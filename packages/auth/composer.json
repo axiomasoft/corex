@@ -1,0 +1,66 @@
+{
+    "name": "corex/auth",
+    "description": "CoreX auth bridge — tenant-boundary authorization, entity-context checks and scoped Blade directives on top of AzGuard (ADR-009).",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "authorization", "multi-tenancy", "azguard", "rbac"],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "axioma-studio/azguard-core": "@dev",
+        "corex/core": "@dev",
+        "illuminate/contracts": "^12.0",
+        "illuminate/support": "^12.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.13",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Auth\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Auth\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CoreX\\Auth\\CoreAuthServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../../../azguard/packages/core"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    }
+}
