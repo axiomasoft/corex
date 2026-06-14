@@ -1,0 +1,48 @@
+{
+    "name": "corex/core",
+    "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for the Flex ecosystem.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "kernel",
+        "multi-tenancy",
+        "ulid",
+        "entity-registry",
+        "audit",
+        "settings"
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "brick/money": "^0.9 || ^0.10",
+        "illuminate/config": "^12.0|^13.0",
+        "illuminate/container": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/http": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CoreX\\CoreServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

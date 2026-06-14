@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+use CoreX\Audit\DatabaseAuditLogger;
+use CoreX\Enums\IdStrategy;
+use CoreX\Registry\EntityRegistry;
+use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Tenancy\NullTenantService;
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Identifier strategy
+    |--------------------------------------------------------------------------
+    | Primary-key strategy for BaseModel. ULID is the default (ADR-003);
+    | the single seam here allows a future migration to UUIDv7 before 1.0.
+    */
+    'ids' => [
+        'strategy' => IdStrategy::Ulid,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Table names
+    |--------------------------------------------------------------------------
+    | Override if the defaults collide with existing tables in a host app.
+    */
+    'tables' => [
+        'settings' => 'corex_settings',
+        'audit_logs' => 'corex_audit_logs',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Multi-tenancy (ADR-004)
+    |--------------------------------------------------------------------------
+    | TenantScope is active only when a TenantService implementation is bound
+    | in the container. On-premise installs leave NullTenantService and run
+    | unscoped. 'column' is the tenant foreign key on tenant-owned tables.
+    */
+    'tenancy' => [
+        'service' => NullTenantService::class,
+        'column' => 'tenant_id',
+        'resolver' => null, // e.g. CoreX\Tenancy\Resolvers\SubdomainTenantResolver::class
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bindings
+    |--------------------------------------------------------------------------
+    | Swap any core contract implementation here.
+    */
+    'bindings' => [
+        'entity_registry' => EntityRegistry::class,
+        'settings' => DatabaseSettingsRepository::class,
+        'audit_logger' => DatabaseAuditLogger::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Audit log
+    |--------------------------------------------------------------------------
+    */
+    'audit' => [
+        'enabled' => true,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings cache
+    |--------------------------------------------------------------------------
+    */
+    'settings' => [
+        'cache_store' => 'array',
+        'cache_ttl' => 3600,
+        'cache_prefix' => 'corex.settings',
+    ],
+
+];
