@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21e4837dd864907051facd44770b9d70",
+    "content-hash": "1be08b6ff3f5512e402a8f9c59d6436f",
     "packages": [
         {
             "name": "brick/math",
@@ -194,7 +194,7 @@
         },
         {
             "name": "corex/core",
-            "version": "dev-main",
+            "version": "dev-feat/corex-crm",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
@@ -244,6 +244,58 @@
                 "multi-tenancy",
                 "settings",
                 "ulid"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/crm",
+            "version": "dev-feat/corex-crm",
+            "dist": {
+                "type": "path",
+                "url": "packages/crm",
+                "reference": "05cd30808f81b7eac2edab89cb5c3add8363cf9b"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Crm\\CrmServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Crm\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "CoreX CRM module — pipelines, stages and deals on corex/core (ULID, tenancy, money).",
+            "keywords": [
+                "crm",
+                "deals",
+                "laravel",
+                "multi-tenancy",
+                "pipeline"
             ],
             "transport-options": {
                 "relative": true
@@ -2180,16 +2232,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.11.4",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "e890471a3494740f7d9326d72ce6a8c559ffee60"
+                "reference": "5a09cc37e4349453c7777b102ce7648e9f36ba94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/e890471a3494740f7d9326d72ce6a8c559ffee60",
-                "reference": "e890471a3494740f7d9326d72ce6a8c559ffee60",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/5a09cc37e4349453c7777b102ce7648e9f36ba94",
+                "reference": "5a09cc37e4349453c7777b102ce7648e9f36ba94",
                 "shasum": ""
             },
             "require": {
@@ -2281,7 +2333,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-07T09:57:54+00:00"
+            "time": "2026-06-14T16:57:45+00:00"
         },
         {
             "name": "nette/schema",
@@ -10294,7 +10346,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "corex/core": 20
+        "corex/core": 20,
+        "corex/crm": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "^8.3",
-        "corex/core": "@dev"
+        "corex/core": "@dev",
+        "corex/crm": "@dev"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
