@@ -49,11 +49,13 @@ final class CoreServiceProvider extends ServiceProvider
 
         // The entity registry is the single source of the morph map (ADR-003).
         // Built after all module providers have booted and registered entities.
+        // Additive (not enforced): registered entities get stable aliases, while
+        // unregistered morph models (framework/third-party) keep working.
         $this->app->booted(function (): void {
             $map = $this->app->make(EntityRegistry::class)->morphMap();
 
             if ($map !== []) {
-                Relation::enforceMorphMap($map);
+                Relation::morphMap($map);
             }
         });
     }
