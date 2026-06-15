@@ -16,11 +16,19 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="Crm">
+            <directory>tests/Crm</directory>
+        </testsuite>
+        <testsuite name="Tasks">
+            <directory>tests/Tasks</directory>
+        </testsuite>
     </testsuites>
 
     <source>
         <include>
             <directory>packages/core/src</directory>
+            <directory>packages/crm/src</directory>
+            <directory>packages/tasks/src</directory>
         </include>
     </source>
 
