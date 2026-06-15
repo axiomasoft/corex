@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('status', 32)->default('open');
             $table->string('owner_id', 64)->nullable()->index();
             $table->unsignedInteger('position')->default(0);
+            $table->ulid('contact_id')->nullable()->index();
+            $table->ulid('company_id')->nullable()->index();
+            $table->jsonb('custom_fields')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
