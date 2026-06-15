@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1be08b6ff3f5512e402a8f9c59d6436f",
+    "content-hash": "d4b52f4b6ede43229a01b1674bed545e",
     "packages": [
         {
             "name": "brick/math",
@@ -194,7 +194,7 @@
         },
         {
             "name": "corex/core",
-            "version": "dev-feat/corex-crm",
+            "version": "dev-feat/corex-tasks",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
@@ -251,7 +251,7 @@
         },
         {
             "name": "corex/crm",
-            "version": "dev-feat/corex-crm",
+            "version": "dev-feat/corex-tasks",
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
@@ -296,6 +296,58 @@
                 "laravel",
                 "multi-tenancy",
                 "pipeline"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/tasks",
+            "version": "dev-feat/corex-tasks",
+            "dist": {
+                "type": "path",
+                "url": "packages/tasks",
+                "reference": "908c77fc2d1454fd6d7eb686db8a8c93942acf4d"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Tasks\\TasksServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Tasks\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "CoreX Tasks module — processes, stages, tasks and projects on corex/core (ULID, tenancy).",
+            "keywords": [
+                "kanban",
+                "laravel",
+                "multi-tenancy",
+                "projects",
+                "tasks"
             ],
             "transport-options": {
                 "relative": true
@@ -10347,7 +10399,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "corex/core": 20,
-        "corex/crm": 20
+        "corex/crm": 20,
+        "corex/tasks": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
