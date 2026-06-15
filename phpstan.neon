@@ -5,6 +5,7 @@ parameters:
     paths:
         - packages/core/src
         - packages/crm/src
+        - packages/tasks/src
 
     level: 6
 
