@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Models;
 
 use CoreX\Concerns\HasAuditLog;
-use CoreX\Concerns\HasUlidKey;
+use CoreX\Concerns\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +20,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 abstract class BaseModel extends Model
 {
     use HasAuditLog;
-    use HasUlidKey;
+    use HasConfiguredId;
     use SoftDeletes;
 }

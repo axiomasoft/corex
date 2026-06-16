@@ -11,4 +11,5 @@ enum IdStrategy: string
 {
     case Ulid = 'ulid';
     case Uuid = 'uuid';
+    case Int = 'int';
 }

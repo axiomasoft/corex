@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Support\Schema\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crm_stages', function (Blueprint $table): void {
-            $table->ulid('id')->primary();
-            $table->string('tenant_id', 64)->nullable()->index();
-            $table->foreignUlid('pipeline_id')->constrained('crm_pipelines')->cascadeOnDelete();
+            IdColumns::primary($table);
+            IdColumns::reference($table, 'tenant_id')->nullable()->index();
+            IdColumns::foreign($table, 'pipeline_id')->constrained('crm_pipelines')->cascadeOnDelete();
             $table->string('name');
             $table->unsignedInteger('position')->default(0);
             $table->unsignedTinyInteger('probability')->default(0);
