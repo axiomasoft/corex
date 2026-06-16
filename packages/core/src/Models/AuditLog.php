@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Models;
 
-use CoreX\Concerns\HasUlidKey;
+use CoreX\Concerns\HasConfiguredId;
 use CoreX\Support\Config;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -21,7 +21,7 @@ use Override;
  */
 final class AuditLog extends Model
 {
-    use HasUlidKey;
+    use HasConfiguredId;
 
     public const UPDATED_AT = null;
 
