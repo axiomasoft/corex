@@ -84,7 +84,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 9/13 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 10/13 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 ## 5. Decision Log
@@ -117,6 +117,7 @@ item называет потребителя. **План живой (loop-back):
 | D24 | 2026-07-12 | Template-parity gate: `tpl_flex_vNN` получает status=ready ТОЛЬКО при diff(pg_dump-schema шаблона, migration-set на пустой БД)=0; schema-hash в root_templates; провижининг отказывает клонировать не-ready/hash-mismatch шаблон. | Pre-mortem A3 (findings/P2-premortem.md): дрейф golden-шаблона = новые аккаунты без security-констрейнтов, тихо. |
 | D25 | 2026-07-12 | Supply-chain-якорь stancl: пин-коммит зеркалируется в собственный форк (composer тянет из форка, не из archtechx-ветки); jobpipeline пин ТОЧНО `2.0.0-rc7` в корневом composer.json. | Pre-mortem B1/B4: force-push/rebase master делает sha недостижимым — чистый CI падает mid-phase; RAG:✅ 2026-07-12 GitHub API (v4 = только master, rc7 — последний тег). |
 | D26 | 2026-07-12 | B-10 §4.5 DX-генераторы (make:module/make:entity, flex:modules:why), §4.6 MCP dev-сервер, AC-33/AC-34, AC-12 N−1 CI-прогон — отложены из P1 (DX-волна после ядра; component-tied части уже покрыты D6). Loop-back: новый item по факту потребителя. | Аудит F13: секции не были ни замаплены, ни помечены отложенными — теперь явный deferred. |
+| D27 | 2026-07-13 | `DomainEvent` (B-10 §3.1: eventId/occurredAt/tenant/`name()`) — каноническая база доменных событий ядра; заменяет пустой маркер `CoreEvent` (удалён, легально pre-1.0 — D17). `Cancellable` (Architecture_CoreX §7.3) — ОТДЕЛЬНЫЙ опциональный интерфейс для отменяемых pre-action событий (`cancel()`/`isCancelled()`), НЕ примешивается в базу: большинство доменных событий информационные. `FeatureFlags`/`DatabaseFeatureFlags`/`FeatureFlagDefinition` (persisted, `sys_feature_flags`/`sys_feature_overrides`) заменяют интерим `FeatureResolver`/`ConfigFeatureResolver` (config-driven, удалены) — единый источник истины. | B-10 §3.1 задаёт форму DomainEvent явно; Architecture_CoreX §7.3 (`CoreXEvent`) — иллюстративный документ (открытое vendor-имя, D11), не владелец контракта; `CoreEvent` был пустым маркером без применяемой формы. RAG:✅ vault B-10 §3.1 (302–336) + Architecture_CoreX §7.3 2026-07-13 |
 
 ## 6. Update Log
 
@@ -136,3 +137,4 @@ item называет потребителя. **План живой (loop-back):
 | 2026-07-13 | plan-exec/sonnet | P1.6 закрыт: `ModuleLifecycle`-FSM + `RecordsRegistrar` + 3 миграции `mod_*`, вводит PG16 тест-лейн — детали см. phases/P1.md P1.6 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.7 закрыт: Settings v2 (namespace/scope, каскад user→workspace→account→manifest-default, `sys_settings` PG-only, шифрование+маска sensitive, `SettingChanged`) — детали см. phases/P1.md P1.7 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.8 закрыт: Audit v2 (queued AuditLogger/AuditEntry, `sys_audit_log` PG-only с BRIN, единый AuditObserver для HasAuditLog+byCapability(Auditable)) — детали см. phases/P1.md P1.8 Completion Notes. |
+| 2026-07-13 | plan-exec/sonnet | P1.9 закрыт: DomainEvent-база (D27, заменяет CoreEvent) + FeatureFlags v2 (sys_feature_flags/overrides PG-only, DatabaseFeatureFlags заменяет ConfigFeatureResolver) + SettingChanged/FeatureFlagToggled на DomainEvent — детали см. phases/P1.md P1.9 Completion Notes. |

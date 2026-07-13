@@ -22,13 +22,13 @@
 
 ### OQ-2 — `DomainEvent` ↔ `CoreXEvent` / `Cancellable` (P1.9)
 
-- **Статус:** Exploration → резолвится на исполнении P1.9 (новый D#)
+- **Статус:** Resolved → D27 (2026-07-13)
 - **Суть:** B-10 задаёт `DomainEvent` (метаданные eventId/occurredAt/tenant); Architecture §7.3 —
   `CoreXEvent` + `Cancellable`; в коде `CoreEvent` — пустая база. Нужна одна согласованная иерархия.
-- **Резолюция (путь):** P1.9 Code Guidance **уполномочивает исполнителя решить автономно** и
-  записать как новый D# (НЕ выносить вопросом владельцу). Рекомендация дизайна: `DomainEvent` —
-  каноническая база доменных событий ядра; `Cancellable` — отдельный опциональный интерфейс;
-  старый `CoreEvent` мигрирует в `DomainEvent` или удаляется. Ретрофит `SettingChanged`/`FeatureFlagToggled`.
+- **Резолюция:** `DomainEvent` — каноническая база (B-10 §3.1 канон); `Cancellable` — отдельный
+  опциональный интерфейс (`packages/core/src/Events/Cancellable.php`, не примешан в базу);
+  `CoreEvent` удалён (pre-1.0 breaking, D17); `SettingChanged` ретрофитнут, `FeatureFlagToggled`
+  создан на `DomainEvent` — см. plan.md D27, phases/P1.md P1.9 Completion Notes.
 - **Owner:** исполнитель P1.9 (plan-exec), запись решения — plan.md §5.
 
 ### OQ-3 — Морф-хендлы crm/tasks: underscore → точка (P1.2)
