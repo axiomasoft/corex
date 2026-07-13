@@ -1,22 +1,21 @@
-# HANDOFF — 2026-07-13 — after P1.2
+# HANDOFF — 2026-07-13 — after P1.3
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
-| Model | Sonnet |
-| Thinking | medium |
+| Model | Opus |
+| Thinking | high — RegistryCompiler + 8 extenders, детерминированный пайплайн + фейл-деплоя, несущий инвариант модуль-системы (Routing §3, pre-mortem A) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.3 (Module manifest + discovery — `Flex\Modules\CorexModule`/`Manifest`/`Dep`/`SettingDefault` + `flex:modules:compile` discovery-часть) — следующий item фазы после P1.1/P1.12/P1.2. |
+| Суть | Исполнить P1.4 (RegistryCompiler + 8 extenders `Entity→EntityField→Permissions→Api→Filament→Menu→Routes→Workflow` + CompilationValidator + `Manifest::extends()`) — следующий item фазы после P1.3. |
 
 ````
-/task:plan-exec COREX-CORE P1.3
+/task:plan-exec COREX-CORE P1.4
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.3) → Required Reads P1.3 (B-10 §3.2
-строки 364–431, §5.2 889–906, §4.1 анти-паттерны 700–718, plan.md D9/D11,
-`packages/modules/src/Enums/Capability.php` из P1.2, `packages/core/src/Modules/ServiceProviderModuleRegistrar.php`).
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.4) → Required Reads P1.4 (B-10 §4.2
+строки 719–809, §4.3 811–817, §5.2 889–906, §7.4 1043–1054, AC-2/AC-19, `packages/modules/src/Registry/EntityDefinition.php`+`Enums/Capability.php` из P1.2, `packages/modules/src/Manifest.php` из P1.3).
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -28,17 +27,28 @@ Completion Notes, коммит `1890e56`.
 **2026-07-13 — P1.2 закрыт:** EntityRegistry v2 (`get`/`has`/`all(?ctx)`/`byCapability`/`forModel`,
 `EntityDefinition`/`FieldDefinition`/`Capability`/`EntityNotFound`) в новом пакете `flex/modules`
 (`Flex\Modules\`); `ArrayEntityRegistry` с инъектируемым module-active предикатом (шов P1.5);
-`ModulesServiceProvider` биндит конкретный синглтон + алиасит контракт (D22), строит
-`Relation::morphMap()` в `booted()`. Старый `CoreX\Registry\*`/`CoreX\Contracts\EntityRegistry`
-удалён из `corex/core`; `CoreServiceProvider`/`Config` очищены. `CrmServiceProvider`/
-`TasksServiceProvider` переведены на точечные handles (`crm.deal`, `tsk.task`, …). Известное
-отклонение: правка задела `packages/auth` (не в Files item'а) — единственный внешний потребитель
-удалённого контракта (`TenantContextGuard`), переведён + верифицирован отдельным прогоном (вне
-корневого гейта). Детали phases/P1.md P1.2 Completion Notes/Known Deviations, коммит `c5fd939`.
+`ModulesServiceProvider` биндит конкретный синглтон + алиасит контракт (D22; `booted()`-колбэк
+строит `Relation::morphMap()`). Старый `CoreX\Registry\*`/`CoreX\Contracts\EntityRegistry` удалён;
+`CrmServiceProvider`/`TasksServiceProvider` переведены на точечные handles. Известное отклонение:
+правка задела `packages/auth` (единственный внешний потребитель удалённого контракта), верифицирован
+отдельным прогоном. Детали phases/P1.md P1.2 Completion Notes, коммит `c5fd939`.
+**2026-07-13 — P1.3 закрыт:** `Flex\Modules\CorexModule` (abstract) + `Manifest` (final fluent:
+`make/title/description/tablePrefix/requires/suggests/editions/components/settings/featureFlags/
+listens/onEnable/onDisable/onPurge`; `extends()` — P1.4, не создан здесь) + `Dep`/`SettingDefault`
+(`final readonly` фабрики, `SettingDefault` — владелец P1.3, D20) + `InvalidManifestException`
+(composer-имя/tablePrefix/пустой title/не-CorexModule). `Discovery\ModuleDiscovery`: инъектируемый
+`fallbackModules` в приоритете, иначе скан `vendor/composer/installed.json` (`type==corex-module`).
+`Commands\CompileModulesCommand` (`flex:modules:compile`) — discovery+базовая валидация,
+компиляция extenders/запись реестра — P1.4/P1.5. `ModulesServiceProvider` биндит `ModuleDiscovery`
+синглтоном + регистрирует команду в `boot()`. Стаб `tests/Stubs/StubCorexModule.php` (title+
+tablePrefix `stb`+1 setting) — переиспользуется P1.4–P1.6. Тесты: `tests/Feature/ModuleDiscoveryTest.php`
+(8 тестов). Прогнано: `composer dump-autoload && composer lint:check && composer analyse && composer test`
+— Pint passed, PHPStan 0 ошибок, Pest 56/56 (было 48/48 до item'а). Детали phases/P1.md P1.3
+Completion Notes, коммит `dabf1ab`.
 
 **Remaining:** Исполнять phase-first, гейт «Запускай P6» снят владельцем 2026-07-13. Порядок P1
-(sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅: **P1.3** (Module manifest + discovery —
-следующий) → P1.4 → P1.5 → **P1.6** (вводит PG-лейн) → P1.7 → P1.8 → P1.9 → P1.10 → P1.11 → P1.13.
+(sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ / P1.3 ✅: **P1.4** (RegistryCompiler + 8 extenders,
+следующий) → P1.5 → **P1.6** (вводит PG-лейн) → P1.7 → P1.8 → P1.9 → P1.10 → P1.11 → P1.13.
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -47,12 +57,12 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 
 | Item | Model/effort | Почему |
 |:--|:--|:--|
-| P1.4 | opus/high | RegistryCompiler + 8 extenders + фейл-деплоя (несущий инвариант, pre-mortem A) |
+| P1.4 | opus/high | RegistryCompiler + 8 extenders + фейл-деплоя (несущий инвариант, pre-mortem A) — **следующий** |
 | P1.6 | opus/high | Lifecycle-FSM + purge (data-loss) + вводит PG16-лейн (pre-mortem B/C) |
 | P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.3 P1.5 P1.7 P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) |
+| P1.5 P1.7 P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) |
 
 **Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D26) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
@@ -71,7 +81,9 @@ broadcasting PR #1448 открыт (OQ-8, вне scope). Полная карта
 - workarounds: SettingChanged (P1.7) и lifecycle-события (P1.6) до DomainEvent — interim-база,
   ретрофит P1.9 (OQ-4); `Manifest::featureFlags()` — interim `list<mixed>` до P1.9 (OQ-9/D20);
   `ArrayEntityRegistry::moduleActive` — предикат-заглушка `fn()=>true` до реального ModuleRegistry
-  (P1.5).
+  (P1.5); `Manifest` читает поля через public-свойства, одноимённые с fluent-сеттерами (P1.3 —
+  легальный PHP, применяется до появления явного read-контракта, если P1.4/P1.5 потребуют иного —
+  пересмотреть).
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI).
