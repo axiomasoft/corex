@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use Flex\Modules\Commands\CompileModulesCommand;
 use Flex\Modules\Contracts\EntityRegistry;
+use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Registry\ArrayEntityRegistry;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -24,10 +26,18 @@ final class ModulesServiceProvider extends ServiceProvider
             EntityRegistry::class,
             static fn (Application $app): ArrayEntityRegistry => $app->make(ArrayEntityRegistry::class),
         );
+
+        // No fallback modules by default — real deploys scan installed.json;
+        // tests/testbench rebind this with an injected class list (P1.3 seam).
+        $this->app->singleton(ModuleDiscovery::class);
     }
 
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([CompileModulesCommand::class]);
+        }
+
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
         $this->app->booted(function (): void {
