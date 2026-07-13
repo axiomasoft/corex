@@ -13,7 +13,9 @@ use CoreX\Contracts\TenantService;
 use CoreX\Enums\IdStrategy;
 use CoreX\Registry\EntityRegistry as EntityRegistryImpl;
 use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\NullTenantService;
+use CoreX\Tenancy\SingleAccountResolver;
 
 /**
  * Typed accessor over config('corex.*') — keeps string keys in one place.
@@ -58,6 +60,15 @@ final class Config
     {
         /** @var class-string<TenantResolver>|null $class */
         $class = config('corex.tenancy.resolver');
+
+        return $class;
+    }
+
+    /** @return class-string<TenantContextResolver> */
+    public static function tenantContextResolverClass(): string
+    {
+        /** @var class-string<TenantContextResolver> $class */
+        $class = config('corex.tenant_context.resolver', SingleAccountResolver::class);
 
         return $class;
     }

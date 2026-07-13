@@ -14,6 +14,7 @@ use CoreX\Contracts\TenantService;
 use CoreX\Features\ConfigFeatureResolver;
 use CoreX\Modules\ServiceProviderModuleRegistrar;
 use CoreX\Support\Config;
+use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -29,6 +30,7 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsRepository::class, Config::settingsRepositoryClass());
         $this->app->singleton(AuditLogger::class, Config::auditLoggerClass());
         $this->app->singleton(TenantService::class, Config::tenantServiceClass());
+        $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
         $this->app->singleton(FeatureResolver::class, ConfigFeatureResolver::class);
 

@@ -7,6 +7,7 @@ use CoreX\Enums\IdStrategy;
 use CoreX\Registry\EntityRegistry;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Tenancy\NullTenantService;
+use CoreX\Tenancy\SingleAccountResolver;
 
 return [
 
@@ -44,6 +45,18 @@ return [
         'service' => NullTenantService::class,
         'column' => 'tenant_id',
         'resolver' => null, // e.g. CoreX\Tenancy\Resolvers\SubdomainTenantResolver::class
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tenant context (B-10 §3.1 / B-11 §3.1)
+    |--------------------------------------------------------------------------
+    | TenantContextResolver binding. Boxed installs default to
+    | SingleAccountResolver (constant context, no real tenancy). Real
+    | resolvers (host/root, corex/tenancy) land in P2.
+    */
+    'tenant_context' => [
+        'resolver' => SingleAccountResolver::class,
     ],
 
     /*
