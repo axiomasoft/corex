@@ -1,27 +1,26 @@
-# HANDOFF — 2026-07-13 — after P1.7
+# HANDOFF — 2026-07-13 — after P1.8
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
 | Model | Sonnet |
-| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.8 в списке sonnet/medium) |
+| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.9 в списке sonnet/medium) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.8 (Audit v2: `AuditLogger::record()` через queued listener, `AuditEntry` (actorType user/agent/api_key/system, context, changes diff), `sys_audit_log` PG-миграция (UUIDv7-PK курсор, BRIN по occurred_at, append-only), авто-observer по `byCapability(Auditable)`) — следующий item фазы после P1.7, переиспользует PG тест-лейн. Внутри item — обязательная эскалация судьбы `updated_at` в append-only (B-10 §9 п.7 vs DB_SCHEMA §Конфликт-2), НЕ решать молча — см. Code Guidance item'а. |
+| Суть | Исполнить P1.9 (DomainEvent база: eventId UUIDv7/occurredAt/tenant/`name()` + FeatureFlags: контракт active/value/define, `FeatureFlagDefinition`, `sys_feature_flags`/`sys_feature_overrides` PG-миграции, `FeatureFlagToggled`) — следующий item фазы после P1.8, переиспользует PG тест-лейн. Внутри item — ОБЯЗАТЕЛЬНОЕ решение и запись в Decision Log (новый D#) соотношения `DomainEvent` (B-10) ↔ существующий `CoreEvent`/Architecture §7.3 `CoreXEvent`+`Cancellable` — не выносить вопросом пользователю (см. Code Guidance item'а), ретрофит `SettingChanged` (P1.7) и lifecycle-события (P1.6) на `DomainEvent`. |
 
 ````
-/task:plan-exec COREX-CORE P1.8
+/task:plan-exec COREX-CORE P1.9
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.8) → Required Reads P1.8 (B-10 §3.1
-AuditEntry/AuditLogger 288–300, §2 sys_audit_log DDL 134–155, DB_SCHEMA.md §3.2 sys_audit_log
-395–412 + §Конфликт-2, B-10 §4.4 capability auditable 823–826, §7.1 бюджет sync ≤0.3мс 1017,
-AC-20/AC-23 1083/1088, §9 п.7 открытый вопрос updated_at 1115,
-`packages/core/src/Audit/DatabaseAuditLogger.php` + `Concerns/HasAuditLog.php` +
-`Models/AuditLog.php` текущие, `packages/modules/src/Enums/Capability.php` (P1.2, `byCapability`),
-plan.md §5 D12). Skills: не требуются сверх стандартных (PG-лейн уже поднят P1.6/P1.7,
-переиспользуется без изменений).
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.9) → Required Reads P1.9 (B-10 §3.1
+DomainEvent+FeatureFlags/FeatureFlagDefinition 302–336, §2 sys_feature_flags/overrides DDL
+157–182, DB_SCHEMA.md §3.2 414–437, B-10 таблица доменных событий 338–349, AC-22 1087,
+Architecture_CoreX §7.3 CoreXEvent/Cancellable в vault — Grep, packages/core/src/Events/CoreEvent.php
++ Contracts/FeatureResolver.php + Features/ConfigFeatureResolver.php, packages/core/src/Tenancy/…
+TenantContext (P1.12), plan.md §5 D12). Skills: не требуются сверх стандартных (PG-лейн уже поднят
+P1.6/P1.7/P1.8, переиспользуется без изменений).
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -129,10 +128,32 @@ Pint passed, PHPStan 0 ошибок, Pest 68/68 sqlite-лейн (было 71/71 
 Settings перенесены в pg-группу); `docker compose up -d` + `vendor/bin/pest --group=pg` (контейнер
 `serversideup/php:8.4-fpm-nginx`, host без `pdo_pgsql`) — 16/16 (5 новых + 11 P1.6 без регресса).
 Детали phases/P1.md P1.7 Completion Notes/Pending Work/Known Deviations, коммит `fd5eb21`.
+**2026-07-13 — P1.8 закрыт:** `Contracts\AuditEntry` (`final readonly`: action/actorType
+`ActorType`-enum/actorId/entityType/entityId/changes/context) + `AuditLogger::record(AuditEntry)`
+(сигнатура переписана, breaking легально pre-1.0). `Audit\QueuedAuditLogger` (enqueue-only) +
+`RecordAuditEntry` (`ShouldQueue`-воркер, резолвит `workspace_id` из `TenantContextResolver` на
+записи, `$writeConnection`-сеймом — не `$connection`, коллизия с `Illuminate\Bus\Queueable`) +
+`Audit\AuditObserver` (единый diff+маскировка sensitive для `HasAuditLog`-трейта И авто-observer) +
+`CurrentActor` (actor-снапшот user/system + ip/ua/request_id). **Архитектурное решение
+(D22-прецедент):** wiring `byCapability(Auditable)` → `Model::observe()` — в новом
+`Flex\Modules\Audit\AuditCapabilityWiring`/`ModulesServiceProvider::boot()`, НЕ в `CoreServiceProvider`
+(corex/core не может зависеть от flex/modules). Миграция `sys_audit_log` (PG-only, BRIN(occurred_at),
+CHECK actor_type, БЕЗ updated_at — DB_SCHEMA §Конфликт-2 разрешён владельцем 2026-07-13, эскалация
+НЕ потребовалась). `CoreXTestCase` — `corex.audit.enabled=false` дефолтом на sqlite-лейне (иначе
+существующие Auditable-модели — Widget в MoneyCastTest/TenantScopeTest/UlidGenerationTest — падали
+бы в missing-table); `AuditLogTest` включает явно. Тесты: `tests/Feature/AuditLogTest.php`
+переписан целиком в `->group('pg')` (8 тестов: enqueue-only/AC-23, HasAuditLog create+update,
+byCapability-авто-observer+маска/AC-20, no-double-record, actor=system, UUIDv7-курсор/AC-23,
+BRIN-индекс). Прогнано: `composer dump-autoload && composer lint:check && composer analyse` —
+Pint passed, PHPStan 0 ошибок; `php vendor/bin/pest --exclude-group=pg` — 66/66 sqlite-лейн (было
+68/68 — 2 старых sqlite-теста Audit перенесены в pg-группу); `docker compose up -d` +
+`PGSQL_HOST=127.0.0.1 PGSQL_PORT=5434 php vendor/bin/pest --group=pg` (host уже несёт `pdo_pgsql` —
+контейнер-обходка P1.6/P1.7 не понадобилась) — 24/24 (8 новых + 16 без регресса). Детали
+phases/P1.md P1.8 Completion Notes/Pending Work/Known Deviations, коммит `18ddf73`.
 
 **Remaining:** Исполнять phase-first. Порядок P1 (sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ /
-P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅: **P1.8** (Audit v2, следующий, переиспользует PG-лейн)
-→ P1.9 → P1.10 → P1.11 → P1.13.
+P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅ / P1.8 ✅: **P1.9** (DomainEvent+FeatureFlags, следующий,
+переиспользует PG-лейн) → P1.10 → P1.11 → P1.13.
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -144,7 +165,7 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 | P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) — **P1.8 следующий** |
+| P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (контракты/DDL/DTO) — **P1.9 следующий** |
 
 **Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D26) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
@@ -155,11 +176,13 @@ B-11_auth-tenancy.md · ~/Vaults/Brain/plans/flex/20_research/R-11_stancl-readin
 ~/Vaults/Brain/plans/flex/50_execution/00_EXECUTION_ROADMAP.md
 
 **Open risks:** **OQ-5 php ^8.4** (stancl master vs corex ^8.3 — блокер P2.1, решение владельца);
-DB_SCHEMA DRAFT (OQ-1/OQ-6 — владелец схемы); stancl v4 без релиза (D8/D25 supply-chain-якорь;
-PoC-гейт держит); churn контрактов до 1.0 (D17 — не тегать 1.0 рано); jobpipeline rc (точный пин);
-broadcasting PR #1448 открыт (OQ-8, вне scope); хост-окружение исполнителя без `pdo_pgsql` — PG-лейн
-требует docker-контейнер с PHP+pdo_pgsql (см. Known Deviation P1.6) до появления такого расширения
-на хосте/CI. Полная карта — findings/P2-premortem.md.
+DB_SCHEMA DRAFT (OQ-1/OQ-6 — владелец схемы; OQ-1 «финальное закрытие P1.8» из plan.md §2 снят —
+DB_SCHEMA §Конфликт-2 (updated_at) разрешён владельцем 2026-07-13, см. P1.8 Completion Notes);
+stancl v4 без релиза (D8/D25 supply-chain-якорь; PoC-гейт держит); churn контрактов до 1.0
+(D17 — не тегать 1.0 рано); jobpipeline rc (точный пин); broadcasting PR #1448 открыт (OQ-8, вне
+scope); host теперь несёт `pdo_pgsql` (P1.8 прогнан напрямую на host, без container-обходки P1.6/P1.7
+— если это регрессирует на другой машине исполнителя, вернуться к `serversideup/php` контейнеру).
+Полная карта — findings/P2-premortem.md.
 
 **Workarounds/Deferred/Open questions:**
 - workarounds: `SettingChanged` (P1.7, реализовано) и lifecycle-события (P1.6, реализовано) до
@@ -174,7 +197,9 @@ broadcasting PR #1448 открыт (OQ-8, вне scope); хост-окружен
   боксед-дефолт `NullSettingDefaultsProvider`, реальная реализация поверх скомпилированного
   реестра манифестов НЕ подключена в `ModulesServiceProvider` (см. Pending Work P1.7); `all()`
   Settings-репозитория мерджит только персистентные строки, без манифест-дефолтов (нет примитива
-  перечисления ключей в `SettingDefaultsProvider`, см. Pending Work P1.7).
+  перечисления ключей в `SettingDefaultsProvider`, см. Pending Work P1.7); `AuditEntry` не несёт
+  actorType `agent`/`api_key` наполнения (только `user`/`system` через `CurrentActor`) — ждёт
+  entity-scoped auth (P2, OQ-7, см. Pending Work P1.8).
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI);
@@ -182,8 +207,10 @@ broadcasting PR #1448 открыт (OQ-8, вне scope); хост-окружен
   wiring `ArrayEntityRegistry`→`ModuleRegistry` и полная персистенция `CompiledRegistry` в файл
   (см. workarounds выше); production `loadMigrationsFrom` для `packages/modules/database/migrations`
   (см. Pending Work P1.6 — сознательно не подключён, ломало бы sqlite-суиты Crm/Tasks); реальный
-  workspace-скоуп-резолв Settings (зависит от P2 workspace, см. Known Deviation P1.7).
+  workspace-скоуп-резолв Settings (зависит от P2 workspace, см. Known Deviation P1.7); ретеншн-хук
+  per-тариф sys_audit_log (биллинг вне плана, см. Pending Work P1.8); бенч sync-пути AuditLogger
+  ≤0.3мс (нет pao/бенч-хука в проекте, см. Pending Work P1.8).
 - open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
-  OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11), OQ-1 (updated_at, финальное закрытие P1.8);
-  OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец схемы); OQ-2 (DomainEvent↔CoreXEvent, решается
-  на P1.9); OQ-8 (наблюдение PR #1448).
+  OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11); OQ-1 (updated_at) снят P1.8 — DB_SCHEMA-
+  владелец разрешил §Конфликт-2 2026-07-13; OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец
+  схемы); OQ-2 (DomainEvent↔CoreXEvent, решается на P1.9); OQ-8 (наблюдение PR #1448).
