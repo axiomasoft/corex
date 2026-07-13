@@ -20,6 +20,6 @@ it('attaches a task to a polymorphic subject resolved via the morph alias', func
 
     $task = app(CreateTask::class)->handle($process, 'Design', 'c1', taskable: $project);
 
-    expect($task->taskable_type)->toBe('tsk_project') // morph alias from EntityRegistry, not FQCN
+    expect($task->taskable_type)->toBe('tsk.project') // morph handle from EntityRegistry, not FQCN
         ->and($task->taskable->is($project))->toBeTrue();
 });

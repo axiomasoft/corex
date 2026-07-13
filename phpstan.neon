@@ -6,6 +6,7 @@ parameters:
         - packages/core/src
         - packages/crm/src
         - packages/tasks/src
+        - packages/modules/src
 
     level: 6
 

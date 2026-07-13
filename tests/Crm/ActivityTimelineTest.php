@@ -24,7 +24,7 @@ it('logs a polymorphic activity resolved through the morph alias', function (): 
 
     expect($activity->tenant_id)->toBe('tenant-a')
         ->and($activity->type)->toBe(ActivityType::Call)
-        ->and($activity->subject_type)->toBe('crm_contact') // morph alias from EntityRegistry, not FQCN
+        ->and($activity->subject_type)->toBe('crm.contact') // morph handle from EntityRegistry, not FQCN
         ->and($activity->subject->is($contact))->toBeTrue()
         ->and($contact->activities()->count())->toBe(1);
 

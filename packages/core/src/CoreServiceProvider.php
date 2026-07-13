@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX;
 
 use CoreX\Contracts\AuditLogger;
-use CoreX\Contracts\EntityRegistry;
 use CoreX\Contracts\FeatureResolver;
 use CoreX\Contracts\ModuleRegistrar;
 use CoreX\Contracts\SettingsRepository;
@@ -15,7 +14,6 @@ use CoreX\Features\ConfigFeatureResolver;
 use CoreX\Modules\ServiceProviderModuleRegistrar;
 use CoreX\Support\Config;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -26,7 +24,6 @@ final class CoreServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
-        $this->app->singleton(EntityRegistry::class, Config::entityRegistryClass());
         $this->app->singleton(SettingsRepository::class, Config::settingsRepositoryClass());
         $this->app->singleton(AuditLogger::class, Config::auditLoggerClass());
         $this->app->singleton(TenantService::class, Config::tenantServiceClass());
@@ -48,17 +45,5 @@ final class CoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/corex.php' => config_path('corex.php'),
         ], 'corex-config');
-
-        // The entity registry is the single source of the morph map (ADR-003).
-        // Built after all module providers have booted and registered entities.
-        // Additive (not enforced): registered entities get stable aliases, while
-        // unregistered morph models (framework/third-party) keep working.
-        $this->app->booted(function (): void {
-            $map = $this->app->make(EntityRegistry::class)->morphMap();
-
-            if ($map !== []) {
-                Relation::morphMap($map);
-            }
-        });
     }
 }

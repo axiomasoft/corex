@@ -8,6 +8,7 @@ use CoreX\Contracts\TenantService;
 use CoreX\Tasks\TasksServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
 use CoreX\Testing\CoreXTestCase;
+use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**
@@ -32,6 +33,7 @@ abstract class TasksTestCase extends CoreXTestCase
     {
         return [
             ...parent::getPackageProviders($app),
+            ModulesServiceProvider::class,
             TasksServiceProvider::class,
         ];
     }

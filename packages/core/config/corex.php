@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Audit\DatabaseAuditLogger;
 use CoreX\Enums\IdStrategy;
-use CoreX\Registry\EntityRegistry;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
@@ -66,7 +65,6 @@ return [
     | Swap any core contract implementation here.
     */
     'bindings' => [
-        'entity_registry' => EntityRegistry::class,
         'settings' => DatabaseSettingsRepository::class,
         'audit_logger' => DatabaseAuditLogger::class,
     ],

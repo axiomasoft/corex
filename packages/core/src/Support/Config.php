@@ -6,12 +6,10 @@ namespace CoreX\Support;
 
 use CoreX\Audit\DatabaseAuditLogger;
 use CoreX\Contracts\AuditLogger;
-use CoreX\Contracts\EntityRegistry;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
 use CoreX\Enums\IdStrategy;
-use CoreX\Registry\EntityRegistry as EntityRegistryImpl;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\NullTenantService;
@@ -74,15 +72,6 @@ final class Config
     }
 
     // ─── Bindings ─────────────────────────────────────────────────────────
-
-    /** @return class-string<EntityRegistry> */
-    public static function entityRegistryClass(): string
-    {
-        /** @var class-string<EntityRegistry> $class */
-        $class = config('corex.bindings.entity_registry', EntityRegistryImpl::class);
-
-        return $class;
-    }
 
     /** @return class-string<SettingsRepository> */
     public static function settingsRepositoryClass(): string

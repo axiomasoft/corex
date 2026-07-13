@@ -9,6 +9,7 @@ use CoreX\Auth\CoreAuthServiceProvider;
 use CoreX\Contracts\TenantService;
 use CoreX\CoreServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
+use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -35,6 +36,7 @@ abstract class CoreAuthTestCase extends Orchestra
     {
         return [
             CoreServiceProvider::class,
+            ModulesServiceProvider::class,
             AzGuardServiceProvider::class,
             CoreAuthServiceProvider::class,
         ];
