@@ -22,6 +22,13 @@
         <testsuite name="Tasks">
             <directory>tests/Tasks</directory>
         </testsuite>
+
+        <!-- flex/modules-lint (P1.13): PHPStan-правила. data/* — фикстуры-нарушения,
+             они анализируются правилом, а не исполняются раннером. -->
+        <testsuite name="PHPStan">
+            <directory>tests/PHPStan</directory>
+            <exclude>tests/PHPStan/data</exclude>
+        </testsuite>
     </testsuites>
 
     <source>
@@ -33,6 +40,9 @@
     </source>
 
     <php>
+        <!-- PHPStan RuleTestCase поднимает свой контейнер и парсер — 128M ему мало. -->
+        <ini name="memory_limit" value="1G"/>
+
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="sqlite"/>
