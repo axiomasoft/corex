@@ -37,5 +37,14 @@
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+
+        <!-- pg-lane (D12): tests tagged ->group('pg') switch to this connection
+             (docker-compose.yml pgsql service). Sqlite stays the default for
+             pure-PHP tests. -->
+        <env name="PGSQL_HOST" value="127.0.0.1"/>
+        <env name="PGSQL_PORT" value="5434"/>
+        <env name="PGSQL_DATABASE" value="corex_test"/>
+        <env name="PGSQL_USERNAME" value="corex"/>
+        <env name="PGSQL_PASSWORD" value="corex"/>
     </php>
 </phpunit>

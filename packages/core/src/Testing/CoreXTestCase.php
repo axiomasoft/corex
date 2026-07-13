@@ -33,5 +33,22 @@ abstract class CoreXTestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
+
+        // pg-lane (D12/P1.6): additive — the default connection stays sqlite
+        // above; tests tagged ->group('pg') opt in with
+        // config(['database.default' => 'pgsql']). getenv(), not the env()
+        // helper (larastan.noEnvCallsOutsideOfConfig — this package ships no
+        // config/database.php for these to live in).
+        $app['config']->set('database.connections.pgsql', [
+            'driver' => 'pgsql',
+            'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
+            'port' => getenv('PGSQL_PORT') ?: '5434',
+            'database' => getenv('PGSQL_DATABASE') ?: 'corex_test',
+            'username' => getenv('PGSQL_USERNAME') ?: 'corex',
+            'password' => getenv('PGSQL_PASSWORD') ?: 'corex',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+        ]);
     }
 }

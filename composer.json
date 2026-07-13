@@ -45,7 +45,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest",
+        "test": "vendor/bin/pest --exclude-group=pg",
+        "test:pg": "vendor/bin/pest --group=pg",
         "test:coverage": "vendor/bin/pest --coverage --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",

@@ -1,0 +1,26 @@
+# PostgreSQL 16 for the pg-lane tests (D12): sys_*/mod_* migrations need
+# jsonb/ltree/BRIN/advisory-locks that sqlite can't provide. No app service —
+# this monorepo has no deployed app, only packages exercised by the test
+# suite (`composer test:pg` / `pest --group=pg`).
+services:
+  pgsql:
+    image: postgres:16-alpine
+    container_name: corex_pgsql_test
+    restart: unless-stopped
+    ports:
+      # Loopback only — not published to the network.
+      - "127.0.0.1:${PGSQL_PORT:-5434}:5432"
+    volumes:
+      - corex_pgsql_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${PGSQL_DATABASE:-corex_test}
+      POSTGRES_USER: ${PGSQL_USERNAME:-corex}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-corex}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  corex_pgsql_data:

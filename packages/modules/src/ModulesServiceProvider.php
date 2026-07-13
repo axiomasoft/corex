@@ -7,12 +7,16 @@ namespace Flex\Modules;
 use Flex\Modules\Commands\CompileModulesCommand;
 use Flex\Modules\Contracts\EntityRegistry;
 use Flex\Modules\Contracts\ModuleActivationGate;
+use Flex\Modules\Contracts\ModuleLifecycle;
 use Flex\Modules\Contracts\ModuleRegistry;
 use Flex\Modules\Contracts\ModuleStateReader;
+use Flex\Modules\Contracts\RecordsRegistrar;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Gate\AllowAllActivationGate;
+use Flex\Modules\Lifecycle\DatabaseModuleLifecycle;
+use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
+use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
 use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\ArrayModuleStateReader;
 use Flex\Modules\Registry\CompiledModuleRegistry;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
@@ -38,10 +42,14 @@ final class ModulesServiceProvider extends ServiceProvider
         // tests/testbench rebind this with an injected class list (P1.3 seam).
         $this->app->singleton(ModuleDiscovery::class);
 
-        // Boxed defaults (D10): empty enabled-set reader, allow-all gate.
-        // The DB-backed reader and the cloud gate are P1.6/application concerns.
-        $this->app->singleton(ModuleStateReader::class, ArrayModuleStateReader::class);
+        // Boxed default (D10): the cloud billing gate is an application concern.
         $this->app->singleton(ModuleActivationGate::class, AllowAllActivationGate::class);
+
+        // mod_modules/mod_records now exist (P1.6) — read/write them directly;
+        // ArrayModuleStateReader remains available for tests that inject a fake.
+        $this->app->singleton(ModuleStateReader::class, DatabaseModuleStateReader::class);
+        $this->app->singleton(RecordsRegistrar::class, DatabaseRecordsRegistrar::class);
+        $this->app->singleton(ModuleLifecycle::class, DatabaseModuleLifecycle::class);
 
         $this->app->singleton(ModuleRegistry::class, static function (Application $app): CompiledModuleRegistry {
             return new CompiledModuleRegistry(
@@ -54,6 +62,11 @@ final class ModulesServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // NOT loadMigrationsFrom: mod_* is PG-only DDL (D12 — CHECK
+        // constraints, advisory locks) and this provider is registered by
+        // every consumer, including sqlite-backed suites (Crm/Tasks). The
+        // pg-lane test/deploy path runs these migrations explicitly,
+        // scoped by --path (see tests/Feature/ModuleLifecycleTest.php).
         if ($this->app->runningInConsole()) {
             $this->commands([CompileModulesCommand::class]);
         }
