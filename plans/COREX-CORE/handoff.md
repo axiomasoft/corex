@@ -1,20 +1,20 @@
-# HANDOFF — 2026-07-13 — after P1.10
+# HANDOFF — 2026-07-13 — after P1.11
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
-| Model | Sonnet |
-| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.11 в списке sonnet/medium) |
+| Model | Opus |
+| Thinking | high — кастомное PHPStan-правило (AST-уровень), не механика (Routing §3: P1.13) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.11 (PubSub: redis/db-poll/sync-null драйверы) — следующий item фазы; см. B-10 §3.1/AC-25 (LISTEN/NOTIFY запрещён — только контракт PubSub через Redis, R-15 §7.3 конвенция «код под transaction pooling»). |
+| Суть | Исполнить P1.13 (PHPStan-правило `flex/modules`-lint — transaction-pooling дисциплина, ловит прямой LISTEN/NOTIFY и прочие нарушения R-15 §7.3 на уровне AST) — последний item фазы P1. |
 
 ````
-/task:plan-exec COREX-CORE P1.11
+/task:plan-exec COREX-CORE P1.13
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.11) → Required Reads P1.11.
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.13) → Required Reads P1.13.
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -190,10 +190,29 @@ Completion Notes/Known Deviations, коммит `32acd10`.
 fluent `->primary()` (`addFluentIndexes()`) ПОЗЖЕ инлайн-`->constrained()` в списке команд blueprint'а,
 self-FK ALTER выполнялся бы раньше ALTER ADD PRIMARY KEY и падал `SQLSTATE[42830]`; решено инженерно
 без эскалации (локальный порядок DDL-команд, не архитектурный вопрос).
+**2026-07-13 — P1.11 закрыт:** `Contracts\PubSub` (`publish(channel,payload)`/`subscribe(channel,Closure)`,
+B-10 §3.1) + `Enums\PubSubDriver` + 3 `final` драйвера: `PubSub\NullPubSub` (in-memory sync, без
+long-running ограничения — не блокирует), `PubSub\RedisPubSub` (`Illuminate\Support\Facades\Redis`),
+`PubSub\DatabasePollPubSub` (`sys_pubsub_messages` cursor-poll, PG-only, `$connection`-сеймом, cursor
+стартует с 0 на каждый `subscribe()`-вызов — без cross-call персистентности, Scope Excluded).
+`subscribe()`-guard на Redis/DatabasePoll: `LogicException` если не `app()->runningInConsole()`
+(SAPI-based — false под php-fpm/Octane, true под artisan/queue-worker); `DatabasePollPubSub::subscribe()`
+добавляет опциональный `?int $maxPolls=null` сверх контракта (легально) для детерминированных тестов
+без бесконечного цикла. `PubSub\PubSubManager` (Manager-паттерн, мемоизирует резолвленный драйвер) —
+выбор по `Config::pubsubDriver()`, без `if(cloud)` (D10); дефолт `corex.pubsub.driver` = `Null`
+(boxed-safe, без инфра-зависимости). Миграция `sys_pubsub_messages` (PG-only, `id` — плоский bigint-
+курсор, НЕ UUIDv7 — не доменная сущность; driver-local, вне DB_SCHEMA/golden-шаблона, OQ-6).
+`CoreServiceProvider`: `PubSub::class`→`PubSubManager::class` singleton. Тесты: `tests/Feature/PubSubTest.php`
+(4, sqlite-лейн) + `tests/Feature/PubSubDatabasePollTest.php` (3, `->group('pg')`) — разнесены в 2
+файла, т.к. `uses()->group('pg')` внутри `describe()` скоупится на весь ФАЙЛ, не на блок (см. Pending
+Work). Прогнано: `composer dump-autoload && composer lint:check && composer analyse` — Pint passed,
+PHPStan 0 ошибок; `composer test` — 70/70 sqlite-лейн (было 66/66 до item'а, +4); `composer test:pg`
+— 40/40 (37 без регресса + 3 новых). Детали phases/P1.md P1.11 Completion Notes/Pending Work,
+коммит `b05459c`.
 
 **Remaining:** Исполнять phase-first. Порядок P1 (sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ /
-P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅ / P1.8 ✅ / P1.9 ✅ / P1.10 ✅: **P1.11** (PubSub,
-следующий) → P1.13.
+P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅ / P1.8 ✅ / P1.9 ✅ / P1.10 ✅ / P1.11 ✅: **P1.13**
+(последний item фазы P1, opus/high — кастомное PHPStan-правило).
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -202,10 +221,9 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 
 | Item | Model/effort | Почему |
 |:--|:--|:--|
-| P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
+| P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) — **следующий, последний item фазы P1** |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.11 | sonnet/medium | механика по готовому ТЗ (PubSub-драйверы) — **следующий** |
 
 **Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D27) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
@@ -252,7 +270,11 @@ P1.6/P1.7 — если это регрессирует на другой маш�
   `FeatureFlags::define()` при module-enable не подключено (мирроит открытый хвост
   `SettingDefaultsProvider`-wiring P1.7, см. Pending Work P1.9); self-referencing FK-порядок в
   `Schema::create()` (P1.10 Known Deviation) — паттерн для будущих self-FK миграций: выносить FK
-  в отдельный `ALTER TABLE` после создания таблицы, не полагаться на `->constrained()` inline.
+  в отдельный `ALTER TABLE` после создания таблицы, не полагаться на `->constrained()` inline;
+  Redis-драйвер PubSub (P1.11) без smoke-теста против живого Redis (нет Redis-инстанса в окружении
+  исполнителя, `->group('redis')` не заведена — item допускает это как «не блокер»); request-cycle
+  guard `subscribe()` (P1.11) не покрыт негативным тестом (SAPI в Pest — `cli`, guard не
+  триггерится под тестами; работает по конструкции в php-fpm/Octane).
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI);
@@ -264,7 +286,8 @@ P1.6/P1.7 — если это регрессирует на другой маш�
   per-тариф sys_audit_log (биллинг вне плана, см. Pending Work P1.8); бенч sync-пути AuditLogger
   ≤0.3мс (нет pao/бенч-хука в проекте, см. Pending Work P1.8); cross-package FK на
   workspace_id/head_user_id (sys_departments) и user_id (sys_department_user) — интеграционная
-  миграция P2.6 (D14), не P1.10.
+  миграция P2.6 (D14), не P1.10; `sys_pubsub_messages` вне DB_SCHEMA/golden-шаблона (OQ-6, P1.11 —
+  наследуется из item'а, не решается здесь).
 - open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
   OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11); OQ-1 (updated_at) снят P1.8 — DB_SCHEMA-
   владелец разрешил §Конфликт-2 2026-07-13; OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец
