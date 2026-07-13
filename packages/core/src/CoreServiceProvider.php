@@ -7,6 +7,7 @@ namespace CoreX;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\FeatureResolver;
 use CoreX\Contracts\ModuleRegistrar;
+use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
@@ -24,6 +25,7 @@ final class CoreServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
+        $this->app->singleton(SettingDefaultsProvider::class, Config::settingDefaultsProviderClass());
         $this->app->singleton(SettingsRepository::class, Config::settingsRepositoryClass());
         $this->app->singleton(AuditLogger::class, Config::auditLoggerClass());
         $this->app->singleton(TenantService::class, Config::tenantServiceClass());

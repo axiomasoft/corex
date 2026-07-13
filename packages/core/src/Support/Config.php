@@ -6,11 +6,13 @@ namespace CoreX\Support;
 
 use CoreX\Audit\DatabaseAuditLogger;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
 use CoreX\Enums\IdStrategy;
 use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
@@ -29,7 +31,7 @@ final class Config
 
     public static function settingsTable(): string
     {
-        return (string) config('corex.tables.settings', 'corex_settings');
+        return (string) config('corex.tables.settings', 'sys_settings');
     }
 
     public static function auditLogsTable(): string
@@ -87,6 +89,15 @@ final class Config
     {
         /** @var class-string<AuditLogger> $class */
         $class = config('corex.bindings.audit_logger', DatabaseAuditLogger::class);
+
+        return $class;
+    }
+
+    /** @return class-string<SettingDefaultsProvider> */
+    public static function settingDefaultsProviderClass(): string
+    {
+        /** @var class-string<SettingDefaultsProvider> $class */
+        $class = config('corex.bindings.setting_defaults', NullSettingDefaultsProvider::class);
 
         return $class;
     }

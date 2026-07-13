@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Audit\DatabaseAuditLogger;
 use CoreX\Enums\IdStrategy;
 use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
 
@@ -28,7 +29,7 @@ return [
     | Override if the defaults collide with existing tables in a host app.
     */
     'tables' => [
-        'settings' => 'corex_settings',
+        'settings' => 'sys_settings',
         'audit_logs' => 'corex_audit_logs',
     ],
 
@@ -67,6 +68,7 @@ return [
     'bindings' => [
         'settings' => DatabaseSettingsRepository::class,
         'audit_logger' => DatabaseAuditLogger::class,
+        'setting_defaults' => NullSettingDefaultsProvider::class,
     ],
 
     /*

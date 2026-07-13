@@ -27,6 +27,11 @@ abstract class CoreXTestCase extends Orchestra
     /** @param Application $app */
     protected function defineEnvironment($app): void
     {
+        // Testbench ships no APP_KEY; Illuminate's encrypter (is_sensitive
+        // settings, P1.7) throws MissingAppKeyException without one. Fixed
+        // test-only key — never used outside this harness.
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
+
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
