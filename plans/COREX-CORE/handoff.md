@@ -1,25 +1,20 @@
-# HANDOFF — 2026-07-13 — after P1.9
+# HANDOFF — 2026-07-13 — after P1.10
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
 | Model | Sonnet |
-| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.10 в списке sonnet/medium) |
+| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.11 в списке sonnet/medium) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.10 (sys_departments ltree-иерархия + sys_department_user + DepartmentRepository: find/subtree/primaryOf/move с pg_advisory_xact_lock + проверкой цикла + один UPDATE по `path <@`, событие DepartmentMoved наследует DomainEvent из P1.9) — следующий item фазы, переиспользует PG тест-лейн. |
+| Суть | Исполнить P1.11 (PubSub: redis/db-poll/sync-null драйверы) — следующий item фазы; см. B-10 §3.1/AC-25 (LISTEN/NOTIFY запрещён — только контракт PubSub через Redis, R-15 §7.3 конвенция «код под transaction pooling»). |
 
 ````
-/task:plan-exec COREX-CORE P1.10
+/task:plan-exec COREX-CORE P1.11
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.10) → Required Reads P1.10 (B-10 §3.1
-DepartmentRepository 351–362, §2 sys_departments/sys_department_user DDL 184–214, DB_SCHEMA.md
-§3.2 439–463, B-10 §5.7 перемещение поддерева ltree 970–972, AC-24 1089, B-10 §7.3 п.3
-advisory-xact-lock 1035, plan.md §5 D12, packages/core/database/migrations (стиль/ltree extension),
-`packages/core/src/Events/DomainEvent.php` (P1.9, база для DepartmentMoved)). Skills: не требуются
-сверх стандартных (PG-лейн уже поднят P1.6–P1.9, переиспользуется без изменений).
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.11) → Required Reads P1.11.
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -149,7 +144,6 @@ Pint passed, PHPStan 0 ошибок; `php vendor/bin/pest --exclude-group=pg` �
 `PGSQL_HOST=127.0.0.1 PGSQL_PORT=5434 php vendor/bin/pest --group=pg` (host уже несёт `pdo_pgsql` —
 контейнер-обходка P1.6/P1.7 не понадобилась) — 24/24 (8 новых + 16 без регресса). Детали
 phases/P1.md P1.8 Completion Notes/Pending Work/Known Deviations, коммит `18ddf73`.
-
 **2026-07-13 — P1.9 закрыт:** `Events\DomainEvent` (`abstract`: eventId `Str::uuid7()`, occurredAt
 `DateTimeImmutable`, tenant — параметр или `app(TenantContextResolver::class)->current()`, abstract
 static `name()`) заменяет пустой маркер `CoreEvent` (удалён) + `Events\Cancellable` (отдельный
@@ -171,11 +165,35 @@ static `name()`) заменяет пустой маркер `CoreEvent` (уда�
 `composer dump-autoload && composer lint:check && composer analyse` — Pint passed, PHPStan 0 ошибок;
 `php vendor/bin/pest --exclude-group=pg` — 66/66 sqlite-лейн (без регресса); `PGSQL_HOST=127.0.0.1
 PGSQL_PORT=5434 vendor/bin/pest --group=pg` — 31/31 (7 новых + 24 без регресса). Детали
-phases/P1.md P1.9 Completion Notes/Pending Work, коммит `963cf44`.
+phases/P1.md P1.9 Completion Notes, коммит `963cf44`.
+**2026-07-13 — P1.10 закрыт:** `Contracts\DepartmentRepository` (find/subtree/primaryOf/move) +
+`Departments\Department` (`final readonly` DTO) + `Departments\DatabaseDepartmentRepository`
+(`?string $connection`-сеймом) + `Models\Department` (`HasConfiguredId`) + `Exceptions\DepartmentCycleException`
++ `Events\DepartmentMoved extends DomainEvent` (`name()`→`core.department.moved`). 2 PG-миграции:
+`sys_departments` (uuid PK, `path ltree NOT NULL UNIQUE`+GIST, self-referencing `parent_id` FK RESTRICT,
+partial-index `(workspace_id) WHERE deleted_at IS NULL`, `CREATE EXTENSION IF NOT EXISTS ltree`) +
+`sys_department_user` (составной PK, FK CASCADE, CHECK role, partial-unique `(user_id) WHERE is_primary`).
+`workspace_id`/`head_user_id`/`user_id` — loose-ref без FK (Scope Excluded, DB_SCHEMA C4). `move()`:
+`pg_advisory_xact_lock(hashtext('sys_departments:'||workspace_id))` → PHP-цикл-проверка (эквивалент
+ltree `<@`, без лишнего SQL) → `DepartmentCycleException` либо ОДИН `UPDATE ... WHERE path <@` (path
+reparent + `parent_id` через CASE WHEN, без рекурсии) → `event(new DepartmentMoved(...))`. Добавлены
+`corex.tables.departments`/`department_user`, `corex.bindings.departments`, биндинг `DepartmentRepository`
+в `CoreServiceProvider` (не было в исходном Files item'а — необходимая проводка контейнера, мирроит
+`FeatureFlags`/`SettingsRepository`). Тесты: `tests/Feature/DepartmentTest.php` (7, `->group('pg')`) —
+AC-24 а/б/в/г/д + GIST/unique-индексы. Прогнано: `composer dump-autoload && composer lint:check &&
+composer analyse` — Pint passed, PHPStan 0 ошибок; `php vendor/bin/pest --exclude-group=pg` — 66/66
+sqlite-лейн (без регресса); `docker compose up -d` + `PGSQL_HOST=127.0.0.1 PGSQL_PORT=5434
+vendor/bin/pest --group=pg` — 37/37 (7 новых + 30 без регресса). Детали phases/P1.md P1.10
+Completion Notes/Known Deviations, коммит `32acd10`.
+**Known Deviation P1.10:** self-referencing FK `sys_departments.parent_id` вынесен из `->constrained()`
+внутри `Schema::create()` в отдельный `ALTER TABLE` ПОСЛЕ создания таблицы — Laravel компилирует
+fluent `->primary()` (`addFluentIndexes()`) ПОЗЖЕ инлайн-`->constrained()` в списке команд blueprint'а,
+self-FK ALTER выполнялся бы раньше ALTER ADD PRIMARY KEY и падал `SQLSTATE[42830]`; решено инженерно
+без эскалации (локальный порядок DDL-команд, не архитектурный вопрос).
 
 **Remaining:** Исполнять phase-first. Порядок P1 (sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ /
-P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅ / P1.8 ✅ / P1.9 ✅: **P1.10** (sys_departments ltree,
-следующий, переиспользует PG-лейн) → P1.11 → P1.13.
+P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅ / P1.8 ✅ / P1.9 ✅ / P1.10 ✅: **P1.11** (PubSub,
+следующий) → P1.13.
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -187,9 +205,9 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 | P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (контракты/DDL/DTO) — **P1.10 следующий** |
+| P1.11 | sonnet/medium | механика по готовому ТЗ (PubSub-драйверы) — **следующий** |
 
-**Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D26) · phases/P1.md · phases/P2.md ·
+**Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D27) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
 дата-штамп) · findings/P2-premortem.md · findings/P1-P2-audit-2026-07-12.md · findings/P1-premortem.md ·
 ~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT — сверяться; FROZEN = предусловие
@@ -202,8 +220,9 @@ DB_SCHEMA DRAFT (OQ-1/OQ-6 — владелец схемы; OQ-1 «финаль�
 DB_SCHEMA §Конфликт-2 (updated_at) разрешён владельцем 2026-07-13, см. P1.8 Completion Notes);
 stancl v4 без релиза (D8/D25 supply-chain-якорь; PoC-гейт держит); churn контрактов до 1.0
 (D17 — не тегать 1.0 рано); jobpipeline rc (точный пин); broadcasting PR #1448 открыт (OQ-8, вне
-scope); host теперь несёт `pdo_pgsql` (P1.8 прогнан напрямую на host, без container-обходки P1.6/P1.7
-— если это регрессирует на другой машине исполнителя, вернуться к `serversideup/php` контейнеру).
+scope); host теперь несёт `pdo_pgsql` (P1.8+ прогнаны напрямую на host, без container-обходки
+P1.6/P1.7 — если это регрессирует на другой машине исполнителя, вернуться к `serversideup/php`
+контейнеру).
 Полная карта — findings/P2-premortem.md.
 
 **Workarounds/Deferred/Open questions:**
@@ -214,13 +233,15 @@ scope); host теперь несёт `pdo_pgsql` (P1.8 прогнан напря
   `SettingChanged` retrofit на DomainEvent — сделан P1.9 (OQ-4 закрыт). `FeatureFlagToggled` —
   деливерабл-класс без продюсера (контракт `FeatureFlags` не несёт toggle-мутатора, UI фич-флагов —
   Scope Excluded P1.9); department-scope overrides (`sys_feature_overrides.scope_type='department'`)
-  — CHECK готов, но `FeatureFlags::active/value` недостижим через `SettingsScope` до P1.10
-  (`sys_departments`, см. Pending Work P1.9); `ArrayEntityRegistry::moduleActive` — предикат-заглушка
-  `fn()=>true`, НЕ подключён к реальному `ModuleRegistry::isActive()` (P1.5 контракт готов,
-  wiring — открытый хвост, см. phases/P1.md P1.5 Pending Work); `Manifest` читает поля через
-  public-свойства, одноимённые с fluent-сеттерами (P1.3 — легальный PHP); `CompiledModule` (P1.5)
-  не персистит полный `CompiledRegistry` в компилированный файл — только module-list (см. Pending
-  Work P1.5); `DatabaseModuleLifecycle`'s `$codeVersions`/`$migrationPaths` — интерим-сеймы вместо
+  — CHECK готов, `sys_departments` теперь существует (P1.10), но `FeatureFlags::active/value` не
+  принимает department-`SettingsScope` — `SettingsScope`/`SettingScope`-enum не несут варианта
+  `department` (P1.7/P1.9 закрыты раньше P1.10) — открытый хвост для loop-back item'а, который
+  расширяет `SettingsScope`; `ArrayEntityRegistry::moduleActive` — предикат-заглушка `fn()=>true`,
+  НЕ подключён к реальному `ModuleRegistry::isActive()` (P1.5 контракт готов, wiring — открытый
+  хвост, см. phases/P1.md P1.5 Pending Work); `Manifest` читает поля через public-свойства,
+  одноимённые с fluent-сеттерами (P1.3 — легальный PHP); `CompiledModule` (P1.5) не персистит
+  полный `CompiledRegistry` в компилированный файл — только module-list (см. Pending Work P1.5);
+  `DatabaseModuleLifecycle`'s `$codeVersions`/`$migrationPaths` — интерим-сеймы вместо
   installed.json/реальных CorexModule-классов (см. Pending Work P1.6); `SettingDefaultsProvider` —
   боксед-дефолт `NullSettingDefaultsProvider`, реальная реализация поверх скомпилированного
   реестра манифестов НЕ подключена в `ModulesServiceProvider` (см. Pending Work P1.7); `all()`
@@ -229,7 +250,9 @@ scope); host теперь несёт `pdo_pgsql` (P1.8 прогнан напря
   actorType `agent`/`api_key` наполнения (только `user`/`system` через `CurrentActor`) — ждёт
   entity-scoped auth (P2, OQ-7, см. Pending Work P1.8); wiring `Manifest::$featureFlags`→
   `FeatureFlags::define()` при module-enable не подключено (мирроит открытый хвост
-  `SettingDefaultsProvider`-wiring P1.7, см. Pending Work P1.9).
+  `SettingDefaultsProvider`-wiring P1.7, см. Pending Work P1.9); self-referencing FK-порядок в
+  `Schema::create()` (P1.10 Known Deviation) — паттерн для будущих self-FK миграций: выносить FK
+  в отдельный `ALTER TABLE` после создания таблицы, не полагаться на `->constrained()` inline.
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI);
@@ -239,7 +262,9 @@ scope); host теперь несёт `pdo_pgsql` (P1.8 прогнан напря
   (см. Pending Work P1.6 — сознательно не подключён, ломало бы sqlite-суиты Crm/Tasks); реальный
   workspace-скоуп-резолв Settings (зависит от P2 workspace, см. Known Deviation P1.7); ретеншн-хук
   per-тариф sys_audit_log (биллинг вне плана, см. Pending Work P1.8); бенч sync-пути AuditLogger
-  ≤0.3мс (нет pao/бенч-хука в проекте, см. Pending Work P1.8).
+  ≤0.3мс (нет pao/бенч-хука в проекте, см. Pending Work P1.8); cross-package FK на
+  workspace_id/head_user_id (sys_departments) и user_id (sys_department_user) — интеграционная
+  миграция P2.6 (D14), не P1.10.
 - open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
   OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11); OQ-1 (updated_at) снят P1.8 — DB_SCHEMA-
   владелец разрешил §Конфликт-2 2026-07-13; OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец
