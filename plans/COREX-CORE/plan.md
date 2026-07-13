@@ -84,7 +84,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 2/13 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 3/13 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 ## 5. Decision Log
@@ -129,3 +129,4 @@ item называет потребителя. **План живой (loop-back):
 | 2026-07-12 | plan-design/fable (ultracode) | Max-design обеих фаз (52 агента): RAG 8 тем + аудит (21 находка внесена) + pre-mortem P2. +D18–D26, +OQ-5..9, v0.2.0 — детали см. findings/P1-P2-audit-2026-07-12.md. |
 | 2026-07-13 | plan-exec/sonnet | P1.1 закрыт: UUIDv7 — дефолт ID-strategy (enum-ветка + IdColumns uuid-тип + config) — детали см. phases/P1.md P1.1 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.12 закрыт: контракты TenantContext/AccountRef/WorkspaceRef + TenantContextResolver + SingleAccountResolver-заглушка (boxed) — детали см. phases/P1.md P1.12 Completion Notes. |
+| 2026-07-13 | plan-exec/sonnet | P1.2 закрыт: EntityRegistry v2 (get/has/all/byCapability/forModel) + новый пакет flex/modules, миграция crm/tasks на точечные handles — детали см. phases/P1.md P1.2 Completion Notes. |
