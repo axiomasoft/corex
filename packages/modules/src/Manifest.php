@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Modules;
 
 use Flex\Modules\Exceptions\InvalidManifestException;
+use Flex\Modules\Extend\Extender;
 
 /**
  * Fluent module manifest (B-10 §3.2). A module's `manifest()` method builds
@@ -12,8 +13,6 @@ use Flex\Modules\Exceptions\InvalidManifestException;
  * `Manifest::make(...)->title(...)->tablePrefix(...)`. Fields double as
  * public properties for read access (discovery/compiler/tests) — PHP allows
  * a property and a method to share a name, disambiguated by call syntax.
- *
- * `extends()` (extenders, B-10 §4) is added by P1.4 — not part of this item.
  */
 final class Manifest
 {
@@ -43,6 +42,9 @@ final class Manifest
 
     /** @var list<SettingDefault> */
     public array $settings = [];
+
+    /** @var list<Extender> RegistryCompiler pipeline input (B-10 §4/§4.2, P1.4). */
+    public array $extenders = [];
 
     /**
      * Interim shim (D20/OQ-9): typed `list<FeatureFlagDefinition>` once
@@ -140,6 +142,14 @@ final class Manifest
     public function settings(array $defaults): self
     {
         $this->settings = $defaults;
+
+        return $this;
+    }
+
+    /** @param  list<Extender>  $extenders */
+    public function extends(array $extenders): self
+    {
+        $this->extenders = $extenders;
 
         return $this;
     }
