@@ -31,7 +31,7 @@ it('creates a deal at the first stage, tenant-stamped, with money', function ():
     expect($deal->stage_id)->toBe($this->newStage->id)
         ->and($deal->status)->toBe(DealStatus::Open)
         ->and($deal->tenant_id)->toBe('tenant-a')
-        ->and(Str::isUlid($deal->id))->toBeTrue()
+        ->and(Str::isUuid($deal->id))->toBeTrue()
         ->and($deal->amount->getAmount()->__toString())->toBe('1500.00')
         ->and($deal->amount->getCurrency()->getCurrencyCode())->toBe('USD');
 

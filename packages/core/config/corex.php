@@ -14,11 +14,11 @@ return [
     |--------------------------------------------------------------------------
     | Identifier strategy
     |--------------------------------------------------------------------------
-    | Primary-key strategy for BaseModel. ULID is the default (ADR-003);
-    | the single seam here allows a future migration to UUIDv7 before 1.0.
+    | Primary-key strategy for BaseModel. UUIDv7 is the default (ADR-003
+    | revision); Ulid/Uuid/Int seams remain for boxed/legacy installs.
     */
     'ids' => [
-        'strategy' => IdStrategy::Ulid,
+        'strategy' => IdStrategy::Uuid7,
     ],
 
     /*

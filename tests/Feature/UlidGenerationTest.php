@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\Enums\IdStrategy;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Support\Str;
+
+beforeEach(function (): void {
+    config(['corex.ids.strategy' => IdStrategy::Ulid]);
+});
 
 it('uses ULID string keys', function (): void {
     $widget = Widget::create(['name' => 'alpha']);

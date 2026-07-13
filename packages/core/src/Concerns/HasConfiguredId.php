@@ -46,9 +46,11 @@ trait HasConfiguredId
 
     public function newUniqueId(): string
     {
-        return Config::idStrategy() === IdStrategy::Uuid
-            ? (string) Str::orderedUuid()
-            : (string) Str::ulid();
+        return match (Config::idStrategy()) {
+            IdStrategy::Uuid7 => (string) Str::uuid7(),
+            IdStrategy::Uuid => (string) Str::orderedUuid(),
+            default => (string) Str::ulid(),
+        };
     }
 
     public function getKeyType(): string

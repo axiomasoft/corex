@@ -25,7 +25,7 @@ final class IdColumns
     {
         match (Config::idStrategy()) {
             IdStrategy::Int => $table->id($name),
-            IdStrategy::Uuid => $table->uuid($name)->primary(),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->uuid($name)->primary(),
             IdStrategy::Ulid => $table->ulid($name)->primary(),
         };
     }
@@ -38,7 +38,7 @@ final class IdColumns
     {
         return match (Config::idStrategy()) {
             IdStrategy::Int => $table->unsignedBigInteger($name),
-            IdStrategy::Uuid => $table->uuid($name),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->uuid($name),
             IdStrategy::Ulid => $table->ulid($name),
         };
     }
@@ -51,7 +51,7 @@ final class IdColumns
     {
         return match (Config::idStrategy()) {
             IdStrategy::Int => $table->foreignId($name),
-            IdStrategy::Uuid => $table->foreignUuid($name),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->foreignUuid($name),
             IdStrategy::Ulid => $table->foreignUlid($name),
         };
     }
