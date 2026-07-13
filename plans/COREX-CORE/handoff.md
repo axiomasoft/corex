@@ -1,24 +1,27 @@
-# HANDOFF — 2026-07-13 — after P1.6
+# HANDOFF — 2026-07-13 — after P1.7
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
 | Model | Sonnet |
-| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.7 в списке sonnet/medium) |
+| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.8 в списке sonnet/medium) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.7 (Settings v2: namespace/SettingsScope, каскад user→workspace→account→manifest-default, `sys_settings` PG-миграция, шифрование `is_sensitive`, событие `SettingChanged`, `SettingDefaultsProvider`-контракт (D20/D23 — direction core←modules, не наоборот)) — следующий item фазы после P1.6, переиспользует PG тест-лейн из P1.6. |
+| Суть | Исполнить P1.8 (Audit v2: `AuditLogger::record()` через queued listener, `AuditEntry` (actorType user/agent/api_key/system, context, changes diff), `sys_audit_log` PG-миграция (UUIDv7-PK курсор, BRIN по occurred_at, append-only), авто-observer по `byCapability(Auditable)`) — следующий item фазы после P1.7, переиспользует PG тест-лейн. Внутри item — обязательная эскалация судьбы `updated_at` в append-only (B-10 §9 п.7 vs DB_SCHEMA §Конфликт-2), НЕ решать молча — см. Code Guidance item'а. |
 
 ````
-/task:plan-exec COREX-CORE P1.7
+/task:plan-exec COREX-CORE P1.8
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.7) → Required Reads P1.7 (B-10 §3.1
-268–324, §2 sys_settings DDL 114–132, DB_SCHEMA.md §3.2 381–393, B-10 §7.2 квоты 1028, AC-21 1086,
-`packages/core/src/Settings/DatabaseSettingsRepository.php` текущий, `Models/Setting.php`,
-`Enums/SettingScope.php`, plan.md §5 D12, `Concerns/HasConfiguredId.php`). Skills: не требуются
-сверх стандартных (PG-лейн уже поднят P1.6, инфра переиспользуется без изменений).
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.8) → Required Reads P1.8 (B-10 §3.1
+AuditEntry/AuditLogger 288–300, §2 sys_audit_log DDL 134–155, DB_SCHEMA.md §3.2 sys_audit_log
+395–412 + §Конфликт-2, B-10 §4.4 capability auditable 823–826, §7.1 бюджет sync ≤0.3мс 1017,
+AC-20/AC-23 1083/1088, §9 п.7 открытый вопрос updated_at 1115,
+`packages/core/src/Audit/DatabaseAuditLogger.php` + `Concerns/HasAuditLog.php` +
+`Models/AuditLog.php` текущие, `packages/modules/src/Enums/Capability.php` (P1.2, `byCapability`),
+plan.md §5 D12). Skills: не требуются сверх стандартных (PG-лейн уже поднят P1.6/P1.7,
+переиспользуется без изменений).
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -107,10 +110,29 @@ Pint passed, PHPStan 0 ошибок, Pest 71/71 sqlite-лейн (было 71/71 
 `pdo_pgsql`, `apt-get`/`sudo` заблокированы sandbox-политикой) — вместо этого контейнер
 `serversideup/php:8.4-fpm-nginx` (локально закэширован, содержит `pdo_pgsql`) в сети
 `docker-compose.yml`; функционально эквивалентно `composer test:pg`.
+**2026-07-13 — P1.7 закрыт:** `Contracts\{SettingsScope,SettingsRepository,SettingDefaultsProvider}`
+(SettingsScope — `final readonly` фабрики `account()/workspace($id)/user($id)`; SettingsRepository v2
+`get/set/forget/all(namespace,key,?scope,default)`; SettingDefaultsProvider — направление core←modules,
+D20/D23) + `Settings\NullSettingDefaultsProvider` (боксед-дефолт, D10) +
+`Exceptions\SettingValueTooLargeException` (квота §7.2). `Enums\SettingScope` заменён
+`Account/Workspace/User` (был `System/Tenant/User`). `DatabaseSettingsRepository` — каскад
+`user→account→default` / `workspace→account→default` (одна `SettingsScope` адресует один уровень —
+Known Deviation ниже); `is_sensitive` шифруется `Crypt::encryptString`, маскируется (`••••••`) в
+`SettingChanged` (интерим `CoreEvent`, retrofit на `DomainEvent` — P1.9); квота 64КБ enforced.
+Миграция `sys_settings` — `packages/core/database/migrations/pg/` (PG-only, jsonb/CHECK/
+UNIQUE NULLS NOT DISTINCT — не грузится дефолтным sqlite-лейном, мигрируется явно PG-тестом,
+паттерн P1.6); старая `corex_settings` удалена (D1, greenfield). `CoreXTestCase` — добавлен
+`app.key` (Testbench не даёт APP_KEY, нужен для `Crypt`). Тесты: `tests/Feature/SettingsTest.php`
+переписан целиком в `->group('pg')` (5 тестов, AC-21 а/б/в/г/д) + `tests/Stubs/StubSettingDefaultsProvider.php`.
+Прогнано: `composer dump-autoload && composer lint:check && composer analyse && composer test` —
+Pint passed, PHPStan 0 ошибок, Pest 68/68 sqlite-лейн (было 71/71 до item'а — 3 старых sqlite-теста
+Settings перенесены в pg-группу); `docker compose up -d` + `vendor/bin/pest --group=pg` (контейнер
+`serversideup/php:8.4-fpm-nginx`, host без `pdo_pgsql`) — 16/16 (5 новых + 11 P1.6 без регресса).
+Детали phases/P1.md P1.7 Completion Notes/Pending Work/Known Deviations, коммит `fd5eb21`.
 
 **Remaining:** Исполнять phase-first. Порядок P1 (sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ /
-P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅: **P1.7** (Settings v2, следующий, переиспользует PG-лейн P1.6)
-→ P1.8 → P1.9 → P1.10 → P1.11 → P1.13.
+P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅ / P1.7 ✅: **P1.8** (Audit v2, следующий, переиспользует PG-лейн)
+→ P1.9 → P1.10 → P1.11 → P1.13.
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -122,7 +144,7 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 | P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.7 P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) — **P1.7 следующий** |
+| P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) — **P1.8 следующий** |
 
 **Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D26) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
@@ -140,22 +162,27 @@ broadcasting PR #1448 открыт (OQ-8, вне scope); хост-окружен
 на хосте/CI. Полная карта — findings/P2-premortem.md.
 
 **Workarounds/Deferred/Open questions:**
-- workarounds: SettingChanged (P1.7) и lifecycle-события (P1.6, реализовано) до DomainEvent —
-  interim-база, ретрофит P1.9 (OQ-4); `Manifest::featureFlags()` — interim `list<mixed>` до P1.9
-  (OQ-9/D20); `ArrayEntityRegistry::moduleActive` — предикат-заглушка `fn()=>true`, НЕ подключён к
-  реальному `ModuleRegistry::isActive()` (P1.5 контракт готов, wiring — открытый хвост, см.
-  phases/P1.md P1.5 Pending Work); `Manifest` читает поля через public-свойства, одноимённые с
-  fluent-сеттерами (P1.3 — легальный PHP); `CompiledModule` (P1.5) не персистит полный
-  `CompiledRegistry` в компилированный файл — только module-list (см. Pending Work P1.5);
-  `DatabaseModuleLifecycle`'s `$codeVersions`/`$migrationPaths` — интерим-сеймы вместо
-  installed.json/реальных CorexModule-классов (см. Pending Work P1.6).
+- workarounds: `SettingChanged` (P1.7, реализовано) и lifecycle-события (P1.6, реализовано) до
+  DomainEvent — interim-база, ретрофит P1.9 (OQ-4); `Manifest::featureFlags()` — interim
+  `list<mixed>` до P1.9 (OQ-9/D20); `ArrayEntityRegistry::moduleActive` — предикат-заглушка
+  `fn()=>true`, НЕ подключён к реальному `ModuleRegistry::isActive()` (P1.5 контракт готов,
+  wiring — открытый хвост, см. phases/P1.md P1.5 Pending Work); `Manifest` читает поля через
+  public-свойства, одноимённые с fluent-сеттерами (P1.3 — легальный PHP); `CompiledModule` (P1.5)
+  не персистит полный `CompiledRegistry` в компилированный файл — только module-list (см. Pending
+  Work P1.5); `DatabaseModuleLifecycle`'s `$codeVersions`/`$migrationPaths` — интерим-сеймы вместо
+  installed.json/реальных CorexModule-классов (см. Pending Work P1.6); `SettingDefaultsProvider` —
+  боксед-дефолт `NullSettingDefaultsProvider`, реальная реализация поверх скомпилированного
+  реестра манифестов НЕ подключена в `ModulesServiceProvider` (см. Pending Work P1.7); `all()`
+  Settings-репозитория мерджит только персистентные строки, без манифест-дефолтов (нет примитива
+  перечисления ключей в `SettingDefaultsProvider`, см. Pending Work P1.7).
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI);
   Filament/Api/Routes-реализации потребителей extenders (их пакеты вне плана, P1.4 Scope Excluded);
   wiring `ArrayEntityRegistry`→`ModuleRegistry` и полная персистенция `CompiledRegistry` в файл
   (см. workarounds выше); production `loadMigrationsFrom` для `packages/modules/database/migrations`
-  (см. Pending Work P1.6 — сознательно не подключён, ломало бы sqlite-суиты Crm/Tasks).
+  (см. Pending Work P1.6 — сознательно не подключён, ломало бы sqlite-суиты Crm/Tasks); реальный
+  workspace-скоуп-резолв Settings (зависит от P2 workspace, см. Known Deviation P1.7).
 - open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
   OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11), OQ-1 (updated_at, финальное закрытие P1.8);
   OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец схемы); OQ-2 (DomainEvent↔CoreXEvent, решается
