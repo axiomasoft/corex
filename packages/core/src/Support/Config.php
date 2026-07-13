@@ -6,11 +6,13 @@ namespace CoreX\Support;
 
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
+use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
@@ -49,6 +51,16 @@ final class Config
     public static function featureOverridesTable(): string
     {
         return (string) config('corex.tables.feature_overrides', 'sys_feature_overrides');
+    }
+
+    public static function departmentsTable(): string
+    {
+        return (string) config('corex.tables.departments', 'sys_departments');
+    }
+
+    public static function departmentUserTable(): string
+    {
+        return (string) config('corex.tables.department_user', 'sys_department_user');
     }
 
     // ─── Tenancy ──────────────────────────────────────────────────────────
@@ -119,6 +131,15 @@ final class Config
     {
         /** @var class-string<FeatureFlags> $class */
         $class = config('corex.bindings.feature_flags', DatabaseFeatureFlags::class);
+
+        return $class;
+    }
+
+    /** @return class-string<DepartmentRepository> */
+    public static function departmentRepositoryClass(): string
+    {
+        /** @var class-string<DepartmentRepository> $class */
+        $class = config('corex.bindings.departments', DatabaseDepartmentRepository::class);
 
         return $class;
     }

@@ -84,7 +84,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 10/13 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 11/13 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 ## 5. Decision Log
@@ -138,3 +138,4 @@ item называет потребителя. **План живой (loop-back):
 | 2026-07-13 | plan-exec/sonnet | P1.7 закрыт: Settings v2 (namespace/scope, каскад user→workspace→account→manifest-default, `sys_settings` PG-only, шифрование+маска sensitive, `SettingChanged`) — детали см. phases/P1.md P1.7 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.8 закрыт: Audit v2 (queued AuditLogger/AuditEntry, `sys_audit_log` PG-only с BRIN, единый AuditObserver для HasAuditLog+byCapability(Auditable)) — детали см. phases/P1.md P1.8 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.9 закрыт: DomainEvent-база (D27, заменяет CoreEvent) + FeatureFlags v2 (sys_feature_flags/overrides PG-only, DatabaseFeatureFlags заменяет ConfigFeatureResolver) + SettingChanged/FeatureFlagToggled на DomainEvent — детали см. phases/P1.md P1.9 Completion Notes. |
+| 2026-07-13 | plan-exec/sonnet | P1.10 закрыт: sys_departments (ltree/GIST) + sys_department_user + DepartmentRepository (find/subtree/primaryOf/move — один UPDATE по path <@, pg_advisory_xact_lock, DepartmentCycleException) + DepartmentMoved на DomainEvent — детали см. phases/P1.md P1.10 Completion Notes. |

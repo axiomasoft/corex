@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Audit\QueuedAuditLogger;
+use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
@@ -34,6 +35,8 @@ return [
         'audit_logs' => 'sys_audit_log',
         'feature_flags' => 'sys_feature_flags',
         'feature_overrides' => 'sys_feature_overrides',
+        'departments' => 'sys_departments',
+        'department_user' => 'sys_department_user',
     ],
 
     /*
@@ -73,6 +76,7 @@ return [
         'audit_logger' => QueuedAuditLogger::class,
         'setting_defaults' => NullSettingDefaultsProvider::class,
         'feature_flags' => DatabaseFeatureFlags::class,
+        'departments' => DatabaseDepartmentRepository::class,
     ],
 
     /*
