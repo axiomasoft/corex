@@ -14,6 +14,7 @@ use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
 use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
+use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
@@ -168,5 +169,24 @@ final class Config
     public static function settingsCachePrefix(): string
     {
         return (string) config('corex.settings.cache_prefix', 'corex.settings');
+    }
+
+    // ─── PubSub ───────────────────────────────────────────────────────────
+
+    public static function pubsubMessagesTable(): string
+    {
+        return (string) config('corex.tables.pubsub_messages', 'sys_pubsub_messages');
+    }
+
+    public static function pubsubDriver(): PubSubDriver
+    {
+        $value = config('corex.pubsub.driver', PubSubDriver::Null);
+
+        return $value instanceof PubSubDriver ? $value : PubSubDriver::from((string) $value);
+    }
+
+    public static function pubsubPollIntervalMicroseconds(): int
+    {
+        return (int) config('corex.pubsub.poll_interval_microseconds', 50_000);
     }
 }

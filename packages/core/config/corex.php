@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
+use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
@@ -37,6 +38,7 @@ return [
         'feature_overrides' => 'sys_feature_overrides',
         'departments' => 'sys_departments',
         'department_user' => 'sys_department_user',
+        'pubsub_messages' => 'sys_pubsub_messages',
     ],
 
     /*
@@ -97,6 +99,19 @@ return [
         'cache_store' => 'array',
         'cache_ttl' => 3600,
         'cache_prefix' => 'corex.settings',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | PubSub (B-10 §3.1/§6.1/§7.3 — no LISTEN/NOTIFY, R-15)
+    |--------------------------------------------------------------------------
+    | 'null' is the boxed-safe default (no infra dependency). 'redis' is the
+    | cloud default (B-10 §6.1); 'database' is the boxed fallback when Redis
+    | is unavailable.
+    */
+    'pubsub' => [
+        'driver' => PubSubDriver::Null,
+        'poll_interval_microseconds' => 50_000,
     ],
 
 ];

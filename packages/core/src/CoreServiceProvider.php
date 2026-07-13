@@ -8,11 +8,13 @@ use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
+use CoreX\Contracts\PubSub;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
 use CoreX\Modules\ServiceProviderModuleRegistrar;
+use CoreX\PubSub\PubSubManager;
 use CoreX\Support\Config;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +35,7 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
         $this->app->singleton(FeatureFlags::class, Config::featureFlagsClass());
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
+        $this->app->singleton(PubSub::class, PubSubManager::class);
 
         $resolver = Config::tenantResolverClass();
 
