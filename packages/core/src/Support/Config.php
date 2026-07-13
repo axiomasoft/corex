@@ -6,11 +6,13 @@ namespace CoreX\Support;
 
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
 use CoreX\Enums\IdStrategy;
+use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -37,6 +39,16 @@ final class Config
     public static function auditLogsTable(): string
     {
         return (string) config('corex.tables.audit_logs', 'sys_audit_log');
+    }
+
+    public static function featureFlagsTable(): string
+    {
+        return (string) config('corex.tables.feature_flags', 'sys_feature_flags');
+    }
+
+    public static function featureOverridesTable(): string
+    {
+        return (string) config('corex.tables.feature_overrides', 'sys_feature_overrides');
     }
 
     // ─── Tenancy ──────────────────────────────────────────────────────────
@@ -98,6 +110,15 @@ final class Config
     {
         /** @var class-string<SettingDefaultsProvider> $class */
         $class = config('corex.bindings.setting_defaults', NullSettingDefaultsProvider::class);
+
+        return $class;
+    }
+
+    /** @return class-string<FeatureFlags> */
+    public static function featureFlagsClass(): string
+    {
+        /** @var class-string<FeatureFlags> $class */
+        $class = config('corex.bindings.feature_flags', DatabaseFeatureFlags::class);
 
         return $class;
     }

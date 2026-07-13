@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Enums\IdStrategy;
+use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\NullTenantService;
@@ -31,6 +32,8 @@ return [
     'tables' => [
         'settings' => 'sys_settings',
         'audit_logs' => 'sys_audit_log',
+        'feature_flags' => 'sys_feature_flags',
+        'feature_overrides' => 'sys_feature_overrides',
     ],
 
     /*
@@ -69,6 +72,7 @@ return [
         'settings' => DatabaseSettingsRepository::class,
         'audit_logger' => QueuedAuditLogger::class,
         'setting_defaults' => NullSettingDefaultsProvider::class,
+        'feature_flags' => DatabaseFeatureFlags::class,
     ],
 
     /*

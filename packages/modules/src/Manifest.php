@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use CoreX\Contracts\FeatureFlagDefinition;
 use Flex\Modules\Exceptions\InvalidManifestException;
 use Flex\Modules\Extend\Extender;
 
@@ -47,10 +48,10 @@ final class Manifest
     public array $extenders = [];
 
     /**
-     * Interim shim (D20/OQ-9): typed `list<FeatureFlagDefinition>` once
-     * corex/core ships the contract (P1.9) — not created by this item.
+     * Retrofitted onto `CoreX\Contracts\FeatureFlagDefinition` (D20/OQ-9
+     * resolution) — `corex/core` ships the contract as of P1.9.
      *
-     * @var list<mixed>
+     * @var list<FeatureFlagDefinition>
      */
     public array $featureFlags = [];
 
@@ -154,7 +155,7 @@ final class Manifest
         return $this;
     }
 
-    /** @param  list<mixed>  $flags */
+    /** @param  list<FeatureFlagDefinition>  $flags */
     public function featureFlags(array $flags): self
     {
         $this->featureFlags = $flags;
