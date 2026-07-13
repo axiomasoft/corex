@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\DatabaseAuditLogger;
+use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Enums\IdStrategy;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
@@ -30,7 +30,7 @@ return [
     */
     'tables' => [
         'settings' => 'sys_settings',
-        'audit_logs' => 'corex_audit_logs',
+        'audit_logs' => 'sys_audit_log',
     ],
 
     /*
@@ -67,7 +67,7 @@ return [
     */
     'bindings' => [
         'settings' => DatabaseSettingsRepository::class,
-        'audit_logger' => DatabaseAuditLogger::class,
+        'audit_logger' => QueuedAuditLogger::class,
         'setting_defaults' => NullSettingDefaultsProvider::class,
     ],
 

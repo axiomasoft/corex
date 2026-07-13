@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-
 interface AuditLogger
 {
     /**
-     * Record an append-only audit entry for a model change.
-     *
-     * @param  array<string, array{old: mixed, new: mixed}>  $changes
+     * Record an append-only audit entry. The default implementation only
+     * enqueues (B-10 §7.1: sync-path budget ≤0.3ms) — the row is written by
+     * a queue worker.
      */
-    public function log(Auditable $model, string $event, array $changes = [], ?Authenticatable $actor = null): void;
+    public function record(AuditEntry $entry): void;
 }

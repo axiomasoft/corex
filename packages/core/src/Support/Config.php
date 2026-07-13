@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Support;
 
-use CoreX\Audit\DatabaseAuditLogger;
+use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
@@ -36,7 +36,7 @@ final class Config
 
     public static function auditLogsTable(): string
     {
-        return (string) config('corex.tables.audit_logs', 'corex_audit_logs');
+        return (string) config('corex.tables.audit_logs', 'sys_audit_log');
     }
 
     // ─── Tenancy ──────────────────────────────────────────────────────────
@@ -88,7 +88,7 @@ final class Config
     public static function auditLoggerClass(): string
     {
         /** @var class-string<AuditLogger> $class */
-        $class = config('corex.bindings.audit_logger', DatabaseAuditLogger::class);
+        $class = config('corex.bindings.audit_logger', QueuedAuditLogger::class);
 
         return $class;
     }

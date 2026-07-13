@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use Flex\Modules\Audit\AuditCapabilityWiring;
 use Flex\Modules\Commands\CompileModulesCommand;
 use Flex\Modules\Contracts\EntityRegistry;
 use Flex\Modules\Contracts\ModuleActivationGate;
@@ -74,15 +75,23 @@ final class ModulesServiceProvider extends ServiceProvider
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
         $this->app->booted(function (): void {
+            $registry = $this->app->make(EntityRegistry::class);
             $map = [];
 
-            foreach ($this->app->make(EntityRegistry::class)->all() as $definition) {
+            foreach ($registry->all() as $definition) {
                 $map[$definition->handle] = $definition->model;
             }
 
             if ($map !== []) {
                 Relation::morphMap($map);
             }
+
+            // AuditObserver lives in corex/core (B-10 §4.4 capability
+            // 'auditable') — the wiring itself lives in flex/modules'
+            // AuditCapabilityWiring because it needs EntityRegistry, and
+            // corex/core cannot depend on flex/modules (reverse of this
+            // package's own require, D22).
+            AuditCapabilityWiring::wire($registry);
         });
     }
 }

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Concerns;
 
+use CoreX\Audit\AuditObserver;
 use CoreX\Contracts\Auditable;
-use CoreX\Contracts\AuditLogger;
 use CoreX\Support\Config;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Records an append-only change history via the AuditLogger. The model must
- * also implement the Auditable contract.
+ * Records an append-only change history via AuditObserver::record() (single
+ * write path shared with the EntityRegistry-driven auto-observer, see
+ * AuditObserver). Manual opt-in for models outside EntityRegistry (e.g. a
+ * host app's User model); the model must also implement Auditable.
  *
  * @mixin Model
  */
@@ -38,37 +40,21 @@ trait HasAuditLog
         return ['created_at', 'updated_at'];
     }
 
-    private static function recordAudit(Model $model, string $event): null
+    /**
+     * Attributes masked in the audit diff.
+     *
+     * @return list<string>
+     */
+    public function auditSensitive(): array
     {
-        if (! $model instanceof Auditable) {
-            return null;
+        return [];
+    }
+
+    private static function recordAudit(Model $model, string $action): null
+    {
+        if ($model instanceof Auditable) {
+            AuditObserver::record($model, $action);
         }
-
-        $except = array_flip($model->auditExcept());
-        $changes = [];
-
-        if ($event === 'created') {
-            /** @var array<string, mixed> $attributes */
-            $attributes = $model->getAttributes();
-
-            foreach ($attributes as $attribute => $value) {
-                if (isset($except[$attribute])) {
-                    continue;
-                }
-
-                $changes[$attribute] = ['old' => null, 'new' => $value];
-            }
-        } else {
-            foreach ($model->getChanges() as $attribute => $value) {
-                if (isset($except[$attribute])) {
-                    continue;
-                }
-
-                $changes[$attribute] = ['old' => $model->getOriginal($attribute), 'new' => $value];
-            }
-        }
-
-        app(AuditLogger::class)->log($model, $event, $changes, auth()->user());
 
         return null;
     }

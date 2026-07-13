@@ -55,5 +55,13 @@ abstract class CoreXTestCase extends Orchestra
             'prefix' => '',
             'schema' => 'public',
         ]);
+
+        // sys_audit_log is PG-only (D12/P1.8) — HasAuditLog fires
+        // unconditionally on every Auditable model's create/update/delete,
+        // so leaving it enabled would break every sqlite-lane test that
+        // touches an Auditable model (Widget et al.) with a missing-table
+        // error. Audit-specific tests opt back in explicitly (->group('pg')
+        // + config(['corex.audit.enabled' => true])).
+        $app['config']->set('corex.audit.enabled', false);
     }
 }
