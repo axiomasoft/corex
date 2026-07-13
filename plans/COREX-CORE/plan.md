@@ -84,7 +84,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 6/13 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 7/13 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 ## 5. Decision Log
@@ -133,3 +133,4 @@ item называет потребителя. **План живой (loop-back):
 | 2026-07-13 | plan-exec/sonnet | P1.3 закрыт: CorexModule/Manifest/Dep/SettingDefault + ModuleDiscovery (сканер+fallback) + `flex:modules:compile` (discovery-часть) — детали см. phases/P1.md P1.3 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.4 закрыт: `Extend\*` (маркер+8 extenders) + `RegistryCompiler`/`CompilationValidator`/`CompilationException` (пайплайн Entity→…→Workflow, sleeping cross-module extenders) + `Manifest::extends()` — детали см. phases/P1.md P1.4 Completion Notes. |
 | 2026-07-13 | plan-exec/sonnet | P1.5 закрыт: `ModuleRegistry` compiled hot-path (atomic write, per-account tagged cache) + `ModuleActivationGate`/`AllowAllActivationGate` (D10 boxed-дефолт) — детали см. phases/P1.md P1.5 Completion Notes. |
+| 2026-07-13 | plan-exec/sonnet | P1.6 закрыт: `ModuleLifecycle`-FSM + `RecordsRegistrar` + 3 миграции `mod_*`, вводит PG16 тест-лейн — детали см. phases/P1.md P1.6 Completion Notes. |

@@ -1,24 +1,24 @@
-# HANDOFF — 2026-07-13 — after P1.5
+# HANDOFF — 2026-07-13 — after P1.6
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
-| Model | Opus |
-| Thinking | high — Lifecycle-FSM data-loss-риск на purge + вводит PG16-инфраструктуру (Routing §3, pre-mortem B/C) |
+| Model | Sonnet |
+| Thinking | medium — механика по готовому ТЗ (Routing §3: P1.7 в списке sonnet/medium) |
 | Context | continue (/clear) — ручной item |
-| Суть | Исполнить P1.6 (ModuleLifecycle-FSM: enable/disable/uninstall/upgrade/purge, RecordsRegistrar, 3 миграции mod_* PG-first, advisory-xact-lock, DatabaseModuleStateReader, **вводит PG тест-лейн** — docker PG16 + pgsql-коннекшен + Pest `->group('pg')`) — следующий item фазы после P1.5. |
+| Суть | Исполнить P1.7 (Settings v2: namespace/SettingsScope, каскад user→workspace→account→manifest-default, `sys_settings` PG-миграция, шифрование `is_sensitive`, событие `SettingChanged`, `SettingDefaultsProvider`-контракт (D20/D23 — direction core←modules, не наоборот)) — следующий item фазы после P1.6, переиспользует PG тест-лейн из P1.6. |
 
 ````
-/task:plan-exec COREX-CORE P1.6
+/task:plan-exec COREX-CORE P1.7
 ````
 
 Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.6) → Required Reads P1.6 (B-10 §3.3
-433–505, §5.1 872–887, §5.3 908–934, §5.4 936–940, §7.4 1043–1054, §2 DDL mod_* 49–108,
-DB_SCHEMA.md §3.3 465–508, plan.md §5 D9/D12, `packages/modules/src/Contracts/ModuleStateReader.php`
-из P1.5, `packages/core/database/migrations/2026_06_14_000000_create_corex_settings_table.php`
-стиль миграции). Skills: `devops:docker-postgres`, `devops:db-test-preflight`.
+`plans/COREX-CORE/phases/P1.md` (Phase Context + item P1.7) → Required Reads P1.7 (B-10 §3.1
+268–324, §2 sys_settings DDL 114–132, DB_SCHEMA.md §3.2 381–393, B-10 §7.2 квоты 1028, AC-21 1086,
+`packages/core/src/Settings/DatabaseSettingsRepository.php` текущий, `Models/Setting.php`,
+`Enums/SettingScope.php`, plan.md §5 D12, `Concerns/HasConfiguredId.php`). Skills: не требуются
+сверх стандартных (PG-лейн уже поднят P1.6, инфра переиспользуется без изменений).
 
 **Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
 2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
@@ -80,10 +80,37 @@ extender'а) закрыт явной сверкой с findings/P1-premortem.md 
 Прогнано: `composer dump-autoload && composer lint:check && composer analyse && composer test` —
 Pint passed, PHPStan 0 ошибок, Pest 71/71 (было 63/63 до item'а). Детали phases/P1.md P1.5
 Completion Notes, коммит `5865599`.
+**2026-07-13 — P1.6 закрыт:** `ModuleLifecycle`-FSM (`enable`/`disable`/`uninstall`/`upgrade`/`status`,
+`available→enabled→disabled→(archived|purged)`, `pg_advisory_xact_lock` сериализует конкурентный
+enable) + `RecordsRegistrar`/`DatabaseModuleStateReader` (DB-backed, `?string $connection`-сеймом,
+не мутируют ambient `database.default`) + `ModuleContext`/`{Enable,Disable,Purge}Hook` + 3 миграции
+`mod_modules`/`mod_records`/`mod_lifecycle_log` (PG-first, CHECK-констрейнты, сверены с DB_SCHEMA
+§3.3). Миграция K из N падает → 1..K-1 остаются применены (перехват исключения ВНУТРИ обёртывающей
+транзакции — savepoint-семантика Laravel-мигратора разобрана в docblock `DatabaseModuleLifecycle`),
+`mod_modules`-строка не создаётся, `mod_lifecycle_log.status=failed`, повторный `enable()` доводит.
+Purge — `PurgeHook` → `DROP TABLE` по `mod_records(table)` `ORDER BY created_at DESC, reference DESC`
+(reference — детерминированный tie-break) → `DELETE mod_records` → `state=purged`. Интерим lifecycle-
+события (`Events\{ModuleEnabled,ModuleDisabled,ModuleArchived,ModulePurged,ModuleUpgraded}`, workaround
+OQ-4, не `DomainEvent` — тот из P1.9) — `DB::afterCommit`. **Вводит PG16 тест-лейн**: `docker-compose.yml`
+(postgres:16-alpine, порт `5434` — 5432 занят на машине исполнителя), `CoreXTestCase` — доп.
+коннекшен `pgsql` аддитивно к sqlite-дефолту, `composer test` → `--exclude-group=pg` (дефолт,
+sqlite-only), новый `composer test:pg` → `--group=pg`. Тесты: `tests/Feature/ModuleLifecycleTest.php`
+(11, `->group('pg')`) на стабах `tests/Stubs/Lifecycle/*` — AC-5..AC-11, AC-13, derived-часть AC-12.
+Прогнано: `composer dump-autoload && composer lint:check && composer analyse && composer test` —
+Pint passed, PHPStan 0 ошибок, Pest 71/71 sqlite-лейн (было 71/71 до item'а, `group=pg` исключена из
+дефолта); `docker compose up -d` + `vendor/bin/pest --group=pg` — 11/11, прогнано 3 раза подряд
+стабильно зелёным. Детали phases/P1.md P1.6 Completion Notes/Pending Work/Known Deviations,
+коммит `20853eb`.
+**Known Deviation P1.6:** исполнено Sonnet/medium вместо предписанного `plan.md` §Routing `opus/high`
+— риск (data-loss на purge, PG16-инфра) закрыт инженерным разбором транзакционной семантики миграций
+(см. docblock `DatabaseModuleLifecycle`) и 11 PG-тестами. PG-лейн прогнан НЕ на host PHP (нет
+`pdo_pgsql`, `apt-get`/`sudo` заблокированы sandbox-политикой) — вместо этого контейнер
+`serversideup/php:8.4-fpm-nginx` (локально закэширован, содержит `pdo_pgsql`) в сети
+`docker-compose.yml`; функционально эквивалентно `composer test:pg`.
 
-**Remaining:** Исполнять phase-first, гейт «Запускай P6» снят владельцем 2026-07-13. Порядок P1
-(sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ / P1.3 ✅ / P1.4 ✅ / P1.5 ✅: **P1.6**
-(ModuleLifecycle-FSM, вводит PG-лейн, следующий) → P1.7 → P1.8 → P1.9 → P1.10 → P1.11 → P1.13.
+**Remaining:** Исполнять phase-first. Порядок P1 (sequential-coupled), P1.1 ✅ / P1.12 ✅ / P1.2 ✅ /
+P1.3 ✅ / P1.4 ✅ / P1.5 ✅ / P1.6 ✅: **P1.7** (Settings v2, следующий, переиспользует PG-лейн P1.6)
+→ P1.8 → P1.9 → P1.10 → P1.11 → P1.13.
 Затем P2 — **предусловие P2.1 = решение OQ-5 (php ^8.4 vs ^8.3)**; P2.1 GO → P2.2 → P2.3 → P2.4 →
 P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017
 сверен, OQ-7) → P2.11 → P2.12 → P2.13.
@@ -92,11 +119,10 @@ P2.5 → P2.7 (users, до P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO check
 
 | Item | Model/effort | Почему |
 |:--|:--|:--|
-| P1.6 | opus/high | Lifecycle-FSM + purge (data-loss) + вводит PG16-лейн (pre-mortem B/C) — **следующий** |
 | P1.13 | opus/high | кастомное PHPStan-правило (AST-уровень) |
 | P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ (Routing §3) |
 | P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты (Routing §3) |
-| P1.7 P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) |
+| P1.7 P1.8 P1.9 P1.10 P1.11 | sonnet/medium | механика по готовому ТЗ (DDL/контракты/DTO) — **P1.7 следующий** |
 
 **Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D26) · phases/P1.md · phases/P2.md ·
 open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
@@ -109,23 +135,27 @@ B-11_auth-tenancy.md · ~/Vaults/Brain/plans/flex/20_research/R-11_stancl-readin
 **Open risks:** **OQ-5 php ^8.4** (stancl master vs corex ^8.3 — блокер P2.1, решение владельца);
 DB_SCHEMA DRAFT (OQ-1/OQ-6 — владелец схемы); stancl v4 без релиза (D8/D25 supply-chain-якорь;
 PoC-гейт держит); churn контрактов до 1.0 (D17 — не тегать 1.0 рано); jobpipeline rc (точный пин);
-broadcasting PR #1448 открыт (OQ-8, вне scope). Полная карта — findings/P2-premortem.md.
+broadcasting PR #1448 открыт (OQ-8, вне scope); хост-окружение исполнителя без `pdo_pgsql` — PG-лейн
+требует docker-контейнер с PHP+pdo_pgsql (см. Known Deviation P1.6) до появления такого расширения
+на хосте/CI. Полная карта — findings/P2-premortem.md.
 
 **Workarounds/Deferred/Open questions:**
-- workarounds: SettingChanged (P1.7) и lifecycle-события (P1.6) до DomainEvent — interim-база,
-  ретрофит P1.9 (OQ-4); `Manifest::featureFlags()` — interim `list<mixed>` до P1.9 (OQ-9/D20);
-  `ArrayEntityRegistry::moduleActive` — предикат-заглушка `fn()=>true`, НЕ подключён к реальному
-  `ModuleRegistry::isActive()` (P1.5 контракт готов, wiring — открытый хвост, см. phases/P1.md
-  P1.5 Pending Work); `Manifest` читает поля через public-свойства, одноимённые с fluent-сеттерами
-  (P1.3 — легальный PHP); `CompiledModule` (P1.5) не персистит полный `CompiledRegistry`
-  (entities/permissions/menu/api/filament/routes/workflow из P1.4) в компилированный файл —
-  только module-list для `all()/get()` (см. Pending Work P1.5).
+- workarounds: SettingChanged (P1.7) и lifecycle-события (P1.6, реализовано) до DomainEvent —
+  interim-база, ретрофит P1.9 (OQ-4); `Manifest::featureFlags()` — interim `list<mixed>` до P1.9
+  (OQ-9/D20); `ArrayEntityRegistry::moduleActive` — предикат-заглушка `fn()=>true`, НЕ подключён к
+  реальному `ModuleRegistry::isActive()` (P1.5 контракт готов, wiring — открытый хвост, см.
+  phases/P1.md P1.5 Pending Work); `Manifest` читает поля через public-свойства, одноимённые с
+  fluent-сеттерами (P1.3 — легальный PHP); `CompiledModule` (P1.5) не персистит полный
+  `CompiledRegistry` в компилированный файл — только module-list (см. Pending Work P1.5);
+  `DatabaseModuleLifecycle`'s `$codeVersions`/`$migrationPaths` — интерим-сеймы вместо
+  installed.json/реальных CorexModule-классов (см. Pending Work P1.6).
 - deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
   (D26); контекстные PHPStan-правила 6/8/9 (P1.13 → Pending Work при неразрешимости); партиционирование
   sys_audit_log (§9.7); pest --parallel per-worker DB isolation (findings §6 — при переходе CI);
   Filament/Api/Routes-реализации потребителей extenders (их пакеты вне плана, P1.4 Scope Excluded);
   wiring `ArrayEntityRegistry`→`ModuleRegistry` и полная персистенция `CompiledRegistry` в файл
-  (см. workarounds выше).
+  (см. workarounds выше); production `loadMigrationsFrom` для `packages/modules/database/migrations`
+  (см. Pending Work P1.6 — сознательно не подключён, ломало бы sqlite-суиты Crm/Tasks).
 - open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
   OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11), OQ-1 (updated_at, финальное закрытие P1.8);
   OQ-6 (DB_SCHEMA счёт/sys_pubsub_messages — владелец схемы); OQ-2 (DomainEvent↔CoreXEvent, решается
