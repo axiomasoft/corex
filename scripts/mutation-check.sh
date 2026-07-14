@@ -21,6 +21,8 @@ declare -A TEST_CMD=(
     [P1.15-drop-entities]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='persists the entity|projects the compiled entities'"
     [P1.15-rename-check]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='leaves the destination intact'"
     [P1.15-silent-empty]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='fail-loud'"
+    [P1.16-tags-back]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='non-taggable file store'"
+    [P1.16-no-epoch-bump]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='shared-DB epoch'"
 )
 
 if [ "${1:-}" = "--list" ]; then
