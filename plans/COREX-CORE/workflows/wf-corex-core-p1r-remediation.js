@@ -33,17 +33,15 @@ const CTX = `
 `
 
 const ITEMS = [
-  { id: 'P1.15', model: 'opus', effort: 'high', deps: [], title: 'Персистенция CompiledRegistry + рантайм-проекция + deploy-хук' },
-  { id: 'P1.16', model: 'opus', effort: 'high', deps: ['P1.15'], title: 'Кеш-контракт без тегов + эпоха-инвалидация (D39) + коннекшн из TenantContext' },
   { id: 'P1.17', model: 'sonnet', effort: 'medium', deps: [], title: 'Гейт компиляции: валидатор' },
-  { id: 'P1.18', model: 'opus', effort: 'high', deps: ['P1.16'], title: 'Lifecycle: seq-порядок, все claim-типы (D41), all-or-nothing enable (D40)' },
+  { id: 'P1.18', model: 'opus', effort: 'high', deps: [], title: 'Lifecycle: seq-порядок, все claim-типы (D41), all-or-nothing enable (D40)' },
   { id: 'P1.19', model: 'opus', effort: 'high', deps: [], title: 'Миграции: publish-скоупы (D43), IdColumns, µs, sys_audit_log.seq (D42)' },
   { id: 'P1.20', model: 'sonnet', effort: 'medium', deps: ['P1.19'], title: 'ID-strategy: единый дефолт + типы колонок на PG' },
   { id: 'P1.21', model: 'opus', effort: 'high', deps: ['P1.19'], title: 'Audit: sensitive, killswitch, время события, курсор по seq' },
   { id: 'P1.22', model: 'sonnet', effort: 'medium', deps: ['P1.19'], title: 'Settings/FeatureFlags: каскад скоупов, payload, констрейнт-тесты' },
   { id: 'P1.23', model: 'opus', effort: 'high', deps: ['P1.19'], title: 'Departments: lock-then-read, after-commit, soft-delete' },
   { id: 'P1.24', model: 'sonnet', effort: 'medium', deps: ['P1.19'], title: 'PubSub: guard, durable-курсор (D44), ретеншн' },
-  { id: 'P1.25', model: 'sonnet', effort: 'medium', deps: ['P1.15', 'P1.18'], title: 'Lifecycle-события на DomainEvent + wiring-хвосты' },
+  { id: 'P1.25', model: 'sonnet', effort: 'medium', deps: ['P1.18'], title: 'Lifecycle-события на DomainEvent + wiring-хвосты' },
 ]
 
 const IMPL_SCHEMA = {

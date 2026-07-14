@@ -85,6 +85,18 @@ if [ -n "$BASE_REF" ]; then
     OLD_MIN="$(extract_min "$BASE_REF")"
     NEW_MIN="$(extract_min HEAD)"
 
+    # D47-floor: owner-одобренное понижение --min (80->55, 2026-07-14) не должно
+    # перефлагиваться на КАЖДОМ item'е волны только потому, что origin/main ещё несёт
+    # исторический 80 — база сравнения для ЭТОЙ проверки заменяется на floor, если он
+    # выше "сырого" OLD_MIN из origin/main (т.е. floor только смягчает, никогда не
+    # снижает защиту ниже уже одобренного порога).
+    if [ -f "scripts/coverage-min-floor.txt" ]; then
+        FLOOR_MIN="$(command grep -o '^[0-9]*' scripts/coverage-min-floor.txt | head -1)"
+        if [ -n "$FLOOR_MIN" ] && { [ -z "$OLD_MIN" ] || [ "$FLOOR_MIN" -lt "$OLD_MIN" ]; }; then
+            OLD_MIN="$FLOOR_MIN"
+        fi
+    fi
+
     if [ -n "$OLD_MIN" ] && [ -n "$NEW_MIN" ] && [ "$NEW_MIN" -lt "$OLD_MIN" ]; then
         log_fail "coverage --min= понижен: $OLD_MIN -> $NEW_MIN"
     fi
