@@ -8,6 +8,7 @@ use CoreX\Tests\Stubs\StubRogueExtender;
 use CoreX\Tests\Stubs\Widget;
 use Flex\Modules\Compiler\CompiledEntityField;
 use Flex\Modules\Compiler\CompiledRegistry;
+use Flex\Modules\Compiler\InstalledPackages;
 use Flex\Modules\Compiler\RegistryCompiler;
 use Flex\Modules\Dep;
 use Flex\Modules\Enums\Capability;
@@ -103,18 +104,40 @@ it('rejects requires that do not mirror an installed module', function (): void 
         ->toThrow(CompilationException::class, 'ghost/does-not-exist');
 });
 
-it('resolves requires against a real installed.json when installedPackages is not injected (AC-2)', function (): void {
-    $requiresRealPackage = Manifest::make('corex/stub-requires-real')
+it('resolves requires against installed.json contents, not a hardcoded package list (AC-2)', function (): void {
+    // Controlled fixture instead of the monorepo's real vendor/composer/installed.json:
+    // base_path()-resolution of the real file is environment-dependent (testbench/CI layout
+    // may not mirror a developer's local monorepo checkout — see Pending Work P1.17) and was
+    // never the point of AC-2. The injection seam (`$installedJsonPath`) exercises the exact
+    // same production parsing/validation path deterministically.
+    $installedPackages = InstalledPackages::discover(
+        __DIR__.'/../Stubs/installed-with-corex-core.json',
+    );
+
+    expect($installedPackages)->toContain('corex/core');
+
+    $requiresInstalled = Manifest::make('corex/stub-requires-real')
         ->title('Requires Real')
         ->tablePrefix('rrl')
         ->requires([Dep::module('corex/core')]);
 
-    // No $installedPackages arg — RegistryCompiler falls back to InstalledPackages::discover(),
-    // which reads the monorepo's real vendor/composer/installed.json (corex/core is a genuine
-    // path-repo dependency there — not a hardcoded ['corex/core'] anymore, D9/AC-2).
-    $registry = (new RegistryCompiler)->compile([$requiresRealPackage]);
+    $registry = (new RegistryCompiler)->compile([$requiresInstalled], $installedPackages);
 
     expect($registry->entities)->toBe([]);
+});
+
+it('rejects requires against a package absent from installed.json (AC-2)', function (): void {
+    $installedPackages = InstalledPackages::discover(
+        __DIR__.'/../Stubs/installed-with-corex-core.json',
+    );
+
+    $requiresMissing = Manifest::make('corex/stub-requires-missing')
+        ->title('Requires Missing')
+        ->tablePrefix('rrm')
+        ->requires([Dep::module('corex/not-installed')]);
+
+    expect(fn () => (new RegistryCompiler)->compile([$requiresMissing], $installedPackages))
+        ->toThrow(CompilationException::class);
 });
 
 it('collects a cross-module EntityField as sleeping, without failing compilation', function () use ($registryCompilerAlphaManifest, $registryCompilerBetaManifest): void {
