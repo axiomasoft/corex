@@ -29,7 +29,7 @@ final class Config
 {
     public static function idStrategy(): IdStrategy
     {
-        $value = config('corex.ids.strategy', IdStrategy::Ulid);
+        $value = config('corex.ids.strategy', IdStrategy::Uuid7);
 
         return $value instanceof IdStrategy ? $value : IdStrategy::from((string) $value);
     }
