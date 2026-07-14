@@ -1,28 +1,39 @@
-# HANDOFF — 2026-07-14 — after P1.19
+# HANDOFF — 2026-07-14 — after P1.20
 
-**Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат. Следующий item — **P1.20** (ID-strategy: единый дефолт + типы колонок на PG + ulid/auth-швы).
+**Next:** /task:plan-design COREX-CORE P1.20
 
+Волна ОСТАНОВЛЕНА на P1.20 (🔴 Blocked, D58) — не продолжать на P1.21+ до фикса. Стоп-условие
+процессное (Major), не архитектурное: инженерная часть P1.20 сделана и независимо подтверждена ревью
+GREEN, но mutation-check-кейс не зарегистрирован в каноническом харнессе (мандат D45).
+
+**Рекомендация владельцу (не обязательно re-design — фикс инфраструктурный):** предпочтительный путь —
+точечный фикс, а не полный `plan-design`-цикл: зарегистрировать кейс
+`plans/COREX-CORE/mutations/P1.20-idcolumns-uuid7-ulid.patch` в `scripts/mutation-check.sh` (правка
+одной строки — по образцу уже зарегистрированных кейсов P1.14/P1.16/P1.17/P1.18/P1.19), приложить оба
+прогона харнесса (до регистрации — `exit=2`; после — патч красит ровно ожидаемый тест, откат чистый),
+затем возобновить волну:
 ```
-Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js"})
+Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "<последний run P1.20>"})
 ```
+`/task:plan-design COREX-CORE P1.20` вызывается, только если владелец при разборе решит, что фикс
+требует пересмотра Validation/Code Guidance item'а — план-протокол требует launch-block именно на
+`plan-design` для разбора остановки Blocked-item'а; команда выше — путь, ожидаемый после разбора.
 
 | Параметр | Значение |
 |:--|:--|
-| Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
-| Thinking | — (делегировано workflow) |
+| Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат; фикс mutation-check-регистрации — sonnet/low (тривиальная правка) |
+| Thinking | — |
 | Context | NEW SESSION |
-| Суть | **P1.19 закрыт 🟠 Done with deviations** (верификация: вердикт ревью GREEN, но `files_outside_scope` непуст — `scripts/mutation-check.sh` правился вне Files item'а — правило докьюрации переводит 🟢→🟠). Прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 22 `timestampTz` (D32/A66/A72; Completion Notes ранее заявляли 24 — Nit, покрытие полное); `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет. Гейт зелёный (101/101 sqlite, 57/57 pg), **CI на ветке зелёный (финальный HEAD `5a8f52d`, run 29353759009; код-HEAD `3a9e555`, run 29353601440, 8/8 job)**, mutation-check 2 кейса (drop-precision, hardcode-uuid) воспроизведены верификатором независимо. Волна продолжается штатно с **P1.20**. |
+| Суть остановки | **P1.20 переведён 🔴 Blocked (был 🟢, D58).** Инженерная часть подтверждена ревью GREEN: единый дефолт `IdStrategy::Uuid7` в `Config::idStrategy()` (A22 закрыт), PG-тест типов колонок через `information_schema.columns.data_type` под 4 стратегиями/3 швами (A4 закрыт), `UlidGenerationTest` пересобирает схему ПОСЛЕ флипа конфига (A21 закрыт), стаб `packages/auth` на `IdColumns` (A23 закрыт), докблоки `IdColumns`/`HasConfiguredId` без лжи про ULID-дефолт (A74/A75 закрыты). Корневой гейт зелёный (lint/analyse/test 100, test:pg 61); тулчейн `packages/auth` прогнан отдельно и зелёный (11 тестов). Единственный дефект — процессный (Major): патч-саботаж `plans/COREX-CORE/mutations/P1.20-idcolumns-uuid7-ulid.patch` применён/откачен ВРУЧНУЮ верификатором (не через харнесс) — краснеет ровно датасет `uuid7`, откат чистый, но `scripts/mutation-check.sh` его не знает, канонический воспроизводимый прогон (мандат D45) падает `exit=2`. |
 
-**Важная находка (D57) — прочитать перед продолжением волны:** предыдущие handoff.md (минимум с
-коммита `f404838`, ДО RED-аудита и ДО этой ремедиации) утверждали, что «OQ-11 (golden-шаблон vs
-DDL-при-enable) решён владельцем Вариантом (A)» — но `git log -S "OQ-11"` не находит НИ ОДНОГО коммита,
-вводящего OQ-11 в `open-questions.md` (там только OQ-1..OQ-9), и фраза «golden-шаблон» в истории репо
-встречается исключительно в контексте P2-провижининга (D24), никогда рядом с P1.18. Альтернативного ТЗ
-P1.18 «purge = очистка данных, не DDL» не существовало НИ В ОДНОМ коммите. Это была недостоверная
-(галлюцинированная) запись, много раз скопированная между handoff'ами без сверки с SSOT — тот же класс
-дефекта, за который фаза P1 получила исходный RED-вердикт. **Урок процессу:** будущие docs-curator/
-handoff-агенты обязаны проверять OQ-ссылки против `open-questions.md` ПЕРЕД тем, как копировать их в
-новый handoff — не доверять прозе предыдущего файла.
+**Партиальный коммит P1.20:** `8dd4847` — «fix(core): единый дефолт ID-стратегии Uuid7 + PG-тесты типов
+колонок (P1.20)», запушен на `p1r-remediation`. Код НЕ откатывается — блокируется только статус item'а
+до регистрации mutation-check-кейса.
+
+**Рабочее дерево на момент остановки:** `git status --porcelain` — чисто по путям P1.20 (Files item'а).
+Сторонний шум вне scope: `?? .mcp.json`, `?? .serena/` (артефакты MCP/serena-тулинга сессии, не относятся
+к P1.20 и не трогались этим item'ом). Стеш НЕ создавался — прятать нечего, изменений по Files item'а в
+рабочем дереве нет (всё, что относится к P1.20, уже в `8dd4847`).
 
 **Разрешённые эскалации прошлых items (детали — `phases/P1.md`, блоки «✅ РАЗРЕШЕНО»):**
 1. **P1.14 (D47/D48):** phpstan `tests`-paths вынесены в **P1.28**; coverage `--min` ослаблен 80→55 (D47),
@@ -37,7 +48,8 @@ handoff-агенты обязаны проверять OQ-ссылки прот�
 4. **P1.18/P1.19 (D57):** ложный DoR-гейт «OQ-11» опровергнут — item'ы разблокированы под существующим
    ТЗ, без re-design.
 
-Волна продолжается **P1.20 → …** по порядку плана. Волна НЕ исполняется через `/task:plan-exec`:
+**Волна ОСТАНОВЛЕНА на P1.20 (D58).** Не продолжать на P1.21+ до фикса mutation-check-регистрации и
+подтверждения зелёного харнесс-прогона (см. Trigger выше). Волна НЕ исполняется через `/task:plan-exec`:
 несущие items предписаны `opus/high`, команда пинит sonnet/medium (routing-undershoot запрещён —
 plan-protocol §9, D35).
 
@@ -49,7 +61,7 @@ plan-protocol §9, D35).
 D45/P1.26 Code Guidance). GREEN → item **P1.26** (CHANGELOG + `Deprecated / Will break in 0.2` +
 semver-теги + PR ветки в `main`) → `/task:plan-close COREX-CORE P1` → и только потом P2.1.
 
-Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D57) → этот файл →
+Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D58) → этот файл →
 `phases/P1.md` (ТЗ item'ов) → `findings/P1-audit-2026-07-13.md` (что чиним, A1..A93) →
 `findings/P1R-premortem.md` (что волна НЕ закрывает) → `findings/P1R-coverage-matrix.md` (93 → items).
 
@@ -101,20 +113,29 @@ lint:check passed, analyse 0 errors, test 101/101 (sqlite), test:pg 57/57. Mutat
 (не блокеры): `schema_version` реализован как `const`, не config-ключ (`config/`/`Config.php` вне Files);
 Nit-мискаунт «24 vs 22» timestampTz в исходной прозе Completion Notes (покрытие полное, исправлено).
 
-**Remaining:**
-1. **Волна 2 (P1.20–P1.25)** — 6 items, порядок: P1.20 → остальные по порядку плана.
-2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
-3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
-4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
-5. **Фаза P2** (0/13): предусловие P2.1 = OQ-5 (php ^8.4 vs ^8.3).
+**2026-07-14 — P1.20 попытан и закрыт 🟢, откачен RED-ревью (D58): волна ОСТАНОВЛЕНА.** Инженерная часть
+подтверждена GREEN (см. врезку Next выше) — единственный дефект процессный: mutation-check-кейс не
+зарегистрирован в `scripts/mutation-check.sh`, канонический прогон харнесса падает `exit=2`. Код (`8dd4847`)
+остаётся в дереве и запушен. Волна НЕ продолжается на P1.21+ до фикса.
 
-**Sources of truth:** plan.md (v0.3.0, D1–D57) · phases/P1.md (28 items) · phases/P2.md ·
+**Remaining:**
+1. **P1.20 (заблокирован, D58)** — фикс: регистрация mutation-check-кейса в `scripts/mutation-check.sh`
+   + оба прогона харнесса. После фикса — волна продолжается **P1.21 → P1.25** по порядку плана.
+2. **Волна 2 (P1.21–P1.25)** — 5 items, ждут разбора P1.20.
+3. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
+4. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
+5. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
+6. **Фаза P2** (0/13): предусловие P2.1 = OQ-5 (php ^8.4 vs ^8.3).
+
+**Sources of truth:** plan.md (v0.3.0, D1–D58) · phases/P1.md (28 items) · phases/P2.md ·
 open-questions.md (OQ-1..15, БЕЗ OQ-11 — см. D57) · findings/{P1-audit-2026-07-13, P1R-premortem,
 P1R-coverage-matrix, P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem,
 P1-premortem}.md · ~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loader.md · B-11_auth-tenancy.md ·
 ~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT) · 50_execution/00_EXECUTION_ROADMAP.md
 
 **Open risks:**
+- **🔴 P1.20 Blocked** (D58, новое) — процессный Major, не архитектурный: mutation-check-кейс
+  `P1.20-idcolumns-uuid7-ulid.patch` не зарегистрирован в харнессе; фикс тривиален (см. Next).
 - ~~**🔴 P1.14/P1.16/P1.17 Blocked**~~ — закрыто D47/D48/D52/D56. ~~«OQ-11» (блокер DoR P1.18)~~ —
   опровергнуто D57 (недостоверная запись, не реальное решение владельца) — P1.18 исполняется под
   существующим ТЗ без re-design.
@@ -125,12 +146,14 @@ P1-premortem}.md · ~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loa
 - ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2) — закрыто P1.16.
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15.
 - ~~**Гейт компиляции пропускал ровно то, ради чего создан**~~ (A7/A41/A42/A44) — закрыто P1.17.
-- ~~**`corex/core` не поставляет ни одной применимой миграции**~~ (A19/A62) — закрыто P1.19 (🟠 Done with
+- ~~**`corex/core` не поставляет ни одной применимой миграции**~~ — закрыто P1.19 (🟠 Done with
   deviations — files_outside_scope): publish по скоупам коннекшена (D33/D43) + README + `SCHEMA_VERSION`;
   мёртвый `loadMigrationsFrom` удалён. Хардкод `uuid` (A58) и `timestamp(0)` (A66/A72) тоже закрыты
   (IdColumns + `precision: 6`).
-- **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
-  mutation-check патчами в репо, прогоняет отдельный верификатор.
+- ~~**A22/A4/A21/A23 (ID-strategy дефолт/типы/ulid-шов/auth-стаб)**~~ — инженерно закрыто P1.20
+  (ревью GREEN), но item сам БЛОКИРОВАН процессно (mutation-check-регистрация, D58).
+- **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65 — часть закрыта P1.20/P1.19): зелёная сьюта ≠
+  покрытие. Правило волны — mutation-check патчами в репо, прогоняет отдельный верификатор.
 - **Ядро де-факто PG16-only, но нигде этого не объявляет** (OQ-12) — boxed-заказчик узнает на площадке.
 - OQ-5 (php ^8.4) — блокер P2.1; DB_SCHEMA DRAFT (OQ-6); stancl v4 без релиза (D8/D25).
 - Полная карта того, что волна НЕ закрывает — `findings/P1R-premortem.md` (кластеры C1–C8, P1–P7, U1–U6).
