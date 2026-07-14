@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
@@ -76,6 +77,7 @@ return [
     'bindings' => [
         'settings' => DatabaseSettingsRepository::class,
         'audit_logger' => QueuedAuditLogger::class,
+        'audit_retention' => NullAuditRetention::class,
         'setting_defaults' => NullSettingDefaultsProvider::class,
         'feature_flags' => DatabaseFeatureFlags::class,
         'departments' => DatabaseDepartmentRepository::class,

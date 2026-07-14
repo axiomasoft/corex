@@ -6,7 +6,6 @@ namespace CoreX\Audit;
 
 use CoreX\Contracts\AuditEntry;
 use CoreX\Models\AuditLog;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,9 +14,11 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Queue worker that writes the sys_audit_log row (B-10 §7.1: the sync path
- * only enqueues this job — see QueuedAuditLogger). workspace_id is resolved
- * here, at write time, from the current TenantContext — AuditEntry itself
- * carries no workspace (B-10 §3.1 constructor).
+ * only enqueues this job — see QueuedAuditLogger). occurred_at and workspace_id
+ * are the EVENT-time snapshot carried on the AuditEntry (A17): the worker only
+ * writes them and NO LONGER resolves tenant here — an async worker runs under a
+ * different (or absent) tenant context and would otherwise stamp a foreign
+ * workspace and the write moment instead of the event moment.
  *
  * `$writeConnection` is null (the app's default) unless a caller pins an
  * explicit name — same seam as DatabaseRecordsRegistrar (P1.6)/
@@ -38,13 +39,13 @@ final class RecordAuditEntry implements ShouldQueue
         private readonly ?string $writeConnection = null,
     ) {}
 
-    public function handle(TenantContextResolver $tenantContext): void
+    public function handle(): void
     {
         AuditLog::on($this->writeConnection)->create([
-            'occurred_at' => now(),
+            'occurred_at' => $this->entry->occurredAt ?? now(),
             'actor_type' => $this->entry->actorType,
             'actor_id' => $this->entry->actorId,
-            'workspace_id' => $tenantContext->current()->workspace?->id,
+            'workspace_id' => $this->entry->workspaceId,
             'entity_type' => $this->entry->entityType,
             'entity_id' => $this->entry->entityId,
             'action' => $this->entry->action,

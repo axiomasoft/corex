@@ -6,7 +6,6 @@ namespace CoreX\Concerns;
 
 use CoreX\Audit\AuditObserver;
 use CoreX\Contracts\Auditable;
-use CoreX\Support\Config;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,13 +20,22 @@ trait HasAuditLog
 {
     public static function bootHasAuditLog(): void
     {
-        if (! Config::auditEnabled()) {
-            return;
-        }
-
+        // Observers are registered UNCONDITIONALLY — the killswitch
+        // (Config::auditEnabled) is evaluated at write time in
+        // AuditObserver::record(), not here (A60): model boot happens once and
+        // is cached across the process, so a boot-time skip would never
+        // re-enable when the config flips (and the capability path never saw
+        // the flag at all).
         static::created(static fn (Model $model): null => self::recordAudit($model, 'created'));
         static::updated(static fn (Model $model): null => self::recordAudit($model, 'updated'));
         static::deleted(static fn (Model $model): null => self::recordAudit($model, 'deleted'));
+
+        // restored/forceDeleted registrars live in the SoftDeletes trait, not
+        // on the base Model — register through registerModelEvent so HasAuditLog
+        // stays usable on non-SoftDeletes models too (the events simply never
+        // fire there). Both are meaningful only under SoftDeletes.
+        static::registerModelEvent('restored', static fn (Model $model): null => self::recordAudit($model, 'restored'));
+        static::registerModelEvent('forceDeleted', static fn (Model $model): null => self::recordAudit($model, 'forceDeleted'));
     }
 
     /**

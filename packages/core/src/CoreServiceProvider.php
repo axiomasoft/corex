@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX;
 
+use CoreX\Audit\NullAuditRetention;
+use CoreX\Audit\PruneAuditLog;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Contracts\AuditRetention;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
@@ -39,6 +42,11 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(SettingDefaultsProvider::class, Config::settingDefaultsProviderClass());
         $this->app->singleton(SettingsRepository::class, Config::settingsRepositoryClass());
         $this->app->singleton(AuditLogger::class, Config::auditLoggerClass());
+
+        /** @var class-string<AuditRetention> $auditRetention */
+        $auditRetention = config('corex.bindings.audit_retention', NullAuditRetention::class);
+        $this->app->singleton(AuditRetention::class, $auditRetention);
+
         $this->app->singleton(TenantService::class, Config::tenantServiceClass());
         $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
@@ -55,6 +63,10 @@ final class CoreServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([PruneAuditLog::class]);
+        }
+
         // NO loadMigrationsFrom (D33/A19/A62): every sys_* migration is PG-only
         // DDL living in database/migrations/pg/, and this provider is registered
         // by sqlite-backed consumer suites too — an unconditional load would
