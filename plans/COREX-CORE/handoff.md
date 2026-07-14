@@ -1,9 +1,6 @@
-# HANDOFF — 2026-07-14 — after P1.25 (blocked attempt)
+# HANDOFF — 2026-07-14 — after P1.25
 
-**Next:** owner review of P1.20 stop-condition (fix already partly landed: `b8328fe` registers the
-mutation-check harness line, but the status-flip + D58 sign-off are NOT committed — see below), then
-`Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js",
-resumeFromRunId: "<last P1.20 run>"})` to resume P1.22→P1.23→P1.24→P1.25.
+**Next:** /task:plan-design COREX-CORE P1.20
 
 Волна ОСТАНОВЛЕНА на P1.20 (🔴 Blocked, D58). Попытки возобновить на **P1.22** (D59), **P1.23**
 (D60), **P1.24** (D61) и теперь **P1.25** заблокированы тем же стоп-условием — все четыре идут в
