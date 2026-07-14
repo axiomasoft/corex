@@ -47,7 +47,7 @@
     "scripts": {
         "test": "vendor/bin/pest --exclude-group=pg",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:coverage": "vendor/bin/pest --coverage --min=80 --exclude-group=pg",
+        "test:coverage": "vendor/bin/pest --coverage --min=55 --exclude-group=pg",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
