@@ -108,20 +108,24 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 2/28 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 2/28 | 🔴 Blocked |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
-**Чтение борда P1 (D28, обновлено D47/D48 — эскалация P1.14 разобрана владельцем).** Волна 1 (P1.1–P1.13)
+**Чтение борда P1 (D28, обновлено D49 — волна остановлена на P1.16).** Волна 1 (P1.1–P1.13)
 исполнена и терминальна, но 🔴 RED-аудит перевёл 12 из 13 items в 🟠 Done with deviations (материальные
 отклонения plan-protocol §6: невыполненный Scope Included, ложные Completion Notes, дифф вне `Files`) —
 в 🟢 остался только P1.12. Волна 2 (P1.14–P1.26, ремедиация) была остановлена на P1.14 двумя независимыми
 эскалациями (D46); владелец разобрал обе 2026-07-14 (D47 — coverage `--min` ослаблен до факта, возврат к
 80% вынесен в time-gated **P1.27**; D48 — phpstan `tests`-paths вынесены из scope P1.14 в отдельный
-**P1.28**) — P1.14 переведён **🟠 Done with deviations**, эскалация снята. Итог борда: **2 🟢 · 13 🟠 · 0 🔴 · 13 ⬜**
-(P1.15 закрыт 🟢; P1.16–P1.26 не стартовали + новые P1.27/P1.28). **P1.27 не блокирует закрытие фазы** (time-gated, стартует
-после обкатки ядра на реальных проектах) — GREEN-аудит и P1.26 не ждут его старта. **P1.16 закрыт 🟠**
-(Blocker A1/A2 + эпоха D39 сданы, гейт-зелёные; коннекшн-из-ctx — открытая эскалация владельцу, см.
-P1.16 Escalation Needed). Итог борда: **2 🟢 · 14 🟠 · 0 🔴 · 12 ⬜**. Волна продолжается с P1.17.
+**P1.28**) — P1.14 переведён **🟠 Done with deviations**, эскалация снята. P1.15 закрыт **🟢**. Волна продолжила
+на **P1.16**, но item сам эскалировал plan-protocol §10 (Scope Included требует ctx→connection-резолвинг
+для `ModuleStateReader`/`RecordsRegistrar`, чего Files item'а не покрывает и что упирается в P2-инфру
+D13) — докс-куратор остановил волну (D49): **P1.16 переведён 🔴 Blocked** (был закрыт 🟠 с открытым
+Escalation Needed=yes — это ровно та ошибка, за которую фаза получила RED, план не имеет права показывать
+незакрытое решение владельца как «в целом успешный» item). Код и коммиты P1.16 (`19d5fa4`/`7d1cb10`/`6c715de`/
+`2be2d2d`/`f18c9b1`) остаются в дереве и запушены — Blocker A1/A2 и эпоха D39 закрыты и гейт-зелёные
+НЕЗАВИСИМО от решения по коннекшну; блокирован лишь статус item'а до владельческого решения. Итог борда:
+**2 🟢 · 13 🟠 · 1 🔴 · 12 ⬜**. Волна НЕ продолжается на P1.17+ до разбора эскалации P1.16.
 
 ## 5. Decision Log
 
@@ -178,6 +182,8 @@ P1.16 Escalation Needed). Итог борда: **2 🟢 · 14 🟠 · 0 🔴 · 
 | D47 | 2026-07-14 | **Coverage-гейт P1.14 ослаблен: `composer test:coverage --min=55`** (было 80, факт 56.3% на CI run 29331681218 — 55 округлено вниз с запасом). Причина владельца: код ядра ещё НЕ обкатан на реальных проектах — он предстоит переписыванию под реальную нагрузку, доводить его сейчас до 80% нерационально (переделывать всё равно придётся). Возврат к `--min=80` — отдельный time-gated item **P1.27**, стартует ПОСЛЕ обкатки на реальных проектах, НЕ блокирует закрытие фазы P1 (P1.26). | Решение владельца плана, 2026-07-14 (см. чат-эскалацию P1.14 деталь #2: PG-only классы — Audit/Settings/Departments/PubSub/Lifecycle — покрыты только `->group('pg')`-тестами, а `test:coverage` обязан исключать эту группу; слияние лейнов ломает `AuditLogTest.php` изоляцией по порядку — пре-существующий изъян P1.8). |
 | D48 | 2026-07-14 | **`phpstan.neon` paths P1.14 НЕ получают `tests`** — Scope Included/Implementation Rules/Deliverables item'а формально сужены до migrations-only (уже фактически так реализовано, Known Deviations → принятое решение). 9 правил `flex/modules-lint` на `tests/` — отдельный item **P1.28**, второй самостоятельный phpstan-прогон (свой `.neon` БЕЗ `larastan/extension.neon`) под 60 Pest-идиом false-positive волны 1. | Решение владельца плана, 2026-07-14 (см. чат-эскалацию P1.14 деталь #1: Implementation Rules «paths += tests, baseline запрещён» структурно конфликтовал с Code Guidance «ошибки вне Files item'а — эскалация»; 60 FP не относятся ни к одному из 9 правил, ради которых A36 просил `tests`). |
 
+| D49 | 2026-07-14 | **Волна ремедиации остановлена на P1.16 — Status 🔴 Blocked** (был 🟠 Done with deviations). Item сам эскалировал plan-protocol §10: Scope Included требует «коннекшн модуль-системы резолвится из `TenantContext` … (`ModuleStateReader`/`RecordsRegistrar`/`ModuleLifecycle`)», но Files item'а не включает `DatabaseModuleStateReader.php`/`DatabaseRecordsRegistrar.php`, а инфра ctx→connection (`AccountRef.connection`/`AccountConnectionResolver`) — предмет P2 (D13). Per-call ctx-резолвинг и тест (з) неисполнимы в P1 без выхода за Files и без P2-инфры. Волна не продолжается на P1.17+ до владельческого решения: (а) принять P1-форму (шов `?string $connection` + config-connection, перенести полный ctx→connection в P2, согласовать с D13/D43) либо (б) расширить Files P1.16 на reader/registrar + добавить `AccountRef.connection`/`AccountConnectionResolver` в P1. Код/коммиты item'а (`19d5fa4`/`7d1cb10`/`6c715de`/`2be2d2d`/`f18c9b1`) в дереве и запушены — Blocker A1/A2 и эпоха D39 закрыты независимо от решения. Рабочее дерево чистое (untracked `.mcp.json`/`.serena/` вне item'а, стеш не создавался). | Docs-curator остановки волны, 2026-07-14: план не имеет права показывать 🟠 Done с открытым Escalation Needed=yes как «в целом успешный» item — статус должен отражать факт незакрытого решения владельца (тот же принцип, что и D46 для P1.14). |
+
 ## 6. Update Log
 
 | Дата | Кто (role/model) | Что |
@@ -205,3 +211,4 @@ P1.16 Escalation Needed). Итог борда: **2 🟢 · 14 🟠 · 0 🔴 · 
 | 2026-07-14 | plan-design/opus | P1.14 разблокирован владельческим решением (D47/D48): 🔴→🟠 Done with deviations. +P1.27 (phpstan flex/modules-lint на tests/, второй прогон), +P1.28 (coverage --min=80, time-gated после обкатки на реальных проектах, не блокирует закрытие фазы P1.26) — детали см. phases/P1.md P1.14/P1.27/P1.28. |
 | 2026-07-14 | wf-p1r/opus | P1.15 закрыт 🟢: персистенция полного `CompiledRegistry` (8 срезов, plain-array round-trip) + рантайм-проекция в EntityRegistry/морф-карту (`ModulesServiceProvider::booted`) + `ModuleRegistry::compiled()` + fail-loud + deploy-хук `optimizes()` + атомарная запись с проверкой возвратов (A10/A47). Гейт зелёный (91/91 sqlite, 40/40 pg), mutation-check материализован (3 кейса) — детали см. phases/P1.md P1.15 Completion Notes. |
 | 2026-07-14 | wf-p1r/opus | P1.16 закрыт 🟠 Done with deviations: `ModuleRegistryCache`-контракт + реализация БЕЗ `tags()` (Blocker A1/A2, D30) + конфиг пакета (store/ttl/prefix/connection) + **эпоха-инвалидация D39** (`count(mod_lifecycle_log)` в ключе кеша, bump-в-транзакции, видно другой ноде без `forget()`) + `isActive()`∩реестр (A45/A46) + предикат `ArrayEntityRegistry`(module,ctx)→`isActive`, `all(null)`=весь реестр (A38) + сброс мемо на `JobProcessing`. Гейт зелёный (95/95 sqlite, 44/44 pg), mutation-check (2 кейса). **Deviation+Escalation:** коннекшн-из-`TenantContext` сдан как шов (config-connection + ключ по account->id), per-call ctx→connection для reader/registrar — P2 (Files не включает эти файлы; AccountRef без коннекшна, D13) — детали см. phases/P1.md P1.16. |
+| 2026-07-14 | docs-curator | Волна остановлена на P1.16 (D49): 🟠→🔴 Blocked. Открытый Escalation Needed=yes по ctx→connection (см. запись выше) не является закрытым решением владельца — статус item'а обязан отражать это. Код/коммиты остаются в дереве и запушены, Blocker A1/A2 + эпоха D39 закрыты независимо. Волна не продолжается на P1.17+ до разбора эскалации — детали см. phases/P1.md P1.16 Pending Work, plan.md D49. |

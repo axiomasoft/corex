@@ -1,22 +1,31 @@
 # HANDOFF — 2026-07-14 — after P1.16
 
-**Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
-
-| Параметр | Значение |
-|:--|:--|
-| Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
-| Thinking | — (делегировано workflow) |
-| Context | NEW SESSION |
-| Суть | P1.16 закрыт **🟠 Done with deviations** (коммиты `19d5fa4` feat + `7d1cb10` mutation): Blocker A1/A2 снят — `ModuleRegistryCache` без `tags()` (D30) + конфиг пакета; **эпоха-инвалидация D39** (`count(mod_lifecycle_log)` в ключе кеша, видно другой ноде без `forget()`); `isActive()`∩реестр (A45/A46); предикат `ArrayEntityRegistry`(module,ctx)→`isActive`, `all(null)`=весь реестр (A38); сброс мемо на `JobProcessing`. Гейт зелёный локально (95/95 sqlite, 44/44 pg), mutation-check 2 кейса. **ОТКРЫТАЯ ЭСКАЛАЦИЯ владельцу:** коннекшн-из-`TenantContext` сдан как шов (config-connection + ключ по `account->id`); per-call ctx→connection для `ModuleStateReader`/`RecordsRegistrar` неисполним в P1 (Files не включает эти файлы; `AccountRef` без коннекшна — P2/D13). Blocker и эпоха закрыты независимо; волна может идти на **P1.17**, решение по коннекшну — владельцу (вероятно перенос полного резолвинга в P2). |
+**Next:** РАЗБОР ОСТАНОВКИ владельцем — вариант (а): точечный фикс кода, затем повторный прогон волны;
+вариант (б): ре-дизайн ТЗ item'а (расширение Files + P1-инфра для AccountRef.connection).
 
 ```
+# вариант (б) — расширить ТЗ P1.16 под reader/registrar + AccountRef.connection:
+/task:plan-design COREX-CORE P1.16
+
+# вариант (а) — после точечного фикса кода на branch p1r-remediation, продолжить волну:
 Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
 ```
 
-Перед запуском проверить: рабочее дерево ветки `p1r-remediation` чистое на HEAD после коммита D47/D48
-(composer.json `--min=55`, phpstan.neon без правки — уже был migrations-only; phases/P1.md/plan.md —
-докс-коммит отдельно от кода item'а). `stash@{0}` (`P1R-P1.14-partial`, чужой дифф — `.claude/**`,
-`docs/**`, `.gitignore`, `CLAUDE.md` и т.п.) НЕ трогать волной, не относится к items плана.
+| Параметр | Значение |
+|:--|:--|
+| Model | владелец решает вариант (а)/(б) → далее per-item (D35), носитель модели workflow-скрипт, НЕ чат |
+| Thinking | high — решение меняет границу P1/P2 (D13) |
+| Context | NEW SESSION |
+| Суть | **Волна ОСТАНОВЛЕНА на P1.16 (стадия impl).** Item сам эскалировал plan-protocol §10: Scope Included требует «коннекшн модуль-системы резолвится из `TenantContext` … (`ModuleStateReader`/`RecordsRegistrar`/`ModuleLifecycle`)», но Files item'а НЕ включает `DatabaseModuleStateReader.php`/`DatabaseRecordsRegistrar.php`, а инфра ctx→connection (`AccountRef.connection`/`AccountConnectionResolver`) — предмет P2 (D13). Per-call ctx-резолвинг и спецификационный тест (з) в P1 неисполнимы без выхода за Files и без P2-инфры (§10: расхождение плана с реальностью). Item был закрыт 🟠 с открытым `Escalation Needed: yes` — докс-куратор понизил статус до **🔴 Blocked** (D49): план не имеет права показывать незакрытое решение владельца как «в целом успешный» item (тот же принцип, что D46 для P1.14). **Blocker A1/A2 и эпоха D39 — закрыты и гейт-зелёные независимо от этого решения**, код в дереве, коммиты запушены (`19d5fa4` feat, `7d1cb10` mutation-check, `6c715de` fix, `2be2d2d`/`f18c9b1` docs). **Trigger владельцу:** (а) принять P1-форму (шов `?string $connection` + config-connection + ключ по `account->id`) и перенести полный ctx→connection в P2-item (согласовать с D13/D43) — тогда P1.16 переоткрывается 🟠 повторно без нового кода; либо (б) расширить Files P1.16 на reader/registrar + добавить `AccountRef.connection`/`AccountConnectionResolver` в P1 — тогда нужен ре-дизайн ТЗ (`/task:plan-design`) и дополнительная реализация. |
+
+Рабочее дерево ветки `p1r-remediation` на момент остановки: `git status --porcelain` показывает только
+`?? .mcp.json` и `?? .serena/` — оба вне scope P1.16 (сессионный MCP/Serena-конфиг), в стеш НЕ убраны.
+HEAD (`f18c9b1`) совпадает с `origin/p1r-remediation` — всё запушено, локальных незакоммиченных правок
+по item'у нет, новый `git stash` не создавался (нечего прятать). `stash@{0}` (`P1R-P1.14-partial`, чужой
+дифф — `.claude/**`, `docs/**`, `.gitignore`, `CLAUDE.md` и т.п.) по-прежнему НЕ трогать волной, не
+относится к items плана.
+
+Волна НЕ продолжается на P1.17+ до разбора этой эскалации.
 
 **Разрешённые эскалации P1.14 (детали — `phases/P1.md` P1.14, блок «✅ РАЗРЕШЕНО»):**
 1. `phpstan.neon` `tests`-paths — вынесено в отдельный item **P1.28** (второй phpstan-прогон без
@@ -75,8 +84,9 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
   (`Workflow resumeFromRunId` — см. Launch-block выше).
 
 **Remaining:**
-1. **Волна 2 (P1.17–P1.25)** — 9 items (P1.15 🟢, P1.16 🟠), порядок: P1.18 — цепочка по данным после
-   P1.16, остальные по порядку плана.
+0. **🔴 P1.16 Blocked — разбор эскалации владельцем (см. Next выше), волна на паузе.**
+1. **Волна 2 (P1.17–P1.25)** — 9 items (P1.15 🟢, P1.16 🔴 Blocked), порядок ПОСЛЕ разблокировки P1.16:
+   P1.18 — цепочка по данным после P1.16, остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
@@ -97,9 +107,10 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
   на ту же ветку.
 - **Coverage-job следующего прогона нужно проверить фактически** — CI ещё не видел `--min=55` вживую
   (только арифметически 56.3%≥55), см. Pending Work P1.14 (1).
-- ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2: `tags()` на не-taggable сторе) — закрыто
-  P1.16: `ModuleRegistryCache` без тегов, эпоха-инвалидация D39. **ОСТАЁТСЯ open (эскалация P1.16):**
-  per-call ctx→connection для reader/registrar — P2 (см. phases/P1.md P1.16 Escalation Needed).
+- ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2: `tags()` на не-taggable сторе) — код
+  закрывает: `ModuleRegistryCache` без тегов, эпоха-инвалидация D39 (гейт-зелёные). **🔴 НО статус item'а
+  P1.16 — Blocked (D49):** открытая эскалация по per-call ctx→connection для reader/registrar (P2) не
+  разобрана владельцем — волна стоит на паузе до решения (см. phases/P1.md P1.16 Escalation Needed).
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15: deploy-хук `optimizes('flex:modules:compile')`
   (компиляция на `php artisan optimize`) + fail-loud (`failIfMissing = environment('production')`: отсутствие
   реестра в проде = `RuntimeException` с инструкцией, не тихий пустой список).
