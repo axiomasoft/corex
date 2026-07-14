@@ -108,7 +108,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 5/28 | 🔴 Blocked |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 4/28 | 🔴 Blocked |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 **Чтение борда P1 (D28, обновлено D52 — эскалация P1.16 разобрана владельцем).** Волна 1 (P1.1–P1.13)
@@ -196,16 +196,19 @@ Blocked (D54) и стоит перед P1.19 в объявленном поря�
 закрыт ранее D52) **тоже разблокирован**. Итог борда после D57: **3 🟢 · 14 🟠 · 0 🔴 · 11 ⬜**. Волна
 продолжается штатно **P1.18 → P1.19 → …**.
 
-**P1.21 закрыт 🟢 (2026-07-14).** Аудит: diff по mass-assignable (guarded-поля исключены, не маскируются —
-A17), killswitch перенесён в рантайм-точку `AuditObserver::record()` (гасит и capability-путь — A60),
-event-time снимок `occurredAt`/`workspaceId` в `QueuedAuditLogger` (воркер больше не резолвит tenant),
-контракт `AuditRetention` + `corex:audit:prune` (A64), AC-23 переписан на монотонный `sys_audit_log.seq`
-(A65/D42). 15 тестов в `AuditLogTest.php`, локальный гейт зелёный (100/100 sqlite, 68/68 pg), mutation-check
-2 кейса (`getattributes-create`, `killswitch`) краснеют под саботажем. **Порядок волны:** P1.21 исполнен по
-прямому распоряжению оркестратора при **P1.20 всё ещё 🔴 Blocked** (D58 — незарегистрированный
-mutation-кейс, процессный фикс в одну строку, вне scope P1.21). Работа P1.21 (Audit) независима от кода
-P1.20 (ID-колонки) — разблокировка/регистрация P1.20 остаётся за оркестратором. Итог борда после закрытия
-P1.21: **5 🟢 · 15 🟠 · 1 🔴 · 7 ⬜** (🔴 = P1.20).
+**P1.21 закрыт: 🟠 Done with deviations (2026-07-14) — детали см. phases/P1.md P1.21 Completion Notes.**
+Ревью GREEN по инженерке (deliverables_met=true, false_claims=[]), но вердикт ATTENTION и
+`files_outside_scope=[scripts/mutation-check.sh]` не пусты → по правилу докс-куратора item не имеет права
+на 🟢 (то же правило, что развело P1.20 на 🔴 в D58). Аудит: diff по mass-assignable (guarded-поля
+исключены, не маскируются — A17), killswitch перенесён в рантайм-точку `AuditObserver::record()` (гасит и
+capability-путь — A60), event-time снимок `occurredAt`/`workspaceId` в `QueuedAuditLogger` (воркер больше
+не резолвит tenant), контракт `AuditRetention` + `corex:audit:prune` (A64), AC-23 переписан на монотонный
+`sys_audit_log.seq` (A65/D42). 15 тестов в `AuditLogTest.php`, локальный гейт зелёный (100/100 sqlite,
+68/68 pg), mutation-check 2 кейса (`getattributes-create`, `killswitch`) краснеют под саботажем.
+**Порядок волны:** P1.21 исполнен по прямому распоряжению оркестратора при **P1.20 всё ещё 🔴 Blocked**
+(D58 — незарегистрированный mutation-кейс, процессный фикс в одну строку, вне scope P1.21). Работа P1.21
+(Audit) независима от кода P1.20 (ID-колонки) — разблокировка/регистрация P1.20 остаётся за оркестратором.
+Итог борда после закрытия P1.21: **4 🟢 · 16 🟠 · 1 🔴 · 7 ⬜** (🔴 = P1.20).
 
 ## 5. Decision Log
 
@@ -314,3 +317,4 @@ P1.21: **5 🟢 · 15 🟠 · 1 🔴 · 7 ⬜** (🔴 = P1.20).
 | 2026-07-14 | wf-p1r/opus | P1.18 закрыт 🟢: Blocker A3 + FSM-набор. `mod_records.seq bigserial` (аддитивно, D31) + purge `ORDER BY seq DESC` по ВСЕМ типам claim'ов (D41: table/column/index → DDL) + авто-claim обёрткой мигратора (schema-diff по `MigrationStarted/Ended`, порядок по `pg_class.oid`) + enable() all-or-nothing (D40: `ModuleEnableFailedException` + полный откат) + FSM-гейты (purged терминален, upgrade из enabled) + `flex:modules:repair` (reconcile + purged→available) + actor из `CurrentActor` + wiring codeVersions/migrationPaths из installed.json. Гейт зелёный (101/101 sqlite, 51/51 pg), **CI на ветке зелёный (run 29351086680, 8/8 job)**, mutation-check 2 кейса (purge-order→2BP01, enable-swallow) — детали см. phases/P1.md P1.18 Completion Notes. |
 | 2026-07-14 | wf-p1r/opus | P1.19 закрыт 🟢: прод-путь миграций. Publish sys_*/mod_* по скоупам коннекшена (D33/D43: теги `corex-migrations`+`-tenant` / `flex-modules-migrations`+`-tenant`, мёртвый `loadMigrationsFrom` удалён, README + `SCHEMA_VERSION`), все PK/FK/reference через `IdColumns` (D3/A58, хардкод `uuid` убран; исключение — `sys_pubsub_messages.id` bigint), `precision: 6` на всех 24 `timestampTz` (D32/A66/A72), `sys_audit_log.seq bigserial` (D42). Поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает; расхождения только «код > DRAFT-каталог» (2 индекса A91 задокументированы, seq/mod_records-индекс — D42/D31), эскалации не требуют. Локальный гейт (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353601440, 8/8 job на финальном HEAD 3a9e555)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Борд P1: **5 🟢 · 14 🟠 · 0 🔴 · 9 ⬜** — детали см. phases/P1.md P1.19 Completion Notes. |
 | 2026-07-14 | docs-curator (верификация) | P1.19: 🟢→🟠 Done with deviations — `files_outside_scope` непуст (`scripts/mutation-check.sh` вне Files). Вердикт ревью GREEN. Completion Notes переписаны на машинные факты. Борд P1: **4 🟢 · 15 🟠 · 0 🔴 · 9 ⬜** — детали см. phases/P1.md P1.19. |
+| 2026-07-14 | docs-curator (верификация) | P1.21 закрыт: 🟠 Done with deviations (не 🟢, как заявлял исполнитель) — вердикт ревью ATTENTION (не GREEN) и `files_outside_scope` непуст (`scripts/mutation-check.sh` вне Files), тот же критерий, что развёл P1.19/P1.20 в 🟠/🔴. Deliverables подтверждены (A17 fillable-diff, A60 killswitch в рантайм-точке, event-time снимок occurredAt/workspaceId, AuditRetention+corex:audit:prune, seq-курсор AC-23), false_claims=[]. Борд P1: **4 🟢 · 16 🟠 · 1 🔴 · 7 ⬜** (🔴 = P1.20) — детали см. phases/P1.md P1.21 Completion Notes. |
