@@ -176,8 +176,11 @@ it('writes the compiled registry atomically, leaving no stray tmp file', functio
     $path = moduleRegistryCachePath();
     CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], [])]);
 
+    // Glob only THIS write's own tmp siblings ($path.'.<rand>.tmp'), not the
+    // whole system temp dir — otherwise the assertion depends on unrelated
+    // machine state (A47/A48).
     expect(is_file($path))->toBeTrue()
-        ->and(glob(dirname($path).'/*.tmp'))->toBe([]);
+        ->and(glob($path.'.*.tmp'))->toBe([]);
 
     $data = require $path;
     expect($data['modules'][0]['composerName'])->toBe('corex/alpha');

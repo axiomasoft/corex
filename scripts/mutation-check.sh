@@ -18,6 +18,9 @@ cd "$(git rev-parse --show-toplevel)"
 declare -A TEST_CMD=(
     [P1.14-pg-lane-split]="PGSQL_PORT=1 vendor/bin/pest --exclude-group=pg tests/Feature/PubSubDatabasePollTest.php"
     [P1.14-foreign-prefix-fp]="vendor/bin/pest tests/PHPStan/ModuleBoundaryRulesTest.php --filter=test_foreign_prefix_sql_no_false_positive"
+    [P1.15-drop-entities]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='persists the entity|projects the compiled entities'"
+    [P1.15-rename-check]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='leaves the destination intact'"
+    [P1.15-silent-empty]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='fail-loud'"
 )
 
 if [ "${1:-}" = "--list" ]; then
