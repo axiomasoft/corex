@@ -1,27 +1,44 @@
-# HANDOFF — 2026-07-15 — after P1.23
+# HANDOFF — 2026-07-15 — after P1.24
 
-**Next:** ЗАПУСК ВРУЧНУЮ: workflow (sonnet/medium per-item, D35)
+**Next:** ЗАПУСК ВРУЧНУЮ: workflow (sonnet/medium per-item, D35) — **P1.25**
 
 | Параметр | Значение |
 |:--|:--|
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — |
 | Context | ТА ЖЕ СЕССИЯ (resume, кэш прошлых items переиспользуется) |
-| Суть запуска | P1.23 закрыт 🟠 Done with deviations — `move()` lock-then-read+re-read под локом (A5), `DepartmentMoved` через afterCommit (A6), `SoftDeletes`+cast на `Models\Department` с фильтрацией find/subtree/primaryOf (A24), `subtree()` per-workspace, DTO `sortOrder`. 13 PG-тестов, локальный гейт зелёный (100/100 sqlite, 86/86 pg), mutation-check 2 кейса (`stale-read`, `event-in-transaction`) воспроизведены харнессом. Коммит `a97d5fb` запушен. Волна продолжается **P1.24 → P1.25**. |
+| Суть запуска | P1.24 закрыт 🟠 Done with deviations — `SubscribeGuard`+`WorkerRuntime`-шов (Octane-детект + явный opt-in, не голый `runningInConsole()`, A29); DURABLE-курсор подписчика `sys_pubsub_cursors` (D44, персистентная позиция channel+subscriber, бутстрап на `max(id)`, без реплея бэклога по умолчанию); `corex:pubsub:prune` ретеншн-команда; рефлексия и grep-тест в `PubSubTest.php` удалены, заменены поведенческими (спай-драйвер через контейнер). Локальный гейт зелёный (104/104 sqlite, 88/88 pg), mutation-check 2 кейса (`bare-runninginconsole-guard`, `cursor-start-zero`) воспроизведены харнессом. Коммиты `f6510a4`/`6111b97` запушены. Волна продолжается **P1.25**. |
 
 ```
 Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
 ```
 
-**Done:** (этот handoff) **P1.23** закрыт 🟠 Done with deviations (2026-07-15, коммит `a97d5fb`
-запушен на `p1r-remediation`) — детали `phases/P1.md` P1.23 Completion Notes/Known Deviations, сводка
-`plan.md` §4 борд (после P1.22-абзаца). `files_outside_scope=[scripts/mutation-check.sh]` (регистрация
-2 mutation-кейсов, D45-мандат) + 2 Known Deviations (тест afterCommit-отката подменяет менеджер транзакций
-на продакшн `DatabaseTransactionsManager` — Foundation testing-менеджер срабатывает на уровне 1 без
-RefreshDatabase-обёртки, ненаблюдаемо; литеральная A5-мутация «read before lock» недетерминируема в один
-поток — пинится наблюдаемое следствие re-read через soft-delete If-then) → статус 🟠, не 🟢, по правилу
-докс-куратора (прецедент P1.19–P1.22). CI на ветке из сессии не верифицирован (только локальный гейт D34) —
-проверяется на закрытии фазы P1.26.
+**Done:** (этот handoff) **P1.24** закрыт 🟠 Done with deviations (2026-07-15, коммиты `f6510a4`/`6111b97`
+запушены на `p1r-remediation`) — детали `phases/P1.md` P1.24 Completion Notes/Known Deviations.
+`files_outside_scope` непустой: `packages/core/src/Contracts/WorkerRuntime.php` (новый контракт — шов
+для негативного теста guard'а), `packages/core/src/PubSub/DefaultWorkerRuntime.php` +
+`packages/core/src/PubSub/SubscribeGuard.php` (продакшен-детект + общая guard-логика для 2 драйверов),
+`packages/core/database/migrations/pg/2026_07_15_090000_create_sys_pubsub_cursors_table.php` (D44
+обязывал таблицу, не называл файл), `packages/core/src/CoreServiceProvider.php` (биндинг +
+регистрация `corex:pubsub:prune`), `tests/Feature/MigrationPublishTest.php` (7→8 sys_*-миграций —
+жёсткий счётчик пришлось поднять), `scripts/mutation-check.sh` (регистрация 2 кейсов, D45-мандат) →
+статус 🟠, не 🟢, по тому же правилу докс-куратора (прецедент P1.19–P1.23: необходимые, но
+не перечисленные в исходном ТЗ файлы). 3 Known Deviations: (1) файлы вне списка (см. выше, все —
+прямое следствие Scope Included, не scope creep); (2) `getenv('LARAVEL_OCTANE')` вместо
+`env('LARAVEL_OCTANE')` из буквального текста Implementation Rules — `larastan.noEnvCallsOutsideOfConfig`
+запрещает `env()` вне `config/`, тот же обход, что уже использует `CoreXTestCase`; (3) мутация
+`P1.24-bare-runninginconsole-guard` реддит тест через реальную (~60с) сетевую ошибку подключения к
+Redis, а не мгновенно через ассерт текста исключения — граница всё равно пинится (raннер подтвердил
+exit≠0 у теста, exit=0 у самого mutation-check.sh), но кейс на порядок медленнее остальных P1.14–P1.23.
+CI на ветке из сессии не верифицирован (только локальный гейт D34) — проверяется на закрытии фазы P1.26.
+
+**Done (ранее):** **P1.23** закрыт 🟠 Done with deviations (2026-07-15, коммит `a97d5fb`
+запушен) — `move()` lock-then-read+re-read под локом (A5), `DepartmentMoved` через afterCommit (A6),
+`SoftDeletes`+cast на `Models\Department` с фильтрацией find/subtree/primaryOf (A24), `subtree()`
+per-workspace, DTO `sortOrder`. `files_outside_scope=[scripts/mutation-check.sh]` + 2 Known Deviations
+(afterCommit-тест наблюдает продакшн `DatabaseTransactionsManager`; A5-мутация пинится через
+наблюдаемое re-read-следствие, не буквальный «read before lock») → статус 🟠, не 🟢. Детали —
+`phases/P1.md` P1.23 Completion Notes/Known Deviations.
 
 **Done (ранее):** (after P1.20/D62) **P1.22** закрыт 🟠 Done with deviations (2026-07-14,
 docs-curator верификация, sha `d96085d`) — детали `phases/P1.md` P1.22 Completion Notes/Known Deviations,
@@ -53,7 +70,7 @@ Time-gated **P1.27** и отдельный **P1.28** — после P1.26, не 
 волны 2 (P1.14–P1.25) сданы. GREEN → **P1.26** (CHANGELOG + `Deprecated / Will break in 0.2` + semver-теги
 + PR ветки в `main`) → `/task:plan-close COREX-CORE P1` → и только потом P2.1.
 
-**Итог борда после закрытия P1.23:** **5 🟢 · 18 🟠 · 0 🔴 · 5 ⬜**.
+**Итог борда после закрытия P1.24:** **5 🟢 · 19 🟠 · 0 🔴 · 4 ⬜**.
 
 **Sources of truth:** `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D62+, §4 борд, §6 Update Log) ·
 `plans/COREX-CORE/phases/P1.md` (ТЗ items) ·
