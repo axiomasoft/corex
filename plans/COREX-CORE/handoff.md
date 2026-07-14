@@ -1,4 +1,4 @@
-# HANDOFF — 2026-07-14 — after P1.19
+# HANDOFF — 2026-07-14 — after P1.17
 
 **Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
 
@@ -11,7 +11,7 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | Эскалация P1.16 разобрана владельцем (D52, вариант а) — коннекшн остаётся P1-формой шва, полный ctx→connection вынесен в P2 (D13). P1.16 переведён 🟠 Done with deviations. P1.17/P1.19 (D50/D51) не имели собственной эскалации — только корректно отказались обходить чужое стоп-условие, кода не писали — разблокированы 🔴→⬜. Волна продолжается штатно с P1.17. |
+| Суть | P1.17 закрыт 🟢 (2026-07-14) — `CompilationValidator`/`RegistryCompiler` доведены до «валидация на компиляции = фейл деплоя» (D37/AC-2/A85). Волна продолжается штатно с **P1.18**. |
 
 **Разрешённые эскалации (детали — `phases/P1.md`, блоки «✅ РАЗРЕШЕНО»):**
 1. **P1.14 (D47/D48):** phpstan `tests`-paths вынесены в **P1.28**; coverage `--min` ослаблен 80→55 (D47),
@@ -28,10 +28,12 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 показать `coverage`: success под `--min=55` вживую в CI (не только арифметически 56.3%≥55) — если
 красный, это регрессия, эскалировать.
 
-Волна продолжается **P1.17 → P1.18 → P1.19 → …** по порядку плана (P1.17/P1.19 не начинали
-имплементацию — Files/Scope Included/Validation в силе без изменений). Волна НЕ исполняется через
-`/task:plan-exec`: несущие items предписаны `opus/high`, команда пинит sonnet/medium (routing-undershoot
-запрещён — plan-protocol §9, D35).
+Волна продолжается **P1.18 → P1.19 → …** по порядку плана (P1.18/P1.19 не начинали
+имплементацию — Files/Scope Included/Validation в силе без изменений; **P1.18 имеет свой
+DoR-гейт — item НЕ стартует до решения OQ-11**, которое уже закрыто владельцем Вариантом (A),
+2026-07-14, см. `open-questions.md`). Волна НЕ исполняется через `/task:plan-exec`: несущие items
+предписаны `opus/high`, команда пинит sonnet/medium (routing-undershoot запрещён — plan-protocol §9,
+D35).
 
 После зелёной волны (порядок обязателен): аудит фазы P1 (команда plan-audit — фаза станет терминальной
 только когда все 12 items волны 2 (P1.14–P1.25) сданы; P1.26/P1.27/P1.28 — после/вне блокирующего
@@ -70,12 +72,26 @@ Files item'а не покрывали и который упирается в P2
 **2026-07-14 — эскалация P1.16 разобрана владельцем (D52):** вариант (а) принят — коннекшн остаётся
 P1-формой шва (уже так реализовано), полный ctx→connection — в P2 (D13), отдельного item'а не заводим.
 P1.16 переведён **🟠 Done with deviations**, эскалация снята. P1.17/P1.19 разблокированы 🔴→⬜ (не имели
-собственной эскалации). Anti-weakening-gate получил floor-исключение под D47. Волна продолжается с
-P1.17 (`Workflow resumeFromRunId` — см. Launch-block выше).
+собственной эскалации).
+
+**2026-07-14 — P1.17 закрыт 🟢.** `CompilationValidator::validateRequiredFields()` — `title`/`tablePrefix`
+обязательны на компиляции (не только в сеттерах, D37); авто-вывод префикса из composer-имени удалён
+из `RegistryCompiler`. Коллизия entity handle между модулями → `CompilationException::duplicateEntityHandle`
+с обоими именами (было молчаливое перетирание). AC-2: новый `Compiler\InstalledPackages::discover()`
+читает `vendor/composer/installed.json` по умолчанию, хардкод `['corex/core']` убран, инъектируемый шов
+для тестов сохранён. A85: новая `Compiler\PipelineStages::ORDER` — единственная константа порядка
+8-extender-пайплайна, на неё ссылаются и `RegistryCompiler::compile()` (стадии гоняются циклом с
+match-диспетчером — генерик-обёртки `collectPermissions/Api/Filament/Menu/Routes/Workflow()` понадобились
+из-за потери T шаблонным `collect()` внутри match-ветки для PHPStan), и `CompilationValidator` (closed-set
+membership). `compile()` принял `?callable $onStage` — наблюдаемый тест AC-18 сверяет порядок с
+hardcoded-литералом (не с самой константой — иначе мутация константы прошла бы тривиально). 9 тестов
+в `RegistryCompilerTest.php` (7 новых + 2 адаптированы под обязательный tablePrefix). Гейт зелёный
+(lint/analyse/test 100-100/test:pg 44-44). 2 mutation-кейса (`P1.17-tableprefix-skip`,
+`P1.17-stage-order-swap`) закоммичены и прогнаны через `scripts/mutation-check.sh`.
 
 **Remaining:**
-1. **Волна 2 (P1.17–P1.25)** — 9 items (P1.15/P1.16 закрыты, остальные ⬜), порядок:
-   P1.17 → P1.18 → P1.19 → остальные по порядку плана.
+1. **Волна 2 (P1.18–P1.25)** — 8 items (P1.15/P1.16/P1.17 закрыты, остальные ⬜), порядок:
+   P1.18 → P1.19 → остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
@@ -88,7 +104,7 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
 ~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT) · 50_execution/00_EXECUTION_ROADMAP.md
 
 **Open risks:**
-- ~~**🔴 P1.14/P1.16 Blocked**~~ — закрыто D47/D48/D52, волна продолжается с P1.17. ~~OQ-11 (блокер DoR
+- ~~**🔴 P1.14/P1.16 Blocked**~~ — закрыто D47/D48/D52, волна продолжается с P1.18. ~~OQ-11 (блокер DoR
   P1.18)~~ — закрыто Вариантом (A), 2026-07-14 (владелец Dmitry Vostrikov, см. `open-questions.md` OQ-11);
   P1.18 переосмыслен под это решение.
 - ~~**Код никогда не пушился**~~ — закрыто P1.14: ветка `p1r-remediation` запушена. Дальше волна пушится
@@ -99,6 +115,8 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
   закрыто P1.16: `ModuleRegistryCache` без тегов, эпоха-инвалидация D39, гейт-зелёные.
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15: deploy-хук `optimizes('flex:modules:compile')`
   + fail-loud (`failIfMissing = environment('production')`).
+- ~~**Гейт компиляции пропускал ровно то, ради чего создан**~~ (A7/A41/A42/A44) — закрыто P1.17:
+  `tablePrefix`/`title` обязательны, коллизия handle и requires↔installed.json проверяются.
 - **`corex/core` не поставляет ни одной применимой миграции** (A19/A62) — до P1.19 `migrate` у потребителя
   создаёт ноль `sys_*`-таблиц. P1.19 разблокирован (D52), риск закрывается штатным прохождением волны.
 - **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
@@ -120,7 +138,8 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
   гидрация реестра (бюджет бута B-10 §7.1); Infection/MSI как машинный оракул тестов; расширяемость
   `Capability`/`Extend\*` для спутников (U4); референс-модуль `flex/module-example` (U5); corex/components
   (D6); DX-генераторы (D26); **coverage 80%** (P1.27, D47); **phpstan `tests`-lint** (P1.28, D48);
-  **per-call ctx→connection для reader/registrar** (P2, D13/D52).
+  **per-call ctx→connection для reader/registrar** (P2, D13/D52); **constraint-версии в `Dep` и
+  топосортировка/циклы зависимостей** — P1.17 Scope Excluded, кандидат следующей волны/потребителя.
 - open_questions: **OQ-1..15**. Блокеры: OQ-5 (P2.1), OQ-15 (P1.26), OQ-7 (P2.10/P2.11).
   Ждут владельца: OQ-12 (PG16 hard requirement), OQ-13 (root vs sys feature flags), OQ-14 (реестр префиксов),
   OQ-6 (DB_SCHEMA), OQ-10 (телеметрия devloop — вне плана).
