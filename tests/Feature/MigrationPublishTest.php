@@ -7,6 +7,7 @@ use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 // P1.19 (D33/D43/A19/A62): the sys_*/mod_* migrations are PG-only and never
 // auto-loaded — the ONLY prod path is `vendor:publish` + an explicit tenant
@@ -175,4 +176,37 @@ it('declares explicit µs precision on every sys_*/mod_* timestamptz column (D32
     ));
 
     expect($offenders)->toBeEmpty();
+});
+
+it('assigns a monotonic bigserial seq cursor to sys_audit_log rows (D42)', function (): void {
+    resetPublicSchema();
+
+    $this->artisan('migrate', [
+        '--database' => PUBLISH_TEST_CONNECTION,
+        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+        '--realpath' => true,
+        '--force' => true,
+    ])->run();
+
+    // Two append-only rows written in order — seq is the clock-free monotonic
+    // cursor keyset pagination sorts by (D42), independent of id/occurred_at.
+    foreach (['first', 'second'] as $action) {
+        DB::connection(PUBLISH_TEST_CONNECTION)->table('sys_audit_log')->insert([
+            'id' => (string) Str::uuid7(),
+            'actor_type' => 'system',
+            'action' => $action,
+        ]);
+    }
+
+    /** @var list<int> $seqs */
+    $seqs = DB::connection(PUBLISH_TEST_CONNECTION)
+        ->table('sys_audit_log')
+        ->orderBy('seq')
+        ->pluck('seq')
+        ->map(static fn (mixed $s): int => (int) $s)
+        ->all();
+
+    expect($seqs)->toHaveCount(2)
+        ->and($seqs[0])->toBeGreaterThan(0)
+        ->and($seqs[1])->toBeGreaterThan($seqs[0]);
 });
