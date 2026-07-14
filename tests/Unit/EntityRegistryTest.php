@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Widget;
 use Flex\Modules\Enums\Capability;
 use Flex\Modules\Exceptions\EntityNotFound;
@@ -46,6 +48,39 @@ it('reports has() as false and forModel() as null for unregistered entities', fu
 
     expect($registry->has('core.missing'))->toBeFalse()
         ->and($registry->forModel(Widget::class))->toBeNull();
+});
+
+it('returns the whole registry for all(null) and only active-module entities for all($ctx) (A38)', function (): void {
+    // The predicate is the ModuleRegistry::isActive seam — per module AND per
+    // ctx. all(null) must bypass it entirely (whole registry: morph map spans
+    // disabled modules too); all($ctx) must apply it.
+    $entityFor = static function (string $handle, string $module): EntityDefinition {
+        return new EntityDefinition(
+            handle: $handle,
+            model: Widget::class,
+            table: 'widgets',
+            module: $module,
+            labelSingular: 'Widget',
+            labelPlural: 'Widgets',
+            capabilities: [],
+            fields: [],
+            titleAttribute: 'name',
+        );
+    };
+
+    $registry = new ArrayEntityRegistry(
+        moduleActive: static fn (string $module, TenantContext $ctx): bool => $module === 'corex/on',
+    );
+    $registry->register($entityFor('on.widget', 'corex/on'));
+    $registry->register($entityFor('off.widget', 'corex/off'));
+
+    $ctx = new TenantContext(new AccountRef(id: 'acc-1', slug: 'acc-1', status: 'active', features: [], limits: []));
+
+    $allHandles = array_map(static fn (EntityDefinition $d): string => $d->handle, $registry->all());
+    $activeHandles = array_map(static fn (EntityDefinition $d): string => $d->handle, $registry->all($ctx));
+
+    expect($allHandles)->toEqualCanonicalizing(['on.widget', 'off.widget'])
+        ->and($activeHandles)->toBe(['on.widget']);
 });
 
 it('filters entities by capability', function (): void {

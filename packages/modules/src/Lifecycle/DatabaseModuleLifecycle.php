@@ -22,6 +22,7 @@ use Flex\Modules\Exceptions\MissingDependencyException;
 use Flex\Modules\Exceptions\ModuleNotFound;
 use Flex\Modules\Manifest;
 use Flex\Modules\ModuleContext;
+use Flex\Modules\ModulesServiceProvider;
 use Flex\Modules\ModuleStatus;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
@@ -474,7 +475,20 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         ]);
     }
 
-    /** @param  array<string, mixed>  $details */
+    /**
+     * Append a lifecycle-log row. Beyond the audit trail (AC-13), this insert
+     * is the registry EPOCH bump (D39): every terminal transition
+     * (enable/disable/upgrade/archive/purge) calls log() INSIDE this
+     * transaction, so the append-only row count in `mod_lifecycle_log` is a
+     * monotonic per-account registry version bumped atomically with the state
+     * change. The hot-path cache keys off that count
+     * ({@see ModulesServiceProvider::registryVersion()}), so a
+     * transition here invalidates every process's/node's cached enabled-set
+     * without any forget(). Removing a log() call therefore un-bumps the epoch
+     * and leaves other processes serving a stale enabled-set.
+     *
+     * @param  array<string, mixed>  $details
+     */
     private function log(string $module, string $operation, string $from, string $to, string $status, array $details): void
     {
         $this->db()->table(self::LOG_TABLE)->insert([

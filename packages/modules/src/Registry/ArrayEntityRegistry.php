@@ -20,16 +20,18 @@ final class ArrayEntityRegistry implements EntityRegistry
     /** @var array<string, EntityDefinition> */
     private array $entities = [];
 
-    /** @var Closure(string): bool */
+    /** @var Closure(string, TenantContext): bool */
     private readonly Closure $moduleActive;
 
     /**
-     * @param  (Closure(string): bool)|null  $moduleActive  Seam for the real active-module
-     *                                                      predicate (ModuleRegistry, P1.5).
+     * @param  (Closure(string, TenantContext): bool)|null  $moduleActive  Real active-module
+     *                                                                     predicate (ModuleRegistry::isActive, P1.16).
+     *                                                                     Takes both the module composer name AND the
+     *                                                                     tenant ctx — activity is per-account (A38).
      */
     public function __construct(?Closure $moduleActive = null)
     {
-        $this->moduleActive = $moduleActive ?? static fn (string $module): bool => true;
+        $this->moduleActive = $moduleActive ?? static fn (string $module, TenantContext $ctx): bool => true;
     }
 
     public function register(EntityDefinition $definition): void
@@ -49,9 +51,18 @@ final class ArrayEntityRegistry implements EntityRegistry
 
     public function all(?TenantContext $ctx = null): array
     {
+        // No ctx = the WHOLE registry (A38): the morph map and satellite
+        // wiring span every declared entity, including those of currently
+        // disabled modules — a persisted row of a disabled module must still
+        // resolve its morph alias. The active-module filter only applies when
+        // a ctx is given (per-account activity).
+        if ($ctx === null) {
+            return array_values($this->entities);
+        }
+
         return array_values(array_filter(
             $this->entities,
-            fn (EntityDefinition $definition): bool => ($this->moduleActive)($definition->module),
+            fn (EntityDefinition $definition): bool => ($this->moduleActive)($definition->module, $ctx),
         ));
     }
 

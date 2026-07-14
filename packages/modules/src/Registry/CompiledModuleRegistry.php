@@ -4,20 +4,31 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Registry;
 
+use Closure;
 use CoreX\Tenancy\TenantContext;
 use Flex\Modules\Compiler\CompiledRegistry;
 use Flex\Modules\Contracts\ModuleRegistry;
+use Flex\Modules\Contracts\ModuleRegistryCache;
 use Flex\Modules\Contracts\ModuleStateReader;
 use Flex\Modules\Exceptions\ModuleNotFound;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Flex\Modules\ModulesServiceProvider;
 use RuntimeException;
 
 /**
  * File-backed {@see ModuleRegistry} (B-10 §5.2/§7.1). `all()`/`get()` read
  * the compiled file written by `flex:modules:compile` (opcache after the
  * first `require`, 0 fs scans on later calls); `active()` intersects it with
- * a per-account tagged cache backed by {@see ModuleStateReader} — a cache
- * miss costs exactly one reader call, a warm cache costs none (AC-3/AC-4).
+ * a per-account cache backed by {@see ModuleStateReader} — a cache miss costs
+ * exactly one reader call, a warm cache costs none but the epoch read
+ * (AC-3/AC-4).
+ *
+ * Cache invalidation is by EPOCH (D39): `$versionResolver` returns a
+ * monotonic per-account registry version (the count of applied lifecycle
+ * transitions), stamped into the cache key via {@see ModuleRegistryCache}. A
+ * bumped version routes reads to a fresh key, so enable/disable is visible to
+ * OTHER processes and nodes without any `forget()` — the file-cache /
+ * long-running-worker failure mode of a caller-local clear (pre-mortem C2)
+ * cannot happen. No cache tags anywhere (D30/A1/A2).
  *
  * The same file also carries the full {@see CompiledRegistry} (all 8 slices)
  * under a `registry` key (P1.15); {@see compiled()} reads and memoizes it for
@@ -34,11 +45,12 @@ final class CompiledModuleRegistry implements ModuleRegistry
 
     private ?CompiledRegistry $registry = null;
 
+    /** @param  Closure(TenantContext): int  $versionResolver  Monotonic per-account registry epoch (D39). */
     public function __construct(
         private readonly string $cachePath,
         private readonly ModuleStateReader $stateReader,
-        private readonly CacheRepository $cache,
-        private readonly int $cacheTtl = 3600,
+        private readonly ModuleRegistryCache $cache,
+        private readonly Closure $versionResolver,
         private readonly bool $failIfMissing = false,
     ) {}
 
@@ -69,7 +81,13 @@ final class CompiledModuleRegistry implements ModuleRegistry
 
     public function isActive(string $name, TenantContext $ctx): bool
     {
-        return array_key_exists($name, $this->enabledFor($ctx));
+        // A45/A46: active iff enabled AND still present in the compiled
+        // registry. A row left in mod_modules for a module whose code no
+        // longer ships (composer remove / rename) must NOT report active —
+        // isActive() is the EntityRegistry activity predicate, and a later
+        // get() on that name would throw ModuleNotFound.
+        return array_key_exists($name, $this->enabledFor($ctx))
+            && array_key_exists($name, $this->modules());
     }
 
     public function compiled(): CompiledRegistry
@@ -86,18 +104,35 @@ final class CompiledModuleRegistry implements ModuleRegistry
         return $this->registry = CompiledRegistry::fromArray($registry);
     }
 
+    /**
+     * Drop the per-process memo of the compiled file (D39): a long-running
+     * `queue:work` must re-read a redeploy's recompiled registry on the next
+     * job instead of serving hours-old code state. Wired to `JobProcessing` in
+     * {@see ModulesServiceProvider}. The enabled-set is NOT
+     * memoized in a property — it lives in the epoch-keyed cache and is
+     * refreshed against the DB epoch on every read, so worker freshness does
+     * not depend on this call alone.
+     */
+    public function flush(): void
+    {
+        $this->modules = null;
+        $this->registry = null;
+    }
+
     /** @return array<string, array{state: string, edition: string}> */
     private function enabledFor(TenantContext $ctx): array
     {
-        $accountId = $ctx->account->id;
+        // Epoch (D39): the version is read fresh on every call (a cheap read
+        // from the shared DB) and stamped into the key. A transition in
+        // ANOTHER process bumps the version there, so this process routes to a
+        // new key and reads fresh — no forget(), no tags().
+        $version = ($this->versionResolver)($ctx);
 
-        return $this->cache
-            ->tags(["account:{$accountId}:modules"])
-            ->remember(
-                "account:{$accountId}:modules:enabled",
-                $this->cacheTtl,
-                fn (): array => $this->stateReader->enabledFor($ctx),
-            );
+        return $this->cache->rememberEnabled(
+            $ctx->account->id,
+            $version,
+            fn (): array => $this->stateReader->enabledFor($ctx),
+        );
     }
 
     /** @return array<string, CompiledModule> */

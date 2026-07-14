@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\Lifecycle\StubDependentModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFailingModule;
 use Flex\Modules\Contracts\ModuleRegistry;
+use Flex\Modules\Contracts\ModuleRegistryCache;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Enums\DisableReason;
 use Flex\Modules\Enums\ModuleState;
@@ -20,6 +23,9 @@ use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
 use Flex\Modules\ModulesServiceProvider;
 use Flex\Modules\Registry\CompiledModule;
 use Flex\Modules\Registry\CompiledModuleRegistry;
+use Flex\Modules\Registry\RepositoryModuleRegistryCache;
+use Illuminate\Cache\ArrayStore;
+use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -94,12 +100,35 @@ beforeEach(function (): void {
         new CompiledModule('corex/stub-failing', 'Stub Failing', 'sbf', [], [], []),
     ]);
 
-    $this->app->instance(ModuleRegistry::class, new CompiledModuleRegistry(
-        cachePath: $this->registryPath,
-        stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
-        cache: Cache::store(),
-    ));
+    $this->app->instance(ModuleRegistry::class, lifecycleModuleRegistry($this->registryPath));
 });
+
+/**
+ * A CompiledModuleRegistry pinned to the pg test connection (the seam a P2
+ * tenancy resolver populates per account), with a real D39 epoch resolver
+ * reading the mod_lifecycle_log row count on that same connection. An
+ * isolated cache can be injected to model a second, independent node/process.
+ */
+function lifecycleModuleRegistry(string $path, ?ModuleRegistryCache $cache = null): CompiledModuleRegistry
+{
+    return new CompiledModuleRegistry(
+        cachePath: $path,
+        stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
+        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+        versionResolver: static fn (TenantContext $ctx): int => (int) lifecyclePg()->table('mod_lifecycle_log')->count(),
+    );
+}
+
+function lifecycleCtx(string $accountId = 'acc-1'): TenantContext
+{
+    return new TenantContext(new AccountRef(id: $accountId, slug: $accountId, status: 'active', features: [], limits: []));
+}
+
+/** An isolated in-memory cache — models a separate node whose store the disabling process cannot reach. */
+function lifecycleIsolatedCache(): RepositoryModuleRegistryCache
+{
+    return new RepositoryModuleRegistryCache(new CacheRepository(new ArrayStore), 3600, 'flex-modules');
+}
 
 afterEach(function (): void {
     if (file_exists($this->registryPath)) {
@@ -276,4 +305,70 @@ it('derives pendingUpgrade from codeVersion vs. the stored dbVersion, never stor
 
     expect(lifecycleFor(codeVersions: ['corex/stub-base' => '1.3.0'])->status('corex/stub-base')->pendingUpgrade)->toBeFalse()
         ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('version'))->toBe('1.3.0');
+});
+
+it('makes an enabled module isActive immediately — epoch invalidation, no TTL wait (D39, test б)', function (): void {
+    $registry = $this->app->make(ModuleRegistry::class);
+    $ctx = lifecycleCtx();
+
+    expect($registry->isActive('corex/stub-base', $ctx))->toBeFalse();
+
+    lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->enable('corex/stub-base');
+
+    // Warm read happened above (false, cached under the pre-enable epoch); the
+    // enable bumped the epoch, so this read routes to a fresh key — no forget()
+    // on the registry, no TTL wait.
+    expect($registry->isActive('corex/stub-base', $ctx))->toBeTrue();
+});
+
+it('makes a disabled module isActive=false immediately — the billing-disable path (D39, test в)', function (): void {
+    $registry = $this->app->make(ModuleRegistry::class);
+    $ctx = lifecycleCtx();
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+
+    $lifecycle->enable('corex/stub-base');
+    expect($registry->isActive('corex/stub-base', $ctx))->toBeTrue(); // warms the enabled state
+
+    $lifecycle->disable('corex/stub-base', DisableReason::Billing);
+
+    // The most dangerous case: a billing-disabled module must drop off the
+    // hot path at once, not stay "active" until the TTL lapses.
+    expect($registry->isActive('corex/stub-base', $ctx))->toBeFalse();
+});
+
+it('propagates a disable to another node without a forget() there — shared-DB epoch (D39, test г)', function (): void {
+    // Node B has its OWN cache store — the disabling process cannot reach it.
+    // Only the shared-DB epoch makes B self-invalidate; a caller-local
+    // forget() (the rejected D30 mechanism) would leave B stale (pre-mortem C2).
+    $nodeB = lifecycleModuleRegistry($this->registryPath, lifecycleIsolatedCache());
+    $ctx = lifecycleCtx();
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+
+    $lifecycle->enable('corex/stub-base');
+    expect($nodeB->isActive('corex/stub-base', $ctx))->toBeTrue(); // node B warms its own store
+
+    $lifecycle->disable('corex/stub-base', DisableReason::Billing);
+
+    // Node B never called forget(); it sees the change purely because the
+    // epoch bumped in the shared DB and its cache key moved on.
+    expect($nodeB->isActive('corex/stub-base', $ctx))->toBeFalse();
+});
+
+it('reads the module state from the injected connection, not the ambient default (C3 seam, test з)', function (): void {
+    // The module system is bound to LIFECYCLE_TEST_CONNECTION (pgsql) — the
+    // seam a P2 tenancy resolver fills per account. It must read THAT database,
+    // not config('database.default') (sqlite here, where mod_modules/
+    // mod_lifecycle_log do not even exist).
+    expect(config('database.default'))->not->toBe(LIFECYCLE_TEST_CONNECTION);
+
+    $registry = $this->app->make(ModuleRegistry::class);
+    $ctx = lifecycleCtx();
+
+    lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->enable('corex/stub-base');
+
+    // The enabled state and the epoch both came from the pinned pg connection;
+    // an ambient-default read would have thrown (no such table) or returned
+    // empty. isActive=true proves the connection came from the seam.
+    expect($registry->isActive('corex/stub-base', $ctx))->toBeTrue()
+        ->and(lifecyclePg()->table('mod_lifecycle_log')->count())->toBeGreaterThan(0);
 });

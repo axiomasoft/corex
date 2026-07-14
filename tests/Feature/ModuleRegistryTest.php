@@ -8,6 +8,7 @@ use CoreX\Tests\Stubs\StubCorexModule;
 use CoreX\Tests\Stubs\Widget;
 use Flex\Modules\Compiler\RegistryCompiler;
 use Flex\Modules\Contracts\EntityRegistry;
+use Flex\Modules\Contracts\ModuleRegistryCache;
 use Flex\Modules\Contracts\ModuleStateReader;
 use Flex\Modules\CorexModule;
 use Flex\Modules\Discovery\ModuleDiscovery;
@@ -23,6 +24,7 @@ use Flex\Modules\Registry\ArrayModuleStateReader;
 use Flex\Modules\Registry\CompiledModule;
 use Flex\Modules\Registry\CompiledModuleRegistry;
 use Flex\Modules\Registry\FieldDefinition;
+use Flex\Modules\Registry\RepositoryModuleRegistryCache;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -66,13 +68,35 @@ function moduleRegistryCachePath(): string
     return sys_get_temp_dir().'/flex_modules_test_'.bin2hex(random_bytes(4)).'.php';
 }
 
+/**
+ * Build a CompiledModuleRegistry with the P1.16 collaborators: a
+ * tag-free {@see ModuleRegistryCache} (default store unless one is injected)
+ * and a constant epoch resolver (0) — tests that exercise real epoch bumping
+ * live in the pg-lane ModuleLifecycleTest.
+ */
+function newModuleRegistry(
+    string $path,
+    ModuleStateReader $reader,
+    ?ModuleRegistryCache $cache = null,
+    ?Closure $versionResolver = null,
+    bool $failIfMissing = false,
+): CompiledModuleRegistry {
+    return new CompiledModuleRegistry(
+        cachePath: $path,
+        stateReader: $reader,
+        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+        versionResolver: $versionResolver ?? static fn (TenantContext $ctx): int => 0,
+        failIfMissing: $failIfMissing,
+    );
+}
+
 it('reads all() and get() from the compiled file', function (): void {
     $path = moduleRegistryCachePath();
     $alpha = new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], []);
     $beta = new CompiledModule('corex/beta', 'Beta', 'bet', [], [], []);
     CompiledModuleRegistry::writeAtomic($path, [$alpha, $beta]);
 
-    $registry = new CompiledModuleRegistry($path, new ArrayModuleStateReader, Cache::store());
+    $registry = newModuleRegistry($path, new ArrayModuleStateReader);
 
     expect($registry->all())->toHaveCount(2)
         ->and($registry->get('corex/alpha')->title)->toBe('Alpha')
@@ -85,7 +109,7 @@ it('throws ModuleNotFound for an unknown module', function (): void {
     $path = moduleRegistryCachePath();
     CompiledModuleRegistry::writeAtomic($path, []);
 
-    $registry = new CompiledModuleRegistry($path, new ArrayModuleStateReader, Cache::store());
+    $registry = newModuleRegistry($path, new ArrayModuleStateReader);
 
     expect(fn () => $registry->get('corex/missing'))
         ->toThrow(ModuleNotFound::class);
@@ -103,7 +127,7 @@ it('active() intersects the compiled registry with the enabled set from the read
     $reader = new ArrayModuleStateReader([
         'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
     ]);
-    $registry = new CompiledModuleRegistry($path, $reader, Cache::store());
+    $registry = newModuleRegistry($path, $reader);
 
     $active = $registry->active(moduleRegistryCtx('acc-1'));
 
@@ -126,7 +150,7 @@ it('isolates active() per tenant context — no state leaks across accounts', fu
         'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
         'acc-2' => ['corex/beta' => ['state' => 'enabled', 'edition' => 'standard']],
     ]);
-    $registry = new CompiledModuleRegistry($path, $reader, Cache::store());
+    $registry = newModuleRegistry($path, $reader);
 
     $namesFor = static fn (array $modules): array => array_map(static fn (CompiledModule $m): string => $m->composerName, $modules);
 
@@ -152,7 +176,7 @@ it('does not call the reader again on a warm cache', function (): void {
         }
     };
 
-    $registry = new CompiledModuleRegistry($path, $reader, Cache::store());
+    $registry = newModuleRegistry($path, $reader);
     $ctx = moduleRegistryCtx('acc-1');
 
     $registry->active($ctx);
@@ -274,7 +298,7 @@ it('reads the persisted registry back through compiled()', function (): void {
     $compiled = (new RegistryCompiler)->compile([(new P15CompiledStubModule)->manifest()]);
     CompiledModuleRegistry::writeAtomic($path, [], $compiled);
 
-    $registry = new CompiledModuleRegistry($path, new ArrayModuleStateReader, Cache::store());
+    $registry = newModuleRegistry($path, new ArrayModuleStateReader);
     $read = $registry->compiled();
 
     expect($read->entities)->toHaveKey('pft.thing')
@@ -303,25 +327,79 @@ it('writeAtomic throws and leaves the destination intact when the atomic move fa
 });
 
 it('throws in production-style strict mode when the compiled registry file is absent (fail-loud)', function (): void {
-    $registry = new CompiledModuleRegistry(
-        cachePath: moduleRegistryCachePath(),
-        stateReader: new ArrayModuleStateReader,
-        cache: Cache::store(),
-        failIfMissing: true,
-    );
+    $registry = newModuleRegistry(moduleRegistryCachePath(), new ArrayModuleStateReader, failIfMissing: true);
 
     expect(fn () => $registry->all())->toThrow(RuntimeException::class, 'flex:modules:compile')
         ->and(fn () => $registry->compiled())->toThrow(RuntimeException::class, 'flex:modules:compile');
 });
 
 it('returns an empty registry outside production when the compiled file is absent', function (): void {
-    $registry = new CompiledModuleRegistry(
-        cachePath: moduleRegistryCachePath(),
-        stateReader: new ArrayModuleStateReader,
-        cache: Cache::store(),
-        failIfMissing: false,
-    );
+    $registry = newModuleRegistry(moduleRegistryCachePath(), new ArrayModuleStateReader, failIfMissing: false);
 
     expect($registry->all())->toBe([])
         ->and($registry->compiled()->entities)->toBe([]);
+});
+
+it('reads active()/isActive() on a non-taggable file store without BadMethodCallException (A1/A2)', function (): void {
+    // The Blocker: file/database stores are not taggable, so any tags() call
+    // in the hot path throws. Pin the cache to the file store — the very store
+    // the boxed profile (B-10 §6.1) uses and testbench's array default hid.
+    $path = moduleRegistryCachePath();
+    CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], [])]);
+
+    $reader = new ArrayModuleStateReader([
+        'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
+    ]);
+    $fileCache = new RepositoryModuleRegistryCache(Cache::store('file'), 3600, 'flex-modules-a1');
+    $registry = newModuleRegistry($path, $reader, cache: $fileCache);
+    $ctx = moduleRegistryCtx('acc-1');
+
+    expect($registry->isActive('corex/alpha', $ctx))->toBeTrue()
+        ->and(array_map(static fn (CompiledModule $m): string => $m->composerName, $registry->active($ctx)))->toBe(['corex/alpha']);
+
+    Cache::store('file')->flush();
+    unlink($path);
+});
+
+it('reports isActive()=false for a module enabled in the reader but absent from the compiled registry (A45/A46)', function (): void {
+    // A ghost row: mod_modules still lists a module whose code was removed
+    // (composer remove / rename). isActive() must intersect with the compiled
+    // registry, or the EntityRegistry predicate would pass a module get()
+    // cannot resolve.
+    $path = moduleRegistryCachePath();
+    CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], [])]);
+
+    $reader = new ArrayModuleStateReader([
+        'acc-1' => [
+            'corex/alpha' => ['state' => 'enabled', 'edition' => 'standard'],
+            'corex/ghost' => ['state' => 'enabled', 'edition' => 'standard'],
+        ],
+    ]);
+    $registry = newModuleRegistry($path, $reader);
+    $ctx = moduleRegistryCtx('acc-1');
+
+    expect($registry->isActive('corex/alpha', $ctx))->toBeTrue()
+        ->and($registry->isActive('corex/ghost', $ctx))->toBeFalse()
+        ->and(array_map(static fn (CompiledModule $m): string => $m->composerName, $registry->active($ctx)))->toBe(['corex/alpha']);
+
+    unlink($path);
+});
+
+it('builds the registry cache from config — store, ttl and prefix are read, not hardcoded (A45/A46)', function (): void {
+    // Point the module cache at a named array store and a custom prefix, then
+    // assert the resolved cache writes the epoch-stamped key THERE — proving
+    // config('flex-modules.cache.*') drives the binding (no hardcoded 3600).
+    config()->set('flex-modules.cache.store', 'array');
+    config()->set('flex-modules.cache.prefix', 'cfg-driven');
+    config()->set('flex-modules.cache.ttl', 3600);
+
+    // The provider's booted() hook already resolved the cache singleton with
+    // the default config; drop it so make() rebuilds against the config set
+    // above (the point of the test — config, not a hardcode, drives it).
+    $this->app->forgetInstance(ModuleRegistryCache::class);
+    $cache = $this->app->make(ModuleRegistryCache::class);
+    $cache->rememberEnabled('acc-9', 7, static fn (): array => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']]);
+
+    expect(Cache::store('array')->get('cfg-driven:account:acc-9:v7:enabled'))
+        ->toBe(['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']]);
 });
