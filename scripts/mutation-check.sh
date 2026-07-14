@@ -23,6 +23,8 @@ declare -A TEST_CMD=(
     [P1.15-silent-empty]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='fail-loud'"
     [P1.16-tags-back]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='non-taggable file store'"
     [P1.16-no-epoch-bump]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='shared-DB epoch'"
+    [P1.17-tableprefix-skip]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='no tablePrefix'"
+    [P1.17-stage-order-swap]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='AC-18'"
 )
 
 if [ "${1:-}" = "--list" ]; then
