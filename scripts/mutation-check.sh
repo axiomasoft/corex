@@ -34,6 +34,8 @@ declare -A TEST_CMD=(
     [P1.21-killswitch]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='killswitch silences'"
     [P1.22-drop-unique-index]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='rejects a duplicate account-level row'"
     [P1.22-drop-workspace-branch]="vendor/bin/pest --group=pg tests/Feature/FeatureFlagsTest.php --filter='AC-22 \(a\)|AC-22 \(b\)'"
+    [P1.23-stale-read]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='re-read guard'"
+    [P1.23-event-in-transaction]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='after-commit'"
 )
 
 if [ "${1:-}" = "--list" ]; then

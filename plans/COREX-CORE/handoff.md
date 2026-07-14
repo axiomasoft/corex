@@ -1,4 +1,4 @@
-# HANDOFF — 2026-07-14 — after P1.22
+# HANDOFF — 2026-07-15 — after P1.23
 
 **Next:** ЗАПУСК ВРУЧНУЮ: workflow (sonnet/medium per-item, D35)
 
@@ -7,13 +7,23 @@
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — |
 | Context | ТА ЖЕ СЕССИЯ (resume, кэш прошлых items переиспользуется) |
-| Суть запуска | P1.22 закрыт 🟠 Done with deviations (вердикт ревью ATTENTION) — каскад AC-22 (department reachable, детерминированный докблок-порядок), payload-фолбэк (A87), атомарный `define()`, `SettingChanged` только-на-изменении+afterCommit, `UnsupportedScopeException` для department в Settings, констрейнт-тест через сырой insert (A57/A63), покрытие `all()`/`forget()` (A59). Гейт зелёный (100/100 sqlite, 79/79 pg), mutation-check 2 кейса воспроизведены верификатором. Волна продолжается **P1.23 → P1.24 → P1.25**. |
+| Суть запуска | P1.23 закрыт 🟠 Done with deviations — `move()` lock-then-read+re-read под локом (A5), `DepartmentMoved` через afterCommit (A6), `SoftDeletes`+cast на `Models\Department` с фильтрацией find/subtree/primaryOf (A24), `subtree()` per-workspace, DTO `sortOrder`. 13 PG-тестов, локальный гейт зелёный (100/100 sqlite, 86/86 pg), mutation-check 2 кейса (`stale-read`, `event-in-transaction`) воспроизведены харнессом. Коммит `a97d5fb` запушен. Волна продолжается **P1.24 → P1.25**. |
 
 ```
 Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
 ```
 
-**Done:** (с прошлого handoff, after P1.20/D62) **P1.22** закрыт 🟠 Done with deviations (2026-07-14,
+**Done:** (этот handoff) **P1.23** закрыт 🟠 Done with deviations (2026-07-15, коммит `a97d5fb`
+запушен на `p1r-remediation`) — детали `phases/P1.md` P1.23 Completion Notes/Known Deviations, сводка
+`plan.md` §4 борд (после P1.22-абзаца). `files_outside_scope=[scripts/mutation-check.sh]` (регистрация
+2 mutation-кейсов, D45-мандат) + 2 Known Deviations (тест afterCommit-отката подменяет менеджер транзакций
+на продакшн `DatabaseTransactionsManager` — Foundation testing-менеджер срабатывает на уровне 1 без
+RefreshDatabase-обёртки, ненаблюдаемо; литеральная A5-мутация «read before lock» недетерминируема в один
+поток — пинится наблюдаемое следствие re-read через soft-delete If-then) → статус 🟠, не 🟢, по правилу
+докс-куратора (прецедент P1.19–P1.22). CI на ветке из сессии не верифицирован (только локальный гейт D34) —
+проверяется на закрытии фазы P1.26.
+
+**Done (ранее):** (after P1.20/D62) **P1.22** закрыт 🟠 Done with deviations (2026-07-14,
 docs-curator верификация, sha `d96085d`) — детали `phases/P1.md` P1.22 Completion Notes/Known Deviations,
 сводка `plan.md` §6 Update Log (запись после D62). `files_outside_scope` непустой
 (`packages/core/src/Exceptions/UnsupportedScopeException.php` — предписан Implementation Rules, не в
@@ -35,7 +45,7 @@ user→workspace требует P2-tenancy), паритетно уже прин�
 4. **P1.18/P1.19 (D57):** ложный DoR-гейт «OQ-11» опровергнут — исполнены под существующим ТЗ.
 5. **P1.20 (D58/D62):** mutation-check-кейс зарегистрирован в харнессе — процессный блокер снят.
 
-**Remaining:** волна 2 — **P1.23, P1.24, P1.25** (3 items по порядку плана) → **P1.26** (закрытие
+**Remaining:** волна 2 — **P1.24, P1.25** (2 items по порядку плана) → **P1.26** (закрытие
 фазы: слепой аудит + CHANGELOG + semver-теги + PR в `main`) → `/task:plan-close COREX-CORE P1` → P2.1.
 Time-gated **P1.27** и отдельный **P1.28** — после P1.26, не блокируют закрытие фазы (D47/D48).
 
@@ -43,7 +53,7 @@ Time-gated **P1.27** и отдельный **P1.28** — после P1.26, не 
 волны 2 (P1.14–P1.25) сданы. GREEN → **P1.26** (CHANGELOG + `Deprecated / Will break in 0.2` + semver-теги
 + PR ветки в `main`) → `/task:plan-close COREX-CORE P1` → и только потом P2.1.
 
-**Итог борда после закрытия P1.22:** **5 🟢 · 17 🟠 · 0 🔴 · 6 ⬜**.
+**Итог борда после закрытия P1.23:** **5 🟢 · 18 🟠 · 0 🔴 · 5 ⬜**.
 
 **Sources of truth:** `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D62+, §4 борд, §6 Update Log) ·
 `plans/COREX-CORE/phases/P1.md` (ТЗ items) ·

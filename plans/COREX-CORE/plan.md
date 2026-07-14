@@ -279,6 +279,21 @@ sqlite, 79/79 pg), mutation-check 2 кейса (`drop-unique-index`, `drop-works
 D45-мандат, тот же паттерн волны) → по правилу докс-куратора (см. P1.20/P1.21) статус **🟠**, не 🟢. Итог
 борда после закрытия P1.22: **5 🟢 · 17 🟠 · 0 🔴 · 6 ⬜**.
 
+**P1.23 закрыт: 🟠 Done with deviations (2026-07-15) — детали см. phases/P1.md P1.23 Completion Notes.**
+`move()` теперь берёт advisory-lock ДО чтения перемещаемой строки и ПЕРЕЧИТЫВАет её под локом (A5:
+минимальное сырое чтение `workspace_id` ради ключа → `pg_advisory_xact_lock` → `firstOrFail`-перечитывание;
+удалённая/soft-deleted строка под локом → `ModelNotFoundException`, не тихий no-op); `DepartmentMoved`
+вынесен в `afterCommit` (A6); `Models\Department` получил `SoftDeletes`+cast `sort_order`, `find/subtree/
+primaryOf` не возвращают удалённые (A24); `subtree()` фильтрует `workspace_id`; DTO — `sortOrder`. 13 PG-
+тестов (счётчик запросов A25/A27, сериализация через `lock_timeout`+holder, afterCommit-откат, soft-delete,
+re-read-guard, `move($id,null)`, цикл). Локальный гейт зелёный (100/100 sqlite, 86/86 pg), mutation-check
+2 кейса (`stale-read`, `event-in-transaction`) краснеют под саботажем (воспроизведены харнессом). Статус
+**🟠**, не 🟢, по правилу докс-куратора: `files_outside_scope=[scripts/mutation-check.sh]` (регистрация
+2 кейсов, D45-мандат), плюс 2 Known Deviations (тест afterCommit-отката подменяет менеджер транзакций на
+продакшн; литеральная A5-мутация «read before lock» недетерминируема в один поток — пинится наблюдаемое
+следствие re-read через soft-delete If-then). Коммит `a97d5fb` запушен на `p1r-remediation`. Итог борда
+после закрытия P1.23: **5 🟢 · 18 🟠 · 0 🔴 · 5 ⬜**. Волна продолжается **P1.24 → P1.25**.
+
 ## 5. Decision Log
 
 | D# | Дата | Решение | Почему |
