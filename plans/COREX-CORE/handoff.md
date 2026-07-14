@@ -1,108 +1,104 @@
-# HANDOFF — 2026-07-13 — after P1.13
+# HANDOFF — 2026-07-14 — after P1.13
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
-| Model | Opus |
-| Thinking | xhigh — adversarial-аудит закрытой фазы: сверка 13 🟢/🟠 с кодом и git, no-op, scope drift |
-| Context | NEW SESSION (/clear) — аудит фазы читает весь код фазы, свежий контекст обязателен |
-| Суть | Фаза P1 терминальна (12 🟢 + 1 🟠) — прогнать аудит фазы, затем закрыть её (Phase Handoff, semver-теги `corex/core v0.1.0` / `flex/modules v0.1.0` + CHANGELOG per D17) и только после этого стартовать P2.1. |
+| Model | Opus (Blocker-ярус) / Sonnet (механика) — per-item, пинит сам workflow |
+| Thinking | high на P1.15/P1.16/P1.18/P1.19/P1.21/P1.23, medium на остальных |
+| Context | NEW SESSION — Workflow-orchestrated (не продолжать эту сессию) |
+| Суть | Волна 2 фазы P1 — ремедиация по 🔴 RED-аудиту: 12 items на ветке `p1r-remediation`, каждый: impl → верификатор → adversarial review → close. **Предусловие: владелец закрыл OQ-11.** |
 
 ````
-/task:plan-audit COREX-CORE P1
+Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js"})
 ````
 
-После GREEN-аудита:
+**🔴 ПЕРЕД ЗАПУСКОМ — решение владельца по OQ-11** (`open-questions.md`): golden-шаблон P2 vs
+DDL-при-enable. Вариант (A) «шаблон содержит таблицы всех модулей» означает, что **P1.18 — самый
+дорогой item волны — строит не то** (purge должен чистить ДАННЫЕ, а не дропать таблицы). Запуск волны
+без этого решения рискует выбросить работу P1.18 целиком. Остальные items от OQ-11 не зависят —
+при желании можно стартовать волну, а P1.18 придержать.
 
-````
-/task:plan-close COREX-CORE P1
-````
+Волна НЕ исполняется через `/task:plan-exec`: несущие items предписаны `opus/high`, команда пинит
+sonnet/medium (routing-undershoot запрещён — plan-protocol §9, D35). Именно этот undershoot дал
+2 из 3 Blocker'ов волны 1.
 
-Затем первый item фазы P2 (**предусловие: OQ-5 — решение владельца по php ^8.4 vs ^8.3**):
+После зелёной волны (порядок обязателен): аудит фазы P1 (команда plan-audit — фаза станет терминальной
+только когда все 12 items волны сданы; до тех пор аудит не запускать).
 
-````
-/task:plan-exec COREX-CORE P2.1
-````
+Аудит проводится **ВСЛЕПУЮ** (без A-списка находок — иначе он превращается в сверку по чек-листу,
+D45/P1.26 Code Guidance). GREEN → item **P1.26** (CHANGELOG + `Deprecated / Will break in 0.2` +
+semver-теги + PR ветки в `main`) → `/task:plan-close COREX-CORE P1` → и только потом P2.1.
 
-Cold-start reads: `plans/COREX-CORE/plan.md` → `plans/COREX-CORE/handoff.md` (этот файл) →
-`plans/COREX-CORE/phases/P1.md` (для аудита) / `phases/P2.md` (для P2.1) → Required Reads item'а.
+Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D45) → этот файл →
+`phases/P1.md` (ТЗ item'а) → `findings/P1-audit-2026-07-13.md` (что чиним, A1..A93) →
+`findings/P1R-premortem.md` (что волна НЕ закрывает) → `findings/P1R-coverage-matrix.md` (93 → items).
 
-**Done:** План создан 2026-07-06; обе фазы детализированы до 16-польных ТЗ 2026-07-08 (26/26);
-2026-07-12 двойной design-пасс (DoR-финализация + max-design, детали в Update Log plan.md).
-**Фаза P1 исполнена целиком (13/13 items терминальны, 12 🟢 + 1 🟠).** Порядок закрытия и коммиты:
-P1.1 `c6b4ce0` (UUIDv7 — дефолт ID-strategy) · P1.12 `1890e56` (контракты TenantContext/AccountRef/
-WorkspaceRef + TenantContextResolver + SingleAccountResolver) · P1.2 `c5fd939` (EntityRegistry v2 +
-новый пакет `flex/modules`) · P1.3 `dabf1ab` (CorexModule/Manifest/Dep/SettingDefault + ModuleDiscovery
-+ `flex:modules:compile`) · P1.4 `e8111bf` (RegistryCompiler + 8 extenders + CompilationValidator,
-«спящий» cross-module extender) · P1.5 `5865599` (CompiledModuleRegistry hot-path + ModuleActivationGate)
-· P1.6 `20853eb` (ModuleLifecycle-FSM + RecordsRegistrar + `mod_*` миграции, **вводит PG16 тест-лейн**)
-· P1.7 `fd5eb21` (Settings v2, `sys_settings`) · P1.8 `18ddf73` (Audit v2 queued, `sys_audit_log` BRIN)
-· P1.9 `963cf44` (DomainEvent-база — D27 — + FeatureFlags v2) · P1.10 `32acd10` (sys_departments ltree
-+ DepartmentRepository) · P1.11 `b05459c` (PubSub + 3 драйвера) · P1.13 `4571e23` (PHPStan-расширение
-`flex/modules-lint`, 9 правил).
-Детали каждого item'а — `phases/P1.md` (Completion Notes / Pending Work / Known Deviations);
-пересказ здесь сознательно опущен.
-**2026-07-13 — P1.13 закрыт (🟠 Done with deviations):** `Flex\Modules\PHPStan\Rules\*` — 6 простых
-правил на SQL-строках-константах DB/Schema-вызовов (SET без LOCAL · session `pg_advisory_lock` ·
-LISTEN/NOTIFY · CREATE TEMP · SQL PREPARE · eval) + 3 контекстных, владение в которых задаётся картой
-в `packages/modules/extension.neon` (чужой tablePrefix · fs вне директории модуля · прямая запись в
-`sys_*`/`mod_*` мимо контрактов). `composer analyse` с включённым расширением — 0 ошибок на легальном
-коде ядра. Тесты — `RuleTestCase`, 9 фикстур позитив/негатив. Отклонения: исполнено sonnet/medium
-вместо `opus/high` (Routing §3; риск закрыт верификацией API по коду установленного phpstan 2.2.2);
-Required Read #6 (context7) не выполнен — квота исчерпана, замещён чтением phar'а той же версии;
-тесты сгруппированы в 2 класса вместо `*RuleTest.php` на правило.
+**Done:** Волна 1 (P1.1–P1.13) исполнена и закоммичена. **Аудит 2026-07-13 — 🔴 RED: 93 находки**
+(3 Blocker · 17 Major · 53 Minor · 20 Nit). Гейты были зелёные — они не покрывали заявленное.
+
+**2026-07-14 — фаза переоткрыта и ре-спроектирована** (`/task:plan-design COREX-CORE P1`):
+- статусы 12 items понижены 🟢→🟠 (материальные отклонения §6), Completion Notes сохранены как история;
+- **13 новых items P1.14–P1.26**; решения **D28–D45**; **OQ-10..OQ-15**;
+- полный список находок восстановлен из журнала прогона в `findings/P1-audit-2026-07-13.md`
+  (в фазе жили только Blocker/Major) + матрица покрытия 93/93;
+- **pre-mortem волны (3 линзы)** нашёл 6 дыр в самой ремедиации — все внесены (D39–D45).
+
+**2026-07-14 — P1.14 закрыт (🟠 Done with deviations), ветка `p1r-remediation` создана:**
+- CI: job'ы `tests-pg` (postgres:16 сервис), `coverage`, `anti-weakening-gate`; `on.push.branches` +=
+  `p1r-remediation`; `composer test:coverage` — без PG-зависимости; `phpunit.xml` `<source>` +=
+  `packages/modules/src`; `phpstan.neon` paths += миграции обоих пакетов (мимоходом починена FP
+  `NoDirectSystemTableWriteRule` на собственных `mod_*`-миграциях); `NoForeignPrefixSqlRule` переписан на
+  позиционную детекцию (A35) + негативная фикстура; `scripts/mutation-check.sh` (harness для всей волны) +
+  2 патча-саботажа в `plans/COREX-CORE/mutations/`; `scripts/anti-weakening-gate.sh` (CI-job, банит
+  `->skip(`/`markTestSkipped`/`continue-on-error`/baseline/понижение `--min=`/уменьшение числа тестов).
+- **Эскалация (не блокирует волну, см. phases/P1.md P1.14 Escalation Needed):** `phpstan.neon` НЕ получил
+  `tests` в paths — конфликт внутри ТЗ item'а: буквальное требование против собственного же Code Guidance
+  item'а («вскрыло ошибки вне Files — эскалация, не фикс»). Причина факта: `tests` при `level: 6` поднимает
+  60 ошибок в 8 файлах волны 1 — Pest `it()`/`beforeEach()` рантайм-биндит `$this` к `TestCase`, статически
+  PHPStan видит `Pest\PendingCalls\TestCall` (мимо `@mixin`); НИ ОДНА ошибка не относится к `flex/modules-lint`
+  (ради которых A36 и просил `tests`). Owner-decision нужно: (а) отдельный phpstan-прогон только под
+  9 custom-правил на `tests/`+migrations, без larastan; (б) официально сузить Deliverables P1.14; (в) отдельный
+  item — ретрофит тестов волны 1 под статически-типизируемый паттерн.
+- **CI-верификация (D45):** см. `gh run list --branch p1r-remediation` на момент закрытия — приложено в
+  Completion Notes item'а или в отдельном апдейте этого файла, если пуш случился после него.
 
 **Remaining:**
-1. **Аудит + закрытие фазы P1** (Phase Handoff в `phases/P1.md`, semver-теги `corex/core v0.1.0` /
-   `flex/modules v0.1.0` + CHANGELOG per D17) — предусловие старта P2 по Execution Rules.
-2. **Фаза P2** (0/13, phase-first): предусловие P2.1 = решение **OQ-5** (php ^8.4 vs ^8.3);
-   P2.1 (PoC-гейт stancl, блокирующий; GO/NO-GO) → P2.2 → P2.3 → P2.4 → P2.5 → P2.7 (users, до
-   P2.6/P2.8) → P2.6 → P2.8 → P2.9 → re-GO checkpoint → P2.10 (DoR: ADR-017 сверен, OQ-7) → P2.11 →
-   P2.12 → P2.13.
+1. **Волна 2 (P1.15–P1.25)** — 11 items. P1.14 закрыт первым (см. выше). Порядок дальше не произвольный:
+   P1.15 → P1.16 → P1.18 — цепочка по данным.
+2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
+3. **Фаза P2** (0/13): предусловие P2.1 = OQ-5 (php ^8.4 vs ^8.3).
 
-**Per-item routing P2** (несущие opus/high — Routing §3):
+**Sources of truth:** plan.md (v0.3.0, D1–D45) · phases/P1.md (26 items) · phases/P2.md ·
+open-questions.md (OQ-1..15) · findings/{P1-audit-2026-07-13, P1R-premortem, P1R-coverage-matrix,
+P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem, P1-premortem}.md ·
+~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loader.md · B-11_auth-tenancy.md ·
+~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT) · 50_execution/00_EXECUTION_ROADMAP.md
 
-| Item | Model/effort | Почему |
-|:--|:--|:--|
-| P2.1 | opus/high | PoC-гейт stancl: GO/NO-GO + F2-спайка + НФТ — **следующий exec-item после закрытия P1** |
-| P2.13 | opus/high | PHPStan stancl-изоляция + arch-тесты |
-| остальные P2 | sonnet/medium | механика (DDL-миграции, контракты, провижининг) |
-
-**Sources of truth:** plans/COREX-CORE/plan.md (v0.2.0, D1–D27) · phases/P1.md · phases/P2.md ·
-open-questions.md (OQ-1..9) · findings/P1-P2-rag-verification-2026-07-12.md (внешние факты,
-дата-штамп) · findings/P2-premortem.md · findings/P1-P2-audit-2026-07-12.md · findings/P1-premortem.md ·
-~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT — сверяться; FROZEN = предусловие
-финального закрытия migration-items) · ~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loader.md ·
-B-11_auth-tenancy.md · ~/Vaults/Brain/plans/flex/20_research/R-11_stancl-readiness.md · R-15_cell-infra.md ·
-~/Vaults/Brain/plans/flex/50_execution/00_EXECUTION_ROADMAP.md
-
-**Open risks:** **OQ-5 php ^8.4** (stancl master vs corex ^8.3 — блокер P2.1, решение владельца);
-DB_SCHEMA DRAFT (OQ-6 — владелец схемы); stancl v4 без релиза (D8/D25 supply-chain-якорь; PoC-гейт
-держит); churn контрактов до 1.0 (D17 — не тегать 1.0, пока EntityRegistry/TenantContext не обкатаны
-потребителями); jobpipeline rc (точный пин `2.0.0-rc7`); broadcasting PR #1448 открыт (OQ-8, вне scope);
-PG-лейн прогоняется на host (`pdo_pgsql` есть; на другой машине — вернуться к контейнеру
-`serversideup/php`, см. Known Deviation P1.6); правила `flex/modules-lint` 6/8 инертны, пока в
-экосистеме нет реальных module-пакетов (карта владения в neon пуста — P1.13 Pending Work).
-Полная карта — findings/P2-premortem.md.
+**Open risks:**
+- **🔴 OQ-11 (блокер DoR P1.18):** golden-шаблон vs DDL-при-enable — при варианте (A) P1.18 строит не то.
+- **Код никогда не пушился:** 28 коммитов волны 1 не в `origin`, `origin/main` от 2026-07-07 — CI не видел
+  ни строчки кода P1. До закрытия P1.14 (ветка + push + зелёный `tests-pg`) любое «зелено» локально.
+- **Модуль-система нерабочая в дефолтной конфигурации** (A1: `tags()` на не-taggable сторе) — до P1.16.
+- **Компиляцию реестра не вызывает никто** (ни composer-хук, ни CI, ни деплой), а пустой реестр молчит —
+  до P1.15 прод получил бы «систему без модулей» без единой ошибки.
+- **`corex/core` не поставляет ни одной применимой миграции** (A19/A62) — до P1.19 `migrate` у потребителя
+  создаёт ноль `sys_*`-таблиц.
+- **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
+  mutation-check патчами в репо, прогоняет отдельный верификатор.
+- **Ядро де-факто PG16-only, но нигде этого не объявляет** (OQ-12) — boxed-заказчик узнает на площадке.
+- В рабочем дереве **чужой дифф** (`.gitignore`, `CLAUDE.md`, удалённый `AGENTS.md`, `.claude/**`) — не мой
+  и не items волны: исполнителям запрещено его коммитить.
+- OQ-5 (php ^8.4) — блокер P2.1; DB_SCHEMA DRAFT (OQ-6); stancl v4 без релиза (D8/D25).
+- Полная карта того, что волна НЕ закрывает — `findings/P1R-premortem.md` (кластеры C1–C8, P1–P7, U1–U6).
 
 **Workarounds/Deferred/Open questions:**
-- workarounds: полный список открытых хвостов P1 (lifecycle-события на interim-базе вместо
-  `DomainEvent`; `ArrayEntityRegistry::moduleActive` — заглушка `fn()=>true`, не подключена к
-  `ModuleRegistry::isActive()`; `SettingDefaultsProvider` — боксед-`Null…`, реальная реализация поверх
-  реестра манифестов не подключена; wiring `Manifest::$featureFlags`→`FeatureFlags::define()` отсутствует;
-  `FeatureFlagToggled` без продюсера; `SettingsScope` не несёт варианта `department`; `CompiledModule`
-  не персистит полный `CompiledRegistry`; `$codeVersions`/`$migrationPaths` `DatabaseModuleLifecycle` —
-  интерим-сеймы; `AuditEntry` без actorType `agent`/`api_key`; Redis-драйвер PubSub без smoke-теста;
-  request-cycle guard `subscribe()` без негативного теста) — живёт в **Pending Work соответствующих
-  items `phases/P1.md`**, здесь не дублируется; аудит фазы P1 обязан их пересобрать.
-- deferred: corex/components (D6); §4.5 DX-генераторы + §4.6 MCP dev-сервер + AC-33/34 + AC-12 N−1
-  (D26); автовывод карты владения `flex/modules-lint` из манифеста (P1.13 Pending Work, v1.1);
-  правила на `PDO::ATTR_PERSISTENT` (§7.3 п.6) и курсоры `WITH HOLD` (§7.3 п.7) — v1.1;
-  партиционирование sys_audit_log (§9.7); pest --parallel per-worker DB isolation; production
-  `loadMigrationsFrom` для `packages/modules/database/migrations`; cross-package FK
-  (`sys_departments.workspace_id`/`head_user_id`, `sys_department_user.user_id`) — интеграционная
-  миграция P2.6 (D14); `sys_pubsub_messages` вне DB_SCHEMA/golden-шаблона (OQ-6).
-- open_questions: **open-questions.md OQ-1..9** — блокеры: OQ-5 (php-констрейнт, предусловие P2.1),
-  OQ-7 (actor-type support + ADR-017, DoR P2.10/P2.11); OQ-6 (DB_SCHEMA счёт/`sys_pubsub_messages` —
-  владелец схемы); OQ-8 (наблюдение PR #1448). Сняты: OQ-1 (P1.8), OQ-2 → D27 (P1.9), OQ-9 (P1.9).
+- workarounds: хвосты волны 1 адресованы поимённо — `findings/P1R-coverage-matrix.md` (93 кода → item).
+- deferred: Nit-класс (20 находок, D29); партиционирование `sys_audit_log` (§9.7) — без него ретеншн-шов
+  P1.21 в проде не исполним; fan-out db-poll (1 поллер на аккаунт — стена облачного парка); ленивая
+  гидрация реестра (бюджет бута B-10 §7.1); Infection/MSI как машинный оракул тестов; расширяемость
+  `Capability`/`Extend\*` для спутников (U4); референс-модуль `flex/module-example` (U5); corex/components
+  (D6); DX-генераторы (D26).
+- open_questions: **OQ-1..15**. Блокеры: **OQ-11** (DoR P1.18), OQ-5 (P2.1), OQ-15 (P1.26), OQ-7 (P2.10/P2.11).
+  Ждут владельца: OQ-12 (PG16 hard requirement), OQ-13 (root vs sys feature flags), OQ-14 (реестр префиксов),
+  OQ-6 (DB_SCHEMA), OQ-10 (телеметрия devloop — вне плана).

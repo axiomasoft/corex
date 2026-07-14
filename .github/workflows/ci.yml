@@ -2,10 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, p1r-remediation]
   pull_request:
 
 jobs:
+  anti-weakening-gate:
+    runs-on: ubuntu-latest
+    name: Anti-weakening gate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Guard against gate-weakening diffs
+        run: bash scripts/anti-weakening-gate.sh
+
   tests:
     runs-on: ubuntu-latest
     strategy:
@@ -31,6 +42,62 @@ jobs:
 
       - name: Tests
         run: composer test
+
+  tests-pg:
+    runs-on: ubuntu-latest
+    name: PG lane (postgres:16)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: PG tests
+        run: composer test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage (min 80%)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Coverage
+        run: composer test:coverage
 
   quality:
     runs-on: ubuntu-latest

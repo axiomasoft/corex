@@ -46,6 +46,21 @@ final class ModuleBoundaryRulesTest extends RuleTestCase
         ]);
     }
 
+    public function test_foreign_prefix_sql_no_false_positive(): void
+    {
+        $this->rule = new NoForeignPrefixSqlRule([
+            self::MODULE_NAMESPACE => 'bil',
+            'CoreX\Tests\PHPStan\Data\Crm\\' => 'crm',
+        ]);
+
+        $this->analyse([__DIR__.'/data/foreign-prefix-sql.php'], [
+            [
+                'Direct DB access to table "mod_records" of a foreign prefix (module owns "bil_") is forbidden (B-10 §7.4 п.9) — go through the owner\'s contract.',
+                39,
+            ],
+        ]);
+    }
+
     public function test_fs_outside_module(): void
     {
         $this->rule = new NoFsOutsideModuleRule([self::MODULE_NAMESPACE]);

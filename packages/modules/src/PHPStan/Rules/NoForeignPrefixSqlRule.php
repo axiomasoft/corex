@@ -7,6 +7,9 @@ namespace Flex\Modules\PHPStan\Rules;
 use Flex\Modules\PHPStan\Rules\Support\DatabaseCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
@@ -27,6 +30,12 @@ final class NoForeignPrefixSqlRule implements Rule
 {
     /** Префиксы ядра — их не может трогать ни один модуль. */
     private const CORE_PREFIXES = ['sys', 'mod'];
+
+    /**
+     * Методы, чей первый строковый аргумент — ИМЯ ТАБЛИЦЫ целиком (не SQL-текст):
+     * `DB::table()`/`Schema::*`. Матчится по полному совпадению строки, не regex-сканом.
+     */
+    private const TABLE_NAME_METHODS = ['table', 'from', 'create', 'drop', 'dropifexists', 'hastable', 'rename'];
 
     /**
      * @param  array<string, string>  $modulePrefixes  PSR-4-неймспейс модуля => tablePrefix
@@ -52,39 +61,101 @@ final class NoForeignPrefixSqlRule implements Rule
 
         $known = array_values(array_unique([...self::CORE_PREFIXES, ...array_values($this->modulePrefixes)]));
         $errors = [];
+        $tables = $this->isTableNameCall($node)
+            ? $this->foreignTableLiterals($node, $scope, $ownPrefix, $known)
+            : $this->foreignTablesInSql($node, $scope, $ownPrefix, $known);
 
-        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
-            foreach ($this->foreignTables($sql, $ownPrefix, $known) as $table) {
-                $errors[] = RuleErrorBuilder::message(sprintf(
-                    'Direct DB access to table "%s" of a foreign prefix (module owns "%s_") is forbidden (B-10 §7.4 п.9) — go through the owner\'s contract.',
-                    $table,
-                    $ownPrefix,
-                ))
-                    ->identifier('flexModules.foreignPrefixSql')
-                    ->build();
-            }
+        foreach ($tables as $table) {
+            $errors[] = RuleErrorBuilder::message(sprintf(
+                'Direct DB access to table "%s" of a foreign prefix (module owns "%s_") is forbidden (B-10 §7.4 п.9) — go through the owner\'s contract.',
+                $table,
+                $ownPrefix,
+            ))
+                ->identifier('flexModules.foreignPrefixSql')
+                ->build();
         }
 
         return $errors;
     }
 
     /**
+     * `DB::table('x')`/`Schema::create('x', ...)` и т.п. — первый строковый аргумент
+     * ЦЕЛИКОМ является именем таблицы, сравниваем без regex-скана по позициям.
+     */
+    private function isTableNameCall(CallLike $node): bool
+    {
+        $name = null;
+
+        if ($node instanceof StaticCall && $node->name instanceof Identifier) {
+            $name = $node->name->toString();
+        } elseif ($node instanceof MethodCall && $node->name instanceof Identifier) {
+            $name = $node->name->toString();
+        }
+
+        return $name !== null && in_array(strtolower($name), self::TABLE_NAME_METHODS, true);
+    }
+
+    /**
      * @param  list<string>  $knownPrefixes
      * @return list<string>
      */
-    private function foreignTables(string $sql, string $ownPrefix, array $knownPrefixes): array
+    private function foreignTableLiterals(CallLike $node, Scope $scope, string $ownPrefix, array $knownPrefixes): array
     {
-        if (preg_match_all('/\b([a-z][a-z0-9]{0,2})_[a-z0-9_]+\b/i', $sql, $matches, PREG_SET_ORDER) === false) {
+        $args = $node->getArgs();
+
+        if ($args === []) {
             return [];
         }
 
+        // Только первый аргумент — второй/третий у Schema::rename()/create() не имена таблиц.
         $tables = [];
 
-        foreach ($matches as [$table, $prefix]) {
-            $prefix = strtolower($prefix);
+        foreach ($scope->getType($args[0]->value)->getConstantStrings() as $constantString) {
+            $table = $constantString->getValue();
+
+            if (preg_match('/^([a-z][a-z0-9]{0,2})_[a-z0-9_]+$/i', $table, $m) !== 1) {
+                continue;
+            }
+
+            $prefix = strtolower($m[1]);
 
             if ($prefix !== $ownPrefix && in_array($prefix, $knownPrefixes, true)) {
                 $tables[] = $table;
+            }
+        }
+
+        return array_values(array_unique($tables));
+    }
+
+    /**
+     * Raw-SQL методы (`DB::select`/`DB::statement`/…): чужой префикс детектится ТОЛЬКО
+     * на позиции имени таблицы — токен, идущий сразу за `FROM`/`JOIN`/`INTO`/`UPDATE`/`TABLE`.
+     * Любое другое вхождение `xx_yyy` (колонка, алиас, строковое значение) — легально.
+     *
+     * @param  list<string>  $knownPrefixes
+     * @return list<string>
+     */
+    private function foreignTablesInSql(CallLike $node, Scope $scope, string $ownPrefix, array $knownPrefixes): array
+    {
+        $tables = [];
+
+        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
+            if (preg_match_all(
+                '/\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+([a-z][a-z0-9]{0,2})_[a-z0-9_]+\b/i',
+                $sql,
+                $matches,
+                PREG_SET_ORDER,
+            ) === false) {
+                continue;
+            }
+
+            foreach ($matches as $match) {
+                $table = preg_replace('/^\S+\s+/', '', $match[0]) ?? $match[0];
+                $prefix = strtolower($match[1]);
+
+                if ($prefix !== $ownPrefix && in_array($prefix, $knownPrefixes, true)) {
+                    $tables[] = $table;
+                }
             }
         }
 

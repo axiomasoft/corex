@@ -57,7 +57,7 @@ final class NoDirectSystemTableWriteRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($this->isCoreOwner($scope)) {
+        if ($this->isCoreOwner($scope) || $this->isMigrationFile($scope)) {
             return [];
         }
 
@@ -147,6 +147,18 @@ final class NoDirectSystemTableWriteRule implements Rule
         }
 
         return null;
+    }
+
+    /**
+     * Миграции — anonymous `return new class extends Migration {…}` без `namespace`
+     * (обязательное соглашение пакетных миграций — не коллидировать с миграцией
+     * потребителя), поэтому `isCoreOwner()` (по неймспейсу) их не видит. Миграция —
+     * легальный владелец таблицы, которую сама создаёт: она и есть DDL-источник
+     * истины для `sys_*`/`mod_*`, отличный от рантайм-контрактов (Settings/Audit/…).
+     */
+    private function isMigrationFile(Scope $scope): bool
+    {
+        return str_contains(str_replace('\\', '/', $scope->getFile()), '/database/migrations/');
     }
 
     private function isCoreOwner(Scope $scope): bool
