@@ -1,7 +1,15 @@
-# HANDOFF — 2026-07-14 — after P1.17
+# HANDOFF — 2026-07-14 — after P1.18
 
 **Next:** /task:plan-exec COREX-CORE P1.17
 
+Волна остановлена на P1.18 — ДВА независимых жёстких STOP-условия (plan-protocol §10), каждого
+достаточно; ниже — оба блокера. Ближайший шаг — снять блокер 1 командой выше; блокер 2 требует отдельного
+владельческого решения (см. ниже), P1.18 не стартует до снятия ОБОИХ.
+
+**Блокер 1 (порядок волны, D53) — фикс P1.17:**
+```
+/task:plan-exec COREX-CORE P1.17
+```
 Волна ОСТАНОВЛЕНА на P1.17 (D53, RED-ревью) — item закрыт был 🟢, откачен в 🔴 Blocked. Волна НЕ
 продолжается на P1.18+ до зелёного CI на P1.17.
 
@@ -21,12 +29,27 @@
 /task:plan-design COREX-CORE P1.17
 ```
 
+**Блокер 2 (DoR-гейт OQ-11 самого P1.18) — решение владельца по покрытию:**
+handoff (эта версия, ниже) утверждает, что OQ-11 закрыт владельцем Вариантом (A) — но: (i) Implementation
+Rules P1.18 буквально требуют СТОП и переписывание item'а через plan-design именно при варианте (A)
+(purge = очистка ДАННЫХ, не DDL), тогда как текущее ТЗ P1.18 реализует путь (B)/(C) (аддитивный
+`seq bigserial` + DROP-purge `ORDER BY seq DESC` по всем claim-типам, D31/D41); (ii) OQ-11 физически
+ОТСУТСТВУЕТ в `open-questions.md` (`grep -c '### OQ-'` = 9, только OQ-1..OQ-9) — заявленная резолюция не
+зафиксирована в SSOT, вариант авторитетно не подтверждаем прозой handoff.
+Триггер владельцу:
+```
+(b) внести OQ-11 в open-questions.md фактической резолюцией с явным вариантом (A/B/C)
+(c) если (A) подтверждён → /task:plan-design COREX-CORE P1.18   # re-design: purge данных, не DDL
+    если фактически (B)/(C) → исправить запись OQ-11/handoff, подтвердить текущее ТЗ P1.18 авторитетным
+```
+Только после (a: фикс P1.17)+(b)+(c) P1.18 исполним штатно `/task:plan-exec COREX-CORE P1.18`.
+
 | Параметр | Значение |
 |:--|:--|
-| Model | per-item (D35); для Пути A — sonnet/medium (routing §3); для Пути B — opus/high |
-| Thinking | Путь A — low/medium; Путь B — high |
+| Model | per-item (D35); блокер 1 Путь A — sonnet/medium (routing §3), Путь B — opus/high; блокер 2 — opus/high (plan-design/владельческое решение) |
+| Thinking | блокер 1 Путь A — low/medium, Путь B — high; блокер 2 — high |
 | Context | NEW SESSION |
-| Суть | P1.17 закрыт был 🟢 (2026-07-14), откачен в 🔴 Blocked (D53) — RED CI на ветке (4 test-лейна + coverage), Completion Notes недостоверны. Волна остановлена. |
+| Суть | P1.18 не стартован (⬜→🔴 Blocked, D54): порядок волны (P1.17 всё ещё 🔴, D53) + DoR-гейт OQ-11 (заявленная резолюция (A) не в SSOT и противоречит текущему ТЗ item'а). |
 
 **Разрешённые эскалации прошлых items (детали — `phases/P1.md`, блоки «✅ РАЗРЕШЕНО»), волны не касаются:**
 1. **P1.14 (D47/D48):** phpstan `tests`-paths вынесены в **P1.28**; coverage `--min` ослаблен 80→55 (D47),
@@ -44,9 +67,11 @@
 фикс по Пути A — механический с детерминированной Validation, поэтому sonnet/medium уместен (см.
 plan.md §3 Routing строку «P1.14, P1.17, P1.20, …»).
 
-Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D53) → этот файл →
-`phases/P1.md` P1.17 (Pending Work — полный диагноз) → `findings/P1-audit-2026-07-13.md` (A7/A41/A42/A44
-— исходные находки, ради которых создан item) → `findings/P1R-coverage-matrix.md`.
+Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–D54) → этот файл →
+`phases/P1.md` P1.17 (Pending Work — полный диагноз блокера 1) → `phases/P1.md` P1.18 (Scope
+Included/Implementation Rules — DoR-гейт OQ-11, блокер 2) → `open-questions.md` (проверить: OQ-11 внесён?)
+→ `findings/P1-audit-2026-07-13.md` (A7/A41/A42/A44 — исходные находки P1.17; A3/A11–A16/A51/A54–A56 —
+P1.18) → `findings/P1R-coverage-matrix.md`.
 
 **Done:** Волна 1 (P1.1–P1.13) исполнена и закоммичена. **Аудит 2026-07-13 — 🔴 RED: 93 находки**
 (3 Blocker · 17 Major · 53 Minor · 20 Nit). Гейты были зелёные — они не покрывали заявленное.
