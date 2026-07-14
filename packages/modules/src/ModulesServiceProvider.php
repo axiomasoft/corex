@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use CoreX\CoreServiceProvider;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use Flex\Modules\Audit\AuditCapabilityWiring;
@@ -35,6 +36,14 @@ use Override;
 
 final class ModulesServiceProvider extends ServiceProvider
 {
+    /**
+     * Shipped schema generation of the mod_* migration set (D43). A consumer
+     * publishes a COPY, so upgrades ship as NEW additive migration files under
+     * the same publish tag and bump this constant (mirrors
+     * {@see CoreServiceProvider::SCHEMA_VERSION}).
+     */
+    public const int SCHEMA_VERSION = 1;
+
     #[Override]
     public function register(): void
     {
@@ -152,6 +161,16 @@ final class ModulesServiceProvider extends ServiceProvider
                 return 0;
             })->purpose('Reconcile mod_records with the schema and reset a purged module to available.');
         }
+
+        // Connection-scoped publish (D33/D43): mod_* is PG-only TENANT-schema
+        // DDL (advisory locks, CHECK, jsonb). NOT loadMigrationsFrom — see the
+        // note above; consumers publish + migrate explicitly on the tenant
+        // connection. The `-tenant` tag names that scope (pre-mortem P1R C5);
+        // the plain `flex-modules-migrations` alias serves the boxed single-DB
+        // case.
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], ['flex-modules-migrations', 'flex-modules-migrations-tenant']);
 
         $this->publishes([
             __DIR__.'/../config/flex-modules.php' => config_path('flex-modules.php'),

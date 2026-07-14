@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('record_type', 40);
             $table->string('reference', 255);
             $table->jsonb('meta')->default('{}');
-            $table->timestampTz('created_at')->useCurrent();
-            $table->timestampTz('updated_at')->useCurrent();
+            $table->timestampTz('created_at', precision: 6)->useCurrent();
+            $table->timestampTz('updated_at', precision: 6)->useCurrent();
 
             $table->primary(['module_name', 'record_type', 'reference']);
         });
