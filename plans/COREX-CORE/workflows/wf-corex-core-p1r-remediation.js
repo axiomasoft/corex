@@ -33,7 +33,6 @@ const CTX = `
 `
 
 const ITEMS = [
-  { id: 'P1.17', model: 'sonnet', effort: 'medium', deps: [], title: 'Гейт компиляции: валидатор' },
   { id: 'P1.18', model: 'opus', effort: 'high', deps: [], title: 'Lifecycle: seq-порядок, все claim-типы (D41), all-or-nothing enable (D40)' },
   { id: 'P1.19', model: 'opus', effort: 'high', deps: [], title: 'Миграции: publish-скоупы (D43), IdColumns, µs, sys_audit_log.seq (D42)' },
   { id: 'P1.20', model: 'sonnet', effort: 'medium', deps: ['P1.19'], title: 'ID-strategy: единый дефолт + типы колонок на PG' },
