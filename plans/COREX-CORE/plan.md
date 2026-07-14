@@ -119,8 +119,9 @@ item называет потребителя. **План живой (loop-back):
 80% вынесен в time-gated **P1.27**; D48 — phpstan `tests`-paths вынесены из scope P1.14 в отдельный
 **P1.28**) — P1.14 переведён **🟠 Done with deviations**, эскалация снята. Итог борда: **2 🟢 · 13 🟠 · 0 🔴 · 13 ⬜**
 (P1.15 закрыт 🟢; P1.16–P1.26 не стартовали + новые P1.27/P1.28). **P1.27 не блокирует закрытие фазы** (time-gated, стартует
-после обкатки ядра на реальных проектах) — GREEN-аудит и P1.26 не ждут его старта. Волна продолжается
-с P1.16.
+после обкатки ядра на реальных проектах) — GREEN-аудит и P1.26 не ждут его старта. **P1.16 закрыт 🟠**
+(Blocker A1/A2 + эпоха D39 сданы, гейт-зелёные; коннекшн-из-ctx — открытая эскалация владельцу, см.
+P1.16 Escalation Needed). Итог борда: **2 🟢 · 14 🟠 · 0 🔴 · 12 ⬜**. Волна продолжается с P1.17.
 
 ## 5. Decision Log
 
@@ -203,3 +204,4 @@ item называет потребителя. **План живой (loop-back):
 | 2026-07-14 | plan-design/opus | P1 переоткрыта и ре-спроектирована по RED-аудиту: +13 items ремедиации (P1.14–P1.26), +D28–D36, статусы 12 items 🟢→🟠, полный список находок восстановлен в findings/P1-audit-2026-07-13.md, v0.3.0 — детали см. phases/P1.md. |
 | 2026-07-14 | plan-design/opus | P1.14 разблокирован владельческим решением (D47/D48): 🔴→🟠 Done with deviations. +P1.27 (phpstan flex/modules-lint на tests/, второй прогон), +P1.28 (coverage --min=80, time-gated после обкатки на реальных проектах, не блокирует закрытие фазы P1.26) — детали см. phases/P1.md P1.14/P1.27/P1.28. |
 | 2026-07-14 | wf-p1r/opus | P1.15 закрыт 🟢: персистенция полного `CompiledRegistry` (8 срезов, plain-array round-trip) + рантайм-проекция в EntityRegistry/морф-карту (`ModulesServiceProvider::booted`) + `ModuleRegistry::compiled()` + fail-loud + deploy-хук `optimizes()` + атомарная запись с проверкой возвратов (A10/A47). Гейт зелёный (91/91 sqlite, 40/40 pg), mutation-check материализован (3 кейса) — детали см. phases/P1.md P1.15 Completion Notes. |
+| 2026-07-14 | wf-p1r/opus | P1.16 закрыт 🟠 Done with deviations: `ModuleRegistryCache`-контракт + реализация БЕЗ `tags()` (Blocker A1/A2, D30) + конфиг пакета (store/ttl/prefix/connection) + **эпоха-инвалидация D39** (`count(mod_lifecycle_log)` в ключе кеша, bump-в-транзакции, видно другой ноде без `forget()`) + `isActive()`∩реестр (A45/A46) + предикат `ArrayEntityRegistry`(module,ctx)→`isActive`, `all(null)`=весь реестр (A38) + сброс мемо на `JobProcessing`. Гейт зелёный (95/95 sqlite, 44/44 pg), mutation-check (2 кейса). **Deviation+Escalation:** коннекшн-из-`TenantContext` сдан как шов (config-connection + ключ по account->id), per-call ctx→connection для reader/registrar — P2 (Files не включает эти файлы; AccountRef без коннекшна, D13) — детали см. phases/P1.md P1.16. |

@@ -1,4 +1,4 @@
-# HANDOFF — 2026-07-14 — after P1.15
+# HANDOFF — 2026-07-14 — after P1.16
 
 **Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
 
@@ -7,7 +7,7 @@
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | P1.15 закрыт 🟢 (коммит `b53bcef`): полная персистенция `CompiledRegistry` (8 срезов) + рантайм-проекция в EntityRegistry/морф-карту + `ModuleRegistry::compiled()` + fail-loud + deploy-хук `optimizes()` + проверка возвратов записи (A10/A47). Гейт зелёный (91/91 sqlite, 40/40 pg), mutation-check материализован (3 кейса). Волна продолжается с **P1.16** (кеш-контракт без тегов + инвалидация эпохой D39 + семантика isActive). |
+| Суть | P1.16 закрыт **🟠 Done with deviations** (коммиты `19d5fa4` feat + `7d1cb10` mutation): Blocker A1/A2 снят — `ModuleRegistryCache` без `tags()` (D30) + конфиг пакета; **эпоха-инвалидация D39** (`count(mod_lifecycle_log)` в ключе кеша, видно другой ноде без `forget()`); `isActive()`∩реестр (A45/A46); предикат `ArrayEntityRegistry`(module,ctx)→`isActive`, `all(null)`=весь реестр (A38); сброс мемо на `JobProcessing`. Гейт зелёный локально (95/95 sqlite, 44/44 pg), mutation-check 2 кейса. **ОТКРЫТАЯ ЭСКАЛАЦИЯ владельцу:** коннекшн-из-`TenantContext` сдан как шов (config-connection + ключ по `account->id`); per-call ctx→connection для `ModuleStateReader`/`RecordsRegistrar` неисполним в P1 (Files не включает эти файлы; `AccountRef` без коннекшна — P2/D13). Blocker и эпоха закрыты независимо; волна может идти на **P1.17**, решение по коннекшну — владельцу (вероятно перенос полного резолвинга в P2). |
 
 ```
 Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
@@ -75,8 +75,8 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
   (`Workflow resumeFromRunId` — см. Launch-block выше).
 
 **Remaining:**
-1. **Волна 2 (P1.16–P1.25)** — 10 items (P1.15 закрыт 🟢), порядок: P1.16 → P1.18 — цепочка по данным,
-   остальные по порядку плана.
+1. **Волна 2 (P1.17–P1.25)** — 9 items (P1.15 🟢, P1.16 🟠), порядок: P1.18 — цепочка по данным после
+   P1.16, остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
@@ -97,7 +97,9 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
   на ту же ветку.
 - **Coverage-job следующего прогона нужно проверить фактически** — CI ещё не видел `--min=55` вживую
   (только арифметически 56.3%≥55), см. Pending Work P1.14 (1).
-- **Модуль-система нерабочая в дефолтной конфигурации** (A1: `tags()` на не-taggable сторе) — до P1.16.
+- ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2: `tags()` на не-taggable сторе) — закрыто
+  P1.16: `ModuleRegistryCache` без тегов, эпоха-инвалидация D39. **ОСТАЁТСЯ open (эскалация P1.16):**
+  per-call ctx→connection для reader/registrar — P2 (см. phases/P1.md P1.16 Escalation Needed).
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15: deploy-хук `optimizes('flex:modules:compile')`
   (компиляция на `php artisan optimize`) + fail-loud (`failIfMissing = environment('production')`: отсутствие
   реестра в проде = `RuntimeException` с инструкцией, не тихий пустой список).
