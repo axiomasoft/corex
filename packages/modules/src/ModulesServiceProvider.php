@@ -116,6 +116,11 @@ final class ModulesServiceProvider extends ServiceProvider
         // per-process compiled-file memo before each job, so a redeploy's
         // recompiled registry is picked up instead of served stale for hours.
         $this->app['events']->listen(JobProcessing::class, function (): void {
+            // Typed as the CONTRACT on purpose: a consumer may rebind
+            // ModuleRegistry to an implementation without flush(), so the
+            // instanceof stays a real guard (and larastan does not narrow the
+            // container binding to the concrete, flagging it always-true).
+            /** @var ModuleRegistry $registry */
             $registry = $this->app->make(ModuleRegistry::class);
 
             if ($registry instanceof CompiledModuleRegistry) {
