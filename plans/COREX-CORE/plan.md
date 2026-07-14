@@ -108,7 +108,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 4/28 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 5/28 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 **Чтение борда P1 (D28, обновлено D52 — эскалация P1.16 разобрана владельцем).** Волна 1 (P1.1–P1.13)
@@ -295,3 +295,4 @@ Blocked (D54) и стоит перед P1.19 в объявленном поря�
 | 2026-07-14 | plan-design/opus | P1.17 исправлен (D56): AC-2 тест на фикстуре вместо реального `installed.json`, гейт зелёный, статус 🔴→🟢 Done — детали см. phases/P1.md P1.17 Completion Notes. |
 | 2026-07-14 | plan-design/opus | «OQ-11» (P1.18) расследован и опровергнут (D57) — недостоверная запись, скопированная в handoff'ы с 2026-07-13, реального решения/альтернативного ТЗ никогда не существовало. P1.18/P1.19 разблокированы 🔴→⬜ под существующим ТЗ (D31/D41) — детали см. phases/P1.md P1.18/P1.19. |
 | 2026-07-14 | wf-p1r/opus | P1.18 закрыт 🟢: Blocker A3 + FSM-набор. `mod_records.seq bigserial` (аддитивно, D31) + purge `ORDER BY seq DESC` по ВСЕМ типам claim'ов (D41: table/column/index → DDL) + авто-claim обёрткой мигратора (schema-diff по `MigrationStarted/Ended`, порядок по `pg_class.oid`) + enable() all-or-nothing (D40: `ModuleEnableFailedException` + полный откат) + FSM-гейты (purged терминален, upgrade из enabled) + `flex:modules:repair` (reconcile + purged→available) + actor из `CurrentActor` + wiring codeVersions/migrationPaths из installed.json. Гейт зелёный (101/101 sqlite, 51/51 pg), **CI на ветке зелёный (run 29351086680, 8/8 job)**, mutation-check 2 кейса (purge-order→2BP01, enable-swallow) — детали см. phases/P1.md P1.18 Completion Notes. |
+| 2026-07-14 | wf-p1r/opus | P1.19 закрыт 🟢: прод-путь миграций. Publish sys_*/mod_* по скоупам коннекшена (D33/D43: теги `corex-migrations`+`-tenant` / `flex-modules-migrations`+`-tenant`, мёртвый `loadMigrationsFrom` удалён, README + `SCHEMA_VERSION`), все PK/FK/reference через `IdColumns` (D3/A58, хардкод `uuid` убран; исключение — `sys_pubsub_messages.id` bigint), `precision: 6` на всех 24 `timestampTz` (D32/A66/A72), `sys_audit_log.seq bigserial` (D42). Поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает; расхождения только «код > DRAFT-каталог» (2 индекса A91 задокументированы, seq/mod_records-индекс — D42/D31), эскалации не требуют. Локальный гейт (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353053921, 8/8 job)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Борд P1: **5 🟢 · 14 🟠 · 0 🔴 · 9 ⬜** — детали см. phases/P1.md P1.19 Completion Notes. |

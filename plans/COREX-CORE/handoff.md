@@ -1,9 +1,9 @@
-# HANDOFF — 2026-07-14 — after P1.18
+# HANDOFF — 2026-07-14 — after P1.19
 
-**Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
+**Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат. Следующий item — **P1.20** (ID-strategy: единый дефолт + типы колонок на PG + ulid/auth-швы).
 
 ```
-Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
+Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js"})
 ```
 
 | Параметр | Значение |
@@ -11,7 +11,7 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | **P1.18 закрыт 🟢** (Blocker A3 + FSM-набор: `mod_records.seq` монотонный purge-порядок D31, purge всех claim-типов D41, авто-claim обёрткой мигратора, enable() all-or-nothing D40, purged-терминал + `flex:modules:repair`, actor из CurrentActor, wiring из installed.json). Гейт зелёный (101/101 sqlite, 51/51 pg), **CI на ветке зелёный (run 29351086680, 8/8 job)**, mutation-check 2 кейса. Волна продолжается штатно с **P1.19**. |
+| Суть | **P1.19 закрыт 🟢** (прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 24 `timestampTz` D32/A66/A72; `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет). Гейт зелёный (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353053921, 8/8 job)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Волна продолжается штатно с **P1.20**. |
 
 **Важная находка (D57) — прочитать перед продолжением волны:** предыдущие handoff.md (минимум с
 коммита `f404838`, ДО RED-аудита и ДО этой ремедиации) утверждали, что «OQ-11 (golden-шаблон vs
@@ -86,8 +86,18 @@ P1.19 вне очереди) закрыта тем же путём — очер�
 `mod_lifecycle_log` не приведён к `sys_audit_log` (schema-owner, вне Files, P2); `purged` сделан
 терминальным вопреки диаграмме B-10 §5.1 (осознанно, A11 + `flex:modules:repair`-escape).
 
+**2026-07-14 — P1.19 закрыт 🟢** (wf-p1r/opus): прод-путь миграций sys_*/mod_*. Publish по скоупам
+коннекшена (D33/D43: `corex-migrations`+`-tenant` / `flex-modules-migrations`+`-tenant`, мёртвый
+`loadMigrationsFrom` на пустой каталог удалён A19/A62, README + `SCHEMA_VERSION` на провайдерах), все
+PK/FK/reference через `IdColumns` (D3/A58, хардкод `uuid` убран; исключение `sys_pubsub_messages.id`
+bigint), `precision: 6` на всех 24 `timestampTz` (D32/A66/A72), `sys_audit_log.seq bigserial` (D42).
+Поколоночная сверка DB_SCHEMA §3.2/§3.3 совпадает; расхождения — только «код > DRAFT-каталог» (2 индекса
+A91 задокументированы; seq/`mod_records`-индекс — D42/D31), правки контракта/эскалации не требуют. Коммиты
+`933c0b6` (код+тесты) / `ed048dc` (mutation-патчи), CI run `29353053921` зелёный (8/8). Known-deviation
+(не блокер): `schema_version` реализован как `const`, не config-ключ (`config/`/`Config.php` вне Files).
+
 **Remaining:**
-1. **Волна 2 (P1.19–P1.25)** — 7 items, порядок: P1.19 → остальные по порядку плана.
+1. **Волна 2 (P1.20–P1.25)** — 6 items, порядок: P1.20 → остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
@@ -110,8 +120,9 @@ P1-premortem}.md · ~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loa
 - ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2) — закрыто P1.16.
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15.
 - ~~**Гейт компиляции пропускал ровно то, ради чего создан**~~ (A7/A41/A42/A44) — закрыто P1.17.
-- **`corex/core` не поставляет ни одной применимой миграции** (A19/A62) — до P1.19 `migrate` у потребителя
-  создаёт ноль `sys_*`-таблиц. P1.19 разблокирован (D57), риск закрывается штатным прохождением волны.
+- ~~**`corex/core` не поставляет ни одной применимой миграции**~~ (A19/A62) — закрыто P1.19: publish по
+  скоупам коннекшена (D33/D43) + README + `SCHEMA_VERSION`; мёртвый `loadMigrationsFrom` удалён. Хардкод
+  `uuid` (A58) и `timestamp(0)` (A66/A72) тоже закрыты (IdColumns + `precision: 6`).
 - **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
   mutation-check патчами в репо, прогоняет отдельный верификатор.
 - **Ядро де-факто PG16-only, но нигде этого не объявляет** (OQ-12) — boxed-заказчик узнает на площадке.
