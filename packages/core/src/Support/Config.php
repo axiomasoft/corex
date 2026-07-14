@@ -178,6 +178,11 @@ final class Config
         return (string) config('corex.tables.pubsub_messages', 'sys_pubsub_messages');
     }
 
+    public static function pubsubCursorsTable(): string
+    {
+        return (string) config('corex.tables.pubsub_cursors', 'sys_pubsub_cursors');
+    }
+
     public static function pubsubDriver(): PubSubDriver
     {
         $value = config('corex.pubsub.driver', PubSubDriver::Null);
@@ -188,5 +193,29 @@ final class Config
     public static function pubsubPollIntervalMicroseconds(): int
     {
         return (int) config('corex.pubsub.poll_interval_microseconds', 50_000);
+    }
+
+    /**
+     * Opt-in flag a dedicated worker command sets before calling
+     * `subscribe()` under an Octane runtime (D44/A29) — `runningInConsole()`
+     * cannot be trusted there (see `CoreX\Contracts\WorkerRuntime`), so the
+     * guard requires this explicit signal instead. Never set by
+     * request-handling code.
+     */
+    public static function pubsubOctaneWorkerOptIn(): bool
+    {
+        return (bool) config('corex.pubsub.octane_worker_opt_in', false);
+    }
+
+    /**
+     * Default `--older-than` for `corex:pubsub:prune` (D44) — a
+     * `DateInterval`-parseable relative-time string. MUST stay longer than
+     * the worst-case subscriber downtime: pruning a message before every
+     * durable cursor behind it has passed it is a silent, permanent
+     * invalidation loss (plan.md D44, pre-mortem P1R C7).
+     */
+    public static function pubsubRetention(): string
+    {
+        return (string) config('corex.pubsub.retention', '30 days');
     }
 }

@@ -40,6 +40,7 @@ return [
         'departments' => 'sys_departments',
         'department_user' => 'sys_department_user',
         'pubsub_messages' => 'sys_pubsub_messages',
+        'pubsub_cursors' => 'sys_pubsub_cursors',
     ],
 
     /*
@@ -110,10 +111,23 @@ return [
     | 'null' is the boxed-safe default (no infra dependency). 'redis' is the
     | cloud default (B-10 §6.1); 'database' is the boxed fallback when Redis
     | is unavailable.
+    |
+    | `octane_worker_opt_in` (D44/A29): a dedicated worker command sets this
+    | to true before calling subscribe() under Octane — runningInConsole()
+    | alone cannot tell an HTTP request from a worker command apart there.
+    | Never set it from request-handling code.
+    |
+    | `retention`: corex:pubsub:prune's default --older-than window for
+    | sys_pubsub_messages. Schedule it (e.g. daily, php artisan schedule)
+    | longer than the worst-case subscriber downtime — pruning a message
+    | before every durable cursor behind it has passed it is a silent,
+    | permanent invalidation loss (D44).
     */
     'pubsub' => [
         'driver' => PubSubDriver::Null,
         'poll_interval_microseconds' => 50_000,
+        'octane_worker_opt_in' => false,
+        'retention' => '30 days',
     ],
 
 ];

@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\PubSub;
-use CoreX\Enums\PubSubDriver;
+use CoreX\Contracts\WorkerRuntime;
 use CoreX\PubSub\DatabasePollPubSub;
-use CoreX\PubSub\PubSubManager;
 use CoreX\Support\Config;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +17,23 @@ function pubsubPg(): Connection
     return DB::connection(PUBSUB_DB_POLL_TEST_CONNECTION);
 }
 
+/** Fakes a console worker (not Octane) — the only runtime the guard allows by default (P1.24). */
+final class WorkerConsoleRuntime implements WorkerRuntime
+{
+    public function isOctane(): bool
+    {
+        return false;
+    }
+
+    public function runningInConsole(): bool
+    {
+        return true;
+    }
+}
+
 beforeEach(function (): void {
-    // D12: sys_pubsub_messages is PG-only. Clean schema per test (mirrors
-    // FeatureFlagsTest's/DepartmentTest's pg-lane pattern).
+    // D12: sys_pubsub_messages/sys_pubsub_cursors are PG-only. Clean schema per
+    // test (mirrors FeatureFlagsTest's/DepartmentTest's pg-lane pattern).
     pubsubPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
     pubsubPg()->statement('CREATE SCHEMA public');
     DB::purge(PUBSUB_DB_POLL_TEST_CONNECTION);
@@ -34,17 +46,27 @@ beforeEach(function (): void {
     ])->run();
 });
 
-it('AC-25(a): publish→subscribe delivers the payload via the poll cursor', function (): void {
-    $pubsub = new DatabasePollPubSub(connection: PUBSUB_DB_POLL_TEST_CONNECTION);
+function pollingPubSub(): DatabasePollPubSub
+{
+    return new DatabasePollPubSub(
+        connection: PUBSUB_DB_POLL_TEST_CONNECTION,
+        runtime: new WorkerConsoleRuntime,
+    );
+}
+
+it('AC-25(a)/(б) publish→subscribe delivers the payload via the poll cursor, from a console worker context', function (): void {
+    $pubsub = pollingPubSub();
 
     $pubsub->publish('module.enabled', ['module' => 'crm']);
     $pubsub->publish('module.enabled', ['module' => 'tasks']);
     $pubsub->publish('other.channel', ['module' => 'ignored']);
 
     $received = [];
+    // A brand-new subscriber bootstraps its cursor at the channel's current
+    // max(id) (skips pre-existing backlog) — pass replayBacklog to see it.
     $pubsub->subscribe('module.enabled', function (array $payload) use (&$received): void {
         $received[] = $payload;
-    }, maxPolls: 1);
+    }, maxPolls: 1, replayBacklog: true);
 
     expect($received)->toBe([
         ['module' => 'crm'],
@@ -53,7 +75,7 @@ it('AC-25(a): publish→subscribe delivers the payload via the poll cursor', fun
 });
 
 it('persists rows in the configured table with a bigint cursor', function (): void {
-    $pubsub = new DatabasePollPubSub(connection: PUBSUB_DB_POLL_TEST_CONNECTION);
+    $pubsub = pollingPubSub();
     $pubsub->publish('module.enabled', ['module' => 'crm']);
 
     $row = pubsubPg()->table(Config::pubsubMessagesTable())->first();
@@ -63,13 +85,60 @@ it('persists rows in the configured table with a bigint cursor', function (): vo
         ->and($row->id)->toBeInt();
 });
 
-it('AC-25(b): PubSubManager resolves DatabasePollPubSub for the database driver', function (): void {
-    config(['corex.pubsub.driver' => PubSubDriver::Database]);
-    /** @var PubSubManager $manager */
-    $manager = app(PubSub::class);
+it('(г) D44: a new subscriber does NOT replay pre-existing history by default (skips straight to max(id))', function (): void {
+    $pubsub = pollingPubSub();
+    $pubsub->publish('module.enabled', ['module' => 'crm']);
+    $pubsub->publish('module.enabled', ['module' => 'tasks']);
+    $pubsub->publish('module.enabled', ['module' => 'sales']);
 
-    $method = new ReflectionMethod(PubSubManager::class, 'driver');
-    $method->setAccessible(true);
+    $received = [];
+    $pubsub->subscribe('module.enabled', function (array $payload) use (&$received): void {
+        $received[] = $payload;
+    }, maxPolls: 1, subscriber: 'invalidation-worker');
 
-    expect($method->invoke($manager))->toBeInstanceOf(DatabasePollPubSub::class);
+    expect($received)->toBe([]);
+});
+
+it('(г) D44: a rolling restart of the SAME subscriber resumes from its persisted cursor, not from 0 or from a fresh max(id)', function (): void {
+    $pubsub = pollingPubSub();
+
+    $pubsub->publish('module.enabled', ['module' => 'crm']);
+    $pubsub->publish('module.enabled', ['module' => 'tasks']);
+
+    // First run: bootstraps the cursor at max(id) — no history is replayed.
+    $firstRun = [];
+    $pubsub->subscribe('module.enabled', function (array $payload) use (&$firstRun): void {
+        $firstRun[] = $payload;
+    }, maxPolls: 1, subscriber: 'invalidation-worker');
+    expect($firstRun)->toBe([]);
+
+    // A message is published during the "restart window" (the process is down).
+    $pubsub->publish('module.enabled', ['module' => 'sales']);
+
+    // Second run (the restarted process): must see the restart-window message —
+    // NOT skip it (max(id) start on every subscribe(), the rejected D44
+    // design) and NOT replay 'crm'/'tasks' again (cursor-at-0 fallback).
+    $secondRun = [];
+    $pubsub->subscribe('module.enabled', function (array $payload) use (&$secondRun): void {
+        $secondRun[] = $payload;
+    }, maxPolls: 1, subscriber: 'invalidation-worker');
+
+    expect($secondRun)->toBe([['module' => 'sales']]);
+});
+
+it('(д) corex:pubsub:prune truncates rows older than the threshold, leaving fresh rows intact', function (): void {
+    pubsubPg()->table(Config::pubsubMessagesTable())->insert([
+        ['channel' => 'module.enabled', 'payload' => '{"module":"stale"}', 'created_at' => now()->subDays(60)],
+        ['channel' => 'module.enabled', 'payload' => '{"module":"fresh"}', 'created_at' => now()],
+    ]);
+
+    $this->artisan('corex:pubsub:prune', [
+        '--older-than' => '30 days',
+        '--database' => PUBSUB_DB_POLL_TEST_CONNECTION,
+    ])->assertSuccessful();
+
+    $remaining = pubsubPg()->table(Config::pubsubMessagesTable())->pluck('payload');
+
+    expect($remaining)->toHaveCount(1)
+        ->and(json_decode((string) $remaining->first(), true))->toBe(['module' => 'fresh']);
 });

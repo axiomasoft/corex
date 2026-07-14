@@ -16,7 +16,10 @@ use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantResolver;
 use CoreX\Contracts\TenantService;
+use CoreX\Contracts\WorkerRuntime;
 use CoreX\Modules\ServiceProviderModuleRegistrar;
+use CoreX\PubSub\DefaultWorkerRuntime;
+use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
 use CoreX\Support\Config;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -53,6 +56,7 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(FeatureFlags::class, Config::featureFlagsClass());
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
         $this->app->singleton(PubSub::class, PubSubManager::class);
+        $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
 
         $resolver = Config::tenantResolverClass();
 
@@ -64,7 +68,7 @@ final class CoreServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([PruneAuditLog::class]);
+            $this->commands([PruneAuditLog::class, PrunePubSubMessages::class]);
         }
 
         // NO loadMigrationsFrom (D33/A19/A62): every sys_* migration is PG-only

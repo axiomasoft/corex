@@ -6,18 +6,24 @@ namespace CoreX\PubSub;
 
 use Closure;
 use CoreX\Contracts\PubSub;
+use CoreX\Contracts\WorkerRuntime;
+use CoreX\Support\Config;
 use Illuminate\Support\Facades\Redis;
-use LogicException;
 use Override;
 
 /**
  * Cloud-default driver (B-10 §6.1) — `illuminate/redis` PUBLISH/SUBSCRIBE.
- * Never `LISTEN`/`NOTIFY` on the PG connection (R-15).
+ * Never `LISTEN`/`NOTIFY` on the PG connection (R-15). Redis PUBLISH/SUBSCRIBE
+ * has no message history at all (unlike the database-poll driver's table) —
+ * a subscriber that was down misses everything published during the outage,
+ * by design of the transport. No durable cursor is possible here (D44 scopes
+ * the durable cursor to the database driver only).
  */
 final class RedisPubSub implements PubSub
 {
     public function __construct(
         private readonly ?string $connection = null,
+        private readonly WorkerRuntime $runtime = new DefaultWorkerRuntime,
     ) {}
 
     #[Override]
@@ -29,12 +35,7 @@ final class RedisPubSub implements PubSub
     #[Override]
     public function subscribe(string $channel, Closure $handler): void
     {
-        if (! app()->runningInConsole()) {
-            throw new LogicException(
-                'RedisPubSub::subscribe() blocks the current process — call it only from a queue worker '.
-                'or console command, never inside an HTTP request cycle (B-10 §3.1).',
-            );
-        }
+        SubscribeGuard::assert($this->runtime, Config::pubsubOctaneWorkerOptIn(), self::class);
 
         Redis::connection($this->connection)->subscribe([$channel], function (string $message) use ($handler): void {
             /** @var array<string, mixed> $payload */
