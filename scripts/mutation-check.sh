@@ -29,6 +29,7 @@ declare -A TEST_CMD=(
     [P1.18-enable-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='all-or-nothing'"
     [P1.19-drop-precision]="vendor/bin/pest --group=pg tests/Feature/MigrationPublishTest.php --filter='precision'"
     [P1.19-hardcode-uuid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='ulid id strategy'"
+    [P1.20-idcolumns-uuid7-ulid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='uuid7 -> uuid'"
     [P1.21-getattributes-create]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='omits guarded'"
     [P1.21-killswitch]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='killswitch silences'"
 )
