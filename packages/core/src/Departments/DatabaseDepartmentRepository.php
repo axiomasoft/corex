@@ -10,8 +10,10 @@ use CoreX\Exceptions\DepartmentCycleException;
 use CoreX\Models\Department as DepartmentModel;
 use CoreX\Support\Config;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Override;
+use RuntimeException;
 
 /**
  * `sys_departments`/`sys_department_user` on ltree (B-10 §2/§3.1/§5.7).
@@ -45,6 +47,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
 
         /** @var list<DepartmentModel> $rows */
         $rows = DepartmentModel::on($this->connection)
+            ->where('workspace_id', $root->workspace_id)
             ->whereRaw('path <@ ?::ltree', [$root->path])
             ->orderBy('path')
             ->get()
@@ -68,11 +71,37 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
     public function move(string $departmentId, ?string $newParentId): void
     {
         $this->db()->transaction(function () use ($departmentId, $newParentId): void {
+            // (1) Minimal read for the LOCK KEY only. workspace_id is immutable,
+            //     so it can be read before the lock; the raw (soft-delete-blind)
+            //     query still returns it for a row mid-deletion, so we always
+            //     serialize on the right workspace. Absent row → explicit throw,
+            //     never a silent no-op (A5 If-then).
+            $lockWorkspaceId = $this->db()->table(Config::departmentsTable())
+                ->where('id', $departmentId)
+                ->value('workspace_id');
+
+            if (! is_string($lockWorkspaceId)) {
+                throw (new ModelNotFoundException)->setModel(DepartmentModel::class, [$departmentId]);
+            }
+
+            // (2) Advisory lock BEFORE reading the mutable path (A5). B-10 §7.3 п.3:
+            //     xact-scoped, released on commit — no session-level lock.
+            $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$lockWorkspaceId]);
+
+            // (3) RE-READ the moving row UNDER the lock — fresh path/parent_id.
+            //     Eloquent (SoftDeletes) excludes a concurrently soft-deleted row,
+            //     so firstOrFail() throws instead of running a no-op UPDATE that
+            //     matches nothing (A5/A24 If-then). All downstream maths use THIS
+            //     row, never the pre-lock read.
             /** @var DepartmentModel $moving */
             $moving = DepartmentModel::on($this->connection)->where('id', $departmentId)->firstOrFail();
 
-            // B-10 §7.3 п.3: xact-scoped, released on commit — no session-level lock.
-            $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$moving->workspace_id]);
+            // The lock key was read before the lock; workspace_id is immutable,
+            // but if it changed under us a concurrent writer is doing something
+            // the contract forbids — fail loudly rather than lock the wrong key.
+            if ($moving->workspace_id !== $lockWorkspaceId) {
+                throw new RuntimeException("Department {$departmentId} changed workspace concurrently during move().");
+            }
 
             $newParentPath = '';
 
@@ -104,7 +133,12 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                 [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath],
             );
 
-            event(new DepartmentMoved(departmentId: $departmentId, oldPath: $oldPath, newPath: $newPath));
+            // A6: dispatch AFTER the transaction commits, not inside it — the
+            // dept_tree cache invalidator (entity-scoped RBAC, P2.9) must not
+            // read uncommitted paths, and a rollback must not leak the event.
+            $this->db()->afterCommit(static fn () => event(
+                new DepartmentMoved(departmentId: $departmentId, oldPath: $oldPath, newPath: $newPath),
+            ));
         });
     }
 
@@ -117,6 +151,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             path: $row->path,
             name: $row->name,
             headUserId: $row->head_user_id,
+            sortOrder: $row->sort_order,
         );
     }
 

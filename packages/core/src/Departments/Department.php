@@ -16,5 +16,6 @@ final readonly class Department
         public string $path,
         public string $name,
         public ?string $headUserId,
+        public int $sortOrder = 0,
     ) {}
 }
