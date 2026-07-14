@@ -11,7 +11,7 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | **P1.19 закрыт 🟢** (прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 24 `timestampTz` D32/A66/A72; `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет). Гейт зелёный (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353601440, 8/8 job на финальном HEAD 3a9e555)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Волна продолжается штатно с **P1.20**. |
+| Суть | **P1.19 закрыт 🟠 Done with deviations** (верификация: вердикт ревью GREEN, но `files_outside_scope` непуст — `scripts/mutation-check.sh` правился вне Files item'а — правило докьюрации переводит 🟢→🟠). Прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 22 `timestampTz` (D32/A66/A72; Completion Notes ранее заявляли 24 — Nit, покрытие полное); `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет. Гейт зелёный (101/101 sqlite, 57/57 pg), **CI на ветке зелёный (финальный HEAD `5a8f52d`, run 29353759009; код-HEAD `3a9e555`, run 29353601440, 8/8 job)**, mutation-check 2 кейса (drop-precision, hardcode-uuid) воспроизведены верификатором независимо. Волна продолжается штатно с **P1.20**. |
 
 **Важная находка (D57) — прочитать перед продолжением волны:** предыдущие handoff.md (минимум с
 коммита `f404838`, ДО RED-аудита и ДО этой ремедиации) утверждали, что «OQ-11 (golden-шаблон vs
@@ -86,15 +86,20 @@ P1.19 вне очереди) закрыта тем же путём — очер�
 `mod_lifecycle_log` не приведён к `sys_audit_log` (schema-owner, вне Files, P2); `purged` сделан
 терминальным вопреки диаграмме B-10 §5.1 (осознанно, A11 + `flex:modules:repair`-escape).
 
-**2026-07-14 — P1.19 закрыт 🟢** (wf-p1r/opus): прод-путь миграций sys_*/mod_*. Publish по скоупам
-коннекшена (D33/D43: `corex-migrations`+`-tenant` / `flex-modules-migrations`+`-tenant`, мёртвый
+**2026-07-14 — P1.19 закрыт 🟠 Done with deviations** (верификатор): прод-путь миграций sys_*/mod_*. Publish
+по скоупам коннекшена (D33/D43: `corex-migrations`+`-tenant` / `flex-modules-migrations`+`-tenant`, мёртвый
 `loadMigrationsFrom` на пустой каталог удалён A19/A62, README + `SCHEMA_VERSION` на провайдерах), все
 PK/FK/reference через `IdColumns` (D3/A58, хардкод `uuid` убран; исключение `sys_pubsub_messages.id`
-bigint), `precision: 6` на всех 24 `timestampTz` (D32/A66/A72), `sys_audit_log.seq bigserial` (D42).
+bigint), `precision: 6` на всех 22 `timestampTz` (D32/A66/A72), `sys_audit_log.seq bigserial` (D42).
 Поколоночная сверка DB_SCHEMA §3.2/§3.3 совпадает; расхождения — только «код > DRAFT-каталог» (2 индекса
-A91 задокументированы; seq/`mod_records`-индекс — D42/D31), правки контракта/эскалации не требуют. Коммиты
-`933c0b6` (код+тесты) / `ed048dc` (mutation-патчи), CI run `29353053921` зелёный (8/8). Known-deviation
-(не блокер): `schema_version` реализован как `const`, не config-ключ (`config/`/`Config.php` вне Files).
+A91 задокументированы; seq/`mod_records`-индекс — D42/D31), правки контракта/эскалации не требуют. Гейт:
+lint:check passed, analyse 0 errors, test 101/101 (sqlite), test:pg 57/57. Mutation-check: `P1.19-drop-precision`
+и `P1.19-hardcode-uuid` — оба воспроизведены харнессом (exit=1 под патчем, чистый откат). Финальный HEAD
+ветки `5a8f52d` (CI run `29353759009`, success), код-HEAD `3a9e555` (CI run `29353601440`, 8/8 job).
+**Понижен 🟢→🟠:** `files_outside_scope` непуст — `scripts/mutation-check.sh` правился вне Files item'а
+(2 записи `TEST_CMD`); прецедент установлен P1.14–P1.18, но формально scope drift. Прочие known-deviations
+(не блокеры): `schema_version` реализован как `const`, не config-ключ (`config/`/`Config.php` вне Files);
+Nit-мискаунт «24 vs 22» timestampTz в исходной прозе Completion Notes (покрытие полное, исправлено).
 
 **Remaining:**
 1. **Волна 2 (P1.20–P1.25)** — 6 items, порядок: P1.20 → остальные по порядку плана.
@@ -120,9 +125,10 @@ P1-premortem}.md · ~/Vaults/Brain/plans/flex/30_blueprints/B-10_core-module-loa
 - ~~**Модуль-система нерабочая в дефолтной конфигурации**~~ (A1/A2) — закрыто P1.16.
 - ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15.
 - ~~**Гейт компиляции пропускал ровно то, ради чего создан**~~ (A7/A41/A42/A44) — закрыто P1.17.
-- ~~**`corex/core` не поставляет ни одной применимой миграции**~~ (A19/A62) — закрыто P1.19: publish по
-  скоупам коннекшена (D33/D43) + README + `SCHEMA_VERSION`; мёртвый `loadMigrationsFrom` удалён. Хардкод
-  `uuid` (A58) и `timestamp(0)` (A66/A72) тоже закрыты (IdColumns + `precision: 6`).
+- ~~**`corex/core` не поставляет ни одной применимой миграции**~~ (A19/A62) — закрыто P1.19 (🟠 Done with
+  deviations — files_outside_scope): publish по скоупам коннекшена (D33/D43) + README + `SCHEMA_VERSION`;
+  мёртвый `loadMigrationsFrom` удалён. Хардкод `uuid` (A58) и `timestamp(0)` (A66/A72) тоже закрыты
+  (IdColumns + `precision: 6`).
 - **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
   mutation-check патчами в репо, прогоняет отдельный верификатор.
 - **Ядро де-факто PG16-only, но нигде этого не объявляет** (OQ-12) — boxed-заказчик узнает на площадке.
