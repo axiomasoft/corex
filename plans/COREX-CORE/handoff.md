@@ -1,4 +1,4 @@
-# HANDOFF — 2026-07-14 — after P1.14
+# HANDOFF — 2026-07-14 — after P1.15
 
 **Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
 
@@ -7,7 +7,7 @@
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | Обе эскалации P1.14 разобраны владельцем (D47/D48) — item переведён в 🟠 Done with deviations, `phpstan.neon`/`composer.json` поправлены. Волна продолжается с P1.15 через тот же workflow-прогон (resume — completed agents из кэша, P1.14 не переисполняется). |
+| Суть | P1.15 закрыт 🟢 (коммит `b53bcef`): полная персистенция `CompiledRegistry` (8 срезов) + рантайм-проекция в EntityRegistry/морф-карту + `ModuleRegistry::compiled()` + fail-loud + deploy-хук `optimizes()` + проверка возвратов записи (A10/A47). Гейт зелёный (91/91 sqlite, 40/40 pg), mutation-check материализован (3 кейса). Волна продолжается с **P1.16** (кеш-контракт без тегов + инвалидация эпохой D39 + семантика isActive). |
 
 ```
 Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "wf_87181b80-667"})
@@ -75,8 +75,8 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
   (`Workflow resumeFromRunId` — см. Launch-block выше).
 
 **Remaining:**
-1. **Волна 2 (P1.15–P1.25)** — 11 items, порядок: P1.15 → P1.16 → P1.18 — цепочка по данным, остальные
-   по порядку плана.
+1. **Волна 2 (P1.16–P1.25)** — 10 items (P1.15 закрыт 🟢), порядок: P1.16 → P1.18 — цепочка по данным,
+   остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.
@@ -98,8 +98,9 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
 - **Coverage-job следующего прогона нужно проверить фактически** — CI ещё не видел `--min=55` вживую
   (только арифметически 56.3%≥55), см. Pending Work P1.14 (1).
 - **Модуль-система нерабочая в дефолтной конфигурации** (A1: `tags()` на не-taggable сторе) — до P1.16.
-- **Компиляцию реестра не вызывает никто** (ни composer-хук, ни CI, ни деплой), а пустой реестр молчит —
-  до P1.15 прод получил бы «систему без модулей» без единой ошибки.
+- ~~**Компиляцию реестра не вызывает никто**~~ — закрыто P1.15: deploy-хук `optimizes('flex:modules:compile')`
+  (компиляция на `php artisan optimize`) + fail-loud (`failIfMissing = environment('production')`: отсутствие
+  реестра в проде = `RuntimeException` с инструкцией, не тихий пустой список).
 - **`corex/core` не поставляет ни одной применимой миграции** (A19/A62) — до P1.19 `migrate` у потребителя
   создаёт ноль `sys_*`-таблиц.
 - **Тавтологичные тесты** (A4/A11/A13/A25/A32/A57/A65): зелёная сьюта ≠ покрытие. Правило волны —
