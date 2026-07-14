@@ -11,7 +11,7 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | **P1.19 закрыт 🟢** (прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 24 `timestampTz` D32/A66/A72; `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет). Гейт зелёный (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353053921, 8/8 job)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Волна продолжается штатно с **P1.20**. |
+| Суть | **P1.19 закрыт 🟢** (прод-путь миграций: publish sys_*/mod_* по скоупам коннекшена D33/D43 + мёртвый `loadMigrationsFrom` удалён + README/`SCHEMA_VERSION`; все PK/FK/reference через `IdColumns` D3/A58; `precision: 6` на всех 24 `timestampTz` D32/A66/A72; `sys_audit_log.seq bigserial` D42; поколоночная сверка с DB_SCHEMA §3.2/§3.3 — совпадает, расхождения только «код > DRAFT-каталог», эскалации нет). Гейт зелёный (101/101 sqlite, 56/56 pg), **CI на ветке зелёный (run 29353601440, 8/8 job на финальном HEAD 3a9e555)**, mutation-check 2 кейса (drop-precision, hardcode-uuid). Волна продолжается штатно с **P1.20**. |
 
 **Важная находка (D57) — прочитать перед продолжением волны:** предыдущие handoff.md (минимум с
 коммита `f404838`, ДО RED-аудита и ДО этой ремедиации) утверждали, что «OQ-11 (golden-шаблон vs
@@ -37,7 +37,7 @@ handoff-агенты обязаны проверять OQ-ссылки прот�
 4. **P1.18/P1.19 (D57):** ложный DoR-гейт «OQ-11» опровергнут — item'ы разблокированы под существующим
    ТЗ, без re-design.
 
-Волна продолжается **P1.18 → P1.19 → …** по порядку плана. Волна НЕ исполняется через `/task:plan-exec`:
+Волна продолжается **P1.20 → …** по порядку плана. Волна НЕ исполняется через `/task:plan-exec`:
 несущие items предписаны `opus/high`, команда пинит sonnet/medium (routing-undershoot запрещён —
 plan-protocol §9, D35).
 
