@@ -24,7 +24,20 @@ return new class extends Migration
             $table->primary(['module_name', 'record_type', 'reference']);
         });
 
-        DB::statement('CREATE INDEX mod_records_module_ix ON mod_records (module_name, created_at DESC)');
+        // Monotonic surrogate ordering key (D31, Blocker A3). created_at is
+        // timestamptz(0) (second precision — RAG §2), so every claim of one
+        // enable() collapses onto the same wall-clock second and the drop
+        // order would be decided by an alphabetic `reference` tiebreak, not by
+        // creation order → a module with a FK between its own tables (parent
+        // created before child) drops the parent first and fails 2BP01. `seq`
+        // is a clock-free bigserial assigned in insert order (= claim order =
+        // creation order via the auto-claim wrapper), so purge orders strictly
+        // by `seq DESC` (reverse creation) and is FK-safe. ADD COLUMN keeps the
+        // migration additive — the composite PK stays untouched, existing
+        // claims keep their rows (Implementation Rules D31; no table recreate).
+        DB::statement('ALTER TABLE mod_records ADD COLUMN seq bigserial');
+
+        DB::statement('CREATE INDEX mod_records_module_seq_ix ON mod_records (module_name, seq DESC)');
         DB::statement("ALTER TABLE mod_records ADD CONSTRAINT mod_records_type_ck CHECK (record_type IN ('table','column','index','role','permission','menu','setting','seed','blueprint','feature_flag','other'))");
     }
 

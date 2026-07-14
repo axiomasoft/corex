@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Flex\Modules\Contracts\RecordsRegistrar;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// No hand-written claim(): auto-claimed from the schema diff (D41).
 return new class extends Migration
 {
     public function up(): void
@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->text('body');
         });
-
-        app(RecordsRegistrar::class)->claim('corex/stub-base', 'table', 'sba_notes');
     }
 
     public function down(): void

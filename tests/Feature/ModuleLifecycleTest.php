@@ -8,15 +8,20 @@ use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\Lifecycle\StubDependentModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFailingModule;
+use CoreX\Tests\Stubs\Lifecycle\StubFkModule;
+use Flex\Modules\Contracts\ModuleLifecycle;
 use Flex\Modules\Contracts\ModuleRegistry;
 use Flex\Modules\Contracts\ModuleRegistryCache;
+use Flex\Modules\Contracts\RecordsRegistrar;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Enums\DisableReason;
 use Flex\Modules\Enums\ModuleState;
 use Flex\Modules\Events\ModuleEnabled;
 use Flex\Modules\Events\ModulePurged;
 use Flex\Modules\Exceptions\HasEnabledDependentsException;
+use Flex\Modules\Exceptions\InvalidStateTransitionException;
 use Flex\Modules\Exceptions\MissingDependencyException;
+use Flex\Modules\Exceptions\ModuleEnableFailedException;
 use Flex\Modules\Lifecycle\DatabaseModuleLifecycle;
 use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
 use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
@@ -24,9 +29,12 @@ use Flex\Modules\ModulesServiceProvider;
 use Flex\Modules\Registry\CompiledModule;
 use Flex\Modules\Registry\CompiledModuleRegistry;
 use Flex\Modules\Registry\RepositoryModuleRegistryCache;
+use Illuminate\Auth\GenericUser;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Database\Connection;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -69,6 +77,36 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
     );
 }
 
+/**
+ * Resolve the lifecycle THROUGH the container (not a hand-built constructor):
+ * connection comes from config, codeVersions/migrationPaths from the
+ * `flex-modules.wiring` binding the ModulesServiceProvider populates from
+ * installed.json. Tests override that binding with stub paths to prove the
+ * container assembly actually wires migrations (C: empty autowired arrays).
+ *
+ * @param  array<string, string>  $migrationPaths
+ * @param  array<string, string>  $codeVersions
+ */
+function lifecycleFromContainer(array $migrationPaths = [], array $codeVersions = []): ModuleLifecycle
+{
+    config(['flex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    app()->instance('flex-modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
+    app()->forgetInstance(RecordsRegistrar::class);
+    app()->forgetInstance(ModuleLifecycle::class);
+
+    return app(ModuleLifecycle::class);
+}
+
+/** A second, independent session on the same pg database — models a concurrent caller. */
+function lifecycleSession(string $name): Connection
+{
+    /** @var array<string, mixed> $config */
+    $config = config('database.connections.'.LIFECYCLE_TEST_CONNECTION);
+    config(['database.connections.'.$name => $config]);
+
+    return DB::connection($name);
+}
+
 beforeEach(function (): void {
     // D12: mod_* is PG-only (advisory-xact-lock, jsonb, CHECK). Reset to a
     // clean public schema so each test starts with no migration history.
@@ -82,6 +120,7 @@ beforeEach(function (): void {
         StubBaseModule::class,
         StubDependentModule::class,
         StubFailingModule::class,
+        StubFkModule::class,
     ]));
 
     $this->artisan('migrate', [
@@ -98,6 +137,9 @@ beforeEach(function (): void {
             ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
         ], [], []),
         new CompiledModule('corex/stub-failing', 'Stub Failing', 'sbf', [], [], []),
+        new CompiledModule('corex/stub-fk', 'Stub FK', 'stf', [
+            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+        ], [], []),
     ]);
 
     $this->app->instance(ModuleRegistry::class, lifecycleModuleRegistry($this->registryPath));
@@ -130,6 +172,22 @@ function lifecycleIsolatedCache(): RepositoryModuleRegistryCache
     return new RepositoryModuleRegistryCache(new CacheRepository(new ArrayStore), 3600, 'flex-modules');
 }
 
+function lifecycleHasColumn(string $table, string $column): bool
+{
+    return (int) lifecyclePg()->selectOne(
+        'select count(*) as c from information_schema.columns where table_schema = current_schema() and table_name = ? and column_name = ?',
+        [$table, $column],
+    )->c > 0;
+}
+
+function lifecycleHasIndex(string $index): bool
+{
+    return (int) lifecyclePg()->selectOne(
+        'select count(*) as c from pg_indexes where schemaname = current_schema() and indexname = ?',
+        [$index],
+    )->c > 0;
+}
+
 afterEach(function (): void {
     if (file_exists($this->registryPath)) {
         unlink($this->registryPath);
@@ -149,6 +207,8 @@ it('enables a module from available: migrations run, mod_records + mod_modules p
         ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue()
         ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_notes'))->toBeTrue();
 
+    // sba_widgets/sba_notes were auto-claimed by the migration wrapper (no
+    // hand-written claim() in the migrations); `greeting` is claimed by the hook.
     $claimed = lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->pluck('reference')->all();
     expect($claimed)->toEqualCanonicalizing(['sba_widgets', 'sba_notes', 'greeting']);
 
@@ -176,34 +236,36 @@ it('cascade auto-enables the requires chain', function (): void {
         ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-dependent')->value('state'))->toBe(ModuleState::Enabled->value);
 });
 
-it('keeps 1..K-1 applied on a migration K failure, leaves mod_modules untouched, and a fixed retry completes (AC-7)', function (): void {
-    lifecycleFor(migrationPaths: ['corex/stub-failing' => lifecycleStubsPath('failing')])
-        ->enable('corex/stub-failing');
+it('rolls the whole transition back and throws when migration K fails — all-or-nothing, a fixed retry starts clean (AC-7, D40)', function (): void {
+    // D40: a failing migration aborts EVERYTHING — migration 1 (sbf_ok) is
+    // rolled back too, no mod_modules row, and the caller gets an exception
+    // (the pre-D40 code silently committed 1..K-1 and returned void).
+    expect(fn () => lifecycleFor(migrationPaths: ['corex/stub-failing' => lifecycleStubsPath('failing')])->enable('corex/stub-failing'))
+        ->toThrow(ModuleEnableFailedException::class);
 
-    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sbf_ok'))->toBeTrue() // migration 1 committed
-        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-failing')->exists())->toBeFalse();
+    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sbf_ok'))->toBeFalse()
+        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-failing')->exists())->toBeFalse()
+        ->and(lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-failing')->exists())->toBeFalse();
 
-    $log = lifecyclePg()->table('mod_lifecycle_log')
-        ->where('module_name', 'corex/stub-failing')->where('operation', 'enable')->where('status', 'failed')
-        ->first();
-    expect($log)->not->toBeNull()
-        ->and(json_decode((string) $log->details, true)['error'])->toContain('boom');
-
-    // Deploy "fixes" module K (boom.php removed) — retry with the corrected
-    // path completes: migration 1 is already tracked as ran, so only the
-    // hook + row insert happen this time.
+    // Deploy "fixes" the module (boom.php removed) — a retry starts from a clean
+    // state (reformulated AC-7) and completes.
     lifecycleFor(migrationPaths: ['corex/stub-failing' => lifecycleStubsPath('failing-fixed')])
         ->enable('corex/stub-failing');
 
-    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-failing')->value('state'))->toBe(ModuleState::Enabled->value);
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-failing')->value('state'))->toBe(ModuleState::Enabled->value)
+        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sbf_ok'))->toBeTrue();
 });
 
-it('never touches data on disable and blocks when a dependent module is enabled (AC-8)', function (): void {
+it('never touches DATA on disable and blocks when a dependent module is enabled (AC-8)', function (): void {
     $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
     $lifecycle->enable('corex/stub-base');
     $lifecycle->enable('corex/stub-dependent');
 
-    $before = lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->orderBy('reference')->get();
+    // REAL rows in the module's data table — the snapshot is taken FROM the data
+    // (A14/A15: the old test snapshotted mod_records with empty tables and would
+    // not have caught a DELETE in the disable path).
+    lifecyclePg()->table('sba_widgets')->insert([['name' => 'alpha'], ['name' => 'beta']]);
+    $before = lifecyclePg()->table('sba_widgets')->orderBy('id')->get();
 
     expect(fn () => $lifecycle->disable('corex/stub-base', DisableReason::Manual))
         ->toThrow(HasEnabledDependentsException::class);
@@ -211,11 +273,11 @@ it('never touches data on disable and blocks when a dependent module is enabled 
     $lifecycle->disable('corex/stub-dependent', DisableReason::Manual);
     $lifecycle->disable('corex/stub-base', DisableReason::Manual);
 
-    $after = lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->orderBy('reference')->get();
+    $after = lifecyclePg()->table('sba_widgets')->orderBy('id')->get();
 
     expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue()
-        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_notes'))->toBeTrue()
         ->and($after->toArray())->toEqual($before->toArray())
+        ->and($after)->toHaveCount(2)
         ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Disabled->value)
         ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('disable_reason'))->toBe(DisableReason::Manual->value);
 });
@@ -241,39 +303,71 @@ it('archives on uninstall(keepData: true) and re-enables cleanly (AC-9)', functi
     expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Enabled->value);
 });
 
-it('purges by dropping tables in reverse mod_records order, clears the registry, dispatches ModulePurged (AC-10)', function (): void {
-    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
-    $lifecycle->enable('corex/stub-base');
-    $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+it('purges every owned object in reverse creation order — FK child before parent, and column/index without dropping the borrowed table (AC-10, D31, D41)', function (): void {
+    // stub-fk owns stf_parents ← stf_children (real FK, parent created first)
+    // AND a column+index on the BASE module\'s sba_widgets. Purge must drop them
+    // all: children before parents (FK-safe, Blocker A3), and the borrowed
+    // column/index without dropping sba_widgets (D41 — all claim types).
+    $lifecycle = lifecycleFor(migrationPaths: [
+        'corex/stub-base' => lifecycleStubsPath('base'),
+        'corex/stub-fk' => lifecycleStubsPath('fk'),
+    ]);
+    $lifecycle->enable('corex/stub-fk', cascade: true);
+
+    // Populated tables — purge must drop them regardless of contents. stf_extra
+    // is the borrowed column on sba_widgets, not on stf_parents.
+    lifecyclePg()->table('stf_parents')->insert(['id' => 1, 'name' => 'p']);
+    lifecyclePg()->table('stf_children')->insert(['id' => 1, 'parent_id' => 1, 'label' => 'c']);
+    lifecyclePg()->table('sba_widgets')->insert(['id' => 1, 'name' => 'w', 'stf_extra' => 'x']);
+
+    expect(lifecycleHasColumn('sba_widgets', 'stf_extra'))->toBeTrue()
+        ->and(lifecycleHasIndex('stf_widgets_extra_ix'))->toBeTrue();
+
+    $lifecycle->disable('corex/stub-fk', DisableReason::Manual);
 
     Event::fake();
-    $lifecycle->uninstall('corex/stub-base', keepData: false);
+    $lifecycle->uninstall('corex/stub-fk', keepData: false);
 
-    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeFalse()
-        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_notes'))->toBeFalse()
-        ->and(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->exists())->toBeFalse()
-        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Purged->value);
+    // Zero orphaned objects of the module (D41): tables, borrowed column, index.
+    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('stf_children'))->toBeFalse()
+        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('stf_parents'))->toBeFalse()
+        ->and(lifecycleHasColumn('sba_widgets', 'stf_extra'))->toBeFalse()
+        ->and(lifecycleHasIndex('stf_widgets_extra_ix'))->toBeFalse()
+        // The borrowed table itself survives — only stub-fk's additions went.
+        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue()
+        ->and(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-fk')->exists())->toBeFalse()
+        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-fk')->value('state'))->toBe(ModuleState::Purged->value);
 
-    $log = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->where('operation', 'purge')->first();
-    // Both migrations run inside the same enable() transaction and can land
-    // on the same wall-clock microsecond — mod_records has no surrogate id,
-    // so the drop order ties back to the documented `reference DESC`
-    // tiebreak (DatabaseModuleLifecycle::purge()), not raw claim order.
-    expect(json_decode((string) $log->details, true)['dropped_tables'])->toBe(['sba_widgets', 'sba_notes']);
+    $log = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-fk')->where('operation', 'purge')->first();
+    expect(json_decode((string) $log->details, true)['dropped_tables'])->toBe(['stf_children', 'stf_parents']);
 
-    Event::assertDispatched(ModulePurged::class, fn (ModulePurged $event): bool => $event->module === 'corex/stub-base');
+    Event::assertDispatched(ModulePurged::class, fn (ModulePurged $event): bool => $event->module === 'corex/stub-fk');
 });
 
-it('makes a second enable of an already-enabled module a no-op (AC-11)', function (): void {
-    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+it('serializes a concurrent enable through pg_advisory_xact_lock — a second holder blocks it (AC-11)', function (): void {
+    // A separate session holds the module\'s advisory xact lock inside an open
+    // transaction; a probe on yet another session sees it locked.
+    $holder = lifecycleSession('pgsql_holder');
+    $holder->beginTransaction();
+    expect($holder->selectOne('select pg_try_advisory_xact_lock(hashtext(?)) as ok', ['corex/stub-base'])->ok)->toBeTrue();
 
-    $lifecycle->enable('corex/stub-base');
-    $lifecycle->enable('corex/stub-base');
+    $probe = lifecycleSession('pgsql_probe');
+    expect($probe->selectOne('select pg_try_advisory_xact_lock(hashtext(?)) as ok', ['corex/stub-base'])->ok)->toBeFalse();
 
-    $successes = lifecyclePg()->table('mod_lifecycle_log')
-        ->where('module_name', 'corex/stub-base')->where('operation', 'enable')->where('status', 'success')
-        ->count();
-    expect($successes)->toBe(1);
+    // enable() must WAIT on that lock: with a short lock_timeout it aborts
+    // instead of proceeding — proof it takes the lock (remove lock() from
+    // enable() and this enable runs to completion, A55/A56).
+    lifecyclePg()->statement("set lock_timeout = '500ms'");
+
+    expect(fn () => lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->enable('corex/stub-base'))
+        ->toThrow(QueryException::class);
+
+    $holder->rollBack();
+
+    // The blocked enable rolled back entirely (D40): no module row.
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->exists())->toBeFalse();
+
+    lifecyclePg()->statement('set lock_timeout = 0');
 });
 
 it('records every transition in mod_lifecycle_log (AC-13)', function (): void {
@@ -287,6 +381,111 @@ it('records every transition in mod_lifecycle_log (AC-13)', function (): void {
     // entries tie on created_at's wall-clock resolution.
     $operations = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->orderBy('created_at')->orderBy('id')->pluck('operation')->all();
     expect($operations)->toBe(['enable', 'disable', 'archive']);
+});
+
+it('writes the lifecycle-log actor from CurrentActor, not a hardcoded value (A54)', function (): void {
+    // Unauthenticated: CurrentActor reports `system`, null id.
+    lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->enable('corex/stub-base');
+
+    $systemRow = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->where('operation', 'enable')->first();
+    expect($systemRow->actor_type)->toBe('system')
+        ->and($systemRow->actor_id)->toBeNull();
+
+    // Authenticated: the actor follows CurrentActor to `user` + the identifier
+    // (a uuid — mod_lifecycle_log.actor_id) — proof the value is sourced, not
+    // the pre-A54 hardcoded 'system'.
+    $userId = '019f61b4-0000-7000-8000-000000000042';
+    Auth::setUser(new GenericUser(['id' => $userId]));
+
+    lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->disable('corex/stub-base', DisableReason::Manual);
+
+    $userRow = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->where('operation', 'disable')->first();
+    expect($userRow->actor_type)->toBe('user')
+        ->and($userRow->actor_id)->toBe($userId);
+});
+
+it('rejects enabling a purged module — purged is terminal (A11/A12, FSM gate)', function (): void {
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+    $lifecycle->enable('corex/stub-base');
+    $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+    $lifecycle->uninstall('corex/stub-base', keepData: false);
+
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Purged->value);
+
+    // A direct enable on a purged module would flip the row to enabled over
+    // dropped tables (its migrations are still logged as ran) — rejected.
+    expect(fn () => $lifecycle->enable('corex/stub-base'))->toThrow(InvalidStateTransitionException::class);
+
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Purged->value);
+});
+
+it('rejects upgrade unless the module is enabled (FSM gate, B-10 §5.5)', function (): void {
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')], codeVersions: ['corex/stub-base' => '2.0.0']);
+    $lifecycle->enable('corex/stub-base');
+    $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+
+    expect(fn () => $lifecycle->upgrade('corex/stub-base'))->toThrow(InvalidStateTransitionException::class);
+});
+
+it('flex:modules:repair returns a purged module to available, and a fresh enable re-installs it (repair, D40)', function (): void {
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+    $lifecycle->enable('corex/stub-base');
+    $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+    $lifecycle->uninstall('corex/stub-base', keepData: false);
+
+    expect(fn () => $lifecycle->enable('corex/stub-base'))->toThrow(InvalidStateTransitionException::class);
+
+    // repair() reconciles + resets the terminal `purged` to `available`, and
+    // forgets the module's migration history so the next enable re-runs the DDL.
+    $lifecycle->repair('corex/stub-base');
+
+    expect($lifecycle->status('corex/stub-base')->state)->toBe(ModuleState::Available)
+        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->exists())->toBeFalse();
+
+    $lifecycle->enable('corex/stub-base');
+
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Enabled->value)
+        ->and(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue();
+});
+
+it('reconciles mod_records with the schema — drops a claim whose table vanished out of band (repair)', function (): void {
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+    $lifecycle->enable('corex/stub-base');
+
+    // A table disappears out of band; its ownership claim is now stale.
+    lifecyclePg()->statement('DROP TABLE sba_notes');
+    expect(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->where('reference', 'sba_notes')->exists())->toBeTrue();
+
+    $lifecycle->repair('corex/stub-base');
+
+    expect(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->where('reference', 'sba_notes')->exists())->toBeFalse()
+        // The surviving table's claim is untouched.
+        ->and(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->where('reference', 'sba_widgets')->exists())->toBeTrue();
+});
+
+it('runs the flex:modules:repair artisan command against the module connection', function (): void {
+    $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+    $lifecycle->enable('corex/stub-base');
+    $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+    $lifecycle->uninstall('corex/stub-base', keepData: false);
+
+    // The container-resolved lifecycle (config connection + wiring binding) is
+    // what the command uses — prove the command path reaches the module DB.
+    lifecycleFromContainer(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
+
+    $this->artisan('flex:modules:repair', ['module' => 'corex/stub-base'])->assertExitCode(0);
+
+    expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->exists())->toBeFalse();
+});
+
+it('runs migrations resolved through the container, not a hand-built constructor (wiring from discovery)', function (): void {
+    // No manual migrationPaths in a constructor — they come from the container
+    // `flex-modules.wiring` binding (installed.json in prod, stub path here).
+    lifecycleFromContainer(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])
+        ->enable('corex/stub-base');
+
+    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue()
+        ->and(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->value('state'))->toBe(ModuleState::Enabled->value);
 });
 
 it('derives pendingUpgrade from codeVersion vs. the stored dbVersion, never stores it (AC-12, derived part)', function (): void {

@@ -25,6 +25,8 @@ declare -A TEST_CMD=(
     [P1.16-no-epoch-bump]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='shared-DB epoch'"
     [P1.17-tableprefix-skip]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='no tablePrefix'"
     [P1.17-stage-order-swap]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='AC-18'"
+    [P1.18-purge-order]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='reverse creation order'"
+    [P1.18-enable-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='all-or-nothing'"
 )
 
 if [ "${1:-}" = "--list" ]; then

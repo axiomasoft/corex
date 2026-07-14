@@ -20,10 +20,10 @@ final class DatabaseRecordsRegistrar implements RecordsRegistrar
     /** @param  array<string, mixed>  $meta */
     public function claim(string $module, string $recordType, string $reference, array $meta = []): void
     {
-        // Microsecond-precision, pre-formatted (not a bare Carbon instance):
-        // Laravel's query-builder date format is second-precision, and purge
-        // orders by created_at DESC — two claims in the same wall-clock
-        // second must still stay orderable (B-10 §5.4).
+        // created_at is an informational wall-clock stamp only — purge orders
+        // by the monotonic bigserial `seq` (auto-assigned on insert, D31), not
+        // by this column, so two claims in the same second stay correctly
+        // orderable regardless of clock precision (B-10 §5.4).
         $now = now()->format('Y-m-d H:i:s.u');
         $identity = ['module_name' => $module, 'record_type' => $recordType, 'reference' => $reference];
         $table = DB::connection($this->connection)->table('mod_records');

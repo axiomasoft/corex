@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use Flex\Modules\Audit\AuditCapabilityWiring;
 use Flex\Modules\Commands\CompileModulesCommand;
@@ -26,6 +27,7 @@ use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -64,8 +66,41 @@ final class ModulesServiceProvider extends ServiceProvider
         // mod_modules/mod_records now exist (P1.6) — read/write them directly;
         // ArrayModuleStateReader remains available for tests that inject a fake.
         $this->app->singleton(ModuleStateReader::class, DatabaseModuleStateReader::class);
-        $this->app->singleton(RecordsRegistrar::class, DatabaseRecordsRegistrar::class);
-        $this->app->singleton(ModuleLifecycle::class, DatabaseModuleLifecycle::class);
+
+        // RecordsRegistrar and the lifecycle read/write the module connection
+        // (config('flex-modules.connection'), null = app default) — the same
+        // seam the epoch and state reader use, so auto-claims land in the module
+        // DB, not the ambient default.
+        $this->app->singleton(RecordsRegistrar::class, static function (): DatabaseRecordsRegistrar {
+            /** @var string|null $connection */
+            $connection = config('flex-modules.connection');
+
+            return new DatabaseRecordsRegistrar($connection);
+        });
+
+        // codeVersions / migrationPaths (composer name → value) come from
+        // installed.json (D41/A: empty autowired arrays = migrations never run
+        // in prod). Exposed as an overridable binding so tests inject stub paths
+        // and resolve the lifecycle from the container, not a hand-built ctor.
+        $this->app->singleton('flex-modules.wiring', fn (): array => $this->moduleWiring());
+
+        $this->app->singleton(ModuleLifecycle::class, function (Application $app): DatabaseModuleLifecycle {
+            /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
+            $wiring = $app->make('flex-modules.wiring');
+            /** @var string|null $connection */
+            $connection = config('flex-modules.connection');
+
+            return new DatabaseModuleLifecycle(
+                registry: $app->make(ModuleRegistry::class),
+                discovery: $app->make(ModuleDiscovery::class),
+                records: $app->make(RecordsRegistrar::class),
+                container: $app,
+                tenantContextResolver: $app->make(TenantContextResolver::class),
+                codeVersions: $wiring['codeVersions'],
+                migrationPaths: $wiring['migrationPaths'],
+                connection: $connection,
+            );
+        });
 
         // Registry cache WITHOUT tags (D30/A1/A2): store/ttl/prefix from config
         // (A45/A46 — no hardcoded 3600). store = null ⇒ the app's default store.
@@ -106,6 +141,16 @@ final class ModulesServiceProvider extends ServiceProvider
         // scoped by --path (see tests/Feature/ModuleLifecycleTest.php).
         if ($this->app->runningInConsole()) {
             $this->commands([CompileModulesCommand::class]);
+
+            // Reconcile a module's ownership registry with the real schema and
+            // provide the single legal exit from the terminal `purged` state
+            // (D40/A11) — a thin wrapper over ModuleLifecycle::repair().
+            Artisan::command('flex:modules:repair {module : Composer name of the module to repair}', function (ModuleLifecycle $lifecycle, string $module): int {
+                $lifecycle->repair($module);
+                $this->info(sprintf('Reconciled module [%s] with the schema.', $module));
+
+                return 0;
+            })->purpose('Reconcile mod_records with the schema and reset a purged module to available.');
         }
 
         $this->publishes([
@@ -194,5 +239,66 @@ final class ModulesServiceProvider extends ServiceProvider
         }
 
         return (int) DB::connection($connection)->table('mod_lifecycle_log')->count();
+    }
+
+    /**
+     * Build codeVersions / migrationPaths from `vendor/composer/installed.json`
+     * (type: corex-module): version → codeVersions, install-path +
+     * `/database/migrations` → migrationPaths. Empty when there is no
+     * installed.json (testbench) or no module packages — real deploys populate
+     * both so {@see DatabaseModuleLifecycle::runModuleMigrations()} actually
+     * runs each module's migrations (A: empty autowired arrays ran nothing).
+     *
+     * @return array{codeVersions: array<string, string>, migrationPaths: array<string, string>}
+     */
+    private function moduleWiring(): array
+    {
+        $codeVersions = [];
+        $migrationPaths = [];
+
+        $path = base_path('vendor/composer/installed.json');
+
+        if (! is_file($path)) {
+            return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];
+        }
+
+        /** @var mixed $data */
+        $data = json_decode((string) file_get_contents($path), associative: true);
+
+        if (! is_array($data)) {
+            return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];
+        }
+
+        /** @var list<mixed> $packages */
+        $packages = is_array($data['packages'] ?? null) ? $data['packages'] : $data;
+        $composerDir = dirname($path);
+
+        foreach ($packages as $package) {
+            if (! is_array($package) || ($package['type'] ?? null) !== 'corex-module') {
+                continue;
+            }
+
+            $name = $package['name'] ?? null;
+
+            if (! is_string($name)) {
+                continue;
+            }
+
+            if (is_string($package['version'] ?? null)) {
+                $codeVersions[$name] = $package['version'];
+            }
+
+            $installPath = $package['install-path'] ?? null;
+
+            if (is_string($installPath)) {
+                $migrationsDir = realpath($composerDir.'/'.$installPath.'/database/migrations');
+
+                if ($migrationsDir !== false) {
+                    $migrationPaths[$name] = $migrationsDir;
+                }
+            }
+        }
+
+        return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];
     }
 }
