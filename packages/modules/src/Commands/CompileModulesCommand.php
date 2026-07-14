@@ -8,6 +8,7 @@ use Flex\Modules\Compiler\RegistryCompiler;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Exceptions\CompilationException;
 use Flex\Modules\Exceptions\InvalidManifestException;
+use Flex\Modules\ModulesServiceProvider;
 use Flex\Modules\Registry\CompiledModule;
 use Flex\Modules\Registry\CompiledModuleRegistry;
 use Illuminate\Console\Command;
@@ -15,9 +16,11 @@ use Illuminate\Console\Command;
 /**
  * Deploy-hook compile pipeline (B-10 §5.2): discovers module manifests,
  * validates them, applies the closed extender set in memory, then writes
- * the module list atomically to `bootstrap/cache/flex_modules.php` (P1.5,
- * tmp+rename — B-10 §7.4 п.7) for {@see CompiledModuleRegistry}
- * to read on the hot path.
+ * both the per-module metadata and the full {@see CompiledRegistry} (all 8
+ * slices — P1.15) atomically to `bootstrap/cache/flex_modules.php`
+ * (tmp+rename — B-10 §7.4 п.7) for {@see CompiledModuleRegistry} to read on
+ * the hot path. Wired into `php artisan optimize` (deploy) by
+ * {@see ModulesServiceProvider}.
  */
 final class CompileModulesCommand extends Command
 {
@@ -48,7 +51,11 @@ final class CompileModulesCommand extends Command
         $this->components->info(sprintf('Compiled %d entity definition(s).', count($compiled->entities)));
 
         $cachePath = CompiledModuleRegistry::defaultCachePath();
-        CompiledModuleRegistry::writeAtomic($cachePath, array_map(CompiledModule::fromManifest(...), $manifests));
+        CompiledModuleRegistry::writeAtomic(
+            $cachePath,
+            array_map(CompiledModule::fromManifest(...), $manifests),
+            $compiled,
+        );
 
         $this->components->info(sprintf('Wrote compiled registry to %s.', $cachePath));
 

@@ -20,4 +20,36 @@ final readonly class FieldDefinition
         public bool $searchable = false,
         public ?array $meta = null,
     ) {}
+
+    /**
+     * Plain-array projection for {@see CompiledRegistry} persistence — scalars
+     * only, no `__set_state` (P1.15): the compiled file must be var_export'able
+     * and re-readable without reconstructing objects from serialized state.
+     *
+     * @return array{handle: string, type: string, required: bool, searchable: bool, meta: array<string, mixed>|null}
+     */
+    public function toArray(): array
+    {
+        return [
+            'handle' => $this->handle,
+            'type' => $this->type,
+            'required' => $this->required,
+            'searchable' => $this->searchable,
+            'meta' => $this->meta,
+        ];
+    }
+
+    /**
+     * @param  array{handle: string, type: 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum', required?: bool, searchable?: bool, meta?: array<string, mixed>|null}  $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            handle: $data['handle'],
+            type: $data['type'],
+            required: $data['required'] ?? false,
+            searchable: $data['searchable'] ?? false,
+            meta: $data['meta'] ?? null,
+        );
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Modules\Registry;
 
 use Flex\Modules\Compiler\CompiledRegistry;
+use Flex\Modules\Contracts\ModuleLifecycle;
 use Flex\Modules\Dep;
 use Flex\Modules\Manifest;
 
@@ -14,9 +15,11 @@ use Flex\Modules\Manifest;
  * arrays so it round-trips through `var_export()` (P1.5 atomic write).
  *
  * Compiled extender output (entities, permissions, menu, api, filament,
- * routes, workflow — {@see CompiledRegistry}) is not
- * persisted here; wiring EntityRegistry and friends to a file-backed source
- * is out of this item's scope (see phases/P1.md P1.5 Pending Work).
+ * routes, workflow — {@see CompiledRegistry}) is persisted separately in the
+ * same compiled file (P1.15) under its own `registry` key. This entry keeps
+ * the per-module manifest metadata the hot path and lifecycle need: identity,
+ * table prefix, dependency/edition/component maps and the terminal-transition
+ * hooks {@see ModuleLifecycle} fires (P1.18).
  */
 final readonly class CompiledModule
 {
@@ -24,6 +27,9 @@ final readonly class CompiledModule
      * @param  list<array{type: string, target: string, constraint: string}>  $requires
      * @param  array<string, list<string>>  $editions
      * @param  list<class-string>  $components
+     * @param  class-string|null  $onEnableHook
+     * @param  class-string|null  $onDisableHook
+     * @param  class-string|null  $onPurgeHook
      */
     public function __construct(
         public string $composerName,
@@ -32,6 +38,9 @@ final readonly class CompiledModule
         public array $requires,
         public array $editions,
         public array $components,
+        public ?string $onEnableHook = null,
+        public ?string $onDisableHook = null,
+        public ?string $onPurgeHook = null,
     ) {}
 
     public static function fromManifest(Manifest $manifest): self
@@ -46,11 +55,14 @@ final readonly class CompiledModule
             ),
             editions: $manifest->editions,
             components: $manifest->components,
+            onEnableHook: $manifest->onEnableHook,
+            onDisableHook: $manifest->onDisableHook,
+            onPurgeHook: $manifest->onPurgeHook,
         );
     }
 
     /**
-     * @param  array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>}  $data
+     * @param  array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, onPurgeHook?: class-string|null}  $data
      */
     public static function fromArray(array $data): self
     {
@@ -61,11 +73,14 @@ final readonly class CompiledModule
             requires: $data['requires'],
             editions: $data['editions'],
             components: $data['components'],
+            onEnableHook: $data['onEnableHook'] ?? null,
+            onDisableHook: $data['onDisableHook'] ?? null,
+            onPurgeHook: $data['onPurgeHook'] ?? null,
         );
     }
 
     /**
-     * @return array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>}
+     * @return array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook: class-string|null, onDisableHook: class-string|null, onPurgeHook: class-string|null}
      */
     public function toArray(): array
     {
@@ -76,6 +91,9 @@ final readonly class CompiledModule
             'requires' => $this->requires,
             'editions' => $this->editions,
             'components' => $this->components,
+            'onEnableHook' => $this->onEnableHook,
+            'onDisableHook' => $this->onDisableHook,
+            'onPurgeHook' => $this->onPurgeHook,
         ];
     }
 }

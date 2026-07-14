@@ -57,6 +57,10 @@ final class ModulesServiceProvider extends ServiceProvider
                 cachePath: CompiledModuleRegistry::defaultCachePath(),
                 stateReader: $app->make(ModuleStateReader::class),
                 cache: $app->make(CacheFactory::class)->store(),
+                // Production must have compiled the registry at deploy; a
+                // missing file there is a hard failure, not a silent empty
+                // runtime (A10, pre-mortem P1R кластер C).
+                failIfMissing: $app->environment('production'),
             );
         });
     }
@@ -72,12 +76,33 @@ final class ModulesServiceProvider extends ServiceProvider
             $this->commands([CompileModulesCommand::class]);
         }
 
+        // Deploy hook: `php artisan optimize` recompiles the registry (B-10
+        // §5.2). No clear command — `optimize:clear` leaves the file, the
+        // next `optimize` overwrites it atomically.
+        $this->optimizes(optimize: 'flex:modules:compile', key: 'flex-modules');
+
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
         $this->app->booted(function (): void {
+            $arrayRegistry = $this->app->make(ArrayEntityRegistry::class);
+
+            // Project the persisted compiled registry into the runtime
+            // EntityRegistry so module-declared entities reach the app (A10) —
+            // not only entities a provider register()'d imperatively.
+            $compiled = $this->app->make(ModuleRegistry::class)->compiled();
+
+            foreach ($compiled->entities as $definition) {
+                $arrayRegistry->register($definition);
+            }
+
             $registry = $this->app->make(EntityRegistry::class);
             $map = [];
 
+            // Morph map spans the WHOLE registry (all() без ctx), never just
+            // the active modules: reading a persisted row of a currently
+            // disabled module must still resolve its morph alias, or
+            // Relation::morphMap loses the handle. The active-module filter in
+            // all(?ctx) is a DIFFERENT call, wired by P1.16 — not this one.
             foreach ($registry->all() as $definition) {
                 $map[$definition->handle] = $definition->model;
             }

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Flex\Modules\Registry;
 
 use CoreX\Tenancy\TenantContext;
+use Flex\Modules\Compiler\CompiledRegistry;
 use Flex\Modules\Contracts\ModuleRegistry;
 use Flex\Modules\Contracts\ModuleStateReader;
 use Flex\Modules\Exceptions\ModuleNotFound;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use RuntimeException;
 
 /**
  * File-backed {@see ModuleRegistry} (B-10 §5.2/§7.1). `all()`/`get()` read
@@ -16,17 +18,28 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
  * first `require`, 0 fs scans on later calls); `active()` intersects it with
  * a per-account tagged cache backed by {@see ModuleStateReader} — a cache
  * miss costs exactly one reader call, a warm cache costs none (AC-3/AC-4).
+ *
+ * The same file also carries the full {@see CompiledRegistry} (all 8 slices)
+ * under a `registry` key (P1.15); {@see compiled()} reads and memoizes it for
+ * the runtime EntityRegistry projection and the morph map.
+ *
+ * A missing compiled file is a hard error under `$failIfMissing` (production
+ * deploy that forgot `php artisan flex:modules:compile` / `optimize`) — never
+ * a silent empty registry, which would resurrect A10 quietly.
  */
 final class CompiledModuleRegistry implements ModuleRegistry
 {
     /** @var array<string, CompiledModule>|null */
     private ?array $modules = null;
 
+    private ?CompiledRegistry $registry = null;
+
     public function __construct(
         private readonly string $cachePath,
         private readonly ModuleStateReader $stateReader,
         private readonly CacheRepository $cache,
         private readonly int $cacheTtl = 3600,
+        private readonly bool $failIfMissing = false,
     ) {}
 
     public static function defaultCachePath(): string
@@ -59,6 +72,20 @@ final class CompiledModuleRegistry implements ModuleRegistry
         return array_key_exists($name, $this->enabledFor($ctx));
     }
 
+    public function compiled(): CompiledRegistry
+    {
+        if ($this->registry !== null) {
+            return $this->registry;
+        }
+
+        $data = $this->readCache();
+
+        /** @var array<string, mixed> $registry */
+        $registry = is_array($data['registry'] ?? null) ? $data['registry'] : [];
+
+        return $this->registry = CompiledRegistry::fromArray($registry);
+    }
+
     /** @return array<string, array{state: string, edition: string}> */
     private function enabledFor(TenantContext $ctx): array
     {
@@ -80,16 +107,14 @@ final class CompiledModuleRegistry implements ModuleRegistry
             return $this->modules;
         }
 
-        if (! is_file($this->cachePath)) {
-            return $this->modules = [];
-        }
-
-        /** @var array{modules?: list<array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>}>} $data */
-        $data = require $this->cachePath;
+        $data = $this->readCache();
 
         $modules = [];
 
-        foreach ($data['modules'] ?? [] as $row) {
+        /** @var list<array<string, mixed>> $rows */
+        $rows = is_array($data['modules'] ?? null) ? $data['modules'] : [];
+
+        foreach ($rows as $row) {
             $module = CompiledModule::fromArray($row);
             $modules[$module->composerName] = $module;
         }
@@ -97,20 +122,64 @@ final class CompiledModuleRegistry implements ModuleRegistry
         return $this->modules = $modules;
     }
 
-    /** @param  list<CompiledModule>  $modules */
-    public static function writeAtomic(string $path, array $modules): void
+    /**
+     * Read and decode the compiled file once. Missing file is a hard failure
+     * in production (`$failIfMissing`) — a silent empty payload would ship a
+     * runtime with no entities and no morph map, exactly the class of defect
+     * A10 was, only quieter.
+     *
+     * @return array<string, mixed>
+     */
+    private function readCache(): array
     {
-        $payload = ['modules' => array_map(static fn (CompiledModule $module): array => $module->toArray(), $modules)];
+        if (! is_file($this->cachePath)) {
+            if ($this->failIfMissing) {
+                throw new RuntimeException(sprintf(
+                    'Compiled module registry not found at [%s]. Run `php artisan flex:modules:compile` (or `php artisan optimize`) as part of the deploy.',
+                    $this->cachePath,
+                ));
+            }
+
+            return [];
+        }
+
+        /** @var mixed $data */
+        $data = require $this->cachePath;
+
+        return is_array($data) ? $data : [];
+    }
+
+    /** @param  list<CompiledModule>  $modules */
+    public static function writeAtomic(string $path, array $modules, ?CompiledRegistry $registry = null): void
+    {
+        $payload = [
+            'modules' => array_map(static fn (CompiledModule $module): array => $module->toArray(), $modules),
+            'registry' => ($registry ?? CompiledRegistry::empty())->toArray(),
+        ];
 
         $directory = dirname($path);
 
-        if (! is_dir($directory)) {
-            mkdir($directory, recursive: true);
+        if (! is_dir($directory) && ! mkdir($directory, recursive: true) && ! is_dir($directory)) {
+            throw new RuntimeException(sprintf('Unable to create compiled registry directory [%s].', $directory));
         }
 
         $tmpPath = $path.'.'.bin2hex(random_bytes(8)).'.tmp';
 
-        file_put_contents($tmpPath, "<?php\n\nreturn ".var_export($payload, true).";\n", LOCK_EX);
-        rename($tmpPath, $path);
+        // tmp+rename keeps the swap atomic (B-10 §7.4 п.7); an unchecked
+        // partial write or a failed rename would drop a corrupt file over the
+        // live one (A47), so both return values are verified. The fs calls are
+        // @-silenced so a warning is not converted to a foreign exception
+        // (ErrorException) ahead of these explicit, typed failures.
+        if (@file_put_contents($tmpPath, "<?php\n\nreturn ".var_export($payload, true).";\n", LOCK_EX) === false) {
+            @unlink($tmpPath);
+
+            throw new RuntimeException(sprintf('Unable to write temporary compiled registry [%s].', $tmpPath));
+        }
+
+        if (! @rename($tmpPath, $path)) {
+            @unlink($tmpPath);
+
+            throw new RuntimeException(sprintf('Unable to move compiled registry into place [%s].', $path));
+        }
     }
 }

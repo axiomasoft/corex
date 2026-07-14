@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Modules\Contracts;
 
 use CoreX\Tenancy\TenantContext;
+use Flex\Modules\Compiler\CompiledRegistry;
 use Flex\Modules\Exceptions\ModuleNotFound;
 use Flex\Modules\Registry\CompiledModule;
 
@@ -25,4 +26,14 @@ interface ModuleRegistry
     public function active(TenantContext $ctx): array;
 
     public function isActive(string $name, TenantContext $ctx): bool;
+
+    /**
+     * The full compiled registry (all 8 slices — B-10 §5.2), read from the
+     * same compiled file (P1.15). The runtime projects `entities` into
+     * EntityRegistry and the morph map from this; downstream consumers of the
+     * other slices live outside this package. Exposed as the whole
+     * {@see CompiledRegistry} (not just `entities()`) because the projection,
+     * morph map and P1.18 lifecycle all read different slices of it.
+     */
+    public function compiled(): CompiledRegistry;
 }
