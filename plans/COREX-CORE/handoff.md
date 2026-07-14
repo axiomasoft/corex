@@ -1,23 +1,47 @@
-# HANDOFF — 2026-07-14 — after P1.13
+# HANDOFF — 2026-07-14 — after P1.14
 
 **Next:**
 
 | Параметр | Значение |
 |:--|:--|
-| Model | Opus (Blocker-ярус) / Sonnet (механика) — per-item, пинит сам workflow |
-| Thinking | high на P1.15/P1.16/P1.18/P1.19/P1.21/P1.23, medium на остальных |
-| Context | NEW SESSION — Workflow-orchestrated (не продолжать эту сессию) |
-| Суть | Волна 2 фазы P1 — ремедиация по 🔴 RED-аудиту: 12 items на ветке `p1r-remediation`, каждый: impl → верификатор → adversarial review → close. **Предусловие: владелец закрыл OQ-11.** |
+| Model | Opus/high — разбор эскалации требует архитектурного решения, не механики |
+| Thinking | high |
+| Context | NEW SESSION |
+| Суть | Волна ремедиации P1 СТОИТ на P1.14. Item сам эскалировал (plan-protocol §10) дважды внутри собственного ТЗ — раньше, чем переходить к P1.15, владелец должен разрешить оба конфликта через ре-дизайн ТЗ item'а (путь по умолчанию ниже) либо, если решение реализуемо без изменения Scope/Deliverables, точечным фиксом + `resumeFromRunId`. |
 
 ````
-Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js"})
+/task:plan-design COREX-CORE P1.14
 ````
 
-**🔴 ПЕРЕД ЗАПУСКОМ — решение владельца по OQ-11** (`open-questions.md`): golden-шаблон P2 vs
-DDL-при-enable. Вариант (A) «шаблон содержит таблицы всех модулей» означает, что **P1.18 — самый
-дорогой item волны — строит не то** (purge должен чистить ДАННЫЕ, а не дропать таблицы). Запуск волны
-без этого решения рискует выбросить работу P1.18 целиком. Остальные items от OQ-11 не зависят —
-при желании можно стартовать волну, а P1.18 придержать.
+Читать сначала: `phases/P1.md` P1.14 (оба Escalation Needed целиком) → `findings/P1-audit-2026-07-13.md`
+(A36, A92) → `findings/P1R-premortem.md`.
+
+Альтернатива к ре-дизайну — точечный фикс без изменения Scope/Deliverables (если решение владельца
+реализуемо в текущих рамках, напр. «второй phpstan-прогон без larastan под `tests/`» или «phpunit/phpcov
+слияние clover-отчётов для coverage»): зафиксировать решение в plan.md (новый D#) и `open-questions.md`,
+снять `git stash pop` (`stash@{0}` на `p1r-remediation` — см. Pending Work P1.14 в `phases/P1.md`, там же
+полный список файлов в стеше), реализовать точечно, затем перезапустить волну через
+`Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.js", resumeFromRunId: "<run-id волны>"})`.
+
+Решение владельца нужно по обеим эскалациям P1.14 (детали — `phases/P1.md` P1.14 Escalation Needed,
+две записи):
+1. `phpstan.neon` `tests`-paths: 60 FP из-за Pest `$this`-биндинга статически невидимого PHPStan (8 файлов
+   волны 1) — не относятся к `flex/modules-lint` (ради которых A36 просил `tests`). Варианты: (а) второй
+   phpstan-прогон без larastan под 9 custom-правил на `tests/`+migrations — новый item; (б) официально
+   сузить Deliverables P1.14 (снять `tests`); (в) ретрофит тестов волны 1 — отдельный item.
+2. Coverage `--min=80` структурно недостижим без слияния PG/sqlite-лейнов (PG-only классы покрыты только
+   `->group('pg')`-тестами, а `test:coverage` обязан их исключать — A92). Слияние лейнов в один процесс
+   ломает `AuditLogTest.php` изоляцией по порядку (пре-существующий изъян P1.8, не P1.14). Варианты: (а)
+   `phpunit/phpcov` — новая dev-зависимость, раздельные прогоны + merge отчётов; (б) добить недостающие
+   ~24пп тестами в чужих доменах (Tasks/Models, SettingDefault) — отдельный item; (в) официально исключить
+   PG-only namespaces из coverage `<source>` (ослабляет смысл item'а).
+
+**После разрешения P1.14** волна продолжается штатно: P1.15 → P1.16 → P1.18 — цепочка по данным
+(OQ-11 закрыт, см. Open risks), остальные items волны — по порядку плана.
+
+**🔴 Пред-условие волны (закрыто):** OQ-11 (`open-questions.md`) — golden-шаблон P2 vs DDL-при-enable
+решён Вариантом (A) 2026-07-14, владелец Dmitry Vostrikov. P1.18 переосмыслен под это решение
+(purge = очистка данных, не DROP таблиц) — деталь в `open-questions.md` OQ-11.
 
 Волна НЕ исполняется через `/task:plan-exec`: несущие items предписаны `opus/high`, команда пинит
 sonnet/medium (routing-undershoot запрещён — plan-protocol §9, D35). Именно этот undershoot дал
@@ -44,28 +68,38 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
   (в фазе жили только Blocker/Major) + матрица покрытия 93/93;
 - **pre-mortem волны (3 линзы)** нашёл 6 дыр в самой ремедиации — все внесены (D39–D45).
 
-**2026-07-14 — P1.14 закрыт (🟠 Done with deviations), ветка `p1r-remediation` создана:**
-- CI: job'ы `tests-pg` (postgres:16 сервис), `coverage`, `anti-weakening-gate`; `on.push.branches` +=
-  `p1r-remediation`; `composer test:coverage` — без PG-зависимости; `phpunit.xml` `<source>` +=
-  `packages/modules/src`; `phpstan.neon` paths += миграции обоих пакетов (мимоходом починена FP
-  `NoDirectSystemTableWriteRule` на собственных `mod_*`-миграциях); `NoForeignPrefixSqlRule` переписан на
-  позиционную детекцию (A35) + негативная фикстура; `scripts/mutation-check.sh` (harness для всей волны) +
-  2 патча-саботажа в `plans/COREX-CORE/mutations/`; `scripts/anti-weakening-gate.sh` (CI-job, банит
-  `->skip(`/`markTestSkipped`/`continue-on-error`/baseline/понижение `--min=`/уменьшение числа тестов).
-- **Эскалация (не блокирует волну, см. phases/P1.md P1.14 Escalation Needed):** `phpstan.neon` НЕ получил
-  `tests` в paths — конфликт внутри ТЗ item'а: буквальное требование против собственного же Code Guidance
-  item'а («вскрыло ошибки вне Files — эскалация, не фикс»). Причина факта: `tests` при `level: 6` поднимает
-  60 ошибок в 8 файлах волны 1 — Pest `it()`/`beforeEach()` рантайм-биндит `$this` к `TestCase`, статически
-  PHPStan видит `Pest\PendingCalls\TestCall` (мимо `@mixin`); НИ ОДНА ошибка не относится к `flex/modules-lint`
-  (ради которых A36 и просил `tests`). Owner-decision нужно: (а) отдельный phpstan-прогон только под
-  9 custom-правил на `tests/`+migrations, без larastan; (б) официально сузить Deliverables P1.14; (в) отдельный
-  item — ретрофит тестов волны 1 под статически-типизируемый паттерн.
-- **CI-верификация (D45):** см. `gh run list --branch p1r-remediation` на момент закрытия — приложено в
-  Completion Notes item'а или в отдельном апдейте этого файла, если пуш случился после него.
+**2026-07-14 — P1.14 попытан, но НЕ закрыт — статус 🔴 Blocked, волна ОСТАНОВЛЕНА**, ветка
+`p1r-remediation` создана и запушена (коммиты `f4f8bd6` impl, `dab0337` docs):
+- Реализовано и зелено в CI (run 29331681218, `gh run list --branch p1r-remediation`): job'ы `tests-pg`
+  (postgres:16 сервис) — success; `anti-weakening-gate` — success; `quality` (PHPStan+Pint) — success;
+  `tests` (все 4 php×laravel) — success. `on.push.branches` += `p1r-remediation`; `composer test:coverage` —
+  без PG-зависимости; `phpunit.xml` `<source>` += `packages/modules/src`; `phpstan.neon` paths += миграции
+  обоих пакетов (мимоходом починена FP `NoDirectSystemTableWriteRule` на собственных `mod_*`-миграциях);
+  `NoForeignPrefixSqlRule` переписан на позиционную детекцию (A35) + негативная фикстура;
+  `scripts/mutation-check.sh` (harness для всей волны) + 2 патча-саботажа в `plans/COREX-CORE/mutations/`;
+  `scripts/anti-weakening-gate.sh` (CI-job, банит `->skip(`/`markTestSkipped`/`continue-on-error`/
+  baseline/понижение `--min=`/уменьшение числа тестов).
+- **Job `coverage` красный в том же прогоне** (56.3% < 80%) — структурная причина, не регрессия диффа
+  item'а (PG-only классы покрыты только `->group('pg')`-тестами, а `test:coverage` обязан их исключать).
+- **Item САМ эскалировал ДВАЖДЫ (plan-protocol §10) — обе записи целиком в `phases/P1.md` P1.14
+  Escalation Needed:**
+  1. `phpstan.neon` `tests`-paths: конфликт внутри собственного ТЗ item'а — Implementation Rules требует
+     `tests` в paths буквально, Code Guidance того же item'а требует эскалации при находках вне Files.
+     Факт: `tests` при `level: 6` поднимает 60 FP в 8 файлах волны 1 (Pest `$this`-биндинг статически
+     невидим PHPStan) — ни одна не относится к `flex/modules-lint` (ради которых A36 просил `tests`).
+  2. Coverage `--min=80` структурно недостижим без слияния PG/sqlite-лейнов — проверенная альтернатива
+     (слить лейны в один процесс) ломает `AuditLogTest.php` изоляцией по порядку исполнения (изъян P1.8).
+- **Решение: докс-курация 2026-07-14 понизила Status P1.14 с 🟠 Done with deviations до 🔴 Blocked** —
+  два открытых Escalation Needed=yes не совместимы со статусом «сдан» по строгому критерию
+  «Deliverables полностью выполнены» (plan-protocol §6), даже при зелёном первичном safety-критичном
+  deliverable. Волна НЕ продолжается на P1.15+ до владельческого решения — см. Launch-block выше.
+  Рабочее дерево на момент остановки сохранено: `git stash push -u -m "P1R-P1.14-partial"` → `stash@{0}`
+  на `p1r-remediation` (детали, полный список файлов — Pending Work P1.14 в `phases/P1.md`).
 
 **Remaining:**
-1. **Волна 2 (P1.15–P1.25)** — 11 items. P1.14 закрыт первым (см. выше). Порядок дальше не произвольный:
-   P1.15 → P1.16 → P1.18 — цепочка по данным.
+0. **🔴 P1.14 разблокировать первым** — см. Launch-block выше. Ничего из п.1–3 не стартует раньше.
+1. **Волна 2 (P1.15–P1.25)** — 11 items, СТОЯТ до разблокировки P1.14. Порядок после разблокировки не
+   произвольный: P1.15 → P1.16 → P1.18 — цепочка по данным.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **Фаза P2** (0/13): предусловие P2.1 = OQ-5 (php ^8.4 vs ^8.3).
 
@@ -76,7 +110,9 @@ P1R-rag-verification-2026-07-14, P1-P2-rag-verification-2026-07-12, P2-premortem
 ~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md (DRAFT) · 50_execution/00_EXECUTION_ROADMAP.md
 
 **Open risks:**
-- **🔴 OQ-11 (блокер DoR P1.18):** golden-шаблон vs DDL-при-enable — при варианте (A) P1.18 строит не то.
+- **🔴 P1.14 Blocked — волна встала.** Две открытые эскалации (см. выше) требуют владельческого решения
+  прежде чем волна двинется дальше P1.14. ~~OQ-11 (блокер DoR P1.18)~~ — закрыто Вариантом (A), 2026-07-14
+  (владелец Dmitry Vostrikov, см. `open-questions.md` OQ-11); P1.18 переосмыслен под это решение.
 - ~~**Код никогда не пушился**~~ — закрыто P1.14: ветка `p1r-remediation` запушена, run 29331681218
   (https://github.com/axioma-studio/corex/actions/runs/29331681218) — `tests-pg`/`quality`/`tests`/
   `anti-weakening-gate` зелёные; job `coverage` красный (56.3%<80%, структурная причина — см. P1.14
