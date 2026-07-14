@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Contracts;
 
 /**
- * Per-account feature-flag store with workspace/user overrides (B-10 §3.1,
- * AC-22). `$scope` addresses ONE override level — `null` reads the
- * account-level default carried by the flag row itself. Department-scoped
- * overrides (`sys_feature_overrides.scope_type = 'department'`) are schema-
- * ready but not reachable through this contract yet: `SettingsScope` has no
- * department level before P1.10 introduces departments (see P1.9 Pending Work).
+ * Per-account feature-flag store with workspace/user/department overrides
+ * (B-10 §3.1, AC-22, D38). `$scope` addresses ONE override level — `null`
+ * reads the account-level default carried by the flag row itself. Cascade
+ * order is DETERMINISTIC (declared in `DatabaseFeatureFlags`'s docblock):
+ * whichever narrow level the caller passed (user/department) beats
+ * workspace beats the flag's own account-level default — one call resolves
+ * exactly the level named by `$scope`, no implicit walk to a broader id the
+ * caller didn't supply.
  */
 interface FeatureFlags
 {

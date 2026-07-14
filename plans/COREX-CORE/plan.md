@@ -260,6 +260,25 @@ P1.20 была GREEN ещё в D58 — единственный блокер (м
 стеш можно безопасно дропнуть при следующей уборке (дубль, не уникальная работа). Итог борда после D62:
 **5 🟢 · 16 🟠 · 0 🔴 · 7 ⬜**. Волна возобновляется штатным порядком **P1.22 → P1.23 → P1.24 → P1.25**.
 
+**P1.22 закрыт: 🟠 Done with deviations (2026-07-14) — детали см. phases/P1.md P1.22 Completion Notes.**
+`SettingScope::Department`+`SettingsScope::department()` (D38) делают department-override реально
+достижимым (CHECK `sys_feature_overrides` уже разрешал тип, фабрики не было); каскад-приоритет AC-22
+(узкий переданный скоуп user/department → workspace → account-дефолт) задокументирован ДЕТЕРМИНИРОВАННО
+докблоком `DatabaseFeatureFlags` — контракт `?SettingsScope $scope` (B-10 §3.1) не расширяется, авто-walk
+от узкого id к неизвестному более широкому НЕ вводится (остаётся Known Deviation P1.7/Scope Excluded,
+ждёт P2 tenancy). `value()` больше не затирает payload флага NULL-payload override'ом (A87); `define()`
+атомарен через `UNIQUE(key)` + `catch(UniqueConstraintViolationException)`, не read-then-create;
+`SettingChanged` — только на фактическом изменении + `afterCommit` (мирроит `DatabaseModuleLifecycle`);
+`DatabaseSettingsRepository` кидает новый `UnsupportedScopeException` на department-скоуп из одной точки
+(`level()`/`cascade()`), покрывает все 4 метода контракта. UNIQUE-констрейнт `sys_settings` теперь бьётся
+сырым `DB::table()->insert()` мимо репозитория (A57/A63 — старый тест через `updateOrCreate()` не мог
+пробить констрейнт); `all()`/`forget()` получили целевые тесты (A59). Локальный гейт зелёный (100/100
+sqlite, 79/79 pg), mutation-check 2 кейса (`drop-unique-index`, `drop-workspace-branch`) краснеют под
+саботажем. `files_outside_scope` непустой (новый `Exceptions/UnsupportedScopeException.php` — прямо
+предписан Implementation Rules, не в исходных Files; регистрация 2 кейсов в `scripts/mutation-check.sh` —
+D45-мандат, тот же паттерн волны) → по правилу докс-куратора (см. P1.20/P1.21) статус **🟠**, не 🟢. Итог
+борда после закрытия P1.22: **5 🟢 · 17 🟠 · 0 🔴 · 6 ⬜**.
+
 ## 5. Decision Log
 
 | D# | Дата | Решение | Почему |

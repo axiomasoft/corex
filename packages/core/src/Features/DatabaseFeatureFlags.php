@@ -10,6 +10,7 @@ use CoreX\Contracts\SettingsScope;
 use CoreX\Enums\SettingScope;
 use CoreX\Models\FeatureFlag;
 use CoreX\Models\FeatureOverride;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Override;
 
 /**
@@ -17,6 +18,15 @@ use Override;
  * (B-10 §3.1, AC-22). Replaces the interim config-driven `FeatureResolver`/
  * `ConfigFeatureResolver` (plan.md D27) — a single source of truth, no
  * config-fallback lane.
+ *
+ * Cascade order (AC-22, D38) — DETERMINISTIC, declared here once:
+ * `SettingScope::User`/`Department` (whichever the caller passes) beats
+ * `Workspace` beats the flag's own account-level `is_enabled`/`payload`.
+ * A single call resolves exactly the ONE override row matching the passed
+ * `$scope` (exact `scope_type`+`scope_id`) — there is no auto-walk from a
+ * narrower id to a broader one the caller didn't name (e.g. from a user id
+ * to "that user's workspace"); a caller that needs several levels checked
+ * calls `active()`/`value()` once per level it can resolve, narrowest first.
  *
  * `$connection` mirrors `DatabaseSettingsRepository`'s seam (null = app
  * default), used by the PG-only test lane (D12).
@@ -52,24 +62,33 @@ final class DatabaseFeatureFlags implements FeatureFlags
 
         $override = $this->findOverride($flag->id, $scope);
 
-        return $override instanceof FeatureOverride ? $override->payload : $flag->payload;
+        // A NULL override payload means "this override only toggles
+        // is_enabled" — it must fall back to the flag's own payload, not
+        // blank it out from under every other scope (A87).
+        if ($override instanceof FeatureOverride && $override->payload !== null) {
+            return $override->payload;
+        }
+
+        return $flag->payload;
     }
 
     #[Override]
     public function define(FeatureFlagDefinition $def): void
     {
-        $existing = $this->find($def->key);
-
-        if ($existing instanceof FeatureFlag) {
-            return;
+        // Atomic via the DB's UNIQUE(key) constraint (sys_feature_flags), not
+        // a read-then-create — two concurrent define() calls for the same
+        // key race on the INSERT, the loser's constraint violation is simply
+        // swallowed. Idempotent: never stomps an admin-toggled `is_enabled`.
+        try {
+            FeatureFlag::on($this->connection)->create([
+                'key' => $def->key,
+                'module' => $def->module,
+                'is_enabled' => $def->default,
+                'payload' => $def->payload,
+            ]);
+        } catch (UniqueConstraintViolationException) {
+            // Already defined — define() is register-once, not upsert.
         }
-
-        FeatureFlag::on($this->connection)->create([
-            'key' => $def->key,
-            'module' => $def->module,
-            'is_enabled' => $def->default,
-            'payload' => $def->payload,
-        ]);
     }
 
     private function find(string $key): ?FeatureFlag
@@ -80,9 +99,9 @@ final class DatabaseFeatureFlags implements FeatureFlags
 
     /**
      * `null`/account scope has no override row — the flag's own `is_enabled`
-     * IS the account-level value. Department scope is schema-ready
-     * (sys_feature_overrides.scope_type CHECK) but unreachable via
-     * SettingsScope until P1.10 (see Contracts\FeatureFlags docblock).
+     * IS the account-level value. Department scope (D38) is reachable here —
+     * `sys_feature_overrides.scope_type` CHECK allows it and `SettingsScope`
+     * now has a `department()` factory.
      */
     private function findOverride(string $flagId, ?SettingsScope $scope): ?FeatureOverride
     {

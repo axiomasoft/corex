@@ -10,8 +10,11 @@ use CoreX\Contracts\SettingsScope;
 use CoreX\Enums\SettingScope;
 use CoreX\Events\SettingChanged;
 use CoreX\Exceptions\SettingValueTooLargeException;
+use CoreX\Exceptions\UnsupportedScopeException;
 use CoreX\Models\Setting;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Override;
 
 /**
@@ -21,6 +24,9 @@ use Override;
  * through workspace — auto-resolving "this user's workspace" needs P2
  * tenancy context and is out of scope here (Scope Excluded, P1.7). Callers
  * that need the workspace level explicitly pass `SettingsScope::workspace()`.
+ * `SettingsScope::department()` (D38) is a `FeatureFlags`-only level —
+ * every method here throws `UnsupportedScopeException` for it (`sys_settings`
+ * has no `department` in its CHECK).
  *
  * `$connection` is null (the app's default) unless a caller pins an explicit
  * name — same seam as DatabaseRecordsRegistrar (P1.6), used by the PG-only
@@ -63,6 +69,7 @@ final class DatabaseSettingsRepository implements SettingsRepository
 
         $old = $this->find($namespace, $key, $scopeType, $scopeId);
         $oldValue = $old instanceof Setting ? $this->decode($old) : null;
+        $changed = ! $old instanceof Setting || $oldValue !== $value;
 
         $stored = $sensitive ? json_encode(Crypt::encryptString($encoded), JSON_THROW_ON_ERROR) : $encoded;
 
@@ -71,15 +78,20 @@ final class DatabaseSettingsRepository implements SettingsRepository
             values: ['value' => $stored, 'is_sensitive' => $sensitive],
         );
 
-        event(new SettingChanged(
-            namespace: $namespace,
-            key: $key,
-            scopeType: $scopeType,
-            scopeId: $scopeId,
-            old: $oldValue,
-            new: $value,
-            sensitive: $sensitive,
-        ));
+        // Only on an actual value change, and after the write commits — a
+        // no-op set() (same value re-written) must not spam listeners, and a
+        // rolled-back transaction must not have fired the event at all.
+        if ($changed) {
+            $this->db()->afterCommit(fn () => event(new SettingChanged(
+                namespace: $namespace,
+                key: $key,
+                scopeType: $scopeType,
+                scopeId: $scopeId,
+                old: $oldValue,
+                new: $value,
+                sensitive: $sensitive,
+            )));
+        }
     }
 
     #[Override]
@@ -116,6 +128,11 @@ final class DatabaseSettingsRepository implements SettingsRepository
         return $merged;
     }
 
+    private function db(): Connection
+    {
+        return DB::connection($this->connection);
+    }
+
     private function find(string $namespace, string $key, SettingScope $scopeType, ?string $scopeId): ?Setting
     {
         /** @var Setting|null */
@@ -142,6 +159,10 @@ final class DatabaseSettingsRepository implements SettingsRepository
     /** @return array{0: SettingScope, 1: string|null} */
     private function level(?SettingsScope $scope): array
     {
+        if ($scope?->type === SettingScope::Department) {
+            throw new UnsupportedScopeException($scope->type);
+        }
+
         return $scope === null ? [SettingScope::Account, null] : [$scope->type, $scope->id];
     }
 
@@ -152,6 +173,7 @@ final class DatabaseSettingsRepository implements SettingsRepository
             null, SettingScope::Account => [[SettingScope::Account, null]],
             SettingScope::Workspace => [[SettingScope::Workspace, $scope->id], [SettingScope::Account, null]],
             SettingScope::User => [[SettingScope::User, $scope->id], [SettingScope::Account, null]],
+            SettingScope::Department => throw new UnsupportedScopeException(SettingScope::Department),
         };
     }
 }

@@ -8,9 +8,13 @@ use CoreX\Enums\SettingScope;
 use Override;
 
 /**
- * Fired on every `SettingsRepository::set()` (B-10 §3.1). `old`/`new` are
- * masked when `sensitive` is true — this event never carries a sensitive
- * value in the clear (B-10 §7.4 п.8), including to queued listeners' logs.
+ * Fired by `SettingsRepository::set()` (B-10 §3.1) ONLY when the stored
+ * value actually changes, and only after the write's transaction commits
+ * (`DatabaseSettingsRepository::set()`, D38/A-audit fix P1.22) — a no-op
+ * `set()` of an unchanged value does not spam listeners, and a rolled-back
+ * write never fires it. `old`/`new` are masked when `sensitive` is true —
+ * this event never carries a sensitive value in the clear (B-10 §7.4 п.8),
+ * including to queued listeners' logs.
  *
  * Retrofitted onto `DomainEvent` (P1.9, OQ-4 resolution) — was interim
  * `CoreEvent` under P1.7.

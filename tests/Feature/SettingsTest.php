@@ -6,11 +6,14 @@ use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\SettingsScope;
 use CoreX\Events\SettingChanged;
 use CoreX\Exceptions\SettingValueTooLargeException;
+use CoreX\Exceptions\UnsupportedScopeException;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use Illuminate\Database\Connection;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 
 uses()->group('pg');
 
@@ -109,7 +112,7 @@ it('encrypts a sensitive value at rest and masks it in SettingChanged', function
     });
 });
 
-it('does not allow a duplicate account-level setting (UNIQUE NULLS NOT DISTINCT)', function (): void {
+it('updates in place through the repository rather than duplicating a row', function (): void {
     $repository = settingsRepositoryFor();
 
     $repository->set('crm', 'dup', 'first');
@@ -117,6 +120,90 @@ it('does not allow a duplicate account-level setting (UNIQUE NULLS NOT DISTINCT)
 
     expect($repository->get('crm', 'dup'))->toBe('second')
         ->and(settingsPg()->table('sys_settings')->where('namespace', 'crm')->where('key', 'dup')->count())->toBe(1);
+});
+
+it('rejects a duplicate account-level row at the DB constraint (UNIQUE NULLS NOT DISTINCT), bypassing the repository', function (): void {
+    // A57/A63: the repository always goes through updateOrCreate(), which
+    // never emits a second INSERT for an existing row — that path can never
+    // exercise the constraint. Hit the table directly with a raw duplicate
+    // insert so the CHECK is the thing actually under test.
+    settingsPg()->table('sys_settings')->insert([
+        'id' => (string) Str::uuid7(),
+        'namespace' => 'crm',
+        'key' => 'dup-raw',
+        'scope_type' => 'account',
+        'scope_id' => null,
+        'value' => json_encode('first', JSON_THROW_ON_ERROR),
+        'is_sensitive' => false,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    expect(fn () => settingsPg()->table('sys_settings')->insert([
+        'id' => (string) Str::uuid7(),
+        'namespace' => 'crm',
+        'key' => 'dup-raw',
+        'scope_type' => 'account',
+        'scope_id' => null,
+        'value' => json_encode('second', JSON_THROW_ON_ERROR),
+        'is_sensitive' => false,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]))->toThrow(QueryException::class);
+});
+
+it('does not fire SettingChanged when set() re-writes the same value', function (): void {
+    $repository = settingsRepositoryFor();
+    $repository->set('crm', 'theme', 'stable');
+
+    Event::fake([SettingChanged::class]);
+    $repository->set('crm', 'theme', 'stable');
+
+    Event::assertNotDispatched(SettingChanged::class);
+});
+
+it('fires SettingChanged once per actual value change', function (): void {
+    $repository = settingsRepositoryFor();
+
+    Event::fake([SettingChanged::class]);
+    $repository->set('crm', 'theme', 'first');
+    $repository->set('crm', 'theme', 'second');
+
+    Event::assertDispatchedTimes(SettingChanged::class, 2);
+});
+
+it('all() merges the cascade with the narrower scope winning per key', function (): void {
+    $repository = settingsRepositoryFor();
+
+    $repository->set('crm', 'theme', 'account-theme');
+    $repository->set('crm', 'locale', 'en');
+    $repository->set('crm', 'theme', 'user-theme', SettingsScope::user(SETTINGS_USER_1));
+
+    expect($repository->all('crm', SettingsScope::user(SETTINGS_USER_1)))
+        ->toBe(['theme' => 'user-theme', 'locale' => 'en'])
+        ->and($repository->all('crm'))->toBe(['theme' => 'account-theme', 'locale' => 'en']);
+});
+
+it('forget() removes exactly its own scope level, leaving other levels intact', function (): void {
+    $repository = settingsRepositoryFor();
+
+    $repository->set('crm', 'theme', 'account-theme');
+    $repository->set('crm', 'theme', 'user-theme', SettingsScope::user(SETTINGS_USER_1));
+
+    $repository->forget('crm', 'theme', SettingsScope::user(SETTINGS_USER_1));
+
+    expect($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1)))->toBe('account-theme')
+        ->and($repository->get('crm', 'theme'))->toBe('account-theme');
+});
+
+it('rejects a department scope on every method (sys_settings has no department level, D38)', function (): void {
+    $repository = settingsRepositoryFor();
+    $department = SettingsScope::department('00000000-0000-0000-0000-000000000301');
+
+    expect(fn () => $repository->get('crm', 'theme', $department))->toThrow(UnsupportedScopeException::class)
+        ->and(fn () => $repository->set('crm', 'theme', 'x', $department))->toThrow(UnsupportedScopeException::class)
+        ->and(fn () => $repository->forget('crm', 'theme', $department))->toThrow(UnsupportedScopeException::class)
+        ->and(fn () => $repository->all('crm', $department))->toThrow(UnsupportedScopeException::class);
 });
 
 it('rejects a value over the 64KB quota', function (): void {
