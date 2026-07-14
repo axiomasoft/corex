@@ -5,15 +5,7 @@ declare(strict_types=1);
 namespace Flex\Modules\Compiler;
 
 use Flex\Modules\Exceptions\CompilationException;
-use Flex\Modules\Extend\Api;
-use Flex\Modules\Extend\Entity;
-use Flex\Modules\Extend\EntityField;
 use Flex\Modules\Extend\Extender;
-use Flex\Modules\Extend\Filament;
-use Flex\Modules\Extend\Menu;
-use Flex\Modules\Extend\Permissions;
-use Flex\Modules\Extend\Routes;
-use Flex\Modules\Extend\Workflow;
 use Flex\Modules\Manifest;
 
 /**
@@ -23,17 +15,21 @@ use Flex\Modules\Manifest;
  */
 final class CompilationValidator
 {
-    /** The closed extender set (B-10 §4.2/§4.3, AC-19) — deliberately not open for extension. */
-    private const CLOSED_EXTENDER_SET = [
-        Entity::class,
-        EntityField::class,
-        Permissions::class,
-        Api::class,
-        Filament::class,
-        Menu::class,
-        Routes::class,
-        Workflow::class,
-    ];
+    /**
+     * @param  list<Manifest>  $manifests
+     */
+    public function validateRequiredFields(array $manifests): void
+    {
+        foreach ($manifests as $manifest) {
+            if ($manifest->title === null) {
+                throw CompilationException::missingTitle($manifest->composerName);
+            }
+
+            if ($manifest->tablePrefix === null) {
+                throw CompilationException::missingTablePrefix($manifest->composerName);
+            }
+        }
+    }
 
     /** @param  list<Manifest>  $manifests */
     public function validateTablePrefixes(array $manifests): void
@@ -113,7 +109,7 @@ final class CompilationValidator
 
     private function isKnownExtender(Extender $extender): bool
     {
-        foreach (self::CLOSED_EXTENDER_SET as $class) {
+        foreach (PipelineStages::ORDER as $class) {
             if ($extender instanceof $class) {
                 return true;
             }

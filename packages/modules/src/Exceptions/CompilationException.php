@@ -59,4 +59,33 @@ final class CompilationException extends RuntimeException
             $expectedPrefix,
         ));
     }
+
+    public static function missingTablePrefix(string $composerName): self
+    {
+        return new self(sprintf(
+            'Module [%s] manifest is missing tablePrefix() — mandatory as of D37, no auto-derivation from the '
+            .'composer name (that was the D9 hole: a third-party module could legally land on a reserved prefix).',
+            $composerName,
+        ));
+    }
+
+    public static function missingTitle(string $composerName): self
+    {
+        return new self(sprintf(
+            'Module [%s] manifest is missing title() — required at compile time, not just rejected as empty by '
+            .'the setter (a manifest that never calls title() at all was shipping title: null into the registry).',
+            $composerName,
+        ));
+    }
+
+    public static function duplicateEntityHandle(string $handle, string $firstModule, string $secondModule): self
+    {
+        return new self(sprintf(
+            'Entity handle [%s] is declared by both [%s] and [%s] — the first module\'s EntityDefinition would be '
+            .'silently overwritten. Entity handles must be unique across the compiled deployment.',
+            $handle,
+            $firstModule,
+            $secondModule,
+        ));
+    }
 }

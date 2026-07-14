@@ -37,28 +37,60 @@ final class RegistryCompiler
 
     /**
      * @param  list<Manifest>  $manifests
-     * @param  list<string>  $installedPackages  composer names installed but without their own
-     *                                           corex-module manifest in this pass (e.g. corex/core).
+     * @param  list<string>|null  $installedPackages  composer names known installed beyond
+     *                                                $manifests (AC-2). Defaults to a real read of
+     *                                                `vendor/composer/installed.json` ({@see
+     *                                                InstalledPackages}) — pass an explicit list in
+     *                                                tests/testbench to avoid depending on the host's
+     *                                                installed.json contents.
+     * @param  (callable(class-string): void)|null  $onStage  observes each {@see PipelineStages}
+     *                                                        entry as its stage starts, in the order
+     *                                                        actually executed — test seam for AC-18
+     *                                                        (pipeline determinism).
      */
-    public function compile(array $manifests, array $installedPackages = ['corex/core']): CompiledRegistry
+    public function compile(array $manifests, ?array $installedPackages = null, ?callable $onStage = null): CompiledRegistry
     {
+        $this->validator->validateRequiredFields($manifests);
         $this->validator->validateExtenderSet($manifests);
         $this->validator->validateTablePrefixes($manifests);
-        $this->validator->validateRequires($manifests, $installedPackages);
+        $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover());
         $this->validator->validateComponents($manifests);
 
-        $entities = $this->applyEntityExtenders($manifests);
-        $entityFields = $this->applyEntityFieldExtenders($manifests, $entities);
+        $entities = [];
+        $entityFields = [];
+        $permissions = [];
+        $api = [];
+        $filament = [];
+        $menu = [];
+        $routes = [];
+        $workflow = [];
+
+        foreach (PipelineStages::ORDER as $stage) {
+            if ($onStage !== null) {
+                $onStage($stage);
+            }
+
+            match ($stage) {
+                Entity::class => $entities = $this->applyEntityExtenders($manifests),
+                EntityField::class => $entityFields = $this->applyEntityFieldExtenders($manifests, $entities),
+                Permissions::class => $permissions = $this->collectPermissions($manifests),
+                Api::class => $api = $this->collectApi($manifests),
+                Filament::class => $filament = $this->collectFilament($manifests),
+                Menu::class => $menu = $this->collectMenu($manifests),
+                Routes::class => $routes = $this->collectRoutes($manifests),
+                Workflow::class => $workflow = $this->collectWorkflow($manifests),
+            };
+        }
 
         return new CompiledRegistry(
             entities: $entities,
             entityFields: $entityFields,
-            permissions: $this->collect($manifests, Permissions::class),
-            api: $this->collect($manifests, Api::class),
-            filament: $this->collect($manifests, Filament::class),
-            menu: $this->collect($manifests, Menu::class),
-            routes: $this->collect($manifests, Routes::class),
-            workflow: $this->collect($manifests, Workflow::class),
+            permissions: $permissions,
+            api: $api,
+            filament: $filament,
+            menu: $menu,
+            routes: $routes,
+            workflow: $workflow,
         );
     }
 
@@ -77,6 +109,15 @@ final class RegistryCompiler
                 }
 
                 $definition = $this->compileEntity($manifest, $extender);
+
+                if (isset($entities[$definition->handle])) {
+                    throw CompilationException::duplicateEntityHandle(
+                        $definition->handle,
+                        $entities[$definition->handle]->module,
+                        $manifest->composerName,
+                    );
+                }
+
                 $entities[$definition->handle] = $definition;
             }
         }
@@ -86,7 +127,15 @@ final class RegistryCompiler
 
     private function compileEntity(Manifest $manifest, Entity $extender): EntityDefinition
     {
-        $modulePrefix = $manifest->tablePrefix ?? Str::of($manifest->composerName)->after('/')->limit(3, '')->lower()->toString();
+        $modulePrefix = $manifest->tablePrefix;
+
+        if ($modulePrefix === null) {
+            // Guarded by CompilationValidator::validateRequiredFields() before the pipeline
+            // starts (D37: tablePrefix is mandatory, no auto-derivation from the composer
+            // name); this branch only matters if compileEntity() is ever reached directly.
+            throw CompilationException::missingTablePrefix($manifest->composerName);
+        }
+
         $handle = $extender->handle ?? sprintf('%s.%s', $modulePrefix, Str::snake(class_basename($extender->model)));
         $table = $extender->table ?? $modulePrefix.'_'.Str::snake(Str::plural(class_basename($extender->model)));
 
@@ -226,5 +275,65 @@ final class RegistryCompiler
         }
 
         return $result;
+    }
+
+    /**
+     * Concretely-typed wrappers around {@see collect()} (one per remaining
+     * extender kind, PipelineStages::ORDER slots 3–8). Template inference on
+     * a direct `collect($manifests, X::class)` call loses T when the call
+     * site sits inside a `match` arm; a named method with its own concrete
+     * `@return` gives the match arm a type PHPStan doesn't have to re-derive.
+     *
+     * @param  list<Manifest>  $manifests
+     * @return list<Permissions>
+     */
+    private function collectPermissions(array $manifests): array
+    {
+        return $this->collect($manifests, Permissions::class);
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<Api>
+     */
+    private function collectApi(array $manifests): array
+    {
+        return $this->collect($manifests, Api::class);
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<Filament>
+     */
+    private function collectFilament(array $manifests): array
+    {
+        return $this->collect($manifests, Filament::class);
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<Menu>
+     */
+    private function collectMenu(array $manifests): array
+    {
+        return $this->collect($manifests, Menu::class);
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<Routes>
+     */
+    private function collectRoutes(array $manifests): array
+    {
+        return $this->collect($manifests, Routes::class);
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<Workflow>
+     */
+    private function collectWorkflow(array $manifests): array
+    {
+        return $this->collect($manifests, Workflow::class);
     }
 }

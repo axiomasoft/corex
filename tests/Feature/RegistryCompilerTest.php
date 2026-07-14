@@ -67,13 +67,54 @@ it('rejects a duplicate tablePrefix across manifests', function () use ($registr
         ->toThrow(CompilationException::class, 'Table prefix [alp]');
 });
 
+it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', function (): void {
+    $noPrefix = Manifest::make('corex/stub-no-prefix')->title('No Prefix');
+
+    expect(fn () => (new RegistryCompiler)->compile([$noPrefix]))
+        ->toThrow(CompilationException::class, 'corex/stub-no-prefix');
+});
+
+it('rejects a manifest with no title() call', function (): void {
+    $noTitle = Manifest::make('corex/stub-no-title')->tablePrefix('ntt');
+
+    expect(fn () => (new RegistryCompiler)->compile([$noTitle]))
+        ->toThrow(CompilationException::class, 'corex/stub-no-title');
+});
+
+it('rejects a duplicate entity handle declared by two modules, naming both', function () use ($registryCompilerAlphaManifest): void {
+    $clone = Manifest::make('corex/stub-alpha-handle-clone')
+        ->title('Alpha Handle Clone')
+        ->tablePrefix('ahc')
+        ->extends([
+            Entity::make(StubEntityAlphaThing::class)->handle('alp.thing')->table('ahc_things'),
+        ]);
+
+    expect(fn () => (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $clone]))
+        ->toThrow(CompilationException::class, 'Entity handle [alp.thing] is declared by both [corex/stub-alpha] and [corex/stub-alpha-handle-clone]');
+});
+
 it('rejects requires that do not mirror an installed module', function (): void {
     $orphan = Manifest::make('corex/stub-orphan')
         ->title('Orphan')
+        ->tablePrefix('orp')
         ->requires([Dep::module('ghost/does-not-exist')]);
 
     expect(fn () => (new RegistryCompiler)->compile([$orphan]))
         ->toThrow(CompilationException::class, 'ghost/does-not-exist');
+});
+
+it('resolves requires against a real installed.json when installedPackages is not injected (AC-2)', function (): void {
+    $requiresRealPackage = Manifest::make('corex/stub-requires-real')
+        ->title('Requires Real')
+        ->tablePrefix('rrl')
+        ->requires([Dep::module('corex/core')]);
+
+    // No $installedPackages arg — RegistryCompiler falls back to InstalledPackages::discover(),
+    // which reads the monorepo's real vendor/composer/installed.json (corex/core is a genuine
+    // path-repo dependency there — not a hardcoded ['corex/core'] anymore, D9/AC-2).
+    $registry = (new RegistryCompiler)->compile([$requiresRealPackage]);
+
+    expect($registry->entities)->toBe([]);
 });
 
 it('collects a cross-module EntityField as sleeping, without failing compilation', function () use ($registryCompilerAlphaManifest, $registryCompilerBetaManifest): void {
@@ -105,6 +146,7 @@ it('does not mark a same-module EntityField as sleeping', function (): void {
 it('rejects an EntityField targeting a handle unknown to any compiled manifest', function (): void {
     $manifest = Manifest::make('corex/stub-ghost-ref')
         ->title('Ghost Ref')
+        ->tablePrefix('ghr')
         ->extends([EntityField::scalar('nowhere.ghost', 'x', 'string')]);
 
     expect(fn () => (new RegistryCompiler)->compile([$manifest]))
@@ -114,6 +156,7 @@ it('rejects an EntityField targeting a handle unknown to any compiled manifest',
 it('rejects a third-party extender outside the closed set with an RFC referral', function (): void {
     $manifest = Manifest::make('corex/stub-rogue')
         ->title('Rogue')
+        ->tablePrefix('rog')
         ->extends([new StubRogueExtender]);
 
     expect(fn () => (new RegistryCompiler)->compile([$manifest]))
@@ -166,6 +209,33 @@ it('round-trips the whole CompiledRegistry (all 8 slices) through toArray/fromAr
     // fromArray reconstructs an equivalent registry (extenders rehydrated,
     // enums restored, CompiledEntityField rewrapped).
     expect(CompiledRegistry::fromArray($array))->toEqual($compiled);
+});
+
+it('runs the closed-set pipeline stages in the declared PipelineStages::ORDER, observably (AC-18)', function () use ($registryCompilerFullManifest): void {
+    $observed = [];
+
+    (new RegistryCompiler)->compile(
+        [$registryCompilerFullManifest()],
+        onStage: function (string $stage) use (&$observed): void {
+            $observed[] = $stage;
+        },
+    );
+
+    // Asserted against a HARDCODED literal, not against PipelineStages::ORDER
+    // itself — comparing $observed to the constant it was derived from would
+    // pass trivially even if the constant were mutated (both sides would move
+    // together). This literal is the actual pinned canon (B-10 §4.2, AC-18);
+    // reordering PipelineStages::ORDER changes $observed and diverges from it.
+    expect($observed)->toBe([
+        Entity::class,
+        EntityField::class,
+        Permissions::class,
+        Api::class,
+        Filament::class,
+        Menu::class,
+        Routes::class,
+        Workflow::class,
+    ]);
 });
 
 it('round-trips a CompiledEntityField, rehydrating the wrapped extender (P1.15)', function (): void {
