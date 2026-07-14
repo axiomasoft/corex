@@ -1,4 +1,4 @@
-# HANDOFF — 2026-07-14 — after P1.19
+# HANDOFF — 2026-07-14 — after P1.18
 
 **Next:** ЗАПУСК ВРУЧНУЮ: per-item (D35) — носитель модели workflow-скрипт, НЕ чат
 
@@ -11,7 +11,7 @@ Workflow({scriptPath: "plans/COREX-CORE/workflows/wf-corex-core-p1r-remediation.
 | Model | per-item (D35) — носитель модели workflow-скрипт, НЕ чат |
 | Thinking | — (делегировано workflow) |
 | Context | NEW SESSION |
-| Суть | P1.17 исправлен и закрыт 🟢 (D56, CI зелёный на ветке). DoR-гейт «OQ-11» (P1.18) расследован и опровергнут (D57) — недостоверная запись, копировавшаяся из handoff в handoff с 2026-07-13, реального альтернативного решения никогда не существовало. P1.18/P1.19 разблокированы под своим существующим ТЗ (D31/D41). Волна продолжается штатно с P1.18. |
+| Суть | **P1.18 закрыт 🟢** (Blocker A3 + FSM-набор: `mod_records.seq` монотонный purge-порядок D31, purge всех claim-типов D41, авто-claim обёрткой мигратора, enable() all-or-nothing D40, purged-терминал + `flex:modules:repair`, actor из CurrentActor, wiring из installed.json). Гейт зелёный (101/101 sqlite, 51/51 pg), **CI на ветке зелёный (run 29351086680, 8/8 job)**, mutation-check 2 кейса. Волна продолжается штатно с **P1.19**. |
 
 **Важная находка (D57) — прочитать перед продолжением волны:** предыдущие handoff.md (минимум с
 коммита `f404838`, ДО RED-аудита и ДО этой ремедиации) утверждали, что «OQ-11 (golden-шаблон vs
@@ -78,8 +78,16 @@ P1-формой шва, полный ctx→connection — в P2 (D13). P1.16 **�
 P1.18/P1.19 разблокированы под существующим ТЗ, эскалация оркестратора (D51/D55, попытки исполнить
 P1.19 вне очереди) закрыта тем же путём — очередь снята штатно.
 
+**2026-07-14 — P1.18 закрыт 🟢** (wf-p1r/opus): монотонный `seq`-purge (D31) + purge всех claim-типов
+(D41) + авто-claim обёрткой мигратора + enable() all-or-nothing (D40) + FSM-гейты (purged терминален,
+`flex:modules:repair` как легальный выход) + actor из `CurrentActor` + wiring codeVersions/migrationPaths
+из installed.json. Коммиты `71ba24d` (код+тесты) / `0082a50` (mutation-патчи), CI run `29351086680`
+зелёный (8/8). Две known-deviations (не блокеры, см. phases/P1.md P1.18): CHECK actor'а
+`mod_lifecycle_log` не приведён к `sys_audit_log` (schema-owner, вне Files, P2); `purged` сделан
+терминальным вопреки диаграмме B-10 §5.1 (осознанно, A11 + `flex:modules:repair`-escape).
+
 **Remaining:**
-1. **Волна 2 (P1.18–P1.25)** — 8 items, порядок: P1.18 → P1.19 → остальные по порядку плана.
+1. **Волна 2 (P1.19–P1.25)** — 7 items, порядок: P1.19 → остальные по порядку плана.
 2. **P1.26** — CHANGELOG + теги + PR в `main`. Гейт: GREEN слепого аудита + решение OQ-15.
 3. **P1.27** (time-gated, вне волны) — coverage → 80% после обкатки на реальных проектах.
 4. **P1.28** (вне волны 2, после неё) — второй phpstan-прогон `flex/modules-lint` на `tests/`.

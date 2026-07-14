@@ -108,7 +108,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 3/28 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 4/28 | 🟡 In progress |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 **Чтение борда P1 (D28, обновлено D52 — эскалация P1.16 разобрана владельцем).** Волна 1 (P1.1–P1.13)
@@ -294,3 +294,4 @@ Blocked (D54) и стоит перед P1.19 в объявленном поря�
 | 2026-07-14 | docs-curator | P1.19: ⬜ Not started → 🔴 Blocked (D55, повторная ESCALATION оркестратора), имплементация не начата, done=false, кода не писал. Составной STOP: (1) порядок волны D53 (P1.17 всё ещё 🔴 Blocked, фикса нет); (2) P1.18 сам 🔴 Blocked (D54) и стоит перед P1.19 в порядке волны. Та же инструкция (исполнить P1.19 вне очереди) уже отклонена в D51 — переопределение порядка не в компетенции исполнителя. Рабочее дерево по item'у чистое (только сторонние `.mcp.json`/`.serena/`), стеш не создавался. Handoff перезаписан launch-block'ом на разбор остановки P1.17/P1.18 — детали см. phases/P1.md P1.19 Pending Work/Escalation Needed, plan.md D55. |
 | 2026-07-14 | plan-design/opus | P1.17 исправлен (D56): AC-2 тест на фикстуре вместо реального `installed.json`, гейт зелёный, статус 🔴→🟢 Done — детали см. phases/P1.md P1.17 Completion Notes. |
 | 2026-07-14 | plan-design/opus | «OQ-11» (P1.18) расследован и опровергнут (D57) — недостоверная запись, скопированная в handoff'ы с 2026-07-13, реального решения/альтернативного ТЗ никогда не существовало. P1.18/P1.19 разблокированы 🔴→⬜ под существующим ТЗ (D31/D41) — детали см. phases/P1.md P1.18/P1.19. |
+| 2026-07-14 | wf-p1r/opus | P1.18 закрыт 🟢: Blocker A3 + FSM-набор. `mod_records.seq bigserial` (аддитивно, D31) + purge `ORDER BY seq DESC` по ВСЕМ типам claim'ов (D41: table/column/index → DDL) + авто-claim обёрткой мигратора (schema-diff по `MigrationStarted/Ended`, порядок по `pg_class.oid`) + enable() all-or-nothing (D40: `ModuleEnableFailedException` + полный откат) + FSM-гейты (purged терминален, upgrade из enabled) + `flex:modules:repair` (reconcile + purged→available) + actor из `CurrentActor` + wiring codeVersions/migrationPaths из installed.json. Гейт зелёный (101/101 sqlite, 51/51 pg), **CI на ветке зелёный (run 29351086680, 8/8 job)**, mutation-check 2 кейса (purge-order→2BP01, enable-swallow) — детали см. phases/P1.md P1.18 Completion Notes. |
