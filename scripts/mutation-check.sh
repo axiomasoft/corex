@@ -27,6 +27,8 @@ declare -A TEST_CMD=(
     [P1.17-stage-order-swap]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='AC-18'"
     [P1.18-purge-order]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='reverse creation order'"
     [P1.18-enable-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='all-or-nothing'"
+    [P1.19-drop-precision]="vendor/bin/pest --group=pg tests/Feature/MigrationPublishTest.php --filter='precision'"
+    [P1.19-hardcode-uuid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='ulid id strategy'"
 )
 
 if [ "${1:-}" = "--list" ]; then
