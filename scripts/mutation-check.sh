@@ -39,6 +39,7 @@ declare -A TEST_CMD=(
     [P1.22-drop-workspace-branch]="vendor/bin/pest --group=pg tests/Feature/FeatureFlagsTest.php --filter='AC-22 \(a\)|AC-22 \(b\)'"
     [P1.23-stale-read]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='re-read guard'"
     [P1.23-event-in-transaction]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='after-commit'"
+    [P1.23-move-workspace-filter]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='never a same-path row'"
     [P1.24-bare-runninginconsole-guard]="vendor/bin/pest --exclude-group=pg tests/Feature/PubSubTest.php --filter='refuses a faked Octane runtime'"
     [P1.24-cursor-start-zero]="vendor/bin/pest --group=pg tests/Feature/PubSubDatabasePollTest.php --filter='does NOT replay pre-existing history'"
     [P1.25-domainevent-drop]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='carries a UUIDv7'"

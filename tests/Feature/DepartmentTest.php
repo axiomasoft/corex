@@ -306,6 +306,34 @@ it('AC-24 (workspace scope): subtree() excludes a same-path row from another wor
     expect(array_map(fn ($d) => $d->id, $subtree))->toBe([$root['id']]);
 });
 
+it('AC-24 (workspace scope): move() rewrites ONLY the moving workspace, never a same-path row in another (D63/D67)', function (): void {
+    $root = seedDepartment(null, null, 'Root');
+    $target = seedDepartment(null, null, 'Target');
+
+    // A row in ANOTHER workspace whose ltree path is a descendant of root's
+    // (globally-unique paths, per-workspace contract — B-10 §5.7). The
+    // `path <@ root.path` predicate matches it too; without the workspace_id
+    // filter, move()'s ONE-UPDATE would rewrite this foreign row's path.
+    $intruderId = (string) Str::uuid7();
+    $intruderPath = $root['path'].'.'.departmentLabel($intruderId);
+    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([
+        'id' => $intruderId,
+        'workspace_id' => DEPARTMENTS_WORKSPACE_2,
+        'parent_id' => null,
+        'path' => $intruderPath,
+        'name' => 'Intruder',
+    ]);
+
+    departments()->move($root['id'], $target['id']);
+
+    $intruder = DB::connection(DEPARTMENTS_TEST_CONNECTION)
+        ->table('sys_departments')->where('id', $intruderId)->first();
+
+    // The foreign-workspace row is untouched — same path, same (null) parent.
+    expect($intruder->path)->toBe($intruderPath)
+        ->and($intruder->parent_id)->toBeNull();
+});
+
 it('AC-24 (DTO): the read-DTO carries sort_order', function (): void {
     $id = (string) Str::uuid7();
     DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([

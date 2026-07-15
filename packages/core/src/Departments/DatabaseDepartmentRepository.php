@@ -124,13 +124,19 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             // per-row traversal (B-10 §5.7): strip the old-parent prefix
             // (nlevel(old moving path) - 1 labels) off every row under the
             // moving path and re-prepend the new parent's path.
+            //
+            // Scoped to the moving row's workspace (targeted audit D63/D67):
+            // ltree paths are globally unique today, but the contract is
+            // per-workspace (B-10 §5.7) and subtree()/primaryOf() already filter
+            // on workspace_id — a same-shaped path in ANOTHER workspace under
+            // `path <@` must never be rewritten by this workspace's move().
             $this->db()->statement(
                 'update '.Config::departmentsTable().' set
                     path = (?::ltree || subpath(path, nlevel(?::ltree) - 1)),
                     parent_id = case when id = ? then ? else parent_id end,
                     updated_at = now()
-                where path <@ ?::ltree',
-                [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath],
+                where path <@ ?::ltree and workspace_id = ?',
+                [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath, $lockWorkspaceId],
             );
 
             // A6: dispatch AFTER the transaction commits, not inside it — the
