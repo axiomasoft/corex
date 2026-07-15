@@ -15,10 +15,13 @@
 ## Архитектура ядра (`packages/core`)
 
 - `BaseModel` (ULID + SoftDeletes) + трейты `Concerns/*` (для моделей, что не могут наследовать BaseModel, напр. `User`).
-- Мульти-тенантность опциональна: `BelongsToTenant` + `TenantScope` активны только при наличии биндинга `TenantService` (контракт). On-prem — без него.
+- Мульти-тенантность в 0.1.0 — **опциональная row-level** (`BelongsToTenant`/`TenantScope`/`TenantService`,
+  активна только при биндинге `TenantService`; on-prem — без него). **`@deprecated`** — замещается
+  физической DB-per-account моделью P2 (ADR-004, stancl/tenancy v4); не строить новые фичи на этом шве.
 - `EntityRegistry` — реестр сущностей; источник морф-карты (`Relation::enforceMorphMap`).
 - `Settings` (System→Tenant→User), `Audit` (append-only), `MoneyCast` (`brick/money`, minor units).
 - ID/морфы/деньги — по ADR-003/004/005; стек — ADR-001 (Laravel 12–13, PHP 8.3–8.5).
+- Ядро требует **PostgreSQL 16** (тенантская БД) — SQLite-лейн тестов покрывает только pure-PHP код (OQ-12).
 
 ## Где что
 

@@ -7,6 +7,16 @@ System→Tenant→User), append-only `Audit`, `MoneyCast`, департамен�
 Пакет ставится как зависимость продукта (FlexCRM и др.); публичные контракты —
 в `src/Contracts/`, реализации скрыты.
 
+## Требование к СУБД
+
+Ядро **требует PostgreSQL 16** для тенантской БД: `sys_*`-миграции используют
+`ltree`/BRIN/`jsonb`/`UNIQUE NULLS NOT DISTINCT`/`pg_advisory_xact_lock` —
+PG-нативные конструкции без SQLite-эквивалента. SQLite-лейн (`composer test`)
+покрывает только pure-PHP код пакета для удобства unit-тестирования — это
+НЕ заявленная поддержка SQLite в продакшене (OQ-12). Все гарантии
+целостности/конкурентности проверяются исключительно на PG-лейне
+(`composer test:pg`).
+
 ## Установка миграций (важно)
 
 Миграции ядра (`sys_*`) — **PostgreSQL-only** (jsonb, `CHECK`, `UNIQUE NULLS NOT

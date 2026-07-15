@@ -5,6 +5,13 @@
 lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр владения
 для безопасного purge. Ставится поверх `corex/core`. MIT.
 
+## Требование к СУБД
+
+Модульная система **требует PostgreSQL 16**: `mod_*`-таблицы и lifecycle-FSM
+используют `pg_advisory_xact_lock`/`CHECK`/`jsonb`. SQLite-лейн покрывает
+только pure-PHP код; lifecycle/purge/кеш-инвалидация проверяются
+исключительно на `composer test:pg`.
+
 ## Установка миграций (важно)
 
 Таблицы модульной системы (`mod_modules`, `mod_records`, `mod_lifecycle_log`) —
