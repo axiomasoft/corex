@@ -57,18 +57,17 @@
 
 ### OQ-12 — Ядро де-факто PG16-only (SQLite-лейн только для pure-PHP)
 
-- **Статус:** Decision pending (owner needed — Approval Owner плана)
+- **Статус:** Resolved → P1.26 (2026-07-15)
 - **Суть:** `sys_*`/`mod_*` DDL PG-нативны (ltree/BRIN/`NULLS NOT DISTINCT`/partial-unique/
   `pg_advisory_xact_lock`, D12); SQLite-лейн (`composer test`) покрывает только pure-PHP items,
   вся data-loss-регрессия — на PG-лейне (`->group('pg')`). Де-факто потребитель ядра обязан
   держать PostgreSQL 16 — но это нигде не объявлено требованием пакета (composer `require`,
   README) как формальный контракт.
-- **Варианты:** (а) объявить PG16 требованием ядра явно (README + `## Phase Handoff` P1.26 +
-  CHANGELOG) — честно, но сужает боксед-профиль; (б) держать SQLite-совместимость как
-  best-effort для pure-PHP-подмножества и задокументировать границу. Ссылка на OQ-12 живёт в
-  `handoff.md` (m-5 аудита D68) — зарегистрирована здесь, чтобы перестать быть фантомной.
-- **Гейт:** решить ДО тега v0.1.0 (влияет на CHANGELOG/README P1.26).
-- **Owner:** Dmitry Vostrikov.
+- **Резолюция:** вариант (а) — PostgreSQL 16 объявлен требованием ядра явно: `packages/core/README.md`
+  и `packages/modules/README.md` несут секцию «Требование к СУБД», `CLAUDE.md` строка про архитектуру
+  ядра, оба `CHANGELOG.md` несут секцию «Requires». SQLite-лейн задокументирован как best-effort
+  pure-PHP unit-тестирование, не заявленная production-поддержка.
+- **Owner:** Dmitry Vostrikov (решение принято в сессии P1.26, 2026-07-15).
 
 ### OQ-15 — Что означает тег `v0.1.0` ядра (семантика первого релиза)
 

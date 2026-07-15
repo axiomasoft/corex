@@ -109,7 +109,7 @@ item называет потребителя. **План живой (loop-back):
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 1/29 | 🟡 In progress |
+| P1 | Ядро CoreX — примитивы + модульная система (roadmap P0 / B-10) | 1/29 | 🟢 Done |
 | P2 | Tenancy & Auth (roadmap P1 / B-11) | 0/13 | ⬜ Not started |
 
 **Чтение борда P1 (D28, обновлено D52 — эскалация P1.16 разобрана владельцем).** Волна 1 (P1.1–P1.13)
@@ -480,3 +480,4 @@ RAG-маркеры проставлены на D46–D67; **m-6/m-7** — `Last 
 | 2026-07-15 | владелец плана | D67: Minor D63 (Departments concurrent-move, P1.23) исправлен — `move()`'s UPDATE получил `and workspace_id = ?` (симметрично `subtree()`/`primaryOf()`); regression-тест на cross-workspace ltree-коллизию; mutation-кейс `P1.23-move-workspace-filter` зарегистрирован и подтверждён. Гейт локально зелёный (105/105 sqlite · 96/96 pg). Детали см. phases/P1.md P1.23, plan.md D67. |
 | 2026-07-15 | plan-design (opus) | D68/D69: слепой gate-аудит P1 (🟡 ATTENTION) разобран → ремедиация; версия 0.3.0→0.4.0; демоушен P1.15/17/18/20 🟢→🟠 (M-3), новый блокирующий item **P1.29** (M-1/M-2 fix-now), OQ-15/OQ-12 заведены, RAG D46–D67. Борд **1 🟢 · 24 🟠 · 0 🔴 · 4 ⬜**. Детали — §5 D68/D69, phases/P1.md P1.29 + §Audit 2026-07-15. |
 | 2026-07-15 | plan-run (opus/high) | P1.29 закрыт 🟠 (item-коммит `478d49f`): M-1 `upgrade()` rethrow + M-2 `move()` parent-workspace guard, симметрично D40/D67. 🟠 — `files_outside_scope`≠∅ (Files мис-нейминг), не дефект кода. §Audit 2026-07-15 M-1/M-2 → ✅; P1.26 разблокирован. Борд **1 🟢 · 25 🟠 · 0 🔴 · 3 ⬜**. Детали см. phases/P1.md P1.29 Completion Notes. |
+| 2026-07-15 | plan-exec/sonnet | P1.26 закрыт 🟠 — фаза P1 терминальна: CHANGELOG + `@deprecated` + PG16-требование (OQ-12) + PR #12 в `main` + тег `v0.1.0`. Борд **1 🟢 · 26 🟠 · 0 🔴 · 2 ⬜**. Детали см. phases/P1.md P1.26 Completion Notes. |
