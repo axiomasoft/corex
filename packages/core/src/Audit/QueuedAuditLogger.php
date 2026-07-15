@@ -6,6 +6,7 @@ namespace CoreX\Audit;
 
 use CoreX\Contracts\AuditEntry;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Support\Config;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 
 /**
@@ -35,6 +36,17 @@ final class QueuedAuditLogger implements AuditLogger
 
     public function record(AuditEntry $entry): void
     {
+        // Killswitch, re-checked at the WRITE seam (defense-in-depth, targeted
+        // audit D63/D66): AuditObserver::record() already guards, but this is
+        // the AuditLogger contract — any caller resolving it directly (not via
+        // the observer) would otherwise enqueue a row with audit disabled. The
+        // gate lives at enqueue time, not in RecordAuditEntry::handle(): an
+        // event captured while auditing was ON must still land if config flips
+        // before the worker runs (the journal records what happened, A17).
+        if (! Config::auditEnabled()) {
+            return;
+        }
+
         $resolver = $this->tenantContext ?? app(TenantContextResolver::class);
 
         RecordAuditEntry::dispatch(

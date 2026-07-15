@@ -356,6 +356,23 @@ it('killswitch silences the capability path, not only the trait (A60)', function
     expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
 });
 
+it('killswitch silences a direct AuditLogger::record() at the write seam, not only the observer (D63/D66 defense-in-depth)', function (): void {
+    config(['corex.audit.enabled' => false]);
+
+    // Bypass the observer entirely — call the AuditLogger contract directly, as
+    // any caller resolving it could. AuditObserver::record()'s guard (A60) does
+    // not cover this path; the write seam must refuse on its own. Sync queue in
+    // this suite means an un-guarded record() would write the row synchronously.
+    auditLogger()->record(new AuditEntry(
+        action: 'created',
+        actorType: ActorType::System,
+        entityType: 'stub.thing',
+        entityId: '00000000-0000-0000-0000-000000000009',
+    ));
+
+    expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
+});
+
 it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)', function (): void {
     Queue::fake();
 
