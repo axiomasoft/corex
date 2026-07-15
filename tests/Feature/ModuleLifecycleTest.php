@@ -16,6 +16,7 @@ use CoreX\Tests\Stubs\Lifecycle\StubFkModule;
 use Flex\Modules\Contracts\ModuleLifecycle;
 use Flex\Modules\Contracts\ModuleRegistry;
 use Flex\Modules\Contracts\ModuleRegistryCache;
+use Flex\Modules\Contracts\ModuleStateReader;
 use Flex\Modules\Contracts\RecordsRegistrar;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Enums\DisableReason;
@@ -46,6 +47,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 uses()->group('pg');
 
@@ -654,4 +656,28 @@ it('defines a manifest-declared feature flag in sys_feature_flags when its modul
     lifecycleFor()->enable('corex/stub-feature-flag');
 
     expect(lifecyclePg()->table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
+});
+
+it('resolves ModuleStateReader from the container reading config(flex-modules.connection), not the app default (D63/D65 Major)', function (): void {
+    // mod_modules lives on the pg test connection; the app default (sqlite in
+    // this suite) has no such table. A container-resolved ModuleStateReader must
+    // read the CONFIGURED module connection — the bare class-string binding this
+    // regression pins autowires connection=null and hits the app default, so the
+    // enabled set reads empty (or throws) and every module reads inactive.
+    lifecyclePg()->table('mod_modules')->insert([
+        'id' => (string) Str::uuid7(),
+        'name' => 'corex/stub-base',
+        'state' => ModuleState::Enabled->value,
+        'version' => '1.0.0',
+        'edition' => 'standard',
+    ]);
+
+    config(['flex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    app()->forgetInstance(ModuleStateReader::class);
+
+    // NO manual `new DatabaseModuleStateReader(connection: ...)` override —
+    // resolve straight from the container, exactly as CompiledModuleRegistry does.
+    $reader = app(ModuleStateReader::class);
+
+    expect($reader->enabledFor(lifecycleCtx()))->toHaveKey('corex/stub-base');
 });

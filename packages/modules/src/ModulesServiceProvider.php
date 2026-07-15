@@ -76,7 +76,18 @@ final class ModulesServiceProvider extends ServiceProvider
 
         // mod_modules/mod_records now exist (P1.6) — read/write them directly;
         // ArrayModuleStateReader remains available for tests that inject a fake.
-        $this->app->singleton(ModuleStateReader::class, DatabaseModuleStateReader::class);
+        // Bound via a closure (NOT a bare class-string): the reader MUST read the
+        // module connection (config('flex-modules.connection'), null = app
+        // default) — the same seam RecordsRegistrar/lifecycle/epoch use. A bare
+        // class-string autowires $connection = null and silently reads the ambient
+        // default, so with a configured module DB the enabled set comes back empty
+        // and every module reads inactive (targeted audit D63/D65).
+        $this->app->singleton(ModuleStateReader::class, static function (): DatabaseModuleStateReader {
+            /** @var string|null $connection */
+            $connection = config('flex-modules.connection');
+
+            return new DatabaseModuleStateReader($connection);
+        });
 
         // RecordsRegistrar and the lifecycle read/write the module connection
         // (config('flex-modules.connection'), null = app default) — the same
