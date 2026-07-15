@@ -4,25 +4,26 @@
 (закрытие фазы: слепой аудит + CHANGELOG + semver-теги + PR в `main`)
 
 **Таргетированный аудит D63 (4 Major-зоны волны 2, НЕ замена канонического слепого гейта) завершён
-2026-07-15.** Нашёл и владелец сразу закрыл **1 подтверждённый Blocker** (D64): `AuditObserver`
-полагался только на `isFillable()`, реальные credential-поля (`password`/`remember_token`) утекали в
-открытом виде на дефолтной `User`-модели и на любой `$guarded=[]`-модели (паттерн обоих стабов сьюта).
-Фикс — `AuditObserver::ALWAYS_EXCLUDED` (жёсткий блок-лист, коммит `49a59d8`), mutation-кейс
-`P1.21-always-excluded-removed` зарегистрирован и подтверждён (`dde0150`). Гейт зелёный (105/105 sqlite,
-93/93 pg). **Остальные находки D63 НЕ исправлены в рамках этого решения** — задокументированы как
-открытые риски ниже, ждут отдельного разбора (не блокируют P1.26 по решению владельца):
-- **connection-seam (P1.16), Major, подтверждено:** `ModuleStateReader` привязан как голый class-string
-  в `ModulesServiceProvider` (строка 79) — НЕ читает `config('flex-modules.connection')`, в отличие от
-  `RecordsRegistrar`/lifecycle/epoch. При настроенном отдельном connection модуль тихо не активируется.
-  P1-scope дефект (не P2-отложенный per-call ctx→connection из D52) — противоречит собственному докблоку
-  кода и Completion Notes P1.16.
-- **killswitch write-seam (P1.21), Minor:** `Config::auditEnabled()` проверяется только в
-  `AuditObserver::record()`, не на реальном seam записи (`QueuedAuditLogger`/`RecordAuditEntry`) — латентно,
-  сегодня все писатели идут через observer.
-- **Departments race (P1.23), Minor, подтверждает уже известный Known Deviation 2:** headline A5-фикс
-  (лок ДО re-read) не запинен напрямую зарегистрированным mutation-кейсом (тот бьёт по soft-delete
-  guard). Плюс новая находка: `move()`'s UPDATE не фильтрует `workspace_id` (subtree()/primaryOf() —
-  фильтруют), низкая эксплуатируемость (упирается в глобальную уникальность ULID-путей).
+2026-07-15, все 4 находки ЗАКРЫТЫ (D64–D67).** Нашёл и владелец сразу закрыл **1 Blocker** (D64):
+`AuditObserver` полагался только на `isFillable()`, credential-поля (`password`/`remember_token`) утекали
+на дефолтной `User` и любой `$guarded=[]`-модели → `AuditObserver::ALWAYS_EXCLUDED` (жёсткий блок-лист,
+`49a59d8`), mutation `P1.21-always-excluded-removed` (`dde0150`). Затем закрыты остальные три:
+- **D65 — connection-seam (P1.16), Major, ✅ исправлено (`1ec7a5e`):** биндинг `ModuleStateReader` в
+  `ModulesServiceProvider` был голым class-string → автовайрил `$connection=null` и читал `mod_modules` с
+  ambient-дефолта, ИГНОРИРУЯ `config('flex-modules.connection')` (в отличие от `RecordsRegistrar`). Переведён
+  на замыкание, читающее config; regression-тест резолвит контракт из контейнера без override; mutation
+  `P1.16-statereader-bare-binding`. P1-scope config-read — P2 per-call ctx→connection (D52) остаётся deferred.
+- **D66 — killswitch write-seam (P1.21), Minor, ✅ исправлено (`1c604f0`):** `Config::auditEnabled()`
+  продублирован в `QueuedAuditLogger::record()` (defense-in-depth на enqueue-seam, не в воркере — событие,
+  снятое при вкл. аудите, обязано долететь); regression-тест на прямой `AuditLogger::record()`; mutation
+  `P1.21-killswitch-writeseam`.
+- **D67 — Departments move() workspace-filter (P1.23), Minor, ✅ исправлено (`e941b83`):** `move()`'s UPDATE
+  получил `and workspace_id = ?` (симметрично `subtree()`/`primaryOf()`); regression-тест на cross-workspace
+  ltree-коллизию; mutation `P1.23-move-workspace-filter`. Низкая эксплуатируемость (глоб. уникальность
+  ULID-путей), контрактная per-workspace корректность восстановлена.
+
+Гейт зелёный локально по всем трём (105/105 sqlite, 96/96 pg — +3 новых pg-теста к 93). Все три коммита
+запушены на `p1r-remediation`. **P1.26 (слепой гейт-аудит + закрытие фазы) более ничем из D63 не блокирован.**
 
 | Параметр | Значение |
 |:--|:--|
@@ -110,12 +111,9 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
 - **FeatureFlags-каскад (A69) остаётся частично открытым** после P1.22: `findOverride()` — single-scope
   exact-match, narrow→wide резолв внутри одного вызова не реализован (докблок фиксирует WAI); риск для
   потребителей, ожидающих настоящего каскада user→workspace→account по одному вызову `active()`.
-- **connection-seam (P1.16, D63/D64), Major, НЕ исправлено:** `ModuleStateReader` не читает
-  `config('flex-modules.connection')` — при настроенном отдельном connection модуль тихо не активируется.
-- **killswitch write-seam (P1.21, D63), Minor, НЕ исправлено:** killswitch проверяется на observer-уровне,
-  не на реальном write-seam.
-- **Departments workspace-filter в move() (P1.23, D63), Minor, НЕ исправлено:** UPDATE не фильтрует
-  `workspace_id`, низкая эксплуатируемость.
+- **Все 4 находки таргетированного аудита D63 закрыты (D64–D67, 2026-07-15)** — connection-seam (P1.16, Major),
+  killswitch write-seam (P1.21, Minor), Departments move() workspace-filter (P1.23, Minor) исправлены; см. блок
+  «Таргетированный аудит D63» выше и plan.md D65/D66/D67.
 - Ядро де-факто PG16-only (OQ-12); OQ-5 (php ^8.4) — блокер P2.1; DB_SCHEMA DRAFT (OQ-6); stancl v4 без релиза.
 - Полная карта того, что волна НЕ закрывает — `findings/P1R-premortem.md` (кластеры C1–C8, P1–P7, U1–U6).
 
