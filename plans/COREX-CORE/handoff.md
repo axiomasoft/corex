@@ -3,6 +3,27 @@
 **Next:** ЗАПУСК ВРУЧНУЮ: workflow (sonnet/low per plan.md §3 Routing, `plan-exec`) — **P1.26**
 (закрытие фазы: слепой аудит + CHANGELOG + semver-теги + PR в `main`)
 
+**Таргетированный аудит D63 (4 Major-зоны волны 2, НЕ замена канонического слепого гейта) завершён
+2026-07-15.** Нашёл и владелец сразу закрыл **1 подтверждённый Blocker** (D64): `AuditObserver`
+полагался только на `isFillable()`, реальные credential-поля (`password`/`remember_token`) утекали в
+открытом виде на дефолтной `User`-модели и на любой `$guarded=[]`-модели (паттерн обоих стабов сьюта).
+Фикс — `AuditObserver::ALWAYS_EXCLUDED` (жёсткий блок-лист, коммит `49a59d8`), mutation-кейс
+`P1.21-always-excluded-removed` зарегистрирован и подтверждён (`dde0150`). Гейт зелёный (105/105 sqlite,
+93/93 pg). **Остальные находки D63 НЕ исправлены в рамках этого решения** — задокументированы как
+открытые риски ниже, ждут отдельного разбора (не блокируют P1.26 по решению владельца):
+- **connection-seam (P1.16), Major, подтверждено:** `ModuleStateReader` привязан как голый class-string
+  в `ModulesServiceProvider` (строка 79) — НЕ читает `config('flex-modules.connection')`, в отличие от
+  `RecordsRegistrar`/lifecycle/epoch. При настроенном отдельном connection модуль тихо не активируется.
+  P1-scope дефект (не P2-отложенный per-call ctx→connection из D52) — противоречит собственному докблоку
+  кода и Completion Notes P1.16.
+- **killswitch write-seam (P1.21), Minor:** `Config::auditEnabled()` проверяется только в
+  `AuditObserver::record()`, не на реальном seam записи (`QueuedAuditLogger`/`RecordAuditEntry`) — латентно,
+  сегодня все писатели идут через observer.
+- **Departments race (P1.23), Minor, подтверждает уже известный Known Deviation 2:** headline A5-фикс
+  (лок ДО re-read) не запинен напрямую зарегистрированным mutation-кейсом (тот бьёт по soft-delete
+  guard). Плюс новая находка: `move()`'s UPDATE не фильтрует `workspace_id` (subtree()/primaryOf() —
+  фильтруют), низкая эксплуатируемость (упирается в глобальную уникальность ULID-путей).
+
 | Параметр | Значение |
 |:--|:--|
 | Model | per-item (D35 для волны; P1.26 сам роутится `sonnet/low`/`plan-exec` — §3 Routing) |
@@ -89,6 +110,12 @@ Cold-start reads: `plans/COREX-CORE/plan.md` (§2 Rules, §3 Routing, §5 D28–
 - **FeatureFlags-каскад (A69) остаётся частично открытым** после P1.22: `findOverride()` — single-scope
   exact-match, narrow→wide резолв внутри одного вызова не реализован (докблок фиксирует WAI); риск для
   потребителей, ожидающих настоящего каскада user→workspace→account по одному вызову `active()`.
+- **connection-seam (P1.16, D63/D64), Major, НЕ исправлено:** `ModuleStateReader` не читает
+  `config('flex-modules.connection')` — при настроенном отдельном connection модуль тихо не активируется.
+- **killswitch write-seam (P1.21, D63), Minor, НЕ исправлено:** killswitch проверяется на observer-уровне,
+  не на реальном write-seam.
+- **Departments workspace-filter в move() (P1.23, D63), Minor, НЕ исправлено:** UPDATE не фильтрует
+  `workspace_id`, низкая эксплуатируемость.
 - Ядро де-факто PG16-only (OQ-12); OQ-5 (php ^8.4) — блокер P2.1; DB_SCHEMA DRAFT (OQ-6); stancl v4 без релиза.
 - Полная карта того, что волна НЕ закрывает — `findings/P1R-premortem.md` (кластеры C1–C8, P1–P7, U1–U6).
 
