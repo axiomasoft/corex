@@ -23,6 +23,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class AuditObserver
 {
+    /**
+     * Attribute names never entering the diff, independent of the model's
+     * fillable/guarded configuration (Blocker, targeted audit D63/P1.21-review:
+     * `isFillable()` alone is not a safe proxy for "audit-safe" — Laravel's
+     * default `User` ships `password` IN `$fillable`, and any model using the
+     * common `$guarded = []` pattern makes EVERY attribute fillable, so the
+     * mass-assignment guard let credential columns straight into `changes`).
+     * This is a hard blocklist, not configurable via Auditable — a host
+     * cannot accidentally re-enable logging its own password column.
+     *
+     * @var list<string>
+     */
+    private const ALWAYS_EXCLUDED = ['password', 'remember_token'];
+
     public function created(Model $model): void
     {
         self::record($model, 'created');
@@ -68,7 +82,12 @@ final class AuditObserver
         // attributes (password, remember_token, …) never enter `changes` — they
         // are OMITTED, not masked (B-10 §7.4 п.8: a masked key still leaks the
         // field's name and that it changed). Fillable-but-sensitive fields are
-        // masked via auditSensitive() instead.
+        // masked via auditSensitive() instead. `isFillable()` alone is NOT
+        // trusted for this (see ALWAYS_EXCLUDED) — it answers "can mass
+        // assignment set this", not "is this safe to log", and the two
+        // diverge exactly for credential columns on `$guarded = []` models or
+        // Laravel's default `User` (password is fillable there by design).
+        $always = array_flip(self::ALWAYS_EXCLUDED);
         $except = array_flip(self::exceptFor($model));
         $sensitive = array_flip(self::sensitiveFor($model));
         $changes = [];
@@ -78,7 +97,7 @@ final class AuditObserver
             $attributes = $model->getAttributes();
 
             foreach ($attributes as $attribute => $value) {
-                if (isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
                     continue;
                 }
 
@@ -86,7 +105,7 @@ final class AuditObserver
             }
         } else {
             foreach ($model->getChanges() as $attribute => $value) {
-                if (isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
                     continue;
                 }
 

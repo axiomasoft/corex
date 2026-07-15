@@ -59,6 +59,33 @@ final class AuditSensitiveStub extends Model implements Auditable
     }
 }
 
+/**
+ * $guarded = [] model (the pattern both Widget and StubAuditableThing already
+ * use elsewhere in this suite) — every attribute is mass-assignable, so
+ * `isFillable()` alone cannot keep password/remember_token out of the diff.
+ * Regression stub for the targeted audit D63 Blocker: AuditObserver must not
+ * rely solely on isFillable() to decide what is audit-safe.
+ */
+final class AuditUnguardedStub extends Model implements Auditable
+{
+    use HasAuditLog;
+    use HasConfiguredId;
+
+    protected $table = 'audit_unguarded_stubs';
+
+    protected $guarded = [];
+
+    public function auditExcept(): array
+    {
+        return ['created_at', 'updated_at'];
+    }
+
+    public function auditSensitive(): array
+    {
+        return [];
+    }
+}
+
 /** Tenant resolver whose current workspace can be mutated between dispatch and handle. */
 final class MutableTenantResolver implements TenantContextResolver
 {
@@ -259,6 +286,36 @@ it('omits guarded/non-fillable attributes from the diff on create (A17)', functi
         ->and($entry->changes)->not->toHaveKey('id')
         // Fillable-but-sensitive field is masked, not omitted.
         ->and($entry->changes['secret']['new'])->toBe('••••••');
+});
+
+it('excludes password/remember_token even when $guarded = [] makes them fillable (D63 Blocker)', function (): void {
+    Schema::create('audit_unguarded_stubs', function ($table): void {
+        $table->uuid('id')->primary();
+        $table->string('name');
+        $table->string('password')->nullable();
+        $table->string('remember_token')->nullable();
+        $table->timestamps();
+    });
+
+    // $guarded = [] means isFillable() returns true for EVERY attribute — the
+    // exclusion must not depend on that check alone (ALWAYS_EXCLUDED).
+    $model = AuditUnguardedStub::create([
+        'name' => 'carol',
+        'password' => 'hashed-password',
+        'remember_token' => 'a-token',
+    ]);
+
+    $created = AuditLog::on(AUDIT_TEST_CONNECTION)->where('action', 'created')->sole();
+
+    expect($created->changes)->toHaveKey('name')
+        ->and($created->changes)->not->toHaveKey('password')
+        ->and($created->changes)->not->toHaveKey('remember_token');
+
+    $model->update(['password' => 'new-hashed-password']);
+
+    $updated = AuditLog::on(AUDIT_TEST_CONNECTION)->where('action', 'updated')->sole();
+
+    expect($updated->changes)->not->toHaveKey('password');
 });
 
 it('masks a fillable sensitive field in both old and new on update (A17)', function (): void {
