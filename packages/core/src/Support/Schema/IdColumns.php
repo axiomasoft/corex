@@ -11,10 +11,11 @@ use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Database\Schema\ForeignIdColumnDefinition;
 
 /**
- * Key columns whose type follows config('corex.ids.strategy'): ULID (default),
- * UUID, or auto-increment int. Lets a host app line CoreX tables up with its
- * own key type without forking the package migrations (mirrors AzGuard's
- * MorphColumns). Pair with CoreX\Concerns\HasConfiguredId on the models.
+ * Key columns whose type follows config('corex.ids.strategy'): UUIDv7
+ * (default, D3), UUID, ULID, or auto-increment int. Lets a host app line
+ * CoreX tables up with its own key type without forking the package
+ * migrations (mirrors AzGuard's MorphColumns). Pair with
+ * CoreX\Concerns\HasConfiguredId on the models.
  */
 final class IdColumns
 {
@@ -25,7 +26,7 @@ final class IdColumns
     {
         match (Config::idStrategy()) {
             IdStrategy::Int => $table->id($name),
-            IdStrategy::Uuid => $table->uuid($name)->primary(),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->uuid($name)->primary(),
             IdStrategy::Ulid => $table->ulid($name)->primary(),
         };
     }
@@ -38,7 +39,7 @@ final class IdColumns
     {
         return match (Config::idStrategy()) {
             IdStrategy::Int => $table->unsignedBigInteger($name),
-            IdStrategy::Uuid => $table->uuid($name),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->uuid($name),
             IdStrategy::Ulid => $table->ulid($name),
         };
     }
@@ -51,7 +52,7 @@ final class IdColumns
     {
         return match (Config::idStrategy()) {
             IdStrategy::Int => $table->foreignId($name),
-            IdStrategy::Uuid => $table->foreignUuid($name),
+            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->foreignUuid($name),
             IdStrategy::Ulid => $table->foreignUlid($name),
         };
     }

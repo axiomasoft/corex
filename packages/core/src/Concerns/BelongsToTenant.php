@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * own typed `tenant()` relation (they own the tenant model).
  *
  * @mixin Model
+ *
+ * @deprecated Row-level tenancy is superseded by the DB-per-account model
+ *     designed for phase P2. Will be replaced, not extended, in 0.2.
  */
 trait BelongsToTenant
 {

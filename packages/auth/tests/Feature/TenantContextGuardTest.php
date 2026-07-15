@@ -6,11 +6,22 @@ use AzGuard\Contracts\ContextGuard;
 use CoreX\Auth\Tests\Stubs\ContextUser;
 use CoreX\Auth\Tests\Stubs\Project;
 use CoreX\Auth\Tests\Stubs\Tenant;
-use CoreX\Contracts\EntityRegistry;
 use CoreX\Contracts\TenantService;
+use Flex\Modules\Registry\ArrayEntityRegistry;
+use Flex\Modules\Registry\EntityDefinition;
 
 beforeEach(function (): void {
-    app(EntityRegistry::class)->register(Project::class, ['alias' => 'project']);
+    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+        handle: 'project',
+        model: Project::class,
+        table: 'projects',
+        module: 'corex/auth-tests',
+        labelSingular: 'Project',
+        labelPlural: 'Projects',
+        capabilities: [],
+        fields: [],
+        titleAttribute: 'name',
+    ));
     app(TenantService::class)->setCurrent(new Tenant('tenant-a'));
     $this->guard = app(ContextGuard::class);
 });

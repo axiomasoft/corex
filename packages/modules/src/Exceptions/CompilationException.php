@@ -1,0 +1,91 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Flex\Modules\Exceptions;
+
+use RuntimeException;
+
+/**
+ * Compilation validation failure (B-10 §7.4 п.4): always a deploy failure,
+ * never a warning.
+ */
+final class CompilationException extends RuntimeException
+{
+    public static function duplicateTablePrefix(string $prefix, string $firstModule, string $secondModule): self
+    {
+        return new self(sprintf(
+            'Table prefix [%s] is claimed by both [%s] and [%s] — tablePrefix must be unique across the deployment (D9).',
+            $prefix,
+            $firstModule,
+            $secondModule,
+        ));
+    }
+
+    public static function unmetRequirement(string $composerName, string $missingDependency): self
+    {
+        return new self(sprintf(
+            'Module [%s] requires [%s], which is not installed in this deployment (requires must mirror composer, B-10 AC-2).',
+            $composerName,
+            $missingDependency,
+        ));
+    }
+
+    public static function unknownExtender(string $composerName, string $class): self
+    {
+        return new self(sprintf(
+            'Module [%s] declares extender [%s], which is outside the closed set of 8 Flex\\Modules\\Extend\\* classes. '
+            .'New extenders require an RFC in flex/modules (docs/rfcs/NNNN-*.md, B-10 §4.3).',
+            $composerName,
+            $class,
+        ));
+    }
+
+    public static function unknownEntityHandle(string $composerName, string $entityHandle): self
+    {
+        return new self(sprintf(
+            'Module [%s] declares an EntityField extender targeting entity handle [%s], which no compiled manifest registers.',
+            $composerName,
+            $entityHandle,
+        ));
+    }
+
+    public static function tablePrefixMismatch(string $composerName, string $table, string $expectedPrefix): self
+    {
+        return new self(sprintf(
+            'Module [%s] declares Entity table [%s], which does not start with its own table prefix [%s_] (D9).',
+            $composerName,
+            $table,
+            $expectedPrefix,
+        ));
+    }
+
+    public static function missingTablePrefix(string $composerName): self
+    {
+        return new self(sprintf(
+            'Module [%s] manifest is missing tablePrefix() — mandatory as of D37, no auto-derivation from the '
+            .'composer name (that was the D9 hole: a third-party module could legally land on a reserved prefix).',
+            $composerName,
+        ));
+    }
+
+    public static function missingTitle(string $composerName): self
+    {
+        return new self(sprintf(
+            'Module [%s] manifest is missing title() — required at compile time, not just rejected as empty by '
+            .'the setter (a manifest that never calls title() at all was shipping title: null into the registry).',
+            $composerName,
+        ));
+    }
+
+    public static function duplicateEntityHandle(string $handle, string $firstModule, string $secondModule): self
+    {
+        return new self(sprintf(
+            'Entity handle [%s] is declared by both [%s] and [%s] — the first module\'s EntityDefinition would be '
+            .'silently overwritten. Entity handles must be unique across the compiled deployment.',
+            $handle,
+            $firstModule,
+            $secondModule,
+        ));
+    }
+}

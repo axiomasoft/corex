@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
- * Config-driven primary key: ULID (default, ADR-003), UUID, or auto-increment
- * int — per config('corex.ids.strategy'). A single seam so a host app can line
- * CoreX models up with its own key type without forking the package (mirrors
- * AzGuard's configurable morph key). Pair with CoreX\Support\Schema\IdColumns
- * in migrations so the column type matches.
+ * Config-driven primary key: UUIDv7 (default, D3/ADR-003), UUID, ULID, or
+ * auto-increment int — per config('corex.ids.strategy'). A single seam so a
+ * host app can line CoreX models up with its own key type without forking
+ * the package (mirrors AzGuard's configurable morph key). Pair with
+ * CoreX\Support\Schema\IdColumns in migrations so the column type matches.
  */
 trait HasConfiguredId
 {
@@ -46,9 +46,11 @@ trait HasConfiguredId
 
     public function newUniqueId(): string
     {
-        return Config::idStrategy() === IdStrategy::Uuid
-            ? (string) Str::orderedUuid()
-            : (string) Str::ulid();
+        return match (Config::idStrategy()) {
+            IdStrategy::Uuid7 => (string) Str::uuid7(),
+            IdStrategy::Uuid => (string) Str::orderedUuid(),
+            default => (string) Str::ulid(),
+        };
     }
 
     public function getKeyType(): string

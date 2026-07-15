@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use CoreX\Enums\SettingScope;
-
 /**
- * Hierarchical settings store: System → Tenant → User.
+ * Hierarchical settings store (B-10 §3.1): user → workspace → account →
+ * manifest-declared default ({@see SettingDefaultsProvider}).
  */
 interface SettingsRepository
 {
-    public function get(string $key, mixed $default = null, SettingScope $scope = SettingScope::System, ?string $scopeId = null): mixed;
+    public function get(string $namespace, string $key, ?SettingsScope $scope = null, mixed $default = null): mixed;
 
-    public function set(string $key, mixed $value, SettingScope $scope = SettingScope::System, ?string $scopeId = null): void;
+    public function set(string $namespace, string $key, mixed $value, ?SettingsScope $scope = null): void;
 
-    public function forget(string $key, SettingScope $scope = SettingScope::System, ?string $scopeId = null): void;
+    public function forget(string $namespace, string $key, ?SettingsScope $scope = null): void;
+
+    /** @return array<string, mixed> merged by cascade — narrower scope overrides broader */
+    public function all(string $namespace, ?SettingsScope $scope = null): array;
 }

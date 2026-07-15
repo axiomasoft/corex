@@ -16,6 +16,9 @@ use Override;
  * active (on-premise, console, seeders) so the same code runs single-tenant.
  *
  * @implements Scope<Model>
+ *
+ * @deprecated Row-level tenancy is superseded by the DB-per-account model
+ *     designed for phase P2. Will be replaced, not extended, in 0.2.
  */
 final class TenantScope implements Scope
 {

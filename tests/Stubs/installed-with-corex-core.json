@@ -1,0 +1,12 @@
+{
+    "packages": [
+        {
+            "name": "corex/core",
+            "version": "dev-main"
+        },
+        {
+            "name": "flex/modules",
+            "version": "dev-main"
+        }
+    ]
+}

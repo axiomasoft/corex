@@ -16,4 +16,11 @@ interface Auditable
      * @return list<string>
      */
     public function auditExcept(): array;
+
+    /**
+     * Attribute names masked in the audit diff (B-10 §4.4).
+     *
+     * @return list<string>
+     */
+    public function auditSensitive(): array;
 }

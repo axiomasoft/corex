@@ -22,6 +22,13 @@
         <testsuite name="Tasks">
             <directory>tests/Tasks</directory>
         </testsuite>
+
+        <!-- flex/modules-lint (P1.13): PHPStan-правила. data/* — фикстуры-нарушения,
+             они анализируются правилом, а не исполняются раннером. -->
+        <testsuite name="PHPStan">
+            <directory>tests/PHPStan</directory>
+            <exclude>tests/PHPStan/data</exclude>
+        </testsuite>
     </testsuites>
 
     <source>
@@ -29,13 +36,26 @@
             <directory>packages/core/src</directory>
             <directory>packages/crm/src</directory>
             <directory>packages/tasks/src</directory>
+            <directory>packages/modules/src</directory>
         </include>
     </source>
 
     <php>
+        <!-- PHPStan RuleTestCase поднимает свой контейнер и парсер — 128M ему мало. -->
+        <ini name="memory_limit" value="1G"/>
+
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+
+        <!-- pg-lane (D12): tests tagged ->group('pg') switch to this connection
+             (docker-compose.yml pgsql service). Sqlite stays the default for
+             pure-PHP tests. -->
+        <env name="PGSQL_HOST" value="127.0.0.1"/>
+        <env name="PGSQL_PORT" value="5434"/>
+        <env name="PGSQL_DATABASE" value="corex_test"/>
+        <env name="PGSQL_USERNAME" value="corex"/>
+        <env name="PGSQL_PASSWORD" value="corex"/>
     </php>
 </phpunit>
