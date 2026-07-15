@@ -30,6 +30,7 @@ use Flex\Modules\Exceptions\HasEnabledDependentsException;
 use Flex\Modules\Exceptions\InvalidStateTransitionException;
 use Flex\Modules\Exceptions\MissingDependencyException;
 use Flex\Modules\Exceptions\ModuleEnableFailedException;
+use Flex\Modules\Exceptions\ModuleUpgradeFailedException;
 use Flex\Modules\Lifecycle\DatabaseModuleLifecycle;
 use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
 use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
@@ -434,6 +435,35 @@ it('rejects upgrade unless the module is enabled (FSM gate, B-10 §5.5)', functi
     $lifecycle->disable('corex/stub-base', DisableReason::Manual);
 
     expect(fn () => $lifecycle->upgrade('corex/stub-base'))->toThrow(InvalidStateTransitionException::class);
+});
+
+it('rolls the upgrade back and rethrows when a catch-up migration fails — schema_version stays put (P1.29 M-1, symmetric to enable D40)', function (): void {
+    // Enable at the base schema, then run a catch-up upgrade whose SECOND
+    // migration throws: the `failing` path's sbf_ok migration applies, then boom
+    // aborts. Pre-P1.29 upgrade() committed `schema_version=end(ran)`, logged
+    // 'failed' and returned WITHOUT rethrowing — a silently half-migrated module,
+    // the exact silent-failure D40 closed for enable().
+    lifecycleFor(
+        migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')],
+        codeVersions: ['corex/stub-base' => '1.0.0'],
+    )->enable('corex/stub-base');
+
+    $before = lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->first();
+
+    expect(fn () => lifecycleFor(
+        migrationPaths: ['corex/stub-base' => lifecycleStubsPath('failing')],
+        codeVersions: ['corex/stub-base' => '2.0.0'],
+    )->upgrade('corex/stub-base'))->toThrow(ModuleUpgradeFailedException::class);
+
+    $after = lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->first();
+
+    // All-or-nothing: the catch-up migration's table rolled back, the version /
+    // schema_version bump did NOT commit, and no 'upgrade' log row survives.
+    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sbf_ok'))->toBeFalse()
+        ->and($after->version)->toBe($before->version)
+        ->and($after->schema_version)->toBe($before->schema_version)
+        ->and(lifecyclePg()->table('mod_lifecycle_log')
+            ->where('module_name', 'corex/stub-base')->where('operation', 'upgrade')->exists())->toBeFalse();
 });
 
 it('flex:modules:repair returns a purged module to available, and a fresh enable re-installs it (repair, D40)', function (): void {

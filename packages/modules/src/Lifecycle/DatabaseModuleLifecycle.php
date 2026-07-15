@@ -25,6 +25,7 @@ use Flex\Modules\Exceptions\InvalidStateTransitionException;
 use Flex\Modules\Exceptions\MissingDependencyException;
 use Flex\Modules\Exceptions\ModuleEnableFailedException;
 use Flex\Modules\Exceptions\ModuleNotFound;
+use Flex\Modules\Exceptions\ModuleUpgradeFailedException;
 use Flex\Modules\Manifest;
 use Flex\Modules\ModuleContext;
 use Flex\Modules\ModulesServiceProvider;
@@ -283,23 +284,32 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             $migration = $this->runModuleMigrations($module);
             $codeVersion = $this->codeVersion($module);
 
+            // D40 all-or-nothing, symmetric to enable() (P1.29 M-1): a failing
+            // catch-up migration aborts the WHOLE transition — migrations 1..K,
+            // the version/schema_version bump and the log row all roll back — and
+            // surfaces to the caller. The pre-P1.29 code committed
+            // `schema_version=end(ran)` and logged 'failed' WITHOUT rethrowing,
+            // leaving the module silently half-migrated and the caller none the
+            // wiser (the symmetric silent-failure to the one D40 closed here).
+            if ($migration['error'] instanceof Throwable) {
+                throw new ModuleUpgradeFailedException($module, $migration['error']);
+            }
+
+            $fromVersion = $current->version;
+
             $this->db()->table(self::MODULES_TABLE)->where('name', $module)->update([
-                'version' => $migration['error'] === null ? $codeVersion : $current->version,
+                'version' => $codeVersion,
                 'schema_version' => $migration['ran'] !== [] ? end($migration['ran']) : $current->schema_version,
                 'updated_at' => $this->timestamp(),
             ]);
 
-            $this->log($module, 'upgrade', $current->state, $current->state, $migration['error'] === null ? 'success' : 'failed', [
+            $this->log($module, 'upgrade', $current->state, $current->state, 'success', [
                 'migrations_run' => $migration['ran'],
-                'from_version' => $current->version,
+                'from_version' => $fromVersion,
                 'to_version' => $codeVersion,
-                'error' => $migration['error']?->getMessage(),
             ]);
 
-            if ($migration['error'] === null) {
-                $fromVersion = $current->version;
-                $this->db()->afterCommit(static fn () => event(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
-            }
+            $this->db()->afterCommit(static fn () => event(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
         });
     }
 

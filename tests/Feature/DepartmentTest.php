@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Events\DepartmentMoved;
+use CoreX\Exceptions\CrossWorkspaceMoveException;
 use CoreX\Exceptions\DepartmentCycleException;
 use CoreX\Models\Department as DepartmentModel;
 use Illuminate\Database\Connection;
@@ -332,6 +333,27 @@ it('AC-24 (workspace scope): move() rewrites ONLY the moving workspace, never a 
     // The foreign-workspace row is untouched — same path, same (null) parent.
     expect($intruder->path)->toBe($intruderPath)
         ->and($intruder->parent_id)->toBeNull();
+});
+
+it('AC-24 (workspace scope): move() into a parent in ANOTHER workspace is rejected and moves nothing (P1.29 M-2, symmetric to D67)', function (): void {
+    $moving = seedDepartment(null, null, 'Moving', DEPARTMENTS_WORKSPACE_1);
+
+    // A parent that lives in a DIFFERENT workspace. Its ltree path is globally
+    // unique, so the cycle check and the FK layer pass — only the parent-side
+    // workspace guard stops the cross-tenant reparent (the symmetric hole to
+    // the descendant-side D67 filter).
+    $foreignParent = seedDepartment(null, null, 'Foreign parent', DEPARTMENTS_WORKSPACE_2);
+
+    expect(fn () => departments()->move($moving['id'], $foreignParent['id']))
+        ->toThrow(CrossWorkspaceMoveException::class);
+
+    $row = DB::connection(DEPARTMENTS_TEST_CONNECTION)
+        ->table('sys_departments')->where('id', $moving['id'])->first();
+
+    // Untouched: still a root in its own workspace, no cross-tenant reparent.
+    expect($row->path)->toBe($moving['path'])
+        ->and($row->parent_id)->toBeNull()
+        ->and($row->workspace_id)->toBe(DEPARTMENTS_WORKSPACE_1);
 });
 
 it('AC-24 (DTO): the read-DTO carries sort_order', function (): void {

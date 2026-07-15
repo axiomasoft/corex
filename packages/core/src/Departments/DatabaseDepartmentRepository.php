@@ -6,6 +6,7 @@ namespace CoreX\Departments;
 
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Events\DepartmentMoved;
+use CoreX\Exceptions\CrossWorkspaceMoveException;
 use CoreX\Exceptions\DepartmentCycleException;
 use CoreX\Models\Department as DepartmentModel;
 use CoreX\Support\Config;
@@ -108,6 +109,17 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             if ($newParentId !== null) {
                 /** @var DepartmentModel $newParent */
                 $newParent = DepartmentModel::on($this->connection)->where('id', $newParentId)->firstOrFail();
+
+                // Parent-side workspace guard (P1.29 M-2, symmetric to the
+                // descendant-side D67 filter on the UPDATE below): the new parent
+                // is read UNDER the already-held advisory lock and must share the
+                // moving row's workspace. ltree paths are globally unique, so a
+                // cross-workspace parent slips past the cycle check and the FK
+                // layer — reparenting into another tenant's subtree would be a
+                // silent cross-tenant integrity breach, not a legal move.
+                if ($newParent->workspace_id !== $lockWorkspaceId) {
+                    throw new CrossWorkspaceMoveException($departmentId, $newParentId);
+                }
 
                 if ($newParent->path === $moving->path || str_starts_with($newParent->path, $moving->path.'.')) {
                     throw new DepartmentCycleException($departmentId, $newParentId);

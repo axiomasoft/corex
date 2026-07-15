@@ -44,6 +44,8 @@ declare -A TEST_CMD=(
     [P1.24-cursor-start-zero]="vendor/bin/pest --group=pg tests/Feature/PubSubDatabasePollTest.php --filter='does NOT replay pre-existing history'"
     [P1.25-domainevent-drop]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='carries a UUIDv7'"
     [P1.25-null-provider-binding]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='resolves a manifest-declared SettingDefault'"
+    [P1.29-upgrade-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='catch-up migration fails'"
+    [P1.29-move-parent-workspace]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='in ANOTHER workspace is rejected'"
 )
 
 if [ "${1:-}" = "--list" ]; then
