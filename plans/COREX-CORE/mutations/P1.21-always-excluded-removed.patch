@@ -1,0 +1,22 @@
+diff --git a/packages/core/src/Audit/AuditObserver.php b/packages/core/src/Audit/AuditObserver.php
+index 1da9bd5..5e1bb65 100644
+--- a/packages/core/src/Audit/AuditObserver.php
++++ b/packages/core/src/Audit/AuditObserver.php
+@@ -97,7 +97,7 @@ final class AuditObserver
+             $attributes = $model->getAttributes();
+ 
+             foreach ($attributes as $attribute => $value) {
+-                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
++                if (isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                     continue;
+                 }
+ 
+@@ -105,7 +105,7 @@ final class AuditObserver
+             }
+         } else {
+             foreach ($model->getChanges() as $attribute => $value) {
+-                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
++                if (isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                     continue;
+                 }
+ 

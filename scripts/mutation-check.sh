@@ -32,6 +32,7 @@ declare -A TEST_CMD=(
     [P1.20-idcolumns-uuid7-ulid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='uuid7 -> uuid'"
     [P1.21-getattributes-create]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='omits guarded'"
     [P1.21-killswitch]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='killswitch silences'"
+    [P1.21-always-excluded-removed]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='guarded = \[\] makes them fillable'"
     [P1.22-drop-unique-index]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='rejects a duplicate account-level row'"
     [P1.22-drop-workspace-branch]="vendor/bin/pest --group=pg tests/Feature/FeatureFlagsTest.php --filter='AC-22 \(a\)|AC-22 \(b\)'"
     [P1.23-stale-read]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='re-read guard'"
