@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\FeatureFlagDefinition;
 use CoreX\Tests\Stubs\StubEntityAlphaThing;
 use CoreX\Tests\Stubs\StubEntityBetaThing;
 use CoreX\Tests\Stubs\StubRogueExtender;
@@ -23,6 +24,7 @@ use Flex\Modules\Extend\Routes;
 use Flex\Modules\Extend\Workflow;
 use Flex\Modules\Manifest;
 use Flex\Modules\Registry\FieldDefinition;
+use Flex\Modules\SettingDefault;
 
 // Local helpers (not global functions, to avoid cross-file name collisions).
 $registryCompilerAlphaManifest = function (): Manifest {
@@ -186,7 +188,8 @@ it('rejects a third-party extender outside the closed set with an RFC referral',
         ->toThrow(CompilationException::class, 'RFC');
 });
 
-// Manifest exercising every one of the 8 extender slices (B-10 §4.2) so the
+// Manifest exercising every one of the 8 extender slices (B-10 §4.2) plus
+// the two non-extender slices settings/featureFlags (P1.25) so the
 // round-trip covers the whole CompiledRegistry, not just entities.
 $registryCompilerFullManifest = function (): Manifest {
     return Manifest::make('corex/stub-full')
@@ -207,16 +210,22 @@ $registryCompilerFullManifest = function (): Manifest {
             Menu::item('app', 'sfl.things')->label('Things')->icon('cube')->after('dashboard')->permission('app.thing.view'),
             Routes::api('routes/api.php')->middleware(['auth', 'throttle'])->prefix('sfl'),
             Workflow::trigger('sfl.thing', ['created', 'updated']),
+        ])
+        ->settings([
+            SettingDefault::make('theme', 'default-theme')->sensitive(),
+        ])
+        ->featureFlags([
+            new FeatureFlagDefinition(key: 'sfl.beta_mode', default: false, module: 'corex/stub-full'),
         ]);
 };
 
-it('round-trips the whole CompiledRegistry (all 8 slices) through toArray/fromArray (P1.15)', function () use ($registryCompilerFullManifest): void {
+it('round-trips the whole CompiledRegistry (all 10 slices) through toArray/fromArray (P1.15/P1.25)', function () use ($registryCompilerFullManifest): void {
     $compiled = (new RegistryCompiler)->compile([$registryCompilerFullManifest()]);
 
     $array = $compiled->toArray();
 
     // Every slice is present and populated in the plain-array projection.
-    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow'])
+    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'settings', 'featureFlags'])
         ->and($array['entities'])->toHaveKey('sfl.thing')
         ->and($array['entityFields'])->toHaveCount(1)
         ->and($array['permissions'])->toHaveCount(1)
@@ -224,14 +233,37 @@ it('round-trips the whole CompiledRegistry (all 8 slices) through toArray/fromAr
         ->and($array['filament'])->toHaveCount(1)
         ->and($array['menu'])->toHaveCount(1)
         ->and($array['routes'])->toHaveCount(1)
-        ->and($array['workflow'])->toHaveCount(1);
+        ->and($array['workflow'])->toHaveCount(1)
+        ->and($array['settings'])->toHaveCount(1)
+        ->and($array['settings'][0])->toBe(['namespace' => 'sfl', 'definition' => ['key' => 'theme', 'default' => 'default-theme', 'workspaceScoped' => false, 'userScoped' => false, 'sensitive' => true]])
+        ->and($array['featureFlags'])->toHaveCount(1)
+        ->and($array['featureFlags'][0])->toBe(['key' => 'sfl.beta_mode', 'default' => false, 'module' => 'corex/stub-full', 'payload' => null]);
 
     // The array is var_export'able: no object, no __set_state marker anywhere.
     expect(var_export($array, true))->not->toContain('::__set_state');
 
     // fromArray reconstructs an equivalent registry (extenders rehydrated,
-    // enums restored, CompiledEntityField rewrapped).
+    // enums restored, CompiledEntityField rewrapped, CompiledSettingDefault/
+    // FeatureFlagDefinition rebuilt).
     expect(CompiledRegistry::fromArray($array))->toEqual($compiled);
+});
+
+it('collects settings/featureFlags off plain manifest properties, not an Extender (P1.25, A68)', function (): void {
+    $manifest = Manifest::make('corex/stub-defaults')
+        ->title('Stub Defaults')
+        ->tablePrefix('sfd')
+        ->settings([SettingDefault::make('locale', 'en')])
+        ->featureFlags([new FeatureFlagDefinition(key: 'sfd.on', default: true)]);
+
+    $compiled = (new RegistryCompiler)->compile([$manifest]);
+
+    expect($compiled->settings)->toHaveCount(1)
+        ->and($compiled->settings[0]->namespace)->toBe('sfd')
+        ->and($compiled->settings[0]->definition->key)->toBe('locale')
+        ->and($compiled->settings[0]->definition->default)->toBe('en')
+        ->and($compiled->featureFlags)->toHaveCount(1)
+        ->and($compiled->featureFlags[0]->key)->toBe('sfd.on')
+        ->and($compiled->featureFlags[0]->default)->toBeTrue();
 });
 
 it('runs the closed-set pipeline stages in the declared PipelineStages::ORDER, observably (AC-18)', function () use ($registryCompilerFullManifest): void {

@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\FeatureFlags;
+use CoreX\Events\DomainEvent;
+use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\Lifecycle\StubDependentModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFailingModule;
+use CoreX\Tests\Stubs\Lifecycle\StubFeatureFlagModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFkModule;
 use Flex\Modules\Contracts\ModuleLifecycle;
 use Flex\Modules\Contracts\ModuleRegistry;
@@ -16,8 +20,11 @@ use Flex\Modules\Contracts\RecordsRegistrar;
 use Flex\Modules\Discovery\ModuleDiscovery;
 use Flex\Modules\Enums\DisableReason;
 use Flex\Modules\Enums\ModuleState;
+use Flex\Modules\Events\ModuleArchived;
+use Flex\Modules\Events\ModuleDisabled;
 use Flex\Modules\Events\ModuleEnabled;
 use Flex\Modules\Events\ModulePurged;
+use Flex\Modules\Events\ModuleUpgraded;
 use Flex\Modules\Exceptions\HasEnabledDependentsException;
 use Flex\Modules\Exceptions\InvalidStateTransitionException;
 use Flex\Modules\Exceptions\MissingDependencyException;
@@ -570,4 +577,81 @@ it('reads the module state from the injected connection, not the ambient default
     // empty. isActive=true proves the connection came from the seam.
     expect($registry->isActive('corex/stub-base', $ctx))->toBeTrue()
         ->and(lifecyclePg()->table('mod_lifecycle_log')->count())->toBeGreaterThan(0);
+});
+
+it('carries a UUIDv7 eventId, occurredAt, tenant and the canonical B-10 §3.1 name on every lifecycle event (P1.25, A68, test а)', function (): void {
+    $tenant = app(TenantContextResolver::class)->current();
+
+    $events = [
+        new ModuleEnabled('corex/stub-base', 'standard', ['0001_x.php']),
+        new ModuleDisabled('corex/stub-base', DisableReason::Manual),
+        new ModuleArchived('corex/stub-base'),
+        new ModulePurged('corex/stub-base', ['sba_widgets']),
+        new ModuleUpgraded('corex/stub-base', '1.0.0', '1.1.0', ['0002_y.php']),
+    ];
+    $names = ['mod.module.enabled', 'mod.module.disabled', 'mod.module.archived', 'mod.module.purged', 'mod.module.upgraded'];
+
+    foreach ($events as $i => $event) {
+        expect($event)->toBeInstanceOf(DomainEvent::class)
+            ->and($event::name())->toBe($names[$i])
+            ->and($event->eventId)->toBeString()->not->toBeEmpty()
+            ->and($event->occurredAt)->toBeInstanceOf(DateTimeImmutable::class)
+            ->and($event->tenant)->toEqual($tenant);
+    }
+});
+
+it('never dispatches ModuleEnabled when the enabling transaction rolls back — afterCommit survives the DomainEvent retrofit (P1.25, test б)', function (): void {
+    Event::fake();
+
+    expect(fn () => lifecycleFor(migrationPaths: ['corex/stub-failing' => lifecycleStubsPath('failing')])->enable('corex/stub-failing'))
+        ->toThrow(ModuleEnableFailedException::class);
+
+    Event::assertNotDispatched(ModuleEnabled::class);
+});
+
+it('defines a manifest-declared feature flag in sys_feature_flags when its module is enabled (P1.25, A68, test г)', function (): void {
+    $this->artisan('migrate', [
+        '--database' => LIFECYCLE_TEST_CONNECTION,
+        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+        '--realpath' => true,
+        '--force' => true,
+    ])->run();
+
+    $this->app->instance(FeatureFlags::class, new DatabaseFeatureFlags(connection: LIFECYCLE_TEST_CONNECTION));
+
+    $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [
+        StubBaseModule::class,
+        StubDependentModule::class,
+        StubFailingModule::class,
+        StubFkModule::class,
+        StubFeatureFlagModule::class,
+    ]));
+
+    CompiledModuleRegistry::writeAtomic($this->registryPath, [
+        new CompiledModule('corex/stub-base', 'Stub Base', 'sba', [], [], []),
+        new CompiledModule('corex/stub-dependent', 'Stub Dependent', 'sbd', [
+            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+        ], [], []),
+        new CompiledModule('corex/stub-failing', 'Stub Failing', 'sbf', [], [], []),
+        new CompiledModule('corex/stub-fk', 'Stub FK', 'stf', [
+            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+        ], [], []),
+        new CompiledModule('corex/stub-feature-flag', 'Stub Feature Flag', 'sff', [], [], []),
+    ]);
+    $this->app->instance(ModuleRegistry::class, lifecycleModuleRegistry($this->registryPath));
+
+    lifecycleFor()->enable('corex/stub-feature-flag');
+
+    $flag = lifecyclePg()->table('sys_feature_flags')->where('key', 'sff.beta_mode')->first();
+
+    expect($flag)->not->toBeNull()
+        ->and((bool) $flag->is_enabled)->toBeFalse()
+        ->and($flag->module)->toBe('corex/stub-feature-flag');
+
+    // Idempotent (P1.22): a second enable() of the SAME module is a lock-serialized
+    // no-op (AC-11) that never reaches defineManifestFeatureFlags() again — no
+    // duplicate/UNIQUE-violation row.
+    lifecycleFor()->enable('corex/stub-feature-flag');
+
+    expect(lifecyclePg()->table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
 });

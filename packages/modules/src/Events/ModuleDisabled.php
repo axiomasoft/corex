@@ -4,13 +4,23 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Events;
 
+use CoreX\Events\DomainEvent;
 use Flex\Modules\Enums\DisableReason;
+use Override;
 
-/** Interim event base (workaround, OQ-4 — see {@see ModuleEnabled}). */
-final readonly class ModuleDisabled
+/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.disabled` (B-10 §3.1). */
+final class ModuleDisabled extends DomainEvent
 {
     public function __construct(
-        public string $module,
-        public DisableReason $reason,
-    ) {}
+        public readonly string $module,
+        public readonly DisableReason $reason,
+    ) {
+        parent::__construct();
+    }
+
+    #[Override]
+    public static function name(): string
+    {
+        return 'mod.module.disabled';
+    }
 }

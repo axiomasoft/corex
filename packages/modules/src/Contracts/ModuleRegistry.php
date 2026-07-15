@@ -28,7 +28,8 @@ interface ModuleRegistry
     public function isActive(string $name, TenantContext $ctx): bool;
 
     /**
-     * The full compiled registry (all 8 slices — B-10 §5.2), read from the
+     * The full compiled registry (all 10 slices — B-10 §5.2, P1.25 added
+     * `settings`/`featureFlags`), read from the
      * same compiled file (P1.15). The runtime projects `entities` into
      * EntityRegistry and the morph map from this; downstream consumers of the
      * other slices live outside this package. Exposed as the whole

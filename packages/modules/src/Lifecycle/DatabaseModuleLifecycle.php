@@ -6,6 +6,7 @@ namespace Flex\Modules\Lifecycle;
 
 use Closure;
 use CoreX\Audit\CurrentActor;
+use CoreX\Contracts\FeatureFlags;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use Flex\Modules\Contracts\ModuleLifecycle;
@@ -159,8 +160,29 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 'migrations_run' => $migration['ran'],
             ]);
 
-            $this->db()->afterCommit(static fn () => event(new ModuleEnabled($module, $edition, $migration['ran'])));
+            $this->db()->afterCommit(function () use ($module, $edition, $migration): void {
+                event(new ModuleEnabled($module, $edition, $migration['ran']));
+                $this->defineManifestFeatureFlags($module);
+            });
         });
+    }
+
+    /**
+     * `Manifest::$featureFlags` → `FeatureFlags::define()` (P1.25, A68
+     * residual — the manifest declaration never reached the runtime flag
+     * store before this). Runs AFTER commit, alongside the lifecycle event:
+     * `define()` is idempotent (P1.22 made it atomic via `sys_feature_flags`
+     * UNIQUE(key)) and a flag row belongs in the DB only once enable() has
+     * actually landed, not while the transaction could still roll back.
+     */
+    private function defineManifestFeatureFlags(string $module): void
+    {
+        /** @var FeatureFlags $flags */
+        $flags = $this->container->make(FeatureFlags::class);
+
+        foreach ($this->manifestFor($module)->featureFlags as $definition) {
+            $flags->define($definition);
+        }
     }
 
     public function disable(string $module, DisableReason $reason, bool $cascade = false): void

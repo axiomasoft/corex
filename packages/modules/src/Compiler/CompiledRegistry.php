@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Compiler;
 
+use CoreX\Contracts\FeatureFlagDefinition;
 use Flex\Modules\Extend\Api;
 use Flex\Modules\Extend\Extender;
 use Flex\Modules\Extend\Filament;
@@ -16,8 +17,9 @@ use ReflectionClass;
 
 /**
  * In-memory result of RegistryCompiler::compile() (B-10 §5.2). The compiled
- * file `bootstrap/cache/flex_modules.php` persists this whole DTO (all 8
- * slices) via {@see toArray()}/{@see fromArray()} (P1.15) so the runtime can
+ * file `bootstrap/cache/flex_modules.php` persists this whole DTO (all 10
+ * slices — the original 8 extender slices plus `settings`/`featureFlags`,
+ * P1.25) via {@see toArray()}/{@see fromArray()} (P1.15) so the runtime can
  * project entities into EntityRegistry and the morph map without re-running
  * the compiler on every request.
  */
@@ -32,6 +34,8 @@ final readonly class CompiledRegistry
      * @param  list<Menu>  $menu
      * @param  list<Routes>  $routes
      * @param  list<Workflow>  $workflow
+     * @param  list<CompiledSettingDefault>  $settings  manifest-declared `SettingDefault`s (P1.25 — B-10 §3.1 default cascade level, not an Extender, so collected straight off `Manifest::$settings`)
+     * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags` (P1.25)
      */
     public function __construct(
         public array $entities,
@@ -42,6 +46,8 @@ final readonly class CompiledRegistry
         public array $menu,
         public array $routes,
         public array $workflow,
+        public array $settings = [],
+        public array $featureFlags = [],
     ) {}
 
     public static function empty(): self
@@ -55,17 +61,19 @@ final readonly class CompiledRegistry
             menu: [],
             routes: [],
             workflow: [],
+            settings: [],
+            featureFlags: [],
         );
     }
 
     /**
-     * Plain-array projection of all 8 slices for the compiled file. Entity
+     * Plain-array projection of all 10 slices for the compiled file. Entity
      * definitions keep their handle keys; the six extender slices flatten to
      * their public scalar properties via {@see extenderToArray()} — the
      * concrete extender class per slice is fixed, so {@see fromArray()} knows
      * exactly which class to rehydrate without a discriminator.
      *
-     * @return array{entities: array<string, array<string, mixed>>, entityFields: list<array<string, mixed>>, permissions: list<array<string, mixed>>, api: list<array<string, mixed>>, filament: list<array<string, mixed>>, menu: list<array<string, mixed>>, routes: list<array<string, mixed>>, workflow: list<array<string, mixed>>}
+     * @return array{entities: array<string, array<string, mixed>>, entityFields: list<array<string, mixed>>, permissions: list<array<string, mixed>>, api: list<array<string, mixed>>, filament: list<array<string, mixed>>, menu: list<array<string, mixed>>, routes: list<array<string, mixed>>, workflow: list<array<string, mixed>>, settings: list<array<string, mixed>>, featureFlags: list<array<string, mixed>>}
      */
     public function toArray(): array
     {
@@ -78,11 +86,13 @@ final readonly class CompiledRegistry
             'menu' => array_map(self::extenderToArray(...), $this->menu),
             'routes' => array_map(self::extenderToArray(...), $this->routes),
             'workflow' => array_map(self::extenderToArray(...), $this->workflow),
+            'settings' => array_map(static fn (CompiledSettingDefault $setting): array => $setting->toArray(), $this->settings),
+            'featureFlags' => array_map(static fn (FeatureFlagDefinition $flag): array => get_object_vars($flag), $this->featureFlags),
         ];
     }
 
     /**
-     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>}  $data
+     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>}  $data
      */
     public static function fromArray(array $data): self
     {
@@ -101,6 +111,23 @@ final readonly class CompiledRegistry
             menu: array_map(static fn (array $row): Menu => self::extenderFromArray(Menu::class, $row), $data['menu'] ?? []),
             routes: array_map(static fn (array $row): Routes => self::extenderFromArray(Routes::class, $row), $data['routes'] ?? []),
             workflow: array_map(static fn (array $row): Workflow => self::extenderFromArray(Workflow::class, $row), $data['workflow'] ?? []),
+            settings: array_map(
+                /** @param  array{namespace: string, definition: array<string, mixed>}  $setting */
+                static fn (array $setting): CompiledSettingDefault => CompiledSettingDefault::fromArray($setting),
+                $data['settings'] ?? [],
+            ),
+            featureFlags: array_map(self::featureFlagFromArray(...), $data['featureFlags'] ?? []),
+        );
+    }
+
+    /** @param  array{key: string, default: bool, module: string|null, payload: array<string, mixed>|null}  $data */
+    private static function featureFlagFromArray(array $data): FeatureFlagDefinition
+    {
+        return new FeatureFlagDefinition(
+            key: $data['key'],
+            default: $data['default'],
+            module: $data['module'],
+            payload: $data['payload'],
         );
     }
 

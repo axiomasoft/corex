@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Compiler;
 
+use CoreX\Contracts\FeatureFlagDefinition;
 use CoreX\Money\MoneyCast;
 use Flex\Modules\Enums\Capability;
 use Flex\Modules\Exceptions\CompilationException;
@@ -91,7 +92,53 @@ final class RegistryCompiler
             menu: $menu,
             routes: $routes,
             workflow: $workflow,
+            settings: $this->collectSettings($manifests),
+            featureFlags: $this->collectFeatureFlags($manifests),
         );
+    }
+
+    /**
+     * `Manifest::$settings`/`$featureFlags` are plain manifest properties,
+     * not entries in the closed 8-extender pipeline (P1.25, A68 residual —
+     * they never reached the compiled file before this) — collected here
+     * directly, outside {@see PipelineStages::ORDER}.
+     *
+     * @param  list<Manifest>  $manifests
+     * @return list<CompiledSettingDefault>
+     */
+    private function collectSettings(array $manifests): array
+    {
+        $settings = [];
+
+        foreach ($manifests as $manifest) {
+            // Guarded by CompilationValidator::validateRequiredFields() (D37:
+            // tablePrefix is mandatory) before this method ever runs — see
+            // compileEntity()'s identical guard.
+            $namespace = $manifest->tablePrefix ?? throw CompilationException::missingTablePrefix($manifest->composerName);
+
+            foreach ($manifest->settings as $default) {
+                $settings[] = new CompiledSettingDefault($namespace, $default);
+            }
+        }
+
+        return $settings;
+    }
+
+    /**
+     * @param  list<Manifest>  $manifests
+     * @return list<FeatureFlagDefinition>
+     */
+    private function collectFeatureFlags(array $manifests): array
+    {
+        $flags = [];
+
+        foreach ($manifests as $manifest) {
+            foreach ($manifest->featureFlags as $flag) {
+                $flags[] = $flag;
+            }
+        }
+
+        return $flags;
     }
 
     /**

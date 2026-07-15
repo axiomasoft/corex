@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Modules;
 
+use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
@@ -24,6 +25,7 @@ use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
 use Flex\Modules\Registry\ArrayEntityRegistry;
 use Flex\Modules\Registry\CompiledModuleRegistry;
 use Flex\Modules\Registry\RepositoryModuleRegistryCache;
+use Flex\Modules\Settings\CompiledSettingDefaultsProvider;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -139,6 +141,15 @@ final class ModulesServiceProvider extends ServiceProvider
                 failIfMissing: $app->environment('production'),
             );
         });
+
+        // Rebind the boxed Null default (CoreServiceProvider::register(),
+        // registered before this provider) to the real manifest-backed
+        // implementation (D20/D22/D23, P1.25) — flex/modules is present, so
+        // manifest-declared setting defaults now reach the runtime cascade.
+        $this->app->singleton(
+            SettingDefaultsProvider::class,
+            static fn (Application $app): CompiledSettingDefaultsProvider => new CompiledSettingDefaultsProvider($app->make(ModuleRegistry::class)),
+        );
     }
 
     public function boot(): void

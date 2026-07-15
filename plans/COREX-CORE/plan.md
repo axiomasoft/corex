@@ -294,6 +294,35 @@ re-read-guard, `move($id,null)`, цикл). Локальный гейт зелё
 следствие re-read через soft-delete If-then). Коммит `a97d5fb` запушен на `p1r-remediation`. Итог борда
 после закрытия P1.23: **5 🟢 · 18 🟠 · 0 🔴 · 5 ⬜**. Волна продолжается **P1.24 → P1.25**.
 
+**P1.24 закрыт: 🟠 Done with deviations (2026-07-14, коммиты `f6510a4`/`6111b97`/`8b39c80`/`91f1b22`)** —
+guard `subscribe()` с детектом Octane + негативный тест, DURABLE-курсор `sys_pubsub_cursors` (D44),
+`corex:pubsub:prune`, поведенческие тесты драйверов. Итог борда после закрытия P1.24: **5 🟢 · 19 🟠 ·
+0 🔴 · 4 ⬜** (детали — `handoff.md`, эта строка добавлена постфактум P1.25-исполнителем: закрывающий
+P1.24 коммит обновил `handoff.md`, но пропустил параграф в этом журнале — процессный гэп, не относящийся
+к scope P1.25, зафиксирован здесь чтобы журнал не расходился со Status Board).
+
+**P1.25 закрыт: 🟠 Done with deviations (2026-07-15) — детали см. phases/P1.md P1.25 Completion Notes.**
+5 lifecycle-событий модуля (`ModuleEnabled/Disabled/Archived/Purged/Upgraded`) переведены на
+`CoreX\Events\DomainEvent` с каноническими именами B-10 §3.1 (`mod.module.*`), диспатч остался в
+существующих `afterCommit`-замыканиях. `CompiledSettingDefaultsProvider` (новый, `flex/modules`) читает
+манифест-дефолты настроек из скомпилированного реестра и ребиндится поверх боксед-`Null`-провайдера в
+`ModulesServiceProvider` (D20/D22/D23 не нарушены). Обнаружен и закрыт архитектурный пробел P1.15:
+`CompiledRegistry` никогда не переносил `Manifest::$settings`/`$featureFlags` ни в один из 8 слайсов —
+без 2 новых слайсов (`settings`/`featureFlags`, `Compiler/CompiledSettingDefault.php` новый) реализовать
+Implementation Rules item'а («поверх скомпилированного реестра», запрет на `ModuleDiscovery::discover()`
+на hot-path) было физически невозможно. `DatabaseModuleLifecycle::enable()` вызывает
+`FeatureFlags::define()` для `Manifest::$featureFlags` внутри того же `afterCommit`, идемпотентно
+(P1.22). Локальный гейт зелёный (105/105 sqlite, 92/92 pg), mutation-check 2 кейса
+(`domainevent-drop`, `null-provider-binding`) краснеют под саботажем, воспроизведены харнессом. Статус
+**🟠**, не 🟢, по правилу докс-куратора (прецедент P1.20–P1.24): `files_outside_scope` непустой —
+`Compiler/{CompiledRegistry,RegistryCompiler}.php` + новый `CompiledSettingDefault.php` (архитектурная
+необходимость, не в исходном `Files`), `Contracts/ModuleRegistry.php` (докблок), `tests/Feature/
+RegistryCompilerTest.php` (P1.15 round-trip обновлён под 10 слайсов), новый тестовый фикстур
+`tests/Stubs/Lifecycle/StubFeatureFlagModule.php`, `scripts/mutation-check.sh` (D45-регистрация, тот же
+паттерн волны). Итог борда после закрытия P1.25: **5 🟢 · 20 🟠 · 0 🔴 · 3 ⬜** (⬜ = P1.26/P1.27/P1.28).
+Волна вплотную подошла к закрытию фазы — **P1.26** (слепой аудит + CHANGELOG + semver-теги + PR в
+`main`) остаётся единственным блокирующим item'ом; P1.27/P1.28 time-gated/отдельные, не блокируют.
+
 ## 5. Decision Log
 
 | D# | Дата | Решение | Почему |

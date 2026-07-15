@@ -2,15 +2,26 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\SettingsScope;
 use CoreX\Events\SettingChanged;
 use CoreX\Exceptions\SettingValueTooLargeException;
 use CoreX\Exceptions\UnsupportedScopeException;
 use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
+use Flex\Modules\Compiler\RegistryCompiler;
+use Flex\Modules\Contracts\ModuleRegistry;
+use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
+use Flex\Modules\Manifest;
+use Flex\Modules\ModulesServiceProvider;
+use Flex\Modules\Registry\CompiledModuleRegistry;
+use Flex\Modules\Registry\RepositoryModuleRegistryCache;
+use Flex\Modules\SettingDefault;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -213,4 +224,51 @@ it('rejects a value over the 64KB quota', function (): void {
 
     expect(fn () => $repository->set('crm', 'huge', $tooLarge))
         ->toThrow(SettingValueTooLargeException::class);
+});
+
+it('resolves a manifest-declared SettingDefault through the container-bound SettingDefaultsProvider once flex/modules is registered (P1.25, A68, test в)', function (): void {
+    // Registering flex/modules must rebind the boxed Null default
+    // (CoreServiceProvider::register()) to CompiledSettingDefaultsProvider —
+    // reading the manifest default without any row in sys_settings is
+    // exactly the wiring gap A68/Pending Work-P1 left open.
+    $this->app->register(ModulesServiceProvider::class);
+
+    $manifest = Manifest::make('corex/stub-settings')
+        ->title('Stub Settings')
+        ->tablePrefix('sst')
+        ->settings([
+            SettingDefault::make('theme', 'manifest-default')->sensitive(),
+        ]);
+
+    $compiled = (new RegistryCompiler)->compile([$manifest]);
+    $path = sys_get_temp_dir().'/flex_modules_settings_test_'.bin2hex(random_bytes(4)).'.php';
+    CompiledModuleRegistry::writeAtomic($path, [], $compiled);
+
+    try {
+        $this->app->instance(ModuleRegistry::class, new CompiledModuleRegistry(
+            cachePath: $path,
+            stateReader: new DatabaseModuleStateReader(connection: SETTINGS_TEST_CONNECTION),
+            cache: new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+            versionResolver: static fn (TenantContext $ctx): int => 0,
+        ));
+
+        // Pulled straight from the container (not hand-built) — the seam the
+        // mutation-check pins: reverting ModulesServiceProvider's rebind to
+        // NullSettingDefaultsProvider makes this resolve to Null instead.
+        /** @var SettingDefaultsProvider $defaults */
+        $defaults = $this->app->make(SettingDefaultsProvider::class);
+
+        expect($defaults->defaultFor('sst', 'theme'))->toBe('manifest-default')
+            ->and($defaults->isSensitive('sst', 'theme'))->toBeTrue()
+            ->and($defaults->defaultFor('sst', 'missing'))->toBeNull();
+
+        // sys_settings carries no row for it — the manifest default alone
+        // reaches SettingsRepository::get().
+        $repository = new DatabaseSettingsRepository(defaults: $defaults, connection: SETTINGS_TEST_CONNECTION);
+
+        expect($repository->get('sst', 'theme'))->toBe('manifest-default')
+            ->and(settingsPg()->table('sys_settings')->where('namespace', 'sst')->where('key', 'theme')->exists())->toBeFalse();
+    } finally {
+        unlink($path);
+    }
 });

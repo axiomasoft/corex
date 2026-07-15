@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Events;
 
-/** Interim event base (workaround, OQ-4 — see {@see ModuleEnabled}). */
-final readonly class ModuleUpgraded
+use CoreX\Events\DomainEvent;
+use Override;
+
+/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.upgraded` (B-10 §3.1). */
+final class ModuleUpgraded extends DomainEvent
 {
     /** @param  list<string>  $migrationsRun */
     public function __construct(
-        public string $module,
-        public string $fromVersion,
-        public string $toVersion,
-        public array $migrationsRun,
-    ) {}
+        public readonly string $module,
+        public readonly string $fromVersion,
+        public readonly string $toVersion,
+        public readonly array $migrationsRun,
+    ) {
+        parent::__construct();
+    }
+
+    #[Override]
+    public static function name(): string
+    {
+        return 'mod.module.upgraded';
+    }
 }

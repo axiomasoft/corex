@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace Flex\Modules\Events;
 
-/** Interim event base (workaround, OQ-4 — see {@see ModuleEnabled}). */
-final readonly class ModulePurged
+use CoreX\Events\DomainEvent;
+use Override;
+
+/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.purged` (B-10 §3.1). */
+final class ModulePurged extends DomainEvent
 {
     /** @param  list<string>  $droppedTables */
     public function __construct(
-        public string $module,
-        public array $droppedTables,
-    ) {}
+        public readonly string $module,
+        public readonly array $droppedTables,
+    ) {
+        parent::__construct();
+    }
+
+    #[Override]
+    public static function name(): string
+    {
+        return 'mod.module.purged';
+    }
 }

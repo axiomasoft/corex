@@ -38,6 +38,8 @@ declare -A TEST_CMD=(
     [P1.23-event-in-transaction]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='after-commit'"
     [P1.24-bare-runninginconsole-guard]="vendor/bin/pest --exclude-group=pg tests/Feature/PubSubTest.php --filter='refuses a faked Octane runtime'"
     [P1.24-cursor-start-zero]="vendor/bin/pest --group=pg tests/Feature/PubSubDatabasePollTest.php --filter='does NOT replay pre-existing history'"
+    [P1.25-domainevent-drop]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='carries a UUIDv7'"
+    [P1.25-null-provider-binding]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='resolves a manifest-declared SettingDefault'"
 )
 
 if [ "${1:-}" = "--list" ]; then
