@@ -190,6 +190,35 @@ jobs:
       - name: PHPStan (auth/src)
         run: composer --working-dir=packages/auth analyse
 
+  layer-gate:
+    runs-on: ubuntu-latest
+    name: Layer & core-isolation gate
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
+        run: composer test:arch
+
+  contract-guard:
+    runs-on: ubuntu-latest
+    name: Contract-snapshot guard
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Guard src/Contracts changes against a CHANGELOG entry
+        run: bash scripts/contract-guard.sh "${{ github.event.pull_request.base.sha || github.event.before }}"
+
   coverage:
     runs-on: ubuntu-latest
     name: Coverage (min 80%)

@@ -17,6 +17,11 @@
             <directory>tests/Feature</directory>
         </testsuite>
 
+        <!-- Layer & isolation gates (P3.5): pure static assertions, no DB/container. -->
+        <testsuite name="Arch">
+            <directory>tests/Arch</directory>
+        </testsuite>
+
         <!-- flex/modules-lint (P1.13): PHPStan-правила. data/* — фикстуры-нарушения,
              они анализируются правилом, а не исполняются раннером. -->
         <testsuite name="PHPStan">
