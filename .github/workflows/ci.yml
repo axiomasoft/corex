@@ -130,6 +130,30 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 
+  auth-tests:
+    runs-on: ubuntu-latest
+    name: Auth package (AzGuard)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Authenticate private azguard repository
+        run: composer config --global --auth github-oauth.github.com "${{ secrets.AZGUARD_TOKEN }}"
+
+      - name: Install dependencies
+        run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress
+
+      - name: Auth tests
+        run: composer --working-dir=packages/auth test
+
+      - name: PHPStan (auth/src)
+        run: composer --working-dir=packages/auth analyse
+
   coverage:
     runs-on: ubuntu-latest
     name: Coverage (min 80%)
