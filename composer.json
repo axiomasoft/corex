@@ -15,7 +15,9 @@
         "corex/core": "@dev",
         "flex/crm": "@dev",
         "corex/tasks": "@dev",
-        "corex/modules": "@dev"
+        "corex/modules": "@dev",
+        "corex/tenancy": "@dev",
+        "stancl/tenancy": "dev-master#76e5f9655924271c6c9da54e2d4ccb82c6f71ea0 as 4.0.0"
     },
     "require-dev": {
         "laravel/pint": "^1.13",

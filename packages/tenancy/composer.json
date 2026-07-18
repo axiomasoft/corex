@@ -1,0 +1,63 @@
+{
+    "name": "corex/tenancy",
+    "description": "CoreX physical DB-per-account tenancy — root-schema control plane on stancl/tenancy v4 (B-11, D13).",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "multi-tenancy", "stancl", "saas"],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "corex/core": "@dev",
+        "stancl/tenancy": "dev-master#76e5f9655924271c6c9da54e2d4ccb82c6f71ea0 as 4.0.0",
+        "stancl/jobpipeline": "2.0.0-rc7",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.13",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Tenancy\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Tenancy\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CoreX\\Tenancy\\TenancyServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest --group=pg",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    }
+}
