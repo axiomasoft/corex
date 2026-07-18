@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Enums;
+namespace CoreX\Modules\Enums;
 
 /**
  * Contract of satellite hookup (B-10 §4.4): a satellite queries

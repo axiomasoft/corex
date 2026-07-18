@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Audit;
+namespace CoreX\Modules\Audit;
 
 use CoreX\Audit\AuditObserver;
 use CoreX\Concerns\HasAuditLog;
-use Flex\Modules\Contracts\EntityRegistry;
-use Flex\Modules\Enums\Capability;
+use CoreX\Modules\Contracts\EntityRegistry;
+use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Eloquent\Model;
 
 use function class_uses_recursive;
@@ -16,7 +16,7 @@ use function class_uses_recursive;
  * Attaches CoreX\Audit\AuditObserver to every model registered with
  * capability Auditable (B-10 §4.4). AuditObserver itself lives in
  * corex/core, but this lookup needs EntityRegistry — corex/core cannot
- * depend on flex/modules (D22: the reverse of this package's own require
+ * depend on corex/modules (D22: the reverse of this package's own require
  * would cycle) — so the wiring lives here, called from
  * ModulesServiceProvider::boot(). Skips models that already opt in
  * manually via HasAuditLog, so a model is never recorded twice.

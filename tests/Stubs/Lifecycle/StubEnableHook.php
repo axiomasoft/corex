@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use Flex\Modules\Contracts\EnableHook;
-use Flex\Modules\ModuleContext;
+use CoreX\Modules\Contracts\EnableHook;
+use CoreX\Modules\ModuleContext;
 
 /** Idempotent (AC-7): claiming the same setting reference twice is a no-op update. */
 final class StubEnableHook implements EnableHook

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Events;
+namespace CoreX\Modules\Events;
 
 use CoreX\Events\DomainEvent;
 use Override;

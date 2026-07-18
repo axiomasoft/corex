@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
-use Flex\Modules\SettingDefault;
+use CoreX\Modules\SettingDefault;
 use ReflectionClass;
 
 /**
@@ -13,7 +13,7 @@ use ReflectionClass;
  * `Manifest::$settings` never reached the compiled registry before this).
  * The namespace is the module's `tablePrefix` — B-10 §3.1 documents
  * `sys_settings.namespace` as "id модуля ('crm')", which is exactly the
- * short 2–3 letter code {@see Flex\Modules\Manifest::$tablePrefix} already
+ * short 2–3 letter code {@see CoreX\Modules\Manifest::$tablePrefix} already
  * carries, not the full composer name.
  */
 final readonly class CompiledSettingDefault

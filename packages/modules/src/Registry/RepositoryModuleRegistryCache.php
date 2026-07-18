@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
 use Closure;
-use Flex\Modules\Contracts\ModuleRegistryCache;
+use CoreX\Modules\Contracts\ModuleRegistryCache;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 /**

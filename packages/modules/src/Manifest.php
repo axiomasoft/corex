@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
 use CoreX\Contracts\FeatureFlagDefinition;
-use Flex\Modules\Exceptions\InvalidManifestException;
-use Flex\Modules\Extend\Extender;
+use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Extend\Extender;
 
 /**
  * Fluent module manifest (B-10 §3.2). A module's `manifest()` method builds

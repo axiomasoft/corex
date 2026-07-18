@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules;
+namespace CoreX\Modules\PHPStan\Rules;
 
-use Flex\Modules\PHPStan\Rules\Support\DatabaseCall;
+use CoreX\Modules\PHPStan\Rules\Support\DatabaseCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
-use Flex\Modules\Compiler\CompiledRegistry;
-use Flex\Modules\Contracts\ModuleLifecycle;
-use Flex\Modules\Dep;
-use Flex\Modules\Manifest;
+use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Modules\Contracts\ModuleLifecycle;
+use CoreX\Modules\Dep;
+use CoreX\Modules\Manifest;
 
 /**
  * One module's compiled-registry entry (B-10 §3.3 `ModuleRegistry::get()`):

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
-use Flex\Modules\Enums\DisableReason;
-use Flex\Modules\Exceptions\HasEnabledDependentsException;
-use Flex\Modules\Exceptions\InvalidStateTransitionException;
-use Flex\Modules\Exceptions\MissingDependencyException;
-use Flex\Modules\Exceptions\ModuleEnableFailedException;
-use Flex\Modules\ModuleStatus;
+use CoreX\Modules\Enums\DisableReason;
+use CoreX\Modules\Exceptions\HasEnabledDependentsException;
+use CoreX\Modules\Exceptions\InvalidStateTransitionException;
+use CoreX\Modules\Exceptions\MissingDependencyException;
+use CoreX\Modules\Exceptions\ModuleEnableFailedException;
+use CoreX\Modules\ModuleStatus;
 
 /**
  * State-machine transitions for one module in the current tenant's database

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
-use Flex\Modules\Contracts\ModuleActivationGate;
+use CoreX\Modules\Contracts\ModuleActivationGate;
 
 /**
  * Result of {@see ModuleActivationGate::check()}

@@ -1,5 +1,5 @@
 {
-    "name": "flex/modules",
+    "name": "corex/modules",
     "description": "Flex module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
     "type": "library",
     "license": "MIT",
@@ -24,13 +24,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Flex\\Modules\\": "src/"
+            "CoreX\\Modules\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Flex\\Modules\\ModulesServiceProvider"
+                "CoreX\\Modules\\ModulesServiceProvider"
             ]
         }
     },

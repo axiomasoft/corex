@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Commands;
+namespace CoreX\Modules\Commands;
 
-use Flex\Modules\Compiler\RegistryCompiler;
-use Flex\Modules\Discovery\ModuleDiscovery;
-use Flex\Modules\Exceptions\CompilationException;
-use Flex\Modules\Exceptions\InvalidManifestException;
-use Flex\Modules\ModulesServiceProvider;
-use Flex\Modules\Registry\CompiledModule;
-use Flex\Modules\Registry\CompiledModuleRegistry;
+use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Modules\Registry\CompiledModule;
+use CoreX\Modules\Registry\CompiledModuleRegistry;
 use Illuminate\Console\Command;
 
 /**

@@ -14,7 +14,7 @@
         "php": "^8.3",
         "axioma-studio/azguard-core": "@dev",
         "corex/core": "@dev",
-        "flex/modules": "@dev",
+        "corex/modules": "@dev",
         "illuminate/contracts": "^12.0",
         "illuminate/support": "^12.0"
     },

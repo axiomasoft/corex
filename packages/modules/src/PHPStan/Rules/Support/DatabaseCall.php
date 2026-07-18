@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules\Support;
+namespace CoreX\Modules\PHPStan\Rules\Support;
 
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +13,7 @@ use PHPStan\Analyser\Scope;
 
 /**
  * Распознавание обращений к БД (`DB::`/`Schema::`, методы с SQL-аргументом) и
- * извлечение из них строк-констант. Общая часть правил flex/modules-lint.
+ * извлечение из них строк-констант. Общая часть правил corex/modules-lint.
  */
 final class DatabaseCall
 {

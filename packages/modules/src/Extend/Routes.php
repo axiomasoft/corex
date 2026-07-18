@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
 /**
  * 7. Route files (plain Laravel routing, B-10 §4.2), grouped per-module by

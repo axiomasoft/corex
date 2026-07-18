@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Events;
+namespace CoreX\Modules\Events;
 
 use CoreX\Events\DomainEvent;
-use Flex\Modules\Enums\DisableReason;
+use CoreX\Modules\Enums\DisableReason;
 use Override;
 
 /** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.disabled` (B-10 §3.1). */

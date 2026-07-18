@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
+use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Contracts\ModuleStateReader;
 
 /**
  * Fake reader for tests and the boxed default (P1.5) — no database. The

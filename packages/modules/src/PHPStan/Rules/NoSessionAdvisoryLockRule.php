@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules;
+namespace CoreX\Modules\PHPStan\Rules;
 
 /**
  * B-10 §7.3 п.3: session-level advisory lock переживает транзакцию и остаётся

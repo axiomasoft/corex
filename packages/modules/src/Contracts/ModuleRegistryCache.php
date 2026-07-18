@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
 use Closure;
 

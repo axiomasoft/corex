@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs;
 
-use Flex\Modules\Extend\Extender;
+use CoreX\Modules\Extend\Extender;
 
 /**
  * Implements the Extender marker but is NOT one of the closed 8 classes —

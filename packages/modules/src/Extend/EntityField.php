@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
 /**
  * 2. A field/relation attached to ANOTHER module's entity (B-10 §4.2).

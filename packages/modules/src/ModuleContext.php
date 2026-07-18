@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
+use CoreX\Modules\Contracts\RecordsRegistrar;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Contracts\RecordsRegistrar;
 
 /**
  * Payload passed to {@see Contracts\EnableHook}/{@see Contracts\DisableHook}/

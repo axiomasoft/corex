@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
 use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Extend\EntityField;
+use CoreX\Modules\Extend\Extender;
+use CoreX\Modules\Extend\Filament;
+use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Extend\Routes;
+use CoreX\Modules\Extend\Workflow;
+use CoreX\Modules\Manifest;
+use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Money\MoneyCast;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Exceptions\CompilationException;
-use Flex\Modules\Extend\Api;
-use Flex\Modules\Extend\Entity;
-use Flex\Modules\Extend\EntityField;
-use Flex\Modules\Extend\Extender;
-use Flex\Modules\Extend\Filament;
-use Flex\Modules\Extend\Menu;
-use Flex\Modules\Extend\Permissions;
-use Flex\Modules\Extend\Routes;
-use Flex\Modules\Extend\Workflow;
-use Flex\Modules\Manifest;
-use Flex\Modules\Registry\EntityDefinition;
-use Flex\Modules\Registry\FieldDefinition;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 

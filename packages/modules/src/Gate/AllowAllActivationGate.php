@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Gate;
+namespace CoreX\Modules\Gate;
 
+use CoreX\Modules\Contracts\ModuleActivationGate;
+use CoreX\Modules\GateDecision;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Contracts\ModuleActivationGate;
-use Flex\Modules\GateDecision;
 
 /**
  * Boxed default (D10) — no billing gate exists outside cloud, so every

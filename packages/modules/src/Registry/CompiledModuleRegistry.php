@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
 use Closure;
+use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Contracts\ModuleRegistryCache;
+use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Exceptions\ModuleNotFound;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Compiler\CompiledRegistry;
-use Flex\Modules\Contracts\ModuleRegistry;
-use Flex\Modules\Contracts\ModuleRegistryCache;
-use Flex\Modules\Contracts\ModuleStateReader;
-use Flex\Modules\Exceptions\ModuleNotFound;
-use Flex\Modules\ModulesServiceProvider;
 use RuntimeException;
 
 /**

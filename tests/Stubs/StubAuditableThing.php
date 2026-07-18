@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * EntityRegistry-driven model (AuditLogTest AC-20) — deliberately does NOT
  * use HasAuditLog, exercising the auto-observer path wired by
- * Flex\Modules\Audit\AuditCapabilityWiring instead of the manual trait. Uuid
+ * CoreX\Modules\Audit\AuditCapabilityWiring instead of the manual trait. Uuid
  * key (HasConfiguredId) because entity_id in sys_audit_log is a uuid column.
  */
 final class StubAuditableThing extends Model implements Auditable

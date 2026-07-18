@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
-use Flex\Modules\ModuleContext;
+use CoreX\Modules\ModuleContext;
 
 /**
  * Module-authored seed step run on enable (B-10 §3.3/§5.3). MUST be

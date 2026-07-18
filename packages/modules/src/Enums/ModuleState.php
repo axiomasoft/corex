@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Enums;
+namespace CoreX\Modules\Enums;
 
 /**
  * Per-account module state machine (B-10 §5.1). `Available` is virtual —

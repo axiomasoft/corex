@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Lifecycle;
+namespace CoreX\Modules\Lifecycle;
 
-use Flex\Modules\Contracts\RecordsRegistrar;
+use CoreX\Modules\Contracts\RecordsRegistrar;
 use Illuminate\Support\Facades\DB;
 
 /**

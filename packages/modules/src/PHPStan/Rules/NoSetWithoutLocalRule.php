@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules;
+namespace CoreX\Modules\PHPStan\Rules;
 
 /**
  * B-10 §7.3 п.1: `SET` держит состояние в сессии, которую transaction pooling

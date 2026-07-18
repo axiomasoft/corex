@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
-use Flex\Modules\ModuleContext;
+use CoreX\Modules\ModuleContext;
 
 /**
  * Module-authored teardown of non-data side effects on disable (cron,

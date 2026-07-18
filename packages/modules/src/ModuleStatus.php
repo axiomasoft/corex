@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
-use Flex\Modules\Enums\ModuleState;
+use CoreX\Modules\Enums\ModuleState;
 
 /**
  * Point-in-time snapshot returned by {@see Contracts\ModuleLifecycle::status()}

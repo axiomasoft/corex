@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
 /**
  * Single extension point for a Flex module (B-10 §3.2): a concrete

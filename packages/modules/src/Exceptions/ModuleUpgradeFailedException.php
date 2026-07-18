@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Exceptions;
+namespace CoreX\Modules\Exceptions;
 
-use Flex\Modules\Contracts\ModuleLifecycle;
+use CoreX\Modules\Contracts\ModuleLifecycle;
 use RuntimeException;
 use Throwable;
 

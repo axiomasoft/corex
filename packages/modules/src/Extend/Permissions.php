@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
 /**
  * 6. AzGuard permission group `{panel}.{entity}.{action}` (B-10 §4.2),

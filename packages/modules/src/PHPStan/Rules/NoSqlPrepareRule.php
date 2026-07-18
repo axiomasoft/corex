@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules;
+namespace CoreX\Modules\PHPStan\Rules;
 
 /**
  * B-10 §7.3 п.5: SQL-level `PREPARE`/`DEALLOCATE` привязывает стейтмент к

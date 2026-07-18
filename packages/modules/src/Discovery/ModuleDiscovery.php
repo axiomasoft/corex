@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Discovery;
+namespace CoreX\Modules\Discovery;
 
-use Flex\Modules\CorexModule;
-use Flex\Modules\Exceptions\InvalidManifestException;
-use Flex\Modules\Manifest;
+use CoreX\Modules\CorexModule;
+use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Manifest;
 
 /**
  * Finds installed modules and builds their manifests (B-10 §3.2/§5.2).

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Exceptions;
+namespace CoreX\Modules\Exceptions;
 
 use RuntimeException;
 

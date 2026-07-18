@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
 /**
  * 3. REST contract (B-10 §4.2): either auto-CRUD for an owned entity, or an

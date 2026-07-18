@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Testing;
 
 use CoreX\Contracts\TenantService;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
 use CoreX\Testing\CoreXTestCase;
-use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**

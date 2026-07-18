@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use Flex\Modules\CorexModule;
-use Flex\Modules\Dep;
-use Flex\Modules\Manifest;
+use CoreX\Modules\CorexModule;
+use CoreX\Modules\Dep;
+use CoreX\Modules\Manifest;
 
 /**
  * Purge/D41 fixture. Owns two tables with a REAL foreign key (stf_children →

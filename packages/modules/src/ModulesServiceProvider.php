@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\CoreServiceProvider;
+use CoreX\Modules\Audit\AuditCapabilityWiring;
+use CoreX\Modules\Commands\CompileModulesCommand;
+use CoreX\Modules\Contracts\EntityRegistry;
+use CoreX\Modules\Contracts\ModuleActivationGate;
+use CoreX\Modules\Contracts\ModuleLifecycle;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Contracts\ModuleRegistryCache;
+use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Contracts\RecordsRegistrar;
+use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Gate\AllowAllActivationGate;
+use CoreX\Modules\Lifecycle\DatabaseModuleLifecycle;
+use CoreX\Modules\Lifecycle\DatabaseModuleStateReader;
+use CoreX\Modules\Lifecycle\DatabaseRecordsRegistrar;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\CompiledModuleRegistry;
+use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Settings\CompiledSettingDefaultsProvider;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Audit\AuditCapabilityWiring;
-use Flex\Modules\Commands\CompileModulesCommand;
-use Flex\Modules\Contracts\EntityRegistry;
-use Flex\Modules\Contracts\ModuleActivationGate;
-use Flex\Modules\Contracts\ModuleLifecycle;
-use Flex\Modules\Contracts\ModuleRegistry;
-use Flex\Modules\Contracts\ModuleRegistryCache;
-use Flex\Modules\Contracts\ModuleStateReader;
-use Flex\Modules\Contracts\RecordsRegistrar;
-use Flex\Modules\Discovery\ModuleDiscovery;
-use Flex\Modules\Gate\AllowAllActivationGate;
-use Flex\Modules\Lifecycle\DatabaseModuleLifecycle;
-use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
-use Flex\Modules\Lifecycle\DatabaseRecordsRegistrar;
-use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\CompiledModuleRegistry;
-use Flex\Modules\Registry\RepositoryModuleRegistryCache;
-use Flex\Modules\Settings\CompiledSettingDefaultsProvider;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -155,7 +155,7 @@ final class ModulesServiceProvider extends ServiceProvider
 
         // Rebind the boxed Null default (CoreServiceProvider::register(),
         // registered before this provider) to the real manifest-backed
-        // implementation (D20/D22/D23, P1.25) — flex/modules is present, so
+        // implementation (D20/D22/D23, P1.25) — corex/modules is present, so
         // manifest-declared setting defaults now reach the runtime cascade.
         $this->app->singleton(
             SettingDefaultsProvider::class,
@@ -250,9 +250,9 @@ final class ModulesServiceProvider extends ServiceProvider
             }
 
             // AuditObserver lives in corex/core (B-10 §4.4 capability
-            // 'auditable') — the wiring itself lives in flex/modules'
+            // 'auditable') — the wiring itself lives in corex/modules'
             // AuditCapabilityWiring because it needs EntityRegistry, and
-            // corex/core cannot depend on flex/modules (reverse of this
+            // corex/core cannot depend on corex/modules (reverse of this
             // package's own require, D22).
             AuditCapabilityWiring::wire($registry);
         });

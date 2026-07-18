@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
 use CoreX\Contracts\FeatureFlagDefinition;
-use Flex\Modules\Extend\Api;
-use Flex\Modules\Extend\Extender;
-use Flex\Modules\Extend\Filament;
-use Flex\Modules\Extend\Menu;
-use Flex\Modules\Extend\Permissions;
-use Flex\Modules\Extend\Routes;
-use Flex\Modules\Extend\Workflow;
-use Flex\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Extend\Extender;
+use CoreX\Modules\Extend\Filament;
+use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Extend\Routes;
+use CoreX\Modules\Extend\Workflow;
+use CoreX\Modules\Registry\EntityDefinition;
 use ReflectionClass;
 
 /**

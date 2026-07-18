@@ -15,7 +15,7 @@
         "corex/core": "@dev",
         "corex/crm": "@dev",
         "corex/tasks": "@dev",
-        "flex/modules": "@dev"
+        "corex/modules": "@dev"
     },
     "require-dev": {
         "laravel/pint": "^1.13",

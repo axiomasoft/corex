@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
-use Flex\Modules\Extend\Api;
-use Flex\Modules\Extend\Entity;
-use Flex\Modules\Extend\EntityField;
-use Flex\Modules\Extend\Filament;
-use Flex\Modules\Extend\Menu;
-use Flex\Modules\Extend\Permissions;
-use Flex\Modules\Extend\Routes;
-use Flex\Modules\Extend\Workflow;
+use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Extend\EntityField;
+use CoreX\Modules\Extend\Filament;
+use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Extend\Routes;
+use CoreX\Modules\Extend\Workflow;
 
 /**
  * The single place the closed 8-extender pipeline order is declared (B-10

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\Modules\Dep;
+use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Manifest;
+use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Modules\SettingDefault;
 use CoreX\Tests\Stubs\StubCorexModule;
-use Flex\Modules\Dep;
-use Flex\Modules\Discovery\ModuleDiscovery;
-use Flex\Modules\Exceptions\InvalidManifestException;
-use Flex\Modules\Manifest;
-use Flex\Modules\ModulesServiceProvider;
-use Flex\Modules\SettingDefault;
 use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function (): void {

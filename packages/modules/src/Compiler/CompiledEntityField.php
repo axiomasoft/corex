@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
-use Flex\Modules\Extend\EntityField;
+use CoreX\Modules\Extend\EntityField;
 
 /**
  * An EntityField extender resolved against the compiled entity set (P1.4).

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
-use Flex\Modules\Registry\FieldDefinition;
+use CoreX\Modules\Registry\FieldDefinition;
 
 /**
  * 1. Declares an owned entity into EntityRegistry (B-10 §4.2). `handle`

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\CoreServiceProvider;
-use Flex\Modules\ModulesServiceProvider;
+use CoreX\Modules\ModulesServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;

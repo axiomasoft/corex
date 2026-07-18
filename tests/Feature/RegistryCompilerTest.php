@@ -3,28 +3,28 @@
 declare(strict_types=1);
 
 use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Compiler\CompiledEntityField;
+use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Modules\Compiler\InstalledPackages;
+use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Dep;
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Extend\EntityField;
+use CoreX\Modules\Extend\Filament;
+use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Extend\Routes;
+use CoreX\Modules\Extend\Workflow;
+use CoreX\Modules\Manifest;
+use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Modules\SettingDefault;
 use CoreX\Tests\Stubs\StubEntityAlphaThing;
 use CoreX\Tests\Stubs\StubEntityBetaThing;
 use CoreX\Tests\Stubs\StubRogueExtender;
 use CoreX\Tests\Stubs\Widget;
-use Flex\Modules\Compiler\CompiledEntityField;
-use Flex\Modules\Compiler\CompiledRegistry;
-use Flex\Modules\Compiler\InstalledPackages;
-use Flex\Modules\Compiler\RegistryCompiler;
-use Flex\Modules\Dep;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Exceptions\CompilationException;
-use Flex\Modules\Extend\Api;
-use Flex\Modules\Extend\Entity;
-use Flex\Modules\Extend\EntityField;
-use Flex\Modules\Extend\Filament;
-use Flex\Modules\Extend\Menu;
-use Flex\Modules\Extend\Permissions;
-use Flex\Modules\Extend\Routes;
-use Flex\Modules\Extend\Workflow;
-use Flex\Modules\Manifest;
-use Flex\Modules\Registry\FieldDefinition;
-use Flex\Modules\SettingDefault;
 
 // Local helpers (not global functions, to avoid cross-file name collisions).
 $registryCompilerAlphaManifest = function (): Manifest {

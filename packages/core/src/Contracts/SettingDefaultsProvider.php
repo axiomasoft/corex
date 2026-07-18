@@ -8,9 +8,9 @@ use CoreX\Settings\NullSettingDefaultsProvider;
 
 /**
  * Manifest-declared setting defaults, injected so corex/core never imports
- * `Flex\Modules\SettingDefault` (D20/D23 — direction core←modules). The
+ * `CoreX\Modules\SettingDefault` (D20/D23 — direction core←modules). The
  * boxed default is a null object ({@see NullSettingDefaultsProvider});
- * ModulesServiceProvider (flex/modules) wires the real implementation over
+ * ModulesServiceProvider (corex/modules) wires the real implementation over
  * the compiled manifest registry.
  */
 interface SettingDefaultsProvider

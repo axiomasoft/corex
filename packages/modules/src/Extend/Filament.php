@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Extend;
+namespace CoreX\Modules\Extend;
 
 /**
  * 4. Filament resources/pages/widgets, or a tab bolted onto ANOTHER

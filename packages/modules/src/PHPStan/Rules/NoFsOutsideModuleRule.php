@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\PHPStan\Rules;
+namespace CoreX\Modules\PHPStan\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;

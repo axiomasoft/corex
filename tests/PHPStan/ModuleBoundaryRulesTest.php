@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\PHPStan;
 
-use Flex\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule;
-use Flex\Modules\PHPStan\Rules\NoForeignPrefixSqlRule;
-use Flex\Modules\PHPStan\Rules\NoFsOutsideModuleRule;
+use CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule;
+use CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule;
+use CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 

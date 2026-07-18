@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Lifecycle;
+namespace CoreX\Modules\Lifecycle;
 
+use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Enums\ModuleState;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Contracts\ModuleStateReader;
-use Flex\Modules\Enums\ModuleState;
 use Illuminate\Support\Facades\DB;
 
 /**

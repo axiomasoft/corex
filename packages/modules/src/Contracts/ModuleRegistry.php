@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
+use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Modules\Exceptions\ModuleNotFound;
+use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Compiler\CompiledRegistry;
-use Flex\Modules\Exceptions\ModuleNotFound;
-use Flex\Modules\Registry\CompiledModule;
 
 /**
  * Compiled code-level registry (B-10 §3.3/§5.2): built by

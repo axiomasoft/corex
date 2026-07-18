@@ -8,17 +8,17 @@ use CoreX\Contracts\SettingsScope;
 use CoreX\Events\SettingChanged;
 use CoreX\Exceptions\SettingValueTooLargeException;
 use CoreX\Exceptions\UnsupportedScopeException;
+use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Lifecycle\DatabaseModuleStateReader;
+use CoreX\Modules\Manifest;
+use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Modules\Registry\CompiledModuleRegistry;
+use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\SettingDefault;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
-use Flex\Modules\Compiler\RegistryCompiler;
-use Flex\Modules\Contracts\ModuleRegistry;
-use Flex\Modules\Lifecycle\DatabaseModuleStateReader;
-use Flex\Modules\Manifest;
-use Flex\Modules\ModulesServiceProvider;
-use Flex\Modules\Registry\CompiledModuleRegistry;
-use Flex\Modules\Registry\RepositoryModuleRegistryCache;
-use Flex\Modules\SettingDefault;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
@@ -226,8 +226,8 @@ it('rejects a value over the 64KB quota', function (): void {
         ->toThrow(SettingValueTooLargeException::class);
 });
 
-it('resolves a manifest-declared SettingDefault through the container-bound SettingDefaultsProvider once flex/modules is registered (P1.25, A68, test в)', function (): void {
-    // Registering flex/modules must rebind the boxed Null default
+it('resolves a manifest-declared SettingDefault through the container-bound SettingDefaultsProvider once corex/modules is registered (P1.25, A68, test в)', function (): void {
+    // Registering corex/modules must rebind the boxed Null default
     // (CoreServiceProvider::register()) to CompiledSettingDefaultsProvider —
     // reading the manifest default without any row in sys_settings is
     // exactly the wiring gap A68/Pending Work-P1 left open.

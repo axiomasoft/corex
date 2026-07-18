@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
-use Flex\Modules\Exceptions\CompilationException;
-use Flex\Modules\Extend\Extender;
-use Flex\Modules\Manifest;
+use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Extend\Extender;
+use CoreX\Modules\Manifest;
 
 /**
  * Compile-time checks (B-10 §5.2/§7.4 п.4) — every failure here is a deploy

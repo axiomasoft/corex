@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Exceptions\EntityNotFound;
+use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Exceptions\EntityNotFound;
-use Flex\Modules\Registry\EntityDefinition;
 
 /**
  * Central registry of ecosystem entities (B-10 §3.4). Single source of the

@@ -1,6 +1,6 @@
-# flex/modules
+# corex/modules
 
-Модульная система Flex (namespace `Flex\Modules\`): манифест модуля, discovery,
+Модульная система Flex (namespace `CoreX\Modules\`): манифест модуля, discovery,
 `RegistryCompiler` + extenders, `ModuleRegistry` (compiled hot-path),
 lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр владения
 для безопасного purge. Ставится поверх `corex/core`. MIT.
@@ -36,7 +36,7 @@ php artisan migrate --database=<tenant>
 Потребитель публикует **копию** миграций; изменения схемы поставляются **новыми
 аддитивными миграциями** под тем же тегом (при апгрейде повторите
 `vendor:publish` + `migrate`). Текущее поколение —
-`Flex\Modules\ModulesServiceProvider::SCHEMA_VERSION`.
+`CoreX\Modules\ModulesServiceProvider::SCHEMA_VERSION`.
 
 ## Идентификаторы и время
 

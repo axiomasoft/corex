@@ -8,8 +8,8 @@ use AzGuard\AzGuardServiceProvider;
 use CoreX\Auth\CoreAuthServiceProvider;
 use CoreX\Contracts\TenantService;
 use CoreX\CoreServiceProvider;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
-use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 

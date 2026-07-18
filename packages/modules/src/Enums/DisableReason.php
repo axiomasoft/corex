@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Enums;
+namespace CoreX\Modules\Enums;
 
 /** Why a module was disabled (B-10 §5.1/§5.4, `mod_modules.disable_reason`). */
 enum DisableReason: string

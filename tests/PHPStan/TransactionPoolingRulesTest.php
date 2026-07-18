@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\PHPStan;
 
-use Flex\Modules\PHPStan\Rules\NoEvalRule;
-use Flex\Modules\PHPStan\Rules\NoListenNotifyRule;
-use Flex\Modules\PHPStan\Rules\NoSessionAdvisoryLockRule;
-use Flex\Modules\PHPStan\Rules\NoSetWithoutLocalRule;
-use Flex\Modules\PHPStan\Rules\NoSqlPrepareRule;
-use Flex\Modules\PHPStan\Rules\NoTempTableRule;
+use CoreX\Modules\PHPStan\Rules\NoEvalRule;
+use CoreX\Modules\PHPStan\Rules\NoListenNotifyRule;
+use CoreX\Modules\PHPStan\Rules\NoSessionAdvisoryLockRule;
+use CoreX\Modules\PHPStan\Rules\NoSetWithoutLocalRule;
+use CoreX\Modules\PHPStan\Rules\NoSqlPrepareRule;
+use CoreX\Modules\PHPStan\Rules\NoTempTableRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 

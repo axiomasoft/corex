@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Exceptions;
+namespace CoreX\Modules\Exceptions;
 
-use Flex\Modules\CorexModule;
+use CoreX\Modules\CorexModule;
 use RuntimeException;
 
 final class InvalidManifestException extends RuntimeException

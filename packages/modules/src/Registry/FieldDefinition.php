@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
 /**
  * System field of an entity (B-10 §3.4); custom fields live in flex/attributes.

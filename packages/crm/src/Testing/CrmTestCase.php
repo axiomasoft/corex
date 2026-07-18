@@ -6,9 +6,9 @@ namespace CoreX\Crm\Testing;
 
 use CoreX\Contracts\TenantService;
 use CoreX\Crm\CrmServiceProvider;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
 use CoreX\Testing\CoreXTestCase;
-use Flex\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use Flex\Modules\CorexModule;
-use Flex\Modules\Manifest;
+use CoreX\Modules\CorexModule;
+use CoreX\Modules\Manifest;
 
 /**
  * No-dependency module used across ModuleLifecycleTest: two migrations

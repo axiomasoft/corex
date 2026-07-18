@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
 use Closure;
+use CoreX\Modules\Contracts\EntityRegistry;
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Exceptions\EntityNotFound;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Contracts\EntityRegistry;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Exceptions\EntityNotFound;
 
 /**
  * In-memory EntityRegistry. Module providers register() their entities at

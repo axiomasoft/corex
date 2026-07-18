@@ -1,7 +1,15 @@
 # Changelog
 
-Все заметные изменения `flex/modules` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Все заметные изменения `corex/modules` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
+
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** пакет и namespace переименованы `flex/modules`/`Flex\Modules\` →
+  `corex/modules`/`CoreX\Modules\` (доктрина слоёв, D70/D72). Consumer-код обновляет `use`/`require`
+  на новые имена (P2.0).
 
 ## [0.1.0] - 2026-07-15
 

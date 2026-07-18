@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Contracts;
+namespace CoreX\Modules\Contracts;
 
+use CoreX\Modules\Gate\AllowAllActivationGate;
+use CoreX\Modules\GateDecision;
 use CoreX\Tenancy\TenantContext;
-use Flex\Modules\Gate\AllowAllActivationGate;
-use Flex\Modules\GateDecision;
 
 /**
  * Cloud billing/edition gate (B-10 §3.3). Boxed installs bind

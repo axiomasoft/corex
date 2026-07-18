@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tests\Stubs\Lifecycle;
 
 use CoreX\Contracts\FeatureFlagDefinition;
-use Flex\Modules\CorexModule;
-use Flex\Modules\Manifest;
+use CoreX\Modules\CorexModule;
+use CoreX\Modules\Manifest;
 
 /**
  * No migrations/hooks — exists solely to exercise `Manifest::$featureFlags`

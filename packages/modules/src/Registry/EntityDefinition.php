@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Registry;
+namespace CoreX\Modules\Registry;
 
-use Flex\Modules\Enums\Capability;
+use CoreX\Modules\Enums\Capability;
 
 /**
  * Immutable description of a registered entity (B-10 §3.4). Handle is the

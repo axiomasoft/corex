@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Exceptions;
+namespace CoreX\Modules\Exceptions;
 
 use RuntimeException;
 
@@ -34,8 +34,8 @@ final class CompilationException extends RuntimeException
     public static function unknownExtender(string $composerName, string $class): self
     {
         return new self(sprintf(
-            'Module [%s] declares extender [%s], which is outside the closed set of 8 Flex\\Modules\\Extend\\* classes. '
-            .'New extenders require an RFC in flex/modules (docs/rfcs/NNNN-*.md, B-10 §4.3).',
+            'Module [%s] declares extender [%s], which is outside the closed set of 8 CoreX\\Modules\\Extend\\* classes. '
+            .'New extenders require an RFC in corex/modules (docs/rfcs/NNNN-*.md, B-10 §4.3).',
             $composerName,
             $class,
         ));

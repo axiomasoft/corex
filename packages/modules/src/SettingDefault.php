@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
 /**
  * Manifest-declared setting default (B-10 §3.2): namespace is the owning

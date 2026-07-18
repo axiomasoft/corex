@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks;
 
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Tasks\Models\Process;
 use CoreX\Tasks\Models\Project;
 use CoreX\Tasks\Models\Stage;
 use CoreX\Tasks\Models\Task;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\EntityDefinition;
 use Illuminate\Support\ServiceProvider;
 
 final class TasksServiceProvider extends ServiceProvider
@@ -19,7 +19,7 @@ final class TasksServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        // Register entities so they enter flex/modules's morph map (built in
+        // Register entities so they enter corex/modules's morph map (built in
         // ModulesServiceProvider's app.booted callback, D22).
         $registry = $this->app->make(ArrayEntityRegistry::class);
 

@@ -11,9 +11,9 @@ use CoreX\Crm\Models\Deal;
 use CoreX\Crm\Models\Lead;
 use CoreX\Crm\Models\Pipeline;
 use CoreX\Crm\Models\Stage;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\EntityDefinition;
 use Illuminate\Support\ServiceProvider;
 
 final class CrmServiceProvider extends ServiceProvider
@@ -22,7 +22,7 @@ final class CrmServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        // Register entities so they enter flex/modules's morph map (built in
+        // Register entities so they enter corex/modules's morph map (built in
         // ModulesServiceProvider's app.booted callback, D22).
         $registry = $this->app->make(ArrayEntityRegistry::class);
 

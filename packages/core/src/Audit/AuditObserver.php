@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Eloquent-observer instance (created/updated/deleted/restored/forceDeleted)
  * for models exposed via EntityRegistry::byCapability(Auditable) — attached in
- * Flex\Modules\ModulesServiceProvider::boot(), not here: this package cannot
- * depend on flex/modules (D22 — flex/modules already requires corex/core, a
+ * CoreX\Modules\ModulesServiceProvider::boot(), not here: this package cannot
+ * depend on corex/modules (D22 — corex/modules already requires corex/core, a
  * reverse dependency would cycle).
  */
 final class AuditObserver

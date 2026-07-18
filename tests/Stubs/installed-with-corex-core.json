@@ -5,7 +5,7 @@
             "version": "dev-main"
         },
         {
-            "name": "flex/modules",
+            "name": "corex/modules",
             "version": "dev-main"
         }
     ]

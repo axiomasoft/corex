@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Compiler;
+namespace CoreX\Modules\Compiler;
 
-use Flex\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Discovery\ModuleDiscovery;
 
 /**
  * AC-2 (B-10 §7.4 п.4): the real composer dependency graph

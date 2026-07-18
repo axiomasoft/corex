@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e56accd04001bf08944b9ef599ae04b1",
+    "content-hash": "2efcb4a8cdd585a135c3a640afe1d1ce",
     "packages": [
         {
             "name": "brick/math",
@@ -255,11 +255,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
-                "reference": "af6f394e91330dbfc45677b95fcc6a9d71c2d0d1"
+                "reference": "d691724c5ce2f6ed27de89f061b530d6b70e1c3d"
             },
             "require": {
                 "corex/core": "@dev",
-                "flex/modules": "@dev",
+                "corex/modules": "@dev",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
@@ -303,16 +303,68 @@
             }
         },
         {
+            "name": "corex/modules",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/modules",
+                "reference": "fc3d19b1adf98b110298a3e259a4efb60d93a373"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "orchestra/testbench": "^10.0|^11.0",
+                "phpstan/phpstan": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Modules\\ModulesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Modules\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "Flex module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
+            "keywords": [
+                "entity-registry",
+                "laravel",
+                "modules"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/tasks",
             "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "433a042727a2be0e70c72cfd13f6678050a831aa"
+                "reference": "8c37fb6f3db6728489a6dc2e3c2160f96a9af9ab"
             },
             "require": {
                 "corex/core": "@dev",
-                "flex/modules": "@dev",
+                "corex/modules": "@dev",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
@@ -727,56 +779,6 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
-        },
-        {
-            "name": "flex/modules",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/modules",
-                "reference": "984bde833a4aa6781bb7ebf8b843e420e14e522c"
-            },
-            "require": {
-                "corex/core": "@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "php": "^8.3"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^10.0|^11.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Flex\\Modules\\ModulesServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Flex\\Modules\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Vostrikov",
-                    "email": "dv.vostrikov@gmail.com"
-                }
-            ],
-            "description": "Flex module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
-            "keywords": [
-                "entity-registry",
-                "laravel",
-                "modules"
-            ],
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "fruitcake/php-cors",
@@ -10599,8 +10601,8 @@
     "stability-flags": {
         "corex/core": 20,
         "corex/crm": 20,
-        "corex/tasks": 20,
-        "flex/modules": 20
+        "corex/modules": 20,
+        "corex/tasks": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -10608,5 +10610,5 @@
         "php": "^8.3"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

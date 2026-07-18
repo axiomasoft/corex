@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules\Settings;
+namespace CoreX\Modules\Settings;
 
 use CoreX\Contracts\SettingDefaultsProvider;
+use CoreX\Modules\Compiler\CompiledSettingDefault;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\SettingDefault;
 use CoreX\Settings\NullSettingDefaultsProvider;
-use Flex\Modules\Compiler\CompiledSettingDefault;
-use Flex\Modules\Contracts\ModuleRegistry;
-use Flex\Modules\SettingDefault;
 use Override;
 
 /**
- * Real {@see SettingDefaultsProvider} for flex/modules (D20/D22/D23 —
+ * Real {@see SettingDefaultsProvider} for corex/modules (D20/D22/D23 —
  * direction core←modules stays intact: `corex/core` only ever sees the
  * contract, this implementation lives here and `ModulesServiceProvider`
  * rebinds it over the boxed {@see NullSettingDefaultsProvider}

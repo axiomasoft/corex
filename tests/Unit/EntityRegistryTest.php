@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Modules\Enums\Capability;
+use CoreX\Modules\Exceptions\EntityNotFound;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Widget;
-use Flex\Modules\Enums\Capability;
-use Flex\Modules\Exceptions\EntityNotFound;
-use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\EntityDefinition;
-use Flex\Modules\Registry\FieldDefinition;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 beforeEach(function (): void {

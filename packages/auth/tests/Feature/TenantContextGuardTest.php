@@ -7,8 +7,8 @@ use CoreX\Auth\Tests\Stubs\ContextUser;
 use CoreX\Auth\Tests\Stubs\Project;
 use CoreX\Auth\Tests\Stubs\Tenant;
 use CoreX\Contracts\TenantService;
-use Flex\Modules\Registry\ArrayEntityRegistry;
-use Flex\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\EntityDefinition;
 
 beforeEach(function (): void {
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(

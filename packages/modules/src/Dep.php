@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Flex\Modules;
+namespace CoreX\Modules;
 
 /**
  * Manifest dependency declaration (B-10 §3.2): a module or a PHP extension.
