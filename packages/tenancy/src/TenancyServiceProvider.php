@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
+use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Provisioning\PendingPool;
@@ -60,6 +63,15 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->singleton(TenancyManager::class, static fn (Application $app): StanclTenancyManager => $app->make(StanclTenancyManager::class));
         $this->app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
 
+        $this->app->singleton(
+            DatabaseIdentitySyncer::class,
+            static fn (Application $app): DatabaseIdentitySyncer => new DatabaseIdentitySyncer(
+                (string) config('tenancy.central_connection'),
+                $app->make(TenancyManager::class),
+            ),
+        );
+        $this->app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));
+
         // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
         // singleton loop, but over OUR `bootstrapper_order` (config/tenancy.php)
         // rather than stancl's default list: ScoutPrefixBootstrapper isn't in
@@ -88,6 +100,13 @@ final class TenancyServiceProvider extends ServiceProvider
             __DIR__.'/../database/migrations/root' => database_path('migrations'),
         ], 'tenancy-migrations');
 
+        // Tenant-DB DDL (`users`, D14/D16) — same publish-only rationale as
+        // root above; a consumer's golden-template build assembles these
+        // (P2.12), never an ad hoc migrate on a live tenant connection.
+        $this->publishes([
+            __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
+        ], 'tenancy-migrations-tenant');
+
         $this->publishes([
             __DIR__.'/../config/tenancy.php' => config_path('tenancy.php'),
         ], 'tenancy-config');
@@ -109,6 +128,7 @@ final class TenancyServiceProvider extends ServiceProvider
             $this->commands([
                 PendingCreateCommand::class,
                 PendingClearCommand::class,
+                IdentitiesReconcileCommand::class,
             ]);
         }
 
