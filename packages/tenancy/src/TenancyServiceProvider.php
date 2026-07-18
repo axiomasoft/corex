@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Tenancy\Commands\PendingClearCommand;
+use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Provisioning\PendingPool;
+use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -18,6 +23,21 @@ final class TenancyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');
+
+        $this->app->singleton(
+            StanclTenantDatabaseProvisioner::class,
+            static fn (): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
+                (string) config('tenancy.central_connection'),
+            ),
+        );
+
+        $this->app->singleton(
+            PendingPool::class,
+            static fn (Application $app): PendingPool => new PendingPool(
+                (string) config('tenancy.central_connection'),
+                $app->make(StanclTenantDatabaseProvisioner::class),
+            ),
+        );
     }
 
     public function boot(): void
@@ -47,6 +67,13 @@ final class TenancyServiceProvider extends ServiceProvider
         ]);
 
         $this->app->bind(UniqueIdentifierGenerator::class, config('tenancy.id_generator'));
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PendingCreateCommand::class,
+                PendingClearCommand::class,
+            ]);
+        }
 
         Event::listen(
             TenantCreated::class,
