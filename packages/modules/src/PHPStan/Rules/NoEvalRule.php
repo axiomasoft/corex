@@ -32,7 +32,7 @@ final class NoEvalRule implements Rule
     {
         return [
             RuleErrorBuilder::message('eval() is forbidden in module code (B-10 §7.3 enforcement list) — it escapes static analysis and marketplace review.')
-                ->identifier('flexModules.eval')
+                ->identifier('corexModules.eval')
                 ->build(),
         ];
     }

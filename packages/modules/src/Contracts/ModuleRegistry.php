@@ -11,7 +11,7 @@ use CoreX\Tenancy\TenantContext;
 
 /**
  * Compiled code-level registry (B-10 §3.3/§5.2): built by
- * `flex:modules:compile` at deploy time, read from a file cache — 0
+ * `corex:modules:compile` at deploy time, read from a file cache — 0
  * filesystem scans, 0 SQL queries on a warm hot path.
  */
 interface ModuleRegistry

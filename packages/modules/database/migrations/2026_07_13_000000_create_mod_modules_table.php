@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 // PG-first (D12/D9): CHECK IN(...) instead of a PG enum, jsonb, timestamptz.
-// Published under `flex-modules-migrations`/`flex-modules-migrations-tenant`
+// Published under `corex-modules-migrations`/`corex-modules-migrations-tenant`
 // (D33/D43), not auto-loaded on the sqlite default lane. `id` follows
 // config('corex.ids.strategy') via IdColumns (D3/A58) — the app generates the
 // key value (no DB default). timestampTz precision is explicit µs (D32/A66).

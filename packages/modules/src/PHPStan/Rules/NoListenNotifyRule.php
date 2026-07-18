@@ -35,6 +35,6 @@ final class NoListenNotifyRule extends AbstractDatabaseCallRule
 
     protected function identifier(): string
     {
-        return 'flexModules.listenNotify';
+        return 'corexModules.listenNotify';
     }
 }

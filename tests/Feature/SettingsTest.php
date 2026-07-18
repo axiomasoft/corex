@@ -241,14 +241,14 @@ it('resolves a manifest-declared SettingDefault through the container-bound Sett
         ]);
 
     $compiled = (new RegistryCompiler)->compile([$manifest]);
-    $path = sys_get_temp_dir().'/flex_modules_settings_test_'.bin2hex(random_bytes(4)).'.php';
+    $path = sys_get_temp_dir().'/corex_modules_settings_test_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($path, [], $compiled);
 
     try {
         $this->app->instance(ModuleRegistry::class, new CompiledModuleRegistry(
             cachePath: $path,
             stateReader: new DatabaseModuleStateReader(connection: SETTINGS_TEST_CONNECTION),
-            cache: new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+            cache: new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
             versionResolver: static fn (TenantContext $ctx): int => 0,
         ));
 

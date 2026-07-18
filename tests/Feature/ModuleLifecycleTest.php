@@ -90,7 +90,7 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
 /**
  * Resolve the lifecycle THROUGH the container (not a hand-built constructor):
  * connection comes from config, codeVersions/migrationPaths from the
- * `flex-modules.wiring` binding the ModulesServiceProvider populates from
+ * `corex-modules.wiring` binding the ModulesServiceProvider populates from
  * installed.json. Tests override that binding with stub paths to prove the
  * container assembly actually wires migrations (C: empty autowired arrays).
  *
@@ -99,8 +99,8 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
  */
 function lifecycleFromContainer(array $migrationPaths = [], array $codeVersions = []): ModuleLifecycle
 {
-    config(['flex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
-    app()->instance('flex-modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
+    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    app()->instance('corex-modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
     app()->forgetInstance(RecordsRegistrar::class);
     app()->forgetInstance(ModuleLifecycle::class);
 
@@ -140,7 +140,7 @@ beforeEach(function (): void {
         '--force' => true,
     ])->run();
 
-    $this->registryPath = sys_get_temp_dir().'/flex_modules_lifecycle_test_'.bin2hex(random_bytes(4)).'.php';
+    $this->registryPath = sys_get_temp_dir().'/corex_modules_lifecycle_test_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($this->registryPath, [
         new CompiledModule('corex/stub-base', 'Stub Base', 'sba', [], [], []),
         new CompiledModule('corex/stub-dependent', 'Stub Dependent', 'sbd', [
@@ -166,7 +166,7 @@ function lifecycleModuleRegistry(string $path, ?ModuleRegistryCache $cache = nul
     return new CompiledModuleRegistry(
         cachePath: $path,
         stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
-        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
         versionResolver: static fn (TenantContext $ctx): int => (int) lifecyclePg()->table('mod_lifecycle_log')->count(),
     );
 }
@@ -179,7 +179,7 @@ function lifecycleCtx(string $accountId = 'acc-1'): TenantContext
 /** An isolated in-memory cache — models a separate node whose store the disabling process cannot reach. */
 function lifecycleIsolatedCache(): RepositoryModuleRegistryCache
 {
-    return new RepositoryModuleRegistryCache(new CacheRepository(new ArrayStore), 3600, 'flex-modules');
+    return new RepositoryModuleRegistryCache(new CacheRepository(new ArrayStore), 3600, 'corex-modules');
 }
 
 function lifecycleHasColumn(string $table, string $column): bool
@@ -466,7 +466,7 @@ it('rolls the upgrade back and rethrows when a catch-up migration fails — sche
             ->where('module_name', 'corex/stub-base')->where('operation', 'upgrade')->exists())->toBeFalse();
 });
 
-it('flex:modules:repair returns a purged module to available, and a fresh enable re-installs it (repair, D40)', function (): void {
+it('corex:modules:repair returns a purged module to available, and a fresh enable re-installs it (repair, D40)', function (): void {
     $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
     $lifecycle->enable('corex/stub-base');
     $lifecycle->disable('corex/stub-base', DisableReason::Manual);
@@ -502,7 +502,7 @@ it('reconciles mod_records with the schema — drops a claim whose table vanishe
         ->and(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->where('reference', 'sba_widgets')->exists())->toBeTrue();
 });
 
-it('runs the flex:modules:repair artisan command against the module connection', function (): void {
+it('runs the corex:modules:repair artisan command against the module connection', function (): void {
     $lifecycle = lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
     $lifecycle->enable('corex/stub-base');
     $lifecycle->disable('corex/stub-base', DisableReason::Manual);
@@ -512,14 +512,14 @@ it('runs the flex:modules:repair artisan command against the module connection',
     // what the command uses — prove the command path reaches the module DB.
     lifecycleFromContainer(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')]);
 
-    $this->artisan('flex:modules:repair', ['module' => 'corex/stub-base'])->assertExitCode(0);
+    $this->artisan('corex:modules:repair', ['module' => 'corex/stub-base'])->assertExitCode(0);
 
     expect(lifecyclePg()->table('mod_modules')->where('name', 'corex/stub-base')->exists())->toBeFalse();
 });
 
 it('runs migrations resolved through the container, not a hand-built constructor (wiring from discovery)', function (): void {
     // No manual migrationPaths in a constructor — they come from the container
-    // `flex-modules.wiring` binding (installed.json in prod, stub path here).
+    // `corex-modules.wiring` binding (installed.json in prod, stub path here).
     lifecycleFromContainer(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])
         ->enable('corex/stub-base');
 
@@ -688,7 +688,7 @@ it('defines a manifest-declared feature flag in sys_feature_flags when its modul
     expect(lifecyclePg()->table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
 });
 
-it('resolves ModuleStateReader from the container reading config(flex-modules.connection), not the app default (D63/D65 Major)', function (): void {
+it('resolves ModuleStateReader from the container reading config(corex-modules.connection), not the app default (D63/D65 Major)', function (): void {
     // mod_modules lives on the pg test connection; the app default (sqlite in
     // this suite) has no such table. A container-resolved ModuleStateReader must
     // read the CONFIGURED module connection — the bare class-string binding this
@@ -702,7 +702,7 @@ it('resolves ModuleStateReader from the container reading config(flex-modules.co
         'edition' => 'standard',
     ]);
 
-    config(['flex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
     app()->forgetInstance(ModuleStateReader::class);
 
     // NO manual `new DatabaseModuleStateReader(connection: ...)` override —

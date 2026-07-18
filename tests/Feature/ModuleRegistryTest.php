@@ -65,7 +65,7 @@ function moduleRegistryCtx(string $accountId): TenantContext
 
 function moduleRegistryCachePath(): string
 {
-    return sys_get_temp_dir().'/flex_modules_test_'.bin2hex(random_bytes(4)).'.php';
+    return sys_get_temp_dir().'/corex_modules_test_'.bin2hex(random_bytes(4)).'.php';
 }
 
 /**
@@ -84,7 +84,7 @@ function newModuleRegistry(
     return new CompiledModuleRegistry(
         cachePath: $path,
         stateReader: $reader,
-        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'flex-modules'),
+        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
         versionResolver: $versionResolver ?? static fn (TenantContext $ctx): int => 0,
         failIfMissing: $failIfMissing,
     );
@@ -212,13 +212,13 @@ it('writes the compiled registry atomically, leaving no stray tmp file', functio
     unlink($path);
 });
 
-it('flex:modules:compile writes the compiled registry file for the discovered modules', function (): void {
+it('corex:modules:compile writes the compiled registry file for the discovered modules', function (): void {
     $this->app->instance(
         ModuleDiscovery::class,
         new ModuleDiscovery(fallbackModules: [StubCorexModule::class]),
     );
 
-    $exitCode = Artisan::call('flex:modules:compile');
+    $exitCode = Artisan::call('corex:modules:compile');
 
     expect($exitCode)->toBe(0);
 
@@ -232,13 +232,13 @@ it('flex:modules:compile writes the compiled registry file for the discovered mo
     unlink($cachePath);
 });
 
-it('flex:modules:compile persists the entity, permissions and menu slices, not just a counter (A10)', function (): void {
+it('corex:modules:compile persists the entity, permissions and menu slices, not just a counter (A10)', function (): void {
     $this->app->instance(
         ModuleDiscovery::class,
         new ModuleDiscovery(fallbackModules: [P15CompiledStubModule::class]),
     );
 
-    expect(Artisan::call('flex:modules:compile'))->toBe(0);
+    expect(Artisan::call('corex:modules:compile'))->toBe(0);
 
     $cachePath = CompiledModuleRegistry::defaultCachePath();
 
@@ -262,7 +262,7 @@ it('projects the compiled entities into EntityRegistry at boot — runtime path,
         ModuleDiscovery::class,
         new ModuleDiscovery(fallbackModules: [P15CompiledStubModule::class]),
     );
-    Artisan::call('flex:modules:compile');
+    Artisan::call('corex:modules:compile');
     $cachePath = CompiledModuleRegistry::defaultCachePath();
 
     // Re-boot the provider so its app.booted projection reads the file we just
@@ -283,7 +283,7 @@ it('adds the compiled entity handle to the morph map at boot, spanning the whole
         ModuleDiscovery::class,
         new ModuleDiscovery(fallbackModules: [P15CompiledStubModule::class]),
     );
-    Artisan::call('flex:modules:compile');
+    Artisan::call('corex:modules:compile');
     $cachePath = CompiledModuleRegistry::defaultCachePath();
 
     $this->app->register(new ModulesServiceProvider($this->app), force: true);
@@ -311,7 +311,7 @@ it('reads the persisted registry back through compiled()', function (): void {
 it('writeAtomic throws and leaves the destination intact when the atomic move fails', function (): void {
     // Destination is an existing directory — rename(tmpFile, dir) fails with
     // EISDIR, so the failed-rename branch is the one exercised.
-    $destination = sys_get_temp_dir().'/flex_modules_reg_'.bin2hex(random_bytes(4));
+    $destination = sys_get_temp_dir().'/corex_modules_reg_'.bin2hex(random_bytes(4));
     mkdir($destination);
 
     expect(fn () => CompiledModuleRegistry::writeAtomic(
@@ -329,8 +329,8 @@ it('writeAtomic throws and leaves the destination intact when the atomic move fa
 it('throws in production-style strict mode when the compiled registry file is absent (fail-loud)', function (): void {
     $registry = newModuleRegistry(moduleRegistryCachePath(), new ArrayModuleStateReader, failIfMissing: true);
 
-    expect(fn () => $registry->all())->toThrow(RuntimeException::class, 'flex:modules:compile')
-        ->and(fn () => $registry->compiled())->toThrow(RuntimeException::class, 'flex:modules:compile');
+    expect(fn () => $registry->all())->toThrow(RuntimeException::class, 'corex:modules:compile')
+        ->and(fn () => $registry->compiled())->toThrow(RuntimeException::class, 'corex:modules:compile');
 });
 
 it('returns an empty registry outside production when the compiled file is absent', function (): void {
@@ -350,7 +350,7 @@ it('reads active()/isActive() on a non-taggable file store without BadMethodCall
     $reader = new ArrayModuleStateReader([
         'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
     ]);
-    $fileCache = new RepositoryModuleRegistryCache(Cache::store('file'), 3600, 'flex-modules-a1');
+    $fileCache = new RepositoryModuleRegistryCache(Cache::store('file'), 3600, 'corex-modules-a1');
     $registry = newModuleRegistry($path, $reader, cache: $fileCache);
     $ctx = moduleRegistryCtx('acc-1');
 
@@ -388,10 +388,10 @@ it('reports isActive()=false for a module enabled in the reader but absent from 
 it('builds the registry cache from config — store, ttl and prefix are read, not hardcoded (A45/A46)', function (): void {
     // Point the module cache at a named array store and a custom prefix, then
     // assert the resolved cache writes the epoch-stamped key THERE — proving
-    // config('flex-modules.cache.*') drives the binding (no hardcoded 3600).
-    config()->set('flex-modules.cache.store', 'array');
-    config()->set('flex-modules.cache.prefix', 'cfg-driven');
-    config()->set('flex-modules.cache.ttl', 3600);
+    // config('corex-modules.cache.*') drives the binding (no hardcoded 3600).
+    config()->set('corex-modules.cache.store', 'array');
+    config()->set('corex-modules.cache.prefix', 'cfg-driven');
+    config()->set('corex-modules.cache.ttl', 3600);
 
     // The provider's booted() hook already resolved the cache singleton with
     // the default config; drop it so make() rebuilds against the config set

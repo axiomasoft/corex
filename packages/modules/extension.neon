@@ -1,5 +1,5 @@
 parameters:
-    flexModules:
+    corexModules:
         # PSR-4-неймспейс модуля => его tablePrefix из манифеста (владение таблицами).
         modulePrefixes: []
         # Неймспейсы модулей — скоуп fs-правила.
@@ -10,7 +10,7 @@ parameters:
             - CoreX\Modules\
 
 parametersSchema:
-    flexModules: structure([
+    corexModules: structure([
         modulePrefixes: arrayOf(string(), string())
         moduleNamespaces: listOf(string())
         systemTableNamespaces: listOf(string())
@@ -44,18 +44,18 @@ services:
     -
         class: CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule
         arguments:
-            modulePrefixes: %flexModules.modulePrefixes%
+            modulePrefixes: %corexModules.modulePrefixes%
         tags:
             - phpstan.rules.rule
     -
         class: CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule
         arguments:
-            moduleNamespaces: %flexModules.moduleNamespaces%
+            moduleNamespaces: %corexModules.moduleNamespaces%
         tags:
             - phpstan.rules.rule
     -
         class: CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule
         arguments:
-            systemTableNamespaces: %flexModules.systemTableNamespaces%
+            systemTableNamespaces: %corexModules.systemTableNamespaces%
         tags:
             - phpstan.rules.rule

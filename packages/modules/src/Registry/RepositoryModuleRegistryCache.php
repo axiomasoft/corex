@@ -12,7 +12,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
  * {@see ModuleRegistryCache} over any {@see CacheRepository} — deliberately
  * WITHOUT `tags()` (D30/A1/A2), so it works on the default `file`/`database`
  * store and in the boxed profile. Store, TTL and prefix come from
- * `config('flex-modules.cache.*')` (A45/A46 — no hardcoded 3600).
+ * `config('corex-modules.cache.*')` (A45/A46 — no hardcoded 3600).
  */
 final class RepositoryModuleRegistryCache implements ModuleRegistryCache
 {

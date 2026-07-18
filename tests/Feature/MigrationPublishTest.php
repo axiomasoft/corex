@@ -101,7 +101,7 @@ it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG sche
     $target = publishTarget();
     removeFiles(glob($target.'/*_create_mod_*_table.php') ?: []);
 
-    $this->artisan('vendor:publish', ['--tag' => 'flex-modules-migrations', '--force' => true])->run();
+    $this->artisan('vendor:publish', ['--tag' => 'corex-modules-migrations', '--force' => true])->run();
 
     $published = glob($target.'/*_create_mod_*_table.php') ?: [];
     expect($published)->toHaveCount(3);
@@ -126,7 +126,7 @@ it('exposes the -tenant connection-scope alias for both migration sets (D43)', f
     );
     $modules = ServiceProvider::pathsToPublish(
         ModulesServiceProvider::class,
-        'flex-modules-migrations-tenant',
+        'corex-modules-migrations-tenant',
     );
 
     expect($core)->not->toBeEmpty()

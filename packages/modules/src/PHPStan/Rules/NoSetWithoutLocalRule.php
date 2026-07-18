@@ -28,6 +28,6 @@ final class NoSetWithoutLocalRule extends AbstractDatabaseCallRule
 
     protected function identifier(): string
     {
-        return 'flexModules.setWithoutLocal';
+        return 'corexModules.setWithoutLocal';
     }
 }

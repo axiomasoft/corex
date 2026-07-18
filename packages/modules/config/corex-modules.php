@@ -16,7 +16,7 @@ return [
     | reader serve several accounts from one process arrives with corex/tenancy
     | (D13) — see phases/P1.md P1.16 Pending Work.
     */
-    'connection' => env('FLEX_MODULES_CONNECTION'),
+    'connection' => env('COREX_MODULES_CONNECTION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -33,9 +33,9 @@ return [
     | 'store' = null uses the app's default store.
     */
     'cache' => [
-        'store' => env('FLEX_MODULES_CACHE_STORE'),
-        'ttl' => (int) env('FLEX_MODULES_CACHE_TTL', 3600),
-        'prefix' => (string) env('FLEX_MODULES_CACHE_PREFIX', 'flex-modules'),
+        'store' => env('COREX_MODULES_CACHE_STORE'),
+        'ttl' => (int) env('COREX_MODULES_CACHE_TTL', 3600),
+        'prefix' => (string) env('COREX_MODULES_CACHE_PREFIX', 'corex-modules'),
     ],
 
 ];

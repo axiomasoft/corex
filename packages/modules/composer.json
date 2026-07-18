@@ -1,6 +1,6 @@
 {
     "name": "corex/modules",
-    "description": "Flex module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
+    "description": "CoreX module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "modules", "entity-registry"],

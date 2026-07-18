@@ -124,7 +124,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             // FSM gate (A11/A12): `purged` is terminal. Its tables are dropped
             // and its migrations are still logged as "ran", so a direct enable
             // would flip the row to enabled over a missing schema. Re-install
-            // goes through `flex:modules:repair` → available → enable.
+            // goes through `corex:modules:repair` → available → enable.
             if ($current !== null && $current->state === ModuleState::Purged->value) {
                 throw InvalidStateTransitionException::purgedIsTerminal($module);
             }

@@ -17,7 +17,7 @@ use ReflectionClass;
 
 /**
  * In-memory result of RegistryCompiler::compile() (B-10 §5.2). The compiled
- * file `bootstrap/cache/flex_modules.php` persists this whole DTO (all 10
+ * file `bootstrap/cache/corex_modules.php` persists this whole DTO (all 10
  * slices — the original 8 extender slices plus `settings`/`featureFlags`,
  * P1.25) via {@see toArray()}/{@see fromArray()} (P1.15) so the runtime can
  * project entities into EntityRegistry and the morph map without re-running

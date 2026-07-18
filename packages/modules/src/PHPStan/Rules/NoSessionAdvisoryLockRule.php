@@ -22,6 +22,6 @@ final class NoSessionAdvisoryLockRule extends AbstractDatabaseCallRule
 
     protected function identifier(): string
     {
-        return 'flexModules.sessionAdvisoryLock';
+        return 'corexModules.sessionAdvisoryLock';
     }
 }

@@ -16,7 +16,7 @@ use RuntimeException;
 
 /**
  * File-backed {@see ModuleRegistry} (B-10 §5.2/§7.1). `all()`/`get()` read
- * the compiled file written by `flex:modules:compile` (opcache after the
+ * the compiled file written by `corex:modules:compile` (opcache after the
  * first `require`, 0 fs scans on later calls); `active()` intersects it with
  * a per-account cache backed by {@see ModuleStateReader} — a cache miss costs
  * exactly one reader call, a warm cache costs none but the epoch read
@@ -35,7 +35,7 @@ use RuntimeException;
  * the runtime EntityRegistry projection and the morph map.
  *
  * A missing compiled file is a hard error under `$failIfMissing` (production
- * deploy that forgot `php artisan flex:modules:compile` / `optimize`) — never
+ * deploy that forgot `php artisan corex:modules:compile` / `optimize`) — never
  * a silent empty registry, which would resurrect A10 quietly.
  */
 final class CompiledModuleRegistry implements ModuleRegistry
@@ -56,7 +56,7 @@ final class CompiledModuleRegistry implements ModuleRegistry
 
     public static function defaultCachePath(): string
     {
-        return base_path('bootstrap/cache/flex_modules.php');
+        return base_path('bootstrap/cache/corex_modules.php');
     }
 
     public function all(): array
@@ -170,7 +170,7 @@ final class CompiledModuleRegistry implements ModuleRegistry
         if (! is_file($this->cachePath)) {
             if ($this->failIfMissing) {
                 throw new RuntimeException(sprintf(
-                    'Compiled module registry not found at [%s]. Run `php artisan flex:modules:compile` (or `php artisan optimize`) as part of the deploy.',
+                    'Compiled module registry not found at [%s]. Run `php artisan corex:modules:compile` (or `php artisan optimize`) as part of the deploy.',
                     $this->cachePath,
                 ));
             }

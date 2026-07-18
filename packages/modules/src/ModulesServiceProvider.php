@@ -49,7 +49,7 @@ final class ModulesServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/flex-modules.php', 'flex-modules');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-modules.php', 'corex-modules');
 
         // Bind the concrete singleton first so module providers can resolve
         // it directly to call register() (not part of the read-only contract),
@@ -77,25 +77,25 @@ final class ModulesServiceProvider extends ServiceProvider
         // mod_modules/mod_records now exist (P1.6) — read/write them directly;
         // ArrayModuleStateReader remains available for tests that inject a fake.
         // Bound via a closure (NOT a bare class-string): the reader MUST read the
-        // module connection (config('flex-modules.connection'), null = app
+        // module connection (config('corex-modules.connection'), null = app
         // default) — the same seam RecordsRegistrar/lifecycle/epoch use. A bare
         // class-string autowires $connection = null and silently reads the ambient
         // default, so with a configured module DB the enabled set comes back empty
         // and every module reads inactive (targeted audit D63/D65).
         $this->app->singleton(ModuleStateReader::class, static function (): DatabaseModuleStateReader {
             /** @var string|null $connection */
-            $connection = config('flex-modules.connection');
+            $connection = config('corex-modules.connection');
 
             return new DatabaseModuleStateReader($connection);
         });
 
         // RecordsRegistrar and the lifecycle read/write the module connection
-        // (config('flex-modules.connection'), null = app default) — the same
+        // (config('corex-modules.connection'), null = app default) — the same
         // seam the epoch and state reader use, so auto-claims land in the module
         // DB, not the ambient default.
         $this->app->singleton(RecordsRegistrar::class, static function (): DatabaseRecordsRegistrar {
             /** @var string|null $connection */
-            $connection = config('flex-modules.connection');
+            $connection = config('corex-modules.connection');
 
             return new DatabaseRecordsRegistrar($connection);
         });
@@ -104,13 +104,13 @@ final class ModulesServiceProvider extends ServiceProvider
         // installed.json (D41/A: empty autowired arrays = migrations never run
         // in prod). Exposed as an overridable binding so tests inject stub paths
         // and resolve the lifecycle from the container, not a hand-built ctor.
-        $this->app->singleton('flex-modules.wiring', fn (): array => $this->moduleWiring());
+        $this->app->singleton('corex-modules.wiring', fn (): array => $this->moduleWiring());
 
         $this->app->singleton(ModuleLifecycle::class, function (Application $app): DatabaseModuleLifecycle {
             /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
-            $wiring = $app->make('flex-modules.wiring');
+            $wiring = $app->make('corex-modules.wiring');
             /** @var string|null $connection */
-            $connection = config('flex-modules.connection');
+            $connection = config('corex-modules.connection');
 
             return new DatabaseModuleLifecycle(
                 registry: $app->make(ModuleRegistry::class),
@@ -128,12 +128,12 @@ final class ModulesServiceProvider extends ServiceProvider
         // (A45/A46 — no hardcoded 3600). store = null ⇒ the app's default store.
         $this->app->singleton(ModuleRegistryCache::class, static function (Application $app): RepositoryModuleRegistryCache {
             /** @var string|null $store */
-            $store = config('flex-modules.cache.store');
+            $store = config('corex-modules.cache.store');
 
             return new RepositoryModuleRegistryCache(
                 store: $app->make(CacheFactory::class)->store($store),
-                ttl: (int) config('flex-modules.cache.ttl', 3600),
-                prefix: (string) config('flex-modules.cache.prefix', 'flex-modules'),
+                ttl: (int) config('corex-modules.cache.ttl', 3600),
+                prefix: (string) config('corex-modules.cache.prefix', 'corex-modules'),
             );
         });
 
@@ -176,7 +176,7 @@ final class ModulesServiceProvider extends ServiceProvider
             // Reconcile a module's ownership registry with the real schema and
             // provide the single legal exit from the terminal `purged` state
             // (D40/A11) — a thin wrapper over ModuleLifecycle::repair().
-            Artisan::command('flex:modules:repair {module : Composer name of the module to repair}', function (ModuleLifecycle $lifecycle, string $module): int {
+            Artisan::command('corex:modules:repair {module : Composer name of the module to repair}', function (ModuleLifecycle $lifecycle, string $module): int {
                 $lifecycle->repair($module);
                 $this->info(sprintf('Reconciled module [%s] with the schema.', $module));
 
@@ -188,15 +188,15 @@ final class ModulesServiceProvider extends ServiceProvider
         // DDL (advisory locks, CHECK, jsonb). NOT loadMigrationsFrom — see the
         // note above; consumers publish + migrate explicitly on the tenant
         // connection. The `-tenant` tag names that scope (pre-mortem P1R C5);
-        // the plain `flex-modules-migrations` alias serves the boxed single-DB
+        // the plain `corex-modules-migrations` alias serves the boxed single-DB
         // case.
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], ['flex-modules-migrations', 'flex-modules-migrations-tenant']);
+        ], ['corex-modules-migrations', 'corex-modules-migrations-tenant']);
 
         $this->publishes([
-            __DIR__.'/../config/flex-modules.php' => config_path('flex-modules.php'),
-        ], 'flex-modules-config');
+            __DIR__.'/../config/corex-modules.php' => config_path('corex-modules.php'),
+        ], 'corex-modules-config');
 
         // Epoch memo reset (D39): a long-running queue worker drops its
         // per-process compiled-file memo before each job, so a redeploy's
@@ -217,7 +217,7 @@ final class ModulesServiceProvider extends ServiceProvider
         // Deploy hook: `php artisan optimize` recompiles the registry (B-10
         // §5.2). No clear command — `optimize:clear` leaves the file, the
         // next `optimize` overwrites it atomically.
-        $this->optimizes(optimize: 'flex:modules:compile', key: 'flex-modules');
+        $this->optimizes(optimize: 'corex:modules:compile', key: 'corex-modules');
 
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
@@ -266,14 +266,14 @@ final class ModulesServiceProvider extends ServiceProvider
      * version bumped atomically with the state change — and, living in the
      * shared DB, it is visible to every process/node (which a caller-local
      * cache clear would not be). The connection comes from
-     * `config('flex-modules.connection')` (null = app default; under P2 stancl
+     * `config('corex-modules.connection')` (null = app default; under P2 stancl
      * rebinds that to the tenant DB). Missing table (pre-migrate / sqlite
      * suites) reads as epoch 0.
      */
     private function registryVersion(): int
     {
         /** @var string|null $connection */
-        $connection = config('flex-modules.connection');
+        $connection = config('corex-modules.connection');
 
         if (! Schema::connection($connection)->hasTable('mod_lifecycle_log')) {
             return 0;

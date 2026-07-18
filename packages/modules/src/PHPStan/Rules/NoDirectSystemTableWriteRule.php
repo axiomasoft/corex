@@ -21,7 +21,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  * B-10 §7.4 п.9: писать в `sys_*`/`mod_*` можно только через контракты ядра
  * (Settings/Audit/ModuleLifecycle/…), не запросом из модуля.
  *
- * Владельцы контрактов (`parameters.flexModules.systemTableNamespaces`) исключены —
+ * Владельцы контрактов (`parameters.corexModules.systemTableNamespaces`) исключены —
  * именно они и есть легальная реализация записи.
  *
  * @implements Rule<CallLike>
@@ -72,7 +72,7 @@ final class NoDirectSystemTableWriteRule implements Rule
                 'Direct write to core table "%s" is forbidden (B-10 §7.4 п.9) — use the owning core contract.',
                 $table,
             ))
-                ->identifier('flexModules.directSystemTableWrite')
+                ->identifier('corexModules.directSystemTableWrite')
                 ->build(),
         ];
     }

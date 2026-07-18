@@ -70,19 +70,19 @@ it('rejects a discovered class that does not extend CorexModule', function (): v
     expect(fn () => $discovery->discover())->toThrow(InvalidManifestException::class);
 });
 
-it('flex:modules:compile does not fail on testbench with no corex-module packages installed', function (): void {
-    $exitCode = Artisan::call('flex:modules:compile');
+it('corex:modules:compile does not fail on testbench with no corex-module packages installed', function (): void {
+    $exitCode = Artisan::call('corex:modules:compile');
 
     expect($exitCode)->toBe(0);
 });
 
-it('flex:modules:compile reports discovered manifests from the bound ModuleDiscovery', function (): void {
+it('corex:modules:compile reports discovered manifests from the bound ModuleDiscovery', function (): void {
     $this->app->instance(
         ModuleDiscovery::class,
         new ModuleDiscovery(fallbackModules: [StubCorexModule::class]),
     );
 
-    $exitCode = Artisan::call('flex:modules:compile');
+    $exitCode = Artisan::call('corex:modules:compile');
 
     expect($exitCode)->toBe(0)
         ->and(Artisan::output())->toContain('Discovered 1 module manifest(s).');

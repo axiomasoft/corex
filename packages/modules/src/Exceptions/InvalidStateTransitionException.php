@@ -9,7 +9,7 @@ use LogicException;
 /**
  * An FSM transition was requested that the module's current state forbids
  * (B-10 §5.1 invariants). `purged` is terminal — re-installing a purged module
- * goes through `flex:modules:repair` (which returns it to `available`), never a
+ * goes through `corex:modules:repair` (which returns it to `available`), never a
  * direct `enable` on the dead schema (A11/A12); `upgrade` requires `enabled`.
  */
 final class InvalidStateTransitionException extends LogicException
@@ -17,7 +17,7 @@ final class InvalidStateTransitionException extends LogicException
     public static function purgedIsTerminal(string $module): self
     {
         return new self(sprintf(
-            'Module [%s] is purged (terminal): its schema is gone. Run `flex:modules:repair %s` to reset it to available before enabling again — enabling directly would flip the row to enabled over dropped tables (A11).',
+            'Module [%s] is purged (terminal): its schema is gone. Run `corex:modules:repair %s` to reset it to available before enabling again — enabling directly would flip the row to enabled over dropped tables (A11).',
             $module,
             $module,
         ));

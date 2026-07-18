@@ -31,6 +31,6 @@ final class NoSqlPrepareRule extends AbstractDatabaseCallRule
 
     protected function identifier(): string
     {
-        return 'flexModules.sqlPrepare';
+        return 'corexModules.sqlPrepare';
     }
 }

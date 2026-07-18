@@ -22,6 +22,6 @@ final class NoTempTableRule extends AbstractDatabaseCallRule
 
     protected function identifier(): string
     {
-        return 'flexModules.tempTable';
+        return 'corexModules.tempTable';
     }
 }

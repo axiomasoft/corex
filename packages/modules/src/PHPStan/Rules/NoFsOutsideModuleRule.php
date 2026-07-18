@@ -22,7 +22,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  * Статически виден только путь-константа: абсолютный путь или обход `..` — ошибка;
  * вычисляемый путь (`storage_path(...)`, конкатенация с переменной) правило не
  * трогает, чтобы не давать ложных срабатываний. Скоуп — неймспейсы модулей из
- * `parameters.flexModules.moduleNamespaces` (ядро и приложение не затрагиваются).
+ * `parameters.corexModules.moduleNamespaces` (ядро и приложение не затрагиваются).
  *
  * @implements Rule<FuncCall>
  */
@@ -76,7 +76,7 @@ final class NoFsOutsideModuleRule implements Rule
                 'Filesystem access outside the module directory is forbidden (B-10 §7.3 enforcement): "%s".',
                 $path,
             ))
-                ->identifier('flexModules.fsOutsideModule')
+                ->identifier('corexModules.fsOutsideModule')
                 ->build();
         }
 
