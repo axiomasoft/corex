@@ -37,6 +37,10 @@ jobs:
       - name: Constrain Laravel version
         run: composer require "illuminate/contracts:${{ matrix.laravel }}" --no-update --no-interaction
 
+      - name: Boxed profile (drop 8.4-only tenancy)
+        if: matrix.php == '8.3'
+        run: composer remove corex/tenancy --no-update --no-interaction
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -45,7 +49,52 @@ jobs:
 
   tests-pg:
     runs-on: ubuntu-latest
-    name: PG lane (postgres:16)
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12.*', '13.*']
+    name: PG lane (postgres:16) · Laravel ${{ matrix.laravel }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+
+      - name: Constrain Laravel version
+        run: composer require "illuminate/contracts:${{ matrix.laravel }}" --no-update --no-interaction
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: PG tests
+        run: composer test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+
+  tenancy-tests:
+    runs-on: ubuntu-latest
+    name: Tenancy package (PG16)
     services:
       postgres:
         image: postgres:16
@@ -70,10 +119,10 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
 
-      - name: PG tests
-        run: composer test:pg
+      - name: Tenancy tests
+        run: composer --working-dir=packages/tenancy test
         env:
           PGSQL_HOST: 127.0.0.1
           PGSQL_PORT: 5432
