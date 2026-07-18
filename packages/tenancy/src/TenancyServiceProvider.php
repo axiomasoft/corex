@@ -6,16 +6,25 @@ namespace CoreX\Tenancy;
 
 use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
+use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
+use Stancl\Tenancy\Events\TenancyEnded;
+use Stancl\Tenancy\Events\TenancyInitialized;
 use Stancl\Tenancy\Events\TenantCreated;
+use Stancl\Tenancy\Listeners\BootstrapTenancy;
+use Stancl\Tenancy\Listeners\RevertToCentralContext;
+use Stancl\Tenancy\Tenancy as Stancl;
 
 final class TenancyServiceProvider extends ServiceProvider
 {
@@ -38,6 +47,32 @@ final class TenancyServiceProvider extends ServiceProvider
                 $app->make(StanclTenantDatabaseProvisioner::class),
             ),
         );
+
+        // Rebind the boxed defaults (CoreServiceProvider::register(),
+        // registered before this provider — corex/tenancy requires corex/core)
+        // to the cloud implementations (D10, P2.5): a container binding, not
+        // an `if(cloud)` branch. Same pattern as ModulesServiceProvider's
+        // SettingDefaultsProvider rebind (P1.25).
+        $this->app->singleton(
+            StanclTenancyManager::class,
+            static fn (Application $app): StanclTenancyManager => new StanclTenancyManager($app->make(Stancl::class)),
+        );
+        $this->app->singleton(TenancyManager::class, static fn (Application $app): StanclTenancyManager => $app->make(StanclTenancyManager::class));
+        $this->app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
+
+        // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
+        // singleton loop, but over OUR `bootstrapper_order` (config/tenancy.php)
+        // rather than stancl's default list: ScoutPrefixBootstrapper isn't in
+        // stancl's own default set (commented out there), so without this it
+        // would resolve fresh on every bootstrap()/revert() call and lose its
+        // stateful $originalScoutPrefix between the two. NOT re-running
+        // `__constructStatic` here — every OTHER bootstrapper in our order is
+        // already in stancl's own default list, whose register() already
+        // called it once (QueueTenancyBootstrapper registers global queue
+        // event listeners there; calling it twice would double-register them).
+        foreach (config('tenancy.bootstrapper_order', []) as $bootstrapper) {
+            $this->app->singleton($bootstrapper);
+        }
     }
 
     public function boot(): void
@@ -64,6 +99,8 @@ final class TenancyServiceProvider extends ServiceProvider
             'tenancy.models.tenant' => config('tenancy.tenant_model'),
             'tenancy.database.central_connection' => config('tenancy.central_connection'),
             'tenancy.database.managers.pgsql' => config('tenancy.tenant_database_manager'),
+            'tenancy.bootstrappers' => config('tenancy.bootstrapper_order'),
+            'tenancy.cache.prefix' => config('tenancy.cache_prefix'),
         ]);
 
         $this->app->bind(UniqueIdentifierGenerator::class, config('tenancy.id_generator'));
@@ -82,5 +119,18 @@ final class TenancyServiceProvider extends ServiceProvider
                 ->shouldBeQueued(false)
                 ->toListener(),
         );
+
+        // stancl ships these two listeners but wires them only in the
+        // `tenancy:install` app-level stub (assets/TenancyServiceProvider.stub.php)
+        // — not automatically by its own package provider. Without this,
+        // Tenancy::initialize()/end() only flip the `initialized` flag and
+        // fire events; no bootstrapper ever actually runs.
+        Event::listen(TenancyInitialized::class, BootstrapTenancy::class);
+        Event::listen(TenancyEnded::class, RevertToCentralContext::class);
+
+        // F-Q1 (D76): QueueTenancyBootstrapper reverts only on
+        // JobProcessed/JobFailed, never on JobExceptionOccurred (retry path)
+        // — see RevertTenancyOnJobException docblock.
+        Event::listen(JobExceptionOccurred::class, RevertTenancyOnJobException::class);
     }
 }

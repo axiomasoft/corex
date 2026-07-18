@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Models\Account;
+use Stancl\Tenancy\Bootstrappers;
 use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 
 return [
@@ -54,5 +55,35 @@ return [
             CreateDatabaseFromTemplate::class,
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | TenancyManager bootstrappers (P2.5, R-11 §2.4 — fixed order)
+    |--------------------------------------------------------------------------
+    | Own key (not `bootstrappers` — that's stancl's own top-level key under
+    | the SAME `tenancy` config namespace; TenancyServiceProvider::boot()
+    | projects this onto it deterministically, mirroring `tenant_model`/
+    | `central_connection` above). Database → Cache(prefix-mode) →
+    | DatabaseSession → Queue → Filesystem → Scout-prefix — order is an
+    | Implementation Rule (P2.5), not incidental.
+    */
+    'bootstrapper_order' => [
+        Bootstrappers\DatabaseTenancyBootstrapper::class,
+        Bootstrappers\CacheTenancyBootstrapper::class,
+        Bootstrappers\DatabaseSessionBootstrapper::class,
+        Bootstrappers\QueueTenancyBootstrapper::class,
+        Bootstrappers\FilesystemTenancyBootstrapper::class,
+        Bootstrappers\Integrations\ScoutPrefixBootstrapper::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache prefix-mode (P2.5 — NOT cache tags, v4 default)
+    |--------------------------------------------------------------------------
+    | `%tenant%` is replaced with the tenant key by CacheTenancyBootstrapper;
+    | prepended to the store's original prefix. Own key, projected onto
+    | stancl's `tenancy.cache.prefix` in boot() (same reasoning as above).
+    */
+    'cache_prefix' => 'tenant_%tenant%_',
 
 ];

@@ -18,7 +18,9 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\NullTenancyManager;
 use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
 
@@ -94,6 +96,15 @@ final class Config
     {
         /** @var class-string<TenantContextResolver> $class */
         $class = config('corex.tenant_context.resolver', SingleAccountResolver::class);
+
+        return $class;
+    }
+
+    /** @return class-string<TenancyManager> */
+    public static function tenancyManagerClass(): string
+    {
+        /** @var class-string<TenancyManager> $class */
+        $class = config('corex.tenant_context.manager', NullTenancyManager::class);
 
         return $class;
     }

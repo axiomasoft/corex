@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Tests;
 use CoreX\Tenancy\TenancyServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
 
 /**
  * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
@@ -23,6 +24,15 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            // Orchestra\Testbench\TestCase::$enablesPackageDiscoveries defaults
+            // to false (composer package auto-discovery, which a real
+            // consumer app gets for free, is off in testbench) — stancl's own
+            // provider (Tenancy::class singleton, its config/tenancy.php
+            // asset defaults, the bootstrapper __constructStatic loop) must
+            // be listed explicitly or `tenancy.cache`/`tenancy.database`
+            // defaults silently end up as whatever OUR narrower config/
+            // tenancy.php happens to project (P2.5).
+            StanclTenancyServiceProvider::class,
             TenancyServiceProvider::class,
         ];
     }

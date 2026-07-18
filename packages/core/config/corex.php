@@ -10,6 +10,7 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Tenancy\NullTenancyManager;
 use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
 
@@ -64,9 +65,16 @@ return [
     | TenantContextResolver binding. Boxed installs default to
     | SingleAccountResolver (constant context, no real tenancy). Real
     | resolvers (host/root, corex/tenancy) land in P2.
+    |
+    | `manager` (P2.5): TenancyManager binding — single switch point for
+    | connection/cache/queue/fs. Boxed default is a null-manager (no-op,
+    | constant context via `resolver` above); corex/tenancy rebinds this to
+    | StanclTenancyManager when the package is present (D10 — container
+    | binding, never an `if(cloud)` branch).
     */
     'tenant_context' => [
         'resolver' => SingleAccountResolver::class,
+        'manager' => NullTenancyManager::class,
     ],
 
     /*
