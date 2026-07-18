@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 8. Workflow-builder step types and entity trigger events (B-10 §4.2,
- * critical for FlexCRM, B-12). `stepType`/`trigger` are pure declarations —
- * the ActionRegistry consuming them lives in flex/workflow, outside this
- * package.
+ * 8. Workflow-builder step types and entity trigger events, critical for
+ * FlexCRM. `stepType`/`trigger` are pure declarations — the ActionRegistry
+ * consuming them lives in flex/workflow, outside this package.
+ *
+ * @internal spec: B-10 §4.2, B-12
  */
 final class Workflow implements Extender
 {

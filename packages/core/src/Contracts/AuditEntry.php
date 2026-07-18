@@ -8,16 +8,18 @@ use CoreX\Enums\ActorType;
 use DateTimeImmutable;
 
 /**
- * One append-only audit record (B-10 §3.1). Built by the caller (HasAuditLog
- * trait or CoreX\Audit\AuditObserver) and handed to AuditLogger::record().
+ * One append-only audit record. Built by the caller (HasAuditLog trait or
+ * CoreX\Audit\AuditObserver) and handed to AuditLogger::record().
  *
- * `occurredAt`/`workspaceId` are the event-time snapshot (P1.21/A17): the
- * synchronous path (QueuedAuditLogger::record) stamps them via withSnapshot()
- * while the request's tenant context is still alive — the queue worker only
- * WRITES them, it no longer resolves tenant at write time (an async worker runs
+ * `occurredAt`/`workspaceId` are the event-time snapshot: the synchronous
+ * path (QueuedAuditLogger::record) stamps them via withSnapshot() while the
+ * request's tenant context is still alive — the queue worker only WRITES
+ * them, it no longer resolves tenant at write time (an async worker runs
  * under a different — or absent — tenant context and would otherwise stamp a
  * FOREIGN workspace and the write time instead of the event time). The `id`
  * column stays filled at write time (DB-generated).
+ *
+ * @internal spec: B-10 §3.1
  */
 final readonly class AuditEntry
 {

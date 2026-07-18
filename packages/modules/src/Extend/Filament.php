@@ -6,8 +6,9 @@ namespace CoreX\Modules\Extend;
 
 /**
  * 4. Filament resources/pages/widgets, or a tab bolted onto ANOTHER
- * module's entity resource (B-10 §4.2) — bridges into corex/filament's
- * Plugin Registry.
+ * module's entity resource — bridges into corex/filament's Plugin Registry.
+ *
+ * @internal spec: B-10 §4.2
  */
 final class Filament implements Extender
 {

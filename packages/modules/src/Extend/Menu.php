@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 5. Panel navigation entry or group (B-10 §4.2). Order between siblings is
+ * 5. Panel navigation entry or group. Order between siblings is
  * deterministic via `after()` — never a numeric priority.
+ *
+ * @internal spec: B-10 §4.2
  */
 final class Menu implements Extender
 {

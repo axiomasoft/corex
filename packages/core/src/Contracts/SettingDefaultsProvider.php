@@ -8,8 +8,8 @@ use CoreX\Settings\NullSettingDefaultsProvider;
 
 /**
  * Manifest-declared setting defaults, injected so corex/core never imports
- * `CoreX\Modules\SettingDefault` (D20/D23 — direction core←modules). The
- * boxed default is a null object ({@see NullSettingDefaultsProvider});
+ * `CoreX\Modules\SettingDefault` (direction core←modules). The boxed default
+ * is a null object ({@see NullSettingDefaultsProvider});
  * ModulesServiceProvider (corex/modules) wires the real implementation over
  * the compiled manifest registry.
  */

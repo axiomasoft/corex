@@ -7,10 +7,12 @@ namespace CoreX\Modules\Extend;
 use CoreX\Modules\Registry\FieldDefinition;
 
 /**
- * 1. Declares an owned entity into EntityRegistry (B-10 §4.2). `handle`
- * defaults to `{tablePrefix}.{snake(model)}` and `fields` to model `$casts`
+ * 1. Declares an owned entity into EntityRegistry. `handle` defaults to
+ * `{tablePrefix}.{snake(model)}` and `fields` to model `$casts`
  * introspection when left unset — both resolved by RegistryCompiler, which
  * knows the owning manifest this extender belongs to.
+ *
+ * @internal spec: B-10 §4.2
  */
 final class Entity implements Extender
 {

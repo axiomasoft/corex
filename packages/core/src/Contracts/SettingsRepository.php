@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Contracts;
 
 /**
- * Hierarchical settings store (B-10 §3.1): user → workspace → account →
+ * Hierarchical settings store: user → workspace → account →
  * manifest-declared default ({@see SettingDefaultsProvider}).
+ *
+ * @internal spec: B-10 §3.1
  */
 interface SettingsRepository
 {

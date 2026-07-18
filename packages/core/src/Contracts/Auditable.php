@@ -18,7 +18,7 @@ interface Auditable
     public function auditExcept(): array;
 
     /**
-     * Attribute names masked in the audit diff (B-10 §4.4).
+     * Attribute names masked in the audit diff.
      *
      * @return list<string>
      */

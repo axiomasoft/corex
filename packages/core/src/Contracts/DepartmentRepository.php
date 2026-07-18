@@ -10,11 +10,13 @@ use CoreX\Exceptions\DepartmentCycleException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
- * Department hierarchy on `sys_departments` (ltree path, B-10 §3.1/§5.7).
+ * Department hierarchy on `sys_departments` (ltree path).
  *
- * Soft-deleted departments (A24) are excluded from every read here —
+ * Soft-deleted departments are excluded from every read here —
  * find()/subtree()/primaryOf() never surface a removed row, so a deleted
- * department drops out of the scope feeding entity-scoped RBAC (P2.9).
+ * department drops out of the scope feeding entity-scoped RBAC.
+ *
+ * @internal spec: B-10 §3.1/§5.7
  */
 interface DepartmentRepository
 {
@@ -29,7 +31,7 @@ interface DepartmentRepository
      */
     public function subtree(string $departmentId): array;
 
-    /** The user's primary department (AzGuard scope=dept, P2.9). */
+    /** The user's primary department (AzGuard scope=dept). */
     public function primaryOf(string $userId): ?Department;
 
     /**

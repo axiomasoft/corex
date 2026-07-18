@@ -7,6 +7,9 @@
 
 ### Changed
 
+- Продуктовые докблоки публичной поверхности `Contracts/**`, `Extend/**`, `CorexModule.php`,
+  `Registry/FieldDefinition.php`: убраны внутренние спека-ссылки (B-10 §…) из основного текста,
+  перенесены в трейлинг `@internal spec: …`; терминология «Flex module» → «CoreX module» (P3.6).
 - **Breaking:** пакет и namespace переименованы `flex/modules`/`Flex\Modules\` →
   `corex/modules`/`CoreX\Modules\` (доктрина слоёв, D70/D72). Consumer-код обновляет `use`/`require`
   на новые имена (P2.0).

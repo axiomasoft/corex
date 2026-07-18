@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 3. REST contract (B-10 §4.2): either auto-CRUD for an owned entity, or an
- * added attribute on ANOTHER module's resource (narrow analogue of Flarum
- * ApiSerializer — no controller override, §4.3 п.3).
+ * 3. REST contract: either auto-CRUD for an owned entity, or an added
+ * attribute on ANOTHER module's resource (narrow analogue of Flarum
+ * ApiSerializer — no controller override).
+ *
+ * @internal spec: B-10 §4.2, §4.3 п.3
  */
 final class Api implements Extender
 {

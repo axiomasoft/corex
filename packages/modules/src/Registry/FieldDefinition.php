@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Modules\Registry;
 
 /**
- * System field of an entity (B-10 §3.4); custom fields live in flex/attributes.
+ * System field of an entity; custom fields live in flex/attributes.
+ *
+ * @internal spec: B-10 §3.4
  */
 final readonly class FieldDefinition
 {
@@ -23,8 +25,8 @@ final readonly class FieldDefinition
 
     /**
      * Plain-array projection for {@see CompiledRegistry} persistence — scalars
-     * only, no `__set_state` (P1.15): the compiled file must be var_export'able
-     * and re-readable without reconstructing objects from serialized state.
+     * only, no `__set_state`: the compiled file must be var_export'able and
+     * re-readable without reconstructing objects from serialized state.
      *
      * @return array{handle: string, type: string, required: bool, searchable: bool, meta: array<string, mixed>|null}
      */

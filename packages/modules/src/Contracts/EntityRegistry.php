@@ -10,10 +10,12 @@ use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Tenancy\TenantContext;
 
 /**
- * Central registry of ecosystem entities (B-10 §3.4). Single source of the
- * polymorphic morph map (ADR-003) and the contract satellites (search,
- * audit, attributes, workflow, comments, documents) query via
- * byCapability() to wire themselves without knowing the owning module.
+ * Central registry of ecosystem entities. Single source of the polymorphic
+ * morph map (ADR-003) and the contract satellites (search, audit,
+ * attributes, workflow, comments, documents) query via byCapability() to
+ * wire themselves without knowing the owning module.
+ *
+ * @internal spec: B-10 §3.4
  */
 interface EntityRegistry
 {

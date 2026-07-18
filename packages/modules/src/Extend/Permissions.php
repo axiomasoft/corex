@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 6. AzGuard permission group `{panel}.{entity}.{action}` (B-10 §4.2),
- * claimed into mod_records on enable. `scopeable()` opts into the
- * aut_role_matrix scope axis (none/own/dept/dept_tree/workspace/account).
+ * 6. AzGuard permission group `{panel}.{entity}.{action}`, claimed into
+ * mod_records on enable. `scopeable()` opts into the aut_role_matrix scope
+ * axis (none/own/dept/dept_tree/workspace/account).
+ *
+ * @internal spec: B-10 §4.2
  */
 final class Permissions implements Extender
 {

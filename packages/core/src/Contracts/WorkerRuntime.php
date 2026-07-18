@@ -6,18 +6,19 @@ namespace CoreX\Contracts;
 
 /**
  * Detects whether the current process is eligible to call
- * `PubSub::subscribe()` (B-10 §3.1, D44). `Application::runningInConsole()`
- * alone is NOT sufficient: an Octane worker boots once via
- * `php artisan octane:start` and then serves HTTP requests through that same
- * long-running CLI process, so `runningInConsole()` still reports `true` for
- * every request it handles — a guard built on it alone is a no-op under
- * Octane (A29): `subscribe()` called from an HTTP handler would pass the
- * check and block that worker forever.
+ * `PubSub::subscribe()`. `Application::runningInConsole()` alone is NOT
+ * sufficient: an Octane worker boots once via `php artisan octane:start` and
+ * then serves HTTP requests through that same long-running CLI process, so
+ * `runningInConsole()` still reports `true` for every request it handles —
+ * a guard built on it alone is a no-op under Octane: `subscribe()` called
+ * from an HTTP handler would pass the check and block that worker forever.
  *
  * This seam exists so a test can fake "running under Octane" without the
- * `laravel/octane` package installed (it is not a require of this package,
- * D16) — implement this interface with a small test double and bind it over
- * the container's default.
+ * `laravel/octane` package installed (it is not a require of this package)
+ * — implement this interface with a small test double and bind it over the
+ * container's default.
+ *
+ * @internal spec: B-10 §3.1
  */
 interface WorkerRuntime
 {

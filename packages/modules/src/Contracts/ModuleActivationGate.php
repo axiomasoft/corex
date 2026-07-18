@@ -9,10 +9,11 @@ use CoreX\Modules\GateDecision;
 use CoreX\Tenancy\TenantContext;
 
 /**
- * Cloud billing/edition gate (B-10 §3.3). Boxed installs bind
- * {@see AllowAllActivationGate} (D10) — the cloud
- * implementation (root_ billing) is injected by the application, never
- * known to this package.
+ * Cloud billing/edition gate. Boxed installs bind
+ * {@see AllowAllActivationGate} — the cloud implementation (root_ billing)
+ * is injected by the application, never known to this package.
+ *
+ * @internal spec: B-10 §3.3
  */
 interface ModuleActivationGate
 {

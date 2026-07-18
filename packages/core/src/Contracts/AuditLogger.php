@@ -8,8 +8,8 @@ interface AuditLogger
 {
     /**
      * Record an append-only audit entry. The default implementation only
-     * enqueues (B-10 §7.1: sync-path budget ≤0.3ms) — the row is written by
-     * a queue worker.
+     * enqueues (sync-path budget ≤0.3ms) — the row is written by a queue
+     * worker.
      */
     public function record(AuditEntry $entry): void;
 }

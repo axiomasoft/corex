@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 7. Route files (plain Laravel routing, B-10 §4.2), grouped per-module by
- * the activity middleware. `api()` auto-prefixes `/api/{module_short}`.
+ * 7. Route files (plain Laravel routing), grouped per-module by the
+ * activity middleware. `api()` auto-prefixes `/api/{module_short}`.
+ *
+ * @internal spec: B-10 §4.2
  */
 final class Routes implements Extender
 {

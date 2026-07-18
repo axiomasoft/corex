@@ -12,16 +12,18 @@ use CoreX\Modules\Exceptions\ModuleEnableFailedException;
 use CoreX\Modules\ModuleStatus;
 
 /**
- * State-machine transitions for one module in the current tenant's database
- * (B-10 §3.3/§5.1): available → enabled → disabled → (archived | purged).
- * `enabled` never goes straight to `archived`/`purged` — disable is a
- * mandatory two-step safety gate (B-10 §7.4 п.3). `purged` is terminal:
- * re-installing a purged module goes through {@see repair()}, not enable().
+ * State-machine transitions for one module in the current tenant's
+ * database: available → enabled → disabled → (archived | purged). `enabled`
+ * never goes straight to `archived`/`purged` — disable is a mandatory
+ * two-step safety gate. `purged` is terminal: re-installing a purged module
+ * goes through {@see repair()}, not enable().
+ *
+ * @internal spec: B-10 §3.3/§5.1, §7.4 п.3
  */
 interface ModuleLifecycle
 {
     /**
-     * available|disabled|archived → enabled. All-or-nothing (D40): a failing
+     * available|disabled|archived → enabled. All-or-nothing: a failing
      * migration or EnableHook rolls the whole transition back and throws
      * {@see ModuleEnableFailedException} — no partial install. `$cascade`
      * auto-enables the requires chain instead of throwing
@@ -47,7 +49,7 @@ interface ModuleLifecycle
 
     /**
      * Catch-up migrations: dbVersion → codeVersion. Requires `enabled` —
-     * throws {@see InvalidStateTransitionException} otherwise (B-10 §5.5).
+     * throws {@see InvalidStateTransitionException} otherwise.
      */
     public function upgrade(string $module): void;
 
@@ -55,8 +57,8 @@ interface ModuleLifecycle
      * Reconcile `mod_records` with the real schema (drop claims whose object
      * vanished) and provide the single legal exit from the terminal `purged`
      * state: reset the module to `available` — clearing its ownership rows and
-     * migration history — so a fresh enable() re-installs it from scratch
-     * (B-10 §5.1). A healthy module keeps its state.
+     * migration history — so a fresh enable() re-installs it from scratch.
+     * A healthy module keeps its state.
      */
     public function repair(string $module): void;
 

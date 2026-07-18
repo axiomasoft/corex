@@ -8,7 +8,9 @@ use CoreX\Modules\ModuleContext;
 
 /**
  * Module-authored teardown of non-data side effects on disable (cron,
- * webhooks — B-10 §5.4). MUST NOT touch the module's data (B-10 §7.4 п.1).
+ * webhooks). MUST NOT touch the module's data.
+ *
+ * @internal spec: B-10 §5.4, §7.4 п.1
  */
 interface DisableHook
 {
