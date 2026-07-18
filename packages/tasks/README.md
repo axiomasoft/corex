@@ -1,7 +1,8 @@
 # corex/tasks
 
 Модуль задач CoreX поверх `corex/core`: **процессы → стадии → задачи** и **проекты**. Зависит только от
-ядра — ULID, мульти-тенантность (`TenantModel` + `TenantScope`), морф-карта через `EntityRegistry`.
+ядра — ULID, морф-карта через `EntityRegistry`. Изоляция тенантов — физическая (DB-per-account, B-11),
+без row-level-скоупа на моделях.
 
 ## Состав
 

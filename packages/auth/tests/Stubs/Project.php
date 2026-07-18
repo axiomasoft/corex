@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Auth\Tests\Stubs;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 
 /**
- * Tenant-owned stub used as an authorization context entity.
+ * Stub used as an authorization context entity.
  *
  * @property string $id
- * @property string|null $tenant_id
  * @property string $name
  */
-final class Project extends TenantModel
+final class Project extends BaseModel
 {
     protected $guarded = [];
 }

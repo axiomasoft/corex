@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantService;
-use CoreX\Tests\Stubs\Tenant;
 use Flex\Crm\Actions\ConvertLead;
 use Flex\Crm\Actions\CreateLead;
 use Flex\Crm\Enums\LeadSource;
@@ -15,7 +13,6 @@ use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function (): void {
-    app(TenantService::class)->setCurrent(new Tenant('tenant-a'));
     $this->pipeline = Pipeline::create(['name' => 'Sales']);
     Stage::create(['pipeline_id' => $this->pipeline->id, 'name' => 'New', 'position' => 0]);
 });

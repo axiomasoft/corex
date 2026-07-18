@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $name
  * @property string|null $legal_name
  * @property string|null $inn
@@ -19,12 +18,12 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string|null $owner_id
  * @property array<string, mixed>|null $custom_fields
  */
-final class Company extends TenantModel
+final class Company extends BaseModel
 {
     protected $table = 'crm_companies';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'name', 'legal_name', 'inn', 'kpp', 'website', 'owner_id', 'custom_fields'];
+    protected $fillable = ['name', 'legal_name', 'inn', 'kpp', 'website', 'owner_id', 'custom_fields'];
 
     /** @return HasMany<Contact, $this> */
     public function contacts(): HasMany

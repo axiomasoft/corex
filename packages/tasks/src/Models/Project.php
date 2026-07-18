@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use CoreX\Tasks\Enums\ProjectStatus;
 use CoreX\Tasks\Enums\ProjectType;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string|null $process_id
  * @property string|null $company_id
  * @property string $name
@@ -21,12 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ProjectStatus $status
  * @property array<string, mixed>|null $settings
  */
-final class Project extends TenantModel
+final class Project extends BaseModel
 {
     protected $table = 'tsk_projects';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'process_id', 'company_id', 'name', 'code', 'description', 'type', 'status', 'settings'];
+    protected $fillable = ['process_id', 'company_id', 'name', 'code', 'description', 'type', 'status', 'settings'];
 
     /** @return HasMany<ProjectParticipant, $this> */
     public function participants(): HasMany

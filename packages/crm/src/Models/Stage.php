@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $pipeline_id
  * @property string $name
  * @property int $position
@@ -18,12 +17,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_won
  * @property bool $is_lost
  */
-final class Stage extends TenantModel
+final class Stage extends BaseModel
 {
     protected $table = 'crm_stages';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'pipeline_id', 'name', 'position', 'probability', 'is_won', 'is_lost'];
+    protected $fillable = ['pipeline_id', 'name', 'position', 'probability', 'is_won', 'is_lost'];
 
     /** @return BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo

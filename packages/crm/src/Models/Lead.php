@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use Flex\Crm\Enums\LeadSource;
 use Flex\Crm\Enums\LeadStatus;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -12,7 +12,6 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $name
  * @property string|null $email
  * @property string|null $phone
@@ -27,13 +26,13 @@ use Illuminate\Support\Carbon;
  * @property string|null $converted_deal_id
  * @property Carbon|null $converted_at
  */
-final class Lead extends TenantModel
+final class Lead extends BaseModel
 {
     protected $table = 'crm_leads';
 
     /** @var list<string> */
     protected $fillable = [
-        'tenant_id', 'name', 'email', 'phone', 'company_name', 'source', 'status', 'score', 'owner_id',
+        'name', 'email', 'phone', 'company_name', 'source', 'status', 'score', 'owner_id',
         'custom_fields', 'converted_contact_id', 'converted_company_id', 'converted_deal_id', 'converted_at',
     ];
 

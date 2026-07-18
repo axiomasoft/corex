@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use Flex\Crm\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -15,7 +15,6 @@ use Illuminate\Support\Carbon;
  * company, deal) via the `subject` morph.
  *
  * @property string $id
- * @property string|null $tenant_id
  * @property ActivityType $type
  * @property string $summary
  * @property string|null $body
@@ -25,12 +24,12 @@ use Illuminate\Support\Carbon;
  * @property array<string, mixed>|null $metadata
  * @property Carbon|null $occurred_at
  */
-final class Activity extends TenantModel
+final class Activity extends BaseModel
 {
     protected $table = 'crm_activities';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'type', 'summary', 'body', 'user_id', 'metadata', 'occurred_at'];
+    protected $fillable = ['type', 'summary', 'body', 'user_id', 'metadata', 'occurred_at'];
 
     /** @return MorphTo<Model, $this> */
     public function subject(): MorphTo

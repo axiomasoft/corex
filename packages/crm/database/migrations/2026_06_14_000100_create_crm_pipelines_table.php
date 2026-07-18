@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('crm_pipelines', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             $table->string('name');
             $table->boolean('is_default')->default(false);
             $table->unsignedInteger('position')->default(0);

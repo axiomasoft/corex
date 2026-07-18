@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('crm_stages', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             IdColumns::foreign($table, 'pipeline_id')->constrained('crm_pipelines')->cascadeOnDelete();
             $table->string('name');
             $table->unsignedInteger('position')->default(0);

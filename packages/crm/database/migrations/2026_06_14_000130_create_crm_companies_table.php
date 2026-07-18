@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('crm_companies', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             $table->string('name');
             $table->string('legal_name')->nullable();
             $table->string('inn', 20)->nullable();
@@ -24,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['tenant_id', 'name']);
+            $table->index(['name']);
         });
     }
 

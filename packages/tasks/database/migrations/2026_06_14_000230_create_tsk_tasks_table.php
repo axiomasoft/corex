@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tsk_tasks', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             IdColumns::foreign($table, 'process_id')->constrained('tsk_processes')->restrictOnDelete();
             IdColumns::foreign($table, 'stage_id')->constrained('tsk_stages')->restrictOnDelete();
             IdColumns::reference($table, 'project_id')->nullable()->index();
@@ -33,8 +32,8 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['tenant_id', 'process_id']);
-            $table->index(['tenant_id', 'responsible_id', 'stage_id']);
+            $table->index(['process_id']);
+            $table->index(['responsible_id', 'stage_id']);
         });
     }
 

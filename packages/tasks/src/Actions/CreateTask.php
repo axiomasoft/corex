@@ -16,7 +16,7 @@ use RuntimeException;
 
 /**
  * Creates a task at the process's first stage (or the given stage). The
- * transaction is the use-case boundary; tenant_id is auto-stamped (ADR-004).
+ * transaction is the use-case boundary.
  */
 final class CreateTask
 {

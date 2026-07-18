@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Brick\Money\Money;
-use CoreX\Contracts\TenantService;
-use CoreX\Tests\Stubs\Tenant;
 use Flex\Crm\Actions\CreateDeal;
 use Flex\Crm\Actions\MoveDealToStage;
 use Flex\Crm\Enums\DealStatus;
@@ -16,21 +14,18 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 beforeEach(function (): void {
-    app(TenantService::class)->setCurrent(new Tenant('tenant-a'));
-
     $this->pipeline = Pipeline::create(['name' => 'Sales', 'is_default' => true]);
     $this->newStage = Stage::create(['pipeline_id' => $this->pipeline->id, 'name' => 'New', 'position' => 0]);
     $this->wonStage = Stage::create(['pipeline_id' => $this->pipeline->id, 'name' => 'Won', 'position' => 1, 'is_won' => true]);
 });
 
-it('creates a deal at the first stage, tenant-stamped, with money', function (): void {
+it('creates a deal at the first stage with money', function (): void {
     Event::fake([DealCreated::class]);
 
     $deal = app(CreateDeal::class)->handle($this->pipeline, 'Acme', Money::of(1500, 'USD'));
 
     expect($deal->stage_id)->toBe($this->newStage->id)
         ->and($deal->status)->toBe(DealStatus::Open)
-        ->and($deal->tenant_id)->toBe('tenant-a')
         ->and(Str::isUuid($deal->id))->toBeTrue()
         ->and($deal->amount->getAmount()->__toString())->toBe('1500.00')
         ->and($deal->amount->getCurrency()->getCurrencyCode())->toBe('USD');

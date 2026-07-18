@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantService;
 use CoreX\Tasks\Actions\AddTaskParticipant;
 use CoreX\Tasks\Actions\CreateProcess;
 use CoreX\Tasks\Actions\CreateTask;
@@ -12,23 +11,20 @@ use CoreX\Tasks\Enums\TaskPriority;
 use CoreX\Tasks\Events\TaskCreated;
 use CoreX\Tasks\Events\TaskMovedToStage;
 use CoreX\Tasks\Models\Stage;
-use CoreX\Tests\Stubs\Tenant;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function (): void {
-    app(TenantService::class)->setCurrent(new Tenant('tenant-a'));
     $this->process = app(CreateProcess::class)->handle('Kanban', 'KANBAN');
     $this->todo = Stage::create(['process_id' => $this->process->id, 'name' => 'To do', 'position' => 0]);
     $this->done = Stage::create(['process_id' => $this->process->id, 'name' => 'Done', 'position' => 1, 'is_final' => true]);
 });
 
-it('creates a task at the first stage, tenant-stamped', function (): void {
+it('creates a task at the first stage', function (): void {
     Event::fake([TaskCreated::class]);
 
     $task = app(CreateTask::class)->handle($this->process, 'Write docs', 'creator-1', priority: TaskPriority::High);
 
     expect($task->stage_id)->toBe($this->todo->id)
-        ->and($task->tenant_id)->toBe('tenant-a')
         ->and($task->priority)->toBe(TaskPriority::High)
         ->and($task->task_key)->toStartWith('T-')
         ->and($task->archived_at)->toBeNull();

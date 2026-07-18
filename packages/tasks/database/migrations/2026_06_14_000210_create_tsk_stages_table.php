@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tsk_stages', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             IdColumns::foreign($table, 'process_id')->constrained('tsk_processes')->cascadeOnDelete();
             $table->string('name', 100);
             $table->char('color', 7)->default('#6B7280');

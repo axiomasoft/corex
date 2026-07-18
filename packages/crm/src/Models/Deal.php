@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Models;
 
 use Brick\Money\Money;
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use CoreX\Money\MoneyCast;
 use Flex\Crm\Enums\DealStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $pipeline_id
  * @property string $stage_id
  * @property string $title
@@ -25,12 +24,12 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string|null $company_id
  * @property array<string, mixed>|null $custom_fields
  */
-final class Deal extends TenantModel
+final class Deal extends BaseModel
 {
     protected $table = 'crm_deals';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'pipeline_id', 'stage_id', 'title', 'amount', 'status', 'owner_id', 'position', 'contact_id', 'company_id', 'custom_fields'];
+    protected $fillable = ['pipeline_id', 'stage_id', 'title', 'amount', 'status', 'owner_id', 'position', 'contact_id', 'company_id', 'custom_fields'];
 
     /** @return BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo

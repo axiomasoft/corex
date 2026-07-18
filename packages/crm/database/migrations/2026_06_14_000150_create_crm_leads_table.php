@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('crm_leads', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
@@ -30,8 +29,9 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['tenant_id', 'status']);
-            $table->index(['tenant_id', 'owner_id']);
+            // owner_id already carries a single-column index from its reference
+            // above; the tenant-composite it used to pair with is gone (P2.14).
+            $table->index(['status']);
         });
     }
 

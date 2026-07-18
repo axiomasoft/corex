@@ -11,7 +11,6 @@ use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\NullTenancyManager;
-use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
 
 return [
@@ -42,20 +41,6 @@ return [
         'department_user' => 'sys_department_user',
         'pubsub_messages' => 'sys_pubsub_messages',
         'pubsub_cursors' => 'sys_pubsub_cursors',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Multi-tenancy (ADR-004)
-    |--------------------------------------------------------------------------
-    | TenantScope is active only when a TenantService implementation is bound
-    | in the container. On-premise installs leave NullTenantService and run
-    | unscoped. 'column' is the tenant foreign key on tenant-owned tables.
-    */
-    'tenancy' => [
-        'service' => NullTenantService::class,
-        'column' => 'tenant_id',
-        'resolver' => null, // e.g. CoreX\Tenancy\Resolvers\SubdomainTenantResolver::class
     ],
 
     /*

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('widgets', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable();
             $table->string('name');
             $table->bigInteger('amount_minor')->nullable();
             $table->string('currency', 3)->nullable();

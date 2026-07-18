@@ -6,19 +6,18 @@ namespace CoreX\Tests\Stubs;
 
 use Brick\Money\Money;
 use CoreX\Contracts\Auditable;
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use CoreX\Money\MoneyCast;
 
 /**
- * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel),
- * tenant scope (TenantModel), and a money cast.
+ * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel)
+ * and a money cast.
  *
  * @property string $id
- * @property string|null $tenant_id
  * @property string $name
  * @property Money|null $price
  */
-final class Widget extends TenantModel implements Auditable
+final class Widget extends BaseModel implements Auditable
 {
     protected $guarded = [];
 

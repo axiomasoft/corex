@@ -10,8 +10,6 @@ use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\TenantResolver;
-use CoreX\Contracts\TenantService;
 use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
 use CoreX\Enums\PubSubDriver;
@@ -21,7 +19,6 @@ use CoreX\Settings\NullSettingDefaultsProvider;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\NullTenancyManager;
-use CoreX\Tenancy\NullTenantService;
 use CoreX\Tenancy\SingleAccountResolver;
 
 /**
@@ -66,30 +63,7 @@ final class Config
         return (string) config('corex.tables.department_user', 'sys_department_user');
     }
 
-    // ─── Tenancy ──────────────────────────────────────────────────────────
-
-    public static function tenantColumn(): string
-    {
-        return (string) config('corex.tenancy.column', 'tenant_id');
-    }
-
-    /** @return class-string<TenantService> */
-    public static function tenantServiceClass(): string
-    {
-        /** @var class-string<TenantService> $class */
-        $class = config('corex.tenancy.service', NullTenantService::class);
-
-        return $class;
-    }
-
-    /** @return class-string<TenantResolver>|null */
-    public static function tenantResolverClass(): ?string
-    {
-        /** @var class-string<TenantResolver>|null $class */
-        $class = config('corex.tenancy.resolver');
-
-        return $class;
-    }
+    // ─── Tenant context (P1.12) ───────────────────────────────────────────
 
     /** @return class-string<TenantContextResolver> */
     public static function tenantContextResolverClass(): string

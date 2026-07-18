@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $name
  * @property bool $is_default
  * @property int $position
  */
-final class Pipeline extends TenantModel
+final class Pipeline extends BaseModel
 {
     protected $table = 'crm_pipelines';
 
     /** @var list<string> */
-    protected $fillable = ['tenant_id', 'name', 'is_default', 'position'];
+    protected $fillable = ['name', 'is_default', 'position'];
 
     /** @return HasMany<Stage, $this> */
     public function stages(): HasMany

@@ -8,10 +8,8 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
 - **`TenantContextGuard`** — реализация AzGuard-контракта `ContextGuard` (тот самый seam, который AzGuard
   ждёт от внешнего пакета). Делает рабочим `$user->hasPermissionIn($type, $id, $permission)`: контекстная
   сущность резолвится через `EntityRegistry` ядра (единый источник морфов, ADR-003), затем проверяется
-  scoped- или глобальное право.
-- **`TenantBoundary`** — read-only проверка границы тенанта (стадия CheckTenantBoundary из ADR-009) для
-  использования в policies: ресурс, принадлежащий другому тенанту, не проходит. Defence-in-depth поверх
-  query-time `TenantScope` ядра.
+  scoped- или глобальное право. Изоляция тенантов — физическая (DB-per-account, B-11): сущность,
+  загруженная здесь, уже пришла из БД своего аккаунта.
 - **Blade `@scope` / `@entity`** — entity-scoped директивы поверх scoped-ролей AzGuard.
 
 ## Вне объёма (позже)

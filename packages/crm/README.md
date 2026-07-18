@@ -2,8 +2,9 @@
 
 CRM-модуль CoreX поверх `corex/core`: **воронка продаж** (pipelines → stages → deals) **+ CRM-ядро**
 (контакты, компании-аккаунты, лиды, конверсия) **+ полиморфная timeline активностей**. Демонстрирует и
-проверяет доменные возможности ядра — ULID, мульти-тенантность (`TenantModel` + `TenantScope`), деньги в
-minor units (`MoneyCast`, ADR-005), морф-карту через `EntityRegistry`.
+проверяет доменные возможности ядра — ULID, деньги в
+minor units (`MoneyCast`, ADR-005), морф-карту через `EntityRegistry`. Изоляция тенантов — физическая
+(DB-per-account, B-11), без row-level-скоупа на моделях.
 
 ## Состав
 

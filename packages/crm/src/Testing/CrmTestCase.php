@@ -4,27 +4,16 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Testing;
 
-use CoreX\Contracts\TenantService;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Tenancy\ContainerTenantService;
 use CoreX\Testing\CoreXTestCase;
 use Flex\Crm\CrmServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**
- * Testbench base for CRM suites: core's environment plus the CRM provider and
- * active multi-tenancy.
+ * Testbench base for CRM suites: core's environment plus the CRM provider.
  */
 abstract class CrmTestCase extends CoreXTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Bind tenancy after boot regardless of Testbench config-timing.
-        $this->app->singleton(TenantService::class, ContainerTenantService::class);
-    }
-
     /**
      * @param  Application  $app
      * @return list<class-string>
@@ -36,13 +25,5 @@ abstract class CrmTestCase extends CoreXTestCase
             ModulesServiceProvider::class,
             CrmServiceProvider::class,
         ];
-    }
-
-    /** @param Application $app */
-    protected function defineEnvironment($app): void
-    {
-        parent::defineEnvironment($app);
-
-        $app['config']->set('corex.tenancy.service', ContainerTenantService::class);
     }
 }

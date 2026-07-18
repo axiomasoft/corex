@@ -2,16 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantService;
 use CoreX\Tasks\Actions\CreateProcess;
 use CoreX\Tasks\Actions\CreateProject;
 use CoreX\Tasks\Actions\CreateTask;
 use CoreX\Tasks\Models\Stage;
-use CoreX\Tests\Stubs\Tenant;
-
-beforeEach(function (): void {
-    app(TenantService::class)->setCurrent(new Tenant('tenant-a'));
-});
 
 it('attaches a task to a polymorphic subject resolved via the morph alias', function (): void {
     $process = app(CreateProcess::class)->handle('P', 'P1');

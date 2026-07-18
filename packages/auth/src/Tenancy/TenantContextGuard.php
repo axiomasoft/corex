@@ -17,8 +17,8 @@ use Override;
  * morph source, ADR-003), and the check passes when the user has the
  * permission scoped to that entity, or globally within the panel.
  *
- * Tenant isolation of the resolved entity is enforced by corex/core's
- * TenantScope at query time; {@see TenantBoundary} covers already-loaded models.
+ * Tenant isolation of the resolved entity is physical (DB-per-account, B-11):
+ * an entity loaded here already came from its account's database.
  */
 final class TenantContextGuard implements ContextGuard
 {

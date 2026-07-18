@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Models;
 
-use CoreX\Models\TenantModel;
+use CoreX\Models\BaseModel;
 use CoreX\Tasks\Enums\TaskPriority;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +14,6 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
- * @property string|null $tenant_id
  * @property string $process_id
  * @property string $stage_id
  * @property string|null $project_id
@@ -33,13 +32,13 @@ use Illuminate\Support\Carbon;
  * @property string|null $taskable_id
  * @property Carbon|null $archived_at
  */
-final class Task extends TenantModel
+final class Task extends BaseModel
 {
     protected $table = 'tsk_tasks';
 
     /** @var list<string> */
     protected $fillable = [
-        'tenant_id', 'process_id', 'stage_id', 'project_id', 'task_key', 'title', 'description_json', 'priority',
+        'process_id', 'stage_id', 'project_id', 'task_key', 'title', 'description_json', 'priority',
         'creator_id', 'responsible_id', 'sort_order', 'due_date', 'estimated_minutes', 'spent_minutes', 'parent_id', 'archived_at',
     ];
 

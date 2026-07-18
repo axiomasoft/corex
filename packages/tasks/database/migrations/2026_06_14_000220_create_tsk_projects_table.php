@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tsk_projects', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             IdColumns::reference($table, 'process_id')->nullable();
             IdColumns::reference($table, 'company_id')->nullable();
             $table->string('name');
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['tenant_id', 'code']);
+            $table->unique(['code']);
         });
     }
 

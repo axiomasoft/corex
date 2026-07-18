@@ -14,7 +14,7 @@ use RuntimeException;
 
 /**
  * Creates a deal at the pipeline's first stage. The transaction is the
- * use-case boundary; tenant_id is auto-stamped by the model (ADR-004).
+ * use-case boundary.
  */
 final class CreateDeal
 {

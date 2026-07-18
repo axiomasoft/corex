@@ -14,8 +14,6 @@ use CoreX\Contracts\ModuleRegistrar;
 use CoreX\Contracts\PubSub;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\TenantResolver;
-use CoreX\Contracts\TenantService;
 use CoreX\Contracts\WorkerRuntime;
 use CoreX\PubSub\DefaultWorkerRuntime;
 use CoreX\PubSub\PrunePubSubMessages;
@@ -51,7 +49,6 @@ final class CoreServiceProvider extends ServiceProvider
         $auditRetention = config('corex.bindings.audit_retention', NullAuditRetention::class);
         $this->app->singleton(AuditRetention::class, $auditRetention);
 
-        $this->app->singleton(TenantService::class, Config::tenantServiceClass());
         $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
         $this->app->singleton(TenancyManager::class, Config::tenancyManagerClass());
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
@@ -59,12 +56,6 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
-
-        $resolver = Config::tenantResolverClass();
-
-        if ($resolver !== null) {
-            $this->app->singleton(TenantResolver::class, $resolver);
-        }
     }
 
     public function boot(): void

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('crm_deals', function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::reference($table, 'tenant_id')->nullable()->index();
             IdColumns::foreign($table, 'pipeline_id')->constrained('crm_pipelines')->cascadeOnDelete();
             IdColumns::foreign($table, 'stage_id')->constrained('crm_stages')->restrictOnDelete();
             $table->string('title');
@@ -28,8 +27,8 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Hot path: deals of a tenant by stage (board / pipeline view).
-            $table->index(['tenant_id', 'stage_id']);
+            // Hot path: deals by stage (board / pipeline view).
+            $table->index(['stage_id']);
         });
     }
 
