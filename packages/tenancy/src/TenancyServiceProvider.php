@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Stancl\JobPipeline\JobPipeline;
+use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
+use Stancl\Tenancy\Events\TenantCreated;
 
 final class TenancyServiceProvider extends ServiceProvider
 {
@@ -31,5 +36,24 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/tenancy.php' => config_path('tenancy.php'),
         ], 'tenancy-config');
+
+        // Projected here (not in register()) so it deterministically wins
+        // over stancl's own TenancyServiceProvider::register() regardless of
+        // provider registration order — see config/tenancy.php comment.
+        config([
+            'tenancy.models.tenant' => config('tenancy.tenant_model'),
+            'tenancy.database.central_connection' => config('tenancy.central_connection'),
+            'tenancy.database.managers.pgsql' => config('tenancy.tenant_database_manager'),
+        ]);
+
+        $this->app->bind(UniqueIdentifierGenerator::class, config('tenancy.id_generator'));
+
+        Event::listen(
+            TenantCreated::class,
+            JobPipeline::make([CreateDatabaseFromTemplate::class])
+                ->send(static fn (TenantCreated $event): mixed => $event->tenant)
+                ->shouldBeQueued(false)
+                ->toListener(),
+        );
     }
 }
