@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Events\CompanyCreated;
-use CoreX\Crm\Models\Company;
+use Flex\Crm\Events\CompanyCreated;
+use Flex\Crm\Models\Company;
 use Illuminate\Support\Facades\DB;
 
 final class CreateCompany

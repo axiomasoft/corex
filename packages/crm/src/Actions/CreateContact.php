@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Events\ContactCreated;
-use CoreX\Crm\Models\Contact;
+use Flex\Crm\Events\ContactCreated;
+use Flex\Crm\Models\Contact;
 use Illuminate\Support\Facades\DB;
 
 final class CreateContact

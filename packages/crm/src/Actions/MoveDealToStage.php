@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Enums\DealStatus;
-use CoreX\Crm\Events\DealMovedToStage;
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Stage;
+use Flex\Crm\Enums\DealStatus;
+use Flex\Crm\Events\DealMovedToStage;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\DB;
 
 /**

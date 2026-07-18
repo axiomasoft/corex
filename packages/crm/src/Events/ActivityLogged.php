@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Events;
+namespace Flex\Crm\Events;
 
-use CoreX\Crm\Models\Activity;
+use Flex\Crm\Models\Activity;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 

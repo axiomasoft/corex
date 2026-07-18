@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Models;
+namespace Flex\Crm\Models;
 
 use Brick\Money\Money;
-use CoreX\Crm\Enums\DealStatus;
 use CoreX\Models\TenantModel;
 use CoreX\Money\MoneyCast;
+use Flex\Crm\Enums\DealStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 

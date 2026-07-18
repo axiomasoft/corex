@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Contracts\TenantService;
-use CoreX\Crm\Actions\CreateCompany;
-use CoreX\Crm\Actions\CreateContact;
-use CoreX\Crm\Models\Company;
 use CoreX\Tests\Stubs\Tenant;
+use Flex\Crm\Actions\CreateCompany;
+use Flex\Crm\Actions\CreateContact;
+use Flex\Crm\Models\Company;
 
 beforeEach(function (): void {
     app(TenantService::class)->setCurrent(new Tenant('tenant-a'));

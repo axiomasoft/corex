@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Enums\ActivityType;
-use CoreX\Crm\Events\ActivityLogged;
-use CoreX\Crm\Models\Activity;
+use Flex\Crm\Enums\ActivityType;
+use Flex\Crm\Events\ActivityLogged;
+use Flex\Crm\Models\Activity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

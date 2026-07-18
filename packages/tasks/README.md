@@ -14,7 +14,7 @@
 - **Events** (`ShouldDispatchAfterCommit`): `TaskCreated`, `TaskMovedToStage`, `ProjectCreated`.
 - **Enums**: `TaskPriority`, `TaskParticipantRole`, `ProjectType`, `ProjectStatus`, `ProjectParticipantRole`.
 - Сущности зарегистрированы в `EntityRegistry` (алиасы `tsk_process/stage/task/project`); `taskable`
-  резолвится через морф-карту — задачу можно прикрепить к **любой** сущности (например, к сделке `corex/crm`).
+  резолвится через морф-карту — задачу можно прикрепить к **любой** сущности (например, к сделке `flex/crm`).
 
 ## Пример
 
@@ -27,7 +27,7 @@ app(MoveTaskToStage::class)->handle($task, $doneStage); // is_final → зада
 
 ## Зависимости
 
-Только `corex/core` (+ `illuminate/*`). **Без связи с `corex/crm`**: `Project.company_id` — plain ulid,
+Только `corex/core` (+ `illuminate/*`). **Без связи с `flex/crm`**: `Project.company_id` — plain ulid,
 `Task.taskable` — полиморф без жёсткой ссылки. Авторизация — забота потребителя / `corex/auth`.
 
 ## Тесты

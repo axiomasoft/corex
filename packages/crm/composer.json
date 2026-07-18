@@ -1,5 +1,5 @@
 {
-    "name": "corex/crm",
+    "name": "flex/crm",
     "description": "CoreX CRM module — pipelines, stages and deals on corex/core (ULID, tenancy, money).",
     "type": "library",
     "license": "MIT",
@@ -23,13 +23,13 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Crm\\": "src/"
+            "Flex\\Crm\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "CoreX\\Crm\\CrmServiceProvider"
+                "Flex\\Crm\\CrmServiceProvider"
             ]
         }
     },

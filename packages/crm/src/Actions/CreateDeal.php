@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
 use Brick\Money\Money;
-use CoreX\Crm\Enums\DealStatus;
-use CoreX\Crm\Events\DealCreated;
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Pipeline;
+use Flex\Crm\Enums\DealStatus;
+use Flex\Crm\Events\DealCreated;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Pipeline;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Models;
+namespace Flex\Crm\Models;
 
-use CoreX\Crm\Enums\LeadSource;
-use CoreX\Crm\Enums\LeadStatus;
 use CoreX\Models\TenantModel;
+use Flex\Crm\Enums\LeadSource;
+use Flex\Crm\Enums\LeadStatus;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2efcb4a8cdd585a135c3a640afe1d1ce",
+    "content-hash": "6d0962ba721438c22c65906d9589a4a4",
     "packages": [
         {
             "name": "brick/math",
@@ -244,59 +244,6 @@
                 "multi-tenancy",
                 "settings",
                 "ulid"
-            ],
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "corex/crm",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/crm",
-                "reference": "d691724c5ce2f6ed27de89f061b530d6b70e1c3d"
-            },
-            "require": {
-                "corex/core": "@dev",
-                "corex/modules": "@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "php": "^8.3"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^10.0|^11.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "CoreX\\Crm\\CrmServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\Crm\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Vostrikov",
-                    "email": "dv.vostrikov@gmail.com"
-                }
-            ],
-            "description": "CoreX CRM module — pipelines, stages and deals on corex/core (ULID, tenancy, money).",
-            "keywords": [
-                "crm",
-                "deals",
-                "laravel",
-                "multi-tenancy",
-                "pipeline"
             ],
             "transport-options": {
                 "relative": true
@@ -779,6 +726,59 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "flex/crm",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/crm",
+                "reference": "cf42bd053050ff179c2f0213e3982532b423c4ec"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Flex\\Crm\\CrmServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Flex\\Crm\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "CoreX CRM module — pipelines, stages and deals on corex/core (ULID, tenancy, money).",
+            "keywords": [
+                "crm",
+                "deals",
+                "laravel",
+                "multi-tenancy",
+                "pipeline"
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "fruitcake/php-cors",
@@ -10600,9 +10600,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "corex/core": 20,
-        "corex/crm": 20,
         "corex/modules": 20,
-        "corex/tasks": 20
+        "corex/tasks": 20,
+        "flex/crm": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

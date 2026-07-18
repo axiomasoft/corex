@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Enums;
+namespace Flex\Crm\Enums;
 
 enum LeadSource: string
 {

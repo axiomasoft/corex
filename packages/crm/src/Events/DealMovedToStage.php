@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Events;
+namespace Flex\Crm\Events;
 
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Stage;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Stage;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 

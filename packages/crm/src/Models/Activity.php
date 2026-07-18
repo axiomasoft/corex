@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Models;
+namespace Flex\Crm\Models;
 
-use CoreX\Crm\Enums\ActivityType;
 use CoreX\Models\TenantModel;
+use Flex\Crm\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm;
+namespace Flex\Crm;
 
-use CoreX\Crm\Models\Activity;
-use CoreX\Crm\Models\Company;
-use CoreX\Crm\Models\Contact;
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Lead;
-use CoreX\Crm\Models\Pipeline;
-use CoreX\Crm\Models\Stage;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
+use Flex\Crm\Models\Activity;
+use Flex\Crm\Models\Company;
+use Flex\Crm\Models\Contact;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Lead;
+use Flex\Crm\Models\Pipeline;
+use Flex\Crm\Models\Stage;
 use Illuminate\Support\ServiceProvider;
 
 final class CrmServiceProvider extends ServiceProvider
@@ -30,7 +30,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.pipeline',
             model: Pipeline::class,
             table: 'crm_pipelines',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Pipeline',
             labelPlural: 'Pipelines',
             capabilities: [],
@@ -42,7 +42,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.stage',
             model: Stage::class,
             table: 'crm_stages',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Stage',
             labelPlural: 'Stages',
             capabilities: [],
@@ -54,7 +54,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.deal',
             model: Deal::class,
             table: 'crm_deals',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Deal',
             labelPlural: 'Deals',
             capabilities: [Capability::Auditable],
@@ -66,7 +66,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.company',
             model: Company::class,
             table: 'crm_companies',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Company',
             labelPlural: 'Companies',
             capabilities: [],
@@ -78,7 +78,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.contact',
             model: Contact::class,
             table: 'crm_contacts',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Contact',
             labelPlural: 'Contacts',
             capabilities: [],
@@ -90,7 +90,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.lead',
             model: Lead::class,
             table: 'crm_leads',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Lead',
             labelPlural: 'Leads',
             capabilities: [],
@@ -102,7 +102,7 @@ final class CrmServiceProvider extends ServiceProvider
             handle: 'crm.activity',
             model: Activity::class,
             table: 'crm_activities',
-            module: 'corex/crm',
+            module: 'flex/crm',
             labelSingular: 'Activity',
             labelPlural: 'Activities',
             capabilities: [Capability::Auditable],

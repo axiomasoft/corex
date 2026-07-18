@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Enums\LeadStatus;
-use CoreX\Crm\Events\LeadConverted;
-use CoreX\Crm\Models\Contact;
-use CoreX\Crm\Models\Lead;
-use CoreX\Crm\Models\Pipeline;
+use Flex\Crm\Enums\LeadStatus;
+use Flex\Crm\Events\LeadConverted;
+use Flex\Crm\Models\Contact;
+use Flex\Crm\Models\Lead;
+use Flex\Crm\Models\Pipeline;
 use Illuminate\Support\Facades\DB;
 
 /**

@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use CoreX\Contracts\TenantService;
-use CoreX\Crm\Actions\ConvertLead;
-use CoreX\Crm\Actions\CreateLead;
-use CoreX\Crm\Enums\LeadSource;
-use CoreX\Crm\Enums\LeadStatus;
-use CoreX\Crm\Events\LeadConverted;
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Pipeline;
-use CoreX\Crm\Models\Stage;
 use CoreX\Tests\Stubs\Tenant;
+use Flex\Crm\Actions\ConvertLead;
+use Flex\Crm\Actions\CreateLead;
+use Flex\Crm\Enums\LeadSource;
+use Flex\Crm\Enums\LeadStatus;
+use Flex\Crm\Events\LeadConverted;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Pipeline;
+use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function (): void {

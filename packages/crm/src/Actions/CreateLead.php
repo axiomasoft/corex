@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Actions;
+namespace Flex\Crm\Actions;
 
-use CoreX\Crm\Enums\LeadSource;
-use CoreX\Crm\Enums\LeadStatus;
-use CoreX\Crm\Events\LeadCreated;
-use CoreX\Crm\Models\Lead;
+use Flex\Crm\Enums\LeadSource;
+use Flex\Crm\Enums\LeadStatus;
+use Flex\Crm\Events\LeadCreated;
+use Flex\Crm\Models\Lead;
 use Illuminate\Support\Facades\DB;
 
 final class CreateLead

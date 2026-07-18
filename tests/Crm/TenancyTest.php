@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use CoreX\Contracts\TenantService;
-use CoreX\Crm\Actions\CreateDeal;
-use CoreX\Crm\Models\Deal;
-use CoreX\Crm\Models\Pipeline;
-use CoreX\Crm\Models\Stage;
 use CoreX\Tests\Stubs\Tenant;
+use Flex\Crm\Actions\CreateDeal;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Pipeline;
+use Flex\Crm\Models\Stage;
 
 it('isolates deals by tenant via the core TenantScope', function (): void {
     $tenants = app(TenantService::class);

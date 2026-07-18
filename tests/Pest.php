@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Crm\Testing\CrmTestCase;
 use CoreX\Tasks\Testing\TasksTestCase;
 use CoreX\Tests\TestCase;
+use Flex\Crm\Testing\CrmTestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');

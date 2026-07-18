@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Crm\Testing;
+namespace Flex\Crm\Testing;
 
 use CoreX\Contracts\TenantService;
-use CoreX\Crm\CrmServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tenancy\ContainerTenantService;
 use CoreX\Testing\CoreXTestCase;
+use Flex\Crm\CrmServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**

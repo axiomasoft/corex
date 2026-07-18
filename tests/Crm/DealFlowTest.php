@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 use Brick\Money\Money;
 use CoreX\Contracts\TenantService;
-use CoreX\Crm\Actions\CreateDeal;
-use CoreX\Crm\Actions\MoveDealToStage;
-use CoreX\Crm\Enums\DealStatus;
-use CoreX\Crm\Events\DealCreated;
-use CoreX\Crm\Events\DealMovedToStage;
-use CoreX\Crm\Models\Pipeline;
-use CoreX\Crm\Models\Stage;
 use CoreX\Tests\Stubs\Tenant;
+use Flex\Crm\Actions\CreateDeal;
+use Flex\Crm\Actions\MoveDealToStage;
+use Flex\Crm\Enums\DealStatus;
+use Flex\Crm\Events\DealCreated;
+use Flex\Crm\Events\DealMovedToStage;
+use Flex\Crm\Models\Pipeline;
+use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
