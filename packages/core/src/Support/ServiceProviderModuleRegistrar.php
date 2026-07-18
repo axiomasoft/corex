@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Modules;
+namespace CoreX\Support;
 
 use CoreX\Contracts\ModuleRegistrar;
 use Illuminate\Contracts\Foundation\Application;
