@@ -10,12 +10,11 @@
 - **Breaking:** пакет и namespace переименованы `flex/modules`/`Flex\Modules\` →
   `corex/modules`/`CoreX\Modules\` (доктрина слоёв, D70/D72). Consumer-код обновляет `use`/`require`
   на новые имена (P2.0).
-- **Breaking:** де-flex публичной поверхности (аудит A5/A10, P3.3): конфиг `config/flex-modules.php`
-  → `corex-modules.php` (ключ `flex-modules` → `corex-modules`), env `FLEX_MODULES_*` →
-  `COREX_MODULES_*`, artisan `flex:modules:compile|repair` → `corex:modules:compile|repair`,
-  publish-теги `flex-modules-*` → `corex-modules-*`, компилят `bootstrap/cache/flex_modules.php` →
-  `corex_modules.php`, PHPStan `parameters.flexModules.*`/`flexModules.*`-identifiers →
-  `corexModules.*`. Consumer-код обновляет `.env`/публикованный конфиг/CI-раннеры на новые имена.
+- **Breaking:** де-flex публичной поверхности (аудит A5/A10, P3.3) — конфиг-файл/ключ, env-префикс,
+  artisan-команды, publish-теги, путь компилята кеша и PHPStan-неймспейс/identifiers, ранее нёсшие
+  legacy Flex-именование, переведены на `corex-modules`/`COREX_MODULES_*`/`corex:modules:*`-эквиваленты
+  (см. `README.md`/`config/corex-modules.php`). Consumer-код обновляет `.env`/публикованный
+  конфиг/CI-раннеры на новые имена.
 
 ## [0.1.0] - 2026-07-15
 
