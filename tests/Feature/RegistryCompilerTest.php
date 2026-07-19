@@ -73,8 +73,24 @@ it('rejects a duplicate tablePrefix across manifests', function () use ($registr
 it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', function (): void {
     $noPrefix = Manifest::make('corex/stub-no-prefix')->title('No Prefix');
 
-    expect(fn () => (new RegistryCompiler)->compile([$noPrefix]))
-        ->toThrow(CompilationException::class, 'corex/stub-no-prefix');
+    $thrown = null;
+
+    try {
+        (new RegistryCompiler)->compile([$noPrefix]);
+    } catch (CompilationException $e) {
+        $thrown = $e;
+    }
+
+    // Assert the VALIDATION-stage message specifically (P3.7): the module name
+    // alone is carried by RegistryCompiler's defensive throws too, so a mutant
+    // that removes CompilationValidator's check would still throw a
+    // CompilationException naming the module and slip past a bare-name assert.
+    // 'missing tablePrefix()' is emitted ONLY by validateRequiredFields — the
+    // defensive fall-through throws tablePrefixInvariantBypassed instead — so
+    // this pins the validation layer and reddens under the P1.17 saboteur.
+    expect($thrown)->toBeInstanceOf(CompilationException::class)
+        ->and($thrown->getMessage())->toContain('corex/stub-no-prefix')
+        ->and($thrown->getMessage())->toContain('missing tablePrefix()');
 });
 
 it('rejects a manifest with no title() call', function (): void {

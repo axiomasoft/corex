@@ -1,0 +1,14 @@
+diff --git a/packages/modules/src/Compiler/PipelineStages.php b/packages/modules/src/Compiler/PipelineStages.php
+index 448d11d..c87b2e6 100644
+--- a/packages/modules/src/Compiler/PipelineStages.php
++++ b/packages/modules/src/Compiler/PipelineStages.php
+@@ -33,8 +33,8 @@ final class PipelineStages
+         Permissions::class,
+         Api::class,
+         Filament::class,
+-        Menu::class,
+         Routes::class,
++        Menu::class,
+         Workflow::class,
+     ];
+ }

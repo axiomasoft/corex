@@ -221,7 +221,7 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
-    name: Coverage (min 80%)
+    name: Coverage (floor from scripts/coverage-min-floor.txt)
     steps:
       - uses: actions/checkout@v4
 
@@ -233,6 +233,12 @@ jobs:
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Effective coverage floor
+        run: |
+          FLOOR="$(grep -m1 -E '^[0-9]+' scripts/coverage-min-floor.txt)"
+          echo "Effective coverage floor (scripts/coverage-min-floor.txt): --min=${FLOOR}"
+          echo "Return to --min=80 is time-gated item P1.27 (D47)."
 
       - name: Coverage
         run: composer test:coverage
@@ -257,3 +263,42 @@ jobs:
 
       - name: Pint
         run: composer lint:check
+
+  mutation-check:
+    runs-on: ubuntu-latest
+    name: Mutation registry (scripts/mutation-check.sh --all)
+    if: github.event_name == 'pull_request'
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Mutation registry — every case must red under sabotage
+        run: bash scripts/mutation-check.sh --all
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex

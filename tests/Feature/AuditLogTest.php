@@ -373,6 +373,47 @@ it('killswitch silences a direct AuditLogger::record() at the write seam, not on
     expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
 });
 
+it('killswitch aborts in the observer itself — an unconditional logger stays untouched (P1.21 observer isolation)', function (): void {
+    config(['corex.audit.enabled' => false]);
+
+    Schema::create('stub_auditable_things', function ($table): void {
+        $table->uuid('id')->primary();
+        $table->string('name');
+        $table->string('secret')->nullable();
+        $table->timestamps();
+    });
+
+    // Unconditional spy: records EVERY call, with NO killswitch of its own. This
+    // isolates AuditObserver's guard from QueuedAuditLogger's write-seam guard
+    // (P1.21-killswitch-writeseam pins the latter separately). The existing
+    // 'killswitch silences' tests assert AuditLog stays empty — but that holds
+    // even if the observer forgets to guard, because the real logger's write-seam
+    // catches it. Only a logger with no guard of its own can prove the observer
+    // short-circuits on its own: if it doesn't, this spy captures the call.
+    $spy = new class implements AuditLogger
+    {
+        public int $calls = 0;
+
+        public function record(AuditEntry $entry): void
+        {
+            $this->calls++;
+        }
+    };
+    $this->app->instance(AuditLogger::class, $spy);
+
+    $registry = new ArrayEntityRegistry;
+    $registry->register(auditEntityFor(StubAuditableThing::class, 'stub_auditable_things', 'stub.auditable_thing'));
+
+    AuditCapabilityWiring::wire($registry);
+
+    StubAuditableThing::create(['name' => 'alpha', 'secret' => 'top-secret']);
+
+    // The observer must short-circuit at its OWN killswitch (AuditObserver::record),
+    // never reaching app(AuditLogger::class). Mutating that guard (&& false) lets
+    // it through → the spy captures → this reddens.
+    expect($spy->calls)->toBe(0);
+});
+
 it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)', function (): void {
     Queue::fake();
 

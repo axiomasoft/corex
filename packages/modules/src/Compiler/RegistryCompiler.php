@@ -113,8 +113,9 @@ final class RegistryCompiler
         foreach ($manifests as $manifest) {
             // Guarded by CompilationValidator::validateRequiredFields() (D37:
             // tablePrefix is mandatory) before this method ever runs — see
-            // compileEntity()'s identical guard.
-            $namespace = $manifest->tablePrefix ?? throw CompilationException::missingTablePrefix($manifest->composerName);
+            // compileEntity()'s identical guard. A DISTINCT throw (P3.7): reaching
+            // it means validation was bypassed, not that the manifest is bad.
+            $namespace = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
 
             foreach ($manifest->settings as $default) {
                 $settings[] = new CompiledSettingDefault($namespace, $default);
@@ -180,7 +181,8 @@ final class RegistryCompiler
             // Guarded by CompilationValidator::validateRequiredFields() before the pipeline
             // starts (D37: tablePrefix is mandatory, no auto-derivation from the composer
             // name); this branch only matters if compileEntity() is ever reached directly.
-            throw CompilationException::missingTablePrefix($manifest->composerName);
+            // Distinct throw (P3.7): a validation bypass, not an ordinary rejection.
+            throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
         }
 
         $handle = $extender->handle ?? sprintf('%s.%s', $modulePrefix, Str::snake(class_basename($extender->model)));

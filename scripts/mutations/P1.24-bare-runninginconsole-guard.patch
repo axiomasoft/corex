@@ -1,0 +1,26 @@
+diff --git a/packages/core/src/PubSub/SubscribeGuard.php b/packages/core/src/PubSub/SubscribeGuard.php
+index 9a8777e..2946edc 100644
+--- a/packages/core/src/PubSub/SubscribeGuard.php
++++ b/packages/core/src/PubSub/SubscribeGuard.php
+@@ -22,21 +22,6 @@ final class SubscribeGuard
+ {
+     public static function assert(WorkerRuntime $runtime, bool $octaneWorkerOptIn, string $driverClass): void
+     {
+-        if ($runtime->isOctane()) {
+-            if ($octaneWorkerOptIn) {
+-                return;
+-            }
+-
+-            throw new LogicException(sprintf(
+-                '%s::subscribe() detected an Octane runtime. Octane workers stay in the same long-running '.
+-                'CLI process across requests, so runningInConsole() cannot tell an HTTP request from a worker '.
+-                'command apart (A29) — subscribe() called from an HTTP handler would block that worker forever. '.
+-                'Call it only from a dedicated worker command that explicitly sets '.
+-                "config(['corex.pubsub.octane_worker_opt_in' => true]) before subscribing.",
+-                $driverClass,
+-            ));
+-        }
+-
+         if (! $runtime->runningInConsole()) {
+             throw new LogicException(sprintf(
+                 '%s::subscribe() polls/blocks forever — call it only from a queue worker or console command, '.

@@ -69,6 +69,27 @@ final class CompilationException extends RuntimeException
         ));
     }
 
+    /**
+     * Distinct from {@see missingTablePrefix} on purpose (P3.7): that one is the
+     * VALIDATION-stage rejection (validateRequiredFields); this one fires from
+     * RegistryCompiler's defensive `?? throw` guards, which are unreachable once
+     * validation has run. Reaching it means validateRequiredFields() was skipped
+     * — a broken invariant, not a bad manifest — so the message says so loudly
+     * instead of masquerading as the ordinary "missing tablePrefix()" rejection.
+     * The two carrying different text is what lets a test pin the validation
+     * layer specifically (a mutant that removes the validation check falls
+     * through to this distinct throw and the validation-message assert reddens).
+     */
+    public static function tablePrefixInvariantBypassed(string $composerName): self
+    {
+        return new self(sprintf(
+            'Module [%s] reached compile with a null tablePrefix — validateRequiredFields() bypassed. '
+            .'tablePrefix is mandatory (D37) and validation must reject a prefix-less manifest before the '
+            .'pipeline runs; hitting this defensive guard means that invariant was broken.',
+            $composerName,
+        ));
+    }
+
     public static function missingTitle(string $composerName): self
     {
         return new self(sprintf(

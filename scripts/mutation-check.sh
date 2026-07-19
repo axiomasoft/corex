@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Mutation-check harness (P1.14, plan.md D45).
 #
-# Применяет патч-саботаж plans/COREX-CORE/mutations/<item>-<case>.patch к рабочему
+# Применяет патч-саботаж scripts/mutations/<item>-<case>.patch к рабочему
 # дереву, гоняет ЗАРЕГИСТРИРОВАННУЮ для этого кейса тестовую команду и требует
 # НЕнулевой exit-код (тест обязан покраснеть под саботажем — граница пинится).
 # Патч всегда откатывается (успех или провал), рабочее дерево не остаётся мутированным.
@@ -9,6 +9,7 @@
 # Использование:
 #   bash scripts/mutation-check.sh <item> <case>
 #   bash scripts/mutation-check.sh --list
+#   bash scripts/mutation-check.sh --all   (все зарегистрированные кейсы подряд, для CI-джоба, P3.7)
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
@@ -32,7 +33,7 @@ declare -A TEST_CMD=(
     [P1.19-hardcode-uuid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='ulid id strategy'"
     [P1.20-idcolumns-uuid7-ulid]="vendor/bin/pest --group=pg tests/Feature/ConfigurableIdTest.php --filter='uuid7 -> uuid'"
     [P1.21-getattributes-create]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='omits guarded'"
-    [P1.21-killswitch]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='killswitch silences'"
+    [P1.21-killswitch]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='observer isolation'"
     [P1.21-always-excluded-removed]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='guarded = \[\] makes them fillable'"
     [P1.21-killswitch-writeseam]="vendor/bin/pest --group=pg tests/Feature/AuditLogTest.php --filter='write seam'"
     [P1.22-drop-unique-index]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='rejects a duplicate account-level row'"
@@ -55,44 +56,63 @@ if [ "${1:-}" = "--list" ]; then
     exit 0
 fi
 
-ITEM="${1:?usage: mutation-check.sh <item> <case>  (или --list)}"
-CASE="${2:?usage: mutation-check.sh <item> <case>  (или --list)}"
-KEY="${ITEM}-${CASE}"
-PATCH="plans/COREX-CORE/mutations/${KEY}.patch"
+run_case() {
+    local KEY="$1" PATCH CMD STATUS
+    PATCH="scripts/mutations/${KEY}.patch"
 
-if [ ! -f "$PATCH" ]; then
-    echo "mutation-check: патч не найден: $PATCH" >&2
-    exit 2
-fi
+    if [ ! -f "$PATCH" ]; then
+        echo "mutation-check: патч не найден: $PATCH" >&2
+        return 2
+    fi
 
-CMD="${TEST_CMD[$KEY]:-}"
-if [ -z "$CMD" ]; then
-    echo "mutation-check: для кейса '$KEY' не зарегистрирована тестовая команда (см. TEST_CMD в этом скрипте)" >&2
-    exit 2
-fi
+    CMD="${TEST_CMD[$KEY]:-}"
+    if [ -z "$CMD" ]; then
+        echo "mutation-check: для кейса '$KEY' не зарегистрирована тестовая команда (см. TEST_CMD в этом скрипте)" >&2
+        return 2
+    fi
 
-if ! git apply --check --whitespace=nowarn "$PATCH" 2>/dev/null; then
-    echo "mutation-check: патч $PATCH не применяется к текущему дереву (git apply --check провалился)" >&2
-    exit 2
-fi
+    if ! git apply --check --whitespace=nowarn "$PATCH" 2>/dev/null; then
+        echo "mutation-check: патч $PATCH не применяется к текущему дереву (git apply --check провалился)" >&2
+        return 2
+    fi
 
-cleanup() {
-    git apply -R --whitespace=nowarn "$PATCH" 2>/dev/null || true
+    cleanup() {
+        git apply -R --whitespace=nowarn "$PATCH" 2>/dev/null || true
+    }
+    trap cleanup RETURN
+
+    echo "mutation-check[$KEY]: применяю $PATCH"
+    git apply --whitespace=nowarn "$PATCH"
+
+    echo "mutation-check[$KEY]: гоняю: $CMD"
+    set +e
+    bash -c "$CMD"
+    STATUS=$?
+    set -e
+
+    if [ "$STATUS" -eq 0 ]; then
+        echo "mutation-check[$KEY]: FAIL — тест остался зелёным под патчем-саботажем (граница НЕ пинится, exit=0)" >&2
+        return 1
+    fi
+
+    echo "mutation-check[$KEY]: OK — тест покраснел под патчем-саботажем (exit=$STATUS), граница пинится"
 }
-trap cleanup EXIT
 
-echo "mutation-check[$KEY]: применяю $PATCH"
-git apply --whitespace=nowarn "$PATCH"
-
-echo "mutation-check[$KEY]: гоняю: $CMD"
-set +e
-bash -c "$CMD"
-STATUS=$?
-set -e
-
-if [ "$STATUS" -eq 0 ]; then
-    echo "mutation-check[$KEY]: FAIL — тест остался зелёным под патчем-саботажем (граница НЕ пинится, exit=0)" >&2
-    exit 1
+if [ "${1:-}" = "--all" ]; then
+    FAILED=()
+    for key in $(for k in "${!TEST_CMD[@]}"; do echo "$k"; done | sort); do
+        if ! run_case "$key"; then
+            FAILED+=("$key")
+        fi
+    done
+    if [ "${#FAILED[@]}" -gt 0 ]; then
+        echo "mutation-check --all: ${#FAILED[@]} кейс(ов) НЕ покраснели/не применились: ${FAILED[*]}" >&2
+        exit 1
+    fi
+    echo "mutation-check --all: все ${#TEST_CMD[@]} кейса(ов) покраснели под саботажем — OK"
+    exit 0
 fi
 
-echo "mutation-check[$KEY]: OK — тест покраснел под патчем-саботажем (exit=$STATUS), граница пинится"
+ITEM="${1:?usage: mutation-check.sh <item> <case>  (или --list, --all)}"
+CASE="${2:?usage: mutation-check.sh <item> <case>  (или --list, --all)}"
+run_case "${ITEM}-${CASE}"

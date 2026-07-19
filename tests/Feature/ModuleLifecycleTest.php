@@ -335,6 +335,20 @@ it('purges every owned object in reverse creation order — FK child before pare
 
     $lifecycle->disable('corex/stub-fk', DisableReason::Manual);
 
+    // Harden the fixture so ONLY `seq DESC` yields the FK-safe drop order (P1.18,
+    // P3.7): collapse every stub-fk claim onto the SAME created_at, leaving the
+    // bigserial `seq` as the only monotonic tiebreak. The real code orders by
+    // `seq DESC` (child before parent → FK-safe), unaffected. A mutant ordering
+    // by `created_at DESC, reference DESC` can no longer lean on created_at, so
+    // it falls to `reference DESC` — which sorts 'stf_parents' before
+    // 'stf_children' → drops the parent while its FK child still references it →
+    // Postgres 2BP01 → the mutation reddens. Without this, parent/child were
+    // claimed a wall-clock tick apart and `created_at DESC` coincided with
+    // `seq DESC`, letting the mutant survive.
+    lifecyclePg()->table('mod_records')
+        ->where('module_name', 'corex/stub-fk')
+        ->update(['created_at' => '2026-07-15 12:00:00+00']);
+
     Event::fake();
     $lifecycle->uninstall('corex/stub-fk', keepData: false);
 
