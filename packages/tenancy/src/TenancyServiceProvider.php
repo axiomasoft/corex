@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
@@ -78,11 +79,18 @@ final class TenancyServiceProvider extends ServiceProvider
         // stancl's own default set (commented out there), so without this it
         // would resolve fresh on every bootstrap()/revert() call and lose its
         // stateful $originalScoutPrefix between the two. NOT re-running
-        // `__constructStatic` here — every OTHER bootstrapper in our order is
-        // already in stancl's own default list, whose register() already
-        // called it once (QueueTenancyBootstrapper registers global queue
-        // event listeners there; calling it twice would double-register them).
+        // `__constructStatic` here for bootstrappers already in stancl's own
+        // default list — its own register() already called it once
+        // (QueueTenancyBootstrapper registers global queue event listeners
+        // there; calling it twice would double-register them).
+        // WorkspaceContextBootstrapper (P2.6) is NOT part of stancl's default
+        // list, so its own static hook is never reached from there — called
+        // explicitly here, exactly once.
         foreach (config('tenancy.bootstrapper_order', []) as $bootstrapper) {
+            if ($bootstrapper === WorkspaceContextBootstrapper::class) {
+                WorkspaceContextBootstrapper::__constructStatic($this->app);
+            }
+
             $this->app->singleton($bootstrapper);
         }
     }

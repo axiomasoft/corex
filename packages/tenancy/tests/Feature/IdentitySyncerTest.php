@@ -16,6 +16,9 @@ uses()->group('pg');
 
 const ROOT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/tenant';
+// P2.6's integration-FK migration (C4/D14) needs sys_departments — owned by
+// corex/core, assembled here the same way a real golden-template build would.
+const CORE_MIGRATIONS_PATH_IS = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
 
 const TENANT_DB_IS = 'acc_is_test';
 
@@ -106,6 +109,12 @@ function migrateUsersTableIS(AccountRef $ref): void
     $manager = app(TenancyManager::class);
 
     $manager->runFor($ref, null, function (): void {
+        Artisan::call('migrate', [
+            '--database' => 'tenant',
+            '--path' => realpath(CORE_MIGRATIONS_PATH_IS),
+            '--realpath' => true,
+            '--force' => true,
+        ]);
         Artisan::call('migrate', [
             '--database' => 'tenant',
             '--path' => realpath(TENANT_MIGRATIONS_PATH_IS),

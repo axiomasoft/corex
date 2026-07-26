@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Models\Account;
@@ -69,6 +70,9 @@ return [
     */
     'bootstrapper_order' => [
         Bootstrappers\DatabaseTenancyBootstrapper::class,
+        // P2.6 — narrows the workspace within the already-switched account
+        // connection; must run after the account-level Database bootstrapper.
+        WorkspaceContextBootstrapper::class,
         Bootstrappers\CacheTenancyBootstrapper::class,
         Bootstrappers\DatabaseSessionBootstrapper::class,
         Bootstrappers\QueueTenancyBootstrapper::class,
