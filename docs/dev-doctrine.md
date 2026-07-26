@@ -93,6 +93,8 @@
 - **Contract-guard:** `scripts/contract-guard.sh`, warn-режим до v1.0 (§5).
 - **Mutation-check:** `scripts/mutation-check.sh`, 30 патчей в едином repo-доме `scripts/mutations/` (`ls scripts/mutations | wc -l` = 30, D86);
   правки — только там, vault-копия жива до `git rm`. Кейс пинит АВТОРИТЕТНУЮ точку enforcement, избыточный DiD-слой изолируется тестом, не retire (D85).
+  **Состояние на 2026-07-26 (`90edbb4`) — КРАСНЫЙ: `bash scripts/mutation-check.sh --all` = 20/30.** 10 патчей (`P1.16`/`P1.18`/`P1.21`×2/`P1.23`×2/`P1.25`×2/`P1.29`×2)
+  не применяются: докблок-правки P2.16 (`3ba6ad2`) сдвинули их контекст. Реанкор — Pending Work (а) item'а P2.17; до него гейт мутаций защищает 20 из 30 границ.
 - **Coverage floor = 55** (`scripts/coverage-min-floor.txt`, ослаблен с 80) — поднять только закрытием time-gated item'а P1.27 (D47).
 - **Anti-weakening-гейт ЗЕЛЁНЫЙ (P2.15/D93):** `bash scripts/anti-weakening-gate.sh` = `OK` на чистом дереве
   (прогон 2026-07-26, `0f778de` против базы `97fdc77`). Три дефекта, названных здесь ранее — счёт только
