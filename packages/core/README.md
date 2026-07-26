@@ -1,10 +1,10 @@
 # corex/core
 
-Ядро экосистемы Flex: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
+Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
 System→Tenant→User), append-only `Audit`, `MoneyCast`, департаменты (ltree),
 фичефлаги, PubSub-контракт и реестр сущностей. MIT.
 
-Пакет ставится как зависимость продукта (FlexCRM и др.); публичные контракты —
+Пакет ставится как зависимость приложения-потребителя; публичные контракты —
 в `src/Contracts/`, реализации скрыты.
 
 ## Требование к СУБД

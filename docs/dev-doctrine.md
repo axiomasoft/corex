@@ -16,6 +16,10 @@
   `flex/*` = тематические модули Flex (L2); продукты = композиция (L3); cross-ecosystem — standalone». D91 уточняет формулировку, не запреты.
 - **Тест агностичности:** «`corex/*` полезен проекту БЕЗ CRM/CMS/Store». Не прошёл — код едет на уровень 1 либо в standalone-пакет (AI-gateway, биллинг, метеринг, модерация).
 - Зависимость вверх запрещена: `corex/*` ↛ `flex/*`, `corex/core` не зависит ни от одного пакета монорепо (гейт — `tests/Arch/LayerTest.php`, §6).
+- Запрет буквален и в ТЕКСТЕ: `flex`-литералов в `packages/{core,modules,tenancy,auth,tasks}`
+  (php/json/md/sql) быть не должно — ни в DDL, ни в описаниях, ни в README, ни в идентификаторах
+  фикстур. Легальны только `flex/crm`/`Flex\Crm` (имя пакета слоя L2, D82) и исторические
+  `CHANGELOG`-записи о ренеймах. Гейт — то же правило source-scan'а (§6, P2.17/D94).
 
 Источник: D91 (владелец, 2026-07-26); D70 + `plans/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md`
 (дословный захват `CoreX.md`); vault `2026.07.17-AXIOMA-ORCHESTRA/research/01-layer-doctrine.md` (таблица слоёв, SSOT).
@@ -81,8 +85,11 @@
 ## 6. Гейты качества — и их честное состояние
 
 - **Закрытие code-item'а (D34) — ОБА лейна:** `composer lint:check && composer analyse && composer test && composer test:pg`; один sqlite-лейн = ложно-зелёное.
-- **Слой-гейт (D84):** source-scan `tests/Arch/LayerTest.php` + `tests/Support/SourceScanner.php`, 3 правила, `composer test:arch`,
+- **Слой-гейт (D84 + P2.17):** source-scan `tests/Arch/LayerTest.php` + `tests/Support/SourceScanner.php`, **4 правила**, `composer test:arch`,
   CI-джоб `layer-gate`; `pest-plugin-arch` отвергнут — пакеты как path-репо под `vendor/` дают ВАКУУМНОЕ прохождение правила.
+  Четвёртое правило (P2.17) — «нет `flex`-литералов в `packages/{core,modules,tenancy,auth,tasks}`» с ЯВНЫМ allow-list
+  (`flex/crm`/`Flex\Crm` + `CHANGELOG.md`); негатив-проверено 2026-07-26 подсадкой литерала в `packages/core/src` (php) и `.sql`-файл —
+  обе стороны красные с именем файла, зелено после снятия.
 - **Contract-guard:** `scripts/contract-guard.sh`, warn-режим до v1.0 (§5).
 - **Mutation-check:** `scripts/mutation-check.sh`, 30 патчей в едином repo-доме `scripts/mutations/` (`ls scripts/mutations | wc -l` = 30, D86);
   правки — только там, vault-копия жива до `git rm`. Кейс пинит АВТОРИТЕТНУЮ точку enforcement, избыточный DiD-слой изолируется тестом, не retire (D85).
@@ -108,9 +115,6 @@
 - Split-зеркала `splitsh-lite` (ADR-002) + изоляционный install-тест — workflow отсутствует (аудит A16, release-фаза, D82).
 - Coverage: `Architecture` §1 требует 85, `Package_Governance` §2 — 80, факт-floor 55; расхождение самих доков не разрешено (разбор при P1.27).
 - ADR-003 (ULID) и ADR-004 (row-level tenancy) superseded (UUIDv7 + DB-per-account), файлы в vault не переписаны — **наводка владельцу:** переписать.
-- **Flex-привязки в коде `corex/*`** (инвентарь 2026-07-26, 11 файлов): DDL-CHECK `product IN ('flexcrm','flexstore')` и комментарий `slug.flexcrm.ru`
-  в `corex/tenancy`, шаблон `tpl_flex_vNN`, описание artisan-команды «Discover Flex module manifests», composer-`description` ядра, докблоки
-  `flex/attributes`/`flex/workflow`, README. Зависимостей кода не создают, но нарушают §1; слой-гейт их не ловит (строки и DDL вне его модели) — нужен item: чистка + расширение гейта.
 - CI-матрица `Development_Process` §2 (8.2–8.4 × L11/12) расходится с ADR-001 (8.3–8.5, L12–13) и фактом `ci.yml` (8.3/8.4 × 12/13).
 
 Источник: `plans/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.

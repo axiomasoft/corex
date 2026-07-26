@@ -1,6 +1,6 @@
 # corex/modules
 
-Модульная система Flex (namespace `CoreX\Modules\`): манифест модуля, discovery,
+Модульная система CoreX (namespace `CoreX\Modules\`): манифест модуля, discovery,
 `RegistryCompiler` + extenders, `ModuleRegistry` (compiled hot-path),
 lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр владения
 для безопасного purge. Ставится поверх `corex/core`. MIT.

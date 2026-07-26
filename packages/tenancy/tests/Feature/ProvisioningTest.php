@@ -15,7 +15,7 @@ uses()->group('pg');
 
 const ROOT_MIGRATIONS_PATH_PROVISIONING = __DIR__.'/../../database/migrations/root';
 
-const TEMPLATE_DB = 'tpl_flex_v1_test';
+const TEMPLATE_DB = 'tpl_tenant_v1_test';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -35,7 +35,7 @@ beforeEach(function (): void {
     DB::statement('CREATE DATABASE '.TEMPLATE_DB);
 
     $probe = connectTo(TEMPLATE_DB);
-    $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_flex_v1/schema.sql');
+    $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_tenant_v1/schema.sql');
     foreach (array_filter(array_map('trim', explode(';', (string) $fixtureSql))) as $statement) {
         $probe->statement($statement);
     }

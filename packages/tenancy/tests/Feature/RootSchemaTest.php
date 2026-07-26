@@ -196,6 +196,32 @@ it('cascades identity_accounts on delete and restricts cluster deletion while re
     expect(DB::table('root_identity_accounts')->where('account_id', $accountId)->exists())->toBeFalse();
 });
 
+it('accepts any application product slug but keeps the shape invariant (P2.17/D94)', function (): void {
+    $accountId = makeAccount(makeCluster(), makeIdentity());
+
+    // The kernel schema no longer enumerates products: an arbitrary slug from
+    // the consuming application is accepted (the admissible SET lives there).
+    DB::table('root_account_products')->insert([
+        'account_id' => $accountId,
+        'product' => 'demo-product',
+    ]);
+
+    expect(DB::table('root_account_products')->where('account_id', $accountId)->where('product', 'demo-product')->exists())
+        ->toBeTrue();
+
+    // …but the invariant was not weakened away: the value must be a non-empty
+    // lowercase slug (empty string and free-form text are still rejected).
+    expect(fn () => DB::table('root_account_products')->insert([
+        'account_id' => $accountId,
+        'product' => '',
+    ]))->toThrow(QueryException::class);
+
+    expect(fn () => DB::table('root_account_products')->insert([
+        'account_id' => $accountId,
+        'product' => 'Demo Product',
+    ]))->toThrow(QueryException::class);
+});
+
 it('carries table/column comments (AC-32)', function (): void {
     $comment = DB::selectOne(
         "SELECT obj_description('root_clusters'::regclass) AS comment",

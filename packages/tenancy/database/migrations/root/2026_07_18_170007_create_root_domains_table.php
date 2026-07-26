@@ -35,7 +35,7 @@ return new class extends Migration
         DB::statement('CREATE UNIQUE INDEX root_domains_host_uq ON root_domains (lower(host)) WHERE deleted_at IS NULL');
         DB::statement('CREATE UNIQUE INDEX root_domains_primary_uq ON root_domains (account_id) WHERE is_primary AND deleted_at IS NULL');
 
-        DB::statement("COMMENT ON TABLE root_domains IS 'platform-домен (slug.flexcrm.ru) создаётся автоматически при активации, verified_at=now(), tls_status=issued (wildcard). Читается ask-endpoint Caddy on-demand TLS: 200 если verified_at IS NOT NULL и account.status в (trial,active)'");
+        DB::statement("COMMENT ON TABLE root_domains IS 'platform-домен (поддомен базового домена платформы вида slug.<base-domain>) создаётся автоматически при активации, verified_at=now(), tls_status=issued (wildcard). Читается ask-endpoint Caddy on-demand TLS: 200 если verified_at IS NOT NULL и account.status в (trial,active)'");
     }
 
     public function down(): void

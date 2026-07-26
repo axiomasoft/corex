@@ -66,3 +66,63 @@ test('corex/core source imports no sibling package namespace', function (): void
 
     expect($offenders)->toBe([]);
 });
+
+// (3) No product bindings in the TEXT of foundation sources (P2.17, OQ-17/D94).
+// Rules 1/2 model namespaces and the require-graph; a `flex` literal in DDL, a
+// composer description or a README creates no code dependency and passed those
+// rules silently — the 2026-07-26 inventory found 11 such files while the gate
+// stayed green. Layer 0 (D91) is literal: "no Flex binding at all, neither in
+// identifiers nor in DDL nor in descriptions" — so the text is scanned too.
+test('foundation packages carry no flex product literals', function () use ($foundationPackages): void {
+    // EXPLICIT allow-list — every entry carries its reason and decision. Widening
+    // it "to make the gate pass" is forbidden (P2.17 Code Guidance): a literal
+    // that fits no reason below gets CLEANED, not permitted. Directory-wide
+    // exemptions are banned outright — they would re-open the hole.
+    $allowedLine = [
+        // `flex/crm` / `Flex\Crm` — the TARGET name of the L2 thematic package
+        // (D82/D70). Naming the neighbouring layer creates no dependency on it;
+        // packages/tasks/README.md uses it precisely to declare isolation FROM it.
+        '#flex/crm#i',
+        '#Flex\\\\Crm#',
+    ];
+
+    // Whole-file allowance, by filename, for history that must not be rewritten.
+    $allowedFile = [
+        // CHANGELOG entries record the `flex/modules` → `corex/modules` and
+        // `flex:modules:*` → `corex:modules:*` renames themselves (P2.0/P3.3).
+        // Scrubbing the old names would make the changelog false.
+        'CHANGELOG.md',
+    ];
+
+    $offenders = [];
+
+    foreach ($foundationPackages as $pkg) {
+        // php/json/md/sql — the source classes the doctrine speaks about
+        // (code, package metadata, public texts, DDL fixtures). Generated
+        // artifacts (`composer.lock`) are out: they mirror upstream text
+        // (`symfony/flex`, `doctrine/lexer`), not this repo's authorship.
+        $hits = SourceScanner::linesMatching(
+            SourceScanner::packagePath($pkg),
+            '/flex/i',
+            ['php', 'json', 'md', 'sql'],
+        );
+
+        foreach ($hits as $hit) {
+            [$path] = explode(':', $hit, 2);
+
+            if (\in_array(basename($path), $allowedFile, strict: true)) {
+                continue;
+            }
+
+            foreach ($allowedLine as $allowed) {
+                if (preg_match($allowed, $hit) === 1) {
+                    continue 2;
+                }
+            }
+
+            $offenders[] = $hit;
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});
