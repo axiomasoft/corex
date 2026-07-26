@@ -169,13 +169,27 @@ jobs:
   auth-tests:
     runs-on: ubuntu-latest
     name: Auth package (AzGuard)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
           coverage: none
 
       - name: Authenticate private azguard repository
@@ -186,6 +200,15 @@ jobs:
 
       - name: Auth tests
         run: composer --working-dir=packages/auth test
+
+      - name: Auth tests (PG16, aut_* DDL)
+        run: composer --working-dir=packages/auth test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
 
       - name: PHPStan (auth/src)
         run: composer --working-dir=packages/auth analyse

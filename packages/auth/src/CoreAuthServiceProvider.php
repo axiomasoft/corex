@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Auth;
 
+use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Contracts\ContextGuard;
+use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
 use CoreX\Auth\Tenancy\TenantContextGuard;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -15,14 +17,61 @@ final class CoreAuthServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');
+
         // Provide AzGuard's optional ContextGuard binding (ADR-009): contextual
         // checks (hasPermissionIn) resolve entities via corex/core's registry.
         $this->app->singleton(ContextGuard::class, TenantContextGuard::class);
+
+        $this->applyAzGuardPins();
     }
 
     public function boot(): void
     {
         $this->registerBladeDirectives();
+        $this->registerPublishing();
+
+        $this->app->make(AzGuardManagerInterface::class)
+            ->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
+    }
+
+    /**
+     * corex/auth does not fork AzGuard (D15): the config pins that make
+     * AzGuard line up with DB_SCHEMA §3.5 / CoreX's uuid principals (D104)
+     * are applied onto AzGuard's own config here, sourced from OUR
+     * publishable corex-auth config — never a second copy of the values.
+     * AzGuard's migrations read this config at `migrate` time (findings/
+     * P2.8-azguard-inventory-2026-07-26.md §2), so setting it in register()
+     * — well before any migrate call — is early enough regardless of
+     * provider registration order.
+     */
+    private function applyAzGuardPins(): void
+    {
+        $config = $this->app['config'];
+
+        $config->set('az-guard.table_names.roles', config('corex-auth.azguard_pins.table_names.roles'));
+        $config->set('az-guard.column_names.morph_type', config('corex-auth.azguard_pins.column_names.morph_type'));
+        $config->set('az-guard.models.role', config('corex-auth.azguard_pins.models.role'));
+    }
+
+    private function registerPublishing(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/corex-auth.php' => config_path('corex-auth.php'),
+        ], 'corex-auth-config');
+
+        // Publish-only, mirroring corex/tenancy's own tenant-DB migrations
+        // (D33/A19/A62 precedent): a golden-template build assembles these
+        // deliberately, never an ad hoc migrate on a live tenant connection.
+        $this->publishes([
+            __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
+        ], 'corex-auth-migrations-tenant');
+
+        // Cloud profile only (D102) — boxed installs never publish this tag,
+        // wsp_workspaces/users belong to corex/tenancy, absent there (AC-28).
+        $this->publishes([
+            __DIR__.'/../database/migrations/tenant-cloud' => database_path('migrations/tenant-cloud'),
+        ], 'corex-auth-migrations-tenant-cloud');
     }
 
     /**
