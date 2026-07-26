@@ -15,7 +15,10 @@
 ## Архитектура ядра (`packages/core`)
 
 - `BaseModel` (ULID + SoftDeletes) + трейты `Concerns/*` (для моделей, что не могут наследовать BaseModel, напр. `User`).
-- Мульти-тенантность опциональна: `BelongsToTenant` + `TenantScope` активны только при наличии биндинга `TenantService` (контракт). On-prem — без него.
+- Мульти-тенантность — **физическая DB-per-account** (stancl/tenancy v4; ADR-004 переписан D1):
+  контракты (`TenantContext`, `TenancyManager`, `AccountConnectionResolver`) живут в `corex/core`,
+  реализация — пакет `corex/tenancy` (boxed-профиль ставится без него). Legacy row-level каркас
+  удалён (P2.14) — в дереве его нет, новые фичи на нём не строятся.
 - `EntityRegistry` — реестр сущностей; источник морф-карты (`Relation::enforceMorphMap`).
 - `Settings` (System→Tenant→User), `Audit` (append-only), `MoneyCast` (`brick/money`, minor units).
 - ID/морфы/деньги — по ADR-003/004/005; стек — ADR-001 (Laravel 12–13, PHP 8.3–8.5).
@@ -23,5 +26,15 @@
 ## Где что
 
 - Библиотечный код пакета: `packages/<name>/src`, `config/`, `database/migrations/`.
-- Тесты и инструменты качества: корень монорепо (`tests/`, `phpunit.xml`, `pint.json`, `phpstan.neon`).
+- Тесты — **per-package** (канон D81): новые тесты пакета кладутся в `packages/<pkg>/tests/**`.
+  Корневой `tests/` — харнесс core/modules (Arch/Feature/Unit/PHPStan) + инструменты качества
+  (`phpunit.xml`, `pint.json`, `phpstan.neon`).
 - Спека и ADR — в Brain-vault (CoreX), не в репозитории кода.
+
+## Доктрина разработки
+
+- Слои: `corex/*` = агностик-платформа (L0) + домен-основы (L1); `flex/*` = тематические модули
+  (L2); продукты = композиция (L3); cross-ecosystem — standalone (D70).
+- Тест агностичности: «`corex/*` полезен проекту БЕЗ CRM/CMS/Store»; зависимость `corex/*` →
+  `flex/*` запрещена (гейт — `tests/Arch/LayerTest.php`).
+- Полные правила, гейты и их честное состояние — **`docs/dev-doctrine.md`** (входной документ).
