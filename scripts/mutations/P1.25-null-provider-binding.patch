@@ -1,15 +1,15 @@
 diff --git a/packages/modules/src/ModulesServiceProvider.php b/packages/modules/src/ModulesServiceProvider.php
-index 74cc017..6bbd963 100644
+index 22b9c43..f4bc000 100644
 --- a/packages/modules/src/ModulesServiceProvider.php
 +++ b/packages/modules/src/ModulesServiceProvider.php
-@@ -152,15 +152,6 @@ final class ModulesServiceProvider extends ServiceProvider
+@@ -154,15 +154,6 @@ final class ModulesServiceProvider extends ServiceProvider
                  failIfMissing: $app->environment('production'),
              );
          });
 -
 -        // Rebind the boxed Null default (CoreServiceProvider::register(),
 -        // registered before this provider) to the real manifest-backed
--        // implementation (D20/D22/D23, P1.25) — corex/modules is present, so
+-        // implementation — corex/modules is present, so
 -        // manifest-declared setting defaults now reach the runtime cascade.
 -        $this->app->singleton(
 -            SettingDefaultsProvider::class,

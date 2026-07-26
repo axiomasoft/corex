@@ -283,7 +283,12 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
+      # fetch-depth: 0 (D97): the 3-way fallback in mutation-check.sh needs the
+      # pre-image blob of each patch's `index` line reachable in the object
+      # database — the default shallow (depth-1) checkout doesn't carry it.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: shivammathur/setup-php@v2
         with:

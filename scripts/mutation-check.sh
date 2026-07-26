@@ -6,6 +6,15 @@
 # НЕнулевой exit-код (тест обязан покраснеть под саботажем — граница пинится).
 # Патч всегда откатывается (успех или провал), рабочее дерево не остаётся мутированным.
 #
+# 3-way-фоллбэк (P2.19, D97): текстовые проходы по коду (докблоки и т.п.) сдвигают
+# ТОЛЬКО контекст хунка, не саботаж — строгий `git apply --check` тогда отказывает,
+# хотя граница цела. Строгий apply остаётся ПЕРВИЧНЫМ путём; при его отказе кейс
+# пробует `git apply -3` (трёхсторонняя склейка от pre-image-blob патча) — успех
+# печатает ГРОМКУЮ строку с именем кейса (гейт зелёный, но говорит «реанкорь»),
+# отказ обеих схем — честное «граница сдвинулась», return 2. Откат зеркалит режим
+# наложения и ДОКАЗЫВАЕТ (слепок хэшей таргет-путей до/после), что дерево вернулось
+# в исходное состояние — расхождение печатает ГРОМКО и падает `exit 3`.
+#
 # Использование:
 #   bash scripts/mutation-check.sh <item> <case>
 #   bash scripts/mutation-check.sh --list
@@ -57,7 +66,7 @@ if [ "${1:-}" = "--list" ]; then
 fi
 
 run_case() {
-    local KEY="$1" PATCH CMD STATUS
+    local KEY="$1" PATCH CMD STATUS APPLY_MODE BEFORE_HASH AFTER_HASH
     PATCH="scripts/mutations/${KEY}.patch"
 
     if [ ! -f "$PATCH" ]; then
@@ -71,18 +80,53 @@ run_case() {
         return 2
     fi
 
+    local -a TARGETS=()
+    while IFS= read -r line; do
+        [ -n "$line" ] && TARGETS+=("$line")
+    done < <(git apply --numstat "$PATCH" 2>/dev/null | awk '{print $3}')
+
+    # Слепок таргет-путей ДО любого наложения — эталон для доказательства отката.
+    BEFORE_HASH=$(git hash-object -- "${TARGETS[@]}" 2>/dev/null || true)
+
+    APPLY_MODE=strict
     if ! git apply --check --whitespace=nowarn "$PATCH" 2>/dev/null; then
-        echo "mutation-check: патч $PATCH не применяется к текущему дереву (git apply --check провалился)" >&2
-        return 2
+        APPLY_MODE=3way
+    fi
+
+    if [ "$APPLY_MODE" = "3way" ]; then
+        if ! git apply --whitespace=nowarn -3 "$PATCH" 2>/dev/null; then
+            # `--check -3` может отрапортовать успех даже при реальном конфликте
+            # склейки (git-квирк) — поэтому решает РЕАЛЬНОЕ наложение, не check.
+            # Конфликт = граница ДЕЙСТВИТЕЛЬНО сдвинулась, не только контекст.
+            git apply -R --whitespace=nowarn -3 "$PATCH" 2>/dev/null || true
+            git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+            git checkout -- "${TARGETS[@]}" 2>/dev/null || true
+            echo "mutation-check: патч $PATCH не применяется к текущему дереву (ни строгий apply, ни чистый 3-way — граница сдвинулась)" >&2
+            return 2
+        fi
+        echo "mutation-check[$KEY]: ГРОМКО — контекст патча $PATCH протух, применён 3-way-фоллбэк (git apply -3); кейс $KEY требует реанкора" >&2
+    else
+        echo "mutation-check[$KEY]: применяю $PATCH"
+        git apply --whitespace=nowarn "$PATCH"
     fi
 
     cleanup() {
-        git apply -R --whitespace=nowarn "$PATCH" 2>/dev/null || true
+        if [ "$APPLY_MODE" = "3way" ]; then
+            git apply -R --whitespace=nowarn -3 "$PATCH" 2>/dev/null || true
+        else
+            git apply -R --whitespace=nowarn "$PATCH" 2>/dev/null || true
+        fi
+        git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+
+        AFTER_HASH=$(git hash-object -- "${TARGETS[@]}" 2>/dev/null || true)
+        if [ "$AFTER_HASH" != "$BEFORE_HASH" ]; then
+            echo "mutation-check[$KEY]: ГРОМКО — ОТКАТ НЕ ПОДТВЕРЖДЁН для $PATCH (таргет-пути разошлись со слепком до наложения); принудительно восстанавливаю дерево и останавливаюсь" >&2
+            git checkout -- "${TARGETS[@]}" 2>/dev/null || true
+            git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+            exit 3
+        fi
     }
     trap cleanup RETURN
-
-    echo "mutation-check[$KEY]: применяю $PATCH"
-    git apply --whitespace=nowarn "$PATCH"
 
     echo "mutation-check[$KEY]: гоняю: $CMD"
     set +e

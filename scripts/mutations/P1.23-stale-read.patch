@@ -1,8 +1,8 @@
 diff --git a/packages/core/src/Departments/DatabaseDepartmentRepository.php b/packages/core/src/Departments/DatabaseDepartmentRepository.php
-index 8d5a66b..681ff25 100644
+index 3536fea..899cae7 100644
 --- a/packages/core/src/Departments/DatabaseDepartmentRepository.php
 +++ b/packages/core/src/Departments/DatabaseDepartmentRepository.php
-@@ -71,37 +71,14 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
+@@ -74,37 +74,14 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
      public function move(string $departmentId, ?string $newParentId): void
      {
          $this->db()->transaction(function () use ($departmentId, $newParentId): void {
@@ -19,8 +19,8 @@ index 8d5a66b..681ff25 100644
 -                throw (new ModelNotFoundException)->setModel(DepartmentModel::class, [$departmentId]);
 -            }
 -
--            // (2) Advisory lock BEFORE reading the mutable path (A5). B-10 §7.3 п.3:
--            //     xact-scoped, released on commit — no session-level lock.
+-            // (2) Advisory lock BEFORE reading the mutable path (A5). Xact-scoped,
+-            //     released on commit — no session-level lock.
 -            $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$lockWorkspaceId]);
 -
 -            // (3) RE-READ the moving row UNDER the lock — fresh path/parent_id.

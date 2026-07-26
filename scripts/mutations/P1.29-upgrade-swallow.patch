@@ -1,18 +1,18 @@
 diff --git a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-index 2a9263f..9545af4 100644
+index 96da474..39835a4 100644
 --- a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-@@ -284,32 +284,23 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+@@ -291,32 +291,23 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
              $migration = $this->runModuleMigrations($module);
              $codeVersion = $this->codeVersion($module);
  
--            // D40 all-or-nothing, symmetric to enable() (P1.29 M-1): a failing
+-            // All-or-nothing, symmetric to enable(): a failing
 -            // catch-up migration aborts the WHOLE transition — migrations 1..K,
 -            // the version/schema_version bump and the log row all roll back — and
--            // surfaces to the caller. The pre-P1.29 code committed
+-            // surfaces to the caller. The older code committed
 -            // `schema_version=end(ran)` and logged 'failed' WITHOUT rethrowing,
 -            // leaving the module silently half-migrated and the caller none the
--            // wiser (the symmetric silent-failure to the one D40 closed here).
+-            // wiser (the symmetric silent-failure this closes).
 -            if ($migration['error'] instanceof Throwable) {
 -                throw new ModuleUpgradeFailedException($module, $migration['error']);
 -            }

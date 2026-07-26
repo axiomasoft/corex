@@ -1,8 +1,8 @@
 diff --git a/packages/modules/src/Events/ModuleEnabled.php b/packages/modules/src/Events/ModuleEnabled.php
-index 5937137..ea19563 100644
+index 5c1d1e8..ea19563 100644
 --- a/packages/modules/src/Events/ModuleEnabled.php
 +++ b/packages/modules/src/Events/ModuleEnabled.php
-@@ -4,29 +4,13 @@ declare(strict_types=1);
+@@ -4,30 +4,13 @@ declare(strict_types=1);
  
  namespace CoreX\Modules\Events;
  
@@ -10,10 +10,11 @@ index 5937137..ea19563 100644
 -use Override;
 -
 -/**
-- * Retrofitted onto `DomainEvent` (P1.25, A68) — was an interim plain-event
-- * class (OQ-4 workaround) dispatched on a successful
-- * `ModuleLifecycle::enable()`. Name matches the B-10 §3.1 domain-events
-- * table (`mod.module.enabled`).
+- * Retrofitted onto `DomainEvent` — was an interim plain-event class
+- * dispatched on a successful `ModuleLifecycle::enable()`. Name matches the
+- * domain-events table (`mod.module.enabled`).
+- *
+- * @internal spec: P1.25, A68, OQ-4 workaround, B-10 §3.1
 - */
 -final class ModuleEnabled extends DomainEvent
 +/** Interim event base (workaround, OQ-4). */

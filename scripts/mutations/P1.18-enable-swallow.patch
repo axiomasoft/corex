@@ -1,12 +1,12 @@
 diff --git a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-index e585185..b417a1e 100644
+index 96da474..e70c492 100644
 --- a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-@@ -146,11 +146,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+@@ -153,11 +153,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                  }
              }
  
--            // D40 all-or-nothing: any failure aborts the whole transaction —
+-            // All-or-nothing: any failure aborts the whole transaction —
 -            // migrations 1..K, claims and the log row all roll back — and
 -            // surfaces to the caller. No silent commit, no half-installed row.
              if ($migration['error'] instanceof Throwable) {
