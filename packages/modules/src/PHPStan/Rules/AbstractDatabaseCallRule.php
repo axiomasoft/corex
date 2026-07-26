@@ -17,10 +17,12 @@ use PHPStan\Rules\RuleErrorBuilder;
  *
  * Запреты консервативнее фактических возможностей инфраструктуры: PgBouncer ≥1.21
  * с `max_prepared_statements` проносит protocol-level PREPARE, а NOTIFY (без LISTEN)
- * переживает transaction pooling. Ядро запрещает всё из B-10 §7.3 целиком — код
- * модуля не должен зависеть от версии и настроек пулера (R-15 §2.2).
+ * переживает transaction pooling. Ядро запрещает это целиком — код
+ * модуля не должен зависеть от версии и настроек пулера.
  *
  * @implements Rule<CallLike>
+ *
+ * @internal spec: B-10 §7.3
  */
 abstract class AbstractDatabaseCallRule implements Rule
 {

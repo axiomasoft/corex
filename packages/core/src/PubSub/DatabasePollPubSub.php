@@ -13,30 +13,31 @@ use Illuminate\Support\Facades\DB;
 use Override;
 
 /**
- * Boxed fallback driver for installs without Redis (B-10 §6.1) — polls
+ * Boxed fallback driver for installs without Redis — polls
  * `sys_pubsub_messages` by an auto-increment cursor instead of `LISTEN`/
  * `NOTIFY` (forbidden under PgBouncer transaction pooling, R-15). `id` is a
  * plain bigint (not UUIDv7/ADR-003) — this table is an internal delivery
  * cursor, not a domain entity.
  *
- * DURABLE cursor (D44, P1.24): the poll position for a `($channel,
+ * DURABLE cursor: the poll position for a `($channel,
  * $subscriber)` pair is persisted in `sys_pubsub_cursors`, not restarted at 0
  * or at `max(id)` on every `subscribe()` call. A rolling-restart of the
  * subscriber process resumes exactly where the previous process left off —
- * the whole point of D44 is that this driver backs the RBAC/module-activity
- * invalidation channel, and a "start from max(id) on every subscribe()"
- * design would silently DROP every message published during the restart
- * window (stale cache, not a storm — see plan.md D44/pre-mortem C7). The
- * corresponding row in `sys_pubsub_cursors` is created only the FIRST time a
- * given `$subscriber` name is seen for a channel: at that point there is no
- * prior position to resume from, so it starts at the channel's current
- * `max(id)` (skips pre-existing backlog) unless `$replayBacklog` is passed
- * explicitly — never a default (Implementation Rules, P1.24).
+ * this driver backs the RBAC/module-activity invalidation channel, and a
+ * "start from max(id) on every subscribe()" design would silently DROP
+ * every message published during the restart window (stale cache, not a
+ * storm). The corresponding row in `sys_pubsub_cursors` is created only the
+ * FIRST time a given `$subscriber` name is seen for a channel: at that point
+ * there is no prior position to resume from, so it starts at the channel's
+ * current `max(id)` (skips pre-existing backlog) unless `$replayBacklog` is
+ * passed explicitly — never a default.
  *
  * `$connection` mirrors the other PG-only drivers' seam (null = app
  * default). `$maxPolls` is test-only: `null` polls forever (real usage), a
  * finite count lets tests observe delivery without blocking — it does NOT
  * bypass the worker-context guard (SubscribeGuard runs regardless).
+ *
+ * @internal spec: B-10 §6.1, D44, P1.24, Implementation Rules, pre-mortem C7
  */
 final class DatabasePollPubSub implements PubSub
 {
@@ -59,13 +60,15 @@ final class DatabasePollPubSub implements PubSub
     /**
      * @param  Closure(array<string, mixed>): void  $handler
      * @param  int|null  $maxPolls  test-only: stop after N poll iterations instead of polling forever.
-     * @param  string  $subscriber  durable-cursor identity (D44) — a distinct name per logical
+     * @param  string  $subscriber  durable-cursor identity — a distinct name per logical
      *                              subscriber lets several independent consumers each track their own
      *                              position on the same channel.
      * @param  bool  $replayBacklog  only meaningful the first time this `$subscriber` subscribes to
      *                               `$channel` (no persisted cursor yet): `true` starts at the beginning
      *                               of the channel's history instead of the current `max(id)`. Never
-     *                               defaults to `true` (Implementation Rules, P1.24).
+     *                               defaults to `true`.
+     *
+     * @internal spec: D44, Implementation Rules, P1.24
      */
     public function subscribe(
         string $channel,

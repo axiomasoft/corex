@@ -8,7 +8,12 @@ use CoreX\Events\DomainEvent;
 use CoreX\Modules\Enums\DisableReason;
 use Override;
 
-/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.disabled` (B-10 §3.1). */
+/**
+ * Domain event dispatched when a module is disabled. Name matches the
+ * domain-events table (`mod.module.disabled`).
+ *
+ * @internal spec: P1.25, A68, B-10 §3.1
+ */
 final class ModuleDisabled extends DomainEvent
 {
     public function __construct(

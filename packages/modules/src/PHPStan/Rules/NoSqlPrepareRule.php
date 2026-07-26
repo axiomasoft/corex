@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Modules\PHPStan\Rules;
 
 /**
- * B-10 §7.3 п.5: SQL-level `PREPARE`/`DEALLOCATE` привязывает стейтмент к
- * серверному коннекту, которого у клиента после коммита уже нет.
+ * SQL-level `PREPARE`/`DEALLOCATE` привязывает стейтмент к серверному
+ * коннекту, которого у клиента после коммита уже нет.
  *
  * Запрет тотален СОЗНАТЕЛЬНО: protocol-level prepared statements PgBouncer ≥1.21
  * проносит (`max_prepared_statements`), но это свойство инфры, а не кода модуля.
+ *
+ * @internal spec: B-10 §7.3 п.5
  */
 final class NoSqlPrepareRule extends AbstractDatabaseCallRule
 {

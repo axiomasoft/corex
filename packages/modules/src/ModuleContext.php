@@ -9,8 +9,10 @@ use CoreX\Tenancy\TenantContext;
 
 /**
  * Payload passed to {@see Contracts\EnableHook}/{@see Contracts\DisableHook}/
- * {@see Contracts\PurgeHook} (B-10 §3.3): which module, for which tenant,
- * with the registrar the hook must use to claim/release anything it creates.
+ * {@see Contracts\PurgeHook}: which module, for which tenant, with the
+ * registrar the hook must use to claim/release anything it creates.
+ *
+ * @internal spec: B-10 §3.3
  */
 final readonly class ModuleContext
 {

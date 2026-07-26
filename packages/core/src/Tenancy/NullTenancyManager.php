@@ -9,11 +9,12 @@ use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 
 /**
- * Boxed-install default (D10, B-11 §6.1 L892–907): a single constant account
- * context, no stancl bootstrap, `initialized()` always true. Cloud installs
- * (`corex/tenancy` present) rebind {@see TenancyManager} to
- * `StanclTenancyManager` — same pattern as the P1.5 module-activation-gate
- * boxed/cloud seam.
+ * Boxed-install default: a single constant account context, no stancl
+ * bootstrap, `initialized()` always true. Cloud installs (`corex/tenancy`
+ * present) rebind {@see TenancyManager} to `StanclTenancyManager` — same
+ * pattern as the module-activation-gate boxed/cloud seam.
+ *
+ * @internal spec: D10, B-11 §6.1 L892–907
  */
 final class NullTenancyManager implements TenancyManager
 {
@@ -33,7 +34,7 @@ final class NullTenancyManager implements TenancyManager
 
     public function initialize(AccountRef $account): void
     {
-        // no-op — boxed installs run a single constant account (§6.1 L907).
+        // no-op — boxed installs run a single constant account.
     }
 
     public function setWorkspace(?WorkspaceRef $workspace): void

@@ -43,18 +43,17 @@ use LogicException;
 use Throwable;
 
 /**
- * DB-backed {@see ModuleLifecycle} (B-10 §3.3/§5.1/§5.3/§5.4). Every
- * transition is wrapped in `pg_advisory_xact_lock(hashtext($module))`
- * (xact-scoped, released on commit — B-10 §7.3 п.3): a second concurrent
- * caller blocks on the lock, then sees the already-applied state and no-ops
- * (AC-11).
+ * DB-backed {@see ModuleLifecycle}. Every transition is wrapped in
+ * `pg_advisory_xact_lock(hashtext($module))` (xact-scoped, released on
+ * commit): a second concurrent caller blocks on the lock, then sees the
+ * already-applied state and no-ops.
  *
- * enable() is all-or-nothing (D40): a failing migration or EnableHook rolls
+ * enable() is all-or-nothing: a failing migration or EnableHook rolls
  * the WHOLE transition back (migrations 1..K included — PG DDL is
  * transactional) and rethrows {@see ModuleEnableFailedException}. No partial
- * install, no orphan `mod_modules` row; a fixed retry starts clean (AC-7).
+ * install, no orphan `mod_modules` row; a fixed retry starts clean.
  *
- * Ownership claims are written AUTOMATICALLY (D41): a per-migration schema
+ * Ownership claims are written AUTOMATICALLY: a per-migration schema
  * diff attributes every table/column/index a module's migrations create to
  * that module ({@see withMigrationClaims()}), so purge can tear them all down
  * in reverse creation order — no hand-written `claim()` calls to drift out of
@@ -63,6 +62,8 @@ use Throwable;
  * `$codeVersions`/`$migrationPaths` (composer name → value) are populated from
  * `vendor/composer/installed.json` by {@see ModulesServiceProvider},
  * so real deploys run each module's migrations; tests inject them directly.
+ *
+ * @internal spec: B-10 §3.3/§5.1/§5.3/§5.4, B-10 §7.3 п.3, AC-11, D40, AC-7, D41
  */
 final class DatabaseModuleLifecycle implements ModuleLifecycle
 {
@@ -77,7 +78,9 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     /**
      * @param  array<string, string>  $codeVersions
      * @param  array<string, string>  $migrationPaths
-     * @param  ?string  $connection  null = the app's default connection (D12: production is PG-only, so that's correct there; tests pin an explicit name to avoid ambient-default mutation).
+     * @param  ?string  $connection  null = the app's default connection (production is PG-only, so that's correct there; tests pin an explicit name to avoid ambient-default mutation).
+     *
+     * @internal spec: D12
      */
     public function __construct(
         private readonly ModuleRegistry $registry,
@@ -99,8 +102,10 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      * Microsecond-precision timestamp string. Laravel's query-builder date
      * format is second-precision (Grammar::getDateFormat()) — passing a
      * bare now() Carbon instance as a bound value truncates it. Ordering of
-     * claims/log rows no longer relies on this (D31/D42 use monotonic
-     * surrogates), but the columns still carry an accurate wall-clock stamp.
+     * claims/log rows no longer relies on this (monotonic surrogates are used
+     * instead), but the columns still carry an accurate wall-clock stamp.
+     *
+     * @internal spec: D31/D42
      */
     private function timestamp(): string
     {
@@ -118,7 +123,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             $current = $this->currentRow($module);
 
             if ($current !== null && $current->state === ModuleState::Enabled->value) {
-                return; // AC-11: lock serialized us behind the winner — no-op.
+                return; // lock serialized us behind the winner — no-op.
             }
 
             // FSM gate (A11/A12): `purged` is terminal. Its tables are dropped
@@ -148,7 +153,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 }
             }
 
-            // D40 all-or-nothing: any failure aborts the whole transaction —
+            // All-or-nothing: any failure aborts the whole transaction —
             // migrations 1..K, claims and the log row all roll back — and
             // surfaces to the caller. No silent commit, no half-installed row.
             if ($migration['error'] instanceof Throwable) {
@@ -169,12 +174,14 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     }
 
     /**
-     * `Manifest::$featureFlags` → `FeatureFlags::define()` (P1.25, A68
-     * residual — the manifest declaration never reached the runtime flag
-     * store before this). Runs AFTER commit, alongside the lifecycle event:
-     * `define()` is idempotent (P1.22 made it atomic via `sys_feature_flags`
-     * UNIQUE(key)) and a flag row belongs in the DB only once enable() has
-     * actually landed, not while the transaction could still roll back.
+     * `Manifest::$featureFlags` → `FeatureFlags::define()` — the manifest
+     * declaration never reached the runtime flag store before this. Runs
+     * AFTER commit, alongside the lifecycle event: `define()` is idempotent
+     * (made atomic via `sys_feature_flags` UNIQUE(key)) and a flag row
+     * belongs in the DB only once enable() has actually landed, not while
+     * the transaction could still roll back.
+     *
+     * @internal spec: P1.25, A68, P1.22
      */
     private function defineManifestFeatureFlags(string $module): void
     {
@@ -284,13 +291,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             $migration = $this->runModuleMigrations($module);
             $codeVersion = $this->codeVersion($module);
 
-            // D40 all-or-nothing, symmetric to enable() (P1.29 M-1): a failing
+            // All-or-nothing, symmetric to enable(): a failing
             // catch-up migration aborts the WHOLE transition — migrations 1..K,
             // the version/schema_version bump and the log row all roll back — and
-            // surfaces to the caller. The pre-P1.29 code committed
+            // surfaces to the caller. The older code committed
             // `schema_version=end(ran)` and logged 'failed' WITHOUT rethrowing,
             // leaving the module silently half-migrated and the caller none the
-            // wiser (the symmetric silent-failure to the one D40 closed here).
+            // wiser (the symmetric silent-failure this closes).
             if ($migration['error'] instanceof Throwable) {
                 throw new ModuleUpgradeFailedException($module, $migration['error']);
             }
@@ -328,9 +335,9 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 return; // a healthy (or already-available) module keeps its row.
             }
 
-            // Legal exit from the `purged` dead end (A11): reset the module to
+            // Legal exit from the `purged` dead end: reset the module to
             // `available` so a fresh enable() re-runs its migrations from
-            // scratch (B-10 §5.1 "purged → enabled: как первый"). Forgetting the
+            // scratch ("purged → enabled: как первый"). Forgetting the
             // migration history is what makes that re-run actually apply the DDL
             // again instead of skipping it as already-ran.
             $this->forgetModuleMigrations($module);
@@ -420,8 +427,8 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $context = new ModuleContext($module, $tenant, $this->records);
         $this->invokeHook($this->manifestFor($module)->onPurgeHook, $context);
 
-        // Tear every owned object down in REVERSE creation order (D31: `seq`,
-        // not the clock), across ALL claim types (D41), so FK children drop
+        // Tear every owned object down in REVERSE creation order (`seq`,
+        // not the clock), across ALL claim types, so FK children drop
         // before parents and no schema object (table/column/index) is orphaned.
         $claims = $this->db()->table(self::RECORDS_TABLE)
             ->where('module_name', $module)
@@ -596,12 +603,14 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     }
 
     /**
-     * Auto-claim wrapper (D41): snapshots the schema around each `up()` and
+     * Auto-claim wrapper: snapshots the schema around each `up()` and
      * attributes the new tables/columns/indexes to $module. Claims are written
      * in creation order (tables by pg_class.oid), so the bigserial `seq` on
      * `mod_records` encodes creation order and purge is FK-safe. The listeners
      * are torn down in `finally` — module lifecycle transitions run in
      * isolation, so nothing else listens on the per-migration events here.
+     *
+     * @internal spec: D41
      */
     private function withMigrationClaims(string $module, Closure $run): ?Throwable
     {
@@ -654,7 +663,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         }
 
         // Columns added to a table that ALREADY existed (cross-module extension
-        // — a module adds a column to another module's table, D41). Columns of
+        // — a module adds a column to another module's table). Columns of
         // a brand-new table need no separate claim: dropping the table drops
         // them.
         foreach (array_keys($after['columns']) as $key) {
@@ -758,8 +767,8 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     }
 
     /**
-     * Append a lifecycle-log row. Beyond the audit trail (AC-13), this insert
-     * is the registry EPOCH bump (D39): every terminal transition
+     * Append a lifecycle-log row. Beyond the audit trail, this insert
+     * is the registry EPOCH bump: every terminal transition
      * (enable/disable/upgrade/archive/purge) calls log() INSIDE this
      * transaction, so the append-only row count in `mod_lifecycle_log` is a
      * monotonic per-account registry version bumped atomically with the state
@@ -769,11 +778,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      * without any forget(). Removing a log() call therefore un-bumps the epoch
      * and leaves other processes serving a stale enabled-set.
      *
-     * Actor is sourced from {@see CurrentActor} (B-10 §3.1). In P1 that only
+     * Actor is sourced from {@see CurrentActor}. Currently that only
      * distinguishes an authenticated user from `system` — both valid under the
-     * current CHECK; agent/api_key actors arrive with entity-scoped auth (P2).
+     * current CHECK; agent/api_key actors arrive with entity-scoped auth later.
      *
      * @param  array<string, mixed>  $details
+     *
+     * @internal spec: AC-13, D39, B-10 §3.1, P1, P2
      */
     private function log(string $module, string $operation, string $from, string $to, string $status, array $details): void
     {

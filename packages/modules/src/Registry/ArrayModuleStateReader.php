@@ -8,8 +8,11 @@ use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Tenancy\TenantContext;
 
 /**
- * Fake reader for tests and the boxed default (P1.5) — no database. The
- * DB-backed reader (`SELECT name,state,edition FROM mod_modules`) is P1.6.
+ * Fake reader for tests and the boxed default — no database. The
+ * DB-backed reader (`SELECT name,state,edition FROM mod_modules`) is the
+ * production counterpart.
+ *
+ * @internal spec: P1.5, P1.6
  */
 final class ArrayModuleStateReader implements ModuleStateReader
 {

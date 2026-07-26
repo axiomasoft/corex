@@ -16,12 +16,14 @@ use CoreX\Modules\Registry\EntityDefinition;
 use ReflectionClass;
 
 /**
- * In-memory result of RegistryCompiler::compile() (B-10 §5.2). The compiled
- * file `bootstrap/cache/corex_modules.php` persists this whole DTO (all 10
- * slices — the original 8 extender slices plus `settings`/`featureFlags`,
- * P1.25) via {@see toArray()}/{@see fromArray()} (P1.15) so the runtime can
- * project entities into EntityRegistry and the morph map without re-running
- * the compiler on every request.
+ * In-memory result of RegistryCompiler::compile(). The compiled file
+ * `bootstrap/cache/corex_modules.php` persists this whole DTO (all 10
+ * slices — the original 8 extender slices plus `settings`/`featureFlags`)
+ * via {@see toArray()}/{@see fromArray()} so the runtime can project
+ * entities into EntityRegistry and the morph map without re-running the
+ * compiler on every request.
+ *
+ * @internal spec: B-10 §5.2, P1.25, P1.15
  */
 final readonly class CompiledRegistry
 {
@@ -34,8 +36,10 @@ final readonly class CompiledRegistry
      * @param  list<Menu>  $menu
      * @param  list<Routes>  $routes
      * @param  list<Workflow>  $workflow
-     * @param  list<CompiledSettingDefault>  $settings  manifest-declared `SettingDefault`s (P1.25 — B-10 §3.1 default cascade level, not an Extender, so collected straight off `Manifest::$settings`)
-     * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags` (P1.25)
+     * @param  list<CompiledSettingDefault>  $settings  manifest-declared `SettingDefault`s (default cascade level, not an Extender, so collected straight off `Manifest::$settings`)
+     * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags`
+     *
+     * @internal spec: P1.25, B-10 §3.1
      */
     public function __construct(
         public array $entities,
@@ -133,12 +137,14 @@ final readonly class CompiledRegistry
 
     /**
      * Flatten an extender to its public scalar/array properties. Every
-     * extender in the closed set (B-10 §4.2) holds only scalars and
-     * arrays-of-scalars (class-strings stay strings) — none nest objects —
-     * so `get_object_vars()` yields a var_export'able array with no
+     * extender in the closed set holds only scalars and arrays-of-scalars
+     * (class-strings stay strings) — none nest objects — so
+     * `get_object_vars()` yields a var_export'able array with no
      * `__set_state` and no closures. Shared by {@see CompiledEntityField}.
      *
      * @return array<string, mixed>
+     *
+     * @internal spec: B-10 §4.2
      */
     public static function extenderToArray(Extender $extender): array
     {

@@ -15,28 +15,30 @@ use CoreX\Tenancy\TenantContext;
 use RuntimeException;
 
 /**
- * File-backed {@see ModuleRegistry} (B-10 §5.2/§7.1). `all()`/`get()` read
- * the compiled file written by `corex:modules:compile` (opcache after the
- * first `require`, 0 fs scans on later calls); `active()` intersects it with
- * a per-account cache backed by {@see ModuleStateReader} — a cache miss costs
- * exactly one reader call, a warm cache costs none but the epoch read
- * (AC-3/AC-4).
+ * File-backed {@see ModuleRegistry}. `all()`/`get()` read the compiled file
+ * written by `corex:modules:compile` (opcache after the first `require`, 0
+ * fs scans on later calls); `active()` intersects it with a per-account
+ * cache backed by {@see ModuleStateReader} — a cache miss costs exactly one
+ * reader call, a warm cache costs none but the epoch read.
  *
- * Cache invalidation is by EPOCH (D39): `$versionResolver` returns a
- * monotonic per-account registry version (the count of applied lifecycle
- * transitions), stamped into the cache key via {@see ModuleRegistryCache}. A
- * bumped version routes reads to a fresh key, so enable/disable is visible to
- * OTHER processes and nodes without any `forget()` — the file-cache /
- * long-running-worker failure mode of a caller-local clear (pre-mortem C2)
- * cannot happen. No cache tags anywhere (D30/A1/A2).
+ * Cache invalidation is by EPOCH: `$versionResolver` returns a monotonic
+ * per-account registry version (the count of applied lifecycle transitions),
+ * stamped into the cache key via {@see ModuleRegistryCache}. A bumped
+ * version routes reads to a fresh key, so enable/disable is visible to OTHER
+ * processes and nodes without any `forget()` — the file-cache /
+ * long-running-worker failure mode of a caller-local clear cannot happen. No
+ * cache tags anywhere.
  *
  * The same file also carries the full {@see CompiledRegistry} (all 8 slices)
- * under a `registry` key (P1.15); {@see compiled()} reads and memoizes it for
- * the runtime EntityRegistry projection and the morph map.
+ * under a `registry` key; {@see compiled()} reads and memoizes it for the
+ * runtime EntityRegistry projection and the morph map.
  *
  * A missing compiled file is a hard error under `$failIfMissing` (production
- * deploy that forgot `php artisan corex:modules:compile` / `optimize`) — never
- * a silent empty registry, which would resurrect A10 quietly.
+ * deploy that forgot `php artisan corex:modules:compile` / `optimize`) —
+ * never a silent empty registry, which would resurrect the same defect class
+ * quietly.
+ *
+ * @internal spec: B-10 §5.2/§7.1, AC-3/AC-4, D39, D30/A1/A2, P1.15, A10
  */
 final class CompiledModuleRegistry implements ModuleRegistry
 {
@@ -45,7 +47,11 @@ final class CompiledModuleRegistry implements ModuleRegistry
 
     private ?CompiledRegistry $registry = null;
 
-    /** @param  Closure(TenantContext): int  $versionResolver  Monotonic per-account registry epoch (D39). */
+    /**
+     * @param  Closure(TenantContext): int  $versionResolver  Monotonic per-account registry epoch.
+     *
+     * @internal spec: D39
+     */
     public function __construct(
         private readonly string $cachePath,
         private readonly ModuleStateReader $stateReader,
@@ -105,13 +111,15 @@ final class CompiledModuleRegistry implements ModuleRegistry
     }
 
     /**
-     * Drop the per-process memo of the compiled file (D39): a long-running
+     * Drop the per-process memo of the compiled file: a long-running
      * `queue:work` must re-read a redeploy's recompiled registry on the next
      * job instead of serving hours-old code state. Wired to `JobProcessing` in
      * {@see ModulesServiceProvider}. The enabled-set is NOT
      * memoized in a property — it lives in the epoch-keyed cache and is
      * refreshed against the DB epoch on every read, so worker freshness does
      * not depend on this call alone.
+     *
+     * @internal spec: D39
      */
     public function flush(): void
     {
@@ -122,7 +130,7 @@ final class CompiledModuleRegistry implements ModuleRegistry
     /** @return array<string, array{state: string, edition: string}> */
     private function enabledFor(TenantContext $ctx): array
     {
-        // Epoch (D39): the version is read fresh on every call (a cheap read
+        // Epoch: the version is read fresh on every call (a cheap read
         // from the shared DB) and stamped into the key. A transition in
         // ANOTHER process bumps the version there, so this process routes to a
         // new key and reads fresh — no forget(), no tags().
@@ -200,9 +208,9 @@ final class CompiledModuleRegistry implements ModuleRegistry
 
         $tmpPath = $path.'.'.bin2hex(random_bytes(8)).'.tmp';
 
-        // tmp+rename keeps the swap atomic (B-10 §7.4 п.7); an unchecked
+        // tmp+rename keeps the swap atomic; an unchecked
         // partial write or a failed rename would drop a corrupt file over the
-        // live one (A47), so both return values are verified. The fs calls are
+        // live one, so both return values are verified. The fs calls are
         // @-silenced so a warning is not converted to a foreign exception
         // (ErrorException) ahead of these explicit, typed failures.
         if (@file_put_contents($tmpPath, "<?php\n\nreturn ".var_export($payload, true).";\n", LOCK_EX) === false) {

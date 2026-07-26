@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\PHPStan\Rules;
 
 /**
- * B-10 §7.3 п.1: `SET` держит состояние в сессии, которую transaction pooling
- * отдаёт другому клиенту после коммита. Легален только `SET LOCAL` в транзакции.
+ * `SET` держит состояние в сессии, которую transaction pooling отдаёт
+ * другому клиенту после коммита. Легален только `SET LOCAL` в транзакции.
+ *
+ * @internal spec: B-10 §7.3 п.1
  */
 final class NoSetWithoutLocalRule extends AbstractDatabaseCallRule
 {

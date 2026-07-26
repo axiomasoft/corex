@@ -10,16 +10,18 @@ use CoreX\Modules\Dep;
 use CoreX\Modules\Manifest;
 
 /**
- * One module's compiled-registry entry (B-10 §3.3 `ModuleRegistry::get()`):
- * manifest metadata needed at the hot path, serialized as plain scalars/
- * arrays so it round-trips through `var_export()` (P1.5 atomic write).
+ * One module's compiled-registry entry (`ModuleRegistry::get()`): manifest
+ * metadata needed at the hot path, serialized as plain scalars/arrays so it
+ * round-trips through `var_export()` atomic write.
  *
  * Compiled extender output (entities, permissions, menu, api, filament,
  * routes, workflow — {@see CompiledRegistry}) is persisted separately in the
- * same compiled file (P1.15) under its own `registry` key. This entry keeps
- * the per-module manifest metadata the hot path and lifecycle need: identity,
+ * same compiled file under its own `registry` key. This entry keeps the
+ * per-module manifest metadata the hot path and lifecycle need: identity,
  * table prefix, dependency/edition/component maps and the terminal-transition
- * hooks {@see ModuleLifecycle} fires (P1.18).
+ * hooks {@see ModuleLifecycle} fires.
+ *
+ * @internal spec: B-10 §3.3, P1.5, P1.15, P1.18
  */
 final readonly class CompiledModule
 {

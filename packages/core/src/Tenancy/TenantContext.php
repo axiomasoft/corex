@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tenancy;
 
 /**
- * Canonical shape — B-10 §3.1 / B-11 §3.1 (owner: B-11). Resolved by
- * corex/tenancy in P2; boxed installs get a constant singleton via
+ * The current account/workspace pair a request or job runs under. Resolved
+ * by corex/tenancy; boxed installs get a constant singleton via
  * {@see SingleAccountResolver}.
+ *
+ * @internal spec: B-10 §3.1, B-11 §3.1 (owner: B-11)
  */
 final readonly class TenantContext
 {

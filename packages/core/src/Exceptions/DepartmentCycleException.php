@@ -7,8 +7,10 @@ namespace CoreX\Exceptions;
 use RuntimeException;
 
 /**
- * B-10 §5.7 move-guard: the new parent must not be inside the moving
- * department's own subtree (`new_parent.path <@ moving.path`).
+ * Move-guard: the new parent must not be inside the moving department's own
+ * subtree (`new_parent.path <@ moving.path`).
+ *
+ * @internal spec: B-10 §5.7
  */
 final class DepartmentCycleException extends RuntimeException
 {

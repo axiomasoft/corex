@@ -14,15 +14,17 @@ use function class_uses_recursive;
 
 /**
  * Attaches CoreX\Audit\AuditObserver to every model registered with
- * capability Auditable (B-10 §4.4). AuditObserver itself lives in
- * corex/core, but this lookup needs EntityRegistry — corex/core cannot
- * depend on corex/modules (D22: the reverse of this package's own require
- * would cycle) — so the wiring lives here, called from
- * ModulesServiceProvider::boot(). Skips models that already opt in
- * manually via HasAuditLog, so a model is never recorded twice.
+ * capability Auditable. AuditObserver itself lives in corex/core, but this
+ * lookup needs EntityRegistry — corex/core cannot depend on corex/modules
+ * (the reverse of this package's own require would cycle) — so the wiring
+ * lives here, called from ModulesServiceProvider::boot(). Skips models
+ * that already opt in manually via HasAuditLog, so a model is never
+ * recorded twice.
  *
  * Extracted to a standalone method (not inlined in the provider) so it is
  * testable independently of Testbench's provider-boot lifecycle.
+ *
+ * @internal spec: B-10 §4.4, D22
  */
 final class AuditCapabilityWiring
 {

@@ -7,15 +7,16 @@ namespace CoreX\Modules\Compiler;
 use CoreX\Modules\Discovery\ModuleDiscovery;
 
 /**
- * AC-2 (B-10 §7.4 п.4): the real composer dependency graph
- * {@see RegistryCompiler::compile()} checks `requires(Dep::module(...))`
- * against by default. Reads the standard `vendor/composer/installed.json`
- * (Composer's own installed-set manifest — no custom format, same file
- * {@see ModuleDiscovery} scans for corex-module
- * packages). A missing/unreadable file resolves to an empty list rather
- * than failing — a deployment with zero third-party composer packages is
- * legal, and `requires` between manifests being compiled together is
- * still checked against each other regardless of this list.
+ * The real composer dependency graph {@see RegistryCompiler::compile()}
+ * checks `requires(Dep::module(...))` against by default. Reads the
+ * standard `vendor/composer/installed.json` (Composer's own installed-set
+ * manifest — no custom format, same file {@see ModuleDiscovery} scans for
+ * corex-module packages). A missing/unreadable file resolves to an empty
+ * list rather than failing — a deployment with zero third-party composer
+ * packages is legal, and `requires` between manifests being compiled
+ * together is still checked against each other regardless of this list.
+ *
+ * @internal spec: AC-2, B-10 §7.4 п.4
  */
 final class InstalledPackages
 {

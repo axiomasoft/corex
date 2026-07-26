@@ -9,12 +9,14 @@ use ReflectionClass;
 
 /**
  * A manifest-declared {@see SettingDefault} paired with its owning module's
- * setting-namespace (P1.25, A68 residual — `SettingDefaultsProvider`/
- * `Manifest::$settings` never reached the compiled registry before this).
- * The namespace is the module's `tablePrefix` — B-10 §3.1 documents
- * `sys_settings.namespace` as "id модуля ('crm')", which is exactly the
- * short 2–3 letter code {@see CoreX\Modules\Manifest::$tablePrefix} already
- * carries, not the full composer name.
+ * setting-namespace — `SettingDefaultsProvider`/`Manifest::$settings` never
+ * reached the compiled registry before this. The namespace is the module's
+ * `tablePrefix`: `sys_settings.namespace` is documented as "id модуля
+ * ('crm')", which is exactly the short 2–3 letter code
+ * {@see CoreX\Modules\Manifest::$tablePrefix} already carries, not the full
+ * composer name.
+ *
+ * @internal spec: P1.25, A68, B-10 §3.1
  */
 final readonly class CompiledSettingDefault
 {

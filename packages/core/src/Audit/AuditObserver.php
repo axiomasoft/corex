@@ -11,29 +11,33 @@ use CoreX\Support\Config;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Single write path for both audit sources (B-10 §4.4 capability +
+ * Single write path for both audit sources (capability-based auditing +
  * HasAuditLog trait) — one diff algorithm, one AuditLogger::record() call
  * per change, so a model wired to both never double-records.
  *
  * Eloquent-observer instance (created/updated/deleted/restored/forceDeleted)
  * for models exposed via EntityRegistry::byCapability(Auditable) — attached in
  * CoreX\Modules\ModulesServiceProvider::boot(), not here: this package cannot
- * depend on corex/modules (D22 — corex/modules already requires corex/core, a
+ * depend on corex/modules (corex/modules already requires corex/core, a
  * reverse dependency would cycle).
+ *
+ * @internal spec: B-10 §4.4, D22
  */
 final class AuditObserver
 {
     /**
      * Attribute names never entering the diff, independent of the model's
-     * fillable/guarded configuration (Blocker, targeted audit D63/P1.21-review:
-     * `isFillable()` alone is not a safe proxy for "audit-safe" — Laravel's
-     * default `User` ships `password` IN `$fillable`, and any model using the
-     * common `$guarded = []` pattern makes EVERY attribute fillable, so the
-     * mass-assignment guard let credential columns straight into `changes`).
-     * This is a hard blocklist, not configurable via Auditable — a host
-     * cannot accidentally re-enable logging its own password column.
+     * fillable/guarded configuration: `isFillable()` alone is not a safe
+     * proxy for "audit-safe" — Laravel's default `User` ships `password` IN
+     * `$fillable`, and any model using the common `$guarded = []` pattern
+     * makes EVERY attribute fillable, so the mass-assignment guard let
+     * credential columns straight into `changes`. This is a hard blocklist,
+     * not configurable via Auditable — a host cannot accidentally re-enable
+     * logging its own password column.
      *
      * @var list<string>
+     *
+     * @internal spec: D63, P1.21
      */
     private const ALWAYS_EXCLUDED = ['password', 'remember_token'];
 
@@ -65,7 +69,7 @@ final class AuditObserver
     public static function record(Model $model, string $action): void
     {
         // Killswitch is checked HERE (runtime, single write path), not in
-        // HasAuditLog::boot (A60): a boot-time skip never re-enables when the
+        // HasAuditLog::boot: a boot-time skip never re-enables when the
         // config flips, and the capability path (::observe) never saw the flag
         // at all — a disabled audit still wrote through byCapability(Auditable).
         if (! Config::auditEnabled()) {
@@ -78,9 +82,9 @@ final class AuditObserver
             return;
         }
 
-        // Diff scope is the model's mass-assignable set (A17): guarded
+        // Diff scope is the model's mass-assignable set: guarded
         // attributes (password, remember_token, …) never enter `changes` — they
-        // are OMITTED, not masked (B-10 §7.4 п.8: a masked key still leaks the
+        // are OMITTED, not masked (a masked key still leaks the
         // field's name and that it changed). Fillable-but-sensitive fields are
         // masked via auditSensitive() instead. `isFillable()` alone is NOT
         // trusted for this (see ALWAYS_EXCLUDED) — it answers "can mass

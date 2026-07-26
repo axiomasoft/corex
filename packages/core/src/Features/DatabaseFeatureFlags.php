@@ -14,12 +14,12 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Override;
 
 /**
- * Persisted feature flags on `sys_feature_flags`/`sys_feature_overrides`
- * (B-10 §3.1, AC-22). Replaces the interim config-driven `FeatureResolver`/
- * `ConfigFeatureResolver` (plan.md D27) — a single source of truth, no
- * config-fallback lane.
+ * Persisted feature flags on `sys_feature_flags`/`sys_feature_overrides`.
+ * Replaces the interim config-driven `FeatureResolver`/
+ * `ConfigFeatureResolver` — a single source of truth, no config-fallback
+ * lane.
  *
- * Cascade order (AC-22, D38) — DETERMINISTIC, declared here once:
+ * Cascade order — DETERMINISTIC, declared here once:
  * `SettingScope::User`/`Department` (whichever the caller passes) beats
  * `Workspace` beats the flag's own account-level `is_enabled`/`payload`.
  * A single call resolves exactly the ONE override row matching the passed
@@ -29,7 +29,9 @@ use Override;
  * calls `active()`/`value()` once per level it can resolve, narrowest first.
  *
  * `$connection` mirrors `DatabaseSettingsRepository`'s seam (null = app
- * default), used by the PG-only test lane (D12).
+ * default), used by the PG-only test lane.
+ *
+ * @internal spec: B-10 §3.1, AC-22, D27, D38, D12
  */
 final class DatabaseFeatureFlags implements FeatureFlags
 {
@@ -99,9 +101,11 @@ final class DatabaseFeatureFlags implements FeatureFlags
 
     /**
      * `null`/account scope has no override row — the flag's own `is_enabled`
-     * IS the account-level value. Department scope (D38) is reachable here —
+     * IS the account-level value. Department scope is reachable here —
      * `sys_feature_overrides.scope_type` CHECK allows it and `SettingsScope`
      * now has a `department()` factory.
+     *
+     * @internal spec: D38
      */
     private function findOverride(string $flagId, ?SettingsScope $scope): ?FeatureOverride
     {

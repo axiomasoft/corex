@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
 
 /**
- * Department hierarchy row (sys_departments, B-10 §2). `path` is ltree —
+ * Department hierarchy row (`sys_departments`). `path` is ltree —
  * read/written as a plain string, PG casts on the wire.
  *
  * SoftDeletes (A24): a removed department must drop out of the scope that
- * feeds entity-scoped RBAC (P2.9) — the `deleted_at` column and the partial
+ * feeds entity-scoped RBAC — the `deleted_at` column and the partial
  * index `WHERE deleted_at IS NULL` are in the migration for exactly this.
  * find()/subtree()/primaryOf() go through Eloquent and inherit the
  * SoftDeletingScope, so soft-deleted rows are excluded automatically.
@@ -27,6 +27,8 @@ use Override;
  * @property string $name
  * @property string|null $head_user_id
  * @property int $sort_order
+ *
+ * @internal spec: B-10 §2, P2.9
  */
 final class Department extends Model
 {

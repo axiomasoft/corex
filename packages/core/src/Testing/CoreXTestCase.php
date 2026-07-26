@@ -28,7 +28,7 @@ abstract class CoreXTestCase extends Orchestra
     protected function defineEnvironment($app): void
     {
         // Testbench ships no APP_KEY; Illuminate's encrypter (is_sensitive
-        // settings, P1.7) throws MissingAppKeyException without one. Fixed
+        // settings) throws MissingAppKeyException without one. Fixed
         // test-only key — never used outside this harness.
         $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
 
@@ -39,7 +39,7 @@ abstract class CoreXTestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        // pg-lane (D12/P1.6): additive — the default connection stays sqlite
+        // pg-lane: additive — the default connection stays sqlite
         // above; tests tagged ->group('pg') opt in with
         // config(['database.default' => 'pgsql']). getenv(), not the env()
         // helper (larastan.noEnvCallsOutsideOfConfig — this package ships no
@@ -56,7 +56,7 @@ abstract class CoreXTestCase extends Orchestra
             'schema' => 'public',
         ]);
 
-        // sys_audit_log is PG-only (D12/P1.8) — HasAuditLog fires
+        // sys_audit_log is PG-only — HasAuditLog fires
         // unconditionally on every Auditable model's create/update/delete,
         // so leaving it enabled would break every sqlite-lane test that
         // touches an Auditable model (Widget et al.) with a missing-table

@@ -33,9 +33,10 @@
   (`phpunit.xml`, `pint.json`, `phpstan.neon`).
 - Спека и ADR — в Brain-vault (CoreX), не в репозитории кода.
 - **Канонический DB-контракт** (все таблицы/поля/связи по префиксам, approval-gate) —
-  `~/Vaults/Brain/plans/flex/60_contracts/DB_SCHEMA.md`. Миграции ядра (`root_/sys_/mod_/wsp_/aut_`)
-  ОБЯЗАНЫ соответствовать ему; при `Status: DRAFT` — сверяться, но контракт не финален.
-  Порядок фаз реализации — `~/Vaults/Brain/plans/flex/50_execution/00_EXECUTION_ROADMAP.md`;
+  `~/Vaults/Brain/05-Projects/01-Products/FlexCRM/plans/flex/60_contracts/DB_SCHEMA.md`. Миграции
+  ядра (`root_/sys_/mod_/wsp_/aut_`) ОБЯЗАНЫ ему соответствовать — статус контракта `FROZEN v1.0`,
+  сверка финальна. Порядок фаз реализации —
+  `~/Vaults/Brain/05-Projects/01-Products/FlexCRM/plans/flex/50_execution/00_EXECUTION_ROADMAP.md`;
   исполняемый план ядра — `plans/COREX-CORE/`.
 
 ## Доктрина разработки

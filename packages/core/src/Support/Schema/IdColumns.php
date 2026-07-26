@@ -12,10 +12,12 @@ use Illuminate\Database\Schema\ForeignIdColumnDefinition;
 
 /**
  * Key columns whose type follows config('corex.ids.strategy'): UUIDv7
- * (default, D3), UUID, ULID, or auto-increment int. Lets a host app line
+ * (default), UUID, ULID, or auto-increment int. Lets a host app line
  * CoreX tables up with its own key type without forking the package
  * migrations (mirrors AzGuard's MorphColumns). Pair with
  * CoreX\Concerns\HasConfiguredId on the models.
+ *
+ * @internal spec: D3
  */
 final class IdColumns
 {

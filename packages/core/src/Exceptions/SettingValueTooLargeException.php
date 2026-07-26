@@ -7,7 +7,9 @@ namespace CoreX\Exceptions;
 use RuntimeException;
 
 /**
- * B-10 §7.2 quota: `sys_settings.value` ≤ 64 KB encoded.
+ * Quota: `sys_settings.value` ≤ 64 KB encoded.
+ *
+ * @internal spec: B-10 §7.2
  */
 final class SettingValueTooLargeException extends RuntimeException
 {

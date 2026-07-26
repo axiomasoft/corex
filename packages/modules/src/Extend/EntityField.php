@@ -6,13 +6,13 @@ namespace CoreX\Modules\Extend;
 
 /**
  * 2. A field/relation attached to ANOTHER module's entity. Storage goes
- * through flex/attributes (B-15) — this only declares the shape; altering
- * the owning entity's own table is forbidden. When the target entity
- * belongs to a different module than the declaring manifest,
+ * through an external attributes package — this only declares the shape;
+ * altering the owning entity's own table is forbidden. When the target
+ * entity belongs to a different module than the declaring manifest,
  * RegistryCompiler marks the compiled declaration "sleeping" — it only
  * takes effect for a tenant where the target module is active.
  *
- * @internal spec: B-10 §4.2
+ * @internal spec: B-10 §4.2, B-15
  */
 final class EntityField implements Extender
 {

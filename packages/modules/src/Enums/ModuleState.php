@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\Enums;
 
 /**
- * Per-account module state machine (B-10 §5.1). `Available` is virtual —
- * code is deployed but `mod_modules` has no row for the module yet.
+ * Per-account module state machine. `Available` is virtual — code is
+ * deployed but `mod_modules` has no row for the module yet.
+ *
+ * @internal spec: B-10 §5.1
  */
 enum ModuleState: string
 {

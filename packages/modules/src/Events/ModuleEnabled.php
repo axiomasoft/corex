@@ -8,10 +8,11 @@ use CoreX\Events\DomainEvent;
 use Override;
 
 /**
- * Retrofitted onto `DomainEvent` (P1.25, A68) — was an interim plain-event
- * class (OQ-4 workaround) dispatched on a successful
- * `ModuleLifecycle::enable()`. Name matches the B-10 §3.1 domain-events
- * table (`mod.module.enabled`).
+ * Retrofitted onto `DomainEvent` — was an interim plain-event class
+ * dispatched on a successful `ModuleLifecycle::enable()`. Name matches the
+ * domain-events table (`mod.module.enabled`).
+ *
+ * @internal spec: P1.25, A68, OQ-4 workaround, B-10 §3.1
  */
 final class ModuleEnabled extends DomainEvent
 {

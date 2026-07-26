@@ -12,11 +12,13 @@ use Illuminate\Contracts\Foundation\Application;
 use Override;
 
 /**
- * Resolves the configured PubSub driver (B-10 §6.1: redis cloud-default,
- * database/null boxed fallbacks) — no `if (cloud)` branching in business
- * code (D10), only this config-driven switch. Bound as a singleton
- * (CoreServiceProvider) so `NullPubSub`'s in-memory subscriber list survives
- * across a process's publish()/subscribe() calls.
+ * Resolves the configured PubSub driver (redis cloud-default, database/null
+ * boxed fallbacks) — no `if (cloud)` branching in business code, only this
+ * config-driven switch. Bound as a singleton (CoreServiceProvider) so
+ * `NullPubSub`'s in-memory subscriber list survives across a process's
+ * publish()/subscribe() calls.
+ *
+ * @internal spec: B-10 §6.1, D10
  */
 final class PubSubManager implements PubSub
 {

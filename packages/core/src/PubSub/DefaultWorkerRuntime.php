@@ -12,7 +12,9 @@ use Override;
  * Octane facade class-string (works even without `laravel/octane` installed —
  * `::class` resolves to a literal FQCN string at compile time, no autoload)
  * plus the `LARAVEL_OCTANE` env var Octane's server process exports to every
- * worker it spawns (Implementation Rules, P1.24).
+ * worker it spawns.
+ *
+ * @internal spec: Implementation Rules, P1.24
  */
 final class DefaultWorkerRuntime implements WorkerRuntime
 {

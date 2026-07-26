@@ -12,22 +12,25 @@ use Stancl\Tenancy\Database\TenantDatabaseManagers\PostgreSQLDatabaseManager;
 use Throwable;
 
 /**
- * `CREATE DATABASE … TEMPLATE tpl_flex_vNN STRATEGY WAL_LOG` (golden-clone
- * provisioning, D24/premortem A3) instead of stancl's default
- * `TEMPLATE=template0`. `STRATEGY WAL_LOG` is mandatory — PG15+ defaults
- * `CREATE DATABASE … TEMPLATE` to FILE_COPY, far slower for a populated
- * golden template (R-11 §2.3 п.2).
+ * `CREATE DATABASE … TEMPLATE "tpl_v42" STRATEGY WAL_LOG` (golden-clone
+ * provisioning) instead of stancl's default `TEMPLATE=template0` — `tpl_v42`
+ * here is only an illustrative name; the real template name is read from
+ * `root_templates.db_name`. `STRATEGY WAL_LOG` is mandatory — PG15+
+ * defaults `CREATE DATABASE … TEMPLATE` to FILE_COPY, far slower for a
+ * populated golden template.
  *
- * Template-parity gate (premortem A3, D24): refuses to clone a template
- * whose `root_templates.status` isn't `ready` — the FROZEN DB_SCHEMA
- * contract carries no schema-hash column, so `status` is the only
- * available parity signal.
+ * Template-parity gate: refuses to clone a template whose
+ * `root_templates.status` isn't `ready` — the FROZEN DB_SCHEMA contract
+ * carries no schema-hash column, so `status` is the only available parity
+ * signal.
  *
- * Quarantine handling (premortem B3, F-DDL1): PG rejects `CREATE DATABASE
- * … TEMPLATE` while any backend is connected to the template DB
- * (SQLSTATE 55006 — "source database is being accessed by other users").
- * The golden template is never meant to have live connections; this is a
- * defensive pre-step + bounded retry, not a substitute for that invariant.
+ * Quarantine handling: PG rejects `CREATE DATABASE … TEMPLATE` while any
+ * backend is connected to the template DB (SQLSTATE 55006 — "source
+ * database is being accessed by other users"). The golden template is
+ * never meant to have live connections; this is a defensive pre-step +
+ * bounded retry, not a substitute for that invariant.
+ *
+ * @internal spec: D24, premortem A3/B3, R-11 §2.3 п.2, F-DDL1
  */
 final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 {

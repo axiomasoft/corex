@@ -12,10 +12,12 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * B-10 §7.4: код модуля должен быть статически проверяем — `eval` выводит
- * произвольный код из-под ревью маркетплейса и статик-анализа.
+ * Код модуля должен быть статически проверяем — `eval` выводит произвольный
+ * код из-под ревью маркетплейса и статик-анализа.
  *
  * @implements Rule<Eval_>
+ *
+ * @internal spec: B-10 §7.4
  */
 final class NoEvalRule implements Rule
 {

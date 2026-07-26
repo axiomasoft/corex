@@ -8,11 +8,13 @@ use CoreX\Contracts\SettingsScope;
 use Override;
 
 /**
- * Domain-event shape for a feature-flag state change (B-10 domain-events
- * table, `core.feature.toggled`). `FeatureFlags` (P1.9) ships no
- * toggle-mutator itself — `define()` only registers a manifest default —
- * so no production code path dispatches this yet; the admin toggle action
- * that will (Scope Excluded: UI фич-флагов) is deferred (P1.9 Pending Work).
+ * Domain-event shape for a feature-flag state change
+ * (`core.feature.toggled`). `FeatureFlags` ships no toggle-mutator itself —
+ * `define()` only registers a manifest default — so no production code path
+ * dispatches this yet; the admin toggle action that will (UI feature-flag
+ * management is out of scope here) is deferred to future work.
+ *
+ * @internal spec: B-10, P1.9
  */
 final class FeatureFlagToggled extends DomainEvent
 {

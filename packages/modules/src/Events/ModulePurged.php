@@ -7,7 +7,11 @@ namespace CoreX\Modules\Events;
 use CoreX\Events\DomainEvent;
 use Override;
 
-/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.purged` (B-10 §3.1). */
+/**
+ * Retrofitted onto `DomainEvent` (see {@see ModuleEnabled}). `mod.module.purged`.
+ *
+ * @internal spec: P1.25, A68, B-10 §3.1
+ */
 final class ModulePurged extends DomainEvent
 {
     /** @param  list<string>  $droppedTables */

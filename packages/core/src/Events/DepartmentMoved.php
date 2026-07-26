@@ -7,10 +7,11 @@ namespace CoreX\Events;
 use Override;
 
 /**
- * Domain-event shape for a department reparent (B-10 domain-events table,
- * `core.department.moved`). AzGuard invalidates its scope=dept_tree cache
- * on this event (B-10 §5.7) — the invalidator itself is out of scope here
- * (consumer-side, P2).
+ * Domain-event shape for a department reparent (`core.department.moved`).
+ * AzGuard invalidates its scope=dept_tree cache on this event — the
+ * invalidator itself is out of scope here (consumer-side).
+ *
+ * @internal spec: B-10 domain-events table, B-10 §5.7, P2
  */
 final class DepartmentMoved extends DomainEvent
 {

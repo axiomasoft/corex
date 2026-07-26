@@ -18,13 +18,15 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * B-10 §7.4 п.9: писать в `sys_*`/`mod_*` можно только через контракты ядра
+ * Писать в `sys_*`/`mod_*` можно только через контракты ядра
  * (Settings/Audit/ModuleLifecycle/…), не запросом из модуля.
  *
  * Владельцы контрактов (`parameters.corexModules.systemTableNamespaces`) исключены —
  * именно они и есть легальная реализация записи.
  *
  * @implements Rule<CallLike>
+ *
+ * @internal spec: B-10 §7.4 п.9
  */
 final class NoDirectSystemTableWriteRule implements Rule
 {

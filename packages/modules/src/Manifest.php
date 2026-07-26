@@ -9,11 +9,13 @@ use CoreX\Modules\Exceptions\InvalidManifestException;
 use CoreX\Modules\Extend\Extender;
 
 /**
- * Fluent module manifest (B-10 §3.2). A module's `manifest()` method builds
- * one of these; each setter mutates and returns $this so authors can chain
+ * Fluent module manifest. A module's `manifest()` method builds one of
+ * these; each setter mutates and returns $this so authors can chain
  * `Manifest::make(...)->title(...)->tablePrefix(...)`. Fields double as
  * public properties for read access (discovery/compiler/tests) — PHP allows
  * a property and a method to share a name, disambiguated by call syntax.
+ *
+ * @internal spec: B-10 §3.2
  */
 final class Manifest
 {
@@ -44,14 +46,20 @@ final class Manifest
     /** @var list<SettingDefault> */
     public array $settings = [];
 
-    /** @var list<Extender> RegistryCompiler pipeline input (B-10 §4/§4.2, P1.4). */
+    /**
+     * @var list<Extender> RegistryCompiler pipeline input.
+     *
+     * @internal spec: B-10 §4/§4.2, P1.4
+     */
     public array $extenders = [];
 
     /**
-     * Retrofitted onto `CoreX\Contracts\FeatureFlagDefinition` (D20/OQ-9
-     * resolution) — `corex/core` ships the contract as of P1.9.
+     * Retrofitted onto `CoreX\Contracts\FeatureFlagDefinition` —
+     * `corex/core` ships the contract.
      *
      * @var list<FeatureFlagDefinition>
+     *
+     * @internal spec: D20/OQ-9 resolution, P1.9
      */
     public array $featureFlags = [];
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Modules\Registry;
 
 /**
- * System field of an entity; custom fields live in flex/attributes.
+ * System field of an entity; custom fields live in an external attributes package.
  *
  * @internal spec: B-10 §3.4
  */

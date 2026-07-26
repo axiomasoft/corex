@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Departments;
 
 /**
- * Department read-DTO (B-10 §3.1 `DepartmentRepository`).
+ * Read-model returned by `DepartmentRepository` implementations.
+ *
+ * @internal spec: B-10 §3.1
  */
 final readonly class Department
 {

@@ -9,10 +9,12 @@ use CoreX\Modules\Exceptions\InvalidManifestException;
 use CoreX\Modules\Manifest;
 
 /**
- * Finds installed modules and builds their manifests (B-10 §3.2/§5.2).
- * Default source is `vendor/composer/installed.json` (`type: corex-module`,
- * class from `extra.corex.module`); an injected fallback list lets tests and
+ * Finds installed modules and builds their manifests. Default source is
+ * `vendor/composer/installed.json` (`type: corex-module`, class from
+ * `extra.corex.module`); an injected fallback list lets tests and
  * testbench avoid depending on real installed.json contents.
+ *
+ * @internal spec: B-10 §3.2/§5.2
  */
 final class ModuleDiscovery
 {

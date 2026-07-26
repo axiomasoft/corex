@@ -7,7 +7,11 @@ namespace CoreX\Modules\Events;
 use CoreX\Events\DomainEvent;
 use Override;
 
-/** Retrofitted onto `DomainEvent` (P1.25, A68 — see {@see ModuleEnabled}). `mod.module.upgraded` (B-10 §3.1). */
+/**
+ * Retrofitted onto `DomainEvent` (see {@see ModuleEnabled}). `mod.module.upgraded`.
+ *
+ * @internal spec: P1.25, A68, B-10 §3.1
+ */
 final class ModuleUpgraded extends DomainEvent
 {
     /** @param  list<string>  $migrationsRun */

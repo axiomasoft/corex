@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\PHPStan\Rules;
 
 /**
- * B-10 §7.3 п.3: session-level advisory lock переживает транзакцию и остаётся
- * висеть на чужом клиенте пула. Легальны только транзакционные `*_xact_*`.
+ * Session-level advisory lock переживает транзакцию и остаётся висеть на
+ * чужом клиенте пула. Легальны только транзакционные `*_xact_*`.
+ *
+ * @internal spec: B-10 §7.3 п.3
  */
 final class NoSessionAdvisoryLockRule extends AbstractDatabaseCallRule
 {

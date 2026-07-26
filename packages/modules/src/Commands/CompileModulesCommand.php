@@ -14,19 +14,20 @@ use CoreX\Modules\Registry\CompiledModuleRegistry;
 use Illuminate\Console\Command;
 
 /**
- * Deploy-hook compile pipeline (B-10 §5.2): discovers module manifests,
- * validates them, applies the closed extender set in memory, then writes
- * both the per-module metadata and the full {@see CompiledRegistry} (all 8
- * slices — P1.15) atomically to `bootstrap/cache/corex_modules.php`
- * (tmp+rename — B-10 §7.4 п.7) for {@see CompiledModuleRegistry} to read on
- * the hot path. Wired into `php artisan optimize` (deploy) by
- * {@see ModulesServiceProvider}.
+ * Deploy-hook compile pipeline: discovers module manifests, validates
+ * them, applies the closed extender set in memory, then writes both the
+ * per-module metadata and the full {@see CompiledRegistry} (all 8 slices)
+ * atomically to `bootstrap/cache/corex_modules.php` (tmp+rename) for
+ * {@see CompiledModuleRegistry} to read on the hot path. Wired into
+ * `php artisan optimize` (deploy) by {@see ModulesServiceProvider}.
+ *
+ * @internal spec: B-10 §5.2, §7.4 п.7, P1.15
  */
 final class CompileModulesCommand extends Command
 {
     protected $signature = 'corex:modules:compile';
 
-    protected $description = 'Discover Flex module manifests, validate and compile their extenders.';
+    protected $description = 'Discover CoreX module manifests, validate and compile their extenders.';
 
     public function handle(ModuleDiscovery $discovery, RegistryCompiler $compiler): int
     {

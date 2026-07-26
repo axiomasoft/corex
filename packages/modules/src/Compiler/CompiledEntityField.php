@@ -7,11 +7,13 @@ namespace CoreX\Modules\Compiler;
 use CoreX\Modules\Extend\EntityField;
 
 /**
- * An EntityField extender resolved against the compiled entity set (P1.4).
+ * An EntityField extender resolved against the compiled entity set.
  * `sleeping` = declaring module differs from the target entity's owning
- * module (B-10 §7.4 п.5): the declaration is collected here regardless, but
- * only takes effect for a tenant where the target module is active — that
- * per-tenant filter is ModuleRegistry's job (P1.5), not this compiler's.
+ * module: the declaration is collected here regardless, but only takes
+ * effect for a tenant where the target module is active — that per-tenant
+ * filter is ModuleRegistry's job, not this compiler's.
+ *
+ * @internal spec: P1.4, B-10 §7.4 п.5, P1.5
  */
 final readonly class CompiledEntityField
 {
@@ -22,11 +24,13 @@ final readonly class CompiledEntityField
     ) {}
 
     /**
-     * Plain-array projection for the compiled file (P1.15). The wrapped
+     * Plain-array projection for the compiled file. The wrapped
      * {@see EntityField} extender flattens through the shared
      * {@see CompiledRegistry::extenderToArray()} — no `__set_state`.
      *
      * @return array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}
+     *
+     * @internal spec: P1.15
      */
     public function toArray(): array
     {

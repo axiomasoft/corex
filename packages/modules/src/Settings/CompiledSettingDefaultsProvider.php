@@ -12,15 +12,17 @@ use CoreX\Settings\NullSettingDefaultsProvider;
 use Override;
 
 /**
- * Real {@see SettingDefaultsProvider} for corex/modules (D20/D22/D23 —
- * direction core←modules stays intact: `corex/core` only ever sees the
- * contract, this implementation lives here and `ModulesServiceProvider`
- * rebinds it over the boxed {@see NullSettingDefaultsProvider}
- * default). Reads manifest-declared {@see SettingDefault}s off
- * the COMPILED registry ({@see ModuleRegistry::compiled()}, P1.15) — never
- * off `ModuleDiscovery::discover()`, which would re-parse every manifest's
- * `manifest()` method on this hot path (`DatabaseSettingsRepository::get()`
- * calls `defaultFor()` on every uncached read, P1.25 Code Guidance).
+ * Real {@see SettingDefaultsProvider} for corex/modules — direction
+ * core←modules stays intact: `corex/core` only ever sees the contract, this
+ * implementation lives here and `ModulesServiceProvider` rebinds it over the
+ * boxed {@see NullSettingDefaultsProvider} default. Reads manifest-declared
+ * {@see SettingDefault}s off the COMPILED registry
+ * ({@see ModuleRegistry::compiled()}) — never off `ModuleDiscovery::discover()`,
+ * which would re-parse every manifest's `manifest()` method on this hot path
+ * (`DatabaseSettingsRepository::get()` calls `defaultFor()` on every
+ * uncached read).
+ *
+ * @internal spec: D20/D22/D23, P1.15, P1.25
  */
 final class CompiledSettingDefaultsProvider implements SettingDefaultsProvider
 {

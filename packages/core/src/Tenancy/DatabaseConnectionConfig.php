@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy;
 
 /**
- * Canonical shape — B-11 §3.1 (owner: B-11). Full Laravel connection config
- * for an account's tenant database, resolved from root_clusters+db_name.
+ * Full Laravel connection config for an account's tenant database, resolved
+ * from root_clusters+db_name.
+ *
+ * @internal spec: B-11 §3.1 (owner: B-11)
  */
 final readonly class DatabaseConnectionConfig
 {

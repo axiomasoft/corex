@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy;
 
 /**
- * Canonical shape — B-11 §3.2 (owner: B-11). Fixes embedding_model/dim on
- * the account row at provisioning time (AC-10, R-16) — never read from
- * global config on the fly.
+ * Fixes embedding_model/dim on the account row at provisioning time — never
+ * read from global config on the fly.
+ *
+ * @internal spec: B-11 §3.2 (owner: B-11), AC-10, R-16
  */
 final readonly class ProvisionParams
 {

@@ -10,12 +10,14 @@ use DateTimeImmutable;
 use Illuminate\Support\Str;
 
 /**
- * Canonical base for ecosystem domain events (B-10 §3.1: eventId/occurredAt/
- * tenant/`name()`). Supersedes the empty `CoreEvent` marker (plan.md D27) —
+ * Canonical base for ecosystem domain events (eventId/occurredAt/tenant/
+ * `name()`). Supersedes the empty `CoreEvent` marker —
  * `Cancellable` is a SEPARATE optional interface for pre-action events that
  * can abort the operation ({@see Cancellable}), not mixed into this base:
  * most domain events (SettingChanged, FeatureFlagToggled, …) are purely
  * informational.
+ *
+ * @internal spec: B-10 §3.1, D27
  */
 abstract class DomainEvent
 {
@@ -32,6 +34,10 @@ abstract class DomainEvent
         $this->tenant = $tenant ?? app(TenantContextResolver::class)->current();
     }
 
-    /** Stable dotted name, e.g. `core.setting.changed` — B-10 domain-events table. */
+    /**
+     * Stable dotted name, e.g. `core.setting.changed`.
+     *
+     * @internal spec: B-10 domain-events table
+     */
     abstract public static function name(): string;
 }

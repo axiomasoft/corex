@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Modules\PHPStan\Rules;
 
 /**
- * B-10 §7.3 п.4: LISTEN/NOTIFY — сессионный канал; через пулер подписка уезжает
- * на чужой бекенд. Легальный путь доставки — контракт `CoreX\Contracts\PubSub`.
+ * LISTEN/NOTIFY — сессионный канал; через пулер подписка уезжает на чужой
+ * бекенд. Легальный путь доставки — контракт `CoreX\Contracts\PubSub`.
  *
  * Запрет тотален СОЗНАТЕЛЬНО: PgBouncer фактически проносит NOTIFY (не LISTEN),
  * но код модуля не должен зависеть от версии и настроек пулера.
+ *
+ * @internal spec: B-10 §7.3 п.4
  */
 final class NoListenNotifyRule extends AbstractDatabaseCallRule
 {

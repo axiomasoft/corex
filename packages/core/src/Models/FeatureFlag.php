@@ -10,13 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Override;
 
 /**
- * Per-account feature-flag default (sys_feature_flags, B-10 §2).
+ * Per-account feature-flag default (sys_feature_flags).
  *
  * @property string $id
  * @property string $key
  * @property string|null $module
  * @property bool $is_enabled
  * @property array<string, mixed>|null $payload
+ *
+ * @internal spec: B-10 §2
  */
 final class FeatureFlag extends Model
 {

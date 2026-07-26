@@ -39,10 +39,12 @@ use Override;
 final class ModulesServiceProvider extends ServiceProvider
 {
     /**
-     * Shipped schema generation of the mod_* migration set (D43). A consumer
+     * Shipped schema generation of the mod_* migration set. A consumer
      * publishes a COPY, so upgrades ship as NEW additive migration files under
      * the same publish tag and bump this constant (mirrors
      * {@see CoreServiceProvider::SCHEMA_VERSION}).
+     *
+     * @internal spec: D43
      */
     public const int SCHEMA_VERSION = 1;
 
@@ -54,7 +56,7 @@ final class ModulesServiceProvider extends ServiceProvider
         // Bind the concrete singleton first so module providers can resolve
         // it directly to call register() (not part of the read-only contract),
         // then alias the contract to the same instance. The active-module
-        // predicate is wired to the real ModuleRegistry::isActive (P1.16, A38)
+        // predicate is wired to the real ModuleRegistry::isActive
         // — resolved lazily at call time so all(null) at boot never triggers it
         // (and never a DB read).
         $this->app->singleton(ArrayEntityRegistry::class, static function (Application $app): ArrayEntityRegistry {
@@ -68,20 +70,20 @@ final class ModulesServiceProvider extends ServiceProvider
         );
 
         // No fallback modules by default — real deploys scan installed.json;
-        // tests/testbench rebind this with an injected class list (P1.3 seam).
+        // tests/testbench rebind this with an injected class list.
         $this->app->singleton(ModuleDiscovery::class);
 
-        // Boxed default (D10): the cloud billing gate is an application concern.
+        // Boxed default: the cloud billing gate is an application concern.
         $this->app->singleton(ModuleActivationGate::class, AllowAllActivationGate::class);
 
-        // mod_modules/mod_records now exist (P1.6) — read/write them directly;
+        // mod_modules/mod_records now exist — read/write them directly;
         // ArrayModuleStateReader remains available for tests that inject a fake.
         // Bound via a closure (NOT a bare class-string): the reader MUST read the
         // module connection (config('corex-modules.connection'), null = app
         // default) — the same seam RecordsRegistrar/lifecycle/epoch use. A bare
         // class-string autowires $connection = null and silently reads the ambient
         // default, so with a configured module DB the enabled set comes back empty
-        // and every module reads inactive (targeted audit D63/D65).
+        // and every module reads inactive (a defect a targeted audit caught).
         $this->app->singleton(ModuleStateReader::class, static function (): DatabaseModuleStateReader {
             /** @var string|null $connection */
             $connection = config('corex-modules.connection');
@@ -101,7 +103,7 @@ final class ModulesServiceProvider extends ServiceProvider
         });
 
         // codeVersions / migrationPaths (composer name → value) come from
-        // installed.json (D41/A: empty autowired arrays = migrations never run
+        // installed.json (empty autowired arrays = migrations never run
         // in prod). Exposed as an overridable binding so tests inject stub paths
         // and resolve the lifecycle from the container, not a hand-built ctor.
         $this->app->singleton('corex-modules.wiring', fn (): array => $this->moduleWiring());
@@ -124,8 +126,8 @@ final class ModulesServiceProvider extends ServiceProvider
             );
         });
 
-        // Registry cache WITHOUT tags (D30/A1/A2): store/ttl/prefix from config
-        // (A45/A46 — no hardcoded 3600). store = null ⇒ the app's default store.
+        // Registry cache WITHOUT tags: store/ttl/prefix from config
+        // (no hardcoded 3600). store = null ⇒ the app's default store.
         $this->app->singleton(ModuleRegistryCache::class, static function (Application $app): RepositoryModuleRegistryCache {
             /** @var string|null $store */
             $store = config('corex-modules.cache.store');
@@ -142,20 +144,20 @@ final class ModulesServiceProvider extends ServiceProvider
                 cachePath: CompiledModuleRegistry::defaultCachePath(),
                 stateReader: $app->make(ModuleStateReader::class),
                 cache: $app->make(ModuleRegistryCache::class),
-                // Epoch (D39): monotonic per-account registry version read from
-                // the module connection. ctx is accepted for the P2 per-account
-                // resolution; P1 reads the (single) module DB.
+                // Epoch: monotonic per-account registry version read from
+                // the module connection. ctx is accepted for future per-account
+                // resolution; today it reads the (single) module DB.
                 versionResolver: fn (TenantContext $ctx): int => $this->registryVersion(),
                 // Production must have compiled the registry at deploy; a
                 // missing file there is a hard failure, not a silent empty
-                // runtime (A10, pre-mortem P1R кластер C).
+                // runtime (a defect class caught in an earlier pre-mortem).
                 failIfMissing: $app->environment('production'),
             );
         });
 
         // Rebind the boxed Null default (CoreServiceProvider::register(),
         // registered before this provider) to the real manifest-backed
-        // implementation (D20/D22/D23, P1.25) — corex/modules is present, so
+        // implementation — corex/modules is present, so
         // manifest-declared setting defaults now reach the runtime cascade.
         $this->app->singleton(
             SettingDefaultsProvider::class,
@@ -165,7 +167,7 @@ final class ModulesServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // NOT loadMigrationsFrom: mod_* is PG-only DDL (D12 — CHECK
+        // NOT loadMigrationsFrom: mod_* is PG-only DDL (CHECK
         // constraints, advisory locks) and this provider is registered by
         // every consumer, including sqlite-backed suites (Crm/Tasks). The
         // pg-lane test/deploy path runs these migrations explicitly,
@@ -175,7 +177,7 @@ final class ModulesServiceProvider extends ServiceProvider
 
             // Reconcile a module's ownership registry with the real schema and
             // provide the single legal exit from the terminal `purged` state
-            // (D40/A11) — a thin wrapper over ModuleLifecycle::repair().
+            // — a thin wrapper over ModuleLifecycle::repair().
             Artisan::command('corex:modules:repair {module : Composer name of the module to repair}', function (ModuleLifecycle $lifecycle, string $module): int {
                 $lifecycle->repair($module);
                 $this->info(sprintf('Reconciled module [%s] with the schema.', $module));
@@ -184,12 +186,12 @@ final class ModulesServiceProvider extends ServiceProvider
             })->purpose('Reconcile mod_records with the schema and reset a purged module to available.');
         }
 
-        // Connection-scoped publish (D33/D43): mod_* is PG-only TENANT-schema
+        // Connection-scoped publish: mod_* is PG-only TENANT-schema
         // DDL (advisory locks, CHECK, jsonb). NOT loadMigrationsFrom — see the
         // note above; consumers publish + migrate explicitly on the tenant
-        // connection. The `-tenant` tag names that scope (pre-mortem P1R C5);
-        // the plain `corex-modules-migrations` alias serves the boxed single-DB
-        // case.
+        // connection. The `-tenant` tag names that scope (caught in an earlier
+        // pre-mortem); the plain `corex-modules-migrations` alias serves the
+        // boxed single-DB case.
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], ['corex-modules-migrations', 'corex-modules-migrations-tenant']);
@@ -198,7 +200,7 @@ final class ModulesServiceProvider extends ServiceProvider
             __DIR__.'/../config/corex-modules.php' => config_path('corex-modules.php'),
         ], 'corex-modules-config');
 
-        // Epoch memo reset (D39): a long-running queue worker drops its
+        // Epoch memo reset: a long-running queue worker drops its
         // per-process compiled-file memo before each job, so a redeploy's
         // recompiled registry is picked up instead of served stale for hours.
         $this->app['events']->listen(JobProcessing::class, function (): void {
@@ -214,9 +216,9 @@ final class ModulesServiceProvider extends ServiceProvider
             }
         });
 
-        // Deploy hook: `php artisan optimize` recompiles the registry (B-10
-        // §5.2). No clear command — `optimize:clear` leaves the file, the
-        // next `optimize` overwrites it atomically.
+        // Deploy hook: `php artisan optimize` recompiles the registry. No
+        // clear command — `optimize:clear` leaves the file, the next
+        // `optimize` overwrites it atomically.
         $this->optimizes(optimize: 'corex:modules:compile', key: 'corex-modules');
 
         // Built after every module provider has booted and registered its
@@ -225,7 +227,7 @@ final class ModulesServiceProvider extends ServiceProvider
             $arrayRegistry = $this->app->make(ArrayEntityRegistry::class);
 
             // Project the persisted compiled registry into the runtime
-            // EntityRegistry so module-declared entities reach the app (A10) —
+            // EntityRegistry so module-declared entities reach the app —
             // not only entities a provider register()'d imperatively.
             $compiled = $this->app->make(ModuleRegistry::class)->compiled();
 
@@ -240,7 +242,7 @@ final class ModulesServiceProvider extends ServiceProvider
             // the active modules: reading a persisted row of a currently
             // disabled module must still resolve its morph alias, or
             // Relation::morphMap loses the handle. The active-module filter in
-            // all(?ctx) is a DIFFERENT call, wired by P1.16 — not this one.
+            // all(?ctx) is a DIFFERENT call — not this one.
             foreach ($registry->all() as $definition) {
                 $map[$definition->handle] = $definition->model;
             }
@@ -249,26 +251,28 @@ final class ModulesServiceProvider extends ServiceProvider
                 Relation::morphMap($map);
             }
 
-            // AuditObserver lives in corex/core (B-10 §4.4 capability
-            // 'auditable') — the wiring itself lives in corex/modules'
+            // AuditObserver lives in corex/core (capability 'auditable') —
+            // the wiring itself lives in corex/modules'
             // AuditCapabilityWiring because it needs EntityRegistry, and
             // corex/core cannot depend on corex/modules (reverse of this
-            // package's own require, D22).
+            // package's own require).
             AuditCapabilityWiring::wire($registry);
         });
     }
 
     /**
-     * Monotonic registry epoch (D39): the count of applied lifecycle
+     * Monotonic registry epoch: the count of applied lifecycle
      * transitions in `mod_lifecycle_log`. The log is append-only and each
      * terminal transition (enable/disable/upgrade/archive/purge) inserts a row
      * INSIDE the lifecycle transaction, so the count is a clock-free monotonic
      * version bumped atomically with the state change — and, living in the
      * shared DB, it is visible to every process/node (which a caller-local
      * cache clear would not be). The connection comes from
-     * `config('corex-modules.connection')` (null = app default; under P2 stancl
+     * `config('corex-modules.connection')` (null = app default; multi-tenancy
      * rebinds that to the tenant DB). Missing table (pre-migrate / sqlite
      * suites) reads as epoch 0.
+     *
+     * @internal spec: D39
      */
     private function registryVersion(): int
     {
@@ -288,7 +292,7 @@ final class ModulesServiceProvider extends ServiceProvider
      * `/database/migrations` → migrationPaths. Empty when there is no
      * installed.json (testbench) or no module packages — real deploys populate
      * both so {@see DatabaseModuleLifecycle::runModuleMigrations()} actually
-     * runs each module's migrations (A: empty autowired arrays ran nothing).
+     * runs each module's migrations (empty autowired arrays ran nothing).
      *
      * @return array{codeVersions: array<string, string>, migrationPaths: array<string, string>}
      */

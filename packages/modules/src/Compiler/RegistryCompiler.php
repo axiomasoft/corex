@@ -25,10 +25,12 @@ use Illuminate\Support\Str;
 
 /**
  * Applies the closed 8-extender set to a set of manifests in a fixed,
- * deterministic pipeline (B-10 §4.2/§5.2): Entity → EntityField →
- * Permissions → Api → Filament → Menu → Routes → Workflow. Output is an
- * in-memory CompiledRegistry — atomic file write and hot-path reads belong
- * to ModuleRegistry (P1.5), not here.
+ * deterministic pipeline: Entity → EntityField → Permissions → Api →
+ * Filament → Menu → Routes → Workflow. Output is an in-memory
+ * CompiledRegistry — atomic file write and hot-path reads belong to
+ * ModuleRegistry, not here.
+ *
+ * @internal spec: B-10 §4.2/§5.2, P1.5
  */
 final class RegistryCompiler
 {
@@ -39,15 +41,17 @@ final class RegistryCompiler
     /**
      * @param  list<Manifest>  $manifests
      * @param  list<string>|null  $installedPackages  composer names known installed beyond
-     *                                                $manifests (AC-2). Defaults to a real read of
+     *                                                $manifests. Defaults to a real read of
      *                                                `vendor/composer/installed.json` ({@see
      *                                                InstalledPackages}) — pass an explicit list in
      *                                                tests/testbench to avoid depending on the host's
      *                                                installed.json contents.
      * @param  (callable(class-string): void)|null  $onStage  observes each {@see PipelineStages}
      *                                                        entry as its stage starts, in the order
-     *                                                        actually executed — test seam for AC-18
-     *                                                        (pipeline determinism).
+     *                                                        actually executed — test seam for
+     *                                                        pipeline determinism.
+     *
+     * @internal spec: AC-2, AC-18
      */
     public function compile(array $manifests, ?array $installedPackages = null, ?callable $onStage = null): CompiledRegistry
     {
@@ -99,21 +103,23 @@ final class RegistryCompiler
 
     /**
      * `Manifest::$settings`/`$featureFlags` are plain manifest properties,
-     * not entries in the closed 8-extender pipeline (P1.25, A68 residual —
-     * they never reached the compiled file before this) — collected here
-     * directly, outside {@see PipelineStages::ORDER}.
+     * not entries in the closed 8-extender pipeline — they never reached
+     * the compiled file before this — collected here directly, outside
+     * {@see PipelineStages::ORDER}.
      *
      * @param  list<Manifest>  $manifests
      * @return list<CompiledSettingDefault>
+     *
+     * @internal spec: P1.25, A68
      */
     private function collectSettings(array $manifests): array
     {
         $settings = [];
 
         foreach ($manifests as $manifest) {
-            // Guarded by CompilationValidator::validateRequiredFields() (D37:
-            // tablePrefix is mandatory) before this method ever runs — see
-            // compileEntity()'s identical guard. A DISTINCT throw (P3.7): reaching
+            // Guarded by CompilationValidator::validateRequiredFields()
+            // (tablePrefix is mandatory) before this method ever runs — see
+            // compileEntity()'s identical guard. A DISTINCT throw: reaching
             // it means validation was bypassed, not that the manifest is bad.
             $namespace = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
 
@@ -179,9 +185,9 @@ final class RegistryCompiler
 
         if ($modulePrefix === null) {
             // Guarded by CompilationValidator::validateRequiredFields() before the pipeline
-            // starts (D37: tablePrefix is mandatory, no auto-derivation from the composer
+            // starts (tablePrefix is mandatory, no auto-derivation from the composer
             // name); this branch only matters if compileEntity() is ever reached directly.
-            // Distinct throw (P3.7): a validation bypass, not an ordinary rejection.
+            // Distinct throw: a validation bypass, not an ordinary rejection.
             throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
         }
 
@@ -241,10 +247,12 @@ final class RegistryCompiler
 
     /**
      * Falls back to introspecting the model's `$casts` when the extender
-     * doesn't declare fields explicitly (B-10 §4.2).
+     * doesn't declare fields explicitly.
      *
      * @param  class-string<Model>  $model
      * @return list<FieldDefinition>
+     *
+     * @internal spec: B-10 §4.2
      */
     private function introspectCasts(string $model): array
     {

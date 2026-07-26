@@ -63,7 +63,7 @@ final class Config
         return (string) config('corex.tables.department_user', 'sys_department_user');
     }
 
-    // ─── Tenant context (P1.12) ───────────────────────────────────────────
+    // ─── Tenant context ───────────────────────────────────────────────────
 
     /** @return class-string<TenantContextResolver> */
     public static function tenantContextResolverClass(): string
@@ -182,10 +182,12 @@ final class Config
 
     /**
      * Opt-in flag a dedicated worker command sets before calling
-     * `subscribe()` under an Octane runtime (D44/A29) — `runningInConsole()`
+     * `subscribe()` under an Octane runtime — `runningInConsole()`
      * cannot be trusted there (see `CoreX\Contracts\WorkerRuntime`), so the
      * guard requires this explicit signal instead. Never set by
      * request-handling code.
+     *
+     * @internal spec: D44
      */
     public static function pubsubOctaneWorkerOptIn(): bool
     {
@@ -193,11 +195,13 @@ final class Config
     }
 
     /**
-     * Default `--older-than` for `corex:pubsub:prune` (D44) — a
+     * Default `--older-than` for `corex:pubsub:prune` — a
      * `DateInterval`-parseable relative-time string. MUST stay longer than
      * the worst-case subscriber downtime: pruning a message before every
      * durable cursor behind it has passed it is a silent, permanent
-     * invalidation loss (plan.md D44, pre-mortem P1R C7).
+     * invalidation loss.
+     *
+     * @internal spec: D44
      */
     public static function pubsubRetention(): string
     {

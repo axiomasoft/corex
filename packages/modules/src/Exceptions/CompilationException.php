@@ -7,8 +7,9 @@ namespace CoreX\Modules\Exceptions;
 use RuntimeException;
 
 /**
- * Compilation validation failure (B-10 §7.4 п.4): always a deploy failure,
- * never a warning.
+ * Compilation validation failure: always a deploy failure, never a warning.
+ *
+ * @internal spec: B-10 §7.4 п.4
  */
 final class CompilationException extends RuntimeException
 {
@@ -70,7 +71,7 @@ final class CompilationException extends RuntimeException
     }
 
     /**
-     * Distinct from {@see missingTablePrefix} on purpose (P3.7): that one is the
+     * Distinct from {@see missingTablePrefix} on purpose: that one is the
      * VALIDATION-stage rejection (validateRequiredFields); this one fires from
      * RegistryCompiler's defensive `?? throw` guards, which are unreachable once
      * validation has run. Reaching it means validateRequiredFields() was skipped
@@ -79,6 +80,8 @@ final class CompilationException extends RuntimeException
      * The two carrying different text is what lets a test pin the validation
      * layer specifically (a mutant that removes the validation check falls
      * through to this distinct throw and the validation-message assert reddens).
+     *
+     * @internal spec: P3.7
      */
     public static function tablePrefixInvariantBypassed(string $composerName): self
     {

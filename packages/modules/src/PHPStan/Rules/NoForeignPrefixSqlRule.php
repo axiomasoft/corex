@@ -16,8 +16,8 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * B-10 §7.4 п.9: модуль не трогает таблицы чужого префикса напрямую — только
- * через контракты владельца.
+ * Модуль не трогает таблицы чужого префикса напрямую — только через
+ * контракты владельца.
  *
  * Владельца определяет конфиг `parameters.corexModules.modulePrefixes`
  * (PSR-4-неймспейс модуля → его `tablePrefix` из манифеста): статически связать
@@ -25,6 +25,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * карты (ядро, тесты, приложение) правило не трогает — ложных срабатываний нет.
  *
  * @implements Rule<CallLike>
+ *
+ * @internal spec: B-10 §7.4 п.9
  */
 final class NoForeignPrefixSqlRule implements Rule
 {

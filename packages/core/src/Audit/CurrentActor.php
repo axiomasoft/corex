@@ -8,9 +8,11 @@ use CoreX\Enums\ActorType;
 
 /**
  * Actor/request snapshot for an audit entry built outside a queue worker
- * (B-10 §3.1 context: ip/user_agent/request_id/module). Real agent/api_key
- * actor wiring lands with entity-scoped auth (P2, OQ-7) — today this only
- * distinguishes an authenticated user from 'system'.
+ * (context: ip/user_agent/request_id/module). Real agent/api_key actor
+ * wiring lands with entity-scoped auth — today this only distinguishes an
+ * authenticated user from 'system'.
+ *
+ * @internal spec: B-10 §3.1, P2, OQ-7
  */
 final class CurrentActor
 {

@@ -7,10 +7,12 @@ namespace CoreX\Modules\Exceptions;
 use LogicException;
 
 /**
- * An FSM transition was requested that the module's current state forbids
- * (B-10 §5.1 invariants). `purged` is terminal — re-installing a purged module
- * goes through `corex:modules:repair` (which returns it to `available`), never a
- * direct `enable` on the dead schema (A11/A12); `upgrade` requires `enabled`.
+ * An FSM transition was requested that the module's current state forbids.
+ * `purged` is terminal — re-installing a purged module goes through
+ * `corex:modules:repair` (which returns it to `available`), never a direct
+ * `enable` on the dead schema; `upgrade` requires `enabled`.
+ *
+ * @internal spec: B-10 §5.1 invariants, A11/A12
  */
 final class InvalidStateTransitionException extends LogicException
 {

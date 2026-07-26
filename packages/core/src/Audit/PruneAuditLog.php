@@ -11,14 +11,16 @@ use Illuminate\Console\Command;
 /**
  * Prunes sys_audit_log rows older than the bound AuditRetention boundary.
  *
- * This is the ONLY legal DELETE against the append-only audit journal (B-10
- * §7.4 п.8, A64): the append path never deletes, and the observer/logger never
- * remove rows — retention is applied here, deliberately and observably, on a
- * documented schedule the host wires into its scheduler. With the boxed-safe
+ * This is the ONLY legal DELETE against the append-only audit journal: the
+ * append path never deletes, and the observer/logger never remove rows —
+ * retention is applied here, deliberately and observably, on a documented
+ * schedule the host wires into its scheduler. With the boxed-safe
  * NullAuditRetention (no boundary) it deletes nothing.
  *
- * `--database` targets a specific connection (sys_audit_log is PG-only, D12);
+ * `--database` targets a specific connection (sys_audit_log is PG-only);
  * omit it for the app default.
+ *
+ * @internal spec: B-10 §7.4 п.8, D12
  */
 final class PruneAuditLog extends Command
 {

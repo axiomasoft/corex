@@ -7,9 +7,11 @@ namespace CoreX\Modules\Registry;
 use CoreX\Modules\Enums\Capability;
 
 /**
- * Immutable description of a registered entity (B-10 §3.4). Handle is the
- * canonical morph key ({module_short}.{entity}, e.g. 'crm.deal') and drives
- * the morph map, satellite hookup and auto-CRUD/search/admin generation.
+ * Immutable description of a registered entity. Handle is the canonical
+ * morph key ({module_short}.{entity}, e.g. 'crm.deal') and drives the morph
+ * map, satellite hookup and auto-CRUD/search/admin generation.
+ *
+ * @internal spec: B-10 §3.4
  */
 final readonly class EntityDefinition
 {
@@ -31,12 +33,14 @@ final readonly class EntityDefinition
     ) {}
 
     /**
-     * Plain-array projection for the compiled registry file (P1.15). Enums
+     * Plain-array projection for the compiled registry file. Enums
      * collapse to their backing `->value`, the class-string stays a string,
      * nested {@see FieldDefinition}s recurse — no object survives into the
      * persisted payload (`__set_state`/serialize are banned for the hot path).
      *
      * @return array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: string, required: bool, searchable: bool, meta: array<string, mixed>|null}>, titleAttribute: string|null}
+     *
+     * @internal spec: P1.15
      */
     public function toArray(): array
     {

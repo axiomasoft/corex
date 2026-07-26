@@ -12,8 +12,10 @@ use CoreX\Tenancy\TenantContext;
 
 /**
  * In-memory EntityRegistry. Module providers register() their entities at
- * boot; the compiled hot-path registry (P1.5) replaces this for production
- * reads once RegistryCompiler (P1.4) exists.
+ * boot; the compiled hot-path registry replaces this for production reads
+ * once RegistryCompiler exists.
+ *
+ * @internal spec: P1.5, P1.4
  */
 final class ArrayEntityRegistry implements EntityRegistry
 {
@@ -25,9 +27,11 @@ final class ArrayEntityRegistry implements EntityRegistry
 
     /**
      * @param  (Closure(string, TenantContext): bool)|null  $moduleActive  Real active-module
-     *                                                                     predicate (ModuleRegistry::isActive, P1.16).
+     *                                                                     predicate (ModuleRegistry::isActive).
      *                                                                     Takes both the module composer name AND the
-     *                                                                     tenant ctx — activity is per-account (A38).
+     *                                                                     tenant ctx — activity is per-account.
+     *
+     * @internal spec: P1.16, A38
      */
     public function __construct(?Closure $moduleActive = null)
     {
@@ -51,7 +55,7 @@ final class ArrayEntityRegistry implements EntityRegistry
 
     public function all(?TenantContext $ctx = null): array
     {
-        // No ctx = the WHOLE registry (A38): the morph map and satellite
+        // No ctx = the WHOLE registry: the morph map and satellite
         // wiring span every declared entity, including those of currently
         // disabled modules — a persisted row of a disabled module must still
         // resolve its morph alias. The active-module filter only applies when

@@ -11,11 +11,13 @@ use Throwable;
 /**
  * A module migration or EnableHook failed during {@see ModuleLifecycle::enable()}.
  *
- * enable() is all-or-nothing (D40): the failure rolls the WHOLE lifecycle
+ * enable() is all-or-nothing: the failure rolls the WHOLE lifecycle
  * transaction back — no partially-applied migrations, no `mod_modules` row —
  * and rethrows this so the caller (a control-plane job) learns of it instead
  * of a module silently stuck half-installed. A retry after the fix starts from
- * a clean state (reformulated AC-7).
+ * a clean state.
+ *
+ * @internal spec: D40, AC-7
  */
 final class ModuleEnableFailedException extends RuntimeException
 {

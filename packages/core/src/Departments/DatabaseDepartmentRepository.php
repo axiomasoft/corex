@@ -17,11 +17,13 @@ use Override;
 use RuntimeException;
 
 /**
- * `sys_departments`/`sys_department_user` on ltree (B-10 §2/§3.1/§5.7).
+ * `sys_departments`/`sys_department_user` on ltree.
  *
  * `$connection` mirrors DatabaseSettingsRepository's/DatabaseFeatureFlags'
- * seam (null = app default), used by the PG-only test lane (D12) — ltree/GIST
+ * seam (null = app default), used by the PG-only test lane — ltree/GIST
  * have no sqlite equivalent.
+ *
+ * @internal spec: B-10 §2/§3.1/§5.7, D12
  */
 final class DatabaseDepartmentRepository implements DepartmentRepository
 {
@@ -85,8 +87,8 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                 throw (new ModelNotFoundException)->setModel(DepartmentModel::class, [$departmentId]);
             }
 
-            // (2) Advisory lock BEFORE reading the mutable path (A5). B-10 §7.3 п.3:
-            //     xact-scoped, released on commit — no session-level lock.
+            // (2) Advisory lock BEFORE reading the mutable path (A5). Xact-scoped,
+            //     released on commit — no session-level lock.
             $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', ['sys_departments:'.$lockWorkspaceId]);
 
             // (3) RE-READ the moving row UNDER the lock — fresh path/parent_id.
@@ -110,8 +112,8 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                 /** @var DepartmentModel $newParent */
                 $newParent = DepartmentModel::on($this->connection)->where('id', $newParentId)->firstOrFail();
 
-                // Parent-side workspace guard (P1.29 M-2, symmetric to the
-                // descendant-side D67 filter on the UPDATE below): the new parent
+                // Parent-side workspace guard, symmetric to the descendant-side
+                // filter on the UPDATE below: the new parent
                 // is read UNDER the already-held advisory lock and must share the
                 // moving row's workspace. ltree paths are globally unique, so a
                 // cross-workspace parent slips past the cycle check and the FK
@@ -133,13 +135,13 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             $newPath = $newParentPath !== '' ? $newParentPath.'.'.$ownLabel : $ownLabel;
 
             // ONE UPDATE over the whole subtree (`path <@`) — no recursive
-            // per-row traversal (B-10 §5.7): strip the old-parent prefix
+            // per-row traversal: strip the old-parent prefix
             // (nlevel(old moving path) - 1 labels) off every row under the
             // moving path and re-prepend the new parent's path.
             //
-            // Scoped to the moving row's workspace (targeted audit D63/D67):
-            // ltree paths are globally unique today, but the contract is
-            // per-workspace (B-10 §5.7) and subtree()/primaryOf() already filter
+            // Scoped to the moving row's workspace: ltree paths are globally
+            // unique today, but the contract is per-workspace and
+            // subtree()/primaryOf() already filter
             // on workspace_id — a same-shaped path in ANOTHER workspace under
             // `path <@` must never be rewritten by this workspace's move().
             $this->db()->statement(
@@ -152,7 +154,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             );
 
             // A6: dispatch AFTER the transaction commits, not inside it — the
-            // dept_tree cache invalidator (entity-scoped RBAC, P2.9) must not
+            // dept_tree cache invalidator (entity-scoped RBAC) must not
             // read uncommitted paths, and a rollback must not leak the event.
             $this->db()->afterCommit(static fn () => event(
                 new DepartmentMoved(departmentId: $departmentId, oldPath: $oldPath, newPath: $newPath),

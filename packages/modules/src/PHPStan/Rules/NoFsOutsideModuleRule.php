@@ -16,8 +16,8 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * B-10 §7.3 enforcement: fs-операции модуля не выходят за его директорию —
- * запись в чужие пути ломает изоляцию и переживает деплой контейнера.
+ * Fs-операции модуля не выходят за его директорию — запись в чужие пути
+ * ломает изоляцию и переживает деплой контейнера.
  *
  * Статически виден только путь-константа: абсолютный путь или обход `..` — ошибка;
  * вычисляемый путь (`storage_path(...)`, конкатенация с переменной) правило не
@@ -25,6 +25,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * `parameters.corexModules.moduleNamespaces` (ядро и приложение не затрагиваются).
  *
  * @implements Rule<FuncCall>
+ *
+ * @internal spec: B-10 §7.3
  */
 final class NoFsOutsideModuleRule implements Rule
 {

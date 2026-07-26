@@ -10,12 +10,14 @@ use CoreX\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
 /**
- * DB-backed {@see ModuleStateReader} (closes the P1.5 seam): reads the
- * enabled set straight from `mod_modules`. `$ctx` is unused for now — P1 has
- * one physical database per install (boxed or single-tenant); the
- * per-account DB-per-account model that gives `$ctx` meaning ships in P2
- * (corex/tenancy, D13). `$connection` is null (app default) unless a caller
- * pins an explicit name (tests).
+ * DB-backed {@see ModuleStateReader}: reads the enabled set straight from
+ * `mod_modules`. `$ctx` is unused for now — the current phase has one
+ * physical database per install (boxed or single-tenant); a later
+ * per-account DB-per-account model (corex/tenancy) will give `$ctx`
+ * meaning. `$connection` is null (app default) unless a caller pins an
+ * explicit name (tests).
+ *
+ * @internal spec: P1.5, D13
  */
 final class DatabaseModuleStateReader implements ModuleStateReader
 {

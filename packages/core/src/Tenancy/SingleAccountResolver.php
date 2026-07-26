@@ -7,9 +7,11 @@ namespace CoreX\Tenancy;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 
 /**
- * Boxed-install stub (D10): a deterministic constant TenantContext, no
- * config lookup, no workspace. Real resolvers (host/root, corex/tenancy)
- * land in P2.
+ * Boxed-install stub: a deterministic constant TenantContext, no config
+ * lookup, no workspace. Real resolvers (host/root, corex/tenancy) land
+ * later.
+ *
+ * @internal spec: D10
  */
 final class SingleAccountResolver implements TenantContextResolver
 {

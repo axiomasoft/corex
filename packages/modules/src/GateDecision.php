@@ -7,9 +7,11 @@ namespace CoreX\Modules;
 use CoreX\Modules\Contracts\ModuleActivationGate;
 
 /**
- * Result of {@see ModuleActivationGate::check()}
- * (B-10 §3.3): allow, or deny with a reason and an optional upgrade hint
- * (e.g. a billing plan slug) for the caller to surface to the user.
+ * Result of {@see ModuleActivationGate::check()}: allow, or deny with a
+ * reason and an optional upgrade hint (e.g. a billing plan slug) for the
+ * caller to surface to the user.
+ *
+ * @internal spec: B-10 §3.3
  */
 final readonly class GateDecision
 {

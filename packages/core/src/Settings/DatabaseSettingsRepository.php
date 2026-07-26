@@ -18,19 +18,21 @@ use Illuminate\Support\Facades\DB;
 use Override;
 
 /**
- * Cascade (B-10 §3.1): user → workspace → account → manifest default
+ * Cascade: user → workspace → account → manifest default
  * ({@see SettingDefaultsProvider}). One `SettingsScope` names a single
  * level; a user-scoped read falls through to account/default but NOT
- * through workspace — auto-resolving "this user's workspace" needs P2
- * tenancy context and is out of scope here (Scope Excluded, P1.7). Callers
- * that need the workspace level explicitly pass `SettingsScope::workspace()`.
- * `SettingsScope::department()` (D38) is a `FeatureFlags`-only level —
- * every method here throws `UnsupportedScopeException` for it (`sys_settings`
+ * through workspace — auto-resolving "this user's workspace" needs tenancy
+ * context and is out of scope here. Callers that need the workspace level
+ * explicitly pass `SettingsScope::workspace()`.
+ * `SettingsScope::department()` is a `FeatureFlags`-only level — every
+ * method here throws `UnsupportedScopeException` for it (`sys_settings`
  * has no `department` in its CHECK).
  *
  * `$connection` is null (the app's default) unless a caller pins an explicit
- * name — same seam as DatabaseRecordsRegistrar (P1.6), used by the PG-only
- * test lane (D12) since `sys_settings` has no sqlite equivalent.
+ * name — same seam as DatabaseRecordsRegistrar, used by the PG-only test
+ * lane since `sys_settings` has no sqlite equivalent.
+ *
+ * @internal spec: B-10 §3.1, P1.7 (Scope Excluded), D38, P1.6, D12
  */
 final class DatabaseSettingsRepository implements SettingsRepository
 {

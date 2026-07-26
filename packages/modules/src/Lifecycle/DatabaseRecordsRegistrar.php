@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * DB-backed {@see RecordsRegistrar} over `mod_records`. `$connection` is
- * null (the app's default — correct in production, D12) unless a caller
- * pins an explicit name (tests — see DatabaseModuleLifecycle's constructor
+ * null (the app's default — correct in production) unless a caller pins an
+ * explicit name (tests — see DatabaseModuleLifecycle's constructor
  * docblock for why).
+ *
+ * @internal spec: D12
  */
 final class DatabaseRecordsRegistrar implements RecordsRegistrar
 {
@@ -21,15 +23,15 @@ final class DatabaseRecordsRegistrar implements RecordsRegistrar
     public function claim(string $module, string $recordType, string $reference, array $meta = []): void
     {
         // created_at is an informational wall-clock stamp only — purge orders
-        // by the monotonic bigserial `seq` (auto-assigned on insert, D31), not
+        // by the monotonic bigserial `seq` (auto-assigned on insert), not
         // by this column, so two claims in the same second stay correctly
-        // orderable regardless of clock precision (B-10 §5.4).
+        // orderable regardless of clock precision.
         $now = now()->format('Y-m-d H:i:s.u');
         $identity = ['module_name' => $module, 'record_type' => $recordType, 'reference' => $reference];
         $table = DB::connection($this->connection)->table('mod_records');
 
-        // Re-claiming is idempotent (EnableHook retries — B-10 §7.4 п.6): update
-        // meta in place, keep the original created_at so purge order stays stable.
+        // Re-claiming is idempotent (EnableHook retries): update meta in
+        // place, keep the original created_at so purge order stays stable.
         if ($table->where($identity)->exists()) {
             $table->where($identity)->update([
                 'meta' => json_encode($meta, JSON_THROW_ON_ERROR),

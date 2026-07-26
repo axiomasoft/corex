@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules;
 
 /**
- * Manifest-declared setting default (B-10 §3.2): namespace is the owning
- * module id, applied automatically by the settings cascade (P1.7) as the
- * lowest-priority level below user/workspace/account overrides.
+ * Manifest-declared setting default: namespace is the owning module id,
+ * applied automatically by the settings cascade as the lowest-priority
+ * level below user/workspace/account overrides.
+ *
+ * @internal spec: B-10 §3.2, P1.7
  */
 final readonly class SettingDefault
 {

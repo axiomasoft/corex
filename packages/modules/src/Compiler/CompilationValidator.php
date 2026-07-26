@@ -9,9 +9,11 @@ use CoreX\Modules\Extend\Extender;
 use CoreX\Modules\Manifest;
 
 /**
- * Compile-time checks (B-10 §5.2/§7.4 п.4) — every failure here is a deploy
- * failure, never a warning. Called by RegistryCompiler before/while
- * building the CompiledRegistry.
+ * Compile-time checks — every failure here is a deploy failure, never a
+ * warning. Called by RegistryCompiler before/while building the
+ * CompiledRegistry.
+ *
+ * @internal spec: B-10 §5.2/§7.4 п.4
  */
 final class CompilationValidator
 {
@@ -96,15 +98,17 @@ final class CompilationValidator
     }
 
     /**
-     * `components()` → `#[AsComponent]` (B-10 §5.2) is a deliberate no-op:
-     * corex/components is deferred out of P1 (D6). Kept as a named hook so
-     * the check has an obvious home once components land.
+     * `components()` → `#[AsComponent]` is a deliberate no-op:
+     * corex/components is deferred, with no consumer yet. Kept as a named
+     * hook so the check has an obvious home once components land.
      *
      * @param  list<Manifest>  $manifests
+     *
+     * @internal spec: B-10 §5.2, D6
      */
     public function validateComponents(array $manifests): void
     {
-        // Deferred (D6) — corex/components has no consumer in P1.
+        // Deferred — corex/components has no consumer yet.
     }
 
     private function isKnownExtender(Extender $extender): bool
