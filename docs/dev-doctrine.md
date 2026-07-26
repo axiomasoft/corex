@@ -6,19 +6,19 @@
 
 ## 1. Слои и тест агностичности
 
-Владельческий канон (эталон — Bitrix D7), дословно:
+Три уровня (формулировка владельца 2026-07-26, D91; эталон — Bitrix). Зависимости — строго вниз.
 
-> `corex/*` = агностик-платформа (L0) + домен-основы без продуктовой семантики
-> (L1, аналог iblock); `flex/*` = тематические модули Flex (L2); продукты =
-> композиция (L3); cross-ecosystem — standalone.
+- **0 — CoreX** (`corex/*`): абстрактный загрузчик модулей и утилиты, годные ЛЮБОМУ Laravel-проекту. Прямой связки с Flex в коде быть не должно
+  вообще — ни в идентификаторах, ни в DDL, ни в описаниях команд. FlexCRM сегодня единственный потребитель, но «единственный» ≠ «целевой».
+- **1 — FlexCMS** (`flex/*`): собственные компоненты и модули поверх CoreX; переиспользуются между продуктами Flex.
+- **2 — FlexCRM**: композиция — потребляет модули уровня 1 и CoreX напрямую, своего кода минимум.
+- Та же лестница в нумерации D70 (дословно): «`corex/*` = агностик-платформа (L0) + домен-основы без продуктовой семантики (L1, аналог iblock);
+  `flex/*` = тематические модули Flex (L2); продукты = композиция (L3); cross-ecosystem — standalone». D91 уточняет формулировку, не запреты.
+- **Тест агностичности:** «`corex/*` полезен проекту БЕЗ CRM/CMS/Store». Не прошёл — код едет на уровень 1 либо в standalone-пакет (AI-gateway, биллинг, метеринг, модерация).
+- Зависимость вверх запрещена: `corex/*` ↛ `flex/*`, `corex/core` не зависит ни от одного пакета монорепо (гейт — `tests/Arch/LayerTest.php`, §6).
 
-- **Тест агностичности:** «`corex/*` полезен проекту БЕЗ CRM/CMS/Store». Не прошёл — код
-  едет в `flex/*` либо в standalone-пакет (AI-gateway, биллинг, метеринг, модерация), не в `corex/*`.
-- Зависимость `corex/*` → `flex/*` запрещена; `corex/core` не зависит ни от одного пакета
-  монорепо. Гейт — `tests/Arch/LayerTest.php` (§6).
-
-Источник: `plans/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md` (дословный захват
-`CoreX.md`), `plans/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §1; D70.
+Источник: D91 (владелец, 2026-07-26); D70 + `plans/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md`
+(дословный захват `CoreX.md`); vault `2026.07.17-AXIOMA-ORCHESTRA/research/01-layer-doctrine.md` (таблица слоёв, SSOT).
 
 ## 2. Тест-топология
 
@@ -101,8 +101,10 @@
 - Webhooks (ADR-021) — proposed, Год 2; marketplace (ADR-015) — superseded → RegHub; `compatibility.json` (ADR-008) — не заведён.
 - Split-зеркала `splitsh-lite` (ADR-002) + изоляционный install-тест — workflow отсутствует (аудит A16, release-фаза, D82).
 - Coverage: `Architecture` §1 требует 85, `Package_Governance` §2 — 80, факт-floor 55; расхождение самих доков не разрешено (разбор при P1.27).
-- ADR-003 (ULID) и ADR-004 (row-level tenancy) фактически superseded (UUIDv7 + физическая DB-per-account), файлы в vault не переписаны —
-  **наводка владельцу:** переписать их, иначе следующий исполнитель прочтёт отменённое решение как канон.
+- ADR-003 (ULID) и ADR-004 (row-level tenancy) superseded (UUIDv7 + DB-per-account), файлы в vault не переписаны — **наводка владельцу:** переписать.
+- **Flex-привязки в коде `corex/*`** (инвентарь 2026-07-26, 11 файлов): DDL-CHECK `product IN ('flexcrm','flexstore')` и комментарий `slug.flexcrm.ru`
+  в `corex/tenancy`, шаблон `tpl_flex_vNN`, описание artisan-команды «Discover Flex module manifests», composer-`description` ядра, докблоки
+  `flex/attributes`/`flex/workflow`, README. Зависимостей кода не создают, но нарушают §1; слой-гейт их не ловит (строки и DDL вне его модели) — нужен item: чистка + расширение гейта.
 - CI-матрица `Development_Process` §2 (8.2–8.4 × L11/12) расходится с ADR-001 (8.3–8.5, L12–13) и фактом `ci.yml` (8.3/8.4 × 12/13).
 
 Источник: `plans/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.
