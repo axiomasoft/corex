@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
-# Анти-ослабляющий гейт CI (P1.14, plan.md D34/D45).
+# Анти-ослабляющий гейт CI (P1.14, plan.md D34/D45; лейны/allowance — P2.15/D93).
 #
 # Ловит диффы, которые "чинят" красный гейт понижением планки вместо фикса:
 #   - ->skip(/markTestSkipped в тестовых файлах (tests/) — тест выключен, а не исправлен;
 #   - continue-on-error в workflow'ах — job формально зелёный при красном шаге;
 #   - phpstan-baseline (или сам файл baseline.neon) — скрытый долг вместо фикса ошибки;
 #   - понижение --min= в composer test:coverage;
-#   - уменьшение числа тестов в любом из двух лейнов (sqlite/pg) относительно базы.
+#   - уменьшение числа тестов в любом из двух лейнов (sqlite/pg) относительно базы —
+#     число считается ПО ОБЪЕДИНЕНИЮ корневого `tests/` и всех `packages/*/tests`
+#     (пакетные сьюты D81 — иначе их вынос из корня читается как удаление тестов, D93).
 #
 # Сравнивает HEAD с базой: merge-base с origin/main, либо (fallback) родитель
 # HEAD, либо (первый коммит истории) пропускает численные проверки — не с чем
-# сравнивать.
+# сравнивать. Одобренное владельцем уменьшение числа тестов (напр. снос легаси-каркаса
+# вместе с его тестами) смягчается ТОЛЬКО через `scripts/anti-weakening-allowances.txt`,
+# ЯКОРЕННЫЙ на конкретный base sha — скидка авто-истекает, как только BASE_REF уезжает
+# (постоянный floor намеренно отвергнут — D93, он тихо накапливал бы вычет навсегда).
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
@@ -103,6 +108,8 @@ if [ -n "$BASE_REF" ]; then
 fi
 
 # --- 3. Число тестов — только вверх (sqlite-лейн исключая ->group('pg'), pg-лейн) ---
+# База сравнения = объединение корневого tests/ и ВСЕХ packages/*/tests (D81/D93):
+# считать только корень значило бы читать миграцию сьюта в пакет как удаление тестов.
 count_tests() {
     local ref="$1"
     local worktree
@@ -113,13 +120,79 @@ count_tests() {
         return
     }
 
-    local total pg
-    total="$(command grep -rEo "^\s*(it|test)\(|public function test_" "$worktree/tests" 2>/dev/null | wc -l | tr -d ' ')"
-    pg="$(command grep -rl "group('pg')" "$worktree/tests" 2>/dev/null | xargs -r command grep -Eo "^\s*(it|test)\(|public function test_" 2>/dev/null | wc -l | tr -d ' ')"
+    local test_dirs=()
+    [ -d "$worktree/tests" ] && test_dirs+=("$worktree/tests")
+    local pkg_tests
+    for pkg_tests in "$worktree"/packages/*/tests; do
+        [ -d "$pkg_tests" ] && test_dirs+=("$pkg_tests")
+    done
+
+    local total=0 pg=0
+    if [ "${#test_dirs[@]}" -gt 0 ]; then
+        total="$(command grep -rEo "^\s*(it|test)\(|public function test_" "${test_dirs[@]}" 2>/dev/null | wc -l | tr -d ' ')"
+        # `command` НЕ ставится перед grep здесь: xargs исполняет свой аргумент как
+        # программу через exec(), а не через шелл, где резолвился бы алиас/функция —
+        # `command grep` в этой позиции был вызовом несуществующего файла (pg-счёт
+        # всегда 0, D93 причина 2). Прямые вызовы `command grep` вне xargs (выше и
+        # в блоке 1) защиту от алиасов сохраняют — это shell-builtin, не программа.
+        pg="$(command grep -rl "group('pg')" "${test_dirs[@]}" 2>/dev/null | xargs -r grep -Eo "^\s*(it|test)\(|public function test_" 2>/dev/null | wc -l | tr -d ' ')"
+    fi
 
     git worktree remove --force "$worktree" >/dev/null 2>&1 || true
 
     echo "$total $pg"
+}
+
+# Allowance — одобренное владельцем уменьшение числа тестов лейна, ЯКОРЕННОЕ на base
+# sha (D93): скидка применяется ТОЛЬКО пока текущий BASE_REF равен sha строки (полное
+# сравнение через `git rev-parse`, не префиксы); иная/неизвестная база → строка печатается
+# «неактивной» и не смягчает счёт (fail-closed к строгости, скидки не накапливаются вечно).
+ALLOWANCES_FILE="scripts/anti-weakening-allowances.txt"
+
+apply_allowance() {
+    local lane="$1"
+    ALLOWANCE_DELTA=0
+
+    [ -f "$ALLOWANCES_FILE" ] || return 0
+
+    local line
+    while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in
+            ''|'#'*) continue ;;
+        esac
+
+        local a_sha a_lane a_delta a_issue a_reason
+        a_reason=""
+        read -r a_sha a_lane a_delta a_issue a_reason <<< "$line"
+
+        if [ -z "$a_sha" ] || [ -z "$a_lane" ] || [ -z "$a_delta" ] || [ -z "$a_issue" ]; then
+            log_fail "allowance-строка не разбирается позиционно (ожидается '<sha> <lane> <дельта> <D#> <причина>'): '$line'"
+            continue
+        fi
+        if [ "$a_lane" != "sqlite" ] && [ "$a_lane" != "pg" ]; then
+            log_fail "allowance-строка несёт неизвестный лейн '$a_lane': '$line'"
+            continue
+        fi
+        case "$a_delta" in
+            -[0-9]*) : ;;
+            *)
+                log_fail "allowance-строка несёт не отрицательную дельту (запрещено — скидка только вниз): '$line'"
+                continue
+                ;;
+        esac
+
+        [ "$a_lane" = "$lane" ] || continue
+
+        local a_sha_full=""
+        a_sha_full="$(git rev-parse --verify --quiet "$a_sha" 2>/dev/null || true)"
+
+        if [ -n "$a_sha_full" ] && [ -n "$BASE_REF" ] && [ "$a_sha_full" = "$BASE_REF" ]; then
+            ALLOWANCE_DELTA=$((ALLOWANCE_DELTA + a_delta))
+            echo "ANTI-WEAKENING GATE: allowance применена ($lane $a_delta, $a_issue) — база совпадает $a_sha"
+        else
+            echo "ANTI-WEAKENING GATE: allowance НЕАКТИВНА ($lane $a_delta, $a_issue, sha=$a_sha) — база сравнения не совпадает"
+        fi
+    done < "$ALLOWANCES_FILE"
 }
 
 if [ -n "$BASE_REF" ]; then
@@ -129,11 +202,16 @@ if [ -n "$BASE_REF" ]; then
     OLD_SQLITE=$((OLD_TOTAL - OLD_PG))
     NEW_SQLITE=$((NEW_TOTAL - NEW_PG))
 
-    if [ "$NEW_SQLITE" -lt "$OLD_SQLITE" ]; then
-        log_fail "число тестов sqlite-лейна уменьшилось: $OLD_SQLITE -> $NEW_SQLITE"
+    apply_allowance sqlite
+    OLD_SQLITE_ALLOWED=$((OLD_SQLITE + ALLOWANCE_DELTA))
+    apply_allowance pg
+    OLD_PG_ALLOWED=$((OLD_PG + ALLOWANCE_DELTA))
+
+    if [ "$NEW_SQLITE" -lt "$OLD_SQLITE_ALLOWED" ]; then
+        log_fail "число тестов sqlite-лейна уменьшилось: $OLD_SQLITE -> $NEW_SQLITE (после allowance: $OLD_SQLITE_ALLOWED)"
     fi
-    if [ "$NEW_PG" -lt "$OLD_PG" ]; then
-        log_fail "число тестов pg-лейна уменьшилось: $OLD_PG -> $NEW_PG"
+    if [ "$NEW_PG" -lt "$OLD_PG_ALLOWED" ]; then
+        log_fail "число тестов pg-лейна уменьшилось: $OLD_PG -> $NEW_PG (после allowance: $OLD_PG_ALLOWED)"
     fi
 
     echo "ANTI-WEAKENING GATE: тесты sqlite $OLD_SQLITE -> $NEW_SQLITE, pg $OLD_PG -> $NEW_PG"

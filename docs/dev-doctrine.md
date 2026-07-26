@@ -87,11 +87,17 @@
 - **Mutation-check:** `scripts/mutation-check.sh`, 30 патчей в едином repo-доме `scripts/mutations/` (`ls scripts/mutations | wc -l` = 30, D86);
   правки — только там, vault-копия жива до `git rm`. Кейс пинит АВТОРИТЕТНУЮ точку enforcement, избыточный DiD-слой изолируется тестом, не retire (D85).
 - **Coverage floor = 55** (`scripts/coverage-min-floor.txt`, ослаблен с 80) — поднять только закрытием time-gated item'а P1.27 (D47).
-- **Anti-weakening-гейт КРАСНЫЙ:** `bash scripts/anti-weakening-gate.sh` = `FAILED`, «тесты sqlite 198 -> 185» против базы `97fdc77`
-  (прогон 2026-07-26). Причина — вынос Crm/Tasks в пакетные лейны (D81/P3.4): гейт считает только КОРНЕВОЙ лейн; чинить — учесть их в базе сравнения.
+- **Anti-weakening-гейт ЗЕЛЁНЫЙ (P2.15/D93):** `bash scripts/anti-weakening-gate.sh` = `OK` на чистом дереве
+  (прогон 2026-07-26, `0f778de` против базы `97fdc77`). Три дефекта, названных здесь ранее — счёт только
+  корневого `tests/`, вакуумный `xargs command grep` для pg-лейна, неучтённое одобренное удаление
+  `TenantBoundaryTest` (D79) — устранены: `count_tests()` считает объединение `tests/` + `packages/*/tests`
+  на обоих деревьях, pg-счёт реально считает pg-файлы (раздельный отчёт `sqlite X -> Y, pg A -> B`),
+  а одобренная дельта смягчена `scripts/anti-weakening-allowances.txt` с ЯКОРЕМ БАЗЫ (скидка авто-истекает,
+  когда `origin/main` уезжает с `97fdc77` — постоянный floor намеренно отвергнут).
 - **Живого CI-прогона нет:** 12 джобов `ci.yml` описаны, run `30204984851` отказан по биллингу — «зелёные» P3.1–P3.7 суть ЛОКАЛЬНЫЕ прогоны.
 
-Источник: D34/D47/D84/D85/D86; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §1–§6; прогоны перечисленных команд 2026-07-26.
+Источник: D34/D47/D84/D85/D86/D93; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §1–§6;
+`plans/COREX-CORE/findings/P2.15-anti-weakening-diagnosis-2026-07-26.md`; прогоны перечисленных команд 2026-07-26.
 
 ## 7. Очередь «спека требует — кода ещё нет»
 
