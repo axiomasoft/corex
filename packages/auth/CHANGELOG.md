@@ -3,7 +3,10 @@
 Все заметные изменения `corex/auth` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
-## [Unreleased]
+## [0.1.0] - 2026-07-27
+
+First tagged release — roadmap-фаза P1 / B-11 (AzGuard-мост, entity-scoped RBAC, OIDC).
+Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
 
 ### Added
 

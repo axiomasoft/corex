@@ -4,7 +4,10 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 Пакет ещё не тегирован: в `v0.1.0` монорепо его нет (`git ls-tree -r v0.1.0 -- packages/tenancy` пусто).
 
-## [Unreleased]
+## [0.1.0] - 2026-07-27
+
+First tagged release — roadmap-фаза P1 / B-11 (physical DB-per-account tenancy). Repo-level
+tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
 
 ### Added
 
