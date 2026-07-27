@@ -5,6 +5,7 @@ declare(strict_types=1);
 use AzGuard\Models\RolePermission;
 use CoreX\Auth\Database\Seeders\SystemRolesSeeder;
 use CoreX\Auth\Enums\PrincipalType;
+use CoreX\Auth\Matrix\ActiveEntityFilter;
 use CoreX\Auth\Matrix\AzGuardRoleModel;
 use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
@@ -12,6 +13,11 @@ use CoreX\Auth\Matrix\MatrixValidator;
 use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\Models\Role;
 use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Auth\Tests\Stubs\Deal;
+use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Registry\EntityDefinition;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
@@ -21,6 +27,25 @@ beforeEach(function (): void {
     $this->resetPgSchema();
     $this->migrateAzGuard();
     $this->migrateAutSchema();
+
+    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+        handle: 'crm.deal',
+        model: Deal::class,
+        table: 'deals',
+        module: 'corex/auth-tests',
+        labelSingular: 'Deal',
+        labelPlural: 'Deals',
+        capabilities: [],
+        fields: [],
+        titleAttribute: null,
+    ));
+
+    // P2.21: the real ModuleRegistry (no compiled file in Testbench) would
+    // report every module inactive and hit tables never migrated here
+    // (mod_modules) — this fixture's module is active by fiat so the
+    // pre-P2.21 compiled-key expectations below stay valid. AC-27 cases
+    // below flip specific entities/modules back to inactive/unknown.
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
 });
 
 function makeCompiler(): DatabaseRoleMatrixCompiler
@@ -172,4 +197,93 @@ it('exposes compiled keys through MatrixPermissionCatalogBuilder for the configu
 
     expect($keys)->toContain('app.crm.deal.read')
         ->and($keys)->not->toContain('app.crm.deal.delete');
+});
+
+// AC-27, negative first (Code Guidance anti-self-deception): before ActiveEntityFilter
+// existed, an unattributable entity_key would still compile into a live AzGuard key —
+// demonstrate the row is dead weight on its own (no EntityRegistry registration at all),
+// then assert the filter keeps it dead.
+it('does not compile a key for an entity_key unknown to EntityRegistry', function (): void {
+    $role = Role::query()->create([
+        'slug' => 'unknown-entity-role-'.uniqid(),
+        'name' => 'Unknown entity role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'ghost.entity', 'action' => 'read', 'scope' => 'account']);
+
+    makeCompiler()->compile($role->id);
+
+    $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->firstOrFail();
+    expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(0);
+});
+
+// AC-27 core: disable ⇒ ключей нет, строки aut_role_matrix целы, re-enable ⇒ ключи вернулись
+// без правки матрицы (D112/D113) — exercised directly at the compiler seam (no lifecycle
+// event dispatch — that path is PermissionsMergerTest.php).
+it('excludes a matrix row whose owning module is inactive, keeping the row itself intact', function (): void {
+    $role = Role::query()->create([
+        'slug' => 'inactive-module-role-'.uniqid(),
+        'name' => 'Inactive module role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+
+    // No module reports active — the fixture's own module ('corex/auth-tests') is disabled here.
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
+
+    makeCompiler()->compile($role->id);
+
+    $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->firstOrFail();
+    expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(0)
+        ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
+});
+
+it('recompiles the key once the owning module becomes active again (re-enable)', function (): void {
+    $role = Role::query()->create([
+        'slug' => 'reenable-role-'.uniqid(),
+        'name' => 'Re-enable role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
+    makeCompiler()->compile($role->id);
+
+    $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->firstOrFail();
+    expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(0);
+
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
+    makeCompiler()->compile($role->id);
+
+    expect(RolePermission::query()->where('role_id', $azguardRole->id)->pluck('permission_key')->all())
+        ->toBe(['app.crm.deal.read'])
+        ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
+});
+
+// Parity (Implementation Rules — ONE filter, both call sites): MatrixPermissionCatalogBuilder
+// applies the exact same active-module exclusion as the compiler.
+it('excludes catalog keys whose owning module is inactive', function (): void {
+    $role = Role::query()->create([
+        'slug' => 'inactive-catalog-role-'.uniqid(),
+        'name' => 'Inactive catalog role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ]);
+
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
+
+    $keys = array_map(
+        static fn ($definition): string => $definition->key(),
+        (new MatrixPermissionCatalogBuilder)->build('app'),
+    );
+
+    expect($keys)->not->toContain('app.crm.deal.read');
 });

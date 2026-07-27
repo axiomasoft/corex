@@ -22,6 +22,17 @@ use Override;
  */
 final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalogBuilder
 {
+    /**
+     * `$activeEntities` defaults to null (resolved from the container
+     * lazily, MatrixValidator precedent) so the pre-existing zero-argument
+     * `new MatrixPermissionCatalogBuilder` call site (P2.8) keeps working
+     * unchanged; DI containers still inject the real ActiveEntityFilter via
+     * the constructor's type-hint.
+     */
+    public function __construct(
+        private ?ActiveEntityFilter $activeEntities = null,
+    ) {}
+
     #[Override]
     public function supports(string $panelId): bool
     {
@@ -39,10 +50,16 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
         return RoleMatrixRow::query()
             ->where('scope', '!=', Scope::None->value)
             ->get(['entity_key', 'action'])
+            ->filter(fn (RoleMatrixRow $row): bool => $this->activeEntities()->isActive($row->entity_key))
             ->map(static fn (RoleMatrixRow $row): string => "{$panelId}.{$row->entity_key}.{$row->action}")
             ->unique()
             ->map(static fn (string $key): PermissionDefinition => new SimplePermissionDefinition($key, $panelId))
             ->values()
             ->all();
+    }
+
+    private function activeEntities(): ActiveEntityFilter
+    {
+        return $this->activeEntities ?? app(ActiveEntityFilter::class);
     }
 }

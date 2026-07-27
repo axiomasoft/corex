@@ -22,8 +22,16 @@ use Override;
  */
 final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerContract
 {
+    /**
+     * `$activeEntities` defaults to null (resolved from the container
+     * lazily, MatrixValidator precedent) so the pre-existing two-argument
+     * `new DatabaseRoleMatrixCompiler($scopeMapVersion)` call sites (P2.8/P2.9)
+     * keep working unchanged; DI containers still inject the real
+     * ActiveEntityFilter via the constructor's type-hint.
+     */
     public function __construct(
         private ScopeMapVersion $scopeMapVersion,
+        private ?ActiveEntityFilter $activeEntities = null,
     ) {}
 
     #[Override]
@@ -50,6 +58,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerCon
                 ->where('role_id', $role->id)
                 ->where('scope', '!=', Scope::None->value)
                 ->get(['entity_key', 'action'])
+                ->filter(fn (RoleMatrixRow $row): bool => $this->activeEntities()->isActive($row->entity_key))
                 ->map(static fn (RoleMatrixRow $row): string => "{$panel}.{$row->entity_key}.{$row->action}")
                 ->unique();
 
@@ -72,5 +81,10 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerCon
             ->whereNull('deleted_at')
             ->pluck('id')
             ->each(fn (string $roleId) => $this->compile($roleId));
+    }
+
+    private function activeEntities(): ActiveEntityFilter
+    {
+        return $this->activeEntities ?? app(ActiveEntityFilter::class);
     }
 }

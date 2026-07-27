@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Auth\Access;
+
+use CoreX\Auth\Enums\Scope;
+use CoreX\Auth\Exceptions\ScopeCapabilityMismatch;
+use CoreX\Auth\Matrix\ActiveEntityFilter;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Extend\Permissions;
+
+/**
+ * Read-only reader of the declared permission surface — `(entity_key,
+ * action, allowed scopes)` per active module's `Extend\Permissions`
+ * declaration — for the UI role-matrix. Never writes `aut_role_matrix`
+ * (D113, that stays the module's own doing via the matrix seeder/merge
+ * path); this class only tells the matrix editor which cells to show and
+ * which scope options are legal for each.
+ *
+ * `isScopeable() === false` ⇒ the entity does not participate in the scope
+ * axis at all, so `account` is the only legal value (B-11 §4 п.3). Scopeable
+ * entities get every {@see Scope} case normalized through
+ * {@see ScopeAvailability} — a scope whose capability the entity never
+ * declared collapses to `account` (or throws {@see ScopeCapabilityMismatch}
+ * when the physical column exists without the declaration, D114 — a
+ * genuine entity-registration bug this surface deliberately does not hide).
+ *
+ * @internal spec: B-11 §4 п.2/п.3, P2.21 D112/D113
+ */
+final readonly class PermissionSurface
+{
+    public function __construct(
+        private ModuleRegistry $modules,
+        private ActiveEntityFilter $activeEntities,
+        private ScopeAvailability $scopeAvailability,
+    ) {}
+
+    /** @return list<array{entity_key: string, action: string, scopes: list<Scope>}> */
+    public function forActiveModules(): array
+    {
+        $rows = [];
+
+        foreach ($this->modules->compiled()->permissions as $declaration) {
+            if (! $this->activeEntities->isActive($declaration->entity)) {
+                continue;
+            }
+
+            foreach ($declaration->actions as $action) {
+                $rows[] = [
+                    'entity_key' => $declaration->entity,
+                    'action' => $action,
+                    'scopes' => $this->availableScopes($declaration),
+                ];
+            }
+        }
+
+        return $rows;
+    }
+
+    /** @return list<Scope> */
+    private function availableScopes(Permissions $declaration): array
+    {
+        if (! $declaration->isScopeable) {
+            return [Scope::Account];
+        }
+
+        $scopes = [];
+
+        foreach (Scope::cases() as $case) {
+            $normalized = $this->scopeAvailability->normalize($declaration->entity, $case);
+
+            if (! in_array($normalized, $scopes, true)) {
+                $scopes[] = $normalized;
+            }
+        }
+
+        return $scopes;
+    }
+}

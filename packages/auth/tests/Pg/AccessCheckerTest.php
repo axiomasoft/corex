@@ -18,7 +18,9 @@ use CoreX\Auth\Models\RoleMatrixRow;
 use CoreX\Auth\RecordContext;
 use CoreX\Auth\Roles\RoleCloner;
 use CoreX\Auth\Tests\Stubs\Deal;
+use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Auth\Tests\Stubs\FakeTenancyManager;
+use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Tenancy\Contracts\TenancyManager;
@@ -47,6 +49,12 @@ beforeEach(function (): void {
         fields: [],
         titleAttribute: null,
     ));
+
+    // P2.21: the real ModuleRegistry (no compiled file in Testbench) would
+    // report every module inactive and hit tables never migrated here
+    // (mod_modules) — this fixture's module is active by fiat so the
+    // pre-P2.21 compiled-key expectations below stay valid.
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
 
     $this->compileRole = function (string $roleId): void {
         (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class)))->compile($roleId);

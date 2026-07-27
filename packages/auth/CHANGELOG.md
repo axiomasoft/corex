@@ -64,6 +64,24 @@
 - PG-фикстуры `users.department_id` + `wsp_workspaces.settings`/`path` + хелпер
   `PgTestCase::migrateCoreDepartments()` (реальная миграция `sys_departments` из `corex/core`) —
   закрывают долг P2.20 «dept/dept_tree не прогнаны против реальных таблиц».
+- `Matrix\ActiveEntityFilter` (P2.21, AC-27) — единственный владелец предиката «даёт ли
+  entity_key ключ прямо сейчас»: entity_key неизвестен `EntityRegistry` ИЛИ его модуль неактивен
+  (`ModuleRegistry::isActive()`) ⇒ fail-closed исключение из компиляции. `Matrix\DatabaseRoleMatrixCompiler`
+  и `Matrix\MatrixPermissionCatalogBuilder` фильтруют через НЕГО (один шов, не два расходящихся
+  условия); строки `aut_role_matrix` неактивного модуля не удаляются — только перестают давать
+  ключ, восстанавливаются на re-enable без правки матрицы (D113).
+- `Extend\PermissionsMerger` — листенер `ModuleEnabled`/`ModuleDisabled` (`CoreAuthServiceProvider::boot()`),
+  на каждое enable/disable перекомпилирует всю матрицу (`RoleMatrixCompiler::recompileAll()`);
+  строк матрицы сам не создаёт (D113 — это дело модулей). `merge()` также валидирует декларации
+  `CoreX\Modules\Extend\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
+  игнорируется fail-closed и попадает в возвращаемый список предупреждений (никогда не в лог).
+- `Access\PermissionSurface` — read-only читатель декларированной поверхности прав
+  `(entity_key, action, допустимые scope)` активных модулей для UI-матрицы, поверх
+  `Access\ScopeAvailability` (P2.9): `isScopeable() === false` ⇒ единственный допустимый scope —
+  `account`.
+- `Contracts\RoleMatrixCompiler` теперь забинжен в контейнере на `Matrix\DatabaseRoleMatrixCompiler`
+  (`CoreAuthServiceProvider::register()`) — ранее ничего не резолвило интерфейс, только прямое
+  конструирование класса.
 
 ### Requires
 

@@ -14,11 +14,17 @@ use CoreX\Auth\Access\ScopeAvailability;
 use CoreX\Auth\Access\WorkspacePermissionLayer;
 use CoreX\Auth\Access\WorkspaceScopeWiring;
 use CoreX\Auth\Contracts\AccessChecker;
+use CoreX\Auth\Contracts\RoleMatrixCompiler;
 use CoreX\Auth\Contracts\ScopeResolver;
+use CoreX\Auth\Extend\PermissionsMerger;
+use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
 use CoreX\Auth\Tenancy\TenantContextGuard;
 use CoreX\Modules\Contracts\EntityRegistry;
+use CoreX\Modules\Events\ModuleDisabled;
+use CoreX\Modules\Events\ModuleEnabled;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -44,6 +50,11 @@ final class CoreAuthServiceProvider extends ServiceProvider
         // its memo) shared across every apply() call within one request.
         $this->app->scoped(ScopeAvailability::class);
         $this->app->scoped(ScopeResolver::class, DefaultScopeResolver::class);
+
+        // P2.21: PermissionsMerger's lifecycle listener needs this resolved
+        // through the interface — nothing bound it before (P2.8/P2.9 always
+        // constructed DatabaseRoleMatrixCompiler directly).
+        $this->app->bind(RoleMatrixCompiler::class, DatabaseRoleMatrixCompiler::class);
 
         // The PermissionLayer slot is singular (findings/P2.8-azguard-
         // inventory-2026-07-26.md §6) — the config switch (D101 risk note)
@@ -72,6 +83,9 @@ final class CoreAuthServiceProvider extends ServiceProvider
             $this->app->make(EntityRegistry::class),
             is_string($scopeClass) ? $scopeClass : null,
         );
+
+        Event::listen(ModuleEnabled::class, PermissionsMerger::class);
+        Event::listen(ModuleDisabled::class, PermissionsMerger::class);
     }
 
     /**
