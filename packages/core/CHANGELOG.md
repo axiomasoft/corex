@@ -7,6 +7,15 @@
 
 ### Added
 
+- **`ImpersonationService` contract + `ImpersonationState` + boxed `NullImpersonationService`
+  (P2.11, B-11 §5.9, D139/D140).** Lives in `corex/core` — the sole consumer, `CurrentActor`,
+  is level 0 and must not import `corex/tenancy`; the cloud implementation rebinds via
+  `Config::impersonationServiceClass()` (D10). `ImpersonationGuard` (L3 — semantic layer of the
+  read-only invariant, D141) + `ImpersonationRestrictedAction` enum (closed, five cases §5.9) +
+  `ImpersonationRestrictedException`. `ActorType::Support` added (D137) — `sys_audit_actor_ck`
+  widened by a new additive migration (closed P1.8 file untouched). `CurrentActor` now resolves
+  the impersonation contract from the container: `type()`/`id()`/`context()` distinguish a
+  support actor from `user`/`system`.
 - `FeatureFlagDefinition::make()` — статическая фабрика (+ `module()`/`payload()` fluent-сеттеры),
   зеркалит `SettingDefault`-канон; конструктор не тронут (P3.6).
 

@@ -8,15 +8,21 @@ use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
+use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
+use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
+use CoreX\Tenancy\Http\Middleware\DenyImpersonatedWrites;
 use CoreX\Tenancy\Http\Middleware\EnforceSessionLifetime;
+use CoreX\Tenancy\Http\Middleware\ImpersonationSessionGuard;
 use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Http\Middleware\ResolveWorkspace;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
+use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
+use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Oidc\IdTokenVerifier;
@@ -144,6 +150,16 @@ final class TenancyServiceProvider extends ServiceProvider
                     centralConnection: (string) config('tenancy.central_connection'),
                 ),
             );
+
+            // P2.11 (D139/D10) — rebind the boxed NullImpersonationService
+            // to the cloud implementation whenever the OIDC lane itself is
+            // active; DatabaseImpersonationService::start() is only ever
+            // reached when `oidc.impersonation.enabled` ALSO gates it open
+            // (OidcLoginController::impersonationClaim()) — binding it here
+            // unconditionally within this block just means the container
+            // has something to resolve for OidcLoginController's
+            // constructor regardless of that inner sub-flag.
+            $this->app->singleton(ImpersonationService::class, DatabaseImpersonationService::class);
         }
 
         // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
@@ -309,6 +325,30 @@ final class TenancyServiceProvider extends ServiceProvider
                 ...($router->getMiddlewareGroups()['tenant'] ?? []),
                 EnforceSessionLifetime::class,
             ]);
+
+            // P2.11 (D141) — same boxed-opt-out idiom as the blocks above:
+            // disabled (default) registers NEITHER the write-guard
+            // middleware NOR the Eloquent listeners, so a boxed/AC-28
+            // profile carries zero impersonation surface (Validation case
+            // аа). `ImpersonationSessionGuard` is placed AFTER
+            // `EnforceSessionLifetime` (Implementation Rule 10 — same
+            // idiom, AC-15); `DenyImpersonatedWrites` last, so a session
+            // already dead on TTL/revocation never reaches the write
+            // check at all.
+            if ((bool) config('tenancy.oidc.impersonation.enabled')) {
+                $router->aliasMiddleware('tenancy.impersonation.allow', AllowImpersonatedWrites::class);
+
+                $router->middlewareGroup('tenant', [
+                    ...($router->getMiddlewareGroups()['tenant'] ?? []),
+                    ImpersonationSessionGuard::class,
+                    DenyImpersonatedWrites::class,
+                ]);
+
+                $writeGuard = $this->app->make(ImpersonatedModelWriteGuard::class);
+                Event::listen('eloquent.saving: *', [$writeGuard, 'handle']);
+                Event::listen('eloquent.deleting: *', [$writeGuard, 'handle']);
+                Event::listen('eloquent.restoring: *', [$writeGuard, 'handle']);
+            }
         }
     }
 

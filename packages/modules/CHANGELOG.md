@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- **`mod_lifecycle_log.actor_ck` widened to include `support` (P2.11, D138).** A second CHECK
+  found during P2.11 design: `DatabaseModuleLifecycle` writes `CurrentActor::type()->value` into
+  this table, whose vocabulary is independent of `sys_audit_log`'s — without this additive
+  migration, the first lifecycle operation performed under impersonation would fail with a
+  CHECK-violation. The closed P1.3 migration file is not edited.
+
 ### Changed
 
 - Шапка `README.md` продукт-нейтральна («Модульная система Flex» → «Модульная система CoreX») —

@@ -166,11 +166,19 @@ return [
             'refetch_cooldown_seconds' => (int) env('TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS', 60),
         ],
 
-        // Fail-closed until P2.11 ships grant validation (`actor_type =
-        // support`, `root_impersonation_grants`) — an `imp` claim is
-        // rejected (403) while this stays false, never silently accepted.
+        // P2.11 — grant validation (`root_impersonation_grants`, D143) +
+        // read-only invariant (D141). `enabled=false` (default): an `imp`
+        // claim is rejected (403) and neither the write-guard middleware
+        // nor the Eloquent listeners are registered (AC-28).
+        //
+        // `require_approved_by` (D148) — 4-eyes is a DEPLOYMENT policy
+        // (B-11 §5.9 п.1 "опционально … для prod-политики"), not part of
+        // the invariant itself: default `false` so dev/staging keeps
+        // working, a prod profile flips it to reject any grant missing
+        // `approved_by`.
         'impersonation' => [
             'enabled' => (bool) env('TENANCY_OIDC_IMPERSONATION_ENABLED', false),
+            'require_approved_by' => (bool) env('TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY', false),
         ],
 
         // AC-15 — enforced by Http\Middleware\EnforceSessionLifetime

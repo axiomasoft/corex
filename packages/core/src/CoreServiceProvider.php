@@ -20,6 +20,7 @@ use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
 use CoreX\Support\Config;
 use CoreX\Support\ServiceProviderModuleRegistrar;
+use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Support\ServiceProvider;
@@ -53,6 +54,7 @@ final class CoreServiceProvider extends ServiceProvider
 
         $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
         $this->app->singleton(TenancyManager::class, Config::tenancyManagerClass());
+        $this->app->singleton(ImpersonationService::class, Config::impersonationServiceClass());
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
         $this->app->singleton(FeatureFlags::class, Config::featureFlagsClass());
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());

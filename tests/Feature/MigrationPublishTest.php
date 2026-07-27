@@ -90,7 +90,13 @@ it('publishes exactly the 8 sys_* migrations and they migrate on a clean PG sche
 
     removeFiles(glob($isolated.'/*') ?: []);
     rmdir($isolated);
-    removeFiles($published);
+    // Clean up EVERY file vendor:publish copied to $target, not just the
+    // `_create_sys_*_table.php` subset $published tracks for the count
+    // assertion above — an additive (non-`_create_`) migration published
+    // alongside them (e.g. P2.11's widening migration) would otherwise be
+    // orphaned in this shared, cross-run testbench skeleton directory and
+    // corrupt a LATER test's un-scoped `artisan migrate` against sqlite.
+    removeFiles(glob($target.'/*.php') ?: []);
 });
 
 it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG schema', function (): void {
@@ -114,7 +120,9 @@ it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG sche
 
     removeFiles(glob($isolated.'/*') ?: []);
     rmdir($isolated);
-    removeFiles($published);
+    // See the sys_* test above for why this cleans up ALL published .php
+    // files, not just the `_create_mod_*_table.php` subset $published tracks.
+    removeFiles(glob($target.'/*.php') ?: []);
 });
 
 it('exposes the -tenant connection-scope alias for both migration sets (D43)', function (): void {

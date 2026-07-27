@@ -16,8 +16,10 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\NullImpersonationService;
 use CoreX\Tenancy\NullTenancyManager;
 use CoreX\Tenancy\SingleAccountResolver;
 
@@ -79,6 +81,15 @@ final class Config
     {
         /** @var class-string<TenancyManager> $class */
         $class = config('corex.tenant_context.manager', NullTenancyManager::class);
+
+        return $class;
+    }
+
+    /** @return class-string<ImpersonationService> */
+    public static function impersonationServiceClass(): string
+    {
+        /** @var class-string<ImpersonationService> $class */
+        $class = config('corex.tenant_context.impersonation', NullImpersonationService::class);
 
         return $class;
     }

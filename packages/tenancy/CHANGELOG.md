@@ -8,6 +8,23 @@
 
 ### Added
 
+- **Support impersonation: `DatabaseImpersonationService` + read-only invariant + ACTOR `support`
+  (P2.11, B-11 §5.9, AC-31, D137–D151).** One-time grant claim via a single atomic `UPDATE …
+  WHERE` (D143, one-time/TTL/revocation/staff-presenter/reason/optional-4-eyes all in one
+  statement); dual-log mirror into `root_account_events` synchronously BEFORE the tenant session
+  opens (D146, first writer of that table). Impersonated session is **read-only by construction**
+  (D141) — three deny-by-default layers: L1 `DenyImpersonatedWrites` (unsafe HTTP method without
+  a route marker → 403) + `AllowImpersonatedWrites` marker; L2 `ImpersonatedModelWriteGuard`
+  (global `eloquent.saving|deleting|restoring` wildcard listeners, closed exempt list, `allowing()`
+  scope — boundary named honestly, D142: mass-update/delete and the `DB` facade are NOT covered);
+  L3 `CoreX\Tenancy\ImpersonationGuard` (core) over the closed `ImpersonationRestrictedAction` enum.
+  `ImpersonationSessionGuard` re-reads `revoked_at` from root on every request (no cache, D144) and
+  enforces TTL; `X-CoreX-Impersonation` response header carries the banner state (D147, level 0
+  has no UI). Login lane (`OidcLoginController`) split `assertMembership` into `assertAccountClaim`
+  (both lanes) + `assertMembership` (ordinary lane only) — the `imp` branch skips membership and
+  `IdentitySyncer` entirely (support is not an account member, D145); the ordinary lane's own
+  Validation suite is unchanged. `require_approved_by` config (D148, default `false`) — optional
+  4-eyes deployment policy.
 - **`ResolveWorkspace`-middleware: `/w/{slug}` → workspace narrowing (P2.23, B-11 §5.4 п.4,
   D131–D136, AC-18).** Registered as the `tenancy.workspace` alias (D131) — always registered,
   never a member of the `'tenant'` group: a route with `->middleware(['tenant',

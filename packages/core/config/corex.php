@@ -10,6 +10,7 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Tenancy\NullImpersonationService;
 use CoreX\Tenancy\NullTenancyManager;
 use CoreX\Tenancy\SingleAccountResolver;
 
@@ -56,10 +57,15 @@ return [
     | constant context via `resolver` above); corex/tenancy rebinds this to
     | StanclTenancyManager when the package is present (D10 — container
     | binding, never an `if(cloud)` branch).
+    |
+    | `impersonation` (P2.11, D139): ImpersonationService binding — boxed
+    | default has no grants at all (B-11 §6.1); corex/tenancy rebinds this to
+    | DatabaseImpersonationService under `tenancy.oidc.impersonation.enabled`.
     */
     'tenant_context' => [
         'resolver' => SingleAccountResolver::class,
         'manager' => NullTenancyManager::class,
+        'impersonation' => NullImpersonationService::class,
     ],
 
     /*
