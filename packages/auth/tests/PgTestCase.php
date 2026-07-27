@@ -69,6 +69,19 @@ abstract class PgTestCase extends CoreAuthTestCase
         $this->migratePath(__DIR__.'/database/migrations/pg');
     }
 
+    /**
+     * The REAL `sys_departments` migration from corex/core (not a fixture) —
+     * closes the P2.20 debt of dept/dept_tree never running against a real
+     * ltree-backed table (P2.9). Requires {@see migrateFixtures()} to have
+     * already created `users` (department_id's FK target column, though the
+     * FK itself is cross-package and lives elsewhere) and `wsp_workspaces`
+     * (sys_departments.workspace_id's loose reference).
+     */
+    protected function migrateCoreDepartments(): void
+    {
+        $this->migratePath(__DIR__.'/../vendor/corex/core/database/migrations/pg');
+    }
+
     private function migratePath(string $path): void
     {
         $this->artisan('migrate', [

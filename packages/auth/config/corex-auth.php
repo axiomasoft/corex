@@ -43,6 +43,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Workspace scope class (D109)
+    |--------------------------------------------------------------------------
+    | Class WorkspaceScopeWiring::wire() registers as a global scope on every
+    | Capability::WorkspaceScoped model, and Access\ScopePredicate lifts via
+    | withoutGlobalScope() for scope `account` — a STRING, never an imported
+    | class reference: corex/auth does not depend on corex/tenancy (AC-28),
+    | so CoreX\Tenancy\Scopes\WorkspaceScope is not necessarily loadable.
+    | null = there is no workspace scope to register or lift (boxed profiles
+    | without corex/tenancy).
+    */
+    'workspace_scope_class' => 'CoreX\\Tenancy\\Scopes\\WorkspaceScope',
+
+    /*
+    |--------------------------------------------------------------------------
     | AzGuard pins (D104)
     |--------------------------------------------------------------------------
     | corex/auth does not fork AzGuard (D15) — these values are applied onto

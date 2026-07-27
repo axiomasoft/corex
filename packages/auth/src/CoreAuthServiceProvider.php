@@ -9,10 +9,15 @@ use AzGuard\Contracts\ContextGuard;
 use AzGuard\Contracts\PermissionLayer;
 use CoreX\Auth\Access\AutMatrixGrantSource;
 use CoreX\Auth\Access\DefaultAccessChecker;
+use CoreX\Auth\Access\DefaultScopeResolver;
+use CoreX\Auth\Access\ScopeAvailability;
 use CoreX\Auth\Access\WorkspacePermissionLayer;
+use CoreX\Auth\Access\WorkspaceScopeWiring;
 use CoreX\Auth\Contracts\AccessChecker;
+use CoreX\Auth\Contracts\ScopeResolver;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
 use CoreX\Auth\Tenancy\TenantContextGuard;
+use CoreX\Modules\Contracts\EntityRegistry;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -31,6 +36,14 @@ final class CoreAuthServiceProvider extends ServiceProvider
         // scoped(), not singleton() — DefaultAccessChecker's scopeFor() memo
         // must not survive across requests on a reused worker (Octane).
         $this->app->scoped(AccessChecker::class, DefaultAccessChecker::class);
+
+        // scoped() for the same reason: ScopeAvailability's per-(entity_key,
+        // scope) memo (P2.9 D114) must not survive a reused Octane worker
+        // either, and DefaultScopeResolver is resolved once per listing
+        // query — binding it keeps that one ScopeAvailability instance (and
+        // its memo) shared across every apply() call within one request.
+        $this->app->scoped(ScopeAvailability::class);
+        $this->app->scoped(ScopeResolver::class, DefaultScopeResolver::class);
 
         // The PermissionLayer slot is singular (findings/P2.8-azguard-
         // inventory-2026-07-26.md §6) — the config switch (D101 risk note)
@@ -51,6 +64,14 @@ final class CoreAuthServiceProvider extends ServiceProvider
         $manager = $this->app->make(AzGuardManagerInterface::class);
         $manager->registerGrantSource(AutMatrixGrantSource::class);
         $manager->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
+
+        /** @var mixed $scopeClass */
+        $scopeClass = config('corex-auth.workspace_scope_class');
+
+        WorkspaceScopeWiring::wire(
+            $this->app->make(EntityRegistry::class),
+            is_string($scopeClass) ? $scopeClass : null,
+        );
     }
 
     /**

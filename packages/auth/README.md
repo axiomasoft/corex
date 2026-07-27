@@ -23,6 +23,24 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   `users.department_id`/`sys_departments.path` — таблиц другого пакета (`corex/tenancy`,
   `corex/core`'s department feature), которых в boxed-профиле может не быть. Отсутствующая таблица
   — fail-closed `false` (никогда не трактуется как «весь скоуп»), не исключение и не access grant.
+- **`Contracts\ScopeResolver`** (`Access\DefaultScopeResolver`) — Builder-аналог `canOnRecord()`:
+  накладывает WHERE по эффективному scope на листинг, а не на одну запись. Семантика 6 скоупов
+  (`none`/`own`/`dept`/`dept_tree`/`workspace`/`account`) живёт в ОДНОМ месте — `Access\ScopePredicate`
+  (`applyTo()` для Builder, `matches()` для записи) — и используется обоими путями, так что
+  листинг и детальная проверка одной и той же записи не могут разойтись. `workspace` несёт явный
+  предикат с модификатором `cascade_view` (иерархический просмотр родитель→потомки по
+  `wsp_workspaces.path`, флаг в `settings` читается строго `=== 'true'` у контекстного workspace).
+- **`Access\ScopeAvailability`** — сущность без объявленной capability (`ownable`/`workspace_scoped`),
+  но с физической колонкой (`owner_id`/`workspace_id`) на таблице, не превращает scope в `account`
+  молча: это declaration drift, `Exceptions\ScopeCapabilityMismatch` (fail-closed, чинится
+  декларацией capability на `EntityDefinition`, не кодом). Нет ни capability, ни колонки — сужать
+  нечем, тогда `account` легален.
+- **`Access\WorkspaceScopeWiring`** — регистрирует `WorkspaceScope` (глобальный scope, приходит из
+  `corex/tenancy` по конфиг-пину `corex-auth.workspace_scope_class`) на моделях с capability
+  `workspace_scoped` автоматически при `boot()`; boxed-профиль без пина — тихий пропуск.
+- **Известное ограничение профиля:** в дереве корневого проекта пока 0 сущностей с capability
+  `ownable`/`workspace_scoped` — их раздача реальным продуктовым сущностям (CRM/Tasks) вне
+  этого пакета.
 
 ## Вне объёма (позже)
 

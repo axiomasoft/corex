@@ -21,6 +21,14 @@
   (см. `README.md`/`config/corex-modules.php`). Consumer-код обновляет `.env`/публикованный
   конфиг/CI-раннеры на новые имена.
 
+## [Unreleased]
+
+### Added
+
+- `Enums\Capability`: two new cases `Ownable`/`WorkspaceScoped` (`corex/auth` P2.9 —
+  admit RBAC scopes `own`/`dept`/`dept_tree` and `workspace` respectively); the
+  existing 7 cases keep their values and ordinal position.
+
 ## [0.1.0] - 2026-07-15
 
 Первый релиз. Реализует roadmap-фазу P0 / блупринт B-10 (модульная система).

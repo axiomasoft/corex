@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Auth\Access;
 
-use AzGuard\Models\DirectGrant;
 use CoreX\Auth\Contracts\AccessChecker;
 use CoreX\Auth\Contracts\Principal;
 use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Auth\Enums\Scope;
 use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\RecordContext;
-use CoreX\Models\Department;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Override;
-
-use function data_get;
 
 /**
  * Two-phase AccessChecker (D101, B-11 §5.5). allowed() asks the real AzGuard
@@ -29,6 +24,13 @@ use function data_get;
  * directly. Fail-closed throughout (Code Guidance): an unresolved entity,
  * absent role row or missing department table never widens to "the whole
  * scope" — it denies.
+ *
+ * The scope predicate itself (own/dept/dept_tree/workspace/account/none) is
+ * NOT decided here (P2.9, D110): it is delegated to {@see ScopePredicate},
+ * the single owner shared with the builder path
+ * ({@see DefaultScopeResolver}), so the two paths cannot silently diverge.
+ * This class's own observable behaviour is UNCHANGED by that delegation —
+ * its 20 pre-existing tests assert that.
  *
  * Bound `scoped` (CoreAuthServiceProvider) so the scopeFor() memo below is
  * request-scoped, never carried across requests on a reused worker.
@@ -42,6 +44,8 @@ final class DefaultAccessChecker implements AccessChecker
         private readonly EntityRegistry $entities,
         private readonly TenancyManager $tenancyManager,
         private readonly ScopeMapVersion $scopeMapVersion,
+        private readonly ScopePredicate $scopePredicate,
+        private readonly DirectGrantLookup $directGrants,
     ) {}
 
     #[Override]
@@ -101,92 +105,11 @@ final class DefaultAccessChecker implements AccessChecker
         $key = "{$this->panel()}.{$entity->handle}.{$action}";
 
         if ($this->allowed($p, $entity->handle, $action)
-            && $this->matchesScope($this->scopeFor($p, $entity->handle, $action), $record, $p)) {
+            && $this->scopePredicate->matches($this->scopeFor($p, $entity->handle, $action), $record, $p)) {
             return true;
         }
 
-        return $this->hasActiveDirectGrant($p, $key);
-    }
-
-    private function matchesScope(Scope $scope, object $record, Principal $p): bool
-    {
-        return match ($scope) {
-            Scope::None => false,
-            Scope::Account => true,
-            Scope::Workspace => $this->matchesWorkspace($record),
-            Scope::Own => data_get($record, 'owner_id') === $p->principalId(),
-            Scope::Dept => $this->matchesDepartment($record, $p, tree: false),
-            Scope::DeptTree => $this->matchesDepartment($record, $p, tree: true),
-        };
-    }
-
-    private function matchesWorkspace(object $record): bool
-    {
-        $recordWorkspaceId = data_get($record, 'workspace_id');
-
-        if ($recordWorkspaceId === null) {
-            return true;
-        }
-
-        return $recordWorkspaceId === $this->tenancyManager->context()?->workspace?->id;
-    }
-
-    /**
-     * dept/dept_tree resolve the record owner's department against the
-     * principal's own, via `users.department_id` (DB_SCHEMA §3.4) and
-     * `sys_departments.path` (ltree). Absent in boxed profiles — no
-     * `users`/`sys_departments` there (AC-28) — fails closed rather than
-     * silently granting (Code Guidance if-then #3); a documented profile
-     * limitation, not a bug.
-     */
-    private function matchesDepartment(object $record, Principal $p, bool $tree): bool
-    {
-        if ($p->principalType() !== PrincipalType::User) {
-            return false;
-        }
-
-        if (! Schema::hasTable('users') || ! Schema::hasTable((new Department)->getTable())) {
-            return false;
-        }
-
-        $ownerId = data_get($record, 'owner_id');
-
-        if (! is_string($ownerId)) {
-            return false;
-        }
-
-        $ownerDeptId = DB::table('users')->where('id', $ownerId)->value('department_id');
-        $principalDeptId = DB::table('users')->where('id', $p->principalId())->value('department_id');
-
-        if (! is_string($ownerDeptId) || ! is_string($principalDeptId)) {
-            return false;
-        }
-
-        if (! $tree) {
-            return $ownerDeptId === $principalDeptId;
-        }
-
-        $principalPath = Department::query()->where('id', $principalDeptId)->value('path');
-
-        if (! is_string($principalPath)) {
-            return false;
-        }
-
-        return Department::query()
-            ->where('id', $ownerDeptId)
-            ->whereRaw('path <@ ?::ltree', [$principalPath])
-            ->exists();
-    }
-
-    private function hasActiveDirectGrant(Principal $p, string $key): bool
-    {
-        return DirectGrant::query()
-            ->where('grantable_type', $p->principalType()->value)
-            ->where('grantable_id', $p->principalId())
-            ->where('panel_id', $this->panel())
-            ->where('permission_key', $key)
-            ->active()
-            ->exists();
+        return $this->directGrants->hasActive($p, $key);
     }
 
     /** @return list<string> */

@@ -20,4 +20,10 @@ enum Capability: string
     case Commentable = 'commentable';
     case Documentable = 'documentable';
     case SoftDeletes = 'soft_deletes';
+
+    /** Has `owner_id` — admits scope own/dept/dept_tree (B-11 §4 п.3, P2.9). */
+    case Ownable = 'ownable';
+
+    /** Has `workspace_id` — admits scope workspace (B-11 §4 п.3, P2.9). */
+    case WorkspaceScoped = 'workspace_scoped';
 }

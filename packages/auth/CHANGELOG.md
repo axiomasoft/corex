@@ -42,6 +42,28 @@
   (слот `PermissionLayer` в AzGuard один).
 - `own`/`dept`/`dept_tree` вырождаются в `Scope::None` для принципалов `agent`/`api_key`
   (ENFORCE, B-11 §5.5).
+- `Contracts\ScopeResolver` (+ `Access\DefaultScopeResolver`) — Builder-аналог `canOnRecord()`
+  (B-11 §5.5): накладывает WHERE по эффективному scope на листинг, зеркаля двухфазность
+  `canOnRecord()` (direct-grant обход → capability-гейт → предикат), пятый опциональный параметр
+  `?RecordContext` сверх снипета спеки (D116).
+- `Access\ScopePredicate` — единственный владелец семантики 6 скоупов (`applyTo()` для Builder,
+  `matches()` для записи); `DefaultAccessChecker` переведён на делегирование в него без изменения
+  наблюдаемого поведения (D110). `workspace`-предикат явный (не полагается на глобальный scope,
+  D107) и несёт модификатор `cascade_view` — иерархический просмотр родитель→потомки по
+  `wsp_workspaces.path`, флаг читается строго `=== 'true'` у самого ctx-workspace (D117).
+- `Access\DirectGrantLookup` — вынесенная из `DefaultAccessChecker` проверка активного
+  AzGuard direct grant, общая для record- и builder-пути.
+- `Access\ScopeAvailability` + `Exceptions\ScopeCapabilityMismatch` — нормализация scope по
+  capability сущности на builder-пути: нет capability и нет колонки ⇒ `account`; нет capability,
+  колонка ЕСТЬ ⇒ fail-closed исключение (declaration drift, D114), никогда не тихое расширение прав.
+- `Access\WorkspaceScopeWiring` — автоматическая регистрация `WorkspaceScope` (глобальный scope)
+  на моделях с capability `workspace_scoped` (прецедент `AuditCapabilityWiring`, D115); конфиг-пин
+  `corex-auth.workspace_scope_class` (строка — `corex/auth` не зависит от `corex/tenancy`, D109).
+- `Matrix\MatrixValidator` — второе правило-предупреждение: строка матрицы со scope, недопустимым
+  для capability сущности (колонка есть, capability не объявлена), попадает в список предупреждений.
+- PG-фикстуры `users.department_id` + `wsp_workspaces.settings`/`path` + хелпер
+  `PgTestCase::migrateCoreDepartments()` (реальная миграция `sys_departments` из `corex/core`) —
+  закрывают долг P2.20 «dept/dept_tree не прогнаны против реальных таблиц».
 
 ### Requires
 
