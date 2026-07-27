@@ -8,9 +8,11 @@ use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
+use CoreX\Tenancy\Commands\TenantsMigrateCommand;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
 use CoreX\Tenancy\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
@@ -24,12 +26,16 @@ use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
 use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
+use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Oidc\JwksKeySet;
 use CoreX\Tenancy\Oidc\OidcClient;
 use CoreX\Tenancy\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Provisioning\PendingPool;
+use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
@@ -69,6 +75,41 @@ final class TenancyServiceProvider extends ServiceProvider
             static fn (Application $app): PendingPool => new PendingPool(
                 (string) config('tenancy.central_connection'),
                 $app->make(StanclTenantDatabaseProvisioner::class),
+            ),
+        );
+
+        // P2.12 — export/drop seam (D13: Stancl*/pg_dump/S3 imports stay
+        // isolated to this package; corex/core only sees the contract).
+        $this->app->singleton(
+            StanclTenantDatabaseLifecycle::class,
+            static fn (): StanclTenantDatabaseLifecycle => new StanclTenantDatabaseLifecycle(
+                (string) config('tenancy.central_connection'),
+            ),
+        );
+        $this->app->singleton(TenantDatabaseLifecycle::class, static fn (Application $app): StanclTenantDatabaseLifecycle => $app->make(StanclTenantDatabaseLifecycle::class));
+
+        // P2.12 — the account FSM (B-11 §5.1); `root_accounts.status` MUST
+        // be mutated only through this class (D151 impersonation guard is
+        // resolved automatically — ImpersonationGuard/ImpersonationService
+        // are both already bound, boxed default by corex/core's
+        // CoreServiceProvider).
+        $this->app->singleton(
+            AccountLifecycle::class,
+            static fn (Application $app): AccountLifecycle => new AccountLifecycle(
+                centralConnection: (string) config('tenancy.central_connection'),
+                pendingPool: $app->make(PendingPool::class),
+                fsm: $app->make(AccountLifecycleFsm::class),
+                tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
+                impersonationGuard: $app->make(ImpersonationGuard::class),
+            ),
+        );
+
+        // P2.12 — synchronous migration-wave orchestrator (B-11 §5.6).
+        $this->app->singleton(
+            MigrationWaveOrchestrator::class,
+            static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
+                centralConnection: (string) config('tenancy.central_connection'),
+                tenancy: $app->make(TenancyManager::class),
             ),
         );
 
@@ -226,6 +267,7 @@ final class TenancyServiceProvider extends ServiceProvider
                 PendingCreateCommand::class,
                 PendingClearCommand::class,
                 IdentitiesReconcileCommand::class,
+                TenantsMigrateCommand::class,
             ]);
         }
 

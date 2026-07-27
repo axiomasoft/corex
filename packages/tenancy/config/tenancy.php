@@ -201,4 +201,27 @@ return [
         'path_segment' => env('TENANCY_WORKSPACE_PATH_SEGMENT', 'w'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Account lifecycle FSM (P2.12, B-11 §5.1)
+    |--------------------------------------------------------------------------
+    | `trial_days` — window `AccountLifecycle::startTrial()` grants before
+    | `trial_ends_at`. `grace_days` — window `AccountLifecycle::startGrace()`
+    | grants before `grace_until`; `purge_after` is always `grace_until` plus
+    | a further fixed 30 days (§7.3 п.7 retention), not itself configurable.
+    */
+    'trial_days' => (int) env('TENANCY_TRIAL_DAYS', 14),
+    'grace_days' => (int) env('TENANCY_GRACE_DAYS', 30),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Platform domain (P2.12, AC-13)
+    |--------------------------------------------------------------------------
+    | Own config key rather than a hardcoded product suffix (D91 — corex/*
+    | stays product-agnostic): `AccountLifecycle::startTrial()` provisions
+    | the platform domain as `<slug>.<platform_domain>`. The default is only
+    | a neutral placeholder — every real deployment overrides it.
+    */
+    'platform_domain' => env('TENANCY_PLATFORM_DOMAIN', 'example.test'),
+
 ];
