@@ -6,6 +6,11 @@ namespace CoreX\Auth;
 
 use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Contracts\ContextGuard;
+use AzGuard\Contracts\PermissionLayer;
+use CoreX\Auth\Access\AutMatrixGrantSource;
+use CoreX\Auth\Access\DefaultAccessChecker;
+use CoreX\Auth\Access\WorkspacePermissionLayer;
+use CoreX\Auth\Contracts\AccessChecker;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
 use CoreX\Auth\Tenancy\TenantContextGuard;
 use Illuminate\Support\Facades\Blade;
@@ -23,6 +28,18 @@ final class CoreAuthServiceProvider extends ServiceProvider
         // checks (hasPermissionIn) resolve entities via corex/core's registry.
         $this->app->singleton(ContextGuard::class, TenantContextGuard::class);
 
+        // scoped(), not singleton() — DefaultAccessChecker's scopeFor() memo
+        // must not survive across requests on a reused worker (Octane).
+        $this->app->scoped(AccessChecker::class, DefaultAccessChecker::class);
+
+        // The PermissionLayer slot is singular (findings/P2.8-azguard-
+        // inventory-2026-07-26.md §6) — the config switch (D101 risk note)
+        // lets a target build step aside for another package's layer instead
+        // of conflicting over it.
+        if ((bool) config('corex-auth.bind_permission_layer', true)) {
+            $this->app->bind(PermissionLayer::class, WorkspacePermissionLayer::class);
+        }
+
         $this->applyAzGuardPins();
     }
 
@@ -31,8 +48,9 @@ final class CoreAuthServiceProvider extends ServiceProvider
         $this->registerBladeDirectives();
         $this->registerPublishing();
 
-        $this->app->make(AzGuardManagerInterface::class)
-            ->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
+        $manager = $this->app->make(AzGuardManagerInterface::class);
+        $manager->registerGrantSource(AutMatrixGrantSource::class);
+        $manager->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
     }
 
     /**

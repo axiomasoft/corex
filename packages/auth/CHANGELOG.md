@@ -27,6 +27,21 @@
   `CoreAuthServiceProvider` без правки самого пакета AzGuard.
 - Второй (PG16) тест-лейн пакета: `tests/Pg` + `PgTestCase`, скрипты `test`/`test:pg`
   (D105) — существующий sqlite-лейн (7 тестов) не тронут.
+- `Contracts\AccessChecker` (+`RecordContext`) — двухфазная проверка прав (B-11 §5.5):
+  `allowed()` (capability, AzGuard-кеш), `scopeFor()` (эффективный scope по матрице,
+  контекстная строка замещает базовую) и `canOnRecord()` (предикат по записи ИЛИ активный
+  `direct_grant`). Реализация — `Access\DefaultAccessChecker`.
+- `Access\AutMatrixGrantSource implements AzGuard\Registry\Contracts\GrantSource` (priority 85,
+  D101) — читает `aut_role_assignments` с учётом workspace/`expires_at` (AC-26); действующее
+  назначение системной роли `owner` даёт `PermissionSet::wildcard()` без хранения `'*'` (D103).
+- `Access\PrincipalIdentity implements Principal, Authenticatable,
+  AzGuard\Contracts\HasPermissions` — носитель принципала `user`/`agent`/`api_key` без строки
+  `users` (AC-25); `allowed()` проверяет права через НЕЁ и настоящий публичный путь AzGuard.
+- `Access\WorkspacePermissionLayer implements AzGuard\Contracts\PermissionLayer` — дискриминатор
+  кеша AzGuard по активному workspace; биндинг за конфиг-ключом `corex-auth.bind_permission_layer`
+  (слот `PermissionLayer` в AzGuard один).
+- `own`/`dept`/`dept_tree` вырождаются в `Scope::None` для принципалов `agent`/`api_key`
+  (ENFORCE, B-11 §5.5).
 
 ### Requires
 

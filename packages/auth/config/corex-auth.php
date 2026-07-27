@@ -30,6 +30,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Workspace permission-layer binding (D101)
+    |--------------------------------------------------------------------------
+    | WorkspacePermissionLayer discriminates AzGuard's permission cache by the
+    | active workspace so two workspaces never share a cached permission set
+    | (findings/P2.8-azguard-inventory-2026-07-26.md §6). AzGuard's
+    | PermissionLayer slot is singular — set this false when another package
+    | (e.g. azguard/context) binds its own layer, so this one steps aside
+    | instead of conflicting.
+    */
+    'bind_permission_layer' => env('COREX_AUTH_BIND_PERMISSION_LAYER', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | AzGuard pins (D104)
     |--------------------------------------------------------------------------
     | corex/auth does not fork AzGuard (D15) — these values are applied onto
