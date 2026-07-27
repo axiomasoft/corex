@@ -1,0 +1,20 @@
+parameters:
+    corexTenancy:
+        # Фрагменты пути (POSIX-форма), внутри которых импорт `Stancl\*` легален.
+        # Граница — путь, а не неймспейс: `CoreX\Tenancy\Contracts\*` физически
+        # живёт в corex/core (D13) и обязан оставаться свободным от stancl.
+        stanclAllowedPathFragments:
+            - '/packages/tenancy/src/'
+
+parametersSchema:
+    corexTenancy: structure([
+        stanclAllowedPathFragments: listOf(string())
+    ])
+
+services:
+    -
+        class: CoreX\Tenancy\PHPStan\Rules\StanclImportBoundaryRule
+        arguments:
+            allowedPathFragments: %corexTenancy.stanclAllowedPathFragments%
+        tags:
+            - phpstan.rules.rule

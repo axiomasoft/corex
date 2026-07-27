@@ -1,6 +1,7 @@
 includes:
     - vendor/larastan/larastan/extension.neon
     - packages/modules/extension.neon
+    - packages/tenancy/extension.neon
 
 parameters:
     paths:
