@@ -66,6 +66,33 @@ return [
     | principals (ADR-003) — direct_grants.grantable_id otherwise rejects a
     | uuid principal.
     */
+    /*
+    |--------------------------------------------------------------------------
+    | Local login lane (D125 — OQ-18 variant A)
+    |--------------------------------------------------------------------------
+    | `Identity\PrincipalUserProvider` reads this table via query-builder and
+    | returns a PrincipalIdentity(user, <id>) — the shared seam BOTH login
+    | lanes construct through (parity, premortem C4): the OIDC lane
+    | (corex/tenancy) ends in `Auth::loginUsingId($sub)`, which resolves
+    | through this exact provider. `connection`/`table` name a table by
+    | STRING, never an imported model — corex/auth does not depend on
+    | corex/tenancy (AC-28), so a boxed profile without it points `table` at
+    | its own users table instead. `enabled=false` skips registering the
+    | `corex-principal` auth driver entirely.
+    */
+    'identity' => [
+        'enabled' => (bool) env('COREX_AUTH_IDENTITY_ENABLED', true),
+        'connection' => env('COREX_AUTH_IDENTITY_CONNECTION'),
+        'table' => env('COREX_AUTH_IDENTITY_TABLE', 'users'),
+        'columns' => [
+            'id' => 'id',
+            'email' => 'email',
+            'password' => 'password_hash',
+            'active' => 'is_active',
+            'deleted_at' => 'deleted_at',
+        ],
+    ],
+
     'azguard_pins' => [
         'table_names' => [
             'roles' => 'az_guard_roles',

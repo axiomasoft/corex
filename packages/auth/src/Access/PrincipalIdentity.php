@@ -8,6 +8,7 @@ use AzGuard\Concerns\HasPermissions as HasPermissionsConcern;
 use AzGuard\Contracts\HasPermissions as HasPermissionsContract;
 use CoreX\Auth\Contracts\Principal;
 use CoreX\Auth\Enums\PrincipalType;
+use CoreX\Auth\Identity\PrincipalUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 
@@ -26,6 +27,7 @@ final class PrincipalIdentity implements Authenticatable, HasPermissionsContract
     public function __construct(
         private readonly PrincipalType $type,
         private readonly string $id,
+        private readonly ?string $passwordHash = null,
     ) {}
 
     public static function fromPrincipal(Principal $principal): self
@@ -69,10 +71,17 @@ final class PrincipalIdentity implements Authenticatable, HasPermissionsContract
         return 'password';
     }
 
+    /**
+     * `null` for the `agent`/`api_key` lanes (no password) and for the OIDC
+     * lane (never constructed with a hash — `Auth::loginUsingId()` skips
+     * credential validation entirely); the local login lane
+     * ({@see PrincipalUserProvider}) is the only constructor of a
+     * `PrincipalIdentity` that passes one.
+     */
     #[Override]
     public function getAuthPassword(): ?string
     {
-        return null;
+        return $this->passwordHash;
     }
 
     #[Override]

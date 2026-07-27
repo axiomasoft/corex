@@ -42,6 +42,31 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   `ownable`/`workspace_scoped` — их раздача реальным продуктовым сущностям (CRM/Tasks) вне
   этого пакета.
 
+- **`Identity\PrincipalUserProvider` — локальный лейн входа (D125)**: собственный
+  `Illuminate\Contracts\Auth\UserProvider`, читающий пользовательскую таблицу через
+  query-builder ЦЕЛИКОМ по конфигу `corex-auth.identity` (`connection`/`table`/карта колонок
+  `id`/`email`/`password`/`active`/`deleted_at`) и отдающий `Access\PrincipalIdentity(user,
+  <id>)`. Пакет не импортирует ни одну модель `corex/tenancy` — имя таблицы приходит строкой,
+  тот же приём, что и `workspace_scope_class`. Это ЕДИНСТВЕННЫЙ шов, которым конструируется
+  принципал-пользователь: облачный OIDC-лейн (`corex/tenancy`, под `tenancy.oidc.enabled`)
+  заканчивается штатным `Auth::loginUsingId($sub)`, который резолвится через ЭТОТ ЖЕ
+  провайдер — так оба входа (локальный `Auth::attempt()` и облачный OIDC) собирают ровно один
+  класс `Principal` (premortem C4). Чтобы включить лейн, приложение указывает драйвер в
+  СВОЁМ `config/auth.php`:
+
+  ```php
+  'providers' => [
+      'users' => [
+          'driver' => 'corex-principal',
+      ],
+  ],
+  ```
+
+  Пакет никогда не пишет в `config('auth.*')` сам — драйвер регистрируется
+  (`Auth::provider('corex-principal', …)`), проводка на гвард — дело приложения.
+  `retrieveByToken()`/`updateRememberToken()` — постоянный no-op: колонки `remember_token` в
+  замороженной схеме `users` нет (P2.7 закрыт), добавлять её запрещено.
+
 ## Вне объёма (позже)
 
 - RoleGroup-иерархия (наследование ролей). У AzGuard есть только информационный `role.level`.

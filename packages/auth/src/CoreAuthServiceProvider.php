@@ -17,12 +17,14 @@ use CoreX\Auth\Contracts\AccessChecker;
 use CoreX\Auth\Contracts\RoleMatrixCompiler;
 use CoreX\Auth\Contracts\ScopeResolver;
 use CoreX\Auth\Extend\PermissionsMerger;
+use CoreX\Auth\Identity\PrincipalUserProvider;
 use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
 use CoreX\Auth\Tenancy\TenantContextGuard;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -71,6 +73,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
     {
         $this->registerBladeDirectives();
         $this->registerPublishing();
+        $this->registerIdentityProvider();
 
         $manager = $this->app->make(AzGuardManagerInterface::class);
         $manager->registerGrantSource(AutMatrixGrantSource::class);
@@ -105,6 +108,35 @@ final class CoreAuthServiceProvider extends ServiceProvider
         $config->set('az-guard.table_names.roles', config('corex-auth.azguard_pins.table_names.roles'));
         $config->set('az-guard.column_names.morph_type', config('corex-auth.azguard_pins.column_names.morph_type'));
         $config->set('az-guard.models.role', config('corex-auth.azguard_pins.models.role'));
+    }
+
+    /**
+     * Registers the `corex-principal` Laravel auth driver (D125) — never
+     * touches `config('auth.*')` itself (a package does not impose the
+     * consuming app's guard wiring); a consumer opts in with
+     * `auth.providers.users.driver = 'corex-principal'` (see README).
+     */
+    private function registerIdentityProvider(): void
+    {
+        if (! (bool) config('corex-auth.identity.enabled', true)) {
+            return;
+        }
+
+        Auth::provider('corex-principal', static function (): PrincipalUserProvider {
+            /** @var array<string, string> $columns */
+            $columns = (array) config('corex-auth.identity.columns', []);
+            $connection = config('corex-auth.identity.connection');
+
+            return new PrincipalUserProvider(
+                connection: is_string($connection) ? $connection : null,
+                table: (string) config('corex-auth.identity.table', 'users'),
+                idColumn: (string) ($columns['id'] ?? 'id'),
+                emailColumn: (string) ($columns['email'] ?? 'email'),
+                passwordColumn: (string) ($columns['password'] ?? 'password_hash'),
+                activeColumn: (string) ($columns['active'] ?? 'is_active'),
+                deletedAtColumn: (string) ($columns['deleted_at'] ?? 'deleted_at'),
+            );
+        });
     }
 
     private function registerPublishing(): void

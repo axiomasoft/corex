@@ -10,12 +10,18 @@ use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
+use CoreX\Tenancy\Http\Middleware\EnforceSessionLifetime;
 use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
+use CoreX\Tenancy\Oidc\IdTokenVerifier;
+use CoreX\Tenancy\Oidc\JwksKeySet;
+use CoreX\Tenancy\Oidc\OidcClient;
+use CoreX\Tenancy\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
@@ -77,6 +83,60 @@ final class TenancyServiceProvider extends ServiceProvider
             ),
         );
         $this->app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));
+
+        // P2.22 — cloud OIDC login lane, entirely opt-in (AC-28): binding a
+        // closure does not execute firebase/php-jwt, only resolving it does,
+        // and nothing resolves these outside routes/oidc.php (loaded in
+        // boot() under the SAME flag below). No `if (cloud)` business-logic
+        // branch — a config-gated container binding (D10), same idiom as
+        // the `host_identification.enabled` block further down.
+        if ((bool) config('tenancy.oidc.enabled')) {
+            $this->app->singleton(
+                OidcDiscovery::class,
+                static fn (): OidcDiscovery => new OidcDiscovery(
+                    issuer: (string) config('tenancy.oidc.issuer'),
+                    cacheStore: self::configStringOrNull('tenancy.oidc.discovery.cache_store'),
+                    cacheTtl: (int) config('tenancy.oidc.discovery.cache_ttl', 3600),
+                ),
+            );
+
+            $this->app->singleton(
+                JwksKeySet::class,
+                static fn (): JwksKeySet => new JwksKeySet(
+                    cacheStore: self::configStringOrNull('tenancy.oidc.jwks.cache_store'),
+                    cacheTtl: (int) config('tenancy.oidc.jwks.cache_ttl', 3600),
+                    refetchCooldownSeconds: (int) config('tenancy.oidc.jwks.refetch_cooldown_seconds', 60),
+                ),
+            );
+
+            $this->app->singleton(
+                IdTokenVerifier::class,
+                static fn (Application $app): IdTokenVerifier => new IdTokenVerifier(
+                    jwks: $app->make(JwksKeySet::class),
+                    issuer: (string) config('tenancy.oidc.issuer'),
+                    clientId: (string) config('tenancy.oidc.client_id'),
+                    allowedAlgs: (array) config('tenancy.oidc.allowed_algs', ['RS256']),
+                    leewaySeconds: (int) config('tenancy.oidc.leeway_seconds', 30),
+                ),
+            );
+
+            $this->app->singleton(
+                OidcClient::class,
+                static fn (Application $app): OidcClient => new OidcClient(
+                    discovery: $app->make(OidcDiscovery::class),
+                    clientId: (string) config('tenancy.oidc.client_id'),
+                    clientSecret: self::configStringOrNull('tenancy.oidc.client_secret'),
+                    redirectUri: (string) config('tenancy.oidc.redirect_uri'),
+                ),
+            );
+
+            $this->app->singleton(
+                LogoutController::class,
+                static fn (): LogoutController => new LogoutController(
+                    centralConnection: (string) config('tenancy.central_connection'),
+                ),
+            );
+        }
 
         // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
         // singleton loop, but over OUR `bootstrapper_order` (config/tenancy.php)
@@ -211,5 +271,32 @@ final class TenancyServiceProvider extends ServiceProvider
                 ScopeSessions::class,
             ]);
         }
+
+        // P2.22 — same boxed-opt-out idiom as host_identification above:
+        // disabled (default) registers neither routes/oidc.php nor the
+        // session-lifetime middleware, so nothing in this block ever runs
+        // in a boxed profile (AC-28). Placed AFTER the host_identification
+        // block above so EnforceSessionLifetime lands after ScopeSessions
+        // in the 'tenant' pipeline (it reads the already-tenant-scoped
+        // session).
+        if ((bool) config('tenancy.oidc.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/oidc.php');
+
+            $router = $this->app->make(Router::class);
+            $router->aliasMiddleware('tenancy.oidc.session_lifetime', EnforceSessionLifetime::class);
+
+            $router->middlewareGroup('tenant', [
+                ...($router->getMiddlewareGroups()['tenant'] ?? []),
+                EnforceSessionLifetime::class,
+            ]);
+        }
+    }
+
+    /** @return non-empty-string|null */
+    private static function configStringOrNull(string $key): ?string
+    {
+        $value = config($key);
+
+        return is_string($value) && $value !== '' ? $value : null;
     }
 }

@@ -7,6 +7,31 @@
 
 ### Added
 
+- **Local login lane / principal seam (P2.22, D125).** `Identity\PrincipalUserProvider
+  implements Illuminate\Contracts\Auth\UserProvider` — all six interface methods, table/columns
+  entirely from `config('corex-auth.identity')` (`connection`/`table`/column map), queries via
+  `DB::connection($conn)->table($table)` (no `corex/tenancy` model import, AC-28). The "live
+  user" filter (`active = true AND deleted_at IS NULL`) is applied in BOTH `retrieveById()` and
+  `retrieveByCredentials()` — a deactivated user's live session does not outlive the
+  deactivation. `retrieveByCredentials()` ignores the `password` key when building the WHERE
+  (Laravel canon) and matches e-mail case-insensitively (`whereRaw('lower(...) = ?')` — the
+  schema's unique index is exactly that). `validateCredentials()` is `Hash::check()` only, never
+  a string comparison. `rehashPasswordIfRequired()` issues an `UPDATE` iff
+  `Hash::needsRehash($hash) || $force`, otherwise zero queries. `retrieveByToken()`/
+  `updateRememberToken()` are permanent no-ops — `users` (P2.7, frozen DDL) carries no
+  `remember_token` column and one will not be added.
+- `Access\PrincipalIdentity` gains an optional trailing constructor parameter `?string
+  $passwordHash = null`; `getAuthPassword()` now returns it (previously always `null`).
+  `fromPrincipal()` and the `agent`/`api_key` lanes are unaffected — only
+  `PrincipalUserProvider` ever passes a hash.
+- `config/corex-auth.php` — new `identity` section (`enabled`/`connection`/`table`/`columns`)
+  + `Auth::provider('corex-principal', …)` registered in `CoreAuthServiceProvider::boot()`
+  under `corex-auth.identity.enabled`. The package never writes to `config('auth.*')` itself —
+  a consumer opts in with `auth.providers.users.driver = 'corex-principal'` (README).
+  Parity with the OIDC cloud lane (`corex/tenancy`, P2.22) is structural: both logins end at
+  this same provider — `Auth::attempt()` locally, `Auth::loginUsingId($sub)` after a successful
+  OIDC callback (premortem C4).
+
 - Схема `aut_*` (роль-надстройка над AzGuard, D15): 3 тенантские миграции (`aut_roles`,
   `aut_role_matrix`, `aut_role_assignments`) + отдельная cloud-миграция cross-package FK
   (`workspace_id → wsp_workspaces`, `granted_by → users`, D102).

@@ -125,4 +125,57 @@ return [
         'read_only_methods' => ['GET', 'HEAD', 'OPTIONS'],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cloud OIDC login lane (P2.22, D123/D127/D129/D130) — default OFF
+    |--------------------------------------------------------------------------
+    | `enabled=false` (boxed profile, AC-28) registers NEITHER the
+    | routes/oidc.php routes NOR the EnforceSessionLifetime middleware — the
+    | package pushes nothing onto the host application's stack either way
+    | (D10), and firebase/php-jwt code never executes. `issuer` is the ONLY
+    | endpoint named here; authorize/token/JWKS endpoints always come from
+    | the Discovery document (`Oidc\OidcDiscovery`), never hardcoded (D123).
+    */
+    'oidc' => [
+        'enabled' => (bool) env('TENANCY_OIDC_ENABLED', false),
+
+        'issuer' => env('TENANCY_OIDC_ISSUER'),
+        'client_id' => env('TENANCY_OIDC_CLIENT_ID'),
+        'client_secret' => env('TENANCY_OIDC_CLIENT_SECRET'),
+        'redirect_uri' => env('TENANCY_OIDC_REDIRECT_URI'),
+
+        // RS256-only allow-list (D123) — checked against the id_token
+        // HEADER before JWT::decode() ever runs (Oidc\IdTokenVerifier).
+        'allowed_algs' => ['RS256'],
+        'leeway_seconds' => (int) env('TENANCY_OIDC_LEEWAY_SECONDS', 30),
+
+        // The guard `Auth::loginUsingId()`/`Auth::logout()` operate on —
+        // the consuming app's own guard name, this package assumes nothing
+        // beyond what it is told.
+        'guard' => env('TENANCY_OIDC_GUARD', 'web'),
+
+        'discovery' => [
+            'cache_store' => env('TENANCY_OIDC_DISCOVERY_CACHE_STORE'), // null = default store
+            'cache_ttl' => (int) env('TENANCY_OIDC_DISCOVERY_CACHE_TTL', 3600),
+        ],
+
+        'jwks' => [
+            'cache_store' => env('TENANCY_OIDC_JWKS_CACHE_STORE'), // null = default store
+            'cache_ttl' => (int) env('TENANCY_OIDC_JWKS_CACHE_TTL', 3600),
+            // D130: ONE forced refetch per unknown kid, gated by this cooldown.
+            'refetch_cooldown_seconds' => (int) env('TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS', 60),
+        ],
+
+        // Fail-closed until P2.11 ships grant validation (`actor_type =
+        // support`, `root_impersonation_grants`) — an `imp` claim is
+        // rejected (403) while this stays false, never silently accepted.
+        'impersonation' => [
+            'enabled' => (bool) env('TENANCY_OIDC_IMPERSONATION_ENABLED', false),
+        ],
+
+        // AC-15 — enforced by Http\Middleware\EnforceSessionLifetime
+        // regardless of the consuming app's own `session.lifetime`.
+        'max_session_lifetime_minutes' => (int) env('TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
+    ],
+
 ];

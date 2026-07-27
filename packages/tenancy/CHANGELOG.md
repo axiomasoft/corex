@@ -8,6 +8,46 @@
 
 ### Added
 
+- **Cloud OIDC login lane + global logout (P2.22, D123/D125/D127/D129/D130), default OFF
+  behind `tenancy.oidc.enabled`.** `Oidc\OidcDiscovery` — `GET
+  {issuer}/.well-known/openid-configuration` via `Http` (not raw Guzzle, so `Http::fake()`
+  works), cached by configurable store/TTL — endpoints are never hardcoded. `Oidc\JwksKeySet` —
+  `Http::get(jwks_uri)` → `Firebase\JWT\JWK::parseKeySet()` → `Cache::store()->put()`, WITHOUT
+  `Firebase\JWT\CachedKeySet` (D130 — no PSR-6 in this tree, and PSR-18 isn't `Http::fake()`-able
+  either): on an unknown `kid` (AS key rotation) exactly ONE forced refetch runs, gated by a
+  cooldown cache key, so key rotation is survived without waiting out the TTL and without an
+  unknown-`kid` DoS lever on the JWKS endpoint. `Oidc\IdTokenVerifier` checks the id_token HEADER
+  (`alg` ∈ `oidc.allowed_algs`, `kid` non-empty) BEFORE `JWT::decode()` even runs, then signature,
+  then `iss`/`aud`/`nonce`/`sub` (`nonce` is mandatory per D129, not merely PKCE — the two protect
+  different things). `Oidc\OidcClient` builds the authorize URL (`state` + `nonce` + PKCE S256
+  `code_challenge`, written to the session exactly once) and exchanges `code` → tokens on
+  `token_endpoint`; `client_secret`/`code_verifier` are `#[SensitiveParameter]`.
+  `Http\Controllers\OidcLoginController` runs the full callback order (research/10 §3): one-time
+  `state` (`hash_equals`, forgotten from the session the instant it is read) → code exchange →
+  id_token verification → `acct === tenancy()->tenant->id` → `root_identity_accounts.status ===
+  'active'` (RIGID equality — the enum is three-valued, `invited` must NOT pass) → `imp`
+  fail-closed gate (`oidc.impersonation.enabled`, default `false` — P2.11 is not built yet) →
+  `Identity\IdentitySyncer::syncToAccount()` (AC-14 sync-on-demand) → `session()->regenerate()` →
+  `Auth::guard($guard)->loginUsingId($sub)` — the ONLY seam that constructs the login session; no
+  class from `corex/auth` is ever imported here (D125), so both login lanes (local `Auth::attempt`
+  in corex/auth, cloud OIDC here) converge on the exact same `PrincipalUserProvider`-built
+  principal (premortem C4). `Http\Controllers\LogoutController` (AC-15) — global logout revokes
+  every unrevoked `root_idp_sessions` row of the identity and cascades into
+  `root_oauth_refresh_tokens` by `session_id`, always via `UPDATE revoked_at`, never `DELETE`
+  (both tables are audited); tenant-local sessions still live up to
+  `oidc.max_session_lifetime_minutes` (default 720 = 12h) after that, enforced by
+  `Http\Middleware\EnforceSessionLifetime` reading the `_corex_auth_at` login marker — independent
+  of whatever `session.lifetime` the consuming app sets. `Exceptions\OidcAuthenticationException`
+  — every OIDC failure renders 403 (`render()`), no partial login, no secret in any message.
+  `routes/oidc.php` (`GET /auth/login`, `GET /auth/callback`, `POST /auth/logout`, all
+  `middleware('tenant')`) loads only under `oidc.enabled`, same idiom as
+  `host_identification.enabled` — no `if (cloud)` branch anywhere, only config-gated container
+  bindings and route/middleware registration (D10). New `oidc` config section (`issuer`,
+  `client_id`/`client_secret`/`redirect_uri`, `allowed_algs` default `['RS256']`,
+  `leeway_seconds`, `guard`, `discovery`/`jwks` cache stores+TTLs, `jwks.refetch_cooldown_seconds`,
+  `impersonation.enabled` default `false`, `max_session_lifetime_minutes` default `720`).
+  New dependency `firebase/php-jwt: ^7.1` (advisories all `<7.0.0`, unaffected).
+
 - **Request resolution: host → account → status gate → tenant session (P2.10).**
   `Resolvers\HostTenantResolver` (extends stancl's `CachedTenantResolver`, D119 — no bespoke
   cache class) resolves `Request::getHost()` through `root_domains` → `root_accounts`, with a
