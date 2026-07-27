@@ -10,14 +10,18 @@ use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
+use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobExceptionOccurred;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -28,6 +32,7 @@ use Stancl\Tenancy\Events\TenancyInitialized;
 use Stancl\Tenancy\Events\TenantCreated;
 use Stancl\Tenancy\Listeners\BootstrapTenancy;
 use Stancl\Tenancy\Listeners\RevertToCentralContext;
+use Stancl\Tenancy\Middleware\ScopeSessions;
 use Stancl\Tenancy\Tenancy as Stancl;
 
 final class TenancyServiceProvider extends ServiceProvider
@@ -160,5 +165,51 @@ final class TenancyServiceProvider extends ServiceProvider
         // JobProcessed/JobFailed, never on JobExceptionOccurred (retry path)
         // — see RevertTenancyOnJobException docblock.
         Event::listen(JobExceptionOccurred::class, RevertTenancyOnJobException::class);
+
+        // P2.10 — boxed profile (AC-28) leaves this whole block unregistered:
+        // no root-DB resolver config, no middleware aliases/group. The
+        // package still pushes nothing onto the consumer's global stack
+        // either way (D10) — the 'tenant' group below is opt-in per route.
+        if (config('tenancy.host_identification.enabled')) {
+            // Same projection reasoning as `bootstrapper_order`/`cache_prefix`
+            // above — own top-level key wins over stancl's own
+            // TenancyServiceProvider::register() regardless of provider order.
+            config([
+                'tenancy.identification.resolvers.'.HostTenantResolver::class => [
+                    'cache' => config('tenancy.host_identification.cache'),
+                    'cache_ttl' => config('tenancy.host_identification.cache_ttl'),
+                    'cache_store' => config('tenancy.host_identification.cache_store'),
+                ],
+                // Appended, not overwritten — an existing consumer-configured
+                // middleware list (e.g. stancl's own defaults) must survive.
+                'tenancy.identification.middleware' => [
+                    ...config('tenancy.identification.middleware', []),
+                    ResolveTenantFromHost::class,
+                ],
+            ]);
+
+            $router = $this->app->make(Router::class);
+            $router->aliasMiddleware('tenancy.host', ResolveTenantFromHost::class);
+            $router->aliasMiddleware('tenancy.status', AccountStatusGate::class);
+
+            // stancl's own TenancyServiceProvider::boot() unconditionally
+            // pre-registers 'tenant' as an EMPTY route-context flag group
+            // (DealsWithRouteContexts) — merged into, not overwritten, so
+            // this survives regardless of whether that boot() already ran.
+            // Reusing stancl's own group name is deliberate: a route tagged
+            // `->middleware('tenant')` gets both stancl's semantic
+            // "tenant-context" flag AND this package's actual pipeline in
+            // one name. Testbench (and this package's own composer.json
+            // `require: stancl/tenancy`) orders stancl's provider before
+            // this one; this merge is the belt to that order's suspenders,
+            // not a substitute — a later-booting provider that itself
+            // OVERWRITES 'tenant' would still win (none does today).
+            $router->middlewareGroup('tenant', [
+                ...($router->getMiddlewareGroups()['tenant'] ?? []),
+                ResolveTenantFromHost::class,
+                AccountStatusGate::class,
+                ScopeSessions::class,
+            ]);
+        }
     }
 }

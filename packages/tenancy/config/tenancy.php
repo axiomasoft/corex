@@ -90,4 +90,39 @@ return [
     */
     'cache_prefix' => 'tenant_%tenant%_',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Host identification (P2.10, B-11 §5.4 п.1–3)
+    |--------------------------------------------------------------------------
+    | Own top-level key, projected in TenancyServiceProvider::boot() onto
+    | stancl's `tenancy.identification.resolvers.<HostTenantResolver::class>`
+    | (same reasoning as `bootstrapper_order`/`cache_prefix` above) and onto
+    | `tenancy.identification.middleware`. `enabled=false` (boxed profile,
+    | AC-28) registers neither the resolver's config subtree nor the
+    | middleware group/aliases — the package pushes nothing onto the host
+    | application's global middleware stack either way (D10).
+    */
+    'host_identification' => [
+        'enabled' => (bool) env('TENANCY_HOST_IDENTIFICATION_ENABLED', false),
+        'cache' => true,
+        'cache_ttl' => 300,
+        'cache_store' => null, // null = default store
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Account status gate (P2.10, B-11 §5.1)
+    |--------------------------------------------------------------------------
+    | `payment_route`/`export_route` accept either a route NAME or a path
+    | pattern (matched via Request::is()); null = no such route configured,
+    | the owner-exception never applies. The package owns no payment/export
+    | page of its own — hardcoding a route name here would be a product
+    | assumption this pure primitives package must not make.
+    */
+    'status_gate' => [
+        'payment_route' => null,
+        'export_route' => null,
+        'read_only_methods' => ['GET', 'HEAD', 'OPTIONS'],
+    ],
+
 ];

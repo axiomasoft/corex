@@ -198,7 +198,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "e102c0c9f4c0047b41dfcd14eef70d8bc6af952d"
+                "reference": "230c74c6a8e2156ba9fbedc4352b0c92270baaa9"
             },
             "require": {
                 "brick/money": "^0.9 || ^0.10",
@@ -235,7 +235,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for the Flex ecosystem.",
+            "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
             "keywords": [
                 "audit",
                 "entity-registry",
@@ -255,7 +255,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
-                "reference": "fc3d19b1adf98b110298a3e259a4efb60d93a373"
+                "reference": "6b2eda88ed981245251f700f2e703a36c22188e5"
             },
             "require": {
                 "corex/core": "@dev",
@@ -291,7 +291,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "Flex module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
+            "description": "CoreX module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
             "keywords": [
                 "entity-registry",
                 "laravel",
@@ -307,7 +307,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "8c37fb6f3db6728489a6dc2e3c2160f96a9af9ab"
+                "reference": "86acd93cd8949020c74c1a0aff59876a72a3adb0"
             },
             "require": {
                 "corex/core": "@dev",
@@ -318,7 +318,10 @@
                 "php": "^8.3"
             },
             "require-dev": {
-                "orchestra/testbench": "^10.0|^11.0"
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
             },
             "type": "library",
             "extra": {
@@ -332,6 +335,25 @@
                 "psr-4": {
                     "CoreX\\Tasks\\": "src/"
                 }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Tasks\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "pest"
+                ],
+                "analyse": [
+                    "phpstan analyse --memory-limit=1G"
+                ],
+                "lint": [
+                    "pint"
+                ],
+                "lint:check": [
+                    "pint --test"
+                ]
             },
             "license": [
                 "MIT"
@@ -360,11 +382,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "7fbb2cd160da8d861d0e8dc64af8015f9e03f653"
+                "reference": "acfad2838b1c1683f11cab5ab20712c6856b2fe7"
             },
             "require": {
                 "corex/core": "@dev",
                 "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/http": "^12.0|^13.0",
+                "illuminate/routing": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4",
                 "stancl/jobpipeline": "2.0.0-rc7",
@@ -807,7 +831,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
-                "reference": "cf42bd053050ff179c2f0213e3982532b423c4ec"
+                "reference": "52340603d1406762c4aff74fd0cb261dba6898a4"
             },
             "require": {
                 "corex/core": "@dev",
@@ -818,7 +842,10 @@
                 "php": "^8.3"
             },
             "require-dev": {
-                "orchestra/testbench": "^10.0|^11.0"
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
             },
             "type": "library",
             "extra": {
@@ -832,6 +859,25 @@
                 "psr-4": {
                     "Flex\\Crm\\": "src/"
                 }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Flex\\Crm\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "pest"
+                ],
+                "analyse": [
+                    "phpstan analyse --memory-limit=1G"
+                ],
+                "lint": [
+                    "pint"
+                ],
+                "lint:check": [
+                    "pint --test"
+                ]
             },
             "license": [
                 "MIT"

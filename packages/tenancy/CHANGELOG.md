@@ -6,6 +6,25 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Request resolution: host → account → status gate → tenant session (P2.10).**
+  `Resolvers\HostTenantResolver` (extends stancl's `CachedTenantResolver`, D119 — no bespoke
+  cache class) resolves `Request::getHost()` through `root_domains` → `root_accounts`, with a
+  fail-closed double guard on `slug IS NULL`/`verified_at IS NULL`/`deleted_at` (§7.3 п.9);
+  `Http\Middleware\ResolveTenantFromHost` initializes tenancy with the already-hydrated model
+  (D120 — no per-request root-DB `find()`); `Http\Middleware\AccountStatusGate` enforces B-11
+  §5.1 access rules purely from the hydrated tenant, no extra query. `Models\Domain` (new,
+  `root_domains`) + `InvalidatesResolverCache`/`InvalidatesTenantsResolverCache` on
+  `Account`/`Domain` bust the resolver cache on save/delete — no TTL wait needed after a status
+  or domain change. Tenant-DB `sessions` migration (Laravel-canonical form, `user_id` as uuid) +
+  `ScopeSessions` complete the middleware group `'tenant'` (merged into stancl's own pre-existing
+  empty group of the same name, not overwritten — see `TenancyServiceProvider::boot()`).
+  Config: new `host_identification`/`status_gate` top-level keys, projected onto stancl's
+  `identification.resolvers.*`/`middleware` keys under the `host_identification.enabled` flag
+  (boxed profile leaves this unregistered — AC-28). `sessions` is a Laravel-framework table, not
+  a `corex/*`-owned domain table — deliberately absent from `DB_SCHEMA.md` (D122).
+
 ### Changed
 
 - **Breaking (DDL, до первого тега):** `root_account_products.product` — продуктовый

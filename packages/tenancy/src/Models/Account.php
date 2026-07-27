@@ -6,8 +6,10 @@ namespace CoreX\Tenancy\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;
+use Stancl\Tenancy\Database\Concerns\InvalidatesResolverCache;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Models\Tenant;
 use Stancl\Tenancy\Events;
@@ -45,6 +47,12 @@ use Stancl\Tenancy\Events;
 final class Account extends Tenant implements TenantWithDatabase
 {
     use HasDatabase;
+
+    // Base Tenant already mixes this trait in (class_uses_recursive picks it
+    // up), so cache invalidation on save/delete is active either way —
+    // restated here so it's visible on this model without tracing the
+    // vendor base class (P2.10, D119).
+    use InvalidatesResolverCache;
 
     protected $table = 'root_accounts';
 
@@ -99,5 +107,13 @@ final class Account extends Tenant implements TenantWithDatabase
             'updated_at',
             'deleted_at',
         ];
+    }
+
+    /**
+     * @return HasMany<Domain, $this>
+     */
+    public function domains(): HasMany
+    {
+        return $this->hasMany(Domain::class, 'account_id');
     }
 }
