@@ -46,7 +46,20 @@ test('every manifest-authoring DTO exposes a public static factory constructor',
 
             $returnType = $method->getReturnType();
 
-            if ($returnType instanceof ReflectionNamedType && in_array($returnType->getName(), ['self', 'static'], true)) {
+            if (! $returnType instanceof ReflectionNamedType) {
+                continue;
+            }
+
+            $returnTypeName = $returnType->getName();
+
+            // PHP 8.5: ReflectionNamedType::getName() resolves `self`/`static` to the
+            // declaring class's FQCN instead of the literal keyword (8.4 and earlier
+            // still report 'self'/'static' verbatim) — accept both forms.
+            $isSelfOrStatic = in_array($returnTypeName, ['self', 'static'], true)
+                || $returnTypeName === $class
+                || is_a($returnTypeName, $class, true);
+
+            if ($isSelfOrStatic) {
                 $hasFactory = true;
 
                 break;
