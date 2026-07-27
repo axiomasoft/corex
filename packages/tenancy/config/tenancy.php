@@ -178,4 +178,19 @@ return [
         'max_session_lifetime_minutes' => (int) env('TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Workspace resolution (P2.23, B-11 §5.4 п.4, AC-18)
+    |--------------------------------------------------------------------------
+    | Wire a route with `->middleware(['tenant', 'tenancy.workspace'])` — in
+    | that order, so the workspace only narrows AFTER 'tenant' has proven the
+    | session belongs to this account. A route WITHOUT the `tenancy.workspace`
+    | alias keeps the account-wide admin context (B-11 §5.4 п.4) — the
+    | package registers no product routes of its own; `/w/{slug}` and its
+    | route-binding are the consuming application's concern (D133).
+    */
+    'workspace' => [
+        'path_segment' => env('TENANCY_WORKSPACE_PATH_SEGMENT', 'w'),
+    ],
+
 ];

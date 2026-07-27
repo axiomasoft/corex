@@ -8,7 +8,6 @@ use CoreX\Tenancy\Models\Workspace;
 use CoreX\Tenancy\WorkspaceRef;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use RuntimeException;
 
 /**
  * Membership-checked `/w/{slug}` → {@see WorkspaceRef} resolver (B-11 §3.2,
@@ -66,7 +65,7 @@ final class DatabaseWorkspaceResolver implements WorkspaceResolver
             ->first();
 
         if ($workspace === null) {
-            throw new RuntimeException('No default workspace membership for the current user.');
+            throw new NoDefaultWorkspaceException('No default workspace membership for the current user.');
         }
 
         return $workspace;

@@ -14,6 +14,7 @@ use CoreX\Tenancy\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Http\Middleware\EnforceSessionLifetime;
 use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
+use CoreX\Tenancy\Http\Middleware\ResolveWorkspace;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
@@ -25,6 +26,8 @@ use CoreX\Tenancy\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspaces\WorkspaceResolver;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Routing\Router;
@@ -83,6 +86,11 @@ final class TenancyServiceProvider extends ServiceProvider
             ),
         );
         $this->app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));
+
+        // P2.23 (D136) — P2.6 left this interface unbound; no config-flagged
+        // choice of implementation (a second one doesn't exist — a switch
+        // key without a consumer is a fabricated contract, D116/D121).
+        $this->app->singleton(WorkspaceResolver::class, DatabaseWorkspaceResolver::class);
 
         // P2.22 — cloud OIDC login lane, entirely opt-in (AC-28): binding a
         // closure does not execute firebase/php-jwt, only resolving it does,
@@ -225,6 +233,18 @@ final class TenancyServiceProvider extends ServiceProvider
         // JobProcessed/JobFailed, never on JobExceptionOccurred (retry path)
         // — see RevertTenancyOnJobException docblock.
         Event::listen(JobExceptionOccurred::class, RevertTenancyOnJobException::class);
+
+        // P2.23 (D131) — registered UNCONDITIONALLY, unlike the two blocks
+        // below: a route tagged with this alias narrows to a workspace, a
+        // route without it keeps the account-wide admin context (B-11 §5.4
+        // п.4). Never added to the 'tenant' group itself — that would force
+        // every tenant-scoped route through a workspace, which the spec's
+        // "admin routes" mode explicitly forbids (D131 rationale,
+        // research/11-p2.23-workspace-middleware-2026-07-27.md §2.1).
+        // Registering an alias pushes nothing onto the application's actual
+        // middleware stack by itself (D10) — same reasoning as the
+        // conditional aliases further down, just without the flag.
+        $this->app->make(Router::class)->aliasMiddleware('tenancy.workspace', ResolveWorkspace::class);
 
         // P2.10 — boxed profile (AC-28) leaves this whole block unregistered:
         // no root-DB resolver config, no middleware aliases/group. The

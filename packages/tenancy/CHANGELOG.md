@@ -8,6 +8,28 @@
 
 ### Added
 
+- **`ResolveWorkspace`-middleware: `/w/{slug}` → workspace narrowing (P2.23, B-11 §5.4 п.4,
+  D131–D136, AC-18).** Registered as the `tenancy.workspace` alias (D131) — always registered,
+  never a member of the `'tenant'` group: a route with `->middleware(['tenant',
+  'tenancy.workspace'])` narrows to a workspace, a route without the alias keeps the account-wide
+  admin context (B-11 §5.4 п.4). Seven-step fail-closed pass (research/11 §2): tenancy
+  initialized → authenticated → slug extracted from the FIRST occurrence of
+  `tenancy.workspace.path_segment` (default `w`) in `$request->segments()` (marker with no
+  following segment → 403) → `WorkspaceResolver::resolve()` → `TenancyManager::setWorkspace()` →
+  post-condition re-read of `context()->workspace->id` (catches a no-op `setWorkspace()`, e.g.
+  `NullTenancyManager`) → `$next`. Every failure is 403, including an unknown slug (D135 — 404
+  would leak slug existence, B-11 §7.3 п.9) and a missing default workspace
+  (`Workspaces\NoDefaultWorkspaceException extends RuntimeException`, D132 — a one-line `throw`
+  change in `DatabaseWorkspaceResolver::defaultWorkspaceFor()`, existing P2.6 test
+  `toThrow(RuntimeException::class)` stays green). New `WorkspaceResolver::class` container
+  binding to `DatabaseWorkspaceResolver::class` (D136 — P2.6 had left it unbound). New `workspace`
+  config section (`path_segment`, default `w`, env `TENANCY_WORKSPACE_PATH_SEGMENT`).
+  `tests/Feature/ResolveWorkspaceTest.php` — 18 cases (negative-first): uninitialized tenancy,
+  guest, non-member, suspended member, unknown slug, bare marker, partner-vs-parent visibility
+  (AC-18), missing default, happy paths (with/without marker, custom marker, marker depth/repeat),
+  no-op-manager post-condition, `WorkspaceScope` narrowing on `sys_departments`, alias-vs-group
+  registration (AC-28), and context clearing after `tenancy()->end()`.
+
 - **Cloud OIDC login lane + global logout (P2.22, D123/D125/D127/D129/D130), default OFF
   behind `tenancy.oidc.enabled`.** `Oidc\OidcDiscovery` — `GET
   {issuer}/.well-known/openid-configuration` via `Http` (not raw Guzzle, so `Http::fake()`
