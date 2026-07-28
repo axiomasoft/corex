@@ -55,6 +55,7 @@
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+        "analyse:tests-lint": "vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G",
         "refactor": "vendor/bin/rector process",
         "refactor:check": "vendor/bin/rector process --dry-run"
     }

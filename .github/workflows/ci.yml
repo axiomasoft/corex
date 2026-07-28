@@ -313,6 +313,12 @@ jobs:
       - name: PHPStan
         run: composer analyse
 
+      # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
+      # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
+      # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.
+      - name: PHPStan (modules-lint on tests/)
+        run: composer analyse:tests-lint
+
       - name: Pint
         run: composer lint:check
 
