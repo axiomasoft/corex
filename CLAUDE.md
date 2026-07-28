@@ -37,7 +37,7 @@
   ядра (`root_/sys_/mod_/wsp_/aut_`) ОБЯЗАНЫ ему соответствовать — статус контракта `FROZEN v1.0`,
   сверка финальна. Порядок фаз реализации —
   `~/Vaults/Brain/05-Projects/01-Products/FlexCRM/plans/flex/50_execution/00_EXECUTION_ROADMAP.md`;
-  исполняемый план ядра — `plans/COREX-CORE/`.
+  исполняемый план ядра — `plans/archive/COREX-CORE/`.
 
 ## Доктрина разработки
 

@@ -2,7 +2,7 @@
 
 Входной документ будущего плана/исполнителя: правила и ссылки, НЕ пересказ первоисточников.
 Каждый раздел несёт строку `Источник:`. Числа перемерены 2026-07-26 на дереве `7fa6036`
-командой, указанной рядом с числом. D# — записи Decision Log `plans/COREX-CORE/plan.md` §5.
+командой, указанной рядом с числом. D# — записи Decision Log `plans/archive/COREX-CORE/plan.md` §5.
 
 ## 1. Слои и тест агностичности
 
@@ -21,7 +21,7 @@
   фикстур. Легальны только `flex/crm`/`Flex\Crm` (имя пакета слоя L2, D82) и исторические
   `CHANGELOG`-записи о ренеймах. Гейт — то же правило source-scan'а (§6, P2.17/D94).
 
-Источник: D91 (владелец, 2026-07-26); D70 + `plans/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md`
+Источник: D91 (владелец, 2026-07-26); D70 + `plans/archive/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md`
 (дословный захват `CoreX.md`); vault `2026.07.17-AXIOMA-ORCHESTRA/research/01-layer-doctrine.md` (таблица слоёв, SSOT).
 
 ## 2. Тест-топология
@@ -36,7 +36,7 @@
   джоба = отсутствие регрессионной защиты (аудит A3, Blocker).
 - Агрегатор — `composer test:packages` (цикл auth/crm/tasks/tenancy).
 
-Источник: D81; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §7; корневой `composer.json`.
+Источник: D81; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §7; корневой `composer.json`.
 
 ## 3. Нейминг-канон
 
@@ -50,8 +50,8 @@
 - LEGACY-реестр «17 пакетов ядра» в `CoreX.md` источником прописки новых пакетов НЕ является
   (прописка — по §1).
 
-Источник: D82; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §8;
-`plans/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md` (warning-box реестра).
+Источник: D82; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §8;
+`plans/archive/COREX-CORE/findings/P3.8-doctrine-source-2026-07-26.md` (warning-box реестра).
 
 ## 4. Extension-канон
 
@@ -66,7 +66,7 @@
 - Запрещённые анти-паттерны: WP-hooks, подписки в БД, рой extenders (Flarum),
   alias-override (October), инфоблоки. Monkey-patching запрещён.
 
-Источник: `plans/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3–§4 (ADR-011/ADR-014);
+Источник: `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3–§4 (ADR-011/ADR-014);
 `packages/modules/src/Extend/Extender.php` (докблок закрытого набора).
 
 ## 5. Контракт-дисциплина
@@ -80,7 +80,7 @@
 - Тег ставится на закрытии фазы по GREEN-аудиту + запись в per-package `CHANGELOG.md`;
   1.0 не ставится, пока контракты не обкатаны потребителями (D17).
 
-Источник: D17; `scripts/contract-guard.sh` (шапка); `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §3.
+Источник: D17; `scripts/contract-guard.sh` (шапка); `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §3.
 
 ## 6. Гейты качества — и их честное состояние
 
@@ -110,8 +110,8 @@
   когда `origin/main` уезжает с `97fdc77` — постоянный floor намеренно отвергнут).
 - **Живого CI-прогона нет:** 12 джобов `ci.yml` описаны, run `30204984851` отказан по биллингу — «зелёные» P3.1–P3.7 суть ЛОКАЛЬНЫЕ прогоны.
 
-Источник: D34/D47/D84/D85/D86/D93; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §1–§6;
-`plans/COREX-CORE/findings/P2.15-anti-weakening-diagnosis-2026-07-26.md`; прогоны перечисленных команд 2026-07-26.
+Источник: D34/D47/D84/D85/D86/D93; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §1–§6;
+`plans/archive/COREX-CORE/findings/P2.15-anti-weakening-diagnosis-2026-07-26.md`; прогоны перечисленных команд 2026-07-26.
 
 ## 7. Очередь «спека требует — кода ещё нет»
 
@@ -124,12 +124,12 @@
 - ADR-003 (ULID) и ADR-004 (row-level tenancy) superseded (UUIDv7 + DB-per-account), файлы в vault не переписаны — **наводка владельцу:** переписать.
 - CI-матрица `Development_Process` §2 (8.2–8.4 × L11/12) расходится с ADR-001 (8.3–8.5, L12–13) и фактом `ci.yml` (8.3/8.4 × 12/13).
 
-Источник: `plans/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.
+Источник: `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.
 
 ## 8. Как этим пользоваться будущему плану
 
-- Этот файл — входная точка. Слои знаний плана: `plans/COREX-CORE/findings/` (сырьё),
-  `plans/COREX-CORE/research/` (синтез), `plan.md` §5 (решения). Спека и ADR — в Brain-vault,
+- Этот файл — входная точка. Слои знаний плана: `plans/archive/COREX-CORE/findings/` (сырьё),
+  `plans/archive/COREX-CORE/research/` (синтез), `plan.md` §5 (решения). Спека и ADR — в Brain-vault,
   не в репозитории; vault правит владелец.
 - Новый пакет: прописка — по §1 (агностик → `corex/*`, тематика → `flex/*`, cross-ecosystem →
   standalone); имя — по §3; тесты и CI-джоб — по §2; контракты и CHANGELOG — по §5.
@@ -139,5 +139,5 @@
   красный/не гонялся» — ложь для следующего исполнителя.
 - Расхождение доктрины с деревом — СТОП и новый D#, а не молчаливая правка правила.
 
-Источник: `plans/COREX-CORE/plan.md` §2 Execution Rules; D89 (дом этого документа — репо);
-`plans/COREX-CORE/research/02-p3-clean-api-2026-07-18.md` §1 (бриф владельца §5–6).
+Источник: `plans/archive/COREX-CORE/plan.md` §2 Execution Rules; D89 (дом этого документа — репо);
+`plans/archive/COREX-CORE/research/02-p3-clean-api-2026-07-18.md` §1 (бриф владельца §5–6).
