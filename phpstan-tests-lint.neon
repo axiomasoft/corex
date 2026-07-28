@@ -10,13 +10,13 @@
 # `includes:` умышленно НЕ ссылается на `phpstan.neon` — иначе Larastan вернулся бы
 # транзитивно.
 #
-# ПОЧЕМУ `level: 0` (эмпирически, первый прогон 2026-07-28 — Implementation Rules P1.28):
-#   level 0 → 16 находок правил, 0 посторонних ошибок;
-#   level 1 → 9 находок правил + 21 посторонняя (`method.notFound`/`staticMethod.notFound`/
-#             `property.notFound` — без Larastan фасады и Eloquent не резолвятся);
-#   level 2 → 9 находок правил + 21 посторонняя.
-# С level ≥ 1 PHPStan обрывает анализ выражения на первой ошибке, и часть вызовов
-# до правил уже не доходит: подъём уровня здесь ОСЛАБЛЯЕТ гейт, а не усиливает.
+# ПОЧЕМУ `level: 0` (эмпирически, первый прогон 2026-07-28 — Implementation Rules P1.28).
+# Замер без `excludePaths`/`ignoreErrors` (всего / из них находки правил / посторонние):
+#   level 0 → 23 / 23 / 0
+#   level 1 → 98 /  9 / 89   (`method.notFound`/`staticMethod.notFound`/`property.notFound` —
+#   level 2 → 103 / 9 / 94    без Larastan фасады и Eloquent не резолвятся)
+# С level ≥ 1 PHPStan обрывает анализ выражения на первой ошибке, и до правил доходит
+# ВТРОЕ меньше вызовов: подъём уровня здесь ОСЛАБЛЯЕТ гейт, а не усиливает.
 
 includes:
     - packages/modules/extension.neon
