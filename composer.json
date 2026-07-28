@@ -51,7 +51,7 @@
         "test:packages": "for p in auth crm tasks tenancy; do composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "contract-guard": "bash scripts/contract-guard.sh",
-        "test:coverage": "vendor/bin/pest --coverage --min=55 --exclude-group=pg",
+        "test:coverage": "vendor/bin/pest --coverage --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",

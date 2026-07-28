@@ -33,8 +33,6 @@
     <source>
         <include>
             <directory>packages/core/src</directory>
-            <directory>packages/crm/src</directory>
-            <directory>packages/tasks/src</directory>
             <directory>packages/modules/src</directory>
         </include>
     </source>
