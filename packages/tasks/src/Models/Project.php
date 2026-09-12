@@ -6,31 +6,50 @@ namespace CoreX\Tasks\Models;
 
 use CoreX\Models\BaseModel;
 use CoreX\Tasks\Enums\ProjectStatus;
-use CoreX\Tasks\Enums\ProjectType;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string|null $process_id
- * @property string|null $company_id
+ * @property string|null $workspace_id
  * @property string $name
- * @property string $code
- * @property string|null $description
- * @property ProjectType $type
  * @property ProjectStatus $status
- * @property array<string, mixed>|null $settings
+ * @property DateTimeInterface|null $created_at
+ * @property DateTimeInterface|null $updated_at
  */
 final class Project extends BaseModel
 {
     protected $table = 'tsk_projects';
 
     /** @var list<string> */
-    protected $fillable = ['process_id', 'company_id', 'name', 'code', 'description', 'type', 'status', 'settings'];
+    protected $fillable = [
+        'workspace_id',
+        'name',
+        'description',
+        'status',
+        'owner_id',
+        'starts_on',
+        'due_on',
+        'settings',
+        'created_by',
+    ];
 
-    /** @return HasMany<ProjectParticipant, $this> */
-    public function participants(): HasMany
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'status' => 'active',
+        'settings' => '{}',
+    ];
+
+    /** @return HasMany<Stage, $this> */
+    public function stages(): HasMany
     {
-        return $this->hasMany(ProjectParticipant::class);
+        return $this->hasMany(Stage::class);
+    }
+
+    /** @return HasMany<Sprint, $this> */
+    public function sprints(): HasMany
+    {
+        return $this->hasMany(Sprint::class);
     }
 
     /** @return HasMany<Task, $this> */
@@ -42,6 +61,12 @@ final class Project extends BaseModel
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return ['type' => ProjectType::class, 'status' => ProjectStatus::class, 'settings' => 'array'];
+        return [
+            'status' => ProjectStatus::class,
+            'starts_on' => 'date',
+            'due_on' => 'date',
+            'settings' => 'array',
+            'created_by' => 'array',
+        ];
     }
 }

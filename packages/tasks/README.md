@@ -1,44 +1,48 @@
-# corex/tasks
+# CoreX Tasks
 
-Модуль задач CoreX поверх `corex/core`: **процессы → стадии → задачи** и **проекты**. Зависит только от
-ядра — ULID, морф-карта через `EntityRegistry`. Изоляция тенантов — физическая (DB-per-account, B-11),
-без row-level-скоупа на моделях.
+Базовый модуль проектов и задач для DB-per-account приложений CoreX.
 
-## Состав
+## Контракт
 
-- **Модели**: `Process`, `Stage` (порядок, цвет, `is_final`), `Task` (приоритет, иерархия
-  parent/children, полиморфный `taskable`, time-tracking: estimated/spent), `Project`; пивоты
-  `TaskParticipant`/`ProjectParticipant`.
-- **Actions** (граница use-case = `DB::transaction`): `CreateProcess`, `CreateTask` (на первой стадии
-  процесса; throw, если стадий нет), `MoveTaskToStage` (финальная стадия → `archived_at`),
-  `CreateProject`, `AddTaskParticipant`.
-- **Events** (`ShouldDispatchAfterCommit`): `TaskCreated`, `TaskMovedToStage`, `ProjectCreated`.
-- **Enums**: `TaskPriority`, `TaskParticipantRole`, `ProjectType`, `ProjectStatus`, `ProjectParticipantRole`.
-- Сущности зарегистрированы в `EntityRegistry` (алиасы `tsk_process/stage/task/project`); `taskable`
-  резолвится через морф-карту — задачу можно прикрепить к **любой** сущности (например, к сделке `flex/crm`).
+- lifecycle manifest: `CoreX\Tasks\TasksModule`, package type `corex-module`;
+- восемь tenant-таблиц с префиксом `tsk_`: projects, stages, sprints, tasks,
+  targets, watchers, time logs и timers;
+- UUIDv7 генерируются через `HasConfiguredId` при стандартной конфигурации
+  CoreX;
+- публичные write-границы: `CreateTaskCommand`, `MoveTaskToStageCommand`,
+  `UpdateTaskCommand` и `CompleteTaskCommand`;
+- переносимые ссылки на внешние сущности передаются как `EntityReference`,
+  без зависимости от моделей host-приложения;
+- host обязан предоставить `TaskAccess` и `TaskMutationAccess`; пакетные
+  реализации по умолчанию запрещают все команды.
 
-## Пример
+Команды проверяют активность модуля в текущем tenant context, работают через
+текущее соединение модели и открывают вложенную транзакцию. Поэтому standalone
+вызов атомарен, а вызов внутри внешней tenant-транзакции участвует в её
+commit/rollback.
 
 ```php
-$process = app(CreateProcess::class)->handle('Kanban', 'KANBAN');
-// + стадии Stage::create([...]) с is_final на терминальной
-$task = app(CreateTask::class)->handle($process, 'Write docs', creatorId: $user->id, priority: TaskPriority::High);
-app(MoveTaskToStage::class)->handle($task, $doneStage); // is_final → задача архивируется
+$task = app(\CoreX\Tasks\Contracts\CreateTaskCommand::class)->handle(
+    new \CoreX\Tasks\Data\TaskDraft(
+        workspaceId: $workspaceId,
+        title: 'Подготовить предложение',
+        actor: $actor,
+        projectId: $projectId,
+        stageId: $stageId,
+    ),
+);
 ```
 
-## Зависимости
+Миграции применяет lifecycle `corex/modules`; service provider их не загружает.
+Alignment migration автоматически заменяет только пустую legacy-схему. При
+наличии legacy-строк она останавливается до DDL и требует отдельного
+согласованного переноса данных.
 
-Только `corex/core` (+ `illuminate/*`). **Без связи с `flex/crm`**: `Project.company_id` — plain ulid,
-`Task.taskable` — полиморф без жёсткой ссылки. Авторизация — забота потребителя / `corex/auth`.
-
-## Тесты
-
-Модуль вшит в **общий root-harness монорепо** (`tests/Tasks/`). Из корня `packages/corex`:
+## Проверки
 
 ```bash
-composer test      # Pest + Orchestra Testbench (sqlite :memory:)
-composer analyse   # PHPStan (larastan) level 6
-composer lint      # Pint
+composer test -- --exclude-group=pg
+PGSQL_HOST=127.0.0.1 PGSQL_PORT=5434 composer test -- --group=pg
+composer analyse
+composer lint:check
 ```
-
-> Вне MVP (follow-up): системные шаблоны процессов / partial-unique индексы; GIN на jsonb (sqlite-харнес).
