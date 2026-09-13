@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "5c936df7a832e6c64a8022e5e03f37a97dd2c9b1",
+  "continuity": {
+    "evidence": [
+      "persisted-context:design-root-terminal"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:aa8db38798482df25afdd4607ae8538e7bb315fe389ef046ef39e8d50e78d6dc",
+    "plan": "sha256:49e6c879862f5e787eefe3e1835ac7c47125fc88374c9ca0c9107e5d3eec5e7c",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P1.1",
+  "plan_id": "2026.09.13-№1-COREX-TENANCY-IDENTITY",
+  "rationale": {
+    "open_risks": "Public API/major approval; exact signup DDL; driver/core test harness/dependency bindings; APPROVED-SPECS template integrity producer; central authenticated acting actor/account, event ordering and authoritative fallback; management-only legacy sync; exact guard/queue/session targets; private immutable source and distribution/pristine/release refs. See D2. Source-inspected membership-only freshness risk not runtime-reproduced by design. MAX-active fallback may collide with surviving stale list key; no normative rewrite without central owner.",
+    "remaining": "Execute P1.1 ready inventory first; P1.2 is separately routed frontier/high after its producer findings. P2 storage, P3 key claim/replay, P4 identity/transport/local sessions, P5 switcher read require applicable D2 gates. P6.1 MCP map after inventory independent of publication; P6.2 package same-ref delivery after actual proofs. Seal plan execution source before product dispatch; preserve dirty baseline."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P1.1\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | implementation · gpt-5.6-terra |\n| Thinking | high |\n| Capabilities | repository read/write, plan tools |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Переснять inventory и portable bindings; подготовка без runtime/DDL |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P1.1'\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "model": "implementation · gpt-5.6-terra",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}
