@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-13
-inputs_sha256: a7d33b371436338a19fcc5bf0083076cddb56a639d88d831662d5c41584cee0a
+inputs_sha256: 86c0c6cd3aebc51a7587ff286be0dcb7223fd6e4a8da1466a3ea323b6a4c3cc3
 generated_by: task plan-views status
 -->
 
@@ -23,7 +23,7 @@ generated_by: task plan-views status
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Inventory и exact approval preparation | 1/2 | 🟡 In progress |
+| P1 | Inventory и exact approval preparation | 2/2 | 🟢 Done |
 | P2 | Tenant storage adapters | 0/2 | ⬜ Not started |
 | P3 | Provisioning request idempotency seam | 0/2 | ⬜ Not started |
 | P4 | Identity safety, transport и local sessions | 0/3 | ⬜ Not started |
@@ -35,7 +35,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P1.1 | Переснять inventory и portable execution bindings | 🟢 Done | 2026-09-13 |
-| P1.2 | Подготовить exact contract/trust dossier | ⬜ Not started | — |
+| P1.2 | Подготовить exact contract/trust dossier | 🟢 Done | 2026-09-13 |
 
 ## Phase P2
 
@@ -85,6 +85,12 @@ generated_by: task plan-views status
 | 2026-09-13 | gpt-5.6-terra/high | plan-run · local-repair · Repaired plan-lint bookkeeping: terminal write-site receipt and bounded P1.2 source selectors. |
 | 2026-09-13 | gpt-5.6-terra/high | plan-run · closed-green · Six-row inventory/bindings delivered; plan-lint repair verified. write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-13 | gpt-5.6-terra/high | plan-run · closed-green · Terminal receipt formatting repaired.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · in-progress · Exact contract/trust dossier preparation admitted; approvals stay pending. |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:11 |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · Final dossier scope alignment:15 pending gates; exact contract/major/CHANGELOG and successor Files patch proposal;710 protected sources unchanged.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · P1 documents GREEN; phase_close_gate allow / PHASE_DIRECT_CLOSE_ASSURED; no admitted audit; all15 product gates pending.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
