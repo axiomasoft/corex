@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-13 — after P3.1
+# HANDOFF — 2026-09-13 — after P6.1
 
-**Next:** run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P6.1
+**Next:** ОЖИДАНИЕ: D2 must qualify PLAN-SOURCE, PUBLIC-API, FS-DRIVERS, and DEPENDENCY-SCOPE for P2.1 before runtime dispatch → run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P2.1
 
 | Параметр | Значение |
 |:--|:--|
@@ -9,20 +9,20 @@
 | Thinking | high |
 | Capabilities | repository read/write, plan tools |
 | Context | continue-root |
-| Суть | Полная MCP ownership/readiness карта B33/B34; неизвестные handlers pending |
+| Суть | P6.1 documentation is complete; P2.1 is the earliest remaining package slice, but its D2 authority/input gates are not grants. |
 
 **Native Codex command:**
 
 ```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P6.1'
+codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P2.1'
 ```
 
-**Done:** P3.1 documents GREEN: exact proposed signup index/up-down SQL, candidate delta 0.2.3-signup-key-review.1 SHA-256 `385e4a16f54c28949775eaa1985c1585222e22ebc8f3f4dbf37391951af571f9`, approved base hashes, four JSON members, ascii-token-128-v1, retain-deny-v1, collision/backfill inventory method and isolated fixture rights request. Companion protocol reserves only qualified pool rows, binds status+key atomically, uses transaction-scoped lock/unique enforcement, recovers same accountId after uncertain commit and maps every fault/compensation boundary to P6.25. No schema/data/runtime/clone/DDL/private/live changes. P1 remains closed; P3 is not closed because P3.2 is unstarted and gated.
+**Done:** P6.1 delivered a complete, portable B33/B34 MCP ownership/readiness map. All 19 blueprint names have a qualified package-source anchor or an explicit missing artifact, exact external owner, side-effect class, authorization and account/cell scope. The P1.1 exact handler search returned no registered package handler or handler test. Consequently all rows are PENDING; `tls.get_certificates_expiry` is external-only. No tool registration, publication, remote call, central handler, provider operation, schema, dependency, or runtime code changed.
 
-**Remaining:** P3.2 requires exact SIGNUP-DDL/fixture consent, PUBLIC-API major/CHANGELOG, named authorized P6.25 caller/digest/retention/compensation binding and current APPROVED-SPECS P2 integrity proof. Other D2 gates remain pending. P6.1 is separable documentation preparation with a fresh bundle. Its former prose input `available terminal package proof refs` was replaced with the concrete P1.2 proposal and explicit absence of runtime package proof; this is input qualification, not handler readiness. P6.1/P6.2 Routing was split into solo launches because installed lint requires a whole batch suffix while P6.2 has missing runtime proofs; model/effort and scope are preserved. No successor was executed.
+**Remaining:** P2.1 may begin only after exact D2 PLAN-SOURCE, PUBLIC-API, FS-DRIVERS, and DEPENDENCY-SCOPE qualification. P6.25 must name handlers for tenancy/storage/provider operations; FLEXID/P6.26 must bind central identity writer/read/cache handlers and consumer policy paths. Before any row becomes READY, handler, test SHA, trusted staff/ops actor, policy check, account/cell binding, and declared negative cases must be proved. D40 keeps CRM registration, invitation, account creation, and access-grant endpoints forbidden. P6.2 also remains blocked on its package-proof predecessors and cannot turn this map into consumer-milestone acceptance.
 
-**Sources of truth:** plan.md; phases/*/*.md; D1/D2; P1.1 inventory/bindings; P1.2 dossier; P3.1-signup-ddl.md and P3.1-replay-contract.md; qualified portable brief; journal.jsonl. Generated status/state/bundles are projections. Preserve the unrelated dirty baseline and foreign plans.
+**Sources of truth:** plan.md; phases/P6/P6.1.md; D1/D2; source-pins.md; inventory.md; P1.1 inventory; P1.2 dossier; B33 §7; B34 §7; D40; findings/P6.1-mcp-map.md; journal.jsonl. Generated state/status are projections. Preserve the pre-existing dirty baseline and foreign plans.
 
-**Open risks:** Exact schema/major/caller/producer/fixture permissions; partial index permits tombstone reuse physically; retain-deny needs all-writer and purge-retention qualification. Existing pullPending commits without a key and can synchronously clone, so it must not precede keyed claim. Blueprint DROP/new-pool compensation requires central reconciliation with stable accountId; no automatic key release or resource DROP. Central trust/session/switcher/private/distribution/live gates remain independent. No current runner/pristine/runtime GREEN is inferred from these proposals.
+**Open risks:** A blueprint name or a related package interface can be mistaken for a policy-safe handler. Central product-wide credentials, caller-selected acting identities, tenant-agent invocation, unchecked account/cell/path/provider values, stale switcher cache data, and uncertain revoke/export/move outcomes must remain denied rather than be inferred safe. The pending status is intentional evidence, not a release or public capability claim.
 
-**Verification:** V-DDL-DOSSIER exact SQL/delta/base/key/tombstone/rights self-check GREEN; V-REPLAY fault/owner/atomicity checks GREEN; V-PLAN scoped lint/views and724 protected source SHA-256 checks GREEN. Terminal-policy and task-contract write sites allow. SQL/delta/document digests are in the terminal journal receipt. Only documents and local plan bookkeeping changed; no DB/implementation tests or audit admission. Any relevant successor source delta needs requalification.
+**Verification:** V-MAP self-check verified the exact 19/19 B33/B34 set, all owner/policy/side-effect/readiness columns, and TLS external-only. Scoped `plan-lint` is GREEN. Only the P6.1 document and plan lifecycle carriers changed; no runtime/tool-registration delta or implementation test is claimed.

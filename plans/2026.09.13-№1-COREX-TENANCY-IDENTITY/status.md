@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-13
-inputs_sha256: c10b46b8e22b8d03e32a133427b3274780eb6b0c61a507e0043e4c9bccbd4cc5
+inputs_sha256: 8a655ce146916f621db5da5c91fc0ba91e523ebbd23b75df76b44150192e3dbf
 generated_by: task plan-views status
 -->
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P3 | Provisioning request idempotency seam | 1/2 | 🟡 In progress |
 | P4 | Identity safety, transport и local sessions | 0/3 | ⬜ Not started |
 | P5 | Switcher transport/read boundary | 0/1 | ⬜ Not started |
-| P6 | MCP maps и delegate delivery | 0/2 | ⬜ Not started |
+| P6 | MCP maps и delegate delivery | 1/2 | 🟡 In progress |
 
 ## Phase P1
 
@@ -69,7 +69,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P6.1 | MCP ownership/readiness карты | ⬜ Not started | — |
+| P6.1 | MCP ownership/readiness карты | 🟢 Done | 2026-09-13 |
 | P6.2 | Delegate delivery evidence и FLEX-2 reconciliation packet | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -96,6 +96,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:15 |
 | 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:16 |
 | 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:17 |
+| 2026-09-13 | gpt-5.6-terra/high | plan-run · in-progress · P6.1 MCP ownership/readiness map admitted; route/context and contract verified; documentation only, with no tool registration or runtime mutation. |
+| 2026-09-13 | gpt-5.6-terra/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:19 |
+| 2026-09-13 | gpt-5.6-terra/high | plan-run · closed-green · Complete 19-row B33/B34 MCP ownership/readiness map delivered; all handlers remain pending and TLS is external-only. Local projection repair only; no product or runtime delta.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
