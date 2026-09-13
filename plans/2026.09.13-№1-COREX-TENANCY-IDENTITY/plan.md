@@ -51,8 +51,8 @@ Approved consumer schema0.2.2 SHA `1ef24ff57f3480829499ab621a9499adc9a96cbc5f618
 | B4 | P4.2 | implementation/high | plan-exec | full | recommended: reuse projection/DTO/security context; central trust approval gate stays visible for selected subset |
 | B4 | P4.3 | implementation/high | plan-exec | full | recommended: reuse P4.1/P4.2 authority/account/session setup; independent review focuses stale replay, cross-account deletion and session guard bypass |
 | solo | P5.1 | implementation/high | plan-exec | full | recommended: distinct central version/fallback input approval boundary before transport implementation; tenant package never owns Redis recovery server |
-| B6 | P6.1 | implementation/high | manual | light | recommended: shared six-row acceptance/ownership context with P6.2; docs map ready subset after P1.1, no publication dependency |
-| B6 | P6.2 | implementation/high | manual | light | recommended: shared ownership/delivery packet context; map can run independently while package proof predecessors remain pending |
+| solo | P6.1 | implementation/high | manual | light | recommended: independent docs map after P1.1; package proof predecessors for P6.2 are pending; no publication dependency |
+| solo | P6.2 | implementation/high | manual | light | recommended: delivery packet only after real package proof predecessors; shared ownership context does not admit missing inputs |
 
 ## 4. Update Log
 

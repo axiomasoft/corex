@@ -1,30 +1,28 @@
-# HANDOFF — 2026-09-13 — after P1.2
+# HANDOFF — 2026-09-13 — after P3.1
 
-**Next:** run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P3.1
+**Next:** run-items: task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P6.1
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
-| Model | frontier · gpt-5.6-sol |
+| Model | implementation · gpt-5.6-terra |
 | Thinking | high |
 | Capabilities | repository read/write, plan tools |
 | Context | continue-root |
-| Суть | Подготовить exact signup DDL/replay dossier; без применения DDL |
+| Суть | Полная MCP ownership/readiness карта B33/B34; неизвестные handlers pending |
 
 **Native Codex command:**
 
 ```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P3.1'
+codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.13-№1-COREX-TENANCY-IDENTITY P6.1'
 ```
 
-**Done:** P1.1 inventory/bindings and P1.2 exact contract/trust dossier/gate requests GREEN; phase P1 direct-closed with phase gate allow and generated P1.closed.md. Dossier proposes exact storage/claim/client/events/accounts interfaces, DTOs/errors, major/CHANGELOG scope, installed local filesystem and core per-package harness qualification, account/actor/event/snapshot/session/version protocols, and exact successor Files patch. No runtime/code/DDL/dependency/private/live changes; all15 D2 gates remain pending. Docs GREEN does not grant product readiness.
+**Done:** P3.1 documents GREEN: exact proposed signup index/up-down SQL, candidate delta 0.2.3-signup-key-review.1 SHA-256 `385e4a16f54c28949775eaa1985c1585222e22ebc8f3f4dbf37391951af571f9`, approved base hashes, four JSON members, ascii-token-128-v1, retain-deny-v1, collision/backfill inventory method and isolated fixture rights request. Companion protocol reserves only qualified pool rows, binds status+key atomically, uses transaction-scoped lock/unique enforcement, recovers same accountId after uncertain commit and maps every fault/compensation boundary to P6.25. No schema/data/runtime/clone/DDL/private/live changes. P1 remains closed; P3 is not closed because P3.2 is unstarted and gated.
 
-**Remaining:** P3.1 is separable preparation using P1.2 dossier and its ready bundle; no schema consent is needed to prepare an exact DDL request. P2.1 bundle exists but runtime API/filesystem/dependency gates remain pending. P6.1 MCP map is also separable after inventory. P2 storage, P3.2 claim/replay, P4 identity/transport/local sessions, P5 switcher read require applicable D2 gates. P6.2 delivery requires actual same-ref proof. Preserve dirty baseline. No successor executed in this invocation.
+**Remaining:** P3.2 requires exact SIGNUP-DDL/fixture consent, PUBLIC-API major/CHANGELOG, named authorized P6.25 caller/digest/retention/compensation binding and current APPROVED-SPECS P2 integrity proof. Other D2 gates remain pending. P6.1 is separable documentation preparation with a fresh bundle. Its former prose input `available terminal package proof refs` was replaced with the concrete P1.2 proposal and explicit absence of runtime package proof; this is input qualification, not handler readiness. P6.1/P6.2 Routing was split into solo launches because installed lint requires a whole batch suffix while P6.2 has missing runtime proofs; model/effort and scope are preserved. No successor was executed.
 
-**Sources of truth:** plan.md; phases/*/*.md; decisions/D1/D2; brief/00-brief.md and qualified copied sources; findings/source-pins.md/inventory.md; journal.jsonl. Generated status/state/bundle/decision views are projections. Foreign addresses provenance only.
+**Sources of truth:** plan.md; phases/*/*.md; D1/D2; P1.1 inventory/bindings; P1.2 dossier; P3.1-signup-ddl.md and P3.1-replay-contract.md; qualified portable brief; journal.jsonl. Generated status/state/bundles are projections. Preserve the unrelated dirty baseline and foreign plans.
 
-**Open risks:** Public API/major approval; exact signup DDL; driver/core test harness/dependency bindings; APPROVED-SPECS template integrity producer; central authenticated acting actor/account, event ordering and authoritative fallback; management-only legacy sync; exact guard/queue/session targets; private immutable source and distribution/pristine/release refs. See D2. Source-inspected membership-only freshness risk not runtime-reproduced by design. MAX-active fallback may collide with surviving stale list key; no normative rewrite without central owner.
+**Open risks:** Exact schema/major/caller/producer/fixture permissions; partial index permits tombstone reuse physically; retain-deny needs all-writer and purge-retention qualification. Existing pullPending commits without a key and can synchronously clone, so it must not precede keyed claim. Blueprint DROP/new-pool compensation requires central reconciliation with stable accountId; no automatic key release or resource DROP. Central trust/session/switcher/private/distribution/live gates remain independent. No current runner/pristine/runtime GREEN is inferred from these proposals.
 
-**Workarounds/Deferred/Open questions:** Original terminal plans not reopened. Boxed workspaces unsupported/deferred, central grants/accept/revoke writer/SSO FLEXID via FLEX-2 P6.26, paid saga/provider/backup/move/DNS/TLS P6.25. MCP handlers/public tools pending owning consumer. D14 consumer audit/release is qualified milestone boundary; no audit consent or release authority created. FLEX-2 reconciliation writes foreign acceptance later. No current runner/pristine/runtime GREEN from docs.
-
-**Verification:** P1.2 all15-gate/public-surface/major/CHANGELOG checks and710 protected-source digests GREEN; bundle sources match; focused plan-lint0 errors/0 warnings. Final dossier hashes are in journal validation receipt. Phase direct-close gate allow and closure freshness checked. No implementation tests were run for this documents-only change; no audit consent assumed. Successor source/gate changes require affected requalification.
+**Verification:** V-DDL-DOSSIER exact SQL/delta/base/key/tombstone/rights self-check GREEN; V-REPLAY fault/owner/atomicity checks GREEN; V-PLAN scoped lint/views and724 protected source SHA-256 checks GREEN. Terminal-policy and task-contract write sites allow. SQL/delta/document digests are in the terminal journal receipt. Only documents and local plan bookkeeping changed; no DB/implementation tests or audit admission. Any relevant successor source delta needs requalification.

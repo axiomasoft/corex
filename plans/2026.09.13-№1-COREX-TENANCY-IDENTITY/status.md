@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-13
-inputs_sha256: 86c0c6cd3aebc51a7587ff286be0dcb7223fd6e4a8da1466a3ea323b6a4c3cc3
+inputs_sha256: c10b46b8e22b8d03e32a133427b3274780eb6b0c61a507e0043e4c9bccbd4cc5
 generated_by: task plan-views status
 -->
 
@@ -25,7 +25,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P1 | Inventory и exact approval preparation | 2/2 | 🟢 Done |
 | P2 | Tenant storage adapters | 0/2 | ⬜ Not started |
-| P3 | Provisioning request idempotency seam | 0/2 | ⬜ Not started |
+| P3 | Provisioning request idempotency seam | 1/2 | 🟡 In progress |
 | P4 | Identity safety, transport и local sessions | 0/3 | ⬜ Not started |
 | P5 | Switcher transport/read boundary | 0/1 | ⬜ Not started |
 | P6 | MCP maps и delegate delivery | 0/2 | ⬜ Not started |
@@ -48,7 +48,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P3.1 | Signup idempotency exact DDL/replay dossier | ⬜ Not started | — |
+| P3.1 | Signup idempotency exact DDL/replay dossier | 🟢 Done | 2026-09-13 |
 | P3.2 | Generic signup key claim/replay adapter | ⬜ Not started | — |
 
 ## Phase P4
@@ -92,6 +92,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · P1 documents GREEN; phase_close_gate allow / PHASE_DIRECT_CLOSE_ASSURED; no admitted audit; all15 product gates pending.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · in-progress · Exact signup DDL/replay proposals admitted; no schema or implementation writes. |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:15 |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:16 |
+| 2026-09-13 | gpt-5.6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:17 |
 
 ## Owner Gates
 
