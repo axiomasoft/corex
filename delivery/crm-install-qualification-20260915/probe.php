@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Api\ApiController;
+use CoreX\Api\ApiServiceProvider;
 use CoreX\Api\Contracts\OperationAuthorizer;
 use CoreX\Api\Contracts\Principal;
 use CoreX\Api\Contracts\PrincipalResolver;
@@ -112,6 +113,7 @@ foreach ($targets as $database) {
     $admin->exec('CREATE DATABASE "'.$database.'"');
 }
 $app = Application::configure(basePath: __DIR__)
+    ->withProviders([ApiServiceProvider::class])
     ->withExceptions()
     ->withRouting(using: static function (): void {
         Route::match(['GET', 'POST'], '/chosen/{version}/{path}', ApiController::class)
