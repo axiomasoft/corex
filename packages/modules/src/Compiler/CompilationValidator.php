@@ -17,6 +17,42 @@ use CoreX\Modules\Manifest;
  */
 final class CompilationValidator
 {
+    /** @param  list<Manifest>  $manifests */
+    public function validateDependencyGraph(array $manifests): void
+    {
+        /** @var array<string, list<string>> $graph */
+        $graph = [];
+
+        foreach ($manifests as $manifest) {
+            $graph[$manifest->composerName] = array_values(array_map(
+                static fn ($dependency): string => $dependency->target,
+                array_filter($manifest->requires, static fn ($dependency): bool => $dependency->type === 'module'),
+            ));
+        }
+
+        /** @var array<string, true> $visited */
+        $visited = [];
+        $visit = function (string $module, array $path) use (&$visit, &$visited, $graph): void {
+            if (in_array($module, $path, true)) {
+                throw new CompilationException('Cyclic module dependency: '.implode(' -> ', [...$path, $module]));
+            }
+
+            if (isset($visited[$module])) {
+                return;
+            }
+
+            foreach ($graph[$module] ?? [] as $dependency) {
+                $visit($dependency, [...$path, $module]);
+            }
+
+            $visited[$module] = true;
+        };
+
+        foreach (array_keys($graph) as $module) {
+            $visit($module, []);
+        }
+    }
+
     /**
      * @param  list<Manifest>  $manifests
      */

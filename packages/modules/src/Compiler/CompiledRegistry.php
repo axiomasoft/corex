@@ -38,6 +38,7 @@ final readonly class CompiledRegistry
      * @param  list<Workflow>  $workflow
      * @param  list<CompiledSettingDefault>  $settings  manifest-declared `SettingDefault`s (default cascade level, not an Extender, so collected straight off `Manifest::$settings`)
      * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags`
+     * @param  array<string, array<class-string, list<class-string>>>  $listeners  manifest-declared event listeners, keyed by module composer name
      *
      * @internal spec: P1.25, B-10 §3.1
      */
@@ -52,6 +53,7 @@ final readonly class CompiledRegistry
         public array $workflow,
         public array $settings = [],
         public array $featureFlags = [],
+        public array $listeners = [],
     ) {}
 
     public static function empty(): self
@@ -67,6 +69,7 @@ final readonly class CompiledRegistry
             workflow: [],
             settings: [],
             featureFlags: [],
+            listeners: [],
         );
     }
 
@@ -77,7 +80,7 @@ final readonly class CompiledRegistry
      * concrete extender class per slice is fixed, so {@see fromArray()} knows
      * exactly which class to rehydrate without a discriminator.
      *
-     * @return array{entities: array<string, array<string, mixed>>, entityFields: list<array<string, mixed>>, permissions: list<array<string, mixed>>, api: list<array<string, mixed>>, filament: list<array<string, mixed>>, menu: list<array<string, mixed>>, routes: list<array<string, mixed>>, workflow: list<array<string, mixed>>, settings: list<array<string, mixed>>, featureFlags: list<array<string, mixed>>}
+     * @return array{entities: array<string, array<string, mixed>>, entityFields: list<array<string, mixed>>, permissions: list<array<string, mixed>>, api: list<array<string, mixed>>, filament: list<array<string, mixed>>, menu: list<array<string, mixed>>, routes: list<array<string, mixed>>, workflow: list<array<string, mixed>>, settings: list<array<string, mixed>>, featureFlags: list<array<string, mixed>>, listeners: array<string, array<class-string, list<class-string>>>}
      */
     public function toArray(): array
     {
@@ -92,11 +95,12 @@ final readonly class CompiledRegistry
             'workflow' => array_map(self::extenderToArray(...), $this->workflow),
             'settings' => array_map(static fn (CompiledSettingDefault $setting): array => $setting->toArray(), $this->settings),
             'featureFlags' => array_map(static fn (FeatureFlagDefinition $flag): array => get_object_vars($flag), $this->featureFlags),
+            'listeners' => $this->listeners,
         ];
     }
 
     /**
-     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>}  $data
+     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}  $data
      */
     public static function fromArray(array $data): self
     {
@@ -121,6 +125,7 @@ final readonly class CompiledRegistry
                 $data['settings'] ?? [],
             ),
             featureFlags: array_map(self::featureFlagFromArray(...), $data['featureFlags'] ?? []),
+            listeners: $data['listeners'] ?? [],
         );
     }
 
