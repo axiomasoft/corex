@@ -8,6 +8,7 @@ use Flex\Crm\Data\CompanyData;
 use Flex\Crm\Events\CompanyCreated;
 use Flex\Crm\Models\Company;
 use Flex\Crm\Support\ContextGuard;
+use Illuminate\Validation\ValidationException;
 
 final readonly class CreateCompany
 {
@@ -28,7 +29,10 @@ final readonly class CreateCompany
                 'source_id' => $data->sourceId, 'owner_id' => $data->ownerId,
             ]);
             $company->setConnection($ctx->connectionName);
-            $company->save();
+
+            if (! $company->save()) {
+                throw ValidationException::withMessages(['company' => 'CRM creation was vetoed by an observer.']);
+            }
             CompanyCreated::dispatch($company, $ctx->actor);
 
             return $company;

@@ -70,6 +70,10 @@ from any admitted record scope; scoped sources must match the record scope and b
 Owners are nullable; selected owners must be active account users and, while a workspace
 context is selected, active members of that workspace. No roles or policy names are encoded.
 Application authorization can narrow these rules. Creation provenance/workspace is immutable.
+Validation runs again at the final INSERT/UPDATE attribute boundary, after saving/creating/
+updating observers, including quiet saves. Late observers cannot forge provenance or move
+scope. An observer veto makes the owning Action fail with ValidationException and rollback;
+no mutation success event is emitted for an unsaved model.
 
 Channels accept lists of `{value, type?, is_primary?}`; any supplied norm is recomputed.
 Empty values, invalid shapes/types, duplicate normalized values and multiple primaries per

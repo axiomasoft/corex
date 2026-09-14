@@ -32,7 +32,10 @@ final readonly class CreateContact
                 'source_id' => $data->sourceId, 'owner_id' => $data->ownerId,
             ]);
             $contact->setConnection($ctx->connectionName);
-            $contact->save();
+
+            if (! $contact->save()) {
+                throw ValidationException::withMessages(['contact' => 'CRM creation was vetoed by an observer.']);
+            }
             ContactCreated::dispatch($contact, $ctx->actor);
 
             return $contact;
