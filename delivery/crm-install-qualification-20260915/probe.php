@@ -110,6 +110,7 @@ foreach ($targets as $database) {
     $admin->exec('CREATE DATABASE "'.$database.'"');
 }
 $app = Application::configure(basePath: __DIR__)
+    ->withExceptions()
     ->withRouting(using: static function (): void {
         Route::match(['GET', 'POST'], '/chosen/{version}/{path}', ApiController::class)
             ->where('path', '.*')->middleware(ErrorBoundary::class);
