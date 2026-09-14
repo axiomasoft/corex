@@ -3,6 +3,15 @@
 Laravel tenancy primitives for CoreX's physical PostgreSQL database-per-account
 profile.
 
+## Local immutable provider proof
+
+The unreleased `4.0.0-alpha1` tenancy candidate is tested only through the
+sealed local Composer transport described in the distribution proof. It is not
+a public package channel: consumers must configure an independently approved
+root repository before resolving `axiomasoft/stancl-tenancy` and
+`axiomasoft/stancl-jobpipeline`. This package does not declare a path, file, or
+development-sibling repository and never falls back to the moving Stancl branch.
+
 ## Template integrity
 
 The internal verifier accepts a ready template only when it has all of the

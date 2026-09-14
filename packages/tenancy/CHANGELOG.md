@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- The package now requires the sealed, immutable local-candidate provider pair
+  `axiomasoft/stancl-tenancy` `4.0.0-alpha1` and
+  `axiomasoft/stancl-jobpipeline` `2.0.0-alpha1`. These are not published
+  packages; the distribution proof documents the required approved root
+  repository and no moving-branch fallback is supported.
+
 Все заметные изменения `corex/tenancy` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 Пакет ещё не тегирован: в `v0.1.0` монорепо его нет (`git ls-tree -r v0.1.0 -- packages/tenancy` пусто).
@@ -12,6 +20,12 @@
 
 ### Changed
 
+- Provisioning, pending-pool claims, queued clone replay, clone DDL,
+  activation, and migration-wave admission now fail closed on template
+  integrity before their first write. Queue workers reload the central account
+  and re-verify after delay; an already-existing account database must match
+  the trusted template catalogue before it is accepted as an idempotent no-op.
+
 - Changed the public `CentralApiClient` to the strict `corex-membership/1`
   profile: every read now carries product and correlation identifiers; snapshots
   retain exact state, revision and revoke-generation values; revoke returns a
@@ -20,6 +34,12 @@
   unregistered until a real cloud binding is supplied.
 
 ### Added
+
+- Added the opt-in domain-trust SPI: consumer-owned policy, challenge-store,
+  proof-verifier and authorizer contracts now drive a CoreX-owned, generation-
+  guarded trusted-state transition. The default profile supplies no DNS, HTTP,
+  TLS, credential, or proof adapter and keeps custom-domain verification
+  disabled.
 
 - Added internal signed template-integrity primitives: the additive
   `schema_hash` migration, canonical catalogue serializer, manifest verifier,

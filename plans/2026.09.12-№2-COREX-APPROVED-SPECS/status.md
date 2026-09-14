@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-14
-inputs_sha256: d796e7066851c1fd73292cdbe2e28fc29f6434fe952820050faea0588f4d797c
+inputs_sha256: 5e34983380c51c467ba939ea1ab342a4ba1e9cdca0c129dc0b498f1f82a42f79
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Approved normative forward corrections | 4/4 | 🟢 Done |
 | P2 | Generic template integrity with explicit schema/trust gates | 3/3 | 🟢 Done |
 | P3 | Generic domain trust and independent project boundaries | 2/2 | 🟢 Done |
-| P4 | Immutable source and isolated public/private distribution proof | 1/5 | 🟡 In progress |
+| P4 | Immutable source and isolated public/private distribution proof | 2/5 | 🟡 In progress |
 | P5 | Factual passports and result-bound publication authority | 0/3 | ⬜ Not started |
 
 ## Phase P1
@@ -58,7 +58,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P4.1 | Fixed-metadata stancl source preparation dossier | 🟢 Done | 2026-09-14 |
-| P4.2 | Reconcile immutable dependency graph в root и tenancy | ⬜ Not started | — |
+| P4.2 | Reconcile immutable dependency graph в root и tenancy | 🟢 Done | 2026-09-14 |
 | P4.3 | Deterministic local CoreX split exporter | ⬜ Not started | — |
 | P4.4 | Pristine public update/install и package matrix proof | ⬜ Not started | — |
 | P4.5 | Optional/private auth canonical source и pristine proof | ⬜ Not started | — |
@@ -130,6 +130,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-14 | plan-run/frontier/high · gpt-5.6-sol | plan-run · local-repair · D10 repaired successor startup reads/producer attribution; exact focused plan-lint rerun GREEN. P4.1 product/terminal evidence unchanged. |
 | 2026-09-14 | plan-run/frontier/high · gpt-5.6-sol | plan-run · closed-green · P4.1 final source-map/dossier: four validations GREEN. Explicit digest guards verified under Python -O; wrong-source fixtures denied. D10 startup repair GREEN. Local candidates only.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.2 local sealed transport: source/lock mapping and L12/L13 cold update→fresh-install proof GREEN; no runtime or external-release action.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
