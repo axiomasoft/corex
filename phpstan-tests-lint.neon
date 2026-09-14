@@ -22,8 +22,11 @@ includes:
     - packages/modules/extension.neon
 
 parameters:
+    tmpDir: build/phpstan-tests-lint
+
     paths:
         - tests
+        - packages/api/tests
         - packages/auth/tests
         - packages/crm/tests
         - packages/tasks/tests

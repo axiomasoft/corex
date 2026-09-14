@@ -1,0 +1,2 @@
+
+BASELINE_ALL_ABORTED: relation lock during DROP SCHEMA; separate original-commit LifecycleRemediation selector reproduces all four PG failures.

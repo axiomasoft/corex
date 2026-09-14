@@ -31,7 +31,7 @@ Route::match(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], '/api/{version}/{path?}'
 
 Ensure Laravel's middleware priority preserves the chosen order. `ErrorBoundary` must surround
 any tenancy/auth/workspace middleware whose exceptions need the API envelope. It handles thrown exceptions and standard Laravel responses carrying a rendered exception;
-a custom exception handler must preserve `withException()` metadata. middleware returning its own response must conform to the same envelope itself.
+a custom exception handler must preserve `withException()` metadata. Middleware returning its own response must conform to the same envelope itself.
 Use a route parameter named `version` and a `path` containing the operation path after the prefix.
 Prefix, guard, cookies, sessions and deployment topology belong to the application.
 

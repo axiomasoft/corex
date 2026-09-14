@@ -1,0 +1,11 @@
+{
+    "databases": [
+        "corex_principal_a_26ac00330d91_test",
+        "corex_principal_b_26ac00330d91_test"
+    ],
+    "test_exit_code": 0,
+    "host": "127.0.0.1",
+    "port": 5434,
+    "control_database": "corex_test",
+    "cleanup": "finally DROP DATABASE WITH FORCE"
+}

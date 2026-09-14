@@ -1,0 +1,50 @@
+{
+    "ref": "69ddf52f1365138c8d469c62a547c83ac6613918",
+    "directory": "/tmp/corex-api-installed-xuo8ph9__test",
+    "dist_sha256": {
+        "corex/core": "e9bb492fc99badab52c3a49a2fd705ea282127ba873ca47b0855c9a5890aeed5",
+        "corex/modules": "99e6417f16e30165c9c759873268a34fd63560dae11cdde214287e88d436114c",
+        "corex/api": "2a53af4f344af87d21145f59d8a4b62c1608e1d2495103f8623d6f2314de2f75",
+        "example/notes": "bfc293ecf43ea389c52c6671d8ceb50697ef429b43cd586959397e4266c02c19"
+    },
+    "consumers": {
+        "consumer-a": {
+            "autoload": {
+                "CoreX\\Api\\Dispatcher": "vendor/corex/api/src/Dispatcher.php",
+                "CoreX\\Modules\\Compiler\\RegistryCompiler": "vendor/corex/modules/src/Compiler/RegistryCompiler.php",
+                "CoreX\\CoreServiceProvider": "vendor/corex/core/src/CoreServiceProvider.php",
+                "Example\\Notes\\EchoNote": "vendor/example/notes/src/EchoNote.php"
+            },
+            "statuses": [
+                200,
+                404,
+                422,
+                404
+            ],
+            "openapi_sha256": "0f21927cfcb563b277c579bddc3f23771117cf8f6cd49414a14e6c02ae196572",
+            "application_key_sha256": "c85ce691b781828c52f86c83bb21a0ee10d544865f6a59e5f6de22dbc43cd5eb",
+            "php": "8.4.1",
+            "laravel": "13.31.0",
+            "lock_sha256": "0fa38590e2234131f24ff51dd3ab8d334f1450b1ce17e6e3b2021c48e2842720"
+        },
+        "consumer-b": {
+            "autoload": {
+                "CoreX\\Api\\Dispatcher": "vendor/corex/api/src/Dispatcher.php",
+                "CoreX\\Modules\\Compiler\\RegistryCompiler": "vendor/corex/modules/src/Compiler/RegistryCompiler.php",
+                "CoreX\\CoreServiceProvider": "vendor/corex/core/src/CoreServiceProvider.php",
+                "Example\\Notes\\EchoNote": "vendor/example/notes/src/EchoNote.php"
+            },
+            "statuses": [
+                200,
+                404,
+                422,
+                404
+            ],
+            "openapi_sha256": "0f21927cfcb563b277c579bddc3f23771117cf8f6cd49414a14e6c02ae196572",
+            "application_key_sha256": "22262b87dd662c31989194b3b26b226eaf1c6ef8c60e4c5bf6b130da2d48e226",
+            "php": "8.4.1",
+            "laravel": "13.31.0",
+            "lock_sha256": "0fa38590e2234131f24ff51dd3ab8d334f1450b1ce17e6e3b2021c48e2842720"
+        }
+    }
+}

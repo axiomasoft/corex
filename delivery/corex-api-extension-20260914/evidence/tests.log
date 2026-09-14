@@ -1,0 +1,47 @@
+> pest
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Api\Tests\Feature\PlatformTest[39m
+  [32;1m✓[39;22m[90m [39m[90mdefault authentication and authorization deny[39m[90m                       [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexplicit mutation receives trusted context and envelope[39m
+  [32;1m✓[39;22m[90m [39m[90munknown routes methods versions and metadata are not executable[39m
+  [32;1m✓[39;22m[90m [39m[90mmissing boxed and disabled contexts fail closed[39m
+  [32;1m✓[39;22m[90m [39m[90mboxed profile requires explicit configuration[39m
+  [32;1m✓[39;22m[90m [39m[90mcontext and module state are read on every dispatch[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #7[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90mcompilation preserves provenance roundtrip and old resource metadata[39m
+  [32;1m✓[39;22m[90m [39m[90mduplicate parameterized routes are compile errors[39m
+  [32;1m✓[39;22m[90m [39m[90mopenapi is deterministic and derived from operations only[39m
+  [32;1m✓[39;22m[90m [39m[90mprovider mounts no routes and application can mount an explicit bou[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror boundary normalizes upstream errors with named version and re[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgenerated request id is shared by the boundary and dispatcher[39m
+  [32;1m✓[39;22m[90m [39m[90mquery in a mutation and non json body are rejected[39m
+  [32;1m✓[39;22m[90m [39m[90mdisabled account is rejected[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #7[39m
+  [32;1m✓[39;22m[90m [39m[90mequal specificity overlapping routes are compile errors[39m
+  [32;1m✓[39;22m[90m [39m[90mequivalent cross method templates require identical parameter names[39m
+  [32;1m✓[39;22m[90m [39m[90mmodule adapters receive context only during the current operation[39m
+
+  [90mTests:[39m    [32;1m40 passed[39;22m[90m (177 assertions)[39m
+  [90mDuration:[39m [39m0.19s[39m
+
