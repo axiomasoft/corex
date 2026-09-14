@@ -1,0 +1,770 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ConversionConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serializes concurrent conversion and returns the committed resul[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ModuleLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit discovers CRM composer metadata and manages its schema through t[39m[90m…[39m [90m0.36s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Pg\ActivityIdTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.29s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.22s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit widens a legacy activity morph column before a UUID insert[39m[90m       [39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Pg\ParityContractTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects foreign or inactive source and owner references[39m
+  [31;1m⨯[39;22m[90m [39m[90mit matches approved PostgreSQL fields lengths defaults indexes and foreign keys[39m
+  [31;1m⨯[39;22m[90m [39m[90mit dispatches mutation events only after the successful outer commit[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects forged actors and mismatched account connections[39m
+  [31;1m⨯[39;22m[90m [39m[90mit fails closed for missing context and revoked membership on reads and writes[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects invalid dates and field widths[39m
+  [31;1m⨯[39;22m[90m [39m[90mit serializes competing primary actions and rejects the loser after commit[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects associations between NULL and workspace even with account capability[39m
+  [31;1m⨯[39;22m[90m [39m[90mit separates NULL account data current workspace and foreign workspaces[39m
+  [31;1m⨯[39;22m[90m [39m[90mit roundtrips all approved company and contact values and search[39m
+  [31;1m⨯[39;22m[90m [39m[90mit preserves pivot on soft delete and applies hard delete SET NULL and CASCADE[39m
+  [31;1m⨯[39;22m[90m [39m[90mit uses deterministic channel fallback and nullable whitespace components[39m
+  [31;1m⨯[39;22m[90m [39m[90mit keeps committed data when a synchronous after-commit listener fails[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+123']], true)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+16502530000'], ['+1 650 253 0000']], true)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@example.test'], ['A@example.test']], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['invalid']], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+16502530000 ext 1']], true)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with (['a@example.test'], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@example.test', true], ['b@example.test', true]], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@example.test', 1]], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@example.test', 'true']], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['']], false)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['6502530000']], true)[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('workflow')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('agent')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('user')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('import')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('api')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as context with ('system')[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enforces pair and primary constraints for direct database writers[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Pg\UpgradeSafetyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit checks prerequisite ownership before any destructive schema operation[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses automatic legacy backfill before altering any CRM data[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompanyContactTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a company and a contact linked to it[39m[90m                     [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\LeadConversionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit converts a lead into contact, company and deal[39m[90m                   [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit converts a lead without company or deal[39m[90m                          [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the same conversion on retry even when passed a stale le[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates approved records and a typed primary association[39m[90m         [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects nameless contacts without usable channels[39m[90m                [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ContextSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fails closed for disabled CRM and tenant context mismatch[39m[90m        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit overwrites forged creation provenance and prevents changing it a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed actor identities and foreign profile IDs[39m[90m       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects direct foreign workspace writes and foreign connection q[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guards direct association writes against cross-scope and foreign[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit requires account-level capability when no workspace exists[39m[90m       [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\DealFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another pipeline without changing the deal[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit moves a deal to a won stage and marks it won[39m[90m                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to create a deal in a pipeline without stages[39m[90m            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates a deal at the first stage with money[39m[90m                     [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ActivityIdTest[22m [90m>[39m it stores and resolves…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "crm_activities" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "crm_activities" alter column "subject_id" type varchar(36), alter column "subject_id" set not null, alter column "subject_id" drop default, alter column "subject_id" drop identity if exists)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_09_14_000001_widen_activity_subject_id.php[39;22m:[39;1m15[39;22m
+      [2m+27 vendor frames [22m
+  [33m37  [39m[39;1mtests/Pg/ActivityIdTest.php[39;22m:[39;1m19[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ActivityIdTest[22m [90m>[39m it stores and resolves…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "crm_pipelines" ("id" uuid not null, "name" varchar(255) not null, "is_default" boolean not null default '0', "position" integer not null default '0', "created_at" timestamp(0) without time zone null, "updated_at" timestamp(0) without time zone null, "deleted_at" timestamp(0) without time zone null))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_06_14_000100_create_crm_pipelines_table.php[39;22m:[39;1m14[39;22m
+      [2m+27 vendor frames [22m
+  [33m37  [39m[39;1mtests/Pg/ActivityIdTest.php[39;22m:[39;1m19[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ActivityIdTest[22m [90m>[39m it widens a legacy acti… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_workspace_id_foreign" foreign key ("workspace_id") references "wsp_workspaces" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ActivityIdTest.php[39;22m:[39;1m30[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects foreign…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it matches approved… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it dispatches mutat… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects forged a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_workspace_id_foreign" foreign key ("workspace_id") references "wsp_workspaces" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it fails closed for… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects invalid…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P06]: Duplicate schema: 7 ERROR:  schema "public" already exists (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: CREATE SCHEMA public)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m36[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it serializes compe… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects associat… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it separates NULL a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it roundtrips all a… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it preserves pivot…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it uses determinist… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it keeps committed…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_workspace_id_foreign" foreign key ("workspace_id") references "wsp_workspaces" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malfor… [41;1m RuntimeException [49;22m  
+[39;1m  CRM prerequisite [users] is missing; initialize the account identity/workspace schema before enabling CRM.[39;22m
+
+  at [32mdatabase/migrations/2026_09_14_000002_company_contact_parity.php[39m:[32m28[39m
+     24▕             }
+     25▕         }
+     26▕         foreach (['users', 'wsp_workspaces', 'wsp_workspace_members'] as $table) {
+     27▕             if (! Schema::hasTable($table)) {
+  ➜  28▕                 throw new RuntimeException("CRM prerequisite [{$table}] is missing; initialize the account identity/workspace schema before enabling CRM.");
+     29▕             }
+     30▕         }
+     31▕ 
+     32▕         if (DB::getDriverName() === 'pgsql' && (int) DB::selectOne('SHOW server_version_num')->server_version_num < 150000) {
+
+  [33m1   [39m[39;1mdatabase/migrations/2026_09_14_000002_company_contact_parity.php[39;22m:[39;1m28[39;22m
+      [2m+27 vendor frames [22m
+  [33m29  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_workspace_id_user_id_unique" unique ("workspace_id", "user_id"))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it rejects malforme… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_workspace_id_foreign" foreign key ("workspace_id") references "wsp_workspaces" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it stores each admi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "wsp_workspace_members" ("id" uuid not null, "workspace_id" uuid not null, "user_id" uuid not null, "status" varchar(255) not null default 'active'))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ParityContractTest[22m [90m>[39m it enforces pair an… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "wsp_workspace_members" does not exist (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: alter table "wsp_workspace_members" add constraint "wsp_workspace_members_user_id_foreign" foreign key ("user_id") references "users" ("id") on delete cascade)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Support/AccountFixture.php[39;22m:[39;1m26[39;22m
+  [33m10  [39m[39;1mtests/Pg/ParityContractTest.php[39;22m:[39;1m37[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\UpgradeSafetyTest[22m [90m>[39m it checks prerequisi… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "crm_contacts" ("id" uuid not null, "first_name" varchar(255) null, "last_name" varchar(255) null, "email" varchar(255) null, "phone" varchar(255) null, "job_title" varchar(255) null, "company_id" uuid null, "owner_id" uuid null, "custom_fields" jsonb null, "merged_into_id" uuid null, "created_at" timestamp(0) without time zone null, "updated_at" timestamp(0) without time zone null, "deleted_at" timestamp(0) without time zone null))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_06_14_000140_create_crm_contacts_table.php[39;22m:[39;1m14[39;22m
+  [33m10  [39m[39;1mtests/Pg/UpgradeSafetyTest.php[39;22m:[39;1m16[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\UpgradeSafetyTest[22m [90m>[39m it refuses automatic… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[3F000]: Invalid schema name: 7 ERROR:  no schema has been selected to create in at character 14 (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_crm_parity_test, SQL: create table "crm_contacts" ("id" uuid not null, "first_name" varchar(255) null, "last_name" varchar(255) null, "email" varchar(255) null, "phone" varchar(255) null, "job_title" varchar(255) null, "company_id" uuid null, "owner_id" uuid null, "custom_fields" jsonb null, "merged_into_id" uuid null, "created_at" timestamp(0) without time zone null, "updated_at" timestamp(0) without time zone null, "deleted_at" timestamp(0) without time zone null))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mdatabase/migrations/2026_06_14_000140_create_crm_contacts_table.php[39;22m:[39;1m14[39;22m
+  [33m10  [39m[39;1mtests/Pg/UpgradeSafetyTest.php[39;22m:[39;1m16[39;22m
+
+
+  [90mTests:[39m    [31;1m36 failed[39;22m[90m,[39m[39m [39m[32;1m22 passed[39;22m[90m (100 assertions)[39m
+  [90mDuration:[39m [39m6.93s[39m
+  [90mRandom Order Seed:[39m [39m1789402130[39m
+

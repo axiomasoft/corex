@@ -1,0 +1,4 @@
+/consumer/vendor/
+/consumer/.phpunit.cache/
+/consumer/.phpunit.result.cache
+/consumer/bootstrap/

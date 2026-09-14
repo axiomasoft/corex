@@ -1,0 +1,20 @@
+{
+    "name": "corex/crm-parity-qualification",
+    "type": "project",
+    "require": {
+        "php": "^8.4",
+        "laravel/framework": "^13.0",
+        "flex/crm": "dev-crm-parity-fb156f5897c1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^11.0"
+    },
+    "repositories": [
+        {"type": "artifact", "url": "../artifacts"}
+    ],
+    "autoload-dev": {
+        "psr-4": {"Flex\\Crm\\Tests\\": "../../../packages/crm/tests/"}
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
