@@ -248,7 +248,7 @@ $manager->setWorkspace($app->make(PrincipalWorkspaceResolver::class)->resolveFor
 $otherCompany = $request('POST', 'companies', ['name' => 'Other buyer'], 201, '/companies');
 $request('POST', 'contacts/'.$ids['a']['contact'].'/companies', ['company_id' => $otherCompany['id'], 'is_primary' => true], 422, '/contacts/{contactId}/companies');
 $raceContact = $request('POST', 'contacts', ['name_first' => 'Concurrent'], 201, '/contacts');
-config(['database.connections.association_race' => DB::connection('tenant')->getConfig()]);
+config(['database.connections.association_race' => config('database.connections.tenant')]);
 $race = DB::connection('association_race');
 $race->beginTransaction();
 $race->statement("SET LOCAL lock_timeout='50ms'");

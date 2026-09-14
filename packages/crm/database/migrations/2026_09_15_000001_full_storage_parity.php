@@ -81,7 +81,7 @@ return new class extends Migration
             $this->scopedUnique('crm_pipelines', 'crm_pipelines_default_uq', ['entity_type', 'workspace_id'], 'is_default AND deleted_at IS NULL');
             Schema::create((new Stage)->getTable(), function (Blueprint $t): void {
                 IdColumns::primary($t);
-                IdColumns::foreign($t, 'pipeline_id')->constrained((new Pipeline)->getTable())->cascadeOnDelete();
+                IdColumns::foreign($t, 'pipeline_id')->constrained('crm_pipelines')->cascadeOnDelete();
                 $t->string('code', 64);
                 $t->jsonb('name');
                 $t->string('color', 16)->nullable();
@@ -98,8 +98,8 @@ return new class extends Migration
                 $this->workspace($t);
                 $t->string('title', 255);
                 $t->string('status', 16)->default('open');
-                IdColumns::foreign($t, 'pipeline_id')->nullable()->constrained((new Pipeline)->getTable())->restrictOnDelete();
-                IdColumns::foreign($t, 'stage_id')->nullable()->constrained((new Stage)->getTable())->restrictOnDelete();
+                IdColumns::foreign($t, 'pipeline_id')->nullable()->constrained('crm_pipelines')->restrictOnDelete();
+                IdColumns::foreign($t, 'stage_id')->nullable()->constrained('crm_stages')->restrictOnDelete();
                 $t->string('contact_name', 255)->nullable();
                 $t->string('phone', 64)->nullable();
                 $t->string('email', 255)->nullable();
@@ -122,8 +122,8 @@ return new class extends Migration
                 $this->workspace($t);
                 $t->string('title', 255);
                 $t->string('status', 8)->default('open');
-                IdColumns::foreign($t, 'pipeline_id')->constrained((new Pipeline)->getTable())->restrictOnDelete();
-                IdColumns::foreign($t, 'stage_id')->constrained((new Stage)->getTable())->restrictOnDelete();
+                IdColumns::foreign($t, 'pipeline_id')->constrained('crm_pipelines')->restrictOnDelete();
+                IdColumns::foreign($t, 'stage_id')->constrained('crm_stages')->restrictOnDelete();
                 $this->amount($t);
                 $t->date('close_date')->nullable();
                 $t->timestampTz('won_at', null)->nullable();
@@ -142,11 +142,11 @@ return new class extends Migration
                 $this->timestamps($t, soft: true);
             });
             Schema::table((new Lead)->getTable(), function (Blueprint $t): void {
-                $t->foreign('converted_deal_id')->references('id')->on((new Deal)->getTable())->nullOnDelete();
+                $t->foreign('converted_deal_id')->references('id')->on('crm_deals')->nullOnDelete();
             });
             Schema::create('crm_deal_contacts', function (Blueprint $t): void {
                 IdColumns::primary($t);
-                IdColumns::foreign($t, 'deal_id')->constrained((new Deal)->getTable())->cascadeOnDelete();
+                IdColumns::foreign($t, 'deal_id')->constrained('crm_deals')->cascadeOnDelete();
                 IdColumns::foreign($t, 'contact_id')->constrained('crm_contacts')->cascadeOnDelete();
                 $t->string('label', 64)->nullable();
                 $t->boolean('is_primary')->default(false);
@@ -175,7 +175,7 @@ return new class extends Migration
                 $this->timestamps($t, soft: true);
             });
             Schema::create('crm_activity_targets', function (Blueprint $t): void {
-                IdColumns::foreign($t, 'activity_id')->constrained((new Activity)->getTable())->cascadeOnDelete();
+                IdColumns::foreign($t, 'activity_id')->constrained('crm_activities')->cascadeOnDelete();
                 $t->string('entity_type', 64);
                 IdColumns::foreign($t, 'entity_id');
                 $t->timestampTz('created_at', null)->useCurrent();
