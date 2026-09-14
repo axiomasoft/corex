@@ -14,15 +14,18 @@ use CoreX\Contracts\ModuleRegistrar;
 use CoreX\Contracts\PubSub;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
+use CoreX\Contracts\TenantStorage;
 use CoreX\Contracts\WorkerRuntime;
 use CoreX\PubSub\DefaultWorkerRuntime;
 use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
+use CoreX\Storage\LocalTenantStorage;
 use CoreX\Support\Config;
 use CoreX\Support\ServiceProviderModuleRegistrar;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -60,6 +63,14 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
+        $this->app->scoped(TenantStorage::class, function ($app): LocalTenantStorage {
+            return new LocalTenantStorage(
+                contexts: $app->make(TenantContextResolver::class),
+                filesystems: new FilesystemManager($app),
+                durableRoot: Config::storageDurableRoot(),
+                ephemeralRoot: Config::storageEphemeralRoot(),
+            );
+        });
     }
 
     public function boot(): void

@@ -18,23 +18,27 @@ use RuntimeException;
  * D13/AC-7, P2.12). `drop()` mirrors the `DROP DATABASE IF EXISTS` pattern
  * already used by {@see PendingPool::clearPending()}.
  *
- * Scope Excluded: real `pg_dump -Fc`/S3 upload — the actual write step is
- * behind an injectable `$writer` closure (defaults to a no-op that records
- * a synthetic `storage_path`), so this class is unit-testable without real
- * Postgres tooling or S3.
+ * The host supplies a writer that returns a durable archive path and size.
+ * Remote writers must also supply a verifier for their storage backend.
  */
 final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
 {
     /**
      * @param  (Closure(AccountRef, string): array{storage_path: string, size_bytes: int})|null  $writer
+     * @param  (Closure(string, int): bool)|null  $verifier
      */
     public function __construct(
         private readonly string $centralConnection,
         private readonly ?Closure $writer = null,
+        private readonly ?Closure $verifier = null,
     ) {}
 
     public function export(AccountRef $account, string $kind): string
     {
+        if ($this->writer === null) {
+            throw new RuntimeException('No tenant export writer configured; refusing to create a ready export.');
+        }
+
         $exportId = (string) Str::uuid7();
 
         DB::connection($this->centralConnection)->table('root_account_exports')->insert([
@@ -53,8 +57,9 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
             ->where('id', $exportId)
             ->update(['status' => 'running', 'updated_at' => now()]);
 
-        $writer = $this->writer ?? self::nullWriter();
+        $writer = $this->writer;
         $result = $writer($account, $exportId);
+        $this->verifyArchive($result['storage_path'], $result['size_bytes']);
 
         DB::connection($this->centralConnection)->table('root_account_exports')
             ->where('id', $exportId)
@@ -83,23 +88,30 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
             );
         }
 
+        $this->verifyArchive((string) $latestExport->storage_path, (int) $latestExport->size_bytes);
+
         $dbName = DB::connection($this->centralConnection)->table('root_accounts')
             ->where('id', $account->id)
             ->value('db_name');
+
+        if (! is_string($dbName) || ! preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $dbName)) {
+            throw new RuntimeException('Invalid account database name; refusing DROP.');
+        }
 
         DB::connection($this->centralConnection)->statement('DROP DATABASE IF EXISTS "'.$dbName.'"');
 
         event(new AccountPurged($account));
     }
 
-    /**
-     * @return Closure(AccountRef, string): array{storage_path: string, size_bytes: int}
-     */
-    private static function nullWriter(): Closure
+    private function verifyArchive(string $path, int $size): void
     {
-        return static fn (AccountRef $account, string $exportId): array => [
-            'storage_path' => "exports/{$account->id}/{$exportId}.dump",
-            'size_bytes' => 0,
-        ];
+        clearstatcache(true, $path);
+        $verified = $path !== '' && $size > 0 && ($this->verifier !== null
+            ? ($this->verifier)($path, $size)
+            : is_file($path) && is_readable($path) && filesize($path) === $size);
+
+        if (! $verified) {
+            throw new RuntimeException('Tenant export archive is unavailable or has an invalid size; refusing ready/DROP.');
+        }
     }
 }

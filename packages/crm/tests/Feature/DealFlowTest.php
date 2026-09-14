@@ -12,6 +12,7 @@ use Flex\Crm\Models\Pipeline;
 use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 beforeEach(function (): void {
     $this->pipeline = Pipeline::create(['name' => 'Sales', 'is_default' => true]);
@@ -53,3 +54,13 @@ it('refuses to create a deal in a pipeline without stages', function (): void {
 
     app(CreateDeal::class)->handle($empty, 'orphan');
 })->throws(RuntimeException::class);
+
+it('rejects a stage from another pipeline without changing the deal or emitting an event', function (): void {
+    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Unchanged');
+    $other = Pipeline::create(['name' => 'Other']);
+    $stage = Stage::create(['pipeline_id' => $other->id, 'name' => 'Other stage', 'position' => 0]);
+    Event::fake([DealMovedToStage::class]);
+    expect(fn () => app(MoveDealToStage::class)->handle($deal, $stage))->toThrow(ValidationException::class);
+    expect($deal->fresh()->stage_id)->toBe($this->newStage->id);
+    Event::assertNotDispatched(DealMovedToStage::class);
+});

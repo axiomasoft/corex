@@ -2,8 +2,8 @@
 projection: owner-gate-view
 projection_version: v1
 source_scope: decisions/queue.jsonl
-through: 11
-inputs_sha256: 899edc91893f6b5e62f14d03463eac145b0ba513cf613261939e726918ca05dc
+through: 33
+inputs_sha256: 30e4e3b10a9d895b8d6eb1d8a4ca0bb29f8cb7e9c677feee79280ef136b7f9a7
 generated_by: task plan-decisions render
 -->
 
@@ -11,18 +11,4 @@ generated_by: task plan-decisions render
 
 > Не править руками: это генерируемый вид.
 
-## authority_change · batched · repository_owner
-
-| Decision | Subject | Expires |
-|:--|:--|:--|
-| AUTH-PRIVATE-CHANNEL | 2026.09.12-№1-COREX-SUCCESSOR P3.3 | 2026-12-31T23:59:59Z |
-| BOXED-INIT | 2026.09.12-№1-COREX-SUCCESSOR P3.2 | 2026-12-31T23:59:59Z |
-| COMPAT-PROOF | 2026.09.12-№1-COREX-SUCCESSOR P3.3 | 2026-12-31T23:59:59Z |
-| DOMAIN-OWNER | 2026.09.12-№1-COREX-SUCCESSOR P3.2 | 2026-12-31T23:59:59Z |
-| NORM-COVERAGE | 2026.09.12-№1-COREX-SUCCESSOR P3.1 | 2026-12-31T23:59:59Z |
-| NORM-FORWARD-SOURCES | 2026.09.12-№1-COREX-SUCCESSOR P3.1 | 2026-12-31T23:59:59Z |
-| NORM-L0-STACK | 2026.09.12-№1-COREX-SUCCESSOR P3.1 | 2026-12-31T23:59:59Z |
-| RELEASE-COREX | 2026.09.12-№1-COREX-SUCCESSOR P3.3 | 2026-12-31T23:59:59Z |
-| ROLE-WRITE | 2026.09.12-№1-COREX-SUCCESSOR P3.2 | 2026-12-31T23:59:59Z |
-| STANCL-SOURCE | 2026.09.12-№1-COREX-SUCCESSOR P3.3 | 2026-12-31T23:59:59Z |
-| TEMPLATE-PARITY | 2026.09.12-№1-COREX-SUCCESSOR P3.2 | 2026-12-31T23:59:59Z |
+Нет неразрешённых owner-gate запросов.

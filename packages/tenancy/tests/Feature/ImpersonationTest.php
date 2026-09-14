@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Events\ImpersonationEnded;
 use CoreX\Tenancy\Events\ImpersonationStarted;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Models\User;
 use CoreX\Tenancy\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
@@ -47,6 +49,30 @@ afterAll(function (): void {
 });
 
 const IM_ISSUER = 'https://idp.corex.test';
+
+it('isolates impersonation state across requests in one worker container', function (bool $firstImpersonated): void {
+    foreach ([$firstImpersonated, ! $firstImpersonated] as $impersonated) {
+        app()->forgetScopedInstances();
+        session()->flush();
+
+        if ($impersonated) {
+            session([
+                'corex.impersonation.grant_id' => 'grant-test',
+                'corex.impersonation.staff_identity_id' => 'staff-test',
+                'corex.impersonation.target_user_id' => 'target-test',
+                'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
+            ]);
+        }
+        expect(app(ImpersonationService::class)->active())->toBe($impersonated ? 'grant-test' : null);
+        $saving = fn () => event('eloquent.saving: '.User::class, [new User]);
+
+        if ($impersonated) {
+            expect($saving)->toThrow(ImpersonationRestrictedException::class);
+        } else {
+            expect($saving)->not->toThrow(ImpersonationRestrictedException::class);
+        }
+    }
+})->with([false, true]);
 const IM_CLIENT_ID = 'oidc-test-client';
 const IM_DISCOVERY_URL = IM_ISSUER.'/.well-known/openid-configuration';
 const IM_AUTHORIZATION_ENDPOINT = IM_ISSUER.'/authorize';

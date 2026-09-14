@@ -4,6 +4,52 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 Пакет ещё не тегирован: в `v0.1.0` монорепо его нет (`git ls-tree -r v0.1.0 -- packages/tenancy` пусто).
 
+## Unreleased
+
+### Changed
+
+- Changed the public `CentralApiClient` to the strict `corex-membership/1`
+  profile: every read now carries product and correlation identifiers; snapshots
+  retain exact state, revision and revoke-generation values; revoke returns a
+  durable receipt. The legacy boolean HTTP adapter was removed rather than
+  silently weakening this contract. The qualified strict transport remains
+  unregistered until a real cloud binding is supplied.
+
+### Added
+
+- Added an unregistered, disposable fenced credential reference seam for local membership fixtures.
+- Added an unregistered durable trigger inbox and pull-only refresh reference seam for local fixtures.
+- Added an unregistered local membership composition reference for A/B revoke, credential cleanup,
+  fenced regrant, restore denial, and trigger-refresh fixtures. It does not register an auth guard,
+  runtime projection, production schema, or public API.
+- Added an unregistered internal accounts-menu read/cache-loss reference. It preserves the public
+  surface, never grants access from menu data, and requires separate central/API adoption.
+
+- Opt-in `CentralApiClient` HTTP transport, UUID-only membership DTOs/events,
+  typed deny/unavailable/protocol failures, and an account-local membership
+  projection. Revocation refreshes authoritative membership under a per-account
+  lock, deactivates only the target tenant user, and deletes only that tenant's
+  sessions. Central writers, credentials provisioning, and SSO authority remain
+  outside this package.
+- `DatabaseIdentitySyncer` now applies membership activity independently from
+  profile freshness: a missing or non-active membership deactivates the existing
+  UUID projection even when the profile timestamp is unchanged; regrant restores
+  that same UUID without a contact-based merge.
+
+- `ProvisioningClaim` and proof-gated `ClaimAccountSignup` reserve one existing
+  pending account for an immutable signup key. The root-only Action uses a
+  transaction-scoped PostgreSQL advisory lock and the partial
+  `root_accounts_signup_key_uq` expression index, returns the original account
+  for compatible replay, preserves unrelated JSON data, and fails closed for
+  incompatible keys, tombstones, unqualified templates, or an empty pool. It
+  never clones, activates, or exposes a runtime entrypoint; those P6.25 saga
+  responsibilities remain consumer-owned.
+- `ContextTenantStorage` binds the core `TenantStorage` contract to the
+  initialized tenancy context. Its `local` and explicitly local `fake-s3`
+  modes create private, captured scoped filesystems rather than exposing a
+  mutable Stancl named disk. The fake mode has object-prefix test semantics
+  only; real S3, credentials, backup, restore and moves remain unimplemented.
+
 ## [0.1.0] - 2026-07-27
 
 First tagged release — roadmap-фаза P1 / B-11 (physical DB-per-account tenancy). Repo-level
@@ -122,3 +168,37 @@ tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
   `db_name`)» (P2.17).
 - Тест-фикстура шаблонной БД переименована `tpl_flex_v1` → `tpl_tenant_v1` (`tests/Stubs/`,
   константы `TEMPLATE_DB`/`PENDING_TEMPLATE_DB`) — идентификаторы уровня 0 без Flex-привязки (P2.17).
+
+### Local engineering — P4.1 (D8, unregistered)
+
+- Added an internal management-only identity hydrator and disposable fixtures.
+  UUID remains the only association key; missing/nonactive authority disables
+  the user independently of profile age, and hydration never activates a user
+  or modifies leases, credential generations, epochs or remember tokens.
+  Existing public syncer behavior and signatures are preserved. This local
+  reference is not runtime membership registration or a production release.
+
+### Local engineering — P4.2 (D8, unregistered)
+
+- Added internal typed membership snapshots/revoke receipts, strict scalar GET
+  serialization, certificate-bound service claim checks, no-store/correlation
+  validation, and a trigger-only RS256 parser. Uncertain revoke outcomes retain
+  the original request ID/payload; audit actors do not grant permission.
+  Disposable wire/signature/central fixtures run in the package harness.
+  Existing public client, DTO/event signatures and runtime bindings are unchanged;
+  accepted central/cloud deployment and public major release remain pending.
+
+### Local engineering — P4.3 (D8, unregistered)
+
+- Added a disposable PostgreSQL `numeric(20,0)` pair-store reference with
+  canonical unsigned-counter validation, operation/application fences,
+  idempotent invalidation barriers, and independent-witness restore denial.
+  It has no migration, service-provider registration, public contract, or
+  production-storage claim.
+
+### Local engineering — P4.4 (D8, unregistered)
+
+- Added controlled local clock-domain arithmetic and fixture-only expiry that
+  denies at the 45-second equality boundary and clears a paused owner's pair
+  fence before a delayed commit. No shared clock, worker-kill mechanism, or
+  production FE-60 assertion is introduced.

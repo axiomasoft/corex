@@ -8,9 +8,9 @@ use CoreX\Tasks\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Data\CompleteTaskData;
 use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Enums\TaskStatus;
 use CoreX\Tasks\Events\TaskCompleted;
 use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Support\TaskCompletion;
 use CoreX\Tasks\Support\TaskModuleGuard;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Database\Connection;
@@ -50,18 +50,9 @@ final class CompleteTask implements CompleteTaskCommand
             $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
         }
 
-        $this->access->authorizeComplete(data: $data, context: $context, task: $task);
-
-        if ($task->status === TaskStatus::Done) {
+        if (! (new TaskCompletion($this->access))->apply($task, $data, $context)) {
             return TaskReference::fromTask($task);
         }
-
-        if ($task->status === TaskStatus::Cancelled) {
-            $this->invalid('status', 'Отменённую задачу нельзя завершить.');
-        }
-
-        $task->status = TaskStatus::Done;
-        $task->completed_at = now();
         $task->save();
         TaskCompleted::dispatch($task);
 

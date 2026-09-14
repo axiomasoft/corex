@@ -67,15 +67,16 @@ final class StanclTenancyManager implements TenancyManager
 
         $previousWorkspace = $this->workspace;
 
-        return $this->tenancy->run($tenant, function () use ($workspace, $callback, $previousWorkspace): mixed {
-            $this->workspace = $workspace;
+        try {
+            return $this->tenancy->run($tenant, function () use ($workspace, $callback): mixed {
+                $this->workspace = $workspace;
 
-            try {
                 return $callback();
-            } finally {
-                $this->workspace = $previousWorkspace;
-            }
-        });
+            });
+        } finally {
+            // Stancl restores the tenant (and runs bootstrapper reverts) after the callback.
+            $this->workspace = $previousWorkspace;
+        }
     }
 
     private function buildContext(): TenantContext

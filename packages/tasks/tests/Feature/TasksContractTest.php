@@ -19,6 +19,7 @@ use CoreX\Tasks\Data\UpdateTaskData;
 use CoreX\Tasks\Enums\TaskPriority;
 use CoreX\Tasks\Enums\TaskStatus;
 use CoreX\Tasks\Events\TaskCompleted;
+use CoreX\Tasks\Events\TaskMovedToStage;
 use CoreX\Tasks\Events\TaskUpdated;
 use CoreX\Tasks\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\Models\Project;
@@ -212,6 +213,36 @@ it('moves only within the task project and applies the stage status', function (
     expect($task->stage_id)->toBe($this->done->getKey())
         ->and($task->status)->toBe(TaskStatus::Done)
         ->and($task->completed_at)->not->toBeNull();
+});
+
+it('enforces completion authorization when moving to a Done stage', function (): void {
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Protected', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    $access = Mockery::mock(TaskMutationAccess::class);
+    $access->shouldReceive('authorizeComplete')->once()->andThrow(new AuthorizationException('completion denied'));
+    app()->instance(TaskMutationAccess::class, $access);
+    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
+        ->toThrow(AuthorizationException::class, 'completion denied');
+    expect(Task::query()->findOrFail($reference->id)->stage_id)->toBe($this->todo->id);
+});
+
+it('completes once through move and preserves the completion time on retry', function (): void {
+    Event::fake([TaskCompleted::class, TaskMovedToStage::class]);
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Once', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    $move = new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor);
+    app(MoveTaskToStageCommand::class)->handle($move);
+    $completed = Task::query()->findOrFail($reference->id)->completed_at;
+    $this->travel(1)->minutes();
+    app(MoveTaskToStageCommand::class)->handle($move);
+    expect(Task::query()->findOrFail($reference->id)->completed_at->equalTo($completed))->toBeTrue();
+    Event::assertDispatchedTimes(TaskCompleted::class, 1);
+    Event::assertDispatchedTimes(TaskMovedToStage::class, 1);
+});
+
+it('cannot complete a cancelled task by moving it', function (): void {
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Cancelled', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    Task::query()->whereKey($reference->id)->update(['status' => TaskStatus::Cancelled]);
+    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
+        ->toThrow(ValidationException::class);
 });
 
 it('updates editable task fields through the public command', function (): void {

@@ -60,6 +60,7 @@ final class RegistryCompiler
         $this->validator->validateTablePrefixes($manifests);
         $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover());
         $this->validator->validateComponents($manifests);
+        $this->validator->validateDependencyGraph($manifests);
 
         $entities = [];
         $entityFields = [];
@@ -98,6 +99,9 @@ final class RegistryCompiler
             workflow: $workflow,
             settings: $this->collectSettings($manifests),
             featureFlags: $this->collectFeatureFlags($manifests),
+            listeners: array_column(array_map(static fn (Manifest $manifest): array => [
+                'module' => $manifest->composerName, 'listeners' => $manifest->listeners,
+            ], $manifests), 'listeners', 'module'),
         );
     }
 

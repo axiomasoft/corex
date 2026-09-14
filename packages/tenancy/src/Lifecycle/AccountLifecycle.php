@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Lifecycle;
 
+use Closure;
 use CoreX\Audit\CurrentActor;
 use CoreX\Enums\ImpersonationRestrictedAction;
 use CoreX\Events\DomainEvent;
@@ -13,8 +14,11 @@ use CoreX\Tenancy\Events\AccountSuspended;
 use CoreX\Tenancy\Events\GraceStarted;
 use CoreX\Tenancy\Events\TrialStarted;
 use CoreX\Tenancy\ImpersonationGuard;
+use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -56,9 +60,9 @@ final class AccountLifecycle
      */
     public function activateFromPool(string $slug, string $ownerIdentityId, ?string $vertical): AccountRef
     {
-        $claimed = $this->pendingPool->pullPending();
-
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
+
+        $claimed = $this->pendingPool->pullPending();
 
         $affected = DB::connection($this->centralConnection)->transaction(fn (): int => DB::connection($this->centralConnection)
             ->table('root_accounts')
@@ -96,12 +100,10 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'trial');
-
         $trialEndsAt = now()->addDays((int) config('tenancy.trial_days', 14));
 
         DB::connection($this->centralConnection)->transaction(function () use ($account, $trialEndsAt): void {
+            $this->assertLockedTransition($account->id, 'trial');
             DB::connection($this->centralConnection)->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'trial', 'trial_ends_at' => $trialEndsAt, 'updated_at' => now()]);
@@ -131,10 +133,8 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'active');
-
         DB::connection($this->centralConnection)->transaction(function () use ($account): void {
+            $this->assertLockedTransition($account->id, 'active');
             DB::connection($this->centralConnection)->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'active', 'suspended_at' => null, 'updated_at' => now()]);
@@ -148,10 +148,8 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'suspended');
-
         DB::connection($this->centralConnection)->transaction(function () use ($account, $reason): void {
+            $this->assertLockedTransition($account->id, 'suspended');
             DB::connection($this->centralConnection)->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'suspended', 'suspended_at' => now(), 'updated_at' => now()]);
@@ -167,10 +165,8 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'active');
-
         DB::connection($this->centralConnection)->transaction(function () use ($account): void {
+            $this->assertLockedTransition($account->id, 'active');
             DB::connection($this->centralConnection)->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'active', 'suspended_at' => null, 'updated_at' => now()]);
@@ -184,13 +180,11 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'grace');
-
         $graceUntil = now()->addDays((int) config('tenancy.grace_days', 30));
         $purgeAfter = $graceUntil->clone()->addDays(30);
 
         DB::connection($this->centralConnection)->transaction(function () use ($account, $graceUntil, $purgeAfter): void {
+            $this->assertLockedTransition($account->id, 'grace');
             DB::connection($this->centralConnection)->table('root_accounts')
                 ->where('id', $account->id)
                 ->update([
@@ -211,18 +205,22 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'exporting');
+        return $this->externalOperation($account->id, function () use ($account): string {
+            DB::connection($this->centralConnection)->transaction(function () use ($account): void {
+                // An interrupted export can be retried while access remains closed.
+                if ($this->currentStatus($account->id) === 'exporting') {
+                    return;
+                }
+                $this->assertLockedTransition($account->id, 'exporting');
+                DB::connection($this->centralConnection)->table('root_accounts')
+                    ->where('id', $account->id)
+                    ->update(['status' => 'exporting', 'updated_at' => now()]);
 
-        DB::connection($this->centralConnection)->transaction(function () use ($account): void {
-            DB::connection($this->centralConnection)->table('root_accounts')
-                ->where('id', $account->id)
-                ->update(['status' => 'exporting', 'updated_at' => now()]);
+                $this->writeEvent($account->id, 'account.export_requested');
+            });
 
-            $this->writeEvent($account->id, 'account.export_requested');
+            return $this->tenantDatabaseLifecycle->export($account, 'offboarding');
         });
-
-        return $this->tenantDatabaseLifecycle->export($account, 'offboarding');
     }
 
     /**
@@ -234,39 +232,86 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $current = $this->currentStatus($account->id);
-        $this->fsm->assertTransition($current, 'deleted');
+        $this->externalOperation($account->id, function () use ($account): void {
+            $current = $this->currentStatus($account->id);
 
-        $latestExportStatus = DB::connection($this->centralConnection)->table('root_account_exports')
-            ->where('account_id', $account->id)
-            ->orderByDesc('created_at')
-            ->value('status');
+            if ($current === 'deleted') {
+                return;
+            }
+            $this->fsm->assertTransition($current, 'deleted');
 
-        if ($latestExportStatus !== 'ready') {
-            throw ValidationException::withMessages([
-                'account' => "Account [{$account->id}] has no ready export on record — cannot purge (export-before-DROP invariant, D13/AC-7).",
-            ]);
-        }
+            $latestExportStatus = DB::connection($this->centralConnection)->table('root_account_exports')
+                ->where('account_id', $account->id)
+                ->orderByDesc('created_at')
+                ->value('status');
 
-        DB::connection($this->centralConnection)->transaction(function () use ($account): void {
-            DB::connection($this->centralConnection)->table('root_accounts')
-                ->where('id', $account->id)
-                ->update(['status' => 'deleted', 'deleted_at' => now(), 'updated_at' => now()]);
+            if ($latestExportStatus !== 'ready') {
+                throw ValidationException::withMessages([
+                    'account' => "Account [{$account->id}] has no ready export on record — cannot purge (export-before-DROP invariant, D13/AC-7).",
+                ]);
+            }
 
-            $this->writeEvent($account->id, 'account.purged');
+            // Keep exporting until DROP succeeds. IF EXISTS makes retry after a crash safe.
+            $this->tenantDatabaseLifecycle->drop($account);
+
+            DB::connection($this->centralConnection)->transaction(function () use ($account): void {
+                $this->assertLockedTransition($account->id, 'deleted');
+                DB::connection($this->centralConnection)->table('root_accounts')
+                    ->where('id', $account->id)
+                    ->update(['status' => 'deleted', 'deleted_at' => now(), 'updated_at' => now()]);
+
+                // Soft-delete (schema convention, root_domains_*_uq partial indexes
+                // are WHERE deleted_at IS NULL) — not a hard DELETE, symmetric with
+                // root_accounts' own soft-delete above.
+                DB::connection($this->centralConnection)->table('root_domains')
+                    ->where('account_id', $account->id)
+                    ->whereNull('deleted_at')
+                    ->update(['deleted_at' => now(), 'updated_at' => now()]);
+
+                $this->writeEvent($account->id, 'account.purged');
+            });
         });
+    }
 
-        // Physical DROP DATABASE cannot run inside a transaction — the
-        // FSM/state write above is already committed by this point.
-        $this->tenantDatabaseLifecycle->drop($account);
+    private function assertLockedTransition(string $accountId, string $to): void
+    {
+        $status = DB::connection($this->centralConnection)->table('root_accounts')
+            ->where('id', $accountId)->lockForUpdate()->value('status');
 
-        // Soft-delete (schema convention, root_domains_*_uq partial indexes
-        // are WHERE deleted_at IS NULL) — not a hard DELETE, symmetric with
-        // root_accounts' own soft-delete above.
-        DB::connection($this->centralConnection)->table('root_domains')
-            ->where('account_id', $account->id)
-            ->whereNull('deleted_at')
-            ->update(['deleted_at' => now(), 'updated_at' => now()]);
+        if ($status === null) {
+            throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
+        }
+        $this->fsm->assertTransition((string) $status, $to);
+    }
+
+    /**
+     * @template T
+     *
+     * @param  Closure(): T  $operation
+     * @return T
+     */
+    private function externalOperation(string $accountId, Closure $operation): mixed
+    {
+        $connection = DB::connection($this->centralConnection);
+
+        if ($connection->transactionLevel() !== 0) {
+            throw new RuntimeException('Export and purge must run outside a transaction.');
+        }
+        $key = 'corex-account-external:'.$accountId;
+        // A separate transaction holds the lock while DROP DATABASE executes
+        // outside a transaction on the central connection (PgBouncer-safe).
+        $lock = (new ConnectionFactory(app()))
+            ->make($connection->getConfig(), 'corex-account-operation-lock');
+
+        try {
+            return $lock->transaction(static function () use ($lock, $key, $operation): mixed {
+                $lock->select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', [$key]);
+
+                return $operation();
+            });
+        } finally {
+            $lock->disconnect();
+        }
     }
 
     private function currentStatus(string $accountId): string
@@ -298,6 +343,15 @@ final class AccountLifecycle
      */
     private function writeEvent(string $accountId, string $event, array $payload = []): void
     {
+        $connectionName = $this->centralConnection;
+        DB::connection($connectionName)->afterCommit(static function () use ($accountId, $connectionName): void {
+            $model = Account::on($connectionName)->find($accountId);
+
+            if ($model !== null) {
+                app(HostTenantResolver::class)->invalidateCache($model);
+            }
+        });
+
         DB::connection($this->centralConnection)->table('root_account_events')->insert([
             'id' => (string) Str::uuid7(),
             'account_id' => $accountId,

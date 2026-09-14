@@ -69,9 +69,8 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerCon
                     'panel_id' => $panel,
                 ]);
             }
+            DB::afterCommit($this->scopeMapVersion->invalidator($roleId));
         });
-
-        $this->scopeMapVersion->bump($roleId);
     }
 
     #[Override]

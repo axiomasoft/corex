@@ -1,97 +1,31 @@
-# HANDOFF — 2026-09-12 — after P1
+# HANDOFF — 2026-09-12 — after owner decisions D6–D8
 
-**Next:** exec-items: task:plan-exec 2026.09.12-№1-COREX-SUCCESSOR P1.1 P1.2
+**Next:** план закрыт; 11 owner decisions разрешены. Дальнейшая реализация оформляется отдельными detailed executable specs, без повторного запуска terminal P3 items.
 
-| Параметр | Значение |
-|:--|:--|
-| Batch | B1 |
-| Model | implementation |
-| Thinking | high |
-| Review | light |
-| Capabilities | — |
-| Context | cold-start-root: design-root-terminal |
-| Суть | P1.1 package modules-lint и P1.2 tenancy L12/L13 CI; per-item validation и закрытие внутри B1 |
+**Done:** P1/P2 results сохранены. P3.1–P3.3 доставили evidence/proposals D6–D8. Владелец ответил тремя блоками: D6 «утверждаю», D7 «да, если ты счтаешь это личшим решением» с подтверждением рекомендации ассистентом, D8 «да». Distinct owner-provenance D11–D21 фиксируют branch choices. Все 11 request outcomes=`apply` в пределах исходного `future-spec-design-only`; pending=0. D6–D8 сохранены неизменными как evidence/proposal records.
 
-**Native Codex command:**
+| Owner record | Request | Selected option |
+|:--|:--|:--|
+| D11 | NORM-COVERAGE | effective80-target85 |
+| D12 | NORM-L0-STACK | l0-php83 |
+| D13 | NORM-FORWARD-SOURCES | minimal-forward-corrections |
+| D14 | TEMPLATE-PARITY | hash-amendment-spec |
+| D15 | BOXED-INIT | unsupported-until-consumer |
+| D16 | DOMAIN-OWNER | consumer-control-plane-owner |
+| D17 | ROLE-WRITE | consumer-writer-owner |
+| D18 | RELEASE-COREX | public-candidate-split-spec |
+| D19 | AUTH-PRIVATE-CHANNEL | private-immutable-source-spec |
+| D20 | STANCL-SOURCE | owned-fixed-metadata-source-spec |
+| D21 | COMPAT-PROOF | minimum-factual-proof-spec |
 
-```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-exec 2026.09.12-№1-COREX-SUCCESSOR P1.1 P1.2'
-```
+**Remaining:** Исполнимых successor items в этом плане нет. Новые executable specs пока не созданы и source/runtime изменения не выполнены. Каждый следующий spec должен закрепить intent/scope, exact inputs/source hashes, owning files/project/operator, validation/negative acceptance, deliverables/rollback и оставшиеся authority/input gates. D15 принимает deferred boxed-workspaces outcome до конкретного потребителя, а не требует runtime adapter сейчас. Consumer DNS/TLS и role writer specs принадлежат concrete consumer project; ownership choice не переносит эти реализации в L0. Normative/source correction specs — docs-only. Template integrity и distribution требуют самостоятельных scope и проверок; поднятие floor до85 и compatibility.json tooling не включены.
 
-**Done:** Завершён design qualification: содержательные brief/roadmap, D10 вместо carrier-wait D9, generated open-questions/decisions/status/state, два ready bundles. Три Phase Assurance blocks и шесть детализированных items сохранены; title projections исправлены через phase source. Это результат дизайна; все product items Not started.
+**Authority:** D11–D21 — принятые owner branch choices для отдельных будущих specs. Согласование документальной поправки DB_SCHEMA D13 записано по контексту вопроса, включавшего роль владельца источника FlexCRM, без более широких schema прав. Concrete root_templates DDL amendment, public Contracts/major, dependency changes и external create/fork/push/tag/release/Packagist/secrets/DNS/TLS операции сохраняют отдельные scoped gates, перечисленные в D14/D16/D18–D20. Publication допускается только после подготовленного exact source/artifact/ref result, GREEN pristine proof и отдельного разрешения. Private install требует source-owner confirmed channel/ref и narrowly scoped read credential authority. No phase audit admitted.
 
-**Remaining:** Отдельно выполнить B1, затем P2.1 после настоящих D3/D4, затем B3 после D5. Future bundles материализуются только после producer outputs. Нормативные, schema/profile/domain/role-write и distribution вопросы P3 завершаются proposals/requests, не runtime implementation.
+**Verification:** Для каждого блока queue response schema, proposal bytes/digests и current request/policy/action digests проверены до фиксации. Добавлены claim/response события, исходные request строки не переписаны. Decision/gate views regenerated и проверены через owning generators. Journal/status и все phase carriers сохранены побайтно относительно начала каждого owner-response turn: P3 не реопенена. plan_requests.resolve() не вызван, поскольку его runtime continuation добавила бы in-progress к исходному terminal item. Product tests не требовались для этих decision-only changes; full mirror lint не объявляется GREEN.
 
-**Sources of truth:** plan.md; brief/00-brief.md; roadmap.md; decisions/D1-scope-reconciliation.md; decisions/D2-source-boundaries.md; decisions/D10-design-finish-carriers.md; phases/P1/P1.md; phases/P2/P2.md; phases/P3/P3.md; journal.jsonl. Canonical Brain/CoreX/plans home; portable execution inputs читаются из scoped committed repository mirror.
+**Sources of truth:** plan.md; brief/00-brief.md; roadmap.md; decisions/D1–D10 evidence/carrier records; decisions/D11–D21 owner records с exact names в generated decisions/_index.md; decisions/queue.jsonl; journal.jsonl. decisions/_gates.md и open-questions.md — owned views. Handoff — navigation, не дублирующий owner record. Canonical home Brain/CoreX/plans; repository mirror inputs сохранены.
 
-**Open risks:** P3 owner choices остаются не выданы; live CI evidence исторического f953716 не является proof текущего дерева. Auth install sole root cause не установлена. Test-DB preflight и изоляция обязательны перед code-item проверками. Public Contracts/frozen schema/release authority gates продолжают действовать.
+**Open risks / missing inputs:** Immutable private AzGuard compatible0.2 ref и подтверждённый canonical channel ещё неизвестны. Stancl mirror maintainer/org/repo/tag/version не определены; root lock отличается от выбранного package ref. Исторический auth CI install failure не имеет доказанной единственной причины. Local D4/D5 receipts не runner GREEN текущего дерева; pristine public/private install proof отсутствует. Concrete consumer/operator/entrypoints для D16/D17 и consumer trigger для D15 не названы. Full mirror lint имел foreign pre-invocation P2.1 error: отсутствующая write-site строка в Completion Notes; не делать retrospective repair в этой decision-only работе. Previous optional-index/orchestration warnings не являются новым acceptance результатом.
 
-**Workarounds/Deferred/Open questions:** Optional index не создан; это advisory WARN. P2/P3 bundles — dependency-not-ready до D3/D4/D5. Docs divergence сохраняется; sync ограничен plans. Нет новых условных implementation items и нет phase-audit admission. Design root завершает авторинг и не запускает successor.
-
-## Typed continuity
-
-Один WorkEstimate построен из provider-attested route, текущих capabilities, digest-bound B1 и измеренного объёма уникальных ready inputs. Context telemetry unavailable; authoring boundary design-root-terminal определяет новый root через reducer. Тот же decision передан PlanNextCarrier.
-
-```json
-{
-  "work_estimate": {
-    "route_attested": true,
-    "capabilities_attested": true,
-    "capabilities_sufficient": true,
-    "context_attested": false,
-    "context_health": "unavailable",
-    "batch_receipt_valid": true,
-    "remaining_batch_digest": "f87d1c5c40ecb8de030ab8233e3eae7002f3a2d769a53af292169d1b9904eb9a",
-    "loaded_inputs_reusable": true,
-    "cold_start_cost": 100194,
-    "lifecycle": "design-root-terminal",
-    "isolated_review": false,
-    "reviewer_task": null,
-    "checkpoint": "2026.09.12-№1-COREX-SUCCESSOR:plan+brief+roadmap+D1D2D10+P1-bundles",
-    "schema_version": "session-work-estimate/v1"
-  },
-  "cold_start_cost_unit": "unicode-characters, unique ready-input files",
-  "next_carrier": {
-    "kind": "exec-items",
-    "command_id": "task:plan-exec",
-    "plan_id": "2026.09.12-№1-COREX-SUCCESSOR",
-    "arguments": [
-      "2026.09.12-№1-COREX-SUCCESSOR",
-      "P1.1",
-      "P1.2"
-    ],
-    "context_kind": "cold-start-root",
-    "item_ids": [
-      "P1.1",
-      "P1.2"
-    ],
-    "cold_start_scope": [],
-    "continuity": {
-      "outcome": "cold-start-root",
-      "reason": "design-root-terminal",
-      "evidence": [
-        "batch:f87d1c5c40ecb8de030ab8233e3eae7002f3a2d769a53af292169d1b9904eb9a",
-        "loaded-inputs:reusable",
-        "cold-start-cost:100194",
-        "checkpoint:2026.09.12-№1-COREX-SUCCESSOR:plan+brief+roadmap+D1D2D10+P1-bundles"
-      ],
-      "runnable": true,
-      "schema_version": "session-continuity-decision/v1"
-    }
-  },
-  "batch_receipt": {
-    "schema_version": "batch-receipt/v1",
-    "batch_id": "B1",
-    "membership": [
-      "P1.1",
-      "P1.2"
-    ],
-    "invocation_digest": "a3c191c66f122fbaa4e9dcd2fe0fb9b820da161718f2d81e01e27b07e81ad871",
-    "completed_prefix": [],
-    "routing_digest": "8d4c3db11a0d274aa2f48501f7055f6ccbeb226004505d81b3c028c2e85e21f3",
-    "spec_digest": "f87d1c5c40ecb8de030ab8233e3eae7002f3a2d769a53af292169d1b9904eb9a",
-    "handoff_digest": null,
-    "stop_disposition": "continue"
-  }
-}
-```
+**Deferred / exclusions:** Existing docs divergence сохранена; sync ограничивать plans при отдельном переносе в canonical home. Historical archive не менять/не реопенить. Runtime/distribution/normative debts не закрыты самим выбором owner branch. Новые пакеты, workspace Move/Rename, year-2 features, public interfaces, release/tag/push не выполнялись.

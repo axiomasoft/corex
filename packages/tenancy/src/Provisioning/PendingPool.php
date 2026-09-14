@@ -120,9 +120,14 @@ final class PendingPool
             throw new RuntimeException('pending-clear requires --template-version and/or --older-than.');
         }
 
+        if (DB::connection($this->centralConnection)->transactionLevel() !== 0) {
+            throw new RuntimeException('Pending cleanup must run outside a transaction.');
+        }
+
         $query = DB::connection($this->centralConnection)
             ->table('root_accounts')
-            ->where('status', 'pending');
+            ->where(fn ($query) => $query->where('status', 'pending')
+                ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)));
 
         if ($templateVersion !== null) {
             $query->where('template_version', $templateVersion);
@@ -133,22 +138,44 @@ final class PendingPool
         }
 
         $stale = $query->get(['id', 'db_name', 'cluster_id']);
+        $cleared = 0;
 
         foreach ($stale as $row) {
+            // A committed claim removes the row from signup selection before external DDL.
+            // The marker makes a failed DROP recoverable by the next cleanup run.
+            $claimed = DB::connection($this->centralConnection)->table('root_accounts')
+                ->where('id', $row->id)
+                ->where(fn ($query) => $query->where('status', 'pending')
+                    ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)))
+                ->update(['status' => 'provisioning', 'data' => DB::raw("jsonb_set(CASE WHEN jsonb_typeof(data) = 'object' THEN data ELSE '{}'::jsonb END, '{pool_cleanup}', 'true')")]);
+
+            if ($claimed !== 1) {
+                continue;
+            }
+
             DB::connection($this->centralConnection)->statement('DROP DATABASE IF EXISTS "'.$row->db_name.'"');
 
-            DB::connection($this->centralConnection)
-                ->table('root_accounts')
-                ->where('id', $row->id)
-                ->delete();
+            DB::connection($this->centralConnection)->transaction(function () use ($row, &$cleared): void {
+                $deleted = DB::connection($this->centralConnection)
+                    ->table('root_accounts')
+                    ->where('id', $row->id)
+                    ->where('status', 'provisioning')
+                    ->where('data->pool_cleanup', true)
+                    ->delete();
 
-            DB::connection($this->centralConnection)
-                ->table('root_clusters')
-                ->where('id', $row->cluster_id)
-                ->decrement('db_count');
+                if ($deleted === 0) {
+                    return;
+                }
+
+                DB::connection($this->centralConnection)
+                    ->table('root_clusters')
+                    ->where('id', $row->cluster_id)
+                    ->decrement('db_count');
+                $cleared++;
+            });
         }
 
-        return $stale->count();
+        return $cleared;
     }
 
     private function cloneOne(?string $clusterId, string $status): string
@@ -166,7 +193,7 @@ final class PendingPool
             'id' => $id,
             'cluster_id' => $cluster->id,
             'db_name' => $dbName,
-            'status' => $status,
+            'status' => 'provisioning',
             'template_version' => $template->version,
             'embedding_model' => $template->embedding_model,
             'embedding_dim' => $template->embedding_dim,
@@ -180,10 +207,15 @@ final class PendingPool
             embeddingDim: (int) $template->embedding_dim,
         ));
 
-        DB::connection($this->centralConnection)
-            ->table('root_clusters')
-            ->where('id', $cluster->id)
-            ->increment('db_count');
+        DB::connection($this->centralConnection)->transaction(function () use ($cluster, $id, $status): void {
+            DB::connection($this->centralConnection)->table('root_accounts')
+                ->where('id', $id)->update(['status' => $status]);
+
+            DB::connection($this->centralConnection)
+                ->table('root_clusters')
+                ->where('id', $cluster->id)
+                ->increment('db_count');
+        });
 
         return $id;
     }

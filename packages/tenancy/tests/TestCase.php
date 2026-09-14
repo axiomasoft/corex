@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Tests;
 
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
+use CoreX\Testing\IsolatesDatabasePath;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
@@ -19,6 +20,10 @@ use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
  */
 abstract class TestCase extends Orchestra
 {
+    use IsolatesDatabasePath {
+        resolveApplicationCore as private resolveIsolatedApplicationCore;
+    }
+
     /**
      * P2.22 (OidcLoginTest/GlobalLogoutTest) opt-in flag — file-scoped via a
      * plain `beforeAll()`/`afterAll()` pair in THOSE TWO FILES ONLY (never
@@ -81,7 +86,7 @@ abstract class TestCase extends Orchestra
     {
         putenv('TENANCY_OIDC_ENABLED='.(static::$oidcEnabled ? 'true' : 'false'));
 
-        parent::resolveApplicationCore($app);
+        $this->resolveIsolatedApplicationCore($app);
     }
 
     /** @param Application $app */

@@ -169,6 +169,32 @@ it('syncToAccount() is idempotent — a second sync upserts, does not duplicate'
     expect($count)->toBe(1);
 });
 
+it('keeps distinct UUID identities separate when their phone values match', function (): void {
+    $account = makeAccountIS(makeClusterIS());
+    migrateUsersTableIS(accountRefIS($account));
+
+    $firstIdentityId = makeIdentityIS(['phone' => '+70000000000']);
+    $secondIdentityId = makeIdentityIS(['phone' => '+70000000000']);
+    makeMembershipIS($firstIdentityId, $account->id);
+    makeMembershipIS($secondIdentityId, $account->id);
+
+    $syncer = app(IdentitySyncer::class);
+    $syncer->syncToAccount($firstIdentityId, $account->id);
+    $syncer->syncToAccount($secondIdentityId, $account->id);
+
+    /** @var TenancyManager $manager */
+    $manager = app(TenancyManager::class);
+    $rows = $manager->runFor(accountRefIS($account), null, fn (): array => DB::table('users')
+        ->whereIn('id', [$firstIdentityId, $secondIdentityId])
+        ->orderBy('id')
+        ->pluck('phone', 'id')
+        ->all());
+
+    expect($rows)->toHaveCount(2)
+        ->and($rows[$firstIdentityId])->toBe('+70000000000')
+        ->and($rows[$secondIdentityId])->toBe('+70000000000');
+});
+
 it('fanOut() reaches every account membership (AC-16 в)', function (): void {
     $clusterId = makeClusterIS();
     $accountA = makeAccountIS($clusterId);
@@ -215,7 +241,7 @@ it('a failure syncing one account does not block another (AC-16 г)', function (
         ->and($statuses)->toContain('failed');
 });
 
-it('removing the membership row still syncs the projection with is_active=false (soft removal, C6)', function (): void {
+it('removing the membership row deactivates a projection without changing the profile clock', function (): void {
     $account = makeAccountIS(makeClusterIS());
     migrateUsersTableIS(accountRefIS($account));
 
@@ -227,9 +253,6 @@ it('removing the membership row still syncs the projection with is_active=false 
 
     DB::table('root_identity_accounts')->where('identity_id', $identityId)->where('account_id', $account->id)->delete();
 
-    // Bump the source so the version-guard does not skip this second sync.
-    DB::table('root_identities')->where('id', $identityId)->update(['updated_at' => now()->addSecond()]);
-
     $syncer->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
@@ -239,6 +262,71 @@ it('removing the membership row still syncs the projection with is_active=false 
 
     expect($row)->not->toBeNull()
         ->and($row->is_active)->toBeFalse();
+});
+
+it('treats a non-active membership as inactive without overwriting a fresh profile', function (string $status): void {
+    $account = makeAccountIS(makeClusterIS());
+    migrateUsersTableIS(accountRefIS($account));
+
+    $identityId = makeIdentityIS(['name' => 'Original']);
+    makeMembershipIS($identityId, $account->id);
+
+    $syncer = app(IdentitySyncer::class);
+    $syncer->syncToAccount($identityId, $account->id);
+
+    $ref = accountRefIS($account);
+    /** @var TenancyManager $manager */
+    $manager = app(TenancyManager::class);
+    $manager->runFor($ref, null, function () use ($identityId): void {
+        DB::table('users')->where('id', $identityId)->update([
+            'name' => 'Locally newer',
+            'synced_at' => now()->addMinute(),
+        ]);
+    });
+    DB::table('root_identity_accounts')
+        ->where('identity_id', $identityId)
+        ->where('account_id', $account->id)
+        ->update(['status' => $status]);
+
+    $syncer->syncToAccount($identityId, $account->id);
+
+    $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
+
+    expect($row->name)->toBe('Locally newer')
+        ->and($row->is_active)->toBeFalse();
+})->with(['blocked', 'invited']);
+
+it('reactivates the same UUID after an active regrant without touching a fresh profile', function (): void {
+    $account = makeAccountIS(makeClusterIS());
+    migrateUsersTableIS(accountRefIS($account));
+
+    $identityId = makeIdentityIS(['name' => 'Original']);
+    makeMembershipIS($identityId, $account->id, ['status' => 'blocked']);
+
+    $syncer = app(IdentitySyncer::class);
+    $syncer->syncToAccount($identityId, $account->id);
+
+    $ref = accountRefIS($account);
+    /** @var TenancyManager $manager */
+    $manager = app(TenancyManager::class);
+    $manager->runFor($ref, null, function () use ($identityId): void {
+        DB::table('users')->where('id', $identityId)->update([
+            'name' => 'Locally newer',
+            'synced_at' => now()->addMinute(),
+        ]);
+    });
+    DB::table('root_identity_accounts')
+        ->where('identity_id', $identityId)
+        ->where('account_id', $account->id)
+        ->update(['status' => 'active']);
+
+    $syncer->syncToAccount($identityId, $account->id);
+
+    $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
+
+    expect($row->id)->toBe($identityId)
+        ->and($row->name)->toBe('Locally newer')
+        ->and($row->is_active)->toBeTrue();
 });
 
 it('emits UserSynced on a real sync', function (): void {
@@ -269,10 +357,10 @@ it('the version-guard skips a stale write once the projection is already newer (
     /** @var TenancyManager $manager */
     $manager = app(TenancyManager::class);
 
-    // Simulate the projection already having a newer synced_at than the
+    // Simulate the projection already having a newer source version than the
     // (unchanged) source identity's updated_at — a second sync must no-op.
     $manager->runFor($ref, null, function () use ($identityId): void {
-        DB::table('users')->where('id', $identityId)->update(['synced_at' => now()->addMinute(), 'name' => 'Untouched']);
+        DB::table('users')->where('id', $identityId)->update(['identity_source_updated_at' => now()->addMinute(), 'name' => 'Untouched']);
     });
 
     $syncer->syncToAccount($identityId, $account->id);
@@ -280,6 +368,37 @@ it('the version-guard skips a stale write once the projection is already newer (
     $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
     expect($row->name)->toBe('Untouched');
 });
+
+it('preserves source ordering independently of delivery time', function (bool $deliverNewerFirst): void {
+    $account = makeAccountIS(makeClusterIS());
+    migrateUsersTableIS(accountRefIS($account));
+    $identity = makeIdentityIS(['name' => 'v1', 'updated_at' => '2026-09-01 10:00:00.123456+00']);
+    makeMembershipIS($identity, $account->id);
+    $syncer = app(IdentitySyncer::class);
+    config(['database.connections.identity_writer_test' => config('database.connections.pgsql')]);
+    $writer = DB::connection('identity_writer_test');
+    $injected = false;
+    DB::listen(function ($event) use ($writer, $identity, $account, $syncer, $deliverNewerFirst, &$injected): void {
+        if (! $injected && str_starts_with($event->sql, 'select * from "root_identities"')) {
+            $injected = true;
+            $writer->table('root_identities')->where('id', $identity)
+                ->update(['name' => 'v2', 'updated_at' => '2026-09-01 10:00:00.654321+00']);
+
+            if ($deliverNewerFirst) {
+                $syncer->syncToAccount($identity, $account->id);
+            }
+        }
+    });
+    $syncer->syncToAccount($identity, $account->id);
+
+    if (! $deliverNewerFirst) {
+        $syncer->syncToAccount($identity, $account->id);
+    }
+    $row = app(TenancyManager::class)->runFor(accountRefIS($account), null, fn () => DB::table('users')->where('id', $identity)->first());
+    expect($injected)->toBeTrue()->and($row->name)->toBe('v2')
+        ->and($row->identity_source_updated_at)->toContain('10:00:00.654321');
+    DB::purge('identity_writer_test');
+})->with([false, true]);
 
 it('identities:reconcile re-syncs failed and stale rows (AC-16 з)', function (): void {
     $account = makeAccountIS(makeClusterIS());

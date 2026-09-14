@@ -7,7 +7,7 @@ namespace CoreX\Audit;
 use CoreX\Contracts\AuditEntry;
 use CoreX\Models\AuditLog;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -29,7 +29,7 @@ use Illuminate\Queue\SerializesModels;
  *
  * @internal spec: B-10 §7.1, P1.6, P1.7, D12
  */
-final class RecordAuditEntry implements ShouldQueue
+final class RecordAuditEntry implements ShouldQueueAfterCommit
 {
     use Dispatchable;
     use InteractsWithQueue;

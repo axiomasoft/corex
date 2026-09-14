@@ -16,6 +16,12 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="CorePackage">
+            <directory>packages/core/tests</directory>
+        </testsuite>
+        <testsuite name="ModulesPackage">
+            <directory>packages/modules/tests</directory>
+        </testsuite>
 
         <!-- Layer & isolation gates (P3.5): pure static assertions, no DB/container. -->
         <testsuite name="Arch">

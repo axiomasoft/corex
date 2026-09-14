@@ -394,6 +394,53 @@ it('apply() and canOnRecord() agree for every scope across every principal type'
     expect($builderIds)->toBe($recordIds);
 })->with(fn (): array => collect(Scope::cases())->crossJoin(PrincipalType::cases())->all());
 
+it('matches real department records to the same IDs through ScopeResolver and AccessChecker', function (Scope $scope, array $expectedLabels): void {
+    $workspaceId = ($this->makeWorkspace)('recordParity');
+    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'recordParity.parent');
+    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'recordParity.parent.child');
+    $siblingDepartmentId = ($this->makeDepartment)($workspaceId, null, 'recordParitySibling');
+
+    $principalId = ($this->makeUser)($parentDepartmentId);
+    $sameDepartmentOwnerId = ($this->makeUser)($parentDepartmentId);
+    $childDepartmentOwnerId = ($this->makeUser)($childDepartmentId);
+    $siblingDepartmentOwnerId = ($this->makeUser)($siblingDepartmentId);
+    $ownerWithoutDepartmentId = ($this->makeUser)();
+
+    $role = ($this->newRole)();
+    ($this->grantScope)($role, $scope);
+    ($this->compileRole)($role->id);
+    ($this->assignRole)($role, $principalId);
+
+    $records = [
+        'same' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $sameDepartmentOwnerId]),
+        'child' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $childDepartmentOwnerId]),
+        'sibling' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $siblingDepartmentOwnerId]),
+        'owner_without_department' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerWithoutDepartmentId]),
+        'missing_owner' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]),
+        'null_owner' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => null]),
+    ];
+
+    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $builderIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->sort()->values()->all();
+    $recordIds = collect($records)
+        ->filter(fn (Deal $record): bool => app(AccessChecker::class)->canOnRecord($identity, 'read', $record))
+        ->pluck('id')
+        ->sort()
+        ->values()
+        ->all();
+    $expectedIds = collect($expectedLabels)
+        ->map(fn (string $label): string => $records[$label]->id)
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($builderIds)->toBe($expectedIds)
+        ->and($recordIds)->toBe($expectedIds);
+})->with([
+    'dept: same department only' => [Scope::Dept, ['same']],
+    'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
+]);
+
 // Monotonicity holds ONLY on a fixture with the NAMED invariants below (premortem A7) — asserted here, not assumed globally.
 it('own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where every owner is in-subtree and in-workspace', function (): void {
     $workspaceId = ($this->makeWorkspace)('wsMono');

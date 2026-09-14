@@ -2,7 +2,7 @@
 
 CRM-модуль CoreX поверх `corex/core`: **воронка продаж** (pipelines → stages → deals) **+ CRM-ядро**
 (контакты, компании-аккаунты, лиды, конверсия) **+ полиморфная timeline активностей**. Демонстрирует и
-проверяет доменные возможности ядра — ULID, деньги в
+проверяет доменные возможности ядра — настраиваемые ID (по умолчанию UUIDv7), деньги в
 minor units (`MoneyCast`, ADR-005), морф-карту через `EntityRegistry`. Изоляция тенантов — физическая
 (DB-per-account, B-11), без row-level-скоупа на моделях.
 
@@ -33,17 +33,30 @@ app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
 
 ## Зависимости
 
-Только `corex/core` (+ `illuminate/*`). Без AzGuard и тяжёлых зависимостей → таргетит Laravel 12/13.
+`corex/core`, `corex/modules` и `illuminate/*`. Без AzGuard; Laravel 12/13.
 Авторизация — забота потребителя / `corex/auth`.
+
+## Установка и lifecycle
+
+Composer обнаруживает `flex/crm` как `corex-module` через `CrmModule`.
+После `corex:modules:compile` включите его через `ModuleLifecycle::enable('flex/crm')`
+в целевой tenant DB. Lifecycle выполняет миграции и учитывает владение схемой;
+provider больше не запускает CRM-миграции при общей команде `migrate`.
+Disable сохраняет данные, повторный enable идемпотентен.
+
+Для существующей установки, мигрировавшей CRM до появления manifest, сначала
+сделайте резервную копию и выполните обновление CRM-миграций явным `--path`.
+Не выполняйте purge: старые ownership claims автоматически не восстанавливаются.
+Согласование исторической схемы и claims — отдельная процедура миграции потребителя.
 
 ## Тесты
 
-Модуль тестируется **общим root-harness монорепо** (`tests/Crm/`). Из корня `packages/corex`:
+Тесты находятся в `packages/crm/tests/`. Из корня монорепо:
 
 ```bash
-composer test      # Pest + Orchestra Testbench (sqlite :memory:)
-composer analyse   # PHPStan (larastan) level 6
-composer lint      # Pint
+composer --working-dir=packages/crm test       # SQLite
+composer --working-dir=packages/crm test:pg    # только изолированная corex_test
+composer --working-dir=packages/crm analyse
 ```
 
 > `custom_fields` — `jsonb` без GIN (sqlite-харнес); GIN-индекс добавляет Postgres-потребитель.

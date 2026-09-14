@@ -38,7 +38,7 @@ function resetPublicSchema(): void
  */
 function migratePublishedInIsolation(array $files): string
 {
-    $dir = sys_get_temp_dir().'/corex_publish_'.bin2hex(random_bytes(4));
+    $dir = database_path('published-'.bin2hex(random_bytes(4)));
     mkdir($dir);
 
     foreach ($files as $file) {
@@ -57,21 +57,8 @@ function migratePublishedInIsolation(array $files): string
     return $dir;
 }
 
-/**
- * @param  list<string>  $paths
- */
-function removeFiles(array $paths): void
-{
-    foreach ($paths as $path) {
-        @unlink($path);
-    }
-}
-
 it('publishes exactly the 8 sys_* migrations and they migrate on a clean PG schema', function (): void {
     $target = publishTarget();
-
-    // Idempotent pre-clean: a prior failed run must not skew the count.
-    removeFiles(glob($target.'/*_create_sys_*_table.php') ?: []);
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
 
@@ -88,15 +75,6 @@ it('publishes exactly the 8 sys_* migrations and they migrate on a clean PG sche
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_departments'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_pubsub_cursors'))->toBeTrue();
 
-    removeFiles(glob($isolated.'/*') ?: []);
-    rmdir($isolated);
-    // Clean up EVERY file vendor:publish copied to $target, not just the
-    // `_create_sys_*_table.php` subset $published tracks for the count
-    // assertion above — an additive (non-`_create_`) migration published
-    // alongside them (e.g. P2.11's widening migration) would otherwise be
-    // orphaned in this shared, cross-run testbench skeleton directory and
-    // corrupt a LATER test's un-scoped `artisan migrate` against sqlite.
-    removeFiles(glob($target.'/*.php') ?: []);
 });
 
 it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG schema', function (): void {
@@ -105,7 +83,6 @@ it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG sche
     $this->app->register(ModulesServiceProvider::class);
 
     $target = publishTarget();
-    removeFiles(glob($target.'/*_create_mod_*_table.php') ?: []);
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-modules-migrations', '--force' => true])->run();
 
@@ -118,11 +95,6 @@ it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG sche
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('mod_records'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('mod_lifecycle_log'))->toBeTrue();
 
-    removeFiles(glob($isolated.'/*') ?: []);
-    rmdir($isolated);
-    // See the sys_* test above for why this cleans up ALL published .php
-    // files, not just the `_create_mod_*_table.php` subset $published tracks.
-    removeFiles(glob($target.'/*.php') ?: []);
 });
 
 it('exposes the -tenant connection-scope alias for both migration sets (D43)', function (): void {

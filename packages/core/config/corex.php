@@ -83,6 +83,11 @@ return [
         'departments' => DatabaseDepartmentRepository::class,
     ],
 
+    'storage' => [
+        'durable_root' => storage_path('app/corex/durable'),
+        'ephemeral_root' => storage_path('app/corex/ephemeral'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Audit log

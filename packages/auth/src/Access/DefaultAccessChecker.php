@@ -104,12 +104,16 @@ final class DefaultAccessChecker implements AccessChecker
 
         $key = "{$this->panel()}.{$entity->handle}.{$action}";
 
-        if ($this->allowed($p, $entity->handle, $action)
-            && $this->scopePredicate->matches($this->scopeFor($p, $entity->handle, $action), $record, $p)) {
+        if ($this->directGrants->hasActive($p, $key)) {
             return true;
         }
 
-        return $this->directGrants->hasActive($p, $key);
+        return $this->allowed($p, $entity->handle, $action)
+            && $this->scopePredicate->matches(
+                (new ScopeAvailability($this->entities))->normalize($entity->handle, $this->scopeFor($p, $entity->handle, $action)),
+                $record,
+                $p,
+            );
     }
 
     /** @return list<string> */
@@ -118,6 +122,7 @@ final class DefaultAccessChecker implements AccessChecker
         $workspaceId = $this->tenancyManager->context()?->workspace?->id;
 
         return DB::table('aut_role_assignments')
+            ->whereIn('role_id', DB::table('aut_roles')->select('id')->whereNull('deleted_at'))
             ->where('principal_type', $p->principalType()->value)
             ->where('principal_id', $p->principalId())
             ->where(static function (Builder $q): void {
@@ -170,11 +175,13 @@ final class DefaultAccessChecker implements AccessChecker
     /** @param list<string> $roleIds */
     private function memoKey(Principal $p, string $entityKey, string $action, ?RecordContext $ctx, array $roleIds): string
     {
-        $versionFingerprint = (new Collection($roleIds))
-            ->map(fn (string $roleId): int => $this->scopeMapVersion->current($roleId))
-            ->implode(',');
+        sort($roleIds);
+        $versionFingerprint = array_map(fn (string $roleId): array => [$roleId, $this->scopeMapVersion->current($roleId)], $roleIds);
 
-        return implode('|', [
+        return json_encode([
+            $this->tenancyManager->context()?->account->id,
+            $this->tenancyManager->context()?->workspace?->id,
+            $this->panel(),
             $p->principalType()->value,
             $p->principalId(),
             $entityKey,
@@ -182,7 +189,7 @@ final class DefaultAccessChecker implements AccessChecker
             $ctx->type ?? '',
             $ctx->id ?? '',
             $versionFingerprint,
-        ]);
+        ], JSON_THROW_ON_ERROR);
     }
 
     private function panel(): string

@@ -20,8 +20,6 @@ final class CrmServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
         // Register entities so they enter corex/modules's morph map (built in
         // ModulesServiceProvider's app.booted callback, D22).
         $registry = $this->app->make(ArrayEntityRegistry::class);

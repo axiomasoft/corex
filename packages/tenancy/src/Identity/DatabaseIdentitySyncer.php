@@ -62,26 +62,44 @@ final class DatabaseIdentitySyncer implements IdentitySyncer
         );
 
         try {
-            $this->tenancy->runFor($accountRef, null, function () use ($identity, $membership, $identityId, $accountId): void {
-                $existing = User::query()->find($identity->id);
-                $sourceUpdatedAt = CarbonImmutable::parse($identity->updated_at);
+            $this->tenancy->runFor($accountRef, null, function () use ($identity, $identityId, $accountId): void {
+                DB::connection()->transaction(function () use ($identity, $identityId, $accountId): void {
+                    // The lock also covers an absent user row, serializing first delivery.
+                    DB::select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
+                    $existing = User::withTrashed()->whereKey($identityId)->first();
+                    $sourceUpdatedAt = CarbonImmutable::parse($identity->updated_at);
+                    $isMembershipActive = DB::connection($this->centralConnection)->table('root_identity_accounts')
+                        ->where('identity_id', $identityId)->where('account_id', $accountId)->value('status') === 'active';
 
-                if ($existing !== null
-                    && $existing->synced_at !== null
-                    && $sourceUpdatedAt->lessThanOrEqualTo($existing->synced_at)) {
-                    return;
-                }
+                    if ($existing !== null
+                        && $existing->identity_source_updated_at !== null
+                        && $sourceUpdatedAt->lessThanOrEqualTo($existing->identity_source_updated_at)) {
+                        // Membership authority is independent of the profile clock. A
+                        // revoke must apply even when the identity profile has not
+                        // changed; a stale profile snapshot must still not overwrite
+                        // local profile data.
+                        User::query()
+                            ->whereKey($identity->id)
+                            ->update(['is_active' => $isMembershipActive]);
 
-                User::query()->updateOrCreate(['id' => $identity->id], [
-                    'email' => $identity->email,
-                    'name' => $identity->name,
-                    'phone' => $identity->phone,
-                    'locale' => $identity->locale,
-                    'is_active' => $membership !== null && $membership->status !== 'blocked',
-                    'synced_at' => CarbonImmutable::now(),
-                ]);
+                        return;
+                    }
 
-                event(new UserSynced($identityId, $accountId));
+                    User::withTrashed()->updateOrCreate(
+                        attributes: ['id' => $identity->id],
+                        values: [
+                            'email' => $identity->email,
+                            'name' => $identity->name,
+                            'phone' => $identity->phone,
+                            'locale' => $identity->locale,
+                            'is_active' => $isMembershipActive,
+                            'synced_at' => CarbonImmutable::now(),
+                            'identity_source_updated_at' => $sourceUpdatedAt->format('Y-m-d H:i:s.uP'),
+                        ],
+                    );
+
+                    DB::afterCommit(static fn () => event(new UserSynced(identityId: $identityId, accountId: $accountId)));
+                });
             });
         } catch (Throwable) {
             $this->markFailed($identityId, $accountId);
@@ -94,6 +112,9 @@ final class DatabaseIdentitySyncer implements IdentitySyncer
                 ->table('root_identity_accounts')
                 ->where('identity_id', $identityId)
                 ->where('account_id', $accountId)
+                ->where('updated_at', $membership->updated_at)
+                ->whereExists(static fn ($query) => $query->selectRaw('1')->from('root_identities')
+                    ->where('id', $identityId)->where('updated_at', $identity->updated_at))
                 ->update(['sync_status' => 'synced', 'synced_at' => CarbonImmutable::now()]);
         }
     }

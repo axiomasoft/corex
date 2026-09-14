@@ -13,6 +13,8 @@ use Orchestra\Testbench\TestCase as Orchestra;
  */
 abstract class CoreXTestCase extends Orchestra
 {
+    use IsolatesDatabasePath;
+
     /**
      * @param  Application  $app
      * @return list<class-string>

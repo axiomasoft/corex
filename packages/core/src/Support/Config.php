@@ -218,4 +218,14 @@ final class Config
     {
         return (string) config('corex.pubsub.retention', '30 days');
     }
+
+    public static function storageDurableRoot(): string
+    {
+        return (string) config('corex.storage.durable_root', storage_path('app/corex/durable'));
+    }
+
+    public static function storageEphemeralRoot(): string
+    {
+        return (string) config('corex.storage.ephemeral_root', storage_path('app/corex/ephemeral'));
+    }
 }

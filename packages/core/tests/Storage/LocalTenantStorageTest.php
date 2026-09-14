@@ -1,0 +1,99 @@
+<?php
+
+declare(strict_types=1);
+
+use CoreX\Contracts\TenantStorage;
+use CoreX\Storage\StorageCapabilityUnavailable;
+use CoreX\Storage\StorageOperationFailed;
+use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\TenantContext;
+use Illuminate\Support\Facades\File;
+
+final class MutableStorageContextResolver implements TenantContextResolver
+{
+    public function __construct(public TenantContext $context) {}
+
+    public function current(): TenantContext
+    {
+        return $this->context;
+    }
+}
+
+function storageContext(string $id): TenantContext
+{
+    return new TenantContext(account: new AccountRef(id: $id, slug: 'test', status: 'active', features: [], limits: []));
+}
+
+beforeEach(function (): void {
+    $this->storageRoot = sys_get_temp_dir().'/corex-storage-'.bin2hex(random_bytes(8));
+    config([
+        'corex.storage.durable_root' => $this->storageRoot.'/durable',
+        'corex.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
+    ]);
+    $this->resolver = new MutableStorageContextResolver(storageContext('11111111-1111-7111-8111-111111111111'));
+    app()->instance(TenantContextResolver::class, $this->resolver);
+    app()->forgetInstance(TenantStorage::class);
+});
+
+afterEach(function (): void {
+    File::deleteDirectory($this->storageRoot);
+});
+
+it('isolates durable and ephemeral storage by the current account and invalidates retained handles', function (): void {
+    $storage = app(TenantStorage::class);
+    $accountA = $storage->disk();
+
+    expect($storage->usageBytes())->toBe(0);
+
+    $accountA->put('document.txt', 'A');
+    $storage->ephemeralDisk()->put('document.txt', 'temporary');
+
+    expect($accountA->get('document.txt'))->toBe('A')
+        ->and($storage->ephemeralDisk()->get('document.txt'))->toBe('temporary')
+        ->and($storage->usageBytes())->toBe(1)
+        ->and($storage->capabilities()->usage)->toBeTrue()
+        ->and($storage->capabilities()->export)->toBeFalse();
+
+    expect(fn () => $accountA->url('document.txt'))->toThrow(StorageOperationFailed::class);
+
+    $this->resolver->context = storageContext('22222222-2222-7222-8222-222222222222');
+
+    expect(fn () => $accountA->get('document.txt'))->toThrow(StorageOperationFailed::class)
+        ->and($storage->disk()->exists('document.txt'))->toBeFalse();
+});
+
+it('rejects path escape and reports unsupported export explicitly', function (): void {
+    $storage = app(TenantStorage::class);
+
+    expect(fn () => $storage->disk()->put('../escape.txt', 'no'))->toThrow(StorageOperationFailed::class)
+        ->and(fn () => $storage->disk()->put('%252e%252e/escape.txt', 'no'))->toThrow(StorageOperationFailed::class)
+        ->and(fn () => $storage->disk()->put('/escape.txt', 'no'))->toThrow(StorageOperationFailed::class)
+        ->and(fn () => $storage->exportArchive())->toThrow(StorageCapabilityUnavailable::class);
+});
+
+it('keeps all relative filesystem operations inside the account root', function (): void {
+    $storage = app(TenantStorage::class);
+    $disk = $storage->disk();
+    $source = $this->storageRoot.'/source.txt';
+    file_put_contents($source, 'uploaded');
+
+    expect($disk->putFileAs('uploads', $source, 'source.txt'))->toBe('uploads/source.txt')
+        ->and($disk->copy('uploads/source.txt', 'copies/source.txt'))->toBeTrue()
+        ->and($disk->move('copies/source.txt', 'moved/source.txt'))->toBeTrue()
+        ->and($disk->files('moved'))->toContain('moved/source.txt')
+        ->and(fn () => $disk->copy('uploads/source.txt', '../escape.txt'))->toThrow(StorageOperationFailed::class)
+        ->and($disk->delete('moved/source.txt'))->toBeTrue()
+        ->and($disk->exists('moved/source.txt'))->toBeFalse();
+});
+
+it('rejects symbolic links within an account root', function (): void {
+    $storage = app(TenantStorage::class);
+    $disk = $storage->disk();
+    $disk->put('source.txt', 'secret');
+    $root = $this->storageRoot.'/durable/tenants/11111111-1111-7111-8111-111111111111';
+
+    symlink($root.'/source.txt', $root.'/linked.txt');
+
+    expect(fn () => $disk->get('linked.txt'))->toThrow(StorageOperationFailed::class);
+});

@@ -53,7 +53,7 @@
 
 <!-- Сгенерировано scripts/generate-hub.sh из реестра swissknifeman. -->
 <!-- НЕ редактируйте вручную: перегенерация затрёт правки. -->
-<!-- swissknifeman:registry sha=7046e720edde skills=229 -->
+<!-- swissknifeman:registry sha=ef4ea8918f27 skills=232 -->
 
 ## Приоритет источников правил
 
@@ -69,6 +69,24 @@
 3. Структурные вопросы нового кода решай в порядке: структура (`laravel-structure`) -> взаимодействие (`dependency-injection`) -> реализация (профильный скилл).
 4. Устройство системы скиллов в проекте (источник истины, симлинки, gitignore) — скилл `skills-ssot`.
 5. Полный индекс с описаниями (если нужен человеку): `skiller status` в проекте либо `generate-hub.sh --target <проект> --full-index --dry-run`.
+
+## Агенты проекта (11)
+
+Роли в `.claude/agents/`. Преднагруженные скиллы — поле `skills:` (⚠ = имя не найдено в реестре, preload молча не сработает).
+
+| Агент | Назначение | Преднагруженные скиллы |
+|---|---|---|
+| `corex-api-surface` | >- | — |
+| `corex-contribution-reviewer` | >- | gh-review, code-review, dependency-audit, dx-design, git-commit-rules |
+| `corex-issue-triager` | >- | github-flow, oss-governance, oss-development, issue-triage |
+| `corex-orchestrator` | >- | — |
+| `corex-release-conductor` | >- | release-engineering, github-flow, dx-design, git-commit-rules |
+| `corex-reviewer` | >- | laravel-package-testing, laravel-package-service-provider, laravel-package-compatibility, dependency-injection, code-style-spatie, laravel |
+| `corex-security-review` | >- | — |
+| `corex-slice-builder` | >- | laravel-package-scaffold, laravel-package-service-provider, laravel-package-compatibility, dependency-injection, code-style-spatie, named-arguments |
+| `corex-spec-writer` | >- | architecture, api-design, task-brief-template |
+| `corex-test-verifier` | >- | — |
+| `corex-test-writer` | >- | laravel-package-testing, test-isolation-guard |
 
 ## Скиллы вне нативного листинга (2)
 

@@ -241,7 +241,7 @@ it('round-trips the whole CompiledRegistry (all 10 slices) through toArray/fromA
     $array = $compiled->toArray();
 
     // Every slice is present and populated in the plain-array projection.
-    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'settings', 'featureFlags'])
+    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'settings', 'featureFlags', 'listeners'])
         ->and($array['entities'])->toHaveKey('sfl.thing')
         ->and($array['entityFields'])->toHaveCount(1)
         ->and($array['permissions'])->toHaveCount(1)

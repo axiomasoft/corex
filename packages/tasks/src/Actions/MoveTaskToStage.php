@@ -6,13 +6,16 @@ namespace CoreX\Tasks\Actions;
 
 use CoreX\Tasks\Contracts\MoveTaskToStageCommand;
 use CoreX\Tasks\Contracts\TaskAccess;
+use CoreX\Tasks\Data\CompleteTaskData;
 use CoreX\Tasks\Data\MoveTaskToStageData;
 use CoreX\Tasks\Data\TaskReference;
 use CoreX\Tasks\Enums\TaskStatus;
+use CoreX\Tasks\Events\TaskCompleted;
 use CoreX\Tasks\Events\TaskMovedToStage;
 use CoreX\Tasks\Models\Project;
 use CoreX\Tasks\Models\Stage;
 use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Support\TaskCompletion;
 use CoreX\Tasks\Support\TaskModuleGuard;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Database\Connection;
@@ -23,6 +26,7 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskAccess $access,
+        private readonly ?TaskCompletion $completion = null,
     ) {}
 
     public function handle(MoveTaskToStageData $data): TaskReference
@@ -68,7 +72,12 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
             $this->invalid('stage_id', 'Проект стадии не принадлежит рабочему пространству задачи.');
         }
 
+        if ($task->stage_id === $stage->getKey()) {
+            return TaskReference::fromTask($task);
+        }
+
         $task->stage_id = $stage->getKey();
+        $completed = false;
 
         if ($stage->auto_status === TaskStatus::InProgress) {
             $task->status = TaskStatus::InProgress;
@@ -76,11 +85,14 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         if ($stage->auto_status === TaskStatus::Done) {
-            $task->status = TaskStatus::Done;
-            $task->completed_at = now();
+            $completed = ($this->completion ?? app(TaskCompletion::class))->apply($task, new CompleteTaskData(taskId: $task->getKey(), actor: $data->actor), $context);
         }
 
         $task->save();
+
+        if ($completed) {
+            TaskCompleted::dispatch($task);
+        }
         TaskMovedToStage::dispatch($task, $stage);
 
         return TaskReference::fromTask($task);
