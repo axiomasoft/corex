@@ -1,0 +1,10 @@
+{
+  "name": "corex/distribution-proof-consumer",
+  "type": "project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "corex/tasks": "0.1.0-p4.3",
+    "illuminate/contracts": "^12.0"
+  }
+}

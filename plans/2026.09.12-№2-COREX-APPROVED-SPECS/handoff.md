@@ -1,31 +1,31 @@
 # HANDOFF — 2026-09-14 — after P4.1
 
-**Next:** waiting: P4.2 — применить проверенные источники к зависимостям CoreX; после отдельного запуска `$ task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P4.2` и проверки доступного канала этих источников. Локальные кандидаты подготовлены; внешние URL пока не опубликованы.
-
-<details>
-<summary>Технические сведения для продолжения</summary>
+**Next:** ОЖИДАНИЕ: P5 outside this launch → task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P5.1
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | B4 · ready subset P4.2 |
+| Batch | B4 |
 | Model | implementation · gpt-5.6-terra |
 | Thinking | high |
-| Capabilities | local sealed artifacts, Composer dependency resolution; no private credentials or publication |
-| Context | continue-root |
-| Суть | Проверенные копии применяются к root/tenancy только в scope P4.2. |
+| Capabilities | local dependency/source/export qualification; isolated public/private fixtures; private read only with existing scoped authority |
+| Context | cold-start-root: owner-requested-new-session |
+| Суть | Выполнить доступный остаток P4 в одной сессии, закрыть GREEN items и затем GREEN фазу; D11. |
 
-```session-continuity-decision/v1
-{"evidence": ["batch:118b4194e4e424dd8f4bcb5130907d2496cba6032c7b3d5fb06fb74f563c84dc", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:.plan-cache/P4.1-post-close-checkpoint.json"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+**Native Codex command:**
+```bash
+codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P4.5'
 ```
 
-</details>
+```session-continuity-decision/v1
+{"evidence": ["owner-decision:D11", "checkpoint:findings/P4-remainder-session-checkpoint.json"], "outcome": "cold-start-root", "reason": "owner-requested-new-session", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```
 
-**Done:** P4.1 подготовил собственные package identities, exact metadata patch, full immutable source snapshots, reproducible ZIP candidates и checksums. V-SOURCE-MAP, V-METADATA, V-LICENSE, V-BOUNDARY GREEN; исходный код и MIT notices сохранены. P4 остаётся открытой.
+**Done:** P4.1 GREEN: fixed metadata, immutable source snapshots, deterministic ZIP candidates/checksums and source/license/boundary evidence. D11 groups the remaining phase; no new product item was executed.
 
-**Remaining:** P4.2–P4.5 and P5. Current invocation closes only P4.1; scope-complete checkpoint retains this root and does not authorize its successor.
+**Remaining:** P4.2 → P4.3 → P4.4, plus independently gated P4.5. Keep executing ready authorized work in this session after each item close. Close P4 inline when all acceptance is GREEN; report exact remaining blockers otherwise. P5 is outside this launch.
 
-**Open risks:** Root tenancy lock/vendor553f57a8… differs from selected76e5f965…; corrected adoption/cold install not yet proved. Remote mirror/tag URLs are proposals. Private auth remains independent and gated.
+**Sources of truth:** plan.md Routing; phases/P4/P4.md and P4.2–P4.5 specs/states; decisions/D2, D9, D10, D11; P4.1 source dossier/map; findings/P4-remainder-session-checkpoint.json.
 
-**Sources of truth:** P4.1 spec/state/journal; D9 and owner-delegation brief; findings/P4.1-stancl-source-dossier.md; findings/P4.1-stancl-metadata.patch; findings/P4.1-source/source-map.json and build.py; post-close checkpoint.
+**Open risks:** Remote mirror URLs remain unpublished proposals. Qualify available local immutable transport before P4.2 adoption. Export only a fixed committed approved candidate, preserve four-package allowlist. PRIVATE-AZGUARD source/ref and PRIVATE-READ are still missing; this launch authorizes their inspection/preparation, not authenticated use without authority. P4.5 and full phase completion remain conditional on those genuine inputs.
 
-**Workarounds/Deferred/Open questions:** Do not use dev-branch fallback or publish proposed URLs as available channels. External creation/tag/release and P4.2 adoption retain their exact scopes. Downstream P4.2 outcome unknown because its future Validation has no executable carrier.
+**Workarounds/Deferred/Open questions:** Repair stale generated views and ordinary failures inline. Preserve foreign dirty changes. Missing private inputs must not stop independent public work. No invented GREEN, moving-branch fallback, new API inclusion, private export or external publication/CI dispatch. Resolve ordered Required Reads per admitted item; generate future bundles only after actual producer output.

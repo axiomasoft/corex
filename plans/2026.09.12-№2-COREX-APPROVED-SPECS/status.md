@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-14
-inputs_sha256: 5e34983380c51c467ba939ea1ab342a4ba1e9cdca0c129dc0b498f1f82a42f79
+inputs_sha256: 108ee85321f2922189713e0ec7ce70d34d1c4b61c4200f1bc411174ec726f4c5
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Approved normative forward corrections | 4/4 | 🟢 Done |
 | P2 | Generic template integrity with explicit schema/trust gates | 3/3 | 🟢 Done |
 | P3 | Generic domain trust and independent project boundaries | 2/2 | 🟢 Done |
-| P4 | Immutable source and isolated public/private distribution proof | 2/5 | 🟡 In progress |
+| P4 | Immutable source and isolated public/private distribution proof | 5/5 | 🟢 Done |
 | P5 | Factual passports and result-bound publication authority | 0/3 | ⬜ Not started |
 
 ## Phase P1
@@ -59,9 +59,9 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P4.1 | Fixed-metadata stancl source preparation dossier | 🟢 Done | 2026-09-14 |
 | P4.2 | Reconcile immutable dependency graph в root и tenancy | 🟢 Done | 2026-09-14 |
-| P4.3 | Deterministic local CoreX split exporter | ⬜ Not started | — |
-| P4.4 | Pristine public update/install и package matrix proof | ⬜ Not started | — |
-| P4.5 | Optional/private auth canonical source и pristine proof | ⬜ Not started | — |
+| P4.3 | Deterministic local CoreX split exporter | 🟢 Done | 2026-09-14 |
+| P4.4 | Pristine public update/install и package matrix proof | 🟢 Done | 2026-09-14 |
+| P4.5 | Optional/private auth canonical source и pristine proof | 🟢 Done | 2026-09-14 |
 
 ## Phase P5
 
@@ -133,6 +133,15 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
 | 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.2 local sealed transport: source/lock mapping and L12/L13 cold update→fresh-install proof GREEN; no runtime or external-release action.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.3 deterministic four-package exporter: independent builds, source denial, focused tests and style GREEN; local candidates only.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.4 sealed public consumer matrix: PHP 8.3/8.4/8.5 compatible cells cold update→platform→fresh install GREEN; PG16 preflight and focused suites GREEN; no remote dispatch.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
+| 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.5 immutable private fixture: canonical ref and two fresh consumer installs GREEN; no secret persistence or external mutation.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

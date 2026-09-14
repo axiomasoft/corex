@@ -1,0 +1,40 @@
+name: Distribution proof
+
+on:
+  workflow_dispatch:
+
+jobs:
+  public-candidates:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.3'
+            laravel: '12'
+            arguments: '--package corex/core --package corex/modules --package corex/tasks'
+          - php: '8.3'
+            laravel: '13'
+            arguments: '--package corex/core --package corex/modules --package corex/tasks'
+          - php: '8.4'
+            laravel: '12'
+            arguments: ''
+          - php: '8.4'
+            laravel: '13'
+            arguments: ''
+          - php: '8.5'
+            laravel: '12'
+            arguments: ''
+          - php: '8.5'
+            laravel: '13'
+            arguments: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - name: Verify sealed public candidates
+        run: python3 scripts/distribution/pristine-proof.py --laravel ${{ matrix.laravel }} ${{ matrix.arguments }}

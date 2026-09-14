@@ -3,6 +3,14 @@
 Все заметные изменения `corex/auth` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
+## [Unreleased]
+
+### Changed
+
+- Released metadata no longer declares development `path` repositories or an
+  unconfirmed AzGuard remote. Private AzGuard resolution is a consumer-owned,
+  canonical immutable channel; credentials are never stored in this package.
+
 ## [0.1.0] - 2026-07-27
 
 First tagged release — roadmap-фаза P1 / B-11 (AzGuard-мост, entity-scoped RBAC, OIDC).

@@ -42,24 +42,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../core"
-        },
-        {
-            "type": "path",
-            "url": "../modules"
-        },
-        {
-            "type": "path",
-            "url": "../../../azguard/packages/core"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/axiomasoft/azguard-private.git"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
