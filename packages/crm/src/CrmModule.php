@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace Flex\Crm;
 
 use CoreX\Modules\CorexModule;
+use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Manifest;
+use Flex\Crm\Api\CreateCompanyOperation;
+use Flex\Crm\Api\CreateContactCompanyOperation;
+use Flex\Crm\Api\CreateContactOperation;
+use Flex\Crm\Api\ListCompaniesOperation;
+use Flex\Crm\Api\ListContactsOperation;
+use Flex\Crm\Api\ShowCompanyOperation;
+use Flex\Crm\Api\ShowContactOperation;
 use Flex\Crm\Models\Activity;
 use Flex\Crm\Models\Company;
 use Flex\Crm\Models\Contact;
@@ -29,6 +37,88 @@ final class CrmModule extends CorexModule
             Entity::make(Contact::class)->handle('crm.contact')->table('crm_contacts')->label('Contact', 'Contacts')->titleAttribute('display_name'),
             Entity::make(Lead::class)->handle('crm.lead')->table('crm_leads')->label('Lead', 'Leads')->titleAttribute('name'),
             Entity::make(Activity::class)->handle('crm.activity')->table('crm_activities')->label('Activity', 'Activities')->titleAttribute('summary')->auditable(),
+            Api::operation(
+                id: 'crm.company.list', method: 'GET', path: '/companies', handler: ListCompaniesOperation::class, ability: 'crm.company.view',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: ['type' => 'object'],
+                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']],
+            ),
+            Api::operation(
+                id: 'crm.company.show', method: 'GET', path: '/companies/{companyId}', handler: ShowCompanyOperation::class, ability: 'crm.company.view',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: ['type' => 'object'],
+            ),
+            Api::operation(
+                id: 'crm.company.create', method: 'POST', path: '/companies', handler: CreateCompanyOperation::class, ability: 'crm.company.create',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false, 'required' => ['name']], responseSchema: ['type' => 'object'],
+                rules: self::companyRules(), successStatus: 201,
+            ),
+            Api::operation(
+                id: 'crm.contact.list', method: 'GET', path: '/contacts', handler: ListContactsOperation::class, ability: 'crm.contact.view',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: ['type' => 'object'],
+                rules: ['limit' => ['sometimes', 'integer', 'min:1', 'max:100']],
+            ),
+            Api::operation(
+                id: 'crm.contact.show', method: 'GET', path: '/contacts/{contactId}', handler: ShowContactOperation::class, ability: 'crm.contact.view',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: ['type' => 'object'],
+            ),
+            Api::operation(
+                id: 'crm.contact.create', method: 'POST', path: '/contacts', handler: CreateContactOperation::class, ability: 'crm.contact.create',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false], responseSchema: ['type' => 'object'],
+                rules: self::contactRules(), successStatus: 201,
+            ),
+            Api::operation(
+                id: 'crm.contact.company.create', method: 'POST', path: '/contacts/{contactId}/companies', handler: CreateContactCompanyOperation::class, ability: 'crm.contact.associate',
+                requestSchema: ['type' => 'object', 'additionalProperties' => false, 'required' => ['company_id']], responseSchema: ['type' => 'object'],
+                rules: ['company_id' => ['required', 'string'], 'label' => ['nullable', 'string', 'max:64'], 'is_primary' => ['sometimes', 'boolean']], successStatus: 201,
+            ),
         ]);
+    }
+
+    /** @return array<string, list<string>> */
+    private static function companyRules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'legal_name' => ['nullable', 'string', 'max:255'],
+            'domain' => ['nullable', 'string', 'max:190'],
+            'inn' => ['nullable', 'string', 'max:12'],
+            'kpp' => ['nullable', 'string', 'max:9'],
+            'ogrn' => ['nullable', 'string', 'max:15'],
+            'phones' => ['sometimes', 'array'],
+            'phones.*.value' => ['required_with:phones', 'string'],
+            'phones.*.type' => ['nullable', 'string', 'max:32'],
+            'phones.*.is_primary' => ['sometimes', 'boolean'],
+            'emails' => ['sometimes', 'array'],
+            'emails.*.value' => ['required_with:emails', 'string'],
+            'emails.*.type' => ['nullable', 'string', 'max:32'],
+            'emails.*.is_primary' => ['sometimes', 'boolean'],
+            'address' => ['nullable', 'array'],
+            'bank_details' => ['nullable', 'array'],
+            'source_id' => ['nullable'],
+            'owner_id' => ['nullable'],
+            'account_level' => ['sometimes', 'boolean'],
+        ];
+    }
+
+    /** @return array<string, list<string>> */
+    private static function contactRules(): array
+    {
+        return [
+            'name_first' => ['nullable', 'string', 'max:120'],
+            'name_last' => ['nullable', 'string', 'max:120'],
+            'name_middle' => ['nullable', 'string', 'max:120'],
+            'job_title' => ['nullable', 'string', 'max:190'],
+            'birthday' => ['nullable', 'date_format:Y-m-d'],
+            'phones' => ['sometimes', 'array'],
+            'phones.*.value' => ['required_with:phones', 'string'],
+            'phones.*.type' => ['nullable', 'string', 'max:32'],
+            'phones.*.is_primary' => ['sometimes', 'boolean'],
+            'emails' => ['sometimes', 'array'],
+            'emails.*.value' => ['required_with:emails', 'string'],
+            'emails.*.type' => ['nullable', 'string', 'max:32'],
+            'emails.*.is_primary' => ['sometimes', 'boolean'],
+            'source_id' => ['nullable'],
+            'owner_id' => ['nullable'],
+            'account_level' => ['sometimes', 'boolean'],
+        ];
     }
 }

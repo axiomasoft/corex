@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "corex/api": "@dev",
         "corex/core": "@dev",
         "corex/modules": "@dev",
         "giggsey/libphonenumber-for-php-lite": "^9.0",
@@ -55,6 +56,10 @@
         {
             "type": "path",
             "url": "../modules"
+        },
+        {
+            "type": "path",
+            "url": "../api"
         }
     ],
     "minimum-stability": "dev",

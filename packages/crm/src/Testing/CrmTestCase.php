@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Testing;
 
+use CoreX\Api\ApiServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Testing\CoreXTestCase;
 use Flex\Crm\CrmServiceProvider;
@@ -28,6 +29,7 @@ abstract class CrmTestCase extends CoreXTestCase
         return [
             ...parent::getPackageProviders($app),
             ModulesServiceProvider::class,
+            ApiServiceProvider::class,
             CrmServiceProvider::class,
         ];
     }

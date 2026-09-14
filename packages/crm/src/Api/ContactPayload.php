@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Flex\Crm\Api;
+
+use Flex\Crm\Models\Contact;
+
+final class ContactPayload
+{
+    /** @return array<string, mixed> */
+    public static function from(Contact $contact): array
+    {
+        return [
+            'id' => (string) $contact->getKey(),
+            'workspace_id' => $contact->workspace_id === null ? null : (string) $contact->workspace_id,
+            'name_first' => $contact->name_first,
+            'name_last' => $contact->name_last,
+            'name_middle' => $contact->name_middle,
+            'display_name' => $contact->display_name,
+            'job_title' => $contact->job_title,
+            'birthday' => $contact->birthday?->format('Y-m-d'),
+            'phones' => $contact->phones,
+            'emails' => $contact->emails,
+            'source_id' => $contact->source_id === null ? null : (string) $contact->source_id,
+            'owner_id' => $contact->owner_id === null ? null : (string) $contact->owner_id,
+        ];
+    }
+}
