@@ -194,11 +194,11 @@
         },
         {
             "name": "corex/core",
-            "version": "dev-main",
+            "version": "dev-codex/crm-company-contact-parity",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "230c74c6a8e2156ba9fbedc4352b0c92270baaa9"
+                "reference": "a45633debd7c84da72430eea1fb1e0e3407b54ab"
             },
             "require": {
                 "brick/money": "^0.9 || ^0.10",
@@ -206,6 +206,7 @@
                 "illuminate/container": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
+                "illuminate/filesystem": "^12.0|^13.0",
                 "illuminate/http": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.3"
@@ -251,7 +252,7 @@
         },
         {
             "name": "corex/modules",
-            "version": "dev-main",
+            "version": "dev-codex/crm-company-contact-parity",
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
@@ -303,11 +304,11 @@
         },
         {
             "name": "corex/tasks",
-            "version": "dev-main",
+            "version": "dev-codex/crm-company-contact-parity",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "86acd93cd8949020c74c1a0aff59876a72a3adb0"
+                "reference": "703dfbf9ac98e8b8029fd21703e9c9b1f15de6d6"
             },
             "require": {
                 "corex/core": "@dev",
@@ -323,8 +324,11 @@
                 "orchestra/testbench": "^10.0|^11.0",
                 "pestphp/pest": "^4.0"
             },
-            "type": "library",
+            "type": "corex-module",
             "extra": {
+                "corex": {
+                    "module": "CoreX\\Tasks\\TasksModule"
+                },
                 "laravel": {
                     "providers": [
                         "CoreX\\Tasks\\TasksServiceProvider"
@@ -345,6 +349,9 @@
                 "test": [
                     "pest"
                 ],
+                "test:coverage": [
+                    "pest --coverage --min=92"
+                ],
                 "analyse": [
                     "phpstan analyse --memory-limit=1G"
                 ],
@@ -364,7 +371,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX Tasks module — processes, stages, tasks and projects on corex/core (ULID, tenancy).",
+            "description": "CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications.",
             "keywords": [
                 "kanban",
                 "laravel",
@@ -378,7 +385,7 @@
         },
         {
             "name": "corex/tenancy",
-            "version": "dev-main",
+            "version": "dev-codex/crm-company-contact-parity",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
@@ -894,18 +901,21 @@
         },
         {
             "name": "flex/crm",
-            "version": "dev-main",
+            "version": "dev-codex/crm-company-contact-parity",
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
-                "reference": "52340603d1406762c4aff74fd0cb261dba6898a4"
+                "reference": "f07edfa0d5f71dd838b38e13a76579240a73d633"
             },
             "require": {
                 "corex/core": "@dev",
                 "corex/modules": "@dev",
+                "giggsey/libphonenumber-for-php-lite": "^9.0",
+                "illuminate/auth": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
+                "illuminate/validation": "^12.0|^13.0",
                 "php": "^8.3"
             },
             "require-dev": {
@@ -937,7 +947,13 @@
             },
             "scripts": {
                 "test": [
-                    "pest"
+                    "pest --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "pest --group=pg"
+                ],
+                "test:coverage": [
+                    "pest --coverage --min=95"
                 ],
                 "analyse": [
                     "phpstan analyse --memory-limit=1G"
@@ -1040,6 +1056,84 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php-lite",
+            "version": "9.0.39",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
+                "reference": "35cd53ef595b709218756965a3fc22263ed9b24e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/35cd53ef595b709218756965a3fc22263ed9b24e",
+                "reference": "35cd53ef595b709218756965a3fc22263ed9b24e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/polyfill-mbstring": "^1.17"
+            },
+            "conflict": {
+                "giggsey/libphonenumber-for-php": "*"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "friendsofphp/php-cs-fixer": "^3.71",
+                "infection/infection": "^0.29|^0.31.0",
+                "nette/php-generator": "^4.1",
+                "php-coveralls/php-coveralls": "^2.7",
+                "phpstan/extension-installer": "^1.4.3",
+                "phpstan/phpstan": "^2.1.7",
+                "phpstan/phpstan-deprecation-rules": "^2.0.1",
+                "phpstan/phpstan-phpunit": "^2.0.4",
+                "phpstan/phpstan-strict-rules": "^2.0.3",
+                "phpunit/phpunit": "^10.5.45",
+                "symfony/console": "^6.4",
+                "symfony/filesystem": "^6.4",
+                "symfony/process": "^6.4"
+            },
+            "suggest": {
+                "giggsey/libphonenumber-for-php": "Use libphonenumber-for-php for geocoding, carriers, timezones and matching"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "libphonenumber\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "https://giggsey.com/"
+                }
+            ],
+            "description": "A lite version of giggsey/libphonenumber-for-php, which is a PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php-lite",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
+                "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
+            },
+            "time": "2026-09-10T13:00:46+00:00"
         },
         {
             "name": "graham-campbell/result-type",

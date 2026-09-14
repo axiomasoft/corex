@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Actions;
 
+use Flex\Crm\Data\CompanyData;
 use Flex\Crm\Events\CompanyCreated;
 use Flex\Crm\Models\Company;
-use Illuminate\Support\Facades\DB;
+use Flex\Crm\Support\ContextGuard;
 
-final class CreateCompany
+final readonly class CreateCompany
 {
-    /** @param array<string, mixed>|null $customFields */
-    public function handle(
-        string $name,
-        ?string $ownerId = null,
-        ?string $legalName = null,
-        ?string $inn = null,
-        ?string $kpp = null,
-        ?string $website = null,
-        ?array $customFields = null,
-    ): Company {
-        return DB::transaction(function () use ($name, $ownerId, $legalName, $inn, $kpp, $website, $customFields): Company {
-            $company = Company::query()->create([
-                'name' => $name,
-                'owner_id' => $ownerId,
-                'legal_name' => $legalName,
-                'inn' => $inn,
-                'kpp' => $kpp,
-                'website' => $website,
-                'custom_fields' => $customFields,
-            ]);
+    public function __construct(private ContextGuard $guard) {}
 
-            CompanyCreated::dispatch($company);
+    public function handle(CompanyData $data): Company
+    {
+        $ctx = $this->guard->current();
+
+        return $this->guard->connection($ctx)->transaction(function () use ($data, $ctx): Company {
+            $this->guard->current(lock: true);
+            $company = new Company([
+                'workspace_id' => $this->guard->workspace(ctx: $ctx, accountLevel: $data->accountLevel),
+                'name' => $data->name, 'legal_name' => $data->legalName, 'domain' => $data->domain,
+                'inn' => $data->inn, 'kpp' => $data->kpp, 'ogrn' => $data->ogrn,
+                'phones' => $data->phones, 'emails' => $data->emails,
+                'address' => $data->address, 'bank_details' => $data->bankDetails,
+                'source_id' => $data->sourceId, 'owner_id' => $data->ownerId,
+            ]);
+            $company->setConnection($ctx->connectionName);
+            $company->save();
+            CompanyCreated::dispatch($company, $ctx->actor);
 
             return $company;
         });

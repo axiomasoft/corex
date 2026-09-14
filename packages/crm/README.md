@@ -4,7 +4,11 @@ CRM-модуль CoreX поверх `corex/core`: **воронка продаж*
 (контакты, компании-аккаунты, лиды, конверсия) **+ полиморфная timeline активностей**. Демонстрирует и
 проверяет доменные возможности ядра — настраиваемые ID (по умолчанию UUIDv7), деньги в
 minor units (`MoneyCast`, ADR-005), морф-карту через `EntityRegistry`. Изоляция тенантов — физическая
-(DB-per-account, B-11), без row-level-скоупа на моделях.
+(DB-per-account, B-11); компании, контакты и связи дополнительно ограничены доверенным workspace-контекстом.
+
+Company/contact/M2M public API, context binding and extension guarantees:
+[COMPANY_CONTACT_API.md](COMPANY_CONTACT_API.md). Breaking changes and safe upgrade boundaries:
+[UPGRADE.md](UPGRADE.md).
 
 ## Состав
 
@@ -59,4 +63,5 @@ composer --working-dir=packages/crm test:pg    # только изолирова
 composer --working-dir=packages/crm analyse
 ```
 
-> `custom_fields` — `jsonb` без GIN (sqlite-харнес); GIN-индекс добавляет Postgres-потребитель.
+Company/contact fields follow approved storage, including JSON channels and PostgreSQL GIN indexes;
+legacy `custom_fields` on those two models are not part of that contract.

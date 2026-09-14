@@ -4,36 +4,36 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Actions;
 
+use DateTimeImmutable;
+use Flex\Crm\Data\ContactData;
 use Flex\Crm\Events\ContactCreated;
 use Flex\Crm\Models\Contact;
-use Illuminate\Support\Facades\DB;
+use Flex\Crm\Support\ContextGuard;
+use Illuminate\Validation\ValidationException;
 
-final class CreateContact
+final readonly class CreateContact
 {
-    /** @param array<string, mixed>|null $customFields */
-    public function handle(
-        ?string $firstName = null,
-        ?string $lastName = null,
-        ?string $email = null,
-        ?string $phone = null,
-        ?string $jobTitle = null,
-        ?string $companyId = null,
-        ?string $ownerId = null,
-        ?array $customFields = null,
-    ): Contact {
-        return DB::transaction(function () use ($firstName, $lastName, $email, $phone, $jobTitle, $companyId, $ownerId, $customFields): Contact {
-            $contact = Contact::query()->create([
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'email' => $email,
-                'phone' => $phone,
-                'job_title' => $jobTitle,
-                'company_id' => $companyId,
-                'owner_id' => $ownerId,
-                'custom_fields' => $customFields,
-            ]);
+    public function __construct(private ContextGuard $guard) {}
 
-            ContactCreated::dispatch($contact);
+    public function handle(ContactData $data): Contact
+    {
+        if ($data->birthday !== null && (($date = DateTimeImmutable::createFromFormat('!Y-m-d', $data->birthday)) === false || $date->format('Y-m-d') !== $data->birthday)) {
+            throw ValidationException::withMessages(['birthday' => 'Birthday must be a valid YYYY-MM-DD date.']);
+        }
+        $ctx = $this->guard->current();
+
+        return $this->guard->connection($ctx)->transaction(function () use ($data, $ctx): Contact {
+            $this->guard->current(lock: true);
+            $contact = new Contact([
+                'workspace_id' => $this->guard->workspace(ctx: $ctx, accountLevel: $data->accountLevel),
+                'name_first' => $data->nameFirst, 'name_last' => $data->nameLast, 'name_middle' => $data->nameMiddle,
+                'job_title' => $data->jobTitle, 'birthday' => $data->birthday,
+                'phones' => $data->phones, 'emails' => $data->emails,
+                'source_id' => $data->sourceId, 'owner_id' => $data->ownerId,
+            ]);
+            $contact->setConnection($ctx->connectionName);
+            $contact->save();
+            ContactCreated::dispatch($contact, $ctx->actor);
 
             return $contact;
         });

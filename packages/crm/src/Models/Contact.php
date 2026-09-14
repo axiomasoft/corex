@@ -4,34 +4,44 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Models;
 
+use Carbon\CarbonImmutable;
 use CoreX\Models\BaseModel;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Flex\Crm\Models\Concerns\HasCrmContext;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Override;
 
 /**
  * @property string $id
- * @property string|null $first_name
- * @property string|null $last_name
- * @property string|null $email
- * @property string|null $phone
+ * @property string|null $name_first
+ * @property string|null $name_last
+ * @property string|null $name_middle
+ * @property string $display_name
+ * @property string|int|null $workspace_id
+ * @property string|int|null $source_id
+ * @property list<array{value: string, norm: string, type: ?string, is_primary: bool}> $phones
+ * @property list<array{value: string, norm: string, type: ?string, is_primary: bool}> $emails
+ * @property array{source: string, id: string, name: string} $created_by
+ * @property string|null $search
+ * @property CarbonImmutable|null $birthday
  * @property string|null $job_title
- * @property string|null $company_id
  * @property string|null $owner_id
- * @property array<string, mixed>|null $custom_fields
- * @property string|null $merged_into_id
  */
 final class Contact extends BaseModel
 {
+    use HasCrmContext;
+
     protected $table = 'crm_contacts';
 
     /** @var list<string> */
-    protected $fillable = ['first_name', 'last_name', 'email', 'phone', 'job_title', 'company_id', 'owner_id', 'custom_fields', 'merged_into_id'];
+    protected $fillable = ['workspace_id', 'name_first', 'name_last', 'name_middle', 'job_title', 'birthday', 'phones', 'emails', 'source_id', 'owner_id'];
 
-    /** @return BelongsTo<Company, $this> */
-    public function company(): BelongsTo
+    /** @return BelongsToMany<Company, $this, ContactCompany> */
+    public function companies(): BelongsToMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(related: Company::class, table: (new ContactCompany)->getTable())
+            ->using(ContactCompany::class)->withPivot(['id', 'label', 'is_primary'])->withTimestamps();
     }
 
     /** @return HasMany<Deal, $this> */
@@ -47,8 +57,9 @@ final class Contact extends BaseModel
     }
 
     /** @return array<string, string> */
+    #[Override]
     protected function casts(): array
     {
-        return ['custom_fields' => 'array'];
+        return ['phones' => 'array', 'emails' => 'array', 'created_by' => 'array', 'birthday' => 'immutable_date'];
     }
 }

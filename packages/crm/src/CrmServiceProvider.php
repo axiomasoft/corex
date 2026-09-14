@@ -81,7 +81,7 @@ final class CrmServiceProvider extends ServiceProvider
             labelPlural: 'Contacts',
             capabilities: [],
             fields: [],
-            titleAttribute: null,
+            titleAttribute: 'display_name',
         ));
 
         $registry->register(new EntityDefinition(
