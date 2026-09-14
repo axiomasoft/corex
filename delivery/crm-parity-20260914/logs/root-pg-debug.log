@@ -1,0 +1,1480 @@
+Test Runner Configured
+PHPUnit Started (PHPUnit 12.5.30 using PHP 8.4.1 (cli) on Linux)
+Test Runner Configured
+Bootstrap Finished (/home/vostrikov/projects/packages/corex-crm-parity-20260914/vendor/autoload.php)
+Event Facade Sealed
+Data Provider Method Called (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_model_key_behaviour_follows_config_corex_ids_strategy__dataset for test method P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_model_key_behaviour_follows_config_corex_ids_strategy_)
+Data Provider Method Finished for P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_model_key_behaviour_follows_config_corex_ids_strategy_:
+- P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_model_key_behaviour_follows_config_corex_ids_strategy__dataset
+Data Provider Method Called (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema__dataset for test method P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_)
+Data Provider Method Finished for P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_:
+- P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema__dataset
+Test Suite Loaded (217 tests)
+Test Runner Started
+Test Suite Sorted
+Test Suite Filtered (107 tests)
+Test Runner Execution Started (107 tests)
+Test Suite Started (/home/vostrikov/projects/packages/corex-crm-parity-20260914/phpunit.xml, 107 tests)
+Test Suite Started (ModulesPackage, 4 tests)
+Test Suite Started (P\Packages\modules\tests\Feature\LifecycleRemediationTest, 4 tests)
+Before First Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUpBeforeClass
+Test Preparation Started (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_serializes_different_module_transitions_on_the_dependency_graph_lock)
+Before Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp)
+Before Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp
+Test Prepared (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_serializes_different_module_transitions_on_the_dependency_graph_lock)
+Test Failed (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_serializes_different_module_transitions_on_the_dependency_graph_lock)
+Failed asserting that false is true.
+After Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown)
+After Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown
+Test Finished (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_serializes_different_module_transitions_on_the_dependency_graph_lock)
+Test Preparation Started (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_honors_a_denying_activation_gate_before_migrations_and_hooks)
+Before Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp)
+Before Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp
+Test Prepared (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_honors_a_denying_activation_gate_before_migrations_and_hooks)
+Test Failed (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_honors_a_denying_activation_gate_before_migrations_and_hooks)
+Exception "Illuminate\Auth\Access\AuthorizationException" not thrown.
+After Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown)
+After Test Method Errored (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown)
+Method check(<Any Arguments>) from Mockery_3_CoreX_Modules_Contracts_ModuleActivationGate should be called
+ exactly 1 times but called 0 times.
+After Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown
+Test Finished (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_honors_a_denying_activation_gate_before_migrations_and_hooks)
+Test Preparation Started (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_makes_flags_visible_to_ModuleEnabled_and_rolls_back_a_failed_definition)
+Before Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp)
+Before Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp
+Test Prepared (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_makes_flags_visible_to_ModuleEnabled_and_rolls_back_a_failed_definition)
+Test Failed (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_makes_flags_visible_to_ModuleEnabled_and_rolls_back_a_failed_definition)
+Failed asserting that 1 is identical to 0.
+After Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown)
+After Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown
+Test Finished (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_makes_flags_visible_to_ModuleEnabled_and_rolls_back_a_failed_definition)
+Test Preparation Started (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_preserves_application_migration_listeners_on_success_and_failure)
+Before Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp)
+Before Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::setUp
+Test Prepared (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_preserves_application_migration_listeners_on_success_and_failure)
+Test Failed (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_preserves_application_migration_listeners_on_success_and_failure)
+Failed asserting that two arrays are identical.
+After Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown)
+After Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDown
+Test Finished (P\Packages\modules\tests\Feature\LifecycleRemediationTest::__pest_evaluable_it_preserves_application_migration_listeners_on_success_and_failure)
+After Last Test Method Called (P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Packages\modules\tests\Feature\LifecycleRemediationTest::tearDownAfterClass
+Test Suite Finished (P\Packages\modules\tests\Feature\LifecycleRemediationTest, 4 tests)
+Test Suite Finished (ModulesPackage, 4 tests)
+Test Suite Started (Feature, 101 tests)
+Test Suite Started (P\Tests\Feature\FeatureFlagsTest, 12 tests)
+Before First Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__d___value___falls_back_to_the_flag_payload_when_the_override_payload_is_NULL)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__d___value___falls_back_to_the_flag_payload_when_the_override_payload_is_NULL)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__d___value___falls_back_to_the_flag_payload_when_the_override_payload_is_NULL)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__d___value___falls_back_to_the_flag_payload_when_the_override_payload_is_NULL)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_idempotent_and_does_not_stomp_an_admin_toggled_is__enabled)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_idempotent_and_does_not_stomp_an_admin_toggled_is__enabled)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_idempotent_and_does_not_stomp_an_admin_toggled_is__enabled)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_idempotent_and_does_not_stomp_an_admin_toggled_is__enabled)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_atomic_under_a_racing_second_define___for_the_same_key__UNIQUE_key___no_read_then_create_)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_atomic_under_a_racing_second_define___for_the_same_key__UNIQUE_key___no_read_then_create_)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_atomic_under_a_racing_second_define___for_the_same_key__UNIQUE_key___no_read_then_create_)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_define___is_atomic_under_a_racing_second_define___for_the_same_key__UNIQUE_key___no_read_then_create_)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_rejects_an_override_scope__type_outside_workspace_user_department__CHECK_constraint_)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_rejects_an_override_scope__type_outside_workspace_user_department__CHECK_constraint_)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_rejects_an_override_scope__type_outside_workspace_user_department__CHECK_constraint_)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_rejects_an_override_scope__type_outside_workspace_user_department__CHECK_constraint_)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a_narrower_workspace_override_wins_over_the_account_level_default)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a_narrower_workspace_override_wins_over_the_account_level_default)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a_narrower_workspace_override_wins_over_the_account_level_default)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__a_narrower_workspace_override_wins_over_the_account_level_default)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_stamps_a_DomainEvent_with_a_UUIDv7_eventId__occurredAt_and_a_stable_name__)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_stamps_a_DomainEvent_with_a_UUIDv7_eventId__occurredAt_and_a_stable_name__)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_stamps_a_DomainEvent_with_a_UUIDv7_eventId__occurredAt_and_a_stable_name__)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_stamps_a_DomainEvent_with_a_UUIDv7_eventId__occurredAt_and_a_stable_name__)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__c___falls_back_to_the_account_level_default_when_no_narrow_override_matches)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__c___falls_back_to_the_account_level_default_when_no_narrow_override_matches)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__c___falls_back_to_the_account_level_default_when_no_narrow_override_matches)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_AC_22__c___falls_back_to_the_account_level_default_when_no_narrow_override_matches)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_FeatureFlagToggled_extends_DomainEvent_with_its_own_stable_name__)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_FeatureFlagToggled_extends_DomainEvent_with_its_own_stable_name__)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_FeatureFlagToggled_extends_DomainEvent_with_its_own_stable_name__)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_FeatureFlagToggled_extends_DomainEvent_with_its_own_stable_name__)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_a_user_scoped_override_is_independent_of_a_workspace_scoped_one)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_a_user_scoped_override_is_independent_of_a_workspace_scoped_one)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_a_user_scoped_override_is_independent_of_a_workspace_scoped_one)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_a_user_scoped_override_is_independent_of_a_workspace_scoped_one)
+Test Preparation Started (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_cascades_override_delete_when_its_flag_is_deleted__FK_ON_DELETE_CASCADE_)
+Before Test Method Called (P\Tests\Feature\FeatureFlagsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::setUp
+Test Prepared (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_cascades_override_delete_when_its_flag_is_deleted__FK_ON_DELETE_CASCADE_)
+Post Condition Method Called (P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDown
+Test Passed (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_cascades_override_delete_when_its_flag_is_deleted__FK_ON_DELETE_CASCADE_)
+Test Finished (P\Tests\Feature\FeatureFlagsTest::__pest_evaluable_it_cascades_override_delete_when_its_flag_is_deleted__FK_ON_DELETE_CASCADE_)
+After Last Test Method Called (P\Tests\Feature\FeatureFlagsTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\FeatureFlagsTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\FeatureFlagsTest, 12 tests)
+Test Suite Started (P\Tests\Feature\ConfigurableIdTest, 5 tests)
+Before First Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy)
+Before Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUp
+Test Prepared (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy)
+Post Condition Method Called (P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDown
+Test Passed (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy)
+Test Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy)
+Test Suite Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_, 4 tests)
+Test Preparation Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "ulid -> character(26)")
+Before Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUp
+Test Prepared (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "ulid -> character(26)")
+Post Condition Method Called (P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDown
+Test Passed (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "ulid -> character(26)")
+Test Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "ulid -> character(26)")
+Test Preparation Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid7 -> uuid")
+Before Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUp
+Test Prepared (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid7 -> uuid")
+Post Condition Method Called (P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDown
+Test Passed (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid7 -> uuid")
+Test Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid7 -> uuid")
+Test Preparation Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid -> uuid")
+Before Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUp
+Test Prepared (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid -> uuid")
+Post Condition Method Called (P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDown
+Test Passed (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid -> uuid")
+Test Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "uuid -> uuid")
+Test Preparation Started (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "int -> bigint")
+Before Test Method Called (P\Tests\Feature\ConfigurableIdTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::setUp
+Test Prepared (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "int -> bigint")
+Post Condition Method Called (P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDown
+Test Passed (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "int -> bigint")
+Test Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_#dataset "int -> bigint")
+Test Suite Finished (P\Tests\Feature\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_, 4 tests)
+After Last Test Method Called (P\Tests\Feature\ConfigurableIdTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\ConfigurableIdTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\ConfigurableIdTest, 5 tests)
+Test Suite Started (P\Tests\Feature\SettingsTest, 12 tests)
+Before First Test Method Called (P\Tests\Feature\SettingsTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_department_scope_on_every_method__sys__settings_has_no_department_level__D38_)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_department_scope_on_every_method__sys__settings_has_no_department_level__D38_)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_department_scope_on_every_method__sys__settings_has_no_department_level__D38_)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_department_scope_on_every_method__sys__settings_has_no_department_level__D38_)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_all___merges_the_cascade_with_the_narrower_scope_winning_per_key)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_all___merges_the_cascade_with_the_narrower_scope_winning_per_key)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_all___merges_the_cascade_with_the_narrower_scope_winning_per_key)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_all___merges_the_cascade_with_the_narrower_scope_winning_per_key)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_forget___removes_exactly_its_own_scope_level__leaving_other_levels_intact)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_forget___removes_exactly_its_own_scope_level__leaving_other_levels_intact)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_forget___removes_exactly_its_own_scope_level__leaving_other_levels_intact)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_forget___removes_exactly_its_own_scope_level__leaving_other_levels_intact)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_fires_SettingChanged_once_per_actual_value_change)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_fires_SettingChanged_once_per_actual_value_change)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_fires_SettingChanged_once_per_actual_value_change)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_fires_SettingChanged_once_per_actual_value_change)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_lets_a_narrower_scope_override_a_broader_one_without_leaking_across_ids)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_lets_a_narrower_scope_override_a_broader_one_without_leaking_across_ids)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_lets_a_narrower_scope_override_a_broader_one_without_leaking_across_ids)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_lets_a_narrower_scope_override_a_broader_one_without_leaking_across_ids)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_encrypts_a_sensitive_value_at_rest_and_masks_it_in_SettingChanged)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_encrypts_a_sensitive_value_at_rest_and_masks_it_in_SettingChanged)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_encrypts_a_sensitive_value_at_rest_and_masks_it_in_SettingChanged)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_encrypts_a_sensitive_value_at_rest_and_masks_it_in_SettingChanged)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_does_not_fire_SettingChanged_when_set___re_writes_the_same_value)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_does_not_fire_SettingChanged_when_set___re_writes_the_same_value)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_does_not_fire_SettingChanged_when_set___re_writes_the_same_value)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_does_not_fire_SettingChanged_when_set___re_writes_the_same_value)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_value_over_the_64KB_quota)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_value_over_the_64KB_quota)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_value_over_the_64KB_quota)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_rejects_a_value_over_the_64KB_quota)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_updates_in_place_through_the_repository_rather_than_duplicating_a_row)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_updates_in_place_through_the_repository_rather_than_duplicating_a_row)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_updates_in_place_through_the_repository_rather_than_duplicating_a_row)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_updates_in_place_through_the_repository_rather_than_duplicating_a_row)
+Test Preparation Started (P\Tests\Feature\SettingsTest::__pest_evaluable_it_cascades_user_over_workspace_over_account_over_manifest_default)
+Before Test Method Called (P\Tests\Feature\SettingsTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\SettingsTest::setUp
+Test Prepared (P\Tests\Feature\SettingsTest::__pest_evaluable_it_cascades_user_over_workspace_over_account_over_manifest_default)
+Post Condition Method Called (P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\SettingsTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\SettingsTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDown
+Test Passed (P\Tests\Feature\SettingsTest::__pest_evaluable_it_cascades_user_over_workspace_over_account_over_manifest_default)
+Test Finished (P\Tests\Feature\SettingsTest::__pest_evaluable_it_cascades_user_over_workspace_over_account_over_manifest_default)
+After Last Test Method Called (P\Tests\Feature\SettingsTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\SettingsTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\SettingsTest, 12 tests)
+Test Suite Started (P\Tests\Feature\PubSubDatabasePollTest, 5 tests)
+Before First Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor)
+Before Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUp
+Test Prepared (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor)
+Post Condition Method Called (P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDown
+Test Passed (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor)
+Test Finished (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor)
+Test Preparation Started (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_)
+Before Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUp
+Test Prepared (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_)
+Post Condition Method Called (P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDown
+Test Passed (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_)
+Test Finished (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_)
+Test Preparation Started (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context)
+Before Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUp
+Test Prepared (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context)
+Post Condition Method Called (P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDown
+Test Passed (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context)
+Test Finished (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context)
+Test Preparation Started (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact)
+Before Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUp
+Test Prepared (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact)
+Post Condition Method Called (P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDown
+Test Passed (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact)
+Test Finished (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact)
+Test Preparation Started (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__)
+Before Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::setUp
+Test Prepared (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__)
+Post Condition Method Called (P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDown
+Test Passed (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__)
+Test Finished (P\Tests\Feature\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__)
+After Last Test Method Called (P\Tests\Feature\PubSubDatabasePollTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\PubSubDatabasePollTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\PubSubDatabasePollTest, 5 tests)
+Test Suite Started (P\Tests\Feature\AuditLogTest, 18 tests)
+Before First Test Method Called (P\Tests\Feature\AuditLogTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_actor__type_falls_back_to_system_when_unauthenticated)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_actor__type_falls_back_to_system_when_unauthenticated)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_actor__type_falls_back_to_system_when_unauthenticated)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_actor__type_falls_back_to_system_when_unauthenticated)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_skips_models_that_already_opt_in_via_HasAuditLog__no_double_record_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_skips_models_that_already_opt_in_via_HasAuditLog__no_double_record_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_skips_models_that_already_opt_in_via_HasAuditLog__no_double_record_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_skips_models_that_already_opt_in_via_HasAuditLog__no_double_record_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_records_restored_and_forceDeleted__folding_the_redundant_delete_of_a_forceDelete__A17_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_records_restored_and_forceDeleted__folding_the_redundant_delete_of_a_forceDelete__A17_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_records_restored_and_forceDeleted__folding_the_redundant_delete_of_a_forceDelete__A17_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_records_restored_and_forceDeleted__folding_the_redundant_delete_of_a_forceDelete__A17_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_deletes_rows_older_than_the_retention_boundary_and_keeps_fresh_ones__A64_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_deletes_rows_older_than_the_retention_boundary_and_keeps_fresh_ones__A64_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_deletes_rows_older_than_the_retention_boundary_and_keeps_fresh_ones__A64_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_deletes_rows_older_than_the_retention_boundary_and_keeps_fresh_ones__A64_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_records_byCapability_Auditable__with_sensitive_masking__AC_20_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_records_byCapability_Auditable__with_sensitive_masking__AC_20_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_records_byCapability_Auditable__with_sensitive_masking__AC_20_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_auto_observer_records_byCapability_Auditable__with_sensitive_masking__AC_20_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_enqueues_on_the_sync_path_instead_of_writing_synchronously__AC_23_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_enqueues_on_the_sync_path_instead_of_writing_synchronously__AC_23_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_enqueues_on_the_sync_path_instead_of_writing_synchronously__AC_23_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_enqueues_on_the_sync_path_instead_of_writing_synchronously__AC_23_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_masks_a_fillable_sensitive_field_in_both_old_and_new_on_update__A17_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_masks_a_fillable_sensitive_field_in_both_old_and_new_on_update__A17_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_masks_a_fillable_sensitive_field_in_both_old_and_new_on_update__A17_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_masks_a_fillable_sensitive_field_in_both_old_and_new_on_update__A17_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_paginates_the_audit_journal_by_the_monotonic_seq_cursor_in_insertion_order__AC_23_D42_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_paginates_the_audit_journal_by_the_monotonic_seq_cursor_in_insertion_order__AC_23_D42_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_paginates_the_audit_journal_by_the_monotonic_seq_cursor_in_insertion_order__AC_23_D42_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_paginates_the_audit_journal_by_the_monotonic_seq_cursor_in_insertion_order__AC_23_D42_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_snapshots_occurred__at_and_workspace__id_at_enqueue__not_in_the_worker__A17_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_snapshots_occurred__at_and_workspace__id_at_enqueue__not_in_the_worker__A17_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_snapshots_occurred__at_and_workspace__id_at_enqueue__not_in_the_worker__A17_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_snapshots_occurred__at_and_workspace__id_at_enqueue__not_in_the_worker__A17_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_with_the_default_NullAuditRetention_deletes_nothing)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_with_the_default_NullAuditRetention_deletes_nothing)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_with_the_default_NullAuditRetention_deletes_nothing)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_corex_audit_prune_with_the_default_NullAuditRetention_deletes_nothing)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_the_diff_on_update)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_the_diff_on_update)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_the_diff_on_update)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_the_diff_on_update)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_creates_the_BRIN_index_on_occurred__at)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_creates_the_BRIN_index_on_occurred__at)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_creates_the_BRIN_index_on_occurred__at)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_creates_the_BRIN_index_on_occurred__at)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_the_capability_path__not_only_the_trait__A60_)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_the_capability_path__not_only_the_trait__A60_)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_the_capability_path__not_only_the_trait__A60_)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_killswitch_silences_the_capability_path__not_only_the_trait__A60_)
+Test Preparation Started (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_an_append_only_entry_on_create_through_the_queue_worker)
+Before Test Method Called (P\Tests\Feature\AuditLogTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\AuditLogTest::setUp
+Test Prepared (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_an_append_only_entry_on_create_through_the_queue_worker)
+Post Condition Method Called (P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\AuditLogTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\AuditLogTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDown
+Test Passed (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_an_append_only_entry_on_create_through_the_queue_worker)
+Test Finished (P\Tests\Feature\AuditLogTest::__pest_evaluable_it_HasAuditLog_trait_records_an_append_only_entry_on_create_through_the_queue_worker)
+After Last Test Method Called (P\Tests\Feature\AuditLogTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\AuditLogTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\AuditLogTest, 18 tests)
+Test Suite Started (P\Tests\Feature\ModuleLifecycleTest, 27 tests)
+Before First Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reconciles_mod__records_with_the_schema_—_drops_a_claim_whose_table_vanished_out_of_band__repair_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reconciles_mod__records_with_the_schema_—_drops_a_claim_whose_table_vanished_out_of_band__repair_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reconciles_mod__records_with_the_schema_—_drops_a_claim_whose_table_vanished_out_of_band__repair_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reconciles_mod__records_with_the_schema_—_drops_a_claim_whose_table_vanished_out_of_band__repair_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_a_disabled_module_isActive_false_immediately_—_the_billing_disable_path__D39__test_в_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_a_disabled_module_isActive_false_immediately_—_the_billing_disable_path__D39__test_в_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_a_disabled_module_isActive_false_immediately_—_the_billing_disable_path__D39__test_в_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_a_disabled_module_isActive_false_immediately_—_the_billing_disable_path__D39__test_в_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reads_the_module_state_from_the_injected_connection__not_the_ambient_default__C3_seam__test_з_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reads_the_module_state_from_the_injected_connection__not_the_ambient_default__C3_seam__test_з_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reads_the_module_state_from_the_injected_connection__not_the_ambient_default__C3_seam__test_з_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_reads_the_module_state_from_the_injected_connection__not_the_ambient_default__C3_seam__test_з_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_writes_the_lifecycle_log_actor_from_CurrentActor__not_a_hardcoded_value__A54_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_writes_the_lifecycle_log_actor_from_CurrentActor__not_a_hardcoded_value__A54_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_writes_the_lifecycle_log_actor_from_CurrentActor__not_a_hardcoded_value__A54_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_writes_the_lifecycle_log_actor_from_CurrentActor__not_a_hardcoded_value__A54_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_resolves_ModuleStateReader_from_the_container_reading_config_corex_modules_connection___not_the_app_default__D63_D65_Major_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_resolves_ModuleStateReader_from_the_container_reading_config_corex_modules_connection___not_the_app_default__D63_D65_Major_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_resolves_ModuleStateReader_from_the_container_reading_config_corex_modules_connection___not_the_app_default__D63_D65_Major_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_resolves_ModuleStateReader_from_the_container_reading_config_corex_modules_connection___not_the_app_default__D63_D65_Major_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_corex_modules_repair_returns_a_purged_module_to_available__and_a_fresh_enable_re_installs_it__repair__D40_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_corex_modules_repair_returns_a_purged_module_to_available__and_a_fresh_enable_re_installs_it__repair__D40_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_corex_modules_repair_returns_a_purged_module_to_available__and_a_fresh_enable_re_installs_it__repair__D40_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_corex_modules_repair_returns_a_purged_module_to_available__and_a_fresh_enable_re_installs_it__repair__D40_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enabling_a_purged_module_—_purged_is_terminal__A11_A12__FSM_gate_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enabling_a_purged_module_—_purged_is_terminal__A11_A12__FSM_gate_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enabling_a_purged_module_—_purged_is_terminal__A11_A12__FSM_gate_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enabling_a_purged_module_—_purged_is_terminal__A11_A12__FSM_gate_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_upgrade_unless_the_module_is_enabled__FSM_gate__B_10_§5_5_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_upgrade_unless_the_module_is_enabled__FSM_gate__B_10_§5_5_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_upgrade_unless_the_module_is_enabled__FSM_gate__B_10_§5_5_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_upgrade_unless_the_module_is_enabled__FSM_gate__B_10_§5_5_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_an_enabled_module_isActive_immediately_—_epoch_invalidation__no_TTL_wait__D39__test_б_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_an_enabled_module_isActive_immediately_—_epoch_invalidation__no_TTL_wait__D39__test_б_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_an_enabled_module_isActive_immediately_—_epoch_invalidation__no_TTL_wait__D39__test_б_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_makes_an_enabled_module_isActive_immediately_—_epoch_invalidation__no_TTL_wait__D39__test_б_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_uninstall_directly_from_enabled_—_two_step_safety__B_10_§5_1_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_uninstall_directly_from_enabled_—_two_step_safety__B_10_§5_1_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_uninstall_directly_from_enabled_—_two_step_safety__B_10_§5_1_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_uninstall_directly_from_enabled_—_two_step_safety__B_10_§5_1_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_derives_pendingUpgrade_from_codeVersion_vs__the_stored_dbVersion__never_stores_it__AC_12__derived_part_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_derives_pendingUpgrade_from_codeVersion_vs__the_stored_dbVersion__never_stores_it__AC_12__derived_part_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_derives_pendingUpgrade_from_codeVersion_vs__the_stored_dbVersion__never_stores_it__AC_12__derived_part_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_derives_pendingUpgrade_from_codeVersion_vs__the_stored_dbVersion__never_stores_it__AC_12__derived_part_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_defines_a_manifest_declared_feature_flag_in_sys__feature__flags_when_its_module_is_enabled__P1_25__A68__test_г_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_defines_a_manifest_declared_feature_flag_in_sys__feature__flags_when_its_module_is_enabled__P1_25__A68__test_г_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_defines_a_manifest_declared_feature_flag_in_sys__feature__flags_when_its_module_is_enabled__P1_25__A68__test_г_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_defines_a_manifest_declared_feature_flag_in_sys__feature__flags_when_its_module_is_enabled__P1_25__A68__test_г_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_enables_a_module_from_available__migrations_run__mod__records___mod__modules_populated__event_dispatched__AC_5_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_enables_a_module_from_available__migrations_run__mod__records___mod__modules_populated__event_dispatched__AC_5_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_enables_a_module_from_available__migrations_run__mod__records___mod__modules_populated__event_dispatched__AC_5_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_enables_a_module_from_available__migrations_run__mod__records___mod__modules_populated__event_dispatched__AC_5_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_dispatches_ModuleEnabled_when_the_enabling_transaction_rolls_back_—_afterCommit_survives_the_DomainEvent_retrofit__P1_25__test_б_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_dispatches_ModuleEnabled_when_the_enabling_transaction_rolls_back_—_afterCommit_survives_the_DomainEvent_retrofit__P1_25__test_б_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_dispatches_ModuleEnabled_when_the_enabling_transaction_rolls_back_—_afterCommit_survives_the_DomainEvent_retrofit__P1_25__test_б_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_dispatches_ModuleEnabled_when_the_enabling_transaction_rolls_back_—_afterCommit_survives_the_DomainEvent_retrofit__P1_25__test_б_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_touches_DATA_on_disable_and_blocks_when_a_dependent_module_is_enabled__AC_8_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_touches_DATA_on_disable_and_blocks_when_a_dependent_module_is_enabled__AC_8_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_touches_DATA_on_disable_and_blocks_when_a_dependent_module_is_enabled__AC_8_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_never_touches_DATA_on_disable_and_blocks_when_a_dependent_module_is_enabled__AC_8_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_cascade_auto_enables_the_requires_chain)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_cascade_auto_enables_the_requires_chain)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_cascade_auto_enables_the_requires_chain)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_cascade_auto_enables_the_requires_chain)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_archives_on_uninstall_keepData__true__and_re_enables_cleanly__AC_9_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_archives_on_uninstall_keepData__true__and_re_enables_cleanly__AC_9_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_archives_on_uninstall_keepData__true__and_re_enables_cleanly__AC_9_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_archives_on_uninstall_keepData__true__and_re_enables_cleanly__AC_9_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_migrations_resolved_through_the_container__not_a_hand_built_constructor__wiring_from_discovery_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_migrations_resolved_through_the_container__not_a_hand_built_constructor__wiring_from_discovery_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_migrations_resolved_through_the_container__not_a_hand_built_constructor__wiring_from_discovery_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_migrations_resolved_through_the_container__not_a_hand_built_constructor__wiring_from_discovery_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_the_corex_modules_repair_artisan_command_against_the_module_connection)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_the_corex_modules_repair_artisan_command_against_the_module_connection)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_the_corex_modules_repair_artisan_command_against_the_module_connection)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_runs_the_corex_modules_repair_artisan_command_against_the_module_connection)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_records_every_transition_in_mod__lifecycle__log__AC_13_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_records_every_transition_in_mod__lifecycle__log__AC_13_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_records_every_transition_in_mod__lifecycle__log__AC_13_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_records_every_transition_in_mod__lifecycle__log__AC_13_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_serializes_a_concurrent_enable_through_pg__advisory__xact__lock_—_a_second_holder_blocks_it__AC_11_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_serializes_a_concurrent_enable_through_pg__advisory__xact__lock_—_a_second_holder_blocks_it__AC_11_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_serializes_a_concurrent_enable_through_pg__advisory__xact__lock_—_a_second_holder_blocks_it__AC_11_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_serializes_a_concurrent_enable_through_pg__advisory__xact__lock_—_a_second_holder_blocks_it__AC_11_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_)
+Test Preparation Started (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enable_when_a_dependency_is_not_enabled__without_touching_the_database__AC_6_)
+Before Test Method Called (P\Tests\Feature\ModuleLifecycleTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::setUp
+Test Prepared (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enable_when_a_dependency_is_not_enabled__without_touching_the_database__AC_6_)
+Post Condition Method Called (P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDown
+Test Passed (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enable_when_a_dependency_is_not_enabled__without_touching_the_database__AC_6_)
+Test Finished (P\Tests\Feature\ModuleLifecycleTest::__pest_evaluable_it_rejects_enable_when_a_dependency_is_not_enabled__without_touching_the_database__AC_6_)
+After Last Test Method Called (P\Tests\Feature\ModuleLifecycleTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\ModuleLifecycleTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\ModuleLifecycleTest, 27 tests)
+Test Suite Started (P\Tests\Feature\ImpersonatedActorTest, 2 tests)
+Before First Test Method Called (P\Tests\Feature\ImpersonatedActorTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_sys__audit__actor__ck_accepts_support_after_the_widening_migration__D137_)
+Before Test Method Called (P\Tests\Feature\ImpersonatedActorTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::setUp
+Test Prepared (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_sys__audit__actor__ck_accepts_support_after_the_widening_migration__D137_)
+Post Condition Method Called (P\Tests\Feature\ImpersonatedActorTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ImpersonatedActorTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::tearDown
+Test Passed (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_sys__audit__actor__ck_accepts_support_after_the_widening_migration__D137_)
+Test Finished (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_sys__audit__actor__ck_accepts_support_after_the_widening_migration__D137_)
+Test Preparation Started (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_mod__ll__actor__ck_accepts_support_after_the_widening_migration_—_CurrentActor_under_impersonation_writes_without_CHECK_violation__х__D138_)
+Before Test Method Called (P\Tests\Feature\ImpersonatedActorTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::setUp
+Test Prepared (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_mod__ll__actor__ck_accepts_support_after_the_widening_migration_—_CurrentActor_under_impersonation_writes_without_CHECK_violation__х__D138_)
+Post Condition Method Called (P\Tests\Feature\ImpersonatedActorTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\ImpersonatedActorTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::tearDown
+Test Passed (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_mod__ll__actor__ck_accepts_support_after_the_widening_migration_—_CurrentActor_under_impersonation_writes_without_CHECK_violation__х__D138_)
+Test Finished (P\Tests\Feature\ImpersonatedActorTest::__pest_evaluable_it_mod__ll__actor__ck_accepts_support_after_the_widening_migration_—_CurrentActor_under_impersonation_writes_without_CHECK_violation__х__D138_)
+After Last Test Method Called (P\Tests\Feature\ImpersonatedActorTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\ImpersonatedActorTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\ImpersonatedActorTest, 2 tests)
+Test Suite Started (P\Tests\Feature\MigrationPublishTest, 5 tests)
+Before First Test Method Called (P\Tests\Feature\MigrationPublishTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_8_sys____migrations_and_they_migrate_on_a_clean_PG_schema)
+Before Test Method Called (P\Tests\Feature\MigrationPublishTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUp
+Test Prepared (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_8_sys____migrations_and_they_migrate_on_a_clean_PG_schema)
+Post Condition Method Called (P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDown
+Test Passed (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_8_sys____migrations_and_they_migrate_on_a_clean_PG_schema)
+Test Finished (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_8_sys____migrations_and_they_migrate_on_a_clean_PG_schema)
+Test Preparation Started (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_assigns_a_monotonic_bigserial_seq_cursor_to_sys__audit__log_rows__D42_)
+Before Test Method Called (P\Tests\Feature\MigrationPublishTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUp
+Test Prepared (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_assigns_a_monotonic_bigserial_seq_cursor_to_sys__audit__log_rows__D42_)
+Post Condition Method Called (P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDown
+Test Passed (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_assigns_a_monotonic_bigserial_seq_cursor_to_sys__audit__log_rows__D42_)
+Test Finished (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_assigns_a_monotonic_bigserial_seq_cursor_to_sys__audit__log_rows__D42_)
+Test Preparation Started (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_exposes_the__tenant_connection_scope_alias_for_both_migration_sets__D43_)
+Before Test Method Called (P\Tests\Feature\MigrationPublishTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUp
+Test Prepared (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_exposes_the__tenant_connection_scope_alias_for_both_migration_sets__D43_)
+Post Condition Method Called (P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDown
+Test Passed (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_exposes_the__tenant_connection_scope_alias_for_both_migration_sets__D43_)
+Test Finished (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_exposes_the__tenant_connection_scope_alias_for_both_migration_sets__D43_)
+Test Preparation Started (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_)
+Before Test Method Called (P\Tests\Feature\MigrationPublishTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUp
+Test Prepared (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_)
+Post Condition Method Called (P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDown
+Test Passed (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_)
+Test Finished (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_)
+Test Preparation Started (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_3_mod____migrations_and_they_migrate_on_a_clean_PG_schema)
+Before Test Method Called (P\Tests\Feature\MigrationPublishTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::setUp
+Test Prepared (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_3_mod____migrations_and_they_migrate_on_a_clean_PG_schema)
+Post Condition Method Called (P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\MigrationPublishTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDown
+Test Passed (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_3_mod____migrations_and_they_migrate_on_a_clean_PG_schema)
+Test Finished (P\Tests\Feature\MigrationPublishTest::__pest_evaluable_it_publishes_exactly_the_3_mod____migrations_and_they_migrate_on_a_clean_PG_schema)
+After Last Test Method Called (P\Tests\Feature\MigrationPublishTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\MigrationPublishTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\MigrationPublishTest, 5 tests)
+Test Suite Started (P\Tests\Feature\DepartmentTest, 15 tests)
+Before First Test Method Called (P\Tests\Feature\DepartmentTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___subtree___excludes_a_same_path_row_from_another_workspace)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___subtree___excludes_a_same_path_row_from_another_workspace)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___subtree___excludes_a_same_path_row_from_another_workspace)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___subtree___excludes_a_same_path_row_from_another_workspace)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__cycle___moving_into_its_own_subtree_is_rejected_and_leaves_the_DB_unchanged__A26_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__cycle___moving_into_its_own_subtree_is_rejected_and_leaves_the_DB_unchanged__A26_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__cycle___moving_into_its_own_subtree_is_rejected_and_leaves_the_DB_unchanged__A26_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__cycle___moving_into_its_own_subtree_is_rejected_and_leaves_the_DB_unchanged__A26_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24e__subtree___and_primaryOf___return_the_correct_rows)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24e__subtree___and_primaryOf___return_the_correct_rows)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24e__subtree___and_primaryOf___return_the_correct_rows)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24e__subtree___and_primaryOf___return_the_correct_rows)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24d__a_second_primary_department_for_the_same_user_is_rejected__partial_unique_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24d__a_second_primary_department_for_the_same_user_is_rejected__partial_unique_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24d__a_second_primary_department_for_the_same_user_is_rejected__partial_unique_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24d__a_second_primary_department_for_the_same_user_is_rejected__partial_unique_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__soft_delete___a_removed_department_drops_out_of_find_subtree_primaryOf__A24_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__soft_delete___a_removed_department_drops_out_of_find_subtree_primaryOf__A24_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__soft_delete___a_removed_department_drops_out_of_find_subtree_primaryOf__A24_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__soft_delete___a_removed_department_drops_out_of_find_subtree_primaryOf__A24_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__a_committed_move___dispatches_DepartmentMoved_with_the_old_and_new_path)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__a_committed_move___dispatches_DepartmentMoved_with_the_old_and_new_path)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__a_committed_move___dispatches_DepartmentMoved_with_the_old_and_new_path)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24c__a_committed_move___dispatches_DepartmentMoved_with_the_old_and_new_path)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__DTO___the_read_DTO_carries_sort__order)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__DTO___the_read_DTO_carries_sort__order)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__DTO___the_read_DTO_carries_sort__order)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__DTO___the_read_DTO_carries_sort__order)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_creates_a_GIST_index_and_a_unique_constraint_on_sys__departments_path)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_creates_a_GIST_index_and_a_unique_constraint_on_sys__departments_path)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_creates_a_GIST_index_and_a_unique_constraint_on_sys__departments_path)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_creates_a_GIST_index_and_a_unique_constraint_on_sys__departments_path)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__root_move___move__id__null__reparents_the_subtree_to_the_workspace_root__A26_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__root_move___move__id__null__reparents_the_subtree_to_the_workspace_root__A26_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__root_move___move__id__null__reparents_the_subtree_to_the_workspace_root__A26_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24__root_move___move__id__null__reparents_the_subtree_to_the_workspace_root__A26_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24a__reparents_the_whole_subtree_in_EXACTLY_ONE_UPDATE__query_count__A25_A27_)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24a__reparents_the_whole_subtree_in_EXACTLY_ONE_UPDATE__query_count__A25_A27_)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24a__reparents_the_whole_subtree_in_EXACTLY_ONE_UPDATE__query_count__A25_A27_)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24a__reparents_the_whole_subtree_in_EXACTLY_ONE_UPDATE__query_count__A25_A27_)
+Test Preparation Started (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24b__move___waits_on_the_workspace_advisory_lock_—_a_holder_blocks_it__another_workspace_does_not)
+Before Test Method Called (P\Tests\Feature\DepartmentTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\DepartmentTest::setUp
+Test Prepared (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24b__move___waits_on_the_workspace_advisory_lock_—_a_holder_blocks_it__another_workspace_does_not)
+Post Condition Method Called (P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged)
+Post Condition Method Finished:
+- P\Tests\Feature\DepartmentTest::__MarkTestIncompleteIfSnapshotHaveChanged
+After Test Method Called (P\Tests\Feature\DepartmentTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDown
+Test Passed (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24b__move___waits_on_the_workspace_advisory_lock_—_a_holder_blocks_it__another_workspace_does_not)
+Test Finished (P\Tests\Feature\DepartmentTest::__pest_evaluable_it_AC_24b__move___waits_on_the_workspace_advisory_lock_—_a_holder_blocks_it__another_workspace_does_not)
+After Last Test Method Called (P\Tests\Feature\DepartmentTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\DepartmentTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\DepartmentTest, 15 tests)
+Test Suite Finished (Feature, 101 tests)
+Test Suite Started (CorePackage, 2 tests)
+Test Suite Started (P\Packages\core\tests\Feature\DeliveryRemediationTest, 2 tests)
+Before First Test Method Called (P\Packages\core\tests\Feature\DeliveryRemediationTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Packages\core\tests\Feature\DeliveryRemediationTest::setUpBeforeClass
+Test Preparation Started (P\Packages\core\tests\Feature\DeliveryRemediationTest::__pest_evaluable_it_serializes_publishers_so_a_cursor_cannot_overtake_an_uncommitted_message)
+Before Test Method Called (P\Packages\core\tests\Feature\DeliveryRemediationTest::setUp)
+Before Test Method Finished:
+- P\Packages\core\tests\Feature\DeliveryRemediationTest::setUp
+Test Prepared (P\Packages\core\tests\Feature\DeliveryRemediationTest::__pest_evaluable_it_serializes_publishers_so_a_cursor_cannot_overtake_an_uncommitted_message)
+Test Failed (P\Packages\core\tests\Feature\DeliveryRemediationTest::__pest_evaluable_it_serializes_publishers_so_a_cursor_cannot_overtake_an_uncommitted_message)
+Exception "Illuminate\Database\QueryException" not thrown.
+After Test Method Called (P\Packages\core\tests\Feature\DeliveryRemediationTest::tearDown)
+After Test Method Finished:
+- P\Packages\core\tests\Feature\DeliveryRemediationTest::tearDown
+Test Finished (P\Packages\core\tests\Feature\DeliveryRemediationTest::__pest_evaluable_it_serializes_publishers_so_a_cursor_cannot_overtake_an_uncommitted_message)
+Test Preparation Started (P\Packages\core\tests\Feature\DeliveryRemediationTest::__pest_evaluable_it_records_committed_audit_only_after_the_outer_transaction_succeeds)

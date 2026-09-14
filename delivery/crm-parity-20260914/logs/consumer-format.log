@@ -1,0 +1,1 @@
+{"tool":"pint","result":"fixed","files":[{"path":"delivery\/crm-parity-20260914\/consumer\/InstalledArtifactTest.php","fixers":["class_definition","php_unit_method_casing","braces_position","single_line_empty_body","blank_line_before_statement"]}]}
