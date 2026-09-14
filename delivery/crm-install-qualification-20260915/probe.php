@@ -156,10 +156,11 @@ foreach (['a', 'b'] as $offset => $name) {
     $account = Account::on('pgsql')->create(['cluster_id' => $cluster, 'db_name' => $targets[$offset + 1], 'slug' => 'account-'.$name, 'template_version' => 1, 'embedding_model' => 'bge-m3', 'embedding_dim' => 1024, 'owner_identity_id' => $user, 'status' => 'active']);
     $ref = new AccountRef(id: $account->id, slug: $account->slug, status: 'active', features: [], limits: []);
     $manager->initialize($ref);
-    check(! $registry->isActive('flex/crm', $manager->context()), 'Default registration enabled CRM.');
     migrateInstalled($console, 'tenant', __DIR__.'/vendor/corex/core/database/migrations/pg');
     migrateInstalled($console, 'tenant', __DIR__.'/vendor/corex/tenancy/database/migrations/tenant');
     migrateInstalled($console, 'tenant', __DIR__.'/vendor/corex/modules/database/migrations');
+    check(! $registry->isActive('flex/crm', $manager->context()), 'Default registration enabled CRM.');
+    check(StorageCatalogue::read(DB::connection('tenant'), 'public') === [], 'Default registration ran CRM DDL.');
     $workspace = (string) Str::uuid7();
     $other = (string) Str::uuid7();
     DB::connection('tenant')->table('users')->insert(['id' => $user, 'email' => $user.'@example.test', 'name' => 'Trusted '.$name]);
