@@ -359,7 +359,44 @@ final class RegistryCompiler
      */
     private function collectApi(array $manifests): array
     {
-        return $this->collect($manifests, Api::class);
+        $result = [];
+        $ids = [];
+        $paths = [];
+        $operations = [];
+
+        foreach ($manifests as $manifest) {
+            foreach ($manifest->extenders as $extender) {
+                if (! $extender instanceof Api) {
+                    continue;
+                }
+
+                $api = clone $extender;
+                // Provenance comes from the owning manifest, never a caller-supplied property.
+                $api->declaringModule = $manifest->composerName;
+
+                if ($api->mode === 'operation') {
+                    ApiOperationValidator::validate($api);
+                    $id = $api->version.':'.$api->operationId;
+                    $path = $api->version.':'.$api->method.':'.preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', $api->path);
+
+                    if (isset($ids[$id]) || isset($paths[$path])) {
+                        throw new CompilationException('Duplicate API operation identifier or route: '.$id);
+                    }
+
+                    foreach ($operations as $other) {
+                        ApiOperationValidator::validateRoutePair($api, $other);
+                    }
+
+                    $ids[$id] = true;
+                    $paths[$path] = true;
+                    $operations[] = $api;
+                }
+
+                $result[] = $api;
+            }
+        }
+
+        return $result;
     }
 
     /**

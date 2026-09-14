@@ -1,0 +1,11 @@
+diff --git a/packages/api/src/Internal/DenyOperationAuthorizer.php b/packages/api/src/Internal/DenyOperationAuthorizer.php
+--- a/packages/api/src/Internal/DenyOperationAuthorizer.php
++++ b/packages/api/src/Internal/DenyOperationAuthorizer.php
+@@ -15,6 +15,6 @@
+     #[Override]
+     public function allows(Operation $operation, RequestContext $context): bool
+     {
+-        return false;
++        return true;
+     }
+ }

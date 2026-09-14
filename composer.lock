@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a95f9c65b0c093440eba9b26f8a7d4a",
+    "content-hash": "d4c77c3f2a74d9c3836a67a7d77fdb12",
     "packages": [
         {
             "name": "brick/math",
@@ -191,6 +191,61 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "corex/api",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/api",
+                "reference": "c89af4a0b720818e71cb909ac6be2bbe98240a7c"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "illuminate/http": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "illuminate/validation": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Api\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Api\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "pest"
+                ],
+                "test:coverage": [
+                    "pest --coverage --min=80"
+                ],
+                "analyse": [
+                    "phpstan analyse --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Opt-in module operation dispatch, trusted context contracts and OpenAPI projection for Laravel.",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "corex/core",
@@ -11124,6 +11179,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "corex/api": 20,
         "corex/core": 20,
         "corex/modules": 20,
         "corex/tasks": 20,

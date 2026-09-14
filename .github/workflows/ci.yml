@@ -92,6 +92,29 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 
+  api-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12.*', '13.*']
+    name: API package · Laravel ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          coverage: xdebug
+      - name: Constrain Laravel version
+        run: composer --working-dir=packages/api require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+      - name: Install dependencies
+        run: composer --working-dir=packages/api update --prefer-dist --no-interaction --no-progress
+      - name: API tests and coverage
+        run: composer --working-dir=packages/api test:coverage
+      - name: API static analysis
+        run: composer --working-dir=packages/api analyse
+
   tenancy-tests:
     runs-on: ubuntu-latest
     strategy:

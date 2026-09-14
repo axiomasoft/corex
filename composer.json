@@ -16,7 +16,8 @@
         "flex/crm": "@dev",
         "corex/tasks": "@dev",
         "corex/modules": "@dev",
-        "corex/tenancy": "@dev"
+        "corex/tenancy": "@dev",
+        "corex/api": "@dev"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
@@ -29,7 +30,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CoreX\\Tests\\": "tests/"
+            "CoreX\\Tests\\": "tests/",
+            "CoreX\\Api\\Tests\\": "packages/api/tests/"
         }
     },
     "repositories": [
@@ -48,7 +50,7 @@
     "scripts": {
         "test": "vendor/bin/pest --exclude-group=pg",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in auth crm tasks tenancy; do composer --working-dir=packages/$p test || exit 1; done",
+        "test:packages": "for p in api auth crm tasks tenancy; do composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "contract-guard": "bash scripts/contract-guard.sh",
         "test:coverage": "vendor/bin/pest --coverage --min=80",

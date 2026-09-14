@@ -20,7 +20,7 @@ use CoreX\Tests\Support\SourceScanner;
 // Foundation = the CoreX\*-namespaced packages (L0 agnostic + L1 domain-base). The
 // crm package IS the Flex\* thematic layer (L2, may depend on corex/*) — it is
 // intentionally excluded from the "may not import Flex" scan.
-$foundationPackages = ['core', 'modules', 'tenancy', 'auth', 'tasks'];
+$foundationPackages = ['core', 'modules', 'tenancy', 'auth', 'tasks', 'api'];
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
 // The vendor inversion D70 fixed was exactly this kind of leak.
@@ -32,6 +32,22 @@ test('foundation packages do not import flex/* namespaces', function () use ($fo
             ...$offenders,
             ...SourceScanner::filesMatching(SourceScanner::packagePath($pkg, 'src'), '/\buse\s+Flex\\\\/'),
         ];
+    }
+
+    expect($offenders)->toBe([]);
+});
+
+test('foundation packages declare no upward composer dependencies', function () use ($foundationPackages): void {
+    $offenders = [];
+
+    foreach ($foundationPackages as $pkg) {
+        $composer = json_decode((string) file_get_contents(SourceScanner::packagePath($pkg, 'composer.json')), associative: true, flags: JSON_THROW_ON_ERROR);
+
+        foreach (array_keys($composer['require'] ?? []) as $dependency) {
+            if (str_starts_with($dependency, 'flex/')) {
+                $offenders[] = $pkg.':'.$dependency;
+            }
+        }
     }
 
     expect($offenders)->toBe([]);
@@ -61,7 +77,7 @@ test('corex/core declares no monorepo package dependencies', function (): void {
 test('corex/core source imports no sibling package namespace', function (): void {
     $offenders = SourceScanner::filesMatching(
         SourceScanner::packagePath('core', 'src'),
-        '/\buse\s+(CoreX\\\\(Modules|Auth|Tasks)|Flex)\\\\/',
+        '/\buse\s+(CoreX\\\\(Modules|Auth|Tasks|Api)|Flex)\\\\/',
     );
 
     expect($offenders)->toBe([]);

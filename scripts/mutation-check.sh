@@ -26,6 +26,10 @@ cd "$(git rev-parse --show-toplevel)"
 # Реестр кейсов: "<item>-<case>" -> тестовая команда, которая обязана
 # ПОКРАСНЕТЬ под применённым патчем-саботажем.
 declare -A TEST_CMD=(
+    [API-default-deny]="vendor/bin/pest --exclude-group=pg packages/api/tests/Feature/PlatformTest.php --filter=test_default_authentication_and_authorization_deny"
+    [API-module-activation]="vendor/bin/pest --exclude-group=pg packages/api/tests/Feature/PlatformTest.php --filter=test_context_and_module_state_are_read_on_every_dispatch"
+    [API-physical-context]="vendor/bin/pest --exclude-group=pg packages/api/tests/Feature/PlatformTest.php --filter=test_missing_boxed_and_disabled_contexts_fail_closed"
+    [API-undeclared-input]="vendor/bin/pest --exclude-group=pg packages/api/tests/Feature/PlatformTest.php --filter=test_malformed_or_forged_input_is_rejected"
     [P1.14-pg-lane-split]="PGSQL_PORT=1 vendor/bin/pest --exclude-group=pg tests/Feature/PubSubDatabasePollTest.php"
     [P1.14-foreign-prefix-fp]="vendor/bin/pest tests/PHPStan/ModuleBoundaryRulesTest.php --filter=test_foreign_prefix_sql_no_false_positive"
     [P1.15-drop-entities]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='persists the entity|projects the compiled entities'"

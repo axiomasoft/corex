@@ -1,0 +1,11 @@
+diff --git a/packages/api/src/Dispatcher.php b/packages/api/src/Dispatcher.php
+--- a/packages/api/src/Dispatcher.php
++++ b/packages/api/src/Dispatcher.php
+@@ -46,6 +46,6 @@
+                 ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
+             $context = $this->contexts->resolve($request, $principal, $metadata);
+
+-            if (! $this->modules->isActive($operation->module, $context->tenant())) {
++            if (false && ! $this->modules->isActive($operation->module, $context->tenant())) {
+                 throw new ApiError('module_unavailable', 404, 'Operation not found.');
+             }

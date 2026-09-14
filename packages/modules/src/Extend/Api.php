@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Modules\Extend;
 
 /**
- * 3. REST contract: either auto-CRUD for an owned entity, or an added
+ * 3. API declaration: resource metadata, explicit operations, or an added
  * attribute on ANOTHER module's resource (narrow analogue of Flarum
  * ApiSerializer — no controller override).
  *
@@ -13,10 +13,36 @@ namespace CoreX\Modules\Extend;
  */
 final class Api implements Extender
 {
-    public string $entityHandle;
+    public string $entityHandle = '';
 
-    /** @var 'entity'|'extendResource' */
+    /** @var 'entity'|'extendResource'|'operation' */
     public string $mode;
+
+    public ?string $declaringModule = null;
+
+    public string $operationId = '';
+
+    public string $version = 'v1';
+
+    public string $method = 'GET';
+
+    public string $path = '';
+
+    public string $ability = '';
+
+    /** @var class-string|null */
+    public ?string $handler = null;
+
+    /** @var array<string, mixed> */
+    public array $requestSchema = ['type' => 'object'];
+
+    /** @var array<string, mixed> */
+    public array $responseSchema = ['type' => 'object'];
+
+    /** @var array<string, list<string>> Laravel validation rules; no closures or objects in the compiled file. */
+    public array $inputRules = [];
+
+    public int $successStatus = 200;
 
     public bool $isReadonly = false;
 
@@ -39,6 +65,40 @@ final class Api implements Extender
         $api = new self;
         $api->entityHandle = $entityHandle;
         $api->mode = 'entity';
+
+        return $api;
+    }
+
+    /**
+     * @param  class-string  $handler
+     * @param  array<string, mixed>  $requestSchema
+     * @param  array<string, mixed>  $responseSchema
+     * @param  array<string, list<string>>  $rules
+     */
+    public static function operation(
+        string $id,
+        string $method,
+        string $path,
+        string $handler,
+        string $ability,
+        array $requestSchema,
+        array $responseSchema,
+        array $rules = [],
+        string $version = 'v1',
+        int $successStatus = 200,
+    ): self {
+        $api = new self;
+        $api->mode = 'operation';
+        $api->operationId = $id;
+        $api->method = strtoupper($method);
+        $api->path = $path;
+        $api->handler = $handler;
+        $api->ability = $ability;
+        $api->requestSchema = $requestSchema;
+        $api->responseSchema = $responseSchema;
+        $api->inputRules = $rules;
+        $api->version = $version;
+        $api->successStatus = $successStatus;
 
         return $api;
     }

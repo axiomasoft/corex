@@ -1,0 +1,11 @@
+diff --git a/packages/api/src/Dispatcher.php b/packages/api/src/Dispatcher.php
+--- a/packages/api/src/Dispatcher.php
++++ b/packages/api/src/Dispatcher.php
+@@ -91,6 +91,6 @@
+
+         $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
+
+-        if (array_diff(array_keys($input), $allowed) !== []) {
++        if (false && array_diff(array_keys($input), $allowed) !== []) {
+             throw new ApiError('validation_failed', 422, 'Input contains undeclared fields.');
+         }

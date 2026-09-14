@@ -1,0 +1,12 @@
+diff --git a/packages/api/src/Internal/TrustedContextResolver.php b/packages/api/src/Internal/TrustedContextResolver.php
+--- a/packages/api/src/Internal/TrustedContextResolver.php
++++ b/packages/api/src/Internal/TrustedContextResolver.php
+@@ -33,7 +33,7 @@
+             throw new ApiError('context_required', 403, 'An initialized account context is required.');
+         }
+
+-        if ($this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
++        if (false && $this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
+             || $this->manager->context() != $tenant)) {
+             throw new ApiError('context_required', 403, 'An initialized physical account context is required.');
+         }

@@ -1,0 +1,8 @@
+{
+    "name": "example/notes",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {"php": "^8.3", "corex/api": "@dev"},
+    "autoload": {"psr-4": {"Example\\Notes\\": "src/"}},
+    "extra": {"corex": {"module": "Example\\Notes\\NotesModule"}}
+}

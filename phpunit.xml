@@ -16,6 +16,9 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="ApiPackage">
+            <directory>packages/api/tests/Feature</directory>
+        </testsuite>
         <testsuite name="CorePackage">
             <directory>packages/core/tests</directory>
         </testsuite>
@@ -38,6 +41,7 @@
 
     <source>
         <include>
+            <directory>packages/api/src</directory>
             <directory>packages/core/src</directory>
             <directory>packages/modules/src</directory>
         </include>

@@ -5,6 +5,10 @@
 
 ## [Unreleased]
 
+### API operations
+
+- Backward-compatible `Api::operation()` declarations with explicit handler, ability, version, schemas and validation rules. Compilation stamps module ownership and rejects duplicate IDs/routes and malformed declarations. Existing resource metadata never becomes implicit CRUD.
+
 ### Added
 
 - **`mod_lifecycle_log.actor_ck` widened to include `support` (P2.11, D138).** A second CHECK
