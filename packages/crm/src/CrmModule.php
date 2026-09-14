@@ -26,7 +26,7 @@ final class CrmModule extends CorexModule
             Entity::make(Stage::class)->handle('crm.stage')->table('crm_stages')->label('Stage', 'Stages')->titleAttribute('name'),
             Entity::make(Deal::class)->handle('crm.deal')->table('crm_deals')->label('Deal', 'Deals')->titleAttribute('title')->auditable(),
             Entity::make(Company::class)->handle('crm.company')->table('crm_companies')->label('Company', 'Companies')->titleAttribute('name'),
-            Entity::make(Contact::class)->handle('crm.contact')->table('crm_contacts')->label('Contact', 'Contacts'),
+            Entity::make(Contact::class)->handle('crm.contact')->table('crm_contacts')->label('Contact', 'Contacts')->titleAttribute('display_name'),
             Entity::make(Lead::class)->handle('crm.lead')->table('crm_leads')->label('Lead', 'Leads')->titleAttribute('name'),
             Entity::make(Activity::class)->handle('crm.activity')->table('crm_activities')->label('Activity', 'Activities')->titleAttribute('summary')->auditable(),
         ]);

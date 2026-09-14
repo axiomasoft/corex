@@ -22,7 +22,7 @@ beforeEach(function (): void {
 it('converts a lead into contact, company and deal', function (): void {
     Event::fake([LeadConverted::class]);
 
-    $lead = app(CreateLead::class)->handle('Jane Doe', LeadSource::Website, email: 'jane@acme.test', companyName: 'Acme', ownerId: 'u1');
+    $lead = app(CreateLead::class)->handle('Jane Doe', LeadSource::Website, email: 'jane@acme.test', companyName: 'Acme', ownerId: $this->crmContext->context->principalId);
     $contact = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
     $lead->refresh();
 
@@ -30,11 +30,18 @@ it('converts a lead into contact, company and deal', function (): void {
         ->and($lead->converted_contact_id)->toBe($contact->id)
         ->and($lead->converted_company_id)->not->toBeNull()
         ->and($lead->converted_deal_id)->not->toBeNull()
-        ->and($contact->company_id)->toBe($lead->converted_company_id);
+        ->and($contact->companies()->sole()->id)->toBe($lead->converted_company_id);
 
     $deal = Deal::query()->findOrFail($lead->converted_deal_id);
     expect($deal->contact_id)->toBe($contact->id)
         ->and($deal->company_id)->toBe($lead->converted_company_id);
+    expect($deal->contact()->sole()->id)->toBe($contact->id)
+        ->and($deal->company()->sole()->id)->toBe($lead->converted_company_id)
+        ->and($deal->pipeline()->sole()->id)->toBe($this->pipeline->id)
+        ->and($deal->stage()->sole()->pipeline_id)->toBe($this->pipeline->id)
+        ->and($contact->deals()->sole()->id)->toBe($deal->id)
+        ->and($deal->company->deals()->sole()->id)->toBe($deal->id)
+        ->and($this->pipeline->deals()->count())->toBe(1);
 
     Event::assertDispatched(LeadConverted::class);
 });
@@ -47,7 +54,7 @@ it('converts a lead without company or deal', function (): void {
     expect($lead->status)->toBe(LeadStatus::Converted)
         ->and($lead->converted_company_id)->toBeNull()
         ->and($lead->converted_deal_id)->toBeNull()
-        ->and($contact->company_id)->toBeNull();
+        ->and($contact->companies()->count())->toBe(0);
 });
 
 it('returns the same conversion on retry even when passed a stale lead instance', function (): void {
