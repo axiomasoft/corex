@@ -203,7 +203,8 @@ $request = function (string $method, string $path, array $input, int $status, st
     $response = $kernel->handle($req);
     check($response->getStatusCode() === $status, $path.' expected '.$status.' got '.$response->getStatusCode().': '.$response->getContent());
     $payload = json_decode($response->getContent(), true, flags: JSON_THROW_ON_ERROR);
-    $evidence['exchanges'][] = ['method' => $method, 'path' => $path, 'schema_path' => $schemaPath, 'input' => (object) $input, 'status' => $status, 'response' => $payload];
+    $evidence['exchanges'][] = ['method' => $method, 'path' => $path, 'schema_path' => $schemaPath, 'input' => (object) $input, 'status' => $status,
+        'response' => json_decode($response->getContent(), flags: JSON_THROW_ON_ERROR), 'response_wire_sha256' => hash('sha256', $response->getContent())];
     $kernel->terminate($req, $response);
 
     return $payload['data'] ?? [];
