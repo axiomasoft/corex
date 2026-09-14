@@ -59,6 +59,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Golden-template integrity (P2.2/P2.3)
+    |--------------------------------------------------------------------------
+    |
+    | A ready row alone is never authority to clone or activate a template.
+    | Each template must have a separately distributed, signed manifest and
+    | its public signing key. The empty default intentionally denies writes.
+    | Values are deployment configuration; private signing material never
+    | belongs here.
+    |
+    */
+    'template_integrity' => [
+        'trusted_keys' => [],
+        'manifests' => [],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | TenancyManager bootstrappers (P2.5, R-11 §2.4 — fixed order)
     |--------------------------------------------------------------------------
     | Own key (not `bootstrappers` — that's stancl's own top-level key under

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning;
 
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\ProvisionParams;
 use DateTimeInterface;
@@ -33,6 +34,7 @@ final class PendingPool
     public function __construct(
         private readonly string $centralConnection,
         private readonly StanclTenantDatabaseProvisioner $provisioner,
+        private readonly ?TemplateIntegrityVerifier $templateIntegrity = null,
     ) {}
 
     /**
@@ -84,13 +86,18 @@ final class PendingPool
                 ->join('root_clusters as rc', 'rc.id', '=', 'ra.cluster_id')
                 ->where('ra.status', 'pending')
                 ->orderBy('rc.db_count')
-                ->select('ra.id')
+                ->select(['ra.id', 'ra.cluster_id'])
                 ->lock('for update of ra skip locked')
                 ->first();
 
             if ($candidate === null) {
                 return null;
             }
+
+            $this->templateIntegrity()->assertCurrent(
+                version: (int) DB::connection($this->centralConnection)->table('root_clusters')->where('id', $candidate->cluster_id)->value('template_version'),
+                clusterId: (string) $candidate->cluster_id,
+            );
 
             DB::connection($this->centralConnection)
                 ->table('root_accounts')
@@ -185,6 +192,7 @@ final class PendingPool
             : $this->leastLoadedActiveCluster();
 
         $template = $this->readyTemplateFor((int) $cluster->template_version);
+        $this->templateIntegrity()->assertCurrent(version: (int) $template->version, clusterId: (string) $cluster->id);
 
         $id = (string) Str::uuid7();
         $dbName = 'acc_'.str_replace('-', '', $id);
@@ -261,5 +269,10 @@ final class PendingPool
         }
 
         return $template;
+    }
+
+    private function templateIntegrity(): TemplateIntegrityVerifier
+    {
+        return $this->templateIntegrity ?? app(TemplateIntegrityVerifier::class);
     }
 }

@@ -11,9 +11,13 @@ use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Commands\TenantsMigrateCommand;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
+use CoreX\Tenancy\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Database\TemplateIntegrityLock;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
 use CoreX\Tenancy\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
@@ -68,16 +72,33 @@ final class TenancyServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             StanclTenantDatabaseProvisioner::class,
-            static fn (): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
-                (string) config('tenancy.central_connection'),
+            static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
+                centralConnection: (string) config('tenancy.central_connection'),
+                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
+        );
+
+        $this->app->singleton(SchemaCatalogueSerializer::class);
+        $this->app->singleton(TemplateIntegrityLock::class);
+        $this->app->singleton(
+            DatabaseTemplateIntegrityVerifier::class,
+            static fn (Application $app): DatabaseTemplateIntegrityVerifier => new DatabaseTemplateIntegrityVerifier(
+                centralConnection: (string) config('tenancy.central_connection'),
+                serializer: $app->make(SchemaCatalogueSerializer::class),
+                lock: $app->make(TemplateIntegrityLock::class),
+            ),
+        );
+        $this->app->singleton(
+            TemplateIntegrityVerifier::class,
+            static fn (Application $app): DatabaseTemplateIntegrityVerifier => $app->make(DatabaseTemplateIntegrityVerifier::class),
         );
 
         $this->app->singleton(
             PendingPool::class,
             static fn (Application $app): PendingPool => new PendingPool(
-                (string) config('tenancy.central_connection'),
-                $app->make(StanclTenantDatabaseProvisioner::class),
+                centralConnection: (string) config('tenancy.central_connection'),
+                provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
+                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
 
@@ -104,6 +125,7 @@ final class TenancyServiceProvider extends ServiceProvider
                 fsm: $app->make(AccountLifecycleFsm::class),
                 tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
                 impersonationGuard: $app->make(ImpersonationGuard::class),
+                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
 
@@ -113,6 +135,7 @@ final class TenancyServiceProvider extends ServiceProvider
             static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
                 centralConnection: (string) config('tenancy.central_connection'),
                 tenancy: $app->make(TenancyManager::class),
+                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
 

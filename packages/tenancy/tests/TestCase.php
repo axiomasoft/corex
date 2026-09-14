@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests;
 
+use CoreX\Tenancy\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Testing\IsolatesDatabasePath;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
@@ -129,5 +132,50 @@ abstract class TestCase extends Orchestra
         $app->resolving('auth', static function ($auth) use ($app): void {
             $auth->provider('oidc-test-stub', static fn () => $app->make(StubIdentityProvider::class));
         });
+    }
+
+    public static function trustTemplate(string $templateId, string $database): void
+    {
+        $central = DB::connection('pgsql');
+        $configuration = $central->getConfig();
+        $configuration['database'] = $database;
+        $templateConnection = (new ConnectionFactory(app()))->make($configuration, 'corex-template-test-catalogue');
+        $serializer = app(SchemaCatalogueSerializer::class);
+
+        try {
+            $schemaHash = $serializer->hash($templateConnection);
+        } finally {
+            $templateConnection->disconnect();
+        }
+
+        $template = DB::table('root_templates')->where('id', $templateId)->first(['id', 'version', 'embedding_model', 'embedding_dim']);
+        $payload = [
+            'canonical_schema_sha256' => $schemaHash,
+            'embedding' => [
+                'dimension' => (string) $template->embedding_dim,
+                'model' => $template->embedding_model,
+            ],
+            'format_version' => 1,
+            'template_id' => $template->id,
+            'template_version' => (string) $template->version,
+        ];
+        $keypair = sodium_crypto_sign_keypair();
+        $signature = sodium_crypto_sign_detached(
+            'corex-template-manifest/v1'."\0".$serializer->encode($payload),
+            sodium_crypto_sign_secretkey($keypair),
+        );
+        $base64Url = static fn (string $value): string => rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+
+        DB::table('root_templates')->where('id', $templateId)->update(['schema_hash' => $schemaHash]);
+        config([
+            'tenancy.template_integrity.trusted_keys' => ['test' => $base64Url(sodium_crypto_sign_publickey($keypair))],
+            'tenancy.template_integrity.manifests' => [
+                $templateId => [
+                    'payload' => $payload,
+                    'signature' => $base64Url($signature),
+                    'trusted_key_id' => 'test',
+                ],
+            ],
+        ]);
     }
 }

@@ -19,6 +19,7 @@ use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -123,8 +124,9 @@ function makeLcClusterRow(array $overrides = []): string
 
 function makeLcTemplateRow(int $version = 1, string $dbName = LC_TEMPLATE_DB): void
 {
+    $id = (string) Str::uuid();
     DB::table('root_templates')->insert([
-        'id' => (string) Str::uuid(),
+        'id' => $id,
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -132,6 +134,7 @@ function makeLcTemplateRow(int $version = 1, string $dbName = LC_TEMPLATE_DB): v
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
+    TestCase::trustTemplate(templateId: $id, database: $dbName);
 }
 
 function makeLcIdentityRow(): string
