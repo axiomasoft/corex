@@ -68,7 +68,8 @@ composition = {'name': 'example/physical-crm-probe', 'type': 'project',
                'require': {'php': '^8.4', 'laravel/framework': args.laravel, **{name: config['version'] for name in names}},
                'repositories': [{'type': 'package', 'package': package} for package in metadata],
                'minimum-stability': 'alpha', 'prefer-stable': True, 'config': {'allow-plugins': False}}
-env = dict(os.environ, APP_ENV='testing', TENANCY_CENTRAL_CONNECTION='pgsql', COREX_MODULES_CONNECTION='')
+env = dict(os.environ, APP_ENV='testing', TENANCY_CENTRAL_CONNECTION='pgsql')
+env.pop('COREX_MODULES_CONNECTION', None)
 for suffix in ['a', 'b']:
     consumer = out / ('consumer-' + suffix)
     consumer.mkdir()

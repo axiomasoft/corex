@@ -25,6 +25,7 @@ use CoreX\Tests\Stubs\StubAuditableThing;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -140,6 +141,13 @@ function auditEntityFor(string $model, string $table, string $handle, array $ove
 }
 
 beforeEach(function (): void {
+    // Full randomized runs may already enforce the owning module morph map.
+    // These audit-only models must participate rather than relax enforcement.
+    $entities = new ArrayEntityRegistry;
+    foreach ([Widget::class => ['widgets', 'stub.widget'], StubAuditableThing::class => ['stub_auditable_things', 'stub.auditable_thing'], AuditSensitiveStub::class => ['audit_sensitive_stubs', 'audit.sensitive'], AuditUnguardedStub::class => ['audit_unguarded_stubs', 'audit.unguarded']] as $model => [$table, $handle]) {
+        $entities->register(auditEntityFor($model, $table, $handle));
+    }
+    Relation::enforceMorphMap(array_column($entities->all(), 'model', 'handle'));
     // CoreXTestCase disables audit by default (missing-table guard for the
     // sqlite lane, see its defineEnvironment) — this suite opts back in.
     config(['corex.audit.enabled' => true]);

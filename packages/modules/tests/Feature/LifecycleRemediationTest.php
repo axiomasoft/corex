@@ -154,3 +154,14 @@ it('rolls back feature definitions and enable notifications with an outer transa
     expect(DB::table('mod_modules')->count())->toBe(0)
         ->and(DB::table('sys_feature_flags')->count())->toBe(0)->and($notified)->toBeFalse();
 });
+
+it('uses the current physical default when lifecycle connection is unpinned', function (): void {
+    app()->instance(FeatureFlags::class, new DatabaseFeatureFlags);
+    $lifecycle = new DatabaseModuleLifecycle(
+        registry: app(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
+        records: new DatabaseRecordsRegistrar, container: app(), tenantContextResolver: app(TenantContextResolver::class),
+    );
+    $lifecycle->enable('corex/stub-feature-flag');
+    expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists())->toBeTrue()
+        ->and(DB::getDefaultConnection())->toBe('pgsql');
+});

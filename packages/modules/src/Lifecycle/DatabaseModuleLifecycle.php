@@ -192,7 +192,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      */
     private function defineManifestFeatureFlags(string $module): void
     {
-        DB::usingConnection($this->connection, function () use ($module): void {
+        DB::usingConnection($this->connection ?? DB::getDefaultConnection(), function () use ($module): void {
             /** @var FeatureFlags $flags */
             $flags = $this->container->make(FeatureFlags::class);
 
