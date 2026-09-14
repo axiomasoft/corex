@@ -64,9 +64,51 @@ $migrationFiles = static function (string $dir): array {
  *
  * @return array{literal: list<string>, dynamic: list<string>}
  */
-$foreignKeyTargets = static function (string $source): array {
+// Resolve only explicit imports with a plain literal model table in owning
+// production PSR-4 source. No eval, model construction, query, or wildcard
+// exception: unresolved/dynamic expressions still fail the inventory gate.
+$literalModelTables = static function (string $source) use ($repoRoot): array {
+    $prefixes = [];
+    foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $manifest) {
+        $composer = json_decode((string) file_get_contents($manifest), true, flags: JSON_THROW_ON_ERROR);
+        foreach ($composer['autoload']['psr-4'] ?? [] as $prefix => $paths) {
+            foreach ((array) $paths as $path) {
+                $prefixes[$prefix][] = dirname($manifest).'/'.$path;
+            }
+        }
+    }
+    preg_match_all('/^use ([a-zA-Z_\\\\][a-zA-Z0-9_\\\\]*)(?: as ([a-zA-Z_][a-zA-Z0-9_]*))?;/m', $source, $imports, PREG_SET_ORDER);
+    $tables = [];
+    foreach ($imports as $import) {
+        $class = $import[1];
+        $alias = $import[2] ?? substr($class, (int) strrpos($class, '\\') + 1);
+        foreach ($prefixes as $prefix => $directories) {
+            if (! str_starts_with($class, $prefix)) {
+                continue;
+            }
+            foreach ($directories as $directory) {
+                $file = $directory.'/'.str_replace('\\', '/', substr($class, strlen($prefix))).'.php';
+
+                if (! is_file($file)) {
+                    continue;
+                }
+                $model = (string) file_get_contents($file);
+
+                if (! preg_match('/function\s+(?:getTable|__construct)\s*\(/', $model)
+                    && preg_match('/protected\s+\$table\s*=\s*([\'"])([a-zA-Z_][a-zA-Z0-9_]*)\1\s*;/', $model, $table)) {
+                    $tables[$alias] = $table[2];
+                }
+            }
+        }
+    }
+
+    return $tables;
+};
+
+$foreignKeyTargets = static function (string $source) use ($literalModelTables): array {
     $literal = [];
     $dynamic = [];
+    $modelTables = $literalModelTables($source);
 
     // Аргумент допускает ОДИН уровень вложенных скобок — этого хватает на
     // `Config::table()`-форму и не даёт регэксу оборваться на её `)`.
@@ -91,6 +133,12 @@ $foreignKeyTargets = static function (string $source): array {
 
         if (preg_match('/^([\'"])(.+)\1$/', $target, $quoted) === 1) {
             $literal[] = $quoted[2];
+
+            continue;
+        }
+
+        if (preg_match('/^\(new ([a-zA-Z_][a-zA-Z0-9_]*)\)->getTable\(\)$/D', trim($target), $model) === 1 && isset($modelTables[$model[1]])) {
+            $literal[] = $modelTables[$model[1]];
 
             continue;
         }
@@ -155,6 +203,17 @@ test('the FK-target detector reads both Laravel forms and flags dynamic targets'
         'literal' => ['root_accounts', 'crm_stages'],
         'dynamic' => ['Config::featureFlagsTable()'],
     ]);
+});
+
+test('literal model table resolution retains root detection and rejects unknown expressions', function () use ($foreignKeyTargets): void {
+    $sample = <<<'PHP'
+    use CoreX\Tenancy\Models\Account;
+    use CoreX\Tenancy\Models\Workspace as Scope;
+    $table->foreign('account_id')->references('id')->on((new Account)->getTable());
+    $table->foreign('workspace_id')->constrained((new Scope)->getTable());
+    $table->foreign('unknown_id')->constrained((new Unknown)->getTable());
+    PHP;
+    expect($foreignKeyTargets($sample))->toBe(['literal' => ['root_accounts', 'wsp_workspaces'], 'dynamic' => ['(new Unknown)->getTable()']]);
 });
 
 test('the migration inventory is not empty in either layer', function () use ($migrationFiles, $rootLayerDir, $tenantLayerDir, $allMigrations): void {
