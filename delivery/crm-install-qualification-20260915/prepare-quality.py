@@ -5,11 +5,13 @@ import hashlib
 import json
 from pathlib import Path
 from urllib.parse import urlparse
+import xml.etree.ElementTree as ET
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--checkout', type=Path, required=True)
 parser.add_argument('--sealed-artifacts', type=Path, required=True)
 parser.add_argument('--installed-set', type=Path)
+parser.add_argument('--auth-static-autoload', type=Path)
 args = parser.parse_args()
 root = args.checkout.resolve()
 sealed = root / 'plans/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/packages.json'
@@ -34,5 +36,25 @@ if args.installed_set:
     value['repositories'] = [{'type': 'package', 'package': package} for package in metadata] + value['repositories']
     value['autoload-dev']['psr-4'].update({'Flex\\Crm\\Tests\\': 'packages/crm/tests/', 'CoreX\\Tenancy\\Tests\\': 'packages/tenancy/tests/'})
     (root / '.qualification-composer.json').write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
+    # Same coverage source sets, relocated to the files actually executed from
+    # immutable vendor. Original XML, tests, exclusions and floors stay intact.
+    package_names = {package['name'].split('/')[1]: package['name'] for package in metadata if package['name'].startswith(('corex/', 'flex/'))}
+    xml = ET.parse(root / 'phpunit.xml')
+    for directory in xml.findall('./source/include/directory'):
+        name = directory.text.split('/')[1]
+        directory.text = 'vendor/' + package_names[name] + '/src'
+    xml.write(root / '.qualification-phpunit.xml', encoding='utf-8', xml_declaration=True)
+    for name in ['crm', 'api', 'tenancy']:
+        folder = root / 'packages' / name
+        xml = ET.parse(folder / 'phpunit.xml')
+        xml.getroot().set('bootstrap', '../../vendor/autoload.php')
+        for directory in xml.findall('./source/include/directory'):
+            directory.text = '../../vendor/' + package_names[name] + '/src'
+        xml.write(folder / '.qualification-phpunit.xml', encoding='utf-8', xml_declaration=True)
+    if args.auth_static_autoload:
+        path = args.auth_static_autoload.resolve()
+        assert path.is_file()
+        source = (root / 'phpstan-tests-lint.neon').read_text()
+        (root / '.qualification-tests-lint.neon').write_text(source.replace('packages/auth/vendor/autoload.php', str(path)))
     print('Pinned every installed runtime dependency for exact-set root/package quality checks.')
 print('Prepared exact sealed dist transport for owning tenancy test manifest.')
