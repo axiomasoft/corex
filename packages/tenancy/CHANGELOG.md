@@ -6,6 +6,10 @@
 
 ## Unreleased
 
+### Principal workspace API
+
+- Added `Contracts\PrincipalWorkspaceResolver::resolveFor()` for trusted session, token or service identities on the initialized account connection. `DatabaseWorkspaceResolver` implements it without implicit `auth()` reads; the existing `WorkspaceResolver::resolve()` delegates and remains compatible. Null/empty principals fail closed and membership is queried afresh.
+
 ### Changed
 
 - Changed the public `CentralApiClient` to the strict `corex-membership/1`

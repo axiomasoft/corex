@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspaces;
 
+use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Models\Workspace;
 use CoreX\Tenancy\WorkspaceRef;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Override;
 
 /**
  * Membership-checked `/w/{slug}` → {@see WorkspaceRef} resolver (B-11 §3.2,
@@ -15,15 +17,30 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * resolved — a partner-workspace membership never grants implicit access to
  * its parent (B-11 §5.4), because no path-based traversal happens here.
  */
-final class DatabaseWorkspaceResolver implements WorkspaceResolver
+final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
 {
+    #[Override]
     public function resolve(?string $slug): WorkspaceRef
     {
         $userId = auth()->id();
 
+        if (! is_string($userId) && ! is_int($userId)) {
+            throw new AuthorizationException('Authentication required to resolve a workspace.');
+        }
+
+        return $this->resolveFor($userId, $slug);
+    }
+
+    #[Override]
+    public function resolveFor(string|int $principalId, ?string $slug): WorkspaceRef
+    {
+        if ((string) $principalId === '') {
+            throw new AuthorizationException('A trusted principal is required to resolve a workspace.');
+        }
+
         $workspace = $slug === null
-            ? $this->defaultWorkspaceFor($userId)
-            : $this->workspaceBySlug($slug, $userId);
+            ? $this->defaultWorkspaceFor($principalId)
+            : $this->workspaceBySlug($slug, $principalId);
 
         return new WorkspaceRef(
             id: $workspace->id,
@@ -34,7 +51,7 @@ final class DatabaseWorkspaceResolver implements WorkspaceResolver
         );
     }
 
-    private function workspaceBySlug(string $slug, mixed $userId): Workspace
+    private function workspaceBySlug(string $slug, string|int $userId): Workspace
     {
         /** @var Workspace $workspace */
         $workspace = Workspace::query()->where('slug', $slug)->firstOr(
@@ -53,7 +70,7 @@ final class DatabaseWorkspaceResolver implements WorkspaceResolver
         return $workspace;
     }
 
-    private function defaultWorkspaceFor(mixed $userId): Workspace
+    private function defaultWorkspaceFor(string|int $userId): Workspace
     {
         /** @var ?Workspace $workspace */
         $workspace = Workspace::query()

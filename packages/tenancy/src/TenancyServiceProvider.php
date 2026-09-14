@@ -11,6 +11,7 @@ use CoreX\Tenancy\Commands\PendingClearCommand;
 use CoreX\Tenancy\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Commands\TenantsMigrateCommand;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -173,6 +174,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // choice of implementation (a second one doesn't exist — a switch
         // key without a consumer is a fabricated contract, D116/D121).
         $this->app->singleton(WorkspaceResolver::class, DatabaseWorkspaceResolver::class);
+        $this->app->bindIf(PrincipalWorkspaceResolver::class, DatabaseWorkspaceResolver::class);
 
         // P2.22 — cloud OIDC login lane, entirely opt-in (AC-28): binding a
         // closure does not execute firebase/php-jwt, only resolving it does,
