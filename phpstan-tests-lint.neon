@@ -24,6 +24,24 @@ includes:
 parameters:
     paths:
         - tests
+        - packages/auth/tests
+        - packages/crm/tests
+        - packages/tasks/tests
+        - packages/tenancy/tests
+
+    scanDirectories:
+        - packages/auth/src
+        - packages/auth/database/seeders
+        - packages/crm/src
+        - packages/tasks/src
+        - packages/tenancy/src
+
+    bootstrapFiles:
+        # Auth remains intentionally absent from the root dependency graph:
+        # its private AzGuard dependency is available only in this package's
+        # own test environment. Loading that installed package autoloader lets
+        # this rules-only pass parse the auth suite without adding Larastan.
+        - packages/auth/vendor/autoload.php
 
     level: 0
 
@@ -88,6 +106,29 @@ parameters:
             # констрейнт `UNIQUE NULLS NOT DISTINCT` недостижим (A57/A63).
             identifier: corexModules.directSystemTableWrite
             path: tests/Feature/SettingsTest.php
+            count: 2
+
+        # --- package-suite fixtures (P1.1) ------------------------------------
+        # ScopeResolver's raw rows establish the ltree department hierarchy
+        # consumed by the resolver under test; the owning contract cannot
+        # create this deliberately malformed/cross-branch fixture.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/auth/tests/Pg/ScopeResolverTest.php
+            count: 1
+        # AccessChecker uses the same real core ltree department fixture to
+        # prove its public record path, then removes its table for the
+        # fail-closed path; sibling/NULL/non-user cases deny.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/auth/tests/Pg/AccessCheckerTest.php
+            count: 2
+        # WorkspaceResolver verifies the tenancy/auth boundary with raw core
+        # department membership rows. Keep the exception exact: any additional
+        # write, or either removed fixture write, fails this standalone pass.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/tenancy/tests/Feature/WorkspaceResolverTest.php
             count: 2
 
         # --- corexModules.setWithoutLocal (3) ---------------------------------

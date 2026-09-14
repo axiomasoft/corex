@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Models;
 
+use Carbon\CarbonImmutable;
 use CoreX\Concerns\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property array<string, mixed> $settings
  * @property ?Carbon $last_login_at
  * @property ?Carbon $synced_at
+ * @property ?CarbonImmutable $identity_source_updated_at
  */
 final class User extends Model
 {
@@ -34,6 +36,8 @@ final class User extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
+
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $hidden = [
         'password_hash',
@@ -50,6 +54,7 @@ final class User extends Model
         'settings',
         'last_login_at',
         'synced_at',
+        'identity_source_updated_at',
     ];
 
     protected $casts = [
@@ -57,5 +62,6 @@ final class User extends Model
         'settings' => 'array',
         'last_login_at' => 'datetime',
         'synced_at' => 'datetime',
+        'identity_source_updated_at' => 'immutable_datetime',
     ];
 }

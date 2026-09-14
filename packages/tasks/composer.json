@@ -1,7 +1,7 @@
 {
     "name": "corex/tasks",
-    "description": "CoreX Tasks module — processes, stages, tasks and projects on corex/core (ULID, tenancy).",
-    "type": "library",
+    "description": "CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications.",
+    "type": "corex-module",
     "license": "MIT",
     "keywords": ["laravel", "tasks", "kanban", "projects", "multi-tenancy"],
     "authors": [
@@ -35,6 +35,9 @@
         }
     },
     "extra": {
+        "corex": {
+            "module": "CoreX\\Tasks\\TasksModule"
+        },
         "laravel": {
             "providers": [
                 "CoreX\\Tasks\\TasksServiceProvider"

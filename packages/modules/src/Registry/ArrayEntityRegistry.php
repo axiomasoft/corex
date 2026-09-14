@@ -30,10 +30,11 @@ final class ArrayEntityRegistry implements EntityRegistry
      *                                                                     predicate (ModuleRegistry::isActive).
      *                                                                     Takes both the module composer name AND the
      *                                                                     tenant ctx — activity is per-account.
+     * @param  (Closure(TenantContext): list<string>)|null  $activeModules  One active-module snapshot per list operation.
      *
      * @internal spec: P1.16, A38
      */
-    public function __construct(?Closure $moduleActive = null)
+    public function __construct(?Closure $moduleActive = null, private readonly ?Closure $activeModules = null)
     {
         $this->moduleActive = $moduleActive ?? static fn (string $module, TenantContext $ctx): bool => true;
     }
@@ -64,9 +65,16 @@ final class ArrayEntityRegistry implements EntityRegistry
             return array_values($this->entities);
         }
 
+        $active = $this->activeModules === null ? null : array_fill_keys(($this->activeModules)($ctx), true);
+        $memo = [];
+
         return array_values(array_filter(
             $this->entities,
-            fn (EntityDefinition $definition): bool => ($this->moduleActive)($definition->module, $ctx),
+            function (EntityDefinition $definition) use ($ctx, $active, &$memo): bool {
+                return $active !== null
+                    ? isset($active[$definition->module])
+                    : ($memo[$definition->module] ??= ($this->moduleActive)($definition->module, $ctx));
+            },
         ));
     }
 

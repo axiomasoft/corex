@@ -205,7 +205,7 @@ afterEach(function (): void {
 });
 
 it('enables a module from available: migrations run, mod_records + mod_modules populated, event dispatched (AC-5)', function (): void {
-    Event::fake();
+    Event::fake([ModuleEnabled::class]);
 
     lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])
         ->enable('corex/stub-base');

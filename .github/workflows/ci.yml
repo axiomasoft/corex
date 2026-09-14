@@ -94,7 +94,11 @@ jobs:
 
   tenancy-tests:
     runs-on: ubuntu-latest
-    name: Tenancy package (PG16)
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12.*', '13.*']
+    name: Tenancy package (PG16) · Laravel ${{ matrix.laravel }}
     services:
       postgres:
         image: postgres:16
@@ -118,6 +122,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
           coverage: none
 
+      - name: Constrain Laravel version
+        run: composer --working-dir=packages/tenancy require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+
       - name: Install dependencies
         run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
 
@@ -131,18 +138,35 @@ jobs:
           PGSQL_PASSWORD: corex
 
       - name: PHPStan (tenancy/src)
+        if: matrix.laravel == '13.*'
         run: composer --working-dir=packages/tenancy analyse
 
   crm-tests:
     runs-on: ubuntu-latest
     name: Crm package
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGSQL_PORT: 5432
     steps:
       - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
           coverage: xdebug
 
       - name: Install dependencies
@@ -150,6 +174,9 @@ jobs:
 
       - name: Crm tests
         run: composer --working-dir=packages/crm test
+
+      - name: Crm PostgreSQL regressions
+        run: composer --working-dir=packages/crm test:pg
 
       - name: Crm coverage (P1.27 compensating gate)
         run: composer --working-dir=packages/crm test:coverage

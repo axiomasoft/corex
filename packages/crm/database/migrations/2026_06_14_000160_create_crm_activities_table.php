@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('type', 32);
             $table->string('summary');
             $table->text('body')->nullable();
-            $table->ulidMorphs('subject');
+            $table->string('subject_type');
+            IdColumns::reference($table, 'subject_id');
+            $table->index(['subject_type', 'subject_id']);
             IdColumns::reference($table, 'user_id')->nullable();
             $table->jsonb('metadata')->nullable();
             $table->timestampTz('occurred_at')->nullable();

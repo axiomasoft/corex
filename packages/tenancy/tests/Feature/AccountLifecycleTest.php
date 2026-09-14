@@ -18,7 +18,9 @@ use CoreX\Tenancy\NullImpersonationService;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use Illuminate\Database\Connection;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -278,7 +280,11 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     lcLifecycle()->activate($account);
     lcLifecycle()->startGrace($account);
 
-    $exportId = lcLifecycle()->requestExport($account);
+    $archive = tempnam(sys_get_temp_dir(), 'corex-export-test-');
+    file_put_contents($archive, 'test archive');
+    $database = new StanclTenantDatabaseLifecycle('pgsql', static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12]);
+    $this->beforeApplicationDestroyed(static fn () => unlink($archive));
+    $exportId = lcLifecycle(tenantDatabaseLifecycle: $database)->requestExport($account);
     expect(DB::table('root_account_exports')->where('id', $exportId)->value('status'))->toBe('ready');
 
     $dbName = DB::table('root_accounts')->where('id', $account->id)->value('db_name');
@@ -298,6 +304,85 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
         ->and(DB::table('root_domains')->where('account_id', $account->id)->whereNotNull('deleted_at')->count())->toBeGreaterThan(0);
 
     Event::assertDispatched(AccountPurged::class, fn (AccountPurged $e): bool => $e->accountId === $account->id);
+});
+
+it('default export cannot become ready or authorize purge', function (): void {
+    $account = activateLcAccount();
+    lcLifecycle()->startGrace($account);
+    expect(fn () => lcLifecycle()->requestExport($account))->toThrow(RuntimeException::class, 'No tenant export writer');
+    expect(DB::table('root_account_exports')->where('account_id', $account->id)->where('status', 'ready')->count())->toBe(0);
+    expect(fn () => lcLifecycle()->purge($account))->toThrow(ValidationException::class);
+    expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('exporting');
+});
+
+it('refuses ready and DROP when an archive is unavailable', function (): void {
+    $account = activateLcAccount();
+    $database = new StanclTenantDatabaseLifecycle('pgsql', static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12]);
+    expect(fn () => $database->export($account, 'offboarding'))->toThrow(RuntimeException::class, 'archive is unavailable');
+    expect(DB::table('root_account_exports')->where('account_id', $account->id)->value('status'))->toBe('running');
+    DB::table('root_account_exports')->where('account_id', $account->id)->update([
+        'status' => 'ready', 'storage_path' => '/missing/archive.dump', 'size_bytes' => 12,
+    ]);
+    expect(fn () => $database->drop($account))->toThrow(RuntimeException::class, 'archive is unavailable');
+    $name = DB::table('root_accounts')->where('id', $account->id)->value('db_name');
+    expect(DB::table('pg_database')->where('datname', $name)->exists())->toBeTrue();
+});
+
+it('retries failed physical purge without publishing a terminal account state', function (): void {
+    $account = activateLcAccount();
+    lcLifecycle()->startGrace($account);
+    DB::table('root_accounts')->where('id', $account->id)->update(['status' => 'exporting']);
+    DB::table('root_account_exports')->insert(['id' => (string) Str::uuid7(), 'account_id' => $account->id, 'kind' => 'offboarding', 'status' => 'ready']);
+    $database = Mockery::mock(TenantDatabaseLifecycle::class);
+    $database->shouldReceive('drop')->once()->andThrow(new RuntimeException('drop failed'));
+    expect(fn () => lcLifecycle(tenantDatabaseLifecycle: $database)->purge($account))->toThrow(RuntimeException::class, 'drop failed');
+    expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('exporting')
+        ->and(DB::table('root_domains')->where('account_id', $account->id)->whereNull('deleted_at')->count())->toBe(1);
+    $retry = Mockery::mock(TenantDatabaseLifecycle::class);
+    $retry->shouldReceive('drop')->once();
+    lcLifecycle(tenantDatabaseLifecycle: $retry)->purge($account);
+    lcLifecycle(tenantDatabaseLifecycle: $retry)->purge($account);
+    expect(DB::table('root_accounts')->where('id', $account->id)->value('status'))->toBe('deleted')
+        ->and(DB::table('root_account_events')->where('account_id', $account->id)->where('event', 'account.purged')->count())->toBe(1);
+});
+
+it('invalidates a warmed host resolver only when a status transition commits', function (): void {
+    $account = activateLcAccount();
+    lcLifecycle()->activate($account);
+    $resolver = app(HostTenantResolver::class);
+    $host = $account->slug.'.'.config('tenancy.platform_domain');
+    expect($resolver->resolve($host)->status)->toBe('active');
+    DB::beginTransaction();
+    lcLifecycle()->suspend($account, 'test');
+    DB::rollBack();
+    expect($resolver->resolve($host)->status)->toBe('active');
+    lcLifecycle()->suspend($account, 'test');
+    expect($resolver->resolve($host)->status)->toBe('suspended');
+});
+
+it('holds the account row lock while validating and committing a transition', function (): void {
+    $account = activateLcAccount();
+    lcLifecycle()->activate($account);
+    $other = lcConnectTo((string) config('database.connections.pgsql.database'));
+    $other->beginTransaction();
+    $other->statement("SET LOCAL lock_timeout = '50ms'");
+    $attempted = false;
+    $blocked = false;
+    DB::listen(function ($event) use ($other, $account, &$attempted, &$blocked): void {
+        if (! $attempted && str_starts_with($event->sql, 'select "status" from "root_accounts"')) {
+            $attempted = true;
+
+            try {
+                $other->table('root_accounts')->where('id', $account->id)->update(['status' => 'grace']);
+            } catch (QueryException $e) {
+                $blocked = $e->getCode() === '55P03';
+            }
+        }
+    });
+    lcLifecycle()->suspend($account, 'test');
+    expect($attempted)->toBeTrue()->and($blocked)->toBeTrue();
+    $other->rollBack();
+    $other->disconnect();
 });
 
 it('purge() under active impersonation throws ImpersonationRestrictedException and never touches the tenant DB (D151)', function (): void {
@@ -331,4 +416,15 @@ it('purge() under active impersonation throws ImpersonationRestrictedException a
 
     $raw = DB::table('root_accounts')->where('id', $account->id)->first();
     expect($raw->status)->toBe('grace');
+});
+
+it('rejects impersonated signup before claiming or provisioning a pool account', function (): void {
+    $guard = Mockery::mock(ImpersonationService::class);
+    $guard->shouldReceive('active')->andReturn('grant-id');
+    $guard->shouldReceive('state')->andReturn(new ImpersonationState('grant-id', 'staff-id', 'target-id', new DateTimeImmutable('+1 hour')));
+    // No cluster exists: touching the pool would throw a provisioning error
+    // instead of the required authorization error.
+    expect(fn () => lcLifecycle($guard)->activateFromPool('forbidden', (string) Str::uuid7(), 'crm'))
+        ->toThrow(ImpersonationRestrictedException::class);
+    expect(DB::table('root_accounts')->count())->toBe(0);
 });

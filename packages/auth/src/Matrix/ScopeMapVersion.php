@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Auth\Matrix;
 
+use Closure;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository;
 
 /**
@@ -32,11 +34,28 @@ final readonly class ScopeMapVersion
     /** Bumps and returns the new version. */
     public function bump(string $roleId): int
     {
-        $store = $this->store();
-        $version = $this->current($roleId) + 1;
-        $store->forever($this->key($roleId), $version);
+        return ($this->invalidator($roleId))();
+    }
 
-        return $version;
+    /** Capture the tenant key before an outer transaction can switch context. */
+    public function invalidator(string $roleId): Closure
+    {
+        $store = $this->store();
+        $key = $this->key($roleId);
+
+        return static function () use ($store, $key): int {
+            $increment = static function () use ($store, $key): int {
+                $store->add($key, 0);
+
+                return (int) $store->increment($key);
+            };
+            $backend = $store->getStore();
+
+            // FileStore's increment is a read/put pair, not an atomic counter.
+            return $backend instanceof LockProvider
+                ? $backend->lock($key.':bump', 10)->block(5, $increment)
+                : $increment();
+        };
     }
 
     private function key(string $roleId): string

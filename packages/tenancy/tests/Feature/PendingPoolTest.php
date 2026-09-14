@@ -6,6 +6,7 @@ use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use Illuminate\Database\Connection;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -234,6 +235,41 @@ it('pending-clear removes stale болванки by template_version (DROP+DELET
 
 it('clearPending() requires at least one filter to avoid nuking the whole pool', function (): void {
     expect(fn () => pendingPool()->clearPending())->toThrow(RuntimeException::class);
+});
+
+it('does not drop a pending account claimed after the cleanup scan', function (): void {
+    $cluster = makePendingClusterRow();
+    makePendingTemplateRow();
+    $id = pendingPool()->createPending(1, $cluster)[0];
+    $other = pendingConnectTo((string) config('database.connections.pgsql.database'));
+    $interleaved = false;
+    DB::listen(function ($event) use ($other, $id, &$interleaved): void {
+        if (! $interleaved && str_starts_with($event->sql, 'select "id", "db_name", "cluster_id"')) {
+            $interleaved = true;
+            $other->table('root_accounts')->where('id', $id)->update(['status' => 'provisioning']);
+        }
+    });
+    expect(pendingPool()->clearPending(templateVersion: 1))->toBe(0)
+        ->and($interleaved)->toBeTrue();
+    $row = DB::table('root_accounts')->where('id', $id)->first();
+    expect($row->status)->toBe('provisioning')
+        ->and(DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$row->db_name]))->not->toBeNull();
+    $other->disconnect();
+});
+
+it('does not publish a pending row before provisioning completes or after it fails', function (): void {
+    $cluster = makePendingClusterRow();
+    makePendingTemplateRow(dbName: 'tpl_missing_remediation_test');
+    $other = pendingConnectTo((string) config('database.connections.pgsql.database'));
+    $observed = null;
+    DB::listen(function ($event) use ($other, &$observed): void {
+        if (str_starts_with($event->sql, 'insert into "root_accounts"')) {
+            $observed = $other->table('root_accounts')->where('status', 'pending')->count();
+        }
+    });
+    expect(fn () => pendingPool()->createPending(1, $cluster))->toThrow(QueryException::class);
+    expect($observed)->toBe(0)->and(pendingPool()->pendingCount())->toBe(0);
+    $other->disconnect();
 });
 
 it('artisan tenants:pending-create tops up to pending_pool_size, tenants:pending-clear removes stale rows', function (): void {

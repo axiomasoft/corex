@@ -14,6 +14,11 @@ use Illuminate\Foundation\Application;
  */
 abstract class CrmTestCase extends CoreXTestCase
 {
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+    }
+
     /**
      * @param  Application  $app
      * @return list<class-string>

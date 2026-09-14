@@ -256,6 +256,72 @@ it('AC-19: accept() creates membership, marks accepted, and checks users_max', f
         ->and($invitation->fresh()->accepted_at)->not->toBeNull();
 });
 
+it('reloads a revoked invitation and rolls back membership when acceptance persistence fails', function (): void {
+    $workspace = makeWorkspaceWsp();
+    $inviter = makeUserWsp();
+    $invitee = makeUserWsp();
+    $invitation = Invitation::query()->create(['email' => $invitee->email, 'workspace_id' => $workspace->id, 'invited_by' => $inviter->id, 'token_hash' => hash('sha256', 'remediation'), 'expires_at' => now()->addDay()]);
+    DB::table('wsp_invitations')->where('id', $invitation->id)->update(['status' => 'revoked']);
+    expect(fn () => $invitation->accept($invitee->id, 1))->toThrow(InvitationNotAcceptableException::class);
+    DB::table('wsp_invitations')->where('id', $invitation->id)->update(['status' => 'pending']);
+    Invitation::updating(static fn () => throw new RuntimeException('acceptance write failed'));
+    expect(fn () => $invitation->accept($invitee->id, 1))->toThrow(RuntimeException::class, 'acceptance write failed');
+    expect(WorkspaceMember::query()->where('workspace_id', $workspace->id)->count())->toBe(0)
+        ->and($invitation->fresh()->status)->toBe('pending');
+});
+
+it('counts only active memberships against invitation quota', function (): void {
+    $workspace = makeWorkspaceWsp();
+    $inviter = makeUserWsp();
+    $invitee = makeUserWsp();
+    WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $inviter->id, 'status' => 'suspended']);
+    $invitation = Invitation::query()->create(['email' => $invitee->email, 'workspace_id' => $workspace->id, 'invited_by' => $inviter->id, 'token_hash' => hash('sha256', 'active-quota'), 'expires_at' => now()->addDay()]);
+    expect($invitation->accept($invitee->id, 1)->status)->toBe('active');
+});
+
+it('serializes acceptance of separate invitations competing for one workspace slot', function (): void {
+    $workspace = makeWorkspaceWsp();
+    $inviter = makeUserWsp();
+    $firstUser = makeUserWsp();
+    $secondUser = makeUserWsp();
+    $make = fn (User $user): Invitation => Invitation::query()->create([
+        'email' => $user->email, 'workspace_id' => $workspace->id, 'invited_by' => $inviter->id,
+        'token_hash' => hash('sha256', $user->id), 'expires_at' => now()->addDay(),
+    ]);
+    $first = $make($firstUser);
+    $second = $make($secondUser);
+    config(['database.connections.quota_race' => config('database.connections.pgsql')]);
+    $other = DB::connection('quota_race');
+    $other->beginTransaction();
+    $other->statement("SET LOCAL lock_timeout = '50ms'");
+    $observed = false;
+    DB::listen(function ($query) use (&$observed, $second, $secondUser): void {
+        if ($observed || $query->connectionName !== 'pgsql' || ! str_contains($query->sql, '"wsp_workspaces"') || ! str_contains($query->sql, 'for update')) {
+            return;
+        }
+        $observed = true;
+
+        try {
+            Invitation::on('quota_race')->findOrFail($second->id)->accept($secondUser->id, 1);
+            test()->fail('Concurrent acceptance passed a locked quota resource.');
+        } catch (QueryException $exception) {
+            expect($exception->errorInfo[0])->toBe('55P03');
+        }
+    });
+
+    try {
+        $first->accept($firstUser->id, 1);
+        expect($observed)->toBeTrue();
+        expect(fn () => Invitation::on('quota_race')->findOrFail($second->id)->accept($secondUser->id, 1))
+            ->toThrow(InvitationNotAcceptableException::class);
+        expect(WorkspaceMember::query()->where('workspace_id', $workspace->id)->count())->toBe(1)
+            ->and($second->fresh()->status)->toBe('pending');
+    } finally {
+        $other->rollBack();
+        DB::purge('quota_race');
+    }
+});
+
 it('AC-19: accept() refuses once the users_max limit is already reached', function (): void {
     $workspace = makeWorkspaceWsp();
     $inviter = makeUserWsp();

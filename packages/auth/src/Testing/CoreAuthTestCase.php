@@ -8,6 +8,7 @@ use AzGuard\AzGuardServiceProvider;
 use CoreX\Auth\CoreAuthServiceProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Testing\IsolatesDatabasePath;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -16,6 +17,8 @@ use Orchestra\Testbench\TestCase as Orchestra;
  */
 abstract class CoreAuthTestCase extends Orchestra
 {
+    use IsolatesDatabasePath;
+
     /**
      * @param  Application  $app
      * @return list<class-string>

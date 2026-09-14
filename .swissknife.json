@@ -1,0 +1,24 @@
+{
+  "providers": {
+    "selection": {
+      "claude-code": {
+        "enabled": true
+      },
+      "codex": {
+        "enabled": true
+      }
+    },
+    "contract_version": "1.0.0"
+  },
+  "plugins": [
+    "core",
+    "devops",
+    "laravel-testing",
+    "oss-dev",
+    "php",
+    "php-packages",
+    "quality",
+    "system",
+    "task"
+  ]
+}

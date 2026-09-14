@@ -914,8 +914,11 @@
                 "orchestra/testbench": "^10.0|^11.0",
                 "pestphp/pest": "^4.0"
             },
-            "type": "library",
+            "type": "corex-module",
             "extra": {
+                "corex": {
+                    "module": "Flex\\Crm\\CrmModule"
+                },
                 "laravel": {
                     "providers": [
                         "Flex\\Crm\\CrmServiceProvider"

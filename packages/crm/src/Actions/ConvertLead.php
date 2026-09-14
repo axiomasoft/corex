@@ -26,7 +26,14 @@ final class ConvertLead
 
     public function handle(Lead $lead, ?Pipeline $pipeline = null, bool $withCompany = false): Contact
     {
-        return DB::transaction(function () use ($lead, $pipeline, $withCompany): Contact {
+        return DB::usingConnection($lead->getConnectionName(), fn (): Contact => $lead->getConnection()->transaction(function () use ($lead, $pipeline, $withCompany): Contact {
+            $fresh = $lead->newQuery()->whereKey($lead->getKey())->lockForUpdate()->firstOrFail();
+            $lead->setRawAttributes($fresh->getAttributes(), true);
+
+            if ($lead->status === LeadStatus::Converted) {
+                return Contact::on($lead->getConnectionName())->findOrFail($lead->converted_contact_id);
+            }
+
             $company = null;
 
             if ($withCompany && $lead->company_name !== null && $lead->company_name !== '') {
@@ -60,6 +67,6 @@ final class ConvertLead
             LeadConverted::dispatch($lead, $contact);
 
             return $contact;
-        });
+        }));
     }
 }

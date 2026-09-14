@@ -67,6 +67,26 @@ test('corex/core source imports no sibling package namespace', function (): void
     expect($offenders)->toBe([]);
 });
 
+test('tenant content does not bypass its owning storage adapter', function (): void {
+    $offenders = SourceScanner::linesMatching(
+        SourceScanner::packagePath('tenancy', 'src'),
+        '/\\b(?:Storage::disk|FilesystemManager)\\b/',
+        ['php'],
+    );
+
+    $allowed = [
+        'packages/tenancy/src/Storage/ContextTenantStorage.php',
+        'packages/tenancy/src/TenancyServiceProvider.php',
+    ];
+
+    $unexpected = array_values(array_filter(
+        $offenders,
+        static fn (string $hit): bool => ! in_array(explode(':', $hit, 2)[0], $allowed, strict: true),
+    ));
+
+    expect($unexpected)->toBe([]);
+});
+
 // (3) No product bindings in the TEXT of foundation sources (P2.17, OQ-17/D94).
 // Rules 1/2 model namespaces and the require-graph; a `flex` literal in DDL, a
 // composer description or a README creates no code dependency and passed those

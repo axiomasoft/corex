@@ -26,4 +26,10 @@ abstract class TasksTestCase extends CoreXTestCase
             TasksServiceProvider::class,
         ];
     }
+
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../../tests/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+    }
 }

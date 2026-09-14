@@ -92,6 +92,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Tenant content storage (P2.2)
+    |--------------------------------------------------------------------------
+    |
+    | These roots are owned by ContextTenantStorage, not by a mutable named
+    | disk returned from Stancl's FilesystemTenancyBootstrapper. `fake-s3` is
+    | a local object-prefix test backend only: it has no SDK, credentials, or
+    | claim of compatibility with a real provider.
+    |
+    */
+    'storage' => [
+        'durable_driver' => env('TENANCY_STORAGE_DURABLE_DRIVER', 'local'),
+        'durable_root' => env('TENANCY_STORAGE_DURABLE_ROOT', storage_path('app/corex/tenancy-durable')),
+        'ephemeral_root' => env('TENANCY_STORAGE_EPHEMERAL_ROOT', storage_path('app/corex/tenancy-ephemeral')),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Host identification (P2.10, B-11 §5.4 п.1–3)
     |--------------------------------------------------------------------------
     | Own top-level key, projected in TenancyServiceProvider::boot() onto

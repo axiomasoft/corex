@@ -19,9 +19,26 @@ use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 uses()->group('pg');
+
+it('invalidates matrix scope only after the outer commit and never after rollback', function (): void {
+    $role = Role::query()->create(['slug' => 'outer-commit', 'name' => 'Outer', 'is_system' => false, 'assignable_to' => ['user']]);
+    $version = app(ScopeMapVersion::class);
+    $initial = $version->current($role->id);
+    DB::beginTransaction();
+    makeCompiler()->compile($role->id);
+    expect($version->current($role->id))->toBe($initial);
+    DB::rollBack();
+    expect($version->current($role->id))->toBe($initial);
+    DB::beginTransaction();
+    makeCompiler()->compile($role->id);
+    expect($version->current($role->id))->toBe($initial);
+    DB::commit();
+    expect($version->current($role->id))->toBe($initial + 1);
+});
 
 beforeEach(function (): void {
     $this->resetPgSchema();

@@ -7,9 +7,11 @@ use AzGuard\Contracts\PermissionLayer;
 use AzGuard\Panels\Panel;
 use CoreX\Auth\Access\PrincipalIdentity;
 use CoreX\Auth\Contracts\AccessChecker;
+use CoreX\Auth\Contracts\ScopeResolver;
 use CoreX\Auth\Database\Seeders\SystemRolesSeeder;
 use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Auth\Enums\Scope;
+use CoreX\Auth\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\Models\Role;
@@ -21,20 +23,110 @@ use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Auth\Tests\Stubs\FakeTenancyManager;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\TenantContext;
 use CoreX\Tenancy\WorkspaceRef;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 uses()->group('pg');
+
+it('uses identical fail-closed capability normalization for record and list checks', function (): void {
+    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+        handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/auth-tests',
+        labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [], fields: [], titleAttribute: null,
+    ));
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
+    ($this->compileRole)($role->id);
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
+    $deal = new Deal(['owner_id' => $principal->principalId()]);
+    expect(fn () => app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))
+        ->toThrow(ScopeCapabilityMismatch::class);
+    expect(fn () => app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read'))
+        ->toThrow(ScopeCapabilityMismatch::class);
+    app(AzGuardManagerInterface::class)->forUser($principal)->on('app')->grant('app.crm.deal.read');
+    expect(app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))->toBeTrue()
+        ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->toSql())->not->toContain('owner_id');
+});
+
+it('recomputes scope after replacing an assignment with an equally versioned role', function (): void {
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $broad = ($this->newRole)();
+    $narrow = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $broad->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    RoleMatrixRow::query()->create(['role_id' => $narrow->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
+    $assignment = RoleAssignment::query()->create(['role_id' => $broad->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
+    $checker = app(AccessChecker::class);
+    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
+    $assignment->update(['role_id' => $narrow->id]);
+    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+});
+
+it('does not reuse scope memo when a connection switch exposes identical role IDs in another tenant', function (): void {
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
+    $context = new TenantContext(new AccountRef('account-a', 'a', 'active', [], []), null);
+    $manager = Mockery::mock(TenancyManager::class);
+    $manager->shouldReceive('context')->andReturnUsing(function () use (&$context) {
+        return $context;
+    });
+    app()->instance(TenancyManager::class, $manager);
+    $checker = app(AccessChecker::class);
+    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
+
+    // Two independent schemas in corex_test stand in for two tenant DBs;
+    // role IDs and version counters intentionally coincide.
+    $schema = 'auth_scope_'.bin2hex(random_bytes(8));
+    DB::statement('CREATE SCHEMA '.$schema);
+
+    try {
+        foreach (['aut_roles', 'aut_role_assignments', 'aut_role_matrix'] as $table) {
+            DB::statement('CREATE TABLE '.$schema.'.'.$table.' (LIKE public.'.$table.' INCLUDING ALL)');
+            DB::statement('INSERT INTO '.$schema.'.'.$table.' SELECT * FROM public.'.$table);
+        }
+        config(['database.connections.scope_other' => array_merge(config('database.connections.pgsql'), ['search_path' => $schema])]);
+        DB::connection('scope_other')->table('aut_role_matrix')->update(['scope' => 'own']);
+        $context = new TenantContext(new AccountRef('account-b', 'b', 'active', [], []), null);
+        DB::setDefaultConnection('scope_other');
+        expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+    } finally {
+        DB::setDefaultConnection('pgsql');
+        DB::purge('scope_other');
+        DB::statement('DROP SCHEMA '.$schema.' CASCADE');
+    }
+});
+
+it('excludes deleted broad roles when a live narrow role still grants access', function (): void {
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    foreach (['account', 'own'] as $scope) {
+        $role = ($this->newRole)();
+        RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope]);
+        RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
+        ($this->compileRole)($role->id);
+
+        if ($scope === 'account') {
+            $role->delete();
+        }
+    }
+    expect(app(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
+        ->and(app(AccessChecker::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+});
 
 beforeEach(function (): void {
     $this->resetPgSchema();
     $this->migrateAzGuard();
     $this->migrateAutSchema();
     $this->migrateFixtures();
+    $this->migrateCoreDepartments();
 
     app(AzGuardManagerInterface::class)->registerPanel(Panel::make()->id('app'));
 
@@ -45,7 +137,7 @@ beforeEach(function (): void {
         module: 'corex/auth-tests',
         labelSingular: 'Deal',
         labelPlural: 'Deals',
-        capabilities: [],
+        capabilities: [Capability::Ownable, Capability::WorkspaceScoped],
         fields: [],
         titleAttribute: null,
     ));
@@ -67,6 +159,29 @@ beforeEach(function (): void {
             'is_system' => false,
             'assignable_to' => [PrincipalType::User->value],
         ], $overrides));
+    };
+
+    $this->makeUser = function (?string $departmentId = null): string {
+        $id = (string) Str::uuid7();
+        DB::table('users')->insert(['id' => $id, 'department_id' => $departmentId]);
+
+        return $id;
+    };
+
+    $this->makeDepartment = function (string $workspaceId, ?string $parentId, string $path): string {
+        $id = (string) Str::uuid7();
+        DB::table('sys_departments')->insert([
+            'id' => $id,
+            'workspace_id' => $workspaceId,
+            'parent_id' => $parentId,
+            'path' => $path,
+            'name' => 'Department',
+            'sort_order' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return $id;
     };
 });
 
@@ -191,6 +306,82 @@ it('matches workspace scope against the active tenancy context, and passes a wor
         ->and($checker->canOnRecord($identity, 'read', $other))->toBeFalse()
         ->and($checker->canOnRecord($identity, 'read', $accountWide))->toBeTrue();
 });
+
+it('grants department scopes only for real same-department and descendant record owners', function (Scope $scope, array $expectedLabels): void {
+    $workspaceId = (string) Str::uuid7();
+    $parentDepartmentId = ($this->makeDepartment)($workspaceId, null, 'record_scope');
+    $childDepartmentId = ($this->makeDepartment)($workspaceId, $parentDepartmentId, 'record_scope.child');
+    $siblingDepartmentId = ($this->makeDepartment)($workspaceId, null, 'other_scope');
+
+    $principalId = ($this->makeUser)($parentDepartmentId);
+    $sameDepartmentOwnerId = ($this->makeUser)($parentDepartmentId);
+    $childDepartmentOwnerId = ($this->makeUser)($childDepartmentId);
+    $siblingDepartmentOwnerId = ($this->makeUser)($siblingDepartmentId);
+    $ownerWithoutDepartmentId = ($this->makeUser)();
+
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope->value]);
+    ($this->compileRole)($role->id);
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => PrincipalType::User->value, 'principal_id' => $principalId]);
+
+    $records = [
+        'same' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $sameDepartmentOwnerId]),
+        'child' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $childDepartmentOwnerId]),
+        'sibling' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $siblingDepartmentOwnerId]),
+        'owner_without_department' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerWithoutDepartmentId]),
+        'missing_owner' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]),
+        'null_owner' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => null]),
+    ];
+
+    $checker = app(AccessChecker::class);
+    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $grantedLabels = collect($records)
+        ->filter(fn (Deal $record): bool => $checker->canOnRecord($identity, 'read', $record))
+        ->keys()
+        ->all();
+
+    expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope)
+        ->and($grantedLabels)->toBe($expectedLabels)
+        ->and($checker->canOnRecord($identity, 'read', $records['sibling']))->toBeFalse()
+        ->and($checker->canOnRecord($identity, 'read', $records['null_owner']))->toBeFalse();
+})->with([
+    'dept: same department only' => [Scope::Dept, ['same']],
+    'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
+]);
+
+it('denies every department scope to non-user principals through AccessChecker', function (PrincipalType $type, Scope $scope): void {
+    $workspaceId = (string) Str::uuid7();
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'record_scope.non_user');
+    $ownerId = ($this->makeUser)($departmentId);
+    $principalId = (string) Str::uuid7();
+    DB::table('users')->insert(['id' => $principalId, 'department_id' => $departmentId]);
+
+    $role = ($this->newRole)(['assignable_to' => [$type->value]]);
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope->value]);
+    ($this->compileRole)($role->id);
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => $type->value, 'principal_id' => $principalId]);
+
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerId]);
+
+    expect(app(AccessChecker::class)->canOnRecord(new PrincipalIdentity($type, $principalId), 'read', $record))->toBeFalse();
+})->with(fn (): array => collect([PrincipalType::Agent, PrincipalType::ApiKey])->crossJoin([Scope::Dept, Scope::DeptTree])->all());
+
+it('denies department scopes through AccessChecker when department tables are absent', function (Scope $scope): void {
+    $workspaceId = (string) Str::uuid7();
+    $departmentId = ($this->makeDepartment)($workspaceId, null, 'record_scope.missing_table');
+    $principalId = ($this->makeUser)($departmentId);
+    $ownerId = ($this->makeUser)($departmentId);
+
+    $role = ($this->newRole)();
+    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => $scope->value]);
+    ($this->compileRole)($role->id);
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => PrincipalType::User->value, 'principal_id' => $principalId]);
+
+    $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerId]);
+    DB::statement('DROP TABLE sys_departments CASCADE');
+
+    expect(app(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principalId), 'read', $record))->toBeFalse();
+})->with([Scope::Dept, Scope::DeptTree]);
 
 // Code Guidance — canOnRecord grants via an active direct_grant even with no matching role at all.
 it('grants canOnRecord via an active AzGuard direct grant with no matching role', function (): void {

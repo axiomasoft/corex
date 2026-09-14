@@ -57,6 +57,18 @@ it('throws when deleting a system role', function (): void {
     expect(fn () => $admin->delete())->toThrow(AuthorizationException::class);
 });
 
+it('cannot clear system status to bypass role and related matrix guards', function (): void {
+    (new SystemRolesSeeder)->run();
+    $role = Role::query()->where('slug', 'owner')->firstOrFail();
+    $role->is_system = false;
+    expect(fn () => $role->save())->toThrow(AuthorizationException::class)
+        ->and(fn () => $role->delete())->toThrow(AuthorizationException::class);
+    $matrix = new RoleMatrixRow(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    $matrix->setRelation('role', $role);
+    expect(fn () => $matrix->save())->toThrow(AuthorizationException::class);
+    expect($role->fresh()->is_system)->toBeTrue();
+});
+
 it('throws when saving a matrix row that belongs to a system role, unless flagged', function (): void {
     (new SystemRolesSeeder)->run();
     $employee = Role::query()->where('slug', 'employee')->firstOrFail();

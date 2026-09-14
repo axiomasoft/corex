@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Contracts\TenantStorage;
 use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Commands\PendingClearCommand;
@@ -38,9 +39,11 @@ use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspaces\WorkspaceResolver;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
@@ -93,7 +96,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // resolved automatically — ImpersonationGuard/ImpersonationService
         // are both already bound, boxed default by corex/core's
         // CoreServiceProvider).
-        $this->app->singleton(
+        $this->app->scoped(
             AccountLifecycle::class,
             static fn (Application $app): AccountLifecycle => new AccountLifecycle(
                 centralConnection: (string) config('tenancy.central_connection'),
@@ -124,6 +127,19 @@ final class TenancyServiceProvider extends ServiceProvider
         );
         $this->app->singleton(TenancyManager::class, static fn (Application $app): StanclTenancyManager => $app->make(StanclTenancyManager::class));
         $this->app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
+
+        // P2.2 — tenant content never receives Stancl's mutable named disk.
+        // The adapter captures its context and root for each acquired handle.
+        $this->app->scoped(
+            TenantStorage::class,
+            static fn (Application $app): ContextTenantStorage => new ContextTenantStorage(
+                contexts: $app->make(TenantContextResolver::class),
+                filesystems: new FilesystemManager($app),
+                durableDriver: (string) config('tenancy.storage.durable_driver'),
+                durableRoot: (string) config('tenancy.storage.durable_root'),
+                ephemeralRoot: (string) config('tenancy.storage.ephemeral_root'),
+            ),
+        );
 
         $this->app->singleton(
             DatabaseIdentitySyncer::class,
@@ -200,7 +216,7 @@ final class TenancyServiceProvider extends ServiceProvider
             // unconditionally within this block just means the container
             // has something to resolve for OidcLoginController's
             // constructor regardless of that inner sub-flag.
-            $this->app->singleton(ImpersonationService::class, DatabaseImpersonationService::class);
+            $this->app->scoped(ImpersonationService::class, DatabaseImpersonationService::class);
         }
 
         // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
@@ -235,7 +251,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // migrator defaults to. A consumer publishes then runs
         // `migrate --database=<central> --path=database/migrations/root`.
         $this->publishes([
-            __DIR__.'/../database/migrations/root' => database_path('migrations'),
+            __DIR__.'/../database/migrations/root' => database_path('migrations/root'),
         ], 'tenancy-migrations');
 
         // Tenant-DB DDL (`users`, D14/D16) — same publish-only rationale as
@@ -273,7 +289,7 @@ final class TenancyServiceProvider extends ServiceProvider
 
         Event::listen(
             TenantCreated::class,
-            JobPipeline::make([CreateDatabaseFromTemplate::class])
+            JobPipeline::make(config('tenancy.provisioning.pipeline', [CreateDatabaseFromTemplate::class]))
                 ->send(static fn (TenantCreated $event): mixed => $event->tenant)
                 ->shouldBeQueued(false)
                 ->toListener(),
@@ -386,10 +402,11 @@ final class TenancyServiceProvider extends ServiceProvider
                     DenyImpersonatedWrites::class,
                 ]);
 
-                $writeGuard = $this->app->make(ImpersonatedModelWriteGuard::class);
-                Event::listen('eloquent.saving: *', [$writeGuard, 'handle']);
-                Event::listen('eloquent.deleting: *', [$writeGuard, 'handle']);
-                Event::listen('eloquent.restoring: *', [$writeGuard, 'handle']);
+                // Resolve per event: a captured object would retain the first
+                // request's scoped impersonation service in a long-lived worker.
+                Event::listen('eloquent.saving: *', [ImpersonatedModelWriteGuard::class, 'handle']);
+                Event::listen('eloquent.deleting: *', [ImpersonatedModelWriteGuard::class, 'handle']);
+                Event::listen('eloquent.restoring: *', [ImpersonatedModelWriteGuard::class, 'handle']);
             }
         }
     }

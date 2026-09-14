@@ -7,6 +7,8 @@ use Flex\Crm\Actions\CreateLead;
 use Flex\Crm\Enums\LeadSource;
 use Flex\Crm\Enums\LeadStatus;
 use Flex\Crm\Events\LeadConverted;
+use Flex\Crm\Models\Company;
+use Flex\Crm\Models\Contact;
 use Flex\Crm\Models\Deal;
 use Flex\Crm\Models\Pipeline;
 use Flex\Crm\Models\Stage;
@@ -46,4 +48,17 @@ it('converts a lead without company or deal', function (): void {
         ->and($lead->converted_company_id)->toBeNull()
         ->and($lead->converted_deal_id)->toBeNull()
         ->and($contact->company_id)->toBeNull();
+});
+
+it('returns the same conversion on retry even when passed a stale lead instance', function (): void {
+    Event::fake([LeadConverted::class]);
+    $lead = app(CreateLead::class)->handle('Retry', LeadSource::Website, companyName: 'Once');
+    $stale = $lead->fresh();
+    $first = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
+    $second = app(ConvertLead::class)->handle($stale, $this->pipeline, withCompany: true);
+    expect($second->id)->toBe($first->id)
+        ->and(Contact::query()->count())->toBe(1)
+        ->and(Company::query()->count())->toBe(1)
+        ->and(Deal::query()->count())->toBe(1);
+    Event::assertDispatchedTimes(LeadConverted::class, 1);
 });

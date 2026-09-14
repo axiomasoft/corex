@@ -7,6 +7,10 @@
 
 ### Added
 
+- `TenantStorage` with scoped durable/ephemeral local disks, explicit usage capability and an
+  explicit unsupported-export outcome. The boxed adapter derives its root exclusively from the
+  current account context and does not require tenancy, auth, Stancl, cloud storage, or archives.
+
 - **`ImpersonationService` contract + `ImpersonationState` + boxed `NullImpersonationService`
   (P2.11, B-11 §5.9, D139/D140).** Lives in `corex/core` — the sole consumer, `CurrentActor`,
   is level 0 and must not import `corex/tenancy`; the cloud implementation rebinds via

@@ -6,31 +6,34 @@ namespace CoreX\Tasks\Models;
 
 use CoreX\Models\BaseModel;
 use CoreX\Tasks\Enums\TaskPriority;
-use Illuminate\Database\Eloquent\Model;
+use CoreX\Tasks\Enums\TaskStatus;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
- * @property string $process_id
- * @property string $stage_id
+ * @property string|null $workspace_id
  * @property string|null $project_id
- * @property string $task_key
- * @property string $title
- * @property array<string, mixed>|null $description_json
- * @property TaskPriority $priority
- * @property string $creator_id
- * @property string|null $responsible_id
- * @property int $sort_order
- * @property Carbon|null $due_date
- * @property int|null $estimated_minutes
- * @property int $spent_minutes
+ * @property string|null $sprint_id
+ * @property string|null $stage_id
  * @property string|null $parent_id
- * @property string|null $taskable_type
- * @property string|null $taskable_id
- * @property Carbon|null $archived_at
+ * @property string $title
+ * @property string|null $description
+ * @property TaskStatus $status
+ * @property TaskPriority $priority
+ * @property string|null $author_id
+ * @property string|null $assignee_id
+ * @property DateTimeInterface|null $starts_at
+ * @property DateTimeInterface|null $due_at
+ * @property DateTimeInterface|null $completed_at
+ * @property int|null $estimate_minutes
+ * @property int $spent_minutes
+ * @property string $position
+ * @property DateTimeInterface|null $created_at
+ * @property DateTimeInterface|null $updated_at
+ * @property-read Project|null $project
+ * @property-read Stage|null $stage
  */
 final class Task extends BaseModel
 {
@@ -38,26 +41,54 @@ final class Task extends BaseModel
 
     /** @var list<string> */
     protected $fillable = [
-        'process_id', 'stage_id', 'project_id', 'task_key', 'title', 'description_json', 'priority',
-        'creator_id', 'responsible_id', 'sort_order', 'due_date', 'estimated_minutes', 'spent_minutes', 'parent_id', 'archived_at',
+        'workspace_id',
+        'project_id',
+        'sprint_id',
+        'stage_id',
+        'parent_id',
+        'title',
+        'description',
+        'status',
+        'priority',
+        'author_id',
+        'assignee_id',
+        'created_by',
+        'starts_at',
+        'due_at',
+        'completed_at',
+        'requires_acceptance',
+        'recurrence_rule_id',
+        'recurrence_occurs_at',
+        'estimate_minutes',
+        'spent_minutes',
+        'position',
     ];
 
-    /** @return BelongsTo<Process, $this> */
-    public function process(): BelongsTo
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'status' => 'open',
+        'priority' => 'normal',
+        'requires_acceptance' => false,
+        'spent_minutes' => 0,
+        'position' => 0,
+    ];
+
+    /** @return BelongsTo<Project, $this> */
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Process::class);
+        return $this->belongsTo(Project::class);
+    }
+
+    /** @return BelongsTo<Sprint, $this> */
+    public function sprint(): BelongsTo
+    {
+        return $this->belongsTo(Sprint::class);
     }
 
     /** @return BelongsTo<Stage, $this> */
     public function stage(): BelongsTo
     {
         return $this->belongsTo(Stage::class);
-    }
-
-    /** @return BelongsTo<Project, $this> */
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class);
     }
 
     /** @return BelongsTo<Task, $this> */
@@ -72,29 +103,39 @@ final class Task extends BaseModel
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    /** @return HasMany<TaskParticipant, $this> */
-    public function participants(): HasMany
+    /** @return HasMany<TaskTarget, $this> */
+    public function targets(): HasMany
     {
-        return $this->hasMany(TaskParticipant::class);
+        return $this->hasMany(TaskTarget::class);
     }
 
-    /** @return MorphTo<Model, $this> */
-    public function taskable(): MorphTo
+    /** @return HasMany<TaskWatcher, $this> */
+    public function watchers(): HasMany
     {
-        return $this->morphTo();
+        return $this->hasMany(TaskWatcher::class);
+    }
+
+    /** @return HasMany<TimeLog, $this> */
+    public function timeLogs(): HasMany
+    {
+        return $this->hasMany(TimeLog::class);
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
         return [
-            'description_json' => 'array',
+            'status' => TaskStatus::class,
             'priority' => TaskPriority::class,
-            'sort_order' => 'integer',
-            'due_date' => 'datetime',
-            'estimated_minutes' => 'integer',
+            'created_by' => 'array',
+            'starts_at' => 'datetime',
+            'due_at' => 'datetime',
+            'completed_at' => 'datetime',
+            'requires_acceptance' => 'boolean',
+            'recurrence_occurs_at' => 'datetime',
+            'estimate_minutes' => 'integer',
             'spent_minutes' => 'integer',
-            'archived_at' => 'datetime',
+            'position' => 'decimal:10',
         ];
     }
 }

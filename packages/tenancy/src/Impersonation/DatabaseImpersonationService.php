@@ -40,7 +40,7 @@ final class DatabaseImpersonationService implements ImpersonationService
 
     /**
      * Request-scoped memo (D139 docblock) — this service is bound as a
-     * singleton, so the container gives one instance per request; `state()`
+     * scoped service, so the container gives one instance per request; `state()`
      * reads the session ONCE and caches the result (or its absence) instead
      * of re-parsing on every {@see CurrentActor} call.
      */

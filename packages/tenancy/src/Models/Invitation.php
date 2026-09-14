@@ -83,30 +83,38 @@ final class Invitation extends Model
      */
     public function accept(string $userId, int $usersMax): ?WorkspaceMember
     {
-        if ($this->status !== 'pending' || $this->expires_at->isPast()) {
-            throw new InvitationNotAcceptableException("Invitation [{$this->id}] is not acceptable (status={$this->status}).");
-        }
+        return $this->getConnection()->transaction(function () use ($userId, $usersMax): ?WorkspaceMember {
+            $invitation = $this->newQuery()->whereKey($this->getKey())->lockForUpdate()->firstOrFail();
+            $this->setRawAttributes($invitation->getAttributes(), true);
 
-        if ($this->workspace_id === null) {
+            if ($this->status !== 'pending' || $this->expires_at->isPast()) {
+                throw new InvitationNotAcceptableException("Invitation [{$this->id}] is not acceptable (status={$this->status}).");
+            }
+
+            if ($this->workspace_id === null) {
+                $this->update(['status' => 'accepted', 'accepted_at' => now()]);
+
+                return null;
+            }
+
+            // All invitations for this workspace compete for the same quota resource.
+            Workspace::on($this->getConnectionName())->whereKey($this->workspace_id)->lockForUpdate()->firstOrFail();
+            $currentMembers = WorkspaceMember::on($this->getConnectionName())->where('workspace_id', $this->workspace_id)
+                ->where('status', 'active')->count();
+
+            if ($currentMembers >= $usersMax) {
+                throw new InvitationNotAcceptableException("Workspace [{$this->workspace_id}] has reached its users_max limit ({$usersMax}).");
+            }
+
+            $member = WorkspaceMember::on($this->getConnectionName())->create([
+                'workspace_id' => $this->workspace_id,
+                'user_id' => $userId,
+                'status' => 'active',
+            ]);
+
             $this->update(['status' => 'accepted', 'accepted_at' => now()]);
 
-            return null;
-        }
-
-        $currentMembers = WorkspaceMember::query()->where('workspace_id', $this->workspace_id)->count();
-
-        if ($currentMembers >= $usersMax) {
-            throw new InvitationNotAcceptableException("Workspace [{$this->workspace_id}] has reached its users_max limit ({$usersMax}).");
-        }
-
-        $member = WorkspaceMember::query()->create([
-            'workspace_id' => $this->workspace_id,
-            'user_id' => $userId,
-            'status' => 'active',
-        ]);
-
-        $this->update(['status' => 'accepted', 'accepted_at' => now()]);
-
-        return $member;
+            return $member;
+        });
     }
 }

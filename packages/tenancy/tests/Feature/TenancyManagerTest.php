@@ -133,14 +133,21 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
     /** @var StanclTenancyManager $manager */
     $manager = app(TenancyManager::class);
 
-    $manager->runFor($refA, null, function () use ($manager, $refA, $refB): void {
-        expect($manager->context()->account->id)->toBe($manager->context()->account->id);
+    $workspace = new WorkspaceRef(id: (string) Str::uuid(), slug: 'outer', type: 'department', path: '/outer', parentId: null);
+    $manager->runFor($refA, $workspace, function () use ($manager, $refA, $refB, $workspace): void {
+        expect($manager->context()->account->id)->toBe($refA->id);
 
         $inner = $manager->runFor($refB, null, fn (): string => $manager->context()->account->id);
 
         expect($inner)->toBe($refB->id)
             // nesting restored the outer account (AC-28 б), not the central scope.
-            ->and($manager->context()->account->id)->toBe($refA->id);
+            ->and($manager->context()->account->id)->toBe($refA->id)
+            ->and($manager->context()->workspace)->toBe($workspace);
+
+        expect(fn () => $manager->runFor($refB, null, static fn () => throw new RuntimeException('nested failure')))
+            ->toThrow(RuntimeException::class, 'nested failure');
+        expect($manager->context()->account->id)->toBe($refA->id)
+            ->and($manager->context()->workspace)->toBe($workspace);
     });
 
     expect($manager->initialized())->toBeFalse();

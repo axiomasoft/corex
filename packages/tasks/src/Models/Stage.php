@@ -4,29 +4,36 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Models;
 
-use CoreX\Models\BaseModel;
+use CoreX\Concerns\HasConfiguredId;
+use CoreX\Tasks\Enums\TaskStatus;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string $process_id
- * @property string $name
- * @property string $color
- * @property int $position
- * @property bool $is_final
+ * @property string $project_id
+ * @property string $code
+ * @property array<string, string> $name
+ * @property string|null $color
+ * @property TaskStatus|null $auto_status
  */
-final class Stage extends BaseModel
+final class Stage extends Model
 {
+    use HasConfiguredId;
+
     protected $table = 'tsk_stages';
 
     /** @var list<string> */
-    protected $fillable = ['process_id', 'name', 'color', 'position', 'is_final'];
+    protected $fillable = ['project_id', 'code', 'name', 'color', 'position', 'auto_status'];
 
-    /** @return BelongsTo<Process, $this> */
-    public function process(): BelongsTo
+    /** @var array<string, mixed> */
+    protected $attributes = ['position' => 0];
+
+    /** @return BelongsTo<Project, $this> */
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Process::class);
+        return $this->belongsTo(Project::class);
     }
 
     /** @return HasMany<Task, $this> */
@@ -38,6 +45,10 @@ final class Stage extends BaseModel
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return ['position' => 'integer', 'is_final' => 'boolean'];
+        return [
+            'name' => 'array',
+            'position' => 'integer',
+            'auto_status' => TaskStatus::class,
+        ];
     }
 }
