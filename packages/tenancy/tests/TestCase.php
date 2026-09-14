@@ -134,6 +134,23 @@ abstract class TestCase extends Orchestra
         });
     }
 
+    /**
+     * Feature fixtures deliberately rebuild the central `public` schema to
+     * exercise root DDL. The root PG suite is randomized and also discovers
+     * these package tests, so leave the database with a schema that the next
+     * independently booted Testbench application can connect to.
+     */
+    #[Override]
+    protected function tearDown(): void
+    {
+        try {
+            DB::disconnect('pgsql');
+            DB::connection('pgsql')->statement('CREATE SCHEMA IF NOT EXISTS public');
+        } finally {
+            parent::tearDown();
+        }
+    }
+
     public static function trustTemplate(string $templateId, string $database): void
     {
         $central = DB::connection('pgsql');
