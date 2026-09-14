@@ -1,6 +1,6 @@
 {
   "schema_version": "corex-crm-local-candidate/v1",
-  "version": "0.3.0-crm-install.20260915",
+  "version": "0.3.0-alpha.20260915",
   "packages": {
     "corex/core": "packages/core",
     "corex/modules": "packages/modules",
