@@ -272,6 +272,56 @@ it('updates editable task fields through the public command', function (): void 
     Event::assertDispatchedTimes(TaskUpdated::class, 1);
 });
 
+it('changes a task project through the public command and resets project-bound fields', function (): void {
+    $otherProject = Project::query()->create([
+        'workspace_id' => $this->workspaceId,
+        'name' => 'Other project',
+        'created_by' => $this->actor->toArray(),
+    ]);
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId,
+        title: 'Move between projects',
+        actor: $this->actor,
+        projectId: (string) $this->project->getKey(),
+        stageId: (string) $this->todo->getKey(),
+    ));
+
+    app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+        taskId: $reference->id,
+        actor: $this->actor,
+        provided: ['project_id'],
+        projectId: (string) $otherProject->getKey(),
+    ));
+
+    $task = Task::query()->findOrFail($reference->id);
+
+    expect($task->project_id)->toBe($otherProject->getKey())
+        ->and($task->stage_id)->toBeNull()
+        ->and($task->sprint_id)->toBeNull();
+});
+
+it('rejects a project outside the task workspace during update', function (): void {
+    $foreignProject = Project::query()->create([
+        'workspace_id' => $this->otherWorkspaceId,
+        'name' => 'Foreign project',
+        'created_by' => $this->actor->toArray(),
+    ]);
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId,
+        title: 'Keep project isolated',
+        actor: $this->actor,
+    ));
+
+    expect(fn () => app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+        taskId: $reference->id,
+        actor: $this->actor,
+        provided: ['project_id'],
+        projectId: (string) $foreignProject->getKey(),
+    )))->toThrow(ValidationException::class);
+
+    expect(Task::query()->findOrFail($reference->id)->project_id)->toBeNull();
+});
+
 it('authorizes mutations against the task inside its locking transaction', function (): void {
     $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,

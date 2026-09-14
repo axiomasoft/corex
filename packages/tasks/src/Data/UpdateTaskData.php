@@ -14,6 +14,7 @@ final readonly class UpdateTaskData
         'description',
         'priority',
         'assignee_id',
+        'project_id',
         'starts_at',
         'due_at',
         'estimate_minutes',
@@ -33,6 +34,7 @@ final readonly class UpdateTaskData
         public ?DateTimeImmutable $startsAt = null,
         public ?DateTimeImmutable $dueAt = null,
         public ?int $estimateMinutes = null,
+        public ?string $projectId = null,
     ) {}
 
     public function has(string $field): bool

@@ -9,6 +9,7 @@ use CoreX\Tasks\Contracts\UpdateTaskCommand;
 use CoreX\Tasks\Data\TaskReference;
 use CoreX\Tasks\Data\UpdateTaskData;
 use CoreX\Tasks\Events\TaskUpdated;
+use CoreX\Tasks\Models\Project;
 use CoreX\Tasks\Models\Task;
 use CoreX\Tasks\Support\TaskModuleGuard;
 use CoreX\Tenancy\TenantContext;
@@ -86,6 +87,22 @@ final class UpdateTask implements UpdateTaskCommand
             $task->assignee_id = $data->assigneeId;
         }
 
+        if ($data->has('project_id')) {
+            $project = $this->project(
+                id: $data->projectId,
+                workspaceId: (string) $task->workspace_id,
+                connectionName: $connectionName,
+            );
+
+            $task->project_id = $project?->getKey();
+
+            if ($task->isDirty('project_id')) {
+                // Смена проекта сбрасывает связанные с ним этап и спринт.
+                $task->stage_id = null;
+                $task->sprint_id = null;
+            }
+        }
+
         if ($data->has('estimate_minutes')) {
             if ($data->estimateMinutes !== null && $data->estimateMinutes < 0) {
                 $this->invalid('estimate_minutes', 'Оценка времени не может быть отрицательной.');
@@ -134,6 +151,22 @@ final class UpdateTask implements UpdateTaskCommand
         if ($unknown !== [] || count(array_unique($data->provided)) !== count($data->provided)) {
             $this->invalid('task', 'Набор изменяемых полей задачи недопустим.');
         }
+    }
+
+    private function project(?string $id, string $workspaceId, ?string $connectionName): ?Project
+    {
+        if ($id === null) {
+            return null;
+        }
+
+        /** @var Project|null $project */
+        $project = Project::on($connectionName)->find($id);
+
+        if ($project === null || $project->workspace_id !== $workspaceId) {
+            $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
+        }
+
+        return $project;
     }
 
     private function immutable(mixed $value): ?DateTimeImmutable
