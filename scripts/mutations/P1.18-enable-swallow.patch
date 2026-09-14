@@ -1,17 +1,16 @@
 diff --git a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
 --- a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-@@ -175,7 +175,12 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
-                 // surfaces to the caller. No silent commit, no half-installed row.
-                 if ($migration['error'] instanceof Throwable) {
--                    throw new ModuleEnableFailedException($module, $migration['error']);
-+                    $this->log($module, 'enable', $fromState, $fromState, 'failed', [
-+                        'migrations_run' => $migration['ran'],
-+                        'error' => $migration['error']->getMessage(),
-+                    ]);
+@@ -158,6 +158,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+             // surfaces to the caller. No silent commit, no half-installed row.
+             if ($migration['error'] instanceof Throwable) {
+-                throw new ModuleEnableFailedException($module, $migration['error']);
++                $this->log($module, 'enable', $fromState, $fromState, 'failed', [
++                    'migrations_run' => $migration['ran'],
++                    'error' => $migration['error']->getMessage(),
++                ]);
 +
-+                    return;
-                 }
++                return;
+             }
  
-                 $this->upsertModuleRow($module, $current, ModuleState::Enabled, $edition, $migration['ran']);
-                 $this->defineManifestFeatureFlags($module);
+             $this->upsertModuleRow($module, $current, ModuleState::Enabled, $edition, $migration['ran']);
