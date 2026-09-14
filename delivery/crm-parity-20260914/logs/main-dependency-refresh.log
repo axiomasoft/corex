@@ -1,0 +1,68 @@
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 0 installs, 5 updates, 0 removals
+  - Upgrading corex/core (dev-codex/crm-company-contact-parity => dev-main)
+  - Upgrading corex/modules (dev-codex/crm-company-contact-parity => dev-main)
+  - Upgrading corex/tasks (dev-codex/crm-company-contact-parity => dev-main)
+  - Upgrading corex/tenancy (dev-codex/crm-company-contact-parity => dev-main)
+  - Upgrading flex/crm (dev-codex/crm-company-contact-parity => dev-main)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 2 installs, 41 updates, 1 removal
+  - Syncing symfony/var-dumper (v8.1.1) into cache
+  - Syncing symfony/event-dispatcher (v8.1.1) into cache
+  - Syncing symfony/mailer (v8.1.1) into cache
+  - Syncing symfony/http-foundation (v8.1.1) into cache
+  - Syncing symfony/error-handler (v8.1.0) into cache
+  - Syncing symfony/http-kernel (v8.1.1) into cache
+  - Syncing symfony/console (v8.1.1) into cache
+  - Syncing nesbot/carbon (3.13.1) into cache
+  - Removing symfony/polyfill-php82 (v1.38.1)
+  - Downgrading symfony/var-dumper (v8.1.6 => v8.1.1): Checking out 40096a2515 from cache
+  - Downgrading symfony/uid (v8.1.5 => v8.1.0): Extracting archive
+  - Downgrading symfony/routing (v8.1.6 => v8.1.0): Extracting archive
+  - Downgrading symfony/process (v8.1.6 => v8.1.0): Extracting archive
+  - Downgrading symfony/polyfill-php86 (v1.41.0 => v1.38.0): Extracting archive
+  - Downgrading symfony/polyfill-php85 (v1.41.0 => v1.38.1): Extracting archive
+  - Downgrading symfony/polyfill-intl-normalizer (v1.42.0 => v1.38.0): Extracting archive
+  - Downgrading symfony/polyfill-intl-idn (v1.42.0 => v1.38.1): Extracting archive
+  - Downgrading symfony/mime (v8.1.6 => v8.1.0): Extracting archive
+  - Downgrading symfony/service-contracts (v3.7.3 => v3.7.1): Extracting archive
+  - Downgrading symfony/event-dispatcher (v8.1.5 => v8.1.1): Checking out abd6c11dc4 from cache
+  - Downgrading symfony/mailer (v8.1.5 => v8.1.1): Checking out 4fa583a737 from cache
+  - Downgrading symfony/http-foundation (v8.1.6 => v8.1.1): Checking out 6a168c8fce from cache
+  - Downgrading symfony/error-handler (v8.1.5 => v8.1.0): Checking out d8aeb1abd3 from cache
+  - Downgrading symfony/http-kernel (v8.1.6 => v8.1.1): Checking out 89d8d6e7fb from cache
+  - Downgrading symfony/finder (v8.1.5 => v8.1.1): Extracting archive
+  - Downgrading symfony/polyfill-intl-grapheme (v1.41.0 => v1.38.1): Extracting archive
+  - Downgrading symfony/string (v8.1.2 => v8.1.0): Extracting archive
+  - Downgrading symfony/console (v8.1.6 => v8.1.1): Checking out b711a8ab80 from cache
+  - Downgrading symfony/translation (v8.1.5 => v8.1.1): Extracting archive
+  - Downgrading carbonphp/carbon-doctrine-types (3.2.1 => 3.2.0): Extracting archive
+  - Downgrading nesbot/carbon (3.14.0 => 3.13.1): Checking out 2937ad3d1d from cache
+  - Downgrading monolog/monolog (3.12.0 => 3.10.0): Extracting archive
+  - Downgrading league/flysystem-local (3.35.3 => 3.31.0): Extracting archive
+  - Downgrading league/flysystem (3.36.0 => 3.35.2): Extracting archive
+  - Downgrading nette/schema (v1.3.6 => v1.3.5): Extracting archive
+  - Downgrading league/commonmark (2.10.1 => 2.8.3): Extracting archive
+  - Downgrading laravel/serializable-closure (v2.0.16 => v2.0.15): Extracting archive
+  - Downgrading laravel/prompts (v0.3.24 => v0.3.21): Extracting archive
+  - Downgrading guzzlehttp/uri-template (v2.0.1 => v1.0.10): Extracting archive
+  - Downgrading guzzlehttp/promises (3.0.2 => 2.5.1): Extracting archive
+  - Installing ralouphie/getallheaders (3.0.3): Extracting archive
+  - Downgrading guzzlehttp/psr7 (3.1.0 => 2.13.0): Extracting archive
+  - Downgrading guzzlehttp/guzzle (8.2.0 => 7.15.2): Extracting archive
+  - Downgrading laravel/framework (v13.31.0 => v13.23.0): Extracting archive
+  - Upgrading corex/core (dev-main 242e535 => dev-main a45633d): Source already present
+  - Upgrading corex/modules (dev-main 227a934 => dev-main 6b2eda8): Source already present
+  - Upgrading corex/tasks (dev-main 4f81730 => dev-main 703dfbf): Source already present
+  - Upgrading corex/tenancy (dev-main c74d8d5 => dev-main 3afe5a1): Source already present
+  - Installing giggsey/libphonenumber-for-php-lite (9.0.39): Extracting archive
+  - Upgrading flex/crm (dev-main eeb94a5 => dev-main f07edfa): Source already present
+  - Downgrading symfony/polyfill-php83 (v1.41.0 => v1.38.2): Extracting archive
+  - Downgrading phpstan/phpdoc-parser (2.3.5 => 2.3.3): Extracting archive
+Generating autoload files
+95 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+Found 10 security vulnerability advisories affecting 1 package.
+Run "composer audit" for a full list of advisories.

@@ -194,7 +194,7 @@
         },
         {
             "name": "corex/core",
-            "version": "dev-codex/crm-company-contact-parity",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
@@ -252,7 +252,7 @@
         },
         {
             "name": "corex/modules",
-            "version": "dev-codex/crm-company-contact-parity",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
@@ -304,7 +304,7 @@
         },
         {
             "name": "corex/tasks",
-            "version": "dev-codex/crm-company-contact-parity",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
@@ -385,7 +385,7 @@
         },
         {
             "name": "corex/tenancy",
-            "version": "dev-codex/crm-company-contact-parity",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
@@ -901,7 +901,7 @@
         },
         {
             "name": "flex/crm",
-            "version": "dev-codex/crm-company-contact-parity",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/crm",

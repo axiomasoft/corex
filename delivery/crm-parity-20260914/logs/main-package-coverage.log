@@ -1,0 +1,139 @@
+PHP Deprecated:  Case statements followed by a semicolon (;) are deprecated, use a colon (:) instead in phar:///home/vostrikov/.config/herd-lite/bin/composer/vendor/react/promise/src/functions.php on line 300
+Deprecation Notice: The predefined locally scoped $http_response_header variable is deprecated, call http_get_last_response_headers() instead in phar:///home/vostrikov/.config/herd-lite/bin/composer/vendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/FileGetContents.php:55
+> pest --coverage --min=95 '--coverage-clover=../../delivery/crm-parity-20260914/logs/main-package-clover.xml'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ContextSecurityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing the workspace and guards quiet[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guards direct association writes against cross-scope and foreign[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats observer veto as failed mutation without dispatching succ[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed actor identities and foreign profile IDs[39m[90m       [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit overwrites forged creation provenance and prevents changing it a[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rechecks trusted provenance after late creating observers[39m[90m        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing association endpoints[39m[90m           [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit requires account-level capability when no workspace exists[39m[90m       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects direct foreign workspace writes and foreign connection q[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails closed for disabled CRM and tenant context mismatch[39m[90m        [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid UTF-8 names rather than silently dropping their[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit normalizes Unicode whitespace before testing empty name componen[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates approved records and a typed primary association[39m[90m         [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects nameless contacts without usable channels[39m[90m                [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompanyContactTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a company and a contact linked to it[39m[90m                     [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\DealFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit moves a deal to a won stage and marks it won[39m[90m                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates a deal at the first stage with money[39m[90m                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to create a deal in a pipeline without stages[39m[90m            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another pipeline without changing the deal[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\LeadConversionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns the same conversion on retry even when passed a stale le[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit converts a lead into contact, company and deal[39m[90m                   [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit converts a lead without company or deal[39m[90m                          [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ConversionConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serializes concurrent conversion and returns the committed resul[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\UpgradeSafetyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit checks prerequisite ownership before any destructive schema oper[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses automatic legacy backfill before altering any CRM data[39m[90m   [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ParityContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit uses deterministic channel fallback and nullable whitespace comp[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid dates and field widths[39m[90m                           [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit preserves pivot on soft delete and applies hard delete SET NULL[39m[90m… [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects associations between NULL and workspace even with accoun[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit serializes competing primary actions and rejects the loser after[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with (['a@e[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['in[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['65[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([[''][39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit roundtrips all approved company and contact values and search[39m[90m    [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects forged actors and mismatched account connections[39m[90m         [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches approved PostgreSQL fields lengths defaults indexes and[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps committed data when a synchronous after-commit listener fa[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dispatches mutation events only after the successful outer commi[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects foreign or inactive source and owner references[39m[90m          [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit separates NULL account data current workspace and foreign worksp[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces pair and primary constraints for direct database writer[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails closed for missing context and revoked membership on reads[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ModuleLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit discovers CRM composer metadata and manages its schema through t[39m[90m…[39m [90m0.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ActivityIdTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit widens a legacy activity morph column before a UUID insert[39m[90m       [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.28s[39m  
+
+  [90mTests:[39m    [32;1m64 passed[39;22m[90m (321 assertions)[39m
+  [90mDuration:[39m [39m12.91s[39m
+  [90mRandom Order Seed:[39m [39m1789403897[39m
+
+  Actions/AssociateContactCompany [90m.................................[39m [33m25[39m[33m [39m[90m/[39m[33m 95.5%[39m  
+  Actions/ConvertLead [90m.............................................[39m [33m38[39m[33m [39m[90m/[39m[33m 97.1%[39m  
+  Actions/CreateCompany [90m...............................................[39m [32m100.0%[39m  
+  Actions/CreateContact [90m...............................................[39m [32m100.0%[39m  
+  Actions/CreateDeal [90m..................................................[39m [32m100.0%[39m  
+  Actions/CreateLead [90m..................................................[39m [32m100.0%[39m  
+  Actions/LogActivity [90m.................................................[39m [32m100.0%[39m  
+  Actions/MoveDealToStage [90m.....................................[39m [33m32..33[39m[33m [39m[90m/[39m[33m 87.5%[39m  
+  Contracts/CrmExecutionContext [90m.......................................[39m [32m100.0%[39m  
+  CrmModule [90m...........................................................[39m [32m100.0%[39m  
+  CrmServiceProvider [90m..................................................[39m [32m100.0%[39m  
+  Data/Actor [90m..........................................................[39m [32m100.0%[39m  
+  Data/CompanyData [90m....................................................[39m [32m100.0%[39m  
+  Data/ContactData [90m....................................................[39m [32m100.0%[39m  
+  Data/ExecutionContext [90m...............................................[39m [32m100.0%[39m  
+  Enums/ActivityType [90m..................................................[39m [32m100.0%[39m  
+  Enums/DealStatus [90m....................................................[39m [32m100.0%[39m  
+  Enums/LeadSource [90m....................................................[39m [32m100.0%[39m  
+  Enums/LeadStatus [90m....................................................[39m [32m100.0%[39m  
+  Events/ActivityLogged [90m...............................................[39m [32m100.0%[39m  
+  Events/CompanyCreated [90m...............................................[39m [32m100.0%[39m  
+  Events/ContactCompanyAssociated [90m.....................................[39m [32m100.0%[39m  
+  Events/ContactCreated [90m...............................................[39m [32m100.0%[39m  
+  Events/DealCreated [90m..................................................[39m [32m100.0%[39m  
+  Events/DealMovedToStage [90m.............................................[39m [32m100.0%[39m  
+  Events/LeadConverted [90m................................................[39m [32m100.0%[39m  
+  Events/LeadCreated [90m..................................................[39m [32m100.0%[39m  
+  Models/Activity [90m.....................................................[39m [32m100.0%[39m  
+  Models/Company [90m......................................................[39m [32m100.0%[39m  
+  Models/Concerns/HasCrmContext [90m...................................[39m [33m35[39m[33m [39m[90m/[39m[33m 83.3%[39m  
+  Models/Contact [90m......................................................[39m [32m100.0%[39m  
+  Models/ContactCompany [90m...................................[39m [33m60, 77..79[39m[33m [39m[90m/[39m[33m 87.5%[39m  
+  Models/Deal [90m.....................................................[39m [33m61[39m[33m [39m[90m/[39m[33m 90.9%[39m  
+  Models/Lead [90m.....................................................[39m [33m42[39m[33m [39m[90m/[39m[33m 87.5%[39m  
+  Models/Pipeline [90m.....................................................[39m [32m100.0%[39m  
+  Models/Source [90m.......................................................[39m [32m100.0%[39m  
+  Models/Stage [90m................................................[39m [33m30..36[39m[33m [39m[90m/[39m[33m 75.0%[39m  
+  Support/Channels [90m................................................[39m [33m53[39m[33m [39m[90m/[39m[33m 97.0%[39m  
+  Support/ContextGuard [90m............................................[39m [33m46[39m[33m [39m[90m/[39m[33m 98.0%[39m  
+  Support/CrmScope [90m....................................................[39m [32m100.0%[39m  
+  Support/RecordRules [90m.............................................[39m [33m59[39m[33m [39m[90m/[39m[33m 98.4%[39m  
+  Testing/CrmTestCase [90m.................................................[39m [32m100.0%[39m  
+  [90m────────────────────────────────────────────────────────────────────────────[39m  
+                                                                 [1mTotal: 96.9 %[22m  
+

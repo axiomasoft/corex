@@ -6,6 +6,22 @@
 его tenancy/identity/release SSOT не изменялся. Выбор маршрута: Task Dev рекомендует
 gpt-5.6-terra/high; активная модель этой сессии программно не переключалась.
 
+## Интеграция в main
+
+Все 13 исходных локальных веток сведены в `main`; 12 остальных refs удалены только
+после ancestor-проверки. Main committed tree после слияний совпал с исходным CRM
+integration tree; код старого row-tenant CRM/Tasks не вернулся. Существующие dirty
+исправления core/modules/tenancy сохранены на main без включения в наши commits.
+Основной receipt теперь по этому пути; old worktree path больше не используется
+для handoff. Branch/recovery proof: [git consolidation receipt](../git-consolidation-20260914/receipt.md).
+
+Перепроверено из основного workspace: root PG107/107, CRM64/64/coverage96.9%,
+полный root suite217/217/coverage88.8% (floor80), Pint PASS, PHPStan0 errors.
+Root @dev lock labels приведены к dev-main. Эти runtime
+проверки включают текущую чужую dirty-работу и НЕ заменяют immutable dependency
+qualification ранее построенных ZIP. Нижеследующий NO-GO относится к этим неизменным
+archive dependency refs и release/full-DDL gates, не к новой локальной PG snapshot.
+
 ## Вердикт и границы
 
 Company/contact/M2M реализация и локальная квалификация: **GREEN** для свежей/пустой
@@ -20,15 +36,19 @@ discovery → compile → полный enable → create/create/association → 
 не выпущено в production, нет push, split mirror, tag или Packagist publication.
 App HTTP/UI/Policy и новые sales use cases не реализовывались.
 
-Работа изолирована от чужого dirty worktree:
+Первоначальное исполнение было изолировано от чужого dirty worktree; затем по
+прямой инструкции владельца изменения объединены в основной workspace/main:
 
 - Исходный workspace: `/home/vostrikov/projects/packages/corex`, HEAD
   `d83ef0a26a1b4939b4bf1fd9131533b3c244005a`; чужие правки core/modules/tenancy/plans
   оставлены как были, не включены в commit или архивы.
-- Реализация: `/home/vostrikov/projects/packages/corex-crm-parity-20260914`.
-- Ветка: `codex/crm-company-contact-parity`.
+- Реализация: `/home/vostrikov/projects/packages/corex`.
+- Текущая ветка: `main` (единственная локальная). Исходная task-ветка
+  `codex/crm-company-contact-parity` merged в main и удалена.
 - Immutable source commit: `fb156f5897c1a703c57f59b37719e1efb1d822ff`.
-- Изменения пока на этой ветке/worktree, не перенесены в исходную dirty ветку.
+- Все CRM-коммиты, receipt, logs и ZIP archives теперь в основной ветке `main`.
+  Дополнительный исполнительский worktree удалён; чужие незакоммиченные изменения
+  восстановлены без изменения bytes и остаются незакоммиченными.
 - Package name / namespace: `flex/crm` / `Flex\Crm`.
 - CRM subtree: `c5f4d5d3131626f3d6fa47706b188037f7bfedd8`.
 
@@ -219,7 +239,7 @@ target data; отдельно authorized verified backup restore вместо р
 | flex/crm | `c5f4d5d3131626f3d6fa47706b188037f7bfedd8` | `54e555cb53159457e5929dbd6d79b200120b98f9093e7bb1128150d8c0bb54ea` |
 
 Artifact repository absolute directory:
-`/home/vostrikov/projects/packages/corex-crm-parity-20260914/delivery/crm-parity-20260914/artifacts`.
+`/home/vostrikov/projects/packages/corex/delivery/crm-parity-20260914/artifacts`.
 Archive filenames: `corex-core-fb156f5897c1.zip`, `corex-modules-fb156f5897c1.zip`,
 `flex-crm-fb156f5897c1.zip`. Local only, qualified scenario candidate, **not release-approved**.
 Do not overwrite these archives; verify SHA before qualification. Builder adds synthetic
@@ -239,16 +259,19 @@ subtree baseline `6575dfe4d5cc7ccebaad53e0ce8811325612ba5a` unchanged. Consumer'
 context/connection adapter admission remains its own integration gate, not the fixture's proof.
 libphonenumber-lite9.0.39 source `35cd53ef595b709218756965a3fc22263ed9b24e`.
 
-Root composer.lock SHA-256: `27d9ddfd8f30d61293b4250de6e7415cabe4d3e866862688099aae09244a10f6`.
+Immutable source-candidate root composer.lock SHA-256: `27d9ddfd8f30d61293b4250de6e7415cabe4d3e866862688099aae09244a10f6`.
 Consumer composer.lock SHA-256: `417fe5b5396ab9b5ccb16c48ac98269bef8dc653b517b4ee6980c0190eb8b3d3`.
 Root path lock refresh included stale metadata/branch versions of existing packages, not
 changes to their source. Source @dev constraints still not a released compatibility matrix.
 
 ## Checks / exact commands / environment
 
-Unless package/consumer CWD specified, CWD = isolated implementation worktree above.
+Исторические commands ниже выполнялись в первоначальном isolated worktree
+`/home/vostrikov/projects/packages/corex-crm-parity-20260914` (теперь удалён);
+логи и artifacts перенесены в основной workspace. Новые main-snapshot checks —
+в [branch consolidation receipt](../git-consolidation-20260914/receipt.md).
 Logs absolute root:
-`/home/vostrikov/projects/packages/corex-crm-parity-20260914/delivery/crm-parity-20260914/logs`.
+`/home/vostrikov/projects/packages/corex/delivery/crm-parity-20260914/logs`.
 PG suites ran serially on dedicated `corex_crm_parity_test`; installed negative lane also
 uses dedicated `corex_crm_foreign_test`. Both names checked `_test` before mutation.
 Host127.0.0.1:5434, user/password corex (isolated test fixture only); Docker existing
@@ -362,8 +385,8 @@ contract, but must not connect this NO-GO candidate to its app DB before these g
 ## Пересылаемый итог
 
 CoreX: company/contact/M2M parity готова к квалификации.
-Receipt: /home/vostrikov/projects/packages/corex-crm-parity-20260914/delivery/crm-parity-20260914/receipt.md.
+Receipt: /home/vostrikov/projects/packages/corex/delivery/crm-parity-20260914/receipt.md.
 Package/ref: flex/crm:dev-crm-parity-fb156f5897c1; source fb156f5897c1a703c57f59b37719e1efb1d822ff.
-Проверки: CRM 64/64, coverage96.9%; installed PG scenario2/2; общий PG/coverage gate не GREEN.
+Проверки: main полный suite217/217, coverage88.8%; CRM64/64,coverage96.9%; installed archive PG2/2. Main runtime GREEN с dirty remedies; immutable archive dependency qualification не GREEN.
 Release/install status: local candidate доступен; release не выполнен, app install NO-GO до dependency/full-DDL gates.
 Следующий шаг FlexCRM: проверить receipt и совместимость; после снятия blockers подключить пакет в bounded app-срезе.

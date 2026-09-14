@@ -4,6 +4,8 @@ includes:
     - packages/tenancy/extension.neon
 
 parameters:
+    tmpDir: build/phpstan
+
     paths:
         - packages/core/src
         - packages/crm/src
