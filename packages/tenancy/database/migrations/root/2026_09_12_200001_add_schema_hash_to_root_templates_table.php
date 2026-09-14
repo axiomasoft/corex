@@ -12,11 +12,4 @@ return new class extends Migration
         DB::statement('ALTER TABLE root_templates ADD COLUMN schema_hash varchar(64) NULL');
         DB::statement("ALTER TABLE root_templates ADD CONSTRAINT root_templates_schema_hash_ck CHECK (schema_hash IS NULL OR schema_hash COLLATE \"C\" ~ '^[0-9a-f]{64}$')");
     }
-
-    public function down(): void
-    {
-        // schema_hash is integrity evidence. Removing it would destroy the
-        // audit trail, so rollback is intentionally operational rather than
-        // an automatic destructive migration.
-    }
 };

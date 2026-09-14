@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Database\TemplateIntegrityException;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\ClusterAccountConnectionResolver;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
@@ -265,6 +267,23 @@ it('denies an unsealed ready template before it writes provisioning parameters',
     expect($account->embedding_model)->toBe('unchanged')
         ->and($account->embedding_dim)->toBe(1)
         ->and(DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$targetDb]))->toBeNull();
+});
+
+it('rechecks template integrity in the queued clone job before an existing-database no-op', function (): void {
+    $clusterId = makeClusterRow(['template_version' => 2]);
+    DB::table('root_templates')->insert([
+        'id' => (string) Str::uuid(),
+        'version' => 2,
+        'db_name' => TEMPLATE_DB,
+        'status' => 'ready',
+        'embedding_model' => 'bge-m3',
+        'embedding_dim' => 1024,
+    ]);
+    $accountId = makeAccountRow($clusterId, ['template_version' => 2]);
+    $account = Account::on('pgsql')->findOrFail($accountId);
+
+    expect(fn () => (new CreateDatabaseFromTemplate($account))->handle(app(TemplateIntegrityVerifier::class)))
+        ->toThrow(TemplateIntegrityException::class);
 });
 
 it('fixes embedding_model/dim and other provisioning params onto the account row (AC-10)', function (): void {

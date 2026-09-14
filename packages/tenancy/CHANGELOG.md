@@ -17,6 +17,12 @@
 
 ### Added
 
+- Added fail-closed signed template-integrity verification. Provisioning,
+  pending-pool claims, lifecycle activation, clone operations, and migration
+  waves now require matching expected manifest, recorded `schema_hash`, and
+  read-only PostgreSQL catalogue hash before their first write. Legacy ready
+  templates without a trusted seal are rejected.
+
 - Added an unregistered, disposable fenced credential reference seam for local membership fixtures.
 - Added an unregistered durable trigger inbox and pull-only refresh reference seam for local fixtures.
 - Added an unregistered local membership composition reference for A/B revoke, credential cleanup,
