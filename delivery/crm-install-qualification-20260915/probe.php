@@ -7,12 +7,14 @@ use CoreX\Api\Contracts\OperationAuthorizer;
 use CoreX\Api\Contracts\Principal;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\RequestContext;
+use CoreX\Api\Dispatcher;
 use CoreX\Api\ErrorBoundary;
 use CoreX\Api\OpenApi;
 use CoreX\Api\Operation;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\DisableReason;
+use CoreX\Modules\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\AccountConnectionResolver;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
@@ -20,6 +22,7 @@ use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\ClusterAccountConnectionResolver;
+use CoreX\Tenancy\StanclTenancyManager;
 use Flex\Crm\Actions\ConvertLead;
 use Flex\Crm\Actions\CreateCompany;
 use Flex\Crm\Actions\CreateLead;
@@ -28,7 +31,6 @@ use Flex\Crm\Data\Actor;
 use Flex\Crm\Data\CompanyData;
 use Flex\Crm\Data\ExecutionContext;
 use Flex\Crm\Events\CompanyCreated;
-use Flex\Crm\Models\Company;
 use Flex\Crm\Tests\Support\StorageCatalogue;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
@@ -124,7 +126,7 @@ check(! class_exists('Flex\\Crm\\Tests\\TestCase'), 'Production autoload exposes
 foreach ([ModuleRegistry::class, ModuleLifecycle::class, TenancyManager::class, TenantContextResolver::class] as $contract) {
     $evidence['contracts'][$contract] = $app->make($contract)::class;
 }
-foreach ([CoreX\Api\Dispatcher::class, CoreX\Modules\Lifecycle\DatabaseModuleLifecycle::class, CoreX\Tenancy\StanclTenancyManager::class, CreateCompany::class] as $class) {
+foreach ([Dispatcher::class, DatabaseModuleLifecycle::class, StanclTenancyManager::class, CreateCompany::class] as $class) {
     $path = (new ReflectionClass($class))->getFileName();
     check(str_starts_with(realpath($path), realpath(__DIR__.'/vendor').'/'), 'Source outside installed vendor.');
     $evidence['autoload'][$class] = ['path' => substr(realpath($path), strlen(realpath(__DIR__)) + 1), 'sha256' => hash_file('sha256', $path)];
@@ -210,6 +212,7 @@ foreach (['a', 'b', 'a'] as $name) {
     $actual = $db->selectOne('SELECT current_database() AS database,current_user AS username,pg_backend_pid() AS backend');
     check($actual->database === $expected->database && $actual->username === $expected->username, 'PDO/context mismatch.');
     $evidence['physical_sequence'][] = ['account' => $name, 'context_account' => $manager->context()->account->id, 'workspace' => $manager->context()->workspace->id, 'config' => array_intersect_key($db->getConfig(), array_flip(['driver', 'host', 'port', 'database', 'username'])), 'pdo' => (array) $actual];
+
     if (! isset($ids[$name])) {
         $company = $request('POST', 'companies', ['name' => 'Same title', 'phones' => [['value' => '+12025550123', 'is_primary' => true]]], 201, '/companies');
         $contact = $request('POST', 'contacts', ['name_first' => 'Jane', 'emails' => [['value' => 'JANE@example.test']]], 201, '/contacts');
@@ -222,6 +225,7 @@ foreach (['a', 'b', 'a'] as $name) {
     $request('GET', 'companies/'.$ids[$name]['company'], [], 200, '/companies/{companyId}');
     $request('GET', 'contacts', [], 200, '/contacts');
     $request('GET', 'contacts/'.$ids[$name]['contact'], [], 200, '/contacts/{contactId}');
+
     if (isset($ids[$name === 'a' ? 'b' : 'a'])) {
         $request('GET', 'companies/'.$ids[$name === 'a' ? 'b' : 'a']['company'], [], 404, '/companies/{companyId}');
     }
@@ -263,7 +267,9 @@ $manager->setWorkspace(null);
 $request('GET', 'companies', [], 403, '/companies');
 $manager->setWorkspace($app->make(PrincipalWorkspaceResolver::class)->resolveFor($a['user'], 'main'));
 $events = 0;
-$app['events']->listen(CompanyCreated::class, function () use (&$events): void { $events++; });
+$app['events']->listen(CompanyCreated::class, function () use (&$events): void {
+    $events++;
+});
 $before = $db->table('crm_companies')->count();
 $db->beginTransaction();
 app(CreateCompany::class)->handle(new CompanyData(name: 'Rollback'));
@@ -280,13 +286,17 @@ app(ConvertLead::class)->handle($lead);
 check($lead->fresh()->status->value === 'converted' && $lead->fresh()->created_by['id'] === $a['user'], 'Canonical sales/provenance mismatch.');
 $snapshot = StorageCatalogue::read($db, 'public');
 $counts = [];
-foreach (array_keys($snapshot) as $table) { $counts[$table] = $db->table($table)->count(); }
+foreach (array_keys($snapshot) as $table) {
+    $counts[$table] = $db->table($table)->count();
+}
 $lifecycle->disable('flex/crm', DisableReason::Manual);
 $request('GET', 'companies', [], 404, '/companies'); // warm disabled registry
 $lifecycle->enable('flex/crm');
 $lifecycle->enable('flex/crm');
 check(StorageCatalogue::read($db, 'public') === $snapshot, 'Re-enable changed schema.');
-foreach ($counts as $table => $count) { check($db->table($table)->count() === $count, 'Disable/re-enable changed rows: '.$table); }
+foreach ($counts as $table => $count) {
+    check($db->table($table)->count() === $count, 'Disable/re-enable changed rows: '.$table);
+}
 $evidence['lifecycle'] = ['disabled_after_warm' => 404, 'preserved_rows' => $counts, 'repeated_enable' => 'idempotent', 'rollback_event_count' => 0, 'after_commit_event_count' => $events];
 $manager->end();
 DB::connection('pgsql')->table('root_accounts')->where('id', $a['ref']->id)->update(['status' => 'suspended']);
