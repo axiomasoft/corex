@@ -107,6 +107,15 @@ for suffix in ['a', 'b']:
     evidence['lock_sha256'] = exporter.digest((consumer / 'composer.lock').read_bytes())
     lock = json.loads((consumer / 'composer.lock').read_text())
     evidence['locked_packages'] = lock['packages']
+    evidence['installed_package_trees'] = {}
+    for dependency in lock['packages']:
+        directory = consumer / 'vendor' / dependency['name']
+        rows = []
+        for path in sorted(directory.rglob('*')):
+            if path.is_file():
+                rows.append(path.relative_to(directory).as_posix() + '\0' + exporter.digest(path.read_bytes()))
+        assert rows, 'Missing installed dependency: ' + dependency['name']
+        evidence['installed_package_trees'][dependency['name']] = exporter.digest(('\n'.join(rows) + '\n').encode())
     assert not lock['packages-dev']
     for path in (consumer / 'vendor').rglob('*'):
         if path.is_symlink():
@@ -133,5 +142,6 @@ assert first['lock_sha256'] == second['lock_sha256']
 assert first['openapi_sha256'] == second['openapi_sha256']
 assert first['application_key_sha256'] != second['application_key_sha256']
 assert first['catalogue'] == second['catalogue']
+assert first['installed_package_trees'] == second['installed_package_trees']
 (out / 'evidence.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
 print(json.dumps({'ref': ref, 'evidence': str(out / 'evidence.json'), 'locks_equal': True, 'independent_keys': True}, indent=2))

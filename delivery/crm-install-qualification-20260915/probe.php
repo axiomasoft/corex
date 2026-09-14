@@ -25,6 +25,7 @@ use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\ClusterAccountConnectionResolver;
 use CoreX\Tenancy\StanclTenancyManager;
+use Flex\Crm\Actions\AssociateContactCompany;
 use Flex\Crm\Actions\ConvertLead;
 use Flex\Crm\Actions\CreateCompany;
 use Flex\Crm\Actions\CreateLead;
@@ -37,6 +38,7 @@ use Flex\Crm\Tests\Support\StorageCatalogue;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\PackageManifest;
 use Illuminate\Http\Request;
@@ -243,6 +245,42 @@ $a = $accounts['a'];
 $manager->initialize($a['ref']);
 $principal->userId = $a['user'];
 $manager->setWorkspace($app->make(PrincipalWorkspaceResolver::class)->resolveFor($a['user'], 'main'));
+$otherCompany = $request('POST', 'companies', ['name' => 'Other buyer'], 201, '/companies');
+$request('POST', 'contacts/'.$ids['a']['contact'].'/companies', ['company_id' => $otherCompany['id'], 'is_primary' => true], 422, '/contacts/{contactId}/companies');
+$raceContact = $request('POST', 'contacts', ['name_first' => 'Concurrent'], 201, '/contacts');
+config(['database.connections.association_race' => DB::connection('tenant')->getConfig()]);
+$race = DB::connection('association_race');
+$race->beginTransaction();
+$race->statement("SET LOCAL lock_timeout='50ms'");
+$blocked = false;
+DB::listen(function ($query) use (&$blocked, $execution, $raceContact, $otherCompany): void {
+    if ($blocked || $query->connectionName !== 'tenant' || ! str_contains($query->sql, '"crm_contacts"') || ! str_contains($query->sql, 'for update')) {
+        return;
+    }
+    $blocked = true;
+    $execution->connection = 'association_race';
+
+    try {
+        app(AssociateContactCompany::class)->handle(contactId: $raceContact['id'], companyId: $otherCompany['id'], isPrimary: true);
+
+        throw new RuntimeException('Concurrent primary mutation did not block.');
+    } catch (QueryException $error) {
+        check($error->errorInfo[0] === '55P03', 'Unexpected concurrent primary error.');
+    } finally {
+        $execution->connection = 'tenant';
+    }
+});
+
+try {
+    app(AssociateContactCompany::class)->handle(contactId: $raceContact['id'], companyId: $ids['a']['company'], isPrimary: true);
+    check($blocked, 'Concurrent primary test did not hit the locked seam.');
+} finally {
+    $race->rollBack();
+    DB::purge('association_race');
+}
+$request('POST', 'contacts/'.$raceContact['id'].'/companies', ['company_id' => $otherCompany['id'], 'is_primary' => true], 422, '/contacts/{contactId}/companies');
+$evidence['association_concurrency'] = ['blocked_sqlstate' => '55P03', 'loser_after_commit_status' => 422, 'primary_count' => DB::connection('tenant')->table('crm_contact_company')->where('contact_id', $raceContact['id'])->where('is_primary', true)->count()];
+check($evidence['association_concurrency']['primary_count'] === 1, 'Concurrent primary invariant failed.');
 $request('POST', 'companies', ['name' => 'Forged actor', 'created_by' => ['source' => 'system']], 422, '/companies');
 $request('POST', 'companies', ['name' => 'Forged conn', 'connection' => 'pgsql'], 422, '/companies');
 $request('POST', 'companies', ['name' => 'Foreign owner', 'owner_id' => $accounts['b']['user']], 403, '/companies');
@@ -312,7 +350,7 @@ $manager->initialize($a['ref']);
 $request('GET', 'companies', [], 403, '/companies');
 $manager->end();
 $document = $app->make(OpenApi::class)->document('v1', 'https://example.test/chosen/v1');
-check(count(array_merge(...array_map('array_values', (array) $document['paths']))) === 7, 'Changed seven-operation surface.');
+check(array_sum(array_map('count', (array) $document['paths'])) === 7, 'Changed seven-operation surface.');
 file_put_contents(__DIR__.'/openapi.json', json_encode($document, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
 $evidence['openapi_sha256'] = hash_file('sha256', __DIR__.'/openapi.json');
 $evidence['application_key_sha256'] = hash('sha256', config('app.key'));
