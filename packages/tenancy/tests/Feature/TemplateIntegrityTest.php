@@ -89,6 +89,21 @@ it('accepts a trusted expected, recorded, and actual schema-hash triple', functi
     expect($template->id)->toBe($templateId);
 });
 
+it('keeps a legacy template row nullable and therefore untrusted', function (): void {
+    $templateId = (string) Str::uuid();
+
+    DB::table('root_templates')->insert([
+        'id' => $templateId,
+        'version' => 99,
+        'db_name' => TEMPLATE_INTEGRITY_DB,
+        'status' => 'ready',
+        'embedding_model' => 'bge-m3',
+        'embedding_dim' => 1024,
+    ]);
+
+    expect(DB::table('root_templates')->where('id', $templateId)->value('schema_hash'))->toBeNull();
+});
+
 it('rejects catalogue drift after a template was sealed', function (): void {
     [$clusterId] = insertTrustedIntegrityTemplate();
     templateIntegrityConnection()->statement('ALTER TABLE integrity_markers ADD COLUMN drifted boolean NOT NULL DEFAULT false');
