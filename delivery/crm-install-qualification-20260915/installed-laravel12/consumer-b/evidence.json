@@ -1,0 +1,3075 @@
+{
+    "targets": [
+        "corex_crm_q15l12b_root_test",
+        "corex_crm_q15l12b_account_a_test",
+        "corex_crm_q15l12b_account_b_test"
+    ],
+    "profile": "PostgreSQL >=15 \/ uuid7 \/ PHP >=8.4 \/ sealed Stancl",
+    "exchanges": [
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "context_required",
+                    "message": "An initialized account context is required.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "e244d113-2ae3-4d54-805a-f9a17e5d84ec",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "484dad364fabd30f7d91ecf0bd19016e6efece0e80da3111e789fc353614fdc6"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 401,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "authentication_required",
+                    "message": "Authentication is required.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "afec9b95-e37e-44b2-8c54-18db0e1220eb",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "c7485f22d01245dac5cc55c8605d2ebafdd5b9b4c2bec5da07158c78bf4fc99f"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Same title",
+                "phones": [
+                    {
+                        "value": "+12025550123",
+                        "is_primary": true
+                    }
+                ]
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name": "Same title",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [
+                        {
+                            "value": "+12025550123",
+                            "norm": "+12025550123",
+                            "type": null,
+                            "is_primary": true
+                        }
+                    ],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "b3a9c4e0-8857-4b60-96ec-5e337ce289e9",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "186ffe0e66ed96d9e80466364f8a1935c2ac0755ed2978234d38098bc8ae7f77"
+        },
+        {
+            "method": "POST",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {
+                "name_first": "Jane",
+                "emails": [
+                    {
+                        "value": "JANE@example.test"
+                    }
+                ]
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name_first": "Jane",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Jane",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [
+                        {
+                            "value": "JANE@example.test",
+                            "norm": "jane@example.test",
+                            "type": null,
+                            "is_primary": false
+                        }
+                    ],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "d07de463-be35-4705-a874-c5cf71e61efe",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "075590e79ee92b7c50ee020f300a4f41ca51adbc4d3f050cda0c268f82757a43"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-746a-70e7-ae82-7f6576d6629e\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                "label": "Buyer",
+                "is_primary": true
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-748b-7021-b5f6-0c1262cb08e9",
+                    "contact_id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                    "company_id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                    "label": "Buyer",
+                    "is_primary": true
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "835e1db2-ddea-4490-bdda-37b854e0a9ed",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "3b919f0c7191fa405b37ec7cecc638fd9d177d37acd404c41c18668288ebf953"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-746a-70e7-ae82-7f6576d6629e\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-745d-7113-9540-445b3e066bc0"
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input validation failed.",
+                    "details": {
+                        "association": [
+                            "The contact\/company pair or primary association already exists."
+                        ]
+                    }
+                },
+                "meta": {
+                    "request_id": "b019a3fe-921f-41f5-b62d-9b11863c7d6b",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "56592b08432291f40d07313be03903d29a77010df8e7cf4589a69c0e6b62645b"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "limit": "10"
+            },
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                            "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                            "name": "Same title",
+                            "legal_name": null,
+                            "domain": null,
+                            "inn": null,
+                            "kpp": null,
+                            "ogrn": null,
+                            "phones": [
+                                {
+                                    "norm": "+12025550123",
+                                    "type": null,
+                                    "value": "+12025550123",
+                                    "is_primary": true
+                                }
+                            ],
+                            "emails": [],
+                            "address": null,
+                            "bank_details": null,
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "8d8d0598-c334-4c07-97da-22d8666d8682",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "4034614d7479ab6600f0cca578889464c3361c12a9e32d67535f248037e34915"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-745d-7113-9540-445b3e066bc0",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name": "Same title",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [
+                        {
+                            "norm": "+12025550123",
+                            "type": null,
+                            "value": "+12025550123",
+                            "is_primary": true
+                        }
+                    ],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "0616bd90-2664-4a84-96bd-59403dae7391",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "648d9ea5321c4b2f1af86ec4936efca24fe496bcae4a20c72a2ce814f5a39494"
+        },
+        {
+            "method": "GET",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                            "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                            "name_first": "Jane",
+                            "name_last": null,
+                            "name_middle": null,
+                            "display_name": "Jane",
+                            "job_title": null,
+                            "birthday": null,
+                            "phones": [],
+                            "emails": [
+                                {
+                                    "norm": "jane@example.test",
+                                    "type": null,
+                                    "value": "JANE@example.test",
+                                    "is_primary": false
+                                }
+                            ],
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "fe273ded-bdd0-4a06-a51f-22494c40eac9",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "5e058c9d1325f2c7bf39456419a8d24db3c13e44cadd9f231cfcbc4515eb4ec9"
+        },
+        {
+            "method": "GET",
+            "path": "contacts\/01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+            "schema_path": "\/contacts\/{contactId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name_first": "Jane",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Jane",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [
+                        {
+                            "norm": "jane@example.test",
+                            "type": null,
+                            "value": "JANE@example.test",
+                            "is_primary": false
+                        }
+                    ],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "b7dcd40d-f421-497f-946a-cfa4d61b8050",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "7f7ba953a24b88e1caf229e57cec5febe84ec9c36ef291d256787cb9b073d37b"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Same title",
+                "phones": [
+                    {
+                        "value": "+12025550123",
+                        "is_primary": true
+                    }
+                ]
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+                    "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                    "name": "Same title",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [
+                        {
+                            "value": "+12025550123",
+                            "norm": "+12025550123",
+                            "type": null,
+                            "is_primary": true
+                        }
+                    ],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "039f1b0e-cb96-4f24-9318-47dffc29ab94",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "5d26e5869506e55e083038c9389a6ef3ed65fee210789b9416b838f02b39e251"
+        },
+        {
+            "method": "POST",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {
+                "name_first": "Jane",
+                "emails": [
+                    {
+                        "value": "JANE@example.test"
+                    }
+                ]
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-74d2-70a6-ba07-30515a9682a8",
+                    "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                    "name_first": "Jane",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Jane",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [
+                        {
+                            "value": "JANE@example.test",
+                            "norm": "jane@example.test",
+                            "type": null,
+                            "is_primary": false
+                        }
+                    ],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "ac0aec79-bccf-4305-8f54-e94875eb4c06",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "82afe15e0ab3b6a31b5f93fab07cc8498f3f038e7b12442cd72b5fe6b93a01d4"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-74d2-70a6-ba07-30515a9682a8\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+                "label": "Buyer",
+                "is_primary": true
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-74f5-72f3-9d23-a12f39537a12",
+                    "contact_id": "01a0a1d7-74d2-70a6-ba07-30515a9682a8",
+                    "company_id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+                    "label": "Buyer",
+                    "is_primary": true
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "b5a33d01-f693-45c3-872f-e39cad038c2d",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "20e93bd946677ace3e95d00ca6c55dac89c19993f3f6565008b0ad1f2ac97acf"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-74d2-70a6-ba07-30515a9682a8\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76"
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input validation failed.",
+                    "details": {
+                        "association": [
+                            "The contact\/company pair or primary association already exists."
+                        ]
+                    }
+                },
+                "meta": {
+                    "request_id": "dbd28bfe-bf6b-48e5-9160-ae7133acdec3",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "1306a3c764033ade9fde38c880cdaec83ac72be7a62b4e57088887c9826140ce"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "limit": "10"
+            },
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+                            "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                            "name": "Same title",
+                            "legal_name": null,
+                            "domain": null,
+                            "inn": null,
+                            "kpp": null,
+                            "ogrn": null,
+                            "phones": [
+                                {
+                                    "norm": "+12025550123",
+                                    "type": null,
+                                    "value": "+12025550123",
+                                    "is_primary": true
+                                }
+                            ],
+                            "emails": [],
+                            "address": null,
+                            "bank_details": null,
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "525c4869-a2a0-4ee2-8054-c6d502795f13",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "2b6e6f30ba699328702f3d31df27dd90ba6cdac54911cd06e421154752741eeb"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+                    "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                    "name": "Same title",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [
+                        {
+                            "norm": "+12025550123",
+                            "type": null,
+                            "value": "+12025550123",
+                            "is_primary": true
+                        }
+                    ],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "7283e206-1a80-4fcd-9aff-ce6e109d4238",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "29fc2b6f8b2b28cb06aec91b0bb7c19f17d5ba0a9249c9ef07a30fdba7c76c8d"
+        },
+        {
+            "method": "GET",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-74d2-70a6-ba07-30515a9682a8",
+                            "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                            "name_first": "Jane",
+                            "name_last": null,
+                            "name_middle": null,
+                            "display_name": "Jane",
+                            "job_title": null,
+                            "birthday": null,
+                            "phones": [],
+                            "emails": [
+                                {
+                                    "norm": "jane@example.test",
+                                    "type": null,
+                                    "value": "JANE@example.test",
+                                    "is_primary": false
+                                }
+                            ],
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "70964cc4-4bb4-4277-bd73-91187f32d5fb",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "865a04b2df83918f6ed9fb51143040c5bd5069c6647beefa446851c5b74336f9"
+        },
+        {
+            "method": "GET",
+            "path": "contacts\/01a0a1d7-74d2-70a6-ba07-30515a9682a8",
+            "schema_path": "\/contacts\/{contactId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-74d2-70a6-ba07-30515a9682a8",
+                    "workspace_id": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+                    "name_first": "Jane",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Jane",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [
+                        {
+                            "norm": "jane@example.test",
+                            "type": null,
+                            "value": "JANE@example.test",
+                            "is_primary": false
+                        }
+                    ],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "08e11bf3-1aff-4f4c-92f0-f6ef1aa5bb42",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "0d20245a7ce6a4288d3b01f4396c9e2043914ba03258a04be571e6c621ec3063"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-745d-7113-9540-445b3e066bc0",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 404,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "resource_not_found",
+                    "message": "Resource not found.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "2cee3c2e-6a22-420c-972e-90d17d6f8298",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "40fa01c5adbd9d121b75658ef3e0d775418bede5b12d63e98b7ffc8d5490d18b"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "limit": "10"
+            },
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                            "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                            "name": "Same title",
+                            "legal_name": null,
+                            "domain": null,
+                            "inn": null,
+                            "kpp": null,
+                            "ogrn": null,
+                            "phones": [
+                                {
+                                    "norm": "+12025550123",
+                                    "type": null,
+                                    "value": "+12025550123",
+                                    "is_primary": true
+                                }
+                            ],
+                            "emails": [],
+                            "address": null,
+                            "bank_details": null,
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "130da9e3-b106-496e-98d5-c2129dc40fb4",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "c024d97a488c83ae08ac5f2ec410a3c73e0b263df21fe9aba472c1ee0a58a84d"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-745d-7113-9540-445b3e066bc0",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-745d-7113-9540-445b3e066bc0",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name": "Same title",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [
+                        {
+                            "norm": "+12025550123",
+                            "type": null,
+                            "value": "+12025550123",
+                            "is_primary": true
+                        }
+                    ],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "a13ce019-f62e-4714-8332-7c1b5f616cbd",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "30ff5ac4bbd718072e5fe87ee346ff5863d4f3cb817d8091718d24f8fd63761d"
+        },
+        {
+            "method": "GET",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": [
+                        {
+                            "id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                            "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                            "name_first": "Jane",
+                            "name_last": null,
+                            "name_middle": null,
+                            "display_name": "Jane",
+                            "job_title": null,
+                            "birthday": null,
+                            "phones": [],
+                            "emails": [
+                                {
+                                    "norm": "jane@example.test",
+                                    "type": null,
+                                    "value": "JANE@example.test",
+                                    "is_primary": false
+                                }
+                            ],
+                            "source_id": null,
+                            "owner_id": null
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "2f1c65e1-366f-4c1e-9e1b-ffd39088427f",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "7e4e6d2203d1d8ca131d53520414f983f58f97267ff4a90ef1c16e9386bad022"
+        },
+        {
+            "method": "GET",
+            "path": "contacts\/01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+            "schema_path": "\/contacts\/{contactId}",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-746a-70e7-ae82-7f6576d6629e",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name_first": "Jane",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Jane",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [
+                        {
+                            "norm": "jane@example.test",
+                            "type": null,
+                            "value": "JANE@example.test",
+                            "is_primary": false
+                        }
+                    ],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "b1e282cb-c42d-469f-a868-d1680dd229d3",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "d6c7c0ef612216464649764cfafefdc12ee23397dc98686a9db312d714a9e8f0"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-74c7-7269-93f9-7f78e0081d76",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 404,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "resource_not_found",
+                    "message": "Resource not found.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "4a1a681a-6efe-4122-a777-8d049702b8c4",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "4ae8185fdb721fe37b1b27187f9aa003a475ac2f41c1bfef301a418bcdf68f3b"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Other buyer"
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-755e-71fc-abe6-aabe6db22be1",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name": "Other buyer",
+                    "legal_name": null,
+                    "domain": null,
+                    "inn": null,
+                    "kpp": null,
+                    "ogrn": null,
+                    "phones": [],
+                    "emails": [],
+                    "address": null,
+                    "bank_details": null,
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "ca7841f5-896d-4bf9-8361-030bcf0334ff",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "3a757cfd107ae8996dbc522a78f16dded1c2625043f7dccf209184e35778cc08"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-746a-70e7-ae82-7f6576d6629e\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-755e-71fc-abe6-aabe6db22be1",
+                "is_primary": true
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input validation failed.",
+                    "details": {
+                        "association": [
+                            "The contact\/company pair or primary association already exists."
+                        ]
+                    }
+                },
+                "meta": {
+                    "request_id": "fd1ecc82-2b13-4547-a066-ec14db1edc74",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "33fd02dd9731d7b022ebb87c1038cf70ba13aec711826f55ab7ec37b48d34a76"
+        },
+        {
+            "method": "POST",
+            "path": "contacts",
+            "schema_path": "\/contacts",
+            "input": {
+                "name_first": "Concurrent"
+            },
+            "status": 201,
+            "response": {
+                "data": {
+                    "id": "01a0a1d7-7586-738f-9f79-fcb6d8d42438",
+                    "workspace_id": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+                    "name_first": "Concurrent",
+                    "name_last": null,
+                    "name_middle": null,
+                    "display_name": "Concurrent",
+                    "job_title": null,
+                    "birthday": null,
+                    "phones": [],
+                    "emails": [],
+                    "source_id": null,
+                    "owner_id": null
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "5aff727b-acff-4424-b869-55bfeebb3347",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "f0a8be3c53048414ba1c34e8712631fa42ced4582c569cc9420c22fb83d0262c"
+        },
+        {
+            "method": "POST",
+            "path": "contacts\/01a0a1d7-7586-738f-9f79-fcb6d8d42438\/companies",
+            "schema_path": "\/contacts\/{contactId}\/companies",
+            "input": {
+                "company_id": "01a0a1d7-755e-71fc-abe6-aabe6db22be1",
+                "is_primary": true
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input validation failed.",
+                    "details": {
+                        "association": [
+                            "The contact\/company pair or primary association already exists."
+                        ]
+                    }
+                },
+                "meta": {
+                    "request_id": "555d01f7-6b74-437d-a1c4-d6329fba1a74",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "8c0b8688a655f5dea670fed494ca7ff5426d029f4e291c2c17d6ed811f6b4054"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Forged actor",
+                "created_by": {
+                    "source": "system"
+                }
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input contains undeclared fields.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "049fb18f-b482-427d-98e5-b33922580dcd",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "737f6e81a784fdbfcda1b805aa6755b372c46c77853b968d02f4c171256c3f90"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Forged conn",
+                "connection": "pgsql"
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input contains undeclared fields.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "295246e6-7270-4c73-9a94-ab8cc399c6e7",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "d2d124af8afc61b6788f4a4fde24600cb241d115ee3151f754770f526e4f16e9"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Foreign owner",
+                "owner_id": "01a0a1d7-70fe-7150-ba0f-a46df1ec8a93"
+            },
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "6543b566-72d2-44d9-86fa-0508f1290a57",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "97d3c27433ba59d71483aba056562c988227f30946bef5bf4af19f84a25aa572"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Foreign source",
+                "source_id": "01a0a1d7-7614-737b-805f-df058c1b0fc4"
+            },
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "7e5cade4-154a-4619-a9b0-15b2bd43c9eb",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "2c6becab66dff00473690f05bfc09ec7f1b84cdcd101254a10831d7394e330fa"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "Numeric boolean",
+                "account_level": 1
+            },
+            "status": 422,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "validation_failed",
+                    "message": "Input validation failed.",
+                    "details": {
+                        "account_level": [
+                            "The account level field must be true or false."
+                        ]
+                    }
+                },
+                "meta": {
+                    "request_id": "065fef3e-df63-48b1-956f-abf52bb0bf5a",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "c162ae33d204c9e79724b6e23d39ed3cac6f83b5f134892e971b8b2622f12b55"
+        },
+        {
+            "method": "POST",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {
+                "name": "No null capability",
+                "account_level": true
+            },
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "2ee5a934-d79f-48f2-86d6-5535aad4c815",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "891762c9b232529c43e9f422a09b3d449006b8ab8f00fe6d20392d662b80893a"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "8862fe11-3095-4a27-a5cd-b187580e57e0",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "5b7c8cec6fa1bfc94d1e7773786c7a9ffa6adfa7fa433a2eb8ca1f7403e2b9a2"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "a3a3f8a8-5f2a-426a-9840-21cf596075b9",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "1bfeac722e032ce7158c5ac40e37cf8f6fae6f090ad3dd73cfb4f222e8c9e1ad"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "982622d5-9d10-4e0a-82ed-589f6eed729b",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "bc98ecdc7c2a2d81ad672f40e514b9409706452abb206caea433aa4680a3a21d"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "d36c62d8-2d44-48ef-be5f-c1102ddf7758",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "9d5f81c3c0bbcaba4a4d0c5bfb9c14d98004201cd6385335d0c42622dfcb9954"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "4057015c-13be-4ee4-82af-08e94d765fb4",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "a763a46a092e195b3d380860236578e7114ebadf63f6d264d554857cfd0c2662"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "21b5b180-c69b-44be-a2c8-981080ab8c86",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "077b25935257c62855923f616e071a2981df9a0f5e4afc6eeb714bf888c9a1ee"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 200,
+            "response": {
+                "data": {
+                    "items": []
+                },
+                "error": null,
+                "meta": {
+                    "request_id": "d886ce29-c58d-4428-9529-4087233aa3cf",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "9aaa38f116ee56a2650e579d5010419a833e8fda474dd2c818bf4d58223a6bde"
+        },
+        {
+            "method": "GET",
+            "path": "companies\/01a0a1d7-745d-7113-9540-445b3e066bc0",
+            "schema_path": "\/companies\/{companyId}",
+            "input": {},
+            "status": 404,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "resource_not_found",
+                    "message": "Resource not found.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "64e1976f-7d6e-449d-8626-df23a7c5a53a",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "b3682923c79116b4e378ab84158b6e4391c0a5cc5e21f8c1149f1847750f7385"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "forbidden",
+                    "message": "Operation is not permitted.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "62fa5677-80b8-44f3-b041-3deda35d7aeb",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "b5eaa57bf8aed096d7436348bff38766213da9d6285c6e9e8f16c1e165393065"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 404,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "module_unavailable",
+                    "message": "Operation not found.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "bf4bc573-955a-41b9-8215-582cf9a9e121",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "a77446cd83a19c3838760fc04c282d57f12649d9adba16f6df39f931b3127cfa"
+        },
+        {
+            "method": "GET",
+            "path": "companies",
+            "schema_path": "\/companies",
+            "input": {},
+            "status": 403,
+            "response": {
+                "data": null,
+                "error": {
+                    "code": "account_unavailable",
+                    "message": "Account is unavailable.",
+                    "details": {}
+                },
+                "meta": {
+                    "request_id": "b858db62-0ea9-4647-8aa4-37789ba93f63",
+                    "api_version": "v1"
+                }
+            },
+            "response_wire_sha256": "99933005b0cee487e60e3a482ce470481bfb67b5c7f47e122c8fea0bd80c3d03"
+        }
+    ],
+    "contracts": {
+        "CoreX\\Modules\\Contracts\\ModuleRegistry": "CoreX\\Modules\\Registry\\CompiledModuleRegistry",
+        "CoreX\\Modules\\Contracts\\ModuleLifecycle": "CoreX\\Modules\\Lifecycle\\DatabaseModuleLifecycle",
+        "CoreX\\Tenancy\\Contracts\\TenancyManager": "CoreX\\Tenancy\\StanclTenancyManager",
+        "CoreX\\Tenancy\\Contracts\\TenantContextResolver": "CoreX\\Tenancy\\TenancyManagerContextResolver",
+        "CoreX\\Tenancy\\Contracts\\AccountConnectionResolver": "CoreX\\Tenancy\\Provisioning\\ClusterAccountConnectionResolver",
+        "CoreX\\Tenancy\\Contracts\\PrincipalWorkspaceResolver": "CoreX\\Tenancy\\Workspaces\\DatabaseWorkspaceResolver"
+    },
+    "autoload": {
+        "CoreX\\Api\\Dispatcher": {
+            "path": "vendor\/corex\/api\/src\/Dispatcher.php",
+            "sha256": "bb8f2b437a803476f369a449e1e47ece9e04eaeb4f685db4a38b38abded4fdfb"
+        },
+        "CoreX\\Modules\\Lifecycle\\DatabaseModuleLifecycle": {
+            "path": "vendor\/corex\/modules\/src\/Lifecycle\/DatabaseModuleLifecycle.php",
+            "sha256": "bba881c9c25e0182bf1cd3834ccfecc375a84cf88954ac31e64da0a9ba84ef17"
+        },
+        "CoreX\\Tenancy\\StanclTenancyManager": {
+            "path": "vendor\/corex\/tenancy\/src\/StanclTenancyManager.php",
+            "sha256": "f182973e08e5ddde35e2fa334389032986b125fbcb2e2a8c606fc9848b3757b9"
+        },
+        "Flex\\Crm\\Actions\\CreateCompany": {
+            "path": "vendor\/flex\/crm\/src\/Actions\/CreateCompany.php",
+            "sha256": "7dc21d0cb65a4d5fe81b840791db65b9b04aa9c2183c55c2963439e72fb638a5"
+        }
+    },
+    "catalogue": {
+        "crm_activities": {
+            "columns": [
+                {
+                    "name": "body",
+                    "type": "text",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "created_by",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "direction",
+                    "type": "character varying(3)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "duration_sec",
+                    "type": "integer",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "email_meta",
+                    "type": "jsonb",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "ends_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "kind",
+                    "type": "character varying(16)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "location",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "owner_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "phone",
+                    "type": "character varying(64)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "recording_file_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "starts_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "status",
+                    "type": "character varying(16)",
+                    "not_null": true,
+                    "default": "'planned'::character varying"
+                },
+                {
+                    "name": "subject",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "transcript",
+                    "type": "text",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "c",
+                    "definition": "CHECK ((((kind)::text = 'call'::text) OR (direction IS NULL) OR ((kind)::text = 'email'::text)))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((direction)::text = ANY ((ARRAY['in'::character varying, 'out'::character varying])::text[])))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((kind)::text = ANY ((ARRAY['call'::character varying, 'email'::character varying, 'meeting'::character varying])::text[])))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((status)::text = ANY ((ARRAY['planned'::character varying, 'done'::character varying, 'canceled'::character varying, 'missed'::character varying])::text[])))"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (kind, status) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (owner_id, starts_at) WHERE status::text = 'planned'::text AND deleted_at IS NULL"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_activity_targets": {
+            "columns": [
+                {
+                    "name": "activity_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "entity_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "entity_type",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (activity_id) REFERENCES crm_activities(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (activity_id, entity_type, entity_id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (entity_type, entity_id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (activity_id, entity_type, entity_id)"
+                }
+            ]
+        },
+        "crm_companies": {
+            "columns": [
+                {
+                    "name": "address",
+                    "type": "jsonb",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "bank_details",
+                    "type": "jsonb",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "created_by",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "domain",
+                    "type": "character varying(190)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "emails",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'[]'::jsonb"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "inn",
+                    "type": "character varying(12)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "kpp",
+                    "type": "character varying(9)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "legal_name",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "name",
+                    "type": "character varying(255)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "ogrn",
+                    "type": "character varying(15)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "owner_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "phones",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'[]'::jsonb"
+                },
+                {
+                    "name": "search",
+                    "type": "tsvector",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "source_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (source_id) REFERENCES crm_sources(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (inn) WHERE inn IS NOT NULL AND deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (owner_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (emails jsonb_path_ops)"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (phones jsonb_path_ops)"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (search)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_contact_company": {
+            "columns": [
+                {
+                    "name": "company_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "contact_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "is_primary",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "false"
+                },
+                {
+                    "name": "label",
+                    "type": "character varying(64)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (company_id) REFERENCES crm_companies(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (contact_id) REFERENCES crm_contacts(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                },
+                {
+                    "type": "u",
+                    "definition": "UNIQUE (contact_id, company_id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (company_id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (contact_id) WHERE is_primary"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (contact_id, company_id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_contacts": {
+            "columns": [
+                {
+                    "name": "birthday",
+                    "type": "date",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "created_by",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "display_name",
+                    "type": "character varying(255)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "emails",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'[]'::jsonb"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "job_title",
+                    "type": "character varying(190)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "name_first",
+                    "type": "character varying(120)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "name_last",
+                    "type": "character varying(120)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "name_middle",
+                    "type": "character varying(120)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "owner_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "phones",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'[]'::jsonb"
+                },
+                {
+                    "name": "search",
+                    "type": "tsvector",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "source_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (source_id) REFERENCES crm_sources(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (owner_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (emails jsonb_path_ops)"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (phones jsonb_path_ops)"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (search)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_deal_contacts": {
+            "columns": [
+                {
+                    "name": "contact_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "deal_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "is_primary",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "false"
+                },
+                {
+                    "name": "label",
+                    "type": "character varying(64)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (contact_id) REFERENCES crm_contacts(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (deal_id) REFERENCES crm_deals(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                },
+                {
+                    "type": "u",
+                    "definition": "UNIQUE (deal_id, contact_id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (contact_id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (deal_id) WHERE is_primary"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (deal_id, contact_id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_deals": {
+            "columns": [
+                {
+                    "name": "amount",
+                    "type": "bigint",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "close_date",
+                    "type": "date",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "company_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "created_by",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "currency",
+                    "type": "character(3)",
+                    "not_null": true,
+                    "default": "'RUB'::bpchar"
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "forecast_category",
+                    "type": "character varying(16)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "forecast_category_is_manual",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "false"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "lost_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "lost_reason_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "owner_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "pipeline_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "numeric(20,10)",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "primary_quote_doc_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "search",
+                    "type": "tsvector",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "source_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "stage_entered_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "stage_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "status",
+                    "type": "character varying(8)",
+                    "not_null": true,
+                    "default": "'open'::character varying"
+                },
+                {
+                    "name": "title",
+                    "type": "character varying(255)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "utm",
+                    "type": "jsonb",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "won_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "c",
+                    "definition": "CHECK ((((status)::text <> 'lost'::text) OR (lost_at IS NOT NULL)))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK ((((status)::text <> 'won'::text) OR (won_at IS NOT NULL)))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((forecast_category)::text = ANY ((ARRAY['pipeline'::character varying, 'best_case'::character varying, 'commit'::character varying, 'omitted'::character varying])::text[])))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((status)::text = ANY ((ARRAY['open'::character varying, 'won'::character varying, 'lost'::character varying])::text[])))"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (company_id) REFERENCES crm_companies(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (lost_reason_id) REFERENCES crm_lost_reasons(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (pipeline_id) REFERENCES crm_pipelines(id) ON DELETE RESTRICT"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (source_id) REFERENCES crm_sources(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (stage_id) REFERENCES crm_stages(id) ON DELETE RESTRICT"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (close_date) WHERE status::text = 'open'::text AND deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (company_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (owner_id, status) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (pipeline_id, stage_id, \"position\") WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id, owner_id, pipeline_id, close_date, forecast_category) WHERE status::text = 'open'::text AND close_date IS NOT NULL AND deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (search)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_leads": {
+            "columns": [
+                {
+                    "name": "amount",
+                    "type": "bigint",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "company_name",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "contact_name",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "converted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "converted_company_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "converted_contact_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "converted_deal_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "created_by",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "currency",
+                    "type": "character(3)",
+                    "not_null": true,
+                    "default": "'RUB'::bpchar"
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "email",
+                    "type": "character varying(255)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "lost_reason_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "owner_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "phone",
+                    "type": "character varying(64)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "pipeline_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "numeric(20,10)",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "search",
+                    "type": "tsvector",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "source_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "stage_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "status",
+                    "type": "character varying(16)",
+                    "not_null": true,
+                    "default": "'open'::character varying"
+                },
+                {
+                    "name": "title",
+                    "type": "character varying(255)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "utm",
+                    "type": "jsonb",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "c",
+                    "definition": "CHECK ((((status)::text <> 'converted'::text) OR (converted_at IS NOT NULL)))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((status)::text = ANY ((ARRAY['open'::character varying, 'converted'::character varying, 'junk'::character varying])::text[])))"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (converted_company_id) REFERENCES crm_companies(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (converted_contact_id) REFERENCES crm_contacts(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (converted_deal_id) REFERENCES crm_deals(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (lost_reason_id) REFERENCES crm_lost_reasons(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (pipeline_id) REFERENCES crm_pipelines(id) ON DELETE RESTRICT"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (source_id) REFERENCES crm_sources(id) ON DELETE SET NULL"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (stage_id) REFERENCES crm_stages(id) ON DELETE RESTRICT"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (owner_id, status) WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (pipeline_id, stage_id, \"position\") WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "gin",
+                    "definition": "USING gin (search)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                }
+            ]
+        },
+        "crm_lost_reasons": {
+            "columns": [
+                {
+                    "name": "code",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "entity_type",
+                    "type": "character varying(16)",
+                    "not_null": true,
+                    "default": "'both'::character varying"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "true"
+                },
+                {
+                    "name": "name",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "integer",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "c",
+                    "definition": "CHECK (((entity_type)::text = ANY ((ARRAY['lead'::character varying, 'deal'::character varying, 'both'::character varying])::text[])))"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                },
+                {
+                    "type": "u",
+                    "definition": "UNIQUE NULLS NOT DISTINCT (workspace_id, code)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": true,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id, code) NULLS NOT DISTINCT"
+                }
+            ]
+        },
+        "crm_pipelines": {
+            "columns": [
+                {
+                    "name": "code",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "entity_type",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "is_default",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "false"
+                },
+                {
+                    "name": "name",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "integer",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "settings",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'{}'::jsonb"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": true,
+                    "method": "btree",
+                    "definition": "USING btree (entity_type, code, workspace_id) NULLS NOT DISTINCT WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": true,
+                    "method": "btree",
+                    "definition": "USING btree (entity_type, workspace_id) NULLS NOT DISTINCT WHERE is_default AND deleted_at IS NULL"
+                }
+            ]
+        },
+        "crm_sources": {
+            "columns": [
+                {
+                    "name": "code",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "is_active",
+                    "type": "boolean",
+                    "not_null": true,
+                    "default": "true"
+                },
+                {
+                    "name": "name",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "integer",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "workspace_id",
+                    "type": "uuid",
+                    "not_null": false,
+                    "default": null
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                },
+                {
+                    "type": "u",
+                    "definition": "UNIQUE NULLS NOT DISTINCT (workspace_id, code)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": true,
+                    "method": "btree",
+                    "definition": "USING btree (workspace_id, code) NULLS NOT DISTINCT"
+                }
+            ]
+        },
+        "crm_stages": {
+            "columns": [
+                {
+                    "name": "code",
+                    "type": "character varying(64)",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "color",
+                    "type": "character varying(16)",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp with time zone",
+                    "not_null": false,
+                    "default": null
+                },
+                {
+                    "name": "id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "name",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "pipeline_id",
+                    "type": "uuid",
+                    "not_null": true,
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "type": "integer",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "probability",
+                    "type": "smallint",
+                    "not_null": true,
+                    "default": "0"
+                },
+                {
+                    "name": "required_fields",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'[]'::jsonb"
+                },
+                {
+                    "name": "semantic",
+                    "type": "character varying(8)",
+                    "not_null": true,
+                    "default": "'open'::character varying"
+                },
+                {
+                    "name": "settings",
+                    "type": "jsonb",
+                    "not_null": true,
+                    "default": "'{}'::jsonb"
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "not_null": true,
+                    "default": "now()"
+                }
+            ],
+            "constraints": [
+                {
+                    "type": "c",
+                    "definition": "CHECK (((probability >= 0) AND (probability <= 100)))"
+                },
+                {
+                    "type": "c",
+                    "definition": "CHECK (((semantic)::text = ANY ((ARRAY['open'::character varying, 'won'::character varying, 'lost'::character varying])::text[])))"
+                },
+                {
+                    "type": "f",
+                    "definition": "FOREIGN KEY (pipeline_id) REFERENCES crm_pipelines(id) ON DELETE CASCADE"
+                },
+                {
+                    "type": "p",
+                    "definition": "PRIMARY KEY (id)"
+                },
+                {
+                    "type": "u",
+                    "definition": "UNIQUE (pipeline_id, code)"
+                }
+            ],
+            "indexes": [
+                {
+                    "is_unique": false,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (pipeline_id, \"position\") WHERE deleted_at IS NULL"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (id)"
+                },
+                {
+                    "is_unique": true,
+                    "nulls_not_distinct": false,
+                    "method": "btree",
+                    "definition": "USING btree (pipeline_id, code)"
+                }
+            ]
+        }
+    },
+    "physical_sequence": [
+        {
+            "account": "a",
+            "context_account": "01a0a1d7-6e18-732f-aa9f-1b28ecbeff42",
+            "workspace": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+            "config": {
+                "driver": "pgsql",
+                "host": "127.0.0.1",
+                "port": 5434,
+                "database": "corex_crm_q15l12b_account_a_test",
+                "username": "corex"
+            },
+            "pdo": {
+                "database": "corex_crm_q15l12b_account_a_test",
+                "username": "corex",
+                "backend": 628277
+            }
+        },
+        {
+            "account": "b",
+            "context_account": "01a0a1d7-7100-711b-9653-fb3ead23fe1e",
+            "workspace": "01a0a1d7-71ad-732b-b486-ba82f6e67a32",
+            "config": {
+                "driver": "pgsql",
+                "host": "127.0.0.1",
+                "port": 5434,
+                "database": "corex_crm_q15l12b_account_b_test",
+                "username": "corex"
+            },
+            "pdo": {
+                "database": "corex_crm_q15l12b_account_b_test",
+                "username": "corex",
+                "backend": 628286
+            }
+        },
+        {
+            "account": "a",
+            "context_account": "01a0a1d7-6e18-732f-aa9f-1b28ecbeff42",
+            "workspace": "01a0a1d7-6eef-70a6-913a-8154191e58ea",
+            "config": {
+                "driver": "pgsql",
+                "host": "127.0.0.1",
+                "port": 5434,
+                "database": "corex_crm_q15l12b_account_a_test",
+                "username": "corex"
+            },
+            "pdo": {
+                "database": "corex_crm_q15l12b_account_a_test",
+                "username": "corex",
+                "backend": 628288
+            }
+        }
+    ],
+    "association_concurrency": {
+        "blocked_sqlstate": "55P03",
+        "loser_after_commit_status": 422,
+        "primary_count": 1
+    },
+    "lifecycle": {
+        "disabled_after_warm": 404,
+        "preserved_rows": {
+            "crm_activities": 0,
+            "crm_activity_targets": 0,
+            "crm_companies": 3,
+            "crm_contact_company": 2,
+            "crm_contacts": 3,
+            "crm_deal_contacts": 0,
+            "crm_deals": 0,
+            "crm_leads": 1,
+            "crm_lost_reasons": 0,
+            "crm_pipelines": 0,
+            "crm_sources": 0,
+            "crm_stages": 0
+        },
+        "repeated_enable": "idempotent",
+        "rollback_event_count": 0,
+        "after_commit_event_count": 1
+    },
+    "openapi_sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33",
+    "application_key_sha256": "4d51745a235f50ead6f9e45f3cad155c2af0469ec659de197822123bb3df6178",
+    "php": "8.4.1",
+    "laravel": "12.69.2",
+    "database_version": "PostgreSQL 16.14 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit"
+}

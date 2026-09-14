@@ -1,0 +1,33 @@
+Installing dependencies from lock file (including require-dev)
+Verifying lock file contents can be installed on current platform.
+Package operations: 152 installs, 0 updates, 0 removals
+  - Downloading axiomasoft/stancl-jobpipeline (2.0.0-alpha1)
+  - Downloading axiomasoft/stancl-jobpipeline (2.0.0-alpha1)
+  - Downloading axiomasoft/stancl-jobpipeline (2.0.0-alpha1)
+  - Downloading axiomasoft/stancl-jobpipeline (2.0.0-alpha1)
+    Failed to download axiomasoft/stancl-jobpipeline from dist: The "file:///home/vostrikov/projects/packages/corex/plans/2026.09.12-%E2%84%962-COREX-APPROVED-SPECS/findings/P4.1-source/jobpipeline-candidate.zip" file could not be downloaded: Failed to open stream: No such file or directory
+    Now trying to download from source
+  - Syncing axiomasoft/stancl-jobpipeline (2.0.0-alpha1) into cache
+  - Downloading axiomasoft/stancl-tenancy (4.0.0-alpha1)
+  - Downloading axiomasoft/stancl-tenancy (4.0.0-alpha1)
+  - Downloading axiomasoft/stancl-tenancy (4.0.0-alpha1)
+  - Downloading axiomasoft/stancl-tenancy (4.0.0-alpha1)
+    Failed to download axiomasoft/stancl-tenancy from dist: The "file:///home/vostrikov/projects/packages/corex/plans/2026.09.12-%E2%84%962-COREX-APPROVED-SPECS/findings/P4.1-source/tenancy-candidate.zip" file could not be downloaded: Failed to open stream: No such file or directory
+    Now trying to download from source
+  - Syncing axiomasoft/stancl-tenancy (4.0.0-alpha1) into cache
+
+In Git.php line 587:
+                                                                               
+  Failed to execute git clone --mirror -- https://gho...2m6:x-oauth-basic@git  
+  hub.com/axiomasoft/stancl-jobpipeline.git /home/vostrikov/.cache/composer/v  
+  cs/https---github.com-axiomasoft-stancl-jobpipeline.git/                     
+                                                                               
+  Cloning into bare repository '/home/vostrikov/.cache/composer/vcs/https---g  
+  ithub.com-axiomasoft-stancl-jobpipeline.git'...                              
+  remote: Repository not found.                                                
+  fatal: repository 'https://github.com/axiomasoft/stancl-jobpipeline.git/' n  
+  ot found                                                                     
+                                                                               
+
+install [--prefer-source] [--prefer-dist] [--prefer-install PREFER-INSTALL] [--dry-run] [--download-only] [--dev] [--no-suggest] [--no-dev] [--no-autoloader] [--no-progress] [--no-install] [--audit] [--audit-format AUDIT-FORMAT] [-v|vv|vvv|--verbose] [-o|--optimize-autoloader] [-a|--classmap-authoritative] [--apcu-autoloader] [--apcu-autoloader-prefix APCU-AUTOLOADER-PREFIX] [--ignore-platform-req IGNORE-PLATFORM-REQ] [--ignore-platform-reqs] [--] [<packages>...]
+

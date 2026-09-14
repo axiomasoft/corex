@@ -1,0 +1,210 @@
+{
+  "schema_version": "corex-crm-install-gates/v1",
+  "source_ref": "cb79f18095589124759fdd1107144764bb31d094",
+  "qualification_ref": "063f165e1065053984751f2efc41c18caefe90ac",
+  "checkout": "/tmp/corex-crm-qualified-l1hCwq/source",
+  "command_notation": "Executed commands/selectors with shell output redirection and exit-preserving tail omitted. Package commands run in the indicated package cwd; their --test-directory is relative to the root Pest runner. Log SHA-256 values are in hashes.json.",
+  "pg_environment": {
+    "PGSQL_HOST": "127.0.0.1",
+    "PGSQL_PORT": "5434",
+    "PGSQL_DATABASE": "corex_crm_install_20260915_test",
+    "PGSQL_USERNAME": "corex",
+    "PGSQL_PASSWORD": "corex"
+  },
+  "quality_profile": "All 88 installed Laravel 13 runtime versions/source/dist/tree hashes match installed consumer-a. Root/package test autoload and dev tooling are qualification-only; production consumers have packages-dev=[] and no source symlinks.",
+  "gates": [
+    {
+      "id": "root-sqlite",
+      "cwd": ".",
+      "command": "php vendor/bin/pest -c .qualification-phpunit.xml --exclude-group=pg",
+      "log": "logs/exact-root-sqlite.log",
+      "exit": 0,
+      "tests": 151,
+      "assertions": 480
+    },
+    {
+      "id": "root-pg",
+      "cwd": ".",
+      "command": "php vendor/bin/pest -c .qualification-phpunit.xml --group=pg",
+      "log": "logs/exact-root-pg.log",
+      "exit": 0,
+      "tests": 110,
+      "assertions": 371
+    },
+    {
+      "id": "root-coverage",
+      "cwd": ".",
+      "command": "XDEBUG_MODE=coverage /usr/bin/php8.4 vendor/bin/pest -c .qualification-phpunit.xml --coverage --min=80 --coverage-clover=/home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/root-exact-coverage.xml",
+      "log": "logs/exact-root-coverage-current.log",
+      "exit": 0,
+      "tests": 261,
+      "assertions": 851,
+      "coverage": 89.6,
+      "floor": 80
+    },
+    {
+      "id": "crm-sqlite",
+      "cwd": "packages/crm",
+      "command": "php ../../vendor/bin/pest --test-directory=packages/crm/tests -c .qualification-phpunit.xml --exclude-group=pg",
+      "log": "logs/exact-crm-sqlite-current.log",
+      "exit": 0,
+      "tests": 34,
+      "assertions": 135
+    },
+    {
+      "id": "crm-full-coverage",
+      "cwd": "packages/crm",
+      "command": "XDEBUG_MODE=coverage /usr/bin/php8.4 ../../vendor/bin/pest --test-directory=packages/crm/tests -c .qualification-phpunit.xml --coverage --min=95 --coverage-clover=/home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/crm-exact-coverage.xml",
+      "log": "logs/exact-crm-coverage.log",
+      "exit": 0,
+      "tests": 80,
+      "assertions": 404,
+      "coverage": 95.7,
+      "floor": 95,
+      "pg_tests": 46
+    },
+    {
+      "id": "api-coverage",
+      "cwd": "packages/api",
+      "command": "XDEBUG_MODE=coverage /usr/bin/php8.4 ../../vendor/bin/pest --test-directory=packages/api/tests -c .qualification-phpunit.xml --coverage --min=80 --coverage-clover=/home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/api-exact-coverage.xml",
+      "log": "logs/exact-api-coverage-current.log",
+      "exit": 0,
+      "tests": 40,
+      "assertions": 177,
+      "coverage": 96.9,
+      "floor": 80
+    },
+    {
+      "id": "tenancy-full",
+      "cwd": "packages/tenancy",
+      "command": "php ../../vendor/bin/pest --test-directory=packages/tenancy/tests -c .qualification-phpunit.xml",
+      "log": "logs/exact-tenancy-tests.log",
+      "exit": 0,
+      "tests": 417,
+      "assertions": 1095,
+      "note": "Executed with mutation-profile source loader still active, after all source patches restored. Source is byte-identical to delivered ZIP src members; exact runtime vendor tree hashes were subsequently sealed. Production source loader restored and its vendor reflection path verified. No tenancy coverage floor exists in the owning package scripts."
+    },
+    {
+      "id": "root-phpstan",
+      "cwd": ".",
+      "command": "php vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
+      "log": "logs/exact-root-analysis.log",
+      "exit": 0,
+      "errors": 0
+    },
+    {
+      "id": "crm-phpstan",
+      "cwd": "packages/crm",
+      "command": "php ../../vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
+      "log": "logs/exact-crm-analysis.log",
+      "exit": 0,
+      "errors": 0
+    },
+    {
+      "id": "tenancy-phpstan",
+      "cwd": "packages/tenancy",
+      "command": "php ../../vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G --no-progress",
+      "log": "logs/exact-tenancy-analysis.log",
+      "exit": 0,
+      "errors": 0,
+      "note": "Herd PHP warns that optional PHPStan turbo extension cannot load; analysis itself completed with zero errors."
+    },
+    {
+      "id": "tests-lint",
+      "cwd": ".",
+      "command": "php vendor/bin/phpstan analyse -c .qualification-tests-lint.neon --memory-limit=1G --no-progress",
+      "log": "logs/exact-tests-lint-current.log",
+      "exit": 0,
+      "errors": 0,
+      "note": "Only the inherited rules-test Auth autoload bootstrap path was relocated to an existing read-only local vendor. No Auth source, credentials, production dependency, test exclusions or ignore counts changed."
+    },
+    {
+      "id": "pint",
+      "cwd": ".",
+      "command": "php vendor/bin/pint --test",
+      "log": "logs/exact-pint-final.log",
+      "exit": 0
+    },
+    {
+      "id": "architecture-layer",
+      "cwd": ".",
+      "command": "php vendor/bin/pest -c .qualification-phpunit.xml --testsuite=Arch",
+      "log": "logs/exact-architecture.log",
+      "exit": 0,
+      "tests": 6,
+      "assertions": 6
+    },
+    {
+      "id": "contract-guard",
+      "cwd": ".",
+      "command": "bash scripts/contract-guard.sh ea5f01dd81c03b238bcb15c24036862adc756eb9",
+      "log": "logs/exact-contract-guard.log",
+      "exit": 0,
+      "note": "No src/Contracts changes; guard remains the existing pre-1.0 proxy, not a claim of complete public API BC analysis."
+    },
+    {
+      "id": "anti-weakening",
+      "cwd": ".",
+      "command": "bash scripts/anti-weakening-gate.sh 2dc5fb1fa1fed9ed2059ed6505806bece2e3ceb8",
+      "log": "logs/exact-anti-weakening.log",
+      "exit": 0,
+      "note": "Existing inactive historical allowance stays inactive; static source counts sqlite 237→290, pg 408→438 are not executed-test totals."
+    },
+    {
+      "id": "registered-mutation-check",
+      "cwd": ".",
+      "command": "bash scripts/mutation-check.sh --all",
+      "log": "logs/exact-mutation.log",
+      "exit": 0,
+      "killed": 34,
+      "registered": 34,
+      "note": "Before this run prepare-quality.py --mutation-source asserted every delivered ZIP src member equals committed source and routed only the qualification loader there. The existing runner verifies restoration per patch. Intentional mutant RED output is success for this unchanged registered gate, not a baseline failure or an Infection MSI claim."
+    },
+    {
+      "id": "installed-laravel13",
+      "cwd": ".",
+      "command": "python3 delivery/crm-install-qualification-20260915/qualify.py --ref cb79f18095589124759fdd1107144764bb31d094 --out delivery/crm-install-qualification-20260915/installed --prefix corex_crm_q15final --laravel '13.*'",
+      "log": "logs/installed-final.log",
+      "exit": 0,
+      "evidence": "installed/evidence.json",
+      "note": "2 independent consumers, fresh no-dev/no-scripts vendor, 45 exchanges each, 12-table parity for both account DB per consumer, installed boxed negative probe."
+    },
+    {
+      "id": "installed-laravel12",
+      "cwd": ".",
+      "command": "python3 delivery/crm-install-qualification-20260915/qualify.py --ref cb79f18095589124759fdd1107144764bb31d094 --out delivery/crm-install-qualification-20260915/installed-laravel12 --prefix corex_crm_q15l12 --laravel '12.*'",
+      "log": "logs/installed-laravel12.log",
+      "exit": 0,
+      "evidence": "installed-laravel12/evidence.json",
+      "note": "Same 7 local package ZIP hashes as Laravel13, independent exact Laravel12 runtime lock, 2 consumers with the same qualification cases."
+    }
+  ],
+  "current_reproductions_before_remedy": [
+    {
+      "log": "logs/baseline-lifecycle.log",
+      "selector": "packages/modules/tests/Feature/LifecycleRemediationTest.php",
+      "source_ref": "ea5f01dd81c03b238bcb15c24036862adc756eb9",
+      "result": "4 failures / 19 assertions; graph serialization, flag timing/rollback, activation gate, migration-listener preservation",
+      "classification": "Current initial baseline reproduced; older owning report failures are historical, not reused as this execution."
+    },
+    {
+      "log": "logs/baseline-core-delivery.log",
+      "selector": "packages/core/tests/Feature/DeliveryRemediationTest.php",
+      "result": "2 pass / 7 assertions on initial dirty remedies; existing work credited and committed"
+    },
+    {
+      "log": "logs/baseline-extension-isolation.log",
+      "selector": "packages/modules/tests/Unit/ExtensionRemediationTest.php + packages/core/tests/Feature/PublishIsolationTest.php",
+      "result": "6 pass / 34 assertions; no redundant generic implementation"
+    },
+    {
+      "log": "logs/clean-root-coverage.log",
+      "result": "Current clean randomized root run reproduced 5 audit-test morph-registration failures; test fixtures now use EntityRegistry/enforced map, runtime morph enforcement unchanged."
+    },
+    {
+      "log": "logs/clean-tenancy-tests.log",
+      "result": "Current full suite: 415 pass, 1 arch detector fail on literal-model table references. Generic PSR-4/literal-table resolver added to static gate; no eval, no CRM exception, unresolved/root FK still denied."
+    }
+  ],
+  "exploration": "Other first/second/third/r1-r9, format, clean-* and non-current exact logs record bounded RED→GREEN development and harness/transport corrections. They are not additional final accepted gate runs. In particular proposed remote mirrors returned 404; local sealed archives, not remote mirror availability, are qualified. Coverage against unexecuted source copies and missing package Pest.php were harness failures, not ignored delivered-code regressions."
+}

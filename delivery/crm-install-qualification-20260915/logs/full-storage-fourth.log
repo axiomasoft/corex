@@ -1,0 +1,36 @@
+
+  [90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[31;1m⨯[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\FullStorageParityTest[22m [90m>[39m it matches every actual enabled…    
+[39;1m  crm_lost_reasons
+Failed asserting that two arrays are identical.
+  [39;22m[32m     'constraints' => Array &11 [[39m[39;1m
+  [39;22m[32m         0 => Array &12 [[39m[39;1m
+  [39;22m[32m             'type' => 'c',[39m[39;1m
+  [39;22m[31m-            'definition' => 'CHECK (((entity_type)::text = ANY ((ARRAY['lead'::character varying, 'deal'::character varying, 'both'::character varying])::text[])))',[39m[39;1m
+  [39;22m[32m+            'definition' => 'CHECK (((entity_type)::text = ANY (ARRAY[('lead'::character varying)::text, ('deal'::character varying)::text, ('both'::character varying)::text])))',[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         1 => Array &13 [[39m[39;1m
+  [39;22m[32m             'type' => 'f',[39m[39;1m
+  [39;22m
+
+  at [32mpackages/crm/tests/Pg/FullStorageParityTest.php[39m:[32m30[39m
+     26▕         $expected = StorageCatalogue::read(DB::connection(), 'crm_reference_test');
+     27▕         $actual = StorageCatalogue::read(DB::connection(), 'public');
+     28▕         expect(array_keys($actual))->toBe(array_keys($expected));
+     29▕         foreach ($expected as $table => $catalogue) {
+  ➜  30▕             expect($actual[$table])->toBe($catalogue, $table);
+     31▕         }
+     32▕         DB::statement('DROP SCHEMA crm_reference_test CASCADE');
+     33▕     });
+     34▕ });
+
+  [33m1   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m30[39;22m
+      [2m+3 vendor frames [22m
+  [33m5   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m22[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m1.29s[39m
+  [90mRandom Order Seed:[39m [39m1789420148[39m
+

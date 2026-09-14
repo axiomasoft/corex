@@ -1,0 +1,154 @@
+# Второй, САМОСТОЯТЕЛЬНЫЙ PHPStan-прогон: 9 правил `corex/modules-lint`
+# (transaction-pooling дисциплина, P1.13) на каталоге `tests/` — item P1.28, D48.
+#
+# ПОЧЕМУ ОТДЕЛЬНЫЙ КОНФИГ, а не `paths += tests` в корневом `phpstan.neon`:
+# корневой прогон включает `larastan/extension.neon` на `level: 6`, а Pest-идиома
+# (`$this`-биндинг в `it()`/`beforeEach()`) даёт под Larastan 60 несвязанных
+# `property.notFound` — они сорвали P1.14 (D48). Здесь Larastan НЕ подключается:
+# mixin-резолюция Pest не участвует, шум исчезает вместе с ней, а 9 правил
+# работают ТЕМИ ЖЕ — они читают AST и строки-константы, а не типы.
+# `includes:` умышленно НЕ ссылается на `phpstan.neon` — иначе Larastan вернулся бы
+# транзитивно.
+#
+# ПОЧЕМУ `level: 0` (эмпирически, первый прогон 2026-07-28 — Implementation Rules P1.28).
+# Замер без `excludePaths`/`ignoreErrors` (всего / из них находки правил / посторонние):
+#   level 0 → 23 / 23 / 0
+#   level 1 → 98 /  9 / 89   (`method.notFound`/`staticMethod.notFound`/`property.notFound` —
+#   level 2 → 103 / 9 / 94    без Larastan фасады и Eloquent не резолвятся)
+# С level ≥ 1 PHPStan обрывает анализ выражения на первой ошибке, и до правил доходит
+# ВТРОЕ меньше вызовов: подъём уровня здесь ОСЛАБЛЯЕТ гейт, а не усиливает.
+
+includes:
+    - packages/modules/extension.neon
+
+parameters:
+    tmpDir: build/phpstan-tests-lint
+
+    paths:
+        - tests
+        - packages/api/tests
+        - packages/auth/tests
+        - packages/crm/tests
+        - packages/tasks/tests
+        - packages/tenancy/tests
+
+    scanDirectories:
+        - packages/auth/src
+        - packages/auth/database/seeders
+        - packages/crm/src
+        - packages/tasks/src
+        - packages/tenancy/src
+
+    bootstrapFiles:
+        # Auth remains intentionally absent from the root dependency graph:
+        # its private AzGuard dependency is available only in this package's
+        # own test environment. Loading that installed package autoloader lets
+        # this rules-only pass parse the auth suite without adding Larastan.
+        - packages/auth/vendor/autoload.php
+
+    level: 0
+
+    excludePaths:
+        analyse:
+            # Негативные фикстуры самих правил: это ВХОДНЫЕ ДАННЫЕ `RuleTestCase`
+            # (`tests/PHPStan/ModuleBoundaryRulesTest.php`, `TransactionPoolingRulesTest.php`),
+            # а не код проекта. Каждый файл — нарушение ПО ЗАМЫСЛУ (иначе правило
+            # не пинилось бы). Анализировать их этим же прогоном — категориальная
+            # ошибка: 7 гарантированно-красных строк, ничего не измеряющих.
+            - tests/PHPStan/data
+
+    ignoreErrors:
+        # ────────────────────────────────────────────────────────────────────────
+        # Первый прогон (2026-07-28) дал 16 находок в 5 файлах. Каждая прочитана
+        # построчно: все — НАМЕРЕННЫЙ обход контракта, и обход и есть предмет теста.
+        # Это НЕ baseline (скрытый долг, который «когда-нибудь починим») — это
+        # доменная граница: правила писаны для РАНТАЙМ-КОДА МОДУЛЯ, а корневой
+        # `tests/` — харнесс САМОГО ядра. Тот же структурный слепок, что P1.14 уже
+        # признал для миграций (`NoDirectSystemTableWriteRule::isMigrationFile()`):
+        # владелец таблицы без неймспейса правилу неотличим от чужого модуля.
+        #
+        # `count` точный + `reportUnmatchedIgnoredErrors` (дефолт `true`) ⇒ гейт
+        # краснеет в ОБЕ стороны: новая находка в этих файлах не пролезет, исчезнувшая
+        # заставит обновить конфиг. Правила остаются вооружёнными на всём остальном
+        # `tests/` — новый файл с `SET`/`LISTEN`/temp-table/`PREPARE`/`eval`/записью
+        # в `sys_*`/`mod_*` красит прогон.
+
+        # --- corexModules.directSystemTableWrite (13) -------------------------
+        # Прямая запись в `sys_*`/`mod_*` в arrange/assert: через контракт владельца
+        # эти тесты недостижимы по построению.
+        -
+            # Дубль `is_primary` — предмет теста partial-unique в БД (AC-24d);
+            # плюс arrange для subtree()/primaryOf()/soft-delete (AC-24e/AC-24).
+            identifier: corexModules.directSystemTableWrite
+            path: tests/Feature/DepartmentTest.php
+            count: 4
+        -
+            # Регрессия расширенного CHECK `actor_type` (D138): строка обязана
+            # писаться СЫРЬЁМ, иначе контракт подставит своё значение и CHECK
+            # не будет тем, что под тестом.
+            identifier: corexModules.directSystemTableWrite
+            path: tests/Feature/ImpersonatedActorTest.php
+            count: 4
+        -
+            # Две append-only строки в заданном порядке — предмет теста монотонность
+            # курсора `seq` (D42), независимая от `id`/`occurred_at`.
+            identifier: corexModules.directSystemTableWrite
+            path: tests/Feature/MigrationPublishTest.php
+            count: 1
+        -
+            # (1) детерминизация `created_at` для патча-саботажа purge-порядка
+            # (без неё мутант выживает); (2) посев `mod_modules` для регрессии
+            # container-биндинга `ModuleStateReader` (D63/D65) — контракт писал бы
+            # в дефолтный коннекшен, т.е. мимо предмета теста.
+            identifier: corexModules.directSystemTableWrite
+            path: tests/Feature/ModuleLifecycleTest.php
+            count: 2
+        -
+            # Дубль account-строки СЫРЫМ insert'ом: репозиторий ходит через
+            # `updateOrCreate()` и второй INSERT не эмитит никогда — через него
+            # констрейнт `UNIQUE NULLS NOT DISTINCT` недостижим (A57/A63).
+            identifier: corexModules.directSystemTableWrite
+            path: tests/Feature/SettingsTest.php
+            count: 2
+
+        # --- package-suite fixtures (P1.1) ------------------------------------
+        # ScopeResolver's raw rows establish the ltree department hierarchy
+        # consumed by the resolver under test; the owning contract cannot
+        # create this deliberately malformed/cross-branch fixture.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/auth/tests/Pg/ScopeResolverTest.php
+            count: 1
+        # AccessChecker uses the same real core ltree department fixture to
+        # prove its public record path, then removes its table for the
+        # fail-closed path; sibling/NULL/non-user cases deny.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/auth/tests/Pg/AccessCheckerTest.php
+            count: 2
+        # WorkspaceResolver verifies the tenancy/auth boundary with raw core
+        # department membership rows. Keep the exception exact: any additional
+        # write, or either removed fixture write, fails this standalone pass.
+        -
+            identifier: corexModules.directSystemTableWrite
+            path: packages/tenancy/tests/Feature/WorkspaceResolverTest.php
+            count: 2
+
+        # --- corexModules.setWithoutLocal (3) ---------------------------------
+        # Единственный санкционированный session-level `SET` в харнессе —
+        # `set lock_timeout` на ОТДЕЛЬНОМ пробном коннекшене: он обязан пережить
+        # оператор и подействовать на СЛЕДУЮЩИЙ вызов (`move()`/`enable()`),
+        # который открывает собственную транзакцию. `SET LOCAL` здесь не просто
+        # эквивалент — он сделал бы доказательство взятия advisory-lock пустым.
+        # Привязка — ТОЛЬКО по файлу и точному счёту: сообщение правила не несёт
+        # самого SQL, отличить `SET lock_timeout` от `SET search_path` регексом
+        # нечем. Поэтому граница держится счётом: ЧЕТВЁРТЫЙ session-level `SET`
+        # в этих двух файлах (как и первый в любом другом) красит прогон.
+        -
+            identifier: corexModules.setWithoutLocal
+            path: tests/Feature/DepartmentTest.php
+            count: 1
+        -
+            identifier: corexModules.setWithoutLocal
+            path: tests/Feature/ModuleLifecycleTest.php
+            count: 2

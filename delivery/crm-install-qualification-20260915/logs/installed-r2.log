@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/qualify.py", line 104, in <module>
+    raise RuntimeError('Installed probe failed: ' + str(consumer / 'probe.log'))
+RuntimeError: Installed probe failed: /tmp/corex-crm-qualified-l1hCwq/installed-r2/consumer-a/probe.log

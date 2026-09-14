@@ -1,0 +1,19 @@
+{
+    "status": 403,
+    "boxed": true,
+    "table_count": 0,
+    "manager": "CoreX\\Tenancy\\NullTenancyManager",
+    "resolver": "CoreX\\Tenancy\\SingleAccountResolver",
+    "response": {
+        "data": null,
+        "error": {
+            "code": "context_required",
+            "message": "An initialized physical account context is required.",
+            "details": {}
+        },
+        "meta": {
+            "request_id": "d2694786-63e1-4d93-8411-6518b1ada6c8",
+            "api_version": "v1"
+        }
+    }
+}

@@ -1,0 +1,61 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ModuleLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit discovers CRM composer metadata and manages its schema through t[39m[90m…[39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ConversionConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serializes concurrent conversion and returns the committed resul[39m[90m…[39m [90m0.55s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\UpgradeSafetyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit checks prerequisite ownership before any destructive schema oper[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses automatic legacy backfill before altering any CRM data[39m[90m   [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ParityContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps committed data when a synchronous after-commit listener fa[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects forged actors and mismatched account connections[39m[90m         [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit separates NULL account data current workspace and foreign worksp[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces pair and primary constraints for direct database writer[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit preserves pivot on soft delete and applies hard delete SET NULL[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with (['a@e[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['in[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['65[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([[''][39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit serializes competing primary actions and rejects the loser after[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid dates and field widths[39m[90m                           [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects foreign or inactive source and owner references[39m[90m          [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dispatches mutation events only after the successful outer commi[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails closed for missing context and revoked membership on reads[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects associations between NULL and workspace even with accoun[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches approved PostgreSQL fields lengths defaults indexes and[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit uses deterministic channel fallback and nullable whitespace comp[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit roundtrips all approved company and contact values and search[39m[90m    [39m [90m0.49s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\FullStorageParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit matches every actual enabled column constraint and index against[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ActivityIdTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit widens a legacy activity morph column before a UUID insert[39m[90m       [39m [90m0.06s[39m  
+
+  [90mTests:[39m    [32;1m44 passed[39;22m[90m (263 assertions)[39m
+  [90mDuration:[39m [39m16.17s[39m
+  [90mRandom Order Seed:[39m [39m1789420664[39m
+

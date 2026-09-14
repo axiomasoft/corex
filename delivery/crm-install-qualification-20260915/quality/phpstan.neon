@@ -1,0 +1,23 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - packages/modules/extension.neon
+    - packages/tenancy/extension.neon
+
+parameters:
+    tmpDir: build/phpstan
+
+    paths:
+        - packages/api/src
+        - packages/core/src
+        - packages/crm/src
+        - packages/tasks/src
+        - packages/modules/src
+        - packages/tenancy/src
+        - packages/core/database/migrations
+        - packages/modules/database/migrations
+        - packages/tenancy/database/migrations
+
+    level: 6
+
+    checkModelProperties: true
+    checkPhpDocMissingReturn: true

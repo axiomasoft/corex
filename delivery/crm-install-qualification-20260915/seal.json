@@ -1,0 +1,1353 @@
+{
+  "authority": {
+    "/home/vostrikov/projects/flexcrm/plans/FLEX-2/brief/crm-install-schema.md": "a65ed02ba8468a4cc90e7e8e54e6be0d0f72a5c1f06cb012030cb7de2b6615a5",
+    "/home/vostrikov/projects/flexcrm/plans/FLEX-2/schema/DATABASE_SCHEMA.md": "1ef24ff57f3480829499ab621a9499adc9a96cbc5f618555d977a6f9f625e98f",
+    "/home/vostrikov/projects/flexcrm/plans/FLEX-2/schema/approval.md": "9ef95fec6ed4f97c1e3fff7523bbbe926827401d3211fdffb7eae5358e5a2fb9"
+  },
+  "baseline_ref": "ea5f01dd81c03b238bcb15c24036862adc756eb9",
+  "exact_quality_runtime": {
+    "axiomasoft/stancl-jobpipeline": {
+      "dist": {
+        "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
+        "shasum": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/jobpipeline-candidate.zip"
+      },
+      "installed_tree_sha256": "5ed2e7bf4cd4cea8e9720602a1077536c30daa0808ae51a3934fad4016d08f54",
+      "source": {
+        "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
+        "type": "git",
+        "url": "https://github.com/axiomasoft/stancl-jobpipeline.git"
+      },
+      "version": "2.0.0-alpha1"
+    },
+    "axiomasoft/stancl-tenancy": {
+      "dist": {
+        "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
+        "shasum": "ef69374969eef0a39a7df24538b07b4805ba0156",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/tenancy-candidate.zip"
+      },
+      "installed_tree_sha256": "f5cfa65ecf4f5a3de90878845a339d63751383dbcd248195bf8903a12221104b",
+      "source": {
+        "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
+        "type": "git",
+        "url": "https://github.com/axiomasoft/stancl-tenancy.git"
+      },
+      "version": "4.0.0-alpha1"
+    },
+    "brick/math": {
+      "dist": {
+        "reference": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/brick/math/zipball/63422359a44b7f06cae63c3b429b59e8efcc0629"
+      },
+      "installed_tree_sha256": "be14c99309a6a3a6b819fdf56daef30938396029a5c1a54faad5086ab83cde08",
+      "source": {
+        "reference": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+        "type": "git",
+        "url": "https://github.com/brick/math.git"
+      },
+      "version": "0.14.8"
+    },
+    "brick/money": {
+      "dist": {
+        "reference": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/brick/money/zipball/b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3"
+      },
+      "installed_tree_sha256": "ea0ab58281233903999a51abe0da204c919925e67ed09f5fea9a226e511cbba1",
+      "source": {
+        "reference": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3",
+        "type": "git",
+        "url": "https://github.com/brick/money.git"
+      },
+      "version": "0.10.3"
+    },
+    "carbonphp/carbon-doctrine-types": {
+      "dist": {
+        "reference": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc"
+      },
+      "installed_tree_sha256": "983f0072a130ddaadd63c4dbcdfcd2bc4b9212862c11d22f95b591bec0a76161",
+      "source": {
+        "reference": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+        "type": "git",
+        "url": "https://github.com/CarbonPHP/carbon-doctrine-types.git"
+      },
+      "version": "3.2.1"
+    },
+    "corex/api": {
+      "dist": {
+        "reference": "cb79f18095589124759fdd1107144764bb31d094",
+        "shasum": "6105f2c1eb47c0d96a898c6a11a9309fbe009748",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/corex-api.zip"
+      },
+      "installed_tree_sha256": "a2e0e832c6e9c87e8830e9d7ece016690a38af5b1320e07654840565725a2ebe",
+      "source": null,
+      "version": "0.3.0-alpha.20260915"
+    },
+    "corex/core": {
+      "dist": {
+        "reference": "cb79f18095589124759fdd1107144764bb31d094",
+        "shasum": "2df40f5b8f07b7f296bc28f8d7120c09e6d37e93",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/corex-core.zip"
+      },
+      "installed_tree_sha256": "5570750737260009c3c790f13704b2e173453b015fe43908d3fdbbba2270420e",
+      "source": null,
+      "version": "0.3.0-alpha.20260915"
+    },
+    "corex/modules": {
+      "dist": {
+        "reference": "cb79f18095589124759fdd1107144764bb31d094",
+        "shasum": "f972728c97afc231e1e37b3af3136e02251d2141",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/corex-modules.zip"
+      },
+      "installed_tree_sha256": "b13ce2b03f770181711d9d8556732f3fe309d1b79e7ee42038fb683cbfda9961",
+      "source": null,
+      "version": "0.3.0-alpha.20260915"
+    },
+    "corex/tenancy": {
+      "dist": {
+        "reference": "cb79f18095589124759fdd1107144764bb31d094",
+        "shasum": "d1853c77dcf601f382054006d6874100ce960a96",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/corex-tenancy.zip"
+      },
+      "installed_tree_sha256": "abc1db39abb774fd27fc1104a7e92f316e230d6aed51f514fa2076b107de1690",
+      "source": null,
+      "version": "0.3.0-alpha.20260915"
+    },
+    "dflydev/dot-access-data": {
+      "dist": {
+        "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/a23a2bf4f31d3518f3ecb38660c95715dfead60f"
+      },
+      "installed_tree_sha256": "9159a33e32d382d8ff4cd016b885e65a62298e369ff0f29892e7c29f7e5c28af",
+      "source": {
+        "reference": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+        "type": "git",
+        "url": "https://github.com/dflydev/dflydev-dot-access-data.git"
+      },
+      "version": "v3.0.3"
+    },
+    "doctrine/inflector": {
+      "dist": {
+        "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/doctrine/inflector/zipball/6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+      },
+      "installed_tree_sha256": "76b73072298231805d61c30375844cec1ee041855bd7e1095794d9f7b366845d",
+      "source": {
+        "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+        "type": "git",
+        "url": "https://github.com/doctrine/inflector.git"
+      },
+      "version": "2.1.0"
+    },
+    "doctrine/lexer": {
+      "dist": {
+        "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/doctrine/lexer/zipball/31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+      },
+      "installed_tree_sha256": "51c27093725c10d1949e49a515716f433a8e500b9f09339e021515d07fa01644",
+      "source": {
+        "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+        "type": "git",
+        "url": "https://github.com/doctrine/lexer.git"
+      },
+      "version": "3.0.1"
+    },
+    "dragonmantank/cron-expression": {
+      "dist": {
+        "reference": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/d61a8a9604ec1f8c3d150d09db6ce98b32675013"
+      },
+      "installed_tree_sha256": "c9fc80071c64db1236a6e22627f55dfb6ec4b32e1e796c1fcb09b7d98c063297",
+      "source": {
+        "reference": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+        "type": "git",
+        "url": "https://github.com/dragonmantank/cron-expression.git"
+      },
+      "version": "v3.6.0"
+    },
+    "egulias/email-validator": {
+      "dist": {
+        "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
+      },
+      "installed_tree_sha256": "875eb432b9350ebcc25720b6c5b6427f40360c5c810cbfe945de4e95739b53d2",
+      "source": {
+        "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+        "type": "git",
+        "url": "https://github.com/egulias/EmailValidator.git"
+      },
+      "version": "4.0.4"
+    },
+    "firebase/php-jwt": {
+      "dist": {
+        "reference": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a"
+      },
+      "installed_tree_sha256": "209e4f48a15c20f2ef847af56405102059568fed02366f88123897ed4cae475a",
+      "source": {
+        "reference": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a",
+        "type": "git",
+        "url": "https://github.com/googleapis/php-jwt.git"
+      },
+      "version": "v7.1.1"
+    },
+    "flex/crm": {
+      "dist": {
+        "reference": "cb79f18095589124759fdd1107144764bb31d094",
+        "shasum": "5f0a240238dca1a8e328bfb2a1de7968c9c88688",
+        "type": "zip",
+        "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed/artifacts/flex-crm.zip"
+      },
+      "installed_tree_sha256": "f7648e331a8cc3167130d9d3a820ad20a12073ac4d75aae371219fd19ee2aade",
+      "source": null,
+      "version": "0.3.0-alpha.20260915"
+    },
+    "fruitcake/php-cors": {
+      "dist": {
+        "reference": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/fruitcake/php-cors/zipball/38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379"
+      },
+      "installed_tree_sha256": "0ebea4208f17a401001d4756a14aa94fe9ef66ec146c50ac01fc9bab7ca5113e",
+      "source": {
+        "reference": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379",
+        "type": "git",
+        "url": "https://github.com/fruitcake/php-cors.git"
+      },
+      "version": "v1.4.0"
+    },
+    "giggsey/libphonenumber-for-php-lite": {
+      "dist": {
+        "reference": "35cd53ef595b709218756965a3fc22263ed9b24e",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/35cd53ef595b709218756965a3fc22263ed9b24e"
+      },
+      "installed_tree_sha256": "43347b5f45eaeac23daa3cd13f271a263728626f7405af7824f13beb324906bd",
+      "source": {
+        "reference": "35cd53ef595b709218756965a3fc22263ed9b24e",
+        "type": "git",
+        "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git"
+      },
+      "version": "9.0.39"
+    },
+    "graham-campbell/result-type": {
+      "dist": {
+        "reference": "adccca3324eece92ca35463648c12b9e6293c05b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/adccca3324eece92ca35463648c12b9e6293c05b"
+      },
+      "installed_tree_sha256": "2fa7f406233b187d7a3814a754712c5d5ece5b613ad1564f85c39f4f0377fcb6",
+      "source": {
+        "reference": "adccca3324eece92ca35463648c12b9e6293c05b",
+        "type": "git",
+        "url": "https://github.com/GrahamCampbell/Result-Type.git"
+      },
+      "version": "v1.2.0"
+    },
+    "guzzlehttp/guzzle": {
+      "dist": {
+        "reference": "93939470950a9b11e2e84204166ef5e048c55fe4",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/guzzle/guzzle/zipball/93939470950a9b11e2e84204166ef5e048c55fe4"
+      },
+      "installed_tree_sha256": "636d0087333f29d8b509eb60fac96b70a8863d3c9b0ed24398264471de210629",
+      "source": {
+        "reference": "93939470950a9b11e2e84204166ef5e048c55fe4",
+        "type": "git",
+        "url": "https://github.com/guzzle/guzzle.git"
+      },
+      "version": "8.2.0"
+    },
+    "guzzlehttp/promises": {
+      "dist": {
+        "reference": "42118e66a53c492effaf92bc357e931985d5c6f9",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/guzzle/promises/zipball/42118e66a53c492effaf92bc357e931985d5c6f9"
+      },
+      "installed_tree_sha256": "3c13fcfdf79a41fa9d90ef6966a9659626ebb8e7254a03e75f334d1383f5b21c",
+      "source": {
+        "reference": "42118e66a53c492effaf92bc357e931985d5c6f9",
+        "type": "git",
+        "url": "https://github.com/guzzle/promises.git"
+      },
+      "version": "3.0.2"
+    },
+    "guzzlehttp/psr7": {
+      "dist": {
+        "reference": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/guzzle/psr7/zipball/a3059ba1a84c9139c4ae03cf0f45bea276c97c74"
+      },
+      "installed_tree_sha256": "6e021d005b77debf6c22ccbb64429bb2dae8f0ed85102925fbf81dda14c0c104",
+      "source": {
+        "reference": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74",
+        "type": "git",
+        "url": "https://github.com/guzzle/psr7.git"
+      },
+      "version": "3.1.0"
+    },
+    "guzzlehttp/uri-template": {
+      "dist": {
+        "reference": "7a466ad606491eb6528c717482f7cca77f1851f3",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/guzzle/uri-template/zipball/7a466ad606491eb6528c717482f7cca77f1851f3"
+      },
+      "installed_tree_sha256": "7410e5bd1325a727dacaacdf7749e26cfa95cb9208fd6912819ba1fccc664393",
+      "source": {
+        "reference": "7a466ad606491eb6528c717482f7cca77f1851f3",
+        "type": "git",
+        "url": "https://github.com/guzzle/uri-template.git"
+      },
+      "version": "v2.0.1"
+    },
+    "laravel/framework": {
+      "dist": {
+        "reference": "7c75fbf93f91fa077d3df1c820cc14f4e59a9774",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/laravel/framework/zipball/7c75fbf93f91fa077d3df1c820cc14f4e59a9774"
+      },
+      "installed_tree_sha256": "03a4614b8f2653e0fd477428e3f3a5ea6f7f71ca3e493c2106dda2a5cfe098c6",
+      "source": {
+        "reference": "7c75fbf93f91fa077d3df1c820cc14f4e59a9774",
+        "type": "git",
+        "url": "https://github.com/laravel/framework.git"
+      },
+      "version": "v13.31.0"
+    },
+    "laravel/prompts": {
+      "dist": {
+        "reference": "5d3cdef29e93ca3b62b1871359db3078cd99908b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/laravel/prompts/zipball/5d3cdef29e93ca3b62b1871359db3078cd99908b"
+      },
+      "installed_tree_sha256": "350107f5d9754d26ecc6df282be61df73a7c9117e325a875e848f68703cad583",
+      "source": {
+        "reference": "5d3cdef29e93ca3b62b1871359db3078cd99908b",
+        "type": "git",
+        "url": "https://github.com/laravel/prompts.git"
+      },
+      "version": "v0.3.24"
+    },
+    "laravel/serializable-closure": {
+      "dist": {
+        "reference": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed"
+      },
+      "installed_tree_sha256": "b086d2e5c69110c20a7b9f290a2def5c2690752d2404aea053712e9b21f9d2d2",
+      "source": {
+        "reference": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed",
+        "type": "git",
+        "url": "https://github.com/laravel/serializable-closure.git"
+      },
+      "version": "v2.0.16"
+    },
+    "laravel/tinker": {
+      "dist": {
+        "reference": "4faba77764bd33411735936acdf30446d058c78b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/laravel/tinker/zipball/4faba77764bd33411735936acdf30446d058c78b"
+      },
+      "installed_tree_sha256": "fdb21d6bdeb8538f411500ad09fba40d0a96aeb07e4fbced0bf5003a0dc860d1",
+      "source": {
+        "reference": "4faba77764bd33411735936acdf30446d058c78b",
+        "type": "git",
+        "url": "https://github.com/laravel/tinker.git"
+      },
+      "version": "v3.0.2"
+    },
+    "league/commonmark": {
+      "dist": {
+        "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/9d489ab67a02960fd8ffe624d93f751daf95439e"
+      },
+      "installed_tree_sha256": "a84fd10568521e8cfde803b06ebe8876269c703b1ca703a0dede8c276e44683f",
+      "source": {
+        "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+        "type": "git",
+        "url": "https://github.com/thephpleague/commonmark.git"
+      },
+      "version": "2.10.1"
+    },
+    "league/config": {
+      "dist": {
+        "reference": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/config/zipball/754b3604fb2984c71f4af4a9cbe7b57f346ec1f3"
+      },
+      "installed_tree_sha256": "582a1329afeaf9e8a9bfec73b6ce1699796c7a7312b5a73426e692ed7cd472ee",
+      "source": {
+        "reference": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3",
+        "type": "git",
+        "url": "https://github.com/thephpleague/config.git"
+      },
+      "version": "v1.2.0"
+    },
+    "league/flysystem": {
+      "dist": {
+        "reference": "f7fb152932f30072d573510cbd4dd657d6475b25",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f7fb152932f30072d573510cbd4dd657d6475b25"
+      },
+      "installed_tree_sha256": "7d89cd282db633810cec226ce239f52dacf92e723cfa4735e4a8bf0a37ef27fe",
+      "source": {
+        "reference": "f7fb152932f30072d573510cbd4dd657d6475b25",
+        "type": "git",
+        "url": "https://github.com/thephpleague/flysystem.git"
+      },
+      "version": "3.36.0"
+    },
+    "league/flysystem-local": {
+      "dist": {
+        "reference": "a099b24dce160f3b2239043d13d47c4a1a214ea4",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/flysystem-local/zipball/a099b24dce160f3b2239043d13d47c4a1a214ea4"
+      },
+      "installed_tree_sha256": "cfb196f2082588d29b6db17d1edc7fb3c9d556f7a1476ad04944cf33497a6aaf",
+      "source": {
+        "reference": "a099b24dce160f3b2239043d13d47c4a1a214ea4",
+        "type": "git",
+        "url": "https://github.com/thephpleague/flysystem-local.git"
+      },
+      "version": "3.35.3"
+    },
+    "league/mime-type-detection": {
+      "dist": {
+        "reference": "f5f47eff7c48ed1003069a2ca67f316fb4021c76",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/f5f47eff7c48ed1003069a2ca67f316fb4021c76"
+      },
+      "installed_tree_sha256": "c39363186caa343a9bde226ae45e92b01aac99dd0df5e0ca76665c38a08d82b2",
+      "source": {
+        "reference": "f5f47eff7c48ed1003069a2ca67f316fb4021c76",
+        "type": "git",
+        "url": "https://github.com/thephpleague/mime-type-detection.git"
+      },
+      "version": "1.17.0"
+    },
+    "league/uri": {
+      "dist": {
+        "reference": "08cf38e3924d4f56238125547b5720496fac8fd4",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/uri/zipball/08cf38e3924d4f56238125547b5720496fac8fd4"
+      },
+      "installed_tree_sha256": "5bb047fe099d05afa94bd977ef379a56504c9d38d784d38534273598d85310a7",
+      "source": {
+        "reference": "08cf38e3924d4f56238125547b5720496fac8fd4",
+        "type": "git",
+        "url": "https://github.com/thephpleague/uri.git"
+      },
+      "version": "7.8.1"
+    },
+    "league/uri-interfaces": {
+      "dist": {
+        "reference": "85d5c77c5d6d3af6c54db4a78246364908f3c928",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/85d5c77c5d6d3af6c54db4a78246364908f3c928"
+      },
+      "installed_tree_sha256": "da48a96673d9c2d37bf5419f68f390c4d10f329bb5d31dcd93a69dc1c9c4bcd8",
+      "source": {
+        "reference": "85d5c77c5d6d3af6c54db4a78246364908f3c928",
+        "type": "git",
+        "url": "https://github.com/thephpleague/uri-interfaces.git"
+      },
+      "version": "7.8.1"
+    },
+    "monolog/monolog": {
+      "dist": {
+        "reference": "72c534fc0ab181ef52d92a68382318631e301608",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/Seldaek/monolog/zipball/72c534fc0ab181ef52d92a68382318631e301608"
+      },
+      "installed_tree_sha256": "d772367a8c424d9715dd0c35e8a8792ff3a4ce588ba28363c5b3ba60a01eb1c7",
+      "source": {
+        "reference": "72c534fc0ab181ef52d92a68382318631e301608",
+        "type": "git",
+        "url": "https://github.com/Seldaek/monolog.git"
+      },
+      "version": "3.12.0"
+    },
+    "nesbot/carbon": {
+      "dist": {
+        "reference": "0023eaa2c9110e47446dd512a263c69c40cd41f2",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/0023eaa2c9110e47446dd512a263c69c40cd41f2"
+      },
+      "installed_tree_sha256": "30ce54b9a5d8f901190bf13a59641ab8f0df1beef91d5bba655bb546b965eba5",
+      "source": {
+        "reference": "0023eaa2c9110e47446dd512a263c69c40cd41f2",
+        "type": "git",
+        "url": "https://github.com/CarbonPHP/carbon.git"
+      },
+      "version": "3.14.0"
+    },
+    "nette/schema": {
+      "dist": {
+        "reference": "c54350438cd6914616f790a49cb424605f421562",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/nette/schema/zipball/c54350438cd6914616f790a49cb424605f421562"
+      },
+      "installed_tree_sha256": "9d39b48d045709b06fc1bdcd12a5205b62219a33681eef5e8a484de26383239a",
+      "source": {
+        "reference": "c54350438cd6914616f790a49cb424605f421562",
+        "type": "git",
+        "url": "https://github.com/nette/schema.git"
+      },
+      "version": "v1.3.6"
+    },
+    "nette/utils": {
+      "dist": {
+        "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/nette/utils/zipball/b043439dbdf954e6c28b5ea7e34b0100f83165e0"
+      },
+      "installed_tree_sha256": "27fe7ffe275d4aa16a6d50fbe6fa5296a709d9b5ab91dc72a52990299778acba",
+      "source": {
+        "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+        "type": "git",
+        "url": "https://github.com/nette/utils.git"
+      },
+      "version": "v4.1.5"
+    },
+    "nikic/php-parser": {
+      "dist": {
+        "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9e33da9553fe7786f0962b35f4e4ecf01be89def"
+      },
+      "installed_tree_sha256": "e7f2218f413d583ac8afb2fd37627ed4fdec5294a6e1610a6b0b17b584eb7b93",
+      "source": {
+        "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
+        "type": "git",
+        "url": "https://github.com/nikic/PHP-Parser.git"
+      },
+      "version": "v5.9.0"
+    },
+    "nunomaduro/termwind": {
+      "dist": {
+        "reference": "712a31b768f5daea284c2169a7d227031001b9a8",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/712a31b768f5daea284c2169a7d227031001b9a8"
+      },
+      "installed_tree_sha256": "66608eafcd635d229496238cc1bd78aadff756c055d6cdeddcaf8f604d7938d9",
+      "source": {
+        "reference": "712a31b768f5daea284c2169a7d227031001b9a8",
+        "type": "git",
+        "url": "https://github.com/nunomaduro/termwind.git"
+      },
+      "version": "v2.4.0"
+    },
+    "phpoption/phpoption": {
+      "dist": {
+        "reference": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/67b192b6a42ec03944b972d6e633ddec78ad2c6d"
+      },
+      "installed_tree_sha256": "1a15ca31a43ee7f4c622e54e4e5b6857d557091621c2f7e47ac86b5e010fc6c3",
+      "source": {
+        "reference": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+        "type": "git",
+        "url": "https://github.com/schmittjoh/php-option.git"
+      },
+      "version": "1.10.0"
+    },
+    "psr/clock": {
+      "dist": {
+        "reference": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/clock/zipball/e41a24703d4560fd0acb709162f73b8adfc3aa0d"
+      },
+      "installed_tree_sha256": "a997eed3950e26c384b36cdfb6ff9907a2e6333450bf6a969e45f73cc2a5c2bb",
+      "source": {
+        "reference": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+        "type": "git",
+        "url": "https://github.com/php-fig/clock.git"
+      },
+      "version": "1.0.0"
+    },
+    "psr/container": {
+      "dist": {
+        "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/container/zipball/c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+      },
+      "installed_tree_sha256": "5e2a84cbf295cc0d49a4e3c4c103efc01cd535c5baf1ea8d89a7d4406b2554b7",
+      "source": {
+        "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+        "type": "git",
+        "url": "https://github.com/php-fig/container.git"
+      },
+      "version": "2.0.2"
+    },
+    "psr/event-dispatcher": {
+      "dist": {
+        "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0"
+      },
+      "installed_tree_sha256": "fd77b5ee72fc62eeb4240d87c9c0c30503fbd3fa35e09b1252fa0390209f9932",
+      "source": {
+        "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+        "type": "git",
+        "url": "https://github.com/php-fig/event-dispatcher.git"
+      },
+      "version": "1.0.0"
+    },
+    "psr/http-client": {
+      "dist": {
+        "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90"
+      },
+      "installed_tree_sha256": "7fc2a0542fccc8791cd6deb9279a141dc0cf932c7686b81213e4a0710941e25d",
+      "source": {
+        "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+        "type": "git",
+        "url": "https://github.com/php-fig/http-client.git"
+      },
+      "version": "1.0.3"
+    },
+    "psr/http-factory": {
+      "dist": {
+        "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/http-factory/zipball/2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
+      },
+      "installed_tree_sha256": "38b25316067acac0cbce4ee7a8bf0164191dd4b2e0d5431b217c6bd9a99699cf",
+      "source": {
+        "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+        "type": "git",
+        "url": "https://github.com/php-fig/http-factory.git"
+      },
+      "version": "1.1.0"
+    },
+    "psr/http-message": {
+      "dist": {
+        "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+      },
+      "installed_tree_sha256": "b1409554fe2d8daf3b3b5b1a100c466cdaaec0dc0c6adaa20c67f1a9c1ebbd28",
+      "source": {
+        "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+        "type": "git",
+        "url": "https://github.com/php-fig/http-message.git"
+      },
+      "version": "2.0"
+    },
+    "psr/log": {
+      "dist": {
+        "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+      },
+      "installed_tree_sha256": "b933809d2ca2735cac89fc5827378f0ec528f1248b75a58b0f0eadf8d7869454",
+      "source": {
+        "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+        "type": "git",
+        "url": "https://github.com/php-fig/log.git"
+      },
+      "version": "3.0.2"
+    },
+    "psr/simple-cache": {
+      "dist": {
+        "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865"
+      },
+      "installed_tree_sha256": "ee8008184c2fd5d7436f12fd649bd136e3c4de21af01fc671da1fb349bfbcb11",
+      "source": {
+        "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+        "type": "git",
+        "url": "https://github.com/php-fig/simple-cache.git"
+      },
+      "version": "3.0.0"
+    },
+    "psy/psysh": {
+      "dist": {
+        "reference": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/bobthecow/psysh/zipball/ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1"
+      },
+      "installed_tree_sha256": "b307bc49974788526ef8a50982b587c72dbd5327275e21b950e1a9785f16d315",
+      "source": {
+        "reference": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+        "type": "git",
+        "url": "https://github.com/bobthecow/psysh.git"
+      },
+      "version": "v0.12.24"
+    },
+    "ramsey/collection": {
+      "dist": {
+        "reference": "344572933ad0181accbf4ba763e85a0306a8c5e2",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/ramsey/collection/zipball/344572933ad0181accbf4ba763e85a0306a8c5e2"
+      },
+      "installed_tree_sha256": "7d0cb4951d66eda9cf5493c0fe64bab53927332dcc97294f50d137b99832d929",
+      "source": {
+        "reference": "344572933ad0181accbf4ba763e85a0306a8c5e2",
+        "type": "git",
+        "url": "https://github.com/ramsey/collection.git"
+      },
+      "version": "2.1.1"
+    },
+    "ramsey/uuid": {
+      "dist": {
+        "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/ramsey/uuid/zipball/1df15849d00943a67d677dc9cfd80795f038c9f8"
+      },
+      "installed_tree_sha256": "00e9c5d4bd2610149ada6ea2a1eceffc79a91793a10c38e36153363b29aadcd5",
+      "source": {
+        "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8",
+        "type": "git",
+        "url": "https://github.com/ramsey/uuid.git"
+      },
+      "version": "4.9.3"
+    },
+    "spatie/invade": {
+      "dist": {
+        "reference": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/spatie/invade/zipball/f929c7b6e75fceeefa7b41a491e91274bafb17af"
+      },
+      "installed_tree_sha256": "1262cdc1745e541e8286b1c1c6a838bfc6e9e75815734352f6db81c46f7fcc63",
+      "source": {
+        "reference": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
+        "type": "git",
+        "url": "https://github.com/spatie/invade.git"
+      },
+      "version": "2.1.1"
+    },
+    "stancl/virtualcolumn": {
+      "dist": {
+        "reference": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/archtechx/virtualcolumn/zipball/75718edcfeeb19abc1970f5395043f7d43cce5bc"
+      },
+      "installed_tree_sha256": "3e62f48b40874b5030253f63f0b7ba1bd80a887cfc24b1acce14fdc0c0967a1b",
+      "source": {
+        "reference": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
+        "type": "git",
+        "url": "https://github.com/archtechx/virtualcolumn.git"
+      },
+      "version": "v1.5.0"
+    },
+    "symfony/clock": {
+      "dist": {
+        "reference": "701ef4de9705d6c32292ebee5e8044094a09fbf6",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/clock/zipball/701ef4de9705d6c32292ebee5e8044094a09fbf6"
+      },
+      "installed_tree_sha256": "618269dad1abb958c6d925c1081c4c620b4fd3045bd3c2470ea9d209e807b746",
+      "source": {
+        "reference": "701ef4de9705d6c32292ebee5e8044094a09fbf6",
+        "type": "git",
+        "url": "https://github.com/symfony/clock.git"
+      },
+      "version": "v8.1.0"
+    },
+    "symfony/console": {
+      "dist": {
+        "reference": "eb7d9957d66739649e931ce7a9d05dab69f8abac",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/console/zipball/eb7d9957d66739649e931ce7a9d05dab69f8abac"
+      },
+      "installed_tree_sha256": "ef301df672caf9857b7aff03589326b5ff86e588793da1e433ef9725bdb0eb39",
+      "source": {
+        "reference": "eb7d9957d66739649e931ce7a9d05dab69f8abac",
+        "type": "git",
+        "url": "https://github.com/symfony/console.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/css-selector": {
+      "dist": {
+        "reference": "08e2905152a39cf3fd1745d83f8c483e258887d9",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/css-selector/zipball/08e2905152a39cf3fd1745d83f8c483e258887d9"
+      },
+      "installed_tree_sha256": "e1a5bc56d72868dbf24cf38c642248515ddec2479ecd844aff3c1a5a092bb091",
+      "source": {
+        "reference": "08e2905152a39cf3fd1745d83f8c483e258887d9",
+        "type": "git",
+        "url": "https://github.com/symfony/css-selector.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/deprecation-contracts": {
+      "dist": {
+        "reference": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/f3202fa1b5097b0af062dc978b32ecf63404e31d"
+      },
+      "installed_tree_sha256": "1f42e4364ed645b9bb2b2123a22a99c83dff1a7b8cd5fb74109764335b0cb79a",
+      "source": {
+        "reference": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+        "type": "git",
+        "url": "https://github.com/symfony/deprecation-contracts.git"
+      },
+      "version": "v3.7.1"
+    },
+    "symfony/error-handler": {
+      "dist": {
+        "reference": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/error-handler/zipball/8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce"
+      },
+      "installed_tree_sha256": "9f79838b87f5a7195e5c1d015a7566180988d09d09aa7e2ed8ed0ae6aa2a34f0",
+      "source": {
+        "reference": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce",
+        "type": "git",
+        "url": "https://github.com/symfony/error-handler.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/event-dispatcher": {
+      "dist": {
+        "reference": "7458da64220376b2e0dc2d8451bf43382c1ad297",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/7458da64220376b2e0dc2d8451bf43382c1ad297"
+      },
+      "installed_tree_sha256": "ec4c2a1ce053e711a428403285fb5d48c1283d8e45b2c1c44a2a8c5eaa88da02",
+      "source": {
+        "reference": "7458da64220376b2e0dc2d8451bf43382c1ad297",
+        "type": "git",
+        "url": "https://github.com/symfony/event-dispatcher.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/event-dispatcher-contracts": {
+      "dist": {
+        "reference": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/c7de7a00ffb67842132da02ea92988a39ccd9f4e"
+      },
+      "installed_tree_sha256": "3e8cf555278339c588844499b838661493b4170d34b66076d600983502804a2e",
+      "source": {
+        "reference": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+        "type": "git",
+        "url": "https://github.com/symfony/event-dispatcher-contracts.git"
+      },
+      "version": "v3.7.1"
+    },
+    "symfony/finder": {
+      "dist": {
+        "reference": "8d7acede2b2ae07605783d1c43e49b5767036474",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/finder/zipball/8d7acede2b2ae07605783d1c43e49b5767036474"
+      },
+      "installed_tree_sha256": "928462b32c6d4efca72829019dbbbd8541dbbc114402c5ad4d52e6b21fc4cbfd",
+      "source": {
+        "reference": "8d7acede2b2ae07605783d1c43e49b5767036474",
+        "type": "git",
+        "url": "https://github.com/symfony/finder.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/http-foundation": {
+      "dist": {
+        "reference": "093b78326f649c3a9db922b9f17123b6aeb3b8fb",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/http-foundation/zipball/093b78326f649c3a9db922b9f17123b6aeb3b8fb"
+      },
+      "installed_tree_sha256": "0766528f50182b848cc20c4cea1401d66a99e1ac731d98eedd420492a50f7b55",
+      "source": {
+        "reference": "093b78326f649c3a9db922b9f17123b6aeb3b8fb",
+        "type": "git",
+        "url": "https://github.com/symfony/http-foundation.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/http-kernel": {
+      "dist": {
+        "reference": "2f73beb7c6f1a97d2c17bbf4dbd59da8cc18b355",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/http-kernel/zipball/2f73beb7c6f1a97d2c17bbf4dbd59da8cc18b355"
+      },
+      "installed_tree_sha256": "a5f63ea1da46ef4a534ee77330d32f08acc8713d08734f6c75d30c1f1f3dba20",
+      "source": {
+        "reference": "2f73beb7c6f1a97d2c17bbf4dbd59da8cc18b355",
+        "type": "git",
+        "url": "https://github.com/symfony/http-kernel.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/mailer": {
+      "dist": {
+        "reference": "89f43137da74b8f1aab37c99926482b7084f51b9",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/mailer/zipball/89f43137da74b8f1aab37c99926482b7084f51b9"
+      },
+      "installed_tree_sha256": "dadb21ff55725538941adb0ca424dcda58c7139a21bd8d208ea9bd0a28cb4174",
+      "source": {
+        "reference": "89f43137da74b8f1aab37c99926482b7084f51b9",
+        "type": "git",
+        "url": "https://github.com/symfony/mailer.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/mime": {
+      "dist": {
+        "reference": "1b36ccfd7ccb9ad1d6eafb9024b3dd3d9606b15f",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/mime/zipball/1b36ccfd7ccb9ad1d6eafb9024b3dd3d9606b15f"
+      },
+      "installed_tree_sha256": "4f9b804a7d0d60531d9ebaa901884b9a6106647327265c80d9fc5f8c1a27b8ad",
+      "source": {
+        "reference": "1b36ccfd7ccb9ad1d6eafb9024b3dd3d9606b15f",
+        "type": "git",
+        "url": "https://github.com/symfony/mime.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/polyfill-ctype": {
+      "dist": {
+        "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2"
+      },
+      "installed_tree_sha256": "4e432c7ee9e1a7b49fa99595c65eceb2396e797f11fbabef035ee4a3c7e9c5e7",
+      "source": {
+        "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-ctype.git"
+      },
+      "version": "v1.37.0"
+    },
+    "symfony/polyfill-intl-grapheme": {
+      "dist": {
+        "reference": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/bb899c1db0aa8127dc3afe8cda4a67eb24915f8d"
+      },
+      "installed_tree_sha256": "5bf4fe56db30b0d634d05ecea2d818372ef2fce03e7dc27194a89b1ea48b4e50",
+      "source": {
+        "reference": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-intl-grapheme.git"
+      },
+      "version": "v1.41.0"
+    },
+    "symfony/polyfill-intl-idn": {
+      "dist": {
+        "reference": "51b5ff5ba85452b31ec6f55490b08148612339d9",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/51b5ff5ba85452b31ec6f55490b08148612339d9"
+      },
+      "installed_tree_sha256": "1751cac9e82a66705758ef91d9f56b0d6d7cc06f7cfc22a805cb1e79d8869643",
+      "source": {
+        "reference": "51b5ff5ba85452b31ec6f55490b08148612339d9",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-intl-idn.git"
+      },
+      "version": "v1.42.0"
+    },
+    "symfony/polyfill-intl-normalizer": {
+      "dist": {
+        "reference": "aa20edea75bd9c48cfecc8360922e5a6e5c44502",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/aa20edea75bd9c48cfecc8360922e5a6e5c44502"
+      },
+      "installed_tree_sha256": "3ccafd2fbe382d0e8437a9df022a4de121829025cd7d8b72e01fe0c3d10c7b89",
+      "source": {
+        "reference": "aa20edea75bd9c48cfecc8360922e5a6e5c44502",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-intl-normalizer.git"
+      },
+      "version": "v1.42.0"
+    },
+    "symfony/polyfill-mbstring": {
+      "dist": {
+        "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
+      },
+      "installed_tree_sha256": "d9f303b29cce1a3854751fd79cc4e582c9e6df2ec8dd93ff352bb8db34c10577",
+      "source": {
+        "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-mbstring.git"
+      },
+      "version": "v1.38.2"
+    },
+    "symfony/polyfill-php80": {
+      "dist": {
+        "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
+      },
+      "installed_tree_sha256": "6f6ed7759455c0161125c720633594aee92a50bac04bf41f2ca8e0e07f03d5d4",
+      "source": {
+        "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-php80.git"
+      },
+      "version": "v1.37.0"
+    },
+    "symfony/polyfill-php82": {
+      "dist": {
+        "reference": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-php82/zipball/002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b"
+      },
+      "installed_tree_sha256": "3503a444d41e55094842ba5b164747438cca02df052c208240a539aa6483e8a7",
+      "source": {
+        "reference": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-php82.git"
+      },
+      "version": "v1.38.1"
+    },
+    "symfony/polyfill-php84": {
+      "dist": {
+        "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
+      },
+      "installed_tree_sha256": "4637af64b66f8b2fa2a2b71b52096f79b909718bd01afb7f76c2932aa33e1c12",
+      "source": {
+        "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-php84.git"
+      },
+      "version": "v1.38.1"
+    },
+    "symfony/polyfill-php85": {
+      "dist": {
+        "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-php85/zipball/255fab485aaa1006ed411040c42aecd7b5302d7a"
+      },
+      "installed_tree_sha256": "0f61c2272dc8c16265b56724d7ba18bd288866ffb7666243482398f901ee9676",
+      "source": {
+        "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-php85.git"
+      },
+      "version": "v1.41.0"
+    },
+    "symfony/polyfill-php86": {
+      "dist": {
+        "reference": "6bc356ed3d8dbfeea8f0de235e34d670704e880e",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-php86/zipball/6bc356ed3d8dbfeea8f0de235e34d670704e880e"
+      },
+      "installed_tree_sha256": "ae3189afbedfebf514dac9cac84c0ddbd1f754fcaeac2663de218b0da626b3e4",
+      "source": {
+        "reference": "6bc356ed3d8dbfeea8f0de235e34d670704e880e",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-php86.git"
+      },
+      "version": "v1.41.0"
+    },
+    "symfony/polyfill-uuid": {
+      "dist": {
+        "reference": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/26dfec253c4cf3e51b541b52ddf7e42cb0908e94"
+      },
+      "installed_tree_sha256": "2f3e7b61a5f93d36a29249cb5a39fffac05b7c4e71fa8eabe9d9499581a2db74",
+      "source": {
+        "reference": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94",
+        "type": "git",
+        "url": "https://github.com/symfony/polyfill-uuid.git"
+      },
+      "version": "v1.37.0"
+    },
+    "symfony/process": {
+      "dist": {
+        "reference": "d863f5e70d7c87abb906ac11b61f83036093000b",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/process/zipball/d863f5e70d7c87abb906ac11b61f83036093000b"
+      },
+      "installed_tree_sha256": "33a69bdb058723f13ae6012966c73f08e39d2ecabfe7d7e78fd2bca53995bb11",
+      "source": {
+        "reference": "d863f5e70d7c87abb906ac11b61f83036093000b",
+        "type": "git",
+        "url": "https://github.com/symfony/process.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/routing": {
+      "dist": {
+        "reference": "3c188091b6b4fa2e4bc83a135caede12deb8576c",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/routing/zipball/3c188091b6b4fa2e4bc83a135caede12deb8576c"
+      },
+      "installed_tree_sha256": "20cbb4674c34973db7797a34cc6ee50f973352e0b6d158658c04ae5989d3a77d",
+      "source": {
+        "reference": "3c188091b6b4fa2e4bc83a135caede12deb8576c",
+        "type": "git",
+        "url": "https://github.com/symfony/routing.git"
+      },
+      "version": "v8.1.6"
+    },
+    "symfony/service-contracts": {
+      "dist": {
+        "reference": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/service-contracts/zipball/15e6a07ec2a2c75ceb1b21dd98105ee8456d2257"
+      },
+      "installed_tree_sha256": "f8a91e447668647dc4f96a3dccd1c5dc1bef814a79a2f63a428869482cb99f32",
+      "source": {
+        "reference": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+        "type": "git",
+        "url": "https://github.com/symfony/service-contracts.git"
+      },
+      "version": "v3.7.3"
+    },
+    "symfony/string": {
+      "dist": {
+        "reference": "286a76b7255e5cc4bf0101a0bc5388ecf1c38ccc",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/string/zipball/286a76b7255e5cc4bf0101a0bc5388ecf1c38ccc"
+      },
+      "installed_tree_sha256": "f2bfe91e0e612aa511d3025c5b5da841731e1c77b167a44c9be15207eda9dd26",
+      "source": {
+        "reference": "286a76b7255e5cc4bf0101a0bc5388ecf1c38ccc",
+        "type": "git",
+        "url": "https://github.com/symfony/string.git"
+      },
+      "version": "v8.1.2"
+    },
+    "symfony/translation": {
+      "dist": {
+        "reference": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/translation/zipball/d9e1caba0d6b6f9a26710af8a2f88d37f001215a"
+      },
+      "installed_tree_sha256": "57807afea9de5e952a038bcf113751314f580215ad59d22314d0032232947a33",
+      "source": {
+        "reference": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a",
+        "type": "git",
+        "url": "https://github.com/symfony/translation.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/translation-contracts": {
+      "dist": {
+        "reference": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/ccb206b98faccc511ebae8e5fad50f2dc0b30621"
+      },
+      "installed_tree_sha256": "341114705d6adc8a097602f4fb8797aa9173d6caa2c9f6f9844ef30593eb1409",
+      "source": {
+        "reference": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+        "type": "git",
+        "url": "https://github.com/symfony/translation-contracts.git"
+      },
+      "version": "v3.7.1"
+    },
+    "symfony/uid": {
+      "dist": {
+        "reference": "a08aef47989093f32fe50fd11859be1b427df389",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/uid/zipball/a08aef47989093f32fe50fd11859be1b427df389"
+      },
+      "installed_tree_sha256": "549e440f7497efa63b51465e864da2457175dd835bf6bb66bc822493bd889142",
+      "source": {
+        "reference": "a08aef47989093f32fe50fd11859be1b427df389",
+        "type": "git",
+        "url": "https://github.com/symfony/uid.git"
+      },
+      "version": "v8.1.5"
+    },
+    "symfony/var-dumper": {
+      "dist": {
+        "reference": "3783365b58972f4779254d98372af80fbf15e170",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3783365b58972f4779254d98372af80fbf15e170"
+      },
+      "installed_tree_sha256": "6852325d3a9a147fbe7dfc9e9577bdc1f7bd121585804c43b1d5401f419ce9be",
+      "source": {
+        "reference": "3783365b58972f4779254d98372af80fbf15e170",
+        "type": "git",
+        "url": "https://github.com/symfony/var-dumper.git"
+      },
+      "version": "v8.1.6"
+    },
+    "tijsverkoyen/css-to-inline-styles": {
+      "dist": {
+        "reference": "f0292ccf0ec75843d65027214426b6b163b48b41",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/f0292ccf0ec75843d65027214426b6b163b48b41"
+      },
+      "installed_tree_sha256": "73c0badd71edb6dc3f9de0ca6f1386061fe03fc083e3310acfa71f7876bd4798",
+      "source": {
+        "reference": "f0292ccf0ec75843d65027214426b6b163b48b41",
+        "type": "git",
+        "url": "https://github.com/tijsverkoyen/CssToInlineStyles.git"
+      },
+      "version": "v2.4.0"
+    },
+    "vlucas/phpdotenv": {
+      "dist": {
+        "reference": "301c07936b16d88628b126b01d082ba153cf4c40",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/301c07936b16d88628b126b01d082ba153cf4c40"
+      },
+      "installed_tree_sha256": "0cafb739099102cefd85e2b14b34c4391ef777ae1136390b6d2dbd2579e36cc1",
+      "source": {
+        "reference": "301c07936b16d88628b126b01d082ba153cf4c40",
+        "type": "git",
+        "url": "https://github.com/vlucas/phpdotenv.git"
+      },
+      "version": "v5.7.0"
+    },
+    "voku/portable-ascii": {
+      "dist": {
+        "reference": "8e1051fe39379367aecf014f41744ce7539a856f",
+        "shasum": "",
+        "type": "zip",
+        "url": "https://api.github.com/repos/voku/portable-ascii/zipball/8e1051fe39379367aecf014f41744ce7539a856f"
+      },
+      "installed_tree_sha256": "8953adae7a74f8b5de5ab73b8120b3db285839171e50377cbdf6e5dcddbb3b36",
+      "source": {
+        "reference": "8e1051fe39379367aecf014f41744ce7539a856f",
+        "type": "git",
+        "url": "https://github.com/voku/portable-ascii.git"
+      },
+      "version": "2.1.1"
+    }
+  },
+  "historical_migration_delta": [],
+  "production_delta_after_source": [],
+  "profiles": {
+    "installed": {
+      "consumers": 2,
+      "exchanges_per_consumer": 45,
+      "laravel": "13.31.0",
+      "lock_sha256": "cb9eaecccde55a063dbccffb180c38ee1b9fd0107f7113b4e8024ea19b1b88c0",
+      "openapi_sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33",
+      "php": "8.4.1",
+      "runtime_packages": 88,
+      "targets": [
+        "corex_crm_q15finala_root_test",
+        "corex_crm_q15finala_account_a_test",
+        "corex_crm_q15finala_account_b_test",
+        "corex_crm_q15finalb_root_test",
+        "corex_crm_q15finalb_account_a_test",
+        "corex_crm_q15finalb_account_b_test"
+      ]
+    },
+    "installed-laravel12": {
+      "consumers": 2,
+      "exchanges_per_consumer": 45,
+      "laravel": "12.69.2",
+      "lock_sha256": "f478197b3ef7883439e7834c8aa1638a369c5b5b0086b5f0595a130b89bdadd5",
+      "openapi_sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33",
+      "php": "8.4.1",
+      "runtime_packages": 88,
+      "targets": [
+        "corex_crm_q15l12a_root_test",
+        "corex_crm_q15l12a_account_a_test",
+        "corex_crm_q15l12a_account_b_test",
+        "corex_crm_q15l12b_root_test",
+        "corex_crm_q15l12b_account_a_test",
+        "corex_crm_q15l12b_account_b_test"
+      ]
+    }
+  },
+  "protected_platform_delta": [],
+  "qualification_ref": "063f165e1065053984751f2efc41c18caefe90ac",
+  "schema_version": "corex-crm-install-seal/v1",
+  "sealed_source_map_sha256": "4faf08b013afa4a3020d6666e2e00054698f639f201aa27806fd4f500139146f",
+  "source_ref": "cb79f18095589124759fdd1107144764bb31d094"
+}

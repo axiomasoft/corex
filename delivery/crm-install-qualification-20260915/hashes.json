@@ -1,0 +1,1001 @@
+{
+  "files": [
+    {
+      "bytes": 27825,
+      "path": "api-coverage.xml",
+      "sha256": "c86dc2722607b2a37ccdbab46623f1951c4ce4442f16bbb4e95434421ae21d98"
+    },
+    {
+      "bytes": 27929,
+      "path": "api-exact-coverage.xml",
+      "sha256": "84bb8214a2d6f2b4c1d63e8a322a956e837063475e965e158286e56f194fb588"
+    },
+    {
+      "bytes": 2564,
+      "path": "boxed.php",
+      "sha256": "b09382e8298f2dbf9f24e4833ad72b6fe893c1bdb5810134dd022b908badd22c"
+    },
+    {
+      "bytes": 514,
+      "path": "candidate.json",
+      "sha256": "909276d088b551c83ec24f4234e7722417ef5c7f05567bf326385b92ff3d1647"
+    },
+    {
+      "bytes": 81075,
+      "path": "crm-coverage.xml",
+      "sha256": "6b8d3214aee1ef45f933784cbb5034f8735683a9a229b59c10a08332efd29491"
+    },
+    {
+      "bytes": 81243,
+      "path": "crm-exact-coverage.xml",
+      "sha256": "a3535bc4efd672ccf736c02fead668df119123a16780c2ef9c5855688232eeec"
+    },
+    {
+      "bytes": 10209,
+      "path": "gates.json",
+      "sha256": "ee83bffb75aeb28c4ad99d093e34ec92564169bbb9e0f5e502750f07f5ea3942"
+    },
+    {
+      "bytes": 48813,
+      "path": "installed/artifacts/corex-api-repeat.zip",
+      "sha256": "28bcb9647040e3b7d8f221257a1df7fa8a9fdd63623951c9440bf106d10c3774"
+    },
+    {
+      "bytes": 48813,
+      "path": "installed/artifacts/corex-api.zip",
+      "sha256": "28bcb9647040e3b7d8f221257a1df7fa8a9fdd63623951c9440bf106d10c3774"
+    },
+    {
+      "bytes": 184495,
+      "path": "installed/artifacts/corex-core-repeat.zip",
+      "sha256": "e27f98e41d58d9612570a2b8ec5c0a9af345f206d31ed83e194fb371cbc27249"
+    },
+    {
+      "bytes": 184495,
+      "path": "installed/artifacts/corex-core.zip",
+      "sha256": "e27f98e41d58d9612570a2b8ec5c0a9af345f206d31ed83e194fb371cbc27249"
+    },
+    {
+      "bytes": 239761,
+      "path": "installed/artifacts/corex-modules-repeat.zip",
+      "sha256": "f28aada9e494b12723c7e62f93e87cdc06a2bb21770d62f633f7064037e9e54a"
+    },
+    {
+      "bytes": 239761,
+      "path": "installed/artifacts/corex-modules.zip",
+      "sha256": "f28aada9e494b12723c7e62f93e87cdc06a2bb21770d62f633f7064037e9e54a"
+    },
+    {
+      "bytes": 406167,
+      "path": "installed/artifacts/corex-tenancy-repeat.zip",
+      "sha256": "825208d4df16003e8f3abc312ae99c51faae8895c15cc530b96fee7de1838b4c"
+    },
+    {
+      "bytes": 406167,
+      "path": "installed/artifacts/corex-tenancy.zip",
+      "sha256": "825208d4df16003e8f3abc312ae99c51faae8895c15cc530b96fee7de1838b4c"
+    },
+    {
+      "bytes": 141908,
+      "path": "installed/artifacts/flex-crm-repeat.zip",
+      "sha256": "5f3dbee7463704f9253430847f1a39aa9b818ca4e755d02eb7e9ce2b52efb4ec"
+    },
+    {
+      "bytes": 141908,
+      "path": "installed/artifacts/flex-crm.zip",
+      "sha256": "5f3dbee7463704f9253430847f1a39aa9b818ca4e755d02eb7e9ce2b52efb4ec"
+    },
+    {
+      "bytes": 26644,
+      "path": "installed/artifacts/jobpipeline-candidate.zip",
+      "sha256": "ab05cafca18259875771d9ccd8321b8a1058d048c6b0c0261effc2a1923ac546"
+    },
+    {
+      "bytes": 2013286,
+      "path": "installed/artifacts/tenancy-candidate.zip",
+      "sha256": "48b6d7a9dc15ebd5d98dcab42844226421709113ff7c1347c10b01f876045d99"
+    },
+    {
+      "bytes": 520,
+      "path": "installed/consumer-a/boxed/evidence.json",
+      "sha256": "6ab8231f4db44728dcb2e4dec9bed82e265d3bbf5db49b5d8faf4796fc6dbf86"
+    },
+    {
+      "bytes": 50,
+      "path": "installed/consumer-a/boxed/probe.log",
+      "sha256": "1ecc63d0d2faf044d065801a93e380425006997e3ae3435b7b62b852d0ae6878"
+    },
+    {
+      "bytes": 16798,
+      "path": "installed/consumer-a/composer.json",
+      "sha256": "cb641d4951b62f5566b3a57d183c41bbc8367820e06b5ee3c1db017e1ec57ef5"
+    },
+    {
+      "bytes": 253604,
+      "path": "installed/consumer-a/composer.lock",
+      "sha256": "cb9eaecccde55a063dbccffb180c38ee1b9fd0107f7113b4e8024ea19b1b88c0"
+    },
+    {
+      "bytes": 111751,
+      "path": "installed/consumer-a/evidence.json",
+      "sha256": "4eadca937278df46a98529b39e63883c4e41e058531e77eb005ba957e69e09d8"
+    },
+    {
+      "bytes": 10208,
+      "path": "installed/consumer-a/install.log",
+      "sha256": "fc68c5db477615cb3f88c8c1d600edbe2c2ddeaa03dd71d044d54015163eb8b1"
+    },
+    {
+      "bytes": 219179,
+      "path": "installed/consumer-a/openapi.json",
+      "sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33"
+    },
+    {
+      "bytes": 45,
+      "path": "installed/consumer-a/probe.log",
+      "sha256": "a445541da8c4dc721ebeaaad73a1c9d78d0f6d2ea2befd3875786e43497319a0"
+    },
+    {
+      "bytes": 520,
+      "path": "installed/consumer-b/boxed/evidence.json",
+      "sha256": "91d85b2bc0fb36f2c5aceff3948f736fb8199c48fec6912a17bb8bf5f79aafab"
+    },
+    {
+      "bytes": 50,
+      "path": "installed/consumer-b/boxed/probe.log",
+      "sha256": "1ecc63d0d2faf044d065801a93e380425006997e3ae3435b7b62b852d0ae6878"
+    },
+    {
+      "bytes": 16798,
+      "path": "installed/consumer-b/composer.json",
+      "sha256": "cb641d4951b62f5566b3a57d183c41bbc8367820e06b5ee3c1db017e1ec57ef5"
+    },
+    {
+      "bytes": 253604,
+      "path": "installed/consumer-b/composer.lock",
+      "sha256": "cb9eaecccde55a063dbccffb180c38ee1b9fd0107f7113b4e8024ea19b1b88c0"
+    },
+    {
+      "bytes": 111751,
+      "path": "installed/consumer-b/evidence.json",
+      "sha256": "288325faafc0e68d94991c04322db374a2947ac37068cd431ac19041a4d1d180"
+    },
+    {
+      "bytes": 5963,
+      "path": "installed/consumer-b/install.log",
+      "sha256": "798addfc7df9ee989a365faae6c2915ba38f3fdcc95fd1d775f2b982c7e67991"
+    },
+    {
+      "bytes": 219179,
+      "path": "installed/consumer-b/openapi.json",
+      "sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33"
+    },
+    {
+      "bytes": 45,
+      "path": "installed/consumer-b/probe.log",
+      "sha256": "a445541da8c4dc721ebeaaad73a1c9d78d0f6d2ea2befd3875786e43497319a0"
+    },
+    {
+      "bytes": 689998,
+      "path": "installed/evidence.json",
+      "sha256": "152371fbf21b54e4cfd1917f5c78b27bdbddaf2389de52ec644f25b43fd089ee"
+    },
+    {
+      "bytes": 14098,
+      "path": "installed/packages.json",
+      "sha256": "fd7e8f7cd602cf858805be86adb7cab99a6f0fc041d8c92a65d3a4dcabf7a871"
+    },
+    {
+      "bytes": 48813,
+      "path": "installed-laravel12/artifacts/corex-api-repeat.zip",
+      "sha256": "28bcb9647040e3b7d8f221257a1df7fa8a9fdd63623951c9440bf106d10c3774"
+    },
+    {
+      "bytes": 48813,
+      "path": "installed-laravel12/artifacts/corex-api.zip",
+      "sha256": "28bcb9647040e3b7d8f221257a1df7fa8a9fdd63623951c9440bf106d10c3774"
+    },
+    {
+      "bytes": 184495,
+      "path": "installed-laravel12/artifacts/corex-core-repeat.zip",
+      "sha256": "e27f98e41d58d9612570a2b8ec5c0a9af345f206d31ed83e194fb371cbc27249"
+    },
+    {
+      "bytes": 184495,
+      "path": "installed-laravel12/artifacts/corex-core.zip",
+      "sha256": "e27f98e41d58d9612570a2b8ec5c0a9af345f206d31ed83e194fb371cbc27249"
+    },
+    {
+      "bytes": 239761,
+      "path": "installed-laravel12/artifacts/corex-modules-repeat.zip",
+      "sha256": "f28aada9e494b12723c7e62f93e87cdc06a2bb21770d62f633f7064037e9e54a"
+    },
+    {
+      "bytes": 239761,
+      "path": "installed-laravel12/artifacts/corex-modules.zip",
+      "sha256": "f28aada9e494b12723c7e62f93e87cdc06a2bb21770d62f633f7064037e9e54a"
+    },
+    {
+      "bytes": 406167,
+      "path": "installed-laravel12/artifacts/corex-tenancy-repeat.zip",
+      "sha256": "825208d4df16003e8f3abc312ae99c51faae8895c15cc530b96fee7de1838b4c"
+    },
+    {
+      "bytes": 406167,
+      "path": "installed-laravel12/artifacts/corex-tenancy.zip",
+      "sha256": "825208d4df16003e8f3abc312ae99c51faae8895c15cc530b96fee7de1838b4c"
+    },
+    {
+      "bytes": 141908,
+      "path": "installed-laravel12/artifacts/flex-crm-repeat.zip",
+      "sha256": "5f3dbee7463704f9253430847f1a39aa9b818ca4e755d02eb7e9ce2b52efb4ec"
+    },
+    {
+      "bytes": 141908,
+      "path": "installed-laravel12/artifacts/flex-crm.zip",
+      "sha256": "5f3dbee7463704f9253430847f1a39aa9b818ca4e755d02eb7e9ce2b52efb4ec"
+    },
+    {
+      "bytes": 26644,
+      "path": "installed-laravel12/artifacts/jobpipeline-candidate.zip",
+      "sha256": "ab05cafca18259875771d9ccd8321b8a1058d048c6b0c0261effc2a1923ac546"
+    },
+    {
+      "bytes": 2013286,
+      "path": "installed-laravel12/artifacts/tenancy-candidate.zip",
+      "sha256": "48b6d7a9dc15ebd5d98dcab42844226421709113ff7c1347c10b01f876045d99"
+    },
+    {
+      "bytes": 520,
+      "path": "installed-laravel12/consumer-a/boxed/evidence.json",
+      "sha256": "75a370876a6ed4e389cd3112f62dcf331f4fc06f8d6bf1810ab9e20cf9acf3f2"
+    },
+    {
+      "bytes": 50,
+      "path": "installed-laravel12/consumer-a/boxed/probe.log",
+      "sha256": "1ecc63d0d2faf044d065801a93e380425006997e3ae3435b7b62b852d0ae6878"
+    },
+    {
+      "bytes": 16868,
+      "path": "installed-laravel12/consumer-a/composer.json",
+      "sha256": "5525524ba2108da9d2353fb04c402a8f10d94e060dd4b40bf145ac6b40c2f0ea"
+    },
+    {
+      "bytes": 253348,
+      "path": "installed-laravel12/consumer-a/composer.lock",
+      "sha256": "f478197b3ef7883439e7834c8aa1638a369c5b5b0086b5f0595a130b89bdadd5"
+    },
+    {
+      "bytes": 111733,
+      "path": "installed-laravel12/consumer-a/evidence.json",
+      "sha256": "6b500465df8728476ed1a24f0ba63c93e598a9b341b29fcb6d3c1fea43cf32d1"
+    },
+    {
+      "bytes": 10234,
+      "path": "installed-laravel12/consumer-a/install.log",
+      "sha256": "da452195cdbb015ab572b929ccadf66c08debd1634b09f0b34b5da986ee30feb"
+    },
+    {
+      "bytes": 219179,
+      "path": "installed-laravel12/consumer-a/openapi.json",
+      "sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33"
+    },
+    {
+      "bytes": 45,
+      "path": "installed-laravel12/consumer-a/probe.log",
+      "sha256": "a445541da8c4dc721ebeaaad73a1c9d78d0f6d2ea2befd3875786e43497319a0"
+    },
+    {
+      "bytes": 520,
+      "path": "installed-laravel12/consumer-b/boxed/evidence.json",
+      "sha256": "12f2ef557e53855608f072339c27ec24892116f9f26e90c8b5073d6c091429df"
+    },
+    {
+      "bytes": 50,
+      "path": "installed-laravel12/consumer-b/boxed/probe.log",
+      "sha256": "1ecc63d0d2faf044d065801a93e380425006997e3ae3435b7b62b852d0ae6878"
+    },
+    {
+      "bytes": 16868,
+      "path": "installed-laravel12/consumer-b/composer.json",
+      "sha256": "5525524ba2108da9d2353fb04c402a8f10d94e060dd4b40bf145ac6b40c2f0ea"
+    },
+    {
+      "bytes": 253348,
+      "path": "installed-laravel12/consumer-b/composer.lock",
+      "sha256": "f478197b3ef7883439e7834c8aa1638a369c5b5b0086b5f0595a130b89bdadd5"
+    },
+    {
+      "bytes": 111733,
+      "path": "installed-laravel12/consumer-b/evidence.json",
+      "sha256": "56f22e3844d7f48d7c2d84e9ca319ed30d850dd077c69a12ed1a316a89efba7b"
+    },
+    {
+      "bytes": 5976,
+      "path": "installed-laravel12/consumer-b/install.log",
+      "sha256": "e0cf21aadedd01ec2d6f51390502743e52bb48633757f3af82639d4333f4f6c3"
+    },
+    {
+      "bytes": 219179,
+      "path": "installed-laravel12/consumer-b/openapi.json",
+      "sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33"
+    },
+    {
+      "bytes": 45,
+      "path": "installed-laravel12/consumer-b/probe.log",
+      "sha256": "a445541da8c4dc721ebeaaad73a1c9d78d0f6d2ea2befd3875786e43497319a0"
+    },
+    {
+      "bytes": 689698,
+      "path": "installed-laravel12/evidence.json",
+      "sha256": "617bb4658ca7bc4ba287077875971533daa5568ec98a04c7ed47902362d15a87"
+    },
+    {
+      "bytes": 14168,
+      "path": "installed-laravel12/packages.json",
+      "sha256": "f56fd3266eff7ec8b7775596e19cbc3a60018da8b5da07f754a4a5e312ec37ee"
+    },
+    {
+      "bytes": 317,
+      "path": "logs/anti-weakening.log",
+      "sha256": "99b4a8dcc6dfed93c5a3878500142584106b8b37fd8530b2eca940d1c2ed6ce5"
+    },
+    {
+      "bytes": 199,
+      "path": "logs/baseline-core-delivery.log",
+      "sha256": "1136432d2e187f2bfe15ae57238b3dbc7104b32861f0bef6c06b390ef4dfc59b"
+    },
+    {
+      "bytes": 264,
+      "path": "logs/baseline-extension-isolation.log",
+      "sha256": "3f84ae67f71ee871638e0ea57bc5a68bdfeefafd6543608c29011084f8c50800"
+    },
+    {
+      "bytes": 5294,
+      "path": "logs/baseline-lifecycle.log",
+      "sha256": "a6fc9c8c61644991e2eed9ea2f22dbbe0e27b75ad2097c9cdcf3dfab3378b5fd"
+    },
+    {
+      "bytes": 8872,
+      "path": "logs/clean-api-coverage.log",
+      "sha256": "a0512fa0dff5e24ad23ed8fe48dc39bfd22f7bbd52b9711943073a35e38b222c"
+    },
+    {
+      "bytes": 15430,
+      "path": "logs/clean-api-install.log",
+      "sha256": "d6a731a14247e2e2e5dddbfa15d1ef84abf980b41fd9d8836f0cb61645d93702"
+    },
+    {
+      "bytes": 18631,
+      "path": "logs/clean-crm-coverage.log",
+      "sha256": "6aca0c3f6a9668898ee41caa7d742014af265d0041a4f353bd06d86297791189"
+    },
+    {
+      "bytes": 15732,
+      "path": "logs/clean-crm-install.log",
+      "sha256": "d5d205ca348167fc4ac2721e38dda61d0c3a3b804c9de62b403dc7259e99fd3c"
+    },
+    {
+      "bytes": 36187,
+      "path": "logs/clean-mutation.log",
+      "sha256": "83827306496faff136d8cec6a3a38e54aa3c28a7c35a859fdab6ef22919d3b5b"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/clean-pint-current.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/clean-pint-final.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 345,
+      "path": "logs/clean-pint.log",
+      "sha256": "7a67aa94b607dcf567296460c697e6fd5341543f56eb5fe0a5836d9a92c12f86"
+    },
+    {
+      "bytes": 48,
+      "path": "logs/clean-root-analysis-current.log",
+      "sha256": "c10f74fb840de989bba7e9c2dfee7f8419b5d2ac0cc0daf18a4a187f6530aa43"
+    },
+    {
+      "bytes": 48,
+      "path": "logs/clean-root-analysis-final.log",
+      "sha256": "c10f74fb840de989bba7e9c2dfee7f8419b5d2ac0cc0daf18a4a187f6530aa43"
+    },
+    {
+      "bytes": 65,
+      "path": "logs/clean-root-analysis.log",
+      "sha256": "00717ef8af244731c2aeda2bbcf1df04ccc3cd953bfdce10b182c0df68aee6c3"
+    },
+    {
+      "bytes": 9877,
+      "path": "logs/clean-root-coverage-current.log",
+      "sha256": "432b7025f229c4e2c8c64c2d6a8010431a3295aafdd797bb6cbf703c3da4d756"
+    },
+    {
+      "bytes": 1912,
+      "path": "logs/clean-root-coverage.log",
+      "sha256": "47865b519e8a2a68228c2a44eec2e91f2e189b55dfb376c2766ce834d74c114f"
+    },
+    {
+      "bytes": 10120,
+      "path": "logs/clean-root-install-local-ascii.log",
+      "sha256": "912827f907a2957080e7fa3811efa42eac416a0b910605ba50ac90c68e02e5ee"
+    },
+    {
+      "bytes": 2816,
+      "path": "logs/clean-root-install-local.log",
+      "sha256": "da2da4a0b9e83db81a2cef9832f215c109872ad8b3af582c4ab7e3fee2e8afe6"
+    },
+    {
+      "bytes": 2314,
+      "path": "logs/clean-root-install.log",
+      "sha256": "72f0acbb5c5ae0a81ffca4aa76a80f882ce2b48b12509ff25c9a14dcd2f294db"
+    },
+    {
+      "bytes": 96,
+      "path": "logs/clean-root-pg.log",
+      "sha256": "84d5ced6da28b441879cdf0728ddb5e385fe3f17ad87001db3f70ac047879aae"
+    },
+    {
+      "bytes": 95,
+      "path": "logs/clean-root-sqlite-current.log",
+      "sha256": "b85aa794bfe1cb651e86bbfcb025688a9260ef5cb94d1b4567b50b00547f7584"
+    },
+    {
+      "bytes": 95,
+      "path": "logs/clean-root-sqlite-final.log",
+      "sha256": "b5288e0a631a71053d5d767b26eeddb15ee102139afee35022148be7d31057f9"
+    },
+    {
+      "bytes": 62,
+      "path": "logs/clean-root-sqlite.log",
+      "sha256": "af5a0df40465393188cf430f823ee2116787e13b6f0368fdaf89d8261b88b933"
+    },
+    {
+      "bytes": 765,
+      "path": "logs/clean-tenancy-analysis.log",
+      "sha256": "26f4c99f5eeea7f91d8f2b66408feeca0b9cf7f232304e251059ca727b3dfb6e"
+    },
+    {
+      "bytes": 15816,
+      "path": "logs/clean-tenancy-install.log",
+      "sha256": "377aa34a0ee491738628d46e1e987994916bf1558fae2bf27af3cd520895f4ce"
+    },
+    {
+      "bytes": 62825,
+      "path": "logs/clean-tenancy-tests-current.log",
+      "sha256": "3519c37ac5bbdc3c229d58de80d2d5da8961dadfa2e5f4322ea6aafcb4669d47"
+    },
+    {
+      "bytes": 64921,
+      "path": "logs/clean-tenancy-tests.log",
+      "sha256": "829a79f39ec72d6384d9f639048f088a4e2b1437e67d395d00cd4fa3d71a97a5"
+    },
+    {
+      "bytes": 0,
+      "path": "logs/clean-tests-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "logs/clean-tests-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 98,
+      "path": "logs/contract-guard.log",
+      "sha256": "830e2d238bf16720e4db9ab113f9545d42e3351e0534839050be8bb60491635e"
+    },
+    {
+      "bytes": 6436,
+      "path": "logs/crm-analysis-first.log",
+      "sha256": "cec6ddbeb8362705b4033987104aea08a9ed4e421cd51fb5d3988b18d15e4a5c"
+    },
+    {
+      "bytes": 1618,
+      "path": "logs/crm-analysis-latest.log",
+      "sha256": "1b5ed4c6e3c33294c75811feef196aaa363ba8fef9fea1cb7978867116eccb37"
+    },
+    {
+      "bytes": 753,
+      "path": "logs/crm-analysis-memory.log",
+      "sha256": "f8d0ac32d236c0ced1d285ee063228ea35d13ffea3845677b6b34cb859d1cf4d"
+    },
+    {
+      "bytes": 6735,
+      "path": "logs/crm-pg-current.log",
+      "sha256": "a7a9d22d0a788cb8545b556df92573e471e91c073b1d3219492e28a61cb5d264"
+    },
+    {
+      "bytes": 2668,
+      "path": "logs/crm-pg-first.log",
+      "sha256": "204cfb673530219f0051efcdc4a941f2e5a5a145d772f909aae9dc7b7f5417b9"
+    },
+    {
+      "bytes": 5462,
+      "path": "logs/crm-sqlite-current-package.log",
+      "sha256": "694aee0a937005c16af4f0a17fc8e883de0117ed0a1abaf55855db0f382d42f1"
+    },
+    {
+      "bytes": 21108,
+      "path": "logs/crm-sqlite-current.log",
+      "sha256": "9de120cb8286395286515f293cbf717aebbbe3d11b7cf2f29e98dacc860c7d55"
+    },
+    {
+      "bytes": 7690,
+      "path": "logs/crm-sqlite-first.log",
+      "sha256": "533caabc3fdcbcb0fabdd9d96140b1d843f8f2b45dd3facae689ce5b68f3c973"
+    },
+    {
+      "bytes": 650,
+      "path": "logs/crm-sqlite-second.log",
+      "sha256": "eccb00448cbe717b81bfe81bd75aa07ad7d5c6590b074ac7c966695400244bae"
+    },
+    {
+      "bytes": 317,
+      "path": "logs/exact-anti-weakening.log",
+      "sha256": "43cfdd8c089b8746a31bb0145eac6a880d9a3619e03159f0c0d0a448e98320d5"
+    },
+    {
+      "bytes": 1057,
+      "path": "logs/exact-api-coverage-current.log",
+      "sha256": "1589996b98fbd8bf89811c95b19d1f57e1070f06415079e9c464dd661f15ba5a"
+    },
+    {
+      "bytes": 1055,
+      "path": "logs/exact-api-coverage.log",
+      "sha256": "5079c3889517dc4dbe345cd247db08ff669660f41ee2a6bbc189aa17eef36212"
+    },
+    {
+      "bytes": 87,
+      "path": "logs/exact-architecture.log",
+      "sha256": "65fe180a16e854b7558d8bdd627eb777e8040db333be95d57785011d388d0415"
+    },
+    {
+      "bytes": 51,
+      "path": "logs/exact-autoload-restored.log",
+      "sha256": "4a7c6488d34281d6395f36d9430875f05ef1e1a755d33e136be951a48412ed8c"
+    },
+    {
+      "bytes": 98,
+      "path": "logs/exact-contract-guard.log",
+      "sha256": "830e2d238bf16720e4db9ab113f9545d42e3351e0534839050be8bb60491635e"
+    },
+    {
+      "bytes": 578,
+      "path": "logs/exact-crm-analysis.log",
+      "sha256": "4cc935d571965d6c395c470c6b91bb47b4731586227bf6fe175f3057e31cc219"
+    },
+    {
+      "bytes": 2024,
+      "path": "logs/exact-crm-coverage.log",
+      "sha256": "eb033a18fd66005336064d9aeab7685a2871bfa1258bdd06208781a1388ba05f"
+    },
+    {
+      "bytes": 92,
+      "path": "logs/exact-crm-sqlite-current.log",
+      "sha256": "8fe738637e94b6b128907ddedaad32d68fa0a080f0a4383177c461931ff234a0"
+    },
+    {
+      "bytes": 23004,
+      "path": "logs/exact-crm-sqlite.log",
+      "sha256": "319449ce307cc03410fcecc663a80940152af5dde111b0254d15bde103500a41"
+    },
+    {
+      "bytes": 39025,
+      "path": "logs/exact-mutation.log",
+      "sha256": "71b81ca4f75bdc46b108cdc9cc74bc41a2329a7fad5bb49fa7c076970b5872d8"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/exact-pint-final.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 12046,
+      "path": "logs/exact-quality-install.log",
+      "sha256": "65c88905772952613a9c7882076a02747687cfa60b97e01827566b4b98cebe16"
+    },
+    {
+      "bytes": 578,
+      "path": "logs/exact-root-analysis.log",
+      "sha256": "4cc935d571965d6c395c470c6b91bb47b4731586227bf6fe175f3057e31cc219"
+    },
+    {
+      "bytes": 51,
+      "path": "logs/exact-root-autoload-restored.log",
+      "sha256": "4a7c6488d34281d6395f36d9430875f05ef1e1a755d33e136be951a48412ed8c"
+    },
+    {
+      "bytes": 9877,
+      "path": "logs/exact-root-coverage-current.log",
+      "sha256": "9a676402903fd0085765a9dd7d2afc9431e4c14ce8325c70edbf6cc8f26a8da5"
+    },
+    {
+      "bytes": 9040,
+      "path": "logs/exact-root-coverage.log",
+      "sha256": "581fa3e53d325492d91f7620f0d85ee67d1d5db094bb3ba0a3596ea53f60dc90"
+    },
+    {
+      "bytes": 96,
+      "path": "logs/exact-root-pg.log",
+      "sha256": "970c8cf30624c28a01e5b33ec846ba697aad3fab7963c826338f44d9244fa0cd"
+    },
+    {
+      "bytes": 95,
+      "path": "logs/exact-root-sqlite.log",
+      "sha256": "9c1d439318a0ff4597073cad8a5798bc2e17ec01b997e22ae8ead3c6b13536e8"
+    },
+    {
+      "bytes": 578,
+      "path": "logs/exact-tenancy-analysis.log",
+      "sha256": "4cc935d571965d6c395c470c6b91bb47b4731586227bf6fe175f3057e31cc219"
+    },
+    {
+      "bytes": 97,
+      "path": "logs/exact-tenancy-tests.log",
+      "sha256": "599234e1a0b38176aef3d8b4d73874291e1fcb5dfb2e5bd9bd98d31abbf61755"
+    },
+    {
+      "bytes": 578,
+      "path": "logs/exact-tests-lint-current.log",
+      "sha256": "4cc935d571965d6c395c470c6b91bb47b4731586227bf6fe175f3057e31cc219"
+    },
+    {
+      "bytes": 1371,
+      "path": "logs/exact-tests-lint.log",
+      "sha256": "1d07500650f1c82a7253cd84d289278eface2f27e62f73fa11f2f0d66659aaad"
+    },
+    {
+      "bytes": 278,
+      "path": "logs/final-readonly-verification.log",
+      "sha256": "719be340525b1cecd8e2544e3a0b9bcc860299e7abd5b0607e28eb83b3cc7010"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/format-audit.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 247,
+      "path": "logs/format-boxed.log",
+      "sha256": "cdf51c1a98bc1c0674ec3d9fa279f9d5218db0762ff85e70c296e7c2de9a5ff6"
+    },
+    {
+      "bytes": 206,
+      "path": "logs/format-fk-detector.log",
+      "sha256": "d6e8b30686e3f8e41cd5a12673154a6e7b3c5925ea7ea62713cdd2688334d61e"
+    },
+    {
+      "bytes": 1410,
+      "path": "logs/format-latest.log",
+      "sha256": "6cda959716c992e8a5f6e75d9e671fe966a4db80445347eb63aca154a45bbd6b"
+    },
+    {
+      "bytes": 271,
+      "path": "logs/format-probe-final.log",
+      "sha256": "9d02af378f9836fd35d3082515e02a05bfa4df3f0c727ffab16b69f7c57fbee2"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/format-probe-latest.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 33,
+      "path": "logs/format-probe-wire.log",
+      "sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+    },
+    {
+      "bytes": 346,
+      "path": "logs/format-probe.log",
+      "sha256": "1a48a0fc276e02553ccd582534b1a710730ac7b1da2111782efd434c62e7e792"
+    },
+    {
+      "bytes": 127,
+      "path": "logs/format-scoped.log",
+      "sha256": "7f10e76f69aa7437870e3418a7313a6113af0e201aca2ea617178cdecfa53603"
+    },
+    {
+      "bytes": 3041,
+      "path": "logs/format.log",
+      "sha256": "4f3abf0770816574bd20fa9910640e3be24922fbfe61f62c5b2cefff6463e30b"
+    },
+    {
+      "bytes": 6971,
+      "path": "logs/full-storage-first.log",
+      "sha256": "18a084603d2140365b78b18868c3cb0a310f5896f06492b8f3fe752c09af89e7"
+    },
+    {
+      "bytes": 2273,
+      "path": "logs/full-storage-fourth.log",
+      "sha256": "c82514ddcb22a421462133fc5fe4e6eb63566e9c9aa9f6d23c76b6978d26204a"
+    },
+    {
+      "bytes": 232,
+      "path": "logs/full-storage-green.log",
+      "sha256": "f3e90dc15867468a06a48db25a607313b8a7412eabce5c7fe2fa317a7034bd2b"
+    },
+    {
+      "bytes": 4054,
+      "path": "logs/full-storage-second.log",
+      "sha256": "f5228efa8739c2106fd8eebbe08c7480e7be63c41c8f2daab95e152c842ee593"
+    },
+    {
+      "bytes": 2032,
+      "path": "logs/full-storage-third.log",
+      "sha256": "905bcbb6dbf34acdae5013a69f30e55f2fc5618c6c9a981fdee978c3f3ffc2fa"
+    },
+    {
+      "bytes": 92,
+      "path": "logs/generic-audit-latest.log",
+      "sha256": "a5e4c360385ecd6ec13cd6d7ac40f922e81be254f7a9d8df7be45b3de8199a49"
+    },
+    {
+      "bytes": 296,
+      "path": "logs/generic-current.log",
+      "sha256": "a01641ed3db2026f0dc1cfc06f54701123a5c7f6312c3c369e7a306a50411cc6"
+    },
+    {
+      "bytes": 90,
+      "path": "logs/generic-latest.log",
+      "sha256": "83f24d8dbbc3cad84535c67be05a35b82c4afc930032a95e56f09cfc4949ccf3"
+    },
+    {
+      "bytes": 232,
+      "path": "logs/green-sales-storage.log",
+      "sha256": "45ad3d94e0d2b0a2428e217952d212a14cf5caab406a5c11c31c3a4d9c9882eb"
+    },
+    {
+      "bytes": 232,
+      "path": "logs/installed-final.log",
+      "sha256": "bf2da3defc768a8b136f39d2184ccb9966ecbf039faa58bdb2c119f70445a7ca"
+    },
+    {
+      "bytes": 242,
+      "path": "logs/installed-laravel12.log",
+      "sha256": "31c802b86ec1c54e6a3e79753c706ee8137b3636950074038da303c924174b60"
+    },
+    {
+      "bytes": 554,
+      "path": "logs/installed-r1.log",
+      "sha256": "3c53392bd787d7563c231afbd57ba2a82a61bc131288dff7fd0c6a0990276091"
+    },
+    {
+      "bytes": 347,
+      "path": "logs/installed-r2.log",
+      "sha256": "5b6a4ef29eb9f47016a5e5a32a5c290e04fae452ac018bc988f946718bb82ea5"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r3.log",
+      "sha256": "4b80ddeaf0969033f683be5fe994fa5461b351b10f35b555e169e31996202033"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r4.log",
+      "sha256": "ddc374feac60a3865e5ce28a4c6562c381bfbab554e546f6aeda4f25b1122385"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r5.log",
+      "sha256": "ee9be29d8890b31da24c9a26ae919f3c1f2936d904cf66c648a6bd0b1451520f"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r6.log",
+      "sha256": "d6eb2a4e28d63aca0212d1c43f3bde11adc1e772ef51827a14c8130161190096"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r7.log",
+      "sha256": "719d6983351521e9c14df4a6341299d4ec13cbf882bba914545a76b8ace56e55"
+    },
+    {
+      "bytes": 820,
+      "path": "logs/installed-r8.log",
+      "sha256": "54325e2e930124cefdea0ae91739df7bd5adc53c160f8564d9f096914e05a777"
+    },
+    {
+      "bytes": 599,
+      "path": "logs/installed-r9.log",
+      "sha256": "ca5d77dbb258ed50e8d9215683d1cfc878a7766c6c5600c2a0523aa529023561"
+    },
+    {
+      "bytes": 51,
+      "path": "logs/mutation-autoload.log",
+      "sha256": "4a7c6488d34281d6395f36d9430875f05ef1e1a755d33e136be951a48412ed8c"
+    },
+    {
+      "bytes": 52,
+      "path": "logs/preflight.log",
+      "sha256": "2a97a59e7752f831e87157916a75edb7922af3fe4118d3a580aeef36ea26e1fa"
+    },
+    {
+      "bytes": 5121,
+      "path": "logs/red-sales-storage.log",
+      "sha256": "700fb2c8a206092d75352e60c254223b3a3dcc8fec39607dead8e5c0096bc229"
+    },
+    {
+      "bytes": 232,
+      "path": "logs/remedy-lifecycle.log",
+      "sha256": "6fffc0616529ef722146c4faab30ec47e710b46f52befbeba6c3e7808d8562ec"
+    },
+    {
+      "bytes": 95,
+      "path": "logs/root-analysis-first.log",
+      "sha256": "53b21167f0d10d8a75f0dbb67f46f1d6aef06fadce33d4489871c015097a4a00"
+    },
+    {
+      "bytes": 1435,
+      "path": "logs/seal-verification.log",
+      "sha256": "00602b4d89412e7cd7a50f01cb72398518d122176bfb02a4ddf8959849c9cc01"
+    },
+    {
+      "bytes": 1133,
+      "path": "logs/tenancy-arch-current.log",
+      "sha256": "cafa39ffb4cf8f3c0800121e6a4b2fbf4dd77e5758fc30ff00848ce5f7474d1f"
+    },
+    {
+      "bytes": 2431,
+      "path": "logs/tenancy-arch-latest.log",
+      "sha256": "a3d592d40c2fa09dd9d17683b538b9a624cff2d4787ec97213a8f5b01c6fd985"
+    },
+    {
+      "bytes": 1547,
+      "path": "logs/tests-lint-first.log",
+      "sha256": "8cadfb4e3dc6e76129c8c3f5d04ca98422caa3aeeef8140dd985719cbed1a450"
+    },
+    {
+      "bytes": 4707,
+      "path": "prepare-quality.py",
+      "sha256": "3167008a8b8ad2ab01e76505b14cf26e916fcd61dff94a2378135008412256af"
+    },
+    {
+      "bytes": 21799,
+      "path": "probe.php",
+      "sha256": "fe6d4b9db226f22e94606f0bd05e0a6132fa4272878f5ef2a1e39f55c30ee672"
+    },
+    {
+      "bytes": 10965,
+      "path": "qualify.py",
+      "sha256": "4079e211f89d2cd25711911c5015cf964bcbcd07f39f17a3c52209d9f3679e63"
+    },
+    {
+      "bytes": 21468,
+      "path": "quality/.qualification-composer.json",
+      "sha256": "93f0a63cf9c8679877f14c980fe7f2ba39b63dcd842c5a639b7a1835e6963682"
+    },
+    {
+      "bytes": 416191,
+      "path": "quality/.qualification-composer.lock",
+      "sha256": "692b417df6eafd4c480e79df029329dd6860f1b813c0bab29d4d00455e4205a5"
+    },
+    {
+      "bytes": 2014,
+      "path": "quality/.qualification-phpunit.xml",
+      "sha256": "d8b31d69de3a18ccdefae7df76eabc8aae7b2f45d61fa4c2f000e447ec89f2a7"
+    },
+    {
+      "bytes": 10253,
+      "path": "quality/.qualification-tests-lint.neon",
+      "sha256": "783e7b530a7f184b846ce44aa0047ae8a8d25182d068a76420b0556abb637d17"
+    },
+    {
+      "bytes": 2085,
+      "path": "quality/composer.json",
+      "sha256": "e7d3bd24392ba8fe2c5ad5106e37f924faaa73b593f16b2bf9be4f9d1856d5bb"
+    },
+    {
+      "bytes": 773,
+      "path": "quality/packages/api/.qualification-phpunit.xml",
+      "sha256": "bb686328ae7981c8a7d5d8415bee3bfcaea531bda58ddcc570f193c03c9d3d3d"
+    },
+    {
+      "bytes": 1340,
+      "path": "quality/packages/api/composer.json",
+      "sha256": "723b34de0c36402a4e16febd6ab24f06762565841eaef12ac51792832bad1148"
+    },
+    {
+      "bytes": 106,
+      "path": "quality/packages/api/phpstan.neon",
+      "sha256": "a6e5cc81b070b1ffd650ac71f9390f3a740b476a87915e164f7e4d57fe4942b7"
+    },
+    {
+      "bytes": 739,
+      "path": "quality/packages/api/phpunit.xml",
+      "sha256": "f68059a0e646307eca16db702543de9559e557baf0b4b568ae0d3c4ac1543bf9"
+    },
+    {
+      "bytes": 946,
+      "path": "quality/packages/crm/.qualification-phpunit.xml",
+      "sha256": "7dc2c90e856796035702d02d1a5cdd821fd16d67af545bd9d3d5ef1e777634b8"
+    },
+    {
+      "bytes": 2089,
+      "path": "quality/packages/crm/composer.json",
+      "sha256": "4f05328ca3814a55b7a61fb5d4dc6d20e31e45b14b77edf1cd879afac82c0da0"
+    },
+    {
+      "bytes": 175,
+      "path": "quality/packages/crm/phpstan.neon",
+      "sha256": "6b46c8736b544ff5c5fcbfeac1e2955003f42cefa4b03121d1c907d56a8a03d3"
+    },
+    {
+      "bytes": 988,
+      "path": "quality/packages/crm/phpunit.xml",
+      "sha256": "bf60e694d43e2b0fe1aaa47d56ce7209e9361e953b9fb6b64aaedc1e09589390"
+    },
+    {
+      "bytes": 1354,
+      "path": "quality/packages/tenancy/.qualification-phpunit.xml",
+      "sha256": "764d4c9496482a244b0c890b9b1ebcb58a15a2cdd238c9b6696e7e1b120a35b0"
+    },
+    {
+      "bytes": 1750,
+      "path": "quality/packages/tenancy/composer.json",
+      "sha256": "284475bb260cd598749c2c9db04298bf8eb0babe15f5950c65287a910f438c14"
+    },
+    {
+      "bytes": 175,
+      "path": "quality/packages/tenancy/phpstan.neon",
+      "sha256": "6b46c8736b544ff5c5fcbfeac1e2955003f42cefa4b03121d1c907d56a8a03d3"
+    },
+    {
+      "bytes": 2028,
+      "path": "quality/packages/tenancy/phpunit.xml",
+      "sha256": "93585138b4cfeb5e3638f50fd098b9ff276d40d4ea68ae15f1ef7da7c7532890"
+    },
+    {
+      "bytes": 10213,
+      "path": "quality/phpstan-tests-lint.neon",
+      "sha256": "a37a4de12c8699effeb77f1a30931c0dbc3f20f3e89d326305c32e5b8d1060b3"
+    },
+    {
+      "bytes": 575,
+      "path": "quality/phpstan.neon",
+      "sha256": "84481b4f3f7ae573ed64e13849ef651897f8689052ed9d89248615a7fb5bcbfc"
+    },
+    {
+      "bytes": 2669,
+      "path": "quality/phpunit.xml",
+      "sha256": "53e3b3c400e8c48d00615656efbd56e2d2027e40e4efb5c6f6781ab077773418"
+    },
+    {
+      "bytes": 602,
+      "path": "quality/pint.json",
+      "sha256": "1f468a645b64a904c6f80089e7393a15a367020925605fc8e7a983c3b3a8696d"
+    },
+    {
+      "bytes": 1270,
+      "path": "review.md",
+      "sha256": "0c99973f9cc20c9f00f81212d9af07d54a7854041d257a1a3f8ff62dd5d3fc11"
+    },
+    {
+      "bytes": 286466,
+      "path": "root-coverage.xml",
+      "sha256": "5abd907efe6e352f94a6828f319749663daba07a88bac61a5d7932b0fcfb6a7d"
+    },
+    {
+      "bytes": 287251,
+      "path": "root-exact-coverage.xml",
+      "sha256": "6c8c40d3b39de64559493824a045084da73cc3ecc0b7be4549155c43a013a421"
+    },
+    {
+      "bytes": 10423,
+      "path": "seal-evidence.py",
+      "sha256": "fa9c0158bda4d22b63fcbffa84292e4cb7a258957b5b955aee60d43b7e28e147"
+    },
+    {
+      "bytes": 53729,
+      "path": "seal.json",
+      "sha256": "7ad0cfbdcf3f0441c5746ad636cde502ffe2f27f74972cff9371a06534fe2a46"
+    }
+  ],
+  "receipt_excluded_to_avoid_recursive_hash": true,
+  "schema_version": "corex-crm-delivery-hashes/v1"
+}

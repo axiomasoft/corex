@@ -1,0 +1,514 @@
+{
+  "config": {
+    "allow-plugins": false
+  },
+  "minimum-stability": "alpha",
+  "name": "example/physical-crm-probe",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "package": {
+        "autoload": {
+          "psr-4": {
+            "CoreX\\Api\\": "src/"
+          }
+        },
+        "autoload-dev": {
+          "psr-4": {
+            "CoreX\\Api\\Tests\\": "tests/"
+          }
+        },
+        "config": {
+          "allow-plugins": {
+            "pestphp/pest-plugin": true
+          }
+        },
+        "description": "Opt-in module operation dispatch, trusted context contracts and OpenAPI projection for Laravel.",
+        "dist": {
+          "reference": "cb79f18095589124759fdd1107144764bb31d094",
+          "shasum": "6105f2c1eb47c0d96a898c6a11a9309fbe009748",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/corex-api.zip"
+        },
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "corex/api",
+        "prefer-stable": true,
+        "require": {
+          "corex/core": "0.3.0-alpha.20260915",
+          "corex/modules": "0.3.0-alpha.20260915",
+          "illuminate/http": "^12.0|^13.0",
+          "illuminate/support": "^12.0|^13.0",
+          "illuminate/validation": "^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "require-dev": {
+          "larastan/larastan": "^3.0",
+          "laravel/pint": "^1.13",
+          "orchestra/testbench": "^10.0|^11.0",
+          "pestphp/pest": "^4.0"
+        },
+        "scripts": {
+          "analyse": "phpstan analyse --memory-limit=1G",
+          "lint:check": "pint --test",
+          "test": "pest",
+          "test:coverage": "pest --coverage --min=80"
+        },
+        "type": "library",
+        "version": "0.3.0-alpha.20260915"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "dv.vostrikov@gmail.com",
+            "name": "Dmitry Vostrikov"
+          }
+        ],
+        "autoload": {
+          "psr-4": {
+            "CoreX\\": "src/"
+          }
+        },
+        "description": "CoreX kernel \u2014 base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+        "dist": {
+          "reference": "cb79f18095589124759fdd1107144764bb31d094",
+          "shasum": "2df40f5b8f07b7f296bc28f8d7120c09e6d37e93",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/corex-core.zip"
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "CoreX\\CoreServiceProvider"
+            ]
+          }
+        },
+        "keywords": [
+          "laravel",
+          "kernel",
+          "multi-tenancy",
+          "ulid",
+          "entity-registry",
+          "audit",
+          "settings"
+        ],
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "corex/core",
+        "prefer-stable": true,
+        "require": {
+          "brick/money": "^0.9 || ^0.10",
+          "illuminate/config": "^12.0|^13.0",
+          "illuminate/container": "^12.0|^13.0",
+          "illuminate/contracts": "^12.0|^13.0",
+          "illuminate/database": "^12.0|^13.0",
+          "illuminate/filesystem": "^12.0|^13.0",
+          "illuminate/http": "^12.0|^13.0",
+          "illuminate/support": "^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "require-dev": {
+          "orchestra/testbench": "^10.0|^11.0"
+        },
+        "type": "library",
+        "version": "0.3.0-alpha.20260915"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "dv.vostrikov@gmail.com",
+            "name": "Dmitry Vostrikov"
+          }
+        ],
+        "autoload": {
+          "psr-4": {
+            "CoreX\\Modules\\": "src/"
+          }
+        },
+        "description": "CoreX module system \u2014 EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
+        "dist": {
+          "reference": "cb79f18095589124759fdd1107144764bb31d094",
+          "shasum": "f972728c97afc231e1e37b3af3136e02251d2141",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/corex-modules.zip"
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "CoreX\\Modules\\ModulesServiceProvider"
+            ]
+          }
+        },
+        "keywords": [
+          "laravel",
+          "modules",
+          "entity-registry"
+        ],
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "corex/modules",
+        "prefer-stable": true,
+        "require": {
+          "corex/core": "0.3.0-alpha.20260915",
+          "illuminate/contracts": "^12.0|^13.0",
+          "illuminate/database": "^12.0|^13.0",
+          "illuminate/support": "^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "require-dev": {
+          "larastan/larastan": "^3.0",
+          "orchestra/testbench": "^10.0|^11.0",
+          "phpstan/phpstan": "^2.0"
+        },
+        "type": "library",
+        "version": "0.3.0-alpha.20260915"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "dv.vostrikov@gmail.com",
+            "name": "Dmitry Vostrikov"
+          }
+        ],
+        "autoload": {
+          "psr-4": {
+            "CoreX\\Tenancy\\": "src/"
+          }
+        },
+        "autoload-dev": {
+          "psr-4": {
+            "CoreX\\Tenancy\\Tests\\": "tests/"
+          }
+        },
+        "config": {
+          "allow-plugins": {
+            "pestphp/pest-plugin": true
+          }
+        },
+        "description": "CoreX physical DB-per-account tenancy \u2014 root-schema control plane on stancl/tenancy v4 (B-11, D13).",
+        "dist": {
+          "reference": "cb79f18095589124759fdd1107144764bb31d094",
+          "shasum": "d1853c77dcf601f382054006d6874100ce960a96",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/corex-tenancy.zip"
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "CoreX\\Tenancy\\TenancyServiceProvider"
+            ]
+          }
+        },
+        "keywords": [
+          "laravel",
+          "multi-tenancy",
+          "stancl",
+          "saas"
+        ],
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "corex/tenancy",
+        "prefer-stable": true,
+        "require": {
+          "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1",
+          "axiomasoft/stancl-tenancy": "4.0.0-alpha1",
+          "corex/core": "0.3.0-alpha.20260915",
+          "firebase/php-jwt": "^7.1",
+          "illuminate/contracts": "^12.0|^13.0",
+          "illuminate/http": "^12.0|^13.0",
+          "illuminate/routing": "^12.0|^13.0",
+          "illuminate/support": "^12.0|^13.0",
+          "php": "^8.4"
+        },
+        "require-dev": {
+          "larastan/larastan": "^3.0",
+          "laravel/pint": "^1.13",
+          "orchestra/testbench": "^10.0|^11.0",
+          "pestphp/pest": "^4.0"
+        },
+        "scripts": {
+          "analyse": "phpstan analyse --memory-limit=1G",
+          "lint": "pint",
+          "lint:check": "pint --test",
+          "test": "pest"
+        },
+        "type": "library",
+        "version": "0.3.0-alpha.20260915"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "dv.vostrikov@gmail.com",
+            "name": "Dmitry Vostrikov"
+          }
+        ],
+        "autoload": {
+          "psr-4": {
+            "Flex\\Crm\\": "src/"
+          }
+        },
+        "autoload-dev": {
+          "psr-4": {
+            "Flex\\Crm\\Tests\\": "tests/"
+          }
+        },
+        "config": {
+          "allow-plugins": {
+            "pestphp/pest-plugin": true
+          }
+        },
+        "description": "CoreX CRM module \u2014 pipelines, stages and deals on corex/core (ULID, tenancy, money).",
+        "dist": {
+          "reference": "cb79f18095589124759fdd1107144764bb31d094",
+          "shasum": "5f0a240238dca1a8e328bfb2a1de7968c9c88688",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/flex-crm.zip"
+        },
+        "extra": {
+          "corex": {
+            "module": "Flex\\Crm\\CrmModule"
+          },
+          "laravel": {
+            "providers": [
+              "Flex\\Crm\\CrmServiceProvider"
+            ]
+          }
+        },
+        "keywords": [
+          "laravel",
+          "crm",
+          "pipeline",
+          "deals",
+          "multi-tenancy"
+        ],
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "flex/crm",
+        "prefer-stable": true,
+        "require": {
+          "corex/api": "0.3.0-alpha.20260915",
+          "corex/core": "0.3.0-alpha.20260915",
+          "corex/modules": "0.3.0-alpha.20260915",
+          "giggsey/libphonenumber-for-php-lite": "^9.0",
+          "illuminate/auth": "^12.0|^13.0",
+          "illuminate/contracts": "^12.0|^13.0",
+          "illuminate/database": "^12.0|^13.0",
+          "illuminate/support": "^12.0|^13.0",
+          "illuminate/validation": "^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "require-dev": {
+          "larastan/larastan": "^3.0",
+          "laravel/pint": "^1.13",
+          "orchestra/testbench": "^10.0|^11.0",
+          "pestphp/pest": "^4.0"
+        },
+        "scripts": {
+          "analyse": "phpstan analyse --memory-limit=1G",
+          "lint": "pint",
+          "lint:check": "pint --test",
+          "test": "pest --exclude-group=pg",
+          "test:coverage": "pest --coverage --min=95",
+          "test:pg": "pest --group=pg"
+        },
+        "type": "corex-module",
+        "version": "0.3.0-alpha.20260915"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "samuel@archte.ch",
+            "name": "Samuel \u0160tancl"
+          }
+        ],
+        "autoload": {
+          "files": [
+            "src/helpers.php"
+          ],
+          "psr-4": {
+            "Stancl\\Tenancy\\": "src/"
+          }
+        },
+        "autoload-dev": {
+          "psr-4": {
+            "Stancl\\Tenancy\\Tests\\": "tests/"
+          }
+        },
+        "config": {
+          "allow-plugins": {
+            "pestphp/pest-plugin": true
+          }
+        },
+        "description": "Automatic multi-tenancy for your Laravel application.",
+        "dist": {
+          "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
+          "shasum": "ef69374969eef0a39a7df24538b07b4805ba0156",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/tenancy-candidate.zip"
+        },
+        "extra": {
+          "laravel": {
+            "aliases": {
+              "GlobalCache": "Stancl\\Tenancy\\Facades\\GlobalCache",
+              "Tenancy": "Stancl\\Tenancy\\Facades\\Tenancy"
+            },
+            "providers": [
+              "Stancl\\Tenancy\\TenancyServiceProvider"
+            ]
+          }
+        },
+        "keywords": [
+          "laravel",
+          "multi-tenancy",
+          "multitenancy",
+          "multi-database",
+          "tenancy"
+        ],
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "axiomasoft/stancl-tenancy",
+        "prefer-stable": true,
+        "require": {
+          "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1",
+          "ext-json": "*",
+          "illuminate/support": "^12.0|^13.0",
+          "laravel/prompts": "0.*",
+          "laravel/tinker": "^2.0|^3.0",
+          "php": "^8.4",
+          "ramsey/uuid": "^4.7.3",
+          "spatie/invade": "*",
+          "stancl/virtualcolumn": "^1.5.0"
+        },
+        "require-dev": {
+          "doctrine/dbal": "^3.6.0",
+          "larastan/larastan": "^3.0",
+          "laravel/framework": "^13.0",
+          "league/flysystem-aws-s3-v3": "^3.12.2",
+          "league/flysystem-path-prefixing": "^3.0",
+          "orchestra/testbench": "^10.0|^11.0",
+          "pestphp/pest": "^4.0",
+          "spatie/valuestore": "^1.2.5"
+        },
+        "scripts": {
+          "act": [
+            "Composer\\Config::disableProcessTimeout",
+            "act -j tests --matrix 'laravel:^11.0'"
+          ],
+          "act-input": [
+            "Composer\\Config::disableProcessTimeout",
+            "act -j tests --matrix 'laravel:^11.0' --input"
+          ],
+          "coverage": "open coverage/phpunit/html/index.html",
+          "cs": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --config=.php-cs-fixer.php",
+          "docker-down": "docker compose down",
+          "docker-m1": "ln -s docker-compose-m1.override.yml docker-compose.override.yml",
+          "docker-rebuild": [
+            "Composer\\Config::disableProcessTimeout",
+            "docker compose up -d --no-deps --build"
+          ],
+          "docker-rebuild-with-xdebug": [
+            "Composer\\Config::disableProcessTimeout",
+            "XDEBUG_ENABLED=true docker compose up -d --no-deps --build"
+          ],
+          "docker-restart": "docker compose down && docker compose up -d",
+          "docker-up": "docker compose up -d",
+          "php85-patch": [
+            "php -r '$file=\"vendor/orchestra/testbench-core/laravel/config/database.php\"; file_put_contents($file, str_replace(\"PDO::MYSQL_ATTR_SSL_CA\", \"Pdo\\\\Mysql::ATTR_SSL_CA\", file_get_contents($file)));'"
+          ],
+          "phpstan": "vendor/bin/phpstan --memory-limit=256M",
+          "phpstan-pro": "vendor/bin/phpstan --memory-limit=256M --pro",
+          "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "./test --no-coverage"
+          ],
+          "test-full": [
+            "Composer\\Config::disableProcessTimeout",
+            "./test"
+          ],
+          "testbench-link": "ln -s /var/www/html/vendor ./vendor/orchestra/testbench-core/laravel/vendor",
+          "testbench-repair": "mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/sessions && mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/views && mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/cache",
+          "testbench-unlink": "rm ./vendor/orchestra/testbench-core/laravel/vendor"
+        },
+        "source": {
+          "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/stancl-tenancy.git"
+        },
+        "version": "4.0.0-alpha1"
+      },
+      "type": "package"
+    },
+    {
+      "package": {
+        "authors": [
+          {
+            "email": "samuel.stancl@gmail.com",
+            "name": "Samuel \u0160tancl"
+          }
+        ],
+        "autoload": {
+          "psr-4": {
+            "Stancl\\JobPipeline\\": "src/"
+          }
+        },
+        "autoload-dev": {
+          "psr-4": {
+            "Stancl\\JobPipeline\\Tests\\": "tests/"
+          }
+        },
+        "description": "Turn any series of jobs into Laravel listeners.",
+        "dist": {
+          "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
+          "shasum": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7",
+          "type": "zip",
+          "url": "file:///home/vostrikov/projects/packages/corex/delivery/crm-install-qualification-20260915/installed-laravel12/artifacts/jobpipeline-candidate.zip"
+        },
+        "license": "MIT",
+        "minimum-stability": "dev",
+        "name": "axiomasoft/stancl-jobpipeline",
+        "prefer-stable": true,
+        "require": {
+          "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+          "php": "^8.0"
+        },
+        "require-dev": {
+          "ext-redis": "*",
+          "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+          "spatie/valuestore": "^1.2"
+        },
+        "source": {
+          "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/stancl-jobpipeline.git"
+        },
+        "version": "2.0.0-alpha1"
+      },
+      "type": "package"
+    }
+  ],
+  "require": {
+    "corex/api": "0.3.0-alpha.20260915",
+    "corex/core": "0.3.0-alpha.20260915",
+    "corex/modules": "0.3.0-alpha.20260915",
+    "corex/tenancy": "0.3.0-alpha.20260915",
+    "flex/crm": "0.3.0-alpha.20260915",
+    "laravel/framework": "12.*",
+    "php": "^8.4"
+  },
+  "type": "project"
+}

@@ -1,0 +1,42 @@
+{
+  "verified": true,
+  "source_ref": "cb79f18095589124759fdd1107144764bb31d094",
+  "profiles": {
+    "installed": {
+      "laravel": "13.31.0",
+      "php": "8.4.1",
+      "lock_sha256": "cb9eaecccde55a063dbccffb180c38ee1b9fd0107f7113b4e8024ea19b1b88c0",
+      "openapi_sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33",
+      "consumers": 2,
+      "runtime_packages": 88,
+      "exchanges_per_consumer": 45,
+      "targets": [
+        "corex_crm_q15finala_root_test",
+        "corex_crm_q15finala_account_a_test",
+        "corex_crm_q15finala_account_b_test",
+        "corex_crm_q15finalb_root_test",
+        "corex_crm_q15finalb_account_a_test",
+        "corex_crm_q15finalb_account_b_test"
+      ]
+    },
+    "installed-laravel12": {
+      "laravel": "12.69.2",
+      "php": "8.4.1",
+      "lock_sha256": "f478197b3ef7883439e7834c8aa1638a369c5b5b0086b5f0595a130b89bdadd5",
+      "openapi_sha256": "2a0566d5c930f94654f02e887bb368b08bb1805ade75cc5d447a7b18e4bc3f33",
+      "consumers": 2,
+      "runtime_packages": 88,
+      "exchanges_per_consumer": 45,
+      "targets": [
+        "corex_crm_q15l12a_root_test",
+        "corex_crm_q15l12a_account_a_test",
+        "corex_crm_q15l12a_account_b_test",
+        "corex_crm_q15l12b_root_test",
+        "corex_crm_q15l12b_account_a_test",
+        "corex_crm_q15l12b_account_b_test"
+      ]
+    }
+  },
+  "quality_runtime_packages": 88,
+  "inventory_files": 198
+}

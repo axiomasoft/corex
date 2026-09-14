@@ -1,0 +1,38 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Arch\NoCrossDbFkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe central and tenant runners load disjoint migration paths[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-layer migrations declare foreign keys only to root_ tables[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FK-target detector reads both Laravel forms and flags dynamic targets[39m
+  [32;1m✓[39;22m[90m [39m[90mevery corex/tenancy migration is classified root or tenant by its directory[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-directory migrations create only root_ tables and tenant-directory migrations create none[39m
+  [31;1m⨯[39;22m[90m [39m[90mtenant-layer migrations declare no foreign key to a root_ table[39m
+  [32;1m✓[39;22m[90m [39m[90mthe migration inventory is not empty in either layer[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Arch\NoCrossDbFkTest[22m [90m>[39m tenant-layer migrations declare no f…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => '2026_09_14_000002_company_contact_parity.php → (new Contact)->getTable()',[39m[39;1m
+  [39;22m[32m+    1 => '2026_09_14_000002_company_contact_parity.php → (new Company)->getTable()',[39m[39;1m
+  [39;22m[32m+    2 => '2026_09_14_000002_company_contact_parity.php → (new Source)->getTable()',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Arch/NoCrossDbFkTest.php[39m:[32m226[39m
+    222▕     }
+    223▕ 
+    224▕     expect($seen)->toBeGreaterThan(5)
+    225▕         ->and($offenders)->toBe([])
+  ➜ 226▕         ->and($unknownDynamic)->toBe([]);
+    227▕ });
+    228▕ 
+    229▕ // ---------------------------------------------------------------------------
+    230▕ // Pre-mortem A4 — migration-path partition.
+
+  [33m1   [39m[39;1mtests/Arch/NoCrossDbFkTest.php[39;22m:[39;1m226[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (18 assertions)[39m
+  [90mDuration:[39m [39m0.04s[39m
+  [90mRandom Order Seed:[39m [39m1789421416[39m
+

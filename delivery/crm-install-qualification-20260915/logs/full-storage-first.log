@@ -1,0 +1,112 @@
+
+  [31;1m⨯[39;22m[31;1m⨯[39;22m[90;1m.[39;22m[31;1m⨯[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\FullStorageParityTest[22m [90m>[39m it refuses populated legacy sale…   
+[39;1m  Failed asserting that an array has a key 'custom_fields' with the value '{"provenance": "keep"}'.
+Failed asserting that two strings are equal.
+  [39;22m[31m-'{"provenance":"keep"}'[39m[39;1m
+  [39;22m[32m+'{"provenance": "keep"}'[39m[39;1m
+  [39;22m
+
+  at [32mpackages/crm/tests/Pg/FullStorageParityTest.php[39m:[32m54[39m
+     50▕     $before = StorageCatalogue::read(DB::connection(), 'public');
+     51▕     $migration = require __DIR__.'/../../database/migrations/2026_09_15_000001_full_storage_parity.php';
+     52▕     expect(fn () => $migration->up())->toThrow(RuntimeException::class, 'CRM_PARITY_UPGRADE_REQUIRES_EXPORT');
+     53▕     expect(StorageCatalogue::read(DB::connection(), 'public'))->toBe($before)
+  ➜  54▕         ->and((array) DB::table($table)->where('id', $id)->first())->toMatchArray($values)
+     55▕         ->and(Schema::hasTable('crm_lost_reasons'))->toBeFalse();
+     56▕ })->with(['crm_leads', 'crm_pipelines', 'crm_activities']);
+     57▕
+
+  [33m1   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\FullStorageParityTest[22m [90m>[39m it refuses populated legacy sale…   
+[39;1m  Failed asserting that an array has a key 'metadata' with the value '{"keep": true}'.
+Failed asserting that two strings are equal.
+  [39;22m[31m-'{"keep":true}'[39m[39;1m
+  [39;22m[32m+'{"keep": true}'[39m[39;1m
+  [39;22m
+
+  at [32mpackages/crm/tests/Pg/FullStorageParityTest.php[39m:[32m54[39m
+     50▕     $before = StorageCatalogue::read(DB::connection(), 'public');
+     51▕     $migration = require __DIR__.'/../../database/migrations/2026_09_15_000001_full_storage_parity.php';
+     52▕     expect(fn () => $migration->up())->toThrow(RuntimeException::class, 'CRM_PARITY_UPGRADE_REQUIRES_EXPORT');
+     53▕     expect(StorageCatalogue::read(DB::connection(), 'public'))->toBe($before)
+  ➜  54▕         ->and((array) DB::table($table)->where('id', $id)->first())->toMatchArray($values)
+     55▕         ->and(Schema::hasTable('crm_lost_reasons'))->toBeFalse();
+     56▕ })->with(['crm_leads', 'crm_pipelines', 'crm_activities']);
+     57▕
+
+  [33m1   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\FullStorageParityTest[22m [90m>[39m it matches every actual enabled…    
+[39;1m  crm_activities
+Failed asserting that two arrays are identical.
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         1 => Array &3 [[39m[39;1m
+  [39;22m[32m             'name' => 'created_at',[39m[39;1m
+  [39;22m[31m-            'type' => 'timestamp with time zone',[39m[39;1m
+  [39;22m[32m+            'type' => 'timestamp(0) with time zone',[39m[39;1m
+  [39;22m[32m             'not_null' => true,[39m[39;1m
+  [39;22m[32m             'default' => 'now()',[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m@@ @@[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         3 => Array &5 [[39m[39;1m
+  [39;22m[32m             'name' => 'deleted_at',[39m[39;1m
+  [39;22m[31m-            'type' => 'timestamp with time zone',[39m[39;1m
+  [39;22m[32m+            'type' => 'timestamp(0) with time zone',[39m[39;1m
+  [39;22m[32m             'not_null' => false,[39m[39;1m
+  [39;22m[32m             'default' => null,[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m@@ @@[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         7 => Array &9 [[39m[39;1m
+  [39;22m[32m             'name' => 'ends_at',[39m[39;1m
+  [39;22m[31m-            'type' => 'timestamp with time zone',[39m[39;1m
+  [39;22m[32m+            'type' => 'timestamp(0) with time zone',[39m[39;1m
+  [39;22m[32m             'not_null' => false,[39m[39;1m
+  [39;22m[32m             'default' => null,[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m@@ @@[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         14 => Array &16 [[39m[39;1m
+  [39;22m[32m             'name' => 'starts_at',[39m[39;1m
+  [39;22m[31m-            'type' => 'timestamp with time zone',[39m[39;1m
+  [39;22m[32m+            'type' => 'timestamp(0) with time zone',[39m[39;1m
+  [39;22m[32m             'not_null' => false,[39m[39;1m
+  [39;22m[32m             'default' => null,[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m@@ @@[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m[32m         18 => Array &20 [[39m[39;1m
+  [39;22m[32m             'name' => 'updated_at',[39m[39;1m
+  [39;22m[31m-            'type' => 'timestamp with time zone',[39m[39;1m
+  [39;22m[32m+            'type' => 'timestamp(0) with time zone',[39m[39;1m
+  [39;22m[32m             'not_null' => true,[39m[39;1m
+  [39;22m[32m             'default' => 'now()',[39m[39;1m
+  [39;22m[32m         ],[39m[39;1m
+  [39;22m
+
+  at [32mpackages/crm/tests/Pg/FullStorageParityTest.php[39m:[32m30[39m
+     26▕         $expected = StorageCatalogue::read(DB::connection(), 'crm_reference_test');
+     27▕         $actual = StorageCatalogue::read(DB::connection(), 'public');
+     28▕         expect(array_keys($actual))->toBe(array_keys($expected));
+     29▕         foreach ($expected as $table => $catalogue) {
+  ➜  30▕             expect($actual[$table])->toBe($catalogue, $table);
+     31▕         }
+     32▕         DB::statement('DROP SCHEMA crm_reference_test CASCADE');
+     33▕     });
+     34▕ });
+
+  [33m1   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m30[39;22m
+      [2m+3 vendor frames [22m
+  [33m5   [39m[39;1mpackages/crm/tests/Pg/FullStorageParityTest.php[39;22m:[39;1m22[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (37 assertions)[39m
+  [90mDuration:[39m [39m1.20s[39m
+  [90mRandom Order Seed:[39m [39m1789420054[39m
+
