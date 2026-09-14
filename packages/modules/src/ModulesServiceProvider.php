@@ -224,6 +224,13 @@ final class ModulesServiceProvider extends ServiceProvider
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
         $this->app->booted(function (): void {
+            // The compiler creates the cache that this projection consumes.
+            // Do not attempt to read it while its own command is booting on a
+            // fresh production deploy.
+            if ($this->isCompilingModules()) {
+                return;
+            }
+
             $arrayRegistry = $this->app->make(ArrayEntityRegistry::class);
 
             // Project the persisted compiled registry into the runtime
@@ -284,6 +291,12 @@ final class ModulesServiceProvider extends ServiceProvider
         }
 
         return (int) DB::connection($connection)->table('mod_lifecycle_log')->count();
+    }
+
+    private function isCompilingModules(): bool
+    {
+        return $this->app->runningInConsole()
+            && ($_SERVER['argv'][1] ?? null) === 'corex:modules:compile';
     }
 
     /**
