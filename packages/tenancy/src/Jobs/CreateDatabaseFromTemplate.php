@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Jobs;
 
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,10 +29,8 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
         public readonly Account $tenant,
     ) {}
 
-    public function handle(TemplateIntegrityVerifier $templateIntegrity): bool
+    public function handle(): bool
     {
-        $templateIntegrity->assertAccount($this->tenant);
-
         $manager = $this->tenant->database()->manager();
         $name = $this->tenant->database()->getName();
 

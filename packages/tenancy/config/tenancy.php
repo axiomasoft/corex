@@ -59,14 +59,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Golden-template integrity (P2.2/P2.3)
+    | Golden-template integrity core (P2.2)
     |--------------------------------------------------------------------------
     |
-    | A ready row alone is never authority to clone or activate a template.
-    | Each template must have a separately distributed, signed manifest and
-    | its public signing key. The empty default intentionally denies writes.
-    | Values are deployment configuration; private signing material never
-    | belongs here.
+    | The verifier authenticates a separately distributed, signed manifest
+    | against its public signing key and a recorded schema hash. The empty
+    | default intentionally fails closed. Write-path consumers are introduced
+    | separately; values are deployment configuration and private signing
+    | material never belongs here.
     |
     */
     'template_integrity' => [

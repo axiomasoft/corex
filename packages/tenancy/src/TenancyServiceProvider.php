@@ -72,9 +72,8 @@ final class TenancyServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             StanclTenantDatabaseProvisioner::class,
-            static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
-                centralConnection: (string) config('tenancy.central_connection'),
-                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
+            static fn (): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
+                (string) config('tenancy.central_connection'),
             ),
         );
 
@@ -96,9 +95,8 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->singleton(
             PendingPool::class,
             static fn (Application $app): PendingPool => new PendingPool(
-                centralConnection: (string) config('tenancy.central_connection'),
-                provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
-                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                (string) config('tenancy.central_connection'),
+                $app->make(StanclTenantDatabaseProvisioner::class),
             ),
         );
 
@@ -125,7 +123,6 @@ final class TenancyServiceProvider extends ServiceProvider
                 fsm: $app->make(AccountLifecycleFsm::class),
                 tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
                 impersonationGuard: $app->make(ImpersonationGuard::class),
-                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
 
@@ -135,7 +132,6 @@ final class TenancyServiceProvider extends ServiceProvider
             static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
                 centralConnection: (string) config('tenancy.central_connection'),
                 tenancy: $app->make(TenancyManager::class),
-                templateIntegrity: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
 

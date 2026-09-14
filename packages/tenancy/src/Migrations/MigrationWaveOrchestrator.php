@@ -7,7 +7,6 @@ namespace CoreX\Tenancy\Migrations;
 use Closure;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\AccountSchemaState;
 use CoreX\Tenancy\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,19 +36,12 @@ final class MigrationWaveOrchestrator
         private readonly string $centralConnection,
         private readonly TenancyManager $tenancy,
         private readonly ?Closure $migrationRunner = null,
-        private readonly ?TemplateIntegrityVerifier $templateIntegrity = null,
     ) {}
 
     public function runBatch(string $batchId, int $chunkSize = 5): void
     {
         /** @var MigrationBatch $batch */
         $batch = MigrationBatch::query()->findOrFail($batchId);
-
-        if ($this->templateIntegrity !== null) {
-            foreach (DB::connection($this->centralConnection)->table('root_accounts')->whereNull('deleted_at')->get() as $account) {
-                $this->templateIntegrity->assertAccount($account);
-            }
-        }
 
         $batch->forceFill(['status' => 'running', 'started_at' => $batch->started_at ?? now()])->save();
 

@@ -10,7 +10,6 @@ use CoreX\Enums\ImpersonationRestrictedAction;
 use CoreX\Events\DomainEvent;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Events\AccountSuspended;
 use CoreX\Tenancy\Events\GraceStarted;
 use CoreX\Tenancy\Events\TrialStarted;
@@ -49,7 +48,6 @@ final class AccountLifecycle
         private readonly AccountLifecycleFsm $fsm,
         private readonly TenantDatabaseLifecycle $tenantDatabaseLifecycle,
         private readonly ImpersonationGuard $impersonationGuard,
-        private readonly ?TemplateIntegrityVerifier $templateIntegrity = null,
     ) {}
 
     /**
@@ -65,7 +63,6 @@ final class AccountLifecycle
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
         $claimed = $this->pendingPool->pullPending();
-        $this->templateIntegrity()->assertAccount($claimed);
 
         $affected = DB::connection($this->centralConnection)->transaction(fn (): int => DB::connection($this->centralConnection)
             ->table('root_accounts')
@@ -102,7 +99,6 @@ final class AccountLifecycle
     public function startTrial(AccountRef $account): void
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
-        $this->templateIntegrity()->assertAccount(Account::on($this->centralConnection)->findOrFail($account->id));
 
         $trialEndsAt = now()->addDays((int) config('tenancy.trial_days', 14));
 
@@ -136,7 +132,6 @@ final class AccountLifecycle
     public function activate(AccountRef $account): void
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
-        $this->templateIntegrity()->assertAccount(Account::on($this->centralConnection)->findOrFail($account->id));
 
         DB::connection($this->centralConnection)->transaction(function () use ($account): void {
             $this->assertLockedTransition($account->id, 'active');
@@ -169,7 +164,6 @@ final class AccountLifecycle
     public function resume(AccountRef $account): void
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
-        $this->templateIntegrity()->assertAccount(Account::on($this->centralConnection)->findOrFail($account->id));
 
         DB::connection($this->centralConnection)->transaction(function () use ($account): void {
             $this->assertLockedTransition($account->id, 'active');
@@ -288,11 +282,6 @@ final class AccountLifecycle
             throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
         }
         $this->fsm->assertTransition((string) $status, $to);
-    }
-
-    private function templateIntegrity(): TemplateIntegrityVerifier
-    {
-        return $this->templateIntegrity ?? app(TemplateIntegrityVerifier::class);
     }
 
     /**

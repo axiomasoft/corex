@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Database\TemplateIntegrityException;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -100,9 +99,8 @@ function makePendingClusterRow(array $overrides = []): string
 
 function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPLATE_DB): void
 {
-    $id = (string) Str::uuid();
     DB::table('root_templates')->insert([
-        'id' => $id,
+        'id' => (string) Str::uuid(),
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -110,10 +108,6 @@ function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPL
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
-
-    if ($dbName === PENDING_TEMPLATE_DB) {
-        TestCase::trustTemplate(templateId: $id, database: $dbName);
-    }
 }
 
 function pendingPool(): PendingPool
@@ -273,8 +267,8 @@ it('does not publish a pending row before provisioning completes or after it fai
             $observed = $other->table('root_accounts')->where('status', 'pending')->count();
         }
     });
-    expect(fn () => pendingPool()->createPending(1, $cluster))->toThrow(TemplateIntegrityException::class);
-    expect($observed)->toBeNull()->and(pendingPool()->pendingCount())->toBe(0);
+    expect(fn () => pendingPool()->createPending(1, $cluster))->toThrow(QueryException::class);
+    expect($observed)->toBe(0)->and(pendingPool()->pendingCount())->toBe(0);
     $other->disconnect();
 });
 

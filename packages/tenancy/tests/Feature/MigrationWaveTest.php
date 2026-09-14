@@ -8,7 +8,6 @@ use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -101,9 +100,8 @@ function makeMwClusterRow(array $overrides = []): string
 
 function makeMwTemplateRow(int $version = 1, string $dbName = MW_TEMPLATE_DB): void
 {
-    $id = (string) Str::uuid();
     DB::table('root_templates')->insert([
-        'id' => $id,
+        'id' => (string) Str::uuid(),
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -111,7 +109,6 @@ function makeMwTemplateRow(int $version = 1, string $dbName = MW_TEMPLATE_DB): v
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
-    TestCase::trustTemplate(templateId: $id, database: $dbName);
 }
 
 /** @return list<string> account ids with a real, physically-cloned database. */
