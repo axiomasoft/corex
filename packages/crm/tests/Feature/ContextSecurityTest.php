@@ -5,15 +5,22 @@ declare(strict_types=1);
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
+use Flex\Crm\Actions\AssociateContactCompany;
 use Flex\Crm\Actions\CreateCompany;
 use Flex\Crm\Actions\CreateContact;
 use Flex\Crm\Data\Actor;
 use Flex\Crm\Data\CompanyData;
 use Flex\Crm\Data\ContactData;
 use Flex\Crm\Data\ExecutionContext;
+use Flex\Crm\Events\CompanyCreated;
+use Flex\Crm\Events\ContactCompanyAssociated;
+use Flex\Crm\Events\ContactCreated;
 use Flex\Crm\Models\Company;
+use Flex\Crm\Models\Contact;
 use Flex\Crm\Models\ContactCompany;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -66,4 +73,55 @@ it('guards direct association writes against cross-scope and foreign connection 
     expect(fn () => ContactCompany::create(['contact_id' => $contact->id, 'company_id' => $company->id]))->toThrow(AuthorizationException::class);
     config(['database.connections.other' => config('database.connections.testbench')]);
     expect(fn () => ContactCompany::on('other')->create(['contact_id' => $contact->id, 'company_id' => $company->id]))->toThrow(AuthorizationException::class);
+});
+
+it('rechecks trusted provenance after late creating observers', function (): void {
+    Company::creating(static function (Company $record): void {
+        $record->forceFill(['created_by' => ['source' => 'system', 'id' => 'forged', 'name' => 'Forged']]);
+    });
+    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Late observer'));
+    expect($company->created_by)->toBe($this->crmContext->current()->actor->toArray());
+});
+
+it('rejects a late observer changing the workspace and guards quiet writes', function (): void {
+    $ctx = $this->crmContext->current();
+    $quiet = new Company(['name' => 'Quiet foreign', 'workspace_id' => (string) Str::uuid7()]);
+    expect(fn () => $quiet->saveQuietly())->toThrow(AuthorizationException::class);
+    $quiet = app(CreateCompany::class)->handle(new CompanyData(name: 'Quiet provenance'));
+    $quiet->forceFill(['created_by' => ['source' => 'system', 'id' => 'forged', 'name' => 'Forged']]);
+    expect(fn () => $quiet->saveQuietly())->toThrow(AuthorizationException::class);
+    Company::creating(static function (Company $record): void {
+        $record->workspace_id = (string) Str::uuid7();
+    });
+    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Late workspace')))->toThrow(AuthorizationException::class);
+    expect(DB::table('crm_companies')->count())->toBe(1);
+});
+
+it('rejects a late observer changing association endpoints', function (): void {
+    $ctx = $this->crmContext->current();
+    $this->crmContext->context = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'testbench', actor: $ctx->actor, principalId: $ctx->principalId, allowAccountLevel: true);
+    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Local'));
+    $global = app(CreateCompany::class)->handle(new CompanyData(name: 'Global', accountLevel: true));
+    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Local'));
+    ContactCompany::creating(static function (ContactCompany $link) use ($global): void {
+        $link->company_id = $global->id;
+    });
+    expect(fn () => app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id))->toThrow(AuthorizationException::class);
+    expect(DB::table('crm_contact_company')->count())->toBe(0);
+});
+
+it('treats observer veto as failed mutation without dispatching success events', function (): void {
+    Event::fake([CompanyCreated::class, ContactCreated::class, ContactCompanyAssociated::class]);
+    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Existing'));
+    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Existing'));
+    Event::fake([CompanyCreated::class, ContactCreated::class, ContactCompanyAssociated::class]);
+    Company::creating(static fn (): bool => false);
+    Contact::creating(static fn (): bool => false);
+    ContactCompany::creating(static fn (): bool => false);
+    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Veto')))->toThrow(ValidationException::class);
+    expect(fn () => app(CreateContact::class)->handle(new ContactData(nameFirst: 'Veto')))->toThrow(ValidationException::class);
+    expect(fn () => app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id))->toThrow(ValidationException::class);
+    Event::assertNothingDispatched();
+    expect(DB::table('crm_companies')->count())->toBe(1)->and(DB::table('crm_contacts')->count())->toBe(1)
+        ->and(DB::table('crm_contact_company')->count())->toBe(0);
 });

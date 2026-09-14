@@ -17,6 +17,8 @@
 - Additive parity migration verifies identity/workspace prerequisites, permits duplicate INN,
   and enforces FK/pair/primary/index contracts. Populated legacy upgrade rejects before changing
   data; no invented actors or silent metadata truncation. See UPGRADE.md.
+- Final insert/update attribute guards prevent late/quiet Eloquent observers from bypassing
+  admission/provenance invariants; owning Actions roll back observer veto without success events.
 
 - **Breaking:** пакет и namespace переименованы `corex/crm`/`CoreX\Crm\` → `flex/crm`/`Flex\Crm\`
   (доктрина слоёв, D70/D72). Consumer-код обновляет `use`/`require` на новые имена (P2.0).

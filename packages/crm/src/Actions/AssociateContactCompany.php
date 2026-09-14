@@ -41,7 +41,10 @@ final readonly class AssociateContactCompany
             }
             $link = new ContactCompany(['contact_id' => $contactId, 'company_id' => $companyId, 'label' => $label === null ? null : trim($label), 'is_primary' => $isPrimary]);
             $link->setConnection($ctx->connectionName);
-            $link->save();
+
+            if (! $link->save()) {
+                throw ValidationException::withMessages(['association' => 'CRM association was vetoed by an observer.']);
+            }
             ContactCompanyAssociated::dispatch($link, $ctx->actor);
 
             return $link;

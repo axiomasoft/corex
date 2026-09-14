@@ -38,24 +38,45 @@ final class ContactCompany extends Pivot
             }
             $builder->whereHas('contact')->whereHas('company');
         });
-        self::saving(static function (self $link): void {
-            $guard = app(ContextGuard::class);
-            $ctx = $guard->current(lock: $link->getConnection()->transactionLevel() > 0);
+        self::saving(static fn (self $link) => $link->assertContext());
+    }
 
-            if ($link->getConnection()->getName() !== $ctx->connectionName) {
-                throw new AuthorizationException('CRM association write requires its context connection.');
-            }
-            $contact = Contact::on($ctx->connectionName)->findOrFail($link->contact_id);
-            $company = Company::on($ctx->connectionName)->findOrFail($link->company_id);
+    private function assertContext(): void
+    {
+        $guard = app(ContextGuard::class);
+        $ctx = $guard->current(lock: $this->getConnection()->transactionLevel() > 0);
 
-            if ($contact->workspace_id !== $company->workspace_id) {
-                throw new AuthorizationException('CRM association requires identical workspace scopes.');
-            }
+        if ($this->getConnection()->getName() !== $ctx->connectionName) {
+            throw new AuthorizationException('CRM association write requires its context connection.');
+        }
+        $contact = Contact::on($ctx->connectionName)->findOrFail($this->contact_id);
+        $company = Company::on($ctx->connectionName)->findOrFail($this->company_id);
 
-            if ($contact->workspace_id === null && ! $ctx->allowAccountLevel) {
-                throw new AuthorizationException('CRM account association requires account-level capability.');
-            }
-        });
+        if ($contact->workspace_id !== $company->workspace_id) {
+            throw new AuthorizationException('CRM association requires identical workspace scopes.');
+        }
+
+        if ($contact->workspace_id === null && ! $ctx->allowAccountLevel) {
+            throw new AuthorizationException('CRM account association requires account-level capability.');
+        }
+    }
+
+    /** @return array<string, mixed> */
+    #[Override]
+    protected function getAttributesForInsert(): array
+    {
+        $this->assertContext();
+
+        return parent::getAttributesForInsert();
+    }
+
+    /** @return array<string, mixed> */
+    #[Override]
+    protected function getDirtyForUpdate(): array
+    {
+        $this->assertContext();
+
+        return parent::getDirtyForUpdate();
     }
 
     /** @return BelongsTo<Contact, $this> */
