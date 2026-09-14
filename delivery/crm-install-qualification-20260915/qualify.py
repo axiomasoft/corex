@@ -104,6 +104,20 @@ for suffix in ['a', 'b']:
     if result.returncode:
         raise RuntimeError('Installed probe failed: ' + str(consumer / 'probe.log'))
     evidence = json.loads((consumer / 'evidence.json').read_text())
+    boxed = consumer / 'boxed'
+    for directory in ['bootstrap/cache', 'config', 'storage/logs']:
+        (boxed / directory).mkdir(parents=True, exist_ok=True)
+    (boxed / 'bootstrap/providers.php').write_text('<?php\ndeclare(strict_types=1);\nreturn [];\n')
+    for name in ['app', 'cache', 'logging', 'corex-api']:
+        shutil.copyfile(consumer / ('config/' + name + '.php'), boxed / ('config/' + name + '.php'))
+    (boxed / 'config/database.php').write_text("<?php\ndeclare(strict_types=1);\nreturn ['default'=>'sqlite','connections'=>['sqlite'=>['driver'=>'sqlite','database'=>':memory:','prefix'=>'']]];\n")
+    shutil.copyfile(consumer / 'bootstrap/cache/corex_modules.php', boxed / 'bootstrap/cache/corex_modules.php')
+    shutil.copyfile(HERE / 'boxed.php', boxed / 'probe.php')
+    boxed_result = subprocess.run(['php', 'probe.php'], cwd=boxed, env=runtime, capture_output=True, text=True)
+    (boxed / 'probe.log').write_text(boxed_result.stdout + boxed_result.stderr)
+    if boxed_result.returncode or not (boxed / 'evidence.json').exists():
+        raise RuntimeError('Installed boxed probe failed: ' + str(boxed / 'probe.log'))
+    evidence['boxed'] = json.loads((boxed / 'evidence.json').read_text())
     evidence['lock_sha256'] = exporter.digest((consumer / 'composer.lock').read_bytes())
     lock = json.loads((consumer / 'composer.lock').read_text())
     evidence['locked_packages'] = lock['packages']
