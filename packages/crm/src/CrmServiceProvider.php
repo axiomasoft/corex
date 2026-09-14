@@ -93,7 +93,7 @@ final class CrmServiceProvider extends ServiceProvider
             labelPlural: 'Leads',
             capabilities: [],
             fields: [],
-            titleAttribute: 'name',
+            titleAttribute: 'title',
         ));
 
         $registry->register(new EntityDefinition(
@@ -105,7 +105,7 @@ final class CrmServiceProvider extends ServiceProvider
             labelPlural: 'Activities',
             capabilities: [Capability::Auditable],
             fields: [],
-            titleAttribute: 'summary',
+            titleAttribute: 'subject',
         ));
     }
 }

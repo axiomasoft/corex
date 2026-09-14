@@ -6,10 +6,9 @@ namespace Flex\Crm\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Models\BaseModel;
+use Flex\Crm\Models\Concerns\HasActivities;
 use Flex\Crm\Models\Concerns\HasCrmContext;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Override;
 
 /**
@@ -30,6 +29,7 @@ use Override;
  */
 final class Contact extends BaseModel
 {
+    use HasActivities;
     use HasCrmContext;
 
     protected $table = 'crm_contacts';
@@ -44,16 +44,10 @@ final class Contact extends BaseModel
             ->using(ContactCompany::class)->withPivot(['id', 'label', 'is_primary'])->withTimestamps();
     }
 
-    /** @return HasMany<Deal, $this> */
-    public function deals(): HasMany
+    /** @return BelongsToMany<Deal, $this> */
+    public function deals(): BelongsToMany
     {
-        return $this->hasMany(Deal::class);
-    }
-
-    /** @return MorphMany<Activity, $this> */
-    public function activities(): MorphMany
-    {
-        return $this->morphMany(Activity::class, 'subject');
+        return $this->belongsToMany(Deal::class, 'crm_deal_contacts')->withPivot(['id', 'label', 'is_primary'])->withTimestamps();
     }
 
     /** @return array<string, string> */

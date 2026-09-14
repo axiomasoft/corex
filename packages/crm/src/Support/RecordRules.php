@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Support;
 
+use Flex\Crm\Models\Activity;
 use Flex\Crm\Models\Company;
 use Flex\Crm\Models\Contact;
+use Flex\Crm\Models\Deal;
+use Flex\Crm\Models\Lead;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
@@ -13,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 /** @internal Saving observer: invariant enforcement for direct Eloquent writes. */
 final class RecordRules
 {
-    public function saving(Company|Contact $record): void
+    public function saving(Company|Contact|Lead|Deal|Activity $record): void
     {
         $guard = app(ContextGuard::class);
         $ctx = $guard->current(lock: $record->getConnection()->transactionLevel() > 0);
@@ -51,6 +54,12 @@ final class RecordRules
             if ($found === null || ($found->workspace_id !== null && $found->workspace_id !== $workspace)) {
                 throw new AuthorizationException('CRM source is not available in this record scope.');
             }
+        }
+
+        if ($record instanceof Lead || $record instanceof Deal || $record instanceof Activity) {
+            $this->text(record: $record, field: $record instanceof Activity ? 'subject' : 'title', length: 255, required: ! ($record instanceof Activity));
+
+            return;
         }
         foreach (['phones', 'emails'] as $field) {
             $value = $record->getAttribute($field) ?? [];

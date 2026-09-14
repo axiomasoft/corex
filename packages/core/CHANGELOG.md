@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Feature definitions isolate duplicate inserts in a savepoint, preserving outer
+  PostgreSQL transactions and administrator toggles. Database-poll publishers
+  serialize per channel until commit so durable cursors cannot skip pending rows.
+
 ### Added
 
 - `TenantStorage` with scoped durable/ephemeral local disks, explicit usage capability and an

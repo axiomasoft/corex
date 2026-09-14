@@ -5,10 +5,24 @@ declare(strict_types=1);
 namespace Flex\Crm\Tests;
 
 use Flex\Crm\Testing\CrmTestCase;
+use Flex\Crm\Tests\Support\TestContext;
+use Override;
 use RuntimeException;
 
 abstract class TestCase extends CrmTestCase
 {
+    public TestContext $crmContext;
+
+    #[Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (static::usesRefreshDatabaseTestingConcern()) {
+            $this->crmContext = TestContext::seed('testbench');
+        }
+    }
+
     protected function defineDatabaseMigrations(): void
     {
         if (! static::usesRefreshDatabaseTestingConcern()) {

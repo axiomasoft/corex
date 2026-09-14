@@ -1,4 +1,4 @@
-# Company/contact parity upgrade
+# Full CRM storage parity upgrade
 
 This is a pre-1.0 breaking MINOR candidate after monorepo v0.2.0. No release tag is implied.
 Back up the account database before a separately authorized installation/upgrade.
@@ -37,7 +37,25 @@ Disable preserves data. Re-enable is idempotent. Parity `down()` refuses a destr
 loss of target data: restore a verified backup only in an authorized maintenance operation.
 Do not use module purge as an upgrade or rollback mechanism.
 
-The module still contains historical pipeline/stage/deal/lead/activity migrations.
-Their complete enable path is tested, but their DDL is not the approved FlexCRM sales
-schema. Full-target schema admission needs its owning continuation before app installation;
-this company/contact change does not approve those additional shapes.
+The subsequent `2026_09_15_000001_full_storage_parity` migration admits the approved
+PostgreSQL CRM profile for all enabled tables, including lost reasons, activity targets
+and the deal/contact association required by the existing conversion Action. It checks
+all affected tables, matching ID types and owning prerequisites before transactional DDL.
+It refuses ANY populated affected table, including already canonical company/contact
+data; enabling a module is not authorization to delete or convert that data.
+
+Sales API compatibility (next pre-1.0 MINOR, not a release): `CreateLead` now requires
+`title`, with explicit optional `contactName`, `email`, `phone`, `companyName`, `ownerId`
+and `sourceId`. Lead title is never interpreted as a human name. LeadStatus is
+`Open/Converted/Junk`; no aliases for New/Contacted/Qualified/Unqualified exist.
+Pipelines require `entity_type`, `code` and localized `name`; stages require `code`,
+localized `name` and `semantic=open/won/lost`, not `is_won/is_lost` flags. Deal amount
+is nullable minor units with mandatory currency (Money values remain supported);
+`Deal::contact()`/`contact_id` become `contacts()`. ActivityType contains only
+Call/Email/Meeting: Note and Task have no implied conversion. Activity target reads
+use `targets()` or entity `activities()`, while activity `subject` is now text.
+`LogActivity` retains summary-to-subject, but the named `userId` argument is replaced
+by `ownerId`; this is ownership, NOT historical authorship. Legacy `metadata` is
+explicitly rejected, not discarded. All sales writes require trusted context and
+preserve observer veto rollback and after-commit events. Product adapters must be
+updated explicitly before a separately authorized application installation.

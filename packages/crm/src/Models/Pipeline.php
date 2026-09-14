@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $id
- * @property string $name
+ * @property array<string, string> $name
+ * @property string|null $workspace_id
+ * @property string $entity_type
  * @property bool $is_default
  * @property int $position
  */
@@ -18,7 +20,7 @@ final class Pipeline extends BaseModel
     protected $table = 'crm_pipelines';
 
     /** @var list<string> */
-    protected $fillable = ['name', 'is_default', 'position'];
+    protected $fillable = ['workspace_id', 'entity_type', 'code', 'name', 'is_default', 'position', 'settings'];
 
     /** @return HasMany<Stage, $this> */
     public function stages(): HasMany
@@ -36,6 +38,8 @@ final class Pipeline extends BaseModel
     protected function casts(): array
     {
         return [
+            'name' => 'array',
+            'settings' => 'array',
             'is_default' => 'boolean',
             'position' => 'integer',
         ];

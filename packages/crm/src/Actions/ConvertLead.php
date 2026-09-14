@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Actions;
 
+use Brick\Money\Money;
+use CoreX\Enums\IdStrategy;
+use CoreX\Support\Config;
 use Flex\Crm\Data\CompanyData;
 use Flex\Crm\Data\ContactData;
 use Flex\Crm\Enums\LeadStatus;
@@ -14,6 +17,7 @@ use Flex\Crm\Models\Pipeline;
 use Flex\Crm\Support\ContextGuard;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Converts a lead into a Contact (+ optional Company, + optional Deal in the
@@ -40,23 +44,29 @@ final class ConvertLead
 
         return DB::usingConnection($lead->getConnectionName(), fn (): Contact => $lead->getConnection()->transaction(function () use ($lead, $pipeline, $withCompany): Contact {
             $fresh = $lead->newQuery()->whereKey($lead->getKey())->lockForUpdate()->firstOrFail();
+            $this->guard->current(lock: true);
             $lead->setRawAttributes($fresh->getAttributes(), true);
 
             if ($lead->status === LeadStatus::Converted) {
                 return Contact::on($lead->getConnectionName())->findOrFail($lead->converted_contact_id);
             }
 
+            if ($lead->status !== LeadStatus::Open || (($lead->contact_name === null || trim($lead->contact_name) === '') && ($lead->email === null || $lead->email === '') && ($lead->phone === null || $lead->phone === ''))) {
+                throw ValidationException::withMessages(['lead' => 'Conversion requires an open lead and explicit contact identity.']);
+            }
+
             $company = null;
 
             if ($withCompany && $lead->company_name !== null && $lead->company_name !== '') {
-                $company = $this->createCompany->handle(new CompanyData(name: $lead->company_name, ownerId: $lead->owner_id));
+                $company = $this->createCompany->handle(new CompanyData(name: $lead->company_name, ownerId: $lead->owner_id, sourceId: $lead->source_id));
             }
 
             $contact = $this->createContact->handle(new ContactData(
-                nameFirst: $lead->name,
+                nameFirst: $lead->contact_name,
                 emails: $lead->email === null || $lead->email === '' ? [] : [['value' => $lead->email]],
                 phones: $lead->phone === null || $lead->phone === '' ? [] : [['value' => $lead->phone]],
                 ownerId: $lead->owner_id,
+                sourceId: $lead->source_id,
             ));
 
             if ($company !== null) {
@@ -66,10 +76,19 @@ final class ConvertLead
             $deal = null;
 
             if ($pipeline instanceof Pipeline) {
-                $deal = $this->createDeal->handle($pipeline, $lead->name, null, $lead->owner_id);
-                $deal->contact_id = $contact->id;
+                $deal = $this->createDeal->handle(pipeline: $pipeline, title: $lead->title, amount: $lead->amount === null ? null : Money::ofMinor($lead->amount, $lead->currency), ownerId: $lead->owner_id);
                 $deal->company_id = $company?->id;
-                $deal->save();
+                $deal->source_id = $lead->source_id;
+
+                if (! $deal->save()) {
+                    throw ValidationException::withMessages(['deal' => 'Deal update was vetoed.']);
+                }
+                $values = ['deal_id' => $deal->id, 'contact_id' => $contact->id, 'is_primary' => true, 'created_at' => now(), 'updated_at' => now()];
+
+                if (Config::idStrategy() !== IdStrategy::Int) {
+                    $values['id'] = $deal->newUniqueId();
+                }
+                $deal->getConnection()->table('crm_deal_contacts')->insert($values);
             }
 
             $lead->status = LeadStatus::Converted;
@@ -77,7 +96,10 @@ final class ConvertLead
             $lead->converted_company_id = $company?->id;
             $lead->converted_deal_id = $deal?->id;
             $lead->converted_at = now();
-            $lead->save();
+
+            if (! $lead->save()) {
+                throw ValidationException::withMessages(['lead' => 'Lead conversion was vetoed.']);
+            }
 
             LeadConverted::dispatch($lead, $contact);
 

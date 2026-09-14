@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Flex\Crm\Models;
 
 use CoreX\Models\BaseModel;
+use Flex\Crm\Models\Concerns\HasActivities;
 use Flex\Crm\Models\Concerns\HasCrmContext;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Override;
 
 /**
@@ -31,6 +31,7 @@ use Override;
  */
 final class Company extends BaseModel
 {
+    use HasActivities;
     use HasCrmContext;
 
     protected $table = 'crm_companies';
@@ -49,12 +50,6 @@ final class Company extends BaseModel
     public function deals(): HasMany
     {
         return $this->hasMany(Deal::class);
-    }
-
-    /** @return MorphMany<Activity, $this> */
-    public function activities(): MorphMany
-    {
-        return $this->morphMany(Activity::class, 'subject');
     }
 
     /** @return array<string, string> */

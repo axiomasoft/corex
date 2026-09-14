@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Lifecycle checks the activation gate before migrations/hooks, serializes the
+  dependency graph, preserves external migration listeners, and defines flags
+  transactionally before the enable notification. Public contracts are unchanged.
+
 ### API operations
 
 - Backward-compatible `Api::operation()` declarations with explicit handler, ability, version, schemas and validation rules. Compilation stamps module ownership and rejects duplicate IDs/routes and malformed declarations. Existing resource metadata never becomes implicit CRUD.

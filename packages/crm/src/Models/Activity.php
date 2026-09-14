@@ -6,8 +6,8 @@ namespace Flex\Crm\Models;
 
 use CoreX\Models\BaseModel;
 use Flex\Crm\Enums\ActivityType;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Flex\Crm\Models\Concerns\HasCrmContext;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -15,8 +15,9 @@ use Illuminate\Support\Carbon;
  * company, deal) via the `subject` morph.
  *
  * @property string $id
- * @property ActivityType $type
- * @property string $summary
+ * @property ActivityType $kind
+ * @property string|null $subject
+ * @property string $status
  * @property string|null $body
  * @property string $subject_type
  * @property string $subject_id
@@ -26,24 +27,29 @@ use Illuminate\Support\Carbon;
  */
 final class Activity extends BaseModel
 {
+    use HasCrmContext;
+
     protected $table = 'crm_activities';
 
     /** @var list<string> */
-    protected $fillable = ['type', 'summary', 'body', 'user_id', 'metadata', 'occurred_at'];
+    protected $fillable = ['workspace_id', 'kind', 'status', 'subject', 'body', 'direction', 'phone', 'duration_sec', 'location', 'email_meta', 'recording_file_id', 'transcript', 'starts_at', 'ends_at', 'owner_id'];
 
-    /** @return MorphTo<Model, $this> */
-    public function subject(): MorphTo
+    /** @return HasMany<ActivityTarget, $this> */
+    public function targets(): HasMany
     {
-        return $this->morphTo();
+        return $this->hasMany(ActivityTarget::class);
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
         return [
-            'type' => ActivityType::class,
-            'metadata' => 'array',
-            'occurred_at' => 'datetime',
+            'kind' => ActivityType::class,
+            'email_meta' => 'array',
+            'created_by' => 'array',
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
+            'duration_sec' => 'integer',
         ];
     }
 }

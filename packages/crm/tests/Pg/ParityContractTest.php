@@ -270,7 +270,8 @@ it('serializes competing primary actions and rejects the loser after commit', fu
     $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact'));
     $ctx = $this->crmContext->current();
     config(['database.connections.primary_race' => config('database.connections.pgsql')]);
-    DB::connection('primary_race')->statement("SET lock_timeout='50ms'");
+    DB::connection('primary_race')->beginTransaction();
+    DB::connection('primary_race')->statement("SET LOCAL lock_timeout='50ms'");
     $fixture = $this->crmContext;
     $race = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'primary_race', actor: $ctx->actor, principalId: $ctx->principalId);
     $observed = false;
@@ -298,6 +299,7 @@ it('serializes competing primary actions and rejects the loser after commit', fu
         expect($observed)->toBeTrue()->and(DB::table('crm_contact_company')->where('is_primary', true)->count())->toBe(1);
     } finally {
         $fixture->context = $ctx;
+        DB::connection('primary_race')->rollBack();
         DB::purge('primary_race');
     }
 });

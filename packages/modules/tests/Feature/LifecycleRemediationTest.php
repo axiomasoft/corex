@@ -125,14 +125,32 @@ it('makes flags visible to ModuleEnabled and rolls back a failed definition', fu
     app()->instance(FeatureFlags::class, $flags);
     expect(fn () => $this->lifecycle->enable('corex/stub-feature-flag'))->toThrow(RuntimeException::class, 'definition failed');
     expect(DB::table('mod_modules')->count())->toBe(0);
-    app()->instance(FeatureFlags::class, new DatabaseFeatureFlags('pgsql'));
+    app()->instance(FeatureFlags::class, new DatabaseFeatureFlags);
+    // Lifecycle is pinned to PG; ambient SQLite has no feature store.
+    config(['database.default' => 'testbench']);
     $seen = false;
     app('events')->listen(ModuleEnabled::class, function () use (&$seen): void {
-        $seen = DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists();
+        $seen = DB::connection('pgsql')->table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists();
     });
     $this->lifecycle->enable('corex/stub-feature-flag');
     expect($seen)->toBeTrue();
+    config(['database.default' => 'pgsql']);
+    DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->update(['is_enabled' => true]);
     $this->lifecycle->disable('corex/stub-feature-flag', DisableReason::Manual);
     $this->lifecycle->enable('corex/stub-feature-flag');
     expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
+    expect(app(FeatureFlags::class)->active('sff.beta_mode'))->toBeTrue();
+});
+
+it('rolls back feature definitions and enable notifications with an outer transaction', function (): void {
+    $notified = false;
+    app('events')->listen(ModuleEnabled::class, function () use (&$notified): void {
+        $notified = true;
+    });
+    DB::beginTransaction();
+    $this->lifecycle->enable('corex/stub-feature-flag');
+    expect(DB::table('sys_feature_flags')->count())->toBe(1)->and($notified)->toBeFalse();
+    DB::rollBack();
+    expect(DB::table('mod_modules')->count())->toBe(0)
+        ->and(DB::table('sys_feature_flags')->count())->toBe(0)->and($notified)->toBeFalse();
 });

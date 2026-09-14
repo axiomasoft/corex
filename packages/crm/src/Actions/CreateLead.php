@@ -4,35 +4,44 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Actions;
 
-use Flex\Crm\Enums\LeadSource;
 use Flex\Crm\Enums\LeadStatus;
 use Flex\Crm\Events\LeadCreated;
 use Flex\Crm\Models\Lead;
-use Illuminate\Support\Facades\DB;
+use Flex\Crm\Support\ContextGuard;
+use Illuminate\Validation\ValidationException;
 
 final class CreateLead
 {
-    /** @param array<string, mixed>|null $customFields */
+    public function __construct(private readonly ContextGuard $guard) {}
+
     public function handle(
-        string $name,
-        LeadSource $source,
+        string $title,
+        ?string $contactName = null,
         ?string $email = null,
         ?string $phone = null,
         ?string $companyName = null,
         ?string $ownerId = null,
-        ?array $customFields = null,
+        string|int|null $sourceId = null,
     ): Lead {
-        return DB::transaction(function () use ($name, $source, $email, $phone, $companyName, $ownerId, $customFields): Lead {
-            $lead = Lead::query()->create([
-                'name' => $name,
-                'source' => $source,
-                'status' => LeadStatus::New,
+        $ctx = $this->guard->current();
+
+        return $this->guard->connection($ctx)->transaction(function () use ($title, $contactName, $sourceId, $email, $phone, $companyName, $ownerId, $ctx): Lead {
+            $this->guard->current(lock: true);
+            $lead = Lead::on($ctx->connectionName)->create([
+                'workspace_id' => $this->guard->workspace(ctx: $ctx, accountLevel: false),
+                'title' => $title,
+                'contact_name' => $contactName,
+                'source_id' => $sourceId,
+                'status' => LeadStatus::Open,
                 'email' => $email,
                 'phone' => $phone,
                 'company_name' => $companyName,
                 'owner_id' => $ownerId,
-                'custom_fields' => $customFields,
             ]);
+
+            if (! $lead->exists) {
+                throw ValidationException::withMessages(['lead' => 'Lead creation was vetoed.']);
+            }
 
             LeadCreated::dispatch($lead);
 

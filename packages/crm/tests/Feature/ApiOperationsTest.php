@@ -82,10 +82,16 @@ it('declares and dispatches company, contact and association operations through 
         ->and($company->getData(true)['data']['name'])->toBe('Acme');
     $companyId = $company->getData(true)['data']['id'];
 
+    foreach ([0, 1, '0', '1'] as $notBoolean) {
+        expect($dispatch('POST', 'companies', ['name' => 'Invalid flag', 'account_level' => $notBoolean])->getStatusCode())->toBe(422);
+    }
+
     $contact = $dispatch('POST', 'contacts', ['name_first' => 'Jane', 'emails' => [['value' => 'jane@acme.test']]]);
     expect($contact->getStatusCode())->toBe(201)
         ->and($contact->getData(true)['data']['display_name'])->toBe('Jane');
     $contactId = $contact->getData(true)['data']['id'];
+
+    expect($dispatch('POST', 'contacts/'.$contactId.'/companies', ['company_id' => $companyId, 'is_primary' => 1])->getStatusCode())->toBe(422);
 
     $association = $dispatch('POST', 'contacts/'.$contactId.'/companies', ['company_id' => $companyId, 'is_primary' => true]);
     expect($association->getStatusCode())->toBe(201)

@@ -11,18 +11,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property string $id
  * @property string $pipeline_id
- * @property string $name
+ * @property array<string, string> $name
  * @property int $position
  * @property int $probability
- * @property bool $is_won
- * @property bool $is_lost
+ * @property string $semantic
+ * @property list<string> $required_fields
  */
 final class Stage extends BaseModel
 {
     protected $table = 'crm_stages';
 
     /** @var list<string> */
-    protected $fillable = ['pipeline_id', 'name', 'position', 'probability', 'is_won', 'is_lost'];
+    protected $fillable = ['pipeline_id', 'code', 'name', 'color', 'semantic', 'position', 'probability', 'required_fields', 'settings'];
 
     /** @return BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo
@@ -42,8 +42,9 @@ final class Stage extends BaseModel
         return [
             'position' => 'integer',
             'probability' => 'integer',
-            'is_won' => 'boolean',
-            'is_lost' => 'boolean',
+            'name' => 'array',
+            'required_fields' => 'array',
+            'settings' => 'array',
         ];
     }
 }

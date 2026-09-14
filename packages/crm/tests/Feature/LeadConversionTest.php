@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Flex\Crm\Actions\ConvertLead;
 use Flex\Crm\Actions\CreateLead;
-use Flex\Crm\Enums\LeadSource;
 use Flex\Crm\Enums\LeadStatus;
 use Flex\Crm\Events\LeadConverted;
 use Flex\Crm\Models\Company;
@@ -15,14 +14,14 @@ use Flex\Crm\Models\Stage;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function (): void {
-    $this->pipeline = Pipeline::create(['name' => 'Sales']);
-    Stage::create(['pipeline_id' => $this->pipeline->id, 'name' => 'New', 'position' => 0]);
+    $this->pipeline = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'sales', 'name' => ['en' => 'Sales']]);
+    Stage::create(['pipeline_id' => $this->pipeline->id, 'code' => 'new', 'name' => ['en' => 'New'], 'position' => 0]);
 });
 
 it('converts a lead into contact, company and deal', function (): void {
     Event::fake([LeadConverted::class]);
 
-    $lead = app(CreateLead::class)->handle('Jane Doe', LeadSource::Website, email: 'jane@acme.test', companyName: 'Acme', ownerId: $this->crmContext->context->principalId);
+    $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane Doe', email: 'jane@acme.test', companyName: 'Acme', ownerId: $this->crmContext->context->principalId);
     $contact = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
     $lead->refresh();
 
@@ -33,9 +32,9 @@ it('converts a lead into contact, company and deal', function (): void {
         ->and($contact->companies()->sole()->id)->toBe($lead->converted_company_id);
 
     $deal = Deal::query()->findOrFail($lead->converted_deal_id);
-    expect($deal->contact_id)->toBe($contact->id)
+    expect($deal->contacts()->sole()->id)->toBe($contact->id)
         ->and($deal->company_id)->toBe($lead->converted_company_id);
-    expect($deal->contact()->sole()->id)->toBe($contact->id)
+    expect($deal->contacts()->sole()->id)->toBe($contact->id)
         ->and($deal->company()->sole()->id)->toBe($lead->converted_company_id)
         ->and($deal->pipeline()->sole()->id)->toBe($this->pipeline->id)
         ->and($deal->stage()->sole()->pipeline_id)->toBe($this->pipeline->id)
@@ -47,7 +46,7 @@ it('converts a lead into contact, company and deal', function (): void {
 });
 
 it('converts a lead without company or deal', function (): void {
-    $lead = app(CreateLead::class)->handle('No Co', LeadSource::Referral);
+    $lead = app(CreateLead::class)->handle(title: 'No Co', contactName: 'Jane');
     $contact = app(ConvertLead::class)->handle($lead);
     $lead->refresh();
 
@@ -59,7 +58,7 @@ it('converts a lead without company or deal', function (): void {
 
 it('returns the same conversion on retry even when passed a stale lead instance', function (): void {
     Event::fake([LeadConverted::class]);
-    $lead = app(CreateLead::class)->handle('Retry', LeadSource::Website, companyName: 'Once');
+    $lead = app(CreateLead::class)->handle(title: 'Retry', contactName: 'Jane', companyName: 'Once');
     $stale = $lead->fresh();
     $first = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
     $second = app(ConvertLead::class)->handle($stale, $this->pipeline, withCompany: true);

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditEntry;
+use CoreX\Contracts\FeatureFlagDefinition;
 use CoreX\Enums\ActorType;
+use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\PubSub\DatabasePollPubSub;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -52,4 +54,17 @@ it('serializes publishers so a cursor cannot overtake an uncommitted message', f
     }, maxPolls: 1, subscriber: 'regression', replayBacklog: true);
     expect($received)->toBe(['first', 'second']);
     DB::purge('publisher_test');
+});
+
+it('isolates duplicate feature definitions without aborting the caller transaction', function (): void {
+    $flags = new DatabaseFeatureFlags('pgsql');
+    $definition = new FeatureFlagDefinition(key: 'example.toggle', default: false);
+    $flags->define($definition);
+    DB::table('sys_feature_flags')->where('key', 'example.toggle')->update(['is_enabled' => true]);
+    DB::transaction(function () use ($flags, $definition): void {
+        $flags->define($definition);
+        $flags->define(new FeatureFlagDefinition(key: 'example.other', default: true));
+        expect($flags->active('example.toggle'))->toBeTrue();
+    });
+    expect(DB::table('sys_feature_flags')->count())->toBe(2);
 });

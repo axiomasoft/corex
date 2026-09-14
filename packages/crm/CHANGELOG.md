@@ -7,6 +7,15 @@
 
 ### Changed
 
+- **Breaking (next MINOR >=0.3.0, pre-1.0):** additive full enabled CRM storage parity,
+  canonical sales enums/fields/relations, lost reasons and activity targets; explicit
+  CreateLead and LogActivity named-argument migration. No guessed legacy status,
+  author, metadata or contact identity conversion. See UPGRADE.md.
+- Existing seven company/contact operations publish typed input/output schemas;
+  boolean inputs reject numeric/string lookalikes instead of reaching strict DTOs.
+- Sales Actions honor observer vetoes transactionally; nullable deal amount preserves
+  mandatory currency, and conversion pivot IDs use the owning configured-ID seam.
+
 - **Breaking (next MINOR, pre-1.0):** approved company/contact fields, B-13 `{source,id,name}`
   provenance, deterministic display/channels/search and typed contact/company M2M replace
   legacy scalar fields and single-company relationship. Create Actions now accept CompanyData/

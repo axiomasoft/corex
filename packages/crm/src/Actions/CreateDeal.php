@@ -9,7 +9,9 @@ use Flex\Crm\Enums\DealStatus;
 use Flex\Crm\Events\DealCreated;
 use Flex\Crm\Models\Deal;
 use Flex\Crm\Models\Pipeline;
-use Illuminate\Support\Facades\DB;
+use Flex\Crm\Support\ContextGuard;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 /**
@@ -18,23 +20,50 @@ use RuntimeException;
  */
 final class CreateDeal
 {
+    public function __construct(private readonly ContextGuard $guard) {}
+
     public function handle(Pipeline $pipeline, string $title, ?Money $amount = null, ?string $ownerId = null): Deal
     {
-        return DB::transaction(function () use ($pipeline, $title, $amount, $ownerId): Deal {
+        $ctx = $this->guard->current();
+
+        if ($pipeline->getConnection()->getName() !== $ctx->connectionName) {
+            throw new AuthorizationException('Pipeline connection differs from the current account.');
+        }
+
+        return $this->guard->connection($ctx)->transaction(function () use ($pipeline, $title, $amount, $ownerId, $ctx): Deal {
+            $this->guard->current(lock: true);
+            $pipeline = Pipeline::on($ctx->connectionName)->whereKey($pipeline->getKey())->sharedLock()->firstOrFail();
+
+            if ($pipeline->entity_type !== 'crm.deal' || ($pipeline->workspace_id !== null && $pipeline->workspace_id !== $ctx->tenant->workspace?->id)) {
+                throw new AuthorizationException('Pipeline is not available for deals in this workspace.');
+            }
             $stage = $pipeline->stages()->first();
 
             if ($stage === null) {
                 throw new RuntimeException('Воронка без стадий: добавьте стадию перед созданием сделки.');
             }
 
-            $deal = Deal::query()->create([
+            $deal = Deal::on($ctx->connectionName)->create([
+                'workspace_id' => $this->guard->workspace(ctx: $ctx, accountLevel: false),
                 'pipeline_id' => $pipeline->id,
                 'stage_id' => $stage->id,
                 'title' => $title,
-                'status' => DealStatus::Open,
+                'status' => DealStatus::from($stage->semantic),
+                'won_at' => $stage->semantic === 'won' ? now() : null,
+                'lost_at' => $stage->semantic === 'lost' ? now() : null,
+                'stage_entered_at' => now(),
                 'owner_id' => $ownerId,
-                'amount' => $amount,
+                ...($amount === null ? ['currency' => 'RUB'] : ['amount' => $amount]),
             ]);
+
+            if (! $deal->exists) {
+                throw ValidationException::withMessages(['deal' => 'Deal creation was vetoed.']);
+            }
+            foreach ($stage->required_fields ?? [] as $field) {
+                if ($deal->getAttribute($field) === null || $deal->getAttribute($field) === '') {
+                    throw ValidationException::withMessages(['stage_id' => 'Required stage fields are missing.']);
+                }
+            }
 
             DealCreated::dispatch($deal);
 
