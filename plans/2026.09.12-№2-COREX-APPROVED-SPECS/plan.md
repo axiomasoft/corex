@@ -1,0 +1,85 @@
+---
+type: workflow
+tags: [corex, plan-v2, approved-specs]
+created: 2026-09-12
+---
+# 2026.09.12-№2-COREX-APPROVED-SPECS — План №2 — CoreX: executable specs принятых D11–D21
+
+## 0. Meta
+
+| Поле | Значение |
+|:--|:--|
+| Plan ID | 2026.09.12-№2-COREX-APPROVED-SPECS |
+| Title | План №2 — CoreX: executable specs принятых D11–D21 |
+| Layout | v2 |
+| Document Type | Executable Master Plan |
+| Authoring Model | frontier/high · gpt-5.6-sol |
+| Repository | corex |
+| Related Packages | corex/core, corex/modules, corex/tasks, corex/tenancy, corex/auth (optional/private) |
+| Execution Mode | phase-first |
+| Target Operator Classes | implementation/high (frozen docs/code) · frontier/high (open source/schema or external operator binding) |
+| Approval Owner | Dmitry Vostrikov; named foreign source/consumer/operator owners per D2 |
+| Home | vault:CoreX/plans (repository design mirror only; sync not performed) |
+| visibility | private |
+| Historical Source | 2026.09.12-№1-COREX-SUCCESSOR, P3 closed, read-only |
+| Paused By | — |
+
+## 1. Context
+
+Все 11 owner branch choices D11–D21 приняты в predecessor future-spec-design-only; queue pending0. Этот новый план не supersedes и не повторяет terminal P3. D1 pins owner provenance and maps each branch to new specs. D2 pins fresh local source hashes and remaining authority/input gates. P1 delivers approved bounded normative corrections; P2 delivers generic template integrity only after exact frozen DDL/trust/seal approval; P3 implements generic domain trust and documents independent project boundaries: AzGuard owns its role system; CoreX provides reusable modules; applications independently compose both. P3.2 contains no foreign role-writer work (D8). P4 prepares fixed immutable source, deterministic four-package public exports and independent public/private pristine proofs. P5 documents factual passports, prepares exact publication result and retains a separate blocked-on-authority operator spec. Detailed contracts do not imply readiness when bindings are absent.
+
+BOXED-INIT accepted deferred under D15: no runtime adapter item; P1.4 only documents supported core-only constant account/no-workspace and unsupported workspaces until consumer. L0 remains useful without CRM/CMS/Store, no flex dependency/product literals or consumer role/host policy in corex code. Auth private/optional never part of public core/modules/tasks/tenancy graph. Coverage enforced 80/target 85 docs-only, stricter package gates retained. Compatibility generator/major Contracts/new packages/year 2/Move/Rename excluded. Current dirty worktree is evidence baseline, never export source. Source files/owned generated views in repository mirror are operational truth; canonical Brain changes/sync require their scoped source-owner workflow.
+
+## 2. Execution Rules
+
+- Current invocation designs only this new plan; no implementation, commit, Brain sync or external operation. Execution begins only by separate routed exact-spec invocation.
+- Read plan/phase/item/bundle/state in protocol order; source SHA mismatch or missing gate fails affected dispatch before product/journal mutation.
+- All selected owner branches are settled; do not ask again for them. Exact DDL/public-major/private-source/credential/external-result grants remain distinct D2 gates.
+- Normative items docs-only; source-owning operator applies only approved hunks with old/new hashes and bounded sync. Preserve unrelated docs divergence and dirty files.
+- No public src/Contracts or changed frozen public semantics without separate major/owner gate; no extra extender/package or upward dependency.
+- D8 replaces the former P3.2 external consumer-writer spec with exact CoreX documentation scope. CoreX, standalone AzGuard and application consumers retain independent ownership; no foreign writer/policy/entrypoint/audit qualification gates revised P3.2. Other source/private/distribution gates remain scoped to their unchanged items.
+- New package tests per-package; root tests/Distribution is quality tooling only. Consumers test in their own qualified project.
+- Code acceptance: root D34 composer lint:check, analyse, test, test:pg plus affected package lanes; composer test:arch for L0/graph scope; src changes require D98 bash scripts/mutation-check.sh --all.
+- V-QUALITY-CODE receipts include tool/runtime/ref hashes and exact commands; current evidence reused only on unchanged relevant inputs, affected delta rerun after change.
+- PG16/test DB preflight and isolation guard before tests/migrations; no dev/prod migrate:fresh. Golden template builder/verifier permissions separately scoped; no live backfill/remediation/DROP.
+- Export only committed approved source SHA; seal artifact/test-support/runtime metadata; no path/source symlink/warmcache/private credential leakage; no hidden packaging dependency rewrite.
+- Local/historical/current runner/pristine/public/private proof classes explicit. A workflow file or old local test is not current runner GREEN.
+- Recommended batches permit safe ready subset/order; never cross phase closure or hide authority/private boundaries; per-item acceptance stays binding.
+- GREEN phase direct-close eligible; independent item review is bounded concrete risk validation, not audit consent. No audit-admission/v2 issued or audit-phase successor.
+- Before delivery regenerate/check owned carriers and eligible bundle; future predecessor/input-gated bundles deferred, never fake output or permission.
+- Original plan/decisions/journal/state and inert historical archive remain byte-identical. New plan scope lint only; predecessor inherited error not retrospectively repaired.
+- External create/fork/push/tag/release/Packagist/secrets/DNS/TLS or authenticated private read requires separate exact source/result/operator authority after reviewable preparation; local GREEN never grants it.
+
+## 3. Routing
+
+| Batch | Items | Model class/effort | Exec | Review | Почему |
+|:--|:--|:--|:--|:--|:--|
+| B1 | P1.1 | implementation/high | manual | light | recommended: shared source/hash/docs context with P1.2–P1.4; preparation can run as ready subset without source writes |
+| B1 | P1.2 | implementation/high | manual | light | recommended: same source patches and ordered hash lineage; docs-only 80/85 definitions |
+| B1 | P1.3 | implementation/high | manual | light | recommended: same normative source/sync context; policy/manifest/proof comparison |
+| B1 | P1.4 | implementation/high | manual | light | recommended: same source qualification; foreign source gates remain per-file |
+| solo | P2.1 | frontier/high | manual | light | recommended: exact frozen-DDL and consumer trust/operator authority boundary prevents reuse with implementation before approval |
+| B2 | P2.2 | implementation/high | plan-exec | full | recommended: serializer/PG16/lock/security context reused with P2.3; bounded independent review of hash/seal/write race risk |
+| B2 | P2.3 | implementation/high | plan-exec | full | recommended: same integrity fixtures and lock proof; all earliest writes and queued rechecks inspected |
+| solo | P3.1 | implementation/high | plan-exec | full | recommended: reusable L0 state/generation/event/cache seam is self-contained and fake-testable; no consumer adapter or live authority is admitted |
+| solo | P3.2 | implementation/high | plan-exec | light | recommended: docs-only project ownership boundary is independent of foreign role-engine and product work; no consumer/security implementation context is admitted |
+| solo | P4.1 | frontier/high | manual | light | recommended: third-party source maintainer/license/artifact authority boundary before dependency edits; local dossier isolated |
+| B4 | P4.2 | implementation/high | plan-exec | light | recommended: release graph/metadata/source setup reused with exporter and public fixtures; immutable provider adoption gate remains explicit |
+| B4 | P4.3 | implementation/high | plan-exec | light | recommended: common source export/provider/test-support context; non-tenancy preparation can be independent ready subset |
+| B4 | P4.4 | implementation/high | plan-exec | light | recommended: reuse exact sealed artifacts/consumer runtime setup; validate public package cells; no publication capability |
+| solo | P4.5 | implementation/high | plan-exec | full | recommended: private source/credential authority and access boundary forbids sharing public credential-free fixture; review metadata/ref and token leakage |
+| B5 | P5.1 | implementation/high | manual | light | recommended: proof/passport/source map reused with exact-result dossier; factual docs only |
+| B5 | P5.2 | implementation/high | manual | light | recommended: same exact artifact/proof context; publication readiness review packet only |
+| solo | P5.3 | frontier/high | manual | full | required: separate exact-result external authority and irreversible remote-resource boundary; named operator only after prepared dossier approval |
+
+## 4. Update Log
+
+Owned projection: status.md and item *.state.md, derived from journal. Current product status derives from journal; this P3.2 design records no product acceptance.
+
+## 5. Decision Log
+
+Каталог решений: `decisions/`; генератор: `python3 plan-views.py decisions --plan-dir <plan>`; prerequisite ledger — D2, branch provenance — D1.
+
+## 7. Authority
+
+brief/00-brief.md#owner-request authorizes separate new design only. D11–D21 settled branch direction for specs. This result does not authorize implementation or external operations; future exact spec invocation must satisfy D2. 2026.09.12-№1-COREX-SUCCESSOR P3 closed permanently for this task. No supersession/re-entry/terminal execution of predecessor.
