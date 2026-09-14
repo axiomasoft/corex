@@ -12,6 +12,7 @@ parser.add_argument('--checkout', type=Path, required=True)
 parser.add_argument('--sealed-artifacts', type=Path, required=True)
 parser.add_argument('--installed-set', type=Path)
 parser.add_argument('--auth-static-autoload', type=Path)
+parser.add_argument('--mutation-source', action='store_true')
 args = parser.parse_args()
 root = args.checkout.resolve()
 sealed = root / 'plans/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/packages.json'
@@ -35,6 +36,22 @@ if args.installed_set:
     metadata = json.loads((installed / 'packages.json').read_text())
     value['repositories'] = [{'type': 'package', 'package': package} for package in metadata] + value['repositories']
     value['autoload-dev']['psr-4'].update({'Flex\\Crm\\Tests\\': 'packages/crm/tests/', 'CoreX\\Tenancy\\Tests\\': 'packages/tenancy/tests/'})
+    if args.mutation_source:
+        # Existing registered sabotage patches target committed source paths.
+        # Require byte equality before routing the mutation-only class loader
+        # there. This prevents a false GREEN from patching unexecuted copies.
+        import zipfile
+        for package in metadata:
+            name = package['name']
+            if not name.startswith(('corex/', 'flex/')):
+                continue
+            folder = root / 'packages' / name.split('/')[1]
+            with zipfile.ZipFile(installed / 'artifacts' / (name.replace('/', '-') + '.zip')) as archive:
+                for member in archive.namelist():
+                    if member.startswith('src/'):
+                        assert (folder / member).read_bytes() == archive.read(member)
+            for prefix, path in package['autoload']['psr-4'].items():
+                value['autoload-dev']['psr-4'][prefix] = str(folder.relative_to(root) / path)
     (root / '.qualification-composer.json').write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
     # Same coverage source sets, relocated to the files actually executed from
     # immutable vendor. Original XML, tests, exclusions and floors stay intact.
