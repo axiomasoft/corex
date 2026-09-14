@@ -16,6 +16,7 @@ use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Lifecycle\DatabaseModuleLifecycle;
+use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\AccountConnectionResolver;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
@@ -139,6 +140,11 @@ function migrateInstalled(ConsoleKernel $console, string $database, string $path
 }
 migrateInstalled($console, 'pgsql', __DIR__.'/vendor/corex/tenancy/database/migrations/root');
 check($console->call('corex:modules:compile') === 0, 'Installed compile failed.');
+// Compile normally runs in its own deploy process. This single-process probe
+// uses the existing worker freshness seam, not a replacement module registry.
+$compiledRegistry = $app->make(ModuleRegistry::class);
+check($compiledRegistry instanceof CompiledModuleRegistry, 'Unexpected installed registry implementation.');
+$compiledRegistry->flush();
 $principal = new ProbePrincipal;
 $policy = new ProbePolicy;
 $app->instance(PrincipalResolver::class, $principal);
