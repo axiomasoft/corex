@@ -1,0 +1,48 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:ab015c331ed651a589a65071dc82b05d07e172567bfd799d13369f4d0c4070c3",
+    "command_id": "task:plan-close",
+    "package": "task",
+    "version": "0.16.1"
+  },
+  "commit_sha": "4d0057681c94a1e84135dd4965d6f38c258a5a70",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:c7f32298d04d2cd13d9eb87821898c1db1de3e3d2624fc877922179b9e07cee8",
+    "plan": "sha256:8d4c3db11a0d274aa2f48501f7055f6ccbeb226004505d81b3c028c2e85e21f3",
+    "state": null
+  },
+  "journal": {
+    "command": "plan-close",
+    "line": 32,
+    "result": "closed-green",
+    "run_id": "archive-2026.09.12-№1-COREX-SUCCESSOR-20260915",
+    "sha256": "sha256:a77e3d3b49d79124f51fd5c2bc186216d086f702b74d3d0dd3b221783a5b24e8"
+  },
+  "next_exact": "план закрыт; 11 owner decisions разрешены. Detailed specs созданы в `2026.09.12-№2-COREX-APPROVED-SPECS`; актуальное ожидание и отдельный guarded запуск находятся в его `handoff.md`. Terminal P3 items не запускаются повторно.",
+  "plan_id": "2026.09.12-№1-COREX-SUCCESSOR",
+  "rationale": {
+    "open_risks": null,
+    "remaining": "Исполнимых successor items в этом плане нет. Executable specs уже созданы в successor; P1 и P2.1 завершены по его journal. Оставшиеся runtime/distribution outcomes этим планом не принимаются. Каждый следующий spec должен закрепить intent/scope, exact inputs/source hashes, owning files/project/operator, validation/negative acceptance, deliverables/rollback и оставшиеся authority/input gates. D15 принимает deferred boxed-workspaces outcome до конкретного потребителя, а не требует runtime adapter сейчас. Consumer DNS/TLS и role writer specs принадлежат concrete consumer project; ownership choice не переносит эти реализации в L0. Normative/source correction specs — docs-only. Template integrity и distribution требуют самостоятельных scope и проверок; поднятие floor до85 и compatibility.json tooling не включены."
+  },
+  "recommendation": "**Next:** план закрыт; 11 owner decisions разрешены. Detailed specs созданы в `2026.09.12-№2-COREX-APPROVED-SPECS`; актуальное ожидание и отдельный guarded запуск находятся в его `handoff.md`. Terminal P3 items не запускаются повторно.\n\n**Context:** continue-root\n\n| Context | continue-root |\n|:--|:--|",
+  "route": {
+    "batch": null,
+    "command": null,
+    "context": "continue-root",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "archived",
+  "subject": "archive"
+}

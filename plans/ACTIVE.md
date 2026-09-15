@@ -1,4 +1,4 @@
 # ACTIVE
 
-**Active:** 2026.09.12-№1-COREX-SUCCESSOR
-**Updated:** 2026-09-12
+**Active:** —
+**Updated:** 2026-09-15

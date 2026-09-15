@@ -2,6 +2,11 @@
 
 **Next:** план закрыт; 11 owner decisions разрешены. Detailed specs созданы в `2026.09.12-№2-COREX-APPROVED-SPECS`; актуальное ожидание и отдельный guarded запуск находятся в его `handoff.md`. Terminal P3 items не запускаются повторно.
 
+**Context:** continue-root
+
+| Context | continue-root |
+|:--|:--|
+
 **Done:** P1/P2 results сохранены. P3.1–P3.3 доставили evidence/proposals D6–D8. Владелец ответил тремя блоками: D6 «утверждаю», D7 «да, если ты счтаешь это личшим решением» с подтверждением рекомендации ассистентом, D8 «да». Distinct owner-provenance D11–D21 фиксируют branch choices. Все 11 request outcomes=`apply` в пределах исходного `future-spec-design-only`; pending=0. D6–D8 сохранены неизменными как evidence/proposal records.
 
 | Owner record | Request | Selected option |
