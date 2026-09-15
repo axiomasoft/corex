@@ -255,7 +255,7 @@ admission prevents send; cancellation after external dispatch cannot retract sen
 ntf_notifications: UUIDv7 id, recipient kind/id, request_key/digest, event_type/template_key/payload,
 related opaque ref, read_at,dismissed_at,cancelled_at,revision,timestamps; UNIQUE(recipient_kind,
 recipient_id,request_key). ntf_recipient_state: (kind,id) PK, preference_revision>=1. ntf_deliveries:
-own FK notification (nullable only for digest-owned intent), own FK digest_run nullable, CHECK exactly
+own FK notification (nullable only for digest-owned intent), nullable digest_run_id (FK added only by P4.6 migration000005 after ntf_digest_runs exists), CHECK exactly
 one owner; channel, delivery_key UNIQUE, state pending/claimed/sent/failed/skipped/cancelled/unknown,
 claim_epoch, attempts,next_attempt,lease_until,admitted_revision,provider_ref/error sanitized,
 sent_at. ntf_digest_runs: UUID, recipient kind/id, period hourly/daily, UTC period_start/end, batch
@@ -549,3 +549,25 @@ external timeout unknown (NTF-05/CHN-06/DIG-04; provider+consumer); preference v
 (VIEW-05/08/09; schema/query owner); optional provider boot secrets (PAN-03/CHN-03; package owner);
 missed fixed-list arch/CI scan (P4.8 negative probes; quality owner); unbound P5 producer
 (D4 finish denies until stable exact binding; P5 designer). None produces fake production acceptance.
+
+## Whole-plan producer placement — AWR-04/07
+
+P4.4 produces `packages/notifications/src/Contracts/NotificationChannelDriver.php`
+with the signatures above, and the built-in InAppChannelDriver. P4.5 consumes that exact
+interface, adding driver implementations/preferences only. Report path remains
+`findings/P4-notification-outbox.md`. NTF-05 validates typed outcomes at that first producer.
+
+P4.6 owns `packages/notifications/src/Internal/Digest/NotificationDigestDueSource.php`
+(CoreX\Notifications\Internal\Digest\NotificationDigestDueSource implements
+CoreX\Wakeup\Contracts\DueSource), registered only when digest is enabled and P5.2/5.5
+actual receipts are available. The source returns bounded pending work to the same runner;
+request→recipient→source→run/items lock order holds even for late arrivals. No new scheduler
+or reinserted completed request. P5.5 never consumes P4.6.
+
+Migration order is000000 notifications,000001 deliveries (nullable digest_run_id, no
+forward digest FK),000002 recipient state,000003 digest runs,000004 digest items,
+000005 add_ntf_deliveries_digest_run_foreign_key. The last file belongs P4.6; populated
+P4.4 baseline has only notification-owned intents and migrates without losing rows.
+DIG-01/02 must verify complete clean order, populated upgrade and final orphan rejection;
+NTF-01 verifies the earlier independent outbox install. Approved exact G-SCHEMA bytes bind
+this order. No historical migration already released may be silently rewritten.

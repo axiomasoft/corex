@@ -9,12 +9,43 @@ import subprocess
 import sys
 
 
+def design_inputs(plan: Path) -> set[str]:
+    """Stable design closure; execution outputs and rolling views are not seal inputs."""
+    expected = {
+        'plan.md', 'roadmap.md', 'open-questions.md',
+        'artifacts/source-inventory.json', 'scripts/task-check.py',
+        'scripts/test-design-guards.py', 'findings/whole-plan-astra-review.md',
+        'research/01b-acceptance-source-supplement.md',
+        'research/06-azguard-patterns.md', 'research/07-open-source-patterns.md',
+        'decisions/D17-whole-plan-review.md',
+    }
+    # Keep exact owning contract names explicit for the per-phase checker contracts.
+    expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py"})
+    for folder in ('brief', 'research', 'decisions'):
+        expected.update(str(path.relative_to(plan)) for path in (plan / folder).rglob('*') if path.is_file())
+    for number in range(1, 12):
+        expected.add(f'scripts/validate-p{number}.py')
+        expected.add(f'phases/P{number}/P{number}.md')
+        expected.update(str(path.relative_to(plan)) for path in (plan / f'phases/P{number}').glob(f'P{number}.*.md') if re.fullmatch(r'P\d+\.\d+\.md', path.name))
+        folder = plan / f'artifacts/P{number}-design'
+        expected.update(str(path.relative_to(plan)) for path in folder.rglob('*') if path.is_file())
+    review = plan / 'artifacts/astra-whole-plan-review'
+    for path in review.rglob('*'):
+        relative = path.relative_to(review)
+        # Read progress and verification output are explicitly volatile; raw retrievals,
+        # snapshots, source/test inventories and semantic review evidence are sealed.
+        if path.is_file() and relative.parts[0] != 'checks' and relative.as_posix() != 'read-pages.jsonl':
+            expected.add(str(path.relative_to(plan)))
+    for name in expected:
+        path = plan / name
+        if not path.is_file() or path.is_symlink() or not path.resolve().is_relative_to(plan.resolve()):
+            raise ValueError(f'DESIGN_PENDING: missing or nonlocal stable input: {name}')
+    return expected
+
+
 def design_ready(plan: Path) -> None:
     fields = ("Intent", "Why", "Scope Included", "Scope Excluded", "Inputs", "Files", "Required Reads", "Implementation Rules", "Code Guidance", "Validation", "Deliverables")
-    expected = {"plan.md", "research/05-integrated-design.md", "decisions/D4.md"}
-    # Stable candidate documents own signatures/SQL/defaults referenced by item specs.
-    # PLAN1.D9/PLAN1.D10: include them in the same finish seal to prevent indirect input drift.
-    expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py"})
+    expected = design_inputs(plan)
     for number in range(1, 12):
         phase = plan / f"phases/P{number}/P{number}.md"
         text = phase.read_text()
@@ -65,7 +96,7 @@ def design_ready(plan: Path) -> None:
     for path, checksum in anchors.items():
         if hashlib.sha256((plan / path).read_bytes()).hexdigest() != checksum:
             raise ValueError(f"DESIGN_PENDING: finish input changed: {path}")
-    print("Design gate PASS: 11 detailed phases, Perplexity evidence and current whole-plan finish; semantic review remains required")
+    print("Design gate PASS: 11 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned")
 
 
 def main() -> int:

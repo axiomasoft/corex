@@ -234,7 +234,7 @@ hourly UTC hour/daily UTC day, fireAt=window.end; supplied timezone/DST windows 
 before request, no cron recurrence here. First durable digest intent/upcoming window creates request
 in SAME account transaction subject to lock order; run for closed window idempotently reuses same
 key while residual/new items are discovered by DIG producer's own durable source. Persistent
-`ntf_digest_items/runs` are authoritative for catch-up: P4.6 notifications registers a DueSource which
+`ntf_digest_items/runs` are authoritative for catch-up: P4.6 notifications registers CoreX\Notifications\Internal\Digest\NotificationDigestDueSource from packages/notifications/src/Internal/Digest/NotificationDigestDueSource.php (implements the P5.2 DueSource) which
 scans remaining closed-window items/runs, invokes same bridge/handler with canonical key and polls
 pending revision/batch until quiescent. No completed sys_wakeup row reinsert or completed-key mutation
 for late arrivals. This source is a SQL discovery adapter, not a new scheduler; uses same runner,

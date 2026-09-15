@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: fcac99bc3d2ed9f648e8b30ef3d39cbe16bab528f6088cc1a2ccc9579e1c6b10
+inputs_sha256: bb7164e477764789be42d937ed1119813669ff5fbd680083d8004af3e2922d16
 generated_by: task plan-views status
 -->
 
@@ -201,6 +201,8 @@ generated_by: task plan-views status
 | 2026-09-15 | plan-designer/gpt-5.6-sol | plan-design · in-progress · P11 explicit plan-only design; actual provider route captured. Failed/incomplete retrievals owner-notified; last successful general primary-source answer retained. No product item start. |
 | 2026-09-15 | plan-designer/gpt-5.6-sol | plan-design · no-op · note сокращена; полный текст: journal.jsonl:28 |
 | 2026-09-15 | plan-designer/gpt-5.6-sol | plan-design · no-op · note сокращена; полный текст: journal.jsonl:29 |
+| 2026-09-15 | owner-authorized-design-review | plan-design · no-op · note сокращена; полный текст: journal.jsonl:30 |
+| 2026-09-15 | owner-authorized-design-review | plan-design · no-op · note сокращена; полный текст: journal.jsonl:31 |
 
 ## Owner Gates
 

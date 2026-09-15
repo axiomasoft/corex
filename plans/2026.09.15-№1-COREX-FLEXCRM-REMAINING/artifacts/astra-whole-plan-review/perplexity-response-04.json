@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\"Concern\",\"Canonical repository\",\"Key source paths\",\"Useful official test paths\"\n\"Tenant DB context\",\"archtechx/tenancy (package: stancl/tenancy)\",\"src/Bootstrappers/DatabaseTenancyBootstrapper.php; src/Tenancy.php; src/Database/\",\"tests/Bootstrappers/DatabaseTenancyBootstrapperTest.php; tests/\"\n\"Scoped storage paths\",\"thephpleague/flysystem plus league/flysystem-path-prefixing\",\"Path-prefixing package: src/PathPrefixedAdapter.php, src/PathPrefixer.php\",\"tests/PathPrefixedAdapterTest.php / adapter conformance tests\"\n\"Media and conversions\",\"spatie/laravel-medialibrary\",\"src/Conversions/, especially Jobs/PerformConversionsJob.php; src/Support/FileRemover/; src/MediaCollections/Models/Media.php\",\"tests/Feature/Conversions/; tests/Feature/Media/; tests/Feature/FileRemover/\""
+    }
+  ]
+}

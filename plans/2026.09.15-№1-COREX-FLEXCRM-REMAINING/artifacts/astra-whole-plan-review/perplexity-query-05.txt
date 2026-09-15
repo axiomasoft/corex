@@ -1,0 +1,1 @@
+Explain in 150 words why tenant database context reset and filesystem path prefixing are different isolation guarantees, and why queued media conversions do not prove physical deletion of late worker outputs. Cite official stancl tenancy, Flysystem and Laravel queue documentation. Plain paragraphs, no table.

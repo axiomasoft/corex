@@ -23,7 +23,7 @@
 
 Задача — закрыть **оставшиеся универсальные CoreX-зависимости** фиксированного набора требований
 FlexCRM и затем передать дальнейшее развитие приложению. Это верхний design слой Astra:
-P1 и P2 детализированы Sol по четыре execution contracts, P3 — семь, P4 — восемь, P5 — шесть, P6 — восемь, P7 — девять, P8 — семь, P9 — девять, P10 — девять; P11 — семь; все фазы имеют детальные спецификации, единый semantic/hash-current design-finish остаётся следующим обязательным шагом.
+P1 и P2 детализированы Sol по четыре execution contracts, P3 — семь, P4 — восемь, P5 — шесть, P6 — восемь, P7 — девять, P8 — семь, P9 — девять, P10 — девять; P11 — семь; все фазы имеют детальные спецификации, whole-plan review и межфазовые исправления описаны D17; актуальность design-finish проверяется scripts/task-check.py --check design.
 Реализация/публичные API/DDL/dependencies/releases/чужие планы текущей сессией не меняются.
 Матрица из 52 R-строк включает всю открытую P6.5–P6.26 программу, P9.1/P11.7 и B38 gaps;
 atomic AC index сохраняет исходные критерии. P1 замораживает их exact owner/evidence mapping.
@@ -37,8 +37,8 @@ Product modules, standalone engines и central/cloud operations имеют от�
 
 ## 2. Execution Rules
 
-- Current owner scope: P11 plan-only детализация по явному `$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11`; D6 neutral external queries, D16 freezes exact complete consumer dependency joins/accepting actor and finite future owning bookkeeping without external grants.
-- P1 и P2 имеют по 4 detailed specs, P3 — 7, P4 — 8, P5 — 6, P6 — 8, P7 — 9, P8 — 7, P9 — 9, P10 — 9, P11 — 7; execution admission для всех items закрыта до полного дизайна P1–P11 и design-finish по D4. P1 mandatory Perplexity receipt verified дополнительным запросом (D5); P2 mandatory neutral RAG verified (D6/D7); P3 mandatory neutral RAG verified (D8); P4 mandatory neutral RAG verified (D9); P5 mandatory neutral RAG verified after owner-resumed general/routing/digest verification (D10); P6 mandatory neutral RAG verified after initial incomplete answer and separate transfer/search queries (D11); P7 mandatory neutral RAG verified after notified incomplete replies and topic queries (D12); P8 mandatory neutral RAG verified after notified incomplete initial answer and separate guard/schema queries (D13); P9 mandatory neutral RAG verified after owner-notified incomplete responses and complete short query/direct sources (D14); P10 mandatory neutral RAG verified with supplementary queries/direct primary sources (D15); P11 neutral mandatory RAG verified after notified failed/incomplete retrievals and awaited successful source-selected response/direct primary checks (D16). Whole integrated finish pending.
+- Current owner scope: полный design review/research/repair по brief/02-astra-whole-plan-review.md (Astra/high); D17 описывает точные исправления. Scope не включает execution items; после actual finish рекомендуется B-P1-QUALIFY на frontier/high = gpt-5.6-sol/high: первый ready carrier P1.1, затем P1.2–P1.4 в том же root по D18.
+- P1 и P2 имеют по 4 detailed specs, P3 — 7, P4 — 8, P5 — 6, P6 — 8, P7 — 9, P8 — 7, P9 — 9, P10 — 9, P11 — 7; execution admission для всех items закрыта до полного дизайна P1–P11 и design-finish по D4. P1 mandatory Perplexity receipt verified дополнительным запросом (D5); P2 mandatory neutral RAG verified (D6/D7); P3 mandatory neutral RAG verified (D8); P4 mandatory neutral RAG verified (D9); P5 mandatory neutral RAG verified after owner-resumed general/routing/digest verification (D10); P6 mandatory neutral RAG verified after initial incomplete answer and separate transfer/search queries (D11); P7 mandatory neutral RAG verified after notified incomplete replies and topic queries (D12); P8 mandatory neutral RAG verified after notified incomplete initial answer and separate guard/schema queries (D13); P9 mandatory neutral RAG verified after owner-notified incomplete responses and complete short query/direct sources (D14); P10 mandatory neutral RAG verified with supplementary queries/direct primary sources (D15); P11 neutral mandatory RAG verified after notified failed/incomplete retrievals and awaited successful source-selected response/direct primary checks (D16). Whole integrated review — D17; current readiness requires the byte-current finish check.
 - **Perplexity:** только общие практики/конкретные технические вопросы/публичные примеры; CoreX — внутренняя разработка, факты о ней проверяются локально (D6).
 - docs/dev-doctrine.md + research/04-architecture.md обязательны; upward dependency и product literals запрещены.
 - Матрица research/01-traceability.md — owner требований; source inventory — provenance; статусы — journal/generated views.
@@ -71,9 +71,19 @@ Product modules, standalone engines и central/cloud operations имеют от�
 - Единая картина: research/05-integrated-design.md; каждый R имеет owner/destination, phase producer→consumer contracts/versions/failure model, no dependency cycles, non-CRM scenario, compatibility/gates/risk owner. Проверка всех межфазовых пересечений и pre-mortem до finish; нет обязательного independent phase audit без consent.
 - Дизайн читает available source/R/AC/A/E evidence; produced artifacts предыдущих execution items описываются как future contracts и не исполняются ради детализации. Их actual GREEN остаётся prerequisite execution. Не подделывать producer output; неизвестный material choice снять в дизайне.
 - До product mutation каждого item: `python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py --check design`. Отсутствующая детализация/RAG/общий finish = DESIGN_PENDING, выполнение не начинается. После изменения design inputs заново проверить affected integrated delta/finish hashes.
-- Finish artifact: artifacts/design-finish.md, **Design finish: verified**, ## Design inputs (Path / SHA256) для plan.md, research/05-integrated-design.md, всех phase index/item specs, research/P1-design-rag.md–P11-design-rag.md и decisions/D4.md, а также stable candidate docs research/P2-contract-design.md/P3-adapter-design.md/P4-extension-design.md /P5-wakeup-design.md/P6-data-design.md/P7-utility-design.md/P8-tool-design.md/P9-cohort-design.md, decisions/D14-release-cohort.md и scripts/validate-p9.py, research/P10-effective-design.md, decisions/D15-effective-acceptance.md и scripts/validate-p10.py, research/P11-reconciliation-design.md, decisions/D16-consumer-reconciliation.md и scripts/validate-p11.py (D9/D10/D11/D12/D13/D14/D15/D16: indirect contract inputs must stay hash-current). Structural lint и содержательная совместимость обязательны; hashes создаются после итоговой записи стабильных inputs, без self/volatile carriers.
+- Finish artifact: artifacts/design-finish.md, **Design finish: verified**, ## Design inputs (Path / SHA256). D17/scripts/task-check.py::design_inputs defines the exact full stable input closure, including all indirect research/source/decision/validator/raw evidence inputs. Self/volatile journal/status/state/bundle/handoff/check logs excluded; own generated views checked separately. Structural checks and recorded semantic integration review must pass before sealing; changed stable inputs invalidate finish.
 
 ## 3. Routing
+
+D18/research/08-execution-batches.md:35 context envelopes (24 groups +11solo), не78
+обязательных новых сессий. Перед запуском группы прочитать этот execution guide.
+Первый реально готовый item допускается отдельно; его producer consumers продолжаются
+в том же root после per-item closure/bundle/admission. Route группы — maxima строк.
+Ready subsets не требуют ещё не созданных outputs будущих членов. Нельзя допустить
+whole dependency chain заранее, когда native admit_batch возвращает BATCH_STALE.
+Каждый group scope должен быть явно включён в invocation владельца; текущий запрос
+разрешает группировку и commit/push дизайна, не выполнение items.
+
 
 Фазовая детализация P1–P11: **frontier/high = gpt-5.6-sol/high**.
 P1–P11 строки ниже — реальные execution items; ни одна не допущена до D4 finish. Sol выбирает models/effort,
@@ -81,84 +91,84 @@ Batch/Review по сложности, integration/security/public риску. Д
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
 |:--|:--|:--|:--|:--|:--|
-| solo | P1.1 | implementation/medium | plan-exec | light | recommended: детерминированная provenance сверка; source output нужен до qualification inputs |
-| B-P1-QUALIFY | P1.2 | frontier/high | plan-exec | light | recommended: общий frozen source/context; mixed ownership и semantic equivalents требуют Sol/high, ready subsets допустимы |
-| B-P1-QUALIFY | P1.3 | frontier/high | plan-exec | light | recommended: общий frozen source/context; mixed ownership и semantic equivalents требуют Sol/high, ready subsets допустимы |
-| solo | P1.4 | frontier/high | plan-exec | light | recommended: lossless seal требует завершённых AC/evidence carriers и содержательной сверки их согласованности |
-| solo | P2.1 | frontier/high | plan-exec | light | recommended: отдельная квалификация sealed P1/equivalents создаёт общий baseline до открытого contract выбора |
-| B-P2-PROPOSALS | P2.2 | frontier/high | plan-exec | light | recommended: общий qualified intake/BC/trust context; parallel DAG branches допускают ready subsets без child agents |
-| B-P2-PROPOSALS | P2.3 | frontier/high | plan-exec | light | recommended: общий qualified intake/BC/trust context; parallel DAG branches допускают ready subsets без child agents |
-| solo | P2.4 | frontier/high | plan-exec | light | recommended: финальный catalogue/12-input seal требует завершённых exact identity и generic proposals; отдельный bounded compatibility check |
-| B-P3-LOCAL | P3.1 | implementation/high | plan-exec | full | recommended: common storage/physical PG setup reused; hard tenant isolation/native driver seam needs bounded independent review |
-| B-P3-LOCAL | P3.2 | implementation/high | plan-exec | full | recommended: common isolated PG/source setup; claim concurrency and export/drop refusal require bounded independent review |
-| B-P3-IDENTITY | P3.3 | implementation/high | plan-exec | full | recommended: frozen wire/SQL/auth context reused across chain; mTLS/JWT identity trust hard seam |
-| B-P3-IDENTITY | P3.4 | implementation/high | plan-exec | full | recommended: same producer/context; restore/fence/inbox concurrent state hard seam, ready subset admitted |
-| B-P3-IDENTITY | P3.5 | implementation/high | plan-exec | full | recommended: same pair/credential/clock fault setup; final-write security+concurrency hard seam |
-| B-P3-IDENTITY | P3.6 | implementation/high | plan-exec | full | recommended: same accepted profile and context; cache version versus authorization separation verified |
-| solo | P3.7 | implementation/medium | plan-exec | light | recommended: distinct final source/seal checkpoint after every branch; read-only evidence consolidation |
-| solo | P4.1 | implementation/high | plan-exec | full | recommended: distinct provider/guest-policy checkpoint; only registry/descriptor package context, later core query/default boundary separated by other producer chains |
-| B-P4-MEDIA | P4.2 | implementation/high | plan-exec | full | recommended: shared media/storage/PG setup; attach/delete and non-transactional IO recovery hard concurrency seam |
-| B-P4-MEDIA | P4.3 | implementation/high | plan-exec | full | recommended: reuse same storage/file-lock/fault harness; stale completion/delete and untrusted decode hard seam |
-| B-P4-NOTIFICATIONS | P4.4 | implementation/high | plan-exec | full | recommended: common SQL/producer transaction/recipient context; commit/dispatch crash and unknown effect hard seam |
-| B-P4-NOTIFICATIONS | P4.5 | implementation/high | plan-exec | full | recommended: same delivery/preference lock context; current authorization/cancellation and unknown provider effect hard seam |
-| B-P4-NOTIFICATIONS | P4.6 | implementation/high | plan-exec | full | recommended: same frozen delivery/digest context; prerequisite P5 gate explicit, safe ready subsets allowed; concurrent claims/admitted content hard seam |
-| solo | P4.7 | implementation/high | plan-exec | full | recommended: distinct core-only schema/SQL/public boundary and nullable default/inference tests; no sibling import, required panels adapter producer explicit |
-| solo | P4.8 | implementation/high | plan-exec | light | recommended: distinct cold installed archive/environment checkpoint after all producers; deterministic manifests/seal and meaningful installed integration checks suffice |
-| solo | P5.1 | implementation/high | plan-exec | light | recommended: distinct standalone source/install qualification before any engine ABI adoption; unavailable source must not delay utility |
-| B-P5-WAKEUP | P5.2 | implementation/high | plan-exec | full | recommended: shared SQL/context/fault harness; durable claim/cancel/local commit hard concurrency seam |
-| B-P5-WAKEUP | P5.3 | implementation/high | plan-exec | full | recommended: reuse same runner/SQL/source setup; root hint revision/epoch CAS and tenant isolation hard seam, ready subset allowed |
-| solo | P5.4 | implementation/high | plan-exec | full | recommended: distinct qualified external engine/FSM ABI and durable producer checkpoint; unknown effect/signal/FSM security hard seam |
-| solo | P5.5 | implementation/high | plan-exec | full | recommended: distinct P4 outbox and wakeup consumer setup; digest mapping/cancel/lock ordering hard seam, no P4.6 prerequisite |
-| solo | P5.6 | implementation/medium | plan-exec | light | recommended: distinct cold dist/installed source seal checkpoint after all branches, full declared hosted/release matrix belongs P9 |
-| solo | P6.1 | implementation/high | plan-exec | light | recommended: distinct independent immutable engine/codec/source qualification before ABI adoption |
-| B-P6-FIELDS | P6.2 | implementation/high | plan-exec | full | recommended: shared qualified engine/type/context PG setup; typed public field/policy seam |
-| B-P6-FIELDS | P6.3 | implementation/high | plan-exec | full | recommended: same engine/catalog harness; async CIC/lock/crash hard seam, ready subsets allowed |
-| B-P6-TRANSFER | P6.4 | implementation/high | plan-exec | full | recommended: shared SQL/source/map/target setup; checkpoint/concurrent jobs/unknown hard seam |
-| B-P6-TRANSFER | P6.5 | implementation/high | plan-exec | full | recommended: same codec/storage SQL setup; snapshot/finalize/current policy hard seam |
-| B-P6-SEARCH | P6.6 | implementation/high | plan-exec | full | recommended: shared schema/PG/provider context; current row/field ACL/query hard seam |
-| B-P6-SEARCH | P6.7 | implementation/high | plan-exec | full | recommended: same provider/task/fault setup; late-sender/rebuild/swap hard seam |
-| solo | P6.8 | implementation/high | plan-exec | light | recommended: distinct cold installed dist/environment checkpoint after all seven branch receipts |
-| solo | P7.1 | implementation/medium | plan-exec | light | recommended: distinct qualified source/producer/installed checkpoint; deterministic evidence qualification/consolidation |
-| solo | P7.2 | implementation/high | plan-exec | full | recommended: distinct qualified source/producer/installed checkpoint; hard public/DST/concurrency/current-authority seam requires bounded review |
-| solo | P7.3 | implementation/high | plan-exec | full | recommended: distinct qualified source/producer/installed checkpoint; hard public/DST/concurrency/current-authority seam requires bounded review |
-| solo | P7.4 | implementation/high | plan-exec | full | recommended: distinct qualified source/producer/installed checkpoint; hard public/DST/concurrency/current-authority seam requires bounded review |
-| B-P7-INTL | P7.5 | implementation/high | plan-exec | light | recommended: shared intl package/Settings/decimal/reference source context, ready subsets sequential writes, no child agents |
-| B-P7-INTL | P7.6 | implementation/high | plan-exec | full | recommended: shared intl package/Settings/decimal/reference source context, ready subsets sequential writes, no child agents |
-| B-P7-INTL | P7.7 | implementation/high | plan-exec | full | recommended: shared intl package/Settings/decimal/reference source context, ready subsets sequential writes, no child agents |
-| solo | P7.8 | implementation/high | plan-exec | full | recommended: distinct qualified source/producer/installed checkpoint; hard public/DST/concurrency/current-authority seam requires bounded review |
-| solo | P7.9 | implementation/medium | plan-exec | light | recommended: distinct qualified source/producer/installed checkpoint; deterministic evidence qualification/consolidation |
-| solo | P8.1 | implementation/medium | plan-exec | light | recommended: separate immutable source/equivalent/adoption intake before compiler work; deterministic qualification |
-| B-P8-TOOLS | P8.2 | implementation/high | plan-exec | full | recommended: common compiled/schema/policy/guard context, ordered ready producer subset allowed; public/schema/current-authority hard seam needs bounded review |
-| B-P8-TOOLS | P8.3 | implementation/high | plan-exec | full | recommended: common compiled/schema/policy/guard context, ordered ready producer subset allowed; public/schema/current-authority hard seam needs bounded review |
-| B-P8-TOOLS | P8.4 | implementation/high | plan-exec | full | recommended: common compiled/schema/policy/guard context, ordered ready producer subset allowed; public/schema/current-authority hard seam needs bounded review |
-| solo | P8.5 | implementation/high | plan-exec | light | recommended: separate modules-only read diagnostic independent of optional APItool/producer state; no hard effect seam |
-| solo | P8.6 | implementation/high | plan-exec | full | recommended: separate actual selected producer/ownership/transport contract setup; security cross-domain mapping hard seam |
-| solo | P8.7 | implementation/medium | plan-exec | light | recommended: distinct cold immutable ZIP/installed source checkpoint after all branch receipts; local seal and parity tests |
-| solo | P9.1 | implementation/medium | plan-exec | light | recommended: deterministic producer/source/profile freeze before build; self-check and affected evidence suffice |
-| solo | P9.2 | implementation/high | plan-exec | full | recommended: public split/composer metadata integrity hard seam; bounded independent review of named seam |
-| solo | P9.3 | implementation/high | plan-exec | full | recommended: frozen compatible matrix/CI and fail-closed runner/publication helpers before grants; bounded review of credential/immutable operation seam |
-| solo | P9.4 | implementation/high | plan-exec | full | recommended: populated upgrade/refusal/restore and tenant isolation hard seam; bounded independent review of named seam |
-| solo | P9.5 | implementation/high | manual | full | recommended: actual remote runner dispatch/credential/source identity hard seam; bounded independent review of named seam |
-| solo | P9.6 | implementation/high | manual | full | recommended: private source confidentiality/current authorization and independent domain hard seam; bounded independent review of named seam |
-| solo | P9.7 | implementation/medium | plan-exec | light | recommended: deterministic seal of already tested publication helper and exact operation packet before grant; self-check and current affected evidence |
-| solo | P9.8 | implementation/high | manual | full | recommended: irreversible multi-repo/version/assets partial-publication hard seam; bounded independent review of named seam |
-| solo | P9.9 | implementation/medium | plan-exec | light | recommended: read-only final cold delivered matrix/passport consolidation using unchanged qualified fixture; self-check and affected evidence suffice |
-| solo | P10.1 | implementation/medium | plan-exec | light | recommended: distinct released intake checkpoint prepares verifier before external evidence acceptance; deterministic local tests |
-| B-P10-TARGETS | P10.2 | implementation/high | plan-exec | light | recommended: shared same-cohort/profile/import provenance context; independently ready central/cloud subsets without agents |
-| B-P10-TARGETS | P10.3 | implementation/high | plan-exec | light | recommended: shared same-cohort/profile/import provenance context; independently ready central/cloud subsets without agents |
-| B-P10-AP | P10.4 | implementation/high | plan-exec | full | recommended: shared deployed security/fault receipt context; all-edge mTLS/current authorization hard seam needs bounded independent review |
-| B-P10-AP | P10.5 | implementation/high | plan-exec | full | recommended: shared deployed security/fault receipt context; final-write/nonrollback witness hard seam needs bounded independent review |
-| solo | P10.6 | implementation/high | plan-exec | full | recommended: distinct actual FE/domain/recovery budget setup; authorization versus physical cleanup hard seam needs bounded review |
-| solo | P10.7 | implementation/high | plan-exec | light | recommended: distinct closed-month telemetry/census external wait, no batch across timing window; raw population and affected semantic checks |
-| solo | P10.8 | implementation/high | plan-exec | light | recommended: distinct actual provider/control-plane operation receipt context; no external writes, raw full selected ops qualification |
-| solo | P10.9 | implementation/medium | plan-exec | light | recommended: distinct current eight-branch final seal after all acceptance windows; deterministic evidence consolidation |
-| solo | P11.1 | implementation/high | plan-exec | light | recommended: distinct producer/source freeze and verifier preparation before receipt qualification; deterministic local checks |
-| B-P11-QUALIFY | P11.2 | implementation/high | plan-exec | light | recommended: shared current consumer pins/config/test/atom context, ready ordered subsets allowed |
-| B-P11-QUALIFY | P11.3 | implementation/high | plan-exec | light | recommended: same qualified consumer/test/atom join setup, distinct per-profile checks |
-| B-P11-QUALIFY | P11.4 | implementation/high | plan-exec | light | recommended: same immutable selected-atom context; deterministic coverage and residual-owner checks |
-| solo | P11.5 | implementation/high | plan-exec | full | recommended: distinct ready exact foreign diff checkpoint before authority grant; accepting actor and race/partial overwrite hard seam requires bounded independent review |
-| solo | P11.6 | implementation/high | manual | full | recommended: distinct finite authority and foreign repository ownership checkpoint, manual dispatch; authenticated actor and concurrent overwrite/partial write hard seam |
-| solo | P11.7 | implementation/medium | plan-exec | light | recommended: distinct consumer committed-result anchor after foreign write; read-only final currentness/coverage seal |
+| B-P1-QUALIFY | P1.1 | implementation/medium | plan-exec | light | recommended: Один frozen source corpus: reconciliation → atoms/equivalents → seal; per-item closure внутри сессии. |
+| B-P1-QUALIFY | P1.2 | frontier/high | plan-exec | light | recommended: Один frozen source corpus: reconciliation → atoms/equivalents → seal; per-item closure внутри сессии. |
+| B-P1-QUALIFY | P1.3 | frontier/high | plan-exec | light | recommended: Один frozen source corpus: reconciliation → atoms/equivalents → seal; per-item closure внутри сессии. |
+| B-P1-QUALIFY | P1.4 | frontier/high | plan-exec | light | recommended: Один frozen source corpus: reconciliation → atoms/equivalents → seal; per-item closure внутри сессии. |
+| B-P2-PROPOSALS | P2.1 | frontier/high | plan-exec | light | recommended: Один P1 lock/BC/trust context: intake → proposals → catalogue; public adoption grants остаются отдельными gates. |
+| B-P2-PROPOSALS | P2.2 | frontier/high | plan-exec | light | recommended: Один P1 lock/BC/trust context: intake → proposals → catalogue; public adoption grants остаются отдельными gates. |
+| B-P2-PROPOSALS | P2.3 | frontier/high | plan-exec | light | recommended: Один P1 lock/BC/trust context: intake → proposals → catalogue; public adoption grants остаются отдельными gates. |
+| B-P2-PROPOSALS | P2.4 | frontier/high | plan-exec | light | recommended: Один P1 lock/BC/trust context: intake → proposals → catalogue; public adoption grants остаются отдельными gates. |
+| B-P3-LOCAL | P3.1 | implementation/high | plan-exec | full | recommended: Общий storage/physical PG harness; независимые isolation и claim reviews сохраняются. |
+| B-P3-LOCAL | P3.2 | implementation/high | plan-exec | full | recommended: Общий storage/physical PG harness; независимые isolation и claim reviews сохраняются. |
+| B-P3-IDENTITY | P3.3 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.4 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.5 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.6 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.7 | implementation/medium | plan-exec | light | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| solo | P4.1 | implementation/high | plan-exec | full | recommended: Headless provider/guest-policy catalogue; соседний media IO требует другого storage/fault harness, coupling не окупается. |
+| B-P4-MEDIA | P4.2 | implementation/high | plan-exec | full | recommended: Общий media/storage/file-lock/decode fault harness; lifecycle → conversions. |
+| B-P4-MEDIA | P4.3 | implementation/high | plan-exec | full | recommended: Общий media/storage/file-lock/decode fault harness; lifecycle → conversions. |
+| B-P4-NOTIFICATIONS | P4.4 | implementation/high | plan-exec | full | recommended: Общий outbox/channel/digest SQL context; P4.6 только после P5.2/5.5, при их отсутствии закончить ready P4.4/5 subset. |
+| B-P4-NOTIFICATIONS | P4.5 | implementation/high | plan-exec | full | recommended: Общий outbox/channel/digest SQL context; P4.6 только после P5.2/5.5, при их отсутствии закончить ready P4.4/5 subset. |
+| B-P4-NOTIFICATIONS | P4.6 | implementation/high | plan-exec | full | recommended: Общий outbox/channel/digest SQL context; P4.6 только после P5.2/5.5, при их отсутствии закончить ready P4.4/5 subset. |
+| B-P4-VIEWS-SEAL | P4.7 | implementation/high | plan-exec | full | recommended: Core saved-view/descriptor checks → installed extension seal; нужны остальные branch receipts, cold fixture не новая сессия. |
+| B-P4-VIEWS-SEAL | P4.8 | implementation/high | plan-exec | light | recommended: Core saved-view/descriptor checks → installed extension seal; нужны остальные branch receipts, cold fixture не новая сессия. |
+| solo | P5.1 | implementation/high | plan-exec | light | recommended: Чужой immutable engine ABI/source grant может ожидаться независимо; его ожидание не связывает готовый wakeup utility. |
+| B-P5-WAKEUP | P5.2 | implementation/high | plan-exec | full | recommended: Один runner/SQL/context harness: local sweep → root hints; physical resolver нужен только выбранной ветке. |
+| B-P5-WAKEUP | P5.3 | implementation/high | plan-exec | full | recommended: Один runner/SQL/context harness: local sweep → root hints; physical resolver нужен только выбранной ветке. |
+| B-P5-CONSUMERS | P5.4 | implementation/high | plan-exec | full | recommended: Общий wakeup consumer/conformance harness: engine binding и digest bridge → installed seal; missing engine не мешает ready P5.5. |
+| B-P5-CONSUMERS | P5.5 | implementation/high | plan-exec | full | recommended: Общий wakeup consumer/conformance harness: engine binding и digest bridge → installed seal; missing engine не мешает ready P5.5. |
+| B-P5-CONSUMERS | P5.6 | implementation/medium | plan-exec | light | recommended: Общий wakeup consumer/conformance harness: engine binding и digest bridge → installed seal; missing engine не мешает ready P5.5. |
+| B-P6-FIELDS | P6.1 | implementation/high | plan-exec | light | recommended: Квалификация source/ABI → field binding → schema bridge в одном engine/catalog context; ready transfer/search не ждут missing engine. |
+| B-P6-FIELDS | P6.2 | implementation/high | plan-exec | full | recommended: Квалификация source/ABI → field binding → schema bridge в одном engine/catalog context; ready transfer/search не ждут missing engine. |
+| B-P6-FIELDS | P6.3 | implementation/high | plan-exec | full | recommended: Квалификация source/ABI → field binding → schema bridge в одном engine/catalog context; ready transfer/search не ждут missing engine. |
+| B-P6-TRANSFER | P6.4 | implementation/high | plan-exec | full | recommended: Общий codec/storage/SQL target context: resumable import → coherent export. |
+| B-P6-TRANSFER | P6.5 | implementation/high | plan-exec | full | recommended: Общий codec/storage/SQL target context: resumable import → coherent export. |
+| B-P6-SEARCH | P6.6 | implementation/high | plan-exec | full | recommended: Общий query/provider/rebuild harness → installed data seal после остальных branches; callbacks/ACL/fault reviews сохраняются. |
+| B-P6-SEARCH | P6.7 | implementation/high | plan-exec | full | recommended: Общий query/provider/rebuild harness → installed data seal после остальных branches; callbacks/ACL/fault reviews сохраняются. |
+| B-P6-SEARCH | P6.8 | implementation/high | plan-exec | light | recommended: Общий query/provider/rebuild harness → installed data seal после остальных branches; callbacks/ACL/fault reviews сохраняются. |
+| B-P7-RECURRENCE | P7.1 | implementation/medium | plan-exec | light | recommended: Квалифицированный source/recurrence ABI → pure bounded adapter; общий immutable source/context. |
+| B-P7-RECURRENCE | P7.2 | implementation/high | plan-exec | full | recommended: Квалифицированный source/recurrence ABI → pure bounded adapter; общий immutable source/context. |
+| B-P7-TASKS | P7.3 | implementation/high | plan-exec | full | recommended: Existing task model/actions/transaction harness → recurrence materializer; binding только после P7.2 и P5.2. |
+| B-P7-TASKS | P7.4 | implementation/high | plan-exec | full | recommended: Existing task model/actions/transaction harness → recurrence materializer; binding только после P7.2 и P5.2. |
+| B-P7-INTL | P7.5 | implementation/high | plan-exec | light | recommended: Общие intl/config/decimal/dataset inputs; sequential shared writes, scoped source/license gates. |
+| B-P7-INTL | P7.6 | implementation/high | plan-exec | full | recommended: Общие intl/config/decimal/dataset inputs; sequential shared writes, scoped source/license gates. |
+| B-P7-INTL | P7.7 | implementation/high | plan-exec | full | recommended: Общие intl/config/decimal/dataset inputs; sequential shared writes, scoped source/license gates. |
+| B-P7-BRIDGES-SEAL | P7.8 | implementation/high | plan-exec | full | recommended: Selected intl/search/label adapters → installed utility seal; потребляются актуальные остальные branch receipts. |
+| B-P7-BRIDGES-SEAL | P7.9 | implementation/medium | plan-exec | light | recommended: Selected intl/search/label adapters → installed utility seal; потребляются актуальные остальные branch receipts. |
+| B-P8-TOOLS | P8.1 | implementation/medium | plan-exec | light | recommended: Registry/API source qualification → declarations → catalogue → guarded invocation; последовательная квалификация без повторного полного чтения. |
+| B-P8-TOOLS | P8.2 | implementation/high | plan-exec | full | recommended: Registry/API source qualification → declarations → catalogue → guarded invocation; последовательная квалификация без повторного полного чтения. |
+| B-P8-TOOLS | P8.3 | implementation/high | plan-exec | full | recommended: Registry/API source qualification → declarations → catalogue → guarded invocation; последовательная квалификация без повторного полного чтения. |
+| B-P8-TOOLS | P8.4 | implementation/high | plan-exec | full | recommended: Registry/API source qualification → declarations → catalogue → guarded invocation; последовательная квалификация без повторного полного чтения. |
+| B-P8-INTEGRATION | P8.5 | implementation/high | plan-exec | light | recommended: Registry diagnostics и selected contributions → installed tool seal; P8.5 готов независимо, P8.6 ждёт только выбранных producers. |
+| B-P8-INTEGRATION | P8.6 | implementation/high | plan-exec | full | recommended: Registry diagnostics и selected contributions → installed tool seal; P8.5 готов независимо, P8.6 ждёт только выбранных producers. |
+| B-P8-INTEGRATION | P8.7 | implementation/medium | plan-exec | light | recommended: Registry diagnostics и selected contributions → installed tool seal; P8.5 готов независимо, P8.6 ждёт только выбранных producers. |
+| B-P9-BUILD | P9.1 | implementation/medium | plan-exec | light | recommended: Source/vector/overlay freeze → exact split/dist build; один export-map context, no remote dispatch. |
+| B-P9-BUILD | P9.2 | implementation/high | plan-exec | full | recommended: Source/vector/overlay freeze → exact split/dist build; один export-map context, no remote dispatch. |
+| B-P9-LOCAL-PROOF | P9.3 | implementation/high | plan-exec | full | recommended: Matrix/CI helpers → pristine/populated installed fixtures; общий actual build/recipe context, bounded отдельно от export implementation. |
+| B-P9-LOCAL-PROOF | P9.4 | implementation/high | plan-exec | full | recommended: Matrix/CI helpers → pristine/populated installed fixtures; общий actual build/recipe context, bounded отдельно от export implementation. |
+| solo | P9.5 | implementation/high | manual | full | recommended: Manual G-RUNNER: удалённый dispatch/current credentials и собственный finite grant; не смешивать с private authority. |
+| solo | P9.6 | implementation/high | manual | full | recommended: Manual G-PRIVATE: отдельный конфиденциальный graph и finite read grant; не объединять authority с runner. |
+| solo | P9.7 | implementation/medium | plan-exec | light | recommended: Локальный publication packet после двух manual branches; соседние Exec=manual, готовые bytes до G-RELEASE. |
+| solo | P9.8 | implementation/high | manual | full | recommended: Manual G-RELEASE: необратимые split/tag/assets и recovery; отдельный exact publication grant. |
+| solo | P9.9 | implementation/medium | plan-exec | light | recommended: Локальный delivered-install/passport после manual publication; actual remote result появляется на другой authority boundary. |
+| B-P10-TARGETS | P10.1 | implementation/medium | plan-exec | light | recommended: Один released/profile/import context: verifier/intake → central/cloud receipts, independent ready subsets. |
+| B-P10-TARGETS | P10.2 | implementation/high | plan-exec | light | recommended: Один released/profile/import context: verifier/intake → central/cloud receipts, independent ready subsets. |
+| B-P10-TARGETS | P10.3 | implementation/high | plan-exec | light | recommended: Один released/profile/import context: verifier/intake → central/cloud receipts, independent ready subsets. |
+| B-P10-AP | P10.4 | implementation/high | plan-exec | full | recommended: Один deployed target/census и fault receipt context: security → races/restore → FE; все исходные budgets и reviews обязательны. |
+| B-P10-AP | P10.5 | implementation/high | plan-exec | full | recommended: Один deployed target/census и fault receipt context: security → races/restore → FE; все исходные budgets и reviews обязательны. |
+| B-P10-AP | P10.6 | implementation/high | plan-exec | full | recommended: Один deployed target/census и fault receipt context: security → races/restore → FE; все исходные budgets и reviews обязательны. |
+| solo | P10.7 | implementation/high | plan-exec | light | recommended: Полный закрытый monthly census — отдельное календарное ожидание; нет busy polling или удержания остальных branches. |
+| B-P10-OPS-SEAL | P10.8 | implementation/high | plan-exec | light | recommended: Provider operation imports → effective seal на том же verifier; P10.8 не ждёт month, P10.9 ждёт все actual branches. |
+| B-P10-OPS-SEAL | P10.9 | implementation/medium | plan-exec | light | recommended: Provider operation imports → effective seal на том же verifier; P10.8 не ждёт month, P10.9 ждёт все actual branches. |
+| B-P11-QUALIFY | P11.1 | implementation/high | plan-exec | light | recommended: Один source/vector/consumer/atom corpus: verifier → pins → tests → ledger; последовательный re-admission по готовности. |
+| B-P11-QUALIFY | P11.2 | implementation/high | plan-exec | light | recommended: Один source/vector/consumer/atom corpus: verifier → pins → tests → ledger; последовательный re-admission по готовности. |
+| B-P11-QUALIFY | P11.3 | implementation/high | plan-exec | light | recommended: Один source/vector/consumer/atom corpus: verifier → pins → tests → ledger; последовательный re-admission по готовности. |
+| B-P11-QUALIFY | P11.4 | implementation/high | plan-exec | light | recommended: Один source/vector/consumer/atom corpus: verifier → pins → tests → ledger; последовательный re-admission по готовности. |
+| solo | P11.5 | implementation/high | plan-exec | full | recommended: Новая finite foreign write surface и full независимый review exact three-file diff; не повышать light qualification batch до full ради packet. |
+| solo | P11.6 | implementation/high | manual | full | recommended: Manual G-CONSUMER-RECONCILE: отдельная accepting/write authority, exclusivity и foreign commit. |
+| solo | P11.7 | implementation/medium | plan-exec | light | recommended: Локальный final consumer seal после manual foreign commit; anchor становится доступен после отдельной write boundary. |
 
 ## 4. Update Log
 

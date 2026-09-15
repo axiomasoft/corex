@@ -416,3 +416,44 @@ Finite tombstone GC with unknown late worker: rejected missing termination horiz
 Key risk owners: external engine/schema owner DDL-02–08; transfer/consumer domain TRN-01–10;
 storage/export EXP-03–06; query/policy SRCH-03–06; provider/lifecycle IDX-02–09; P9 install/release;
 P10 actual 10M/backup/fleet/provider timing; P11 immutable consumer. Detailed thresholds untouched.
+
+## Shared foundation adoption — AWR-04/06
+
+The exact three CoreX\Support\Data DTOs above have **one shared implementation**, with
+finite first-consumer ownership. Eligible writers are P6.2, P6.4, P6.6, P7.4, P7.6 and
+P7.7, only after their own P1/P2 exact adoption gates. The first actually ready one
+creates the foundation as its first substep; readiness is not determined by phase
+number or availability of the attributes engine. This is a frozen placement/contract,
+not permission for an executor to choose a new DTO or library. No extra execution item,
+engine dependency, scheduler or runtime registry is introduced.
+
+Exact shared Files: packages/core/src/Support/Data/DataScope.php, RecordRef.php and
+WriteToken.php in that same directory; packages/core/tests/Unit/SupportDataTest.php;
+packages/core/CHANGELOG.md; findings/shared-data-foundation.md. Per-package core tests
+must be included in the existing root phpunit.xml/ci.yml harness by the first writer;
+those finite paths are allowed there. No unrelated Support/Data files are writable.
+
+Scheduler rule: shared-file production is serial across all six eligible items, even
+if their independent package work is otherwise runnable concurrently. Before writing,
+check the existing Task journal/worktree owner and foundation receipt. If absent and
+another item is producing it, wait for that bounded substep; do not create a competing
+copy. If files exist after interrupted production without a receipt, the recorded
+producing item reconciles its unfinished substep before reuse, not silent overwrite.
+Once produced, later items read the receipt and exact files, verify hashes plus adopted
+API/behavior and consume them without mutation. A mismatch returns the original producer
+for explicit affected repair and new receipt; it is never silently redefined by a consumer.
+
+The receipt has schema `shared-data-foundation/1`, actual producing item, exact P2
+proposal/adoption digests, Source(Path/SHA256), constructor/invariant observations and
+core test command/runtime/log SHA256/result. It is an ordinary partial producer output,
+not a fake completed phase or a new requirement. Each eligible item's existing first
+boundary case binds that receipt and its own consuming API tests. Package seal inputs
+P6.8/P7.9 include the same foundation receipt and source hashes, regardless of which
+eligible item produced them. No engine receipt is a prerequisite for that shared output.
+
+Shared tests prove trusted context/connection identity cannot be overridden by serialized
+payload, required strings/opaque revisions remain lossless, malformed hashes/keys/refs
+are rejected, and callbacks/default deny remain scoped to the current operation. Actual
+current policy/SQL atomicity remains at each consuming boundary, not in a DTO constructor.
+Pure recurrence and locale-only work do not depend on this foundation. Shared source
+mutations use actual applicable D34/D98/core tests; documentation never counts as that proof.

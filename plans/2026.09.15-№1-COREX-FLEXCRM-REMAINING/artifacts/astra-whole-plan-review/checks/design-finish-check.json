@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+    "--check",
+    "design"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "exit": 0,
+  "stdout": "Design gate PASS: 11 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned\n",
+  "stderr": "",
+  "finish_sha256": "a311b4abb5c1aeae0754b6b34189ab4f2c4e01cd1bfbe65413b8982e93dce34d",
+  "at": "2026-09-15T14:04:45.460064+00:00"
+}

@@ -1,0 +1,1103 @@
+{
+  "schema": "whole-plan-read-review/v1",
+  "scope": "all11 phase contexts/78specs and owning stable research/decisions/checkers/briefs; raw historical trees are hash-qualified, not claimed wholly semantically read",
+  "inputs": [
+    {
+      "path": "phases/P1/P1.1.md",
+      "initial_sha256": "238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c",
+      "current_sha256": "238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output."
+    },
+    {
+      "path": "phases/P1/P1.2.md",
+      "initial_sha256": "731e5812885d0933f5935c16b12a2ecabefe6898c1f9cc2867f6b033418e6941",
+      "current_sha256": "36bb11309c77cddf48dd2a5ad644e9aa12237563b82e0d6848cf10f1e8dd48a9",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output."
+    },
+    {
+      "path": "phases/P1/P1.3.md",
+      "initial_sha256": "c2c7b835993fbbc5ab97c1056a4833e5d9784b753040050852def3453535d71d",
+      "current_sha256": "c2c7b835993fbbc5ab97c1056a4833e5d9784b753040050852def3453535d71d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output."
+    },
+    {
+      "path": "phases/P1/P1.4.md",
+      "initial_sha256": "0c31a24ee41a6de6867f680fdcfb9c695fbdbf942562cd8804902d7a8bfa56a6",
+      "current_sha256": "0c31a24ee41a6de6867f680fdcfb9c695fbdbf942562cd8804902d7a8bfa56a6",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output."
+    },
+    {
+      "path": "phases/P1/P1.md",
+      "initial_sha256": "2f6c88fe012d0db7c145037b1b6f9c781ba09d44b3a4c6918588a1ae935e0dbe",
+      "current_sha256": "8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output."
+    },
+    {
+      "path": "phases/P2/P2.1.md",
+      "initial_sha256": "2e81fd6e55218270a664842377b8e0d6d6beb180a8b65132c695c5bea2d69e0c",
+      "current_sha256": "75830a58b0d1811015d2515640202bb0295565c9bc21b46da78fcfc95d57b428",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge."
+    },
+    {
+      "path": "phases/P2/P2.2.md",
+      "initial_sha256": "535fd9687f53eb8ee17b858e40226d8a3868310a58780f634a68f022309dcb4e",
+      "current_sha256": "535fd9687f53eb8ee17b858e40226d8a3868310a58780f634a68f022309dcb4e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge."
+    },
+    {
+      "path": "phases/P2/P2.3.md",
+      "initial_sha256": "97c4e3ed6ef8067ccb09eeb1cc37441b4ab9f0ea298b0ab72e68aad0b615309f",
+      "current_sha256": "97c4e3ed6ef8067ccb09eeb1cc37441b4ab9f0ea298b0ab72e68aad0b615309f",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge."
+    },
+    {
+      "path": "phases/P2/P2.4.md",
+      "initial_sha256": "97ba3d3dd68671f49624d74053e23c41b60b2bbcdcc01083d406f9b4b51e6ea5",
+      "current_sha256": "97ba3d3dd68671f49624d74053e23c41b60b2bbcdcc01083d406f9b4b51e6ea5",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge."
+    },
+    {
+      "path": "phases/P2/P2.md",
+      "initial_sha256": "d8189392b6a66b3ce5ad133538571bbc074cb59ef7781acdea3b2c56aaee1759",
+      "current_sha256": "395ee3900d98501338c71670734c8501f122d349df62588768b7f9bc221bf35f",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge."
+    },
+    {
+      "path": "phases/P3/P3.1.md",
+      "initial_sha256": "83fe7fd78824a0a5d3d823ec4d905bf244d0ae617c7a153cb83573a1e50960c6",
+      "current_sha256": "83fe7fd78824a0a5d3d823ec4d905bf244d0ae617c7a153cb83573a1e50960c6",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.2.md",
+      "initial_sha256": "f7fdbe9b9e199444d6c7fe3d80c1775a7a725620fc78d38941c492c05b4d3f92",
+      "current_sha256": "f7fdbe9b9e199444d6c7fe3d80c1775a7a725620fc78d38941c492c05b4d3f92",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.3.md",
+      "initial_sha256": "8735318de9f71c70b334d5bea1a5ae0a014ac4947c4896d09c73d7435990f8db",
+      "current_sha256": "8735318de9f71c70b334d5bea1a5ae0a014ac4947c4896d09c73d7435990f8db",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.4.md",
+      "initial_sha256": "117871036930da259619c2468a24c0d3e2edb2f4826daa816d643b77d724d634",
+      "current_sha256": "110094dd528c3b655abd28a347be3ed8479130773ef4dac9f2f94acd861485fe",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.5.md",
+      "initial_sha256": "0ce8e4e501ed8f79420ccb798b634dae77a2b59b573d0bf25e52b1f90f9abfcb",
+      "current_sha256": "572d36797a974d98005edd2fe7daedf15381ba9c5cd6286138a24ec635f424f8",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.6.md",
+      "initial_sha256": "5fe60fc22c5b15b169a5b6a3aeeea9fa46fbdcec8de8411abe500e1f39424025",
+      "current_sha256": "5fe60fc22c5b15b169a5b6a3aeeea9fa46fbdcec8de8411abe500e1f39424025",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.7.md",
+      "initial_sha256": "e2062d5ac76c0da7c0a357421cb32b300139731d50f104788688382a04e4699d",
+      "current_sha256": "e2062d5ac76c0da7c0a357421cb32b300139731d50f104788688382a04e4699d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P3/P3.md",
+      "initial_sha256": "3c07519251045237de9b81368e6d10ae5a3c939bb42ac17df970e0cba8c7775d",
+      "current_sha256": "eda83c240c8ddd1f87c4928105e59a70f27a6f59e46419211c9516e082bdc262",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved."
+    },
+    {
+      "path": "phases/P4/P4.1.md",
+      "initial_sha256": "8355d7744a9c95c4fa77d5235d3dba278fef89a4032739490bdef4c9db0a922b",
+      "current_sha256": "bc3bfebcab4feed496d2e815ce1d355c25fb11bec6303b9908123ba30c897bb0",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.2.md",
+      "initial_sha256": "938923b14e6db56e51f80489c8b21b5a2e7004670b5e381607c7c80ee7eed492",
+      "current_sha256": "938923b14e6db56e51f80489c8b21b5a2e7004670b5e381607c7c80ee7eed492",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.3.md",
+      "initial_sha256": "008bb82892dbc63001096a8ebb750fd5b8747e6062124e8e06e38d0c6e479f6a",
+      "current_sha256": "008bb82892dbc63001096a8ebb750fd5b8747e6062124e8e06e38d0c6e479f6a",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.4.md",
+      "initial_sha256": "f67297d6eae73d0c8f48e0ccc75246aaca73c42f5cea12608ac8ac896547fa83",
+      "current_sha256": "ecc5eae1f4c85c5b9afdc11c5b1d05f69ffcf05f7bb62ca75c4ac4a1c147baed",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.5.md",
+      "initial_sha256": "8fd2d9c5048accf07fc08b0ff1796306251f0c88c0e8022db5b57be9db42ac90",
+      "current_sha256": "7739d0df3557fc882101e1339a356227f1e502959adf9b798ee3a72ac720dba8",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.6.md",
+      "initial_sha256": "69aa9d660352a5fda7b1976baeea7e4827b4f438e151cb1db1ccc8caf9514965",
+      "current_sha256": "1950310f4ccd9892fdac85c3b85722c33bb35e10e7990de55bc35450e4eb818e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.7.md",
+      "initial_sha256": "29e6a498acffa03033cc203ab86af457cc77ac55b24924fbb387f12aa372b35b",
+      "current_sha256": "29e6a498acffa03033cc203ab86af457cc77ac55b24924fbb387f12aa372b35b",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.8.md",
+      "initial_sha256": "f84e3e9e4939be82b2f35f9e5f890e2419ad1939e49000dac1060b6ce7141769",
+      "current_sha256": "f84e3e9e4939be82b2f35f9e5f890e2419ad1939e49000dac1060b6ce7141769",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P4/P4.md",
+      "initial_sha256": "350f8f977df06b7a8d696d4b7d05de635186ed62e18b83ec0ca27261cf36f547",
+      "current_sha256": "c50765731fb64b75f026335aa613ccdcdb7231056116b4e61c16aae44cbad1f0",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default."
+    },
+    {
+      "path": "phases/P5/P5.1.md",
+      "initial_sha256": "ae548e36e3a28eb8b802db453262329e985d9f362bdf9169a507003278256e34",
+      "current_sha256": "ae548e36e3a28eb8b802db453262329e985d9f362bdf9169a507003278256e34",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.2.md",
+      "initial_sha256": "a0b4b45c777376329bf674ba91540d2b8b0700fa4d2d261e5ad63880671fe41e",
+      "current_sha256": "a0b4b45c777376329bf674ba91540d2b8b0700fa4d2d261e5ad63880671fe41e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.3.md",
+      "initial_sha256": "6867806ef177e03c7aae823de414551a009c92c46bcce5352c47e1bdfd403795",
+      "current_sha256": "6867806ef177e03c7aae823de414551a009c92c46bcce5352c47e1bdfd403795",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.4.md",
+      "initial_sha256": "608ee2c875a677583040277a9902d3b67502b475071f6e81b6e6aedded9ef146",
+      "current_sha256": "608ee2c875a677583040277a9902d3b67502b475071f6e81b6e6aedded9ef146",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.5.md",
+      "initial_sha256": "453824bff9f6ff4c091ac9b9e8e6f716f24e8402365dc919de00aec316f8ff71",
+      "current_sha256": "453824bff9f6ff4c091ac9b9e8e6f716f24e8402365dc919de00aec316f8ff71",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.6.md",
+      "initial_sha256": "b110acacef6c6e6b4302fdfa917838b172893acd9bc9355681a8d3b2dc301e35",
+      "current_sha256": "b110acacef6c6e6b4302fdfa917838b172893acd9bc9355681a8d3b2dc301e35",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P5/P5.md",
+      "initial_sha256": "bd3c2298950a2fa816cde7e77d07dd8963593e7d1bac4de0d031582e6e5ba3ce",
+      "current_sha256": "c81bbdd13b71204284d446aeb6e31e9f417146a875f01617cf5ec5133d6d9d45",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority."
+    },
+    {
+      "path": "phases/P6/P6.1.md",
+      "initial_sha256": "b8e74d592f307825bcf86679cacb756eeb6b0cf612e1df201dca48df59105d2e",
+      "current_sha256": "b8e74d592f307825bcf86679cacb756eeb6b0cf612e1df201dca48df59105d2e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.2.md",
+      "initial_sha256": "46fff68b6a69545e49ea48897558c4d0a5eb38f526e6656b91757358247d64b2",
+      "current_sha256": "d78560542eac026bbf72b7e03ff8ef10f6d301e5641bd3996ca4ff431c2142d1",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.3.md",
+      "initial_sha256": "ae4378e7c5dd81e3fec72de4483b5b433416ec3c1b2a732eac5e1f868a706522",
+      "current_sha256": "ae4378e7c5dd81e3fec72de4483b5b433416ec3c1b2a732eac5e1f868a706522",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.4.md",
+      "initial_sha256": "5d4e89b840d8398be63f823055c6cab34606117f6c0a7d3047ada821fac43b98",
+      "current_sha256": "b7ae58b4d59182c7fef9ec4ca17167d3b2b102d227971dd05cb3949f13746115",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.5.md",
+      "initial_sha256": "97385b8dd7903e9d1b723ecb78de53c06818fc1671aa6134e2d819976e6be3b3",
+      "current_sha256": "97385b8dd7903e9d1b723ecb78de53c06818fc1671aa6134e2d819976e6be3b3",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.6.md",
+      "initial_sha256": "7a14134dca6cf7d9f7831fdc8c34e0b5a891f71b95eefefbabcb9801e8983010",
+      "current_sha256": "18bfda23310a989894ed4233f90db2615564bcde05c312321bf7d8e62512e4ff",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.7.md",
+      "initial_sha256": "65ccaabeee6da73644efb3a176783a9e6cfe4c6a479b41aa78101b9f627bed6a",
+      "current_sha256": "65ccaabeee6da73644efb3a176783a9e6cfe4c6a479b41aa78101b9f627bed6a",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.8.md",
+      "initial_sha256": "2f246c7f9973bfad9afa23258e7ee9210a858ef84930175074baeb0f0aefabf0",
+      "current_sha256": "4808c683072a1caf546d92c99417e45cd1ad1ea1cc1ea27245f18d6423de70d8",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P6/P6.md",
+      "initial_sha256": "e22a47d39fc6de282ce443df2fdb310d1f7e3dcfa8a8f6a52f0e38363047d692",
+      "current_sha256": "efa2f8d145c16d5dd33f8a98b8bea212b42bf3291d68d6af3e290d0b31e46fca",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected."
+    },
+    {
+      "path": "phases/P7/P7.1.md",
+      "initial_sha256": "80b982ccc0735f20dbe2d11c5a0657c356248769e310cf7b318b1819ab66ce7e",
+      "current_sha256": "80b982ccc0735f20dbe2d11c5a0657c356248769e310cf7b318b1819ab66ce7e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.2.md",
+      "initial_sha256": "1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8",
+      "current_sha256": "1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.3.md",
+      "initial_sha256": "6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375",
+      "current_sha256": "6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.4.md",
+      "initial_sha256": "b145c4841ed9a643c067e953f54047188b2f2a146d08e3e5897d5c128dcef33f",
+      "current_sha256": "e11e137bb11cea2339890c7d94c76506b90b4412b9f67e3b1732d608fc009b13",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.5.md",
+      "initial_sha256": "dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103",
+      "current_sha256": "dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.6.md",
+      "initial_sha256": "b5fc691e128470fde32b636a8de127dfb0e6d6bac99e01aa9eb062a20c64c57f",
+      "current_sha256": "b5feae3eba5ee51d3f1f9b80812646413cbf6f8d1a80461a61d88c41cc6313a0",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.7.md",
+      "initial_sha256": "3ad16f8969f4dfed0ca665d55059e3614c6e6ebc8497bc2e4dcd32467c86cc09",
+      "current_sha256": "e488f4abf19961b08e21d7d8b6b403405f97cc60b71519a48c83508a8de3ee8d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.8.md",
+      "initial_sha256": "ba52375138e5ba536d647a7cdf43937ef11298b4d4aa97cfa8a4093131169f8d",
+      "current_sha256": "ba52375138e5ba536d647a7cdf43937ef11298b4d4aa97cfa8a4093131169f8d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.9.md",
+      "initial_sha256": "3fd3f0d3999452ce07c939e4e82f725d89722a1090864fc50f790cf04ea6a9ac",
+      "current_sha256": "a7c9960156f7800e70c28585ec5ea77c781b41e140b5b6c8f3f8c8a2833f04c1",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P7/P7.md",
+      "initial_sha256": "67ec6b83404178e617ae2297ca18bd55119b41ffb65190cc7c76b14d88a33dcc",
+      "current_sha256": "2da96803a1cca5b21ceb18958b51a1a53773593cf26a23ce8c699438903613d5",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected."
+    },
+    {
+      "path": "phases/P8/P8.1.md",
+      "initial_sha256": "972f21282840aa99f4e580c40c7a1d1e76c76c6b9cc943a6adeaa492d4f1ab24",
+      "current_sha256": "ba5fac92cfc5420376ad6b7044dd987973aec29b91ab382fee62284244c0151f",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.2.md",
+      "initial_sha256": "18909044e5d3234480a4bae08e950c02562a0422dee37fca0c0f01b81f9034fb",
+      "current_sha256": "18909044e5d3234480a4bae08e950c02562a0422dee37fca0c0f01b81f9034fb",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.3.md",
+      "initial_sha256": "010e6166076f3cab8425d533ba06e8e067c50593c68607cebd32a5bc6f311b0e",
+      "current_sha256": "010e6166076f3cab8425d533ba06e8e067c50593c68607cebd32a5bc6f311b0e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.4.md",
+      "initial_sha256": "91967e0432eb5d921a5f3688e977aff29b7c9f65147c77357352a3f30ce65257",
+      "current_sha256": "91967e0432eb5d921a5f3688e977aff29b7c9f65147c77357352a3f30ce65257",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.5.md",
+      "initial_sha256": "5cbc88adbaf7d49f5a516d4c9214673b9123daa7789fe6ed5925c09c4056eec2",
+      "current_sha256": "5cbc88adbaf7d49f5a516d4c9214673b9123daa7789fe6ed5925c09c4056eec2",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.6.md",
+      "initial_sha256": "57f66238ac62c3e3e38275d1dbec5bf17a5b4da4ce5c83a5fbc653a3bf067db7",
+      "current_sha256": "57f66238ac62c3e3e38275d1dbec5bf17a5b4da4ce5c83a5fbc653a3bf067db7",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.7.md",
+      "initial_sha256": "670863303d0ce78451e6f5796d5d639c8a8882ba8ce6abaff1c61415d388c127",
+      "current_sha256": "670863303d0ce78451e6f5796d5d639c8a8882ba8ce6abaff1c61415d388c127",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P8/P8.md",
+      "initial_sha256": "be943768070293110ade5888e4148205493018cb3343f938fd2c2e0bb90f5fdc",
+      "current_sha256": "dd4609e9e73414ed7f40d39aab20a8ea1b74788c630d5aa26775ef9ad2b2b22f",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained."
+    },
+    {
+      "path": "phases/P9/P9.1.md",
+      "initial_sha256": "9d3bbc3fbac052a1134707e0e495d01ea6eefc66c3019fae13cd5e2b0dfd20a6",
+      "current_sha256": "ceb95f40cc3991a76fc65e89a63cbc39764c3ed1eafbef739ed0fcf3dc7da50d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.2.md",
+      "initial_sha256": "bfe5d19b680444affb436b19840976b40af66b110a8d4d2f500414bc13e2b445",
+      "current_sha256": "a886cca9342109927b38bb00781953b7e4be6afa7ccf5eea734b27520b1509cc",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.3.md",
+      "initial_sha256": "37d3049d39dbd2e1bcff62ec01f4f551e97d09d8372aab92dc23d8293ff3cc71",
+      "current_sha256": "374c5e29eb424b5e9a6a1f517d4baa14e2f7a4bebf94e7a8cb718ee486662939",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.4.md",
+      "initial_sha256": "c99197b440b301701ff30432d630418fd41497328d5635f9790ef7ca7f6ec413",
+      "current_sha256": "ee074137076a81c669afaddc9d41f7f34cd6513d9b21b69a5396381514b7537b",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.5.md",
+      "initial_sha256": "8fd49b1a430255a8c747c674cf980515ba494fb8f8756a98ff58958f7721d5fe",
+      "current_sha256": "8fd49b1a430255a8c747c674cf980515ba494fb8f8756a98ff58958f7721d5fe",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.6.md",
+      "initial_sha256": "3c620724ab7bdea2844a2d3ca94453c19535890cf3c28e5a03078bf2748a655b",
+      "current_sha256": "fbc3186f840012d906c81dba72a87a8d7bf48169d2b941d6c1489f4ecefdab77",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.7.md",
+      "initial_sha256": "8b9b69041c665107cae207cf7dd5afef6a13dde16231e202a504f40034057128",
+      "current_sha256": "be3207274a4c7a3ee43408c33eee70ef903c32491d31273a7f566b276ff40b43",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.8.md",
+      "initial_sha256": "68fa0383610479490b9e45cad12078e8f78751ef5f9a5867bb10ffcd480d74b4",
+      "current_sha256": "68fa0383610479490b9e45cad12078e8f78751ef5f9a5867bb10ffcd480d74b4",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.9.md",
+      "initial_sha256": "7052f9686305d63eed8e3ec13949e77cd7bc2bf8ebddadb9b7a7b580026c2f55",
+      "current_sha256": "760a1e8d729f277ccd69b14633512ce06261a2be82a3c6aab2b8536f175a3999",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P9/P9.md",
+      "initial_sha256": "6800d8ced8f92d973a87bd22908701616cddcb27c95833d5c64eceae0610adf5",
+      "current_sha256": "b26325f2a95b53f7cd6b37214b2c93f8200b2dc918a06e16b4f29338ebbfd89a",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct."
+    },
+    {
+      "path": "phases/P10/P10.1.md",
+      "initial_sha256": "430eab1d70a403a8cb5137c14cf3702f8a58aa40d6875b78c5a95659d8043f2e",
+      "current_sha256": "430eab1d70a403a8cb5137c14cf3702f8a58aa40d6875b78c5a95659d8043f2e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.2.md",
+      "initial_sha256": "0e0f51fd66b34e0948ae8f84666ac2443f6d0a3fb723cb4541ae72e6bbf0611c",
+      "current_sha256": "0e0f51fd66b34e0948ae8f84666ac2443f6d0a3fb723cb4541ae72e6bbf0611c",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.3.md",
+      "initial_sha256": "1ec070306c30ebada098c9a059c9d2ff6f2f5e2c8c7bf981c2c999af91ad461f",
+      "current_sha256": "1ec070306c30ebada098c9a059c9d2ff6f2f5e2c8c7bf981c2c999af91ad461f",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.4.md",
+      "initial_sha256": "3666710febacaca64ea84bc40b96fab5487ff3c562ac0ef921605fdea50745a8",
+      "current_sha256": "3666710febacaca64ea84bc40b96fab5487ff3c562ac0ef921605fdea50745a8",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.5.md",
+      "initial_sha256": "9020ae0afcc511c93c865319987d8157ed65669c1c6dc637d533dc0d616db45e",
+      "current_sha256": "9020ae0afcc511c93c865319987d8157ed65669c1c6dc637d533dc0d616db45e",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.6.md",
+      "initial_sha256": "be459bbda20b714fa417348dc56b477c59275fbcffe5ff191baa32724296db90",
+      "current_sha256": "be459bbda20b714fa417348dc56b477c59275fbcffe5ff191baa32724296db90",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.7.md",
+      "initial_sha256": "2a119835b2b5ab91cdbef7f4e8c36faa22d40a685051d3698ae5c1c2006453ae",
+      "current_sha256": "2a119835b2b5ab91cdbef7f4e8c36faa22d40a685051d3698ae5c1c2006453ae",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.8.md",
+      "initial_sha256": "44bedb80840788c58cf57ed5ba2a22a05a010f61328136688837ba68ba4eab7d",
+      "current_sha256": "44bedb80840788c58cf57ed5ba2a22a05a010f61328136688837ba68ba4eab7d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.9.md",
+      "initial_sha256": "43f75295d3a2004c90a03cfd820be4185eb1c6ab7e8d436cac5c0befa60b6681",
+      "current_sha256": "43f75295d3a2004c90a03cfd820be4185eb1c6ab7e8d436cac5c0befa60b6681",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P10/P10.md",
+      "initial_sha256": "b32f834812d1a0b88747c23ec2cfe0a5386c12d7756b89c6f24417db28ff93c2",
+      "current_sha256": "27c09ad50bed6ded5c49b596d82db6d49ab1689703b7bf11d3c51a9ae5fc5097",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute."
+    },
+    {
+      "path": "phases/P11/P11.1.md",
+      "initial_sha256": "75672c83f76d12184f966737a58715898eda509a6d0c30c3addc7ee869e17c40",
+      "current_sha256": "794dfee9e85a11f9fcb17634c6a0aed5c12826c3bf26f2e0bf6502fef21ae738",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.2.md",
+      "initial_sha256": "2e847d71060a22f028ac8a1a6a00b70414f88c01aca9ee4f9e0d0b70a860a55e",
+      "current_sha256": "6e58e39559f60ebc783f517bb1e7820670951e9234eb8fa086e52f4f27561698",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.3.md",
+      "initial_sha256": "dcf2c625c9a5e9c749b864df3313436018ba9f9c68a787656047b498f1e1f03e",
+      "current_sha256": "1282238b3557482de31eee65e3dbf254b9f1ba463c30d31184a0c3fbbeaf03ba",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.4.md",
+      "initial_sha256": "d0e9e8357a96f097291d9d513483e7f146ff02a8dd2dba8b8e789aead28c999d",
+      "current_sha256": "f85eb5a8f10daef56ee3a97d9bd33cceebe4cd94778ae45cc8706b9faa9a3d95",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.5.md",
+      "initial_sha256": "1495992f77035e37e98da1916b797087dbc5a43ce7384ce559c981f64bcb9c93",
+      "current_sha256": "b7a09e32c98fac7897206b0d6709eb9c5dfd41a8974d0ffa282b06fc4acf9287",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.6.md",
+      "initial_sha256": "742bdfc7a5ee4dbfa01eca1c7c9518266e37a3832f11d1f011739aca4da35388",
+      "current_sha256": "4d3db2712d1938191270270c0b09276d3207b6bf75e314ea01d018e5cc53a5bf",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.7.md",
+      "initial_sha256": "d0bf634fa1874cb715658c4295926159b82afe27f14357b84d065b1001741bfc",
+      "current_sha256": "fe590af9f12a1b3d7fe28ddee814a843e168d3cb075a7f5e097a513b3d39a3cc",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "phases/P11/P11.md",
+      "initial_sha256": "b91125573abc7a9e9b936d3870fda425d650275b92610f972153b5e8eb24040d",
+      "current_sha256": "a05100b3f35d261b4d3aebc2af62f6528f9a63b61c33bfa0c628c17ab477f40d",
+      "read": "full initial context/spec; current edits reviewed separately",
+      "semantic_review": "Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery."
+    },
+    {
+      "path": "research/00-sources.md",
+      "initial_sha256": "0cec5f58a1bcab6f6e0bfa32b3b09269b50c7cd7d7a030b1a78bdca6a58189f3",
+      "current_sha256": "0cec5f58a1bcab6f6e0bfa32b3b09269b50c7cd7d7a030b1a78bdca6a58189f3",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/01-traceability.md",
+      "initial_sha256": "818d0faef9074b7c38c97f1b6fc2c09641bbe0928f272552d2d435d0515cde93",
+      "current_sha256": "818d0faef9074b7c38c97f1b6fc2c09641bbe0928f272552d2d435d0515cde93",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/01a-acceptance-index.md",
+      "initial_sha256": "49e7888b52214d2a64592a3748561ce128914ad136ad8d582f6c97fbb51d4360",
+      "current_sha256": "49e7888b52214d2a64592a3748561ce128914ad136ad8d582f6c97fbb51d4360",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/01b-acceptance-source-supplement.md",
+      "initial_sha256": null,
+      "current_sha256": "dbcffc4197212d9fd5dca30b0f03a68b1967cb63c7331cef99c3d6bf817be2d2",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/02-baseline.md",
+      "initial_sha256": "0179e0e638ab4b5b98b6cea549334b61339654d38ec644461b7e0bd428e0e90a",
+      "current_sha256": "0179e0e638ab4b5b98b6cea549334b61339654d38ec644461b7e0bd428e0e90a",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/03-gates.md",
+      "initial_sha256": "b9a2ad93007d76152c25dbf2f4c6b908c2182482900c1f7f144c6ffb5857db3f",
+      "current_sha256": "b9a2ad93007d76152c25dbf2f4c6b908c2182482900c1f7f144c6ffb5857db3f",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/04-architecture.md",
+      "initial_sha256": "2460dfa9a457b23da029b73a254c2ef7a44c47dd5537f2a95e7d0c98c77a1ed5",
+      "current_sha256": "2460dfa9a457b23da029b73a254c2ef7a44c47dd5537f2a95e7d0c98c77a1ed5",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/05-integrated-design.md",
+      "initial_sha256": "2a6a034f62c67c33be398b96624f28b3538059c1df5f6d3bb33ca8ba77b8e128",
+      "current_sha256": "6aca22518b510e17d108e0878baaa512b152596b56d75b185adc73494c117e9e",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/06-azguard-patterns.md",
+      "initial_sha256": null,
+      "current_sha256": "33e6a1cc959aa5070134061eafe36f90ba701c2132d98dea56a3324370609c1b",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/07-open-source-patterns.md",
+      "initial_sha256": null,
+      "current_sha256": "1c74909638574cbf9fc6179e697a8be114df3c4ba07305587559191b6481a5f0",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P1-design-rag.md",
+      "initial_sha256": "ab10a68d233c02c636e0f72441e6bc40aec53e9862ca65f614c241985d885860",
+      "current_sha256": "ab10a68d233c02c636e0f72441e6bc40aec53e9862ca65f614c241985d885860",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P10-design-rag.md",
+      "initial_sha256": "22580a49bf9650f93f3cf09172bde07ef6ecc191e447ae13920607a3c4c8e65a",
+      "current_sha256": "22580a49bf9650f93f3cf09172bde07ef6ecc191e447ae13920607a3c4c8e65a",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P10-effective-design.md",
+      "initial_sha256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac",
+      "current_sha256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P11-design-rag.md",
+      "initial_sha256": "fcc73a3a6562f37de7f0d5d2296baa1fb136bb9bd96f99227f820af0c36b3b34",
+      "current_sha256": "fcc73a3a6562f37de7f0d5d2296baa1fb136bb9bd96f99227f820af0c36b3b34",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P11-reconciliation-design.md",
+      "initial_sha256": "07b96803c362a64c043f140cd086c5435ba302efdba10beb5e63dd5987f3a02d",
+      "current_sha256": "32cce51ebff33a8980f54d1864be6a0e5c15adb7a18f8974f7f17d72a5d310af",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P2-contract-design.md",
+      "initial_sha256": "7eefb1385378065d4e039d81353940516f8d9df413e8274a2dfba8fe3f07ef9e",
+      "current_sha256": "7eefb1385378065d4e039d81353940516f8d9df413e8274a2dfba8fe3f07ef9e",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P2-design-rag.md",
+      "initial_sha256": "b4715c31e66df2de63d07db2ca6539b994089c7c3f1d7b68d4b9b9a9a6251626",
+      "current_sha256": "b4715c31e66df2de63d07db2ca6539b994089c7c3f1d7b68d4b9b9a9a6251626",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P3-adapter-design.md",
+      "initial_sha256": "05dc04b765f133b4779a173c534e15d0ce6eb7ea020f77b5987cf5e391bf5525",
+      "current_sha256": "05dc04b765f133b4779a173c534e15d0ce6eb7ea020f77b5987cf5e391bf5525",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P3-design-rag.md",
+      "initial_sha256": "ccbd75f3a229b2032c7bbd603dc8c2cc745907ee2614d68b4f169d1ee510f40f",
+      "current_sha256": "ccbd75f3a229b2032c7bbd603dc8c2cc745907ee2614d68b4f169d1ee510f40f",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P4-design-rag.md",
+      "initial_sha256": "87ad139479bd4cbd96aef681b5f7ded723206e6ec4735e0114ed3d0555876090",
+      "current_sha256": "87ad139479bd4cbd96aef681b5f7ded723206e6ec4735e0114ed3d0555876090",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P4-extension-design.md",
+      "initial_sha256": "e611a32053a63c3f7e270dda3364b6abf2604a7a7461729983f2af3f4d6a71f7",
+      "current_sha256": "957873c6995cb3811983217a67f99d5068416f4f46da8a1653650cbc595d143a",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P5-design-rag.md",
+      "initial_sha256": "a6f1c22c688d24b427f2c0f64f2755c154cbba969f7b955dbbc381cf9bc068cc",
+      "current_sha256": "a6f1c22c688d24b427f2c0f64f2755c154cbba969f7b955dbbc381cf9bc068cc",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P5-wakeup-design.md",
+      "initial_sha256": "27263f30366b2281aa80f21ce63c082f335977af789e0e45787a0b93043a0b60",
+      "current_sha256": "ac703e502544138dd6acebaf3778fe20968186b0aacec14049ed16a4f337f3fc",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P6-data-design.md",
+      "initial_sha256": "1f0e6a3694d7d53ebc29f5b889d4e61a24904d5a12835470aaa44eacdf80a8d5",
+      "current_sha256": "149932325e6a7c48495a81e56e3ae2054f105fe9dde3147a83955f831d3a02cb",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P6-design-rag.md",
+      "initial_sha256": "9dfeee763636a232dd8ad3773e096398c2b56d1c4fd9216a7ecad3efa298cec2",
+      "current_sha256": "9dfeee763636a232dd8ad3773e096398c2b56d1c4fd9216a7ecad3efa298cec2",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P7-design-rag.md",
+      "initial_sha256": "0e9e3b02190e21405acba959670fce23e9921f0e0508d3185c1086100676a7c0",
+      "current_sha256": "0e9e3b02190e21405acba959670fce23e9921f0e0508d3185c1086100676a7c0",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P7-utility-design.md",
+      "initial_sha256": "906b5f280f092781b0b8c78cd6b8044bda6e100bd6da45a70287d4d6d191b1b8",
+      "current_sha256": "e8030ad4a090f1bb13f6def331f8858606fe2716754d5e8e9b12c8ef2c4cbc43",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P8-design-rag.md",
+      "initial_sha256": "d1a2cbfe4dee9fe0c48b013cc746b195a43a68bf6d4f17f11ca024245d2796e3",
+      "current_sha256": "d1a2cbfe4dee9fe0c48b013cc746b195a43a68bf6d4f17f11ca024245d2796e3",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P8-tool-design.md",
+      "initial_sha256": "ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca",
+      "current_sha256": "ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P9-cohort-design.md",
+      "initial_sha256": "3eb128acfedfdac4e7899d5d4a267b39c8fb57a0c8fe345091f83bea0b38c526",
+      "current_sha256": "87828181adc3de1af50a098e7882faa5204a1d7e610466b36b242c9b2aa85aeb",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "research/P9-design-rag.md",
+      "initial_sha256": "1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1",
+      "current_sha256": "1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D1.md",
+      "initial_sha256": "1b13c87b2364105e870b622b0d2f85bc2769882cb930ab82c139447352bb811d",
+      "current_sha256": "1b13c87b2364105e870b622b0d2f85bc2769882cb930ab82c139447352bb811d",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D10-workflow-wakeup.md",
+      "initial_sha256": "cf30071864f81d7ce2b882653c8b06dfd5dab36e62d948a8ec1a9d76f1241381",
+      "current_sha256": "cf30071864f81d7ce2b882653c8b06dfd5dab36e62d948a8ec1a9d76f1241381",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D11-data-import-search.md",
+      "initial_sha256": "deb3640ccb7a03be98d24fa515132a6912506dc0af3ff3eb6454c80c66f5b6bc",
+      "current_sha256": "deb3640ccb7a03be98d24fa515132a6912506dc0af3ff3eb6454c80c66f5b6bc",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D12-portable-utilities.md",
+      "initial_sha256": "517b369dbaf33cd5588aa6bdb380286d93b091aece5f1dd87ce05bc50923adb0",
+      "current_sha256": "517b369dbaf33cd5588aa6bdb380286d93b091aece5f1dd87ce05bc50923adb0",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D13-tool-introspection.md",
+      "initial_sha256": "4470953848bfbe2c24b54782db1fed20ec90a2cc95b9d1d0c04b517cecc02fb6",
+      "current_sha256": "4470953848bfbe2c24b54782db1fed20ec90a2cc95b9d1d0c04b517cecc02fb6",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D14-release-cohort.md",
+      "initial_sha256": "cfabaff5040c6d2c0a00a4c5e52c341ea5ab5d7ec2af2236bfe37e9264c4aa20",
+      "current_sha256": "cfabaff5040c6d2c0a00a4c5e52c341ea5ab5d7ec2af2236bfe37e9264c4aa20",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D15-effective-acceptance.md",
+      "initial_sha256": "2a069bf51368af81161ab959025b45ebda32fbe3350957910221e602ba5f7f62",
+      "current_sha256": "2a069bf51368af81161ab959025b45ebda32fbe3350957910221e602ba5f7f62",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D16-consumer-reconciliation.md",
+      "initial_sha256": "b2dc87759ee29b66ecec8ec8a65c15389c2a5cf91c36e57d9ce3632b05111682",
+      "current_sha256": "b2dc87759ee29b66ecec8ec8a65c15389c2a5cf91c36e57d9ce3632b05111682",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D17-whole-plan-review.md",
+      "initial_sha256": null,
+      "current_sha256": "cb8500c380d261ece723bcbe110e756477684d01f96818d339d3daec8064b5be",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D2.md",
+      "initial_sha256": "3d6352dd37ded3e1caca32af16313796e22c58b4d927cf4ad247f8184886f818",
+      "current_sha256": "3d6352dd37ded3e1caca32af16313796e22c58b4d927cf4ad247f8184886f818",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D3.md",
+      "initial_sha256": "6af2445122495b980efc08f65ae3023c9b76ae388e3e7e355aed1be0bbc79c46",
+      "current_sha256": "6af2445122495b980efc08f65ae3023c9b76ae388e3e7e355aed1be0bbc79c46",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D4.md",
+      "initial_sha256": "618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16",
+      "current_sha256": "618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D5.md",
+      "initial_sha256": "fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67",
+      "current_sha256": "fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D6.md",
+      "initial_sha256": "c547fe6117e1dd166820483dd3909661e6a63cb01880f28862b932a81b978e4e",
+      "current_sha256": "c547fe6117e1dd166820483dd3909661e6a63cb01880f28862b932a81b978e4e",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D7.md",
+      "initial_sha256": "68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832",
+      "current_sha256": "68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D8.md",
+      "initial_sha256": "69c62efb10d483ec735d27ae5b00b029c5bb209d1e1b71cb65baeee957d516d4",
+      "current_sha256": "69c62efb10d483ec735d27ae5b00b029c5bb209d1e1b71cb65baeee957d516d4",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "decisions/D9-headless-extensions.md",
+      "initial_sha256": "2aef863b44bef787110781cff3b69b1fd2b585048850074a71a1c5a224e43e68",
+      "current_sha256": "2aef863b44bef787110781cff3b69b1fd2b585048850074a71a1c5a224e43e68",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/task-check.py",
+      "initial_sha256": "696725e92842e10d76b98316688344aabd8826c1fc18d85db8403351bfa412ce",
+      "current_sha256": "23b9d802afbce847077569f51ae2a298cf990605f7c9802e7c0e6229a3813b0b",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/test-design-guards.py",
+      "initial_sha256": null,
+      "current_sha256": "8cfaa13ed785af4c5370483e3e7c24ef5ce1debb5028bb325f4bc45d9ff5cd1b",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p1.py",
+      "initial_sha256": "c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8",
+      "current_sha256": "c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p10.py",
+      "initial_sha256": "557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49",
+      "current_sha256": "557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p11.py",
+      "initial_sha256": "c71002de9e8f1f825238751cdfd6e113cf26fc8381ed78022ca38c2da5030e44",
+      "current_sha256": "3ad17b7568ca7aef50356e5b0fc4baf7cd03418a9289ccb4f83ed478a5b718c2",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p2.py",
+      "initial_sha256": "ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3",
+      "current_sha256": "ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p3.py",
+      "initial_sha256": "4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787",
+      "current_sha256": "4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p4.py",
+      "initial_sha256": "724f046aedcf91e322436a1f7845187ae7e36c8e3c2919d072b7f8c41edccc27",
+      "current_sha256": "724f046aedcf91e322436a1f7845187ae7e36c8e3c2919d072b7f8c41edccc27",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p5.py",
+      "initial_sha256": "64b5aeb9d66523d9180f8ae2ac5287df341e4e1836871a7991441e67ff9d26b9",
+      "current_sha256": "64b5aeb9d66523d9180f8ae2ac5287df341e4e1836871a7991441e67ff9d26b9",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p6.py",
+      "initial_sha256": "7dff092df1617a4cd96e4dfff47e2677fdedda201673d7f9d989ce439ff94d70",
+      "current_sha256": "7dff092df1617a4cd96e4dfff47e2677fdedda201673d7f9d989ce439ff94d70",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p7.py",
+      "initial_sha256": "d66e495e378db35096eb980a21c611833d4bed4c7b30bfde34ba6bfeb76f81fb",
+      "current_sha256": "d66e495e378db35096eb980a21c611833d4bed4c7b30bfde34ba6bfeb76f81fb",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p8.py",
+      "initial_sha256": "2b01d55aeecd7cd9932e1c7b06419b81453b856a02d231ebabb56f8ba8730a1c",
+      "current_sha256": "2b01d55aeecd7cd9932e1c7b06419b81453b856a02d231ebabb56f8ba8730a1c",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "scripts/validate-p9.py",
+      "initial_sha256": "352752c91efc8af60aea8ab566b65c671f8424b4d6948107badab00514cf95d8",
+      "current_sha256": "352752c91efc8af60aea8ab566b65c671f8424b4d6948107badab00514cf95d8",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "brief/00-owner-request.md",
+      "initial_sha256": "aa86b6854d8873028f3460afe55ce9a9b4f8a300a9810dd37f5054812b7a34a2",
+      "current_sha256": "aa86b6854d8873028f3460afe55ce9a9b4f8a300a9810dd37f5054812b7a34a2",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "brief/01-owner-design-policy.md",
+      "initial_sha256": "cebda2cf4cc82630f5b2d02cffc5dc857922125737c538b32f8b68643934181a",
+      "current_sha256": "cebda2cf4cc82630f5b2d02cffc5dc857922125737c538b32f8b68643934181a",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "brief/02-astra-whole-plan-review.md",
+      "initial_sha256": "47c2ba432612d6b014bddc10124fb01007f1b9f7c880105619727400bb967458",
+      "current_sha256": "47c2ba432612d6b014bddc10124fb01007f1b9f7c880105619727400bb967458",
+      "read": "full owning input or newly authored/reviewed; large inputs paginated with supplemental reads"
+    },
+    {
+      "path": "plan.md",
+      "initial_sha256": "5e2d1a163105ad0633b6727df3ffd90ed47ce43032315da686501f5507211bd3",
+      "read": "full current carrier and changes reviewed",
+      "semantic_review": "Current navigation, authority, findings and one successor reconciled with D17; no execution acceptance.",
+      "current_sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36"
+    },
+    {
+      "path": "roadmap.md",
+      "initial_sha256": "c986ab678ff1af8e665f47dbb8cea705b680f8a132b97448a7502131a549c94f",
+      "read": "full current carrier and changes reviewed",
+      "semantic_review": "Current navigation, authority, findings and one successor reconciled with D17; no execution acceptance.",
+      "current_sha256": "5093dc5695d7866473762f90a4c5c961a4f659c24a6411f360aa18b8ba0f8de1"
+    },
+    {
+      "path": "handoff.md",
+      "initial_sha256": "2c720f8ff1680a9a1bda43d16f6c30a98a01ff79b86d9c05ec30bc620c991549",
+      "read": "full current carrier and changes reviewed",
+      "semantic_review": "Current navigation, authority, findings and one successor reconciled with D17; no execution acceptance.",
+      "current_sha256": "2b3bba8b074294d2f67f61c38b2635bcbd5dfa3f010800972553cbcb40122fc3"
+    },
+    {
+      "path": "open-questions.md",
+      "initial_sha256": "cbe7d3d66b2b0cbba7d918120400d1f1793b755e7293f308f6d443f27bc72e01",
+      "read": "full current carrier and changes reviewed",
+      "semantic_review": "Current navigation, authority, findings and one successor reconciled with D17; no execution acceptance.",
+      "current_sha256": "9c2536c93e0a18fe6d3ae82d3e720868ca40186cbf746f324652527ca2c81030"
+    },
+    {
+      "path": "findings/whole-plan-astra-review.md",
+      "initial_sha256": null,
+      "read": "full current carrier and changes reviewed",
+      "semantic_review": "Current navigation, authority, findings and one successor reconciled with D17; no execution acceptance.",
+      "current_sha256": "94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b"
+    },
+    {
+      "path": "research/08-execution-batches.md",
+      "initial_sha256": null,
+      "current_sha256": "9bd1b1b0caad5e4384842c6bbc0aef8e91e9da470e46d173ffa7fcc3ee0ee0c0",
+      "read": "full D18 owner follow-up authoring/review",
+      "semantic_review": "Grouping, unchanged item contracts, maximum routes, native ready-subset admission, explicit scope and context boundaries."
+    },
+    {
+      "path": "decisions/D18-execution-batches.md",
+      "initial_sha256": null,
+      "current_sha256": "167ac553aa0d5e7bdd0afc6b53455a1c2b216b2413da1838538a3a2f74018340",
+      "read": "full D18 owner follow-up authoring/review",
+      "semantic_review": "Grouping, unchanged item contracts, maximum routes, native ready-subset admission, explicit scope and context boundaries."
+    },
+    {
+      "path": "artifacts/astra-whole-plan-review/batch-routing-check.py",
+      "initial_sha256": null,
+      "current_sha256": "3987ede9bf0d5629c7829f32f282a71de0fbaa2317794dbc17e484d84f4c486d",
+      "read": "full D18 owner follow-up authoring/review",
+      "semantic_review": "Grouping, unchanged item contracts, maximum routes, native ready-subset admission, explicit scope and context boundaries."
+    }
+  ],
+  "external_inputs": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "e17cf766ddec6dbb3129635721d8f4dfd8d04c3a5c0a51f6f22bd56484047858",
+      "read": "full"
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "sha256": "9f72bb48a69f7e5e014d9cbcee5d16ce224631c455f4da556409e061a24380b6",
+      "read": "full"
+    },
+    {
+      "path": "packages/tasks/src/Support/TaskCompletion.php",
+      "sha256": "204595009bc3703169f9456887bd8bce418a400199921bf6988dc6165068ce7a",
+      "read": "full"
+    },
+    {
+      "path": "packages/tasks/src/Actions/CompleteTask.php",
+      "sha256": "24d408bc3d6ab1e06b8564db8d49177b9ad724940c0e3a70a0209bbaaaa2c2da",
+      "read": "full"
+    },
+    {
+      "path": "packages/tasks/src/Events/TaskCompleted.php",
+      "sha256": "d37aaf5e88a244c9317c3166993fdc37e1fbd8f5eebc559e213311a91a65a0d1",
+      "read": "full"
+    },
+    {
+      "path": "packages/core/src/Events/DomainEvent.php",
+      "sha256": "2326f626baf97f4b4b85aa453f1036004303e33c1d01b54c91702a02da684098",
+      "read": "full"
+    }
+  ],
+  "refreshed_at": "2026-09-15T13:48:58.299851+00:00",
+  "followup": "D18: root/phase routing, current guidance and new execution guide reviewed; refreshed current hashes preserve initial digests."
+}

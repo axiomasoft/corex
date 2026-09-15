@@ -56,7 +56,7 @@ Future owning FlexCRM handoff должен содержать точную ин�
 P2.4→P3.1/P3.2/P3.3; P3.3→P3.4→P3.5 and P3.3→P3.6; all six→P3.7→P9.
 P4/P6 file IO may consume accepted findings/P3-storage-context.md after P3.1; no dependency on
 membership target deployment. B-P3-LOCAL and B-P3-IDENTITY are recommendations, not atomic groups.
-Each affected gate respected; no successor/child launched during design. P4 detailed; P8–P11 remain skeleton.
+Each affected gate respected; no successor/child launched during design. All P1–P11 contracts are detailed; D17 governs whole-plan corrections.
 
 
 ## P4 execution subsets (D9; after full design-finish only)
@@ -66,7 +66,7 @@ P4.1→P4.7 modules schema adapter; P4.4→P4.5→P4.6; accepted P5 local_sweep 
 All seven→P4.8 installed neutral receipts/seal→P8/P9; P9/P10→P11 immutable acceptance.
 B-P4-MEDIA and B-P4-NOTIFICATIONS are recommended reusable context groups,
 ready dependency-safe subsets allowed, no agent orchestration implied. Core-only view branch,
-pure notify/channel and panels don't wait central/membership deployment. P8–P11/full finish pending.
+pure notify/channel and panels don't wait central/membership deployment. Current finish readiness is checked by task-check.py --check design.
 
 ## P6 execution subsets (PLAN1.D11; after full design-finish only)
 
@@ -75,16 +75,16 @@ P3.1 supported storage only file IO; stream/static PG independent. Dynamic-field
 grammar integration conditional; no P3.2/P4/P5 runtime reverse edge. Missing required external
 engine ABI/source gates only engine subset, no source-qualified NO-GO completes R11. Groups
 B-P6-FIELDS/B-P6-TRANSFER/B-P6-SEARCH recommended context reuse, safe ready subsets admitted.
-P8–P11 detail/RAG/whole finish pending; all product items Not started, no successor execution.
+All product items remain Not started; D17 and current finish seal govern execution admission.
 
 
 ## P7 execution subsets (PLAN1.D12; after full design-finish only)
 
-P2→P7.1→P7.2/P7.3/P7.5/P7.6; P7.1+P7.5→P7.7; P7.2+P7.3+P5.2→P7.4, optional P5.4current binding gates onlyFSM. P7.5+P7.7→P7.8 selected P6/P4/consumer-driver capabilities; all8reports→P7.9 installed5Rseal→P8/P9/P10/P11. Pure recurrence/money/locale/reference do not await central membership/Meili/engine. B-P7-INTL shared setup recommended, Files overlaps sequential same-root writes and commonDTO frozen, no child agents. Source/driver/import/install conformance70actual cases,45mixed original parents retained; P8–P11/full finish pending, no runtime execution.
+P2→P7.1→P7.2/P7.3/P7.5/P7.6; P7.1+P7.5→P7.7; P7.2+P7.3+P5.2→P7.4, optional P5.4current binding gates onlyFSM. P7.5+P7.7→P7.8 selected P6/P4/consumer-driver capabilities; all8reports→P7.9 installed5Rseal→P8/P9/P10/P11. Pure recurrence/money/locale/reference do not await central membership/Meili/engine. B-P7-INTL shared setup recommended, Files overlaps sequential same-root writes and commonDTO frozen, no child agents. Source/driver/import/install conformance70actual cases,45mixed original parents retained; D17 whole-plan corrections apply; no runtime execution in authoring.
 
 ## P8 execution subsets (PLAN1.D13; after D4 finish)
 
-P1/P2→P8.1source→P8.2declarations→P8.3catalogue→P8.4guard; P8.1→P8.5modules-onlydiagnosticindependent; P8.4+onlyactuallyselectedP3–P7contributions→P8.6; all6→P8.7coldinstalled3Rseal→P9/P10/P11. BatchB-P8-TOOLSrecommendedreadyorderedsubset,nosiblingengine/productmodule/centralwaitforgenericread.7specs/56cases/49parents/19externalnames,currentpolicy/finaldomainauthority/typedoutcomes/offlineschemabudgets; no automaticendpoint. AllruntimeNotstarted, nextP9designseparateSol/high, fullP1–P11finishbeforeexecution.
+P1/P2→P8.1source→P8.2declarations→P8.3catalogue→P8.4guard; P8.1→P8.5modules-onlydiagnosticindependent; P8.4+onlyactuallyselectedP3–P7contributions→P8.6; all6→P8.7coldinstalled3Rseal→P9/P10/P11. BatchB-P8-TOOLSrecommendedreadyorderedsubset,nosiblingengine/productmodule/centralwaitforgenericread.7specs/56cases/49parents/19externalnames,currentpolicy/finaldomainauthority/typedoutcomes/offlineschemabudgets; no automaticendpoint. All runtime items Not started; actual full design-finish is required before execution.
 
 
 ## P10 execution subsets (PLAN1.D15; after full D4 finish)
@@ -94,4 +94,18 @@ P10.1 actual source/released intake + prepared verifier → independent recommen
 
 ## P11 execution subsets (PLAN1.D16; after full D4 finish)
 
-P1/P2 actual selected atoms + included P3–P8 seals + P9 released vector + P10 effective complete seal → P11.1 intake/verifier → recommended B-P11-QUALIFY P11.2 pins → P11.3 actual consumer tests → P11.4 complete52R/365parents/positive selected atom ledger → P11.5 ready three-file packet → authenticated G-CONSUMER-RECONCILE manual P11.6 owning write/consumer commit → P11.7 final seal. R47 final result no prerequisite self-edge; R52 invariant checked here. Foreign only immutable acceptance/progress append/handoff, no source/lock/schema/state/milestone writes.46cases; whole-plan finish separate next invocation, all execution Not started.
+P1/P2 actual selected atoms + included P3–P8 seals + P9 released vector + P10 effective complete seal → P11.1 intake/verifier → recommended B-P11-QUALIFY P11.2 pins → P11.3 actual consumer tests → P11.4 complete52R/365parents/positive selected atom ledger → P11.5 ready three-file packet → authenticated G-CONSUMER-RECONCILE manual P11.6 owning write/consumer commit → P11.7 final seal. R47 final result no prerequisite self-edge; R52 invariant checked here. Foreign only immutable acceptance/progress append/handoff, no source/lock/schema/state/milestone writes.46cases; D17 whole-plan review/current finish seal applies, all execution Not started.
+
+## D17 shared foundation and release edges
+
+Shared core DTOs have finite serial first-consumer ownership P6.2/4/6 or P7.4/6/7;
+findings/shared-data-foundation.md is produced once and hash-checked by later consumers.
+No forced engine edge or concurrent shared writes. Exact protocol is in P6 stable design.
+P4.4 NotificationChannelDriver precedes P4.5; P5.2+P4.4/5→P5.5→P4.6 DueSource/digest FK.
+P9.1 intake intent→P9.2 build attestation→P9.3/4 recipe/installed→P9.5/6 hosted/private
+→P9.7 packet→P9.8 publication→P9.9 released install; no backward hash into intake.
+
+**Единственный рекомендуемый следующий scope после actual finish:** B-P1-QUALIFY,
+frontier/high = gpt-5.6-sol/high; первый runnable carrier P1.1, затем P1.2–P1.4
+в том же root по per-item readiness. Подробная карта35 envelopes и порядок при
+P4/P5 interleave/P10 window — research/08-execution-batches.md (D18).

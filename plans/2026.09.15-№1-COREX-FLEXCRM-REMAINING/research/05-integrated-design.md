@@ -1,8 +1,8 @@
 # Единая картина дизайна — PLAN1
 
 RAG:— Adopted programme scope D2, explicit full-plan-first/mandatory Perplexity policy D4.
-Это общая contract-first картина всех 11 фаз; P1/P2 имеют по четыре specs, P3 — семь, P4 — восемь, P5 — шесть, P6 — восемь, P7 — девять, P8 — семь, P9/P10 — по девять; P11 — семь exact specs/46cases; whole-plan semantic/hash-current finish pending.
-Она не означает, что проектирование всех фаз завершено, и не содержит fake producer/acceptance results.
+Это общая contract-first картина всех 11 фаз; P1/P2 имеют по четыре specs, P3 — семь, P4 — восемь, P5 — шесть, P6 — восемь, P7 — девять, P8 — семь, P9/P10 — по девять; P11 — семь exact specs/46cases; whole-plan semantic corrections D17; readiness is bound to the current finish seal.
+Все фазы детализированы; semantic review/corrections D17 и actual finish gate отделены от будущих producer/acceptance results.
 
 ## Порядок
 
@@ -46,11 +46,17 @@ material mismatch требует affected design/finish revision до завис
 - Design gate подтверждает полноту/hash freshness; semantic integration review и actual runtime tests
   остаются отдельными obligations. GREEN дизайна не release/live/consumer acceptance.
 
-## Current pending work
+## История завершения фазовой детализации
 
 Initial P1 query вернул login required и был сообщён; additional query после автовхода successful,
 primary NASA/W3C verification и raw response сохранены в research/P1-design-rag.md (D5). P2 neutral query successful, локальные boundaries/четыре catalogue contracts сохранены в research/P2-contract-design.md и P2-design-rag.md (D6/D7). P3/P4/P5/P6 neutral detail/RAG complete; P7/P8/P9 detailed/RAG verified; P10/P11 detailed with successful mandatory neutral RAG/direct sources D15/D16; общего semantic/hash-current finish ещё нет.
 D4 запрещает выполнение P1.1 и других items до общего завершения дизайна.
+
+## Исторические integration notes D7–D16
+
+Следующие phase notes сохраняют ход исходной детализации. Их фразы pending/next/future
+описывают момент соответствующего D-record, не текущую readiness или новый маршрут.
+Текущее согласованное состояние и pre-mortem приведены в разделе D17 ниже.
 
 ## P6 integrated delta / pre-mortem — PLAN1.D11
 
@@ -257,3 +263,75 @@ P1 classification selects atoms; P2 accepted catalogue/gates establishes require
 
 
 Positive selected CoreX dependency atoms exactly derived from P1 frozen classification; final R47 action excluded from its own prerequisites, R52 current producer/non-CRM invariant checked here. R41/R42 dependency slices do not close original app milestones. Independently authenticated accepting-consumer evidence separate finite G-CONSUMER-RECONCILE write grant, current three-file diff before approval, immutable collision/partial write/input drift checks. Whole finish must hash P11 stable candidate/D16/checker in addition existing eleven phase/spec/RAG/plan/integrated inputs; no current actual acceptance or execution.
+
+## D17 — Текущая содержательная межфазовая сверка
+
+RAG:— Full11phase/78spec review completed against52R/365original parent inputs; source
+reading ledger records hashes and scope, not fake runtime/atom acceptance. All explicit
+corrections are D17 and whole-plan findings; design readiness requires actual current
+finish/hash/structural checks. Historical notes above do not select a successor.
+
+| Phase | Reviewed contract / mitigation / remaining actual proof |
+|:--|:--|
+| P1 | Source100/R52/parent365 conserved; working vs committed and E1–E5 bounded; supplement fixes known source extraction without renumbering; actual atoms remain P1 output. |
+| P2 | P1 sealed classification→exact proposal/no-delta→catalogue; protected per-row adoption distinct from proposal freeze; P3–P8 specs read at design is not runtime reverse edge. |
+| P3 | Physical storage branch independent of membership; PairStore identity now owned before final writer; unknown revoke, durable fence/lease/restore and display-cache-not-authority preserved. |
+| P4 | Headless descriptors, staged media usages/delete/late worker, outbox driver producer order, forward digest FK fixed, guest/parent access distinct, typed saved views and exact-one default. |
+| P5 | Engine independent; wakeup utility independent; P5.2+P4.4/5→P5.5→P4.6 exact path; same runner/catch-up/lock order, durable root hints not authority. |
+| P6 | Typed field/DDL qualification, transfer cross-job dedup/snapshot, search authoritative hydration and dirty/rebuild/unknown swap retained; shared first-consumer foundation and CI corrected. |
+| P7 | Pure RFC recurrence and exact intl independent, sameSQL task observer capture confirmed against CompleteTask/TaskCompleted source; shared token identity/revision and foundation corrected. |
+| P8 | Existing Api/8extenders, opt-in compiled tools, offline schema and current policy/final guarded effects, unknown result semantics; modules-only introspection, external19 names retained. |
+| P9 | Intake identity now excludes downstream recipe/split/dist hashes; fixed overlays, build attestation, actual min/current matrix/hosted/private/publication/released install remain distinct. |
+| P10 | All34DI/13AP/169subconditions; FE45+5+10 physical cleanup vsdeny; complete monthly missing∞/ceil(.999N), perpair30s, real provider/fleet/restore owners; no local substitute. |
+| P11 | Independent accepting actor/lock/config/actual tests; full selected atoms and historical supplement; R47 self-edge excluded; verifier required, equality allowed, exclusive finite writes/recovery. |
+
+### Pre-mortem после исправлений
+
+- **Утечка контекста/старые права:** current trusted resolver/operation policy, scoped state
+  только где есть mutable context, finally cleanup; PairStore::isFor same-object + final
+  sameSQL fence/elapsed checks. P3/P4/P8 negative cases, actual deployed entry census P10.
+- **Потеря эффекта/неизвестный commit:** durable intent до dispatch, bounded retry по
+  доказанному upstream key/lookup, unknown не sent и не разрешение blind resend.
+  P4/P5/P6/P7 own cases; late media writer требует retained attempts/termination horizon.
+- **Неразрешимый producer:** exact early channel interface, later FK and DueSource, shared
+  finite first-consumer DTO receipt; shared writes serialized. Crash before receipt
+  reconciles recorded producer, no concurrent duplicate source or invented predecessor.
+- **Закольцованный release hash:** intake excludes all derived output hashes; metadata
+  overlays frozen before write, recipes have separate actual attestations, source.reference
+  outside split tree. P9 tests modified overlay/identity/map; same vector required P10/P11.
+- **Формальный PASS вместо acceptance:** hash closure includes indirect inputs;13 isolated
+  guard tests cover actual drift/refusal. P11 verifier mandatory but independently trusted
+  accepting actor/real observed outputs still required; signed producer alone insufficient.
+- **Потеря criteria:** all original365 labels/text hashes retained, full source span supplement
+  bound into P1/P11 atoms; R52 cross-cutting and R47 final action cannot erase or self-produce
+  dependencies. External/standalone/product residual owners stay explicit.
+- **Недоказанные timing/provider:** original FE/DI/AP/month/fleet/provider thresholds intact;
+  no-data/open-month/missing remains pending, selected provider needs actual environment.
+- **Потеря foreign edits:** reviewed3-file packet, real exclusivity/quiescence, current
+  preimages before operations, per-op partial reconciliation, immutable receipts no overwrite.
+
+### Compatibility and readiness
+
+Accepted core/API/ID/Money/Settings/Task foundations and existing8extenders unchanged.
+Corex/auth declared Laravel12 remains distinct from new public comparators supporting13;
+actual required target gap needs owning source/API/dependency qualification, never fake PASS.
+Engine/driver/library exact immutable ABI and conformance are executable qualification
+inputs with named owners and resume predicates; they do not invite cloning/reselecting a
+new architecture during implementation. Changes to frozen choices require affected design
+revision and fresh finish. Public no-private and independent non-CRM installs remain required.
+
+No new unresolved internal architecture choice is delegated by this review. Genuine future
+source-owner/API/schema/private/runner/release/effective month/provider/consumer acceptances
+remain gates in03-gates and owning specs. New questions from actual qualified source mismatch
+are possible and must return to the affected design, not be silently guessed.
+
+**Current successor — D18:** B-P1-QUALIFY frontier/high = gpt-5.6-sol/high; first ready
+carrier P1.1, then P1.2–P1.4 in the same root after actual closure/admission.
+Initial design-root-terminal boundary remains; no execution in this design review.
+
+## D18 — Execution grouping
+
+research/08-execution-batches.md фиксирует35 envelopes, reuse/read-cost methodology и
+per-item readiness. Общий batch не создаёт reverse dependency: P4/P5 interleave и
+P10 month/ops сохраняют independent ready subsets, shared D17 writers serial.
+Manual grants/phase closure/current context не обходятся ради меньшего числа запусков.

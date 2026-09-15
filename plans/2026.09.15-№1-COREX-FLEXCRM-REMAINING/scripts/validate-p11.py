@@ -8,6 +8,7 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 loader = importlib.util.spec_from_file_location('p11_base', Path(__file__).with_name('validate-p4.py'))
@@ -91,7 +92,7 @@ def report(plan, stage):
     v.require('p11-reconciliation-report/1' in a.file(plan, path).read_text(), 'stage report version missing')
     cases = a.table(plan, path, 'Cases', ('ID', 'Result', 'Expected', 'Actual', 'Evidence'))
     v.exact(cases, 'ID', wanted(stage))
-    v.require(all(x['Result'] == 'PASS' and x['Actual'] != x['Expected'] for x in cases), 'missing observed PASS or copied assertion')
+    v.require(all(x['Result'] == 'PASS' and x['Actual'].strip() and x['Expected'].strip() for x in cases), 'missing observed PASS or assertion')
     inputs = a.table(plan, path, 'Inputs', ('Path', 'SHA256'))
     v.exact(inputs, 'Path', {x['Path'] for x in inputs})
     for row in inputs:
@@ -111,6 +112,21 @@ def report(plan, stage):
         v.exact(atoms, 'Atom', {x['Atom'] for x in atoms})
         v.require(all(x['R'] != 'R47' and x['Result'] == 'PASS' for x in atoms), 'self-edge or unfinished dependency')
         # Full original atom-set/source/owner semantics are verified by P11.1 tool and owning executor.
+    verify_prepared_report(plan, path)
+
+
+def verify_prepared_report(plan, report_path):
+    """Require the P11.1 verifier for execution reports; never run it for design."""
+    tool = a.file(plan, 'scripts/reconcile-consumer.py').resolve()
+    report_file = a.file(plan, report_path).resolve()
+    try:
+        result = subprocess.run(
+            [sys.executable, '-B', str(tool), '--verify', str(report_file)],
+            cwd=plan.resolve(), check=False, timeout=60,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError('prepared consumer verifier timed out') from exc
+    v.require(result.returncode == 0, 'prepared consumer verifier red')
 
 
 def main():

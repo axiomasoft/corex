@@ -61,7 +61,7 @@ No foreign source/locks/schema/spec/journal/state/status/archive/Brain writes. P
 
 Packet Markdown ## Operations (ID / Repo / Path / Kind / Expected old SHA256 / New SHA256 / Payload / Recovery), ## Frozen inputs (Repo / Path / SHA256), ## Authority (Gate / Branch / Finite scope / Packet SHA256 / Owner / Authenticated grant reference), ## Assertions and ## Remaining app work. Gate G-CONSUMER-RECONCILE, branch consumer-dependency-reconciliation, finite scope p11-consumer-reconciliation/1:repo-flexcrm:FLEX-2:three-file-packet. Gate grant must bind current packet bytes/digest and three paths/new payloads/old preimages under authenticated existing owner provenance, expiry/revocation respected. Current design/previous access/D41/D42 not a grant. Prepare all bytes/simulation first; approval only at actual finite write boundary when missing.
 
-Tool in P11.1 is local read-only verifier plus dry-run operation planner; write mode exists only if packet/grant/lock/preimages guards are enforced and meaningful synthetic refusal/recovery tests pass. Immediately pre-write check canonical repo/path identity, relevant input hashes, exclusive cooperative repository reconciliation lock and old preimages; atomic per-file replace/create with no-clobber, append under lock. Cooperative lock requires all owning writers honoring same lock; otherwise quiesced owning checkout or fresh conflict detection, never assume global distributed transaction. Before each operation recheck non-target inputs and expected-current target SHA. Unknown timeout/crash reconciles actual file SHA with durable per-op log before retry. Identical immutable receipt replay no-op; different bytes never overwrite. If source/owner delta appears after partial success, retain factual partial receipt and return no-write conflict for remaining operations, no blind rollback of later edits. All GREEN requires post-diff exactly three files/current inputs and returned consumer commit; unrelated dirty files never staged/committed.
+Tool in P11.1 is local read-only verifier plus dry-run operation planner; write mode exists only if packet/grant/lock/preimages guards are enforced and meaningful synthetic refusal/recovery tests pass. Immediately pre-write check canonical repo/path identity, relevant input hashes, exclusive cooperative repository reconciliation lock and old preimages; atomic per-file replace/create with no-clobber, append under lock. Cooperative lock requires all owning writers honoring same lock; otherwise an owner-quiesced owning checkout must remain exclusive throughout the operations; fresh conflict detection is additional and never substitutes exclusivity. Without either established exclusive mode, refuse before mutation; never assume global distributed transaction. Before each operation recheck non-target inputs and expected-current target SHA. Unknown timeout/crash reconciles actual file SHA with durable per-op log before retry. Identical immutable receipt replay no-op; different bytes never overwrite. If source/owner delta appears after partial success, retain factual partial receipt and return no-write conflict for remaining operations, no blind rollback of later edits. All GREEN requires post-diff exactly three files/current inputs and returned consumer commit; unrelated dirty files never staged/committed.
 
 ## Exact app-only handoff statement
 
@@ -147,4 +147,23 @@ P1 classification selects atoms; P2 accepted catalogue/gates establishes require
 
 ## Finish inputs / unresolved actual premises
 
-Include research/P11-reconciliation-design.md, decisions/D16-consumer-reconciliation.md and scripts/validate-p11.py alongside all phase/spec/RAG/plan/integrated inputs in full design-finish gate. No current product acceptance/consumer grant/commit/test/release/deployment from this design. Actual immutable engine/adoption/released/effective/consumer packets, authenticated owner acceptances and finite grant remain future prerequisites, not unknown design choices. Integrated semantic finish is separate next invocation.
+Include research/P11-reconciliation-design.md, decisions/D16-consumer-reconciliation.md and scripts/validate-p11.py alongside all phase/spec/RAG/plan/integrated inputs in full design-finish gate. No current product acceptance/consumer grant/commit/test/release/deployment from this design. Actual immutable engine/adoption/released/effective/consumer packets, authenticated owner acceptances and finite grant remain future prerequisites, not unknown design choices. At the original P11 phase checkpoint, integrated semantic finish was the next invocation; the current whole-plan review and finish are governed by D17.
+
+## Whole-plan verifier and source-span correction — AWR-09/10/11
+
+P11.1 produces `scripts/reconcile-consumer.py` with exact read-only CLI
+`python3 -B scripts/reconcile-consumer.py --verify <absolute-report-path>`. It infers
+stage from the fixed seven report paths, validates source/atom/cohort/actor/preimage joins
+required for that stage, reads only declared imports, performs no external writes/network
+operations and exits0 only for complete valid evidence. Missing/malformed/stale inputs or
+unknown stage return nonzero. It must finish within60s for a bounded report; timeout fails
+closed. `validate-p11.py` invokes it after structural checks for every execution stage,
+never for design. `--self-test` uses isolated synthetic inputs and tests acceptance of
+expected1/actual1 with real bound evidence as well as missing/verifier-red/refusal cases.
+Matching Expected/Actual is legitimate; raw provenance and predicate evaluation establish
+truth, textual inequality does not. The checker cannot independently authenticate a forged
+external statement; existing owner-policy verification remains necessary.
+
+P1/P11 classification consumes `research/01b-acceptance-source-supplement.md`; original
+365 hashes/labels stay unchanged, complete B36 clauses and B34 reference lineage are bound
+into actual atoms. WRITE-02 includes noncooperating-writer/no-quiescence => no-write refusal.

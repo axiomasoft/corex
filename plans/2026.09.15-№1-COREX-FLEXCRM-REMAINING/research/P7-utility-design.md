@@ -28,13 +28,13 @@ CoreX\\Tasks\\Contracts:
 - TaskPlanningCommand::recordTime(TimeLogDraft $draft, PlanningToken $token): TimeLogReference
 - TaskPlanningAccess::authorize(PlanningOperation $operation, PlanningSubject $subject, ActorData $actor, TenantContext $context): void
 CoreX\\TasksWorkflow\\Contracts:
-- TaskRecurrenceCommand::materialize(DataScope $scope, SeriesReference $series, MaterializationWindow $window, OperationToken $token): MaterializationReceipt
+- TaskRecurrenceCommand::materialize(DataScope $scope, SeriesReference $series, MaterializationWindow $window, WriteToken $token): MaterializationReceipt
 CoreX\\Intl\\Contracts:
 - LocaleResolver::resolve(LocaleInputs $inputs, LocalePolicy $policy): LocaleResolution
 - TranslationReader::read(LocalizedText $text, LocaleResolution $locale): TranslationResult
 - CurrencyMetadata::get(string $currencyCode): CurrencyInfo
 - RateProvider::lookup(RateQuery $query): RateLookup
-- RateImporter::import(DataScope $scope, RateBatch $batch, OperationToken $token): RateImportReceipt
+- RateImporter::import(DataScope $scope, RateBatch $batch, WriteToken $token): RateImportReceipt
 - CurrencyConverter::convert(Money $amount, RateSnapshot $rate, ConversionPolicy $policy): ConversionReceipt
 - MoneyFormatter::format(Money $amount, LocaleResolution $locale, FormatPolicy $policy): FormattedMoney
 - GeographyProvider::describe(DataScope $scope): DatasetManifest
@@ -65,7 +65,7 @@ corex/intl-search consumes actual P6 search/1 and index-lifecycle/1 only for dec
 
 ## Shared typed value and operation rules
 
-Unqualified DTOs resolve to the owning package CoreX\Recurrence\Data, CoreX\Tasks\Data, CoreX\TasksWorkflow\Data, CoreX\Intl\Data; Money/rounding use existing Brick\Money/Brick\Math. Cross-domain DataScope/OperationToken are actual adopted CoreX\Support\Data candidates from P6/P2, never sibling package imports. All DTOs final readonly, constructor promotion with typed properties, defensive canonical lists/maps validated at construction; serialized version/hash methods not arbitrary object deserialization. Date value strict yyyy-mm-dd; Instant DateTimeImmutable UTC, LocaleTag string validated BCP47+allowlist, Scope/Actor only trusted ingress. Exceptions stable invalidDefinition/invalidLocale/invalidRate/unsupportedCapability/environmentMismatch/staleCursor/operationConflict/snapshotExpired/accessDenied; invalid/no-op/unknown results cannot be coerced into success.
+Unqualified DTOs resolve to the owning package CoreX\Recurrence\Data, CoreX\Tasks\Data, CoreX\TasksWorkflow\Data, CoreX\Intl\Data; Money/rounding use existing Brick\Money/Brick\Math. Cross-domain DataScope/WriteToken are actual adopted CoreX\Support\Data candidates from P6/P2, never sibling package imports. All DTOs final readonly, constructor promotion with typed properties, defensive canonical lists/maps validated at construction; serialized version/hash methods not arbitrary object deserialization. Date value strict yyyy-mm-dd; Instant DateTimeImmutable UTC, LocaleTag string validated BCP47+allowlist, Scope/Actor only trusted ingress. Exceptions stable invalidDefinition/invalidLocale/invalidRate/unsupportedCapability/environmentMismatch/staleCursor/operationConflict/snapshotExpired/accessDenied; invalid/no-op/unknown results cannot be coerced into success.
 
 PlanningOperation enum createProject|createSprint|recordTime; PlanningSubject {workspaceId:string,projectId:?string,taskId:?string,userId:?string} from resolved same-account rows, never caller assertion as access proof. Project/Sprint/TimeLog refs {id:string,type:string,display:string}; exact current type/ID mapping adopted P2, no product entity literals. ProjectDraft name trimmed1..190, SprintDraft name1..190/startDate/endDate map existing starts_on/ends_on, task title retains existing255. TimeLog minutes1..2^31-1, accumulated spent_minutes representability checked before save; comment≤2000/user actor authority current policy, no self-selected user impersonation. Existing Project active/Sprint planned defaults preserved. PlanningToken key≤190bytes and SHA256 canonical typed input+actor+scope+operation; same-key mismatch refuses and existing-key lookup authorizes current resolved subject first. Consumer policy passed by declared DI default deny, no new permission engine.
 
@@ -220,3 +220,17 @@ Branch report p7-utility-receipts/1: ## Inputs table Path / SHA256 / Role (actua
 P1 sealed52R/365parents→P2 adopted exact new candidate signatures/schema/equivalents/gates→P7 independent branches. Design P7 candidate is P2 planning input only, not execution reverse edge. .1→.2/.3/.5/.6/.7; .2+.3+P5.2→.4; optional P5.4 gates only FSM branch. .5+.7+actual P6 query/index/P4 label if selected→.8; .2–.8→.9. Address selected driver actual G-DEPENDENCY/read config; no engine clone. Pure recurrence/locale/rate/reference do not await central membership/workflow/Meili. .9→P8 actual metadata/P9 cohort→P10 actual source/10M/vendor/fleet/perf→P11 consumer. No cycle P5→P7 only, P6→P7 optional bridge only.
 
 Mitigations tied to cases: Feb31/gap/count and cursor watchdog REC01/03/05/09/10; old tzdb REC11; UTC dedup/materialize edit/partial-watermark MAT01–05; afterCommit signal loss MAT02/07/P5 engine current source; task time total/dedup PRIM04/05; leaked locale LOC03/04; float display FX09; overwritten correction FX03/10; incomplete geography GEO01/02; mixed cursor generation GEO04/05; guessed timezone GEO07; API disclosure OPT04/06. Product B27 templates/DAG/acceptance/KPI and B29 booking/sync/calendar roles remain owning external criteria, not transformed into smaller generic tests. B35 finance finalization/tariffs/root fan-out/RTL/vendor backoff/retention remain R26/product/ops. New packages must join layer/literal scan inventories and per-package CI/aggregator/release matrix, plant violations to prevent vacuum green. Actual stack baseline PHP8.3–8.5/L12–13 policy qualified source/runtime/CI separately, optional extension/pin requirements explicit. No weakened coverage/root80 target85/per-package stricter floors.
+
+## Whole-plan seam correction — AWR-06
+
+`WriteToken` is the sole shared CoreX\Support\Data operation token; no separate
+OperationToken class is produced. Its exact constructor is frozen in P6 data design.
+For TaskRecurrenceCommand, expectedRecordVersion is the immutable admitted series revision;
+for RateImporter it is the target publication revision (literal `absent` only when no
+publication exists). Admission checks that expected revision under the same SQL boundary
+as the operation claim/result. Same key + same canonical payload replays the recorded
+result; different payload conflicts. A matching token never substitutes current scope/policy.
+
+Shared DTO production/reuse follows the finite serial first-consumer protocol in
+research/P6-data-design.md AWR-04/06. P7.4/6/7 can produce it after their own P2 gates
+without waiting for P6 engine, transfer or search. Pure recurrence/locale stay independent.

@@ -1,0 +1,1 @@
+In two short paragraphs, compare nWidart laravel-modules manifest priority/provider boot ordering with spatie laravel-data typed creation/validation. Explain one failure mode each and cite official docs or source. No table; maximum 180 words.

@@ -1,0 +1,1873 @@
+{
+  "head": "67ebcde7b3ab32aa0205deb37a483b605e140cdb",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "8b4f4b3790b8f16a2576615f47ee4ed5ed284c5b9a989396fa9e5c8b01f092da"
+    },
+    {
+      "path": "composer.json",
+      "sha256": "3dd2bb6563cbe91581ad304d59cc838651dafec3b05c209cab63e846b1e1be15"
+    },
+    {
+      "path": "composer.lock",
+      "sha256": "230d317facc6aab84af4fabd63b1317c868f9e530fd9c50c684f878a382cc57b"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "6d3c95134ac602c836fde922039d648584f4af06e061cd12f6594aa6e9dda20a"
+    },
+    {
+      "path": "packages/context/CHANGELOG.md",
+      "sha256": "03f583631348d3ebafeda1ad739db88c5959d23210aa4c8f9ab96c3ac68e7e1b"
+    },
+    {
+      "path": "packages/context/composer.json",
+      "sha256": "697f230ea8d585e7cd68071e02f048bb818f015adc0176564e2e55e605647133"
+    },
+    {
+      "path": "packages/context/README.md",
+      "sha256": "7a55a016a213c3f83b9031ec0c762971f53970e76ffa412a58b0761f59c010b4"
+    },
+    {
+      "path": "packages/core/CHANGELOG.md",
+      "sha256": "39d7f43bbf43105f1fab4544f411c0dceccb1e4f343654d078416a3898e5c635"
+    },
+    {
+      "path": "packages/core/composer.json",
+      "sha256": "41de5e89d0a85a4254a4acb616201fda862df63c3f5418ad8e375e1992aab50b"
+    },
+    {
+      "path": "packages/core/rector.php",
+      "sha256": "2ea50709e6450a3104a080a10a050b04172c0a2a1de60d27a60318a81f5229e3"
+    },
+    {
+      "path": "packages/core/README.md",
+      "sha256": "c575b2bd3f1e3861434ff1ce6c8370864a2faa9852e446057c808a23cffdad9e"
+    },
+    {
+      "path": "packages/filament/CHANGELOG.md",
+      "sha256": "534b29ed25ada58c2908ec1bfc1c4f94793114bfd6d9135709117b2f8bcf8489"
+    },
+    {
+      "path": "packages/filament/composer.json",
+      "sha256": "672fcb1caded8cde32295995a90dac0b14937e171da49b3b1ef8678b43feaad9"
+    },
+    {
+      "path": "packages/filament/README.md",
+      "sha256": "33ef7ef03e7bf7857f194c6f2e2ea6f78f10612f34e2332540138771d1ce1b30"
+    },
+    {
+      "path": "packages/context/src/ContextGuard.php",
+      "sha256": "c4abca5d7be47f0bb2de92e04d9f1e83a8d0aed4ac9f6c784ae9325d3b04c54c"
+    },
+    {
+      "path": "packages/context/src/ContextNotSetException.php",
+      "sha256": "ead573479eb1ad9b0b8a455b8666ebc61670a09f12afd13f5b3efa230c467cef"
+    },
+    {
+      "path": "packages/context/src/ContextGrantBuilderFactory.php",
+      "sha256": "b14d9db018dcd07e826843cecb9fe80334fb0c34a6b97d10c02db24bb18e9cd3"
+    },
+    {
+      "path": "packages/context/src/ContextGrantBuilder.php",
+      "sha256": "20188a61ca25e0b6acdeaa788012e1fd0568a1b77ef00dd62d650d210ed1f9fd"
+    },
+    {
+      "path": "packages/context/src/ContextPermissionLayer.php",
+      "sha256": "0ee7cc87a7905fc524a2a16dbf11210b9da084ee13bd7f6f5afb5e3aecdd94d4"
+    },
+    {
+      "path": "packages/context/src/AuthorizationContext.php",
+      "sha256": "caeb9f02077f54a9f8872fb9065c078297334b18bdaf758a6bc41d0c0fa6f7b1"
+    },
+    {
+      "path": "packages/context/src/AzGuardContextServiceProvider.php",
+      "sha256": "18a16fc85daa227077ca58c0e478c673d3d389bd586ac55dea945e04501aa2ac"
+    },
+    {
+      "path": "packages/context/src/AuthorizationContextManager.php",
+      "sha256": "79430f1d9462a5ccc326d2af85d2ebf63dbffaef78cceb53628d0438b5af68b2"
+    },
+    {
+      "path": "packages/context/config/az-guard-context.php",
+      "sha256": "e436ea138e1c20efa6c1cd27f7edf8a8a2476cc5936a98472e69570f0b6706de"
+    },
+    {
+      "path": "packages/context/src/Events/ContextGrantGiven.php",
+      "sha256": "0ab02bdc17d04a442af5a770e2663905162a8d8e3b7d6e6426f7d7d1bd4b6521"
+    },
+    {
+      "path": "packages/context/src/Events/ContextGrantRevoked.php",
+      "sha256": "8005eb221f1e492299fffe3a1ae827a2bfd642d95e3363acd97b08ab0e9e3654"
+    },
+    {
+      "path": "packages/context/src/Commands/ContextRevokeCommand.php",
+      "sha256": "c16585fde45fb513754d68d47c1b04e3b05618006d7998fc9353a7ca69a37051"
+    },
+    {
+      "path": "packages/context/src/Commands/ContextGrantCommand.php",
+      "sha256": "2c564ae7e7d8479a65e65186d6e9c08d1fbe9cfc40d3afcc952baf7f633ad002"
+    },
+    {
+      "path": "packages/context/src/Middleware/SetAuthorizationContext.php",
+      "sha256": "d9fae967460dc736927249b59a833fd5b3c0fd04ce53cca99ef736a3ee070e78"
+    },
+    {
+      "path": "packages/context/src/Models/ContextRole.php",
+      "sha256": "eead17309aa453d1c594f278088885494a7236d639161630bdc8f358c6f8144d"
+    },
+    {
+      "path": "packages/context/src/Strategies/ContextOnlyStrategy.php",
+      "sha256": "a5c7af7b412a12bdda40b44768a33483a4098f3eae405cf7da2bc986c3e3cf8b"
+    },
+    {
+      "path": "packages/context/src/Strategies/DenyWithoutContextStrategy.php",
+      "sha256": "b3b665d1a0433071a3308fd274f0b8261f85696bd6d0ecd6cb9b875d491869d2"
+    },
+    {
+      "path": "packages/context/src/Strategies/GlobalPlusContextStrategy.php",
+      "sha256": "5756a4403030964efc422f633c387f19f56f73d9985731de3885d4f6b210a14a"
+    },
+    {
+      "path": "packages/context/src/Contracts/ResolvesContext.php",
+      "sha256": "eb830943778f24d0ea09cbf212754267c6cdd298d475aa311f2f2860eb59a9ca"
+    },
+    {
+      "path": "packages/context/src/Contracts/MergeStrategy.php",
+      "sha256": "e6008c01c9a259a1bf30ab0d07b552811f5f286f3d7988faa726b44c093c661f"
+    },
+    {
+      "path": "packages/context/database/migrations/2026_01_01_000011_add_expires_at_to_az_guard_context_roles_table.php",
+      "sha256": "f24f636a272bcf2fe889d87af4e683838cf7fcfe28dfcd2e54d6ce2f4452d4a5"
+    },
+    {
+      "path": "packages/context/database/migrations/2026_01_01_000010_create_az_guard_context_roles_table.php",
+      "sha256": "f187fdddb1168cf3b62fd34746d12a72b513d5eb6b00b3fd7db3c7f899a47a5d"
+    },
+    {
+      "path": "packages/core/src/AzGuardServiceProvider.php",
+      "sha256": "5388d9c7e9bf21e09e7d5aadf362c8e89a3185509bed63696863581159a8489d"
+    },
+    {
+      "path": "packages/core/src/AzGuardManager.php",
+      "sha256": "b1674f12f262056352dd506e448d0ef09efd4122fc330d1f769d0061df1c5460"
+    },
+    {
+      "path": "packages/core/config/az-guard.php",
+      "sha256": "edbe820639c891f09478a77c1129d88547d51d2838c295a2429b7e5685fb62b4"
+    },
+    {
+      "path": "packages/core/src/Configuration/Config.php",
+      "sha256": "5c9a57024c4b866a034d1b35418b14b06a461e0876b7245eddfe87c34f0ab0bc"
+    },
+    {
+      "path": "packages/core/src/Guard/Authorizer.php",
+      "sha256": "7ec6c4acdbe9fa81d7f0aca71a4b888dacaa81b9d1efaa9507409c5febf6831a"
+    },
+    {
+      "path": "packages/core/src/Guard/AzGuardDiagnostics.php",
+      "sha256": "772b8f8eaecdf3af21fb0abe7b949708dd109441f693338e000a81efb3cfa373"
+    },
+    {
+      "path": "packages/core/src/Guard/PolicyDiscovery.php",
+      "sha256": "1e8f3410a609a8e3d5d39be656a04b53744e1302d9caa7cd4978f6fc423125c0"
+    },
+    {
+      "path": "packages/core/src/Events/GrantRevoked.php",
+      "sha256": "4de2666ff37c95745826c6d99683c4143081be608cbe58847a7d3427e1ce09be"
+    },
+    {
+      "path": "packages/core/src/Events/RoleAttached.php",
+      "sha256": "7840b1c600fc63bc92998a0651f665384b966e31fd4d19776e9adcaec7f9806e"
+    },
+    {
+      "path": "packages/core/src/Events/AccessDecision.php",
+      "sha256": "24df38b21eea3bd1c862a3a4d2cdd1a372871e6f9abebcaad90b1a383d4e53d5"
+    },
+    {
+      "path": "packages/core/src/Events/RoleDetached.php",
+      "sha256": "cc60227cdb86e723fdd84c516f1122ac5b9381cef0b06c64741476ce16e5f07d"
+    },
+    {
+      "path": "packages/core/src/Events/GrantGiven.php",
+      "sha256": "66fd44752afefa97f7f59793c6e522b6fa3f1be9d4bca2b4491d91815bce81c7"
+    },
+    {
+      "path": "packages/core/src/Concerns/HasDirectGrants.php",
+      "sha256": "e8cfee638ca18a6624a7b8ee956b0595f1cbcd8ea77cd5cdfec44e7a37184494"
+    },
+    {
+      "path": "packages/core/src/Concerns/HasPermissions.php",
+      "sha256": "a7c1bb13c3d0b675854ec9a89646a89f33de95d6e236c1488bab0e641fe2f583"
+    },
+    {
+      "path": "packages/core/src/Concerns/HasScopedRoles.php",
+      "sha256": "6deef79924aa794d58aaef19a128187c91229f58dc6724bdbdd5fbe0317ce392"
+    },
+    {
+      "path": "packages/core/src/Concerns/ResolvesRole.php",
+      "sha256": "acd691f0b7377ee0719a3e5d39d08f2e6ded065aece368e0aef13bec75276f06"
+    },
+    {
+      "path": "packages/core/src/Concerns/HasAzGuard.php",
+      "sha256": "aa131a4017486aaa297a9d8fcf1930e1c3b1ac84fbc3273d66e08be2f4257614"
+    },
+    {
+      "path": "packages/core/src/Concerns/HasRoles.php",
+      "sha256": "4bc9f5e5c477872ad7bcacdf377c8813faabeaec3dbe3b274ea809cb85b562c5"
+    },
+    {
+      "path": "packages/core/src/Permissions/PermissionKey.php",
+      "sha256": "20bcd9e47422782b9f403bcab76312159efb51bf0cd5cbbf46592305c8231aa9"
+    },
+    {
+      "path": "packages/core/src/Permissions/InteractsWithPanel.php",
+      "sha256": "f0d8052a8f70aaf5dec35f758ca576ab5a42294b6908f4a15c15d38c47e80645"
+    },
+    {
+      "path": "packages/core/src/Permissions/PermissionName.php",
+      "sha256": "ba4d058209eb62f85dfce90f1f4d8d9aef9b590b1376776746cb5c8bbb35bc2f"
+    },
+    {
+      "path": "packages/core/src/Abilities/AbilitiesDto.php",
+      "sha256": "c8d37eb549a70b10d4ed5eb17f05b9bf1793f8b1061bd69a9b199612ac3a4695"
+    },
+    {
+      "path": "packages/core/src/Abilities/DefaultAbilitiesResolver.php",
+      "sha256": "65bea3552de4e909160606c8ca2fb8b120eacc0af9c04b036fc63c2f41fbf4ca"
+    },
+    {
+      "path": "packages/core/src/Abilities/ResolvesGateAbilities.php",
+      "sha256": "bd079381e83ce9e15dd2e00c5aa8938bae1566ed7cfd60f38fd6bac017f75073"
+    },
+    {
+      "path": "packages/core/src/Attributes/CheckPermission.php",
+      "sha256": "b6c819ab1f8ae0079a370f008ea9766af62ead6617fbf3c3838d0ff8c500e533"
+    },
+    {
+      "path": "packages/core/src/Attributes/GuardPolicy.php",
+      "sha256": "d40de3af5aa7a7587698deb5c2ac3f6c40030e5e2892b28e33bae3c6a00edc2a"
+    },
+    {
+      "path": "packages/core/src/Attributes/GateAbility.php",
+      "sha256": "dd0624ec759e55bdf7ee7e87de429ce6260d4a9755d8c944a2c207e583231a94"
+    },
+    {
+      "path": "packages/core/src/Attributes/SkipGuardCheck.php",
+      "sha256": "88ed06891050f3d2e88281be53d10c5c047e82f912844e1897e8f0c495b8a578"
+    },
+    {
+      "path": "packages/core/src/Attributes/RoleOnly.php",
+      "sha256": "c2ec9f0865e77c26e0ec8d923e3969df1b59fb052106c41c68a6012a35f6f0b1"
+    },
+    {
+      "path": "packages/core/src/Commands/CatalogListCommand.php",
+      "sha256": "fc43e0ebeef93f530413b445530610a42ca4c6de69ddd552136e01c75f4545ca"
+    },
+    {
+      "path": "packages/core/src/Commands/RevokeGrantCommand.php",
+      "sha256": "4f8748171a1f25de2c8d5f75ce7bdf92baf3974615b30075cb440386ce426901"
+    },
+    {
+      "path": "packages/core/src/Commands/MakeGuardPermissionCommand.php",
+      "sha256": "ec2d698a527e17f6f851b0138006af7323d2bd263e09bfc26142420ef3e6363f"
+    },
+    {
+      "path": "packages/core/src/Commands/PruneGrantsCommand.php",
+      "sha256": "60316cd362919d3c8cdfb19e4cd8969ea66b146073e6357655960e52a468479a"
+    },
+    {
+      "path": "packages/core/src/Commands/AbilitiesCommand.php",
+      "sha256": "c47ab5d76de838d9901dd4aa5bf2eba280d67dc1e0a9ffaaa4712db5708de22a"
+    },
+    {
+      "path": "packages/core/src/Commands/RoleAssignmentCommand.php",
+      "sha256": "b61dc032e3121b6179293d12119996b59d97a1eb2eee3b976a661e1def0eba1d"
+    },
+    {
+      "path": "packages/core/src/Commands/SyncRolesCommand.php",
+      "sha256": "52ea7d57905ce5d74c59db1c3c35413e1c9caeb9deb6f8485757d70d1f6663dd"
+    },
+    {
+      "path": "packages/core/src/Commands/MakeGuardPolicyCommand.php",
+      "sha256": "21ea2bdb9e0b8308c3c7d89afb1d8334fbd85cd4b3b3d9b7f8aa058061d6dca6"
+    },
+    {
+      "path": "packages/core/src/Commands/ListScopedRolesCommand.php",
+      "sha256": "af9890c882bea2ecf46dd21e07309c95108121cd1719954dac8774c9039efe43"
+    },
+    {
+      "path": "packages/core/src/Commands/SuperAdminCommand.php",
+      "sha256": "1c8cca4284c89a4aff5e0bd9a8a429aa2b5f63fd739b79e60c62fe776ba366b3"
+    },
+    {
+      "path": "packages/core/src/Commands/CacheResetCommand.php",
+      "sha256": "927389979a127ca3f8c2f4fbdd10d62f41c3d165307910b38298bf3aa276f1fd"
+    },
+    {
+      "path": "packages/core/src/Commands/ExplainCommand.php",
+      "sha256": "b4df11aadd2fe1c9c2ee4b24e7aad390fa517439c5ee961d42c0fd287876dee7"
+    },
+    {
+      "path": "packages/core/src/Commands/MakeGuardAbilitiesCommand.php",
+      "sha256": "1c53f220259cab66fb08d3e5f494408d98c2e30cf4ec1f668b1e0a70ad6a0042"
+    },
+    {
+      "path": "packages/core/src/Commands/InstallCommand.php",
+      "sha256": "e6614411c27f1044928ac3bfbccad882c9d36182da860c3e886db4e4c25b88ad"
+    },
+    {
+      "path": "packages/core/src/Commands/ListPermissionsCommand.php",
+      "sha256": "6ef0907a56fe6485146717757540b155884f16060eadbebaf4773e1632b82416"
+    },
+    {
+      "path": "packages/core/src/Commands/GrantsListCommand.php",
+      "sha256": "1e6acd52ddeae012e623e5b47a513c8e69d75ec0218d3e473457104b36b3e999"
+    },
+    {
+      "path": "packages/core/src/Commands/CatalogValidateCommand.php",
+      "sha256": "cb9334754f95847bc8113e765f95bb8ef664b229e31a9c9b465c826d5912812c"
+    },
+    {
+      "path": "packages/core/src/Commands/RolePermissionsCommand.php",
+      "sha256": "c03d3f220de7dccc5cc5785999ba372d26be8a7294408cbb26625b3b155ccd06"
+    },
+    {
+      "path": "packages/core/src/Commands/MakeGuardPanelCommand.php",
+      "sha256": "0afe0eb370fca9219158428fbc2edce2e5f3370f3474ca43066c305da198d92c"
+    },
+    {
+      "path": "packages/core/src/Commands/GrantCommand.php",
+      "sha256": "7fd572d66df972aa035c4985fa8504a88dc66c0bf5ffa4f7a0199446c65648c1"
+    },
+    {
+      "path": "packages/core/src/Commands/DoctorCommand.php",
+      "sha256": "da69c2f94714acec567d56c44d2b153aea86eb2db5bdb061f5bdf7c044b3829c"
+    },
+    {
+      "path": "packages/core/src/Commands/MakeGuardRoleCommand.php",
+      "sha256": "e5161bb2d6265864efcec28e43ba80dcaa5ad523b30df2a51f374ecb7149bb7a"
+    },
+    {
+      "path": "packages/core/src/Grants/GrantBuilder.php",
+      "sha256": "07273bea2fab9a3941b9a6f21da0629f977c4c14a20c4136c48c4b4d3d6114b3"
+    },
+    {
+      "path": "packages/core/src/Auth/PolicyAttributeRegistrar.php",
+      "sha256": "e62105f078334bf9b7f4a45bf761f38b826c5831455eef2c888c125841d97880"
+    },
+    {
+      "path": "packages/core/src/Auth/DirectGrantPolicy.php",
+      "sha256": "f36a1b0f50fe7fd1e9ea13d949b79da702e3fd150a79bc80f393f7799742d4ab"
+    },
+    {
+      "path": "packages/core/src/Auth/BladeHelper.php",
+      "sha256": "802d53f4d78e656607f6b175b7419f98cd2314e7d215f14b279b4253dbd9e6ee"
+    },
+    {
+      "path": "packages/core/src/Testing/Recorded.php",
+      "sha256": "4c4118d9bf61ae08e246cb2afd762bb71d7d7ff009203028a09787950a470913"
+    },
+    {
+      "path": "packages/core/src/Testing/AzGuardFake.php",
+      "sha256": "34a7a86ecf3449ac19d473c5e9cb16d3189b080480b9ce89ff39b3b2ce0aa158"
+    },
+    {
+      "path": "packages/core/src/Testing/FakeGrantSource.php",
+      "sha256": "feae1eba8c394570fc8e038f7e28b6dac67094a1b7af1206d77f716789cebf17"
+    },
+    {
+      "path": "packages/core/src/Testing/FakeAzGuardUser.php",
+      "sha256": "4bcb3d3894a69b869870addccaa5b97b3751f16e450b170e19bdf61e8c94fad3"
+    },
+    {
+      "path": "packages/core/src/Exceptions/PanelNotFoundException.php",
+      "sha256": "d3c9f4f64025db887fa3a56bc208ce2730ac260e364ef9b6f8e26f4eca1b2668"
+    },
+    {
+      "path": "packages/core/src/Exceptions/AzGuardException.php",
+      "sha256": "132ede7bd08000f0dad305d15920fc7ac54803addf5118a3f9092127ffcdec5d"
+    },
+    {
+      "path": "packages/core/src/Exceptions/PanelNotSetException.php",
+      "sha256": "3123b0b4cc1d1e47d5434c0dd417df5959b6120c96b49d04b93c85a2fbb9f68b"
+    },
+    {
+      "path": "packages/core/src/Exceptions/InvalidMorphTypeException.php",
+      "sha256": "52c4f6e1f2ab93a0cf477eedc3ce0a767288743a9df3477c5ac824650ccb95f0"
+    },
+    {
+      "path": "packages/core/src/Exceptions/InvalidCacheConfigException.php",
+      "sha256": "742a0e0082a9fd55383c6377511361ae6c104b492b4a3a14426b58aca6ef00ea"
+    },
+    {
+      "path": "packages/core/src/Exceptions/ContextPackageNotInstalledException.php",
+      "sha256": "4ffca48d7f4e24ed22185cbe2bfc09be44f301b704bbeb23dce0ac60b29a90fd"
+    },
+    {
+      "path": "packages/core/src/Policies/AuthorizesPermission.php",
+      "sha256": "e0f8a9b8573eaa5f1292d25c9c248fb36052c090b0259b28597701db3b7083b8"
+    },
+    {
+      "path": "packages/core/src/Models/RolePermission.php",
+      "sha256": "8ac17c140516b371ba1e4bb94719247ef936736abeb6c06889b527f62f88aa27"
+    },
+    {
+      "path": "packages/core/src/Models/Role.php",
+      "sha256": "372fe3a14e360d5fcc82dbfe7d55da417a477de7b2676494d619086919fdf2d5"
+    },
+    {
+      "path": "packages/core/src/Models/DirectGrant.php",
+      "sha256": "b81fccb3fd5aaaf904e2613c2580d91db7a247ac0379977e4107c284e1f7f8d4"
+    },
+    {
+      "path": "packages/core/src/Models/ModelHasScope.php",
+      "sha256": "7bd58f37110b207675b1e1b88b5d99910c073fa56cb0813941638cd7249e929d"
+    },
+    {
+      "path": "packages/core/src/Panels/PanelProvider.php",
+      "sha256": "e6c55d9bc5331a241410d95bdfaadcfda5616bc4696a238b09a41fea04505d5b"
+    },
+    {
+      "path": "packages/core/src/Panels/Panel.php",
+      "sha256": "88d5653ce88a0ed25f0c58d75dded90000a5468a17a2edbc58da36606d3cc56a"
+    },
+    {
+      "path": "packages/core/src/Panels/PanelResolver.php",
+      "sha256": "30fcc89f0ac16a969391a6d22030306a78a3030eea2b3afd4c2ac520076a0a71"
+    },
+    {
+      "path": "packages/core/src/Roles/BaseRole.php",
+      "sha256": "01da521ac534676f15ab6840cf44054ea2c04de9493fbad48111a989072bdf96"
+    },
+    {
+      "path": "packages/core/src/Roles/SuperAdminRole.php",
+      "sha256": "60fcc7ae33d64e11f405b7e0c4c56ddb56e2218cc7b5fa97c5c9e6d19cbceb76"
+    },
+    {
+      "path": "packages/core/src/Runtime/RequestState.php",
+      "sha256": "69a3f3e3411936e6f20344e6367d1cccfbba77583aa7bf9ed3ef18214c9e67c9"
+    },
+    {
+      "path": "packages/core/src/Runtime/ScopedRoleCache.php",
+      "sha256": "1903ba7d0b69a4c07ccc1fa043fff0f69bdf3abb9d6ce1e30d6ba287ba321e34"
+    },
+    {
+      "path": "packages/core/src/Facades/AzGuard.php",
+      "sha256": "5d33c9cc5747b35355b9a9b5a907ef7ac11682beeddd9c20912bd9469bb2d47d"
+    },
+    {
+      "path": "packages/core/src/Contracts/PermissionMatcher.php",
+      "sha256": "0065fd940704f609c089564237d9b7bd18cba2fd2d3b2aca59a5f6a45b9c3d52"
+    },
+    {
+      "path": "packages/core/src/Contracts/HasDirectGrants.php",
+      "sha256": "dec1c0f2e6db7157cfbbb7e98399ef4be443e60be519f41f0c54b9e72f027aa0"
+    },
+    {
+      "path": "packages/core/src/Contracts/PermissionLayer.php",
+      "sha256": "16c5e5a10030ef466f3bf319b664508244008598803a39384bf864ed42ef7699"
+    },
+    {
+      "path": "packages/core/src/Contracts/RoleInterface.php",
+      "sha256": "5efefbf114a0fa835886114fcedce66a676bd1975015a4f454ccb32b67ca1893"
+    },
+    {
+      "path": "packages/core/src/Contracts/ContextGuard.php",
+      "sha256": "30b140865139ee4723331cc76b6bd0bba9304bde0e2a75762b819c4ebecf8b9c"
+    },
+    {
+      "path": "packages/core/src/Contracts/ContextGrantBuilderFactory.php",
+      "sha256": "61bd4430419330fcae2744fa4a34b10203fad7a557b0013898c4318a7f122bad"
+    },
+    {
+      "path": "packages/core/src/Contracts/ContextGrantBuilder.php",
+      "sha256": "3db96c5ddc1139285e9161048c2de6e7276e91b294f338541ea254cbd6286183"
+    },
+    {
+      "path": "packages/core/src/Contracts/HasPermissions.php",
+      "sha256": "28d4bbf7a20b0059209164be279f19aea4eff0d6dc3c9720153b21b02538fd7f"
+    },
+    {
+      "path": "packages/core/src/Contracts/PermissionContext.php",
+      "sha256": "5fc99c61acaa6c690eeaa24286b06d7e39f405c4869fd4a00ec5e8b190737175"
+    },
+    {
+      "path": "packages/core/src/Contracts/AzGuardUser.php",
+      "sha256": "014df7c2ec85bd4ad1a4fafde3f992b107eab810f94491853ad4c81e4f8c4dc0"
+    },
+    {
+      "path": "packages/core/src/Contracts/RolePermissionValidator.php",
+      "sha256": "05406c07c7d1e4d288fdc42d3a77ab0a93b414ea35159d8eef6357c727e2c2c0"
+    },
+    {
+      "path": "packages/core/src/Contracts/AbilitiesResolver.php",
+      "sha256": "14f61ce68c7d0c603882140afe7b27e77682ba0aae9c35f16c8bcc80b5b662ea"
+    },
+    {
+      "path": "packages/core/src/Contracts/HasScopedRoles.php",
+      "sha256": "b2023517c6b30b8aa3505c0d0913bcfb33dcfe940718b3ac9532ae8c1f81bea9"
+    },
+    {
+      "path": "packages/core/src/Contracts/ScopeInterface.php",
+      "sha256": "708ed23a4d0a366269373bf6eac2a3081965fd554516064d816f5fbf17431b70"
+    },
+    {
+      "path": "packages/core/src/Contracts/HasRoles.php",
+      "sha256": "441649b75d04920f090c284c43790daa011b20d979375413c2835f54bfcb6b15"
+    },
+    {
+      "path": "packages/core/src/Contracts/Permission.php",
+      "sha256": "fc784c4a0048ab782782c50a78ea471f311a0d11f8e7849fdc2321349ab24366"
+    },
+    {
+      "path": "packages/core/src/Contracts/AzGuardManagerInterface.php",
+      "sha256": "44892bfb15f9dc50f9aa929f7c6819df486f888ad3823821982177d03b9ac59f"
+    },
+    {
+      "path": "packages/core/src/Contracts/PermissionResolverInterface.php",
+      "sha256": "fbbcbe3f79bdeb430e81ffcb4264b2ad4d952da40f35a34f5829a2730c719738"
+    },
+    {
+      "path": "packages/core/src/Commands/Concerns/OutputsStructured.php",
+      "sha256": "826c79a14c7d3a687bbe22fbc6aaf9611c5c2dc557053c35ef950b2e76d11fa5"
+    },
+    {
+      "path": "packages/core/src/Commands/Concerns/ResolvesGuardNamespaces.php",
+      "sha256": "19c6698374675e8f2bef7eda0e1f27a4bf823209cef5015822634c22cc50d3ce"
+    },
+    {
+      "path": "packages/core/src/Commands/Concerns/SupportsForcefulGeneration.php",
+      "sha256": "7b0aec49583d3bde3b1050cdc6d4fe8ed93825c8a475fa6337d959b570e4ea50"
+    },
+    {
+      "path": "packages/core/src/Commands/Concerns/ResolvesUserModel.php",
+      "sha256": "051444ef1a109b5a076a9c7d8a6a20b8933653227719da1d1aade2ae1991f705"
+    },
+    {
+      "path": "packages/core/src/Http/Middleware/PanelCheckAccess.php",
+      "sha256": "08fba37bb30c5e8ccc151f8fdee408fce3fd508bfbeade95b5bdd9c9e2ceffdd"
+    },
+    {
+      "path": "packages/core/src/Http/Middleware/CheckAccess.php",
+      "sha256": "51e42e10a8b48d8b72d640daadfd36abe1b0b193e519c3179cfcabcc8be8bc59"
+    },
+    {
+      "path": "packages/core/src/Http/Middleware/LoadAzGuardRoles.php",
+      "sha256": "65ced67567dcbbacecfb294c4c1736193244cfc7aec2c648112b89f44c0c1db7"
+    },
+    {
+      "path": "packages/core/src/Http/Middleware/SetCurrentPanel.php",
+      "sha256": "017814dae87dcce5b075c1537814d71e5f3288518e687b3aa91c800b0086547d"
+    },
+    {
+      "path": "packages/core/src/Http/Middleware/CheckDirectGrant.php",
+      "sha256": "129e8856935f4481220def8c2b08139ee64b6393617cffd8fe776efdb8a325c8"
+    },
+    {
+      "path": "packages/core/src/Registry/Values/PermissionSet.php",
+      "sha256": "a355aabef9f46327705525701222560346cb13d1e803b01cd8a092f680085cda"
+    },
+    {
+      "path": "packages/core/src/Registry/Sources/DatabaseRoleGrantSource.php",
+      "sha256": "f0daba32c3a4f2afd32c2bf9ddcf985ca8fe4847edfbc45134fb9ced13d16150"
+    },
+    {
+      "path": "packages/core/src/Registry/Sources/DirectGrantSource.php",
+      "sha256": "1e4fb1e43b666b5381f3bd57e1e532f5180a11fe179bfb7fcc822101bf2358b1"
+    },
+    {
+      "path": "packages/core/src/Registry/Sources/ClassRoleGrantSource.php",
+      "sha256": "b65659bbf21baeba2f071539c82479c46180c1414f55124a4b9270b20012ee3d"
+    },
+    {
+      "path": "packages/core/src/Registry/Validation/CatalogRolePermissionValidator.php",
+      "sha256": "450a5bf39c48f67292878bf5fa13831692dcad217cc6214b8bd0c6c5027ecc06"
+    },
+    {
+      "path": "packages/core/src/Registry/Matching/WildcardPermissionMatcher.php",
+      "sha256": "f25e50969c371848abff86b440a2031cf93f01b2512c61d5a611110cd3c31175"
+    },
+    {
+      "path": "packages/core/src/Registry/Matching/HierarchicalPermissionMatcher.php",
+      "sha256": "753f690b671a77ec87ad89ab1a78a68baf1b22afce131ebbb4eac7c03d11a469"
+    },
+    {
+      "path": "packages/core/src/Registry/Exceptions/InvalidPermissionKeyException.php",
+      "sha256": "b5e2b92647fb85e8b14d086635539ffbbe5568708ff5c5181c89e578c573c396"
+    },
+    {
+      "path": "packages/core/src/Registry/Resolver/EffectivePermissionResolver.php",
+      "sha256": "ad5e5479bff429151805c4cde9b1fb1f0e36c6bd669e705474f3bf0bf4807358"
+    },
+    {
+      "path": "packages/core/src/Registry/Resolver/PermissionCache.php",
+      "sha256": "d5926a3d1e1acda5b38db3602cd397352bd5cf9e25c84570e59bed936071b67e"
+    },
+    {
+      "path": "packages/core/src/Registry/Definitions/EnumPermissionDefinition.php",
+      "sha256": "8e3420d8c9cbf1b534b05a8c481c0bf7b0e5f33a934a022baef9ad751f3836a9"
+    },
+    {
+      "path": "packages/core/src/Registry/Definitions/SimplePermissionMeta.php",
+      "sha256": "93ed868b2eb8a7df4080044610fea762d8a00c8c473c463ff134febd8aa7abbc"
+    },
+    {
+      "path": "packages/core/src/Registry/Definitions/SimplePermissionDefinition.php",
+      "sha256": "c701cee0c604929f6afebbb3022d037bfc751b5786181e8003d31e53d420935b"
+    },
+    {
+      "path": "packages/core/src/Registry/Builders/CompositePermissionCatalog.php",
+      "sha256": "a0c0af65b3cfd16fd5621c1f91fc8e93af3f96af55888892af5d2a92154c0256"
+    },
+    {
+      "path": "packages/core/src/Registry/Builders/EnumPermissionCatalogBuilder.php",
+      "sha256": "dd9cecf3f95780a0deeaf018051a5cfced2e27383d10441f40dfb3a2873e2b21"
+    },
+    {
+      "path": "packages/core/src/Registry/Builders/PolicyAbilityCatalogBuilder.php",
+      "sha256": "069856184140aef393a7499ef420888e2110d3f5c3276b1fb5569aa0314cc344"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/PermissionCatalog.php",
+      "sha256": "ec421a0612a8399ba82b0028a7f527ee04b2f7574734c7f9ef06bafd037f1385"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/PermissionCatalogBuilder.php",
+      "sha256": "06e42b9443db8daaef9686c51d227ea7dedc9e7302370583c3d505713113a56c"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/PermissionDefinition.php",
+      "sha256": "021e0613aa96ee42bba2180d1d5800e6640f897a213179943ea36562cd9f26d7"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/PermissionMeta.php",
+      "sha256": "184e851aa1558fb4880b0516119d371d48e790eb700e664f68e0e887c3f8b850"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/GrantSource.php",
+      "sha256": "d6dfce6c76933946af2fa8c49ac4dea07a732b7d5f5fa0c50f1997241cf058ff"
+    },
+    {
+      "path": "packages/core/src/Registry/Contracts/GrantPriority.php",
+      "sha256": "ca2c2413165004d69c0da79b76994a6728dd66eca23bdd0594aecbccc892dc63"
+    },
+    {
+      "path": "packages/core/src/Database/Schema/MorphColumns.php",
+      "sha256": "589777c23613b5cd4c4876f097da5b7337180b289b76d7665dceed7690284f30"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000003_add_panel_id_to_model_has_scopes.php",
+      "sha256": "6cfc761ac97d079839d630a5ae74af59f0365fbd2a57cf04c7e28024fc505017"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000000_create_az_guard_tables.php",
+      "sha256": "611702f4027db675b2ee93b04dbf32cd6a8c2a5186747a8e69e3284446dce7d1"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000004_make_scope_class_nullable_on_model_has_scopes.php",
+      "sha256": "cbeb9f34de7d984729759c780730e862558e0dafb19aca3a77b198062c6944c8"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000005_add_unique_constraints_to_model_has_roles_and_scopes.php",
+      "sha256": "a8d698a3b68f03283a6a47b419f43bbf7830d9a48bebc2b45b94b8783bd53308"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000002_create_az_guard_role_permissions_and_direct_grants.php",
+      "sha256": "1d8b24582c2cf1467df0556a0b74f686d5b1b4999ba9e867a2e1205f07922c9f"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_01_01_000001_add_role_id_to_model_has_scopes.php",
+      "sha256": "57f0e4d30f63db94b62c402f5f5608d04b92f2dba942d9237ebedcfb6f30c7c7"
+    },
+    {
+      "path": "packages/core/resources/boost/skills/azguard-development/SKILL.md",
+      "sha256": "79b29733bbc4e981997488bf44e9f5578c4e54a5e81717bb40a69146fe3ffd83"
+    },
+    {
+      "path": "packages/filament/src/AzGuardPlugin.php",
+      "sha256": "06febd7d6e59b6aaa330a3ee861998abff5918c71449f4acb8e1a30f3f9c9514"
+    },
+    {
+      "path": "packages/filament/src/AzGuardFilamentServiceProvider.php",
+      "sha256": "3ce0c6efb394d2e6bc6776de64bf40a5b73d3ec1fd0604efb0b5e582d8fcde1d"
+    },
+    {
+      "path": "packages/filament/config/az-guard-filament.php",
+      "sha256": "390f5ec6d23897708a56698751f9ed22540555a732139d0258033778bd4ff7c6"
+    },
+    {
+      "path": "packages/filament/src/Concerns/HasAzGuardPage.php",
+      "sha256": "5abb43fb0b336fe1368f3368832c50bcc61ed42ec0b98fca374190abbb3b1a31"
+    },
+    {
+      "path": "packages/filament/src/Concerns/HasAzGuardWidget.php",
+      "sha256": "5c1e1932bf0f7ae69e2e8972c6f1e0ff55ee8f3d696a1b93fb302146cac97ebc"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PermissionSubject.php",
+      "sha256": "a8d60a36e5993b12f34467daf54946979a762befc9c9118ef05ce69fd367a961"
+    },
+    {
+      "path": "packages/filament/src/Permissions/FilamentActions.php",
+      "sha256": "1fb382f954a4749f20e1be75859915cd0f6f69ef511bd3d6f6098534d2a50964"
+    },
+    {
+      "path": "packages/filament/src/Permissions/FilamentDiscovery.php",
+      "sha256": "8f3179d1770ea5c64508afff15cfc8fbec86755b3efcefa29afe215733104920"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PolicyGenerator.php",
+      "sha256": "9ad49fc2aaec2a61a8ef51f7d44fae2948e1e7233a68a00e37da314787bfd33d"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PageWidgetAccessEvaluator.php",
+      "sha256": "daf4047c1da07d58528af966aad6a23a946f5425db1fc71c3665b340e56db7b0"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PermissionDiscovery.php",
+      "sha256": "a86f7f58eb130ae12b21db6af7134a364de8f16f6069599425dd74c8b68ee021"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PermissionEnumGenerator.php",
+      "sha256": "8223808566411e37d44a537bd8eeb2cbd554cb2d6b4a0523e3041262c6b880c0"
+    },
+    {
+      "path": "packages/filament/src/Permissions/ResourceGate.php",
+      "sha256": "327873d71c5ff13a1c2bb1a8a774b35b63452801939b966208f84c358c7d11d0"
+    },
+    {
+      "path": "packages/filament/src/Permissions/PermissionSchema.php",
+      "sha256": "94de804308e35c59d45260f0fa77bd166d0bc5e0f36232f0f045ce7ba171f5ee"
+    },
+    {
+      "path": "packages/filament/src/Permissions/FilamentPermissionCatalogBuilder.php",
+      "sha256": "91d3cbbc73a7c0b8e660907f65927b2bae1fc9c8b4414c00286180718561c779"
+    },
+    {
+      "path": "packages/filament/src/Commands/GenerateFilamentPermissionsCommand.php",
+      "sha256": "47ebd7925c0a45d1509130dcfd9fca36977dfe4ccbf417635d68746f17adf3ab"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource.php",
+      "sha256": "c18ef590da2fbeab197f266ca96c0ee6508f17e9e2f3436edcf780b271c42e2f"
+    },
+    {
+      "path": "packages/filament/src/Resources/DirectGrantResource.php",
+      "sha256": "f621e1f4dbc6929720084f2c9d3ef7b1d315d3773aff473ca6332c631850f962"
+    },
+    {
+      "path": "packages/filament/src/Pages/DoctorPage.php",
+      "sha256": "22d47f27bf552b40b2f2ca75ac3a45770afef4ab6e6bb021201fca1ed33a4c7b"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource/RelationManagers/RolePermissionsRelationManager.php",
+      "sha256": "8db03e139be8a79f35e37d87a63b93b9c9047fe4ed7d14ead52c19988c6ee33a"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource/RelationManagers/RoleUsersRelationManager.php",
+      "sha256": "18d42bd2a302f7831a56fa7c32f66e6caa84a53af59051443f6cc69b7ffc7ae1"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource/Pages/EditRole.php",
+      "sha256": "bf647b334dca292f23adc7656af554c48998941923d9bbb1a145e6032bcb4a92"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource/Pages/ListRoles.php",
+      "sha256": "0d41207293e43c03271fdd33a4c103715fe8eecffaf569c81eec77c11f633a7c"
+    },
+    {
+      "path": "packages/filament/src/Resources/RoleResource/Pages/CreateRole.php",
+      "sha256": "0c7cf09c65ac3daef373e34b16dbdc0af3038a8c993f48bd19c536ac52987382"
+    },
+    {
+      "path": "packages/filament/src/Resources/DirectGrantResource/Pages/CreateDirectGrant.php",
+      "sha256": "6539286f08b2713799081608d0c1a188b524eac6ba3fd80b9dd14b7c9d70fd46"
+    },
+    {
+      "path": "packages/filament/src/Resources/DirectGrantResource/Pages/ListDirectGrants.php",
+      "sha256": "9ff15d9abea9efeace2425052cdc56252129442b3d1107cf840753831831fa7a"
+    },
+    {
+      "path": "packages/filament/resources/views/pages/doctor.blade.php",
+      "sha256": "22e11c441c4335e397c8d8b8352db0cd3c239dab3ff7da8cee5344c83c8b66f1"
+    },
+    {
+      "path": "tests/TestCase.php",
+      "sha256": "1eadd07e9e7e0bba5370954c654781861e88431bb4bc3a1e21052421bd78c403"
+    },
+    {
+      "path": "tests/FilamentTestCase.php",
+      "sha256": "244f7bb6aa41565123b4517e5d24ac487fba3bc5566f94bc945f8dee35acd6b5"
+    },
+    {
+      "path": "tests/ContextTestCase.php",
+      "sha256": "ca5046754a9609d772408bf0c2ad99aaccba2bd9e88bf2e5fd425ae44d0c5ecb"
+    },
+    {
+      "path": "tests/ArchTest.php",
+      "sha256": "c93a3b4a3f98769c030a301ffb7a431a7d0c8159ead64e056c662bbba75e8134"
+    },
+    {
+      "path": "tests/MorphTypeTestCase.php",
+      "sha256": "d38edc2d88f5ddb6d911714d87618865ba3511a25cc03620bad4100984c813df"
+    },
+    {
+      "path": "tests/ManagerSwapTestCase.php",
+      "sha256": "81d5b03c8949414ddd0a532bfe2e109a464be87e7c22574596451a369b357b89"
+    },
+    {
+      "path": "tests/Pest.php",
+      "sha256": "483bf927638158ae31e647f303ebd909f9d680cdeb03ae121c0790845243b570"
+    },
+    {
+      "path": "tests/Support/InteractsWithGuard.php",
+      "sha256": "b28f70fe74f4692b6db22e137b3d73304ac0800bd316a29d952ed2336be64ba2"
+    },
+    {
+      "path": "tests/Feature/EnumRolePermissionsTest.php",
+      "sha256": "f482f91613dfbd4bfa016f32cb195a8d77fce4e744431728e2cd8b3ce3be48c6"
+    },
+    {
+      "path": "tests/Feature/GrantsCliColumnsTest.php",
+      "sha256": "0dbe65c7188f7335b5ba44388882e70739d5b23619149c0b99d500549a091cfd"
+    },
+    {
+      "path": "tests/Feature/AuthorizerTest.php",
+      "sha256": "e2533df1450e60c7f49b0055842629dfac09feb4f3d904d89dc24837a2156213"
+    },
+    {
+      "path": "tests/Feature/CliCommandMatrixTest.php",
+      "sha256": "6463931f1229a4392e3ff59b375faefafcf55933efc5e51475d9b39424142f1d"
+    },
+    {
+      "path": "tests/Feature/AccessDecisionTest.php",
+      "sha256": "bab30ed6bebbae0f111db9a588b06b91f1c1db343a82a3e3e80121ee10977e57"
+    },
+    {
+      "path": "tests/Feature/LoadAzGuardRolesMiddlewareTest.php",
+      "sha256": "1ad8326c5d1dcd2fb37f6b9ddedb741ca496c97e984b0ac862735e342b569c5d"
+    },
+    {
+      "path": "tests/Feature/MassAssignmentGuardTest.php",
+      "sha256": "c8e4d045bd6b7795b3f03974861e1e47550cc407d1fdddd9643c355675bbc697"
+    },
+    {
+      "path": "tests/Feature/AbilitiesForTest.php",
+      "sha256": "086f60e517b3244fde4d6566e3a40a2805179ba56874d2a250e9103d101d7c9e"
+    },
+    {
+      "path": "tests/Feature/ManagerSwapTest.php",
+      "sha256": "998fc43b2545da2b506ed206a827ec63811b725c3955ff87311b11e7fb7a3710"
+    },
+    {
+      "path": "tests/Feature/ScopedRolesConsoleQueueTest.php",
+      "sha256": "984cd9391c96e7ea61e13be7620a65dd5dc293c758b1c0a6169f61db2630c256"
+    },
+    {
+      "path": "tests/Feature/MakeGuardForceGenerationTest.php",
+      "sha256": "f7ec6fbae18ab343f3d264fa3ec625abce52971d6b3e2868b4e38cc7fab4402f"
+    },
+    {
+      "path": "tests/Feature/CliReferenceDriftTest.php",
+      "sha256": "89f58e6f336d9f6d48e4a3b7a4ff5b3be9966b99206b6fe6feba7c1a6c0130a6"
+    },
+    {
+      "path": "tests/Feature/IntegrationPolishTest.php",
+      "sha256": "f7ec4083a9740ec7df78d41740545b12d10b4ae20cc6368746ff150d87902a02"
+    },
+    {
+      "path": "tests/Feature/ListScopedRolesCommandTest.php",
+      "sha256": "dff52587d43922b7bb77b8aad6b91fa9f77dee807c1ed751acdd4d9da5d8bb2e"
+    },
+    {
+      "path": "tests/Feature/HasDirectGrantsTest.php",
+      "sha256": "7da16b8305473be5bd3c34337a7295ad7e6490decae8089fa32af23d3d158f08"
+    },
+    {
+      "path": "tests/Feature/FakeGrantSourceTest.php",
+      "sha256": "72b85767db2676fc998c0851e0cddf0d822e1f0a3a7c60c42a39f54b61445b92"
+    },
+    {
+      "path": "tests/Feature/PolicyAttributeRegistrarTest.php",
+      "sha256": "184c3524836a68d2fb6944798bcd928893fe02e9f4c2f82a694ac8da9404798a"
+    },
+    {
+      "path": "tests/Feature/DirectGrantPanelChangeCacheTest.php",
+      "sha256": "4ddcf7c7876dae3489111591683c55054017d507d385d3ea17fd08ff8cd3d1c5"
+    },
+    {
+      "path": "tests/Feature/CustomGrantSourceTest.php",
+      "sha256": "0f441d2f729261a3704256a0e6a3768da0ba9d1c43e7aa1322aebaad60a004ff"
+    },
+    {
+      "path": "tests/Feature/PanelCheckAccessMiddlewareTest.php",
+      "sha256": "9372834150ed130ebd2f8a584fa35340117ea18ef6c32125fab612d4f456bf47"
+    },
+    {
+      "path": "tests/Feature/ScopedPermissionEnumResolutionTest.php",
+      "sha256": "113b9228c517cb637a19e0458b9e325a43312f651479085f7c147cfd61cf269e"
+    },
+    {
+      "path": "tests/Feature/ScopedRolePanelIsolationTest.php",
+      "sha256": "315b54c25884937a144bdf5ecaf047519f464ae0bde6c125ea78344d62aff4bb"
+    },
+    {
+      "path": "tests/Feature/CacheResetCommandTest.php",
+      "sha256": "8d1b645467b31a965be9cd9882e6da84f080d7d04c5338414d780f5bb9887b28"
+    },
+    {
+      "path": "tests/Feature/PanelRoleEnumEntrypointsTest.php",
+      "sha256": "48b01cde3f1d2ac5b828dd74c121a19142deec2ccff834f21130c6dab18d6db7"
+    },
+    {
+      "path": "tests/Feature/MakeGuardPanelCommandTest.php",
+      "sha256": "e777c68213700ee3b54567b06013470bb9b449846bee6dc20e4cf454d9da4070"
+    },
+    {
+      "path": "tests/Feature/DoctorCommandTest.php",
+      "sha256": "d3e5e199e5b237691fc9914d2fdb13399f538e52b08e1c375deec8b2ac126281"
+    },
+    {
+      "path": "tests/Feature/EnumPermissionArgumentTest.php",
+      "sha256": "0a676aa56f8c8922687a90fa40ee2af3d5f5d04d98b03de6e5d64f512aceeca8"
+    },
+    {
+      "path": "tests/Feature/PermissionCacheCrossProcessRaceTest.php",
+      "sha256": "ceb30c271040ceda660588b80a792623e961b2f14f6c50d0ee100689858cf97c"
+    },
+    {
+      "path": "tests/Feature/CollationCaseSensitivityTest.php",
+      "sha256": "efdf1bb38b680fe02136512afa097ca86c1f91e5af852f275306bbb002b38a5c"
+    },
+    {
+      "path": "tests/Feature/ClassPermissionTest.php",
+      "sha256": "99114a6846c8ce8f5388709f96e6906d7ab55186a6f05d118e9de359124522cd"
+    },
+    {
+      "path": "tests/Feature/PanelEnumIdentityTest.php",
+      "sha256": "097593395304b54cc51d68c166a6393889c033ba4689202b1a9a5c5aae632346"
+    },
+    {
+      "path": "tests/Feature/CommandPrefixRegistrationTest.php",
+      "sha256": "7da3b821fe9727dd57cfaddebee82603ac6a8b2c62be3cca4a72af39f386f6e2"
+    },
+    {
+      "path": "tests/Feature/PermissionCacheEpochInvalidationTest.php",
+      "sha256": "87d190db879e8749a36fcd8d665738ef9fcdf47ffcbe91c08dd60ff6a572cdd0"
+    },
+    {
+      "path": "tests/Feature/ScopeClassMigrationRollbackTest.php",
+      "sha256": "3af53c3a0c553783fe23aaf869c9d73728cce34b55f5a6da2bad58c7f721e590"
+    },
+    {
+      "path": "tests/Feature/PermissionCacheEpochLockWarningTest.php",
+      "sha256": "3432761246b8b76f46280b00bb3168cac1e08b58a79f9c9cea58bb59350f1610"
+    },
+    {
+      "path": "tests/Feature/DirectGrantSourceTest.php",
+      "sha256": "bef0d764137fd284bc94aaccffc095a59bfe708cc9eca246d2b57e1919bf26e5"
+    },
+    {
+      "path": "tests/Feature/RoleClassResolutionTest.php",
+      "sha256": "cb307f174f7700d12f3800d2e535d52c0cd3da38ae495d7970c49abc633b18db"
+    },
+    {
+      "path": "tests/Feature/DirectGrantMorphMapTest.php",
+      "sha256": "95abbcac7d48db4d75a042a225a2fc56cdaa77cce5c458c28ffa5fa42a033e8a"
+    },
+    {
+      "path": "tests/Feature/GrantSourcesAllowlistTest.php",
+      "sha256": "1eb5df2117ddeaa114bb0281847c6e7c4d9c718210e0fd89a0aea6020540c423"
+    },
+    {
+      "path": "tests/Feature/PermissionAccessTest.php",
+      "sha256": "86b0afc98b74066858f4a0b066c734ff2e0b28a84f8429a72c8f9287692821d4"
+    },
+    {
+      "path": "tests/Feature/PanelPermissionResolverTest.php",
+      "sha256": "eb0429422d2a00663a141a5749b5d7e41f8ab28e67dda5790e78931104f8617f"
+    },
+    {
+      "path": "tests/Feature/SyncRolesCommandTest.php",
+      "sha256": "749b8155205ed97d9326eeba8d614b60df0eed29cda696049829537daeda5a26"
+    },
+    {
+      "path": "tests/Feature/StructuredOutputCommandsTest.php",
+      "sha256": "84383966c8bebab7dba639c3abdb2ebb4df91e3d9281b9adc265c578329f84ad"
+    },
+    {
+      "path": "tests/Feature/CheckAccessMiddlewareTest.php",
+      "sha256": "54aa7a0c71112e99c5ae54fe84074cede1508903ca347d6b51a05a67cef24149"
+    },
+    {
+      "path": "tests/Feature/AuthorizerPanelResolutionTest.php",
+      "sha256": "9d38163175be00b6aaed609e61ebb7487aa4f67b438e345ec3b5819fa9cf20dd"
+    },
+    {
+      "path": "tests/Feature/CheckDirectGrantMiddlewareTest.php",
+      "sha256": "70c0553addedaa9c0e0ce31e54271ff785b5613c093add0604a0d86924d09084"
+    },
+    {
+      "path": "tests/Feature/ScopedRoleQueryScopePanelIsolationTest.php",
+      "sha256": "1e0acd8e0a8bb60c663ace0a8403b69b7e5464665a743a87c66956c0991eaaf5"
+    },
+    {
+      "path": "tests/Feature/SetCurrentPanelMiddlewareTest.php",
+      "sha256": "58447df5028e80234823b66f1dfa49e8223a253fabf7ed236673a943aca85f64"
+    },
+    {
+      "path": "tests/Feature/AccessControlTest.php",
+      "sha256": "48a96a907bf2912afd8c5ac6fd291d8ab692a52dfae27839df40b7b646c37815"
+    },
+    {
+      "path": "tests/Feature/PermissionMapTest.php",
+      "sha256": "7aa2a684b2e970dc564a0661527c48d378b0d1dc9c6de59a359631f1ffff544b"
+    },
+    {
+      "path": "tests/Feature/RoleAssignmentCommandTest.php",
+      "sha256": "da37f0c7afd6cd2423b529f33e012a4a68171212d32b5c54fabcfa3922b79688"
+    },
+    {
+      "path": "tests/Feature/CustomCatalogBuilderTest.php",
+      "sha256": "18cbedc75e54b0f62a31e424d75885d4f5ed574d8c2d4073926a28d1c5b45fb1"
+    },
+    {
+      "path": "tests/Feature/JobProcessingPanelResetTest.php",
+      "sha256": "d598f524f52289b7d82135de3117aabb0b79d8a65306ea44df07d5d2b12f8bb6"
+    },
+    {
+      "path": "tests/Feature/ExplainAbilitiesCommandTest.php",
+      "sha256": "ed154fe5c3317097d09bd1933f3941ea995a7184ba9cc04f5bcf8df0cc73f040"
+    },
+    {
+      "path": "tests/Feature/StaleScopeClassTest.php",
+      "sha256": "e3e558cf211891ec8a6a7976da7a52f6b7ccc2ab4e56101800dc7257cb2c0aa3"
+    },
+    {
+      "path": "tests/Feature/GrantsFacadeDefaultPanelTest.php",
+      "sha256": "1a60f6a96ef98e509d7c9252d5eccce33d75e4c11b2e10056796087caf579bac"
+    },
+    {
+      "path": "tests/Feature/ScopedRoleMorphMapTest.php",
+      "sha256": "ebd4cdb608fc947c2bb4ad2bba6b97e7674563d47149faf602f20d78a11994ef"
+    },
+    {
+      "path": "tests/Feature/CatalogLazyPanelsTest.php",
+      "sha256": "79ec7559e8278b94f85b45033f9bbb77e8618fb66537dfbbf0f1bfdff1d2806c"
+    },
+    {
+      "path": "tests/Feature/RolePermissionsCommandTest.php",
+      "sha256": "a5f84b969eecf3fb40fadcfbe26c1af3c3a099955b4c06b40685031cf8eb1645"
+    },
+    {
+      "path": "tests/Feature/AzGuardFakeTest.php",
+      "sha256": "99353f72b9248761b70255a0f7bfd1ee9447efe900765cb57874e38b2dde3ccd"
+    },
+    {
+      "path": "tests/Feature/ModelHasRolesScopesUniqueConstraintTest.php",
+      "sha256": "3a0b8ad842d7791fc5a5f625ef9d69dfcafcd71823e396016c2a53d0b0df5b60"
+    },
+    {
+      "path": "tests/Feature/WildcardCatalogFilterTest.php",
+      "sha256": "8ec56ba9f2b9cb2074b72b6c2179e08291017ac17d039ee3f8218c6b12f693f3"
+    },
+    {
+      "path": "tests/Feature/MorphTypeTest.php",
+      "sha256": "1d94f38086b8256cd48343f615ec235fa008215a0e5e4605fcec50a28de85eb7"
+    },
+    {
+      "path": "tests/Feature/CrossRequestCacheInvalidationTest.php",
+      "sha256": "a3affc7d9008f6ee69263811ff4806c5a2f990797876fc66a27aa066d45ea3b9"
+    },
+    {
+      "path": "tests/Feature/SuperAdminCommandTest.php",
+      "sha256": "528956b6d6db0d3009b7fd1806decf3b9dc22462936ca0d019b232a88e1ea85f"
+    },
+    {
+      "path": "tests/Feature/InstallCommandTest.php",
+      "sha256": "d8ebb5cac02655442af285626981da339d3f1b281baab8b1432152ff138227ff"
+    },
+    {
+      "path": "tests/Feature/AuthorizerExtendedTest.php",
+      "sha256": "821a52083166f2ce4b8f45dbe56d707f66c5278c24a55b9ab4684fa6f975ac4b"
+    },
+    {
+      "path": "tests/Feature/DatabaseRoleGrantSourceTest.php",
+      "sha256": "431d8eaaca23f4477595ebe34142aa6288f82465c5815f4d08107627f9be6023"
+    },
+    {
+      "path": "tests/Feature/RolePermissionValidationTest.php",
+      "sha256": "3f579aebb8e38cb4039b33dfed1fa9de3708dbb28fda5510792c80b9926a9ac3"
+    },
+    {
+      "path": "tests/Feature/GateIntegrationScopedTest.php",
+      "sha256": "23502f372aa6d8546949be7b04947e9c238931a39d360ba1fe734365934f170a"
+    },
+    {
+      "path": "tests/Feature/ExtensionSwapTest.php",
+      "sha256": "92f615760e4a479b45083ba3f416e8a739436401a2375b893736eb03e98b268d"
+    },
+    {
+      "path": "tests/Stubs/CountingDiagnostics.php",
+      "sha256": "1c8c0740153d31f1ec3d74583b3723e4da80c162fb1f63d6dbd3614c7e8363b1"
+    },
+    {
+      "path": "tests/Stubs/SwapTestManager.php",
+      "sha256": "7fb0afed1da9b534fa689d1923b7e048f8a7766f9d1c39c000aa91ec7ba9e84e"
+    },
+    {
+      "path": "tests/Stubs/UserWithDirectGrants.php",
+      "sha256": "a1ca7a6f1385b0ce58534abd9cd8d347269a800b7a1995cf4394041a1df26c6c"
+    },
+    {
+      "path": "tests/Stubs/User.php",
+      "sha256": "37452edf35eba27469d77c16a0ba444b3d65483fd60777367e43adcaad9797d4"
+    },
+    {
+      "path": "tests/Stubs/CustomDirectGrant.php",
+      "sha256": "df3582effb971fb935d440e99afca59c3675b7e55ac04a13be5d5c441ccd58d0"
+    },
+    {
+      "path": "tests/Stubs/CustomRolePermission.php",
+      "sha256": "02a8bba6c9613143e48631aedf048ce29e4c408211bc26daad3763fc27dcc3f8"
+    },
+    {
+      "path": "tests/Stubs/AdminPanelProvider.php",
+      "sha256": "845964c888b041611da6914c8c72e92f9294dbb73e9c85a9947eaf65b623f1f6"
+    },
+    {
+      "path": "tests/Stubs/CustomRole.php",
+      "sha256": "79e9a08f39d1254d12d9eee649332241da843d562646b980be224d0f9f71e528"
+    },
+    {
+      "path": "tests/Stubs/Project.php",
+      "sha256": "85c8fd0c9860bb217dee8e393401433050ce1a2ed6203da6d7812b1d69b4d1b1"
+    },
+    {
+      "path": "tests/Stubs/TestGuardPanelProvider.php",
+      "sha256": "9c6605db785baf996d5b07a5891cc3120239869d569a7bc4918fc94cc1fefa2a"
+    },
+    {
+      "path": "tests/Stubs/UlidUser.php",
+      "sha256": "4152a6129afb383d09f0a0b831bb4b93ead665070e510a42d1b68bab646b247b"
+    },
+    {
+      "path": "tests/Fixtures/epoch-bump-worker.php",
+      "sha256": "f05d2b2ab96803c94dc9edd341ada84113b73f27f53ef0eac039338a02dcc0d4"
+    },
+    {
+      "path": "tests/Fixtures/api-surface.snapshot.php",
+      "sha256": "212f1619d8eea7cbaa8bbbe17d4a74462dd566aeb91ca2a45d61a569f463241a"
+    },
+    {
+      "path": "tests/Unit/BladeDirectiveTest.php",
+      "sha256": "3b1b46a612c2fe97c177ac5f0d89851c05d4f6d1b3cb8ec3e95cbee83496ec04"
+    },
+    {
+      "path": "tests/Unit/OctaneScopingTest.php",
+      "sha256": "b8c3335d6272ce72993a3762ed06d5446796c90c15ce5501c56b63c470d021c6"
+    },
+    {
+      "path": "tests/Unit/PermissionKeyTest.php",
+      "sha256": "e802caba432f0ff6a8c499aaea892ebdd0875d348dff8325957f25d62a5c8297"
+    },
+    {
+      "path": "tests/Unit/ApiBoundaryTest.php",
+      "sha256": "c4ddfab57470f4c5744aabb6ff46b99e9cf689763f5c9d311bbba6a22a881873"
+    },
+    {
+      "path": "tests/database/migrations/2026_01_01_000001_create_users_table.php",
+      "sha256": "f4559b3d690c31d653f991b666377b343f51bf40eccabb518fd8a0a8b4f1a086"
+    },
+    {
+      "path": "tests/database/migrations/2026_01_01_000002_create_projects_table.php",
+      "sha256": "01ecb75bd15be0c97763c380ab0f0925647d174521136c0e6c04afca802ea473"
+    },
+    {
+      "path": "tests/database/migrations/2026_01_01_000003_create_ulid_users_table.php",
+      "sha256": "f5fc75c3b4d94b73596ec45a300eed01ccfcf95dd8b272ff18df178c87ee5a31"
+    },
+    {
+      "path": "tests/Feature/Context/ContextMiddlewareAliasTest.php",
+      "sha256": "db1d0cd88197b75544b62c94d17e6d47e8a38a41e9b378f98e078d2a2a3b3697"
+    },
+    {
+      "path": "tests/Feature/Context/ContextGuardCacheEpochTest.php",
+      "sha256": "620528aaa296788595d6c6f39c90e803319e11fb3f9cb82819484ea81ffbac62"
+    },
+    {
+      "path": "tests/Feature/Context/ContextGuardTest.php",
+      "sha256": "e0ae7d55bf63ceef45ee61636a721eec472c6a301f79618dd337d6b3d556eba6"
+    },
+    {
+      "path": "tests/Feature/Context/ContextPermissionLayerTest.php",
+      "sha256": "c73a50228f8b542bdb018fad622a8021a0abfa9878b1061f511ceb0b1d1e7237"
+    },
+    {
+      "path": "tests/Feature/Context/UnifiedGrantGrammarTest.php",
+      "sha256": "26d449073d0c6aead36f4f4afeeee1d99d2cbf5e81a270f8d976f951b4ffb9e4"
+    },
+    {
+      "path": "tests/Feature/Context/ContextMergeStrategySwapTest.php",
+      "sha256": "282accd71d16dc48d4ed06d3e252f10ee165de7fd5fb6b927ca6e8ebfbd89a0d"
+    },
+    {
+      "path": "tests/Feature/Context/ContextGrantCommandTest.php",
+      "sha256": "ccc5ccde55453d28d32d2fe746af6002c2b6721d30e2d5735bd410fb383c6ed6"
+    },
+    {
+      "path": "tests/Feature/Context/ContextTableNameConfigTest.php",
+      "sha256": "b771ec8b3eb9c0cb9f7731f0bf832be061a7a44053fe74f27e9aec23ab85071a"
+    },
+    {
+      "path": "tests/Feature/Context/ContextGrantBuilderWildcardTest.php",
+      "sha256": "9cffa1bd69b32dc080a2b9b8ae3b1f6b95874c7f9f65ee67d099b7108a075962"
+    },
+    {
+      "path": "tests/Feature/Context/ContextScopingTest.php",
+      "sha256": "d502b55b7376ca0df862d5ed17329adefe38044651bce444e662a582808035e4"
+    },
+    {
+      "path": "tests/Feature/Context/ContextCrossRequestCacheInvalidationTest.php",
+      "sha256": "de92c09e6ebbc8f2c86dd25e3a1fb5114f832f0ffb4b760526f0c102c29d7d55"
+    },
+    {
+      "path": "tests/Feature/Filament/DirectGrantResourceLikeEscapeTest.php",
+      "sha256": "26dd5356415e8c6bd5702e61defdaf6b72ba7616647feb17ed2db394b4922cdd"
+    },
+    {
+      "path": "tests/Feature/Filament/UserLabelColumnConfigTest.php",
+      "sha256": "d7ce12f56726f473851626cce95c302391418f309a85e761d22b56b8758f04f6"
+    },
+    {
+      "path": "tests/Feature/Filament/PageWidgetEnforcementTest.php",
+      "sha256": "7b7452bd0597ddbd7078db2ae9bf018a41ccc77d489a9ccbe8d8ab65c9ea8aa7"
+    },
+    {
+      "path": "tests/Feature/Filament/DirectGrantResourceEagerLoadTest.php",
+      "sha256": "119a1864e4ad300b75245f191d85717ea029e5249f8c3a0a25efa747148fe324"
+    },
+    {
+      "path": "tests/Feature/Filament/DoctorPageMemoizationTest.php",
+      "sha256": "82c5ed2ec13847419d8941fa42ef95a23637d50ee639016199bc369ca1ef551d"
+    },
+    {
+      "path": "tests/Feature/Filament/ResourceEnforcementTest.php",
+      "sha256": "d940eaa0107c3887d309f6f70a2ee2be289c9b9624da7c198fb7567291fad921"
+    },
+    {
+      "path": "tests/Stubs/Permissions/TestPermission.php",
+      "sha256": "1bfae886ae471002f711c444edc93dd38c3393dc45150a7fdc4a2c3a5f2c4b15"
+    },
+    {
+      "path": "tests/Stubs/Permissions/PostPermission.php",
+      "sha256": "9aae2636364564822fb68a7615e8e6133ff00049d53a45ec5bc20130b323b55c"
+    },
+    {
+      "path": "tests/Stubs/Context/StaticWorkspaceResolver.php",
+      "sha256": "b7ba093561d59237467d8230f1b0e8f12f99a6bb627a8e6a3b071eaa792873d5"
+    },
+    {
+      "path": "tests/Stubs/Panels/TestAdminPanelProvider.php",
+      "sha256": "a7232984458a072247c357319f6ef6c3bbbc9defe6e2ff9aa9541385fd64c358"
+    },
+    {
+      "path": "tests/Stubs/Filament/GuardedSettingsPage.php",
+      "sha256": "6906850a4acc101e575c87427b893cde1c871267bdfe98a0312b237d649e4eef"
+    },
+    {
+      "path": "tests/Stubs/Filament/GuardedRevenueWidget.php",
+      "sha256": "a8284125894ded506b23bfbdd3f4393b332642953acadef1fe0a2a5f0ef57333"
+    },
+    {
+      "path": "tests/Stubs/Filament/PlainSettingsPage.php",
+      "sha256": "2a6585074e32f06701d5a0d5acbceb72fac44c9fec6312ea51f0b6a7623bd0c3"
+    },
+    {
+      "path": "tests/Stubs/Roles/EnumScopedRole.php",
+      "sha256": "f739631218912612aa2d0d5f7700f046d5fdb7bec2a4c6a9da3fc8fb4b669eaf"
+    },
+    {
+      "path": "tests/Stubs/Roles/ManagerRole.php",
+      "sha256": "6afda0fa2579dc570afd85978b22abb098a7f61e514a1123fe31d99893eded87"
+    },
+    {
+      "path": "tests/Stubs/Roles/SuperAdminRole.php",
+      "sha256": "0b418534e2c7f7464a57fcfdeb6f39959fd040c6953eebf3c9887e4ee3eca55a"
+    },
+    {
+      "path": "tests/Stubs/Roles/ScopedFilterRole.php",
+      "sha256": "2bff90f53800879d6f7bffbebc2b7ab127f4ae1c055bf8e6ddf3b8e7b8174e93"
+    },
+    {
+      "path": "tests/Stubs/Roles/ProjectEditorRole.php",
+      "sha256": "1be7f6af97fdc4f84c62bc818f61522a11080f6830a6fe375f98ea17dfff87ea"
+    },
+    {
+      "path": "tests/Stubs/Posts/Permissions/PostPermission.php",
+      "sha256": "19c61fff7d209cd05781d09dc63fd747c07494492023cbc0751a37ac64c6b72a"
+    },
+    {
+      "path": "tests/Stubs/Posts/Policies/PostPolicy.php",
+      "sha256": "1c9d00744250dae60c8c21fdc0b262bbe065e8328bd339c1c094f635301f00ba"
+    },
+    {
+      "path": "tests/Stubs/Panels/Permissions/AdminPermission.php",
+      "sha256": "653847b3ad6d3fe42dc5b322e8066f2064dc4260aeb135c3d0a59a6bffb88a7f"
+    },
+    {
+      "path": "tests/Stubs/Panels/Permissions/PostPermission.php",
+      "sha256": "d98ee8244a413dd1efa47dbd91d046038647e386659fdb0091f65aad0b309090"
+    },
+    {
+      "path": "tests/Stubs/Panels/Policies/AdminPostPolicy.php",
+      "sha256": "d0571eaa52304b1d63cbd8225138bfcd7393e82d1de5fb80a3fe619db7160bbf"
+    },
+    {
+      "path": "tests/Unit/Guard/AuthorizerTest.php",
+      "sha256": "e2a13086a85f6bb1c8daffc612ec3b17732d0da16508cded27a4d08996138494"
+    },
+    {
+      "path": "tests/Unit/Concerns/HasAzGuardScopedRolesTest.php",
+      "sha256": "7c1b4e77903405a5d95f50c49f8d059c918cc177f7c13c226da3155cec522a78"
+    },
+    {
+      "path": "tests/Unit/Concerns/HasAzGuardRolesTest.php",
+      "sha256": "364fd684c8e26270a25c4595f98a75955fc6465c69630778a7a311e1eac2e5e4"
+    },
+    {
+      "path": "tests/Unit/Concerns/HasAzGuardTest.php",
+      "sha256": "b84e50ed85fa3d69f18c40b6d808f321b000be8b4262513de12ea09921e1afdb"
+    },
+    {
+      "path": "tests/Unit/Concerns/ScopeClassNullableTest.php",
+      "sha256": "fd8ba72fc1ac448a95d29343d3b32c84c058fe7be6eeec8046aab6ba91db5f29"
+    },
+    {
+      "path": "tests/Unit/Abilities/AbilitiesDtoTest.php",
+      "sha256": "d4d9412720fb6951ef0c04d87dce71236761d3c8dd29def7f5caeea12753b0ff"
+    },
+    {
+      "path": "tests/Unit/Grants/GrantBuilderTest.php",
+      "sha256": "00779d0ac45b6d3ef17f1a63ce71ecbbbcca0b5b4169114ae8f13f55a23f6cbb"
+    },
+    {
+      "path": "tests/Unit/Support/OnMissingPanelConfigTest.php",
+      "sha256": "e98bce569b7807bd94987f71dc50a2edc35e1aee0e55168964fe5efccbd749b2"
+    },
+    {
+      "path": "tests/Unit/Support/StrictPanelsTest.php",
+      "sha256": "ac2de5c96658ff48edc36ecd0a64139f6b484af6845644ba859795a24f95e323"
+    },
+    {
+      "path": "tests/Unit/Support/PanelTest.php",
+      "sha256": "fd50dfda61911a0e76fc40db95d1f03434d4b8a3d67eb4622f60e74b22865bda"
+    },
+    {
+      "path": "tests/Unit/Support/CacheConfigValidationTest.php",
+      "sha256": "125a311e511ea9bb5915dea39c095396050f3f864e5388755a6dd62260514b32"
+    },
+    {
+      "path": "tests/Unit/Support/ScopedRoleCacheTest.php",
+      "sha256": "b719e33b86df933b751cc8316b5a3dbc9d9d073f3fb94c77ed431d349f6ccd7d"
+    },
+    {
+      "path": "tests/Unit/Auth/DirectGrantPolicyTest.php",
+      "sha256": "dc57c3c53f5e77500f3be47368abe5923675dc8531fe33ccae4da3314c5eaa44"
+    },
+    {
+      "path": "tests/Unit/Models/RoleGetRoleLogicTest.php",
+      "sha256": "bdc9f34b36a88af52d05d7b28a1b95faa5f8ffe77a9b11b680306a1e6fb5475e"
+    },
+    {
+      "path": "tests/Unit/Context/MergeStrategyTest.php",
+      "sha256": "894e7fd3f158ee4a98d265608aca9d758764890b05a859196a8854de4380fdef"
+    },
+    {
+      "path": "tests/Unit/Context/AuthorizationContextTest.php",
+      "sha256": "dcba3f9d4e73853e154e3e5efbb2e5b9c859fe081663e3a4d3a2549a0513c8f1"
+    },
+    {
+      "path": "tests/Unit/Context/AuthorizationContextManagerTest.php",
+      "sha256": "655232203e5744b4b63aeff3d3743ddf4c7942a049653a8989b002b088b39f1f"
+    },
+    {
+      "path": "tests/Unit/Registry/EffectivePermissionResolverTest.php",
+      "sha256": "8744d5078d30b0c18b9d3040341e232a45477d7e5e7ea827cca766b7429e9d38"
+    },
+    {
+      "path": "tests/Unit/Registry/PermissionCacheTest.php",
+      "sha256": "bb2ef265b1818cec27bc24318bbf8c3c5b2667fb085ca61aab500c5b61fe16a1"
+    },
+    {
+      "path": "tests/Unit/Registry/PermissionSetTest.php",
+      "sha256": "773f797be180d3d38d73db3247684b5073451482c51a7cc57bb7e79121351c91"
+    },
+    {
+      "path": "tests/Unit/Registry/PolicyAbilityCatalogBuilderTest.php",
+      "sha256": "72b15976f00bf7ebbc1285f7abd3c8d3a98dd137e9969d753ffcc9e1a165bcff"
+    },
+    {
+      "path": "tests/Unit/Registry/EnumPermissionCatalogBuilderTest.php",
+      "sha256": "8ccc73fd24759ce89ae93d403e6d96b403f4545079d43b2ded4e6702328afec0"
+    },
+    {
+      "path": "tests/Unit/Registry/CompositePermissionCatalogTest.php",
+      "sha256": "00034f7aaa3af4655924691fe350ecded4eb84be3fc4842424b3d5ca57d18633"
+    },
+    {
+      "path": "tests/Unit/Registry/EnumPermissionDefinitionTest.php",
+      "sha256": "1ff5be70e4d5063903facabe492b538ce1196b2fdff7d7e104181584317679e1"
+    },
+    {
+      "path": "tests/Unit/Registry/PermissionMatcherTest.php",
+      "sha256": "a7fc90b4ae8780b242f19b8876877e981101c7061d0216f725f51c3bf7d9b0e7"
+    },
+    {
+      "path": "tests/Unit/Filament/FilamentPermissionCatalogBuilderTest.php",
+      "sha256": "2b24d1be73bbda90c2d9cc9fed46d0448d061c23504b207ae376ab5b9b658147"
+    },
+    {
+      "path": "tests/Unit/Filament/ResourceGateTest.php",
+      "sha256": "08fdcf602372db196cb4c6453139666a0fa0b1f619ed095758195f640fbd5693"
+    },
+    {
+      "path": "tests/Unit/Filament/FilamentArchTest.php",
+      "sha256": "b7e99d8e7590883062484fb123f42e6008a7ea69f3092b5718076afac04dc5d6"
+    },
+    {
+      "path": "tests/Unit/Filament/PermissionEnumGeneratorTest.php",
+      "sha256": "791691d1a93a466e8e9f3cf3a28bf1bce5347ec81bf36d16fa092d71195b75a7"
+    },
+    {
+      "path": "tests/Unit/Filament/PermissionSchemaTest.php",
+      "sha256": "d75ecda6c661c379fd60a0939c4dfade6f72857e6d772b29ea9c6c086f299f5a"
+    },
+    {
+      "path": "tests/Unit/Filament/AzGuardFilamentServiceProviderTest.php",
+      "sha256": "e2cbe3b8ae53269c282e4d1cb3acbf722061e97a5618b1f36dedbb2d5c839bbb"
+    },
+    {
+      "path": "tests/Unit/Filament/AzGuardPluginTest.php",
+      "sha256": "6d6c09897a9047e1e4af88d6882c4d3cb6affd58d4c5db5728bd003653fad0b1"
+    },
+    {
+      "path": "tests/Unit/Filament/PolicyGeneratorTest.php",
+      "sha256": "e3480d3c2830a2ed9cf112af360d568852b1ff623e633791901e6aa0cb1ada8c"
+    },
+    {
+      "path": "tests/Unit/Roles/BaseRoleTest.php",
+      "sha256": "eb60b5399d20ddf3510fdbb6958588f5014061c645959bc44e6f974f2acb3743"
+    },
+    {
+      "path": "tests/Unit/Contracts/AzGuardManagerInterfaceTest.php",
+      "sha256": "e3181b7c0b2f87508ffca518329e25d67e0667fdc1251a2f7465824748e15f7e"
+    },
+    {
+      "path": "tests/Unit/Contracts/ContractTraitParityTest.php",
+      "sha256": "1d4a92678415f6f3714f91a9cac9315a35b2dd32cf6a23363f150ccf04cd510e"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "d366317905742dbf9c58a6555c28e759b4ffc375f8e749ceb34b0ec9af680469"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "a4785fd86b5c765f7a33a4e1e71be019ccf1b5f937180ecd85be6a6ab34efeb3"
+    },
+    {
+      "path": "docs/05_AI/glossary.md",
+      "sha256": "6e76e1df1ea515a89651ea0d45a82f5c709b83ac4ce117fde6979a0e061b705c"
+    },
+    {
+      "path": "docs/05_AI/package-hardening-track.md",
+      "sha256": "fbaa861d270c89e0ea014e6028c2df499599c5c87c1439f9e21670796eaad2b5"
+    },
+    {
+      "path": "docs/05_AI/api-surface.md",
+      "sha256": "1336feafe38fa5ced496c9f062954dba6811cf2e61590607293f79c01531cf79"
+    },
+    {
+      "path": "docs/ru/index.md",
+      "sha256": "54bfec9b1156ae4611e55f1c7e51c234553405cc8971945d172a84f419022f1e"
+    },
+    {
+      "path": "docs/introduction/quick-start.md",
+      "sha256": "e7e9a8ba6c162bfe237b14a8c55593d9afccab1f8eab25c5f851378e67a07db8"
+    },
+    {
+      "path": "docs/introduction/questions-issues.md",
+      "sha256": "c223037367a32293590efcbaf814c8841c4affd0f63884b27b5ed1a38e9e092f"
+    },
+    {
+      "path": "docs/introduction/installation.md",
+      "sha256": "49a9d109d832936d28e1c5cdc1e6dfd24cd910218253a5c1a54504abe573fa37"
+    },
+    {
+      "path": "docs/introduction/versioning.md",
+      "sha256": "7522a15bbfa489adb66d0afe0261f22cf77d8753b3fda9c684ed780126b62d4d"
+    },
+    {
+      "path": "docs/introduction/known-limitations.md",
+      "sha256": "1af02626b739aa42a1bc3e7ade5aa13c408d0a809f8bbb3eff7ef9691ef9f734"
+    },
+    {
+      "path": "docs/introduction/comparison.md",
+      "sha256": "734043cf07c8e3851a5c27e95dff3955a8b721e36f0af34e0d44a4bfb059fe53"
+    },
+    {
+      "path": "docs/introduction/headless-quick-start.md",
+      "sha256": "172f99d8d8fc332dc728974b0112c9b0b84279ea4ea8e471523bc135f492e454"
+    },
+    {
+      "path": "docs/introduction/upgrading.md",
+      "sha256": "5139b94c4ca1dd9eccf0216010fa89e7113e18cd5810a0c0b9d221db5760d7ba"
+    },
+    {
+      "path": "docs/introduction/prerequisites.md",
+      "sha256": "64416348ec18a4663766c1874adccbcef3a619a5262594401cbde36726312e9b"
+    },
+    {
+      "path": "docs/introduction/changelog.md",
+      "sha256": "ab6f3d21b1e89e7c458280426cc627aeda21e5a639590404d124a8ba5dc5837b"
+    },
+    {
+      "path": "docs/introduction/why-azguard.md",
+      "sha256": "fe54b523f4adb435e172bc9f5a40b41ee4b16a308ac94b5c9283aeebcb971e44"
+    },
+    {
+      "path": "docs/best-practices/policies-and-gates.md",
+      "sha256": "285ba0e07eee826bb71af1494d4c2828db5790900cb48ef71909e162a4ddfbe8"
+    },
+    {
+      "path": "docs/best-practices/best-practices.md",
+      "sha256": "e7657540b691bd0dbeabecdcd18eac610afd1e19c2f0c5b1a3ca3c52dfc678e3"
+    },
+    {
+      "path": "docs/best-practices/performance-tips.md",
+      "sha256": "cd3184d95119a3c5f1832dc5772e5a92450711134213e6b2d5d758557d291c59"
+    },
+    {
+      "path": "docs/best-practices/permission-catalog.md",
+      "sha256": "7c3f37ee66aadf1608741e8d3c7828c3df0279d8c8a1d8efe744ae77c1b9d867"
+    },
+    {
+      "path": "docs/advanced/testing.md",
+      "sha256": "2c1906c1feabac7c55ac32715fe1b4ff0b676091b6f982fd9bd31ae2857d2242"
+    },
+    {
+      "path": "docs/advanced/panels.md",
+      "sha256": "c45fe2719fca5af3dbf35a38101fb498db22266eb489532c1b9adade473de583"
+    },
+    {
+      "path": "docs/advanced/context.md",
+      "sha256": "0dee5db720f3bee5618d0177487e8d137824ad766faef6b1a3c0ef997ac3bdb3"
+    },
+    {
+      "path": "docs/advanced/events.md",
+      "sha256": "af1f331b2a0d9e53b443c2d058492f5b3a4ee18b5788998640c14f14bb047bfb"
+    },
+    {
+      "path": "docs/advanced/seeding.md",
+      "sha256": "f1969872aa8043e6db3e21900c41352f01e24f9a5fc26076f94e950d4dfc86db"
+    },
+    {
+      "path": "docs/advanced/exceptions.md",
+      "sha256": "3e5e7df1a9b7f82101eed0fc75909f7c7755ce58c48c0a2deb74b164a258ba4f"
+    },
+    {
+      "path": "docs/advanced/uuid-ulid.md",
+      "sha256": "fd218c0eb41b6c1df0db6e131d5480b7092605b4be723ad1b7be1daf3a6860b0"
+    },
+    {
+      "path": "docs/advanced/extending.md",
+      "sha256": "98a5ab416e5607a5fd3c2da149f4c320e288c51e42576fc7a99715fefba95713"
+    },
+    {
+      "path": "docs/advanced/entity-scopes.md",
+      "sha256": "ed5358f649ff85f5d53cc679129cf952a7e8051dcc84865cf640e6434d19c903"
+    },
+    {
+      "path": "docs/advanced/configuration.md",
+      "sha256": "b3b4bab86592064b32cdb67e7316bd6c70945c8b4ab50533527dc957fcbf15a9"
+    },
+    {
+      "path": "docs/advanced/cache.md",
+      "sha256": "4ccbb79f016dbd45544aa84f0fac0bec02bceb8f6b423f1a91d803eea273ad9b"
+    },
+    {
+      "path": "docs/advanced/phpstorm.md",
+      "sha256": "6f3ec228e9c0664aada76b30cef366feb7b0be330903d1dcc4f5ceeccc163924"
+    },
+    {
+      "path": "docs/basic-usage/basic-usage.md",
+      "sha256": "232a12859fa8148920f78481a6e536578daab66ed003ff798a087c9dbd216824"
+    },
+    {
+      "path": "docs/basic-usage/blade-directives.md",
+      "sha256": "e090c846ff9d3481cf907fdd441e5babf2ce4e43903dbc9e6e4785c1565d533d"
+    },
+    {
+      "path": "docs/basic-usage/http-access.md",
+      "sha256": "0447ef5d3d0b0daf50f1e7beac7432894840e22bd031c19006320010784253f0"
+    },
+    {
+      "path": "docs/basic-usage/permissions.md",
+      "sha256": "e865c32b04e0640fac6c05dad542fcebbc64657f8f45cf672b0e801066b4a8a7"
+    },
+    {
+      "path": "docs/basic-usage/super-admin.md",
+      "sha256": "ad4987dc7d4652916a30fcc312c6c64aea880ce36eba1999107304f857aca988"
+    },
+    {
+      "path": "docs/basic-usage/abilities-frontend.md",
+      "sha256": "70312da7ee527a663aecfbf9a356cf47033187e78bf03e20f226f8a440690339"
+    },
+    {
+      "path": "docs/basic-usage/artisan-commands.md",
+      "sha256": "21b66b4af3ddc707df78b2b93c34c2c663ed7296cb5b5dc94511946bd69b79b8"
+    },
+    {
+      "path": "docs/basic-usage/roles.md",
+      "sha256": "b016e81aaa93aec7ddc466301acb06bb24d881e3c507e4706202689845708295"
+    },
+    {
+      "path": "docs/basic-usage/multiple-guards.md",
+      "sha256": "7c2480bc883092937d503fa39e3f5b9d970d6d3a5b04822d0c260e5d9d02ed78"
+    },
+    {
+      "path": "docs/basic-usage/direct-grants.md",
+      "sha256": "7bf6a0ff14bbf221fdc929c3564425617545d7330c4a2c528922283f92030ab1"
+    },
+    {
+      "path": "docs/basic-usage/filament.md",
+      "sha256": "085e9cbf081165d3c322f5a4f861fa5751256e4bddb52914c0abe5d611ede1b5"
+    },
+    {
+      "path": "docs/recipes/soft-role-override.md",
+      "sha256": "9912e06822dee41d308d236a24e7b71991efd4c760b8192a415e8d68dd213ae6"
+    },
+    {
+      "path": "docs/recipes/policy-integration.md",
+      "sha256": "be12b683f40bc83a0031bcfb675c764399e52bd9304b39597ab16d29b4c17ca4"
+    },
+    {
+      "path": "docs/recipes/index.md",
+      "sha256": "f092d227e59fb7e081dde2922308bede0d3a880d9645b55b89b467e5c4df4284"
+    },
+    {
+      "path": "docs/recipes/integration.md",
+      "sha256": "aa5a0e1620b081050cc70ed4912b6cdd29144c5b0d34e6c736c072abc194f2fb"
+    },
+    {
+      "path": "docs/recipes/multi-tenant.md",
+      "sha256": "539fc02e4581f4dbbebaac0d4c45f5533e9a70d883772bbd6f59cc87601eef83"
+    },
+    {
+      "path": "docs/recipes/temp-access-via-grant.md",
+      "sha256": "7af7c92e5c405e5430d7c4c71255a70be4aac8524f25041ec20fbf6eedd1e671"
+    },
+    {
+      "path": "docs/recipes/super-admin-wildcard.md",
+      "sha256": "41a644d8f3eef6d8aa1e8c8c74a6ff590256e6820deaa55a7721a38ea31fdde8"
+    },
+    {
+      "path": "docs/recipes/inertia-permissions.md",
+      "sha256": "73f0170c1e05c6f04a91f102b3f483113b55ed84cc7f4b2a8676075f5f49835e"
+    },
+    {
+      "path": "docs/05_AI/guidelines/subagents-and-workflows.md",
+      "sha256": "b47de62799bfc432812b4699eba7b18fb28f1135bb3498d5c6072318f86c49c5"
+    },
+    {
+      "path": "docs/ru/introduction/quick-start.md",
+      "sha256": "0953ab1c9a0c69c90402c3d3e887db653d778da81b3dcb744af883a453bf64b1"
+    },
+    {
+      "path": "docs/ru/introduction/questions-issues.md",
+      "sha256": "0cea28cfa5ee8d7552c37c1f7fc033d2597c646799ee65b37df6ecbb398bd7a0"
+    },
+    {
+      "path": "docs/ru/introduction/installation.md",
+      "sha256": "c4b3d1592a0208c05dec4ab7c6a5d5f7cc4d74d6be2dc38a219fc6267c8c708d"
+    },
+    {
+      "path": "docs/ru/introduction/versioning.md",
+      "sha256": "3e6d53d2dd86676b998cc06dd102b423e553360a4118ea4a4184fcfaa4e39310"
+    },
+    {
+      "path": "docs/ru/introduction/known-limitations.md",
+      "sha256": "69136cef2840d992c9ea44ad50416cd0770a1ea8c1d23d3ac3d2f677edc51aa9"
+    },
+    {
+      "path": "docs/ru/introduction/comparison.md",
+      "sha256": "c86d4f73f787ae3533086dfb0cf0b01d68fea58cf2d89356b3ed4a6089658a0e"
+    },
+    {
+      "path": "docs/ru/introduction/headless-quick-start.md",
+      "sha256": "65dcf2ac26ef9c4f6da303f08337136ee65decaea0235f2ae4e2250ea115599c"
+    },
+    {
+      "path": "docs/ru/introduction/upgrading.md",
+      "sha256": "078331e7a26f25b092ca35db7c91768b460cdaaefc2fc2710bae96684fd3442f"
+    },
+    {
+      "path": "docs/ru/introduction/prerequisites.md",
+      "sha256": "3c7b7b22103fb51b36e4cf94e0923337b714483cf41abc0a726cf0d688857e42"
+    },
+    {
+      "path": "docs/ru/introduction/changelog.md",
+      "sha256": "a5645082bf5117d1a874933bce765d403d6c7a26868c97fb49832f6c6f42bc96"
+    },
+    {
+      "path": "docs/ru/introduction/why-azguard.md",
+      "sha256": "0cea67bd90525caf5f48b7c696a1ea661e9887efb3542e07dcf2ce2bdf97c735"
+    },
+    {
+      "path": "docs/ru/best-practices/policies-and-gates.md",
+      "sha256": "4b7ecc60c3c34c288853002ebb357e56719cb509b28ea3f727228c1d6bfd2298"
+    },
+    {
+      "path": "docs/ru/best-practices/best-practices.md",
+      "sha256": "dbf4393b9624c36474d39c8538a8f75edf0a851ac644806bf8e1fd909094323a"
+    },
+    {
+      "path": "docs/ru/best-practices/performance-tips.md",
+      "sha256": "f6fe9ce14903e92392fba598a5d04b76f5a3db1233250e1bf6fa91da306e998a"
+    },
+    {
+      "path": "docs/ru/best-practices/permission-catalog.md",
+      "sha256": "1e0140d2088a334560d2b7fed42f81f123f9fb8992536cdc949d82ce4af48cfc"
+    },
+    {
+      "path": "docs/ru/advanced/testing.md",
+      "sha256": "57140b495d65796185538af7da19ba5767ae208a0c9177b82551d99bda4c5332"
+    },
+    {
+      "path": "docs/ru/advanced/panels.md",
+      "sha256": "c7da05c6189077aeb46c2cac6cd95a4ac1f13dc5f5c61a7d1efd70f6f1932d23"
+    },
+    {
+      "path": "docs/ru/advanced/context.md",
+      "sha256": "11be67a290e9fd5e5c33b72b85112179d9065476c0a54f3fdfe243d4b4be18f1"
+    },
+    {
+      "path": "docs/ru/advanced/events.md",
+      "sha256": "1743370d7b26c6279055169e22b4d5f30677e6d30663e549c545f38ca0011b96"
+    },
+    {
+      "path": "docs/ru/advanced/seeding.md",
+      "sha256": "b769e3a6d25f4f020213e42c99fc1342bfcac58d9c5d3d5857e019a4c6a817a9"
+    },
+    {
+      "path": "docs/ru/advanced/exceptions.md",
+      "sha256": "d999602b6bbf3cdbb7fdcf6a9a3e7edbec05bdaf3ed57422db6846a05745deb5"
+    },
+    {
+      "path": "docs/ru/advanced/uuid-ulid.md",
+      "sha256": "38f8506419008d715836af55e7c763ccd97249ff70e9a6c8a6185762cfca2977"
+    },
+    {
+      "path": "docs/ru/advanced/extending.md",
+      "sha256": "8fae61e548a6592109a22bd54c0fc5b7d9f3796baee6639adcb988915fae67a5"
+    },
+    {
+      "path": "docs/ru/advanced/entity-scopes.md",
+      "sha256": "a4dc62d459fd15c277827725f87d5890f61d2eb6831929871517aa02e5a06793"
+    },
+    {
+      "path": "docs/ru/advanced/configuration.md",
+      "sha256": "00ec7b76b1b333768b6beb5af7b4df889e8ed86693be2aa89aca83afd179627d"
+    },
+    {
+      "path": "docs/ru/advanced/cache.md",
+      "sha256": "31efcec010b4fef685e9215c0b2d3ea1b0439fe10bf67ab9d6a879224dc48515"
+    },
+    {
+      "path": "docs/ru/advanced/phpstorm.md",
+      "sha256": "bce7d480f956b37ea6166c0dcff536c4a1ff522ecec4252bfd4aac7f394c90c4"
+    },
+    {
+      "path": "docs/ru/basic-usage/basic-usage.md",
+      "sha256": "76ee610bbb16d545b03001aa68bba8405939d9d86580bc1859986949134b6c96"
+    },
+    {
+      "path": "docs/ru/basic-usage/blade-directives.md",
+      "sha256": "2f73e7e3680efe429af2d91d50142e3ed22efb9f57f466d19e805c733f124636"
+    },
+    {
+      "path": "docs/ru/basic-usage/http-access.md",
+      "sha256": "58289e4f7231e287526572c578b3e6434eb93b56d3f5d494185f3c3cb13ee386"
+    },
+    {
+      "path": "docs/ru/basic-usage/permissions.md",
+      "sha256": "41ab31f53f7dd31234d4896a7c793910914999f3e94cc0d987404baf31881388"
+    },
+    {
+      "path": "docs/ru/basic-usage/super-admin.md",
+      "sha256": "4620beb08f8f51789411160b938761638d5f6247fd62552ed330f2bdc8641e92"
+    },
+    {
+      "path": "docs/ru/basic-usage/abilities-frontend.md",
+      "sha256": "bd514eeeb80a9ad06932d5a78c1c03baf089b7765cdd04bc6ff8c7a33dd977b7"
+    },
+    {
+      "path": "docs/ru/basic-usage/artisan-commands.md",
+      "sha256": "7ed387370c5ed3ef0d2f3a7734cc65b3ca386fcf1f7dbfe4c2836927e696983c"
+    },
+    {
+      "path": "docs/ru/basic-usage/roles.md",
+      "sha256": "6f5a345204d5054f071d16c47c2dfc9b940eb1149dcb2630842aa857f4fa4fb9"
+    },
+    {
+      "path": "docs/ru/basic-usage/multiple-guards.md",
+      "sha256": "e83e804966dbaf7f10022c5da6395086ce011ba0f4fa601a4d0d8ff2bdedf562"
+    },
+    {
+      "path": "docs/ru/basic-usage/direct-grants.md",
+      "sha256": "4731318373de603a137ea35398d09da25d445df00956e4d3d13e241df437510a"
+    },
+    {
+      "path": "docs/ru/basic-usage/filament.md",
+      "sha256": "570782e3a4bf63603f6e67caab1caa19f3cc6613a8cbf7ed2aab41bbf742cadd"
+    },
+    {
+      "path": "docs/ru/recipes/soft-role-override.md",
+      "sha256": "da8a32d0a619d8a30854caab33bd1d3b61aca2efda011e64928a27ba159a3fba"
+    },
+    {
+      "path": "docs/ru/recipes/policy-integration.md",
+      "sha256": "1ab785a99e1ca8a815cc1e6b85ee0fcca221e9d945b8b03f5e97ac40938d8fd9"
+    },
+    {
+      "path": "docs/ru/recipes/index.md",
+      "sha256": "e7bc830bc7ea60cb29ec35b99dfe8a98fec8c6390615f05992a422b34c6a4a07"
+    },
+    {
+      "path": "docs/ru/recipes/integration.md",
+      "sha256": "2702ab56beacd4200f6d44ed919856816433afed6736b546ed88e033c5e1567e"
+    },
+    {
+      "path": "docs/ru/recipes/multi-tenant.md",
+      "sha256": "b5ba1bb8413f4e21dfae2107d42fda344f461253bf3bbcacaca4e03f97be0b2c"
+    },
+    {
+      "path": "docs/ru/recipes/temp-access-via-grant.md",
+      "sha256": "d3111f37f99fd6064025ef43d50979cb040edaf7aac5e2d2b22ed007195ddad0"
+    },
+    {
+      "path": "docs/ru/recipes/super-admin-wildcard.md",
+      "sha256": "713d473633d903cbc2f83a04065dc56842508bbe33a8a9b09e0e59ec830152c6"
+    },
+    {
+      "path": "docs/ru/recipes/inertia-permissions.md",
+      "sha256": "f6bcf0a668b4d1611819125981fc43bae0cc847a9b6f7779ba6135d7bf22506f"
+    },
+    {
+      "path": "docs/.vitepress/dist/hashmap.json",
+      "sha256": "710b8165aebdfd77a463479c9be9a57574f6b67cf0487c7da55bfb316161b26b"
+    }
+  ]
+}

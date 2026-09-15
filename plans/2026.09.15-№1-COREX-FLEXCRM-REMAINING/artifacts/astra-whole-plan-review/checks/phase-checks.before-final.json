@@ -1,0 +1,134 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+      "--stage",
+      "inputs"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p3.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p4.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p5.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p6.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 3, \"case_contracts\": 57, \"semantic_acceptance\": \"item-owned; structure never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 5, \"case_contracts\": 70, \"parent_ownership\": 45, \"semantic_acceptance\": \"item-owned; structural checks never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p8.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 3, \"case_contracts\": 56, \"parent_ownership\": 49, \"external_control_plane_tools\": 19, \"semantic_acceptance\": \"item-owned; structure is not executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p9.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 2, \"case_contracts\": 64, \"parent_ownership\": 32, \"runtime_or_live_proof\": false, \"semantic_acceptance\": \"owning executor verifies actual assertions; structural check not execution proof\"}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p10.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"di\": 34, \"ap\": 13, \"subconditions\": 169, \"case_contracts\": 59, \"original_parents\": 31, \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p11.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "P11 structural identity check PASS; actual executed/accepting-owner/authority truth remains item-owned\n",
+    "stderr": ""
+  }
+]

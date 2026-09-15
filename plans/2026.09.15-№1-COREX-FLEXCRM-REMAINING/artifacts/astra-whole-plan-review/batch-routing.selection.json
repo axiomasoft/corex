@@ -1,0 +1,325 @@
+[
+  {
+    "batch": "B-P1-QUALIFY",
+    "range": "P1.1-P1.4",
+    "items": [
+      "P1.1",
+      "P1.2",
+      "P1.3",
+      "P1.4"
+    ],
+    "why": "Один frozen source corpus: reconciliation → atoms/equivalents → seal; per-item closure внутри сессии."
+  },
+  {
+    "batch": "B-P2-PROPOSALS",
+    "range": "P2.1-P2.4",
+    "items": [
+      "P2.1",
+      "P2.2",
+      "P2.3",
+      "P2.4"
+    ],
+    "why": "Один P1 lock/BC/trust context: intake → proposals → catalogue; public adoption grants остаются отдельными gates."
+  },
+  {
+    "batch": "B-P3-LOCAL",
+    "range": "P3.1-P3.2",
+    "items": [
+      "P3.1",
+      "P3.2"
+    ],
+    "why": "Общий storage/physical PG harness; независимые isolation и claim reviews сохраняются."
+  },
+  {
+    "batch": "B-P3-IDENTITY",
+    "range": "P3.3-P3.7",
+    "items": [
+      "P3.3",
+      "P3.4",
+      "P3.5",
+      "P3.6",
+      "P3.7"
+    ],
+    "why": "Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2."
+  },
+  {
+    "batch": "solo",
+    "range": "P4.1",
+    "items": [
+      "P4.1"
+    ],
+    "why": "Headless provider/guest-policy catalogue; соседний media IO требует другого storage/fault harness, coupling не окупается."
+  },
+  {
+    "batch": "B-P4-MEDIA",
+    "range": "P4.2-P4.3",
+    "items": [
+      "P4.2",
+      "P4.3"
+    ],
+    "why": "Общий media/storage/file-lock/decode fault harness; lifecycle → conversions."
+  },
+  {
+    "batch": "B-P4-NOTIFICATIONS",
+    "range": "P4.4-P4.6",
+    "items": [
+      "P4.4",
+      "P4.5",
+      "P4.6"
+    ],
+    "why": "Общий outbox/channel/digest SQL context; P4.6 только после P5.2/5.5, при их отсутствии закончить ready P4.4/5 subset."
+  },
+  {
+    "batch": "B-P4-VIEWS-SEAL",
+    "range": "P4.7-P4.8",
+    "items": [
+      "P4.7",
+      "P4.8"
+    ],
+    "why": "Core saved-view/descriptor checks → installed extension seal; нужны остальные branch receipts, cold fixture не новая сессия."
+  },
+  {
+    "batch": "solo",
+    "range": "P5.1",
+    "items": [
+      "P5.1"
+    ],
+    "why": "Чужой immutable engine ABI/source grant может ожидаться независимо; его ожидание не связывает готовый wakeup utility."
+  },
+  {
+    "batch": "B-P5-WAKEUP",
+    "range": "P5.2-P5.3",
+    "items": [
+      "P5.2",
+      "P5.3"
+    ],
+    "why": "Один runner/SQL/context harness: local sweep → root hints; physical resolver нужен только выбранной ветке."
+  },
+  {
+    "batch": "B-P5-CONSUMERS",
+    "range": "P5.4-P5.6",
+    "items": [
+      "P5.4",
+      "P5.5",
+      "P5.6"
+    ],
+    "why": "Общий wakeup consumer/conformance harness: engine binding и digest bridge → installed seal; missing engine не мешает ready P5.5."
+  },
+  {
+    "batch": "B-P6-FIELDS",
+    "range": "P6.1-P6.3",
+    "items": [
+      "P6.1",
+      "P6.2",
+      "P6.3"
+    ],
+    "why": "Квалификация source/ABI → field binding → schema bridge в одном engine/catalog context; ready transfer/search не ждут missing engine."
+  },
+  {
+    "batch": "B-P6-TRANSFER",
+    "range": "P6.4-P6.5",
+    "items": [
+      "P6.4",
+      "P6.5"
+    ],
+    "why": "Общий codec/storage/SQL target context: resumable import → coherent export."
+  },
+  {
+    "batch": "B-P6-SEARCH",
+    "range": "P6.6-P6.8",
+    "items": [
+      "P6.6",
+      "P6.7",
+      "P6.8"
+    ],
+    "why": "Общий query/provider/rebuild harness → installed data seal после остальных branches; callbacks/ACL/fault reviews сохраняются."
+  },
+  {
+    "batch": "B-P7-RECURRENCE",
+    "range": "P7.1-P7.2",
+    "items": [
+      "P7.1",
+      "P7.2"
+    ],
+    "why": "Квалифицированный source/recurrence ABI → pure bounded adapter; общий immutable source/context."
+  },
+  {
+    "batch": "B-P7-TASKS",
+    "range": "P7.3-P7.4",
+    "items": [
+      "P7.3",
+      "P7.4"
+    ],
+    "why": "Existing task model/actions/transaction harness → recurrence materializer; binding только после P7.2 и P5.2."
+  },
+  {
+    "batch": "B-P7-INTL",
+    "range": "P7.5-P7.7",
+    "items": [
+      "P7.5",
+      "P7.6",
+      "P7.7"
+    ],
+    "why": "Общие intl/config/decimal/dataset inputs; sequential shared writes, scoped source/license gates."
+  },
+  {
+    "batch": "B-P7-BRIDGES-SEAL",
+    "range": "P7.8-P7.9",
+    "items": [
+      "P7.8",
+      "P7.9"
+    ],
+    "why": "Selected intl/search/label adapters → installed utility seal; потребляются актуальные остальные branch receipts."
+  },
+  {
+    "batch": "B-P8-TOOLS",
+    "range": "P8.1-P8.4",
+    "items": [
+      "P8.1",
+      "P8.2",
+      "P8.3",
+      "P8.4"
+    ],
+    "why": "Registry/API source qualification → declarations → catalogue → guarded invocation; последовательная квалификация без повторного полного чтения."
+  },
+  {
+    "batch": "B-P8-INTEGRATION",
+    "range": "P8.5-P8.7",
+    "items": [
+      "P8.5",
+      "P8.6",
+      "P8.7"
+    ],
+    "why": "Registry diagnostics и selected contributions → installed tool seal; P8.5 готов независимо, P8.6 ждёт только выбранных producers."
+  },
+  {
+    "batch": "B-P9-BUILD",
+    "range": "P9.1-P9.2",
+    "items": [
+      "P9.1",
+      "P9.2"
+    ],
+    "why": "Source/vector/overlay freeze → exact split/dist build; один export-map context, no remote dispatch."
+  },
+  {
+    "batch": "B-P9-LOCAL-PROOF",
+    "range": "P9.3-P9.4",
+    "items": [
+      "P9.3",
+      "P9.4"
+    ],
+    "why": "Matrix/CI helpers → pristine/populated installed fixtures; общий actual build/recipe context, bounded отдельно от export implementation."
+  },
+  {
+    "batch": "solo",
+    "range": "P9.5",
+    "items": [
+      "P9.5"
+    ],
+    "why": "Manual G-RUNNER: удалённый dispatch/current credentials и собственный finite grant; не смешивать с private authority."
+  },
+  {
+    "batch": "solo",
+    "range": "P9.6",
+    "items": [
+      "P9.6"
+    ],
+    "why": "Manual G-PRIVATE: отдельный конфиденциальный graph и finite read grant; не объединять authority с runner."
+  },
+  {
+    "batch": "solo",
+    "range": "P9.7",
+    "items": [
+      "P9.7"
+    ],
+    "why": "Локальный publication packet после двух manual branches; соседние Exec=manual, готовые bytes до G-RELEASE."
+  },
+  {
+    "batch": "solo",
+    "range": "P9.8",
+    "items": [
+      "P9.8"
+    ],
+    "why": "Manual G-RELEASE: необратимые split/tag/assets и recovery; отдельный exact publication grant."
+  },
+  {
+    "batch": "solo",
+    "range": "P9.9",
+    "items": [
+      "P9.9"
+    ],
+    "why": "Локальный delivered-install/passport после manual publication; actual remote result появляется на другой authority boundary."
+  },
+  {
+    "batch": "B-P10-TARGETS",
+    "range": "P10.1-P10.3",
+    "items": [
+      "P10.1",
+      "P10.2",
+      "P10.3"
+    ],
+    "why": "Один released/profile/import context: verifier/intake → central/cloud receipts, independent ready subsets."
+  },
+  {
+    "batch": "B-P10-AP",
+    "range": "P10.4-P10.6",
+    "items": [
+      "P10.4",
+      "P10.5",
+      "P10.6"
+    ],
+    "why": "Один deployed target/census и fault receipt context: security → races/restore → FE; все исходные budgets и reviews обязательны."
+  },
+  {
+    "batch": "solo",
+    "range": "P10.7",
+    "items": [
+      "P10.7"
+    ],
+    "why": "Полный закрытый monthly census — отдельное календарное ожидание; нет busy polling или удержания остальных branches."
+  },
+  {
+    "batch": "B-P10-OPS-SEAL",
+    "range": "P10.8-P10.9",
+    "items": [
+      "P10.8",
+      "P10.9"
+    ],
+    "why": "Provider operation imports → effective seal на том же verifier; P10.8 не ждёт month, P10.9 ждёт все actual branches."
+  },
+  {
+    "batch": "B-P11-QUALIFY",
+    "range": "P11.1-P11.4",
+    "items": [
+      "P11.1",
+      "P11.2",
+      "P11.3",
+      "P11.4"
+    ],
+    "why": "Один source/vector/consumer/atom corpus: verifier → pins → tests → ledger; последовательный re-admission по готовности."
+  },
+  {
+    "batch": "solo",
+    "range": "P11.5",
+    "items": [
+      "P11.5"
+    ],
+    "why": "Новая finite foreign write surface и full независимый review exact three-file diff; не повышать light qualification batch до full ради packet."
+  },
+  {
+    "batch": "solo",
+    "range": "P11.6",
+    "items": [
+      "P11.6"
+    ],
+    "why": "Manual G-CONSUMER-RECONCILE: отдельная accepting/write authority, exclusivity и foreign commit."
+  },
+  {
+    "batch": "solo",
+    "range": "P11.7",
+    "items": [
+      "P11.7"
+    ],
+    "why": "Локальный final consumer seal после manual foreign commit; anchor становится доступен после отдельной write boundary."
+  }
+]

@@ -4,7 +4,9 @@ RAG:— This document freezes release assurance only. Runtime packages/interface
 
 ## Cohort identity and transformations
 
-`p9-cohort/1` has schema_version, cohort_id, frozen R/AC membership, package_source (repository/full commit), recipe (repository/full commit/tool hashes), package rows, upstream rows, profile cells and baseline rows. `cohort_id` is SHA256 of canonical UTF-8 JSON identity payload (sorted object keys, deterministic array order, no floats). No mutable journal/handoff/run URL is part of identity. Packages use a version vector, not an unproved identical version number. Every included package: name/path/source_commit/subtree_tree/composer_sha256/license/export-policy hash, transformed release file map with SHA256+Git mode, split repository/visibility/commit/tree/tag+tag-object, version and exact in-cohort requires, dist reference/endpoint/asset SHA256+Composer checksum, accepted P2 contract/schema/gate hashes. Upstreams have independent immutable refs/license/driver ABI; matching published providers reused without writes. Version choices are resolved from actual adopted P2+G-API/major decisions before P9.1 freeze; no invented concrete version or latest/dev substitute.
+`p9-cohort/1` is the immutable **intake intent**, not its future build result. It contains schema_version, cohort_id, frozen R/AC membership, package_source(repository/full commit), selected package/upstream version vector and exact in-cohort requires, accepted P2 contract/schema/gate hashes, profile-plan/baseline hashes, source subtree/composer/license hashes, approved export policy, exact metadata overlays and intended split repository/visibility/tag/channel. An overlay records path, base SHA256, exact replacement bytes and target SHA256; P9.1 can prepare these bytes without mutating a package. `cohort_id` is SHA256 of this canonical identity payload excluding cohort_id itself (sorted object keys, deterministic arrays, no floats). Candidate file SHA256 is separate from cohort_id.
+
+Future recipe commits, transformed file maps, local split commits/tag objects, ZIP bytes/hashes, run URLs and consumer locks are **derived attestations**, never members of the frozen intake identity. P9.2 produces build/export-map.json and build/build-attestation.json linked to candidate file SHA256/cohort_id; P9.3/4 reports bind their own actual tool/fixture recipe commits and locks; P9.7 publication packet binds all selected current attestations; P9.9 released-cohort.json joins actual publication/install results to that same intake. No child output is hashed into its parent. Upstreams keep independent immutable source/license/ABI receipts; matching published providers are reused without writes. Version choices are resolved from actual adopted P2+G-API/major decisions before P9.1, no invented concrete version/latest/dev substitute.
 
 Do not equate original subtree tree and transformed split tree: Composer metadata version/dependency pins, removal of local repositories and injection of root LICENSE are declared byte transformations. All other included blob bytes and relevant modes must match. A stable release tree → split root tree equality is proved independently. source.reference is the split commit for VCS metadata; a monorepo SHA that does not exist in the split repository is invalid. Dist bytes have independent references/digests, ZIP checksum never inferred from Git object hash. Filtered dev/test fixture recipe remains separately hash-qualified; source package bytes may stay fixed while P9 tools/workflows are committed later, but both source and recipe commits are explicitly captured and tested. Bookkeeping-only commits do not pretend to be product source. Any changed package/export/recipe/profile/baseline bytes invalidate affected evidence and packet; no self-hashing receipt input.
 
@@ -198,3 +200,25 @@ Each branch report `p9-cohort-receipts/1` has Cases (Case/R/AC/Expected/Actual e
 Each Evidence table Path resolves to retained JSON with schema_version=p9-evidence/1, proof_class=executed, id/cohort/cell/command/cwd/runtime/start/end/exit/result matching table cells; source_commit/recipe_commit/candidate_sha256/lock_sha256/config_sha256/fixture_sha256/log_path/log_sha256/cases are mandatory. log_path is a retained repository-relative plan evidence artifact whose bytes match log_sha256. cases names actual assertions, not document-generated outcomes; expected/actual/check commands and source/platform hashes in logs remain executor-verified. A expected refusal may have nonzero exit with PASS assertion; exit never conflated with case verdict. Source-only qualification records retain actual verification command and source/fixture hashes; unavailable execution cannot mint wrapper.
 
 Hosted evidence adds run_url/run_id/run_attempt/job_id/workflow_sha and Kind=hosted; private adds grant_sha256 and Kind=private; publication adds grant_sha256/operations and Kind=release; delivered install adds delivery_urls/download_sha256 and Kind=released-installed. Source/config fixture no-delta uses explicit hashed applicability document rather than empty sentinel. Candidate/environment identifiers bind whole supported cell set; full final package-row matrix/gate/source/version validation stays semantic owning acceptance, structural wrapper cannot prove real remote/provider behavior. No report or volatile journal/self hash in inputs.
+
+## Whole-plan acyclic identity rules — AWR-08
+
+- Intake→build→matrix/installed→hosted/private→packet→publication→released install is
+  the only hash direction. A report's `recipe_commit` identifies code actually executed
+  for that evidence record, including the existing intake verifier at P9.1; it is not
+  a promise of a future P9.3/4 helper commit. Candidate SHA remains the unchanged P9.1 file.
+- P9.2 applies only the exact intake-approved metadata overlays. Runtime src/config/DDL
+  remain byte-identical to the accepted producer trees. A changed desired overlay,
+  source/vector/profile/baseline/export intent returns P9.1 for a new explicit revision;
+  no downstream writer silently edits the sealed candidate or accepted producer receipt.
+- Build attestation includes source and overlay commit, actual recipe commit/tool hashes,
+  transformed path/SHA256/mode map, local split tree/commit/tag object, archive hashes and
+  candidate SHA. Different recipe code yielding identical approved output still requires
+  its own tests and attestation; changed recipe cannot borrow previous hosted evidence.
+- Composer repository `source.reference` is placed in external `public/packages.json`
+  after the split commit exists. Do not embed the split commit's own hash into a file
+  inside that commit, ZIP checksum into the ZIP, or grant/report hash into its own payload.
+- INTAKE-06 rejects future-output fields in intake; DIST-02/07 prove fixed candidate
+  remains byte-identical through build and reject mismatched overlays/maps. PACKET-01
+  and RELEASE-01 require actual selected build/recipe/publication joins. Counterexamples
+  are required in the owning exporter/packet tests, not claims of outputs made at design.
