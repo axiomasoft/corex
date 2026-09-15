@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: c6fd600fbf45b4e976681bdf91dd7e16f696a7b9c548b195ca7d14e3f92ab1bc
+inputs_sha256: 66caf2d362282d19332acbaddae5ab030541318936ddd5ad407e5a7efa7beffe
 generated_by: task plan-views status
 -->
 
@@ -40,7 +40,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
-| P1.2 | Разделить исходные AC на механизм, policy и владельцев | ⬜ Not started | — |
+| P1.2 | Разделить исходные AC на механизм, policy и владельцев | ⬜ Not started | 2026-09-15 |
 | P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | ⬜ Not started | — |
 | P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
 
@@ -207,6 +207,7 @@ generated_by: task plan-views status
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · — |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · inputs/sources PASS;100 IDs/52 R/365 parents;0 drift/elevated working claims. Anchors:findings/P1-source-reconciliation.md;artifacts/B-P1-QUALIFY. Runtime/release/live unclaimed.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · decision-pending · Required reads exceed frozen item cap; original lint reproduced RED. Owner threshold decision pending. No P1.2 start. See artifacts/B-P1-QUALIFY/read-budget-decision.md. |
 
 ## Owner Gates
 

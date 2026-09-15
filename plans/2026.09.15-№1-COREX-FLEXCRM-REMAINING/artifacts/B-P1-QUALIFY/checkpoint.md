@@ -1,3 +1,16 @@
-# B-P1-QUALIFY checkpoint
+# B-P1-QUALIFY checkpoint — owner contract decision pending
 
-Owner scope P1.1–P1.4; same root. P1.1 GREEN attempt1. Remaining P1.2 P1.3 P1.4. P1.1 full Required Reads and five-carrier context consumed. Sol/high route confirmed. 100 sources/52 R/365 parents; no drift; all working claims proposal; archives historical. Stable sources/design untouched. P1.2 bundle generated; admission next.
+Owner scope P1.1–P1.4 remains authorized in the same root; no execution beyond P1.4.
+P1.1 GREEN attempt1, commit7aa0fb0. P1.2–P1.4 Not started; P1.2 decision-pending is a non-execution observation, not a consumed attempt or terminal block.
+
+The active-phase native lint is RED: P1.2=174211, P1.3=143022, P1.4=125689 estimated mandatory tokens before missing map/ledger, versus frozen100000. P1.4 future outputs also need producer annotations in duplicate Required Reads. Changing the cap requires owner D-record and local versioned contract. Concrete250000 finite-group proposal is unapplied; owner answer is required before dependent writes. See read-budget-decision.md, exact RED log, machine measurement and repair reducer (design-required/nonterminal). No unasked audit or child launched.
+
+P1.1 inputs/sources validators PASS:100source IDs/52R/365parents, zero live drift. Full mandatory P1.1 reads consumed through immutable five-carrier snapshot, SHA af5fc7edebbe72a8d8364c9505732443f4b66220dd5e5ed5d8b59dcf138e9444. Sol/high provider-thread-state route confirmed, thread01a0a564-4072-7253-91a6-4fa41959a8e2. All working claims proposal, archives historical; current committed source scope only. No runtime/release/live acceptance claimed. Stable design/source bytes unchanged.
+
+P1.2 bundle generated after P1.1 closure, native ready-subset admission ALLOW before additional lint. Its immutable context snapshot exists at /tmp/corex-p12-context.pickle, SHA4dcb2e1cd67b07c64245196f12683f3b8da6422c5b9c06ce3fc412811f9a425b, but all five carriers still require chunk consumption/terminal proof before start. Supplement research/01b-acceptance-source-supplement.md fully read: preserve365historical parent labels/hashes and classify full B36 multiline criteria plus B34 AC-19 source-reference sequence, with separate span hash.
+
+Resume after owner answer: enact only approved finite contract choice with D19/version/machine measurements and preserved aggregate/per-read limits; repair future producer annotations; reconcile design-finish digests if stable contracts change; regenerate P1.2 bundle and admission, consume full snapshot, then sequentially implement/verify/close/commit P1.2,P1.3,P1.4. After every closure regenerate successor bundle/admission. Restore100000 before P2; do not execute P2. Every semantic subcondition/owner/threshold/G/DI/AP remains mandatory. Scripts validate-p1 stages criteria/evidence/seal plus task-check design/lint/downstream; use canonical native terminal/continuity/delivery reducers.
+
+Canonical Task root /home/vostrikov/projects/packages/swissknifeman/packages/task. PYTHONPATH monorepo root plus task/lib for command_render/plan_delivery. Initial P1.1 receipt set and source pins committed under artifacts/B-P1-QUALIFY. No foreign/runtime/API/DDL/dependency/test/publication writes.
+
+Tool limitation after typed waiting handoff: native delivery verify PASS, but native plan-lint compact Context parser accepts only continue-root/isolated-child-return/cold-start-root and rejects waiting-owner, while delivery requires compact Context equal typed waiting outcome. Preserved truthful waiting-owner and exact second RED log read-budget-waiting-lint.red.txt; no shared runtime edits or false GREEN. Read-budget P1.2 now174212 after nonterminal journal observation; original baseline174211 unchanged.

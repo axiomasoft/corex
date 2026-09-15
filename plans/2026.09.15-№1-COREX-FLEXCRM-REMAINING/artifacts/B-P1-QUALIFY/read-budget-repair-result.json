@@ -1,0 +1,7 @@
+{
+  "action": "design-required",
+  "terminal_allowed": false,
+  "reason_code": "NEW_MATERIAL_DECISION_SURFACE",
+  "repair_digest": "0688446afd82043057e98ec54f781d175d04c72093707566e3ac92c9e09b2152",
+  "post_validation_required": false
+}

@@ -5,21 +5,21 @@
     "package": "task",
     "version": "0.18.0"
   },
-  "commit_sha": "09c08684f29904b477402e128e4aa3461c2c31ef",
+  "commit_sha": "7aa0fb01930b51a74bcdef59435d85a5de2e6d9e",
   "continuity": {
     "evidence": [
       "batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
       "loaded-inputs:reusable",
       "cold-start-cost:0"
     ],
-    "outcome": "continue-root",
-    "reason": "context-telemetry-unavailable",
-    "runnable": true,
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "runnable": false,
     "schema_version": "session-continuity-decision/v1"
   },
   "digests": {
     "closure": null,
-    "handoff": "sha256:ae0edbad0b54bdd4f86ebe5f3e3cdc5da0ae5674675781bc3025f61955bfed7c",
+    "handoff": "sha256:c672c0a5e52bc2f19ef2f0bcc4d14aa9441f0c1167435be50ab9d570078bcdc6",
     "plan": "sha256:8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
     "state": "sha256:6a8479ce039df24940895defb3801f96e02b0fbe87b375779400a541035ffb4e"
   },
@@ -30,30 +30,30 @@
     "run_id": "69d165524c6f8a539f40896ed198b63614bbc3eee60a0dff048702de4ee0d389",
     "sha256": "sha256:b19ba230e4cd73e1c5dcd6b07ff865e58db938178849f1ebc17d320b8e009962"
   },
-  "next_exact": "exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4",
+  "next_exact": "waiting: owner read-budget decision → exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4",
   "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
   "rationale": {
-    "open_risks": "Source-owner bindings and all runtime/API/schema/release/live/consumer receipts remain owning obligations.",
-    "remaining": "P1.2–P1.4 in owner scope; other 74 items outside scope. Sequential ready admission; no future producer bytes."
+    "open_risks": "Active-phase lint exceeds frozen read-budget; owner contract decision required. P1.4 future-input producer annotations need reconciliation. Runtime/API/schema/release/live/consumer receipts remain owning obligations.",
+    "remaining": "P1.2–P1.4 remain authorized in this root; all three Not started. No work beyond P1.4."
   },
-  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B-P1-QUALIFY |\n| Model class | frontier |\n| Model | gpt-5.6-sol |\n| Effort | high |\n| Capabilities | — |\n| Context | continue-root |\n| Суть | AC qualification/equivalents/seal; authorized through P1.4 |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"continue-root\", \"reason\": \"context-telemetry-unavailable\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "recommendation": "**Next:** waiting: owner read-budget decision → exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B-P1-QUALIFY |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | waiting-owner |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
   "route": {
     "batch": "B-P1-QUALIFY",
     "command": null,
-    "context": "continue-root",
+    "context": "waiting-owner",
     "continuity": {
       "evidence": [
         "batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
         "loaded-inputs:reusable",
         "cold-start-cost:0"
       ],
-      "outcome": "continue-root",
-      "reason": "context-telemetry-unavailable",
-      "runnable": true,
+      "outcome": "waiting-owner",
+      "reason": "owner-wait",
+      "runnable": false,
       "schema_version": "session-continuity-decision/v1"
     },
     "model": "gpt-5.6-sol",
-    "thinking": null
+    "thinking": "high"
   },
   "schema_version": "terminal-delivery-receipt/v1",
   "status": "🟢 Done",
