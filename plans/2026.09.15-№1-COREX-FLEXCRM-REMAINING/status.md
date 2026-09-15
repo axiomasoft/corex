@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: bb7164e477764789be42d937ed1119813669ff5fbd680083d8004af3e2922d16
+inputs_sha256: c6fd600fbf45b4e976681bdf91dd7e16f696a7b9c548b195ca7d14e3f92ab1bc
 generated_by: task plan-views status
 -->
 
@@ -16,14 +16,14 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | ⬜ Not started |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-15 |
 
 ## 4. Phase Index & Status Board
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Freeze требований, provenance и владельцев | 0/4 | ⬜ Not started |
+| P1 | Freeze требований, provenance и владельцев | 1/4 | 🟡 In progress |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 0/4 | ⬜ Not started |
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P1.1 | Сверить источники, hashes и исходную provenance | ⬜ Not started | — |
+| P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
 | P1.2 | Разделить исходные AC на механизм, policy и владельцев | ⬜ Not started | — |
 | P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | ⬜ Not started | — |
 | P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
@@ -203,6 +203,10 @@ generated_by: task plan-views status
 | 2026-09-15 | plan-designer/gpt-5.6-sol | plan-design · no-op · note сокращена; полный текст: journal.jsonl:29 |
 | 2026-09-15 | owner-authorized-design-review | plan-design · no-op · note сокращена; полный текст: journal.jsonl:30 |
 | 2026-09-15 | owner-authorized-design-review | plan-design · no-op · note сокращена; полный текст: journal.jsonl:31 |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · inputs/sources PASS;100 IDs/52 R/365 parents;0 drift/elevated working claims. Anchors:findings/P1-source-reconciliation.md;artifacts/B-P1-QUALIFY. Runtime/release/live unclaimed.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
