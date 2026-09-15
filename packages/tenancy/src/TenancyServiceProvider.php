@@ -54,7 +54,9 @@ use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspaces\WorkspaceResolver;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Routing\Router;
@@ -381,6 +383,16 @@ final class TenancyServiceProvider extends ServiceProvider
         // package still pushes nothing onto the consumer's global stack
         // either way (D10) — the 'tenant' group below is opt-in per route.
         if (config('tenancy.host_identification.enabled')) {
+            // Идентифицируем account до auth: пользователь лежит в tenant БД.
+            $this->app->afterResolving(HttpKernel::class, static function (HttpKernel $kernel): void {
+                if (method_exists($kernel, 'addToMiddlewarePriorityBefore')) {
+                    $kernel->addToMiddlewarePriorityBefore(
+                        before: AuthenticatesRequests::class,
+                        middleware: ResolveTenantFromHost::class,
+                    );
+                }
+            });
+
             // Same projection reasoning as `bootstrapper_order`/`cache_prefix`
             // above — own top-level key wins over stancl's own
             // TenancyServiceProvider::register() regardless of provider order.

@@ -46,6 +46,9 @@ abstract class TestCase extends Orchestra
      */
     public static bool $oidcEnabled = false;
 
+    /** Физический host-profile включаем только в регрессии порядка middleware. */
+    public static bool $hostIdentificationEnabled = false;
+
     /**
      * @param  Application  $app
      * @return list<class-string>
@@ -107,6 +110,7 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
             'schema' => 'public',
         ]);
+        $app['config']->set('tenancy.host_identification.enabled', static::$hostIdentificationEnabled);
 
         if (! static::$oidcEnabled) {
             return;
