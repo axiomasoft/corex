@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "checks": [
+    {
+      "case": "approved-threshold",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "case": "future-scope",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "case": "unverified-weight",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "case": "missing-input",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "case": "oversized-read",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "case": "other-error",
+      "result": "PASS",
+      "exit_code": 1
+    }
+  ]
+}

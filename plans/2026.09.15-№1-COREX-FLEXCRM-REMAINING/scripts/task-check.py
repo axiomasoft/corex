@@ -99,6 +99,50 @@ def design_ready(plan: Path) -> None:
     print("Design gate PASS: 11 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned")
 
 
+def policy_lint(plan: Path, runtime: Path) -> int:
+    """Apply the explicit plan-owner severity policy through native lint's DI sink."""
+    sys.path.insert(0, str(runtime / "lib"))
+    sys.path.insert(0, str(runtime.parent.parent))
+    from task import plan_lint, plan_weight
+    policy = json.loads((plan / "research/09-read-budget-policy.json").read_text())
+    scope = {"P1.1", "P1.2", "P1.3", "P1.4"}
+    if (policy.get("schema_version") != "plan-read-budget-policy/v1"
+            or policy.get("version") != "1.0.0" or policy.get("mode") != "advisory"
+            or set(policy.get("scope", [])) != scope or policy.get("batch") != "B-P1-QUALIFY"
+            or policy.get("reference_item_tokens") != 100000
+            or policy.get("decision") != "decisions/D19-read-budget-advisory.md"
+            or hashlib.sha256((plan / policy["decision"]).read_bytes()).hexdigest() != policy.get("decision_sha256")):
+        raise ValueError("invalid or unbound owner read-budget policy")
+    measured = plan_weight.measure_plan(plan, plan_weight.Measurer())
+    records = {row["item_id"]: row for row in measured["items"]}
+    threshold = measured["totals"]["admission"]["contract"]["item_tokens"]
+    if threshold != policy["reference_item_tokens"]:
+        raise ValueError("native read-budget contract drift")
+
+    class OwnerDiagnostics(plan_lint.Diagnostics):
+        def error(self, path, line, msg):
+            match = re.fullmatch(r"read-budget-v1: пункт (P\d+\.\d+): вес (\d+) > порога (\d+) оценочных токенов \(.+\)", msg)
+            row = records.get(match[1]) if match else None
+            if (match and match[1] in scope and Path(path).resolve() == (plan / "plan.md").resolve()
+                    and line is None and row and row.get("admission_state") == "ready"
+                    and row.get("d2a_pass") is False and int(match[2]) == row["weight_tokens"]
+                    and int(match[3]) == threshold):
+                self.warning(path, line, msg + " [owner advisory D19; completeness required]")
+            else:
+                super().error(path, line, msg)
+
+    diagnostics = OwnerDiagnostics()
+    plan_lint.lint_plan(plan, diagnostics)
+    for message in diagnostics.errors:
+        print("ERROR: " + message)
+    for message in diagnostics.warnings:
+        print("WARNING: " + message)
+    print(json.dumps({"policy": policy, "native_totals": measured["totals"],
+                      "result": "PASS" if diagnostics.ok else "FAIL",
+                      "errors": len(diagnostics.errors), "warnings": len(diagnostics.warnings)}, ensure_ascii=False))
+    return 0 if diagnostics.ok else 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", choices=("lint", "downstream", "design"), required=True)
@@ -116,7 +160,7 @@ def main() -> int:
         command = [sys.executable, str(script)]
         command += [str(plan)] if args.check == "lint" else ["--plan-dir", str(plan), "--item", "P1.4"]
         print(json.dumps({"command": command, "cwd": str(Path.cwd())}), flush=True)
-        return subprocess.run(command, check=False).returncode
+        return policy_lint(plan, roots[0]) if args.check == "lint" else subprocess.run(command, check=False).returncode
     except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as exc:
         print(f"Task runtime check FAIL: {exc}", file=sys.stderr)
         return 1

@@ -1,0 +1,27 @@
+{
+  "verdict": "ALLOW",
+  "batch": {
+    "batch_id": "B-P1-QUALIFY",
+    "items": [
+      "P1.1",
+      "P1.2",
+      "P1.3",
+      "P1.4"
+    ],
+    "route": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "exec": "plan-exec",
+    "review": "light",
+    "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "spec_digest": "0e56a6086fb4ff3ccbdf57239dc40131125450a4bc791101820a4fc8271fe2b6",
+    "recommended": true
+  },
+  "requested": [
+    "P1.2"
+  ],
+  "canonical": [
+    "P1.2"
+  ]
+}

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: 66caf2d362282d19332acbaddae5ab030541318936ddd5ad407e5a7efa7beffe
+inputs_sha256: d903ea6b36f626742ee631354f3a99e482697aa45550e2b852f7f47d4a72672c
 generated_by: task plan-views status
 -->
 

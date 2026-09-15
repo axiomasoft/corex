@@ -1,0 +1,15 @@
+{
+  "schema_version": "plan-read-budget-policy/v1",
+  "version": "1.0.0",
+  "mode": "advisory",
+  "scope": [
+    "P1.1",
+    "P1.2",
+    "P1.3",
+    "P1.4"
+  ],
+  "batch": "B-P1-QUALIFY",
+  "reference_item_tokens": 100000,
+  "decision": "decisions/D19-read-budget-advisory.md",
+  "decision_sha256": "2468dd354eafd9e71b2f786f98f3dfa8be12ada031323e6050b3f587ede89377"
+}
