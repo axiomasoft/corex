@@ -1,0 +1,52 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "continuity": {
+    "evidence": [
+      "batch:dd2f07e5755edd4ef24a488d3093db7fa9ce918e87e4713525a92b223b0d84c6",
+      "loaded-inputs:reusable",
+      "cold-start-cost:124784",
+      "checkpoint:artifacts/P7-design/validation.md"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:ba3efd5dbc51581b25fb728cdbbb4d9a68681ed157516c2c041d5011cc451ee3",
+    "plan": "sha256:cec7611201a67e0f8b772e51a734f0536e7392bf62da9405a7770cf5d10b93b4",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P8",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "rationale": {
+    "open_risks": "Source engine seek/internal traversal/corpus cannot be invented or completed by NO-GO; generated gap versus explicit start/count/exceptions/tzdb civil identity; immutable revision cutover/contiguous cursor/task+trigger transaction/stale epoch. Existing primitiveTask statuses/API not full FSM/roles. Request/job locale/cache cross-account reset. Exact rates/publication corrections/source date/explicit financial rounding and float-only ICU display parity fallback. Dataset source/license/coverage/hierarchy/source IDs/CASpointer/pinned cursor/timezone uncertainty; old refs never automatically remapped/deleted. Optional suggestions admitted minimalPII/timeout/distinct unavailable, search current policy/dirty-lane/PG skipsMeili-only metadata and no backward P6edge. P8actual typed catalogue/current invoke authority/read metadata not grant; P9cold new packages/full CI/release matrix scans; P10original vendor/perf/clone/backoff/fleet/outcomes and P11same immutable consumerR. Full45mixed B27/B29/B35parents and B13/R17qualifications preserved, product/ops/finance ownership separate.",
+    "remaining": "P8–P11/detail/RAG and complete semantic integrated pre-mortem/hash-current design-finish BEFORE any execution, including P1.1. Actual source/equivalent/ABI/upstream/dataset license/runtime/driver/public-schema-pins/PG/installed/protected approval receipts future prerequisites, exact P5local/P6/P4 producer contributions only selected branches. P9full hosted/released cohort/P10actual vendor/central/cloud/load/perf/P11immutable consumer acceptance still required."
+  },
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P8\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Детализировать P8: introspection и tool integration |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P8'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:dd2f07e5755edd4ef24a488d3093db7fa9ce918e87e4713525a92b223b0d84c6\", \"loaded-inputs:reusable\", \"cold-start-cost:124784\", \"checkpoint:artifacts/P7-design/validation.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "continuity": {
+      "evidence": [
+        "batch:dd2f07e5755edd4ef24a488d3093db7fa9ce918e87e4713525a92b223b0d84c6",
+        "loaded-inputs:reusable",
+        "cold-start-cost:124784",
+        "checkpoint:artifacts/P7-design/validation.md"
+      ],
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "gpt-5.6-sol",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

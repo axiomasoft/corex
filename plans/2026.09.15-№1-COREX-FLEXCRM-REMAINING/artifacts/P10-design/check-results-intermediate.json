@@ -1,0 +1,189 @@
+[
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "state",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--all"
+    ],
+    "exit": 0,
+    "stdout": "views: собраны (72)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "decisions",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ERROR: /home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D15-effective-acceptance.md: тело обязано нести ## Решение и ## Почему\n"
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING"
+    ],
+    "exit": 0,
+    "stdout": "views: собраны (1)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--item",
+      "P1.1"
+    ],
+    "exit": 0,
+    "stdout": "views: собраны (1)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p10.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"di\": 34, \"ap\": 13, \"subconditions\": 169, \"case_contracts\": 59, \"original_parents\": 31, \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING"
+    ],
+    "exit": 0,
+    "stdout": "plan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "state",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--all"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (72)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "decisions",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ERROR: /home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D15-effective-acceptance.md: тело обязано нести ## Решение и ## Почему\n"
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--item",
+      "P1.1"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-downstream.py",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--item",
+      "P10.9",
+      "--json"
+    ],
+    "exit": 0,
+    "stdout": "{\"blocks\": false, \"consumers\": [], \"gate\": \"downstream-gate-v1\", \"outcome\": \"unknown\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\", \"producer_item\": \"P10.9\", \"version\": \"1.0.0\"}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "design"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Task runtime check FAIL: DESIGN_PENDING: P11 remains a skeleton\n"
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-delivery.py",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--subject",
+      "P10",
+      "--kind",
+      "handoff",
+      "--output",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/P10-design/handoff-receipt.json"
+    ],
+    "exit": 0,
+    "stdout": "{\"adapter_attestation\": null, \"commit_sha\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\", \"continuity\": {\"evidence\": [\"batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9\", \"loaded-inputs:reusable\", \"cold-start-cost:96899\", \"checkpoint:artifacts/P10-design/validation.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}, \"digests\": {\"closure\": null, \"handoff\": \"sha256:8bcfcef3bca7e0bb7d89ad6fc0679edc99b41c06c48a49b018616c2d9221b242\", \"plan\": \"sha256:cd2b063b2bd3951bb7fbaa7c84bc1638da3a016e9f6fff743a6587ea2f3027ca\", \"state\": null}, \"journal\": null, \"next_exact\": \"design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11\", \"plan_id\": \"2026.09.15-№1-COREX-FLEXCRM-REMAINING\", \"rationale\": {\"open_risks\": \"Actual external source/profile/endpoint/registration/operator/PKI/clock/store/witness/everyentry/pair/window/RUvendor/IAM/restore/fleet acceptance inputs independent owner receipts; no assumption from web/localfixtures. Guard/finalUPDATE/cookie/retiredpooledTLS omitted, witness restoredinrollbackset, denyascleanup, sampled/warm/averaged/monthopen/missingcommits/unknowncensus latency, fakeprovider or filelessrestore/200DBextrapolation. Rawassertion/provenance/source-to-env semantic truth owning executor verifies; local structural wrapper alone insufficient. Current actual external/consumer grants not minted by design.\", \"remaining\": \"P11 detail/RAG and integrated semantic pre-mortem/hash-current full11phase finish before everyitem includingP1.1. Actual adopted sources/upstream/P9released/central-cloud-everyedge-entry/independentwitness/FE/currentclosedmonth/fullselectedproviderops/gates remain future. P11 same immutable released/effective consumer pins/R-AC receipts/G-CONSUMER in own scope, no FLEX-2milestone aggregate closure.\"}, \"recommendation\": \"**Next:** design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11\\n\\n| Параметр | Значение |\\n|:--|:--|\\n| Batch | n/a |\\n| Model class | frontier |\\n| Model | gpt-5.6-sol |\\n| Thinking | high |\\n| Capabilities | shell/FS, Perplexity, primary-source verification |\\n| Context | cold-start-root: design-root-terminal |\\n| Суть | Детализировать P11: same released/effective cohort→consumer locks/R-AC acceptance→owning app handoff |\\n\\n**Native Codex command:**\\n\\n```bash\\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort=\\\"high\\\"' -a never -s danger-full-access '$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11'\\n```\\n\\n```session-continuity-decision/v1\\n{\\\"evidence\\\": [\\\"batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9\\\", \\\"loaded-inputs:reusable\\\", \\\"cold-start-cost:96899\\\", \\\"checkpoint:artifacts/P10-design/validation.md\\\"], \\\"outcome\\\": \\\"cold-start-root\\\", \\\"reason\\\": \\\"design-root-terminal\\\", \\\"runnable\\\": true, \\\"schema_version\\\": \\\"session-continuity-decision/v1\\\"}\\n```\", \"route\": {\"batch\": \"n/a\", \"command\": null, \"context\": \"cold-start-root: design-root-terminal\", \"continuity\": {\"evidence\": [\"batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9\", \"loaded-inputs:reusable\", \"cold-start-cost:96899\", \"checkpoint:artifacts/P10-design/validation.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}, \"model\": \"gpt-5.6-sol\", \"thinking\": \"high\"}, \"schema_version\": \"handoff-recommendation-receipt/v1\", \"status\": \"handoff-persisted\", \"subject\": \"P10\"}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-delivery.py",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--subject",
+      "P10",
+      "--kind",
+      "terminal",
+      "--verify",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/P10-design/handoff-receipt.json",
+      "--render-final"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ERROR: STALE_TERMINAL_RECEIPT: terminal delivery receipt is required\n"
+  }
+]

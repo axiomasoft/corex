@@ -1,0 +1,50 @@
+[
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p5.py --stage design",
+    "chunk_id": "fbcf5f",
+    "wall_time_seconds": 0.000001501,
+    "exit_code": 0,
+    "original_token_count": 51,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage inputs",
+    "chunk_id": "339626",
+    "wall_time_seconds": 0.000001726,
+    "exit_code": 0,
+    "original_token_count": 37,
+    "output": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n"
+  },
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py --stage design",
+    "chunk_id": "41077a",
+    "wall_time_seconds": 0.000003186,
+    "exit_code": 0,
+    "original_token_count": 36,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p3.py --stage design",
+    "chunk_id": "2fdd83",
+    "wall_time_seconds": 0.000001441,
+    "exit_code": 0,
+    "original_token_count": 45,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p4.py --stage design",
+    "chunk_id": "3e7f9b",
+    "wall_time_seconds": 0.000002078,
+    "exit_code": 0,
+    "original_token_count": 54,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "command": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py --check design",
+    "chunk_id": "9295c5",
+    "wall_time_seconds": 0.000001996,
+    "exit_code": 1,
+    "original_token_count": 16,
+    "output": "Task runtime check FAIL: DESIGN_PENDING: P6 remains a skeleton\n"
+  }
+]

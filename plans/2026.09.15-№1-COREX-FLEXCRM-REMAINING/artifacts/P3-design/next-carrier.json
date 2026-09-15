@@ -1,0 +1,24 @@
+{
+  "kind": "design-phase",
+  "command_id": "task:plan-design",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "arguments": [
+    "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+    "P4"
+  ],
+  "context_kind": "cold-start-root",
+  "item_ids": [],
+  "cold_start_scope": [],
+  "continuity": {
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "evidence": [
+      "batch:6d453ff62bce5a30f5731fcbc2eb31e0ddcb16adaa3706a7db16ce0f1298cff0",
+      "loaded-inputs:reusable",
+      "cold-start-cost:69269",
+      "checkpoint:artifacts/P3-design/validation.md + decisions/D8.md + research/P3-adapter-design.md + research/P3-design-rag.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  }
+}

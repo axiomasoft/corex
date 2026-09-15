@@ -1,0 +1,1 @@
+PHP NumberFormatter formatCurrency float precision with Brick Money exact arithmetic and explicit rounding; ICU Locale canonicalize versus BCP47 lookup fallback. Explain supported API limitations and robust alternatives in 600 words, cite official PHP Unicode Brick Money IETF documentation.

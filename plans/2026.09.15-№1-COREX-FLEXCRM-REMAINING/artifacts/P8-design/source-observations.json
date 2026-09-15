@@ -1,0 +1,112 @@
+[
+  {
+    "path": "packages/modules/src/Contracts/ModuleRegistry.php",
+    "sha256": "8c959b24f2f2b01b1457ccfb85948f70ab0aa8ad5490b87491571053421189a8",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Contracts/EntityRegistry.php",
+    "sha256": "21fd375349bdedc1b11bb6cd7e09d6f36812fcfc5a74fc26480ee770bf2cac78",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Contracts/ModuleActivationGate.php",
+    "sha256": "d717ee0cd2f1775c3b341a3cfa715173e623e462fbb87ca98a5e835625cbf6bb",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Contracts/ModuleStateReader.php",
+    "sha256": "a767a16e8b09bc111f07da8e849b73ef5630b0676fa3c7a98031c7bd7145c93c",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Manifest.php",
+    "sha256": "37c05a707d85b3341ab7472206dad7d1a48bfd71978adc0bf5caf82c8dc2aac2",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Extend/Api.php",
+    "sha256": "1dbaece6ae633ce60e67f812e29ed3f6d5428ec28e026c186e2ca7ba3f335da1",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+    "sha256": "cb1e8e565989ddee7d935e2ce1a95734e14244ef447a4b081b4b6fae7b9af477",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+    "sha256": "133b771fe5196f1d7bd33d9c73f22affd72ac5408645d5597eee27df7f3350e2",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Compiler/ApiOperationValidator.php",
+    "sha256": "35d3661119b95a6d10317aff0c8b74a0175f11598dab8cb9d8961cbb1f992bc8",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+    "sha256": "1b912de73cbaf52f0476884f16bfe029055bf69dd226567fb34b75a3b6829f7e",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/modules/src/ModulesServiceProvider.php",
+    "sha256": "91ae0214228e99292bc666382987ffecdcbb27d30f4835880f78ba4a7b8b2561",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/README.md",
+    "sha256": "94aa3c05c10c34820bbec95608c3d06889eb33bc3f539fb439188e9bf833752f",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/composer.json",
+    "sha256": "723b34de0c36402a4e16febd6ab24f06762565841eaef12ac51792832bad1148",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Dispatcher.php",
+    "sha256": "bb8f2b437a803476f369a449e1e47ece9e04eaeb4f685db4a38b38abded4fdfb",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Operation.php",
+    "sha256": "af4cd2bed5c75f9dbdf3d2905408131bfc45565d7ff2c3918e67caf297b77b4c",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/OperationRegistry.php",
+    "sha256": "2fb23a8380e9da942d78bc2280248005ecf7bc342e47206601b8273e5c0869d0",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/ApiServiceProvider.php",
+    "sha256": "e4ccb9efbd4bcefd8edeb03d84410ab92bcd0048d6f1aadd95ff7893b3adb73a",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Contracts/OperationHandler.php",
+    "sha256": "9be3a7d6d825079e3782cf3145c152db5ab4511e9e366214361e6ffb6ab25794",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Contracts/RequestContext.php",
+    "sha256": "d35255df68bccdeaa6cd2a61217ca46fdded70e8945ed1e783aeb7cdd618d1f7",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Contracts/RequestContextProvider.php",
+    "sha256": "544e3f49254cccebbe9600b94cdbbea02fa7536e2b79b4f4db38af3861d6d902",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "packages/api/src/Internal/CurrentRequestContext.php",
+    "sha256": "059d3afee5819e4e1e90ca8fdaa3729fc4def1e2e230bb979cbb075e97e62229",
+    "kind": "source-inspection; tests-not-executed"
+  },
+  {
+    "path": "tests/Arch/LayerTest.php",
+    "sha256": "c43e53584bf24c0e1b22630448e3cc3365bf9c50d42f4be593c66bc41da3f619",
+    "kind": "source-inspection; tests-not-executed"
+  }
+]

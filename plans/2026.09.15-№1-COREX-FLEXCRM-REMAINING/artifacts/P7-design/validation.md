@@ -1,0 +1,17 @@
+# P7 design validation — PLAN1
+
+**Design result:** detailed and mandatory neutral RAG verified; actual phase/runtime GREEN not claimed.
+
+Nine ordered11stable-field execution specs/fiveR/70future local cases,45mixed original parent criteria owner-mapped. Frozen source/equivalence qualification, pure RFC recurrence/civil identity/upstream internal budgets, minimal task planning versus acceptedTask policy, same-DB materialization/cursor/wakeup/optional signal capture, request locale/no root, exact dated immutable rate corrections and safe display fallback, licensed offline reference snapshot/CAS/pinned cursor and optional metadata/address drivers. New ports/schema/pins/protected adoption still actual P2/Gowners, source/driver conformance executor-owned.
+
+P1inputs100sources/52R/365parent criteria/P2–P7design checksPASS. Seven isolated negative casesPASS (missing observable case, emptyFiles, stale digest, failed retrieval, internal query, invented predecessor and missing actual seal), disposable plan copy removed. Current named lint/generated state/decisions/status/bundle and downstream results check-results.json. Downstream extracts first command only; P7 branch/seal checker first in each spec, absent/uncommitted future receipts unknown, neither raw downstream status nor checker proves actual conformance.
+
+Mandatory Perplexity4successful neutral separate geo/recurrence/locale-money/optional-provider replies retained with rawJSONSHAanchors and direct independent primary origins. Incomplete/structure-error answers immediately owner-notified, not accepted as coverage. Reject explicit-vs-generated DST gap conflation/full HTTPheader Locale.lookup/unproven final display float precision/mocked real-provider acceptance/geo locality universal postal validation. Source publication/license/runtime versions are future qualification, current doc not installed proof.
+
+Integration graph P1/P2→P7independent branches; P5local→P7.4only/optional qualifiedFSM, P6/P4→P7.8optional, all8reports→P7.9install5Rseal→P8/P9/P10/P11. No engine/scheduler/registry clone/Task public policy/ID rewrite or runtime reverseP6 edge. P7 stable candidate included full-finish hash inputs. Root80target85/stricter package floors, D34SQLite+PG/D98src/packageCI/anti-vacuum source scans remain binding execution gates. Existing generic utility no private/root/Meili/sdk/credential boot requirement. Original B13/B27/B29/B35product/ops finance/roles/booking/vendor200k/template3s/CBRsync/backoff/retention/RTL criteria retained external owners; qualificationNO-GO not completed R.
+
+100 source inventory hashes match,87snapshots/13committed original pointers; no original source mutation. All product items Not started, full admission expected DESIGN_PENDINGP8skeleton; no design-finish artifact manufactured. Owner scope P7design complete; typed exactNext P8frontier/high at design-root-terminal boundary, no successor execution/agent/commit/push/publication/foreign/Brain/API/DDL/dependency/source/private/live/audit changes. Existing owner untracked plan/ACTIVE retained.
+
+write-site: pre_mutation: allow · pre_final: allow
+
+pre_mutation exact provider turn-context Sol/high and owner P7design invocation captured before append-only route-bound design journal; pre_final same route recaptured and actual design/RAG/structure/source/negative/delivery evidence. These codes cover plan-only authoring, no protected adoption/release grant.

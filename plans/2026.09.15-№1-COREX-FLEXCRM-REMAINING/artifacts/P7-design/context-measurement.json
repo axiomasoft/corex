@@ -1,0 +1,14 @@
+{
+  "context_telemetry": "unavailable",
+  "attested": false,
+  "cold_start_cost_unit": "UTF-8 input bytes proxy, not measured tokens",
+  "cold_start_cost": 124784,
+  "remaining_input_anchor_digest": "dd2f07e5755edd4ef24a488d3093db7fa9ce918e87e4713525a92b223b0d84c6",
+  "capabilities_observed": [
+    "exec_command",
+    "apply_patch",
+    "perplexity_web.search",
+    "web.run"
+  ],
+  "boundary": "completed explicit P7 design, DESIGN-ROOT-TERMINAL; no successor authorized or executed"
+}

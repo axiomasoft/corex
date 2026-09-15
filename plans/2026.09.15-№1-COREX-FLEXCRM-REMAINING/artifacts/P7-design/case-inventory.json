@@ -1,0 +1,112 @@
+{
+  "ENG7": {
+    "report": "findings/P7-source-qualification.md",
+    "cases": {
+      "ENG7-01": "Qualify immutable recurrence source/license/ref/hash/ABI and actual upstream isolated install/suite, all required RFC cases; missing mandatory capability not completed R20.",
+      "ENG7-02": "Qualify existing Task commands/access/model/schema equivalents against sealed P1/P2; exact old signatures/DTO/status/schema retained and each real gap mapped.",
+      "ENG7-03": "Qualify current Brick Money/currency metadata and PHP/ICU/tzdb/SQLite/PG16 compatibility; no new unpinned dependency assumed.",
+      "ENG7-04": "Qualify two interchangeable reference providers with exact dataset scope/license/attribution/raw+normalized hashes; missing licensed source blocks dataset subset only.",
+      "ENG7-05": "Base core-only, recurrence-only and intl-only boot with no tasks/workflow/tenancy/private/Redis/remote credentials; optional search/address integrations do not instantiate absent drivers."
+    }
+  },
+  "REC": {
+    "report": "findings/P7-recurrence.md",
+    "cases": {
+      "REC-01": "Monthly January31 COUNT4 produces Jan31/Mar31/May31/Jul31; invalid dates not rolled over or counted; leap-year Feb29 exact.",
+      "REC-02": "America/New_York weekly09:00 through spring/fall transitions retains wall time, UTC offsets change; Europe/Moscow baseline tested separately and never used as DST-transition proof.",
+      "REC-03": "Generated NewYork02:30 spring gap ignored and not counted; explicit DTSTART gap uses RFC pre-transition offset, identity stays nominal; PHP normalization cannot erase distinction.",
+      "REC-04": "NewYork autumn01:30 fold resolves first occurrence exactly once, nominal identity+TZID retained; no second-fold duplicate.",
+      "REC-05": "COUNT plus EXDATE reduces visible set without replacement; DTSTART excluded still retained master; RRULE/RDATE duplicates union once; EXDATE separate property.",
+      "REC-06": "UNTIL inclusive and correct DATE/UTC type, COUNT+UNTIL reject; incompatible TZID/value type, invalid DTSTART-pattern and unsupported BYSECOND60/VTIMEZONE/RANGE deny explicitly.",
+      "REC-07": "DATE all-day expansion uses DateWindow/calendar dates without midnight conversion; floating time rejected in this bounded profile unless explicit zone supplied.",
+      "REC-08": "Half-open InstantWindow, adjacent pages/windows and overlaps yield same occurrence key; moved override uses original recurrence key and changed effective instant, cancelled override absent.",
+      "REC-09": "Ancient DTSTART/dense SECONDLY/rare BY combinations stop within candidate/time/memory limits even before first emitted result; budgetExceeded is not exhausted or horizon-complete.",
+      "REC-10": "Cursor source/rule/set/override/zone version hash mismatch rejects; supported upstream seek/resume or bounded replay actual proven, no reimplemented RRULE algorithm or serialized arbitrary object.",
+      "REC-11": "Pinned old tzdb unavailable fails unsupportedEnvironment; current tzdb changed output cannot silently rewrite committed instances or dedup by UTC.",
+      "REC-12": "Two actual neutral consumers equipment-maintenance and community timetable share pure conformance, no task/calendar/model/database imports."
+    }
+  },
+  "PRIM": {
+    "report": "findings/P7-task-primitives.md",
+    "cases": {
+      "PRIM-01": "Existing Create/Update/Complete/Move commands run unchanged through existing access/module/context guard; unauthorized/disabled denies, committed signatures and DTOs identical.",
+      "PRIM-02": "New planning createProject/createSprint enforce trusted physical context/workspace/current policy; same ID in another account denied and no connection selected by payload.",
+      "PRIM-03": "Project/sprint parent and date ordering checked before writes; same request key/hash returns same refs, changed payload conflicts, no duplicate events.",
+      "PRIM-04": "RecordTime command explicit positive integer minutes/date/source on authorized task; request dedup, target+time row+spent_minutes+outbox same transaction, crash rollback all.",
+      "PRIM-05": "Concurrent time-log requests different keys serialize task total correctly; repeated key increments once; deadlock retries whole transaction bounded.",
+      "PRIM-06": "Existing completion/status policy preserved; no new acceptance roles/review status/StateMachine ownership, no direct workflow policy inferred from model enum.",
+      "PRIM-07": "Null/boxed context supported exactly as actual existing schema/profile; user/workspace/author validation does not weaken existing ID or access rules.",
+      "PRIM-08": "Neutral maintenance project/sprint/time-log and target entity installed fixture; existing Task/Project/Sprint/TimeLog schema equivalent kept, no redundant table/migration."
+    }
+  },
+  "MAT": {
+    "report": "findings/P7-task-recurrence.md",
+    "cases": {
+      "MAT-01": "Same rule immutable revision/original occurrence key twice or concurrent sessions creates one task and links one receipt, unique SQL final authority.",
+      "MAT-02": "Crash after occurrence insert/before task or cursor commit rolls back task+occurrence+cursor+durable trigger atomically; replay same key returns exact stored result.",
+      "MAT-03": "Partial expansion/budget stop commits only completely persisted contiguous prefix, never full30day horizon; invalid/cancelled candidates count traversal but no holes.",
+      "MAT-04": "Disable/revision edit serializes rule row→occurrence→task against materialize; retired generation cannot add after retirement commit; already committed tasks retained with consumer cancellation owner.",
+      "MAT-05": "Moved override retains original key and effective time; immutable revision edit cutover retires old future projection explicitly, no automatic duplicate replacement task or deletion of completed task.",
+      "MAT-06": "P5.2 local_sweep wakeup/1 actual exact bridge creates durable local trigger and same-DB materialization; no second scheduler, no network effects under SQL lock.",
+      "MAT-07": "Optional P5.4 qualified FSM/signal binding task completion capture in same task SQL transaction before afterCommit; signal-before-wait recovered by engine contract, no acceptance-role implementation.",
+      "MAT-08": "Cross-account reuse/restoreEpoch stale worker denies, current policy checked after lock before each task write; cancelled task remains historic and outbox dedup keyed immutable operation.",
+      "MAT-09": "Boxed queue=sync/root absent real recurrence/task flow plus claim retry and changed credentials policy; afterCommit-only/fake engine does not pass durability or FSM conformance."
+    }
+  },
+  "LOC": {
+    "report": "findings/P7-locale.md",
+    "cases": {
+      "LOC-01": "Supported allowlist nonempty/deterministic and bounded BCP47 validation; ICU canonicalize not validity/data-support proof; invalid/overlong tags explicit invalidLocale.",
+      "LOC-02": "User-projected preference→local Settings account default→app locale→explicit fallback; supported parent negotiation explicit and reports requested/used/origin/fallback.",
+      "LOC-03": "Two sequential requests/jobs accounts/users A/B in one long-lived process no locale/timezone/static Translator leakage; restoration after exception verified.",
+      "LOC-04": "Warm path root/central/remote calls0; Settings scope/version invalidation per account; no stale cross-account memo or identity-writer mutation.",
+      "LOC-05": "Translation exact/parent/configured fallback order dedup; missing/null falls through, empty string is value, escaped content not translated/unescaped by utility.",
+      "LOC-06": "Only module-declared localized fields and UI resource paths allowed; field/schema hash drift denies, no arbitrary filesystem path/key or fixed ru/en SQL columns.",
+      "LOC-07": "Existing Settings/Audit/file Translator and consumer JSONB storage reused; no new translations table or user contact/name automatic localization.",
+      "LOC-08": "ICU absent plain supported locale+translation behavior still boots; formatting capability unavailable/fallback explicit, no environment locale guessing.",
+      "LOC-09": "Actual generic user-facing library labels and localized reference metadata from two providers, deterministic fallback under actual recorded PHP/ICU versions."
+    }
+  },
+  "FX": {
+    "report": "findings/P7-money-rates.md",
+    "cases": {
+      "FX-01": "Currency exponent from pinned metadata USD2/JPY0/KWD3/CLF4, unknown code denies; MoneyCast unchanged, integer storage overflow rejected not truncated.",
+      "FX-02": "Base→quote unit orientation amountBase×rate=amountQuote; rates exact decimal strings positive bounded digits/no float/NaN/Inf, rational inverse only explicit no triangulation default.",
+      "FX-03": "Immutable RateSnapshot source/publicationRevision/effectiveOn/observedAt/sha; same publication key/hash idempotent, changed payload conflicts and source correction new immutable revision.",
+      "FX-04": "Concurrent rate import duplicates one row; whole batch validate then SQL transaction, receipt/current pointer atomic; failed import retains old snapshot.",
+      "FX-05": "Weekend/date-specific missing versus stale explicit lookup result, maxAge selection supplied by consumer; no nearest future rate, stale not success without explicit admission.",
+      "FX-06": "Conversion snapshot base/quote match and explicit RoundingMode/context; no intermediate float rounding; repeating immutable input yields same result/receipt.",
+      "FX-07": "Same currency exact identity rate1 needs no provider/SQL/network and preserves amount/currency; does not enable product multicurrency feature/backfill.",
+      "FX-08": "Negative/zero/large signed amounts exact Money conversion and explicit target exponent; SQL/integer representability checked, arbitrary Money magnitude not MoneyCast capacity proof.",
+      "FX-09": "Presentation exact ISO-code+decimal fallback for all magnitudes; optional float-only ICU path used only with proven minor-unit render parity actual ICU corpus; digit corruption/failure falls back observably.",
+      "FX-10": "Old rate snapshot remains reproducible after corrected rates/provider swap; dataset refresh not financial finalization/revaluation/retention policy; optional live sync not implied by manual installed flow."
+    }
+  },
+  "GEO": {
+    "report": "findings/P7-geography.md",
+    "cases": {
+      "GEO-01": "Two actual provider implementations same scoped country/subdivision/place/timezone queries with provider+source keys; equivalent coverage documented not invented ISO subdivision mapping.",
+      "GEO-02": "Raw URI/retrieval/source provenance/hash, normalized manifest/importer/version/counts/license/attribution/coverage actual; checksum alone not origin/completeness proof.",
+      "GEO-03": "Malformed bounded file/invalid zone/duplicate source identity/broken parent cross-snapshot ref rejects staging and leaves active snapshot unchanged.",
+      "GEO-04": "Immutable staging→validated snapshot→CAS active pointer same SQL transaction; crash/concurrent publish one expected generation wins, committed readers never partial.",
+      "GEO-05": "Pinned keyset cursor snapshot/filter/locale/sort/hash; replacement publication cannot mix page generations, missing retired snapshot explicit snapshotExpired.",
+      "GEO-06": "Name/alias normalization locale aware bounded UTF8 query≤200chars/page≤100, parameterized predicates/allowlisted structure; same names ambiguous not merged by name.",
+      "GEO-07": "Countries with multiple zones/missing city-zone mapping never single guessed timezone; canonical IANA ID+actual tzdb version, offset calculated for supplied instant.",
+      "GEO-08": "Country→region→city query EXPLAIN BUFFERS on declared realistic source corpus and ≥30samples, local p95 each≤50ms/autocomplete≤100ms/no unexpected SeqScan; population/hardware/result raw, full vendor200k/clone budget P10 retained.",
+      "GEO-09": "Account-scoped read-only lookup no public importer/write capability; dataset retirement never deletes consumer references or silently maps retired IDs.",
+      "GEO-10": "Boxed SQLite supported indexed prefix capabilities explicit; PG16 trigram needs approved extension, absent rejects fuzzy while exact/prefix still work; no PG/Meili rank parity promise."
+    }
+  },
+  "OPT": {
+    "report": "findings/P7-optional-bridges.md",
+    "cases": {
+      "OPT-01": "Absent search/address provider/source/secrets base boot/query stays offline; integrations enabled only after actual accepted producer/capability/profile.",
+      "OPT-02": "Localized field search optional P6.6/7 search/1 typed current schema/policy projection; PG route never invokes Meili-only localizedAttributes; no P6↔P7 runtime cycle.",
+      "OPT-03": "Locale to P4.7 saved-view labels only declared translation metadata/read port; original field AST/schema/operator/current ACL and default uniqueness unchanged.",
+      "OPT-04": "Address suggestion consumer-supplied driver authorized minimised query, timeout≤2s/results≤20/response≤64KiB; invalid/unsupported/unavailable/rateLimited/notFound distinct, secrets/PII not in logs.",
+      "OPT-05": "Two interchangeable installed address drivers via same port; at least selected actual configured driver conformance if claimed, canned fake not real provider acceptance; offline addresses accepted independently.",
+      "OPT-06": "Changing translated metadata uses P6 existing dirty/outbox/index lane/current policy and revision; late response never changes authoritative place ID or unauthorized index result.",
+      "OPT-07": "Read descriptors for locale/currencies/rate/geo no mutation/config changes/network eager calls; P8 actual invoke authorizer/descriptor/wire namespace receipt future, read-only label not authority."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "outcome": "cold-start-root",
+  "reason": "design-root-terminal",
+  "evidence": [
+    "batch:e0e1768b14832c04d1852ccaa73704af6debe1c1cbd09a83bd9f2e6cd11d821e",
+    "loaded-inputs:reusable",
+    "cold-start-cost:100502",
+    "checkpoint:artifacts/P4-design/validation.md + decisions/D9-headless-extensions.md + research/P4-extension-design.md + research/P4-design-rag.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

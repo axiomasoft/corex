@@ -1,0 +1,52 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "continuity": {
+    "evidence": [
+      "batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9",
+      "loaded-inputs:reusable",
+      "cold-start-cost:96899",
+      "checkpoint:artifacts/P10-design/validation.md"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:1656f61de41c34f92b14028d8c7bdd9e9e104594ac8a6d14bff095c9a904dd85",
+    "plan": "sha256:cd2b063b2bd3951bb7fbaa7c84bc1638da3a016e9f6fff743a6587ea2f3027ca",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "rationale": {
+    "open_risks": "Полнота deployed edges/entries и реальных final INSERT/UPDATE/remember/cookie проверок; независимость witness от полного rollback set; физический cleanup отдельно от authorization deny; полный committed-event census, missing/late/error и pair admission; реальные IAM/provider/restore/fleet доказательства. Wrapper и структурный verifier не подтверждают истинность source-to-deployment и assertions: её проверяет owning executor по исходным receipts. Все внешние операции остаются в independently authorized scope их владельцев.",
+    "remaining": "Детализация и RAG P11, затем единая проверка совместимости и hash-current design-finish всех 11 фаз. Это обязательно до любого execution item, включая P1.1. Actual source/adoption/released cohort, central/cloud deployment, AP, FE, полный текущий месяц, выбранные provider/ops и consumer receipts остаются будущими результатами их владельцев."
+  },
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Capabilities | shell/FS, Perplexity, primary-source verification |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Детализировать P11: same released/effective cohort→consumer locks/R-AC acceptance→owning app handoff |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9\", \"loaded-inputs:reusable\", \"cold-start-cost:96899\", \"checkpoint:artifacts/P10-design/validation.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "continuity": {
+      "evidence": [
+        "batch:01fd629ce45441a31e90b1a7c31d0f08c282b6e55ed093038ceb71245211a9c9",
+        "loaded-inputs:reusable",
+        "cold-start-cost:96899",
+        "checkpoint:artifacts/P10-design/validation.md"
+      ],
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "gpt-5.6-sol",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P10"
+}

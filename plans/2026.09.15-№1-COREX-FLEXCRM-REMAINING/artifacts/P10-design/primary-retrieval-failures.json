@@ -1,0 +1,8 @@
+[
+  {
+    "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf",
+    "attempt": "direct urllib default agent",
+    "error": "HTTP403Forbidden",
+    "web_pdf_retrieval": "successful; subsequent raw attempt pending"
+  }
+]

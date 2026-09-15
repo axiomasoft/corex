@@ -1,0 +1,12 @@
+{
+  "outcome": "cold-start-root",
+  "reason": "design-root-terminal",
+  "evidence": [
+    "batch:56405e3f036d14f87cb892ecf4cad66816f54569d58faa8e47ca1584b6db558d",
+    "loaded-inputs:reusable",
+    "cold-start-cost:32042",
+    "checkpoint:artifacts/P6-design/validation.md + research/P6-data-design.md + research/P6-design-rag.md + decisions/D11-data-import-search.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

@@ -1,0 +1,30 @@
+{
+  "inputs": [
+    {
+      "path": "plan.md",
+      "sha256": "951eec8b1991a2803ddf89344626daa90d43b7c4253deeec007552c690df32eb",
+      "bytes": 16344
+    },
+    {
+      "path": "phases/P3/P3.md",
+      "sha256": "28eded81f38a3fe075321d9e47f90114b19439569681172d75e92413bbfb4859",
+      "bytes": 7224
+    },
+    {
+      "path": "phases/P3/P3.1.md",
+      "sha256": "6f985d24c1264950630aeadb13c93dfdd4e448d078fe18159d30d419c0eee663",
+      "bytes": 365
+    },
+    {
+      "path": "brief/01-owner-design-policy.md",
+      "sha256": "cebda2cf4cc82630f5b2d02cffc5dc857922125737c538b32f8b68643934181a",
+      "bytes": 3445
+    },
+    {
+      "path": "research/05-integrated-design.md",
+      "sha256": "abff5667bc081a6e964e1dcd0627b2ebfa3c01fbbfce34b0d0b74453e7415180",
+      "bytes": 9522
+    }
+  ],
+  "cold_start_cost_method": "heuristic ceil UTF-8 bytes/4; not provider token/context telemetry"
+}

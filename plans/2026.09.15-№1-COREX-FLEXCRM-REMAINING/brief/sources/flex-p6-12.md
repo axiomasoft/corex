@@ -1,0 +1,13 @@
+### P6.12 — corex/social (B-28 соц-контур) → GREEN
+
+**Intent:** Реализовать новый пакет соц-контура (B-28: `soc_*` — 11 таблиц: лента, посты, комментарии, реакции, группы, упоминания, «спасибо») + аддитивная `tsk_projects.group_id` — до GREEN + тег.
+**Why:** Соц-контур («живая лента» Б24) — гап-фича корпоративного портала: вовлечение, объявления, обсуждения вокруг сущностей. Потребители: задачи, календарь (группа = владелец календаря), chatom, vaulter. RAG:✅ B-28:15 (новый пакет) + B-28:30 (зависимости) 2026-07-13.
+**Scope Included:** новый пакет в репе corex; план делегата; `soc_*` DDL по DB_SCHEMA; комментарии/реакции/упоминания через `corex/notifications`; панели через `corex/panels`; медиа через `corex/media`; exec до GREEN + тег.
+**Scope Excluded:** UI ленты (app P6.18); мессенджер (Chatom — P6.24); дизайн-развилка реакций (решена в B-28, не пересматривается).
+**Inputs:** B-28 блюпринт · инфра-пакеты из P6.9 · `corex/tasks` (аддитивная колонка `group_id`) · DB_SCHEMA (`soc_`, зарегистрирован в P6.1).
+**Files:** `~/projects/packages/corex/packages/social/**` · план делегата · Status Board этого файла.
+**Required Reads:** 1) `05-Projects/01-Products/FlexCRM/plans/FLEX-2/findings/P6-implementation-map.md` 2) `05-Projects/01-Products/FlexCRM/plans/flex/30_blueprints/B-28_social.md` 3) `05-Projects/01-Products/FlexCRM/plans/flex/30_blueprints/B-16_satellite-contracts.md` (Panelable/notifications/media) 4) `05-Projects/01-Products/FlexCRM/plans/flex/60_contracts/DB_SCHEMA.md` (`soc_`)
+**Implementation Rules:** предусловия — P6.9 (panels/notifications/media), P6.10 (`corex/tasks` — для `group_id`). Своего движка комментариев/уведомлений/медиа НЕ заводить (B-28 §3, явный запрет) — только потребление инфра-пакетов. Boxed-совместимость обязательна (AC-15): никаких cloud-only зависимостей.
+**Code Guidance:** ДЕЛЕГИРОВАНИЕ + модульная дисциплина (протокол как P6.9). Обязательные тесты: лента при 10k постов — курсорная пагинация без OFFSET-деградации; упоминание `@user` порождает уведомление ровно один раз (дедуп); реакции — уникальность (user, entity, type). Скоуп прав — через ScopeResolver (`corex/auth`), не своя проверка. Запрещено: свой движок уведомлений/комментариев; ветвление `if(cloud)` (boxed-инверсия, COREX-CORE D10); N+1 на ленте (eager-load обязателен, тест).
+**Validation:** `task:plan-audit` делегата = GREEN; 11 таблиц `soc_` совпадают с B-28 §2 и FROZEN-контрактом; тесты пагинации/дедупа уведомлений/уникальности реакций зелёные; boxed-прогон (без cloud-сервисов) зелёный; composer-гейт + тег.
+**Deliverables:** пакет соц-контура + план закрыт + тег + Status Board.

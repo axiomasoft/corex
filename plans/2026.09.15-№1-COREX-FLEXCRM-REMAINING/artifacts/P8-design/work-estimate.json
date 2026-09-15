@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "9ae1212f3218582b8925681106bdb0e2780308555a4047b5d0855479911005a6",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 149551,
+  "lifecycle": "design-root-terminal",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/P8-design/validation.md",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "path": "plan.md",
+    "sha256": "218b0198d515943e5b46892fdc15f588ee30abf83ad26a18eea330e668554379"
+  },
+  {
+    "path": "phases/P6/P6.md",
+    "sha256": "348e57788523ebaf77dc6d3d85e2eb2adc06c6fbe641fd71ab275fa702e0a66d"
+  },
+  {
+    "path": "phases/P6/P6.1.md",
+    "sha256": "e8a4c5e2869f85dab7025d2e0fb0a7fd9b0f99eaad61f5a4edf72fd7c95877e3"
+  },
+  {
+    "path": "brief/01-owner-design-policy.md",
+    "sha256": "cebda2cf4cc82630f5b2d02cffc5dc857922125737c538b32f8b68643934181a"
+  },
+  {
+    "path": "research/05-integrated-design.md",
+    "sha256": "f5bbf3a9949b262ca3caffa60c019e3a36fbb4820c205dd01c26079a383864b4"
+  }
+]

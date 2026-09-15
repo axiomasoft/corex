@@ -1,0 +1,1 @@
+Explain SQL transactional outbox and idempotent scheduled-job recovery in Laravel. Cite official Laravel queues documentation, PostgreSQL SKIP LOCKED documentation, AWS transactional outbox, and Composer immutable dependency refs. Compare same-transaction intent with afterCommit-only dispatch; distinguish retry/lease fencing from exactly-once external effects.

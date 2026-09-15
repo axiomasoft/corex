@@ -1,0 +1,139 @@
+{
+  "verified_at": "2026-09-15",
+  "method": "web.run direct opens/find to primary URLs; repository inference separate",
+  "sources": [
+    {
+      "origin": "IETF",
+      "url": "https://www.rfc-editor.org/rfc/rfc5545.html",
+      "supported_claim": "Recurrence set/COUNT/UNTIL and3.3.5 first fold/explicit gap versus3.3.10 generated invalid/gap skip; REC corpus.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "rlanvin",
+      "url": "https://github.com/rlanvin/php-rrule",
+      "supported_claim": "MIT source/claimed RFC scope/intl optional; exact actual immutable version ABI/seek/DST conformance must be qualified locally.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Recurr",
+      "url": "https://github.com/simshaun/recurr",
+      "supported_claim": "Alternative recurrence transformer and bounded constraints; source README not full standards/timeout acceptance.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/sql-insert.html",
+      "supported_claim": "ON CONFLICT SQL authority; not external exactly-once or safe mutable historical overwrite.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/transaction-iso.html",
+      "supported_claim": "READ COMMITTED concurrent conflict behavior and whole serializable transaction retry.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "AWS",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+      "supported_claim": "Same transaction business/outbox protects lost dispatch, duplicate consumer delivery still possible.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Laravel",
+      "url": "https://laravel.com/framework/docs/13.x/queues",
+      "supported_claim": "afterCommit defers queued work until commit; does not create durable independent event recovery.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "IETF",
+      "url": "https://www.rfc-editor.org/rfc/rfc4647.html",
+      "supported_claim": "Explicit lookup versus filtering; one language range not full HTTP weighted header.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "IETF",
+      "url": "https://www.rfc-editor.org/rfc/rfc5646.html",
+      "supported_claim": "Language tag grammar separate supported application resource set.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PHP",
+      "url": "https://www.php.net/manual/en/locale.canonicalize.php",
+      "supported_claim": "ICU normalization not tag validity or supported data proof; recorded ICU version matters.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PHP",
+      "url": "https://www.php.net/manual/en/locale.lookup.php",
+      "supported_claim": "Language range matching explicit tag list\u2264100; HTTP header example from RAG rejected.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Unicode",
+      "url": "https://unicode-org.github.io/icu/userguide/locale/",
+      "supported_claim": "Resource fallback/locale normalization different application translated-language selection.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Brick",
+      "url": "https://github.com/brick/money",
+      "supported_claim": "Immutable exact arithmetic/arbitrary magnitude/currency context and explicit rounding; own formatting also float/intl boundary must be checked.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PHP",
+      "url": "https://www.php.net/manual/en/numberformatter.formatcurrency.php",
+      "supported_claim": "Only float input, false error; final conversion after rounding alone cannot ensure large-value display precision.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Unicode",
+      "url": "https://unicode-org.github.io/icu/userguide/format_parse/numbers/",
+      "supported_claim": "ICU number presentation behavior; native supported decimal capabilities not assumed PHP wrapper APIs.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "GeoNames",
+      "url": "https://www.geonames.org/export/",
+      "supported_claim": "CCBY attribution, commercial use/as-is and no accuracy/timeliness/completeness warranty.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "GeoNames",
+      "url": "https://download.geonames.org/export/dump/readme.txt",
+      "supported_claim": "Source IDs/feature/admin/timezone columns and selected file scope; code/data attribution version actual acquisition qualification.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "IANA",
+      "url": "https://www.iana.org/time-zones",
+      "supported_claim": "Historical changing zone rules/release versions; not country/city coverage or coordinate boundary proof.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/ddl-constraints.html",
+      "supported_claim": "Composite unique/NOTNULL/FK same-snapshot hierarchy; nullable unique/default-null subtlety.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "Composer",
+      "url": "https://getcomposer.org/doc/04-schema.md#suggest",
+      "supported_claim": "suggest not installed dependency, separate optional integration package needs actual required graph.",
+      "direct_open": "successful"
+    },
+    {
+      "origin": "OWASP",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html",
+      "supported_claim": "Avoid unnecessary user information disclosure; address provider admission/minimization/timeout are local candidate policy.",
+      "direct_open": "successful"
+    }
+  ],
+  "rejected": [
+    "Perplexity generated gap shift: RFC3.3.10 skip instead",
+    "Locale::lookup full Accept-Language header example",
+    "Final float conversion alone render precision proof",
+    "rlanvin.github.io failed URL, official repository corrected"
+  ],
+  "runtime_proof": false
+}

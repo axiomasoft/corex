@@ -1,0 +1,9 @@
+{
+  "query": "In at most 900 words with official primary URLs, verify three general Composer library release choices: (1) PHP/framework compatibility matrix with minimum and current dependency solutions, real hosted CI job/run SHA, lockfile install versus update, check-platform-reqs and no ignore-platform-reqs; distinguish supported declaration from executed evidence. (2) Independent empty install and populated PostgreSQL migration upgrade using immutable released baseline, preflight incompatibility refusal before any mutation, forward recovery versus destructive rollback; backup testing limitations. (3) Optional private authorization adapter, separate public no-credential dependency graph and exact authorized private source ref install; default-deny consumer-policy ownership and real positive/negative checks. Give alternatives and failure modes. Use Composer, GitHub Actions, PostgreSQL, Laravel official docs and OWASP, no private project analysis.",
+  "content": [
+    {
+      "type": "text",
+      "text": "\"Claim\",\"Required evidence\",\"What it proves\"\n\"Supported PHP / Laravel ranges\",\"composer.json constraints, e.g. \"\"php\"\": \"\"^8.2\"\" and \"\"illuminate/contracts\"\": \"\"^10.0 \\|\\| ^11.0 \\|\\| ^12.0\"\"\",\"Solver declaration, not runtime proof\"\n\"Minimum solution\",\"A dedicated CI job using lowest allowed versions, e.g. composer update --prefer-lowest --prefer-stable under each intended PHP/framework lane\",\"Lowest satisfiable dependency set actually installs and tests\"\n\"Current solution\",\"A dedicated CI job using normal resolution, e.g. composer update --prefer-stable\",\"Current compatible releases actually install and test\"\n\"Reproducible release installation\",\"Commit composer.lock; CI/release builds use composer install\",\"The precise dependency graph tested is reinstalled\""
+    }
+  ]
+}

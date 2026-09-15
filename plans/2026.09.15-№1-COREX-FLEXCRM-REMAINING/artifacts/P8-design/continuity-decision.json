@@ -1,0 +1,12 @@
+{
+  "outcome": "cold-start-root",
+  "reason": "design-root-terminal",
+  "evidence": [
+    "batch:9ae1212f3218582b8925681106bdb0e2780308555a4047b5d0855479911005a6",
+    "loaded-inputs:reusable",
+    "cold-start-cost:149551",
+    "checkpoint:artifacts/P8-design/validation.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

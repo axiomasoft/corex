@@ -1,0 +1,210 @@
+{
+  "source_tree": "working tree; verify source-owner bindings at P1 execution",
+  "files": [
+    {
+      "path": "composer.json",
+      "sha256": "e7d3bd24392ba8fe2c5ad5106e37f924faaa73b593f16b2bf9be4f9d1856d5bb",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/core/src/Contracts/TenantStorage.php",
+      "sha256": "458256f46c6f7c6e36a6925a0539f6a2161013cb790e56d0598532e4bb1bf024",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/core/src/Storage/LocalTenantStorage.php",
+      "sha256": "8715571913b58d63abc4a058cbbe514c2b8c51c435855a0289f24be40615493f",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/core/src/Storage/ScopedFilesystem.php",
+      "sha256": "46ac83beb4273c080ccb68b582719501d2e17c81e82a8847d3da8bdd1ca55853",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "sha256": "284475bb260cd598749c2c9db04298bf8eb0babe15f5950c65287a910f438c14",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ClaimAccountSignup.php",
+      "sha256": "9607e8b1e0732eceb64525986e83db170b476a269f672d75f1502ba96445cc17",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Bootstrappers/WorkspaceContextBootstrapper.php",
+      "sha256": "e558be4152266f47ad37e1b6b4d5cdf0116305704b35ad4e0babd7430e0e55e8",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/CentralApiClient.php",
+      "sha256": "da879bdb9ad6fb66a26227af29d859c4a1cc12ff24598a86de9106647328f271",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/PrincipalWorkspaceResolver.php",
+      "sha256": "37a7e92f70228209318b2537751e2b29083719b445579bea523ed0c15e4677c7",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/ProvisioningClaim.php",
+      "sha256": "130bbea34b80281fcc73bc0827ed705ada3c647345a18566683a8657d49e66dc",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Http/Middleware/EnforceSessionLifetime.php",
+      "sha256": "607fe0b64374f190e43ba0de5556d7b0eca5076842f95be01509c04152b69bda",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Lifecycle/AccountLifecycle.php",
+      "sha256": "ac92492f0497826da5215182c222fcbbd651ebc7ec6321a39f4e073616773896",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Credentials/CredentialCookieQueue.php",
+      "sha256": "0a7957e1d048017f3dc53e32ffa5e3f35696d6316066b3eb7b615b4559166929",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Credentials/FencedCredentialIssuer.php",
+      "sha256": "d9cd5f12153bf043a01ecf9e1ffb4b0114571e2583c05b8d566e51f08f2f2bee",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Expiry/ExpiryScheduler.php",
+      "sha256": "399b8dfe4df13326aef906bd663957c35fd52ab550a2f7b475e116ea4b730437",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Inbox/DurableInbox.php",
+      "sha256": "99d7c15f2a76d91c997eb85cf0a2ee5916ab0bc458112235d088f4b4da1788a5",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Persistence/PairState.php",
+      "sha256": "9b4cdf5be43c7559502a3dbbc2f31bccca365048c1a63b5028e311a0d1b1b243",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+      "sha256": "c7f4f62ecafdd1b2ef66c2ee5e888ee0a45023bf52d38839d46fa28fdf3263c9",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Projection/ReferenceMembershipProjection.php",
+      "sha256": "663fff819f16622d88bfdf2cf47fc66d55dd39b24dfed6e00d628fe8bae7c292",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountClickAuthorizer.php",
+      "sha256": "50cff49642cb9c71f431cca1ca4437ceb83292070b342731592955aa33afc0fd",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuCache.php",
+      "sha256": "0712521aa6a97b7c2330e2dbfda1eb71b5affae52d43684cb0e09f82dbd585b7",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+      "sha256": "c77347bbdfbbb8701c5568885c19fcd257454d1131cce547b548f62409ee4127",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountsReadTransport.php",
+      "sha256": "9a4f1f15d32f74dfa2dafeef3b14e54b0e20084b2f602f6f03a5304a85e60e5b",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Timing/ClockReading.php",
+      "sha256": "9b91db5492ca92bfea7e2cb031e8956b473bbd624661ee216ff50aa80cb0d722",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Timing/Elapsed.php",
+      "sha256": "bc059bbe4ac11b36383de864792327f5052664034abf3547a6d7be71e684b89a",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Timing/Lease.php",
+      "sha256": "2d3bc8dfb8e35faf87dbb9733683e0b40423dffae0e35c517d959895d6019721",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/ChannelBinding.php",
+      "sha256": "3c70bf593da9e93eb6e1f27d64ca16de4a3d0e9733e29eece145fdd308f920b9",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+      "sha256": "a694b53d81208553ef9e97181da5876a134e517e2686db4f52faa1462edb3559",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php",
+      "sha256": "bd50720757790bceff5b58098d374c87de6e49bbfac2eacbd53c6187bdc9937f",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/StanclTenancyManager.php",
+      "sha256": "f182973e08e5ddde35e2fa334389032986b125fbcb2e2a8c606fc9848b3757b9",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/Storage/ContextTenantStorage.php",
+      "sha256": "68d59a3143876c5984d0acaaee1fba5b36af708cffdee103ab51301a8773ba78",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "sha256": "3e2eb5b05aced59788aea78089052f71c464813365031a9779933526317f3088",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/AccountLifecycleTest.php",
+      "sha256": "c52cbc7dfe7cecfa6e047bf9496989bacdbe7af6b0164ba5357eaec14f549a51",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/AccountSwitcherTest.php",
+      "sha256": "c0349d5951225f44cedeb852a31df782a71540ca3af093d1336d75d6851d2eb0",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/CentralApiClientTest.php",
+      "sha256": "9e681cea548bd51fc2c109c61fdd5035ef6ea41ec9324bf7fbf4a3ed181fd624",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ManagementIdentityHydratorTest.php",
+      "sha256": "db574746f11d0ac02ba2b08773e940f0f300e991f0bbfb243297863be8ef5b5d",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/MembershipRuntimeRegistrationTest.php",
+      "sha256": "f7f61d130c11989df3ec99645cdd6e149a04de863c4456c892a5235031d6978a",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/TenantStorageTest.php",
+      "sha256": "2fbbd04913540875d506a97aa4afa3ac6544cc90d00d09d73235b31cf296999f",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Pg/FencedCredentialRaceTest.php",
+      "sha256": "352a969a5c23e9359f5c97fbfadc70560789b23a544510bbf91372330791150b",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Pg/MembershipPairStoreTest.php",
+      "sha256": "6c0a3a98cf329cd8d884ff44cfd9f82b8b7ae295ce9cd8af870463fb390c35ec",
+      "classification": "source observation; not executed proof"
+    },
+    {
+      "path": "packages/tenancy/tests/Support/Membership/PairStoreFixture.php",
+      "sha256": "e6fbbd8d63067e7fb7bd703b41350482111e11775d134f7c3d739d18f60c4ffa",
+      "classification": "source observation; not executed proof"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P5'

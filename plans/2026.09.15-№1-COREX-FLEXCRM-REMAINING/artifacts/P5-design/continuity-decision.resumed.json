@@ -1,0 +1,12 @@
+{
+  "outcome": "cold-start-root",
+  "reason": "design-root-terminal",
+  "evidence": [
+    "batch:1e43137b9cd23f0299d64ef3421ad7022b054c7ff0d55039ff8cfd8b536c3b35",
+    "loaded-inputs:reusable",
+    "cold-start-cost:50323",
+    "checkpoint:artifacts/P5-design/validation.resumed.md + research/P5-design-rag.md + research/P5-wakeup-design.md + decisions/D10-workflow-wakeup.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

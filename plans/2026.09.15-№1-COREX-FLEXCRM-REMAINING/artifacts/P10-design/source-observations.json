@@ -1,0 +1,23 @@
+{
+  "proof_class": "source-inspection",
+  "source_commit": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "inputs": {
+    "docs/dev-doctrine.md": "9f72bb48a69f7e5e014d9cbcee5d16ce224631c455f4da556409e061a24380b6",
+    "packages/tenancy/src/Membership/Internal/Timing/Elapsed.php": "bc059bbe4ac11b36383de864792327f5052664034abf3547a6d7be71e684b89a",
+    "packages/tenancy/src/Membership/Internal/Persistence/PairWitness.php": "b50adeb20276019740fc1e5ddc61406d23081466ca7c24c67dfadfee04bf69bd",
+    "packages/tenancy/src/Membership/Internal/Expiry/ExpiryScheduler.php": "399b8dfe4df13326aef906bd663957c35fd52ab550a2f7b475e116ea4b730437",
+    "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php": "a694b53d81208553ef9e97181da5876a134e517e2686db4f52faa1462edb3559",
+    "packages/tenancy/src/Storage/ContextTenantStorage.php": "68d59a3143876c5984d0acaaee1fba5b36af708cffdee103ab51301a8773ba78",
+    "packages/tenancy/src/TenancyServiceProvider.php": "3e2eb5b05aced59788aea78089052f71c464813365031a9779933526317f3088",
+    "packages/core/src/Contracts/TenantStorage.php": "458256f46c6f7c6e36a6925a0539f6a2161013cb790e56d0598532e4bb1bf024",
+    "packages/tenancy/src/Contracts/CentralApiClient.php": "da879bdb9ad6fb66a26227af29d859c4a1cc12ff24598a86de9106647328f271",
+    "tests/Arch/LayerTest.php": "c43e53584bf24c0e1b22630448e3cc3365bf9c50d42f4be593c66bc41da3f619"
+  },
+  "observations": {
+    "Elapsed": "same domain/process/tick rate and nondecreasing ticks, conservative errors; actual platform not qualified",
+    "PairWitness": "fixture witness object only, no allocated outside-rollback service",
+    "ExpiryScheduler": "fixture-only, no worker or kill registered",
+    "ContextTenantStorage": "fake-s3 is local backend; no provider claim",
+    "StrictTransport": "typed opt-in strict client, no actual central profile/deployment proof"
+  }
+}

@@ -1,0 +1,71 @@
+[
+  {
+    "case": "missing-case",
+    "expected_refusal": "Case: missing=",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: Case: missing=['DIST-03'], extra=['WRONG-03']",
+    "result": "PASS"
+  },
+  {
+    "case": "empty-files",
+    "expected_refusal": "empty P9.2.md/Files",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: empty P9.2.md/Files",
+    "result": "PASS"
+  },
+  {
+    "case": "missing-authority",
+    "expected_refusal": "finite protected Authority",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: finite protected Authority missing",
+    "result": "PASS"
+  },
+  {
+    "case": "stale-retrieval",
+    "expected_refusal": "retrieval digest stale",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: retrieval digest stale",
+    "result": "PASS"
+  },
+  {
+    "case": "failed-retrieval",
+    "expected_refusal": "retrieval error",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: retrieval error",
+    "result": "PASS"
+  },
+  {
+    "case": "internal-query",
+    "expected_refusal": "internal context",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: internal context in external query",
+    "result": "PASS"
+  },
+  {
+    "case": "invented-producer",
+    "expected_refusal": "invented predecessor",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: invented predecessor findings/P3-invented-output.md",
+    "result": "PASS"
+  },
+  {
+    "case": "lost-original-owner",
+    "expected_refusal": "Parent: missing=",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: Parent: missing=['B11 AC-21'], extra=['B11 AC-99']",
+    "result": "PASS"
+  },
+  {
+    "case": "post-grant-helper",
+    "expected_refusal": "publication helper must be prepared",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: publication helper must be prepared before grant",
+    "result": "PASS"
+  },
+  {
+    "case": "missing-actual-released-proof",
+    "exit": 1,
+    "stderr": "P9 validation FAIL: missing or unsafe plan input: findings/P9-intake.md",
+    "result": "PASS"
+  }
+]

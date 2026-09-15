@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "\"Topic\",\"Official primary link\",\"What it establishes\"\n\"Composer lockfiles\",\"Composer: Basic usage\",\"composer update resolves dependencies and writes their exact versions into composer.lock; with that file present, composer install uses the exact locked versions rather than resolving anew.\"\n\"in-toto Statement v1\",\"in-toto: Statement layer specification\",\"The Statement binds a predicate—such as provenance or a scan result—to one or more artifact subjects. Each subject must contain a digest.\"\n\"SLSA provenance verification\",\"SLSA: Verifying artifacts, v1.0\",\"A verifier should validate the signature, ensure the Statement subject matches the artifact digest, validate the provenance type, establish a trusted builder, and compare provenance to package-specific expectations.\""
+    }
+  ]
+}

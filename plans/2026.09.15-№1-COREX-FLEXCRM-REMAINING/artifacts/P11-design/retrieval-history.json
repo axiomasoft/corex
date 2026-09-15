@@ -1,0 +1,60 @@
+{
+  "route": {
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "effort": "high",
+    "invocation": "$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P11",
+    "model": "gpt-5.6-sol",
+    "model_class": "frontier",
+    "source": "provider-thread-state",
+    "source_version": "codex-turn-context-v1",
+    "thread_id": "01a0a50a-6ae3-71f3-a79c-5c4e029c1060",
+    "ts": "2026-09-15T12:29:05Z"
+  },
+  "queries": [
+    {
+      "query": "For a Composer/Laravel library release consumed by an independent application, how should a dependency-only acceptance and handoff verify immutable package/source/dist identities, exact composer.lock/config hashes, executed integration tests, complete requirement-level evidence, authorized consumer bookkeeping and protection against stale or partial evidence? Compare a digest-bound signed attestation/evidence manifest with relying on version strings, green CI badges or a prose handoff. Use primary official sources from at least two independent organizations (e.g. Composer, SLSA, in-toto, NIST). Cover minimum subject/predicate/actor fields, source versus artifact versus deployment provenance, lock reproducibility limits, fail-closed coverage, mutation races, and separating dependency acceptance from overall product completion. Do not assume specific internal software exists.",
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Perplexity login required — a login window was opened and you have been notified. Retry once logged in."
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "query": "Verify from official primary documentation only: what exact evidence should a software consumer use to accept a library release using Composer lockfiles and digest-bound in-toto/SLSA attestations? Explain source/dist identity, lockfile limits, signed accepting-actor versus merely signed producer claims, executed tests and complete requirements coverage, current input hashes and race-safe bookkeeping. Compare alternatives. Cite Composer plus at least one independent standard/project. This is a general software engineering question; no internal project context.",
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No answer found. Perplexity may have changed its structure."
+          }
+        ]
+      }
+    },
+    {
+      "query": "Find official primary sources explaining Composer composer.lock reproducible installs and SLSA/in-toto digest-bound software release attestations. Which claims do these mechanisms prove and which consumer integration-test acceptance claims require separate evidence? Give official links from Composer and SLSA or in-toto.",
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No answer found. Perplexity may have changed its structure."
+          }
+        ]
+      }
+    },
+    {
+      "query": "Official documentation only: Composer lockfile installs exact versions; in-toto Statement subjects and digests; SLSA verification of artifact provenance. Provide primary links and explain the limitations for consumer acceptance.",
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "\"Topic\",\"Official primary link\",\"What it establishes\"\n\"Composer lockfiles\",\"Composer: Basic usage\",\"composer update resolves dependencies and writes their exact versions into composer.lock; with that file present, composer install uses the exact locked versions rather than resolving anew.\"\n\"in-toto Statement v1\",\"in-toto: Statement layer specification\",\"The Statement binds a predicate—such as provenance or a scan result—to one or more artifact subjects. Each subject must contain a digest.\"\n\"SLSA provenance verification\",\"SLSA: Verifying artifacts, v1.0\",\"A verifier should validate the signature, ensure the Statement subject matches the artifact digest, validate the provenance type, establish a trusted builder, and compare provenance to package-specific expectations.\""
+          }
+        ]
+      }
+    }
+  ]
+}

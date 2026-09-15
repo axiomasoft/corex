@@ -1,0 +1,65 @@
+[
+  {
+    "label": "P11 design",
+    "cmd": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p11.py --stage design",
+    "chunk_id": "b1a752",
+    "wall_time_seconds": 0.000004725,
+    "exit_code": 0,
+    "original_token_count": 26,
+    "output": "P11 structural identity check PASS; actual executed/accepting-owner/authority truth remains item-owned\n"
+  },
+  {
+    "label": "Owned state",
+    "cmd": "python3 /home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py state --plan-dir plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING --all --check",
+    "chunk_id": "239c57",
+    "wall_time_seconds": 0.074701856,
+    "exit_code": 0,
+    "original_token_count": 8,
+    "output": "views: проверены (78)\n"
+  },
+  {
+    "label": "Owned status",
+    "cmd": "python3 /home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py status --plan-dir plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING --check",
+    "chunk_id": "bbbcbe",
+    "wall_time_seconds": 0.00000266,
+    "exit_code": 1,
+    "original_token_count": 22,
+    "output": "ERROR: вид устарел: plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/status.md\n"
+  },
+  {
+    "label": "Owned decisions",
+    "cmd": "python3 /home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py decisions --plan-dir plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING --check",
+    "chunk_id": "94f268",
+    "wall_time_seconds": 0.000002377,
+    "exit_code": 0,
+    "original_token_count": 8,
+    "output": "views: проверены (4)\n"
+  },
+  {
+    "label": "Next current P1.1 bundle",
+    "cmd": "python3 /home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py bundle --plan-dir plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING --item P1.1 --check",
+    "chunk_id": "0c1254",
+    "wall_time_seconds": 0.000001706,
+    "exit_code": 0,
+    "original_token_count": 8,
+    "output": "views: проверены (1)\n"
+  },
+  {
+    "label": "Downstream future evidence",
+    "cmd": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py --check downstream",
+    "chunk_id": "56bc18",
+    "wall_time_seconds": 9.930630695,
+    "exit_code": 0,
+    "original_token_count": 82,
+    "output": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-downstream.py\", \"--plan-dir\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\", \"--item\", \"P1.4\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nGREEN: P1.4; consumers=64\n"
+  },
+  {
+    "label": "D4 execution remains denied",
+    "cmd": "python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py --check design",
+    "chunk_id": "bfd2dd",
+    "wall_time_seconds": 0.000001529,
+    "exit_code": 1,
+    "original_token_count": 45,
+    "output": "Task runtime check FAIL: [Errno 2] No such file or directory: '/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/design-finish.md'\n"
+  }
+]

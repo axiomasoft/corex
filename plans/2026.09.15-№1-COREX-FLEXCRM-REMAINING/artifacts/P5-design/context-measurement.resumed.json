@@ -1,0 +1,13 @@
+{
+  "telemetry": "unavailable",
+  "measurement": "UTF-8 bytes of named successor input carriers; not provider token telemetry",
+  "bytes": 50323,
+  "paths": [
+    "plan.md",
+    "phases/P6/P6.md",
+    "phases/P6/P6.1.md",
+    "brief/01-owner-design-policy.md",
+    "research/05-integrated-design.md"
+  ],
+  "capability_evidence": "exposed tools and actual successful Perplexity web/general calls; successor routing frontier/high"
+}

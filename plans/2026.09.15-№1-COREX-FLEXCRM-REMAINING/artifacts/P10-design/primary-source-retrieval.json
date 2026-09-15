@@ -1,0 +1,144 @@
+[
+  {
+    "origin": "IETF",
+    "url": "https://www.rfc-editor.org/rfc/rfc8705.html",
+    "final_url": "https://www.rfc-editor.org/rfc/rfc8705.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-1a562210fe98eb6d.html.gz",
+    "raw_sha256": "f9ca7c82d30fd90f1ab21bc16d561ae5e3da625e824cc73b97000ae829f2bdb9",
+    "compressed_sha256": "a5d20441d225e44db5ee7be4e1f41e200b21d4957829d991560f42388de6e572",
+    "raw_bytes": 141020
+  },
+  {
+    "origin": "IETF",
+    "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+    "final_url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-4e6d674bf887d330.html.gz",
+    "raw_sha256": "c00e2234fcd79581bc29669c60d693afaa42f67d9205bddee848f757ae975419",
+    "compressed_sha256": "023351a6305d89d401feb03bb47bed64980ab36c27f63ea771051e1b4e73ebd8",
+    "raw_bytes": 261599
+  },
+  {
+    "origin": "Google SRE",
+    "url": "https://sre.google/sre-book/service-level-objectives/",
+    "final_url": "https://sre.google/sre-book/service-level-objectives/",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-7b9a3e66dbb9cd31.html.gz",
+    "raw_sha256": "449fb54ce65e05102fac46c797a08b86c5ab93ade2c70c63ae25e7648d687d7d",
+    "compressed_sha256": "c1d25d98ebdd07004a33717c9f7115365422f23ed2f674d3106ce1b341123038",
+    "raw_bytes": 45445
+  },
+  {
+    "origin": "Prometheus",
+    "url": "https://prometheus.io/docs/practices/histograms/",
+    "final_url": "https://prometheus.io/docs/practices/histograms/",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-a04effa473fb145c.html.gz",
+    "raw_sha256": "95e08d134267d342c5408cbad271b92d8b9c2aadbd62886f19042fc27c1bf712",
+    "compressed_sha256": "0306296e3be3ead4a82b969e717937d896afaf320436ba7c9e3fed395bccb7e7",
+    "raw_bytes": 283208
+  },
+  {
+    "origin": "PostgreSQL",
+    "url": "https://www.postgresql.org/docs/16/continuous-archiving.html",
+    "final_url": "https://www.postgresql.org/docs/16/continuous-archiving.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-99db330be8cb828c.html.gz",
+    "raw_sha256": "aa1d754676584b9509bf50f403df878ae92798e3fcd63036246f75509801f273",
+    "compressed_sha256": "730ddcb5b5dfbe987b5b07b8728f14de6f99a34ce1a4bc832b187ec866d11c88",
+    "raw_bytes": 69317
+  },
+  {
+    "origin": "PostgreSQL",
+    "url": "https://www.postgresql.org/docs/16/backup-dump.html",
+    "final_url": "https://www.postgresql.org/docs/16/backup-dump.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-10346fff24e322b2.html.gz",
+    "raw_sha256": "e24f0dbb437f2a3871762ce9338a160063cea2d5c7abc95c5cabdf9c339907a8",
+    "compressed_sha256": "05a65b3f3043340c6b9cde2049152985b81f5e1170ff25309b3c8bb12c05a9f9",
+    "raw_bytes": 29884
+  },
+  {
+    "origin": "OWASP",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+    "final_url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-10c2347db109ea1e.html.gz",
+    "raw_sha256": "368296f7add7ffd6f175d4de8f2e03dbbd287f6eda75e85603b2d39919913c30",
+    "compressed_sha256": "c8489160d0e1f85266ad0aa0692ea58d008553bc52116f81b9e94d694cc4dadf",
+    "raw_bytes": 100788
+  },
+  {
+    "origin": "Linux Kernel",
+    "url": "https://www.kernel.org/doc/html/latest/timers/timekeeping.html",
+    "final_url": "https://www.kernel.org/doc/html/latest/timers/timekeeping.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-9df8106752836173.html.gz",
+    "raw_sha256": "46ed668de631e92df70fc4379aae4435cbd5ab852c01279897c5b4fbf650279e",
+    "compressed_sha256": "be82ce7b6a5265df774803a1ea7e6e5f5666d0e71166b69f6453a95b2f59ce08",
+    "raw_bytes": 21917
+  },
+  {
+    "origin": "NIST",
+    "url": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final",
+    "final_url": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-f561a6295e1b6a09.html.gz",
+    "raw_sha256": "437e333c860b3856b3a7ffbfc1f9d63d0b95355607764000eeec2b02e0c4ed5c",
+    "compressed_sha256": "c8fe5780399b9fee1b8ade94de347a4e7f65972c4a864b7e459e807f129773e3",
+    "raw_bytes": 46487
+  },
+  {
+    "origin": "Let's Encrypt",
+    "url": "https://letsencrypt.org/docs/challenge-types/",
+    "final_url": "https://letsencrypt.org/docs/challenge-types/",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-3d1f0dbea6f47149.html.gz",
+    "raw_sha256": "d6dd41ccd9d43cc6c864d8dc1a2d968a9c4266892e158a7f3a6bdf48b3a775e4",
+    "compressed_sha256": "0833698241bece300c715bf12d9cdbe8c1597eccb50fb68df441dda57c4f0a47",
+    "raw_bytes": 34054
+  },
+  {
+    "origin": "AWS",
+    "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazon-s3-policy-keys.html",
+    "final_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazon-s3-policy-keys.html",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-15a0fd0f91bcc2c4.html.gz",
+    "raw_sha256": "c07337cbc94e97c123769a64b2e7eb0418af48eef6535a7be06d8f9114982064",
+    "compressed_sha256": "550e58f814f4909cdb662e13a5fbb6699885037493c3af7a8db393907fae91cf",
+    "raw_bytes": 59143
+  },
+  {
+    "origin": "HdrHistogram",
+    "url": "https://hdrhistogram.github.io/HdrHistogram/JavaDoc/",
+    "final_url": "https://hdrhistogram.github.io/HdrHistogram/JavaDoc/",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-d2339cc3e4d51f42.html.gz",
+    "raw_sha256": "f77ecce2ab764dbe3a8dbb069e89f61a807a285648057c56193a7df7828aedc9",
+    "compressed_sha256": "a815679f6cc010b2d613354d37752b2df35fb71723f79a984f7e5cbd9a53e8e9",
+    "raw_bytes": 2925
+  },
+  {
+    "origin": "NIST",
+    "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf",
+    "result": "retrieved",
+    "status": 200,
+    "artifact": "artifacts/P10-design/primary-nist80034.pdf.gz",
+    "raw_sha256": "476f04d4c60b0770c1ac8b2720551972074ce78e936a3e7a535048416111d0df",
+    "compressed_sha256": "fe441dce0b21e775a62d10508d88a117c13b9fd3e13b9f4ce1f0d40bc05dc7bf",
+    "raw_bytes": 952921
+  }
+]

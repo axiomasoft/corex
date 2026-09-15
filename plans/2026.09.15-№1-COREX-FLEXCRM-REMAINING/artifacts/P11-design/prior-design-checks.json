@@ -1,0 +1,82 @@
+[
+  {
+    "phase": "P1",
+    "chunk_id": "681d6d",
+    "wall_time_seconds": 0.000001375,
+    "exit_code": 2,
+    "original_token_count": 63,
+    "output": "usage: validate-p1.py [-h] --stage {inputs,sources,criteria,evidence,seal}\n                      [--plan-dir PLAN_DIR]\nvalidate-p1.py: error: argument --stage: invalid choice: 'design' (choose from 'inputs', 'sources', 'criteria', 'evidence', 'seal')\n"
+  },
+  {
+    "phase": "P2",
+    "chunk_id": "34fc88",
+    "wall_time_seconds": 9.02e-7,
+    "exit_code": 0,
+    "original_token_count": 36,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P3",
+    "chunk_id": "f1da09",
+    "wall_time_seconds": 0.000002404,
+    "exit_code": 0,
+    "original_token_count": 45,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P4",
+    "chunk_id": "5991fa",
+    "wall_time_seconds": 0.000001254,
+    "exit_code": 0,
+    "original_token_count": 54,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P5",
+    "chunk_id": "72f5d4",
+    "wall_time_seconds": 0.000001463,
+    "exit_code": 0,
+    "original_token_count": 51,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P6",
+    "chunk_id": "64cd96",
+    "wall_time_seconds": 0.000001522,
+    "exit_code": 0,
+    "original_token_count": 48,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 3, \"case_contracts\": 57, \"semantic_acceptance\": \"item-owned; structure never executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P7",
+    "chunk_id": "50d1ad",
+    "wall_time_seconds": 0.00000229,
+    "exit_code": 0,
+    "original_token_count": 56,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 5, \"case_contracts\": 70, \"parent_ownership\": 45, \"semantic_acceptance\": \"item-owned; structural checks never executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P8",
+    "chunk_id": "1486aa",
+    "wall_time_seconds": 0.000009039,
+    "exit_code": 0,
+    "original_token_count": 64,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 3, \"case_contracts\": 56, \"parent_ownership\": 49, \"external_control_plane_tools\": 19, \"semantic_acceptance\": \"item-owned; structure is not executed proof\", \"runtime_or_live_proof\": false}\n"
+  },
+  {
+    "phase": "P9",
+    "chunk_id": "f3753b",
+    "wall_time_seconds": 0.000001698,
+    "exit_code": 0,
+    "original_token_count": 64,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 2, \"case_contracts\": 64, \"parent_ownership\": 32, \"runtime_or_live_proof\": false, \"semantic_acceptance\": \"owning executor verifies actual assertions; structural check not execution proof\"}\n"
+  },
+  {
+    "phase": "P10",
+    "chunk_id": "69ec11",
+    "wall_time_seconds": 0.000002229,
+    "exit_code": 0,
+    "original_token_count": 43,
+    "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"di\": 34, \"ap\": 13, \"subconditions\": 169, \"case_contracts\": 59, \"original_parents\": 31, \"runtime_or_live_proof\": false}\n"
+  }
+]

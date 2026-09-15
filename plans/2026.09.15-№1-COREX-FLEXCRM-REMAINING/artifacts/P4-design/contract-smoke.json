@@ -1,0 +1,37 @@
+{
+  "class": "synthetic structural checker probes; no product conformance",
+  "baseline": "PASS",
+  "faults": [
+    {
+      "fault": "empty item Intent",
+      "result": "DENIED",
+      "reason": "P4.2.md/Intent empty"
+    },
+    {
+      "fault": "missing canonical case",
+      "result": "DENIED",
+      "reason": "local case inventory drift"
+    },
+    {
+      "fault": "lost R owner",
+      "result": "DENIED",
+      "reason": "R: missing=['R28'], extra=['R27']"
+    },
+    {
+      "fault": "internal external query",
+      "result": "DENIED",
+      "reason": "internal context in external query"
+    },
+    {
+      "fault": "raw hash tamper",
+      "result": "DENIED",
+      "reason": "RAG hash stale"
+    },
+    {
+      "fault": "driver seam omitted",
+      "result": "DENIED",
+      "reason": "frozen seam missing: NotificationChannelDriver"
+    }
+  ],
+  "restored": "PASS"
+}

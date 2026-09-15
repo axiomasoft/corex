@@ -1,0 +1,137 @@
+[
+  {
+    "repo": "flexcrm",
+    "path": "AGENTS.md",
+    "sha256": "53f02ea6fc20903dacd7b74ebcf47714a35e298ef291a1ac1243cc83f43280e2",
+    "bytes": 25655,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/plan.md",
+    "sha256": "c75cf985d7cf02c35bd82601763a05ce2c60f9f50f61351ee36bf51665e190c3",
+    "bytes": 27323,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/handoff.md",
+    "sha256": "1d6805f348b348b89ad007e757df4b4976fb896a14cafe799f33a886562ee656",
+    "bytes": 2743,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/decisions/D41-p6-next-slice.md",
+    "sha256": "bc9b9e6fb92b81a176ed9d94048bccec7008a88e8f03e916528fcd8503ae478a",
+    "bytes": 2938,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/decisions/D42-p6-delegate-continuation.md",
+    "sha256": "39e16b9af98b06ad1dbc3cbb64aa19283b5cfce27eef706332db187dab8b1d0c",
+    "bytes": 2228,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/decisions/D49-backend-first-frontend-out-of-scope.md",
+    "sha256": "9894ad65e48d0178874a3365b699d0b3e9a238fd1345979e6ff38e4404192907",
+    "bytes": 5356,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "plans/FLEX-2/findings/P6.5-delegate-progress.md",
+    "sha256": "a4e71cd130f0ffe741f64ae02e6aefa7c588b80579fb4fcb9a397db74d1d3fca",
+    "bytes": 6021,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "composer.json",
+    "sha256": "213863287024dccfc1d6252ed0490dee7ea10cf401bb5c5155f9eb2cbbf82d55",
+    "bytes": 8685,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "composer.lock",
+    "sha256": "78f97b9babe0aa029bab224ca2bc6576a5a923bf90200df0a3f543dcd2c0d819",
+    "bytes": 609639,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "solutions/construction/composer.json",
+    "sha256": "8df8c31d6b3b734c4ddce6d8625363ecfa88b3af0f79e930de19d469f14e102c",
+    "bytes": 4053,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "solutions/construction/composer.lock",
+    "sha256": "903e2089b121469c5f782ee0dcebdb72151c687264f75eb7b76dcabfdfdfdc27",
+    "bytes": 410130,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "solutions/property-management/composer.json",
+    "sha256": "73bbbdc017ccad0ae2e61de815273f2260ac19e7a416ffeb3f1d9d8bf7509101",
+    "bytes": 4067,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "solutions/property-management/composer.lock",
+    "sha256": "5b47e177da0d92a46a927881190238e6c6dc5c325e460c9a5f6dea8676bdfea8",
+    "bytes": 410130,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "delivery/crm-backend-installed/receipt.md",
+    "sha256": "5c6c4b97d60e7959bfda21a1c74460413faecd6cf7e0596e3131a04fda9f14d4",
+    "bytes": 3106,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  },
+  {
+    "repo": "flexcrm",
+    "path": "delivery/crm-backend-installed/source-inputs.json",
+    "sha256": "72576328514566f9e3acfd69eb6f869bd1f57bacce0239834d6bb492dcd4326b",
+    "bytes": 2345,
+    "head": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "class": "observed-working-bytes",
+    "execution_acceptance": false
+  }
+]

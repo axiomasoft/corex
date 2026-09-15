@@ -1,0 +1,11 @@
+{
+  "model_class": "frontier",
+  "effort": "high",
+  "source": "provider-thread-state",
+  "ts": "2026-09-15T11:10:53Z",
+  "model": "gpt-5.6-sol",
+  "thread_id": "01a0a4bf-8d34-79a2-a247-7a4dac3111d4",
+  "source_version": "codex-turn-context-v1",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "invocation": "$ task:plan-design 2026.09.15-\u21161-COREX-FLEXCRM-REMAINING P7"
+}

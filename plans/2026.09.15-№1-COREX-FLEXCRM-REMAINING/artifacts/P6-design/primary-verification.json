@@ -1,0 +1,91 @@
+{
+  "checked_at": "2026-09-15",
+  "method": "direct web open of official pages; correcting redirects by official search where required",
+  "sources": [
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/functions-json.html",
+      "supported_claim": "JSONB missing/null operators and explicit immutable structural mapping; business parity remains local."
+    },
+    {
+      "origin": "Laravel",
+      "url": "https://laravel.com/docs/13.x/queues",
+      "supported_claim": "afterCommit dispatch follows SQL commit; does not establish durable external delivery."
+    },
+    {
+      "origin": "OWASP",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "supported_claim": "Structural SQL identifiers require allowlist; scalar parameter bindings."
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/sql-createindex.html",
+      "supported_claim": "CIC cannot run in transaction, invalid recovery and IF NOT EXISTS not equivalent definition."
+    },
+    {
+      "origin": "Django",
+      "url": "https://docs.djangoproject.com/en/5.2/ref/contrib/postgres/operations/#concurrent-index-operations",
+      "supported_claim": "PostgreSQL concurrent index operations require non-atomic migration; independent integration limitation."
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/sql-copy.html",
+      "supported_claim": "PG16 COPY options; no newer ON_ERROR/REJECT_LIMIT, codec design cannot assume them."
+    },
+    {
+      "origin": "PHP",
+      "url": "https://www.php.net/manual/en/function.fputcsv.php",
+      "supported_claim": "PHP8.4 explicit escape; empty disables proprietary escape; stream output."
+    },
+    {
+      "origin": "OWASP",
+      "url": "https://owasp.org/www-community/attacks/CSV_Injection",
+      "supported_claim": "Spreadsheet formula hazard and sanitizer portability limitation, display profile distinct raw data."
+    },
+    {
+      "origin": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/16/textsearch.html",
+      "supported_claim": "PG native full-text facility, not Meilisearch feature/rank equality."
+    },
+    {
+      "origin": "OWASP",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+      "supported_claim": "Deny default and validate current authorization each request; index ACL not authority."
+    },
+    {
+      "origin": "Meilisearch",
+      "url": "https://www.meilisearch.com/docs/reference/api/indexes/swap-indexes",
+      "supported_claim": "Swap completed atomic but 202/task async; enqueued task UIDs unmodified."
+    },
+    {
+      "origin": "Meilisearch",
+      "url": "https://www.meilisearch.com/docs/capabilities/indexing/tasks_and_batches/async_operations",
+      "supported_claim": "Task IDs and succeeded/failed status, 202 acceptance not completion."
+    },
+    {
+      "origin": "AWS",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+      "supported_claim": "Business/outbox same transaction, relay duplicates require idempotent consumer."
+    },
+    {
+      "origin": "Composer",
+      "url": "https://getcomposer.org/doc/04-schema.md#suggest",
+      "supported_claim": "require mandatory, suggest informational; optional SDK in separate adapter require."
+    },
+    {
+      "origin": "Laravel",
+      "url": "https://laravel.com/docs/13.x/providers",
+      "supported_claim": "Providers register resources/container services, lazy integration boundary."
+    }
+  ],
+  "rejected": [
+    "Perplexity initial answer incomplete after beginning transfer section; retained, owner notified.",
+    "Transfer answer COPY ON_ERROR/REJECT_LIMIT from current PG rejected for PG16.",
+    "Search answer RLS as tenant design rejected: physical DB-per-account maintained.",
+    "Search answer framework-free core inference rejected: reusable Laravel CoreX core boundary maintained.",
+    "Initial Meilisearch indexes URL redirected to settings; exact official swap page found and directly verified."
+  ],
+  "local_inference": [
+    "Port signatures, placement, bounded thresholds, dedicated CIC lock, manifest snapshot, serialized no-takeover unknown lane, gap-safe watermark/publication fence and swap reconciliation are local design; docs not implementation proof."
+  ]
+}

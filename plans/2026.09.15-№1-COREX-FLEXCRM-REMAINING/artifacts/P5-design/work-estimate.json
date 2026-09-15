@@ -1,0 +1,26 @@
+{
+  "route_attested": true,
+  "capabilities_attested": false,
+  "capabilities_sufficient": false,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "da51151d438e80fc169172cb302fc04099f4250413bd099db0515e8a2069ff49",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 91109,
+  "lifecycle": "waiting-external",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/P5-design/validation.md + research/P5-wakeup-design.md + research/P5-design-rag.md + decisions/D10-workflow-wakeup.md (proposed)",
+  "external_pause": {
+    "reason": "mandatory-Perplexity-three-identical-timeouts",
+    "started_at": "2026-09-15T10:13:25Z",
+    "resume_at": "2026-09-15T10:28:07.480195Z",
+    "observed_at": "2026-09-15T10:27:07.480195Z",
+    "fingerprint": "ab16b4a69b8cd2164881bfa2fdd654f5cb1e4fe916c573bccd97763f31e5f89e",
+    "runnable_after": "Perplexity successful neutral responses covering all five choices; independent primary sources directly verified; no product execution",
+    "predicate_satisfied": false,
+    "continuation": "waiting: восстановление Perplexity; затем manual: завершить обязательную нейтральную RAG-проверку и принять черновик PLAN1 P5 в текущей сессии"
+  },
+  "schema_version": "session-work-estimate/v1"
+}

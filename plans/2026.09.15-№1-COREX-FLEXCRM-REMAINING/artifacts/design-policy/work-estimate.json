@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "77f52a0e2c3f796bff773bfed627d260724ff21a4063560582b7d9d6b612a7ca",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 7310,
+  "lifecycle": "scope-complete",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "decisions/D4.md + decisions/D5.md + research/05-integrated-design.md + research/P1-design-rag.md + artifacts/design-policy/validation.md",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

@@ -1,0 +1,132 @@
+[
+  {
+    "origin": "composer-basic",
+    "url": "https://getcomposer.org/doc/01-basic-usage.md",
+    "resolved": "https://getcomposer.org/doc/01-basic-usage.md",
+    "sha256": "e4a62229ab5952a9ea04845ad11a6220a7a97cd7c46e613054d730112bbb7e6e",
+    "bytes": 21097,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/composer-basic.html.gz",
+    "compressed_sha256": "2c63528add67958feafdd8d90d65757e1c86b1b0c2b892b7296c90b959efc2a6"
+  },
+  {
+    "origin": "composer-cli",
+    "url": "https://getcomposer.org/doc/03-cli.md",
+    "resolved": "https://getcomposer.org/doc/03-cli.md",
+    "sha256": "fe0fc74cdf8fe18b804d6268237438d084c11a150aab3f8381a9cba297230268",
+    "bytes": 110559,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/composer-cli.html.gz",
+    "compressed_sha256": "f6db3570fce56ba5e9652ee8402e70f60c36cb93c9c2fd6a709b65bd145b7086"
+  },
+  {
+    "origin": "composer-repositories",
+    "url": "https://getcomposer.org/doc/05-repositories.md",
+    "resolved": "https://getcomposer.org/doc/05-repositories.md",
+    "sha256": "d164f405b1889254169ec282d43992ea5db511aa14b8a144d12c6383a1a28890",
+    "bytes": 45767,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/composer-repositories.html.gz",
+    "compressed_sha256": "d882ae6b9520362cb68bfb1d6377a2b7add609082c171b2eb4b68b1cd5522ae3"
+  },
+  {
+    "origin": "git-archive",
+    "url": "https://git-scm.com/docs/git-archive",
+    "resolved": "https://git-scm.com/docs/git-archive",
+    "sha256": "cb3715f0c2359f43d0b1a12501ef82ff2ab46474c69ba5f6af40ae2d7656e4f9",
+    "bytes": 50105,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/git-archive.html.gz",
+    "compressed_sha256": "9d3690adfa8797020ee4b6bf1656c8deaa438fb25dbdb488b46e4a9fc07982ba"
+  },
+  {
+    "origin": "github-contexts",
+    "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts",
+    "resolved": "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts",
+    "sha256": "a0b2d199113c3ed6877756350f00d171596051aafd00ced185127da4003af2a8",
+    "bytes": 1014845,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/github-contexts.html.gz",
+    "compressed_sha256": "3f986b7b64cc45a705ccee05aea0058782908cec9657818c3ab03d3fe7073125"
+  },
+  {
+    "origin": "github-immutable",
+    "url": "https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases",
+    "resolved": "https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases",
+    "sha256": "b0dc9f0a053321b99823d692129a7bebd71289fb8f823c52c1d406e4610453cf",
+    "bytes": 559434,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/github-immutable.html.gz",
+    "compressed_sha256": "074df05e852e069a9baf7344c4d873193d12f79fe14687f53798c4751571e699"
+  },
+  {
+    "origin": "github-security",
+    "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+    "resolved": "https://docs.github.com/en/actions/reference/security/secure-use",
+    "sha256": "31e947d41774f227a07fa724d2ac8a9061e7ded65d4350e0a2691112152cdad7",
+    "bytes": 468756,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/github-security.html.gz",
+    "compressed_sha256": "234b49984ca0a2b257fb27304dd3c1bf39b5d7b9f95a05ac04d206d5fce8b116"
+  },
+  {
+    "origin": "semver",
+    "url": "https://semver.org/",
+    "resolved": "https://semver.org/",
+    "sha256": "1d282f7eb59a4e4d0199f30431e333d43181149cac41f77a0b46ab7229089c25",
+    "bytes": 31102,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/semver.html.gz",
+    "compressed_sha256": "5fe48ab99a8c8ab1e395dc2eb32fe9272c051e8dc1f9e758dbf1ea2321459ee9"
+  },
+  {
+    "origin": "postgres-dump",
+    "url": "https://www.postgresql.org/docs/16/backup-dump.html",
+    "resolved": "https://www.postgresql.org/docs/16/backup-dump.html",
+    "sha256": "e24f0dbb437f2a3871762ce9338a160063cea2d5c7abc95c5cabdf9c339907a8",
+    "bytes": 29884,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/postgres-dump.html.gz",
+    "compressed_sha256": "05a65b3f3043340c6b9cde2049152985b81f5e1170ff25309b3c8bb12c05a9f9"
+  },
+  {
+    "origin": "laravel-migrations",
+    "url": "https://laravel.com/docs/13.x/migrations",
+    "resolved": "https://laravel.com/framework/docs/13.x/migrations",
+    "sha256": "1f1baa97183ce6003d2030c98902c11fdcb954763eea54d562e708631c5b6e52",
+    "bytes": 616135,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/laravel-migrations.html.gz",
+    "compressed_sha256": "d2887820762ea79fea11ae3ac71b0931a7f9b141c4abe0d00305adf50223b2cf"
+  },
+  {
+    "origin": "owasp-authorization",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+    "resolved": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+    "sha256": "368296f7add7ffd6f175d4de8f2e03dbbd287f6eda75e85603b2d39919913c30",
+    "bytes": 100788,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/owasp-authorization.html.gz",
+    "compressed_sha256": "c8489160d0e1f85266ad0aa0692ea58d008553bc52116f81b9e94d694cc4dadf"
+  },
+  {
+    "origin": "slsa-provenance",
+    "url": "https://slsa.dev/spec/v1.2/provenance",
+    "resolved": "https://slsa.dev/spec/v1.2/provenance",
+    "sha256": "9a176a8193aff28144dbab80584f0e9dd707a7c24f98c436349674a4a0e51e44",
+    "bytes": 17253,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/slsa-provenance.html.gz",
+    "compressed_sha256": "b64104b7039cddf9dd75c6168a926dbacc9b750de9b6ccd01916aa13f5c37ee5"
+  },
+  {
+    "origin": "reproducible-timestamps",
+    "url": "https://reproducible-builds.org/docs/timestamps/",
+    "resolved": "https://reproducible-builds.org/docs/timestamps/",
+    "sha256": "288a73b523cccef211d30f99305363c913106e3a1f507a98baa7c4fb027a8291",
+    "bytes": 40213,
+    "result": "retrieved",
+    "artifact": "artifacts/P9-design/primary/reproducible-timestamps.html.gz",
+    "compressed_sha256": "82b10d7cfa6e2711feaa5f3fb0c6697d315a6b59fcb100f728f968bb824d371f"
+  }
+]

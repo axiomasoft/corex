@@ -1,0 +1,234 @@
+[
+  {
+    "label": "P1 design inputs",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+      "--stage",
+      "inputs"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+    "stderr": ""
+  },
+  {
+    "label": "P11 structural contract",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p11.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "P11 structural identity check PASS; actual executed/accepting-owner/authority truth remains item-owned\n",
+    "stderr": ""
+  },
+  {
+    "label": "lint",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "lint"
+    ],
+    "exit": 0,
+    "stdout": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nplan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n",
+    "stderr": ""
+  },
+  {
+    "label": "state",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "state",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--all"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (78)\n",
+    "stderr": ""
+  },
+  {
+    "label": "status",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "label": "decisions",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "decisions",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (4)\n",
+    "stderr": ""
+  },
+  {
+    "label": "bundle",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--item",
+      "P1.1"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "label": "P1 design inputs post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+      "--stage",
+      "inputs"
+    ],
+    "exit": 0,
+    "stdout": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+    "stderr": ""
+  },
+  {
+    "label": "P11 structural contract post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p11.py",
+      "--stage",
+      "design"
+    ],
+    "exit": 0,
+    "stdout": "P11 structural identity check PASS; actual executed/accepting-owner/authority truth remains item-owned\n",
+    "stderr": ""
+  },
+  {
+    "label": "lint post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "lint"
+    ],
+    "exit": 0,
+    "stdout": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nplan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n",
+    "stderr": ""
+  },
+  {
+    "label": "state post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "state",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--all"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (78)\n",
+    "stderr": ""
+  },
+  {
+    "label": "status post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "label": "decisions post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "decisions",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (4)\n",
+    "stderr": ""
+  },
+  {
+    "label": "bundle post-journal",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check",
+      "--item",
+      "P1.1"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "label": "status final",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  {
+    "label": "lint final",
+    "command": [
+      "python3",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "lint"
+    ],
+    "exit": 0,
+    "stdout": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nplan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n",
+    "stderr": ""
+  },
+  {
+    "label": "bundle final",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--item",
+      "P1.1",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  }
+]

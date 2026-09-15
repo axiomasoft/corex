@@ -1,4 +1,4 @@
 # ACTIVE
 
-**Active:** —
+**Active:** [PLAN1 — COREX-FLEXCRM-REMAINING](2026.09.15-№1-COREX-FLEXCRM-REMAINING/plan.md)
 **Updated:** 2026-09-15

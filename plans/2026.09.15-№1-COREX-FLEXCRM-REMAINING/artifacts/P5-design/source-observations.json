@@ -1,0 +1,58 @@
+[
+  {
+    "path": "composer.json",
+    "sha256": "e7d3bd24392ba8fe2c5ad5106e37f924faaa73b593f16b2bf9be4f9d1856d5bb"
+  },
+  {
+    "path": "docs/dev-doctrine.md",
+    "sha256": "9f72bb48a69f7e5e014d9cbcee5d16ce224631c455f4da556409e061a24380b6"
+  },
+  {
+    "path": "packages/modules/src/Extend/Workflow.php",
+    "sha256": "8d68c590ee3eb71ea7993808cac692cca21c4dc50ad9f94bf92554818d71cb44"
+  },
+  {
+    "path": "packages/modules/src/Manifest.php",
+    "sha256": "37c05a707d85b3341ab7472206dad7d1a48bfd71978adc0bf5caf82c8dc2aac2"
+  },
+  {
+    "path": "packages/modules/src/Contracts/ModuleRegistry.php",
+    "sha256": "8c959b24f2f2b01b1457ccfb85948f70ab0aa8ad5490b87491571053421189a8"
+  },
+  {
+    "path": "packages/modules/src/Contracts/EntityRegistry.php",
+    "sha256": "21fd375349bdedc1b11bb6cd7e09d6f36812fcfc5a74fc26480ee770bf2cac78"
+  },
+  {
+    "path": "packages/core/src/Events/DomainEvent.php",
+    "sha256": "2326f626baf97f4b4b85aa453f1036004303e33c1d01b54c91702a02da684098"
+  },
+  {
+    "path": "packages/core/src/Tenancy/TenantContext.php",
+    "sha256": "a47d86d208f203c2dcfda5719a8d80c446dfd580533a5513cb3286ddef92768b"
+  },
+  {
+    "path": "packages/core/src/Tenancy/Contracts/AccountConnectionResolver.php",
+    "sha256": "97ae7f7c35c2d0b40725fe00b1edc6b2caf9645f05776a72cdc74a2d7f11b8c8"
+  },
+  {
+    "path": "packages/tenancy/composer.json",
+    "sha256": "284475bb260cd598749c2c9db04298bf8eb0babe15f5950c65287a910f438c14"
+  },
+  {
+    "path": "packages/tenancy/src/Membership/Internal/Expiry/ExpiryScheduler.php",
+    "sha256": "399b8dfe4df13326aef906bd663957c35fd52ab550a2f7b475e116ea4b730437"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "sha256": "d739a76c6fe1ddd3e52b000252a17fdd52e8a61489529fa63d22c0543321a03b"
+  },
+  {
+    "path": "tests/Arch/LayerTest.php",
+    "sha256": "c43e53584bf24c0e1b22630448e3cc3365bf9c50d42f4be593c66bc41da3f619"
+  },
+  {
+    "path": "phpunit.xml",
+    "sha256": "53e3b3c400e8c48d00615656efbd56e2d2027e40e4efb5c6f6781ab077773418"
+  }
+]

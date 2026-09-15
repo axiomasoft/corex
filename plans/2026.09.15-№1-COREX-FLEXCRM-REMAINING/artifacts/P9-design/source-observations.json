@@ -1,0 +1,97 @@
+{
+  "source_commit": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "files": [
+    {
+      "path": "composer.json",
+      "sha256": "e7d3bd24392ba8fe2c5ad5106e37f924faaa73b593f16b2bf9be4f9d1856d5bb",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/core/composer.json",
+      "sha256": "0b8a2dd10530dc87802e75f2a518db5280fcf183baa0b2b83fc1a59670d71674",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/modules/composer.json",
+      "sha256": "60ba7cb6a013be029d4897a7b27975d58cf01435f4360fc8696e87eed5bce73a",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/api/composer.json",
+      "sha256": "723b34de0c36402a4e16febd6ab24f06762565841eaef12ac51792832bad1148",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/tasks/composer.json",
+      "sha256": "b017b75acc50e376e101e7f5b3fe5d251751a8e85e52b5c16f3df84cc0a0633c",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "sha256": "284475bb260cd598749c2c9db04298bf8eb0babe15f5950c65287a910f438c14",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "packages/auth/composer.json",
+      "sha256": "6458197889e7bd68717e42b635d6f668bbab2a23f475b7983629a99272e82dfe",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "d739a76c6fe1ddd3e52b000252a17fdd52e8a61489529fa63d22c0543321a03b",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": ".github/workflows/distribution-proof.yml",
+      "sha256": "9472072adb77610879ee396197065f4a7378bf4c785133c01f9a98c55f2b8751",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/export.py",
+      "sha256": "2e7983e8a36ced1d8196bd86c17c6e0a395850b42687e77b852025a4f5fcba1a",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/export-policy.json",
+      "sha256": "12347edc9ba81cb6c71a54b513c5ee7308f29348d152535e7f930cb66edf1501",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/pristine-proof.py",
+      "sha256": "39e57671570a48daa880f4f70669cd6d56ca64004a68b76698671aad9f1f52cf",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/publish_guard.py",
+      "sha256": "e4e1b26d0b5348f133a8f6f8527698ff10dbb37c3129798e3d783a3116eb8e0b",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/publish_exact.py",
+      "sha256": "334fbdbe3f6e96d4e3d246c63c86d090d6d85c388c2bde30d2276fd0437fa8f2",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "scripts/distribution/private-auth-proof.py",
+      "sha256": "eda672bc45663082be61c74a7b30492214fda69c50ce7cb99113842fac42d364",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "delivery/crm-install-qualification-20260915/receipt.md",
+      "sha256": "d2e6052a7b2ca87a3d04753597057282014f114674d116d9a81a232872bc334b",
+      "claims": "inspected source only; no current execution inferred"
+    },
+    {
+      "path": "delivery/module-install-qualification-20260915/corex-tasks-candidate.json",
+      "sha256": "90095a6b040df73d89c373da55e5479a459979eecd12e265d4f4cc525d9a24da",
+      "claims": "inspected source only; no current execution inferred"
+    }
+  ],
+  "facts": [
+    "origin axiomasoft/corex",
+    "export and pristine helper fixed to historical4 package source; publish_exact bound old D17 and version",
+    "current api PHP^8.3 L12/13; tenancy PHP^8.4 L12/13 fixed stancl providers; auth PHP^8.3 L12 and independent AzGuard",
+    "CI auth job requires private token; hosted success not inferred from workflow config",
+    "E2/E3 local candidates are not new released baseline; E5 historical older published set retained"
+  ]
+}

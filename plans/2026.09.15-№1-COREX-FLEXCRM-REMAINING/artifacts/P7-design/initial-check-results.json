@@ -1,0 +1,114 @@
+{
+  "p1-inputs": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+      "--stage",
+      "inputs"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+    "stderr": ""
+  },
+  "p2-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p3-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p3.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p4-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p4.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p5-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p5.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p6-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p6.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 3, \"case_contracts\": 57, \"semantic_acceptance\": \"item-owned; structure never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p7-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 5, \"case_contracts\": 70, \"parent_ownership\": 45, \"semantic_acceptance\": \"item-owned; structural checks never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "full-design-denied": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 1,
+    "expected_result": "deny P8 skeleton",
+    "check": "PASS",
+    "stdout": "",
+    "stderr": "Task runtime check FAIL: DESIGN_PENDING: P8 remains a skeleton\n"
+  }
+}

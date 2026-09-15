@@ -1,0 +1,83 @@
+{
+  "source_commit": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "inputs": [
+    {
+      "path": "packages/modules/src/Contracts/EntityRegistry.php",
+      "sha256": "21fd375349bdedc1b11bb6cd7e09d6f36812fcfc5a74fc26480ee770bf2cac78"
+    },
+    {
+      "path": "packages/modules/src/Registry/ArrayEntityRegistry.php",
+      "sha256": "a33b5adb95cd3c60c70adcb0967c7e8ffca45b081b3c301eea98fed86cb76dd5"
+    },
+    {
+      "path": "packages/modules/src/Registry/EntityDefinition.php",
+      "sha256": "732b39dee3f08555c36ab278914d53bd0837be241610222b37c78062044302f1"
+    },
+    {
+      "path": "packages/modules/src/Registry/FieldDefinition.php",
+      "sha256": "6313ff6463f804df45d84b079b51fc3a89c8b27197aa712722b87138d18369ff"
+    },
+    {
+      "path": "packages/modules/src/Enums/Capability.php",
+      "sha256": "184d7a41be649e053a2e625ed6243cdc0db197266500b9f42d2e28374a246552"
+    },
+    {
+      "path": "packages/modules/src/Manifest.php",
+      "sha256": "37c05a707d85b3341ab7472206dad7d1a48bfd71978adc0bf5caf82c8dc2aac2"
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompilationValidator.php",
+      "sha256": "1e68f7ec772e2ec36f980c103f14b6e71e7a3657d7bdb2e39ce1c46678a4d42d"
+    },
+    {
+      "path": "packages/core/src/Contracts/TenantStorage.php",
+      "sha256": "458256f46c6f7c6e36a6925a0539f6a2161013cb790e56d0598532e4bb1bf024"
+    },
+    {
+      "path": "packages/core/src/Contracts/SettingsRepository.php",
+      "sha256": "a6a6740fa139278d09b6b18c3e5e4cb845f812a5d0a810c072696d44641493f1"
+    },
+    {
+      "path": "packages/core/src/Events/DomainEvent.php",
+      "sha256": "2326f626baf97f4b4b85aa453f1036004303e33c1d01b54c91702a02da684098"
+    },
+    {
+      "path": "packages/api/src/Contracts/RequestContext.php",
+      "sha256": "d35255df68bccdeaa6cd2a61217ca46fdded70e8945ed1e783aeb7cdd618d1f7"
+    },
+    {
+      "path": "packages/api/src/Contracts/Principal.php",
+      "sha256": "b8d31ab5cbc592d0944d2551dfbe7859dd36099b88c458d450c035f08bc601a9"
+    },
+    {
+      "path": "packages/api/src/Contracts/OperationHandler.php",
+      "sha256": "9be3a7d6d825079e3782cf3145c152db5ab4511e9e366214361e6ffb6ab25794"
+    },
+    {
+      "path": "packages/api/src/Dispatcher.php",
+      "sha256": "bb8f2b437a803476f369a449e1e47ece9e04eaeb4f685db4a38b38abded4fdfb"
+    },
+    {
+      "path": "tests/Arch/LayerTest.php",
+      "sha256": "c43e53584bf24c0e1b22630448e3cc3365bf9c50d42f4be593c66bc41da3f619"
+    },
+    {
+      "path": "composer.json",
+      "sha256": "e7d3bd24392ba8fe2c5ad5106e37f924faaa73b593f16b2bf9be4f9d1856d5bb"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "d739a76c6fe1ddd3e52b000252a17fdd52e8a61489529fa63d22c0543321a03b"
+    }
+  ],
+  "observations": [
+    "EntityRegistry get/has/unscoped all expose definitions irrespective of activation; current ctx all/byCapability required for user-facing lookup.",
+    "Capability contains Commentable/Documentable; no generic attachment capability may be invented by enum extension.",
+    "Manifest components handles AsComponent validation deliberate no-op; panel descriptor DI adapter avoids implementing a second component engine.",
+    "SettingsRepository already owns cascade; notification preference facade can adapt Settings with no public changes.",
+    "Core imports no sibling packages; saved views own policy/schema ports in core and modules adapter stays in panels.",
+    "Literal scan fixed foundation package list needs panels/media/notifications coverage; CI aggregator also needs declared new package suites.",
+    "No panels/media/notifications packages or saved-view implementation found in qualified source paths. This is design source observation; actual equivalent qualification P1/P2 and executed proof future."
+  ],
+  "product_or_runtime_tests_run": false
+}

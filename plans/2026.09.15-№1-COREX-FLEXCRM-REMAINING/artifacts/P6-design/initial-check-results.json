@@ -1,0 +1,83 @@
+{
+  "schema": "design-check-results/1",
+  "checks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p1-inputs",
+        "result": {
+          "chunk_id": "40c621",
+          "wall_time_seconds": 0.000005937,
+          "exit_code": 0,
+          "original_token_count": 37,
+          "output": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n"
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p2-design",
+        "result": {
+          "chunk_id": "14199e",
+          "wall_time_seconds": 0.00000337,
+          "exit_code": 0,
+          "original_token_count": 36,
+          "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n"
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p3-design",
+        "result": {
+          "chunk_id": "a5e54b",
+          "wall_time_seconds": 0.000001049,
+          "exit_code": 0,
+          "original_token_count": 45,
+          "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n"
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p4-design",
+        "result": {
+          "chunk_id": "1758e5",
+          "wall_time_seconds": 0.000001803,
+          "exit_code": 0,
+          "original_token_count": 54,
+          "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p5-design",
+        "result": {
+          "chunk_id": "8f5878",
+          "wall_time_seconds": 9.29e-7,
+          "exit_code": 0,
+          "original_token_count": 51,
+          "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n"
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "p6-design",
+        "result": {
+          "chunk_id": "688ca0",
+          "wall_time_seconds": 0.000001176,
+          "exit_code": 0,
+          "original_token_count": 48,
+          "output": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 3, \"case_contracts\": 57, \"semantic_acceptance\": \"item-owned; structure never executed proof\", \"runtime_or_live_proof\": false}\n"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "findings/P8-source-qualification.md": [
+    "QUAL",
+    5
+  ],
+  "findings/P8-descriptors.md": [
+    "DESC",
+    9
+  ],
+  "findings/P8-catalogue-policy.md": [
+    "CAT",
+    9
+  ],
+  "findings/P8-invocation.md": [
+    "INVOKE",
+    12
+  ],
+  "findings/P8-introspection.md": [
+    "INTRO",
+    7
+  ],
+  "findings/P8-contributions.md": [
+    "CONTRIB",
+    8
+  ],
+  "findings/P8-installed.md": [
+    "INST",
+    6
+  ]
+}

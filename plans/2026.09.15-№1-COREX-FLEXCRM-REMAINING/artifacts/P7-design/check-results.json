@@ -1,0 +1,222 @@
+{
+  "p1-inputs": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+      "--stage",
+      "inputs"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"inputs\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+    "stderr": ""
+  },
+  "p2-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p3-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p3.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 7, \"requirements\": 8, \"semantic_acceptance\": \"item-owned; checker cannot substitute executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p4-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p4.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 4, \"case_contracts\": 51, \"semantic_acceptance\": \"item-owned; structural checker never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p5-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p5.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 6, \"requirements\": 2, \"case_contracts\": 32, \"semantic_acceptance\": \"item-owned; structure never substitutes executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p6-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p6.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 8, \"requirements\": 3, \"case_contracts\": 57, \"semantic_acceptance\": \"item-owned; structure never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "p7-design": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py",
+      "--stage",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "expected_result": "PASS",
+    "check": "PASS",
+    "stdout": "{\"stage\": \"design\", \"result\": \"PASS\", \"specs\": 9, \"requirements\": 5, \"case_contracts\": 70, \"parent_ownership\": 45, \"semantic_acceptance\": \"item-owned; structural checks never executed proof\", \"runtime_or_live_proof\": false}\n",
+    "stderr": ""
+  },
+  "full-design-denied": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "--check",
+      "design"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 1,
+    "expected_result": "deny P8 skeleton",
+    "check": "PASS",
+    "stdout": "",
+    "stderr": "Task runtime check FAIL: DESIGN_PENDING: P8 remains a skeleton\n"
+  },
+  "named-lint": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "plan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n",
+    "stderr": ""
+  },
+  "state-fresh": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "state",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--all",
+      "--check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "views: проверены (50)\n",
+    "stderr": ""
+  },
+  "decisions-fresh": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "decisions",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "views: проверены (4)\n",
+    "stderr": ""
+  },
+  "status-fresh": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "status",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  "bundle-fresh": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-views.py",
+      "bundle",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--item",
+      "P1.1",
+      "--check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "views: проверены (1)\n",
+    "stderr": ""
+  },
+  "downstream-structural": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-downstream.py",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--item",
+      "P7.1",
+      "--json"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "{\"blocks\": false, \"consumers\": [{\"commands\": [{\"addressed_paths\": [\"findings/P7-recurrence.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"], \"applicable\": false, \"command\": \"python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-recurrence.md\", \"missing_paths\": [\"findings/P7-recurrence.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"]}], \"consumer_spec_sha256\": \"1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8\", \"item\": \"P7.2\", \"matched_paths\": [\"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P7-source-qualification.md\"], \"outcome\": \"unknown\", \"owns_git_ref\": false, \"readiness\": null, \"result_key\": {\"consumer_spec_sha256\": \"1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\"}, \"validation\": \"`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-recurrence.md` — first carrier exit0 with exact actual cases/inputs/adoption. For actual code/config delta D34 `composer lint:check`, `composer analyse`, `composer test`, `composer test:pg`; `composer test:arch`, `composer contract-guard`, `bash scripts/anti-weakening-gate.sh`; D98 `bash scripts/mutation-check.sh --all` when src changes. Affected package own `composer test`, `composer analyse`, `composer test:coverage`, existing floors/root80 target85 no weakening. Mandatory DB isolation+PG preflight before stateful tests, disposable _test DBs PG16 concurrent sessions/subprocess fault injection, SQLite boxed separate. Actual command/cwd/exit/source/runtime/ICU/tzdb/fixture/config/schema/profile/raw log SHA256 and Expected/Actual per exact case; checker proves structure not executed conformance. Source-only qualification has conditional D34 code gates; real provider/network/installed/hosted/release/live distinct.\"}, {\"commands\": [{\"addressed_paths\": [\"findings/P7-task-primitives.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"], \"applicable\": false, \"command\": \"python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-task-primitives.md\", \"missing_paths\": [\"findings/P7-task-primitives.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"]}], \"consumer_spec_sha256\": \"6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375\", \"item\": \"P7.3\", \"matched_paths\": [\"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P7-source-qualification.md\"], \"outcome\": \"unknown\", \"owns_git_ref\": false, \"readiness\": null, \"result_key\": {\"consumer_spec_sha256\": \"6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\"}, \"validation\": \"`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-task-primitives.md` — first carrier exit0 with exact actual cases/inputs/adoption. For actual code/config delta D34 `composer lint:check`, `composer analyse`, `composer test`, `composer test:pg`; `composer test:arch`, `composer contract-guard`, `bash scripts/anti-weakening-gate.sh`; D98 `bash scripts/mutation-check.sh --all` when src changes. Affected package own `composer test`, `composer analyse`, `composer test:coverage`, existing floors/root80 target85 no weakening. Mandatory DB isolation+PG preflight before stateful tests, disposable _test DBs PG16 concurrent sessions/subprocess fault injection, SQLite boxed separate. Actual command/cwd/exit/source/runtime/ICU/tzdb/fixture/config/schema/profile/raw log SHA256 and Expected/Actual per exact case; checker proves structure not executed conformance. Source-only qualification has conditional D34 code gates; real provider/network/installed/hosted/release/live distinct.\"}, {\"commands\": [{\"addressed_paths\": [\"findings/P7-locale.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"], \"applicable\": false, \"command\": \"python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-locale.md\", \"missing_paths\": [\"findings/P7-locale.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"]}], \"consumer_spec_sha256\": \"dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103\", \"item\": \"P7.5\", \"matched_paths\": [\"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P7-source-qualification.md\"], \"outcome\": \"unknown\", \"owns_git_ref\": false, \"readiness\": null, \"result_key\": {\"consumer_spec_sha256\": \"dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\"}, \"validation\": \"`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-locale.md` — first carrier exit0 with exact actual cases/inputs/adoption. For actual code/config delta D34 `composer lint:check`, `composer analyse`, `composer test`, `composer test:pg`; `composer test:arch`, `composer contract-guard`, `bash scripts/anti-weakening-gate.sh`; D98 `bash scripts/mutation-check.sh --all` when src changes. Affected package own `composer test`, `composer analyse`, `composer test:coverage`, existing floors/root80 target85 no weakening. Mandatory DB isolation+PG preflight before stateful tests, disposable _test DBs PG16 concurrent sessions/subprocess fault injection, SQLite boxed separate. Actual command/cwd/exit/source/runtime/ICU/tzdb/fixture/config/schema/profile/raw log SHA256 and Expected/Actual per exact case; checker proves structure not executed conformance. Source-only qualification has conditional D34 code gates; real provider/network/installed/hosted/release/live distinct.\"}, {\"commands\": [{\"addressed_paths\": [\"findings/P7-money-rates.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"], \"applicable\": false, \"command\": \"python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-money-rates.md\", \"missing_paths\": [\"findings/P7-money-rates.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"]}], \"consumer_spec_sha256\": \"b5fc691e128470fde32b636a8de127dfb0e6d6bac99e01aa9eb062a20c64c57f\", \"item\": \"P7.6\", \"matched_paths\": [\"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P7-source-qualification.md\"], \"outcome\": \"unknown\", \"owns_git_ref\": false, \"readiness\": null, \"result_key\": {\"consumer_spec_sha256\": \"b5fc691e128470fde32b636a8de127dfb0e6d6bac99e01aa9eb062a20c64c57f\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\"}, \"validation\": \"`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-money-rates.md` — first carrier exit0 with exact actual cases/inputs/adoption. For actual code/config delta D34 `composer lint:check`, `composer analyse`, `composer test`, `composer test:pg`; `composer test:arch`, `composer contract-guard`, `bash scripts/anti-weakening-gate.sh`; D98 `bash scripts/mutation-check.sh --all` when src changes. Affected package own `composer test`, `composer analyse`, `composer test:coverage`, existing floors/root80 target85 no weakening. Mandatory DB isolation+PG preflight before stateful tests, disposable _test DBs PG16 concurrent sessions/subprocess fault injection, SQLite boxed separate. Actual command/cwd/exit/source/runtime/ICU/tzdb/fixture/config/schema/profile/raw log SHA256 and Expected/Actual per exact case; checker proves structure not executed conformance. Source-only qualification has conditional D34 code gates; real provider/network/installed/hosted/release/live distinct.\"}, {\"commands\": [{\"addressed_paths\": [\"findings/P7-geography.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"], \"applicable\": false, \"command\": \"python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-geography.md\", \"missing_paths\": [\"findings/P7-geography.md\", \"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py\"]}], \"consumer_spec_sha256\": \"3ad16f8969f4dfed0ca665d55059e3614c6e6ebc8497bc2e4dcd32467c86cc09\", \"item\": \"P7.7\", \"matched_paths\": [\"plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P7-source-qualification.md\"], \"outcome\": \"unknown\", \"owns_git_ref\": false, \"readiness\": null, \"result_key\": {\"consumer_spec_sha256\": \"3ad16f8969f4dfed0ca665d55059e3614c6e6ebc8497bc2e4dcd32467c86cc09\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\"}, \"validation\": \"`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p7.py --stage branches --report findings/P7-geography.md` — first carrier exit0 with exact actual cases/inputs/adoption. For actual code/config delta D34 `composer lint:check`, `composer analyse`, `composer test`, `composer test:pg`; `composer test:arch`, `composer contract-guard`, `bash scripts/anti-weakening-gate.sh`; D98 `bash scripts/mutation-check.sh --all` when src changes. Affected package own `composer test`, `composer analyse`, `composer test:coverage`, existing floors/root80 target85 no weakening. Mandatory DB isolation+PG preflight before stateful tests, disposable _test DBs PG16 concurrent sessions/subprocess fault injection, SQLite boxed separate. Actual command/cwd/exit/source/runtime/ICU/tzdb/fixture/config/schema/profile/raw log SHA256 and Expected/Actual per exact case; checker proves structure not executed conformance. Source-only qualification has conditional D34 code gates; real provider/network/installed/hosted/release/live distinct.\"}], \"gate\": \"downstream-gate-v1\", \"outcome\": \"unknown\", \"producer_commit\": \"6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41\", \"producer_item\": \"P7.1\", \"version\": \"1.0.0\"}\n",
+    "stderr": ""
+  },
+  "delivery-fresh": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-delivery.py",
+      "--plan-dir",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "--subject",
+      "design",
+      "--verify",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/P7-design/delivery-receipt.json"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit_code": 0,
+    "check": "PASS",
+    "stdout": "plan-delivery: receipt OK\n",
+    "stderr": ""
+  }
+}

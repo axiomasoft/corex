@@ -1,0 +1,3 @@
+Initial mandatory neutral query failed: page.waitForFunction: Timeout 60000ms exceeded. Owner notified immediately; pending, not accepted. Supplementary focused verification required.
+Supplementary query failed with same page.waitForFunction timeout; owner immediately notified. Minimal connectivity/technical verification query next, all key choices pending.
+Third minimal query failed with identical timeout; owner notified. Three reproduced external-service failures, no response/claim accepted. Stop equivalent retries; retain source-grounded candidate and exact resume predicate: successful neutral Perplexity responses covering choices + direct independent sources before acceptance.

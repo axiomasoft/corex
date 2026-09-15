@@ -1,0 +1,20 @@
+{
+  "validation": [
+    "focused",
+    "affected-package"
+  ],
+  "review": "light",
+  "audit_action": "not-requested",
+  "route_evidence": "reuse",
+  "projections": [
+    "decisions",
+    "state",
+    "status",
+    "roadmap",
+    "index"
+  ],
+  "commits": 2,
+  "context": "cold-start-root",
+  "semantic_next": "exec-items",
+  "foreign_baseline": "visible-non-gating"
+}

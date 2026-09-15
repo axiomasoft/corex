@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "1d988a1aa67d3df1a297b289598f06a78f8b7cb0e8fd5e2cffd6cc9068ebcb2d",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 9225,
+  "lifecycle": "design-root-terminal",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/P2-design/validation.md + decisions/D6.md + decisions/D7.md + research/P2-contract-design.md + research/P2-design-rag.md",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

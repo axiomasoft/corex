@@ -1,0 +1,9 @@
+[
+  "| solo | P11.1 | implementation/high | plan-exec | light | recommended: distinct producer/source freeze and verifier preparation before receipt qualification; deterministic local checks |",
+  "| B-P11-QUALIFY | P11.2 | implementation/high | plan-exec | light | recommended: shared current consumer pins/config/test/atom context, ready ordered subsets allowed |",
+  "| B-P11-QUALIFY | P11.3 | implementation/high | plan-exec | light | recommended: same qualified consumer/test/atom join setup, distinct per-profile checks |",
+  "| B-P11-QUALIFY | P11.4 | implementation/high | plan-exec | light | recommended: same immutable selected-atom context; deterministic coverage and residual-owner checks |",
+  "| solo | P11.5 | implementation/high | plan-exec | full | recommended: distinct ready exact foreign diff checkpoint before authority grant; accepting actor and race/partial overwrite hard seam requires bounded independent review |",
+  "| solo | P11.6 | implementation/high | manual | full | recommended: distinct finite authority and foreign repository ownership checkpoint, manual dispatch; authenticated actor and concurrent overwrite/partial write hard seam |",
+  "| solo | P11.7 | implementation/medium | plan-exec | light | recommended: distinct consumer committed-result anchor after foreign write; read-only final currentness/coverage seal |"
+]

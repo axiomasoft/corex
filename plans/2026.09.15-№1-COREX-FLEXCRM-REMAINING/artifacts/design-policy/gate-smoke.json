@@ -1,0 +1,35 @@
+{
+  "scope": "isolated synthetic fixtures; no future phase verification claimed",
+  "cases": [
+    {
+      "case": "execution denied while P2 skeleton remains",
+      "expected_success": false,
+      "exit": 1,
+      "message": "Task runtime check FAIL: DESIGN_PENDING: P2 remains a skeleton"
+    },
+    {
+      "case": "changed retrieval bytes denied",
+      "expected_success": false,
+      "exit": 1,
+      "message": "Task runtime check FAIL: DESIGN_PENDING: P1 retrieval digest mismatch"
+    },
+    {
+      "case": "full schemas without finish denied",
+      "expected_success": false,
+      "exit": 1,
+      "message": "Task runtime check FAIL: [Errno 2] No such file or directory: '/tmp/corex-design-gate-vnzuci7c/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/design-finish.md'"
+    },
+    {
+      "case": "complete synthetic contracts and current finish accepted",
+      "expected_success": true,
+      "exit": 0,
+      "message": "Design gate PASS: 11 detailed phases, Perplexity evidence and current whole-plan finish; semantic review remains required"
+    },
+    {
+      "case": "changed integrated design invalidates finish",
+      "expected_success": false,
+      "exit": 1,
+      "message": "Task runtime check FAIL: DESIGN_PENDING: finish input changed: research/05-integrated-design.md"
+    }
+  ]
+}

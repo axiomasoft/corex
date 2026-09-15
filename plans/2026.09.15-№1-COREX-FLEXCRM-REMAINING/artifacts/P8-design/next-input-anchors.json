@@ -1,0 +1,52 @@
+[
+  {
+    "path": "plan.md",
+    "sha256": "75948a305ebc57111ccfcd153ef30f06771dc74c94eeb09a0e4812362ca51b3c",
+    "bytes": 24418
+  },
+  {
+    "path": "phases/P9/P9.md",
+    "sha256": "40cbb63eaea9e7600e426f9d9dd40da1b65ccb8beb77188ae190ea6e836bca50",
+    "bytes": 7079
+  },
+  {
+    "path": "phases/P9/P9.1.md",
+    "sha256": "3cc00aee7568c6f2cde3e057af364414ee89e0c449ad01054c4917fe4f8c9683",
+    "bytes": 365
+  },
+  {
+    "path": "research/05-integrated-design.md",
+    "sha256": "0ba5ba31736d9c91457b242ac9b657bbc153ce01c6017cc874632cdf0f71f9e7",
+    "bytes": 29330
+  },
+  {
+    "path": "research/03-gates.md",
+    "sha256": "b9a2ad93007d76152c25dbf2f4c6b908c2182482900c1f7f144c6ffb5857db3f",
+    "bytes": 17495
+  },
+  {
+    "path": "research/02-baseline.md",
+    "sha256": "0179e0e638ab4b5b98b6cea549334b61339654d38ec644461b7e0bd428e0e90a",
+    "bytes": 6674
+  },
+  {
+    "path": "research/P8-tool-design.md",
+    "sha256": "ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca",
+    "bytes": 50080
+  },
+  {
+    "path": "decisions/D4.md",
+    "sha256": "618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16",
+    "bytes": 5050
+  },
+  {
+    "path": "decisions/D6.md",
+    "sha256": "c547fe6117e1dd166820483dd3909661e6a63cb01880f28862b932a81b978e4e",
+    "bytes": 2904
+  },
+  {
+    "path": "decisions/D13-tool-introspection.md",
+    "sha256": "4470953848bfbe2c24b54782db1fed20ec90a2cc95b9d1d0c04b517cecc02fb6",
+    "bytes": 6156
+  }
+]

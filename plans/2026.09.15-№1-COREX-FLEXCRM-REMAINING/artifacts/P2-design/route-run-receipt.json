@@ -1,0 +1,19 @@
+{
+  "schema_version": "route-run-receipt/v1",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "item_id": "design",
+  "attempt": 3,
+  "session_id": "01a0a44c-a9aa-7930-a77b-1d0838215b20",
+  "run_id": "630212cc491a2af5f790aa2ad43063b37cd1eeba072278207cf75d0df82e7c8c",
+  "evidence": {
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "effort": "high",
+    "invocation": "$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2",
+    "model": "gpt-5.6-sol",
+    "model_class": "frontier",
+    "source": "provider-thread-state",
+    "source_version": "codex-turn-context-v1",
+    "thread_id": "01a0a44c-a9aa-7930-a77b-1d0838215b20",
+    "ts": "2026-09-15T09:07:27Z"
+  }
+}

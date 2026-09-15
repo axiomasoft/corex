@@ -1,0 +1,52 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+  "continuity": {
+    "evidence": [
+      "batch:56405e3f036d14f87cb892ecf4cad66816f54569d58faa8e47ca1584b6db558d",
+      "loaded-inputs:reusable",
+      "cold-start-cost:32042",
+      "checkpoint:artifacts/P6-design/validation.md + research/P6-data-design.md + research/P6-design-rag.md + decisions/D11-data-import-search.md"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:fb8d7dbe75aa1c6e22d24dcf3352559469d89a4da0a7bef937ea82d629959c9c",
+    "plan": "sha256:746fa56bb98669fe84adeb17af9d54dffb596a454317170bcd37426b6fa142cf",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P7",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "rationale": {
+    "open_risks": "Missing engine capability cannot complete R11 by NO-GO, independent static PG/stream",
+    "remaining": "P7–P11 detailed/RAG and whole integrated semantic pre-mortem/hash-current design-finish"
+  },
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P7\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Capabilities | repository design; neutral Perplexity RAG; direct primary verification |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Детализировать P7 task/recurrence/intl, mandatory neutral Perplexity RAG |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-design 2026.09.15-№1-COREX-FLEXCRM-REMAINING P7'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:56405e3f036d14f87cb892ecf4cad66816f54569d58faa8e47ca1584b6db558d\", \"loaded-inputs:reusable\", \"cold-start-cost:32042\", \"checkpoint:artifacts/P6-design/validation.md + research/P6-data-design.md + research/P6-design-rag.md + decisions/D11-data-import-search.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "continuity": {
+      "evidence": [
+        "batch:56405e3f036d14f87cb892ecf4cad66816f54569d58faa8e47ca1584b6db558d",
+        "loaded-inputs:reusable",
+        "cold-start-cost:32042",
+        "checkpoint:artifacts/P6-design/validation.md + research/P6-data-design.md + research/P6-design-rag.md + decisions/D11-data-import-search.md"
+      ],
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "gpt-5.6-sol",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}
