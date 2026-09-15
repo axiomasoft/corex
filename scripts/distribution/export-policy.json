@@ -1,5 +1,5 @@
 {
-  "source_ref": "ea7d0dbdf36b122904abba91e124018c11b939ed",
+  "source_ref": "9152dde68ccace20d111f044aecf132bb8d49861",
   "version": "0.1.0-p4.3",
   "packages": {
     "corex/core": "packages/core",
@@ -7,6 +7,6 @@
     "corex/tasks": "packages/tasks",
     "corex/tenancy": "packages/tenancy"
   },
-  "include": ["composer.json", "src/", "config/", "database/migrations/", "resources/", "README.md", "CHANGELOG.md", "LICENSE"],
+  "include": ["composer.json", "src/", "config/", "database/migrations/", "resources/", "README.md", "PACKAGE.md", "CHANGELOG.md", "LICENSE"],
   "forbidden_segments": ["vendor", "node_modules", ".env", "auth.json", ".git", ".plan-cache"]
 }

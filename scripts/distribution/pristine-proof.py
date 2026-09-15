@@ -18,6 +18,7 @@ EXPORTER = ROOT / "scripts/distribution/export.py"
 P41_SOURCE = ROOT / "plans/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source"
 VERSION = "0.1.0-p4.3"
 PACKAGES = ("corex/core", "corex/modules", "corex/tasks", "corex/tenancy")
+POLICY = ROOT / "scripts/distribution/export-policy.json"
 
 
 class ProofError(RuntimeError):
@@ -34,7 +35,8 @@ def command(*parts: str, cwd: Path, environment: dict[str, str]) -> subprocess.C
 
 def build_repository(root: Path) -> dict:
     staging = root / "staging"
-    result = command("python3", str(EXPORTER), "--source-sha", "ea7d0dbdf36b122904abba91e124018c11b939ed", "--staging", str(staging), cwd=ROOT, environment=os.environ.copy())
+    source_ref = json.loads(POLICY.read_text(encoding="utf-8"))["source_ref"]
+    result = command("python3", str(EXPORTER), "--source-sha", source_ref, "--staging", str(staging), cwd=ROOT, environment=os.environ.copy())
     if result.returncode:
         raise ProofError(result.stderr.strip() or "export failed")
     metadata_path = staging / "packages.json"

@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-14
-inputs_sha256: 108ee85321f2922189713e0ec7ce70d34d1c4b61c4200f1bc411174ec726f4c5
+through: 2026-09-15
+inputs_sha256: 4ab8634494ed0ecef396ae2ca18d44e0731fffdb1e32d6fa13134e8b2f6f34e0
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-14 |
+| Last Updated | 2026-09-15 |
 
 ## 4. Phase Index & Status Board
 
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P2 | Generic template integrity with explicit schema/trust gates | 3/3 | 🟢 Done |
 | P3 | Generic domain trust and independent project boundaries | 2/2 | 🟢 Done |
 | P4 | Immutable source and isolated public/private distribution proof | 5/5 | 🟢 Done |
-| P5 | Factual passports and result-bound publication authority | 0/3 | ⬜ Not started |
+| P5 | Factual passports and result-bound publication authority | 1/3 | 🟡 In progress |
 
 ## Phase P1
 
@@ -67,7 +67,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P5.1 | Minimum per-package factual compatibility passports | ⬜ Not started | — |
+| P5.1 | Minimum per-package factual compatibility passports | 🟢 Done | 2026-09-15 |
 | P5.2 | Подготовить exact publication review dossier | ⬜ Not started | — |
 | P5.3 | Separately authorized exact public split publication | ⬜ Not started | — |
 
@@ -142,6 +142,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · in-progress · — |
 | 2026-09-14 | plan-exec/implementation/high · gpt-5.6-terra | plan-exec · closed-green · P4.5 immutable private fixture: canonical ref and two fresh consumer installs GREEN; no secret persistence or external mutation.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | codex/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-15 | codex/gpt-5.6-terra/high | plan-exec · closed-green · P5.1 factual passports and docs-only local artifact lineage GREEN; P4 remains closed and CRM delivery is evidence-only.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
