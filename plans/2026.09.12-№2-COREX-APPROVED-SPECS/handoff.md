@@ -1,6 +1,29 @@
-# HANDOFF — 2026-09-14 — after P4.1
+# HANDOFF — 2026-09-15 — after P5.1
 
-**Next:** ОЖИДАНИЕ: P5 outside this launch → task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P5.1
+**Next:** task:plan-run 2026.09.12-№2-COREX-APPROVED-SPECS P5.2
+
+```session-continuity-decision/v1
+{"evidence":["route:provider-thread-state","batch:B5"],"outcome":"continue-root","reason":"compatible-active-work","runnable":true,"schema_version":"session-continuity-decision/v1"}
+```
+
+| Параметр | Значение |
+|:--|:--|
+| Context | continue-root |
+
+**Done:** P5.1 GREEN: five factual package passports and a docs-only local
+four-package artifact lineage. P4 remains closed; CRM delivery was used only
+for the explicitly labelled aggregate coverage fact.
+
+**Remaining:** P5.2 prepares an exact publication review dossier only; P5.3
+remains separately gated for external authority.
+
+**Sources of truth:** `phases/P5/P5.1.md`,
+`findings/P5.1-passport-conformance.md`, and the generated P5.1 state/status.
+
+**Open risks:** P5.2 still carries its declared PUBLICATION clarification and
+does not authorize any remote operation.
+
+## Historical P4 checkpoint retained for provenance
 
 | Параметр | Значение |
 |:--|:--|
