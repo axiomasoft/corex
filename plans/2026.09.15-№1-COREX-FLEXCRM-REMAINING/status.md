@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: cfd7b9bc20c03610f761b286ae049b29377da60adb53c7e7af3eea60f090ca44
+inputs_sha256: bb7eb2177b6b591aa85e6be753936e4f13979b5edab253bbb7070c36325017ce
 generated_by: task plan-views status
 -->
 
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
-| P3 | Довести generic tenancy, storage и identity adapters | 0/7 | ⬜ Not started |
+| P3 | Довести generic tenancy, storage и identity adapters | 2/7 | 🟡 In progress |
 | P4 | Headless extensions: panels, media, notifications, saved views | 0/8 | ⬜ Not started |
 | P5 | Workflow binding и единый durable wakeup seam | 0/6 | ⬜ Not started |
 | P6 | Data extension, import/export и search | 0/8 | ⬜ Not started |
@@ -83,8 +83,8 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P3.1 | Квалифицировать storage и физический context lifecycle | ⬜ Not started | 2026-09-15 |
-| P3.2 | Квалифицировать concurrent claim, integrity и export-before-drop | ⬜ Not started | — |
+| P3.1 | Квалифицировать storage и физический context lifecycle | 🟢 Done | 2026-09-15 |
+| P3.2 | Квалифицировать concurrent claim, integrity и export-before-drop | 🟢 Done | 2026-09-15 |
 | P3.3 | Квалифицировать identity и accepted central transport | ⬜ Not started | — |
 | P3.4 | Адаптировать durable pair store, inbox и restore barrier | ⬜ Not started | — |
 | P3.5 | Закрепить lease и final credential-write conformance | ⬜ Not started | — |
@@ -246,6 +246,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Inline P2 closure: four GREEN heads; phase assurance direct-close/phase gate allow;55exact proposals/12SHA, no grants/audit/child. artifacts/B-P2-PROPOSALS/P2-phase-close-admission.json
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · decision-pending · Preflight only: D23 scoped advisory; D24 source-preserving D2(b) repair PASS. Missing G-STORAGE/G-DEPENDENCY owner receipts. Exact requests/resume: artifacts/B-P3-LOCAL/owner-gate-requests.md; checkpoint.md. No product START or attempt consumed. |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Seven local cases/root D34/Arch/contracts/antiweakening/D98/package PASS. Native/physical proof; external effective gates stay pending. Receipt: artifacts/B-P3-LOCAL/P3.1-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Seven local cases/root D34/Arch/contracts/antiweakening/D98/package PASS. Native/physical proof; external effective gates stay pending. Receipt: artifacts/B-P3-LOCAL/P3.2-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

@@ -1,39 +1,17 @@
-# B-P3-LOCAL checkpoint — waiting-owner, 2026-09-15
+# B-P3-LOCAL — scope complete
 
-Current root 01a0a63e-5b7e-7af2-8348-ab127f7d7fef, provider-attested gpt-5.6-sol/high.
-Owner authorizes P3.1→P3.2 sequential only, no children; after both next handoff B-P3-IDENTITY,
-leave P3 open. No product recovery START/run/attempt consumed, no source/test/Contracts/DDL/dependency
-adoption or root/package working lock changes. Initially git status clean; all current writes are
-plan-owned admission preparation. Existing foreign/historical files preserved.
+P3.1 and P3.2 native closed-green, original attempt 1, same root; no agents. P3 remains open. Product execution stops at P3.2. All mandatory checks and both semantic reports GREEN; do not repeat code checks for bookkeeping.
 
-D23 records scoped advisory aggregate policy1.2.0; D19/D20 preserved, runtime unchanged.
-19 policy guards/13 design guards, current design seal and P3 design checks PASS.
-D24 fixes original oversized generated P3.1 bundle by expanding only own P2 catalogue/proposal
-multi-selectors; all105 ordered (path,selector,wholeSHA,selectedSHA) entries unchanged.
-Generated bundle20478 estimated tokens, byte-fresh state; D2(b) PASS, aggregate566233 advisory.
-P3.2 aggregate100049 advisory, D2(b) PASS in measurement; P3.2 future bundle not admitted yet.
-Initial five-carrier snapshot was consumed completely; original receipt/content archived here.
-After spec/state repair that snapshot is stale for execution; recapture fresh after owner receipt.
-Execution Required Reads have NOT all been consumed: only preflight plan/phase/item/bundle/state,
-selected design/gates/metadata/source observations. Do not claim full source reuse from hashes or
-prior root summaries. Read all declared source selections in order bounded contiguous chunks;
-archive read cursors for context pressure. Temporary resolver directory is not an execution input.
+Owner accepted exact two scoped receipts bound to packet SHA256 4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9. Acceptance original preserved; D25 metadata normalization provenance is decision-metadata-reconciliation.json. Budget D23 advisory only local two items; all sources, individual read limits, mandatory checks and shared runtime preserved.
 
-Missing only matching owner adoption decisions for two concrete requests:
-Q-P3-LOCAL-STORAGE-001/G-STORAGE and Q-P3-LOCAL-DEPENDENCY-001/G-DEPENDENCY,
-qualifying proposal-only Q-P2-001/002, packet SHA256 4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9.
-Metadata-only Composer resolution and five dist archive/license/manifest checks are proposals,
-not install/upstream/ABI/driver conformance. MinIO image exact digest local candidate; upstream
-release tag/label differ, no source-to-image claim. No service started; no effective provider adoption.
-Concrete proposed caller optional composer suggest + exact test dependency, five-package closure,
-19 total retained dependency versions and local disposable service are in owner-gate-requests.md.
-Owner question sent asynchronously; silence does not grant authority. No P2 proposal converted to grant.
+P3.1 run 354839f50fe4c06d63579f587e557fcc8892cd7522c38573506b92aa5cd4f6aa. P3.2 run e59a7a507384076c5c01e2f446b5b156e2d6a53788ebe52f6b2e33b7d1358201. Native journal/state/check-results are authoritative. Decision projection interrupted after P3.2 terminal, recovered without second START/terminal; P3.2-projection-recovery.json records this honestly.
 
-Resume existing root only after exact accepted matching receipts: record response provenance/bindings;
-fresh context/read/source-seal/design/bundle/route/evidence-graph/contract admission; recovery START
-P3.1; all named root/package/native/PG checks and meaningful invariants; GREEN closure→next bundle
-and admission→P3.2. No phase close. Next B-P3-IDENTITY is deferred until P3.2 GREEN.
-If a future new dependency/schema/material branch is demonstrated, request only its missing receipt.
-Keep current owner scope active through ordinary repairs; no intermediate approval between GREEN items.
+Required actual reads complete: required-read-progress.json 105 selections; P3.2-required-read-progress.json 101 selections. Reuse unchanged qualified actual source reads; do not load whole corpus again. Final own code delta proof P3.2-final-bundle-delta-proof.json. No public Contracts/schema/default DI/shared lock/runtime delta.
 
-Carrier correction: native lint rejected compact Context=waiting-owner. Preserve red lint/results; manual owner-request carrier now uses reducer-derived continue-root with separate manual-request estimate. Product lifecycle waiting-owner remains in continuity-decision.json; no execution authority changed. Both representations identify the same existing root and exact missing receipts.
+Product result: symlink/traversal/context/private filesystem guards and optional ObjectTenantStorage; workspace and physical DB context restore conformance; real separate-worker PG locks/unique-index authority/crash/lost response replay; template exhaustion/tamper; physical pg_dump/pg_restore archive readability/hash/size/account binding and actual DROP crash/retry conformance. Existing lifecycle verifier now mandatory, latest export ties deterministic. All exact reports and root/package/Arch/contracts/antiweakening/D98 checks preserved. Tenancy final 463 passed, 1493 assertions, one intentional SDK-absence skip (actual absence separately qualified). PHP8.4/8.5 × Laravel12/13 scoped compatibility proven in disposable labs; upstream private 83/83 PASS, full public-mode exclusions explicit.
+
+Next handoff B-P3-IDENTITY P3.3–P3.7 only. Historical next-admission BATCH_STALE preserved. D29 repaired only original next P3.3 read carrier, preserving all sources/limits/checks. Native materialize_next_ready produced bundles/P3.3.json; current B-P3-IDENTITY-handoff-admission.json verdict ALLOW for routing/structure only. No identity START or product execution. Actual complete identity reads, strict budget/per-read admission, current route and matching owner receipts still required before future START/protected writes; local D23 does not extend. Native handoff recommends exec-items for identity after actual carrier repair and structural ALLOW; future post-ALLOW command and full scope in handoff.md.
+
+P9/P10 installed/effective production qualifications remain owning gates. No new owner decision required to finish local scope. Only owned disposable MinIO removed after completed checks; existing PG test container preserved. Safe cleanup receipt storage-service-cleanup.json. One scoped final commit and verified native terminal delivery finish this local invocation.
+
+Final handoff-only D29 exposes the pre-existing strict future identity aggregate budget block. It is outside completed B-P3-LOCAL product execution; no waiver granted. Individual oversized duplicate Inputs reads repaired without omitting any source. Final structural reconciliation must retain native future D2a BLOCKED separately from local closure PASS.

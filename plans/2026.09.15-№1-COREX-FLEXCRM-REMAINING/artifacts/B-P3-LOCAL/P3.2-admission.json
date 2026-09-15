@@ -1,0 +1,25 @@
+{
+  "verdict": "ALLOW",
+  "batch": {
+    "batch_id": "B-P3-LOCAL",
+    "items": [
+      "P3.1",
+      "P3.2"
+    ],
+    "route": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "exec": "plan-exec",
+    "review": "full",
+    "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "spec_digest": "7d7c12df60060528839a650fe6f9825bcee025de25506319abbf2a271e0032bd",
+    "recommended": true
+  },
+  "requested": [
+    "P3.2"
+  ],
+  "canonical": [
+    "P3.2"
+  ]
+}

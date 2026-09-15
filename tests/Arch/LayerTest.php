@@ -92,6 +92,7 @@ test('tenant content does not bypass its owning storage adapter', function (): v
 
     $allowed = [
         'packages/tenancy/src/Storage/ContextTenantStorage.php',
+        'packages/tenancy/src/Storage/ObjectTenantStorage.php',
         'packages/tenancy/src/TenancyServiceProvider.php',
     ];
 

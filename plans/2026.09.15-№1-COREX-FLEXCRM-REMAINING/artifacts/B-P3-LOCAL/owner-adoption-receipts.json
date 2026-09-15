@@ -1,0 +1,19 @@
+{
+  "status": "accepted",
+  "owner_response": "Принять оба receipts в указанном scope",
+  "decision": "decisions/D25-P3-local-owner-adoption.md",
+  "decision_sha256": "ac7cd4dbad769ddf22e0acafbd3f493b6aa8ab4f5c5ffbb96c2c588ed74bb181",
+  "packet_sha256": "4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9",
+  "requests": [
+    "Q-P3-LOCAL-STORAGE-001",
+    "Q-P3-LOCAL-DEPENDENCY-001"
+  ],
+  "gates": [
+    "G-STORAGE",
+    "G-DEPENDENCY"
+  ],
+  "scope": [
+    "P3.1"
+  ],
+  "product_conformance": false
+}

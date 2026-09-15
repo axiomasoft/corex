@@ -99,7 +99,7 @@ units было57. Все индивидуальные route/Exec/review и item 
 Max-route группы применяется к launch; source intake и final seal присоединены там,
 где переиспользуют тот же context. research/08-execution-batches.md содержит все группы,
 отказы от лишнего объединения, P4/P5 interleave, P10 window и честное измерение известных
-cold-read bytes:32 173 559 →20 657 887 (−35,8%). Это не гарантия35 fresh sessions.
+cold-read bytes:32 173 559 →20 658 887 (−35,8%). Это не гарантия35 fresh sessions.
 
 Native batch-routing-check.py:6 readiness/refusal checks PASS, actual compiler35 units,
 готовый P1.1 ALLOW, неготовая P1 chain BATCH_STALE. Semantic Next перечисляет requested
@@ -110,7 +110,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 ## Design inputs
 
 | Path | SHA256 |
-| :-- | :-- |
+|---|---|
 | artifacts/P1-design/context-measurement.json | 09b2b21abe72be5c1f9dbd096321eb3596f236aff3325ba8a612714d3c1c1aa1 |
 | artifacts/P1-design/continuity-decision.json | 8937935ed7858d6f850bdd19186a81ed364360765cb5e74751bf99f8d327eb75 |
 | artifacts/P1-design/contract-smoke.json | 1bbadc4644a91f000fe1dfc2383e76d1f12878edf9a6db5462488305cf6a8b63 |
@@ -617,6 +617,11 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | decisions/D22-P2-successor-admission.md | e95e76009278edc9a0afced828167bf8fd73112b5dd6f4b58b7fd23fe89b3658 |
 | decisions/D23-P3-local-read-budget-advisory.md | 8a747470cd85b2312ef52b6fe5992cbaf3e3e9f15d118e92ddc54470c47b5b83 |
 | decisions/D24-P3-local-read-carrier-repair.md | fa4e45e0fad170142812f0cf134ff88b42480de536560ebed95f2d7fb5c62a31 |
+| decisions/D25-P3-local-owner-adoption.md | 080ccc67f4f9041ff4ae9292e2b37eecf5cf795da8fba72b1bdbe7529528a075 |
+| decisions/D26-P3-local-usage-adjacency-repair.md | c1941937af863e54058e592b2d2a58255a07081ff2b70abf46530aaa8405a843 |
+| decisions/D27-P3-claim-read-carriers.md | 82a83bdf16a7bce077d510f5da5752c52bfa398adaafa8b7cb3701dd8920f5ac |
+| decisions/D28-local-handoff-producer-readiness.md | fed5502672d518ef09dd027c222e06d2635efef421d74b60dd8d7134f14b1216 |
+| decisions/D29-identity-handoff-read-carrier.md | c25fa1ac70f1bb364ce3b8464edb242adfa5630737be943dfb42992ddd7d3bc9 |
 | decisions/D3.md | 6af2445122495b980efc08f65ae3023c9b76ae388e3e7e355aed1be0bbc79c46 |
 | decisions/D4.md | 618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16 |
 | decisions/D5.md | fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67 |
@@ -624,11 +629,11 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | decisions/D7.md | 68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832 |
 | decisions/D8.md | 69c62efb10d483ec735d27ae5b00b029c5bb209d1e1b71cb65baeee957d516d4 |
 | decisions/D9-headless-extensions.md | 2aef863b44bef787110781cff3b69b1fd2b585048850074a71a1c5a224e43e68 |
-| decisions/_archive.md | 1056f17d8aaba1662f8cae084c0e5cd5daf8b622b37095c9a8e3eb4085adb06b |
-| decisions/_current.md | f09e69751b505d260f9e844d3f6c1010c894da12e40500dadfb806dc943fa05e |
-| decisions/_index.md | dcff3343ae7f210b46cc59c25a8efc2f78c1717b53f986e60a6825e1b1b5a907 |
+| decisions/_archive.md | 8f4d4bf2b268d1b4caf38570fca56c1e5cc77ddec30e4fecbaa34f060965ee84 |
+| decisions/_current.md | b1ad68bf071013358b7818f11d1ba64d9a61072f4d0e1ba75f7d5afa38c57827 |
+| decisions/_index.md | 0f0401f3ca028bfa6f2fcbf3f61a9d35c1134f633998f6488314e01850581828 |
 | findings/whole-plan-astra-review.md | 94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b |
-| open-questions.md | ea75c39b48227c5671d7b1979f05e947362e8174a59c802590b5715ab60fb212 |
+| open-questions.md | 77cdedcda5b8900e0d1a3b0b1f2d11f67fd91b99897147f070771afb62f24345 |
 | phases/P1/P1.1.md | 238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c |
 | phases/P1/P1.2.md | 787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c |
 | phases/P1/P1.3.md | 4661b63da5f537d47fa95455f5cd466b7fe33b5e2d7395b2cd3f6dd09dd17411 |
@@ -657,13 +662,13 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | phases/P2/P2.3.md | 0d9da50a8d1528903b6fcc898c9c3905be2d217ac957bcaa9d92920370c467a6 |
 | phases/P2/P2.4.md | 8e97b212cee2c60175954acf16049fb33c51a01b9e9836dadff06ec4874435d0 |
 | phases/P2/P2.md | 470f0268b2a333c70d7054b7ad63c1659a8d82b52ea9597aadfb85bc0e4972e8 |
-| phases/P3/P3.1.md | 4c753fe31b0e6801fd7716a9f44d40e5d4209142004695cfb87a86d6a06c3796 |
-| phases/P3/P3.2.md | f7fdbe9b9e199444d6c7fe3d80c1775a7a725620fc78d38941c492c05b4d3f92 |
-| phases/P3/P3.3.md | 8735318de9f71c70b334d5bea1a5ae0a014ac4947c4896d09c73d7435990f8db |
+| phases/P3/P3.1.md | 053ba425a7facfb4dc52877ca45b54bf92daf952d36df641ee73cbe0cc7bd64b |
+| phases/P3/P3.2.md | 9f84b0e02b9449778a3277a8d17531bdf50d7194a64053c11ac89a5100b39f05 |
+| phases/P3/P3.3.md | 3a001002cd0ed2be86abf691595e914c00a3b01257acbc90897c85cbf4dc496d |
 | phases/P3/P3.4.md | 110094dd528c3b655abd28a347be3ed8479130773ef4dac9f2f94acd861485fe |
 | phases/P3/P3.5.md | 572d36797a974d98005edd2fe7daedf15381ba9c5cd6286138a24ec635f424f8 |
 | phases/P3/P3.6.md | 5fe60fc22c5b15b169a5b6a3aeeea9fa46fbdcec8de8411abe500e1f39424025 |
-| phases/P3/P3.7.md | e2062d5ac76c0da7c0a357421cb32b300139731d50f104788688382a04e4699d |
+| phases/P3/P3.7.md | 19dc1d86c865024130228c559cd2a169febf1aaf252339246189ed50c7b00939 |
 | phases/P3/P3.md | eda83c240c8ddd1f87c4928105e59a70f27a6f59e46419211c9516e082bdc262 |
 | phases/P4/P4.1.md | bc3bfebcab4feed496d2e815ce1d355c25fb11bec6303b9908123ba30c897bb0 |
 | phases/P4/P4.2.md | 938923b14e6db56e51f80489c8b21b5a2e7004670b5e381607c7c80ee7eed492 |
@@ -809,3 +814,17 @@ a concrete reviewable request in artifacts/B-P3-LOCAL/owner-gate-requests.md; no
 granted, upstream source installation/conformance and product execution remain pending.
 Prior integrated semantic review retained; affected finite delta sealed here, no claim
 of a new whole-plan replay. P3.1/P3.2 remain Not started, P3 open.
+
+## D25 finite owner-adoption delta
+
+2026-09-15 owner accepted both scoped receipts in the exact SHA256-bound B-P3-LOCAL request packet. D25 records that adoption before execution; original P2 proposals remain proposals. Only the finite owner-decision input and its generated projection were added to the design seal. No production conformance or whole-plan review replay is claimed. Required sources, individual read limits, checks, and shared runtime remain unchanged.
+
+D26: finite Files repair for reproduced boxed/local usage-root defect; original review retained, no review replay claimed.
+
+D27 finite successor carrier repair adopted after P3.1 GREEN. All original mandatory sources and individual limits retained; no whole-plan review replay.
+
+D28 only corrects pending producer metadata for the required identity handoff, preserving every future limit/source/check. No future item is executed or admitted by this finite correction.
+
+Native decision metadata normalized with explicit superseded_by:null and required summary headings (D25–D28); original accepted bytes and protected receipt/packet bindings preserved in decision-metadata-reconciliation.json. No substantive decision or scope changed.
+
+D29 finite source-complete next P3.3 read carrier repair is required by final native lint for the requested identity handoff. Original sources, limits, checks and strict identity aggregate policy retained; no identity START/product execution or whole-plan review replay.

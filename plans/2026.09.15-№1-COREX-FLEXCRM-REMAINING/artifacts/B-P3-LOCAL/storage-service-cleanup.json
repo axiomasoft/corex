@@ -1,0 +1,9 @@
+{
+  "container": "corex_p3_storage_test",
+  "removed": true,
+  "after_all_code_checks": true,
+  "production": false,
+  "existing_postgres_preserved": true,
+  "image_digest": "sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e",
+  "observed_at": "2026-09-15T19:36:30.646421+00:00"
+}

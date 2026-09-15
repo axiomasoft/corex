@@ -1,0 +1,19 @@
+PHPUnit 12.5.33 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.5.10
+Configuration: /home/vostrikov/projects/packages/corex/packages/tenancy/phpunit.xml
+Random Seed:   1789499429
+
+..
+  [90;1m.[39;22m[90;1m.[39;22m....[36;1mS[0m............                                               19 / 19 (100%)[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[33;1ms[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m
+
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m18 passed[39;22m[90m (190 assertions)[39m
+  [90mDuration:[39m [39m1.59s[39m
+  [90mRandom Order Seed:[39m [39m1789499429[39m
+
+
+
+Time: 00:01.564, Memory: 72.50 MB
+
+[30;42mOK, but some tests were skipped![0m
+[30;42mTests: 19[0m[30;42m, Assertions: 190[0m[30;42m, Skipped: 1[0m[30;42m.[0m

@@ -1,0 +1,24 @@
+
+  [90;1m.[39;22m[90;1m.[39;22m[31;1m⨯[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it refuses size-onl…   
+[39;1m  Exception "RuntimeException" not thrown.[39;22m
+
+  at [32mtests/Feature/ClaimLifecycleConformanceTest.php[39m:[32m168[39m
+    164▕ 
+    165▕ it('refuses size-only archives without a qualified integrity verifier', function (): void {
+    166▕     $account = $this->p32Accounts[0];
+    167▕     $adapter = new StanclTenantDatabaseLifecycle(centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
+  ➜ 168▕     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
+    169▕     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
+    170▕     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
+    171▕ });
+    172▕
+
+  [33m1   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m168[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (92 assertions)[39m
+  [90mDuration:[39m [39m4.33s[39m
+  [90mRandom Order Seed:[39m [39m1789500118[39m
+

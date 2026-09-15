@@ -1,0 +1,24 @@
+
+  [90;1m.[39;22m[31;1m⨯[39;22m[90;1m.[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\StorageContextConformanceTest[22m [90m>[39m `native object inte…   
+[39;1m  Exception "CoreX\Storage\StorageOperationFailed" not thrown.[39;22m
+
+  at [32mpackages/tenancy/tests/Feature/StorageContextConformanceTest.php[39m:[32m149[39m
+    145▕             ->and(fn () => $this->objectStorage->usageBytes())->toThrow(StorageCapabilityUnavailable::class)
+    146▕             ->and(fn () => $this->objectStorage->exportArchive())->toThrow(StorageCapabilityUnavailable::class)
+    147▕             ->and(fn () => $archive->url('document.txt'))->toThrow(StorageOperationFailed::class)
+    148▕             ->and(fn () => $archive->setVisibility('document.txt', 'public'))->toThrow(StorageOperationFailed::class)
+  ➜ 149▕             ->and(fn () => $archive->put('public.txt', 'unsafe', ['visibility' => 'public']))->toThrow(StorageOperationFailed::class)
+    150▕             ->and(fn () => $archive->put('%255cescape', 'unsafe'))->toThrow(StorageOperationFailed::class)
+    151▕             ->and(fn () => $archive->delete(['document.txt', '%252e%252e/escape']))->toThrow(StorageOperationFailed::class);
+    152▕ 
+    153▕         $this->contexts->context = conformanceStorageContext('00000000-0000-4000-8000-000000000202');
+
+  [33m1   [39m[39;1mpackages/tenancy/tests/Feature/StorageContextConformanceTest.php[39;22m:[39;1m149[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (32 assertions)[39m
+  [90mDuration:[39m [39m0.61s[39m
+  [90mRandom Order Seed:[39m [39m1789498798[39m
+

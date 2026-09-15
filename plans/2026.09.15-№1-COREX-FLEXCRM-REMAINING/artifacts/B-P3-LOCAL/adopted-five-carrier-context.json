@@ -1,0 +1,37 @@
+{
+  "schema_version": "plan-context-receipt/v1",
+  "item_id": "P3.1",
+  "snapshot_sha256": "242ba14ad8cb4b8d356f9932437fb4bc2d3548432d02575f008e8aea5505c57b",
+  "members": [
+    {
+      "role": "plan-core",
+      "path": "plan.md",
+      "sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "bytes": 32648
+    },
+    {
+      "role": "phase-context",
+      "path": "phases/P3/P3.md",
+      "sha256": "eda83c240c8ddd1f87c4928105e59a70f27a6f59e46419211c9516e082bdc262",
+      "bytes": 7458
+    },
+    {
+      "role": "item-spec",
+      "path": "phases/P3/P3.1.md",
+      "sha256": "4c753fe31b0e6801fd7716a9f44d40e5d4209142004695cfb87a86d6a06c3796",
+      "bytes": 9250
+    },
+    {
+      "role": "bundle",
+      "path": "bundles/P3.1.json",
+      "sha256": "e56be513c00b38832813b8eb3b8e8dad0c3db1f603d6bb3ceaa200be7ab173e8",
+      "bytes": 50318
+    },
+    {
+      "role": "item-state",
+      "path": "phases/P3/P3.1.state.md",
+      "sha256": "a535818dd58359484d795aef336c73acecd5848a9f37c480460a2a13d26e7517",
+      "bytes": 602
+    }
+  ]
+}

@@ -97,3 +97,20 @@ it('rejects symbolic links within an account root', function (): void {
 
     expect(fn () => $disk->get('linked.txt'))->toThrow(StorageOperationFailed::class);
 });
+
+it('rejects encoded backslashes and NUL bytes before the driver sees them', function (string $path): void {
+    expect(fn () => app(TenantStorage::class)->disk()->put($path, 'unsafe'))
+        ->toThrow(StorageOperationFailed::class);
+})->with(['%5cescape.txt', '%255cescape.txt', 'document%00.txt', 'document%2500.txt']);
+
+it('rejects a replaced account root even when listing without a directory', function (): void {
+    $disk = app(TenantStorage::class)->disk();
+    $disk->put('document.txt', 'owned');
+    $root = dirname($disk->path('document.txt'));
+    rename($root, $root.'-original');
+    symlink($root.'-original', $root);
+
+    expect(fn () => $disk->allFiles())->toThrow(StorageOperationFailed::class);
+    expect(fn () => app(TenantStorage::class)->usageBytes())->toThrow(StorageOperationFailed::class);
+    unlink($root);
+});

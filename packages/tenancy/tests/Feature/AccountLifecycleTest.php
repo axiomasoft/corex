@@ -306,7 +306,12 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
 
     $archive = tempnam(sys_get_temp_dir(), 'corex-export-test-');
     file_put_contents($archive, 'test archive');
-    $database = new StanclTenantDatabaseLifecycle('pgsql', static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12]);
+    $digest = hash_file('sha256', $archive);
+    $database = new StanclTenantDatabaseLifecycle(
+        centralConnection: 'pgsql',
+        writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
+        verifier: static fn (string $path, int $size): bool => $path === $archive && is_file($path) && is_readable($path) && filesize($path) === $size && hash_equals($digest, (string) hash_file('sha256', $path)),
+    );
     $this->beforeApplicationDestroyed(static fn () => unlink($archive));
     $exportId = lcLifecycle(tenantDatabaseLifecycle: $database)->requestExport($account);
     expect(DB::table('root_account_exports')->where('id', $exportId)->value('status'))->toBe('ready');
@@ -315,7 +320,7 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     $existsBefore = DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$dbName]);
     expect($existsBefore)->not->toBeNull();
 
-    lcLifecycle()->purge($account);
+    lcLifecycle(tenantDatabaseLifecycle: $database)->purge($account);
 
     $raw = DB::table('root_accounts')->where('id', $account->id)->first();
     expect($raw->status)->toBe('deleted')
@@ -341,7 +346,11 @@ it('default export cannot become ready or authorize purge', function (): void {
 
 it('refuses ready and DROP when an archive is unavailable', function (): void {
     $account = activateLcAccount();
-    $database = new StanclTenantDatabaseLifecycle('pgsql', static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12]);
+    $database = new StanclTenantDatabaseLifecycle(
+        centralConnection: 'pgsql',
+        writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
+        verifier: static fn (): bool => false,
+    );
     expect(fn () => $database->export($account, 'offboarding'))->toThrow(RuntimeException::class, 'archive is unavailable');
     expect(DB::table('root_account_exports')->where('account_id', $account->id)->value('status'))->toBe('running');
     DB::table('root_account_exports')->where('account_id', $account->id)->update([

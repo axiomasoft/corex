@@ -1,0 +1,30 @@
+
+  [31;1m⨯[39;22m[90;1m.[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\PhysicalContextConformanceTest[22m [90m>[39m it clears previous work…   
+[39;1m  Failed asserting that CoreX\Tenancy\WorkspaceRef Object #2833 (
+    'id' => '05e1e791-fe89-46e8-9a25-23067e9531dc',
+    'slug' => 'archive',
+    'type' => 'company',
+    'path' => 'archive',
+    'parentId' => null,
+) is null.[39;22m
+
+  at [32mpackages/tenancy/tests/Pg/PhysicalContextConformanceTest.php[39m:[32m91[39m
+     87▕     Event::dispatch(new JobProcessing('database', $job));
+     88▕     expect($manager->context()->workspace->slug)->toBe('archive');
+     89▕ 
+     90▕     Event::dispatch(new JobProcessing('database', physicalContextJob(['tenant_id' => $account->id])));
+  ➜  91▕     expect($manager->context()->workspace)->toBeNull();
+     92▕ 
+     93▕     $manager->setWorkspace(new WorkspaceRef(id: $this->workspaceId, slug: 'archive', type: 'company', path: 'archive', parentId: null));
+     94▕     expect(fn () => Event::dispatch(new JobProcessing('database', physicalContextJob(['tenant_id' => $account->id, 'workspace_id' => (string) Str::uuid()]))))
+     95▕         ->toThrow(RuntimeException::class, 'Queued workspace context is unavailable.');
+
+  [33m1   [39m[39;1mpackages/tenancy/tests/Pg/PhysicalContextConformanceTest.php[39;22m:[39;1m91[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (26 assertions)[39m
+  [90mDuration:[39m [39m1.23s[39m
+  [90mRandom Order Seed:[39m [39m1789498547[39m
+

@@ -1,0 +1,17 @@
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  The test directory [/tmp/corex-p3-laravel12-a5hcpehp/tests/] does not exist.[39;22m
+
+  at [32m/tmp/corex-p3-laravel12-a5hcpehp/vendor/pestphp/pest/src/Bootstrappers/BootFiles.php[39m:[32m45[39m
+     41▕         $rootPath = TestSuite::getInstance()->rootPath;
+     42▕         $testsPath = $rootPath.DIRECTORY_SEPARATOR.testDirectory();
+     43▕ 
+     44▕         if (! is_dir($testsPath)) {
+  ➜  45▕             throw new FatalException(sprintf('The test directory [%s] does not exist.', $testsPath));
+     46▕         }
+     47▕ 
+     48▕         foreach (self::STRUCTURE as $filename) {
+     49▕             $filename = sprintf('%s%s%s', $testsPath, DIRECTORY_SEPARATOR, $filename);
+
+

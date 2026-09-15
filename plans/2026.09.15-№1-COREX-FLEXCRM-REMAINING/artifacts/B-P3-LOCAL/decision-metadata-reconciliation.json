@@ -1,0 +1,34 @@
+{
+  "entries": [
+    {
+      "decision": "decisions/D25-P3-local-owner-adoption.md",
+      "original_accepted_archive": "artifacts/B-P3-LOCAL/D25-P3-local-owner-adoption-before-metadata.md",
+      "original_sha256": "ac7cd4dbad769ddf22e0acafbd3f493b6aa8ab4f5c5ffbb96c2c588ed74bb181",
+      "current_sha256": "080ccc67f4f9041ff4ae9292e2b37eecf5cf795da8fba72b1bdbe7529528a075",
+      "delta": "Explicit superseded_by:null and required summary headings only; original accepted text remains verbatim prefix, status/scope/protected owner authority unchanged"
+    },
+    {
+      "decision": "decisions/D26-P3-local-usage-adjacency-repair.md",
+      "original_accepted_archive": "artifacts/B-P3-LOCAL/D26-P3-local-usage-adjacency-repair-before-metadata.md",
+      "original_sha256": "6b5f3801f636667f312795631373d9447dc8b2780bfe92f3bdc1f4f060218416",
+      "current_sha256": "c1941937af863e54058e592b2d2a58255a07081ff2b70abf46530aaa8405a843",
+      "delta": "Explicit superseded_by:null and required summary headings only; original accepted text remains verbatim prefix, status/scope/protected owner authority unchanged"
+    },
+    {
+      "decision": "decisions/D27-P3-claim-read-carriers.md",
+      "original_accepted_archive": "artifacts/B-P3-LOCAL/D27-P3-claim-read-carriers-before-metadata.md",
+      "original_sha256": "8e2d9ed6d9761043343aa0d102407999c63f5f47ce89c3c3882b249bc6639639",
+      "current_sha256": "82a83bdf16a7bce077d510f5da5752c52bfa398adaafa8b7cb3701dd8920f5ac",
+      "delta": "Explicit superseded_by:null and required summary headings only; original accepted text remains verbatim prefix, status/scope/protected owner authority unchanged"
+    },
+    {
+      "decision": "decisions/D28-local-handoff-producer-readiness.md",
+      "original_accepted_archive": "artifacts/B-P3-LOCAL/D28-local-handoff-producer-readiness-before-metadata.md",
+      "original_sha256": "552ef013a0e5d7fee03c4e5bf2ae4109fbbfb27bb595286ce71105b5c399073c",
+      "current_sha256": "fed5502672d518ef09dd027c222e06d2635efef421d74b60dd8d7134f14b1216",
+      "delta": "Explicit superseded_by:null and required summary headings only; original accepted text remains verbatim prefix, status/scope/protected owner authority unchanged"
+    }
+  ],
+  "owner_receipts": "Original D25 accepted SHA is immutable acceptance provenance and matches its original archive; packet, protected scope and owner receipt JSON unchanged. Current normalized decision embeds the exact original accepted text, without scope changes.",
+  "runtime": "No runtime mutation; current native decision parser requires explicit null metadata."
+}

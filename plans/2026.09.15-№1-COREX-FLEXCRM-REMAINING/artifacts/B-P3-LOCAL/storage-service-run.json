@@ -1,0 +1,10 @@
+{
+  "container": "cf5e3f115e82b57f51907d3b89477aa683fe5f9ca9d9b9eee6c2386884493bcf",
+  "name": "corex_p3_storage_test",
+  "image": "minio/minio@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e",
+  "image_id": "sha256:9d668e47f1fc60ea49af4203deee87a657eb1aa0e2761fee2c7c2d1df282c880",
+  "endpoint": "http://127.0.0.1:32768",
+  "bucket": "corex-p3-storage-test",
+  "data_class": "disposable generated test data",
+  "production_receipt": false
+}

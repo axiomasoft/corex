@@ -1,0 +1,17 @@
+{
+  "command": [
+    "php",
+    "/home/vostrikov/projects/packages/corex/vendor/bin/phpunit",
+    "--bootstrap",
+    "/home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/artifacts/B-P3-LOCAL/P3.1/upstream-tests/bootstrap.php",
+    "/home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/artifacts/B-P3-LOCAL/P3.1/upstream-tests/AwsS3V3AdapterTest.php",
+    "--filter",
+    "/^(?!.*::(?:setting_visibility|copying_a_file|copying_a_file_again|moving_a_file|generating_a_public_url)$)/"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-09-15T19:11:06.245989+00:00",
+  "ended_at": "2026-09-15T19:11:07.335032+00:00",
+  "exit_code": 0,
+  "log": "artifacts/B-P3-LOCAL/P3.1/checks/upstream-private.log",
+  "sha256": "580b22b9567d6c4a7e6a6719d0a7ec70e026063d6eef2441d991211911f23fb6"
+}

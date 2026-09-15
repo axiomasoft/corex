@@ -1,0 +1,21 @@
+{
+  "command": [
+    "composer",
+    "test:arch"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": {
+    "php": "8.4.1"
+  },
+  "started_at": "2026-09-15T19:23:50.288104+00:00",
+  "ended_at": "2026-09-15T19:23:50.580575+00:00",
+  "exit_code": 0,
+  "environment": {
+    "APP_ENV": "testing",
+    "PGSQL_DATABASE": "corex_test",
+    "PGSQL_PORT": "5434",
+    "files": "unique Testbench paths and generated storage roots"
+  },
+  "log": "artifacts/B-P3-LOCAL/P3.2/checks/root-arch.log",
+  "sha256": "6398545e279908c97ac6bd39f53b424a8e699a6c75b09682be0a40193bde1e7e"
+}

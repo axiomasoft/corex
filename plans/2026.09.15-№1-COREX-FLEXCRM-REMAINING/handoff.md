@@ -1,26 +1,29 @@
-# HANDOFF — 2026-09-15 — after P2.4
+# HANDOFF — 2026-09-15 — after P3.2
 
-**Next:** manual: принять Q-P3-LOCAL-STORAGE-001 и Q-P3-LOCAL-DEPENDENCY-001 по artifacts/B-P3-LOCAL/owner-gate-requests.md; затем продолжить P3.1 → P3.2 в текущем root.
+**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P3.3 P3.4 P3.5 P3.6 P3.7
 
 | Параметр | Значение |
-| :-- | :-- |
-| Batch | B-P3-LOCAL |
+|---|---|
+| Batch | B-P3-IDENTITY |
 | Model | gpt-5.6-terra |
 | Thinking | high |
 | Context | continue-root |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:029a699459901bff081ff7f6d54b9d853850cc90b4ddae1bf09e5b94ca20ce72", "loaded-inputs:not-reusable", "cold-start-cost:0"], "outcome": "continue-root", "reason": "context-telemetry-unavailable", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:02d8855c8537bbffe37ef01c8f16fea1ba3bcf5bf9710be197c58993d1e927da", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/B-P3-LOCAL/checkpoint.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** B-P2-PROPOSALS P2.1–P2.4 GREEN/P2 closed, historical evidence unchanged. Current B-P3-LOCAL admission preparation: D23 scoped owner budget decision/policy1.2.0; D24 read-carrier repair with all105 source selections/digests/order preserved; per-read D2(b) PASS; policy19/design13 guards/current finish/P3 design/bundle/routing checks PASS. Product P3 execution not started.
 
-**Remaining:** P3.1 then P3.2, owner-authorized in one root without children. Q-P2-001/002 remain proposals; independently accepted G-STORAGE/G-DEPENDENCY receipts for exact concrete packet below are missing. Complete all declared Required Reads and admission after receipts. Do not close P3 or execute beyond P3.2; after both GREEN prepare B-P3-IDENTITY P3.3–P3.7 handoff. No premature identity handoff.
+Strict read-budget admission B-P3-IDENTITY остаётся BLOCKED (P3.3: 583017 > 100000 estimated tokens); перед будущим START нужно решение в scope этой группы. Текущее ALLOW относится только к bundle/маршрутизации.
 
-**Sources of truth:** decisions/D23-P3-local-read-budget-advisory.md; decisions/D24-P3-local-read-carrier-repair.md; research/09-read-budget-policy.json; findings/P2-contract-catalogue.md; findings/P2-gate-requests.md; findings/P2-contract-proposals.md; artifacts/B-P3-LOCAL/owner-gate-requests.md (SHA256 4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9); dependency-qualification.json; storage-service-candidate.json; D23-policy-checks.json; read-repair-check.json; checkpoint.md. P3.1 generated bundle/state fresh; future P3.2 bundle only after owning closure/admission.
+**Done:** P3.1 и P3.2 closed-green, каждый attempt 1 в одном root. B-P3-LOCAL полностью завершён. Новых START/terminal при восстановлении проекций не было. Все обязательные локальные проверки GREEN.
 
-**Open risks:** Matching protected receipts absent. Five-package immutable SDK closure is metadata/download/license qualification only, not installed/upstream/ABI/PHP-Laravel matrix or SDK-service conformance. MinIO is separate disposable local integration candidate with exact image digest; tag/label source discrepancy explicit, no reproducible-image assertion. Fake-s3/native-SDK/local/installed/released/hosted/deployed receipts remain distinct. All55 P2 proposals/G/34DI/13AP/effective provider/consumer residuals remain owning gates, no grants manufactured.
+**Remaining:** Только следующий B-P3-IDENTITY (P3.3–P3.7), выполнение не начато и настоящим handoff не разрешается. Фаза P3 открыта. D29 исправил только source-complete read carrier следующего P3.3; bundle материализован и native batch admission ALLOW. Этот admission относится к структуре/маршрутизации, не к фактически завершённым чтениям, строгому identity budget или protected owner gates: проверить их в следующем авторизованном execution до START/записей. D23 advisory budget относится только к завершённому B-P3-LOCAL. После ALLOW предполагаемая команда: `$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P3.3 P3.4 P3.5 P3.6 P3.7`.
 
-**Workarounds/Deferred/Open questions:** D23 advisory only P3.1/P3.2, B-P3-IDENTITY excluded. Individual limits/source order/validation/authority retained; runtime untouched. P3.1 original bundle/spec/measurements archived; current state Not started, decision-pending consumes no product attempt. Current root pending exact two gate decisions; resume after acceptance, no renewed group confirmation. Current preflight is not full execution-source reuse; checkpoint records reads still required.
+**Sources of truth:** plan.md; journal.jsonl; phases/P3/P3.1.state.md; phases/P3/P3.2.state.md; findings/P3-storage-context.md; findings/P3-claim-maintenance.md; artifacts/B-P3-LOCAL/P3.1-check-results.json; artifacts/B-P3-LOCAL/P3.2-check-results.json; artifacts/B-P3-LOCAL/B-P3-IDENTITY-handoff-admission.json; decisions/D29-identity-handoff-read-carrier.md; artifacts/B-P3-LOCAL/checkpoint.md; decisions/D23-P3-local-read-budget-advisory.md; decisions/D25-P3-local-owner-adoption.md; artifacts/B-P3-LOCAL/owner-adoption-receipts.json; artifacts/B-P3-LOCAL/decision-metadata-reconciliation.json.
 
-**Owner wait:** product lifecycle waiting-owner/nonrunnable is persisted in artifacts/B-P3-LOCAL/continuity-decision.json. The manual receipt request retains continue-root for this existing root; it is no executor dispatch or grant. Native compact Context parser accepts only root-placement enums; original invalid compact waiting-owner diagnostic retained in lint-before-context-repair.log. Manual request continuity has its own typed estimate; product wait stays unchanged.
+**Open risks:** P9 installed-cohort и P10 effective provider/IAM/usage/export/deployed qualification остаются отдельными owning gates. Доказана optional private native SDK/MinIO квалификация, не публичный S3/AWS/production профиль. Полный upstream запуск 83/88 PASS с пятью публичными режимами FAIL сохранён; разрешённый private профиль 83/83 PASS. Перед identity G-STORAGE/G-DEPENDENCY/иными защищёнными изменениями проверить точные matching owner receipts; P2 proposals и общая поддержка улучшений не заменяют scoped receipts.
+
+**Workarounds and limitations:** Existing archive hook теперь требует доверенный verifier для каждого архива, включая local; size-only writer или legacy ready flags без verifier fail closed. Это отражено в changelog и проверено до READY и реального DROP. Публичные Contracts, DDL, общий runtime, рабочие lockfiles и default DI не менялись. Изолированные SDK/совместимость/MinIO использованы только тестами. D24/D26/D27 конечные local corrections сохраняют все обязательные источники и проверки. D28 касается только producer readiness для необходимого handoff P3.7: четыре отсутствующих identity reports сохраняют pending; P3.7 не выполнялся. Native metadata нормализация D25–28 не меняет принятое разрешение; исходные байты D25 с исходным acceptance SHA архивированы.
+
+**Parallel briefs:** Нет дочерних агентов. Выполнение P3.1 → P3.2 последовательное, проверки независимых carriers выполнены с изолированными targets. Полные чтения не повторять: P3.1 105/105, P3.2 101/101 фактически завершены с SHA-qualified reuse; изменения и пять текущих carriers прочитаны отдельно. Никаких повторных проверок кода после GREEN bookkeeping.

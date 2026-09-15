@@ -7,6 +7,9 @@
 
 ### Fixed
 
+- Scoped storage rejects recursively encoded backslashes/NUL and replaced local
+  root symlinks, including directory listings and usage measurement.
+
 - Feature definitions isolate duplicate inserts in a savepoint, preserving outer
   PostgreSQL transactions and administrator toggles. Database-poll publishers
   serialize per channel until commit so durable cursors cannot skip pending rows.

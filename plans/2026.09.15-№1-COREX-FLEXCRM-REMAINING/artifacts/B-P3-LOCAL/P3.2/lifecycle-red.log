@@ -1,0 +1,140 @@
+
+  [31;1m⨯[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (d74f8f4a-617a-4349-b4c4-0e7bc7e418e2, archive, null, 90d577b2-7f6f-470f-a555-6d86254742a4, acc_p32_archive_a2b9948739d3889a_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:15.6748+00, 2026-09-15 19:20:15.6748+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (d74f8f4a-617a-4349-b4c4-0e7bc7e418e2, 90d577b2-7f6f-470f-a555-6d86254742a4, archive, acc_p32_archive_a2b9948739d3889a_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (4d2c3466-09ee-4b59-88d8-bbb5ac3d7e92, archive, null, 9734b5e7-d55a-4475-b050-5629bfb89838, acc_p32_archive_d2fc41e0c7651c6c_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:16.091429+00, 2026-09-15 19:20:16.091429+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (4d2c3466-09ee-4b59-88d8-bbb5ac3d7e92, 9734b5e7-d55a-4475-b050-5629bfb89838, archive, acc_p32_archive_d2fc41e0c7651c6c_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (7e5d9ed3-744d-405d-b672-47af1d12f705, archive, null, 79ad74b1-0610-45c8-8032-75e7a45e6660, acc_p32_archive_e7a5d0ccde01ce49_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:16.59514+00, 2026-09-15 19:20:16.59514+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (7e5d9ed3-744d-405d-b672-47af1d12f705, 79ad74b1-0610-45c8-8032-75e7a45e6660, archive, acc_p32_archive_e7a5d0ccde01ce49_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (b9b596ae-df52-48cc-9af6-4fa3f2cf5500, archive, null, 53c23142-fdc4-4bb0-9d9e-2f5f9994de44, acc_p32_archive_52d95d2c0cd131e4_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:17.016575+00, 2026-09-15 19:20:17.016575+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (b9b596ae-df52-48cc-9af6-4fa3f2cf5500, 53c23142-fdc4-4bb0-9d9e-2f5f9994de44, archive, acc_p32_archive_52d95d2c0cd131e4_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (65b98c42-fcff-4d41-b43d-257dd162c865, archive, null, f267cce4-529a-4239-b695-7193fa6c0925, acc_p32_archive_fa8b960ea53cb178_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:17.410569+00, 2026-09-15 19:20:17.410569+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (65b98c42-fcff-4d41-b43d-257dd162c865, f267cce4-529a-4239-b695-7193fa6c0925, archive, acc_p32_archive_fa8b960ea53cb178_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (965a62af-47c2-4f08-a841-7ea4226c55e6, archive, null, 31ee7b5c-5bd4-42bb-b662-45fdedfa9544, acc_p32_archive_fdd46262c545b388_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:17.807084+00, 2026-09-15 19:20:17.807084+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (965a62af-47c2-4f08-a841-7ea4226c55e6, 31ee7b5c-5bd4-42bb-b662-45fdedfa9544, archive, acc_p32_archive_fdd46262c545b388_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "root_accounts" violates check constraint "root_accounts_owner_or_pending_ck"
+DETAIL:  Failing row contains (935073fc-c07b-4fc2-aba1-dd4d925b05b4, archive, null, 21430207-e81c-4e7a-a03e-030cc53758ca, acc_p32_archive_6a2bdd8b10111106_test, grace, null, null, 1, test, 1, ru, null, null, null, null, {}, 2026-09-15 19:20:18.20317+00, 2026-09-15 19:20:18.20317+00, null). (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_accounts" ("id", "cluster_id", "slug", "db_name", "status", "template_version", "embedding_model", "embedding_dim") values (935073fc-c07b-4fc2-aba1-dd4d925b05b4, 21430207-e81c-4e7a-a03e-030cc53758ca, archive, acc_p32_archive_6a2bdd8b10111106_test, grace, 1, test, 1))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m144[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m3.10s[39m
+  [90mRandom Order Seed:[39m [39m1789500015[39m
+
