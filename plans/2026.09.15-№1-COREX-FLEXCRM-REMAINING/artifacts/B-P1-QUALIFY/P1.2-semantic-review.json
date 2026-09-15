@@ -1,0 +1,23 @@
+{
+  "schema_version": "p1-semantic-review/v1",
+  "status": "OPEN",
+  "structural_result": "PASS",
+  "parents": 365,
+  "atoms": 631,
+  "remaining": [
+    "Inspect every parent/atom against pinned source, no automated splitter accepted as semantic proof",
+    "B15 AC-26 manual assignment cardinality: three clauses need R11,R11,R36, not two",
+    "B11 AC-1 root-feature-flags vs aut uniqueness owners split; preserve original statement and source context",
+    "B11 AC-8 expand exact six restore steps b11 L863-869, separate generic hooks and central/fleet/provider outcomes",
+    "B12 AC-1 split global DDL metadata from root wakeup ownership; no blanket CoreX schema adoption",
+    "B12 AC-10 expand all parallel/sequential/quorum outcomes including impossible quorum; exact target b12 L841-844",
+    "B34 AC-19 full L205-212 invitation sequence must separate central writer, tenant accept/token/role/users_max, source-reference lineage",
+    "Inspect all cross-cutting atoms; generic mechanism vs actual consumer policy/provider need distinct conditions/owners",
+    "Review every corex atom for CRM/CMS/Store/provider/edition/root literals; preserve historical requirements without promoting product assumptions to CoreX",
+    "Read remaining referenced target snippets as needed; record exact digest and bounded span",
+    "Strengthen mechanical clause preservation + threshold assertions after final semantic mapping; require explicit parent-complete review evidence",
+    "When final map/ledger produced, P1.4 use all numbered report sections, complete coverage and unchanged aggregate; whole-file per-read would be oversized; no hidden exclusion",
+    "Do not close P1.2 from structural count alone; validate criteria then semantic evidence, close/commit/native next bundle/admission P1.3",
+    "P1.3 full evidence/source/test/receipt inventory reads still outstanding; P1.4 untouched; stop product work after P1.4"
+  ]
+}

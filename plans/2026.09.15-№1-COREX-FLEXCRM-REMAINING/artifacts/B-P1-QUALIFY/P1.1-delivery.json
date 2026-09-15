@@ -5,21 +5,21 @@
     "package": "task",
     "version": "0.18.0"
   },
-  "commit_sha": "7aa0fb01930b51a74bcdef59435d85a5de2e6d9e",
+  "commit_sha": "cd233ab1dc2eac78d240549237d24f32fc97eb99",
   "continuity": {
     "evidence": [
       "batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
       "loaded-inputs:reusable",
       "cold-start-cost:0"
     ],
-    "outcome": "waiting-owner",
-    "reason": "owner-wait",
-    "runnable": false,
+    "outcome": "continue-root",
+    "reason": "context-telemetry-unavailable",
+    "runnable": true,
     "schema_version": "session-continuity-decision/v1"
   },
   "digests": {
     "closure": null,
-    "handoff": "sha256:c672c0a5e52bc2f19ef2f0bcc4d14aa9441f0c1167435be50ab9d570078bcdc6",
+    "handoff": "sha256:3e1f2262cd98709e90d6d59e2c6bce92e93b95856e5676ca64f86f4023066507",
     "plan": "sha256:8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
     "state": "sha256:6a8479ce039df24940895defb3801f96e02b0fbe87b375779400a541035ffb4e"
   },
@@ -30,26 +30,26 @@
     "run_id": "69d165524c6f8a539f40896ed198b63614bbc3eee60a0dff048702de4ee0d389",
     "sha256": "sha256:b19ba230e4cd73e1c5dcd6b07ff865e58db938178849f1ebc17d320b8e009962"
   },
-  "next_exact": "waiting: owner read-budget decision → exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4",
+  "next_exact": "exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4",
   "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
   "rationale": {
-    "open_risks": "Active-phase lint exceeds frozen read-budget; owner contract decision required. P1.4 future-input producer annotations need reconciliation. Runtime/API/schema/release/live/consumer receipts remain owning obligations.",
-    "remaining": "P1.2–P1.4 remain authorized in this root; all three Not started. No work beyond P1.4."
+    "open_risks": "Draft mixed owner assignments and atomic clauses need full semantic review. Structural PASS is not GREEN closure. Runtime/API/schema/release/live/consumer obligations remain. D19 applies only P1; P2 retains frozen policy.",
+    "remaining": "P1.2 In progress attempt1, then P1.3/P1.4 Not started. Same root, no P2 execution."
   },
-  "recommendation": "**Next:** waiting: owner read-budget decision → exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B-P1-QUALIFY |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | waiting-owner |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2 P1.3 P1.4\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B-P1-QUALIFY |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | continue-root |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"continue-root\", \"reason\": \"context-telemetry-unavailable\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
   "route": {
     "batch": "B-P1-QUALIFY",
     "command": null,
-    "context": "waiting-owner",
+    "context": "continue-root",
     "continuity": {
       "evidence": [
         "batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
         "loaded-inputs:reusable",
         "cold-start-cost:0"
       ],
-      "outcome": "waiting-owner",
-      "reason": "owner-wait",
-      "runnable": false,
+      "outcome": "continue-root",
+      "reason": "context-telemetry-unavailable",
+      "runnable": true,
       "schema_version": "session-continuity-decision/v1"
     },
     "model": "gpt-5.6-sol",

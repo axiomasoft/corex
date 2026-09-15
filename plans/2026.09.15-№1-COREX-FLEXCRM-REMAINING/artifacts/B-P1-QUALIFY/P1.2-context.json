@@ -33,5 +33,12 @@
       "sha256": "51656f61f0b29bde9e06f7f9f16fd8750d40d0cecac91ad666e19c34800d66c3",
       "bytes": 602
     }
-  ]
+  ],
+  "consumption": {
+    "plan-core": "reused full P1.1 read; unchanged digest",
+    "phase-context": "reused full P1.1 read; unchanged digest",
+    "item-spec": "full read in current turn",
+    "bundle": "full raw JSON read in current turn",
+    "item-state": "full read in current turn"
+  }
 }

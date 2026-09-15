@@ -1,5 +1,7 @@
 # B-P1-QUALIFY — read-budget decision packet
 
+**Resolved by owner D19:** advisory read-budget/no hard cap/quality priority. The250000 proposal below is historical and unapplied. No approval question remains. Current policy: research/09-read-budget-policy.json; decision: decisions/D19-read-budget-advisory.md.
+
 P1.1 closed GREEN commit7aa0fb0. P1.2 native ready-subset admission ALLOW, but no P1.2 start or product mutation has occurred. Owner scope remains P1.1–P1.4 in this root.
 
 Native lint reproduced RED after the phase became In progress. The design session had no active phase, so its recorded GREEN lint did not exercise this gate. Current P1.2 bundle already selects named acceptance sections (not entire blueprints): this is not a whole-file selector bug. Fixed mandatory inputs alone exceed the frozen item cap.

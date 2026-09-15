@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: d903ea6b36f626742ee631354f3a99e482697aa45550e2b852f7f47d4a72672c
+inputs_sha256: 21d5c2ed43caf825ba6898fa7012846c03259ef167b4215614eb2c5c49b02c6e
 generated_by: task plan-views status
 -->
 
@@ -40,7 +40,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
-| P1.2 | Разделить исходные AC на механизм, policy и владельцев | ⬜ Not started | 2026-09-15 |
+| P1.2 | Разделить исходные AC на механизм, policy и владельцев | 🟡 In progress | 2026-09-15 |
 | P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | ⬜ Not started | — |
 | P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
 
@@ -208,6 +208,8 @@ generated_by: task plan-views status
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · inputs/sources PASS;100 IDs/52 R/365 parents;0 drift/elevated working claims. Anchors:findings/P1-source-reconciliation.md;artifacts/B-P1-QUALIFY. Runtime/release/live unclaimed.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · decision-pending · Required reads exceed frozen item cap; original lint reproduced RED. Owner threshold decision pending. No P1.2 start. See artifacts/B-P1-QUALIFY/read-budget-decision.md. |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · D19 owner advisory admitted; full17AC sections + B38/B26/FLEX carriers consumed; referenced target snippets read. Semantic atom mapping underway, no acceptance claimed. |
 
 ## Owner Gates
 

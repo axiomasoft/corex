@@ -625,9 +625,9 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `findings/whole-plan-astra-review.md` | 94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b |
 | `open-questions.md` | ea75c39b48227c5671d7b1979f05e947362e8174a59c802590b5715ab60fb212 |
 | `phases/P1/P1.1.md` | 238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c |
-| `phases/P1/P1.2.md` | 36bb11309c77cddf48dd2a5ad644e9aa12237563b82e0d6848cf10f1e8dd48a9 |
-| `phases/P1/P1.3.md` | c2c7b835993fbbc5ab97c1056a4833e5d9784b753040050852def3453535d71d |
-| `phases/P1/P1.4.md` | 11fa0e02e02a325de78842abded03525838651ee218dc873df08f26bcb127fbb |
+| `phases/P1/P1.2.md` | 673dbbb652b012623a959d9889b9b3eba90e038dbe60cdbbdfd56d0fd12955ec |
+| `phases/P1/P1.3.md` | 2b085330b2596cac8a932d26faff05be1be865ab3ae33e4bf819a8d3ccce5d20 |
+| `phases/P1/P1.4.md` | b81ccf57e3d6a171ac2277a0f1dfd8bec378ed446e6578dd8fdc2566efe6b8ff |
 | `phases/P1/P1.md` | 8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418 |
 | `phases/P10/P10.1.md` | 430eab1d70a403a8cb5137c14cf3702f8a58aa40d6875b78c5a95659d8043f2e |
 | `phases/P10/P10.2.md` | 0e0f51fd66b34e0948ae8f84666ac2443f6d0a3fb723cb4541ae72e6bbf0611c |
