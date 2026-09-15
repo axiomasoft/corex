@@ -46,3 +46,9 @@ PGSQL_HOST=127.0.0.1 PGSQL_PORT=5434 composer test -- --group=pg
 composer analyse
 composer lint:check
 ```
+
+## Compatibility evidence
+
+The factual compatibility passport, its local proof class, and explicit limits
+are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
+constitute a publication promise.

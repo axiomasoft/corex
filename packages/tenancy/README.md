@@ -27,3 +27,9 @@ Existing ready rows with a NULL hash are not compatible fallback templates.
 Consumer write-path adoption is intentionally separate. Operational rollback
 preserves the integrity metadata; the additive migration has no destructive
 automatic down action.
+
+## Compatibility evidence
+
+The factual compatibility passport, its local proof class, and explicit limits
+are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
+constitute a publication promise.

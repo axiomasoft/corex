@@ -45,3 +45,9 @@ php artisan migrate --database=<tenant>
 corex/core). Все `timestamptz` — с явной микросекундной точностью
 (`precision: 6`). Порядок purge в `mod_records` детерминирован монотонным
 `seq bigserial` (не часами) — FK-безопасный обратный порядок удаления.
+
+## Compatibility evidence
+
+The factual compatibility passport, its local proof class, and explicit limits
+are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
+constitute a publication promise.

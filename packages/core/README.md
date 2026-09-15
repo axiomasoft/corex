@@ -66,3 +66,9 @@ php artisan migrate --database=<tenant>
 (`sys_audit_log`). `sys_audit_log.seq bigserial` — монотонный курсор аудита:
 keyset-пагинация и tie-break сортировки идут **только по `seq`**, а не по
 `id`/`occurred_at` (часы принявшего узла монотонности не дают).
+
+## Compatibility evidence
+
+The factual compatibility passport, its local proof class, and explicit limits
+are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
+constitute a publication promise.
