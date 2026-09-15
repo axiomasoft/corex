@@ -107,12 +107,24 @@ def policy_lint(plan: Path, runtime: Path) -> int:
     policy = json.loads((plan / "research/09-read-budget-policy.json").read_text())
     scope = {"P1.1", "P1.2", "P1.3", "P1.4"}
     if (policy.get("schema_version") != "plan-read-budget-policy/v1"
-            or policy.get("version") != "1.0.0" or policy.get("mode") != "advisory"
+            or policy.get("version") != "1.1.0" or policy.get("mode") != "advisory"
             or set(policy.get("scope", [])) != scope or policy.get("batch") != "B-P1-QUALIFY"
             or policy.get("reference_item_tokens") != 100000
             or policy.get("decision") != "decisions/D19-read-budget-advisory.md"
             or hashlib.sha256((plan / policy["decision"]).read_bytes()).hexdigest() != policy.get("decision_sha256")):
         raise ValueError("invalid or unbound owner read-budget policy")
+    additional = policy.get("additional_scopes")
+    if not isinstance(additional, list) or len(additional) != 1:
+        raise ValueError("invalid additional owner read-budget scopes")
+    p2 = additional[0]
+    if (not isinstance(p2, dict) or set(p2) != {"scope", "batch", "decision", "decision_sha256"}
+            or p2.get("scope") != ["P2.1", "P2.2", "P2.3", "P2.4"]
+            or p2.get("batch") != "B-P2-PROPOSALS"
+            or p2.get("decision") != "decisions/D20-P2-read-budget-advisory.md"
+            or hashlib.sha256((plan / p2["decision"]).read_bytes()).hexdigest() != p2.get("decision_sha256")):
+        raise ValueError("invalid or unbound P2 owner read-budget policy")
+    decisions = {item: "D19" for item in scope}
+    decisions.update({item: "D20" for item in p2["scope"]})
     measured = plan_weight.measure_plan(plan, plan_weight.Measurer())
     records = {row["item_id"]: row for row in measured["items"]}
     threshold = measured["totals"]["admission"]["contract"]["item_tokens"]
@@ -123,11 +135,11 @@ def policy_lint(plan: Path, runtime: Path) -> int:
         def error(self, path, line, msg):
             match = re.fullmatch(r"read-budget-v1: пункт (P\d+\.\d+): вес (\d+) > порога (\d+) оценочных токенов \(.+\)", msg)
             row = records.get(match[1]) if match else None
-            if (match and match[1] in scope and Path(path).resolve() == (plan / "plan.md").resolve()
+            if (match and match[1] in decisions and Path(path).resolve() == (plan / "plan.md").resolve()
                     and line is None and row and row.get("admission_state") == "ready"
                     and row.get("d2a_pass") is False and int(match[2]) == row["weight_tokens"]
                     and int(match[3]) == threshold):
-                self.warning(path, line, msg + " [owner advisory D19; completeness required]")
+                self.warning(path, line, msg + f" [owner advisory {decisions[match[1]]}; completeness required]")
             else:
                 super().error(path, line, msg)
 

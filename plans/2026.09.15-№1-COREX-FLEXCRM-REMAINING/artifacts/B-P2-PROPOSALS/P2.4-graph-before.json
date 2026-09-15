@@ -1,0 +1,97 @@
+{
+  "schema_version": "evidence-graph/v1",
+  "item_id": "P2.4",
+  "product_paths": [
+    "findings/P2-contract-catalogue.md",
+    "findings/P2-gate-requests.md."
+  ],
+  "digest_inputs": [
+    "docs/dev-doctrine.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/01-owner-design-policy.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D4.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D6.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D7.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-downstream-gaps.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-requirements-lock.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-auth-ownership.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-consumer-cases.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-delta-map.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-identity-profile.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-intake.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P10/P10.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P11/P11.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P3/P3.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P4/P4.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P5/P5.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P6/P6.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P7/P7.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P8/P8.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P9/P9.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/plan.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/03-gates.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/04-architecture.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/05-integrated-design.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/P2-contract-design.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/P2-design-rag.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/roadmap.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py"
+  ],
+  "collisions": [],
+  "nodes": [
+    {
+      "id": "spec",
+      "kind": "item-spec",
+      "path": "phases/P2/P2.4.md",
+      "sha256": "8e97b212cee2c60175954acf16049fb33c51a01b9e9836dadff06ec4874435d0"
+    },
+    {
+      "id": "bundle",
+      "kind": "bundle",
+      "sha256": "c2c3bb197daa46462db1da2abc1ec4a1435aed966ab5333ced33e4a5519adc8b",
+      "declaration_sha256": "4074f0f7bb52853ec687617b8796bc4ee667afa74267d72275f3a90036e63a2a"
+    },
+    {
+      "id": "product",
+      "kind": "declared-files",
+      "anchor": {
+        "paths": [
+          {
+            "path": "findings/P2-contract-catalogue.md",
+            "state": "missing"
+          },
+          {
+            "path": "findings/P2-gate-requests.md.",
+            "state": "missing"
+          }
+        ],
+        "sha256": "99fa98e9bce0aafe71c1703dbf48a581a7b8b45173055a826a03641554870e1c"
+      }
+    },
+    {
+      "id": "closure",
+      "kind": "closure-projections",
+      "paths": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "spec",
+      "to": "product",
+      "kind": "precedes"
+    },
+    {
+      "from": "bundle",
+      "to": "product",
+      "kind": "digest-input"
+    },
+    {
+      "from": "product",
+      "to": "closure",
+      "kind": "byte-identity"
+    }
+  ],
+  "sha256": "82bb17238520da6b1a52a490d9c86a337161fb6a28457370260ee222052d17de"
+}

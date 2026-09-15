@@ -1,0 +1,445 @@
+{
+  "status": "green",
+  "profile": "p2-contract-catalogue/1",
+  "coverage": {
+    "R": 52,
+    "parents": 365,
+    "operative": 682,
+    "delimiters": 6,
+    "foundations": 9,
+    "contracts": 30,
+    "independent_future_cases": 60,
+    "typed_declarations": 217,
+    "isolated_SQL_review_checks": 47,
+    "finite_requests": 55,
+    "sealed_inputs": 12,
+    "producer_phase_or_conditional_edges": 130
+  },
+  "requirements": [
+    {
+      "R": "R01",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R02",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R03",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R04",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R05",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R06",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R07",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R08",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R09",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R10",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R11",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R12",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R13",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R14",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R15",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R16",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R17",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R18",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R19",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R20",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R21",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R22",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R23",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R24",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R25",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R26",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R27",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R28",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R29",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R30",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R31",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R32",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R33",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R34",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R35",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R36",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R37",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R38",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R39",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R40",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R41",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R42",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R43",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R44",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R45",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R46",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R47",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R48",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R49",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R50",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R51",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    },
+    {
+      "R": "R52",
+      "full_frozen_lock_join": "PASS",
+      "original_protected_scope_retained": "PASS"
+    }
+  ],
+  "current_seals": [
+    {
+      "Path": "decisions/D7.md",
+      "SHA256": "68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832"
+    },
+    {
+      "Path": "findings/P1-requirements-lock.md",
+      "SHA256": "6c2fd0af8072fd681eb095c748fa67d9fc5aab5dad252cefbf06c6597b36e0c2"
+    },
+    {
+      "Path": "findings/P2-auth-ownership.md",
+      "SHA256": "041196cc9db87c6f5141c73a0a26f224472082c8c6cf62acfc5af97320ff7af6"
+    },
+    {
+      "Path": "findings/P2-consumer-cases.md",
+      "SHA256": "2e8cdc24b0a9193d418aa2e17e53ad4c9fff48c893d279b4e1d8f7740a61f760"
+    },
+    {
+      "Path": "findings/P2-contract-proposals.md",
+      "SHA256": "8101a51c2cde939584511f9af24da730ce1b2b7438fb8b4037692483fad1348b"
+    },
+    {
+      "Path": "findings/P2-delta-map.md",
+      "SHA256": "5e5d3d2b3372f3865d157466336d53c966ffdea09e89a2e1aba4d1735a2c3fe9"
+    },
+    {
+      "Path": "findings/P2-gate-requests.md",
+      "SHA256": "77b763002a9509b5ab995046ed838bbcc19f9e6c1786cc6da6a6c994172e5cdd"
+    },
+    {
+      "Path": "findings/P2-identity-profile.md",
+      "SHA256": "e9819018a40d8d1d99bf41690c6057722536e5b98f8d75d8cb8615a404c057d9"
+    },
+    {
+      "Path": "findings/P2-intake.md",
+      "SHA256": "2e0d9d7eff7344f24be8da75d6ab6e06c55e101151601ef4512fe3ab30f8d924"
+    },
+    {
+      "Path": "research/03-gates.md",
+      "SHA256": "b9a2ad93007d76152c25dbf2f4c6b908c2182482900c1f7f144c6ffb5857db3f"
+    },
+    {
+      "Path": "research/05-integrated-design.md",
+      "SHA256": "6aca22518b510e17d108e0878baaa512b152596b56d75b185adc73494c117e9e"
+    },
+    {
+      "Path": "research/P2-contract-design.md",
+      "SHA256": "7eefb1385378065d4e039d81353940516f8d9df413e8274a2dfba8fe3f07ef9e"
+    }
+  ],
+  "new_request_coverage": {
+    "C-P2-001": [
+      "G-DEPENDENCY",
+      "G-STORAGE"
+    ],
+    "C-P2-004": [
+      "G-SCHEMA",
+      "G-STORAGE",
+      "G-TIMING"
+    ],
+    "C-P2-005": [
+      "G-API",
+      "G-CENTRAL"
+    ],
+    "C-P2-007": [
+      "G-API"
+    ],
+    "C-P2-008": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "C-P2-009": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-010": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-011": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-012": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-013": [
+      "G-API",
+      "G-DEPENDENCY",
+      "G-SCHEMA"
+    ],
+    "C-P2-014": [
+      "G-API"
+    ],
+    "C-P2-015": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "C-P2-016": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "C-P2-017": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "C-P2-018": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "C-P2-019": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "C-P2-020": [
+      "G-API",
+      "G-DEPENDENCY",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "C-P2-021": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-022": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "C-P2-023": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-024": [
+      "G-API"
+    ],
+    "C-P2-025": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "C-P2-026": [
+      "G-API",
+      "G-DEPENDENCY",
+      "G-SCHEMA"
+    ],
+    "C-P2-027": [
+      "G-API"
+    ],
+    "C-P2-028": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "C-P2-029": [
+      "G-API"
+    ]
+  },
+  "protected_grants": 0,
+  "receipt_linked": 0,
+  "unresolved_internal_contract_choices": 0,
+  "runtime_changed": false,
+  "actual_runtime_installed_live_released_effective_consumer_proof": false,
+  "future_residual_owners": "P3–P11 original scope; C01–09 and DI34/AP13 remain independently owning, no blanket approval"
+}

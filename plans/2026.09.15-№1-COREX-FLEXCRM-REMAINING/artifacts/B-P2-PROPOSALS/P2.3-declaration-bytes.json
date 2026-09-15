@@ -1,0 +1,1304 @@
+[
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Contracts/PanelProvider.php",
+    "sha256": "581e4477a0c7de6fcb9df008b0447d289f239cc18ac240b17786aca88ad15855",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Contracts;\ninterface PanelProvider {\n    public function descriptor(): \\CoreX\\Panels\\Data\\PanelDescriptor;\n    public function access(\\CoreX\\Panels\\Data\\PanelContext $context, \\CoreX\\Panels\\Data\\PanelReference $panel): \\CoreX\\Panels\\Data\\PanelAccess;\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Contracts/PanelCatalogue.php",
+    "sha256": "8c5775979fcb75b6a545eb8d5f3b36d118af41ea6b3594f129d8feb38fd41ee0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Contracts;\ninterface PanelCatalogue {\n    /** @return list<PanelDescriptor> */\n    public function forEntity(\\CoreX\\Panels\\Data\\PanelContext $context, \\CoreX\\Panels\\Data\\EntityReference $entity): array;\n    public function access(\\CoreX\\Panels\\Data\\PanelContext $context, \\CoreX\\Panels\\Data\\PanelReference $panel): \\CoreX\\Panels\\Data\\PanelAccess;\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Data/PanelDescriptor.php",
+    "sha256": "6a8b6e27fc0154a01d02089a83cf59b603a2fd295d775fafd278a804db50b509",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Data;\nfinal readonly class PanelDescriptor {\n    /** @param list<string> $supportedActions */\n    public function __construct(\n        public string $version,\n        public string $key,\n        public string $owningModule,\n        public ?string $requiredCapability,\n        public array $supportedActions,\n        public string $label,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Data/EntityReference.php",
+    "sha256": "a6588b8fb797122494e3f6c4c93edae7f8c3da4a5ae1c3d55a6fa9a0a9ffa2de",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Data;\nfinal readonly class EntityReference {\n    public function __construct(\n        public string $handle,\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Data/PanelReference.php",
+    "sha256": "baea7b7fb269f742fb9dc0e5f2977d872311ee8945de35949c1b0ad3f77d846a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Data;\nfinal readonly class PanelReference {\n    public function __construct(\n        public string $providerKey,\n        public string $panelId,\n        public ?\\CoreX\\Panels\\Data\\EntityReference $parent,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Data/PanelContext.php",
+    "sha256": "02259da8e7196048a9ce448cfb1b19867e0284ecc934142934debc9511f8e95e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Data;\nfinal readonly class PanelContext {\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $tenant,\n        public string $actorKind,\n        public ?string $actorId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-007",
+    "path": "packages/panels/src/Data/PanelAccess.php",
+    "sha256": "ff1d5b25c7ce3bf04972a6dd742c3321882d51879d885dd0352afd0e6072f645",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Panels\\Data;\nfinal readonly class PanelAccess {\n    /** @param list<string> $actions */\n    public function __construct(\n        public bool $view,\n        public array $actions,\n        public ?string $reason,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Contracts/MediaLibrary.php",
+    "sha256": "baa830250b5a4b1106415ccaaf3828964951c206e374c9f6db46913b801e4f4f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Contracts;\ninterface MediaLibrary {\n    public function store(\\CoreX\\Media\\Data\\MediaContext $context, \\CoreX\\Media\\Data\\UploadInput $input): \\CoreX\\Media\\Data\\MediaFileRef;\n    public function read(\\CoreX\\Media\\Data\\MediaContext $context, string $fileId): \\CoreX\\Media\\Data\\MediaReadRef;\n    public function delete(\\CoreX\\Media\\Data\\MediaContext $context, string $fileId): \\CoreX\\Media\\Data\\DeleteResult;\n    public function conversion(\\CoreX\\Media\\Data\\MediaContext $context, string $fileId, string $profile): ?\\CoreX\\Media\\Data\\MediaConversionRef;\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Contracts/RelationLookup.php",
+    "sha256": "b624e57b19c7eba062658e64e76bd4b03061794db215b83a9bd802da959e8b9f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Contracts;\ninterface RelationLookup {\n    public function attach(\\CoreX\\Media\\Data\\MediaContext $context, \\CoreX\\Media\\Data\\AttachmentInput $input): void;\n    public function detach(\\CoreX\\Media\\Data\\MediaContext $context, \\CoreX\\Media\\Data\\AttachmentInput $input): void;\n    /** @return list<AttachmentRef> */\n    public function usages(\\CoreX\\Media\\Data\\MediaContext $context, string $fileId, int $limit = 50): array;\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Contracts/MediaPolicy.php",
+    "sha256": "d08c9bbdb5ba6a282cf8021f3dc27187118432f71ea9f4e2044eca43a65211b1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Contracts;\ninterface MediaPolicy {\n    public function allows(\\CoreX\\Media\\Data\\MediaContext $context, \\CoreX\\Media\\Data\\MediaAction $action, \\CoreX\\Media\\Data\\MediaSubject $subject): bool;\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Contracts/ConversionDriver.php",
+    "sha256": "7f0ea7437bd1ea33fec26e9a53d1aebf06478a0dc6e45b08699fcfc096ab1f66",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Contracts;\ninterface ConversionDriver {\n    public function profile(): \\CoreX\\Media\\Data\\ConversionProfile;\n    public function convert(\\CoreX\\Media\\Data\\ConversionInput $input): \\CoreX\\Media\\Data\\ConversionOutput;\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaContext.php",
+    "sha256": "8bde1617a0ca788aee988c5a024dc526cc51e45f67ba71bd0d33620c1f22daf1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class MediaContext {\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $tenant,\n        public string $actorKind,\n        public ?string $actorId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/UploadInput.php",
+    "sha256": "90ece02941202d7890a279a80058a34fe52809bfce2b9cd213115d2f62411d57",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class UploadInput {\n    public function __construct(\n        public string $requestKey,\n        public \\Illuminate\\Http\\UploadedFile $file,\n        public string $purpose,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/AttachmentInput.php",
+    "sha256": "b15c5be8ddcd1d0de95187095d47c32d681e4a61841989eff8ca1e20d5fba009",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class AttachmentInput {\n    public function __construct(\n        public string $fileId,\n        public string $entityHandle,\n        public string $entityId,\n        public string $slot,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/AttachmentRef.php",
+    "sha256": "b68b85e293fa44374339637371157266b2cd2d22aaee1d0bf6244c4583dfc016",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class AttachmentRef {\n    public function __construct(\n        public string $fileId,\n        public string $entityHandle,\n        public string $entityId,\n        public string $slot,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaFileRef.php",
+    "sha256": "24f807c2610f1537b83e42db03065f024c793aee49b4b8fbb7a1d916c47d06ee",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class MediaFileRef {\n    public function __construct(\n        public string $id,\n        public string $kind,\n        public string $mimeType,\n        public int $sizeBytes,\n        public string $sha256,\n        public string $state,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaReadRef.php",
+    "sha256": "e015d885f6c1c68206b5f81645c86529f4310d8477c7fabe34a1d684f7dded11",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class MediaReadRef {\n    public function __construct(\n        public string $fileId,\n        public string $mimeType,\n        public int $sizeBytes,\n        public string $sha256,\n        public \\Closure $openStream,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaConversionRef.php",
+    "sha256": "4d27d650db0719041d83250ee00f22d4ad2a22c05265aadbdad0fe1e5d184491",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class MediaConversionRef {\n    public function __construct(\n        public string $fileId,\n        public string $profile,\n        public string $profileDigest,\n        public string $sourceVersion,\n        public \\CoreX\\Media\\Data\\MediaReadRef $output,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/DeleteResult.php",
+    "sha256": "b91e4fee082b12202f6fe2ec561341f51c97c7528d76a7be45a2d39f0c66edfc",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class DeleteResult {\n    public function __construct(\n        public bool $deleted,\n        public bool $purgePending,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaSubject.php",
+    "sha256": "9d2c976d11bfd949fbe6c92d7a9d74f63377dbc56008b51f5ae2fb4d0cde2f24",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class MediaSubject {\n    /** @param array<string, null|bool|int|string|array> $metadata */\n    public function __construct(\n        public ?string $fileId,\n        public ?\\CoreX\\Media\\Data\\AttachmentInput $entity,\n        public array $metadata,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/ConversionProfile.php",
+    "sha256": "96b0588eefc4c02787a688c678b6c709608515f7be53a261e1e675e23b3a944f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class ConversionProfile {\n    /** @param list<string> $inputMimes */\n    public function __construct(\n        public string $key,\n        public string $version,\n        public string $digest,\n        public array $inputMimes,\n        public string $outputMime,\n        public int $maxBytes,\n        public int $maxPixels,\n        public int $maxDimension,\n        public int $maxSeconds,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/ConversionInput.php",
+    "sha256": "d68453ac370e6ce22ad9a424f171a819e3968705431c48f6d796aca4588dd1bf",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class ConversionInput {\n    public function __construct(\n        public \\CoreX\\Media\\Data\\MediaContext $context,\n        public \\CoreX\\Media\\Data\\MediaReadRef $file,\n        public \\CoreX\\Media\\Data\\ConversionProfile $profile,\n        public string $sourceVersion,\n        public string $attemptKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/ConversionOutput.php",
+    "sha256": "1af757d093fb345384fb8d2e09b0b1fa0dc67beb09d85ead8415a7861b157950",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nfinal readonly class ConversionOutput {\n    public function __construct(\n        public \\Closure $openStream,\n        public string $mimeType,\n        public int $sizeBytes,\n        public string $sha256,\n        public int $width,\n        public int $height,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-008",
+    "path": "packages/media/src/Data/MediaAction.php",
+    "sha256": "3f531e995159ba4001a9ade3fc194f10e470ee0f51a8a6188cf0118115007285",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Media\\Data;\nenum MediaAction: string {\n    case Store = 'store';\n    case Read = 'read';\n    case Attach = 'attach';\n    case Detach = 'detach';\n    case Delete = 'delete';\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Contracts/NotificationCenter.php",
+    "sha256": "86a35e466dc5ec186c717182e6351586077ab233feaab7c164286d4d724465c3",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface NotificationCenter {\n    public function notify(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\NotificationInput $input): \\CoreX\\Notifications\\Data\\NotificationRef;\n    public function cancel(\\CoreX\\Notifications\\Data\\NotificationContext $context, string $notificationId): \\CoreX\\Notifications\\Data\\CancelResult;\n    public function markRead(\\CoreX\\Notifications\\Data\\NotificationContext $context, string $notificationId): void;\n    /** @return list<NotificationRef> */\n    public function inbox(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\InboxQuery $query): array;\n    public function unreadCount(\\CoreX\\Notifications\\Data\\NotificationContext $context): int;\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Contracts/NotificationPolicy.php",
+    "sha256": "45201615d225ae81c7ed1b0983aad6d5f9a7aa3fb077ed59a8004c6f4b10fcc5",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface NotificationPolicy {\n    public function allows(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\NotificationAction $action, \\CoreX\\Notifications\\Data\\NotificationSubject $subject): bool;\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Contracts/NotificationChannelDriver.php",
+    "sha256": "ba103465e4113b1deaf0c3a285b5c4ca9f2de177b8d06f20db541f6e62125c62",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface NotificationChannelDriver {\n    public function descriptor(): \\CoreX\\Notifications\\Data\\ChannelDescriptor;\n    public function send(\\CoreX\\Notifications\\Data\\DeliveryInput $input): \\CoreX\\Notifications\\Data\\DeliveryOutcome;\n    public function reconcile(\\CoreX\\Notifications\\Data\\DeliveryInput $input): \\CoreX\\Notifications\\Data\\DeliveryOutcome;\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Contracts/RecipientResolver.php",
+    "sha256": "4dd36cf1d3536a9b71a7e3525898e64af2d87ff482d2c2a7d723730ce75cb97f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface RecipientResolver {\n    public function resolve(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\RecipientReference $recipient, string $channel): ?\\CoreX\\Notifications\\Data\\DeliveryTarget;\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Contracts/PreferenceRepository.php",
+    "sha256": "a0a4109daa7f4fe1838fa1c799058441641b0060ad8d95e0176df616eb3d7b2c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface PreferenceRepository {\n    public function get(\\CoreX\\Notifications\\Data\\NotificationContext $context, string $eventType): \\CoreX\\Notifications\\Data\\NotificationPreference;\n    public function set(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\PreferenceInput $input): \\CoreX\\Notifications\\Data\\NotificationPreference;\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationContext.php",
+    "sha256": "c0b87fb1843e4bcb42e1be92c3ca384c50fecdba67f258f0e7b8b161ca8ec131",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class NotificationContext {\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $tenant,\n        public string $actorKind,\n        public ?string $actorId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/RecipientReference.php",
+    "sha256": "921cd47fdbaa3e690694f76804cd182483106106c34cf0730a06e9a97f014a4d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class RecipientReference {\n    public function __construct(\n        public string $kind,\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/EntityReference.php",
+    "sha256": "faf8f26630221a71c158ab70625858ba3b8335e1dd2027384c43d4b49994cbdf",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class EntityReference {\n    public function __construct(\n        public string $handle,\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationInput.php",
+    "sha256": "b89f6d875c1a746d5ebf9ad6b744b244e4a3f21015087101e5ddccccf4924353",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class NotificationInput {\n    /** @param array<string, null|bool|int|string|array> $payload */\n    public function __construct(\n        public string $requestKey,\n        public string $eventType,\n        public \\CoreX\\Notifications\\Data\\RecipientReference $recipient,\n        public string $templateKey,\n        public array $payload,\n        public ?\\CoreX\\Notifications\\Data\\EntityReference $related,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationRef.php",
+    "sha256": "e339a1bc3b2129aa5e56d194e0c37a0c8596a268747ef4514f722749c5fd2909",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class NotificationRef {\n    public function __construct(\n        public string $id,\n        public \\CoreX\\Notifications\\Data\\RecipientReference $recipient,\n        public string $eventType,\n        public string $revision,\n        public ?\\DateTimeImmutable $readAt,\n        public ?\\DateTimeImmutable $cancelledAt,\n        public ?\\CoreX\\Notifications\\Data\\EntityReference $related,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/InboxQuery.php",
+    "sha256": "3b50b1e32352a33654cdb9c3f4950d4fdc7f82ba5c0d037005f4b957fa8e4098",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class InboxQuery {\n    public function __construct(\n        public ?string $before,\n        public int $limit = 100,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/CancelResult.php",
+    "sha256": "20c45ce6f0334abf612e961bab16740e20f993bc895d5f6dfbe558a9e4641c77",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class CancelResult {\n    /** @param list<string> $alreadyDispatched */\n    public function __construct(\n        public bool $cancelled,\n        public array $alreadyDispatched,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationSubject.php",
+    "sha256": "610e6a81d74069a7b4d2bb4a8519b2104712e37670cf1c66bafc61dd6ac972e7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class NotificationSubject {\n    public function __construct(\n        public ?string $notificationId,\n        public \\CoreX\\Notifications\\Data\\RecipientReference $recipient,\n        public ?\\CoreX\\Notifications\\Data\\EntityReference $related,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationPreference.php",
+    "sha256": "6b33737e9eb1f54738f4abf63aa303ee976d21ba6a2babc381eb7861f6951efd",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class NotificationPreference {\n    /** @param list<string> $channels */\n    public function __construct(\n        public string $version,\n        public array $channels,\n        public string $digest,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/PreferenceInput.php",
+    "sha256": "1e0df48c55207d7cf67ebeffc29c464f6d9eaf3acffb26f489e3c8282f91fd9b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class PreferenceInput {\n    /** @param list<string> $channels */\n    public function __construct(\n        public string $eventType,\n        public array $channels,\n        public string $digest,\n        public string $expectedVersion,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/ChannelDescriptor.php",
+    "sha256": "743f20f00a55c57598c6199e5e23b06b2e38ae52a997d4bf75c805ff3ce74f01",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class ChannelDescriptor {\n    public function __construct(\n        public string $key,\n        public string $version,\n        public bool $supportsIdempotency,\n        public bool $supportsReconciliation,\n        public ?int $dedupWindowSeconds,\n        public string $dedupScope,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/DeliveryTarget.php",
+    "sha256": "80fda40c41a33fab2f2b306acf1064b1c485ac555363124c6d1ea1c28d456a03",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class DeliveryTarget {\n    public function __construct(\n        public string $channel,\n        public string $reference,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/DeliveryInput.php",
+    "sha256": "848cbecb40b75416004df2bd7514cc655ee8c7fc6ade4ea30810c8aa6b125b91",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class DeliveryInput {\n    /** @param array<string, null|bool|int|string|array> $message */\n    public function __construct(\n        public string $deliveryKey,\n        public int $attemptEpoch,\n        public \\CoreX\\Notifications\\Data\\DeliveryTarget $target,\n        public array $message,\n        public \\CoreX\\Notifications\\Data\\NotificationContext $context,\n        public string $messageSha256,\n        public string $templateVersion,\n        public string $policyVersion,\n        public string $driverVersion,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/DeliveryOutcome.php",
+    "sha256": "a1e9300b7d6ae05db406b1003654438c87a133574993c116964d24c93e8f339b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class DeliveryOutcome {\n    public function __construct(\n        public string $kind,\n        public ?string $providerRef,\n        public ?int $retryAfter,\n        public string $reason,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-009",
+    "path": "packages/notifications/src/Data/NotificationAction.php",
+    "sha256": "67dc2cda42dcc0250f19f009f857116f2acf70c01aff521fd46eb02bda821bf0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nenum NotificationAction: string {\n    case Notify = 'notify';\n    case Read = 'read';\n    case Cancel = 'cancel';\n    case Preference = 'preference';\n}"
+  },
+  {
+    "contract": "C-P2-010",
+    "path": "packages/notifications/src/Contracts/DigestBuilder.php",
+    "sha256": "dfdd47ca00cfbffa95dff31d2206e7bceb486f512e90abd14135d1075b2a7d15",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Contracts;\ninterface DigestBuilder {\n    public function build(\\CoreX\\Notifications\\Data\\NotificationContext $context, \\CoreX\\Notifications\\Data\\DigestWindow $window): ?\\CoreX\\Notifications\\Data\\DigestRef;\n}"
+  },
+  {
+    "contract": "C-P2-010",
+    "path": "packages/notifications/src/Data/DigestWindow.php",
+    "sha256": "e4b8f39d16896e1f84025e602adf421b12c01d352196319dc27ca60dd74e286e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class DigestWindow {\n    public function __construct(\n        public \\DateTimeImmutable $start,\n        public \\DateTimeImmutable $end,\n        public string $period,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-010",
+    "path": "packages/notifications/src/Data/DigestRef.php",
+    "sha256": "0a1adefef2bd98b2dcf7cf189cb8a77ef2d02c37b8e2914a6470a21e1e0683ff",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Notifications\\Data;\nfinal readonly class DigestRef {\n    public function __construct(\n        public string $id,\n        public \\CoreX\\Notifications\\Data\\DigestWindow $window,\n        public string $membershipHash,\n        public int $batchSequence,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Contracts/SavedViewRepository.php",
+    "sha256": "a43b1722c99e07084583c2c2d80fa1825eeb9263836f2d09254175dc2f33216c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Contracts;\ninterface SavedViewRepository {\n    /** @return list<SavedViewRef> */\n    public function viewsFor(\\CoreX\\Views\\Data\\ViewContext $context, \\CoreX\\Views\\Data\\ViewScope $scope): array;\n    public function save(\\CoreX\\Views\\Data\\ViewContext $context, \\CoreX\\Views\\Data\\SaveViewInput $input): \\CoreX\\Views\\Data\\SavedViewRef;\n    public function delete(\\CoreX\\Views\\Data\\ViewContext $context, string $viewId): void;\n    public function setDefault(\\CoreX\\Views\\Data\\ViewContext $context, string $viewId): \\CoreX\\Views\\Data\\SavedViewRef;\n    public function compile(\\CoreX\\Views\\Data\\ViewContext $context, string $viewId): \\CoreX\\Views\\Data\\SavedQuery;\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Contracts/ViewSchemaProvider.php",
+    "sha256": "902cc11bca37b9b0361081ab00d864363b2c58ce22e559358a338a5fc82b8010",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Contracts;\ninterface ViewSchemaProvider {\n    public function schema(\\CoreX\\Views\\Data\\ViewContext $context, string $entityHandle): \\CoreX\\Views\\Data\\ViewSchema;\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Contracts/ViewAccessPolicy.php",
+    "sha256": "58d9e15051db1905955421d726bfdefb8f70129178c133bc51e0abbe2b2b406b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Contracts;\ninterface ViewAccessPolicy {\n    public function allows(\\CoreX\\Views\\Data\\ViewContext $context, \\CoreX\\Views\\Data\\ViewAction $action, \\CoreX\\Views\\Data\\ViewSubject $subject): bool;\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewContext.php",
+    "sha256": "61f4a33f3339d4550f44bd6389233e87d0d0fc03a38a12ef98fbc25a6003c5ef",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class ViewContext {\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $tenant,\n        public string $actorKind,\n        public ?string $actorId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewScope.php",
+    "sha256": "de678e5a988bd7ad94ef45a38911ec81d4356f3350a42c05b33eb4e2e368bbf1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class ViewScope {\n    public function __construct(\n        public string $entityHandle,\n        public ?string $workspaceId,\n        public ?string $ownerKind,\n        public ?string $ownerId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/SaveViewInput.php",
+    "sha256": "4f13350a84d5701f1528c26314eaee8b27e6909c436e0aa5a5dcbd9cd3d6afed",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class SaveViewInput {\n    /** @param array<string,string> $localizedName | @param array<string, null|bool|int|string|array> $config */\n    public function __construct(\n        public ?string $id,\n        public string $expectedRevision,\n        public \\CoreX\\Views\\Data\\ViewScope $scope,\n        public string $kind,\n        public array $localizedName,\n        public array $config,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/SavedViewRef.php",
+    "sha256": "d6fbca481fdfc345204e4946c4c1d7eee32a62686aeb9379b87da549975a0608",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class SavedViewRef {\n    public function __construct(\n        public string $id,\n        public \\CoreX\\Views\\Data\\ViewScope $scope,\n        public string $kind,\n        public string $revision,\n        public bool $isDefault,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewField.php",
+    "sha256": "c85282112b64259f8ca92590630ee62291cf8ae360e022c7078492c4cf4fd5bf",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class ViewField {\n    /** @param list<string> $operators */\n    public function __construct(\n        public string $key,\n        public string $type,\n        public array $operators,\n        public bool $visible,\n        public bool $filterable,\n        public bool $sortable,\n        public bool $projectable,\n        public string $mappingKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewSchema.php",
+    "sha256": "4f53766c14198aa3dea81a9d9a45ce0082ab91b3dbda6cddef96cd900f54edd1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class ViewSchema {\n    /** @param list<ViewField> $fields */\n    public function __construct(\n        public string $version,\n        public string $entityHandle,\n        public array $fields,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewSubject.php",
+    "sha256": "c97401f6820f4e53d5d22ffb8b2db57680a2a1348fded59bafe6961ea5b1ae00",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class ViewSubject {\n    public function __construct(\n        public \\CoreX\\Views\\Data\\ViewScope $scope,\n        public ?string $viewId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/SavedQuery.php",
+    "sha256": "fcf21d305c8900bd41468f775be123d069802e1ee5273648769f9455964368b8",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nfinal readonly class SavedQuery {\n    /** @param array<string, null|bool|int|string|array> $filters | @param list<json-map> $sort | @param list<string> $projection */\n    public function __construct(\n        public string $schemaVersion,\n        public array $filters,\n        public array $sort,\n        public array $projection,\n        public ?string $groupBy,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-011",
+    "path": "packages/core/src/Views/Data/ViewAction.php",
+    "sha256": "096fd7578afe209b9ee595877ef6e103ecf056eccd7a6042a412673a1196fa7d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Views\\Data;\nenum ViewAction: string {\n    case Read = 'read';\n    case Create = 'create';\n    case Update = 'update';\n    case Delete = 'delete';\n    case SetDefault = 'setDefault';\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Contracts/WakeupScheduler.php",
+    "sha256": "02a4214f02fd983321499c18c7e6a1c8ce2f08bdbea80a54ad904ec55a4baca1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Contracts;\ninterface WakeupScheduler {\n    public function schedule(\\CoreX\\Wakeup\\Data\\WakeupRequest $request): \\CoreX\\Wakeup\\Data\\ScheduleResult;\n    public function cancel(\\CoreX\\Tenancy\\TenantContext $context, string $requestKey): \\CoreX\\Wakeup\\Data\\CancelResult;\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Contracts/WakeupHandler.php",
+    "sha256": "8036c23f7d36d8212e80ae3d28ba66f6ab9d5b467d609b0f77dfa55a73a42223",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Contracts;\ninterface WakeupHandler {\n    public function handle(\\CoreX\\Wakeup\\Data\\WakeupDelivery $delivery): void;\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Contracts/DueSource.php",
+    "sha256": "c31bb5217bd65c39499a871a13122b2865ab3f61df9ce881a63af468e40bf195",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Contracts;\ninterface DueSource {\n    public function nextDue(\\CoreX\\Tenancy\\TenantContext $context): ?\\DateTimeImmutable;\n    public function sweep(\\CoreX\\Tenancy\\TenantContext $context, \\DateTimeImmutable $now, int $limit): \\CoreX\\Wakeup\\Data\\SweepResult;\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Contracts/WakeupSweeper.php",
+    "sha256": "079b6ba330b0837241e18b4bf797290dbd33c5605d7caa7f6b9ee40674f06a26",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Contracts;\ninterface WakeupSweeper {\n    public function sweep(\\CoreX\\Tenancy\\TenantContext $context, int $limit): \\CoreX\\Wakeup\\Data\\SweepResult;\n    public function nextDue(\\CoreX\\Tenancy\\TenantContext $context): ?\\DateTimeImmutable;\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Contracts/WakeupHint.php",
+    "sha256": "3d594c32ccfbd42c2ef999df4098691f93a11b750a22d22befa1080be2b3db8a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Contracts;\ninterface WakeupHint {\n    public function scheduled(\\CoreX\\Tenancy\\TenantContext $context, \\DateTimeImmutable $fireAt): void;\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/WakeupRequest.php",
+    "sha256": "d83eb289b7399d8344f4c2731be986da4fd2b94a4425ae80c5c6a35b981d46dd",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class WakeupRequest {\n    /** @param array<string, null|bool|int|string|array> $payload */\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $context,\n        public string $kind,\n        public string $requestKey,\n        public \\DateTimeImmutable $fireAt,\n        public ?\\CoreX\\Wakeup\\Data\\WakeupWindow $window,\n        public array $payload,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/WakeupWindow.php",
+    "sha256": "70850f52215bdea5228fe5f0b213bde35affdc47029a947445357a41adf54c32",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class WakeupWindow {\n    public function __construct(\n        public \\DateTimeImmutable $start,\n        public \\DateTimeImmutable $end,\n        public string $period,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/WakeupDelivery.php",
+    "sha256": "06ef04e999577dc85d8ca63122e13ec98881be29431cbb216831e54f53609f63",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class WakeupDelivery {\n    public function __construct(\n        public \\CoreX\\Wakeup\\Data\\WakeupRequest $request,\n        public int $generation,\n        public int $attempt,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/ScheduleResult.php",
+    "sha256": "c4fdf0655c8f1153507ca497a5c87410799b0efbddbbd72fd5a5fabe17294595",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class ScheduleResult {\n    public function __construct(\n        public string $status,\n        public string $requestKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/CancelResult.php",
+    "sha256": "6967273a777264e39482d2ad1d2c5b2056ce90b80647a33b3c36afbf1ca85c74",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class CancelResult {\n    public function __construct(\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-012",
+    "path": "packages/wakeup/src/Data/SweepResult.php",
+    "sha256": "1d67761771bd40c4954c3a0b8aef7f4ba032656f9099aaa587556d959a3f5071",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Wakeup\\Data;\nfinal readonly class SweepResult {\n    public function __construct(\n        public int $claimed,\n        public int $completed,\n        public int $retried,\n        public int $failed,\n        public int $skipped,\n        public bool $remainingDue,\n        public ?\\DateTimeImmutable $nextFireAt,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Contracts/WorkflowBinding.php",
+    "sha256": "01aedf0c92e6c9f7036cfb03d2587bf4bc93bfaeec8baf916b7d1f2a1e001c89",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Contracts;\ninterface WorkflowBinding {\n    public function capture(\\CoreX\\Workflow\\Data\\TriggerRequest $request): \\CoreX\\Workflow\\Data\\CaptureResult;\n    public function signal(\\CoreX\\Workflow\\Data\\SignalRequest $request): \\CoreX\\Workflow\\Data\\SignalResult;\n    public function fire(\\CoreX\\Workflow\\Data\\TransitionRequest $request): \\CoreX\\Workflow\\Data\\TransitionResult;\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Contracts/EngineAdapter.php",
+    "sha256": "0b496f70a23f495602fde8cef7027b7b5e754427212c3b0aec7dbe3506a8b511",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Contracts;\ninterface EngineAdapter {\n    public function start(\\CoreX\\Workflow\\Data\\TriggerRequest $request): \\CoreX\\Workflow\\Data\\StartResult;\n    public function signal(\\CoreX\\Workflow\\Data\\SignalRequest $request): \\CoreX\\Workflow\\Data\\SignalResult;\n    public function fire(\\CoreX\\Workflow\\Data\\TransitionRequest $request): \\CoreX\\Workflow\\Data\\TransitionResult;\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/TriggerRequest.php",
+    "sha256": "6954a9a7fc5532db969df8a78a24ac677d7cf07352124bbfdec02ef81aebdc5d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class TriggerRequest {\n    /** @param array<string, null|bool|int|string|array> $scalarSnapshot */\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $context,\n        public string $module,\n        public string $entityHandle,\n        public string $eventId,\n        public string $eventName,\n        public string $subjectRef,\n        public string $definitionRef,\n        public string $versionRef,\n        public array $scalarSnapshot,\n        public string $requestKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/SignalRequest.php",
+    "sha256": "b57991c75a24cfd548158a62073a2630220171013a38bc4f2de34f45a1f8d713",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class SignalRequest {\n    /** @param array<string, null|bool|int|string|array> $payload */\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $context,\n        public string $name,\n        public string $correlationKey,\n        public array $payload,\n        public string $requestKey,\n        public \\DateTimeImmutable $expiresAt,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/TransitionRequest.php",
+    "sha256": "8877eedb8bf4fba3b80db68b81854ea284c4164d2bebe0ba1946b832b63a8958",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class TransitionRequest {\n    /** @param array<string, null|bool|int|string|array> $payload */\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $context,\n        public string $subjectRef,\n        public string $edge,\n        public string $actorRef,\n        public array $payload,\n        public string $requestKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/CaptureResult.php",
+    "sha256": "1a448683c5e9322ecaf7d56e03c446f1e2ea04f66c0e91d32679854e702aad8e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class CaptureResult {\n    public function __construct(\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/StartResult.php",
+    "sha256": "6ce60642727c20d5f0132c53123d736a1e60b9daaf1172f3daa76e1ffbe7b3fe",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class StartResult {\n    public function __construct(\n        public string $status,\n        public ?string $instanceRef,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/SignalResult.php",
+    "sha256": "4dfc2fdbc68bed21194326bb653bb0b34acdb83648b908723c7fc92916dd4106",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class SignalResult {\n    public function __construct(\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-013",
+    "path": "packages/workflow/src/Data/TransitionResult.php",
+    "sha256": "2877b685f7b71b5ce59263027a9df9d814fc54e167fa6371ab1dfd01a1959406",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Workflow\\Data;\nfinal readonly class TransitionResult {\n    public function __construct(\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-014",
+    "path": "packages/core/src/Support/Data/DataScope.php",
+    "sha256": "94fb9e0785c1ffb95865cabbc1c72ea72193a5cfc095a0d3ce5713db3cdcf803",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Support\\Data;\nfinal readonly class DataScope {\n    public function __construct(\n        public \\CoreX\\Tenancy\\TenantContext $context,\n        public string $connectionIdentity,\n        public string $actorId,\n        public \\Closure $authorize,\n        public string $restoreEpoch,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-014",
+    "path": "packages/core/src/Support/Data/RecordRef.php",
+    "sha256": "7a687bfc5f31d1be8fbcf88ffeb7678a7675fa372768e128d0adc4707972c57d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Support\\Data;\nfinal readonly class RecordRef {\n    public function __construct(\n        public string $entity,\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-014",
+    "path": "packages/core/src/Support/Data/WriteToken.php",
+    "sha256": "17364d6f4005eae4d89d7bc15e11097595a2980bfd1eec574cd9934bd7118594",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Support\\Data;\nfinal readonly class WriteToken {\n    public function __construct(\n        public string $operationKey,\n        public string $payloadHash,\n        public string $expectedRecordVersion,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Contracts/FieldCatalogue.php",
+    "sha256": "411695f8e1c1120228749b7fdcb168f3ebdf409af2a471b6106fd79f15dde21c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Contracts;\ninterface FieldCatalogue {\n    public function snapshot(\\CoreX\\Support\\Data\\DataScope $scope, string $entity): \\CoreX\\Attributes\\Support\\FieldSnapshot;\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Contracts/AttributeStore.php",
+    "sha256": "4df5bb6925ea19a5e8fb9bd1316c80f69caaf4436bb8ec8beb7f58f45fc1212c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Contracts;\ninterface AttributeStore {\n    public function read(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Support\\Data\\RecordRef $record, \\CoreX\\Attributes\\Support\\FieldSelection $fields): \\CoreX\\Attributes\\Support\\ValueBag;\n    public function write(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Support\\Data\\RecordRef $record, \\CoreX\\Attributes\\Support\\ValuePatch $patch, \\CoreX\\Support\\Data\\WriteToken $token): \\CoreX\\Attributes\\Support\\WriteResult;\n    public function loadMany(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Attributes\\Support\\RecordSelection $records, \\CoreX\\Attributes\\Support\\FieldSelection $fields): \\CoreX\\Attributes\\Support\\ValueBatch;\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Contracts/AttributeFilter.php",
+    "sha256": "6d7fdaa5214403cabe376463e29da08326cfb28585d568089413eefe1264619c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Contracts;\ninterface AttributeFilter {\n    public function compile(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Attributes\\Support\\FieldSnapshot $schema, \\CoreX\\Attributes\\Support\\FilterNode $filter): \\CoreX\\Attributes\\Support\\FilterPlan;\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/FieldSnapshot.php",
+    "sha256": "80b00b831b41f78dd3b67da3b1ad0a374014eafa4b8400bad72d601897178d21",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class FieldSnapshot {\n    /** @param list<json-map> $activeFields | @param array<string, null|bool|int|string|array> $driverCapabilities */\n    public function __construct(\n        public string $entity,\n        public string $schemaVersion,\n        public string $schemaHash,\n        public array $activeFields,\n        public array $driverCapabilities,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/FieldSelection.php",
+    "sha256": "01e47068982f50e2c29108c5f0572d1ed91a21dceb2038de67a3da054388026e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class FieldSelection {\n    /** @param list<string> $fields */\n    public function __construct(\n        public array $fields,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/RecordSelection.php",
+    "sha256": "379e681bfabcf78f111bb4b26f57cb6b47e99912d8be6f7430667b172ad562eb",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class RecordSelection {\n    /** @param list<CoreX\\Support\\Data\\RecordRef> $records */\n    public function __construct(\n        public array $records,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/ValueBag.php",
+    "sha256": "3c101a845ac0552cce8be23638145ac8febede58c750532c5934eb47730a2abf",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class ValueBag {\n    /** @param array<string, null|bool|int|string|array> $values */\n    public function __construct(\n        public array $values,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/ValuePatch.php",
+    "sha256": "a52f4e110ab589367f5ca6b46bb18d1b441ad8554a555f8f9ae88bc318a2883e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class ValuePatch {\n    /** @param array<string, null|bool|int|string|array> $values */\n    public function __construct(\n        public array $values,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/ValueBatch.php",
+    "sha256": "0f42c8bad293ae6c611f4385fa01867232263ddc50527c200ac461fcb6728f5c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class ValueBatch {\n    /** @param list<ValueBag> $records */\n    public function __construct(\n        public array $records,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/WriteResult.php",
+    "sha256": "31b6114ffc3fc1eb9a3e10401c05e696a4a4782494b7b5262243ba7d2c5f3229",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class WriteResult {\n    public function __construct(\n        public string $status,\n        public string $recordVersion,\n        public string $payloadHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/FilterNode.php",
+    "sha256": "485dbab1ba7c75dbf676708c3cdfa84b4a4edea703e75822f4deda3509d22de4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class FilterNode {\n    /** @param array<string, null|bool|int|string|array> $tree */\n    public function __construct(\n        public array $tree,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-015",
+    "path": "packages/attributes/src/Support/FilterPlan.php",
+    "sha256": "ab1e01c4c94fd61910b1ee01029af1b018d5f02c18f09f90f79138f082fb9f6e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support;\nfinal readonly class FilterPlan {\n    /** @param array<string, null|bool|int|string|array> $tree */\n    public function __construct(\n        public string $schemaHash,\n        public array $tree,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Contracts/SchemaOperations.php",
+    "sha256": "eec623541eabd414b96d18b8678d691c5b153d91bd6ab5cdfadc4c8e8d86cb14",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Contracts;\ninterface SchemaOperations {\n    public function request(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Attributes\\Support\\Schema\\SchemaChange $change, \\CoreX\\Attributes\\Support\\Schema\\OperationKey $key): \\CoreX\\Attributes\\Support\\Schema\\SchemaReceipt;\n    public function inspect(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Attributes\\Support\\Schema\\OperationRef $operation): \\CoreX\\Attributes\\Support\\Schema\\SchemaReceipt;\n    public function verify(\\CoreX\\Support\\Data\\DataScope $scope, string $entity): \\CoreX\\Attributes\\Support\\Schema\\DriftReport;\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Support/Schema/SchemaChange.php",
+    "sha256": "5ff216ae8d17afdb8fa195811a3f8bb9c63920f86135e93990728c1e46a6ffb4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support\\Schema;\nfinal readonly class SchemaChange {\n    /** @param array<string, null|bool|int|string|array> $definition */\n    public function __construct(\n        public string $entity,\n        public string $kind,\n        public string $expectedSchemaHash,\n        public array $definition,\n        public string $approvalDigest,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Support/Schema/OperationKey.php",
+    "sha256": "6734cefde2364361d26565fb6e8b1a16c08d437fc5e74b590af668a2ea6176bd",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support\\Schema;\nfinal readonly class OperationKey {\n    public function __construct(\n        public string $key,\n        public string $payloadHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Support/Schema/OperationRef.php",
+    "sha256": "7ab10e555cf41627980684f3427272155de3e835e99054b1eb76c5dd264389b9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support\\Schema;\nfinal readonly class OperationRef {\n    public function __construct(\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Support/Schema/SchemaReceipt.php",
+    "sha256": "5d5b597aaadf1dbc2d720c79bf702f1d265b6696304bcc5053c8e96fcf33c124",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support\\Schema;\nfinal readonly class SchemaReceipt {\n    public function __construct(\n        public \\CoreX\\Attributes\\Support\\Schema\\OperationRef $operation,\n        public string $status,\n        public string $schemaHash,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-016",
+    "path": "packages/attributes/src/Support/Schema/DriftReport.php",
+    "sha256": "c89fa08e7ed482f6a9d6f36890af709b669b65a1934f5421fcf20b811d29dca6",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Attributes\\Support\\Schema;\nfinal readonly class DriftReport {\n    /** @param list<json-map> $drift */\n    public function __construct(\n        public string $entity,\n        public string $schemaHash,\n        public array $drift,\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Contracts/TransferSource.php",
+    "sha256": "e82ea64c55471ffb7441cceaef2df29230b7245abf5f5b8b48ca2559a1e81806",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Contracts;\ninterface TransferSource {\n    public function describe(\\CoreX\\Support\\Data\\DataScope $scope): \\CoreX\\ImportExport\\Support\\SourceManifest;\n    public function read(\\CoreX\\ImportExport\\Support\\SourceManifest $source, \\CoreX\\ImportExport\\Support\\SourceCursor $after, \\CoreX\\ImportExport\\Support\\TransferLimits $limits): \\CoreX\\ImportExport\\Support\\RowBatch;\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Contracts/RecordMapper.php",
+    "sha256": "2e5dbb133d316f33d6ed7a5d4d398521b8226931862368c56d96ff32b3a859de",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Contracts;\ninterface RecordMapper {\n    public function map(\\CoreX\\ImportExport\\Support\\SourceRow $row, \\CoreX\\ImportExport\\Support\\MappingSnapshot $mapping): \\CoreX\\ImportExport\\Support\\MappingResult;\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Contracts/ImportTarget.php",
+    "sha256": "3ae6a126338b40e7b0f002518a2d0c64b1f5562b9e5bc953a19982a9a53f9f54",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Contracts;\ninterface ImportTarget {\n    public function preview(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\ImportExport\\Support\\CanonicalRecord $record, \\CoreX\\ImportExport\\Support\\ConflictRule $rule): \\CoreX\\ImportExport\\Support\\ImportDecision;\n    public function apply(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\ImportExport\\Support\\CanonicalRecord $record, \\CoreX\\ImportExport\\Support\\ConflictRule $rule, \\CoreX\\Support\\Data\\WriteToken $token): \\CoreX\\ImportExport\\Support\\TargetResult;\n    public function lookup(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Support\\Data\\WriteToken $token): \\CoreX\\ImportExport\\Support\\TargetResult;\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Contracts/TransferRunner.php",
+    "sha256": "177f32fdcb8b07be1d4cb5ee8a666cf3e5c5967fd174646be4df3e6c6c34de60",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Contracts;\ninterface TransferRunner {\n    public function step(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\ImportExport\\Support\\TransferRef $transfer, \\CoreX\\ImportExport\\Support\\StepToken $token): \\CoreX\\ImportExport\\Support\\TransferReceipt;\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/SourceManifest.php",
+    "sha256": "162d5c2c9496ff95b6a2cdf8dc188f42d09470a857c7a9f8f761cd9c6d954edb",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class SourceManifest {\n    public function __construct(\n        public string $immutableRef,\n        public string $sha256,\n        public int $length,\n        public string $format,\n        public string $parserVersion,\n        public string $encoding,\n        public string $delimiter,\n        public string $enclosure,\n        public string $escape,\n        public string $schemaHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/SourceCursor.php",
+    "sha256": "41a401e2f53be23e5b1b4fe2c3f84991c786b9ed32a502c6657bc5a113b1cf7b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class SourceCursor {\n    public function __construct(\n        public string $ordinal,\n        public ?string $boundaryByteOffset,\n        public string $sourceHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/TransferLimits.php",
+    "sha256": "2e436f87edacafffb35b8c36115f058bc78b4b922301b1f2e6bd7a1a395ea270",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class TransferLimits {\n    public function __construct(\n        public int $maxFileBytes = 1073741824,\n        public int $maxRecordBytes = 1048576,\n        public int $maxFields = 256,\n        public int $maxDepth = 32,\n        public int $batchRows = 500,\n        public int $maxErrors = 1000,\n        public int $maxRuntimeSeconds = 30,\n        public int $maxMemoryMiB = 128,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/SourceRow.php",
+    "sha256": "132524f503c6f52389ee3846117aa3b1cea43fda494d2d4f0ea1d53c860c2976",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class SourceRow {\n    /** @param array<string, null|bool|int|string|array> $values */\n    public function __construct(\n        public string $ordinal,\n        public array $values,\n        public string $sourceHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/RowBatch.php",
+    "sha256": "f23f31169cb638c82a241b1e2603c9291dbbbf31363f421420006624c4dc80f7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class RowBatch {\n    /** @param list<SourceRow> $rows */\n    public function __construct(\n        public array $rows,\n        public \\CoreX\\ImportExport\\Support\\SourceCursor $next,\n        public bool $remaining,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/MappingSnapshot.php",
+    "sha256": "8e42ef96283fa76c1f0b4601157f0bf8e38efc67524584b35f0e558dd39b53e6",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class MappingSnapshot {\n    /** @param array<string, null|bool|int|string|array> $definition */\n    public function __construct(\n        public string $version,\n        public string $schemaHash,\n        public array $definition,\n        public string $sha256,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/MappingResult.php",
+    "sha256": "0b79cd0a5129037a11a5a59ba4a69e4ec5cc864e6d0dc6450dd8dda588976322",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class MappingResult {\n    public function __construct(\n        public string $status,\n        public ?\\CoreX\\ImportExport\\Support\\CanonicalRecord $record,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/CanonicalRecord.php",
+    "sha256": "97a729280363ea55c47e707385111028c9eac14f93262ba885911fa86462c192",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class CanonicalRecord {\n    /** @param array<string, null|bool|int|string|array> $values */\n    public function __construct(\n        public string $entity,\n        public string $externalSystem,\n        public string $externalId,\n        public string $sourceRevision,\n        public ?\\DateTimeImmutable $sourceUpdatedAt,\n        public array $values,\n        public string $payloadHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/ConflictRule.php",
+    "sha256": "c8a7899f553a554bc832863ae8bc6f75d898029862ec7709b06f97d43059cbc9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class ConflictRule {\n    public function __construct(\n        public string $kind,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/ImportDecision.php",
+    "sha256": "69581488e9a299cc0841000cb5da2f17ecd168c6fae5f91044849c7a2ab45681",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class ImportDecision {\n    public function __construct(\n        public string $status,\n        public ?string $reason,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/TargetResult.php",
+    "sha256": "1f337a87eb84f38fa63b1bba5596ee3c1f0d898822898d409087025910720dac",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class TargetResult {\n    public function __construct(\n        public string $status,\n        public ?\\CoreX\\Support\\Data\\RecordRef $target,\n        public ?string $recordVersion,\n        public ?string $providerTask,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/TransferRef.php",
+    "sha256": "6ce1e6b0a5ea2c3377143fd0720faf0688f8c17c5af97ae73a7eee6780daf2fc",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class TransferRef {\n    public function __construct(\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/StepToken.php",
+    "sha256": "e2970bce82150068fb0b24ac2a09d173f09d5cb99a0dc9ac0bb5bcbb70c57367",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class StepToken {\n    public function __construct(\n        public string $checkpointSequence,\n        public string $epoch,\n        public string $sourceHash,\n        public string $mappingHash,\n        public string $schemaHash,\n        public string $restoreEpoch,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-017",
+    "path": "packages/import-export/src/Support/TransferReceipt.php",
+    "sha256": "b01942a5fdc9f53c9bd6681d0bcd7e71c8e93fbb0d1f920f61b62b1ee48b78e1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support;\nfinal readonly class TransferReceipt {\n    /** @param array<string, null|bool|int|string|array> $stats | @param list<string> $gaps */\n    public function __construct(\n        public string $state,\n        public \\CoreX\\ImportExport\\Support\\SourceCursor $cursor,\n        public string $checkpointSequence,\n        public array $stats,\n        public array $gaps,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-018",
+    "path": "packages/import-export/src/Contracts/ExportSource.php",
+    "sha256": "039fa8fccfd74b6eec53f5ca4342d8116fd4bbe09df42366a35920a96712d5d7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Contracts;\ninterface ExportSource {\n    public function page(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\ImportExport\\Support\\Export\\ExportManifest $manifest, \\CoreX\\ImportExport\\Support\\Export\\ExportCursor $after, \\CoreX\\ImportExport\\Support\\TransferLimits $limits): \\CoreX\\ImportExport\\Support\\Export\\ExportPage;\n}"
+  },
+  {
+    "contract": "C-P2-018",
+    "path": "packages/import-export/src/Support/Export/ExportManifest.php",
+    "sha256": "a3cdef4e37205c70b220f0f0a4d233d10309b90de92eb3afd8be97da1ecc269e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support\\Export;\nfinal readonly class ExportManifest {\n    /** @param array<string, null|bool|int|string|array> $roster */\n    public function __construct(\n        public string $id,\n        public string $snapshotMode,\n        public string $schemaHash,\n        public string $restoreEpoch,\n        public array $roster,\n        public string $partsHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-018",
+    "path": "packages/import-export/src/Support/Export/ExportCursor.php",
+    "sha256": "573d1494b6f19b598d98428e1d59a22dd6d33afea02e124e92a90847bc2636b1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support\\Export;\nfinal readonly class ExportCursor {\n    public function __construct(\n        public string $partNumber,\n        public string $rowOrdinal,\n        public string $manifestHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-018",
+    "path": "packages/import-export/src/Support/Export/ExportPage.php",
+    "sha256": "a3ad1f032071ae9f08e61320020721bae194de47b698cd50e38ce4e074fe9b18",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\ImportExport\\Support\\Export;\nfinal readonly class ExportPage {\n    /** @param list<CanonicalRecord> $rows */\n    public function __construct(\n        public array $rows,\n        public ?\\CoreX\\ImportExport\\Support\\Export\\ExportCursor $next,\n        public bool $complete,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Contracts/SearchSchema.php",
+    "sha256": "712d30268d5e1f8c5877c2d435a167bb95d96d74d17c3aa7b7601e51a0302d79",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Contracts;\ninterface SearchSchema {\n    public function describe(\\CoreX\\Support\\Data\\DataScope $scope, string $entity): \\CoreX\\Search\\Support\\SearchSnapshot;\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Contracts/SearchProvider.php",
+    "sha256": "d0e13e7ce53d3794dcd3e99b6f11b1d324d4e434f1405c7fa07a75869de38ca4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Contracts;\ninterface SearchProvider {\n    public function capabilities(): \\CoreX\\Search\\Support\\SearchCapabilities;\n    public function query(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Search\\Support\\SearchQuery $query): \\CoreX\\Search\\Support\\CandidatePage;\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Contracts/SearchHydrator.php",
+    "sha256": "4111ae5ce87c88f534a414b8a4813bb2a860eb7a95d29312af776c91f4ac7b6d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Contracts;\ninterface SearchHydrator {\n    public function authorize(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Search\\Support\\CandidatePage $candidates, \\CoreX\\Search\\Support\\SearchSnapshot $schema): \\CoreX\\Search\\Support\\SearchPage;\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Support/SearchSnapshot.php",
+    "sha256": "6be03bfeeed0bed874aa1a63ae16e6c44a84928ff5e6dad11917e8e110dd4335",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support;\nfinal readonly class SearchSnapshot {\n    /** @param array<string, null|bool|int|string|array> $definition */\n    public function __construct(\n        public string $entity,\n        public string $schemaHash,\n        public string $generation,\n        public array $definition,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Support/SearchCapabilities.php",
+    "sha256": "f374f8feb178164c073ee7f423668a6ef7fdb46217da1386283e8416454b38ca",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support;\nfinal readonly class SearchCapabilities {\n    /** @param list<string> $features */\n    public function __construct(\n        public string $profile,\n        public array $features,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Support/SearchQuery.php",
+    "sha256": "f51dc0f2a81eada9cf564a39dce909a9831ced56dd04ef1bbc362a30d2ce5985",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support;\nfinal readonly class SearchQuery {\n    /** @param array<string, null|bool|int|string|array> $filter | @param list<json-map> $sort */\n    public function __construct(\n        public string $entity,\n        public string $schemaHash,\n        public string $text,\n        public array $filter,\n        public array $sort,\n        public int $limit,\n        public int $scanBudget,\n        public ?string $cursor,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Support/CandidatePage.php",
+    "sha256": "b708dc6252aca48fd21df88989397bf0cbbf2beb8b2bef25fb54062fd1199791",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support;\nfinal readonly class CandidatePage {\n    /** @param list<string> $ids */\n    public function __construct(\n        public array $ids,\n        public ?string $nextCursor,\n        public bool $truncated,\n        public string $schemaHash,\n        public string $generation,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-019",
+    "path": "packages/search/src/Support/SearchPage.php",
+    "sha256": "cee9ff49806824c7ae3149ec3c8972d4e42d7c2fce6534be0eb4ee36f8c5720d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support;\nfinal readonly class SearchPage {\n    /** @param list<json-map> $records */\n    public function __construct(\n        public array $records,\n        public ?string $nextCursor,\n        public bool $truncated,\n        public ?int $total,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Contracts/SearchDocuments.php",
+    "sha256": "c9afd83b01b682e6dd6492fcef225b3fc2c9e7c928c7894bdc32cee804fd4046",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Contracts;\ninterface SearchDocuments {\n    public function page(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Search\\Support\\Index\\DocumentCursor $after, int $limit): \\CoreX\\Search\\Support\\Index\\DocumentBatch;\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Contracts/IndexDriver.php",
+    "sha256": "b6bb0ad6c1c96f753f043f5171795931631cad6340d8a8de5f12517b29a194bf",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Contracts;\ninterface IndexDriver {\n    public function submit(\\CoreX\\Search\\Support\\Index\\IndexBatch $batch): \\CoreX\\Search\\Support\\Index\\IndexSubmission;\n    public function status(\\CoreX\\Search\\Support\\Index\\IndexSubmission $submission): \\CoreX\\Search\\Support\\Index\\IndexOutcome;\n    public function swap(\\CoreX\\Search\\Support\\Index\\IndexSwap $swap): \\CoreX\\Search\\Support\\Index\\IndexSubmission;\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/DocumentCursor.php",
+    "sha256": "8c0be4ae956b96f199ef6b28cb14cdaa0399dbebbd8dcc20ac2cbf5992de5eea",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class DocumentCursor {\n    /** @param array<string, null|bool|int|string|array> $position */\n    public function __construct(\n        public string $schemaHash,\n        public string $restoreEpoch,\n        public string $generation,\n        public array $position,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/DocumentBatch.php",
+    "sha256": "5b8f06af59bc7c0911d8cf71b837b21aec507f017325e56f7f1c18c207dc159e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class DocumentBatch {\n    /** @param list<json-map> $documents */\n    public function __construct(\n        public array $documents,\n        public ?\\CoreX\\Search\\Support\\Index\\DocumentCursor $next,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/IndexBatch.php",
+    "sha256": "91aee09d0a2ca04372fae07dff3ad16c590c142a6a23b2b6239fd16be1cdb596",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class IndexBatch {\n    /** @param list<json-map> $documents */\n    public function __construct(\n        public string $indexUid,\n        public string $generation,\n        public string $restoreEpoch,\n        public string $schemaHash,\n        public string $payloadHash,\n        public array $documents,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/IndexSubmission.php",
+    "sha256": "5e901420623e27a51630079dc87b8a0fbc9caf315fb94e52aa833cd6d8c8e440",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class IndexSubmission {\n    public function __construct(\n        public string $indexUid,\n        public string $generation,\n        public ?string $taskId,\n        public string $requestHash,\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/IndexOutcome.php",
+    "sha256": "638b8e96a2483a2c033c955c19e5c6ad82c8372dea728198f4ad27f45c52a2b8",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class IndexOutcome {\n    public function __construct(\n        public string $status,\n        public ?string $taskId,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-020",
+    "path": "packages/search/src/Support/Index/IndexSwap.php",
+    "sha256": "b57012817721822aac1226fed7c1f820f27ada6bc821e3088c8c7df162bdd2b5",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Search\\Support\\Index;\nfinal readonly class IndexSwap {\n    public function __construct(\n        public string $oldUid,\n        public string $newUid,\n        public string $generation,\n        public string $markerHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Contracts/TaskPlanningCommand.php",
+    "sha256": "eec60299f94f2a7d851a6150bdaa74e5e3e727ac87caa5795112042074c3720c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Contracts;\ninterface TaskPlanningCommand {\n    public function createProject(\\CoreX\\Tasks\\Data\\ProjectDraft $draft, \\CoreX\\Tasks\\Data\\PlanningToken $token): \\CoreX\\Tasks\\Data\\ProjectReference;\n    public function createSprint(\\CoreX\\Tasks\\Data\\SprintDraft $draft, \\CoreX\\Tasks\\Data\\PlanningToken $token): \\CoreX\\Tasks\\Data\\SprintReference;\n    public function recordTime(\\CoreX\\Tasks\\Data\\TimeLogDraft $draft, \\CoreX\\Tasks\\Data\\PlanningToken $token): \\CoreX\\Tasks\\Data\\TimeLogReference;\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Contracts/TaskPlanningAccess.php",
+    "sha256": "a742159149d367aef50626d29e3659b92477791ed02bdcc0365da83ade384504",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Contracts;\ninterface TaskPlanningAccess {\n    public function authorize(\\CoreX\\Tasks\\Data\\PlanningOperation $operation, \\CoreX\\Tasks\\Data\\PlanningSubject $subject, \\CoreX\\Tasks\\Data\\ActorData $actor, \\CoreX\\Tenancy\\TenantContext $context): void;\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/ProjectDraft.php",
+    "sha256": "b55e95f6f291c476bab979f3e8e391f3f83f30980a1b2729aaeba90e0b813fc3",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class ProjectDraft {\n    public function __construct(\n        public string $workspaceId,\n        public string $name,\n        public \\CoreX\\Tasks\\Data\\ActorData $actor,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/SprintDraft.php",
+    "sha256": "e5dcd71fab36c8afe8fd3792b91e56580ceae400a1dcf1cec645b67c5fa0b3be",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class SprintDraft {\n    public function __construct(\n        public string $projectId,\n        public string $name,\n        public ?string $startDate,\n        public ?string $endDate,\n        public \\CoreX\\Tasks\\Data\\ActorData $actor,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/TimeLogDraft.php",
+    "sha256": "c88f4f43f371d94c3bea7d83742a013ab10d51773dba25d23525e19b9294c3f7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class TimeLogDraft {\n    public function __construct(\n        public string $taskId,\n        public string $userId,\n        public int $minutes,\n        public string $spentOn,\n        public ?string $comment,\n        public \\CoreX\\Tasks\\Enums\\TimeLogSource $source,\n        public \\CoreX\\Tasks\\Data\\ActorData $actor,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/PlanningToken.php",
+    "sha256": "16d7cce707f2a7d7bd8218f2a9ec8d9d147a5ddc1f69d38ccb5a04a5fa85e9a0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class PlanningToken {\n    public function __construct(\n        public string $requestKey,\n        public string $payloadHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/PlanningSubject.php",
+    "sha256": "9070742e7ddaf7b6986c01501d41e1d22a780e159b35b06dbf3e50d6b72e6be9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class PlanningSubject {\n    public function __construct(\n        public string $workspaceId,\n        public ?string $projectId,\n        public ?string $taskId,\n        public ?string $userId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/ProjectReference.php",
+    "sha256": "d61fcc388f7fac4c938b5c31bb35f59a24efa3cad11e4c87b079487f09f06280",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class ProjectReference {\n    public function __construct(\n        public string $id,\n        public string $type,\n        public string $display,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/SprintReference.php",
+    "sha256": "6bae4c02b303a01049c3e08d906d2224f988b571a63c936bfbd38174b3319c23",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class SprintReference {\n    public function __construct(\n        public string $id,\n        public string $type,\n        public string $display,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/TimeLogReference.php",
+    "sha256": "d90ab3b5c486c19ecdf0d3335e706b49550b927b996d31f07d69d3973a42179d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nfinal readonly class TimeLogReference {\n    public function __construct(\n        public string $id,\n        public string $type,\n        public string $display,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-021",
+    "path": "packages/tasks/src/Data/PlanningOperation.php",
+    "sha256": "08b20b73945fd42b0fa706146cb3727c1845e1da1792ae58d960c719c43239d0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Tasks\\Data;\nenum PlanningOperation: string {\n    case CreateProject = 'createProject';\n    case CreateSprint = 'createSprint';\n    case RecordTime = 'recordTime';\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Contracts/RecurrenceExpander.php",
+    "sha256": "b11a630ad05b9448922e65ec96ad4de0915c225ec83b95c37aa7d9f540fe314a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Contracts;\ninterface RecurrenceExpander {\n    public function expand(\\CoreX\\Recurrence\\Data\\RecurrenceSet $set, \\CoreX\\Recurrence\\Data\\RecurrenceWindow $window, \\CoreX\\Recurrence\\Data\\ExpansionLimits $limits, ?\\CoreX\\Recurrence\\Data\\ExpansionCursor $after = null): \\CoreX\\Recurrence\\Data\\OccurrencePage;\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/DateStart.php",
+    "sha256": "38b6494429b5a069846b5cf4eb544d8e22e8efd97a37b60656bfe34ec36f407f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class DateStart {\n    public function __construct(\n        public string $valueType,\n        public string $nominalStart,\n        public ?string $tzid,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/RecurrenceOverride.php",
+    "sha256": "9d341f6d063bf444d4cba4642c7ca04f5cdfd7bbc13ce230d4ed8d50b555ec29",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class RecurrenceOverride {\n    public function __construct(\n        public string $originalRecurrenceId,\n        public ?string $effectiveStart,\n        public bool $cancelled,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/RecurrenceSet.php",
+    "sha256": "7f55deda4148f1e103601dce42a20fb966d03e6dde62c7b7773e9f090ee6d45d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class RecurrenceSet {\n    /** @param list<string> $rdates | @param list<string> $exdates | @param list<RecurrenceOverride> $overrides */\n    public function __construct(\n        public string $schemaVersion,\n        public string $seriesId,\n        public string $immutableRevision,\n        public \\CoreX\\Recurrence\\Data\\DateStart $start,\n        public ?string $rrule,\n        public array $rdates,\n        public array $exdates,\n        public array $overrides,\n        public string $tzdbVersion,\n        public string $definitionHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/RecurrenceWindow.php",
+    "sha256": "5fe1525d88dc7ceca645530741ec287aa339d883eef67e5ff48703a16c45ee0b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class RecurrenceWindow {\n    public function __construct(\n        public string $valueType,\n        public string $start,\n        public string $end,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/DateWindow.php",
+    "sha256": "84a68f10157f4c461867b1aa0471b0fe6094443ac15b70353b0c61ce51c022a7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class DateWindow {\n    public function __construct(\n        public string $start,\n        public string $end,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/InstantWindow.php",
+    "sha256": "fda7cf52791d77995ceed3455c1e5296995c09f72b79a0a6115837ace97f1b83",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class InstantWindow {\n    public function __construct(\n        public \\DateTimeImmutable $start,\n        public \\DateTimeImmutable $end,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/ExpansionLimits.php",
+    "sha256": "80607c2dc9a74aabfe065368fb717e5085262211768b623b611875181a7413b7",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class ExpansionLimits {\n    public function __construct(\n        public int $rangeDays = 366,\n        public int $emitted = 1000,\n        public int $candidateSteps = 100000,\n        public int $wallSeconds = 2,\n        public int $memoryMiB = 32,\n        public int $ruleBytes = 8192,\n        public int $exceptionCount = 10000,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/ExpansionCursor.php",
+    "sha256": "450b84e687370c3ac15e60cdb0bd5aef9f32df2929c8f472c1961b524e9214ae",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class ExpansionCursor {\n    /** @param array<string, null|bool|int|string|array> $resumePosition */\n    public function __construct(\n        public string $setHash,\n        public string $windowHash,\n        public string $tzdbVersion,\n        public string $libraryVersion,\n        public array $resumePosition,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/Occurrence.php",
+    "sha256": "486280512509def27bad15194e133fc2320c90130c430274c3e96c335915d25a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class Occurrence {\n    public function __construct(\n        public string $key,\n        public string $originalRecurrenceId,\n        public string $valueType,\n        public ?string $tzid,\n        public string $nominal,\n        public string $effectiveDateOrInstant,\n        public ?int $offset,\n        public string $tzdbVersion,\n        public string $definitionHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-022",
+    "path": "packages/recurrence/src/Data/OccurrencePage.php",
+    "sha256": "f0f97cbd3dd97890f26ee1f58975dbe660112d5c6ba0cf91cbe05ea0ca505945",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Recurrence\\Data;\nfinal readonly class OccurrencePage {\n    /** @param list<Occurrence> $occurrences */\n    public function __construct(\n        public array $occurrences,\n        public string $status,\n        public ?\\CoreX\\Recurrence\\Data\\ExpansionCursor $nextCursor,\n        public ?string $completeThrough,\n        public int $scanned,\n        public int $emitted,\n        public string $definitionHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-023",
+    "path": "packages/tasks-workflow/src/Contracts/TaskRecurrenceCommand.php",
+    "sha256": "0578c6eb2f2557c3437294307357c818c785335695612913f1e2b896e08f85b4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\TasksWorkflow\\Contracts;\ninterface TaskRecurrenceCommand {\n    public function materialize(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\TasksWorkflow\\Data\\SeriesReference $series, \\CoreX\\TasksWorkflow\\Data\\MaterializationWindow $window, \\CoreX\\Support\\Data\\WriteToken $token): \\CoreX\\TasksWorkflow\\Data\\MaterializationReceipt;\n}"
+  },
+  {
+    "contract": "C-P2-023",
+    "path": "packages/tasks-workflow/src/Data/SeriesReference.php",
+    "sha256": "51f6c3bd431226f5c3c5cafe53e03cb1229b8fb8f2beb01b08a6b2f691a7baa0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\TasksWorkflow\\Data;\nfinal readonly class SeriesReference {\n    public function __construct(\n        public string $id,\n        public string $immutableRevision,\n        public string $definitionHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-023",
+    "path": "packages/tasks-workflow/src/Data/MaterializationWindow.php",
+    "sha256": "71d42945cfb27efb612d33c0a29e975c004c7446edc5c9f753b79f7e050c4a52",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\TasksWorkflow\\Data;\nfinal readonly class MaterializationWindow {\n    public function __construct(\n        public string $start,\n        public string $end,\n        public int $aheadDays = 30,\n        public int $pageLimit = 100,\n        public int $maxSeconds = 5,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-023",
+    "path": "packages/tasks-workflow/src/Data/MaterializationReceipt.php",
+    "sha256": "3b1a08ac9c5a4aded184715bc2aa423f4750c2b317ca9d8ed2a5a2f5f891b6c3",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\TasksWorkflow\\Data;\nfinal readonly class MaterializationReceipt {\n    /** @param list<CoreX\\Tasks\\Data\\TaskReference> $taskRefs */\n    public function __construct(\n        public string $version,\n        public array $taskRefs,\n        public string $pageDigest,\n        public ?string $committedPrefix,\n        public ?\\CoreX\\Recurrence\\Data\\ExpansionCursor $cursor,\n        public int $created,\n        public int $noop,\n        public int $conflict,\n        public bool $retired,\n        public bool $unknown,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Contracts/LocaleResolver.php",
+    "sha256": "39a26dacf5fe795e364f0903699c0aac1852f566eac13e9f8cf6c1ab8c4e1868",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface LocaleResolver {\n    public function resolve(\\CoreX\\Intl\\Data\\LocaleInputs $inputs, \\CoreX\\Intl\\Data\\LocalePolicy $policy): \\CoreX\\Intl\\Data\\LocaleResolution;\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Contracts/TranslationReader.php",
+    "sha256": "fd7ad20132b31eef609f4294498fec0820baf3b970faabd78bef9082dd6af0ef",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface TranslationReader {\n    public function read(\\CoreX\\Intl\\Data\\LocalizedText $text, \\CoreX\\Intl\\Data\\LocaleResolution $locale): \\CoreX\\Intl\\Data\\TranslationResult;\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Data/LocalePolicy.php",
+    "sha256": "aecb2bfc1214cd40d52f9310354f6a9a5402e93ed245a2042cd36337f8f6cd02",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class LocalePolicy {\n    /** @param list<string> $supportedTags | @param list<string> $explicitFallbackTags */\n    public function __construct(\n        public array $supportedTags,\n        public string $appTag,\n        public array $explicitFallbackTags,\n        public bool $allowParent,\n        public string $policyHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Data/LocaleInputs.php",
+    "sha256": "38d0aca111581a308f0acd3fec8c0c8906bcfac191b9e4bcf169b81c3e9d837e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class LocaleInputs {\n    public function __construct(\n        public ?string $projectedUserTag,\n        public ?string $accountSettingsTag,\n        public string $requestContextKey,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Data/LocaleResolution.php",
+    "sha256": "6e04a11ca7c8d8ac0903a54bf9682a151a1959e1de229cc457e6b564612e085c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class LocaleResolution {\n    /** @param list<string> $fallbackChain */\n    public function __construct(\n        public ?string $requested,\n        public string $used,\n        public string $origin,\n        public array $fallbackChain,\n        public bool $wasFallback,\n        public string $policyHash,\n        public ?string $icuVersion,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Data/LocalizedText.php",
+    "sha256": "a9d1dcd4e2251e4043330d682ceacc20576bef48cfc4add0761f14962e25588c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class LocalizedText {\n    /** @param array<string,string|null> $map */\n    public function __construct(\n        public ?string $declaredField,\n        public ?string $schemaHash,\n        public array $map,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-024",
+    "path": "packages/intl/src/Data/TranslationResult.php",
+    "sha256": "363e6da4b1d706efd8d8291de020dfcf0bb1e5bb10b01949f0bd8e1f48c9c6a9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class TranslationResult {\n    public function __construct(\n        public string $status,\n        public ?string $value,\n        public ?string $usedLocale,\n        public bool $wasFallback,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Contracts/CurrencyMetadata.php",
+    "sha256": "d6251d19d5639a611d9ad64951935871f537a15830a20a18b71ec709bc1f80cd",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface CurrencyMetadata {\n    public function get(string $currencyCode): \\CoreX\\Intl\\Data\\CurrencyInfo;\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Contracts/RateProvider.php",
+    "sha256": "b59233fbbe31032505c1d1d9c80dd29b76dc695935fc5d7cd9dfcaa069ea2b66",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface RateProvider {\n    public function lookup(\\CoreX\\Intl\\Data\\RateQuery $query): \\CoreX\\Intl\\Data\\RateLookup;\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Contracts/RateImporter.php",
+    "sha256": "e8792df1ddb52500c31adb396cbb17ca8ec68efbc860a29943962e79f22c09e9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface RateImporter {\n    public function import(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Intl\\Data\\RateBatch $batch, \\CoreX\\Support\\Data\\WriteToken $token): \\CoreX\\Intl\\Data\\RateImportReceipt;\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Contracts/CurrencyConverter.php",
+    "sha256": "86fd87a94c5cc831015e4872aa6f8bc99d6ac9d21eab1351d2139c822956a583",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface CurrencyConverter {\n    public function convert(\\Brick\\Money\\Money $amount, \\CoreX\\Intl\\Data\\RateSnapshot $rate, \\CoreX\\Intl\\Data\\ConversionPolicy $policy): \\CoreX\\Intl\\Data\\ConversionReceipt;\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Contracts/MoneyFormatter.php",
+    "sha256": "a587d8184937d43a356207f38122a41a26e4b48c966e2b5dd261366975847d34",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface MoneyFormatter {\n    public function format(\\Brick\\Money\\Money $amount, \\CoreX\\Intl\\Data\\LocaleResolution $locale, \\CoreX\\Intl\\Data\\FormatPolicy $policy): \\CoreX\\Intl\\Data\\FormattedMoney;\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/CurrencyInfo.php",
+    "sha256": "530f428681f6795cc61c34a48bc5a3252f73c605a4c1ef473f79aae42753ec1e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class CurrencyInfo {\n    public function __construct(\n        public string $isoCode,\n        public int $exponent,\n        public ?string $name,\n        public ?string $symbol,\n        public string $metadataVersion,\n        public string $metadataHash,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/RateQuery.php",
+    "sha256": "93a8558afef08c15a11650cb5345097746af56dc7b4386a1ac66983eee7251af",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class RateQuery {\n    /** @param list<string> $sourceSelection */\n    public function __construct(\n        public string $base,\n        public string $quote,\n        public string $onDate,\n        public array $sourceSelection,\n        public ?\\DateTimeImmutable $publicationCutoff,\n        public int $maxAgeDays,\n        public bool $allowStale = false,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/RateSnapshot.php",
+    "sha256": "d89603e5723be93c1e9be67fdfeab104295c3e2f881d548f53a930d773c5cce9",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class RateSnapshot {\n    public function __construct(\n        public string $schema,\n        public string $base,\n        public string $quote,\n        public string $rateDecimal,\n        public string $validOn,\n        public \\DateTimeImmutable $observedAt,\n        public string $source,\n        public string $publicationId,\n        public string $publicationRevision,\n        public string $payloadSha256,\n        public string $id,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/RateLookup.php",
+    "sha256": "06ab5d7a6c85188febf61c545995c4b339de5ab9343f3b9034ba2781ec9e75e1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class RateLookup {\n    public function __construct(\n        public string $status,\n        public ?\\CoreX\\Intl\\Data\\RateSnapshot $snapshot,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/RateBatch.php",
+    "sha256": "08de4c8972288ea1a23028492896e5821b8126c8c7704573e824ffa856d9dee5",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class RateBatch {\n    /** @param list<RateSnapshot> $snapshots | @param array<string, null|bool|int|string|array> $sourceManifest */\n    public function __construct(\n        public array $snapshots,\n        public int $expectedGeneration,\n        public string $formatHash,\n        public array $sourceManifest,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/RateImportReceipt.php",
+    "sha256": "94ece6bcf42c72c2ab9d01a107e3be965e100c41880cb76c98b58c04b4ef8c24",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class RateImportReceipt {\n    public function __construct(\n        public string $status,\n        public int $generation,\n        public int $imported,\n        public int $noop,\n        public int $conflicts,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/ConversionPolicy.php",
+    "sha256": "42519b55ae601afb7c5231291bf58babd3f80667b86c79889ebc742bc9620755",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class ConversionPolicy {\n    public function __construct(\n        public \\Brick\\Math\\RoundingMode $roundingMode,\n        public \\Brick\\Money\\Context $targetContext,\n        public string $policyId,\n        public bool $allowStale,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/ConversionReceipt.php",
+    "sha256": "762f38d90d792f642bd9a6ebde8fd38451c3c323a2302f91cfda7412840ce998",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class ConversionReceipt {\n    public function __construct(\n        public \\Brick\\Money\\Money $source,\n        public \\Brick\\Money\\Money $result,\n        public string $rateSnapshotId,\n        public string $rateHash,\n        public string $policyHash,\n        public string $requestedDate,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/FormatPolicy.php",
+    "sha256": "a9080ed9cecfbd61399fdbaa3f8be2e6b81350b9111d21658ae4f63ed78c275f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class FormatPolicy {\n    public function __construct(\n        public string $mode,\n        public string $fallback,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-025",
+    "path": "packages/intl/src/Data/FormattedMoney.php",
+    "sha256": "8af99baab0e0146ac676cb4437e9ddee0d37f5064f4a17d9dfa2bce43154d911",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class FormattedMoney {\n    public function __construct(\n        public string $text,\n        public string $exactDecimal,\n        public string $currency,\n        public string $locale,\n        public string $method,\n        public bool $wasFallback,\n        public ?string $icuVersion,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Contracts/GeographyProvider.php",
+    "sha256": "307823dffb943e88192719a82559da24e6a6c532f9d38f83e02f6225c605d0b1",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface GeographyProvider {\n    public function describe(\\CoreX\\Support\\Data\\DataScope $scope): \\CoreX\\Intl\\Data\\DatasetManifest;\n    public function query(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Intl\\Data\\GeographyQuery $query, ?\\CoreX\\Intl\\Data\\ReferenceCursor $after = null): \\CoreX\\Intl\\Data\\ReferencePage;\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Contracts/DatasetImporter.php",
+    "sha256": "faaa3ab67f24df7e1730c83b4d40284a80c8167cbb6419fb75416ba75852479f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface DatasetImporter {\n    public function publish(\\CoreX\\Support\\Data\\DataScope $scope, \\CoreX\\Intl\\Data\\DatasetCandidate $candidate, \\CoreX\\Intl\\Data\\DatasetGeneration $expected): \\CoreX\\Intl\\Data\\DatasetReceipt;\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/DatasetManifest.php",
+    "sha256": "eadbe66240663b1b9c39a8483f254412f66d97eacfa0049311f2c9282bbd172f",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class DatasetManifest {\n    /** @param list<string> $coveredCountries | @param list<string> $types | @param array<string,int> $counts */\n    public function __construct(\n        public string $schema,\n        public string $snapshotId,\n        public string $provider,\n        public string $sourceUri,\n        public \\DateTimeImmutable $retrievedAt,\n        public string $rawHash,\n        public string $normalizedHash,\n        public string $sourceVersion,\n        public string $importerVersion,\n        public string $licenseUri,\n        public string $attribution,\n        public array $coveredCountries,\n        public array $types,\n        public array $counts,\n        public string $coverageNotes,\n        public string $tzdbVersion,\n        public string $status,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/ReferenceIdentity.php",
+    "sha256": "a104a5e606aa610a48d566e32b580e341a783e6abf34b2e4657da2907fb7fc54",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class ReferenceIdentity {\n    public function __construct(\n        public string $namespace,\n        public string $sourceId,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/GeographyQuery.php",
+    "sha256": "ff3e973a6f924fd6451ef3b475d84390d38797b4c3e46d236893702d3427d921",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class GeographyQuery {\n    public function __construct(\n        public string $kind,\n        public ?\\CoreX\\Intl\\Data\\ReferenceIdentity $countryKey,\n        public ?\\CoreX\\Intl\\Data\\ReferenceIdentity $parentKey,\n        public ?\\CoreX\\Intl\\Data\\ReferenceIdentity $placeKey,\n        public ?string $query,\n        public string $locale,\n        public ?string $snapshotId,\n        public string $mode,\n        public int $limit,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/ReferenceCursor.php",
+    "sha256": "7909e383a94127ae0a4d460ec8dc4b5fdbd62706748962e7be4200b399b34d09",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class ReferenceCursor {\n    public function __construct(\n        public string $schema,\n        public string $snapshotId,\n        public string $queryHash,\n        public string $lastNormalizedName,\n        public string $lastNamespace,\n        public string $lastSourceId,\n        public string $proof,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/ReferencePage.php",
+    "sha256": "085f9a69fd94717e5d527eb04863e9c44988d3b3dbb08738d4e8bf213927254c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class ReferencePage {\n    /** @param list<json-map> $records | @param array<string, null|bool|int|string|array> $provenance */\n    public function __construct(\n        public string $status,\n        public array $records,\n        public ?\\CoreX\\Intl\\Data\\ReferenceCursor $next,\n        public ?string $snapshotId,\n        public array $provenance,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/DatasetCandidate.php",
+    "sha256": "cdb7fe3261ab67880f4f770f9d0a3682c9c633e2a30c95d811725777f73ab458",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class DatasetCandidate {\n    public function __construct(\n        public \\CoreX\\Intl\\Data\\DatasetManifest $manifest,\n        public string $immutableRef,\n        public int $byteLength,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/DatasetGeneration.php",
+    "sha256": "6f95cc234f14b6e2fdfb7a08e556b8a761d69bcef60e88691689e13de4a36ff4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class DatasetGeneration {\n    public function __construct(\n        public ?string $expectedSnapshot,\n        public int $generation,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-026",
+    "path": "packages/intl/src/Data/DatasetReceipt.php",
+    "sha256": "8202b1c1d6ba22fcd301155aa6b7dfcddf99ed4b934529b885ebbaea7254ee4a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class DatasetReceipt {\n    public function __construct(\n        public string $status,\n        public ?string $snapshotId,\n        public int $generation,\n        public ?string $errorCode,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-027",
+    "path": "packages/intl/src/Contracts/AddressSuggestProvider.php",
+    "sha256": "c8342b07aea85ed0954c4ecb2cfb2dc270079eba01beece5cd6e42b30610460d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Contracts;\ninterface AddressSuggestProvider {\n    public function suggest(\\CoreX\\Intl\\Data\\AddressQuery $query, \\CoreX\\Intl\\Data\\SuggestionLimits $limits): \\CoreX\\Intl\\Data\\SuggestionResult;\n}"
+  },
+  {
+    "contract": "C-P2-027",
+    "path": "packages/intl/src/Data/AddressQuery.php",
+    "sha256": "892e1ba11366751d95a1a8372c74da9c3e48355df0347ef749471ce96e83e01a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class AddressQuery {\n    public function __construct(\n        public string $text,\n        public string $locale,\n        public ?string $country,\n        public string $consentReference,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-027",
+    "path": "packages/intl/src/Data/SuggestionLimits.php",
+    "sha256": "8813e077af13a043a81494a7fb91ec6dbd493155ab1d9d1fca97524aac5510ef",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class SuggestionLimits {\n    public function __construct(\n        public int $timeoutSeconds = 2,\n        public int $results = 20,\n        public int $maxResponseBytes = 65536,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-027",
+    "path": "packages/intl/src/Data/SuggestionResult.php",
+    "sha256": "4a2764aa1581b576cd68a0af35e0a759aa7c9c18a0b9fa964cdb9a6b27eb7710",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Intl\\Data;\nfinal readonly class SuggestionResult {\n    /** @param list<json-map> $suggestions | @param array<string, null|bool|int|string|array> $provenance */\n    public function __construct(\n        public string $status,\n        public array $suggestions,\n        public ?string $source,\n        public array $provenance,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolCatalogue.php",
+    "sha256": "ed735574cfc123a3d9a60e81e253339a3be192a3937d239ff1fc0f84d197a69c",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolCatalogue {\n    public function discover(\\CoreX\\Api\\Contracts\\RequestContext $context): \\CoreX\\Api\\Data\\ToolCatalogueView;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolInvoker.php",
+    "sha256": "a26f772a4f4a6f873a18dbaf7aa5d50c3263e4ac279b00f5c4095c17758e9a3e",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolInvoker {\n    public function invoke(\\CoreX\\Api\\Contracts\\RequestContext $context, \\CoreX\\Api\\Data\\ToolCall $call): \\CoreX\\Api\\Data\\ToolResult;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolRequestContext.php",
+    "sha256": "ed068d7918e41f04816103c8a8a2f4ec5309451efee97acd14cccdcfe13cdaf0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolRequestContext extends \\CoreX\\Api\\Contracts\\RequestContext {\n    public function operationKey(): ?string;\n    public function toolContractHash(): string;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolPolicy.php",
+    "sha256": "f85b7fbd224ec92f89e7deb71bc9158f4e0a77efa0f17b5c0a3b4251571eede0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolPolicy {\n    public function discover(\\CoreX\\Api\\Data\\ToolDescriptor $tool, \\CoreX\\Api\\Contracts\\RequestContext $context): bool;\n    public function invoke(\\CoreX\\Api\\Data\\ToolDescriptor $tool, \\CoreX\\Api\\Contracts\\RequestContext $context, \\CoreX\\Api\\Data\\JsonObject $arguments): bool;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolSchemaValidator.php",
+    "sha256": "3dcedb099c9fb9dafb2d2e4bf44e779f6e67c72721369af98e64e78618bc3a14",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolSchemaValidator {\n    public function admit(\\CoreX\\Api\\Data\\JsonObject $schema, string $profile): \\CoreX\\Api\\Data\\SchemaHandle;\n    public function validate(\\CoreX\\Api\\Data\\SchemaHandle $schema, \\CoreX\\Api\\Data\\JsonValue $value): \\CoreX\\Api\\Data\\SchemaValidation;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Contracts/ToolExecutionGuard.php",
+    "sha256": "cfe0c6db350533b96b08e3ad46dbac8581759306d5d0a6a8a7be00091533fc73",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Contracts;\ninterface ToolExecutionGuard {\n    public function execute(\\CoreX\\Api\\Data\\ToolDescriptor $tool, \\CoreX\\Api\\Contracts\\RequestContext $context, \\CoreX\\Api\\Data\\ToolCall $call, \\Closure $effect): \\CoreX\\Api\\Data\\ToolResult;\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/JsonValue.php",
+    "sha256": "e85af17fbda15302ff18094d60d6ff6fe0622d37b79f37e6c97b2ce406a9b3ca",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class JsonValue {\n    public function __construct(\n        public string $canonicalJson,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/JsonObject.php",
+    "sha256": "05c03e313a43f0be0c4580be538f3e09103f22154f072fe8b3d001b91341b5cb",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class JsonObject {\n    public function __construct(\n        public string $canonicalJson,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/ToolDescriptor.php",
+    "sha256": "3a89d9852a6d4aeca334d77e01e17dd1d45d97dcaf45c88cd4e85e62069d77ae",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class ToolDescriptor {\n    /** @param array<string, null|bool|int|string|array> $availability */\n    public function __construct(\n        public string $module,\n        public string $code,\n        public string $toolVersion,\n        public string $wireName,\n        public string $title,\n        public string $description,\n        public string $ability,\n        public string $sideEffect,\n        public string $idempotency,\n        public \\CoreX\\Api\\Data\\JsonObject $inputSchema,\n        public \\CoreX\\Api\\Data\\JsonObject $outputSchema,\n        public string $schemaProfile,\n        public string $contractHash,\n        public ?string $operationRef,\n        public array $availability,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/ToolCatalogueView.php",
+    "sha256": "dfc32fd677dc20eaec745bf53c2d7493958e6e1fe3131de9954b2ab318f7bb55",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class ToolCatalogueView {\n    /** @param list<ToolDescriptor> $descriptors */\n    public function __construct(\n        public string $revision,\n        public array $descriptors,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/ToolCall.php",
+    "sha256": "e47e75492eac73564aa5b2fd999fe064a471ceb9055a9abdb839a30ca30e5d9d",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class ToolCall {\n    public function __construct(\n        public string $code,\n        public string $toolVersion,\n        public string $expectedContractHash,\n        public \\CoreX\\Api\\Data\\JsonObject $arguments,\n        public string $requestId,\n        public ?string $operationKey,\n        public ?string $clientProof,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/ToolResult.php",
+    "sha256": "d6c02078913c68336f8ef939b766f271ad3174d8beabddb8bd2872cbefacbe9a",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class ToolResult {\n    public function __construct(\n        public string $outcome,\n        public ?\\CoreX\\Api\\Data\\JsonObject $structuredData,\n        public ?string $errorCode,\n        public ?string $operationKey,\n        public bool $replayed,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/SchemaHandle.php",
+    "sha256": "3f1bdadb2ef61e167570800fdd35783df05bf33de3a45762d4a5c6b40ea9eae0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class SchemaHandle {\n    /** @param array<string,string> $localResources */\n    public function __construct(\n        public string $digest,\n        public string $profile,\n        public array $localResources,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-028",
+    "path": "packages/api/src/Data/SchemaValidation.php",
+    "sha256": "d1f89706afd7922c198a653d333187a96ef70e73f3b5664c897a398f11c3c1a0",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Api\\Data;\nfinal readonly class SchemaValidation {\n    /** @param list<json-map> $errors */\n    public function __construct(\n        public bool $valid,\n        public array $errors,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-029",
+    "path": "packages/modules/src/Contracts/RegistryIntrospection.php",
+    "sha256": "fe0e49b47801017787650c8e25ae99bb248c9a2fb8b1701187668ee29d5f5768",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Modules\\Contracts;\ninterface RegistryIntrospection {\n    public function extensionPoints(): \\CoreX\\Modules\\Data\\RegistryMap;\n    public function why(string $module, ?\\CoreX\\Tenancy\\TenantContext $context): \\CoreX\\Modules\\Data\\ModuleExplanation;\n}"
+  },
+  {
+    "contract": "C-P2-029",
+    "path": "packages/modules/src/Data/RegistryMap.php",
+    "sha256": "3d129080574e6fc7a92d9baff85ca1252cb1650e9c2f870e60f1f71fac70bc6b",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Modules\\Data;\nfinal readonly class RegistryMap {\n    /** @param list<json-map> $extensionPoints */\n    public function __construct(\n        public string $schemaVersion,\n        public string $revision,\n        public array $extensionPoints,\n    ) {}\n}"
+  },
+  {
+    "contract": "C-P2-029",
+    "path": "packages/modules/src/Data/ModuleExplanation.php",
+    "sha256": "461b37f20e072544dfd76c7837616d6cff78f7f01407ff04f74f8a08c263ddc4",
+    "declaration": "declare(strict_types=1);\nnamespace CoreX\\Modules\\Data;\nfinal readonly class ModuleExplanation {\n    /** @param array<string, null|bool|int|string|array> $declaredConstraints | @param list<string> $reasons */\n    public function __construct(\n        public string $schemaVersion,\n        public string $module,\n        public string $status,\n        public array $declaredConstraints,\n        public array $reasons,\n        public bool $hasTenantVerdict,\n    ) {}\n}"
+  }
+]

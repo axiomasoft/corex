@@ -1,0 +1,99 @@
+{
+  "item": "P2.1",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "coverage": {
+    "R": 52,
+    "parents": 365,
+    "substantive_atoms": 682,
+    "historical_delimiters": 6,
+    "foundations": 9
+  },
+  "equality": [
+    "frozen atoms/non-AC",
+    "disposition",
+    "owner",
+    "resume",
+    "destination",
+    "existing equivalent",
+    "source anchors",
+    "keep boundaries"
+  ],
+  "new_runtime_acceptance": false,
+  "semantic_review": "All R minimal reasons checked against P1 lock/map/ledger/gaps; pending source branches and effective receipts kept, independent non-CRM expectations supplied, no invented external absence or executed proof. R04 typed existing, R17 project/sprint present, R24 money existing, R33 writer unsupported kept.",
+  "bounded_sources": [
+    {
+      "path": "packages/core/src/Storage/LocalTenantStorage.php",
+      "sha256": "8715571913b58d63abc4a058cbbe514c2b8c51c435855a0289f24be40615493f",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ClaimAccountSignup.php",
+      "sha256": "9607e8b1e0732eceb64525986e83db170b476a269f672d75f1502ba96445cc17",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/auth/src/Identity/PrincipalUserProvider.php",
+      "sha256": "d8a9f2dc4d8cdd1a1578da3d043adcfb156b9a4c9e093ee7b43fa4e9eb194235",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ApplyMembershipProjection.php",
+      "sha256": "ee4d4bf7cd68bd90ee36b89fdca575981244fbd9c00e3f7eeae30e06ac45deed",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php",
+      "sha256": "bd50720757790bceff5b58098d374c87de6e49bbfac2eacbd53c6187bdc9937f",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/modules/src/Extend/EntityField.php",
+      "sha256": "1fb60488ed3b7c0b18179d48be2e4a87d01e655c762b350ed70c9e0ea55389b8",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/modules/src/Extend/Workflow.php",
+      "sha256": "8d68c590ee3eb71ea7993808cac692cca21c4dc50ad9f94bf92554818d71cb44",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/modules/src/Extend/Filament.php",
+      "sha256": "1c8af7bcb24d5aaa79af81fe467d8d722b2f13333bf21ec63f38d855ceefe243",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/api/src/OperationRegistry.php",
+      "sha256": "2fb23a8380e9da942d78bc2280248005ecf7bc342e47206601b8273e5c0869d0",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/core/src/Money/MoneyCast.php",
+      "sha256": "871c3c7fe53f3c034bc211413d73c6ef36502d0ba9f1ee281da836f08361c65d",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/tasks/src/Data/TaskDraft.php",
+      "sha256": "25449cd233d8efbdce131882732992225114c47b989011627d9773529e38fba7",
+      "class": "current-source-only",
+      "read": "complete body"
+    },
+    {
+      "path": "packages/core/src/PubSub/PubSubManager.php",
+      "sha256": "dec6720983b527f3e331890a22d63c22dc445558bf2096d2be9d04105c199782",
+      "class": "current-source-only",
+      "read": "complete body"
+    }
+  ],
+  "product_sha256": "4c73378380806fd7e487caecafa17e2ca6231eff8a952878e36467105525c52e",
+  "status": "green"
+}

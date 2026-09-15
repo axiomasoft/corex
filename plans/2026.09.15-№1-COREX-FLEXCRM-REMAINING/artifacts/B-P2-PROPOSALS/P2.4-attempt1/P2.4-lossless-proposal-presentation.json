@@ -1,0 +1,9 @@
+{
+  "source_sha256": "8101a51c2cde939584511f9af24da730ce1b2b7438fb8b4037692483fad1348b",
+  "presentation_sha256": "11ffe773013ed717f9e9cfb23572ca1a6f7e0a44ffde4f4a41b7f163abe89835",
+  "method": "full original markdown text; SQL blocks encoded losslessly against previously exposed exact block text, all replacement literals shown; every block individually reconstructed equal; no source or bound relaxed",
+  "source_chars": 551881,
+  "presentation_chars": 476238,
+  "block_count": 63,
+  "round_trip_blocks_equal": true
+}

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: 81de47df5b2308ad9c7be9143285554d719f30777c923686f26760555e29b9a5
+inputs_sha256: 96aee6d1e60fc767f7d63859a4aca4749d120208b94e0998482b4e1fab84fc00
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
-| P2 | Минимальные reusable contracts и границы адаптеров | 0/4 | ⬜ Not started |
+| P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 0/7 | ⬜ Not started |
 | P4 | Headless extensions: panels, media, notifications, saved views | 0/8 | ⬜ Not started |
 | P5 | Workflow binding и единый durable wakeup seam | 0/6 | ⬜ Not started |
@@ -74,10 +74,10 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P2.1 | Квалифицировать frozen gaps против существующих ports | ⬜ Not started | — |
-| P2.2 | Identity/auth и versioned profile: сохранить authority boundaries | ⬜ Not started | — |
-| P2.3 | Exact reusable delta proposals и producer/consumer contracts | ⬜ Not started | — |
-| P2.4 | Запечатать contract catalogue и точные downstream gate requests | ⬜ Not started | — |
+| P2.1 | Квалифицировать frozen gaps против существующих ports | 🟢 Done | 2026-09-15 |
+| P2.2 | Identity/auth и versioned profile: сохранить authority boundaries | 🟢 Done | 2026-09-15 |
+| P2.3 | Exact reusable delta proposals и producer/consumer contracts | 🟢 Done | 2026-09-15 |
+| P2.4 | Запечатать contract catalogue и точные downstream gate requests | 🟢 Done | 2026-09-15 |
 
 ## Phase P3
 
@@ -221,6 +221,29 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · seal/downstream/lint+semantic PASS;100sources/52R/365parents/682conditions+6delimiter IDs;17finite conflicts/11SHA;DI34/AP13 open. Exact commands/cwd/results: artifacts/B-P1-QUALIFY/P1.4-check-results.json
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Inline P1 phase closure after GREEN P1.4; four GREEN item heads, phase_close_gate allow; closure SHA pinned; no phase audit/child. artifacts/B-P1-QUALIFY/P1-phase-close-admission.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · intake/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.1-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · intake/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.1-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · identity/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.2-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · identity/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.2-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · deltas/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.3-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · seal/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.4-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · seal/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/P2.4-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Inline P2 closure: four GREEN heads; phase assurance direct-close/phase gate allow;55exact proposals/12SHA, no grants/audit/child. artifacts/B-P2-PROPOSALS/P2-phase-close-admission.json
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

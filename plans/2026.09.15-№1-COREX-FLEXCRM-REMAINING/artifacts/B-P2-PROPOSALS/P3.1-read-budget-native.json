@@ -1,0 +1,1403 @@
+{
+  "item_id": "P3.1",
+  "status": "⬜ Not started",
+  "files": [
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/plan.md",
+      "role": "plan-core",
+      "bytes": 32648,
+      "chars": 26765,
+      "est_tokens": 8968,
+      "dense_ascii_share": 0.007920792079207921,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P3/P3.md",
+      "role": "phase-context",
+      "bytes": 7458,
+      "chars": 7026,
+      "est_tokens": 2345,
+      "dense_ascii_share": 0.004554511813265016,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P3/P3.1.md",
+      "role": "item-spec",
+      "bytes": 8110,
+      "chars": 7897,
+      "est_tokens": 4279,
+      "dense_ascii_share": 0.11599341522097,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/bundles/P3.1.json",
+      "role": "item-input-bundle",
+      "bytes": 51803,
+      "chars": 51451,
+      "est_tokens": 25601,
+      "dense_ascii_share": 0.2740471516588599,
+      "gates": {
+        "size_bytes": true,
+        "tokens": false
+      },
+      "passes": false
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:0",
+      "role": "bundle-input",
+      "bytes": 1941,
+      "chars": 1931,
+      "est_tokens": 991,
+      "dense_ascii_share": 0.10564474365613671,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/00-owner-request.md",
+      "role": "bundle-input",
+      "bytes": 2625,
+      "chars": 1711,
+      "est_tokens": 807,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/01-owner-design-policy.md",
+      "role": "bundle-input",
+      "bytes": 3445,
+      "chars": 2061,
+      "est_tokens": 1072,
+      "dense_ascii_share": 0.016496846191169336,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D4.md",
+      "role": "bundle-input",
+      "bytes": 5050,
+      "chars": 3559,
+      "est_tokens": 1357,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D5.md",
+      "role": "bundle-input",
+      "bytes": 2389,
+      "chars": 1850,
+      "est_tokens": 881,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D6.md",
+      "role": "bundle-input",
+      "bytes": 2904,
+      "chars": 1927,
+      "est_tokens": 866,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D7.md",
+      "role": "bundle-input",
+      "bytes": 3847,
+      "chars": 3219,
+      "est_tokens": 1275,
+      "dense_ascii_share": 0.010251630941286114,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D8.md",
+      "role": "bundle-input",
+      "bytes": 2560,
+      "chars": 2540,
+      "est_tokens": 1152,
+      "dense_ascii_share": 0.013779527559055118,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "role": "bundle-input",
+      "bytes": 18001,
+      "chars": 12609,
+      "est_tokens": 5661,
+      "dense_ascii_share": 0.006503291299865176,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/02-baseline.md",
+      "role": "bundle-input",
+      "bytes": 6674,
+      "chars": 5343,
+      "est_tokens": 1793,
+      "dense_ascii_share": 0.09301890323788134,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01-traceability.md",
+      "role": "bundle-input",
+      "bytes": 20393,
+      "chars": 19136,
+      "est_tokens": 5515,
+      "dense_ascii_share": 0.03313127090301003,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01a-acceptance-index.md",
+      "role": "bundle-input",
+      "bytes": 109699,
+      "chars": 81378,
+      "est_tokens": 24309,
+      "dense_ascii_share": 0.0020644400206444,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/03-gates.md",
+      "role": "bundle-input",
+      "bytes": 17495,
+      "chars": 16010,
+      "est_tokens": 4462,
+      "dense_ascii_share": 0.03910056214865709,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/04-architecture.md",
+      "role": "bundle-input",
+      "bytes": 7074,
+      "chars": 5014,
+      "est_tokens": 1597,
+      "dense_ascii_share": 0.015556441962504986,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/05-integrated-design.md",
+      "role": "bundle-input",
+      "bytes": 45643,
+      "chars": 43424,
+      "est_tokens": 16438,
+      "dense_ascii_share": 0.06233879882092852,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/P3-adapter-design.md",
+      "role": "bundle-input",
+      "bytes": 22156,
+      "chars": 22128,
+      "est_tokens": 5901,
+      "dense_ascii_share": 0.012382501807664497,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/P3-design-rag.md",
+      "role": "bundle-input",
+      "bytes": 6291,
+      "chars": 5859,
+      "est_tokens": 1906,
+      "dense_ascii_share": 0.030551288615804743,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/core/src/Contracts/TenantStorage.php",
+      "role": "bundle-input",
+      "bytes": 457,
+      "chars": 457,
+      "est_tokens": 421,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/core/src/Storage/ScopedFilesystem.php",
+      "role": "bundle-input",
+      "bytes": 6565,
+      "chars": 6565,
+      "est_tokens": 1406,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/tenancy/src/Storage/ContextTenantStorage.php",
+      "role": "bundle-input",
+      "bytes": 3821,
+      "chars": 3821,
+      "est_tokens": 1015,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/tenancy/src/StanclTenancyManager.php",
+      "role": "bundle-input",
+      "bytes": 2656,
+      "chars": 2652,
+      "est_tokens": 829,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/tenancy/src/Bootstrappers/WorkspaceContextBootstrapper.php",
+      "role": "bundle-input",
+      "bytes": 4202,
+      "chars": 4197,
+      "est_tokens": 1185,
+      "dense_ascii_share": 0.0,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/TenantStorageTest.php",
+      "role": "bundle-input",
+      "bytes": 3563,
+      "chars": 3563,
+      "est_tokens": 1050,
+      "dense_ascii_share": 0.019085040696042662,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-requirements-lock.md",
+      "role": "bundle-input",
+      "bytes": 36605,
+      "chars": 36584,
+      "est_tokens": 9655,
+      "dense_ascii_share": 0.029384430352066476,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:0",
+      "role": "bundle-input",
+      "bytes": 1954,
+      "chars": 1953,
+      "est_tokens": 824,
+      "dense_ascii_share": 0.01638504864311316,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.1",
+      "role": "bundle-input",
+      "bytes": 25191,
+      "chars": 25187,
+      "est_tokens": 7656,
+      "dense_ascii_share": 0.11434470163179418,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.2",
+      "role": "bundle-input",
+      "bytes": 25674,
+      "chars": 25669,
+      "est_tokens": 7804,
+      "dense_ascii_share": 0.11219759242666251,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.3",
+      "role": "bundle-input",
+      "bytes": 25192,
+      "chars": 25189,
+      "est_tokens": 7665,
+      "dense_ascii_share": 0.11433562269244511,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.4",
+      "role": "bundle-input",
+      "bytes": 25093,
+      "chars": 25090,
+      "est_tokens": 7652,
+      "dense_ascii_share": 0.11478676763650857,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.5",
+      "role": "bundle-input",
+      "bytes": 24659,
+      "chars": 24657,
+      "est_tokens": 7518,
+      "dense_ascii_share": 0.11680253072149896,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.6",
+      "role": "bundle-input",
+      "bytes": 25626,
+      "chars": 25621,
+      "est_tokens": 7815,
+      "dense_ascii_share": 0.11240779048436829,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.7",
+      "role": "bundle-input",
+      "bytes": 27368,
+      "chars": 27363,
+      "est_tokens": 8568,
+      "dense_ascii_share": 0.133318715053174,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.8",
+      "role": "bundle-input",
+      "bytes": 26210,
+      "chars": 26165,
+      "est_tokens": 8963,
+      "dense_ascii_share": 0.12230078348939423,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:1.9",
+      "role": "bundle-input",
+      "bytes": 2830,
+      "chars": 2823,
+      "est_tokens": 1269,
+      "dense_ascii_share": 0.11335458731845555,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.1",
+      "role": "bundle-input",
+      "bytes": 9617,
+      "chars": 8858,
+      "est_tokens": 2880,
+      "dense_ascii_share": 0.13005193045834273,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.2",
+      "role": "bundle-input",
+      "bytes": 9104,
+      "chars": 8525,
+      "est_tokens": 2795,
+      "dense_ascii_share": 0.13513196480938416,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.3",
+      "role": "bundle-input",
+      "bytes": 9621,
+      "chars": 8906,
+      "est_tokens": 2893,
+      "dense_ascii_share": 0.12935099932629687,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.4",
+      "role": "bundle-input",
+      "bytes": 8807,
+      "chars": 8238,
+      "est_tokens": 2762,
+      "dense_ascii_share": 0.13983976693372177,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.5",
+      "role": "bundle-input",
+      "bytes": 9217,
+      "chars": 8565,
+      "est_tokens": 3053,
+      "dense_ascii_share": 0.16252189141856394,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.6",
+      "role": "bundle-input",
+      "bytes": 8122,
+      "chars": 7707,
+      "est_tokens": 3115,
+      "dense_ascii_share": 0.2740365901128844,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.7",
+      "role": "bundle-input",
+      "bytes": 8362,
+      "chars": 7882,
+      "est_tokens": 3275,
+      "dense_ascii_share": 0.2476528799797006,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.8",
+      "role": "bundle-input",
+      "bytes": 7806,
+      "chars": 7245,
+      "est_tokens": 2733,
+      "dense_ascii_share": 0.15900621118012423,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.9",
+      "role": "bundle-input",
+      "bytes": 9154,
+      "chars": 8442,
+      "est_tokens": 3033,
+      "dense_ascii_share": 0.13646055437100213,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.10",
+      "role": "bundle-input",
+      "bytes": 8409,
+      "chars": 7950,
+      "est_tokens": 3111,
+      "dense_ascii_share": 0.149937106918239,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.11",
+      "role": "bundle-input",
+      "bytes": 8442,
+      "chars": 7768,
+      "est_tokens": 2815,
+      "dense_ascii_share": 0.14830072090628219,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.12",
+      "role": "bundle-input",
+      "bytes": 8617,
+      "chars": 8045,
+      "est_tokens": 2808,
+      "dense_ascii_share": 0.14319453076444996,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.13",
+      "role": "bundle-input",
+      "bytes": 8940,
+      "chars": 8069,
+      "est_tokens": 2869,
+      "dense_ascii_share": 0.1427686206469203,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.14",
+      "role": "bundle-input",
+      "bytes": 9150,
+      "chars": 8628,
+      "est_tokens": 2914,
+      "dense_ascii_share": 0.13351877607788595,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.15",
+      "role": "bundle-input",
+      "bytes": 10255,
+      "chars": 9418,
+      "est_tokens": 3014,
+      "dense_ascii_share": 0.12231896368655766,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.16",
+      "role": "bundle-input",
+      "bytes": 9526,
+      "chars": 8935,
+      "est_tokens": 3060,
+      "dense_ascii_share": 0.1289311695579183,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.17",
+      "role": "bundle-input",
+      "bytes": 9060,
+      "chars": 8427,
+      "est_tokens": 2932,
+      "dense_ascii_share": 0.13670345318618726,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.18",
+      "role": "bundle-input",
+      "bytes": 10208,
+      "chars": 9342,
+      "est_tokens": 3243,
+      "dense_ascii_share": 0.1233140655105973,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.19",
+      "role": "bundle-input",
+      "bytes": 10224,
+      "chars": 9524,
+      "est_tokens": 3093,
+      "dense_ascii_share": 0.12095758084838303,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.20",
+      "role": "bundle-input",
+      "bytes": 10621,
+      "chars": 9855,
+      "est_tokens": 3203,
+      "dense_ascii_share": 0.12014205986808726,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.21",
+      "role": "bundle-input",
+      "bytes": 10533,
+      "chars": 9935,
+      "est_tokens": 3244,
+      "dense_ascii_share": 0.1159536990437846,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.22",
+      "role": "bundle-input",
+      "bytes": 10100,
+      "chars": 9345,
+      "est_tokens": 3356,
+      "dense_ascii_share": 0.12680577849117175,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.23",
+      "role": "bundle-input",
+      "bytes": 8907,
+      "chars": 8006,
+      "est_tokens": 3061,
+      "dense_ascii_share": 0.1480139895078691,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.24",
+      "role": "bundle-input",
+      "bytes": 9344,
+      "chars": 8414,
+      "est_tokens": 3085,
+      "dense_ascii_share": 0.1451152840503922,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.25",
+      "role": "bundle-input",
+      "bytes": 9022,
+      "chars": 8298,
+      "est_tokens": 2980,
+      "dense_ascii_share": 0.13882863340563992,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.26",
+      "role": "bundle-input",
+      "bytes": 8402,
+      "chars": 7698,
+      "est_tokens": 3081,
+      "dense_ascii_share": 0.1539360872954014,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.27",
+      "role": "bundle-input",
+      "bytes": 8306,
+      "chars": 7473,
+      "est_tokens": 2780,
+      "dense_ascii_share": 0.15415495784825373,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.28",
+      "role": "bundle-input",
+      "bytes": 9740,
+      "chars": 8674,
+      "est_tokens": 3229,
+      "dense_ascii_share": 0.13281069863961265,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.29",
+      "role": "bundle-input",
+      "bytes": 9336,
+      "chars": 8390,
+      "est_tokens": 3209,
+      "dense_ascii_share": 0.1802145411203814,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.30",
+      "role": "bundle-input",
+      "bytes": 10459,
+      "chars": 9300,
+      "est_tokens": 3825,
+      "dense_ascii_share": 0.1625806451612903,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.31",
+      "role": "bundle-input",
+      "bytes": 9756,
+      "chars": 8731,
+      "est_tokens": 3358,
+      "dense_ascii_share": 0.1319436490665445,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.32",
+      "role": "bundle-input",
+      "bytes": 9566,
+      "chars": 8694,
+      "est_tokens": 3457,
+      "dense_ascii_share": 0.1363008971704624,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.33",
+      "role": "bundle-input",
+      "bytes": 10017,
+      "chars": 9143,
+      "est_tokens": 3448,
+      "dense_ascii_share": 0.14765394290714207,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.34",
+      "role": "bundle-input",
+      "bytes": 9433,
+      "chars": 8469,
+      "est_tokens": 3281,
+      "dense_ascii_share": 0.1409847679773291,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.35",
+      "role": "bundle-input",
+      "bytes": 10651,
+      "chars": 9256,
+      "est_tokens": 3766,
+      "dense_ascii_share": 0.12445980985306827,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.36",
+      "role": "bundle-input",
+      "bytes": 10290,
+      "chars": 9145,
+      "est_tokens": 3735,
+      "dense_ascii_share": 0.1259704756697649,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.37",
+      "role": "bundle-input",
+      "bytes": 10079,
+      "chars": 9016,
+      "est_tokens": 3922,
+      "dense_ascii_share": 0.12777284826974267,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.38",
+      "role": "bundle-input",
+      "bytes": 9921,
+      "chars": 8958,
+      "est_tokens": 3827,
+      "dense_ascii_share": 0.12860013395847286,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:2.39",
+      "role": "bundle-input",
+      "bytes": 2718,
+      "chars": 2358,
+      "est_tokens": 1152,
+      "dense_ascii_share": 0.1085665818490246,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:3.1",
+      "role": "bundle-input",
+      "bytes": 7256,
+      "chars": 7190,
+      "est_tokens": 4537,
+      "dense_ascii_share": 0.3560500695410292,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:3.2",
+      "role": "bundle-input",
+      "bytes": 5444,
+      "chars": 5412,
+      "est_tokens": 2944,
+      "dense_ascii_share": 0.3074648928307465,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:3.3",
+      "role": "bundle-input",
+      "bytes": 5314,
+      "chars": 5268,
+      "est_tokens": 2939,
+      "dense_ascii_share": 0.21867881548974943,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md#section:3.4",
+      "role": "bundle-input",
+      "bytes": 4988,
+      "chars": 4975,
+      "est_tokens": 2017,
+      "dense_ascii_share": 0.192964824120603,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:3",
+      "role": "bundle-input",
+      "bytes": 1257,
+      "chars": 1255,
+      "est_tokens": 988,
+      "dense_ascii_share": 0.6119521912350597,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:1.1",
+      "role": "bundle-input",
+      "bytes": 13323,
+      "chars": 13321,
+      "est_tokens": 3803,
+      "dense_ascii_share": 0.061481870730425645,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:1.2",
+      "role": "bundle-input",
+      "bytes": 12455,
+      "chars": 12453,
+      "est_tokens": 3605,
+      "dense_ascii_share": 0.0657672849915683,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:1.3",
+      "role": "bundle-input",
+      "bytes": 12462,
+      "chars": 12460,
+      "est_tokens": 3625,
+      "dense_ascii_share": 0.06573033707865168,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:1.4",
+      "role": "bundle-input",
+      "bytes": 12953,
+      "chars": 12949,
+      "est_tokens": 3769,
+      "dense_ascii_share": 0.06324812726851495,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:2.1",
+      "role": "bundle-input",
+      "bytes": 23902,
+      "chars": 23900,
+      "est_tokens": 6947,
+      "dense_ascii_share": 0.08836820083682008,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:2.2",
+      "role": "bundle-input",
+      "bytes": 23930,
+      "chars": 23928,
+      "est_tokens": 6970,
+      "dense_ascii_share": 0.09252758274824474,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:2.3",
+      "role": "bundle-input",
+      "bytes": 23961,
+      "chars": 23959,
+      "est_tokens": 6954,
+      "dense_ascii_share": 0.08815059059226178,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-catalogue.md#section:2.4",
+      "role": "bundle-input",
+      "bytes": 16815,
+      "chars": 16813,
+      "est_tokens": 4610,
+      "dense_ascii_share": 0.041099149467673825,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:0",
+      "role": "bundle-input",
+      "bytes": 882,
+      "chars": 878,
+      "est_tokens": 698,
+      "dense_ascii_share": 0.2984054669703872,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:1",
+      "role": "bundle-input",
+      "bytes": 15030,
+      "chars": 15014,
+      "est_tokens": 4975,
+      "dense_ascii_share": 0.13267616890901826,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.1",
+      "role": "bundle-input",
+      "bytes": 59232,
+      "chars": 59173,
+      "est_tokens": 18446,
+      "dense_ascii_share": 0.12978892400250114,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.2",
+      "role": "bundle-input",
+      "bytes": 46873,
+      "chars": 46795,
+      "est_tokens": 14669,
+      "dense_ascii_share": 0.1323218292552623,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.3",
+      "role": "bundle-input",
+      "bytes": 47242,
+      "chars": 47162,
+      "est_tokens": 15175,
+      "dense_ascii_share": 0.1452652559263814,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.4",
+      "role": "bundle-input",
+      "bytes": 47891,
+      "chars": 47832,
+      "est_tokens": 13534,
+      "dense_ascii_share": 0.08611389864525841,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.5",
+      "role": "bundle-input",
+      "bytes": 57838,
+      "chars": 57736,
+      "est_tokens": 19475,
+      "dense_ascii_share": 0.17884855202992933,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.6",
+      "role": "bundle-input",
+      "bytes": 52226,
+      "chars": 52149,
+      "est_tokens": 14512,
+      "dense_ascii_share": 0.07235038064008897,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.7",
+      "role": "bundle-input",
+      "bytes": 62633,
+      "chars": 62555,
+      "est_tokens": 18132,
+      "dense_ascii_share": 0.10010390856046679,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.8",
+      "role": "bundle-input",
+      "bytes": 66574,
+      "chars": 66479,
+      "est_tokens": 19767,
+      "dense_ascii_share": 0.1137201221438349,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.9",
+      "role": "bundle-input",
+      "bytes": 58705,
+      "chars": 58622,
+      "est_tokens": 17474,
+      "dense_ascii_share": 0.11391627716556924,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-contract-proposals.md#section:3.10",
+      "role": "bundle-input",
+      "bytes": 37489,
+      "chars": 37430,
+      "est_tokens": 12245,
+      "dense_ascii_share": 0.15450173657493987,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-consumer-cases.md",
+      "role": "bundle-input",
+      "bytes": 42267,
+      "chars": 42195,
+      "est_tokens": 11933,
+      "dense_ascii_share": 0.03972034601256073,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P2-gate-requests.md",
+      "role": "bundle-input",
+      "bytes": 52609,
+      "chars": 52585,
+      "est_tokens": 15959,
+      "dense_ascii_share": 0.12769801274127604,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    },
+    {
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/phases/P3/P3.1.state.md",
+      "role": "item-state",
+      "bytes": 601,
+      "chars": 551,
+      "est_tokens": 545,
+      "dense_ascii_share": 0.1161524500907441,
+      "gates": {
+        "size_bytes": true,
+        "tokens": true
+      },
+      "passes": true
+    }
+  ],
+  "gaps": [
+    {
+      "kind": "oversized_file",
+      "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/bundles/P3.1.json",
+      "role": "item-input-bundle",
+      "entry": null,
+      "gate": "tokens",
+      "bytes": 51803,
+      "est_tokens": 25601,
+      "detail": "файл не проходит гейт «tokens» лимита одного чтения (D2б: обязательная единица должна читаться ОДНИМ вызовом)"
+    }
+  ],
+  "weight_tokens": 571115,
+  "weight_bytes": 1817866,
+  "floor_tokens": 41738,
+  "required_reads_tokens": 529377,
+  "resolved_files": 105,
+  "gap_counts": {
+    "unreadable_root": 0,
+    "unresolved_entry": 0,
+    "missing_file": 0,
+    "oversized_file": 1
+  },
+  "phase_id": "P3",
+  "title": "Квалифицировать storage и физический context lifecycle",
+  "admission_state": "ready",
+  "producer_item": null,
+  "producer_edges": [],
+  "admission_gaps": [],
+  "admission_pass": false,
+  "d2a_pass": false,
+  "d2b_pass": false
+}

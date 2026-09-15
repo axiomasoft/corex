@@ -1,0 +1,92 @@
+[
+  {
+    "path": "phases/P7/P7.1.md",
+    "sha256": "80b982ccc0735f20dbe2d11c5a0657c356248769e310cf7b318b1819ab66ce7e",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.2.md",
+    "sha256": "1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.3.md",
+    "sha256": "6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.4.md",
+    "sha256": "e11e137bb11cea2339890c7d94c76506b90b4412b9f67e3b1732d608fc009b13",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.5.md",
+    "sha256": "dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.6.md",
+    "sha256": "b5feae3eba5ee51d3f1f9b80812646413cbf6f8d1a80461a61d88c41cc6313a0",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.7.md",
+    "sha256": "e488f4abf19961b08e21d7d8b6b403405f97cc60b71519a48c83508a8de3ee8d",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.8.md",
+    "sha256": "ba52375138e5ba536d647a7cdf43937ef11298b4d4aa97cfa8a4093131169f8d",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  },
+  {
+    "path": "phases/P7/P7.9.md",
+    "sha256": "a7c9960156f7800e70c28585ec5ea77c781b41e140b5b6c8f3f8c8a2833f04c1",
+    "bounded_fields": [
+      "Files",
+      "Implementation Rules",
+      "Code Guidance"
+    ],
+    "reason": "indexed affected stable producer Files/exact API/DTO/schema/error/BC and invariant selectors; full owning design/phase read separately; execution Required Reads not recursively invoked"
+  }
+]
