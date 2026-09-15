@@ -1,0 +1,2 @@
+> vendor/bin/pest --exclude-group=pg
+{"tool":"pest","result":"passed","tests":104,"passed":104,"assertions":277,"duration_ms":1299}

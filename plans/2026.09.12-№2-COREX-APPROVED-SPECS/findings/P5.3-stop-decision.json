@@ -1,0 +1,174 @@
+{
+  "repair_record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+    "item_id": "P5.3",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "P5.3 V-LIVE-AUTHORITY/V-PUBLISH acceptance",
+      "digest": "5288932af1169e8f6e45b7eb72356ad07303a15144560e9ca1783b3c1451c01c",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": true,
+      "carrier": {
+        "command": "P5.3 V-LIVE-AUTHORITY/V-PUBLISH acceptance",
+        "digest": "5288932af1169e8f6e45b7eb72356ad07303a15144560e9ca1783b3c1451c01c",
+        "result": "red"
+      }
+    },
+    "candidate": {
+      "delta_proved": false,
+      "evidence_ids": []
+    },
+    "affected_paths": [
+      {
+        "path": "findings/P5.3-publication-receipt.md",
+        "owner_item": "P5.3",
+        "declared_file": true
+      },
+      {
+        "path": "external:axiomasoft/stancl-tenancy",
+        "owner_item": "P5.3",
+        "declared_file": false
+      },
+      {
+        "path": "external:axiomasoft/stancl-jobpipeline",
+        "owner_item": "P5.3",
+        "declared_file": false
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 0,
+      "max_files": 1,
+      "reversible": false
+    },
+    "material_surface": {
+      "public": true,
+      "frozen": true,
+      "security": true,
+      "schema": false,
+      "dependency": true,
+      "authority": true,
+      "irreversible": true,
+      "product": false,
+      "test_topology": false
+    },
+    "pre_validation": [
+      {
+        "command": "P5.3 V-LIVE-AUTHORITY/V-PUBLISH acceptance",
+        "digest": "5288932af1169e8f6e45b7eb72356ad07303a15144560e9ca1783b3c1451c01c",
+        "result": "red"
+      }
+    ],
+    "post_validation": [],
+    "evidence_ids": [
+      "sha256:5288932af1169e8f6e45b7eb72356ad07303a15144560e9ca1783b3c1451c01c",
+      "review:/root/p53_release_review"
+    ],
+    "design": {
+      "decision_question": "How must the OAuth-scope deviation and absent public Stancl channels be resolved without weakening frozen acceptance or extending D16 implicitly?",
+      "evidence_gap": "Narrow credential requirement unmet; public Stancl providers outside authorized four-repository scope; negative/replay fixtures pending.",
+      "alternatives": [
+        "Retain partial publication and freeze further writes pending owner-bounded remediation design",
+        "Owner separately defines a result-bound credential and provider publication/acceptance decision"
+      ],
+      "expected_artifact": "Owner-approved bounded P5.3 remediation design with explicit immutable-result lineage and pending validation carriers"
+    }
+  },
+  "repair_verdict": {
+    "action": "design-required",
+    "terminal_allowed": false,
+    "reason_code": "NEW_MATERIAL_DECISION_SURFACE",
+    "repair_digest": "6b1ba90e201fa061d77221ace72a986157642b6bac4c28a340c626174e3c462c",
+    "post_validation_required": false
+  },
+  "authority_request": {
+    "kind": "authorization",
+    "decision_class": "scope_change",
+    "decision_id": "P53-acceptance-remediation",
+    "action_version": 1,
+    "subject": {
+      "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+      "phase_id": "P5",
+      "item_id": "P5.3"
+    },
+    "action": {
+      "description": "Define remediation of credential-policy deviation and lower-provider public-install acceptance; no new remote mutation authorized by this request",
+      "affected_surfaces": [
+        "credential-policy",
+        "external:axiomasoft/stancl-tenancy",
+        "external:axiomasoft/stancl-jobpipeline",
+        "P5.3-frozen-acceptance"
+      ],
+      "declared_scope": [
+        "external:axiomasoft/corex-core",
+        "external:axiomasoft/corex-modules",
+        "external:axiomasoft/corex-tasks",
+        "external:axiomasoft/corex-tenancy"
+      ],
+      "frozen_contract_change": true,
+      "closed_set_extension": true,
+      "reversible": false,
+      "decision_recorded": false,
+      "requires_authorization": true
+    },
+    "options": [
+      {
+        "id": "wait",
+        "description": "Preserve immutable publication; no further external writes"
+      },
+      {
+        "id": "bounded-design",
+        "description": "Owner directs a separate bounded remediation design; not an approval to publish extra repositories"
+      }
+    ],
+    "default_option": "wait",
+    "continuation": {
+      "target": {
+        "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+        "item_id": "P5.3",
+        "kind": "waiting-owner"
+      },
+      "capabilities": {
+        "external_writes": false,
+        "design_requires_owner_direction": true
+      }
+    }
+  },
+  "authority_verdict": {
+    "verdict": "approval_required",
+    "reason_code": "P5_DECISION_ESCALATED",
+    "policy_digest": "1849b2b299451bc3e6ea6ffaba638ace3dfdc48bc9ada1aaa092abbb940086c1",
+    "material_fields": [],
+    "affected_surfaces": []
+  },
+  "continuity_estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": false,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "122ce007f071c3292b7b8ccf3bc05d5ed5942c1b8c680e92252a91882c0624a0",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "waiting-owner",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "sha256:5288932af1169e8f6e45b7eb72356ad07303a15144560e9ca1783b3c1451c01c",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "continuity": {
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "evidence": [
+      "batch:122ce007f071c3292b7b8ccf3bc05d5ed5942c1b8c680e92252a91882c0624a0",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  }
+}

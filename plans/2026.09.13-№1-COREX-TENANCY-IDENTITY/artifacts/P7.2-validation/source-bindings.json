@@ -1,0 +1,15 @@
+{
+  "required_reads": {
+    "decisions/D7-remaining-sequence-and-autonomy.md": "d11675b959a053f6981fd074328cab329f11d802be9ee84f5ad376bbf09eec65",
+    "decisions/D6-d2-membership-profile.md": "09bf79e377598ccdf55923c377083c29a6056c2f529318e20b001c6f6e59326c",
+    "decisions/D2-input-and-authority-gates.md": "449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a",
+    "findings/P7.1-central-qualification.md": "ef476ecd1dc3095e02552372a781345969faa76a9259cb00f12d35c518831573",
+    "findings/P4.7-session-proof.md": "722f58606ecac8f64a4b266fc56ba0cd1de080704adc915581bfd631ba4782fc",
+    "findings/P5.1-switcher-proof.md": "4480333c339aa99bd620c3271b8da0e23eeb3e5a5927124fc5605dcaba664b44"
+  },
+  "unchanged_d2": {
+    "findings/D2-qualification-gap-receipt.md": "3fd852bccad8e27abe47c616ec3514f84a8198a1f7d796148869352bbdfb4ce5",
+    "findings/D2-qualification-packet.md": "d601c29a77d2892a8d86f8b8d6dca0b8e55d6f23d1b745d40c5b7bdcfa0028dd"
+  },
+  "owning_receipt_delta": []
+}

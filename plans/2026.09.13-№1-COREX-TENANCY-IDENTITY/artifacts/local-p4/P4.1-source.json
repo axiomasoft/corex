@@ -1,0 +1,102 @@
+[
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/plan.md",
+    "sha256": "30301a074732adbe9804c262bc5ef9149e0cf66473ae3755d63360143bfe7a94",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/30301a074732adbe9804c262bc5ef9149e0cf66473ae3755d63360143bfe7a94"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/phases/P4/P4.md",
+    "sha256": "ccda4635c47cf581a305c9541c6afbf3e085160006e8bf7e3c3847a17592588d",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/ccda4635c47cf581a305c9541c6afbf3e085160006e8bf7e3c3847a17592588d"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/phases/P4/P4.1.md",
+    "sha256": "da39711e1b68832ccdac81b4afad09d044538bfd803556b013875b20ca24dc3e",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/da39711e1b68832ccdac81b4afad09d044538bfd803556b013875b20ca24dc3e"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/bundles/P4.1.json",
+    "sha256": "e547b446b4b4c25012144d1f2f858d0b4d337fa5b76724208a7ca83bff109e19",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/e547b446b4b4c25012144d1f2f858d0b4d337fa5b76724208a7ca83bff109e19"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/phases/P4/P4.1.state.md",
+    "sha256": "b2401e6a03113614a5ac1f24da182c58a9ff96b9302b14d0827a0dd4e6662f4a",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/b2401e6a03113614a5ac1f24da182c58a9ff96b9302b14d0827a0dd4e6662f4a"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P1.1-bindings.md",
+    "sha256": "0ef9c301aeabcfaac1c764a1818630c8448eecee7b02cf9b02990526b0b21e80",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/0ef9c301aeabcfaac1c764a1818630c8448eecee7b02cf9b02990526b0b21e80"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P1.2-contract-dossier.md",
+    "sha256": "92e16701948f029f3e51a7377268ae72ed498591cac703a9083b3cbef00461f1",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/92e16701948f029f3e51a7377268ae72ed498591cac703a9083b3cbef00461f1"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D7-remaining-sequence-and-autonomy.md",
+    "sha256": "d11675b959a053f6981fd074328cab329f11d802be9ee84f5ad376bbf09eec65",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/d11675b959a053f6981fd074328cab329f11d802be9ee84f5ad376bbf09eec65"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/D2-development-sequence.md",
+    "sha256": "2825ba57eeeef564d2c9e41abe08753d9b02175456127cebd9e7d8cc440aa618",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/2825ba57eeeef564d2c9e41abe08753d9b02175456127cebd9e7d8cc440aa618"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D2-input-and-authority-gates.md",
+    "sha256": "449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D6-d2-membership-profile.md",
+    "sha256": "09bf79e377598ccdf55923c377083c29a6056c2f529318e20b001c6f6e59326c",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/09bf79e377598ccdf55923c377083c29a6056c2f529318e20b001c6f6e59326c"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D2-input-and-authority-gates.md",
+    "sha256": "449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/D2-qualification-packet.md",
+    "sha256": "d601c29a77d2892a8d86f8b8d6dca0b8e55d6f23d1b745d40c5b7bdcfa0028dd",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/d601c29a77d2892a8d86f8b8d6dca0b8e55d6f23d1b745d40c5b7bdcfa0028dd"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D2-input-and-authority-gates.md",
+    "sha256": "449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/449ad2b5e2985097e64c47eb6d0cf05ad52648c2b2883585cd641f4e5133959a"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P1.1-bindings.md",
+    "sha256": "0ef9c301aeabcfaac1c764a1818630c8448eecee7b02cf9b02990526b0b21e80",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/0ef9c301aeabcfaac1c764a1818630c8448eecee7b02cf9b02990526b0b21e80"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P1.2-contract-dossier.md",
+    "sha256": "92e16701948f029f3e51a7377268ae72ed498591cac703a9083b3cbef00461f1",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/92e16701948f029f3e51a7377268ae72ed498591cac703a9083b3cbef00461f1"
+  },
+  {
+    "path": "packages/tenancy/src/Identity/DatabaseIdentitySyncer.php",
+    "sha256": "08c04fc3cffc6189430e1a635f1b5c1c460e9b7aa6c86139245fa941e32f32f5",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/08c04fc3cffc6189430e1a635f1b5c1c460e9b7aa6c86139245fa941e32f32f5"
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/IdentitySyncerTest.php",
+    "sha256": "05bb77562eecce9accac2d86701daaa9d766e2d754cb2951e811994186242ff1",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/05bb77562eecce9accac2d86701daaa9d766e2d754cb2951e811994186242ff1"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D8-local-library-implementation.md",
+    "sha256": "db3858011cae5b0229a3ad80725692731a67dec81b8886c6752fc4c42ab08be8",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/db3858011cae5b0229a3ad80725692731a67dec81b8886c6752fc4c42ab08be8"
+  },
+  {
+    "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/brief/02-local-implementation-owner-request.md",
+    "sha256": "420d9d1fb501bf52453542927f25184931298aa81c78c50f8fceff1eb547bdf6",
+    "carrier": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/sources/420d9d1fb501bf52453542927f25184931298aa81c78c50f8fceff1eb547bdf6"
+  }
+]

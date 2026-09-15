@@ -1,0 +1,158 @@
+[
+  {
+    "id": "preflight",
+    "command": [
+      "docker",
+      "compose",
+      "ps"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322920.437252,
+    "duration_s": 0.047098636627197266,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/preflight.log",
+    "sha256": "fef7b4c5cbc6ea786e3c9705c38c9751513c99bd7ff3b2d7e4a5ddb7a1a2d571"
+  },
+  {
+    "id": "pg-preflight",
+    "command": [
+      "psql",
+      "-h",
+      "127.0.0.1",
+      "-p",
+      "5434",
+      "-U",
+      "corex",
+      "-d",
+      "corex_test",
+      "-Atqc",
+      "select current_database(), current_user, version();"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322920.4847608,
+    "duration_s": 0.026421546936035156,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/pg-preflight.log",
+    "sha256": "8a6f406c990c5f558ad01eee6545900ec2ecae27ef43d2d6967010e7a8726ce7"
+  },
+  {
+    "id": "root-analyse",
+    "command": [
+      "composer",
+      "analyse"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322921.4006538,
+    "duration_s": 2.083958148956299,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/root-analyse.log",
+    "sha256": "53b21167f0d10d8a75f0dbb67f46f1d6aef06fadce33d4489871c015097a4a00"
+  },
+  {
+    "id": "root-test",
+    "command": [
+      "composer",
+      "test"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322923.4850166,
+    "duration_s": 1.6749486923217773,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/root-test.log",
+    "sha256": "182349c336d9d887cf15f948a16907bfd6449b0a5634dc7d83f4ee086d9dfad6"
+  },
+  {
+    "id": "root-test-pg",
+    "command": [
+      "composer",
+      "test:pg"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322925.1603715,
+    "duration_s": 13.917351007461548,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/root-test-pg.log",
+    "sha256": "aa7f8dde23cf8b19b112221998591cf590d0912f3a654242cbfd98b30d330288"
+  },
+  {
+    "id": "root-arch",
+    "command": [
+      "composer",
+      "test:arch"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322939.0781279,
+    "duration_s": 0.29905056953430176,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/root-arch.log",
+    "sha256": "f41f794425d91696e02e129a419763e055264d14ba4a92d16962617f10ba7540"
+  },
+  {
+    "id": "tenancy-lint",
+    "command": [
+      "composer",
+      "--working-dir=packages/tenancy",
+      "lint:check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "started_at": 1789322939.3775952,
+    "duration_s": 0.6944179534912109,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/tenancy-lint.log",
+    "sha256": "8a57e246283a00079f17b64b5127ec75c43b8a0a70d9ddead1f087ae77379c66"
+  },
+  {
+    "id": "root-lint",
+    "command": [
+      "composer",
+      "lint:check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "duration_s": 0.4987354278564453,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/root-lint.log",
+    "sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+  },
+  {
+    "id": "tenancy-analyse",
+    "command": [
+      "composer",
+      "--working-dir=packages/tenancy",
+      "analyse"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "duration_s": 1.6317009925842285,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/tenancy-analyse.log",
+    "sha256": "43790193f4a9f8de39f7991495272076127f01125520c418c1b64b1ead523f40"
+  },
+  {
+    "id": "tenancy-test",
+    "command": [
+      "composer",
+      "--working-dir=packages/tenancy",
+      "test"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "exit": 0,
+    "duration_s": 62.06834363937378,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/tenancy-test.log",
+    "sha256": "802229ac8640ba66342c34c90d1a3ecefddfc2a63847dba59bcc94a4df82d130"
+  },
+  {
+    "id": "mutation",
+    "command": [
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "cwd": "/tmp/corex-p4-mutation-shadow",
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_p4_mutation_test"
+    },
+    "exit": 0,
+    "log": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/artifacts/local-p4/P4.1/mutation.log",
+    "sha256": "868444aff11a1cab4419eb310b7d763b4b60bce479482e6e16694cfe7244ffd0"
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "status": "green",
+  "commands": [
+    {
+      "name": "plan-lint",
+      "command": [
+        "python3",
+        "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-lint.py",
+        "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY"
+      ],
+      "exit": 0,
+      "log_sha256": "571dabffdaf799b2864a559e72bfecd1d200919f14145a0ec7d981767b04c417"
+    },
+    {
+      "name": "state-check",
+      "command": [
+        "python3",
+        "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py",
+        "state",
+        "--plan-dir",
+        "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY",
+        "--item",
+        "P7.1",
+        "--check"
+      ],
+      "exit": 0,
+      "log_sha256": "069544cc9ab3b1b91f8a1e08c2a2ef5146fa68a5bc44d2be76a83a8ddd87ea61"
+    },
+    {
+      "name": "status-check",
+      "command": [
+        "python3",
+        "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py",
+        "status",
+        "--plan-dir",
+        "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY",
+        "--check"
+      ],
+      "exit": 0,
+      "log_sha256": "069544cc9ab3b1b91f8a1e08c2a2ef5146fa68a5bc44d2be76a83a8ddd87ea61"
+    },
+    {
+      "name": "bundle-check",
+      "command": [
+        "python3",
+        "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py",
+        "bundle",
+        "--plan-dir",
+        "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY",
+        "--item",
+        "P7.1",
+        "--check"
+      ],
+      "exit": 0,
+      "log_sha256": "069544cc9ab3b1b91f8a1e08c2a2ef5146fa68a5bc44d2be76a83a8ddd87ea61"
+    }
+  ],
+  "baseline_lint": "0 errors, 3 inherited warnings",
+  "php_runtime_execution": "not applicable: documents only",
+  "warnings": "3 baseline P2/P4/P6 orchestration warnings; P7 warning appears on activation because unchanged phase prose says no multi-agent orchestration required"
+}

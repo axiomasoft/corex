@@ -1,0 +1,61 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:4fda4312ee96b6ee71a19efb3095cd79f64c7bde8d614bbb5f5ab2b15915ef07",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.18.0"
+  },
+  "commit_sha": "5c7f512b8bb8bc00f362b8e1249939c00c15f8fc",
+  "continuity": {
+    "evidence": [
+      "batch:122ce007f071c3292b7b8ccf3bc05d5ed5942c1b8c680e92252a91882c0624a0",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:a57f798a667c0936f31de1d7012b32febe0305da24578d12fa62fb13fe3a1c21",
+    "plan": "sha256:c3fc8423e2aaf5204be54543cb9e464ea6c6224b0d8634e152d85dd004033912",
+    "state": "sha256:78cf912eb34fe3ee5225b56ea14312e4781b0b1fdc8e1e3bfda391f3c9a66a15"
+  },
+  "journal": {
+    "command": "plan-run",
+    "line": 58,
+    "result": "escalated",
+    "run_id": "3452d3f68afcee3b0f077790c18015fb231e425d5d7229def88dc5f13f3d6a8d",
+    "sha256": "sha256:4129e049f60a5d52378634ddac34b5941332af6c9d6fc4bbf8219b79f6a3fb01"
+  },
+  "next_exact": "waiting: accepted owner decision on P5.3 credential-scope deviation and missing public Stancl provider channels",
+  "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+  "rationale": {
+    "open_risks": null,
+    "remaining": "P5.3 is NOT GREEN. Narrow credential requirement was unmet by"
+  },
+  "recommendation": "**Next:** waiting: accepted owner decision on P5.3 credential-scope deviation and missing public Stancl provider channels\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model class | frontier |\n| Effort | high |\n| Context | waiting-owner |\n| Суть | Preserve exact published result; no further external writes before a new owner-bound decision. |\n\n```session-continuity-decision/v1\n{\n  \"outcome\": \"waiting-owner\",\n  \"reason\": \"owner-wait\",\n  \"evidence\": [\n    \"batch:122ce007f071c3292b7b8ccf3bc05d5ed5942c1b8c680e92252a91882c0624a0\",\n    \"loaded-inputs:reusable\",\n    \"cold-start-cost:0\"\n  ],\n  \"runnable\": false,\n  \"schema_version\": \"session-continuity-decision/v1\"\n}\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "waiting-owner",
+    "continuity": {
+      "evidence": [
+        "batch:122ce007f071c3292b7b8ccf3bc05d5ed5942c1b8c680e92252a91882c0624a0",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "waiting-owner",
+      "reason": "owner-wait",
+      "runnable": false,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🔴 Blocked",
+  "subject": "P5.3"
+}

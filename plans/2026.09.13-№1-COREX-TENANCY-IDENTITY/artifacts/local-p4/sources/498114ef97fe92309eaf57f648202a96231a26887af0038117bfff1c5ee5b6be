@@ -1,0 +1,25 @@
+### P4.2 — Local strict transport, wire fixtures и trigger parser
+
+**Intent:** Prove D6/packet transport behavior in unregistered internal library code and isolated fake central fixtures.
+
+**Why:** RAG:— D7 splits the previous mixed proof/implementation gate; this item produces the next item's concrete local inputs.
+
+**Scope Included:** Strict typed query/snapshot/revoke-receipt semantics, scalar GET/no-body byte fixtures, no-cache/correlation checks, UUID signed-trigger validation, typed uncertain/denial outcomes.
+
+**Scope Excluded:** Changed existing CentralApiClient/public DTO constructors before acceptance, effective OAuth/mTLS registration, central endpoint/writer, runtime config/provider binding, new auth dependency.
+
+**Inputs:** `findings/P4.1-identity-safety.md` (producer: P4.1) · `findings/P1.2-contract-dossier.md`
+
+**Files:** packages/tenancy/src/Membership/Internal/Transport/** · packages/tenancy/tests/Feature/CentralApiClientTest.php · packages/tenancy/tests/Unit/MembershipEventTest.php · packages/tenancy/tests/Support/Membership/** · packages/tenancy/CHANGELOG.md · findings/P4.2-transport-proof.md
+
+**Required Reads:** 1) `decisions/D7-remaining-sequence-and-autonomy.md` 2) `findings/D2-development-sequence.md` 3) `decisions/D6-d2-membership-profile.md` 4) `decisions/D2-input-and-authority-gates.md` 5) `findings/D2-qualification-packet.md` 6) `findings/P4.1-identity-safety.md` (producer: P4.1) 7) `findings/P1.2-contract-dossier.md`
+
+**Implementation Rules:** D6/D7 retain D2 NOT released for implementation; this item is a future bounded local engineering tranche, not deployment qualification. Bind actual LOCAL-IMPLEMENTATION authority before code mutation. Preserve existing distributed Contracts/DTO semantics; changed public shape requires exact PUBLIC-API/major acceptance before mutation. Draft logic is hidden/unregistered; use supported composition and no mandatory auth dependency. Per-package tests only; no production migrations, guessed bindings, external operations, private access/install or commit.
+
+**Code Guidance:** 1. Use packet §2/§8 exact target; preserve existing candidate public Files pending BC/major evidence; prepare exact public facade comparison for P7.1. 2. Internal adapter accepts explicitly supplied sanitized binding/profile and trusted account/product context; missing/mismatch→zero call. 3. Fake bytes test scalar query encoding, duplicate/bracket arrays/conflicts and response pair/product/request/profile echo. 4. Signed events only trigger pull; old grant cannot produce active state. 5. Revoke timeout/5xx is uncertain, no local authoritative success and no changed-ID retry. Acted identity is audit-only; owning permission fixture supplies actual decision semantics.
+
+**Validation:** V-TRANSPORT: UUID/pair/product/certificate-token claim cross-check negatives, zero call when permission/binding absent, strict byte fixtures and typed failures; parser no-PII/no-message-key-fetch/replay conflict tests. Fake channel does not qualify AP-02/03/05 or DI-01…18/34. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.
+
+**Deliverables:** `findings/P4.2-transport-proof.md`; exact local receipt/subcondition map and external owner/next action. Rollback disables draft/reference use and preserves deny/fences/credentials tombstones; no automatic counter reset or production DDL rollback.
+
+**Authority:** [OWNER-GATE:LOCAL-IMPLEMENTATION] branch=`local-library`; scope=`P4/P5 unregistered library and disposable fixtures; preserve existing public API; no production schema, runtime registration, dependency, commit, private access or external writes`

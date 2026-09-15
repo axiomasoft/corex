@@ -1,0 +1,61 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:4fda4312ee96b6ee71a19efb3095cd79f64c7bde8d614bbb5f5ab2b15915ef07",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.18.0"
+  },
+  "commit_sha": "edf2b704b75e5ac7244f5fde8a8652514d81f474",
+  "continuity": {
+    "evidence": [
+      "batch:0601aabc85bf82c379f62fb295dbfbc734f5c9764c7d2ee18d01afbefa71332c",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "terminal",
+    "reason": "terminal-evidence",
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:7d11c944424123845ba20c6368a4c15815603a902125b9e35c52ee4b0911fd99",
+    "plan": "sha256:c3fc8423e2aaf5204be54543cb9e464ea6c6224b0d8634e152d85dd004033912",
+    "state": "sha256:5facf6a225d893508627074d6b7f6f0bd89114aa27c72eb9b116708a591e794b"
+  },
+  "journal": {
+    "command": "plan-run",
+    "line": 61,
+    "result": "closed-deviations",
+    "run_id": "b484f94264ab091f927253fd83a51df7ada314e029435ec3f92813a22f79d6ea",
+    "sha256": "sha256:2616a0f235a794700daa4dd5d5b6de6e90abe6f26b008f98d395ee88a130d7b3"
+  },
+  "next_exact": "terminal: план закрыт",
+  "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+  "rationale": {
+    "open_risks": "Initial broad-OAuth failure remains RED in history; accepted D17 exception is exhausted for missing-result publication, not narrow capability or an ongoing grant. No hosted CI/Packagist/Brain sync claim.",
+    "remaining": "No unfinished declared item. P5 aggregate is terminal Done with deviations, but formal direct phase closure is NOT performed: phase_close_gate returns PHASE_ACCEPTANCE_NON_GREEN because P5.3 retains its accepted historical deviation. This is not unfinished publication or a directive to rerun a completed item. Future formal phase reconciliation needs its own applicable owner decision; no such operation inferred here."
+  },
+  "recommendation": "**Next:** terminal: план закрыт\n\n| Параметр | Значение |\n|:--|:--|\n| Context | terminal |\n\n```session-continuity-decision/v1\n{\"outcome\":\"terminal\",\"reason\":\"terminal-evidence\",\"evidence\":[\"batch:0601aabc85bf82c379f62fb295dbfbc734f5c9764c7d2ee18d01afbefa71332c\",\"loaded-inputs:reusable\",\"cold-start-cost:0\"],\"runnable\":false,\"schema_version\":\"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": null,
+    "command": null,
+    "context": "terminal",
+    "continuity": {
+      "evidence": [
+        "batch:0601aabc85bf82c379f62fb295dbfbc734f5c9764c7d2ee18d01afbefa71332c",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "terminal",
+      "reason": "terminal-evidence",
+      "runnable": false,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟠 Done with deviations",
+  "subject": "P5.3"
+}

@@ -1,0 +1,38 @@
+{
+  "status": "green",
+  "mapped_central_ids": [
+    "DI-01",
+    "DI-02",
+    "DI-03",
+    "DI-04",
+    "DI-05",
+    "DI-06",
+    "DI-07",
+    "DI-08",
+    "DI-09",
+    "DI-10",
+    "DI-11",
+    "DI-12",
+    "DI-13",
+    "DI-14",
+    "DI-15",
+    "DI-16",
+    "DI-17",
+    "DI-18",
+    "DI-19",
+    "DI-20",
+    "DI-34"
+  ],
+  "switcher_actual_resolution": "UNFILLED",
+  "effective_di": 0,
+  "executed_ap": 0,
+  "input_hash_checks": "green",
+  "local_source_hash_checks": "green",
+  "local_links": "green",
+  "foreign_files_unchanged": 1249,
+  "write_site": {
+    "pre_mutation": "allow",
+    "pre_final": "allow"
+  },
+  "product_sha256": "ef476ecd1dc3095e02552372a781345969faa76a9259cb00f12d35c518831573"
+}

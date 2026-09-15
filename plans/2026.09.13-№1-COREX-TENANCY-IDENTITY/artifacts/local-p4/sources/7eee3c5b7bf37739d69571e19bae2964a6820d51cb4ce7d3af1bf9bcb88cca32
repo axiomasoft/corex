@@ -1,0 +1,24 @@
+diff --git a/packages/modules/src/ModulesServiceProvider.php b/packages/modules/src/ModulesServiceProvider.php
+index 22b9c43..778f092 100644
+--- a/packages/modules/src/ModulesServiceProvider.php
++++ b/packages/modules/src/ModulesServiceProvider.php
+@@ -78,18 +78,7 @@ final class ModulesServiceProvider extends ServiceProvider
+ 
+         // mod_modules/mod_records now exist — read/write them directly;
+         // ArrayModuleStateReader remains available for tests that inject a fake.
+-        // Bound via a closure (NOT a bare class-string): the reader MUST read the
+-        // module connection (config('corex-modules.connection'), null = app
+-        // default) — the same seam RecordsRegistrar/lifecycle/epoch use. A bare
+-        // class-string autowires $connection = null and silently reads the ambient
+-        // default, so with a configured module DB the enabled set comes back empty
+-        // and every module reads inactive (a defect a targeted audit caught).
+-        $this->app->singleton(ModuleStateReader::class, static function (): DatabaseModuleStateReader {
+-            /** @var string|null $connection */
+-            $connection = config('corex-modules.connection');
+-
+-            return new DatabaseModuleStateReader($connection);
+-        });
++        $this->app->singleton(ModuleStateReader::class, DatabaseModuleStateReader::class);
+ 
+         // RecordsRegistrar and the lifecycle read/write the module connection
+         // (config('corex-modules.connection'), null = app default) — the same

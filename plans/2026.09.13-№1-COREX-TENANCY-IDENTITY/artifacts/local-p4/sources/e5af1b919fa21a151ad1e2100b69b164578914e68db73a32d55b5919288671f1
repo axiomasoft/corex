@@ -1,0 +1,70 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Central;
+
+use DateTimeImmutable;
+use Throwable;
+
+final readonly class MembershipSnapshot
+{
+    public function __construct(
+        string $identityId,
+        string $accountId,
+        ?string $membershipId,
+        public bool $active,
+        string $authorityVersion,
+        public DateTimeImmutable $observedAt,
+    ) {
+        $this->identityId = CentralValue::uuid(value: $identityId, field: 'identity_id');
+        $this->accountId = CentralValue::uuid(value: $accountId, field: 'account_id');
+        $this->membershipId = $membershipId === null ? null : CentralValue::uuid(value: $membershipId, field: 'membership_id');
+        $this->authorityVersion = CentralValue::nonEmpty(value: $authorityVersion, field: 'authority_version');
+
+        if ($this->active && $this->membershipId === null) {
+            throw new CentralProtocolViolation('An active membership requires membership_id.');
+        }
+    }
+
+    public string $identityId;
+
+    public string $accountId;
+
+    public ?string $membershipId;
+
+    public string $authorityVersion;
+
+    /** @param array<string, mixed> $payload */
+    public static function fromPayload(array $payload): self
+    {
+        try {
+            if (! is_bool($payload['active'] ?? null) || ! is_string($payload['observed_at'] ?? null)) {
+                throw new CentralProtocolViolation('Invalid membership snapshot payload.');
+            }
+
+            return new self(
+                identityId: self::string($payload, 'identity_id'),
+                accountId: self::string($payload, 'account_id'),
+                membershipId: is_string($payload['membership_id'] ?? null) ? $payload['membership_id'] : null,
+                active: $payload['active'],
+                authorityVersion: self::string($payload, 'authority_version'),
+                observedAt: new DateTimeImmutable($payload['observed_at']),
+            );
+        } catch (CentralProtocolViolation $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw new CentralProtocolViolation('Invalid membership snapshot payload.', previous: $exception);
+        }
+    }
+
+    /** @param array<string, mixed> $payload */
+    private static function string(array $payload, string $key): string
+    {
+        if (! is_string($payload[$key] ?? null)) {
+            throw new CentralProtocolViolation("{$key} is required.");
+        }
+
+        return $payload[$key];
+    }
+}

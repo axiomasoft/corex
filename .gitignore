@@ -18,9 +18,18 @@
 
 # Generated Task runtime state and ad-hoc diagnostic output.
 /plans/**/.plan-cache/
-/plans/**/artifacts/
-/plans/2026.09.12-№2-COREX-APPROVED-SPECS/
 /scratch_gate.log
+
+# Installed-consumer runs retain their committed locks, evidence and logs only.
+# Their app scaffolding and Composer vendor trees are recreated by qualification.
+/delivery/**/consumer-*/StorageCatalogue.php
+/delivery/**/consumer-*/approved-storage.sql
+/delivery/**/consumer-*/bootstrap/
+/delivery/**/consumer-*/boxed/
+/delivery/**/consumer-*/config/
+/delivery/**/consumer-*/probe.php
+/delivery/**/consumer-*/storage/
+/delivery/**/consumer-*/vendor/
 
 # CoreX specifications and ADRs are maintained in the Brain vault.
 /docs/03_Dev/

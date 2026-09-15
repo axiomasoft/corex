@@ -1,0 +1,13 @@
+{
+  "status": "green",
+  "mapped_consumer_ids": ["DI-21", "DI-22", "DI-23", "DI-24", "DI-25", "DI-26", "DI-27", "DI-28", "DI-29", "DI-30", "DI-33", "DI-34"],
+  "mapped_acceptance_ids": ["AP-06", "AP-07", "AP-08", "AP-09", "AP-10", "AP-11", "AP-12", "AP-13"],
+  "required_inventory": ["guard", "entry", "PAT", "OAuth", "job", "websocket", "command"],
+  "effective_di": 0,
+  "executed_ap": 0,
+  "cloud_target_acceptance": "UNFILLED",
+  "d2_gap_receipt_sha256": "3fd852bccad8e27abe47c616ec3514f84a8198a1f7d796148869352bbdfb4ce5",
+  "d2_packet_sha256": "d601c29a77d2892a8d86f8b8d6dca0b8e55d6f23d1b745d40c5b7bdcfa0028dd",
+  "product_sha256": "bd7102e830b227c145a8efad93666518683b04cc56f88b44913439d755bd83f4",
+  "write_site": {"pre_mutation": "allow", "pre_final": "allow"}
+}

@@ -1,0 +1,234 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.13-\u21161-corex-tenancy-identity-p4-2",
+  "version": {
+    "revision": 1,
+    "content_hash": "1a50fba8358869aa13b4ee7f169d0dc8b349e52ec4db624474e5e49922d73bd6",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Prove D6/packet transport behavior in unregistered internal library code and isolated fake central fixtures.",
+    "non_goals": [
+      "Changed existing CentralApiClient/public DTO constructors before acceptance, effective OAuth/mTLS registration, central endpoint/writer, runtime config/provider binding, new auth dependency."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "Strict typed query/snapshot/revoke-receipt semantics, scalar GET/no-body byte fixtures, no-cache/correlation checks, UUID signed-trigger validation, typed uncertain/denial outcomes.",
+      "source_ref": "phases/P4.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Changed existing CentralApiClient/public DTO constructors before acceptance, effective OAuth/mTLS registration, central endpoint/writer, runtime config/provider binding, new auth dependency.",
+      "source_ref": "phases/P4.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "`findings/P4.2-transport-proof.md`; exact local receipt/subcondition map and external owner/next action. Rollback disables draft/reference use and preserves deny/fences/credentials tombstones; no automatic counter reset or production DDL rollback.",
+        "scope": "public",
+        "check": "V-TRANSPORT: UUID/pair/product/certificate-token claim cross-check negatives, zero call when permission/binding absent, strict byte fixtures and typed failures; parser no-PII/no-message-key-fetch/replay conflict tests. Fake channel does not qualify AP-02/03/05 or DI-01\u202618/34. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.",
+        "evidence_ref": "E10"
+      }
+    ]
+  },
+  "authority": {
+    "class": "owner-gate",
+    "granted": true,
+    "granted_by": "decisions/D8:1 [OWNER-GRANT:LOCAL-IMPLEMENTATION]",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "exec-items",
+    "carrier": "task:plan-exec 2026.09.13-\u21161-COREX-TENANCY-IDENTITY P4.2",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "findings/P4.1-identity-safety.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "findings/P1.2-contract-dossier.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "decisions/D7-remaining-sequence-and-autonomy.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "findings/D2-development-sequence.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "decisions/D6-d2-membership-profile.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "decisions/D2-input-and-authority-gates.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "findings/D2-qualification-packet.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "findings/P4.1-identity-safety.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "findings/P1.2-contract-dossier.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "V-TRANSPORT: UUID/pair/product/certificate-token claim cross-check negatives, zero call when permission/binding absent, strict byte fixtures and typed failures; parser no-PII/no-message-key-fetch/replay conflict tests. Fake channel does not qualify AP-02/03/05 or DI-01\u202618/34. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.",
+      "proof_class": "cross-checked",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "findings/P4.1-identity-safety.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1.2-contract-dossier.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D7-remaining-sequence-and-autonomy.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/D2-development-sequence.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D6-d2-membership-profile.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D2-input-and-authority-gates.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/D2-qualification-packet.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P4.1-identity-safety.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1.2-contract-dossier.md",
+        "kind": "committed",
+        "producer": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": []
+    },
+    "semantic_carrier": "task:plan-exec",
+    "provider_renderers": {
+      "claude": "/task:plan-exec 2026.09.13-\u21161-COREX-TENANCY-IDENTITY P4.2",
+      "codex": "$ task:plan-exec 2026.09.13-\u21161-COREX-TENANCY-IDENTITY P4.2"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.13-\u21161-COREX-TENANCY-IDENTITY",
+    "item_id": "P4.2",
+    "reads": [
+      "E3",
+      "E4",
+      "E5",
+      "E6",
+      "E7",
+      "E8",
+      "E9"
+    ],
+    "carrier": "task:plan-exec 2026.09.13-\u21161-COREX-TENANCY-IDENTITY P4.2"
+  }
+}

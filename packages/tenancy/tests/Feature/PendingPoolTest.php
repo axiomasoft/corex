@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Database\TemplateIntegrityException;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -97,10 +99,12 @@ function makePendingClusterRow(array $overrides = []): string
     return $id;
 }
 
-function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPLATE_DB): void
+function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPLATE_DB, bool $trusted = true): void
 {
+    $templateId = (string) Str::uuid();
+
     DB::table('root_templates')->insert([
-        'id' => (string) Str::uuid(),
+        'id' => $templateId,
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -108,11 +112,24 @@ function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPL
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
+
+    if ($trusted) {
+        TestCase::trustTemplate(templateId: $templateId, database: $dbName);
+    }
 }
 
 function pendingPool(): PendingPool
 {
-    return new PendingPool('pgsql', new StanclTenantDatabaseProvisioner('pgsql'));
+    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+
+    return new PendingPool(
+        centralConnection: 'pgsql',
+        provisioner: new StanclTenantDatabaseProvisioner(
+            centralConnection: 'pgsql',
+            templateIntegrityVerifier: $templateIntegrityVerifier,
+        ),
+        templateIntegrityVerifier: $templateIntegrityVerifier,
+    );
 }
 
 it('creates pending болванки with cloned databases, status=pending, slug/owner NULL (AC-4)', function (): void {
@@ -259,7 +276,7 @@ it('does not drop a pending account claimed after the cleanup scan', function ()
 
 it('does not publish a pending row before provisioning completes or after it fails', function (): void {
     $cluster = makePendingClusterRow();
-    makePendingTemplateRow(dbName: 'tpl_missing_remediation_test');
+    makePendingTemplateRow(dbName: 'tpl_missing_remediation_test', trusted: false);
     $other = pendingConnectTo((string) config('database.connections.pgsql.database'));
     $observed = null;
     DB::listen(function ($event) use ($other, &$observed): void {
@@ -267,8 +284,8 @@ it('does not publish a pending row before provisioning completes or after it fai
             $observed = $other->table('root_accounts')->where('status', 'pending')->count();
         }
     });
-    expect(fn () => pendingPool()->createPending(1, $cluster))->toThrow(QueryException::class);
-    expect($observed)->toBe(0)->and(pendingPool()->pendingCount())->toBe(0);
+    expect(fn () => pendingPool()->createPending(1, $cluster))->toThrow(TemplateIntegrityException::class);
+    expect($observed)->toBeNull()->and(pendingPool()->pendingCount())->toBe(0);
     $other->disconnect();
 });
 

@@ -1,0 +1,108 @@
+{
+  "schema_version": "evidence-graph/v1",
+  "item_id": "P4.2",
+  "product_paths": [
+    "packages/tenancy/CHANGELOG.md",
+    "packages/tenancy/phpunit.xml",
+    "packages/tenancy/src/Membership/Internal/Transport/**",
+    "packages/tenancy/tests/Feature/CentralApiClientTest.php",
+    "packages/tenancy/tests/Support/Membership/**",
+    "packages/tenancy/tests/Unit/MembershipEventTest.php",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P4.2-transport-proof.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P7.1-local-transport-checkpoint.md"
+  ],
+  "digest_inputs": [
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D2-input-and-authority-gates.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D6-d2-membership-profile.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/decisions/D7-remaining-sequence-and-autonomy.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/D2-development-sequence.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/D2-qualification-packet.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P1.2-contract-dossier.md",
+    "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P4.1-identity-safety.md"
+  ],
+  "collisions": [],
+  "nodes": [
+    {
+      "id": "spec",
+      "kind": "item-spec",
+      "path": "phases/P4/P4.2.md",
+      "sha256": "83f6e11ac9625ab3821f9c292bec1ccc9f48d350a05cd57613b34417f3a83081"
+    },
+    {
+      "id": "bundle",
+      "kind": "bundle",
+      "sha256": "81a8df9b5f01593f788ac5bc48ea45bb1e1bc4bddae7fbc268b4e6c8ec2ce7ee",
+      "declaration_sha256": "eb5dfd95e1714c95a095bbd3862e52aad3f78dce59b1c48f450e2a06fde5cadb"
+    },
+    {
+      "id": "product",
+      "kind": "declared-files",
+      "anchor": {
+        "paths": [
+          {
+            "path": "packages/tenancy/CHANGELOG.md",
+            "state": "file",
+            "sha256": "4dd6e2dd6517840193d10f0ecffb81f400a33f588e661ee632a1bc5b980b1543"
+          },
+          {
+            "path": "packages/tenancy/phpunit.xml",
+            "state": "file",
+            "sha256": "93585138b4cfeb5e3638f50fd098b9ff276d40d4ea68ae15f1ef7da7c7532890"
+          },
+          {
+            "path": "packages/tenancy/src/Membership/Internal/Transport/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/tenancy/tests/Feature/CentralApiClientTest.php",
+            "state": "file",
+            "sha256": "7bc92e0f6e951fa240197c281fa4c6238b345a4557133369a3673e957c66d404"
+          },
+          {
+            "path": "packages/tenancy/tests/Support/Membership/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/tenancy/tests/Unit/MembershipEventTest.php",
+            "state": "file",
+            "sha256": "ac857690b7c0e5593075d2dfcf2786272fc856a53a428a87ed1f7bce26fdd1d8"
+          },
+          {
+            "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P4.2-transport-proof.md",
+            "state": "file",
+            "sha256": "e7e77c1bdd6674e1b2aa5ff590b2310677934d99dded588d0407f1094ff12442"
+          },
+          {
+            "path": "plans/2026.09.13-\u21161-COREX-TENANCY-IDENTITY/findings/P7.1-local-transport-checkpoint.md",
+            "state": "file",
+            "sha256": "9f583e785f30e88050d341ee5a1fc96d03bd01e7df45a044015eb1b5be9299e0"
+          }
+        ],
+        "sha256": "83acb09fe43dcfc8d5c7d8274101d85f0f575a71402407f99e8f26629012a3a9"
+      }
+    },
+    {
+      "id": "closure",
+      "kind": "closure-projections",
+      "paths": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "spec",
+      "to": "product",
+      "kind": "precedes"
+    },
+    {
+      "from": "bundle",
+      "to": "product",
+      "kind": "digest-input"
+    },
+    {
+      "from": "product",
+      "to": "closure",
+      "kind": "byte-identity"
+    }
+  ],
+  "sha256": "fa019b52431b410edb368e70c9018770dd23f7cba18059802469db724067a581"
+}

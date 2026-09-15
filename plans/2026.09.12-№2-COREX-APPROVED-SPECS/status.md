@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: 4ab8634494ed0ecef396ae2ca18d44e0731fffdb1e32d6fa13134e8b2f6f34e0
+inputs_sha256: 795cbe5a8b34a61f3ef2f0837befba4045af4f0898814e753ed83315502b5341
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟠 Done with deviations |
 | Last Updated | 2026-09-15 |
 
 ## 4. Phase Index & Status Board
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P2 | Generic template integrity with explicit schema/trust gates | 3/3 | 🟢 Done |
 | P3 | Generic domain trust and independent project boundaries | 2/2 | 🟢 Done |
 | P4 | Immutable source and isolated public/private distribution proof | 5/5 | 🟢 Done |
-| P5 | Factual passports and result-bound publication authority | 1/3 | 🟡 In progress |
+| P5 | Factual passports and result-bound publication authority | 2/3 | 🟠 Done with deviations |
 
 ## Phase P1
 
@@ -68,8 +68,8 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P5.1 | Minimum per-package factual compatibility passports | 🟢 Done | 2026-09-15 |
-| P5.2 | Подготовить exact publication review dossier | ⬜ Not started | — |
-| P5.3 | Separately authorized exact public split publication | ⬜ Not started | — |
+| P5.2 | Подготовить exact publication review dossier | 🟢 Done | 2026-09-15 |
+| P5.3 | Exact publication remediation with accepted historical deviation | 🟠 Done with deviations | 2026-09-15 |
 
 ## 6. Update Log
 
@@ -146,7 +146,17 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | codex/gpt-5.6-terra/high | plan-exec · in-progress · — |
 | 2026-09-15 | codex/gpt-5.6-terra/high | plan-exec · closed-green · P5.1 factual passports and docs-only local artifact lineage GREEN; P4 remains closed and CRM delivery is evidence-only.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | plan-run/implementation/high · gpt-5.6-terra | plan-run · in-progress · — |
+| 2026-09-15 | plan-run/implementation/high · gpt-5.6-terra | plan-run · closed-green · P5.2 local publication dossier GREEN; four sealed artifacts and proof lineage verified. Publication remains NO-GO: no remote read/write.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · in-progress · P5.3 exact publication admitted; five-carrier snapshot 3827a72a2af2f7ab1f4d57b94c7a30f78c84b11c47072b2283f9d976d94d2ad4 consumed. D16 and live organization/target preflight GREEN; no remote mutation yet. write-site: pre_mutation: allow. |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · decision-pending · Four immutable releases verified; acceptance RED/PENDING. Closed repair evidence requires new material decision; no further external writes. |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · escalated · PARTIAL publication: four exact public prereleases exist. NOT GREEN: broad OAuth deviation, missing public Stancl providers, pending negative/replay fixtures. Owner-bound remediation required; preserve refs/assets. |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · decision-pending · note сокращена; полный текст: journal.jsonl:60 |
+| 2026-09-15 | gpt-5.6-sol/high | plan-run · closed-deviations · D17 exact two-provider publication, six-resource reconciliation, four public consumer cells and 16 guard/adapter fixtures PASS. Independent full risk review GREEN; initial OAuth deviation retained.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
-- —
+- P5.3: known deviation

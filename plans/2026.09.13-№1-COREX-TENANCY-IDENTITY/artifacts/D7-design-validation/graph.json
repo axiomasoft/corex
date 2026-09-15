@@ -1,0 +1,107 @@
+{
+  "schema": "remaining-plan-design-check/v1",
+  "scope": "2026.09.13-№1-COREX-TENANCY-IDENTITY remaining design",
+  "item_count": 21,
+  "dependencies": {
+    "P1.1": [],
+    "P1.2": [],
+    "P2.1": [],
+    "P2.2": [],
+    "P3.1": [],
+    "P3.2": [],
+    "P4.1": [],
+    "P4.2": [
+      "P4.1"
+    ],
+    "P4.3": [
+      "P4.2"
+    ],
+    "P4.4": [
+      "P4.3",
+      "P4.3"
+    ],
+    "P4.5": [
+      "P4.3",
+      "P4.4"
+    ],
+    "P4.6": [
+      "P4.2",
+      "P4.3",
+      "P4.4"
+    ],
+    "P4.7": [
+      "P4.1",
+      "P4.2",
+      "P4.3",
+      "P4.4",
+      "P4.5",
+      "P4.6"
+    ],
+    "P5.1": [
+      "P4.2"
+    ],
+    "P6.1": [],
+    "P6.2": [
+      "P2.2",
+      "P3.2",
+      "P4.7",
+      "P5.1"
+    ],
+    "P7.1": [],
+    "P7.2": [
+      "P7.1",
+      "P4.7",
+      "P5.1"
+    ],
+    "P7.3": [
+      "P7.1",
+      "P7.2",
+      "P4.7",
+      "P5.1"
+    ],
+    "P7.4": [
+      "P7.1",
+      "P7.2",
+      "P7.3"
+    ],
+    "P7.5": [
+      "P6.2",
+      "P7.4"
+    ]
+  },
+  "topological_order": [
+    "P1.1",
+    "P1.2",
+    "P2.1",
+    "P2.2",
+    "P3.1",
+    "P3.2",
+    "P4.1",
+    "P4.2",
+    "P4.3",
+    "P4.4",
+    "P4.5",
+    "P4.6",
+    "P4.7",
+    "P5.1",
+    "P6.1",
+    "P6.2",
+    "P7.1",
+    "P7.2",
+    "P7.3",
+    "P7.4",
+    "P7.5"
+  ],
+  "errors": [],
+  "protected_unchanged": {
+    "decisions/D6-d2-membership-profile.md": true,
+    "findings/D2-membership-profile.md": true,
+    "findings/D2-qualification-gap-receipt.md": true,
+    "findings/D2-qualification-packet.md": true,
+    "journal.jsonl": true
+  },
+  "effective_DI_qualified": 0,
+  "executed_AP": 0,
+  "implementation_release": false,
+  "product_execution": false
+}

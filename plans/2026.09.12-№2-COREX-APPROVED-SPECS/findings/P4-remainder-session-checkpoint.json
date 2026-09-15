@@ -1,0 +1,27 @@
+{
+  "schema_version": "corex-phase-remainder-checkpoint/v1",
+  "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+  "date": "2026-09-14",
+  "closed_item": "P4.1",
+  "owner_decision": "decisions/D11-p4-remainder-session.md",
+  "requested_scope": [
+    "P4.2",
+    "P4.3",
+    "P4.4",
+    "P4.5"
+  ],
+  "source_anchor": "a9cdb37f183883b78c4979d45a6cb683dce7ac8c",
+  "remaining_spec_sha256": {
+    "P4.2": "118b4194e4e424dd8f4bcb5130907d2496cba6032c7b3d5fb06fb74f563c84dc",
+    "P4.3": "3434c76e6955288ce24739cb653e076be4945d017aedd6de710de7f79fb85fd2",
+    "P4.4": "307d7352a313e950c2fc0b9e892959342317d42be02ddc93b0446970f74ea4b7",
+    "P4.5": "10c329e13b71de31a1b99cf90619518bcc964a5ae5abdb0f7c5138586ab96d31"
+  },
+  "remaining_gates": [
+    "P4.2 qualified available immutable provider transport",
+    "P4.3 committed export candidate and staged versions",
+    "P4.4 supported actual runtime cells",
+    "P4.5 confirmed private source/ref and authorized read"
+  ],
+  "product_execution_started": false
+}

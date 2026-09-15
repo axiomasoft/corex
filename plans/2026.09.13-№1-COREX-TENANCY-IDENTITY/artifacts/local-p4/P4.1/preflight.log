@@ -1,0 +1,2 @@
+NAME               IMAGE                COMMAND                  SERVICE   CREATED        STATUS                PORTS
+corex_pgsql_test   postgres:16-alpine   "docker-entrypoint.s…"   pgsql     2 months ago   Up 3 days (healthy)   127.0.0.1:5434->5432/tcp

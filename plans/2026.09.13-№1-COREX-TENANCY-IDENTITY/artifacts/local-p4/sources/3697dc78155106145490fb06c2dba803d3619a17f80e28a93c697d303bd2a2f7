@@ -1,0 +1,106 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Central;
+
+use CoreX\Tenancy\Contracts\CentralApiClient;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+
+final readonly class HttpCentralApiClient implements CentralApiClient
+{
+    public function __construct(
+        private string $baseUrl,
+        private string $accessToken,
+        private string $audience,
+        private string $product,
+        private int $timeoutSeconds = 5,
+    ) {}
+
+    public function revokeMembership(RevokeMembershipRequest $request): void
+    {
+        try {
+            $response = $this->request()
+                ->post('/api/memberships/revoke', [
+                    'request_id' => $request->requestId,
+                    'identity_id' => $request->identityId,
+                    'account_id' => $request->accountId,
+                    'acting_identity_id' => $request->actingIdentityId,
+                    'reason' => $request->reason->value,
+                ]);
+        } catch (ConnectionException $exception) {
+            throw new CentralUnavailable('Central API is unavailable.', previous: $exception);
+        }
+
+        $this->assertSuccessful(response: $response);
+    }
+
+    public function membershipFor(MembershipQuery $query): MembershipSnapshot
+    {
+        try {
+            $response = $this->request()
+                ->get('/api/memberships/state', [
+                    'identity_id' => $query->identityId,
+                    'account_id' => $query->accountId,
+                ]);
+        } catch (ConnectionException $exception) {
+            throw new CentralUnavailable('Central API is unavailable.', previous: $exception);
+        }
+
+        $this->assertSuccessful(response: $response);
+        $payload = $response->json();
+
+        if (! is_array($payload)) {
+            throw new CentralProtocolViolation('Central membership response must be an object.');
+        }
+
+        $snapshot = MembershipSnapshot::fromPayload(payload: $payload);
+
+        if ($snapshot->identityId !== $query->identityId || $snapshot->accountId !== $query->accountId) {
+            throw new CentralProtocolViolation('Central membership response does not match its query.');
+        }
+
+        return $snapshot;
+    }
+
+    private function request(): PendingRequest
+    {
+        if (trim($this->baseUrl) === '' || trim($this->accessToken) === '' || trim($this->audience) === '' || trim($this->product) === '') {
+            throw new CentralUnavailable('Central API client is not configured.');
+        }
+
+        $url = parse_url($this->baseUrl);
+
+        if (! is_array($url) || ($url['scheme'] ?? null) !== 'https' || ! is_string($url['host'] ?? null) || $url['host'] === '') {
+            throw new CentralProtocolViolation('Central API base URL must be an absolute HTTPS URL.');
+        }
+
+        if ($this->timeoutSeconds <= 0) {
+            throw new CentralProtocolViolation('Central API timeout must be positive.');
+        }
+
+        return Http::baseUrl(rtrim($this->baseUrl, '/'))
+            ->acceptJson()
+            ->asJson()
+            ->timeout($this->timeoutSeconds)
+            ->withToken($this->accessToken)
+            ->withHeaders([
+                'X-CoreX-Audience' => $this->audience,
+                'X-CoreX-Product' => $this->product,
+            ]);
+    }
+
+    private function assertSuccessful(Response $response): void
+    {
+        if ($response->status() === 401 || $response->status() === 403) {
+            throw new CentralUnauthorized('Central API denied the request.');
+        }
+
+        if ($response->failed()) {
+            throw new CentralUnavailable('Central API is unavailable.');
+        }
+    }
+}

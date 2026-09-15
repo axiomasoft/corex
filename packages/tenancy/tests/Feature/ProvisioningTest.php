@@ -3,10 +3,13 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Database\TemplateIntegrityException;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\ClusterAccountConnectionResolver;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\ProvisionParams;
+use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -92,6 +95,8 @@ function makeClusterRow(array $overrides = []): string
         'name' => 'cell-'.$id,
         'pg_host_writer' => 'writer.local',
         'pgbouncer_host' => 'pgbouncer-a.local',
+        'status' => 'active',
+        'template_version' => 1,
         // Pre-existing PG role assumed (cell-provisioning is out of P2.3
         // scope) — 'corex' is the superuser the docker fixture already has.
         'app_db_user' => 'corex',
@@ -100,10 +105,12 @@ function makeClusterRow(array $overrides = []): string
     return $id;
 }
 
-function makeReadyTemplate(int $version, string $dbName = TEMPLATE_DB): void
+function makeReadyTemplate(int $version, string $dbName = TEMPLATE_DB, bool $trusted = true): void
 {
+    $templateId = (string) Str::uuid();
+
     DB::table('root_templates')->insert([
-        'id' => (string) Str::uuid(),
+        'id' => $templateId,
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -111,6 +118,10 @@ function makeReadyTemplate(int $version, string $dbName = TEMPLATE_DB): void
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
+
+    if ($trusted) {
+        TestCase::trustTemplate(templateId: $templateId, database: $dbName);
+    }
 }
 
 function makeAccountRow(string $clusterId, array $overrides = []): string
@@ -159,7 +170,10 @@ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, w
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
     trackDatabase($targetDb);
 
-    (new StanclTenantDatabaseProvisioner('pgsql'))->provision(new ProvisionParams(
+    (new StanclTenantDatabaseProvisioner(
+        centralConnection: 'pgsql',
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    ))->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 1,
@@ -196,7 +210,10 @@ it('re-provisioning an already-created database is idempotent (replayable pipeli
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
     trackDatabase($targetDb);
 
-    $provisioner = new StanclTenantDatabaseProvisioner('pgsql');
+    $provisioner = new StanclTenantDatabaseProvisioner(
+        centralConnection: 'pgsql',
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    );
     $provisioner->provision($params);
     $provisioner->provision($params);
 
@@ -218,7 +235,10 @@ it('refuses to clone a template that is not ready (template-parity gate, D24)', 
 
     $accountId = makeAccountRow($clusterId, ['template_version' => 2]);
 
-    expect(fn () => (new StanclTenantDatabaseProvisioner('pgsql'))->provision(new ProvisionParams(
+    expect(fn () => (new StanclTenantDatabaseProvisioner(
+        centralConnection: 'pgsql',
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    ))->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 2,
@@ -231,6 +251,38 @@ it('refuses to clone a template that is not ready (template-parity gate, D24)', 
     expect($exists)->toBeNull();
 });
 
+it('rejects an untrusted template before changing provisioning parameters or dispatching a clone', function (): void {
+    $clusterId = makeClusterRow();
+    makeReadyTemplate(version: 1, trusted: false);
+    $accountId = makeAccountRow($clusterId, [
+        'embedding_model' => 'placeholder',
+        'embedding_dim' => 1,
+        'vertical_code' => null,
+        'locale' => 'ru',
+    ]);
+    $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
+
+    expect(fn () => (new StanclTenantDatabaseProvisioner(
+        centralConnection: 'pgsql',
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    ))->provision(new ProvisionParams(
+        accountId: $accountId,
+        clusterId: $clusterId,
+        templateVersion: 1,
+        embeddingModel: 'bge-m3',
+        embeddingDim: 1024,
+        verticalCode: 'crm',
+        locale: 'en',
+    )))->toThrow(TemplateIntegrityException::class);
+
+    $account = DB::table('root_accounts')->where('id', $accountId)->first();
+    expect($account->embedding_model)->toBe('placeholder')
+        ->and($account->embedding_dim)->toBe(1)
+        ->and($account->vertical_code)->toBeNull()
+        ->and($account->locale)->toBe('ru')
+        ->and(DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$targetDb]))->toBeNull();
+});
+
 it('fixes embedding_model/dim and other provisioning params onto the account row (AC-10)', function (): void {
     $clusterId = makeClusterRow();
     makeReadyTemplate(1);
@@ -241,7 +293,10 @@ it('fixes embedding_model/dim and other provisioning params onto the account row
     ]);
     trackDatabase(DB::table('root_accounts')->where('id', $accountId)->value('db_name'));
 
-    (new StanclTenantDatabaseProvisioner('pgsql'))->provision(new ProvisionParams(
+    (new StanclTenantDatabaseProvisioner(
+        centralConnection: 'pgsql',
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    ))->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 1,

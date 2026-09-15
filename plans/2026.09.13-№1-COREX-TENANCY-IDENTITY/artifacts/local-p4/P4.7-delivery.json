@@ -1,0 +1,48 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:1592207cf0b13c466ad62ab1bc7e2686debffe069a5cd5e846cd2a11c0c4ad70",
+    "command_id": "task:plan-exec",
+    "package": "task",
+    "version": "0.16.1"
+  },
+  "commit_sha": "5e396e7210fc17e1dc0e6917e70bef10b74becab",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": "sha256:124a1f8bda63bd4ed20ed0879ae4c1fcf4700758b546b6e45df9891174e6f1dc",
+    "handoff": "sha256:34324556e83e0eb66266efa7697bc94d5490c47acc63b1d61a057da32a6c5610",
+    "plan": "sha256:7296de697ef86ffb012bc372561fdee44cf24a72dc9f025f56b00015b09d7e23",
+    "state": "sha256:a73d527f70eaee136b296c0433e9394bd9c70e48fbc121ed2e92b316822336f9"
+  },
+  "journal": {
+    "command": "plan-exec",
+    "line": 46,
+    "result": "closed-green",
+    "run_id": "9de63b77dfb8eb384f467bb6f3f8674bb2c0167991b13bd92de0cf116280735e",
+    "sha256": "sha256:a9c868549eb7b1f5ed1395dfc15392bd1c9ce63b6c78b46fbcfc44828a4aaaec"
+  },
+  "next_exact": "exec-items: task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1",
+  "plan_id": "2026.09.13-№1-COREX-TENANCY-IDENTITY",
+  "rationale": {
+    "open_risks": "Effective DI0/34 and owning AP0/13 remain UNFILLED. Local fixture proof does not establish consumer guard/API/job/ws binding, central/cloud deployment, shared clock/witness, physical cleanup SLO, or actual membership acceptance.",
+    "remaining": "P5.1 and P6.2 local work remain; P7 owning qualification/adoption/release remains separate. No P7 attempt executed."
+  },
+  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | gpt-5.6-terra |\n| Thinking | high |\n| Context | continue-root |\n| Суть | Build the independent local accounts-menu/cache-loss reference under D8; retain P4's local-only boundary |\n\n**Native Codex command:**\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1'\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "continue-root",
+    "model": "gpt-5.6-terra",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P4.7"
+}

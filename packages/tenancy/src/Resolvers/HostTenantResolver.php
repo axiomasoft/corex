@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Resolvers;
 
+use CoreX\Tenancy\DomainTrust\NormalizedHost;
 use CoreX\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Models\Domain;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 use Override;
 use Stancl\Tenancy\Contracts\Tenant;
 use Stancl\Tenancy\Resolvers\Contracts\CachedTenantResolver;
@@ -65,8 +67,12 @@ final class HostTenantResolver extends CachedTenantResolver
             ->all();
     }
 
-    private static function normalizeHost(string $host): string
+    public static function normalizeHost(string $host): string
     {
-        return mb_strtolower(explode(':', $host, 2)[0]);
+        try {
+            return (new NormalizedHost($host))->value;
+        } catch (InvalidArgumentException) {
+            throw new TenantCouldNotBeIdentifiedByHostException($host);
+        }
     }
 }

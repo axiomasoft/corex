@@ -1,0 +1,146 @@
+{
+  "schema_version": "corex-v2-compatibility-qualification/v1",
+  "date": "2026-09-14",
+  "invocation": "$ task:plan-design 2026.09.12-№1-COREX-SUCCESSOR,2026.09.12-№2-COREX-APPROVED-SPECS v2-compatibility",
+  "actual_route": {
+    "model_class": "frontier",
+    "effort": "high",
+    "source": "provider-thread-state",
+    "ts": "2026-09-14T11:32:25Z",
+    "model": "gpt-5.6-sol",
+    "thread_id": "01a09faa-654c-7d52-9b50-0dc66bab0fb5",
+    "source_version": "codex-turn-context-v1",
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "invocation": "$ task:plan-design 2026.09.12-№1-COREX-SUCCESSOR,2026.09.12-№2-COREX-APPROVED-SPECS v2-compatibility"
+  },
+  "qualification": "design-only",
+  "installed_runtime_changed": false,
+  "runtime_patch_sha256": "2708b760d2c58f2e0f70105fa1ea536e966f8ef060c5dfa56c436405a37ed8fc",
+  "runtime_files": {
+    "lib/task/plan_weight.py": {
+      "original_sha256": "9307630cadbec7e6eee7150bdf168a1432c4a1159bfd3dc9de64579d68e09f48",
+      "compatible_sha256": "359619e559d065c3806d6634afef06ed3cd307e6d06345dc6f6cc5a52b44b029"
+    },
+    "lib/task/plan_bundle.py": {
+      "original_sha256": "dd78998c69c1b6590b54f70298c59f1f75a5331b35b594949d99935d322a899d",
+      "compatible_sha256": "52dd0cea2098193bccb6e96f071bd2786c4f10317a255bc0a71737d7fc801dcb"
+    },
+    "lib/task/plan_continuity.py": {
+      "original_sha256": "98c3bf1366584b2490e3a063df3206bdad24c259aa73501871f53c5c957ff654",
+      "compatible_sha256": "7a5e87a59185c446c549b79b02d1f52c126d5be213e69c8c83943252494c7702"
+    }
+  },
+  "positive_checks": [
+    "explicit Unicode cross-plan decision is not interpreted as local bare D14",
+    "P2.2 bundle resolves exact predecessor D14 and full current source digest",
+    "bare local D1–D3 range resolves three exact records",
+    "compact waiting-owner remains canonical and non-runnable"
+  ],
+  "negative_checks": [
+    "missing declared path rejected: findings/absent-v2-compatibility.md",
+    "missing declared path rejected: plans/2026.09.12-№1-COREX-SUCCESSOR/decisions/D999-absent.md",
+    "missing bare local D100–D101 rejected",
+    "malformed Context rejected: waiting-owner: accidental-reason",
+    "malformed Context rejected: cold-start-root",
+    "malformed Context rejected: cold-start-root: invented",
+    "malformed Context rejected: continue-root: invented",
+    "malformed Context rejected: unknown"
+  ],
+  "upstream_tests": {
+    "command": "python3 -m unittest tests.test_plan_bundle tests.test_plan_continuity tests.test_plan_weight",
+    "run": 76,
+    "skipped": 1,
+    "failed": 0,
+    "environment": "disposable marketplace-shaped runtime with original core and historical schema fixture; initial standalone fixture gaps resolved before rerun"
+  },
+  "lifecycle": {
+    "validation": [
+      "focused"
+    ],
+    "review": "none",
+    "audit_action": "not-requested",
+    "route_evidence": "reuse",
+    "projections": [
+      "state:P2.1",
+      "status",
+      "decisions",
+      "closure"
+    ],
+    "commits": 1,
+    "context": "continue-root",
+    "semantic_next": "exec-items",
+    "foreign_baseline": "visible-non-gating"
+  },
+  "preservation": {
+    "original_item_specs": "byte-identical",
+    "original_decisions": "byte-identical",
+    "original_queue": "byte-identical",
+    "original_master_plans": "byte-identical",
+    "original_product_findings": "byte-identical",
+    "historical_journals": "byte-identical prefix",
+    "item_statuses": "unchanged",
+    "tracked_paths_outside_selected_plans": {
+      "count": 875,
+      "all_hashes_match": true
+    },
+    "installed_runtime_hashes": "original hashes match",
+    "phase_closure_contract_deliverables_deviations": "unchanged; P3 navigation regenerated to existing D11–D21 only"
+  },
+  "lint": {
+    "2026.09.12-№1-COREX-SUCCESSOR": {
+      "installed": {
+        "command": [
+          "python3",
+          "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-lint.py",
+          "/home/vostrikov/projects/packages/corex/plans/2026.09.12-№1-COREX-SUCCESSOR"
+        ],
+        "exit_code": 0,
+        "output": "plan-lint: OK (1 план(ов), 0 ошибок, 1 предупреждений)\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№1-COREX-SUCCESSOR/plan.md: нет 2026.09.12-№1-COREX-SUCCESSOR/index.md (карта файлов + провенанс findings/research→фаза, P1.2, опционален) — снипет snippets/index-template.md\n"
+      },
+      "compatible": {
+        "command": [
+          "python3",
+          "/tmp/corex-v2-compatibility-0assvyo2/runtime/packages/task/scripts/plan-lint.py",
+          "/home/vostrikov/projects/packages/corex/plans/2026.09.12-№1-COREX-SUCCESSOR"
+        ],
+        "exit_code": 0,
+        "output": "plan-lint: OK (1 план(ов), 0 ошибок, 1 предупреждений)\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№1-COREX-SUCCESSOR/plan.md: нет 2026.09.12-№1-COREX-SUCCESSOR/index.md (карта файлов + провенанс findings/research→фаза, P1.2, опционален) — снипет snippets/index-template.md\n"
+      }
+    },
+    "2026.09.12-№2-COREX-APPROVED-SPECS": {
+      "installed": {
+        "command": [
+          "python3",
+          "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-lint.py",
+          "/home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS"
+        ],
+        "exit_code": 1,
+        "output": "plan-lint: ПРОВАЛ (1 план(ов), 3 ошибок, 2 предупреждений)\nERROR: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/phases/P2/P2.md: item P2.2: bundle следующего запускаемого item не собирается: unresolvable_entry: `plans/2026.09.12-№1-COREX-SUCCESSOR/decisions/D14-owner-template-parity.md`; сначала классифицируй и исправь локальный обратимый носитель в текущем execution attempt, затем запусти plan-views.py bundle --item P2.2; task:plan-design допустим только при доказанном новом material decision surface\nERROR: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/plan.md: read-budget-v1: пункт P2.2: обязательный вход 'plans/2026.09.12-№2-COREX-APPROVED-SPECS/bundles/P2.2.json' не проходит D2(b): generated bundle не byte-fresh: unresolvable_entry: `plans/2026.09.12-№1-COREX-SUCCESSOR/decisions/D14-owner-template-parity.md`\nERROR: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/handoff.md:3: handoff.Next: CONTINUITY_CONTEXT_INVALID (CONTINUITY_CONTEXT_INVALID)\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/plan.md: нет 2026.09.12-№2-COREX-APPROVED-SPECS/index.md (карта файлов + провенанс findings/research→фаза, P1.2, опционален) — снипет snippets/index-template.md\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/phases/P2/P2.md:49: фаза P2 в статусе «🟡 In progress», но несёт 2 маркер(ов) [NEEDS CLARIFICATION] (строки [49, 99]) — DoR-гейт не пройден (SKILL §7)\n"
+      },
+      "compatible": {
+        "command": [
+          "python3",
+          "/tmp/corex-v2-compatibility-0assvyo2/runtime/packages/task/scripts/plan-lint.py",
+          "/home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS"
+        ],
+        "exit_code": 0,
+        "output": "plan-lint: OK (1 план(ов), 0 ошибок, 2 предупреждений)\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/plan.md: нет 2026.09.12-№2-COREX-APPROVED-SPECS/index.md (карта файлов + провенанс findings/research→фаза, P1.2, опционален) — снипет snippets/index-template.md\nWARN: /home/vostrikov/projects/packages/corex/plans/2026.09.12-№2-COREX-APPROVED-SPECS/phases/P2/P2.md:49: фаза P2 в статусе «🟡 In progress», но несёт 2 маркер(ов) [NEEDS CLARIFICATION] (строки [49, 99]) — DoR-гейт не пройден (SKILL §7)\n"
+      }
+    }
+  },
+  "semantic_next": {
+    "kind": "waiting",
+    "runnable": false,
+    "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+    "items": [
+      "P2.2",
+      "P2.3"
+    ],
+    "conditions": [
+      "TEMPLATE-SCHEMA exact packet",
+      "TEMPLATE-SEAL/operator/trust/lock/storage/fixture bindings",
+      "Task runtime with verified compatibility semantics"
+    ],
+    "exec": "plan-exec"
+  }
+}

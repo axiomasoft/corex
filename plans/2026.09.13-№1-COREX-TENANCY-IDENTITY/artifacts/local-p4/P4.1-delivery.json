@@ -1,0 +1,48 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:1592207cf0b13c466ad62ab1bc7e2686debffe069a5cd5e846cd2a11c0c4ad70",
+    "command_id": "task:plan-exec",
+    "package": "task",
+    "version": "0.16.1"
+  },
+  "commit_sha": "5e396e7210fc17e1dc0e6917e70bef10b74becab",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:fe93a900d3ce994eb1c742465cf82336905ee3d234b88b926218f7c122821c61",
+    "plan": "sha256:30301a074732adbe9804c262bc5ef9149e0cf66473ae3755d63360143bfe7a94",
+    "state": "sha256:1a4e6d4e2e1bea02e0965555ad1f28122295fe967a10d8a85b8d8c63cc9ee2b4"
+  },
+  "journal": {
+    "command": "plan-exec",
+    "line": 33,
+    "result": "closed-green",
+    "run_id": "72b7a5330078c141451d2ff838f5f63fa10b0847131e3f84289e53e3f948cec2",
+    "sha256": "sha256:e7098f732d9c1048da1e3848a32ae386256f646d3e476697283ce33197b66cf6"
+  },
+  "next_exact": "exec-items: task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P4.2",
+  "plan_id": "2026.09.13-№1-COREX-TENANCY-IDENTITY",
+  "rationale": {
+    "open_risks": "owning DI/AP/deployment/public major/release stays UNFILLED. D6 unchanged. No commit or runtime registration.",
+    "remaining": "P4.2 selected here, then P4.3–P4.7/P5.1/P6.2 successors."
+  },
+  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P4.2\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B4A |\n| Model | gpt-5.6-terra |\n| Thinking | high |\n| Context | continue-root |\n| Суть | Strict internal transport after qualified identity receipt; D8 retained |\n\n**Native Codex command:**\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P4.2'\n```\n\nP4.2 continues in the already authorized current invocation.",
+  "route": {
+    "batch": "B4A",
+    "command": null,
+    "context": "continue-root",
+    "model": "gpt-5.6-terra",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P4.1"
+}

@@ -1,0 +1,12 @@
+diff --git a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php b/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
+index ec5aa12..a50d03a 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
++++ b/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
+@@ -41,7 +41,6 @@ return new class extends Migration
+ 
+         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_scope_ck CHECK (scope_type IN ('account','workspace','user'))");
+         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_scope_id_ck CHECK ((scope_type = 'account' AND scope_id IS NULL) OR (scope_type <> 'account' AND scope_id IS NOT NULL))");
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_uq UNIQUE NULLS NOT DISTINCT (namespace, key, scope_type, scope_id)");
+         // Beyond the DRAFT DB_SCHEMA catalog (A91, documented deviation): a
+         // scope lookup index for the cascade resolver. Kept, not dropped — the
+         // catalog is silent on it, not in conflict; recorded in P1.19 report.

@@ -12,13 +12,11 @@
   },
   "plugins": [
     "core",
-    "devops",
     "laravel-testing",
     "oss-dev",
     "php",
     "php-packages",
     "quality",
-    "system",
     "task"
   ]
 }

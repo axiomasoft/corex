@@ -1,0 +1,52 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "2b426ee8ac96d5572fbd022dbc8e77204c603b21",
+  "continuity": {
+    "evidence": [
+      "batch:2464523015cd6655fca57f78083104aae7732222149219a5fd08af621ab98471",
+      "loaded-inputs:reusable",
+      "cold-start-cost:19559",
+      "checkpoint:plans/2026.09.12-№2-COREX-APPROVED-SPECS/handoff.md"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:ff6ea7c052b15916abc5284844bab3b5695f73bdb0a657240c1abcb703f2f664",
+    "plan": "sha256:f4dc577bc45768968226398662292ecd8f2bcac466881e3a16c5e206c5518c56",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "exec-items: task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P3.2",
+  "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+  "rationale": {
+    "open_risks": "Existing auth role models/matrix/compiler have not received a duplication audit; removal/reclassification is separate scope. Prior P3.1 aggregate PG receipt reports four foreign modules baseline failures; no product tests or reassessment performed here.",
+    "remaining": "P3.2 docs-only exact Files: root doctrine, generic optional auth-bridge README and ownership proof. P3 stays open until executor acceptance and eligible closure. P4/P5 retain their existing gates."
+  },
+  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P3.2\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | implementation · gpt-5.6-terra |\n| Thinking | high |\n| Capabilities | local CoreX documentation writes and existing architecture check |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Документировать независимость проектов; без ролевого writer и изменений AzGuard/FlexCRM |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P3.2'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:2464523015cd6655fca57f78083104aae7732222149219a5fd08af621ab98471\", \"loaded-inputs:reusable\", \"cold-start-cost:19559\", \"checkpoint:plans/2026.09.12-№2-COREX-APPROVED-SPECS/handoff.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"design-root-terminal\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "continuity": {
+      "evidence": [
+        "batch:2464523015cd6655fca57f78083104aae7732222149219a5fd08af621ab98471",
+        "loaded-inputs:reusable",
+        "cold-start-cost:19559",
+        "checkpoint:plans/2026.09.12-№2-COREX-APPROVED-SPECS/handoff.md"
+      ],
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "implementation · gpt-5.6-terra",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design-P3.2"
+}

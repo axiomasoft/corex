@@ -2,8 +2,8 @@
 projection: decision-current
 projection_version: v1
 source_scope: decisions/
-through: 2026-09-14/D14
-inputs_sha256: c52339ecf1c5fa75af9cf7328e4b14da1f63a9a65008dd0de9ad73dde811f2dd
+through: 2026-09-15/D17
+inputs_sha256: c94dccee2e10c6adda6e7dce1fdc3a0db599acc2830c7d7c97b5114d6a4e33ab
 generated_by: task plan-views decisions
 -->
 
@@ -26,3 +26,5 @@ generated_by: task plan-views decisions
 | D12 | 2026-09-14 | accepted | P4.2 | D11's explicit local-transport qualification resolves P4.2's stale availability marker for this exact local B4 invocation. The only admissible channel is a disposable isolated Composer artifact fixture built from the two P4.1 sealed ZIPs and their exact metadata. It is evidence transport, not a consumer configuration, publication, remote repository or package-release claim. The scoped reconciliation may update only the P4.2 Files and must preserve the selected source mapping, package versions and upstream constraints. Any missing artifact checksum, source/tree mismatch, unexpected graph delta, path repository in the resulting manifest, authenticated/private requirement, or attempt to reach a remote candidate remains a hard rejection. |
 | D13 | 2026-09-14 | accepted | P4.3 | The deterministic exporter receives exactly commit `ea7d0dbdf36b122904abba91e124018c11b939ed`; the source tree is read with Git, not from the working directory. Staged versions are local unpublished `0.1.0-p4.3` candidates for the four approved CoreX packages. Their metadata is available only in disposable staging and has no path repository, sibling source, private auth, CRM or API package. |
 | D14 | 2026-09-14 | accepted | P4.5 | [OWNER-GRANT:PRIVATE-READ] branch=`axiomasoft-azguard-immutable-read`; scope=`read-only axiomasoft/azguard metadata and immutable commit inspection plus disposable Composer fixtures for P4.5; no push tag fork release or secret persistence`; owner-message=`brief/p45-private-read-owner-message.md#p45-private-read` |
+| D15 | 2026-09-15 | accepted | P5, P5.2, P5.3 | Repair P5's executable carriers so that P5.2 is a routine, local-only dossier operation and P5.3 is the only finite external-publication gate. A release version/tag and remote state may be recorded as explicit NO-GO facts in P5.2; they are never invented. P5.3 names P5.2 as its producer and uses the finite `PUBLICATION` gate for the four D18 targets. |
+| D17 | 2026-09-15 | accepted | P5.3 | [OWNER-GRANT:PUBLICATION-REMEDIATION] branch=`publication-remediation`; scope=`axiomasoft/corex-core, axiomasoft/corex-modules, axiomasoft/corex-tasks, axiomasoft/corex-tenancy read-only P5.2 reconciliation; axiomasoft/stancl-jobpipeline, axiomasoft/stancl-tenancy exact P4.1 create/push/tag/release and Actions disable; one-use academici OAuth exception`; owner-message=`brief/P5.3-remediation-owner-messages.md#p53-remediation-confirmation` |

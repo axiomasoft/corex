@@ -2,8 +2,8 @@
 projection: decision-current
 projection_version: v1
 source_scope: decisions/
-through: 2026-09-12/D21
-inputs_sha256: 12878cd18219e97b6c6b3dc07cc326b6079ce726a3eb469635968f9864430288
+through: 2026-09-14/D22
+inputs_sha256: 6217df31b32ea3b9af762c8251de30a0a613c3184fbb0467838ba70e916ddf23
 generated_by: task plan-views decisions
 -->
 
@@ -33,3 +33,4 @@ generated_by: task plan-views decisions
 | D19 | 2026-09-12 | accepted | P3.3 | Выбрать canonical private AzGuard VCS/registry channel, owner-provided immutable compatible0.2 ref и selected-repository read credentials; auth остаётся opt-in/private. Candidate VCS из D8: https://github.com/axiomasoft/azguard-private.git, не считать confirmed canonical address без source-owner подтверждения. Private contents не экспортируются в public artifacts; auth exclusion-until-release направление не выбрано. Queue decision: `AUTH-PRIVATE-CHANNEL`; selected option: `private-immutable-source-spec`; outcome: `apply` for the declared future-spec-design-only scope. |
 | D20 | 2026-09-12 | accepted | P3.3 | Выбрать owner-maintained fixed-metadata mirror/tag для исходного stancl commit 76e5f9655924271c6c9da54e2d4ccb82c6f71ea0 и jobpipeline v2.0.0-rc7 ref 07dc54a49cf9e2df1238ee4a347af333260519a6. Temporary consumer-root pin/lock с branch-metadata risk не выбран. Exact mirror org/repo/name/version и maintainer определяются отдельным spec; refs здесь выбраны из D8 evidence, не переопределены. Queue decision: `STANCL-SOURCE`; selected option: `owned-fixed-metadata-source-spec`; outcome: `apply` for the declared future-spec-design-only scope. |
 | D21 | 2026-09-12 | accepted | P3.3 | Утвердить minimum per-package factual passport/proof table: declared constraints, actually tested PHP/framework versions, source/installed refs/SHA, runner run/job или local proof class и private limitations. Каждый заявленный supported major связан с isolated install и package tests. Compatibility.json generation/enforcement отложен до отдельного ADR; auth Laravel13 не обещать. Queue decision: `COMPAT-PROOF`; selected option: `minimum-factual-proof-spec`; outcome: `apply` for the declared future-spec-design-only scope. |
+| D22 | 2026-09-14 | accepted | — | The current owner invocation authorizes bounded plan metadata compatibility repair and owned projection regeneration in both named plans. It supersedes the earlier task-local prohibition on retrospective metadata repair only for this qualification; it does not change old decisions, owner grants, item specifications, product acceptance or phase results. No execution or phase re-entry is authorized or recorded. Append a history-only P2.1 observation with current reducer-produced write-site codes; the state owner renders that line without a new terminal event. These codes are evaluated now for bookkeeping qualification, not reconstructed assertions about the historical executor. Preserve original journal bytes as a prefix. Correct the handoff title and stale successor navigation. Remove a negated workflow phrase that the old lint scanner reads as an orchestration declaration; owner-session execution remains the same. |

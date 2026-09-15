@@ -1,54 +1,25 @@
-# HANDOFF — 2026-09-15 — after P5.1
+# HANDOFF — 2026-09-15 — after P5.3
 
-**Next:** task:plan-run 2026.09.12-№2-COREX-APPROVED-SPECS P5.2
-
-```session-continuity-decision/v1
-{"evidence":["route:provider-thread-state","batch:B5"],"outcome":"continue-root","reason":"compatible-active-work","runnable":true,"schema_version":"session-continuity-decision/v1"}
-```
+**Next:** terminal: план закрыт
 
 | Параметр | Значение |
 |:--|:--|
-| Context | continue-root |
-
-**Done:** P5.1 GREEN: five factual package passports and a docs-only local
-four-package artifact lineage. P4 remains closed; CRM delivery was used only
-for the explicitly labelled aggregate coverage fact.
-
-**Remaining:** P5.2 prepares an exact publication review dossier only; P5.3
-remains separately gated for external authority.
-
-**Sources of truth:** `phases/P5/P5.1.md`,
-`findings/P5.1-passport-conformance.md`, and the generated P5.1 state/status.
-
-**Open risks:** P5.2 still carries its declared PUBLICATION clarification and
-does not authorize any remote operation.
-
-## Historical P4 checkpoint retained for provenance
-
-| Параметр | Значение |
-|:--|:--|
-| Batch | B4 |
-| Model | implementation · gpt-5.6-terra |
-| Thinking | high |
-| Capabilities | local dependency/source/export qualification; isolated public/private fixtures; private read only with existing scoped authority |
-| Context | cold-start-root: owner-requested-new-session |
-| Суть | Выполнить доступный остаток P4 в одной сессии, закрыть GREEN items и затем GREEN фазу; D11. |
-
-**Native Codex command:**
-```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-exec 2026.09.12-№2-COREX-APPROVED-SPECS P4.5'
-```
+| Context | terminal |
 
 ```session-continuity-decision/v1
-{"evidence": ["owner-decision:D11", "checkpoint:findings/P4-remainder-session-checkpoint.json"], "outcome": "cold-start-root", "reason": "owner-requested-new-session", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome":"terminal","reason":"terminal-evidence","evidence":["batch:0601aabc85bf82c379f62fb295dbfbc734f5c9764c7d2ee18d01afbefa71332c","loaded-inputs:reusable","cold-start-cost:0"],"runnable":false,"schema_version":"session-continuity-decision/v1"}
 ```
 
-**Done:** P4.1 GREEN: fixed metadata, immutable source snapshots, deterministic ZIP candidates/checksums and source/license/boundary evidence. D11 groups the remaining phase; no new product item was executed.
+**Done:** P5.3 Done with deviations. Six public results match sealed refs/trees/ZIPs. Both providers Actions-disabled before first push; four CoreX mirrors unchanged. Public Laravel 12/13 update and separate cold fresh-install pass all four cells; installed snapshots match released ZIP bytes. Sixteen guard/adapter fixtures pass normally and optimized; real replay zero-write. Independent full risk review confirms current D17 acceptance.
 
-**Remaining:** P4.2 → P4.3 → P4.4, plus independently gated P4.5. Keep executing ready authorized work in this session after each item close. Close P4 inline when all acceptance is GREEN; report exact remaining blockers otherwise. P5 is outside this launch.
+**Remaining:** No unfinished declared item. P5 aggregate is terminal Done with deviations, but formal direct phase closure is NOT performed: phase_close_gate returns PHASE_ACCEPTANCE_NON_GREEN because P5.3 retains its accepted historical deviation. This is not unfinished publication or a directive to rerun a completed item. Future formal phase reconciliation needs its own applicable owner decision; no such operation inferred here.
 
-**Sources of truth:** plan.md Routing; phases/P4/P4.md and P4.2–P4.5 specs/states; decisions/D2, D9, D10, D11; P4.1 source dossier/map; findings/P4-remainder-session-checkpoint.json.
+**Sources of truth:** findings/P5.3-remediation-receipt.md · findings/P5.3-live-remediation.json · findings/P5.3-public-consumers.json · D17/actual owner messages · original publication receipt/spec · append-only journal · current live refs/releases.
 
-**Open risks:** Remote mirror URLs remain unpublished proposals. Qualify available local immutable transport before P4.2 adoption. Export only a fixed committed approved candidate, preserve four-package allowlist. PRIVATE-AZGUARD source/ref and PRIVATE-READ are still missing; this launch authorizes their inspection/preparation, not authenticated use without authority. P4.5 and full phase completion remain conditional on those genuine inputs.
+**Open risks:** Initial broad-OAuth failure remains RED in history; accepted D17 exception is exhausted for missing-result publication, not narrow capability or an ongoing grant. No hosted CI/Packagist/Brain sync claim.
 
-**Workarounds/Deferred/Open questions:** Repair stale generated views and ordinary failures inline. Preserve foreign dirty changes. Missing private inputs must not stop independent public work. No invented GREEN, moving-branch fallback, new API inclusion, private export or external publication/CI dispatch. Resolve ordered Required Reads per admitted item; generate future bundles only after actual producer output.
+**Workarounds/Deferred/Open questions:**
+
+- workarounds: explicit one-use owner-approved OAuth exception; public HTTPS Git-driver Composer proof uses declared public repository roots, not local providers.
+- deferred: formal P5 phase closure not direct-close eligible; unrelated owner modifications/Brain sync outside this invocation.
+- open_questions: none for completed P5.3; future phase override must be separately authorized.

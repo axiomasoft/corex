@@ -1,0 +1,61 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:a5e403c8afd89b75360c31ec3705267c2df5a4824c70b280c0596dcc44b417da",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.16.1"
+  },
+  "commit_sha": "23c99e213800ecd12c0740d119a183485420c706",
+  "continuity": {
+    "evidence": [
+      "batch:bf5fd5bc26ec08675091dfba67eab60b78c98a0cbdbb0bc86fdbd7fe699e0fd3",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:599301da174fa9d56714d9545dc90a6193aedc10eaa7bac50319889baf50b6c2",
+    "plan": "sha256:d452316fe20fa7ba9fddb2f68e571443c1ec285604aba52a2b1d1fece9ec89e2",
+    "state": "sha256:acdb465fb5cf4fb5113c90bd525e014d1902ca54fab5ff26e4ac20a5208f9fa0"
+  },
+  "journal": {
+    "command": "plan-run",
+    "line": 21,
+    "result": "closed-green",
+    "run_id": "a7c562a5e14a016f5f155c3586d09de7cb62ab87b83e31e3fe203c443cf46fb7",
+    "sha256": "sha256:bc52fedaedcd9b58056587bb5d1e850f8f45336f5e2e9090d693ea65e1e8f640"
+  },
+  "next_exact": "waiting: approve the exact P2.1 nullable64/check/source/format packet and qualify TEMPLATE-SEAL before P2.2–P2.3 execution.",
+  "plan_id": "2026.09.12-№2-COREX-APPROVED-SPECS",
+  "rationale": {
+    "open_risks": "Initial-verifier zero-write and interrupted cross-connection work are different acceptance cases; advisory locks are database-local/cooperative and cannot constrain superusers. Golden catalogue backend must disconnect before clone while coordination backend remains held. Existing DB replay and direct pool/activation/wave paths require fresh proofs. Local vectors do not prove PG catalogue/signatures/lock privileges. Current plan is explicitly ignored in .gitignore (introduced by a4625f3); no rationale for ignoring the full executable plan was found. No forced add or commit; receipt HEAD refers to unchanged code baseline. Owner asked why the ignore exists; the question was answered from history, without treating it as an instruction to change ignore/sync/publication policy.",
+    "remaining": "P2.2–P2.3 not started; new owner D# must bind the exact two dossier hashes and nullable64/check/format/source/rollout packet. Named consumer/operator, independent expected-manifest/key fingerprint/trust policy, common coordination DB/direct lock session, seal/privilege/bypass invariant, immutable manifest/wave store, PG16/extractor/extension/source digests and dedicated fixture DB/role capabilities remain unfilled. No ready-only fallback or live rebuild/backfill/remediation/DROP grant."
+  },
+  "recommendation": "**Next:** waiting: approve the exact P2.1 nullable64/check/source/format packet and qualify TEMPLATE-SEAL before P2.2–P2.3 execution.\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B2 |\n| Model | implementation · gpt-5.6-terra |\n| Thinking | high |\n| Context | waiting-owner |\n| Суть | P2.2–P2.3 require a new exact source-owner approval and committed operator/trust/lock/storage/fixture qualification; P2.1 local dossier is complete |\n\n**Native Codex command:**\n\n```bash\n# Only after TEMPLATE-SCHEMA and TEMPLATE-SEAL qualification and correction of the Task bundle resolver documented in P2.1 bindings.\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-run 2026.09.12-№2-COREX-APPROVED-SPECS P2.2-P2.3'\n```\n\n```session-continuity-decision/v1\n{\n  \"outcome\": \"waiting-owner\",\n  \"reason\": \"owner-wait\",\n  \"evidence\": [\n    \"batch:bf5fd5bc26ec08675091dfba67eab60b78c98a0cbdbb0bc86fdbd7fe699e0fd3\",\n    \"loaded-inputs:reusable\",\n    \"cold-start-cost:0\"\n  ],\n  \"runnable\": false,\n  \"schema_version\": \"session-continuity-decision/v1\"\n}\n```",
+  "route": {
+    "batch": "B2",
+    "command": null,
+    "context": "waiting-owner",
+    "continuity": {
+      "evidence": [
+        "batch:bf5fd5bc26ec08675091dfba67eab60b78c98a0cbdbb0bc86fdbd7fe699e0fd3",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "waiting-owner",
+      "reason": "owner-wait",
+      "runnable": false,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "implementation · gpt-5.6-terra",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P2.1"
+}

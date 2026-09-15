@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+use CoreX\Tasks\Testing\TasksTestCase;
+use CoreX\Testing\CoreXTestCase;
+use CoreX\Tests\TestCase;
+use Flex\Crm\Testing\CrmTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class)->in('Unit');
+uses(CoreXTestCase::class)->in('../packages/core/tests');
+uses(CrmTestCase::class, RefreshDatabase::class)->in('Crm');
+uses(TasksTestCase::class, RefreshDatabase::class)->in('Tasks');

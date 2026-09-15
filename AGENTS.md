@@ -40,3 +40,44 @@
 - Тест агностичности: «`corex/*` полезен проекту БЕЗ CRM/CMS/Store»; зависимость `corex/*` →
   `flex/*` запрещена (гейт — `tests/Arch/LayerTest.php`). Flex-строк/DDL в `corex/*` быть не должно.
 - Полные правила, гейты и их честное состояние — **`docs/dev-doctrine.md`** (входной документ).
+
+<!-- swissknifeman:hub:start -->
+# Swissknifeman: хаб скиллов
+
+<!-- Сгенерировано scripts/generate-hub.sh из реестра swissknifeman. -->
+<!-- НЕ редактируйте вручную: перегенерация затрёт правки. -->
+<!-- swissknifeman:registry sha=b4d6d25e2758 skills=232 -->
+
+## Приоритет источников правил
+
+1. Проектные правила и скиллы (`.ai/guidelines/`, `.ai/skills/`, корневые инструкции проекта) задают локальные соглашения.
+2. Скиллы swissknifeman (нативный листинг скиллов клиента) — архитектура, структура, практики, процессы. Если в проект добавят Laravel Boost, его версионно-специфичные скиллы приоритетнее пересекающихся.
+
+Скиллы дополняют инструкции среды и запрос владельца; внутри совместимых правил выбирай более специфичный источник (проект > Boost > реестр swissknifeman).
+
+## Как найти нужный скилл
+
+1. Скиллы swissknifeman уже перечислены НАТИВНЫМ листингом клиента (имя + описание каждого доступного скилла резидентны с начала сессии) — ищи по нему; здесь индекс не дублируется.
+2. Выбери скилл по описанию; внутри скилла открывай сниппеты только по его таблице «когда какой сниппет открывать» — не загружай всё подряд.
+3. Открывай архитектурные скиллы при изменении соответствующих контрактов; обычная правка следует существующей структуре проекта.
+4. Устройство системы скиллов в проекте (источник истины, симлинки, gitignore) — скилл `skills-ssot`.
+5. Полный индекс с описаниями (если нужен человеку): `skiller status` в проекте либо `generate-hub.sh --target <проект> --full-index --dry-run`.
+
+## Агенты проекта (11)
+
+Роли в `.claude/agents/`. Преднагруженные скиллы — поле `skills:` (⚠ = имя не найдено в реестре, preload молча не сработает).
+
+| Агент | Назначение | Преднагруженные скиллы |
+|---|---|---|
+| `corex-api-surface` | >- | — |
+| `corex-contribution-reviewer` | >- | gh-review, code-review, dependency-audit, dx-design, git-commit-rules |
+| `corex-issue-triager` | >- | github-flow, oss-governance, oss-development, issue-triage |
+| `corex-orchestrator` | >- | — |
+| `corex-release-conductor` | >- | release-engineering, github-flow, dx-design, git-commit-rules |
+| `corex-reviewer` | >- | laravel-package-testing, laravel-package-service-provider, laravel-package-compatibility, dependency-injection, code-style-spatie, laravel |
+| `corex-security-review` | >- | — |
+| `corex-slice-builder` | >- | laravel-package-scaffold, laravel-package-service-provider, laravel-package-compatibility, dependency-injection, code-style-spatie, named-arguments |
+| `corex-spec-writer` | >- | architecture, api-design, task-brief-template |
+| `corex-test-verifier` | >- | — |
+| `corex-test-writer` | >- | laravel-package-testing, test-isolation-guard |
+<!-- swissknifeman:hub:end -->

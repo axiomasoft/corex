@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-12
-inputs_sha256: 68d8ff22c6797b0f03d85e69f9c7af7794a7e69bd4787ac57f10b53e893bdbd8
+through: 2026-09-14
+inputs_sha256: aae3daee1036cb751e75399a93d743dca3e9eb4635047e80604950b436444303
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟢 Done |
-| Last Updated | 2026-09-12 |
+| Last Updated | 2026-09-14 |
 
 ## 4. Phase Index & Status Board
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P2.1 | Реальная department record parity | 🟢 Done | 2026-09-12 |
+| P2.1 | Реальная department record parity | 🟢 Done | 2026-09-14 |
 
 ## Phase P3
 
@@ -88,6 +88,11 @@ Scoped plan-lint 0 new ERROR; inherited P2.1 error remains. |
 write-site: pre_mutation: allow · pre_final: allow
 Scoped plan-lint 0 new ERROR; inherited P2.1 error remains. |
 | 2026-09-12 | gpt-5.6-sol/high | plan-run · closed-green · P3 direct-close: three decision-ready proposals GREEN; 11 future owner requests pending. No audit or runtime/release authority.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-designer/frontier/high · gpt-5.6-sol | plan-design · in-progress · Owner requested bounded v2 compatibility qualification. No product execution or phase re-entry; baseline and actual route captured. |
+| 2026-09-14 | plan-designer/frontier/high · gpt-5.6-sol | plan-design · no-op · Current metadata qualification only; historical terminal result and acceptance retained. D22 records reducer evaluation; no retrospective route attestation.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-14 | plan-designer/frontier/high · gpt-5.6-sol | plan-design · closed-green · Bounded compatibility design qualified; original specs/decisions/queue/journal prefix retained. Installed runtime limitation explicit; one waiting schema/seal/operator/runtime Next.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

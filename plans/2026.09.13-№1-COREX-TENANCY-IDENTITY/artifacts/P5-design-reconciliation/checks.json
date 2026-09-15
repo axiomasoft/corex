@@ -1,0 +1,491 @@
+{
+  "proof_class": "documents-only",
+  "route_evidence": {
+    "model_class": "frontier",
+    "effort": "high",
+    "source": "provider-thread-state",
+    "ts": "2026-09-14T04:49:19Z",
+    "model": "gpt-5.6-sol",
+    "thread_id": "01a09e3a-ce67-7dc3-9885-badf97c9cfe9",
+    "source_version": "codex-turn-context-v1",
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "invocation": "$ task:plan-design 2026.09.13-№1-COREX-TENANCY-IDENTITY P5"
+  },
+  "bookkeeping_evaluation": {
+    "pre_mutation": "allow",
+    "pre_final": "allow",
+    "content_hash": "31364f8e8db82e86b676cde895c487ae2be27f63d74f58437389617a99805967"
+  },
+  "contract": {
+    "schema_version": "task-contract/v1",
+    "contract_id": "2026.09.13-№1-corex-tenancy-identity-p5-1",
+    "version": {
+      "revision": 1,
+      "content_hash": "31364f8e8db82e86b676cde895c487ae2be27f63d74f58437389617a99805967",
+      "supersedes": null
+    },
+    "goal": {
+      "outcome": "Implement an unregistered internal accounts menu read adapter and exact local cache-loss fixtures independently after transport.",
+      "non_goals": [
+        "Existing/new public AccountSwitcher adoption before PUBLIC-API acceptance, actual central Redis writer/recovery server, central SSO authorization, workspaces, runtime registration."
+      ]
+    },
+    "must": [
+      {
+        "id": "M1",
+        "requirement": "Internal typed AccountsQuery/AccountsResult/list-entry validation, identity/product scope, authoritative recompute reference on cache loss, unavailable/empty menu error and click-auth boundary.",
+        "source_ref": "phases/P5.md:7"
+      }
+    ],
+    "never": [
+      {
+        "id": "N1",
+        "prohibition": "Existing/new public AccountSwitcher adoption before PUBLIC-API acceptance, actual central Redis writer/recovery server, central SSO authorization, workspaces, runtime registration.",
+        "source_ref": "phases/P5.md:9"
+      }
+    ],
+    "done": {
+      "public_acceptance": [
+        {
+          "id": "A1",
+          "predicate": "`findings/P5.1-switcher-proof.md`: internal read implementation, exact cold-loss/replay/permission fixtures, proposed public facade BC/CHANGELOG entry and missing central adoption owner/action. Rollback disables draft menu; no SSO authority change.",
+          "scope": "public",
+          "check": "V-SWITCHER: exact scoped typed list, version-loss with surviving old key never returns revoked entry, regrant current list, product collision negative, TTL300s reference, stale menu cannot authorize SSO. Actual cache/endpoint/latency/SSO and SWITCHER-AUTHORITY remain UNFILLED. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.",
+          "evidence_ref": "E11"
+        }
+      ]
+    },
+    "authority": {
+      "class": "owner-gate",
+      "granted": true,
+      "granted_by": "decisions/D8:1 [OWNER-GRANT:LOCAL-IMPLEMENTATION]",
+      "auto_allowed": [
+        "write the item's declared Files",
+        "run the item's Validation",
+        "close the item with the two-commit topology"
+      ],
+      "stop_boundaries": [
+        "tag/push/release",
+        "fleet rollout",
+        "consumer repositories",
+        "FOREMAN outward parts"
+      ],
+      "loop_budget": {
+        "audit_rounds_max": 2,
+        "same_finding_max": 2
+      },
+      "observed_rounds": 0,
+      "audit_cap_remediation": false
+    },
+    "next": {
+      "form": "close",
+      "carrier": "task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1",
+      "context": "cold-start-root: design-root-terminal",
+      "origin": "approved-goal",
+      "changed_by": null
+    },
+    "route": {
+      "required": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "actual": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "capabilities": []
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "path": "findings/P4.2-transport-proof.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E2",
+        "path": "findings/P1.2-contract-dossier.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E3",
+        "path": "decisions/D7-remaining-sequence-and-autonomy.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E4",
+        "path": "findings/D2-development-sequence.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E5",
+        "path": "decisions/D6-d2-membership-profile.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E6",
+        "path": "decisions/D2-input-and-authority-gates.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E7",
+        "path": "findings/D2-qualification-packet.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E8",
+        "path": "findings/P4.2-transport-proof.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E9",
+        "path": "findings/P1.2-contract-dossier.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E10",
+        "path": "brief/sources/B34.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E11",
+        "path": "V-SWITCHER: exact scoped typed list, version-loss with surviving old key never returns revoked entry, regrant current list, product collision negative, TTL300s reference, stale menu cannot authorize SSO. Actual cache/endpoint/latency/SSO and SWITCHER-AUTHORITY remain UNFILLED. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.",
+        "proof_class": "cross-checked",
+        "algorithm": "shell-command"
+      }
+    ],
+    "portability": {
+      "tier": "committed-bundle",
+      "execution_inputs": [
+        {
+          "path": "findings/P4.2-transport-proof.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/P1.2-contract-dossier.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D7-remaining-sequence-and-autonomy.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/D2-development-sequence.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D6-d2-membership-profile.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D2-input-and-authority-gates.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/D2-qualification-packet.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/P4.2-transport-proof.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/P1.2-contract-dossier.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/B34.md",
+          "kind": "committed",
+          "producer": null
+        }
+      ],
+      "provenance_only": [],
+      "privacy": {
+        "minimized": true,
+        "excluded_classes": []
+      },
+      "semantic_carrier": "task:plan-exec",
+      "provider_renderers": {
+        "claude": "/task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1",
+        "codex": "$ task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1"
+      }
+    },
+    "conflicts": [],
+    "slice": {
+      "subagent_keys": [
+        "goal",
+        "must",
+        "never",
+        "done",
+        "authority",
+        "next",
+        "route",
+        "version"
+      ],
+      "root_only_keys": [
+        "evidence",
+        "portability",
+        "conflicts"
+      ]
+    },
+    "cold_start": {
+      "plan_id": "2026.09.13-№1-COREX-TENANCY-IDENTITY",
+      "item_id": "P5.1",
+      "reads": [
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "E10"
+      ],
+      "carrier": "task:plan-exec 2026.09.13-№1-COREX-TENANCY-IDENTITY P5.1"
+    }
+  },
+  "phase_candidate": {
+    "fingerprint": "31777415d709b410e811de7aaaece26f85f722773ff2605b250c583d4ba0cd8e",
+    "snapshot": {
+      "phase_id": "P5",
+      "scope": [],
+      "terminal_item_heads": [
+        {
+          "item_id": "P5.1",
+          "status": "🟢 Done",
+          "spec_sha256": "99f5ce7140b56ced31339fa70e9aeea42d42ba26ac70bcf9fbc350621f821e3a",
+          "terminal_evidence_sha256": "c2e63dde9df8ca1f3c676d7c0643c54bb0d13aae87dd212273d232dca55e4831"
+        }
+      ],
+      "material_risks": [],
+      "declared_files": [
+        "findings/P5.1-switcher-proof.md",
+        "packages/tenancy/CHANGELOG.md",
+        "packages/tenancy/src/Membership/Internal/Switcher/**",
+        "packages/tenancy/tests/Feature/AccountSwitcherTest.php",
+        "packages/tenancy/tests/Support/Membership/**"
+      ],
+      "product_tree_sha256": "baa53980397bebe8476f50652d11cc63c88794baae995f7e7def513ad79a7be6",
+      "product_files": [
+        {
+          "declared": "findings/P5.1-switcher-proof.md",
+          "state": "missing"
+        },
+        {
+          "declared": "packages/tenancy/CHANGELOG.md",
+          "path": "packages/tenancy/CHANGELOG.md",
+          "state": "file",
+          "sha256": "059ba1839adf4332adf66f3b297a09369b4fe08ad3a0f91d9bf6882c192d0876"
+        },
+        {
+          "declared": "packages/tenancy/src/Membership/Internal/Switcher/**",
+          "state": "missing"
+        },
+        {
+          "declared": "packages/tenancy/tests/Feature/AccountSwitcherTest.php",
+          "state": "missing"
+        },
+        {
+          "declared": "packages/tenancy/tests/Support/Membership/**",
+          "state": "missing"
+        }
+      ],
+      "observed_repository_head": "5e396e7210fc17e1dc0e6917e70bef10b74becab"
+    }
+  },
+  "phase_close_gate": {
+    "allow": true,
+    "code": "allow",
+    "journal_line": null,
+    "audit_policy": {
+      "action": "direct-close",
+      "audit_required": false,
+      "close_allowed": true,
+      "code": "PHASE_DIRECT_CLOSE_ASSURED",
+      "reasons": [
+        "green-acceptance-no-approved-audit"
+      ],
+      "assurance": {
+        "schema_version": "phase-assurance/v1",
+        "impact": "security-external",
+        "integration_seams": [
+          "scoped-accounts-read",
+          "cache-loss-reference",
+          "sso-denial-boundary"
+        ],
+        "live_or_irreversible": false,
+        "audit_intent": "direct-close-eligible",
+        "rationale": "Target stale-cache counterexamples are proved locally; actual central response/cache/source acceptance is separately qualified in P7. No phase audit consent inferred."
+      },
+      "impact": null,
+      "audit_admission": {
+        "allowed": false,
+        "code": "AUDIT_CONSENT_MISSING",
+        "record": null
+      },
+      "diagnostics": [],
+      "next_kind": "close",
+      "next_exact": "close: task:plan-close 2026.09.13-№1-COREX-TENANCY-IDENTITY P5",
+      "effective_review": "full",
+      "routing_reviews": {
+        "P5.1": "full"
+      }
+    }
+  },
+  "work_estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "31777415d709b410e811de7aaaece26f85f722773ff2605b250c583d4ba0cd8e",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "design-root-terminal",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/handoff.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "continuity": {
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "evidence": [
+      "batch:31777415d709b410e811de7aaaece26f85f722773ff2605b250c583d4ba0cd8e",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "checkpoint:plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/handoff.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "handoff_receipt": {
+    "schema_version": "handoff-recommendation-receipt/v1",
+    "plan_id": "2026.09.13-№1-COREX-TENANCY-IDENTITY",
+    "subject": "design",
+    "status": "handoff-persisted",
+    "next_exact": "close: task:plan-close 2026.09.13-№1-COREX-TENANCY-IDENTITY P5",
+    "recommendation": "**Next:** close: task:plan-close 2026.09.13-№1-COREX-TENANCY-IDENTITY P5\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model | gpt-5.6-terra |\n| Thinking | low |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Reconcile the already GREEN local P5 result, record phase closure and hand off P6.2 |\n\n**Native Codex command:**\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-terra -c 'model_reasoning_effort=\"low\"' -a never -s danger-full-access '$ task:plan-close 2026.09.13-№1-COREX-TENANCY-IDENTITY P5'\n```",
+    "route": {
+      "batch": "n/a",
+      "model": "gpt-5.6-terra",
+      "thinking": "low",
+      "context": "cold-start-root: design-root-terminal",
+      "command": null
+    },
+    "continuity": {
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "evidence": [
+        "persisted-context:design-root-terminal"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "rationale": {
+      "remaining": "standalone P5 phase reconciliation, then P6.2 local same-source delivery; P7 owning qualification/adoption/release remains separate. No successor executed in this design invocation.",
+      "open_risks": "Effective DI0/34 and owning AP0/13 remain UNFILLED. SWITCHER-AUTHORITY, public adoption and central Redis/SSO/timing remain owning P7 inputs. The P5.1 receipt's later foreign PG harness failures remain visible; this documents-only turn claims no new runner GREEN."
+    },
+    "commit_sha": "5e396e7210fc17e1dc0e6917e70bef10b74becab",
+    "journal": null,
+    "adapter_attestation": null,
+    "digests": {
+      "plan": "sha256:e45b48df0421799be59dd6f544ef7097509ef731c8292bad0f48a8afe6d75c25",
+      "handoff": "sha256:44c4c115ddcd91128c4f04adb58782565c9f9950efd71b220a6bf98b775e2db6",
+      "state": null,
+      "closure": null
+    }
+  },
+  "protected_byte_identity": {
+    "checked_files": 43432,
+    "changed_existing_paths": [
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/handoff.md",
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/plan.md",
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/journal.jsonl",
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/status.md",
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P5/P5.1.state.md",
+      "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P5/P5.md"
+    ],
+    "unexpected_changes": [],
+    "journal_prefix_preserved": true,
+    "P5.1_spec_and_material_evidence_preserved": true,
+    "receipt_source_digests_match": true
+  },
+  "downstream": {
+    "consumers": [
+      {
+        "item": "P6.2",
+        "matched_paths": [
+          "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/findings/P5.1-switcher-proof.md"
+        ],
+        "validation": "V-DELIVERY: all declared local package seam receipts GREEN and current relevant inputs on one qualified immutable source selector/ref; current dirty bytes alone are not a sealed ref, remaining consumer boundaries explicit; release/pristine pending never called published/GREEN. V-QUALITY-REF: receipt commands/environment source checked and affected delta rerun where needed. V-PLAN: scoped lint/views/downstream before terminal; no external publication or foreign writes.",
+        "owns_git_ref": false
+      },
+      {
+        "item": "P7.2",
+        "matched_paths": [
+          "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/findings/P5.1-switcher-proof.md"
+        ],
+        "validation": "V-CLOUD-TARGET: exact owner-approved target API/storage/profile/schema/auth/clock/witness/guard contract, acceptance actor and immutable profile/source digest; every-pair cleanup and permission/audit obligations, explicit unsupported paths. Effective deployment release and actual registrations are separately UNFILLED and are not prerequisites for this pre-adoption dossier. Required absent adoption/clock/store/restore conditions UNFILLED; proposed future facade is not effective deployment. V-PLAN: scoped plan lint and generated projection checks; no PHP/runtime acceptance claimed by documentation.",
+        "owns_git_ref": false
+      },
+      {
+        "item": "P7.3",
+        "matched_paths": [
+          "plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/findings/P5.1-switcher-proof.md"
+        ],
+        "validation": "V-ADOPTION: accepted exact public facade old/new BC and major/CHANGELOG; approved physical mapping/API/profile conversion roundtrip; actual registration stays fail-closed without effective receipt; local A/B credential/inbox/expiry/restore/switcher regression; no auth/upward dependency. V-QUALITY: root composer lint:check, composer analyse, composer test, composer test:pg, composer test:arch; affected package composer lint:check/analyse/test; bash scripts/mutation-check.sh --all for packages/*/src changes. Read-only PG/test DB isolation preflight before disposable setup. Every receipt binds exact commands/exits, source/tree and relevant environment/tool/fixture/log SHA. Rerun only relevant changed evidence; missing/red local acceptance repairs in this item. Local/fake proofs do not close effective DI/AP or production SLO.",
+        "owns_git_ref": false
+      }
+    ],
+    "producer_spec_and_receipt_unchanged": true,
+    "action": "reuse; no producer-output delta"
+  },
+  "tools": {
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-downstream.py": "ce2f63f873edadc4ef63b79a05ab0f6065a9260ccae1663eab7e6d5d5b312fec",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py": "7ab1669d40511d20895c7daa8df50b0cf4c4ebf7c5773df747a839117b15e92c",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-delivery.py": "2a5ef326b7db0effab5ba9c6b54ac18f8c786a35d8926767f70a876276b6cc3a",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-weight.py": "3615c79604fe278a36ec1d9b6de879d60fb4b8edbeaab752c53ab96478920a92",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-terminal-admission.py": "ce91210ee754df9d01a712ff3c312f95ab9582bba6ee42047d64aaf42800ec23",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-session.py": "c947e011aaa1bb90fa8851e1949b6465f74bfc328646fdd7190d8cd1eb4acaff",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-decisions.py": "e022155b132b0f23efa577d8feec83a2d2d163c112a35ea7a1ae0842b98e56b8",
+    "/home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-lint.py": "890c7a9f5194194a323adf0b70f10f0c3f9a17fa8baecfe919da9627ab753f7c"
+  },
+  "checks": [
+    {
+      "command": "python3 /home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-lint.py plans/2026.09.13-№1-COREX-TENANCY-IDENTITY",
+      "exit_code": 0,
+      "output": "WARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P2/P2.md: фаза P2 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)\nWARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P4/P4.md: фаза P4 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)\nWARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P6/P6.md: фаза P6 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)\nplan-lint: OK (1 план(ов), 0 ошибок, 3 предупреждений)\n"
+    },
+    {
+      "command": "python3 /home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py state --plan-dir plans/2026.09.13-№1-COREX-TENANCY-IDENTITY --item P5.1 --check",
+      "exit_code": 0,
+      "output": "views: проверены (1)\n"
+    },
+    {
+      "command": "python3 /home/vostrikov/.codex/.tmp/marketplaces/swissknifeman/packages/task/scripts/plan-views.py status --plan-dir plans/2026.09.13-№1-COREX-TENANCY-IDENTITY --check",
+      "exit_code": 0,
+      "output": "views: проверены (1)\n"
+    }
+  ]
+}

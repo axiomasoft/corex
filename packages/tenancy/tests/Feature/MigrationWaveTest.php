@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -100,8 +102,10 @@ function makeMwClusterRow(array $overrides = []): string
 
 function makeMwTemplateRow(int $version = 1, string $dbName = MW_TEMPLATE_DB): void
 {
+    $templateId = (string) Str::uuid();
+
     DB::table('root_templates')->insert([
-        'id' => (string) Str::uuid(),
+        'id' => $templateId,
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -109,6 +113,8 @@ function makeMwTemplateRow(int $version = 1, string $dbName = MW_TEMPLATE_DB): v
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
+
+    TestCase::trustTemplate(templateId: $templateId, database: $dbName);
 }
 
 /** @return list<string> account ids with a real, physically-cloned database. */
@@ -117,7 +123,16 @@ function makeMwAccounts(int $count, ?string $clusterId = null): array
     $clusterId ??= makeMwClusterRow();
     makeMwTemplateRow();
 
-    return (new PendingPool('pgsql', new StanclTenantDatabaseProvisioner('pgsql')))->createPending($count, $clusterId);
+    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+
+    return (new PendingPool(
+        centralConnection: 'pgsql',
+        provisioner: new StanclTenantDatabaseProvisioner(
+            centralConnection: 'pgsql',
+            templateIntegrityVerifier: $templateIntegrityVerifier,
+        ),
+        templateIntegrityVerifier: $templateIntegrityVerifier,
+    ))->createPending($count, $clusterId);
 }
 
 function makeMwBatch(int $toVersion = 1, string $wave = 'internal'): string
@@ -141,6 +156,7 @@ it('AC-11: a failing account does not abort the batch; a second failure escalate
     $orchestrator = new MigrationWaveOrchestrator(
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
         migrationRunner: function (AccountRef $account) use ($badId): void {
             if ($account->id === $badId) {
                 throw new RuntimeException('simulated migration failure');
@@ -187,7 +203,11 @@ it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\'))
     // into schema_state.status='failed' by the orchestrator (already
     // covered by the AC-11 test) — irrelevant to AC-12, which only asserts
     // the lock CALL itself was issued.
-    $orchestrator = new MigrationWaveOrchestrator(centralConnection: 'pgsql', tenancy: app(TenancyManager::class));
+    $orchestrator = new MigrationWaveOrchestrator(
+        centralConnection: 'pgsql',
+        tenancy: app(TenancyManager::class),
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+    );
     $orchestrator->runBatch($batchId);
 
     expect(collect($queries)->contains(fn (string $sql): bool => str_contains($sql, 'pg_advisory_xact_lock')))->toBeTrue();
@@ -202,6 +222,7 @@ it('creates root_account_schema_state rows (current_version=0) for accounts miss
     $orchestrator = new MigrationWaveOrchestrator(
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
         migrationRunner: function (): void {
             //
         },
@@ -222,6 +243,7 @@ it('tenants:migrate requires --batch and does not hard-fail the command on a per
     app()->instance(MigrationWaveOrchestrator::class, new MigrationWaveOrchestrator(
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
         migrationRunner: function (AccountRef $account) use ($badId): void {
             if ($account->id === $badId) {
                 throw new RuntimeException('simulated migration failure');

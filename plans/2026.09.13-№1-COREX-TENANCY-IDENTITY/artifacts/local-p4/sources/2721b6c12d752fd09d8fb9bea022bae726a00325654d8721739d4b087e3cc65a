@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Membership\Internal\Transport;
+
+use CoreX\Tenancy\Central\MembershipReason;
+
+/** @internal */
+final readonly class RevokeMembershipRequest
+{
+    public function __construct(public string $requestId, public string $identityId, public string $accountId, public string $product, public MembershipReason $reason, public ?string $actingIdentityId)
+    {
+        Value::uuid($requestId);
+        Value::uuid($identityId);
+        Value::uuid($accountId);
+        Value::product($product);
+
+        if ($actingIdentityId !== null) {
+            Value::uuid($actingIdentityId);
+        }
+    }
+
+    /** @return array<string, string|null> */
+    public function payload(): array
+    {
+        return ['request_id' => $this->requestId, 'identity_id' => $this->identityId, 'account_id' => $this->accountId, 'product' => $this->product, 'reason' => $this->reason->value, 'acting_identity_id' => $this->actingIdentityId];
+    }
+}

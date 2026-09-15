@@ -6,6 +6,7 @@ use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
+use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Events\AccountPurged;
 use CoreX\Tenancy\Events\AccountSuspended;
 use CoreX\Tenancy\Events\GraceStarted;
@@ -19,6 +20,7 @@ use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -123,8 +125,10 @@ function makeLcClusterRow(array $overrides = []): string
 
 function makeLcTemplateRow(int $version = 1, string $dbName = LC_TEMPLATE_DB): void
 {
+    $templateId = (string) Str::uuid();
+
     DB::table('root_templates')->insert([
-        'id' => (string) Str::uuid(),
+        'id' => $templateId,
         'version' => $version,
         'db_name' => $dbName,
         'status' => 'ready',
@@ -132,6 +136,8 @@ function makeLcTemplateRow(int $version = 1, string $dbName = LC_TEMPLATE_DB): v
         'embedding_dim' => 1024,
         'built_at' => now(),
     ]);
+
+    TestCase::trustTemplate(templateId: $templateId, database: $dbName);
 }
 
 function makeLcIdentityRow(): string
@@ -148,12 +154,22 @@ function makeLcIdentityRow(): string
 
 function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabaseLifecycle $tenantDatabaseLifecycle = null): AccountLifecycle
 {
+    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+
     return new AccountLifecycle(
         centralConnection: 'pgsql',
-        pendingPool: new PendingPool('pgsql', new StanclTenantDatabaseProvisioner('pgsql')),
+        pendingPool: new PendingPool(
+            centralConnection: 'pgsql',
+            provisioner: new StanclTenantDatabaseProvisioner(
+                centralConnection: 'pgsql',
+                templateIntegrityVerifier: $templateIntegrityVerifier,
+            ),
+            templateIntegrityVerifier: $templateIntegrityVerifier,
+        ),
         fsm: new AccountLifecycleFsm,
         tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new StanclTenantDatabaseLifecycle('pgsql'),
         impersonationGuard: new ImpersonationGuard($impersonation ?? new NullImpersonationService),
+        templateIntegrityVerifier: $templateIntegrityVerifier,
     );
 }
 
@@ -162,7 +178,15 @@ function activateLcAccount(): AccountRef
 {
     $clusterId = makeLcClusterRow();
     makeLcTemplateRow();
-    (new PendingPool('pgsql', new StanclTenantDatabaseProvisioner('pgsql')))->createPending(1, $clusterId);
+    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+    (new PendingPool(
+        centralConnection: 'pgsql',
+        provisioner: new StanclTenantDatabaseProvisioner(
+            centralConnection: 'pgsql',
+            templateIntegrityVerifier: $templateIntegrityVerifier,
+        ),
+        templateIntegrityVerifier: $templateIntegrityVerifier,
+    ))->createPending(1, $clusterId);
 
     $ownerId = makeLcIdentityRow();
     $slug = 'acme-'.Str::random(6);

@@ -2,8 +2,8 @@
 projection: decision-archive
 projection_version: v1
 source_scope: decisions/
-through: 2026-09-14/D14
-inputs_sha256: c52339ecf1c5fa75af9cf7328e4b14da1f63a9a65008dd0de9ad73dde811f2dd
+through: 2026-09-15/D17
+inputs_sha256: c94dccee2e10c6adda6e7dce1fdc3a0db599acc2830c7d7c97b5114d6a4e33ab
 generated_by: task plan-views decisions
 -->
 
@@ -13,4 +13,4 @@ generated_by: task plan-views decisions
 
 | ID | Date | Status | Items | Решение |
 |:--|:--|:--|:--|:--|
-| — | — | — | — | Нет записей |
+| D16 | 2026-09-15 | superseded | P5.3 | [OWNER-GRANT:PUBLICATION] branch=`publication-exact-result`; scope=`only axiomasoft/corex-core, axiomasoft/corex-modules, axiomasoft/corex-tasks, axiomasoft/corex-tenancy; exact dossier-bound create/push/tag/release/Packagist/secret actions`; owner-message=`brief/p53-publication-owner-message.md#p53-publication-confirmation` |

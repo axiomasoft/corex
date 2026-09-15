@@ -1,0 +1,15 @@
+diff --git a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
+index 55c2847..8f99209 100644
+--- a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
++++ b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
+@@ -184,10 +184,6 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+                 'updated_at' => $this->timestamp(),
+             ]);
+ 
+-            $this->log($module, 'disable', ModuleState::Enabled->value, ModuleState::Disabled->value, 'success', [
+-                'reason' => $reason->value,
+-            ]);
+-
+             $this->db()->afterCommit(static fn () => event(new ModuleDisabled($module, $reason)));
+         });
+     }

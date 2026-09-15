@@ -44,7 +44,7 @@ BOXED-INIT accepted deferred under D15: no runtime adapter item; P1.4 only docum
 - PG16/test DB preflight and isolation guard before tests/migrations; no dev/prod migrate:fresh. Golden template builder/verifier permissions separately scoped; no live backfill/remediation/DROP.
 - Export only committed approved source SHA; seal artifact/test-support/runtime metadata; no path/source symlink/warmcache/private credential leakage; no hidden packaging dependency rewrite.
 - Local/historical/current runner/pristine/public/private proof classes explicit. A workflow file or old local test is not current runner GREEN.
-- Recommended batches permit safe ready subset/order; never cross phase closure or hide authority/private boundaries; per-item acceptance stays binding.
+- Recommended batches permit safe ready subset/order; never cross phase closure or hide authority/private boundaries; per-item acceptance stays binding. D11 authorizes one new session for B4 P4.2–P4.5: continue through the ready remainder without stopping after each GREEN item, close P4 in the same session only when its acceptance is GREEN; continue independent preparation when an affected item lacks genuine inputs.
 - GREEN phase direct-close eligible; independent item review is bounded concrete risk validation, not audit consent. No audit-admission/v2 issued or audit-phase successor.
 - Before delivery regenerate/check owned carriers and eligible bundle; future predecessor/input-gated bundles deferred, never fake output or permission.
 - Original plan/decisions/journal/state and inert historical archive remain byte-identical. New plan scope lint only; predecessor inherited error not retrospectively repaired.
@@ -64,10 +64,10 @@ BOXED-INIT accepted deferred under D15: no runtime adapter item; P1.4 only docum
 | solo | P3.1 | implementation/high | plan-exec | full | recommended: reusable L0 state/generation/event/cache seam is self-contained and fake-testable; no consumer adapter or live authority is admitted |
 | solo | P3.2 | implementation/high | plan-exec | light | recommended: docs-only project ownership boundary is independent of foreign role-engine and product work; no consumer/security implementation context is admitted |
 | solo | P4.1 | frontier/high | manual | light | recommended: third-party source maintainer/license/artifact authority boundary before dependency edits; local dossier isolated |
-| B4 | P4.2 | implementation/high | plan-exec | light | recommended: release graph/metadata/source setup reused with exporter and public fixtures; immutable provider adoption gate remains explicit |
+| B4 | P4.2 | implementation/high | plan-exec | light | recommended: D11 owner-requested phase remainder; reconcile immutable graph, then reuse source/provider context for P4.3–P4.5; per-item input gates remain binding |
 | B4 | P4.3 | implementation/high | plan-exec | light | recommended: common source export/provider/test-support context; non-tenancy preparation can be independent ready subset |
 | B4 | P4.4 | implementation/high | plan-exec | light | recommended: reuse exact sealed artifacts/consumer runtime setup; validate public package cells; no publication capability |
-| solo | P4.5 | implementation/high | plan-exec | full | recommended: private source/credential authority and access boundary forbids sharing public credential-free fixture; review metadata/ref and token leakage |
+| B4 | P4.5 | implementation/high | plan-exec | full | recommended: D11 same-session phase remainder; separate private fixture and scoped read authority preserve credential-free public proof; bounded independent review of metadata/ref and token leakage |
 | B5 | P5.1 | implementation/high | manual | light | recommended: proof/passport/source map reused with exact-result dossier; factual docs only |
 | B5 | P5.2 | implementation/high | manual | light | recommended: same exact artifact/proof context; publication readiness review packet only |
 | solo | P5.3 | frontier/high | manual | full | required: separate exact-result external authority and irreversible remote-resource boundary; named operator only after prepared dossier approval |
