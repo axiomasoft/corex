@@ -107,14 +107,14 @@ def policy_lint(plan: Path, runtime: Path) -> int:
     policy = json.loads((plan / "research/09-read-budget-policy.json").read_text())
     scope = {"P1.1", "P1.2", "P1.3", "P1.4"}
     if (policy.get("schema_version") != "plan-read-budget-policy/v1"
-            or policy.get("version") != "1.1.0" or policy.get("mode") != "advisory"
+            or policy.get("version") != "1.2.0" or policy.get("mode") != "advisory"
             or set(policy.get("scope", [])) != scope or policy.get("batch") != "B-P1-QUALIFY"
             or policy.get("reference_item_tokens") != 100000
             or policy.get("decision") != "decisions/D19-read-budget-advisory.md"
             or hashlib.sha256((plan / policy["decision"]).read_bytes()).hexdigest() != policy.get("decision_sha256")):
         raise ValueError("invalid or unbound owner read-budget policy")
     additional = policy.get("additional_scopes")
-    if not isinstance(additional, list) or len(additional) != 1:
+    if not isinstance(additional, list) or len(additional) != 2:
         raise ValueError("invalid additional owner read-budget scopes")
     p2 = additional[0]
     if (not isinstance(p2, dict) or set(p2) != {"scope", "batch", "decision", "decision_sha256"}
@@ -125,6 +125,14 @@ def policy_lint(plan: Path, runtime: Path) -> int:
         raise ValueError("invalid or unbound P2 owner read-budget policy")
     decisions = {item: "D19" for item in scope}
     decisions.update({item: "D20" for item in p2["scope"]})
+    p3 = additional[1]
+    if (not isinstance(p3, dict) or set(p3) != {"scope", "batch", "decision", "decision_sha256"}
+            or p3.get("scope") != ["P3.1", "P3.2"]
+            or p3.get("batch") != "B-P3-LOCAL"
+            or p3.get("decision") != "decisions/D23-P3-local-read-budget-advisory.md"
+            or hashlib.sha256((plan / p3["decision"]).read_bytes()).hexdigest() != p3.get("decision_sha256")):
+        raise ValueError("invalid or unbound P3 local owner read-budget policy")
+    decisions.update({item: "D23" for item in p3["scope"]})
     measured = plan_weight.measure_plan(plan, plan_weight.Measurer())
     records = {row["item_id"]: row for row in measured["items"]}
     threshold = measured["totals"]["admission"]["contract"]["item_tokens"]

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: 96aee6d1e60fc767f7d63859a4aca4749d120208b94e0998482b4e1fab84fc00
+inputs_sha256: cfd7b9bc20c03610f761b286ae049b29377da60adb53c7e7af3eea60f090ca44
 generated_by: task plan-views status
 -->
 
@@ -83,7 +83,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P3.1 | Квалифицировать storage и физический context lifecycle | ⬜ Not started | — |
+| P3.1 | Квалифицировать storage и физический context lifecycle | ⬜ Not started | 2026-09-15 |
 | P3.2 | Квалифицировать concurrent claim, integrity и export-before-drop | ⬜ Not started | — |
 | P3.3 | Квалифицировать identity и accepted central transport | ⬜ Not started | — |
 | P3.4 | Адаптировать durable pair store, inbox и restore barrier | ⬜ Not started | — |
@@ -245,6 +245,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Inline P2 closure: four GREEN heads; phase assurance direct-close/phase gate allow;55exact proposals/12SHA, no grants/audit/child. artifacts/B-P2-PROPOSALS/P2-phase-close-admission.json
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · decision-pending · Preflight only: D23 scoped advisory; D24 source-preserving D2(b) repair PASS. Missing G-STORAGE/G-DEPENDENCY owner receipts. Exact requests/resume: artifacts/B-P3-LOCAL/owner-gate-requests.md; checkpoint.md. No product START or attempt consumed. |
 
 ## Owner Gates
 

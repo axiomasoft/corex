@@ -1,24 +1,26 @@
 # HANDOFF — 2026-09-15 — after P2.4
 
-**Next:** manual: подготовить admission P3.1 — согласовать scoped read-budget policy и получить matching G-STORAGE/G-DEPENDENCY receipts; P3.1 не запускался.
+**Next:** manual: принять Q-P3-LOCAL-STORAGE-001 и Q-P3-LOCAL-DEPENDENCY-001 по artifacts/B-P3-LOCAL/owner-gate-requests.md; затем продолжить P3.1 → P3.2 в текущем root.
 
 | Параметр | Значение |
 | :-- | :-- |
-| Batch | B-P3-LOCAL (next scope; not executed) |
+| Batch | B-P3-LOCAL |
 | Model | gpt-5.6-terra |
 | Thinking | high |
 | Context | continue-root |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:e8612c77e4cd536c4bd4bb3b0e4dd3a052ec273d3f62db675c3bb005c5a981f6", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/B-P2-PROPOSALS/checkpoint.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:029a699459901bff081ff7f6d54b9d853850cc90b4ddae1bf09e5b94ca20ce72", "loaded-inputs:not-reusable", "cold-start-cost:0"], "outcome": "continue-root", "reason": "context-telemetry-unavailable", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** B-P2-PROPOSALS P2.1–P2.4 GREEN, P2 closed inline;52R/365parents/682operative+6delimiters/9foundations;30surfaces/60futurecases/217declarations/47isolatedSQLreviewchecks/55finiteproposalrequests/12sealedSHA. No public/runtime/DB/dependency/private/foreign/live/release writes or grants.
+**Done:** B-P2-PROPOSALS P2.1–P2.4 GREEN/P2 closed, historical evidence unchanged. Current B-P3-LOCAL admission preparation: D23 scoped owner budget decision/policy1.2.0; D24 read-carrier repair with all105 source selections/digests/order preserved; per-read D2(b) PASS; policy19/design13 guards/current finish/P3 design/bundle/routing checks PASS. Product P3 execution not started.
 
-**Remaining:** P3.1 actual successor Not started; generated bundle and routing receipt prepared. Native estimated aggregate 571115 > unchanged100000; D20 covers ONLY B-P2, no P3 budget approval. D22 repairs only source-complete successor read syntax/own catalogue bounded headings, preserving source order/substantive fields/constraints. Required gate owner receipts still proposal; source/library/provider selection only after immutable qualification. User boundary stops at P2.4, no P3 start.
+**Remaining:** P3.1 then P3.2, owner-authorized in one root without children. Q-P2-001/002 remain proposals; independently accepted G-STORAGE/G-DEPENDENCY receipts for exact concrete packet below are missing. Complete all declared Required Reads and admission after receipts. Do not close P3 or execute beyond P3.2; after both GREEN prepare B-P3-IDENTITY P3.3–P3.7 handoff. No premature identity handoff.
 
-**Sources of truth:** findings/P2-contract-catalogue.md; findings/P2-gate-requests.md; findings/P2-contract-proposals.md; P2-intake.md; P2-identity-profile.md; P2-auth-ownership.md; P2-delta-map.md; P2-consumer-cases.md; phases/P2/P2.closed.md; artifacts/B-P2-PROPOSALS/*check-results.json, *semantic.json, *closure-freshness.json; D20/D21/D22.
+**Sources of truth:** decisions/D23-P3-local-read-budget-advisory.md; decisions/D24-P3-local-read-carrier-repair.md; research/09-read-budget-policy.json; findings/P2-contract-catalogue.md; findings/P2-gate-requests.md; findings/P2-contract-proposals.md; artifacts/B-P3-LOCAL/owner-gate-requests.md (SHA256 4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9); dependency-qualification.json; storage-service-candidate.json; D23-policy-checks.json; read-repair-check.json; checkpoint.md. P3.1 generated bundle/state fresh; future P3.2 bundle only after owning closure/admission.
 
-**Open risks:** All55new requests proposal, no receipt-linked authorization. Original C01–09 and every G/34DI/13AP/subcondition/residual APP/EXTERNAL/EXCLUDED owner preserved; DI34/AP13 UNFILLED. P3–P8 actual conformance/P9 same immutable installed-hosted-released cohort/P10 actualeffective windows/P11 consumer acceptance remain future; catalogue or SQLite memory checks are not runtime/live/zero-CoreX-gaps proof.
+**Open risks:** Matching protected receipts absent. Five-package immutable SDK closure is metadata/download/license qualification only, not installed/upstream/ABI/PHP-Laravel matrix or SDK-service conformance. MinIO is separate disposable local integration candidate with exact image digest; tag/label source discrepancy explicit, no reproducible-image assertion. Fake-s3/native-SDK/local/installed/released/hosted/deployed receipts remain distinct. All55 P2 proposals/G/34DI/13AP/effective provider/consumer residuals remain owning gates, no grants manufactured.
 
-**Workarounds/Deferred/Open questions:** D20 scoped aggregate advice only B-P2, mandatory sources/per-read/provider/validation/closure constraints unchanged; shared runtime unchanged. P2.1/P2.2/P2.4 original attempts/proofs retained; final owning receipts fresh. Next source declarations repaired as required for concrete handoff, no feature choice/child/audit/push.
+**Workarounds/Deferred/Open questions:** D23 advisory only P3.1/P3.2, B-P3-IDENTITY excluded. Individual limits/source order/validation/authority retained; runtime untouched. P3.1 original bundle/spec/measurements archived; current state Not started, decision-pending consumes no product attempt. Current root pending exact two gate decisions; resume after acceptance, no renewed group confirmation. Current preflight is not full execution-source reuse; checkpoint records reads still required.
+
+**Owner wait:** product lifecycle waiting-owner/nonrunnable is persisted in artifacts/B-P3-LOCAL/continuity-decision.json. The manual receipt request retains continue-root for this existing root; it is no executor dispatch or grant. Native compact Context parser accepts only root-placement enums; original invalid compact waiting-owner diagnostic retained in lint-before-context-repair.log. Manual request continuity has its own typed estimate; product wait stays unchanged.

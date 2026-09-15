@@ -615,6 +615,8 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | decisions/D20-P2-read-budget-advisory.md | a2094343ea42a67caeb5d3b811dba3aa61ebd014adb0206c40d04356e42d38c4 |
 | decisions/D21-P2-read-declarations.md | d6b23fcf1dbb2c71a4eff572df580cbd546eb0cc9a2b438c2c7a64df32a4d02f |
 | decisions/D22-P2-successor-admission.md | e95e76009278edc9a0afced828167bf8fd73112b5dd6f4b58b7fd23fe89b3658 |
+| decisions/D23-P3-local-read-budget-advisory.md | 8a747470cd85b2312ef52b6fe5992cbaf3e3e9f15d118e92ddc54470c47b5b83 |
+| decisions/D24-P3-local-read-carrier-repair.md | fa4e45e0fad170142812f0cf134ff88b42480de536560ebed95f2d7fb5c62a31 |
 | decisions/D3.md | 6af2445122495b980efc08f65ae3023c9b76ae388e3e7e355aed1be0bbc79c46 |
 | decisions/D4.md | 618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16 |
 | decisions/D5.md | fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67 |
@@ -655,7 +657,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | phases/P2/P2.3.md | 0d9da50a8d1528903b6fcc898c9c3905be2d217ac957bcaa9d92920370c467a6 |
 | phases/P2/P2.4.md | 8e97b212cee2c60175954acf16049fb33c51a01b9e9836dadff06ec4874435d0 |
 | phases/P2/P2.md | 470f0268b2a333c70d7054b7ad63c1659a8d82b52ea9597aadfb85bc0e4972e8 |
-| phases/P3/P3.1.md | 9954beef336c1200498099a6051d47e3b2cc5c75131674ff2dfd6535b6e7a782 |
+| phases/P3/P3.1.md | 4c753fe31b0e6801fd7716a9f44d40e5d4209142004695cfb87a86d6a06c3796 |
 | phases/P3/P3.2.md | f7fdbe9b9e199444d6c7fe3d80c1775a7a725620fc78d38941c492c05b4d3f92 |
 | phases/P3/P3.3.md | 8735318de9f71c70b334d5bea1a5ae0a014ac4947c4896d09c73d7435990f8db |
 | phases/P3/P3.4.md | 110094dd528c3b655abd28a347be3ed8479130773ef4dac9f2f94acd861485fe |
@@ -728,7 +730,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | research/06-azguard-patterns.md | 33e6a1cc959aa5070134061eafe36f90ba701c2132d98dea56a3324370609c1b |
 | research/07-open-source-patterns.md | 1c74909638574cbf9fc6179e697a8be114df3c4ba07305587559191b6481a5f0 |
 | research/08-execution-batches.md | 9bd1b1b0caad5e4384842c6bbc0aef8e91e9da470e46d173ffa7fcc3ee0ee0c0 |
-| research/09-read-budget-policy.json | b2e7cfd0a9931af6d5a73e7a7ca44398568d1fc75d4526cadaad357b391eac3f |
+| research/09-read-budget-policy.json | c9de9238d7781865990ae733d57b5953962500dfa2d7aa164c71b812d8573152 |
 | research/P1-design-rag.md | ab10a68d233c02c636e0f72441e6bc40aec53e9862ca65f614c241985d885860 |
 | research/P10-design-rag.md | 22580a49bf9650f93f3cf09172bde07ef6ecc191e447ae13920607a3c4c8e65a |
 | research/P10-effective-design.md | 3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac |
@@ -751,7 +753,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | research/P9-cohort-design.md | 87828181adc3de1af50a098e7882faa5204a1d7e610466b36b242c9b2aa85aeb |
 | research/P9-design-rag.md | 1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1 |
 | roadmap.md | 5093dc5695d7866473762f90a4c5c961a4f659c24a6411f360aa18b8ba0f8de1 |
-| scripts/task-check.py | 0d6e60cf0dd6d0d2bac783ee05a74cb57eaa4a1b9b668f12e54073bb33116704 |
+| scripts/task-check.py | f298e70cd5bce0d1c2093b7f6e21ca20dce3643c04e1369378f70a9b9c2be593 |
 | scripts/test-design-guards.py | 8cfaa13ed785af4c5370483e3e7c24ef5ce1debb5028bb325f4bc45d9ff5cd1b |
 | scripts/validate-p1.py | c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8 |
 | scripts/validate-p10.py | 557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49 |
@@ -792,3 +794,18 @@ Reseal only plan-owned aggregate severity policy and digest-bound D20; 52R/365pa
 ## D21 finite execution declaration correction
 
 Bounded read selectors and exact quoted producer/file declarations repaired without design scope or runtime changes; D21 documents actual diagnostics and retained inputs. All other semantic design inputs/review outcomes retained.
+
+## D23 / D24 finite B-P3-LOCAL admission delta
+
+2026-09-15 executor/gpt-5.6-sol/high, current provider-attested root. D23 records direct
+owner authorization and extends plan-owned aggregate advisory only to P3.1/P3.2; D19/D20
+unchanged. D24 repairs duplicated selector-list syntax in P3.1 only. Exact ordered
+105 path/selector/wholeSHA/selectedSHA entries unchanged, all sources and substantive
+fields preserved; generated bundle20478 estimated tokens and byte-fresh state pass
+D2(b). Mandatory per-read/digest/readiness/route/design/Validation checks remain binding.
+No shared runtime/product/Contracts/composer lock/provider/live/release/foreign write.
+19 isolated policy guards and13 design guards PASS. New SDK/service selection is only
+a concrete reviewable request in artifacts/B-P3-LOCAL/owner-gate-requests.md; no receipt
+granted, upstream source installation/conformance and product execution remain pending.
+Prior integrated semantic review retained; affected finite delta sealed here, no claim
+of a new whole-plan replay. P3.1/P3.2 remain Not started, P3 open.
