@@ -1,0 +1,76 @@
+{
+  "status": "OPEN",
+  "classification": "lossless whitespace source fragments accidentally projected into independent atom rows; requires explicit P1.4 reconciliation without deleting source bytes or inventing acceptance",
+  "fragments": [
+    {
+      "atom": "B11 AC-8.a3",
+      "parent": "B11 AC-8",
+      "condition": "Пост-restore reconciliation: ",
+      "fragment": "'\\n'",
+      "r": "R39"
+    },
+    {
+      "atom": "B11 AC-8.a5",
+      "parent": "B11 AC-8",
+      "condition": "Пост-restore reconciliation: ",
+      "fragment": "'\\n'",
+      "r": "R39"
+    },
+    {
+      "atom": "B11 AC-8.a7",
+      "parent": "B11 AC-8",
+      "condition": "Пост-restore reconciliation: ",
+      "fragment": "'\\n'",
+      "r": "R39"
+    },
+    {
+      "atom": "B11 AC-8.a9",
+      "parent": "B11 AC-8",
+      "condition": "Пост-restore reconciliation: ",
+      "fragment": "'\\n'",
+      "r": "R39"
+    },
+    {
+      "atom": "B11 AC-8.a11",
+      "parent": "B11 AC-8",
+      "condition": "Пост-restore reconciliation: ",
+      "fragment": "'\\n'",
+      "r": "R39"
+    },
+    {
+      "atom": "B34 AC-19.a2",
+      "parent": "B34 AC-19",
+      "condition": "Исходная последовательность принятия приглашения B34 L205–212: ",
+      "fragment": "' '",
+      "r": "R40"
+    },
+    {
+      "atom": "B16.§8.20.a2",
+      "parent": "B16.§8.20",
+      "condition": "Контракт `MessageService` проходит PHPStan level 8 без `@phpstan-ignore`.",
+      "fragment": "''",
+      "r": "R38"
+    },
+    {
+      "atom": "B16.§8.20.a3",
+      "parent": "B16.§8.20",
+      "condition": "Контракт `PermissionResolver` проходит PHPStan level 8 без `@phpstan-ignore`.",
+      "fragment": "''",
+      "r": "R37"
+    },
+    {
+      "atom": "B16.§8.20.a4",
+      "parent": "B16.§8.20",
+      "condition": "Контракт `NotificationCenter` проходит PHPStan level 8 без `@phpstan-ignore`.",
+      "fragment": "''",
+      "r": "R16"
+    },
+    {
+      "atom": "B16.§8.20.a5",
+      "parent": "B16.§8.20",
+      "condition": "Контракт `RelationLookup` проходит PHPStan level 8 без `@phpstan-ignore`.",
+      "fragment": "''",
+      "r": "R14"
+    }
+  ]
+}

@@ -1,24 +1,24 @@
-# HANDOFF — 2026-09-15 — after P1.3
+# HANDOFF — 2026-09-15 — after P1.4
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.4
+**Next:** manual: подготовить admission P2.1 плана 2026.09.15-№1-COREX-FLEXCRM-REMAINING: согласовать read-budget policy перед запуском (оценка 381254 при исходном пороге 100000; bundle и routing-admission ALLOW подготовлены).
 
 | Параметр | Значение |
-|:--|:--|
-| Batch | B-P1-QUALIFY |
+| :-- | :-- |
+| Batch | B-P2-PROPOSALS (future; routing ALLOW, budget not passed) |
 | Model | gpt-5.6-sol |
 | Thinking | high |
 | Context | continue-root |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "continue-root", "reason": "context-telemetry-unavailable", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:59160614190941e970aa8764cba5fe886d88263833addea73b2598afec155fe2", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/B-P1-QUALIFY/checkpoint.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** P1.1/P1.2/P1.3 GREEN:100sources/365parents/688atoms/52R;91fullsourceblobs/9A/5E/12G/34DI/13AP qualified.
+**Done:** B-P1-QUALIFY P1.1–P1.4 GREEN; фаза P1 закрыта inline. 100 sources/52 R/365 parents; 688 исходных строк = 682 содержательных условия + 6 delimiter records; 17 conflicts/11 final SHA. Exact sources, proposals/history and future obligations remain distinct.
 
-**Remaining:** P1.4 Not started, native bundle current and admission ALLOW. Continue same root; stop after P1.4.
+**Remaining:** P2.1 is the actual successor, Not started. Native final lint required reversible local repair: all original paths retained, 53 map/13 ledger sections enumerated; nine semantic/rule fields unchanged. Current bundle and routing-admission ALLOW prepared; design finish rebound at 650 exact stable inputs. Native read-budget assessment is separate: aggregate 381254 > 100000, d2a false/d2b true, all 99 individual read files/selections within bounds. D19 does not extend to P2. No P2 START/product. Define the future owning budget policy before execution; no new phase design required without a concrete choice.
 
-**Sources of truth:** plan.md; phases/P1/P1.4.md; bundles/P1.4.json; findings/P1-acceptance-map.md; findings/P1-evidence-ledger.md; artifacts/B-P1-QUALIFY/P1.3-semantic-review.json; artifacts/B-P1-QUALIFY/checkpoint.md.
+**Sources of truth:** findings/P1-requirements-lock.md; findings/P1-conflicts.md; findings/P1-downstream-gaps.md; phases/P1/P1.closed.md; artifacts/B-P1-QUALIFY/P1.4-semantic-review.json; P1.4-independent-seal-check.json; P1.4-check-results.json; P2.1-admission.json; checkpoint.md.
 
-**Open risks:** Source-owner numeric/schema/confirmation/translation/privacy/cache choices; D10 local strict facade kept; E2/E3 source/config/receipt boundaries; E5 older public release kept. All future effective DI/AP/release/runner/consumer outcomes unfilled.
+**Open risks:** Eight source-owner choices, one confirmation proposal, source binding; exact public API/major/DDL/dependency/installed/release/hosted/effective/timing/consumer receipts remain owning obligations. DI34/AP13 unfilled. This is a sealed qualification definition, not zero runtime CoreX gaps or final P11 acceptance.
 
-**Workarounds/Deferred/Open questions:** D19 aggregate budget advisory only B-P1, all mandatory reads/per-read bounds retained. P1.4 selectors cover all operative map and ledger sections; owner source branches remain proposals. P2 outside policy and execution.
+**Workarounds/Deferred/Open questions:** D19 aggregate estimate advisory only B-P1, mandatory sources/per-read limits retained. Six delimiter projection and P1.1 punctuation reconciled without mutating closed source artifacts. Native P2.1 grouped unquoted declaration repaired in current attempt as required by final lint; aggregate P2 hard budget remains unsatisfied, no executable ready successor launch is claimed. No P2 execution, audit/children, shared runtime edits, public/private/live/foreign actions or push.

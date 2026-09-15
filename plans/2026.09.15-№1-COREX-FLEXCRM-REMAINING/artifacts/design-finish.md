@@ -110,7 +110,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 ## Design inputs
 
 | Path | SHA256 |
-|:--|:--|
+| :-- | :-- |
 | `artifacts/P1-design/context-measurement.json` | 09b2b21abe72be5c1f9dbd096321eb3596f236aff3325ba8a612714d3c1c1aa1 |
 | `artifacts/P1-design/continuity-decision.json` | 8937935ed7858d6f850bdd19186a81ed364360765cb5e74751bf99f8d327eb75 |
 | `artifacts/P1-design/contract-smoke.json` | 1bbadc4644a91f000fe1dfc2383e76d1f12878edf9a6db5462488305cf6a8b63 |
@@ -647,7 +647,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P11/P11.6.md` | 4d3db2712d1938191270270c0b09276d3207b6bf75e314ea01d018e5cc53a5bf |
 | `phases/P11/P11.7.md` | fe590af9f12a1b3d7fe28ddee814a843e168d3cb075a7f5e097a513b3d39a3cc |
 | `phases/P11/P11.md` | a05100b3f35d261b4d3aebc2af62f6528f9a63b61c33bfa0c628c17ab477f40d |
-| `phases/P2/P2.1.md` | 75830a58b0d1811015d2515640202bb0295565c9bc21b46da78fcfc95d57b428 |
+| `phases/P2/P2.1.md` | 4c560a9098c1359754b8f49addf940a9d87427318d504c094760fde284bcb2e1 |
 | `phases/P2/P2.2.md` | 535fd9687f53eb8ee17b858e40226d8a3868310a58780f634a68f022309dcb4e |
 | `phases/P2/P2.3.md` | 97c4e3ed6ef8067ccb09eeb1cc37441b4ab9f0ea298b0ab72e68aad0b615309f |
 | `phases/P2/P2.4.md` | 97ba3d3dd68671f49624d74053e23c41b60b2bbcdcc01083d406f9b4b51e6ea5 |
@@ -777,3 +777,7 @@ P1.4 consumes all operative ledger policy0/Requirements1.1–1.4/Foundations2/Co
 ## P1.4 bundle metadata repair
 
 All map/ledger operative section selectors remain mandatory in independently numbered Required Reads. Inputs retain whole-source identity via policy0; canonical bundle no longer repeats full selector list in each raw entry. Native per-read bundle estimate17842≤25000/47258bytes≤262144; all selected normative source rows retained, aggregate remains visible advisory. Original oversized-bundle RED retained, no threshold or shared runtime edit.
+
+## P1 post-close successor carrier repair
+
+Current executor Sol/high repaired P2.1 canonical read declaration only after native successor preparation returned unresolvable_entry and final lint required local reversible repair. Every mandatory path retained; whole producer identity bound by policy0 and all 53 map/13 ledger operative sections explicitly enumerated. Intent/scope/Files/rules/guidance/Validation/Deliverables unchanged. No P2 execution, product/API/DDL/dependency/major/profile choice, source approval or new independent whole-plan review. Original Astra review retained; current 650 stable input hashes rebound. D19 remains B-P1-only; P2 hard aggregate policy unchanged.

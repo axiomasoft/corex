@@ -1,0 +1,31 @@
+{
+  "verdict": "BATCH_STALE",
+  "batch": {
+    "batch_id": "B-P2-PROPOSALS",
+    "items": [
+      "P2.1",
+      "P2.2",
+      "P2.3",
+      "P2.4"
+    ],
+    "route": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "exec": "plan-exec",
+    "review": "light",
+    "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "spec_digest": "462597c445d1e570d6f23b08c9fe471167c394ed9b31b776a396a4d6c6b472bc",
+    "recommended": true
+  },
+  "requested": [
+    "P2.1"
+  ],
+  "canonical": [
+    "P2.1",
+    "P2.2",
+    "P2.3",
+    "P2.4"
+  ],
+  "reason": "unresolvable_entry: plan.md; decisions/D4.md; decisions/D5.md; decisions/D6.md; decisions/D7.md; brief/01-owner-design-policy.md"
+}

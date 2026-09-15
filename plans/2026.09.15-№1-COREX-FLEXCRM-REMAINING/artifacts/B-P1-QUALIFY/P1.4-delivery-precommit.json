@@ -1,0 +1,65 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:1e126e8fe48451bde39877bda219bbc59b379ea1e0184c17a2612dadb2c64974",
+    "command_id": "task:plan-exec",
+    "package": "task",
+    "version": "0.18.0"
+  },
+  "commit_sha": "41a2c9317c0f8db62b6422151c3d9b8462dcb877",
+  "continuity": {
+    "evidence": [
+      "batch:59160614190941e970aa8764cba5fe886d88263833addea73b2598afec155fe2",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:artifacts/B-P1-QUALIFY/checkpoint.md"
+    ],
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": "sha256:30709f98c562203dfa715c02a09887b40ce48eab071ac7b7d56711283914c298",
+    "handoff": "sha256:a2e2799403637928e251cda5eba6753f8d0d5287f2faafa96dd5187a4678f909",
+    "plan": "sha256:8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "state": "sha256:5def8c905d534aaa5ad1651c323979ecc8424c3cad3887d7f1c36d47f2c0a303"
+  },
+  "journal": {
+    "command": "plan-exec",
+    "line": 44,
+    "result": "closed-green",
+    "run_id": "62cf9bdb6ccf59b6955df8efe9fc13f58d7df0e1463c01e0c405ea1456b93238",
+    "sha256": "sha256:0b5f1317a900a8f735f39e063e0ba2a0f1174d8216b11d20510dae597099c78d"
+  },
+  "next_exact": "manual: подготовить admission P2.1 плана 2026.09.15-№1-COREX-FLEXCRM-REMAINING: согласовать read-budget policy перед запуском (оценка 381254 при исходном пороге 100000; bundle и routing-admission ALLOW подготовлены).",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "rationale": {
+    "open_risks": "Eight source-owner choices, one confirmation proposal, source binding; exact public API/major/DDL/dependency/installed/release/hosted/effective/timing/consumer receipts remain owning obligations. DI34/AP13 unfilled. This is a sealed qualification definition, not zero runtime CoreX gaps or final P11 acceptance.",
+    "remaining": "P2.1 is the actual successor, Not started. Native final lint required reversible local repair: all original paths retained, 53 map/13 ledger sections enumerated; nine semantic/rule fields unchanged. Current bundle and routing-admission ALLOW prepared; design finish rebound at 650 exact stable inputs. Native read-budget assessment is separate: aggregate 381254 > 100000, d2a false/d2b true, all 99 individual read files/selections within bounds. D19 does not extend to P2. No P2 START/product. Define the future owning budget policy before execution; no new phase design required without a concrete choice."
+  },
+  "recommendation": "**Next:** manual: подготовить admission P2.1 плана 2026.09.15-№1-COREX-FLEXCRM-REMAINING: согласовать read-budget policy перед запуском (оценка 381254 при исходном пороге 100000; bundle и routing-admission ALLOW подготовлены).\n\n| Параметр | Значение |\n| :-- | :-- |\n| Batch | B-P2-PROPOSALS (future; routing ALLOW, budget not passed) |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | continue-root |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:59160614190941e970aa8764cba5fe886d88263833addea73b2598afec155fe2\", \"loaded-inputs:reusable\", \"cold-start-cost:0\", \"lifecycle:scope-complete\", \"checkpoint:artifacts/B-P1-QUALIFY/checkpoint.md\"], \"outcome\": \"continue-root\", \"reason\": \"authorized-scope-complete\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "B-P2-PROPOSALS (future; routing ALLOW, budget not passed)",
+    "command": null,
+    "context": "continue-root",
+    "continuity": {
+      "evidence": [
+        "batch:59160614190941e970aa8764cba5fe886d88263833addea73b2598afec155fe2",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "lifecycle:scope-complete",
+        "checkpoint:artifacts/B-P1-QUALIFY/checkpoint.md"
+      ],
+      "outcome": "continue-root",
+      "reason": "authorized-scope-complete",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "gpt-5.6-sol",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P1.4"
+}

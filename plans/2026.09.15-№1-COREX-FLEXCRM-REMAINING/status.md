@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: e0245799690ee71ff75e72f6b4c755b5e145503b7e763cddd59254b743c221fc
+inputs_sha256: 81de47df5b2308ad9c7be9143285554d719f30777c923686f26760555e29b9a5
 generated_by: task plan-views status
 -->
 
@@ -23,7 +23,7 @@ generated_by: task plan-views status
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Freeze требований, provenance и владельцев | 3/4 | 🟡 In progress |
+| P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 0/4 | ⬜ Not started |
@@ -42,7 +42,7 @@ generated_by: task plan-views status
 | P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
 | P1.2 | Разделить исходные AC на механизм, policy и владельцев | 🟢 Done | 2026-09-15 |
 | P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | 🟢 Done | 2026-09-15 |
-| P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
+| P1.4 | Запечатать requirements-lock и downstream gap set | 🟢 Done | 2026-09-15 |
 
 ## Phase P10
 
@@ -215,6 +215,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · All fixed Required Reads and five carriers consumed; P1.2 closed and P1.3 admission ALLOW. Adaptive implementation/provider/config/test/CHANGELOG evidence inspection underway; no runtime acceptance. |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · evidence+semantic PASS;52R/688atoms/91fullsourceblobs/9A/5E/12G;DI34/AP13remain open;D10local kept,E2/E3cohorts split. artifacts/B-P1-QUALIFY/P1.3-semantic-review.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · seal/downstream/lint+semantic PASS;100sources/52R/365parents/682conditions+6delimiter IDs;17finite conflicts/11SHA;DI34/AP13 open. Exact commands/cwd/results: artifacts/B-P1-QUALIFY/P1.4-check-results.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Inline P1 phase closure after GREEN P1.4; four GREEN item heads, phase_close_gate allow; closure SHA pinned; no phase audit/child. artifacts/B-P1-QUALIFY/P1-phase-close-admission.json
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

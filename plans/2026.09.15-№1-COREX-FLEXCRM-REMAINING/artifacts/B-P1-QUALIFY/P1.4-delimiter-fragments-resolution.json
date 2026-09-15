@@ -1,0 +1,10 @@
+{
+  "status": "RECONCILED",
+  "discovery": "P1.4-delimiter-fragments-open.json",
+  "resolution": "P1.4-effective-acceptance-projection.json",
+  "sealed_conflict": "findings/P1-conflicts.md#effective-acceptance-projection",
+  "six_delimiters": 6,
+  "substantive_conditions": 682,
+  "shared_phpstan_targets_kept": 5,
+  "independent_check": "P1.4-independent-seal-check.json"
+}

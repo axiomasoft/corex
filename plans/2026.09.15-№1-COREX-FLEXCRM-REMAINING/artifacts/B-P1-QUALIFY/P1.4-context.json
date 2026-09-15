@@ -1,0 +1,44 @@
+{
+  "schema_version": "plan-context-receipt/v1",
+  "item_id": "P1.4",
+  "snapshot_sha256": "21ab79935b6eb01540915918681df1af8d0bca78332d1febe3f8f16a9144d96d",
+  "members": [
+    {
+      "role": "plan-core",
+      "path": "plan.md",
+      "sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "bytes": 32648
+    },
+    {
+      "role": "phase-context",
+      "path": "phases/P1/P1.md",
+      "sha256": "8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418",
+      "bytes": 10733
+    },
+    {
+      "role": "item-spec",
+      "path": "phases/P1/P1.4.md",
+      "sha256": "73f1b01ca12257b24b02c32e94682d23233d89512f42bb520721909649befc6d",
+      "bytes": 10197
+    },
+    {
+      "role": "bundle",
+      "path": "bundles/P1.4.json",
+      "sha256": "56fb60376cd1689766f1ca0367b4bcc60310d1d81ddf00e9133eb307e21d3efc",
+      "bytes": 47258
+    },
+    {
+      "role": "item-state",
+      "path": "phases/P1/P1.4.state.md",
+      "sha256": "d486eb18ce0c0401b4c6be6f3b962c119d3e1b00568be0a0f646d4dc5d8952a1",
+      "bytes": 601
+    }
+  ],
+  "consumption": {
+    "plan-core": "prior actual full source read at identical SHA",
+    "phase-context": "prior actual full source read at identical SHA",
+    "item-spec": "complete full actual body read",
+    "item-state": "complete full actual body read",
+    "bundle": "all four bounded raw chunks fully consumed; no truncation"
+  }
+}

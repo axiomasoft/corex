@@ -1,0 +1,9 @@
+{
+  "paths": [
+    {
+      "path": "findings/P1-requirements-lock.md · findings/P1-conflicts.md · findings/P1-downstream-gaps.md",
+      "state": "missing"
+    }
+  ],
+  "sha256": "b4716404f9e55ce2834ebb8baae2a0afbb17826cac365bc7ab5b9815296f01ea"
+}
