@@ -1,0 +1,101 @@
+{
+  "schema_version": "evidence-graph/v1",
+  "item_id": "P1.2",
+  "product_paths": [
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md"
+  ],
+  "digest_inputs": [
+    "docs/dev-doctrine.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/00-owner-request.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/01-owner-design-policy.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b10.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b11.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b12.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b13.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b15.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b16.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b18.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b26.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b27.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b28.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b29.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b30.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b31.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b32.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b33.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b34.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b35.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b36.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b38.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p117.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p6.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p91.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D1.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D19-read-budget-advisory.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D2.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D3.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D4.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-source-reconciliation.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01-traceability.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01a-acceptance-index.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01b-acceptance-source-supplement.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/03-gates.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/04-architecture.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/05-integrated-design.md",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/09-read-budget-policy.json",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py"
+  ],
+  "collisions": [],
+  "nodes": [
+    {
+      "id": "spec",
+      "kind": "item-spec",
+      "path": "phases/P1/P1.2.md",
+      "sha256": "787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c"
+    },
+    {
+      "id": "bundle",
+      "kind": "bundle",
+      "sha256": "80f70a6df966378288ba7f470a9fc317cec205b9c285cc2b2ad7dc031faa4b4f",
+      "declaration_sha256": "dcedf0b7d9dde2950a87c848b666a7110dab914e2964fd35fbc957774158c069"
+    },
+    {
+      "id": "product",
+      "kind": "declared-files",
+      "anchor": {
+        "paths": [
+          {
+            "path": "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-acceptance-map.md",
+            "state": "file",
+            "sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9"
+          }
+        ],
+        "sha256": "35164e37f576a5614356665320300b97616d1c0cacd4b2903fd82a0295e268ec"
+      }
+    },
+    {
+      "id": "closure",
+      "kind": "closure-projections",
+      "paths": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "spec",
+      "to": "product",
+      "kind": "precedes"
+    },
+    {
+      "from": "bundle",
+      "to": "product",
+      "kind": "digest-input"
+    },
+    {
+      "from": "product",
+      "to": "closure",
+      "kind": "byte-identity"
+    }
+  ],
+  "sha256": "aef16f366173b8959972376a1a976f97596b4d53306fe4af6da4271b5af81152"
+}

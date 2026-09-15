@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: 21d5c2ed43caf825ba6898fa7012846c03259ef167b4215614eb2c5c49b02c6e
+inputs_sha256: ead8a4b260b44520e6cc741bf5149277968fb595bebeec69257864e651899f96
 generated_by: task plan-views status
 -->
 
@@ -23,7 +23,7 @@ generated_by: task plan-views status
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Freeze требований, provenance и владельцев | 1/4 | 🟡 In progress |
+| P1 | Freeze требований, provenance и владельцев | 2/4 | 🟡 In progress |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 0/4 | ⬜ Not started |
@@ -40,7 +40,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
-| P1.2 | Разделить исходные AC на механизм, policy и владельцев | 🟡 In progress | 2026-09-15 |
+| P1.2 | Разделить исходные AC на механизм, policy и владельцев | 🟢 Done | 2026-09-15 |
 | P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | ⬜ Not started | — |
 | P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
 
@@ -210,6 +210,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · decision-pending · Required reads exceed frozen item cap; original lint reproduced RED. Owner threshold decision pending. No P1.2 start. See artifacts/B-P1-QUALIFY/read-budget-decision.md. |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · D19 owner advisory admitted; full17AC sections + B38/B26/FLEX carriers consumed; referenced target snippets read. Semantic atom mapping underway, no acceptance claimed. |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · criteria+semantic PASS;365parents/688atoms/52R;full clauses/thresholds retained, native/product owners split. Source choices flow P1.4;runtime acceptance unclaimed. artifacts/B-P1-QUALIFY/P1.2-semantic-review.json
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

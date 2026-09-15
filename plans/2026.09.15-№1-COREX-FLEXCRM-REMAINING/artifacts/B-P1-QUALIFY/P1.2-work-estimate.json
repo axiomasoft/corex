@@ -5,7 +5,7 @@
   "context_attested": false,
   "context_health": "unavailable",
   "batch_receipt_valid": true,
-  "remaining_batch_digest": "d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
+  "remaining_batch_digest": "85f8928dcdcf386aab04fdceaea1176b94c9481cd42ef635d0712b6826383b06",
   "loaded_inputs_reusable": true,
   "cold_start_cost": 0,
   "lifecycle": "active",

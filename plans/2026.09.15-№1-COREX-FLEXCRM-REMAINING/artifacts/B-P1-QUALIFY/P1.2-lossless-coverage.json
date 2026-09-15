@@ -1,0 +1,2929 @@
+{
+  "schema_version": "p1-lossless-coverage/v1",
+  "result": "PASS",
+  "semantic_review": "separate root assessment; no automated acceptance",
+  "parents": [
+    {
+      "parent": "B10 AC-1",
+      "original_sha256": "08f527be5e985b801a8f52a9c06cda2133d6ea4714737479726091f75851238d",
+      "full_body_sha256": "08f527be5e985b801a8f52a9c06cda2133d6ea4714737479726091f75851238d",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-2",
+      "original_sha256": "210069abd3ed374aeb5b09b4a0e608df9fda33d07534e57e86ac38179f7196d8",
+      "full_body_sha256": "210069abd3ed374aeb5b09b4a0e608df9fda33d07534e57e86ac38179f7196d8",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-3",
+      "original_sha256": "a1b8a7c8c5241c725e5a9e7d76115ad89db853db22f52f64e0b5e28b8d43abc6",
+      "full_body_sha256": "a1b8a7c8c5241c725e5a9e7d76115ad89db853db22f52f64e0b5e28b8d43abc6",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-4",
+      "original_sha256": "e0b10be8dbe7c8cc7b92ab85694bbf207383f1ebd68445f9a280634de9d247f6",
+      "full_body_sha256": "e0b10be8dbe7c8cc7b92ab85694bbf207383f1ebd68445f9a280634de9d247f6",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-5",
+      "original_sha256": "004a268abeb3cb57c92cd4266e4eab51299090a6757df5a31b401af1d7ce65db",
+      "full_body_sha256": "004a268abeb3cb57c92cd4266e4eab51299090a6757df5a31b401af1d7ce65db",
+      "coverage": "lossless",
+      "primary_atoms": 6,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-6",
+      "original_sha256": "b7c47aaf21a12458a4a860573246b6c41dcba60703f38dc7506213158eaf3ca5",
+      "full_body_sha256": "b7c47aaf21a12458a4a860573246b6c41dcba60703f38dc7506213158eaf3ca5",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-7",
+      "original_sha256": "38f12b199730195a1b8b7cb62c0472915cc7e19cb2c9dabfc07a66b6e26e9535",
+      "full_body_sha256": "38f12b199730195a1b8b7cb62c0472915cc7e19cb2c9dabfc07a66b6e26e9535",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-8",
+      "original_sha256": "eb5ed4b5cfabf09c9429bd2273ce176919108fd129fd72130cee0a3f9b8c9d07",
+      "full_body_sha256": "eb5ed4b5cfabf09c9429bd2273ce176919108fd129fd72130cee0a3f9b8c9d07",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-9",
+      "original_sha256": "b751aab96dda30dfd1fee020ba13fd518785254dc43f8a491a1733551e5c4cf7",
+      "full_body_sha256": "b751aab96dda30dfd1fee020ba13fd518785254dc43f8a491a1733551e5c4cf7",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-10",
+      "original_sha256": "9c76ef9418d398a2775e1395102abf1bd303cd8a90e0674ad2a5d914f8fa5dd5",
+      "full_body_sha256": "9c76ef9418d398a2775e1395102abf1bd303cd8a90e0674ad2a5d914f8fa5dd5",
+      "coverage": "lossless",
+      "primary_atoms": 5,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-11",
+      "original_sha256": "3331de27037eb9de9ab9fb9c324dca1f6d02ebf403d785540ee6516c4955f17f",
+      "full_body_sha256": "3331de27037eb9de9ab9fb9c324dca1f6d02ebf403d785540ee6516c4955f17f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-12",
+      "original_sha256": "4df1243d3c6d65139c87e26258848b171a29cedb105c0b7d74bffdcdd1d05e3c",
+      "full_body_sha256": "4df1243d3c6d65139c87e26258848b171a29cedb105c0b7d74bffdcdd1d05e3c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-13",
+      "original_sha256": "2780535c0bffbe2881d1f084b3d30eb485fd372d980daa1e6983bab8c87b2eaf",
+      "full_body_sha256": "2780535c0bffbe2881d1f084b3d30eb485fd372d980daa1e6983bab8c87b2eaf",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-14",
+      "original_sha256": "72e70c57b53e2a12ad33a0c4ff4ccfc8c5d170b43d418776a74aa5339ca2c425",
+      "full_body_sha256": "72e70c57b53e2a12ad33a0c4ff4ccfc8c5d170b43d418776a74aa5339ca2c425",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-15",
+      "original_sha256": "eebce0c279547c70a271fb6fcb16eb300169613b191ea2818220e0c6c8f43202",
+      "full_body_sha256": "eebce0c279547c70a271fb6fcb16eb300169613b191ea2818220e0c6c8f43202",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-16",
+      "original_sha256": "235a7bc96de406f800dfa71e286e73a2a8ee5f94f72821ee41ae0e06aefaa4ee",
+      "full_body_sha256": "235a7bc96de406f800dfa71e286e73a2a8ee5f94f72821ee41ae0e06aefaa4ee",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-17",
+      "original_sha256": "38f9cc95aa2e99d64998fbf5e53a7d5cbcb3400ededb193884300e782e9487fd",
+      "full_body_sha256": "38f9cc95aa2e99d64998fbf5e53a7d5cbcb3400ededb193884300e782e9487fd",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-18",
+      "original_sha256": "2a5c6c660a87ade8cfd43bc2e7bbf8a666dd024a772a995a44522c0edfb43c35",
+      "full_body_sha256": "2a5c6c660a87ade8cfd43bc2e7bbf8a666dd024a772a995a44522c0edfb43c35",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-19",
+      "original_sha256": "9bf7fa04cad21b1935e638f93e9bc04b8f700bf2c6c5d51c5253bdc9e2b532ce",
+      "full_body_sha256": "9bf7fa04cad21b1935e638f93e9bc04b8f700bf2c6c5d51c5253bdc9e2b532ce",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-20",
+      "original_sha256": "71b6ff199f99047cf8d65fa18051f13274d49aacfeb397b8b05e878fbc621d22",
+      "full_body_sha256": "71b6ff199f99047cf8d65fa18051f13274d49aacfeb397b8b05e878fbc621d22",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-21",
+      "original_sha256": "9b7de47a0f0ab4a772a7b09f3eb9c5175e3ad1e0be889dc133903d1ece245edb",
+      "full_body_sha256": "9b7de47a0f0ab4a772a7b09f3eb9c5175e3ad1e0be889dc133903d1ece245edb",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-22",
+      "original_sha256": "55d23472a9864a3a2e31fe854e0e1907551f3c3659add5d7624a7e253de1dd48",
+      "full_body_sha256": "55d23472a9864a3a2e31fe854e0e1907551f3c3659add5d7624a7e253de1dd48",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-23",
+      "original_sha256": "1c1a8f3b9ed8c5f826b96ee793db3939bdf52ea53d220fb977fc4537f848a578",
+      "full_body_sha256": "1c1a8f3b9ed8c5f826b96ee793db3939bdf52ea53d220fb977fc4537f848a578",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-24",
+      "original_sha256": "278bbbc20388df560ca235b12cc507d435f13101d3aaec545c601e2f763f5230",
+      "full_body_sha256": "278bbbc20388df560ca235b12cc507d435f13101d3aaec545c601e2f763f5230",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-25",
+      "original_sha256": "5f122bdafcd15b11ab5d9be178abb66a178e0f60691a30b96cf27f2f9f0cfb76",
+      "full_body_sha256": "5f122bdafcd15b11ab5d9be178abb66a178e0f60691a30b96cf27f2f9f0cfb76",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-26",
+      "original_sha256": "73c3f01f17dd8ce8ff5cbdf407a1c865bc9e43938b5626ee6a24456e18d351c9",
+      "full_body_sha256": "73c3f01f17dd8ce8ff5cbdf407a1c865bc9e43938b5626ee6a24456e18d351c9",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-27",
+      "original_sha256": "f029bbc299d244839ed805571d819f5ee8d01b8d4aa065d3b4ebb50277f2ec79",
+      "full_body_sha256": "f029bbc299d244839ed805571d819f5ee8d01b8d4aa065d3b4ebb50277f2ec79",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-28",
+      "original_sha256": "6b9da66122951ebda34845549eac62dd1002416a2606ab99f8e3620062428a1c",
+      "full_body_sha256": "6b9da66122951ebda34845549eac62dd1002416a2606ab99f8e3620062428a1c",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-29",
+      "original_sha256": "e7006d483d353571e7348c6616b6a17a9b0a74e1985d710282d2691f050eb3db",
+      "full_body_sha256": "e7006d483d353571e7348c6616b6a17a9b0a74e1985d710282d2691f050eb3db",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-30",
+      "original_sha256": "96a3209e6beb663208e9fce8761dd17f38d6898c26f43213614911fe7b126c96",
+      "full_body_sha256": "96a3209e6beb663208e9fce8761dd17f38d6898c26f43213614911fe7b126c96",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-31",
+      "original_sha256": "c5bc845e1561455be7cd0099a49909316616394a08265312af4706c340b53768",
+      "full_body_sha256": "c5bc845e1561455be7cd0099a49909316616394a08265312af4706c340b53768",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-32",
+      "original_sha256": "72b5336018dff816832a5c584a674d31e4947d3ed8dc4726491535479feead00",
+      "full_body_sha256": "72b5336018dff816832a5c584a674d31e4947d3ed8dc4726491535479feead00",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-33",
+      "original_sha256": "39b39aa99e3d4124654454031f29e29ee3c2f40c315c13cbff9d044c887c2554",
+      "full_body_sha256": "39b39aa99e3d4124654454031f29e29ee3c2f40c315c13cbff9d044c887c2554",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B10 AC-34",
+      "original_sha256": "4d5561b6e52fb747f33fb73b2f6f9539238e142c913c2ec2ec02143fc4f8d6cb",
+      "full_body_sha256": "4d5561b6e52fb747f33fb73b2f6f9539238e142c913c2ec2ec02143fc4f8d6cb",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-1",
+      "original_sha256": "5d632239b56b77581f68b474f412c252dd5729488d8090c417a602fe23a55efd",
+      "full_body_sha256": "5d632239b56b77581f68b474f412c252dd5729488d8090c417a602fe23a55efd",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-2",
+      "original_sha256": "60bf4427d420865ea0e90909c9959ab6c1fe3daf055afce21f8f6954ebf79693",
+      "full_body_sha256": "60bf4427d420865ea0e90909c9959ab6c1fe3daf055afce21f8f6954ebf79693",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-3",
+      "original_sha256": "d5b2344084199e1e599718878f45ff666bf98b87504fa8856f106eefaec88ec2",
+      "full_body_sha256": "d5b2344084199e1e599718878f45ff666bf98b87504fa8856f106eefaec88ec2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-4",
+      "original_sha256": "62ca1fe3fd112faede605b10a2fa385afd52d6a6e3fa11d50e8fe4c317592fc4",
+      "full_body_sha256": "62ca1fe3fd112faede605b10a2fa385afd52d6a6e3fa11d50e8fe4c317592fc4",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-5",
+      "original_sha256": "10872e5dfa1b74e6fe2e53c8b6d152d18438591b4d8f4ee80ce83c141cbfd48e",
+      "full_body_sha256": "10872e5dfa1b74e6fe2e53c8b6d152d18438591b4d8f4ee80ce83c141cbfd48e",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-6",
+      "original_sha256": "5396ab1da4bec6176979b5e4fe9a2db6e4e7b3f77bd557c60c6ae046c7e5c284",
+      "full_body_sha256": "5396ab1da4bec6176979b5e4fe9a2db6e4e7b3f77bd557c60c6ae046c7e5c284",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-7",
+      "original_sha256": "84141c9f7c076f01f786f2fb214a691afe30b24add421c5f2eda3259d5c11f49",
+      "full_body_sha256": "84141c9f7c076f01f786f2fb214a691afe30b24add421c5f2eda3259d5c11f49",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-8",
+      "original_sha256": "60d0d1dcfb793a734b355043e40eacbe5268ae2153205e397adf9bae1df0d6a7",
+      "full_body_sha256": "60d0d1dcfb793a734b355043e40eacbe5268ae2153205e397adf9bae1df0d6a7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 11
+    },
+    {
+      "parent": "B11 AC-9",
+      "original_sha256": "e3eada6bb9f3a6659fabde18028d741a9f6b10449c617a29774728661556e248",
+      "full_body_sha256": "e3eada6bb9f3a6659fabde18028d741a9f6b10449c617a29774728661556e248",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-10",
+      "original_sha256": "74fb9bad4ef21446ac26e244e1f1e4544eda04b6466f24be903c5ddda5cd1772",
+      "full_body_sha256": "74fb9bad4ef21446ac26e244e1f1e4544eda04b6466f24be903c5ddda5cd1772",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-11",
+      "original_sha256": "60be6435c0d37067f986d5d52d42556e176cdaa3e66f3a1c25c96e203fd1f337",
+      "full_body_sha256": "60be6435c0d37067f986d5d52d42556e176cdaa3e66f3a1c25c96e203fd1f337",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-12",
+      "original_sha256": "7d838f1e53b7bb95b2ec2caec6e34b3fef83f4af7e604782d0c9ad71818687ad",
+      "full_body_sha256": "7d838f1e53b7bb95b2ec2caec6e34b3fef83f4af7e604782d0c9ad71818687ad",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-13",
+      "original_sha256": "37de3e476b8ce5083fa255e8b3f8ef608138427e3ad22ad100250acbdd7b2c43",
+      "full_body_sha256": "37de3e476b8ce5083fa255e8b3f8ef608138427e3ad22ad100250acbdd7b2c43",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-14",
+      "original_sha256": "5e56d08484e59784650cb777a1013a5d6206feea48964c465141463c32679090",
+      "full_body_sha256": "5e56d08484e59784650cb777a1013a5d6206feea48964c465141463c32679090",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-15",
+      "original_sha256": "4dc7d5b6a002f3d6f255071798eec63110b0d99d89d8b5cb2efed89052da6726",
+      "full_body_sha256": "4dc7d5b6a002f3d6f255071798eec63110b0d99d89d8b5cb2efed89052da6726",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-16",
+      "original_sha256": "d5207c7aefeab783cc78d6de7ab187de0f928e2b618d10847d5de62ade273484",
+      "full_body_sha256": "d5207c7aefeab783cc78d6de7ab187de0f928e2b618d10847d5de62ade273484",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-17",
+      "original_sha256": "14eb406c1e4c3c08ff3f671ee320ce4a0e6ea12a53e1d172ab634ab2b8eee1a1",
+      "full_body_sha256": "14eb406c1e4c3c08ff3f671ee320ce4a0e6ea12a53e1d172ab634ab2b8eee1a1",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-18",
+      "original_sha256": "f39bc140e7c15ff6db8f7efb639c96e1e8604b2bf053c475449905aa0ca77812",
+      "full_body_sha256": "f39bc140e7c15ff6db8f7efb639c96e1e8604b2bf053c475449905aa0ca77812",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-19",
+      "original_sha256": "85ae32f3faa099f979a7a30354441a1760a0f490de59df2778b143c5cd02193c",
+      "full_body_sha256": "85ae32f3faa099f979a7a30354441a1760a0f490de59df2778b143c5cd02193c",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-20",
+      "original_sha256": "dc89de899ed8b52585361eb5f788d363013a06843138149674743a2088038db0",
+      "full_body_sha256": "dc89de899ed8b52585361eb5f788d363013a06843138149674743a2088038db0",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-21",
+      "original_sha256": "c0eb16785ad0151eff14d358b4a7e27e69297ee2154f08525262b0812bee18da",
+      "full_body_sha256": "c0eb16785ad0151eff14d358b4a7e27e69297ee2154f08525262b0812bee18da",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-22",
+      "original_sha256": "83d49555f1ca91b95fbf785f09d7a1c9b267a6a9dcfb881b6025b1fd56fe82cb",
+      "full_body_sha256": "83d49555f1ca91b95fbf785f09d7a1c9b267a6a9dcfb881b6025b1fd56fe82cb",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-23",
+      "original_sha256": "3a4275f8497bfa1c1f16c037a66f6e9d1af726c7749513a15b7a0e0f57439a0a",
+      "full_body_sha256": "3a4275f8497bfa1c1f16c037a66f6e9d1af726c7749513a15b7a0e0f57439a0a",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-24",
+      "original_sha256": "42336e2c8ee8ce709613b823304eeac1103071d752e35144be00f4601db8b9e4",
+      "full_body_sha256": "42336e2c8ee8ce709613b823304eeac1103071d752e35144be00f4601db8b9e4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-25",
+      "original_sha256": "c2bd3104d119b6db2bb5a7d81ff1999197409acf054a807d8e902409da1c2990",
+      "full_body_sha256": "c2bd3104d119b6db2bb5a7d81ff1999197409acf054a807d8e902409da1c2990",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-26",
+      "original_sha256": "07c9172e992f7b2d4ac23955f5994e0f5426fdbdcb0610a6ef86f8afef8a5c4d",
+      "full_body_sha256": "07c9172e992f7b2d4ac23955f5994e0f5426fdbdcb0610a6ef86f8afef8a5c4d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-27",
+      "original_sha256": "8c6120ad238d3fc2246045169cf101cf391614f64eebf46ca2425c537d463f26",
+      "full_body_sha256": "8c6120ad238d3fc2246045169cf101cf391614f64eebf46ca2425c537d463f26",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-28",
+      "original_sha256": "0df2fb6b66bee695b1cea2da98d2146531477704012bf335d5603edeed9d82fc",
+      "full_body_sha256": "0df2fb6b66bee695b1cea2da98d2146531477704012bf335d5603edeed9d82fc",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-29",
+      "original_sha256": "5bf157d15968ee09a0ae84cc4f9d6322a5d7d8d1c7b42a662cdfe456f8aea066",
+      "full_body_sha256": "5bf157d15968ee09a0ae84cc4f9d6322a5d7d8d1c7b42a662cdfe456f8aea066",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-30",
+      "original_sha256": "4e33720391618c66f7770aea9b8e395370e48d16985f077eca8f4bf6019eaf12",
+      "full_body_sha256": "4e33720391618c66f7770aea9b8e395370e48d16985f077eca8f4bf6019eaf12",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-31",
+      "original_sha256": "33d1da3e37e307df79b55872c6fbefd450a6985d8fa9cb36ed2bf118879321c6",
+      "full_body_sha256": "33d1da3e37e307df79b55872c6fbefd450a6985d8fa9cb36ed2bf118879321c6",
+      "coverage": "lossless",
+      "primary_atoms": 6,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B11 AC-32",
+      "original_sha256": "77d6d74401a3b3739e34f49f050f5068570e47be47570a080a3e95ee4bfa7654",
+      "full_body_sha256": "77d6d74401a3b3739e34f49f050f5068570e47be47570a080a3e95ee4bfa7654",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-1",
+      "original_sha256": "f9bc1bec3dfc2d94ff83a89d8d3b4519514e36623d7f241b63ab4b206b12d753",
+      "full_body_sha256": "f9bc1bec3dfc2d94ff83a89d8d3b4519514e36623d7f241b63ab4b206b12d753",
+      "coverage": "lossless",
+      "primary_atoms": 5,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-2",
+      "original_sha256": "5adb6bf46eeb28cfe773d4b8bea4cb647301204fbb005e1720dfee13f691c408",
+      "full_body_sha256": "5adb6bf46eeb28cfe773d4b8bea4cb647301204fbb005e1720dfee13f691c408",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-3",
+      "original_sha256": "a15fff1de6e82c55123a0d10bd707b05430d86ae948e85a865b8a93f3c9bedb8",
+      "full_body_sha256": "a15fff1de6e82c55123a0d10bd707b05430d86ae948e85a865b8a93f3c9bedb8",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-4",
+      "original_sha256": "3fd5ca8892aaf47914e88edec50c13458d6a651b442531170d43556fec91587d",
+      "full_body_sha256": "3fd5ca8892aaf47914e88edec50c13458d6a651b442531170d43556fec91587d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-5",
+      "original_sha256": "fd1c65ae3a2ee07f29f9ac88ed27aa551b71b849d8cc9f61ff07005845e3b19f",
+      "full_body_sha256": "fd1c65ae3a2ee07f29f9ac88ed27aa551b71b849d8cc9f61ff07005845e3b19f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-6",
+      "original_sha256": "af3f09f544cc8971f9e38622f5a627d29034ae527a49d81b9612441737379f34",
+      "full_body_sha256": "af3f09f544cc8971f9e38622f5a627d29034ae527a49d81b9612441737379f34",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-7",
+      "original_sha256": "560a02cd0fb9ce0e32420240bb62972f69bfb246d9e161819f7b21dd36b293c2",
+      "full_body_sha256": "560a02cd0fb9ce0e32420240bb62972f69bfb246d9e161819f7b21dd36b293c2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-8",
+      "original_sha256": "233a68dac60aeda2d9dfc366edef4aefa7d25b148aeaaa1754ddb17f25330106",
+      "full_body_sha256": "233a68dac60aeda2d9dfc366edef4aefa7d25b148aeaaa1754ddb17f25330106",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-9",
+      "original_sha256": "0d0d761f64e7867cbe5fe595620c3b8b162f7cef2879f8cb44802d2e893ca7df",
+      "full_body_sha256": "0d0d761f64e7867cbe5fe595620c3b8b162f7cef2879f8cb44802d2e893ca7df",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-10",
+      "original_sha256": "10c2c7374d90c6953d014c0e4cfd45ef37c0afc323d567831e4a627652280007",
+      "full_body_sha256": "10c2c7374d90c6953d014c0e4cfd45ef37c0afc323d567831e4a627652280007",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 9
+    },
+    {
+      "parent": "B12 AC-11",
+      "original_sha256": "22d123b7eb7f1f5ceeaf123bc4e22d2e8ef4167c5ce7256840c55195da5581b8",
+      "full_body_sha256": "22d123b7eb7f1f5ceeaf123bc4e22d2e8ef4167c5ce7256840c55195da5581b8",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-12",
+      "original_sha256": "d4ff8deddb2f9d3fdc044036363ee76a956c18be2fd409641c5306f287e71885",
+      "full_body_sha256": "d4ff8deddb2f9d3fdc044036363ee76a956c18be2fd409641c5306f287e71885",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-13",
+      "original_sha256": "59817eb659e1f7981f3761b0f6f4c333cb5c0c01d567e074b58615dd574ff0e7",
+      "full_body_sha256": "59817eb659e1f7981f3761b0f6f4c333cb5c0c01d567e074b58615dd574ff0e7",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-14",
+      "original_sha256": "fc1c8b71b104c2599fbcb34b9fed2790ed5613980b0003e794e6f640f2bdfa67",
+      "full_body_sha256": "fc1c8b71b104c2599fbcb34b9fed2790ed5613980b0003e794e6f640f2bdfa67",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-15",
+      "original_sha256": "1e34590e5db983b572e8e2407648c5c171816259a1c55a1c5edd37fd4bb1edd5",
+      "full_body_sha256": "1e34590e5db983b572e8e2407648c5c171816259a1c55a1c5edd37fd4bb1edd5",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-16",
+      "original_sha256": "0dfb37ec16fec94036ccdd17715414cbad20256bc3102beff014cbc08e3d7bde",
+      "full_body_sha256": "0dfb37ec16fec94036ccdd17715414cbad20256bc3102beff014cbc08e3d7bde",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-17",
+      "original_sha256": "f4083a86b4b1178a2ab6cc417fa8502c70977e21232998e162b0d9c165779d17",
+      "full_body_sha256": "f4083a86b4b1178a2ab6cc417fa8502c70977e21232998e162b0d9c165779d17",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-18",
+      "original_sha256": "f47cb5ad5aa48b32418d478a3b58303af832699f4f08d5a1d69696c4c0c42e75",
+      "full_body_sha256": "f47cb5ad5aa48b32418d478a3b58303af832699f4f08d5a1d69696c4c0c42e75",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-19",
+      "original_sha256": "719248c49fcafa77266b68297a06489cbd37a52ecffa58beb535994de41eac33",
+      "full_body_sha256": "719248c49fcafa77266b68297a06489cbd37a52ecffa58beb535994de41eac33",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-20",
+      "original_sha256": "8e19c58ec7acdff7bd7c95f175addee27c51c9f1858d474cd68462e8cb4a0da0",
+      "full_body_sha256": "8e19c58ec7acdff7bd7c95f175addee27c51c9f1858d474cd68462e8cb4a0da0",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-21",
+      "original_sha256": "512f56be84022ac646ab088327ee171168467ae407327faf58e31a1d5c4821ff",
+      "full_body_sha256": "512f56be84022ac646ab088327ee171168467ae407327faf58e31a1d5c4821ff",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-22",
+      "original_sha256": "d1dccab19def85b2c7c91a66e2ad77d4a3a87b23675b4fd744b511405f3dc0a8",
+      "full_body_sha256": "d1dccab19def85b2c7c91a66e2ad77d4a3a87b23675b4fd744b511405f3dc0a8",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-23",
+      "original_sha256": "40c25f66936fd0f6c79c7d68884dac74af81ed24ed247b1d36e2758f850f9772",
+      "full_body_sha256": "40c25f66936fd0f6c79c7d68884dac74af81ed24ed247b1d36e2758f850f9772",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-24",
+      "original_sha256": "68af2fd235abccaeabf299ce442f3397c9bc0099add9419200968d6e9439cca3",
+      "full_body_sha256": "68af2fd235abccaeabf299ce442f3397c9bc0099add9419200968d6e9439cca3",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-25",
+      "original_sha256": "981ed653cf099298b4ba301c61fd5ff5e3ac40d023e45d38be20005d8200a682",
+      "full_body_sha256": "981ed653cf099298b4ba301c61fd5ff5e3ac40d023e45d38be20005d8200a682",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-26",
+      "original_sha256": "135a23e8e44d27a0e26ac734ffc834bd485ee7d17c4933db6aa93eee1ba25689",
+      "full_body_sha256": "135a23e8e44d27a0e26ac734ffc834bd485ee7d17c4933db6aa93eee1ba25689",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-27",
+      "original_sha256": "9cb59c886123bce5f6c04844314726134775c384afcf7de99ab71686372285f6",
+      "full_body_sha256": "9cb59c886123bce5f6c04844314726134775c384afcf7de99ab71686372285f6",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-28",
+      "original_sha256": "354de1d6d80bd672ed3091a9761639f93c4dc8912646c9759b1b11f4f888b433",
+      "full_body_sha256": "354de1d6d80bd672ed3091a9761639f93c4dc8912646c9759b1b11f4f888b433",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-29",
+      "original_sha256": "b60b3c67a64068e9332de7f52c175576491cb2a04a26688b4a409ca2dcad6067",
+      "full_body_sha256": "b60b3c67a64068e9332de7f52c175576491cb2a04a26688b4a409ca2dcad6067",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B12 AC-30",
+      "original_sha256": "73649d9130fa99d2c462080e0323665cbe51529373c1c4d31a82cc14ff1764ae",
+      "full_body_sha256": "73649d9130fa99d2c462080e0323665cbe51529373c1c4d31a82cc14ff1764ae",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-1",
+      "original_sha256": "2574f63b24fb4d5a462d2c7aac7fe6d2636ad600bd6d72faf7dbf77e9223a56c",
+      "full_body_sha256": "2574f63b24fb4d5a462d2c7aac7fe6d2636ad600bd6d72faf7dbf77e9223a56c",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-2",
+      "original_sha256": "d9fbc800013885a315305d7cafb24928f3f16b6fad37afcab5b902bc74c40acf",
+      "full_body_sha256": "d9fbc800013885a315305d7cafb24928f3f16b6fad37afcab5b902bc74c40acf",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-3",
+      "original_sha256": "bfc6e61481a9141f8c64ab01cd88c3d35317d95b4afce02964f8a142494268ab",
+      "full_body_sha256": "bfc6e61481a9141f8c64ab01cd88c3d35317d95b4afce02964f8a142494268ab",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-4",
+      "original_sha256": "18ecc63168d00d0d4f5eaf0e36563d80c9e5ad0f6a9a9a36707e96f294529f70",
+      "full_body_sha256": "18ecc63168d00d0d4f5eaf0e36563d80c9e5ad0f6a9a9a36707e96f294529f70",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-5",
+      "original_sha256": "8173e172a52963ccad7d426ac0404fa5e82d9f908b717c84e04e6611f56ee642",
+      "full_body_sha256": "8173e172a52963ccad7d426ac0404fa5e82d9f908b717c84e04e6611f56ee642",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-6",
+      "original_sha256": "f981de502b89228bdba6a27dfac44d94c96271a551cad2b6d8e74d004635f4b1",
+      "full_body_sha256": "f981de502b89228bdba6a27dfac44d94c96271a551cad2b6d8e74d004635f4b1",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-7",
+      "original_sha256": "af9f3abc5b17cacd20c7defc153248ec769ee9a9b682e5fff1b8d6ac03148eaf",
+      "full_body_sha256": "af9f3abc5b17cacd20c7defc153248ec769ee9a9b682e5fff1b8d6ac03148eaf",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-8",
+      "original_sha256": "63ed214c367e32319de6748de1eaf67aaeafb35940342a27e776ec86bc770895",
+      "full_body_sha256": "63ed214c367e32319de6748de1eaf67aaeafb35940342a27e776ec86bc770895",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-9",
+      "original_sha256": "8c1a8ee395fd87908dd51ed963371be662f195006787c7114122cf11b813f60c",
+      "full_body_sha256": "8c1a8ee395fd87908dd51ed963371be662f195006787c7114122cf11b813f60c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-10",
+      "original_sha256": "f74c91eaf45c46bf055ef68b416065b583754dc80f880da6d3076c9de00e772d",
+      "full_body_sha256": "f74c91eaf45c46bf055ef68b416065b583754dc80f880da6d3076c9de00e772d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-11",
+      "original_sha256": "48c58d5e6745506f8910300b36abf357dbef4c118ad7444797d6df7fd97155a4",
+      "full_body_sha256": "48c58d5e6745506f8910300b36abf357dbef4c118ad7444797d6df7fd97155a4",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-12",
+      "original_sha256": "af6686b15b2de0e9c1fd5099ab9b8616efa03fbfe0d26a600da017f85b010b85",
+      "full_body_sha256": "af6686b15b2de0e9c1fd5099ab9b8616efa03fbfe0d26a600da017f85b010b85",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-13",
+      "original_sha256": "99c75cd8e9d4ecda95210af25e2c2a29f03cd0726dfca9e5c1a7cac0dbf8e56b",
+      "full_body_sha256": "99c75cd8e9d4ecda95210af25e2c2a29f03cd0726dfca9e5c1a7cac0dbf8e56b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-14",
+      "original_sha256": "4df05e60a1c23db6aef63580b6f171de1a54bd030edbf965d211f6674294fba4",
+      "full_body_sha256": "4df05e60a1c23db6aef63580b6f171de1a54bd030edbf965d211f6674294fba4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-15",
+      "original_sha256": "2a819785a83bb94095e7caa8f07b032470838ef7838821664335f92ed8bb366f",
+      "full_body_sha256": "2a819785a83bb94095e7caa8f07b032470838ef7838821664335f92ed8bb366f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-16",
+      "original_sha256": "f012063737d07296faf3a41c27b344d73106c579ff166a4c873f30b6cf1c7c03",
+      "full_body_sha256": "f012063737d07296faf3a41c27b344d73106c579ff166a4c873f30b6cf1c7c03",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-17",
+      "original_sha256": "1db711cb10e04a14d27d48a2801107dd6aa5644eb1d7e4f339a62a50f8046a1d",
+      "full_body_sha256": "1db711cb10e04a14d27d48a2801107dd6aa5644eb1d7e4f339a62a50f8046a1d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-18",
+      "original_sha256": "7c1bd7492adbb8dba53399f3ab38f49656d88c8c654662d41a73c75691260413",
+      "full_body_sha256": "7c1bd7492adbb8dba53399f3ab38f49656d88c8c654662d41a73c75691260413",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-19",
+      "original_sha256": "7ef7b4850bcdf9abf45121c20c62fc7c3b270aa1e0415ea46dd7cfc4137e388d",
+      "full_body_sha256": "7ef7b4850bcdf9abf45121c20c62fc7c3b270aa1e0415ea46dd7cfc4137e388d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-20",
+      "original_sha256": "d1ed6926c3f9e5ccf68024957e304863f8430c66e9dceb225aef41642c713884",
+      "full_body_sha256": "d1ed6926c3f9e5ccf68024957e304863f8430c66e9dceb225aef41642c713884",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-21",
+      "original_sha256": "6d147fdac988a18e9bc4717e21b3d4dcf674d94d2cb97cd976fbdd39523e2194",
+      "full_body_sha256": "6d147fdac988a18e9bc4717e21b3d4dcf674d94d2cb97cd976fbdd39523e2194",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-22",
+      "original_sha256": "24797e38aee4cac8bd0cb99405db0f4129d19942373841ee0bd1a820ae62c0ee",
+      "full_body_sha256": "24797e38aee4cac8bd0cb99405db0f4129d19942373841ee0bd1a820ae62c0ee",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-23",
+      "original_sha256": "ce9a50da24327b81ed34ef6f721367f26b4cb3ab91325c94787a3ed5f4559924",
+      "full_body_sha256": "ce9a50da24327b81ed34ef6f721367f26b4cb3ab91325c94787a3ed5f4559924",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-24",
+      "original_sha256": "1928b37439c2be3306932bbe43122d1ebf9456c6f79725b359187073be144084",
+      "full_body_sha256": "1928b37439c2be3306932bbe43122d1ebf9456c6f79725b359187073be144084",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-25",
+      "original_sha256": "c70946a4151b154ec2baf3f23ddef912f34ba826dd92b9eaa7b03b1923ac0345",
+      "full_body_sha256": "c70946a4151b154ec2baf3f23ddef912f34ba826dd92b9eaa7b03b1923ac0345",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-26",
+      "original_sha256": "6f2b07c954045a213be81946984d640665686af2a228c6fe718a70b8ec6489db",
+      "full_body_sha256": "6f2b07c954045a213be81946984d640665686af2a228c6fe718a70b8ec6489db",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-27",
+      "original_sha256": "d36dda459d043a47c09825a9dae73a4921ff8ed3afd99ad4c3dba28df41f6424",
+      "full_body_sha256": "d36dda459d043a47c09825a9dae73a4921ff8ed3afd99ad4c3dba28df41f6424",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-28",
+      "original_sha256": "6c2ad3f695a37966e3ab10f7c603f65e261b212cd0ca38e21ad5e0b5c6971410",
+      "full_body_sha256": "6c2ad3f695a37966e3ab10f7c603f65e261b212cd0ca38e21ad5e0b5c6971410",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-29",
+      "original_sha256": "3aa4e8ea8ed7d8b9a6dd2135af664499764a648e0261ab2c6e8dff1283849bcd",
+      "full_body_sha256": "3aa4e8ea8ed7d8b9a6dd2135af664499764a648e0261ab2c6e8dff1283849bcd",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-30",
+      "original_sha256": "804c2afc295e534ab86c3302c20eb36dde69f262a20915684d6e4fb0a96ee9f0",
+      "full_body_sha256": "804c2afc295e534ab86c3302c20eb36dde69f262a20915684d6e4fb0a96ee9f0",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-31",
+      "original_sha256": "7faa85576bca5bac4a984e36c64cdfd5b5b7e09bf46c8817de1f8a1a5c75059a",
+      "full_body_sha256": "7faa85576bca5bac4a984e36c64cdfd5b5b7e09bf46c8817de1f8a1a5c75059a",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-32",
+      "original_sha256": "4ba4b81fc1b84f18ec20a7ea851725966c4f10d76b63549aae8eff8f6df6c111",
+      "full_body_sha256": "4ba4b81fc1b84f18ec20a7ea851725966c4f10d76b63549aae8eff8f6df6c111",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-33",
+      "original_sha256": "b603318603c712bfc023f262aa999acb00f4b10f7ad1428c98adbedb04f41c6e",
+      "full_body_sha256": "b603318603c712bfc023f262aa999acb00f4b10f7ad1428c98adbedb04f41c6e",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-34",
+      "original_sha256": "d5a947fdafda3ab2392bd930110f6241f90fddaaa316b689d944e3529c3eebca",
+      "full_body_sha256": "d5a947fdafda3ab2392bd930110f6241f90fddaaa316b689d944e3529c3eebca",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-35",
+      "original_sha256": "92c3b08872719cee0d8c7a25df4b9dab48b215909e1d75ca2127b7204c424c9a",
+      "full_body_sha256": "92c3b08872719cee0d8c7a25df4b9dab48b215909e1d75ca2127b7204c424c9a",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-36",
+      "original_sha256": "220ef84f45e726abca852dcacb4c2777a478c198f646e4d9673b0b3fa24c92c7",
+      "full_body_sha256": "220ef84f45e726abca852dcacb4c2777a478c198f646e4d9673b0b3fa24c92c7",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-37",
+      "original_sha256": "fc15dd68c0de97c145a27e5cb5171912bdc8c17b0cc74da95e011e2f1cefd6dc",
+      "full_body_sha256": "fc15dd68c0de97c145a27e5cb5171912bdc8c17b0cc74da95e011e2f1cefd6dc",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-38",
+      "original_sha256": "b829b3c9a188d9940ced75aa1815b8470a3edba5c65c17b62c015877e275a2ed",
+      "full_body_sha256": "b829b3c9a188d9940ced75aa1815b8470a3edba5c65c17b62c015877e275a2ed",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-39",
+      "original_sha256": "34fda34407b92d594042c4232846ff4aa575a164b54568fd709e065ce88dabeb",
+      "full_body_sha256": "34fda34407b92d594042c4232846ff4aa575a164b54568fd709e065ce88dabeb",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-40",
+      "original_sha256": "6cdcc65d7a4a6b880dac7f9311e7f134b5eabd4698fd9ea7a6e0ff1f99f04b00",
+      "full_body_sha256": "6cdcc65d7a4a6b880dac7f9311e7f134b5eabd4698fd9ea7a6e0ff1f99f04b00",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-41",
+      "original_sha256": "103ce0a1ed2aa4c4ef4b60b1e0300c026179411a7d0c27871b4e0813dee5017d",
+      "full_body_sha256": "103ce0a1ed2aa4c4ef4b60b1e0300c026179411a7d0c27871b4e0813dee5017d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B13 AC-42",
+      "original_sha256": "d08f40f55b26acb2d55dadad69ab33a23b5ee3154b257d2f7b66a1774d471f94",
+      "full_body_sha256": "d08f40f55b26acb2d55dadad69ab33a23b5ee3154b257d2f7b66a1774d471f94",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-1",
+      "original_sha256": "4ba42cbf02e44d81b6c0c210a6ed1af0c9ef4d23905238f3f718197781698444",
+      "full_body_sha256": "4ba42cbf02e44d81b6c0c210a6ed1af0c9ef4d23905238f3f718197781698444",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-2",
+      "original_sha256": "547243e3638957e6b16f543eebef485f9cef4b32bf902ba88bd499ce66def204",
+      "full_body_sha256": "547243e3638957e6b16f543eebef485f9cef4b32bf902ba88bd499ce66def204",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-3",
+      "original_sha256": "feeefc3a3cd3b8686026e1f8fd598c4cc0c6e7d2bbe29a9724fa6c8dfb06af4e",
+      "full_body_sha256": "feeefc3a3cd3b8686026e1f8fd598c4cc0c6e7d2bbe29a9724fa6c8dfb06af4e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-4",
+      "original_sha256": "3fb612c8c448a7a8233db6cecfefb3056feacde6bb55bbff616d123734d028f2",
+      "full_body_sha256": "3fb612c8c448a7a8233db6cecfefb3056feacde6bb55bbff616d123734d028f2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-5",
+      "original_sha256": "45afd10cf0a158bfd1064f8ef7a8750f42aa415b332847b4d94a23a0fb946e21",
+      "full_body_sha256": "45afd10cf0a158bfd1064f8ef7a8750f42aa415b332847b4d94a23a0fb946e21",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-6",
+      "original_sha256": "66a1112a402bfbba198c5f0d041d81eefcd63abba2820af4ea62c62e9e99ac8f",
+      "full_body_sha256": "66a1112a402bfbba198c5f0d041d81eefcd63abba2820af4ea62c62e9e99ac8f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-7",
+      "original_sha256": "4cb53743f558657c611eb8f77cdc6d0036d0c15fb4a6d56b03886a235987d9d5",
+      "full_body_sha256": "4cb53743f558657c611eb8f77cdc6d0036d0c15fb4a6d56b03886a235987d9d5",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-8",
+      "original_sha256": "fea78771f6b16fa944aa3512bf7a55a3faadda2b673f008efb74696f64d1f3d9",
+      "full_body_sha256": "fea78771f6b16fa944aa3512bf7a55a3faadda2b673f008efb74696f64d1f3d9",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-9",
+      "original_sha256": "720ddf7a64ffb4ebf373143235834839bff7b1181e593a104c43288bbfc236aa",
+      "full_body_sha256": "720ddf7a64ffb4ebf373143235834839bff7b1181e593a104c43288bbfc236aa",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-10",
+      "original_sha256": "51d56d1ed54db828f123753f6f9b9a23bd492312a850f3a675a0708c6c47faa4",
+      "full_body_sha256": "51d56d1ed54db828f123753f6f9b9a23bd492312a850f3a675a0708c6c47faa4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-11",
+      "original_sha256": "21ae3d6c4c31c15e95bef32b0834672ab9853e4d2326f2b58e8ef517fa64970e",
+      "full_body_sha256": "21ae3d6c4c31c15e95bef32b0834672ab9853e4d2326f2b58e8ef517fa64970e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-12",
+      "original_sha256": "3792b5c001a6a24b496fa32954ae63c229508c0faf5162a2f2bab5852fc2fbeb",
+      "full_body_sha256": "3792b5c001a6a24b496fa32954ae63c229508c0faf5162a2f2bab5852fc2fbeb",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-13",
+      "original_sha256": "a1f52a3a6e2f77cf104957cad829e5de064dad2ee3474cf84a3fcdf04c70fad5",
+      "full_body_sha256": "a1f52a3a6e2f77cf104957cad829e5de064dad2ee3474cf84a3fcdf04c70fad5",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-14",
+      "original_sha256": "77931c42a01246312cf00491400c7b86de72b1dde35bcf507f37a0fb0805ea88",
+      "full_body_sha256": "77931c42a01246312cf00491400c7b86de72b1dde35bcf507f37a0fb0805ea88",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-15",
+      "original_sha256": "7b69b940b619babb6ddcd08b469c55c3ea68932dba54e0fcc4af0d0016387b64",
+      "full_body_sha256": "7b69b940b619babb6ddcd08b469c55c3ea68932dba54e0fcc4af0d0016387b64",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-16",
+      "original_sha256": "ddc9906683ee7701c2155f5da824ac7848e34616561aa7280acbb61c2afa2e84",
+      "full_body_sha256": "ddc9906683ee7701c2155f5da824ac7848e34616561aa7280acbb61c2afa2e84",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-17",
+      "original_sha256": "0e8b20bde0a9dbc9b3a5e0a1ea8193ef7ab99a5919d29aa8a92a43530fbcdbc4",
+      "full_body_sha256": "0e8b20bde0a9dbc9b3a5e0a1ea8193ef7ab99a5919d29aa8a92a43530fbcdbc4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-18",
+      "original_sha256": "84bb1d2055388857d11655a8786bb57fb7f36932f3d019b4149438562843be56",
+      "full_body_sha256": "84bb1d2055388857d11655a8786bb57fb7f36932f3d019b4149438562843be56",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-19",
+      "original_sha256": "6ab38ec3ffceaa6e6f5d7675d186b4bae0db7210b76808ac64a0a483668c0b56",
+      "full_body_sha256": "6ab38ec3ffceaa6e6f5d7675d186b4bae0db7210b76808ac64a0a483668c0b56",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-20",
+      "original_sha256": "616e674e299a3d2fbc10ab7ee7ae1a8ff56f923396cac32afa2efb7b3b8a4008",
+      "full_body_sha256": "616e674e299a3d2fbc10ab7ee7ae1a8ff56f923396cac32afa2efb7b3b8a4008",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-21",
+      "original_sha256": "249fcf89151ac913fd93d5ce0e34c0b0a66c2464d0438fcbaa0462a33cc2bbb1",
+      "full_body_sha256": "249fcf89151ac913fd93d5ce0e34c0b0a66c2464d0438fcbaa0462a33cc2bbb1",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-22",
+      "original_sha256": "3577939b75553774489f1b0561094c28b72b7c9f9a5fa00bdedb9ab7d59355a3",
+      "full_body_sha256": "3577939b75553774489f1b0561094c28b72b7c9f9a5fa00bdedb9ab7d59355a3",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-23",
+      "original_sha256": "eb914ee00230a74acb0be26ecb63b366ac36dc0af3072caec3a10d399de42a94",
+      "full_body_sha256": "eb914ee00230a74acb0be26ecb63b366ac36dc0af3072caec3a10d399de42a94",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-24",
+      "original_sha256": "2197b7e3b224f262d14daed63acdfac2f0ef98d1cb47c0723b513d86aebaaa54",
+      "full_body_sha256": "2197b7e3b224f262d14daed63acdfac2f0ef98d1cb47c0723b513d86aebaaa54",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-25",
+      "original_sha256": "54d98f08e9a6e071347dbfe6ac4553a31269c74148fb75f708c0cfca9555347b",
+      "full_body_sha256": "54d98f08e9a6e071347dbfe6ac4553a31269c74148fb75f708c0cfca9555347b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-26",
+      "original_sha256": "f47292257e030703f11cd6e967c1559beb95f1f1fe88c36cf78131a1e94a794a",
+      "full_body_sha256": "f47292257e030703f11cd6e967c1559beb95f1f1fe88c36cf78131a1e94a794a",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-27",
+      "original_sha256": "12d8cde9dcea90617d0951ed629f6e3d37822df6584282fb8af8fc3f243d085e",
+      "full_body_sha256": "12d8cde9dcea90617d0951ed629f6e3d37822df6584282fb8af8fc3f243d085e",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-28",
+      "original_sha256": "a6a2c6a975af78a6e386646518e72e1ac36bb04ba810503df047c00ac7178525",
+      "full_body_sha256": "a6a2c6a975af78a6e386646518e72e1ac36bb04ba810503df047c00ac7178525",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-29",
+      "original_sha256": "ecd9d3af6ed961e593351770f33fcad4c1485c1e13a8489539285c2e6c8c2d90",
+      "full_body_sha256": "ecd9d3af6ed961e593351770f33fcad4c1485c1e13a8489539285c2e6c8c2d90",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B15 AC-30",
+      "original_sha256": "a4f560de388e36a70edc0ea2b9551dff58b5b0cfecd96458e37807040628b8a2",
+      "full_body_sha256": "a4f560de388e36a70edc0ea2b9551dff58b5b0cfecd96458e37807040628b8a2",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-1",
+      "original_sha256": "3760ac93012b037bb64d26e766f64f39c6ab2bb5c3fec94b90d1f85a70234ac2",
+      "full_body_sha256": "3760ac93012b037bb64d26e766f64f39c6ab2bb5c3fec94b90d1f85a70234ac2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-2",
+      "original_sha256": "8ac4b66874b5aa8d2c803376bd02cf728dc2b7f6158ba589cb0ff7320842d7d7",
+      "full_body_sha256": "8ac4b66874b5aa8d2c803376bd02cf728dc2b7f6158ba589cb0ff7320842d7d7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-3",
+      "original_sha256": "f78fb597628a6b21833ac9e551572fd8c55c33b202112eb5bad4a1f5125152aa",
+      "full_body_sha256": "f78fb597628a6b21833ac9e551572fd8c55c33b202112eb5bad4a1f5125152aa",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-4",
+      "original_sha256": "ac691073943c755bfbffdfb08396e97f076ee0895ba9887456f27d214a7b4051",
+      "full_body_sha256": "ac691073943c755bfbffdfb08396e97f076ee0895ba9887456f27d214a7b4051",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-5",
+      "original_sha256": "5a2a10de79d639666f8cb07ec293790a7313bc4dbeea54af18365fc34b1700e2",
+      "full_body_sha256": "5a2a10de79d639666f8cb07ec293790a7313bc4dbeea54af18365fc34b1700e2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-6",
+      "original_sha256": "314ed550e9f85728ae448b9dafc421a63db4f59ff342213ff80852235314c3d8",
+      "full_body_sha256": "314ed550e9f85728ae448b9dafc421a63db4f59ff342213ff80852235314c3d8",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-7",
+      "original_sha256": "88d24375381752495173363ae10f07cfb6938b239ba4ecc941593c02074ef78a",
+      "full_body_sha256": "88d24375381752495173363ae10f07cfb6938b239ba4ecc941593c02074ef78a",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-8",
+      "original_sha256": "c2a281c827360e771fefa95cd95b0410ed28dde1d8a58d58d485a1211b036cad",
+      "full_body_sha256": "c2a281c827360e771fefa95cd95b0410ed28dde1d8a58d58d485a1211b036cad",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-9",
+      "original_sha256": "e4b2554a14823147a166730b41d9c77df156a3131e1388b486af77db8a6818b1",
+      "full_body_sha256": "e4b2554a14823147a166730b41d9c77df156a3131e1388b486af77db8a6818b1",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-10",
+      "original_sha256": "2ad57c271b86be22bbfc3d398b20954e32f24fd463870151627d379a6dde96e7",
+      "full_body_sha256": "2ad57c271b86be22bbfc3d398b20954e32f24fd463870151627d379a6dde96e7",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-11",
+      "original_sha256": "37125b947a297a2dd10fd66a0ee5fe23b8df6f9b37bd44dc65687d8c2447c2aa",
+      "full_body_sha256": "37125b947a297a2dd10fd66a0ee5fe23b8df6f9b37bd44dc65687d8c2447c2aa",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-12",
+      "original_sha256": "f61be378619802374291b3fc9eaadea290f0ed3c916caba3751655a4aca4499d",
+      "full_body_sha256": "f61be378619802374291b3fc9eaadea290f0ed3c916caba3751655a4aca4499d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-13",
+      "original_sha256": "edae224f826bb0de4a9509f3082e7651da6863c495d303f9b0aeb90c342638b5",
+      "full_body_sha256": "edae224f826bb0de4a9509f3082e7651da6863c495d303f9b0aeb90c342638b5",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-14",
+      "original_sha256": "8f6edfd504e645baf78affc1ee291c8df19f54f0f0ca06e7dc16be3f0241b005",
+      "full_body_sha256": "8f6edfd504e645baf78affc1ee291c8df19f54f0f0ca06e7dc16be3f0241b005",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B27 AC-15",
+      "original_sha256": "379c359deb141586ae0e958bb17dd451e315ef4c126634a59d4a4f3904491eda",
+      "full_body_sha256": "379c359deb141586ae0e958bb17dd451e315ef4c126634a59d4a4f3904491eda",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-1",
+      "original_sha256": "a5bf95a2efabd3ab04129e809edb19bfbda8b7157b1d9c4f0a4cda27ed2a043b",
+      "full_body_sha256": "a5bf95a2efabd3ab04129e809edb19bfbda8b7157b1d9c4f0a4cda27ed2a043b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-2",
+      "original_sha256": "b3a2c2f9d1dadb8b84cf92b264ef26287ca9ade91b9d1442ec9cb5cd16522b2c",
+      "full_body_sha256": "b3a2c2f9d1dadb8b84cf92b264ef26287ca9ade91b9d1442ec9cb5cd16522b2c",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-3",
+      "original_sha256": "4d51b171923f2ddcc801665316a121c492d8022660de87d06b78243a9d6b4922",
+      "full_body_sha256": "4d51b171923f2ddcc801665316a121c492d8022660de87d06b78243a9d6b4922",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-4",
+      "original_sha256": "d7b6e99f30bced3968646e7aef75ca05a7c65a52046dae8a29655be6f777cd88",
+      "full_body_sha256": "d7b6e99f30bced3968646e7aef75ca05a7c65a52046dae8a29655be6f777cd88",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-5",
+      "original_sha256": "e37399ec91e77c37aa8965bef0f3a2cd06aa5694c91e6683685b8aa9e5d15843",
+      "full_body_sha256": "e37399ec91e77c37aa8965bef0f3a2cd06aa5694c91e6683685b8aa9e5d15843",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-6",
+      "original_sha256": "78f957eaaec55abdf3e54bc8cb7e31b88b2c9b70776dec3a20e3f559a850abd0",
+      "full_body_sha256": "78f957eaaec55abdf3e54bc8cb7e31b88b2c9b70776dec3a20e3f559a850abd0",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-7",
+      "original_sha256": "89379f3fb910b43edb09c24e7835bc1903be2cad05b1170479898c9127ae5813",
+      "full_body_sha256": "89379f3fb910b43edb09c24e7835bc1903be2cad05b1170479898c9127ae5813",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-8",
+      "original_sha256": "52e6d80fffd4fb556a6f57830528ce6c0d56b2e4ad3b7d6cf342a514bd256d5c",
+      "full_body_sha256": "52e6d80fffd4fb556a6f57830528ce6c0d56b2e4ad3b7d6cf342a514bd256d5c",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-9",
+      "original_sha256": "c059c11b15beeba25ccb0bfe4f8dc05ddb3119f927e8018cc2ee0481cbf6492e",
+      "full_body_sha256": "c059c11b15beeba25ccb0bfe4f8dc05ddb3119f927e8018cc2ee0481cbf6492e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-10",
+      "original_sha256": "44a263cb3eb7d62e3cde7881f378dd70adaf5b1776f7319335328bf4eea2f442",
+      "full_body_sha256": "44a263cb3eb7d62e3cde7881f378dd70adaf5b1776f7319335328bf4eea2f442",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-11",
+      "original_sha256": "44c4064e25e410b3734498968fb1211311ae59e3df8f28b7c61ed9c59e22349b",
+      "full_body_sha256": "44c4064e25e410b3734498968fb1211311ae59e3df8f28b7c61ed9c59e22349b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-12",
+      "original_sha256": "3e7a9859608a3e095f9a3d5a08b5f5381eba6fa1e6685f9577b72bf4d1ff0f26",
+      "full_body_sha256": "3e7a9859608a3e095f9a3d5a08b5f5381eba6fa1e6685f9577b72bf4d1ff0f26",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-13",
+      "original_sha256": "54628b5487cb0026d980af96a694a11335e2057d7f76302952ef5150ccbe2368",
+      "full_body_sha256": "54628b5487cb0026d980af96a694a11335e2057d7f76302952ef5150ccbe2368",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-14",
+      "original_sha256": "56ec2b852f56b96b5c5e9bcb82728fa56cc4a06400fd86b2db52200a5d8bc503",
+      "full_body_sha256": "56ec2b852f56b96b5c5e9bcb82728fa56cc4a06400fd86b2db52200a5d8bc503",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B28 AC-15",
+      "original_sha256": "9bc9be7e0ad1332ff18c55730abbeab5fcef3ccd97a4bb766efcafabc385d0ab",
+      "full_body_sha256": "9bc9be7e0ad1332ff18c55730abbeab5fcef3ccd97a4bb766efcafabc385d0ab",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-1",
+      "original_sha256": "b86ea01a0ee7c66f2894c111f7dbd92725f0b81c59ca8fe76d581f5c9dcb8a55",
+      "full_body_sha256": "b86ea01a0ee7c66f2894c111f7dbd92725f0b81c59ca8fe76d581f5c9dcb8a55",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-2",
+      "original_sha256": "c332056a047a0438d397281f55946c63ead9e37e1fab421c00806a9e62d0a4a9",
+      "full_body_sha256": "c332056a047a0438d397281f55946c63ead9e37e1fab421c00806a9e62d0a4a9",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-3",
+      "original_sha256": "9d42b888d493b9946b3e39126ed488120e745d2219305bce1cd40951bcab347e",
+      "full_body_sha256": "9d42b888d493b9946b3e39126ed488120e745d2219305bce1cd40951bcab347e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-4",
+      "original_sha256": "e0656321e59ab85f322bb8e4db82fec203fee962cbb405d326c34733086c34ae",
+      "full_body_sha256": "e0656321e59ab85f322bb8e4db82fec203fee962cbb405d326c34733086c34ae",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-5",
+      "original_sha256": "6ac21b49d1bf64f3e78488258e9cb9e82eee28b781391220b6c12c591ceac3ac",
+      "full_body_sha256": "6ac21b49d1bf64f3e78488258e9cb9e82eee28b781391220b6c12c591ceac3ac",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-6",
+      "original_sha256": "5c366b51d2f2e850b440d0382640031d1564fd4ce26c70a90035e6a218b9ae23",
+      "full_body_sha256": "5c366b51d2f2e850b440d0382640031d1564fd4ce26c70a90035e6a218b9ae23",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-7",
+      "original_sha256": "0b3c264293fd7622816eb20b1fb7ff2ac855d6c286503dba2e52267f0b6e9194",
+      "full_body_sha256": "0b3c264293fd7622816eb20b1fb7ff2ac855d6c286503dba2e52267f0b6e9194",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-8",
+      "original_sha256": "ed5d4e0f71cd3db86e274d825ced3081977ff6f059bd61a834b928e00d9acdd3",
+      "full_body_sha256": "ed5d4e0f71cd3db86e274d825ced3081977ff6f059bd61a834b928e00d9acdd3",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-9",
+      "original_sha256": "e86a179a1e6d1c3f23f90ad1b15eb80c035c6b99efc68932e7829b874eaeab6a",
+      "full_body_sha256": "e86a179a1e6d1c3f23f90ad1b15eb80c035c6b99efc68932e7829b874eaeab6a",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-10",
+      "original_sha256": "d7f27d00e0e4daaba372df87d6ee8bce2df56a47b17e1d9f3ff00311220563cc",
+      "full_body_sha256": "d7f27d00e0e4daaba372df87d6ee8bce2df56a47b17e1d9f3ff00311220563cc",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-11",
+      "original_sha256": "5ab869790ed957bf67020a8767739b05324db9a3ec26c3b4549a33327993a058",
+      "full_body_sha256": "5ab869790ed957bf67020a8767739b05324db9a3ec26c3b4549a33327993a058",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-12",
+      "original_sha256": "240d1d72a72ba3207c9b6699bd26c04776ebeb824fca3a950b170d5b58678692",
+      "full_body_sha256": "240d1d72a72ba3207c9b6699bd26c04776ebeb824fca3a950b170d5b58678692",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-13",
+      "original_sha256": "0b1fecc73e779d2edff2c87e9e6f56d29f1206d6a2f8c77c0c5d3afa77451254",
+      "full_body_sha256": "0b1fecc73e779d2edff2c87e9e6f56d29f1206d6a2f8c77c0c5d3afa77451254",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-14",
+      "original_sha256": "89b117173a12f140f545a9447837004aec58b2028cd96584e0bdc48d4824e774",
+      "full_body_sha256": "89b117173a12f140f545a9447837004aec58b2028cd96584e0bdc48d4824e774",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B29 AC-15",
+      "original_sha256": "1fd2e5f440b7f4932bdd1fd74efe482c01f0d12b4682a57d846a9f2ae01f88db",
+      "full_body_sha256": "1fd2e5f440b7f4932bdd1fd74efe482c01f0d12b4682a57d846a9f2ae01f88db",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-1",
+      "original_sha256": "d534b325642104d81c2e62f5bdffb0dcd8166c91e83c7f337134de890fbbd085",
+      "full_body_sha256": "d534b325642104d81c2e62f5bdffb0dcd8166c91e83c7f337134de890fbbd085",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-2",
+      "original_sha256": "72018b708c4e9b51702e4e32f990f337b054cbff890ef3a6594f9f4d181b4a8d",
+      "full_body_sha256": "72018b708c4e9b51702e4e32f990f337b054cbff890ef3a6594f9f4d181b4a8d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-3",
+      "original_sha256": "b6fb8d0f9fa40a2d7930415efdbabc859eaa30ad4e058d6dbd0a4291b0e18ba7",
+      "full_body_sha256": "b6fb8d0f9fa40a2d7930415efdbabc859eaa30ad4e058d6dbd0a4291b0e18ba7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-4",
+      "original_sha256": "876452b87c27fe4e16968eff59fc7581223b7ad65a0c45e252a6bfe627f31ee0",
+      "full_body_sha256": "876452b87c27fe4e16968eff59fc7581223b7ad65a0c45e252a6bfe627f31ee0",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-5",
+      "original_sha256": "4b65e50d1c3602ef0f44c760fdcce77a78c2ab7f2c4b796d82ccdf73950d2584",
+      "full_body_sha256": "4b65e50d1c3602ef0f44c760fdcce77a78c2ab7f2c4b796d82ccdf73950d2584",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-6",
+      "original_sha256": "2903ef75f456ac31abecf2f3ed0fee6b075afd411fd538d75fa4e57bbb0e64dd",
+      "full_body_sha256": "2903ef75f456ac31abecf2f3ed0fee6b075afd411fd538d75fa4e57bbb0e64dd",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-7",
+      "original_sha256": "64528e108ed797c03c4ca08b2c842c6b969e9881c989bc163010489427766356",
+      "full_body_sha256": "64528e108ed797c03c4ca08b2c842c6b969e9881c989bc163010489427766356",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-8",
+      "original_sha256": "376608ff6a098e6a10e3212d2ae7e6015d0d7e0cb4923f1b8cc96a7bbb3badd1",
+      "full_body_sha256": "376608ff6a098e6a10e3212d2ae7e6015d0d7e0cb4923f1b8cc96a7bbb3badd1",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-9",
+      "original_sha256": "5cdcc0a6786fe0ae62a890827ab0c14874f0f19a053aa6b164c311a229acc2bc",
+      "full_body_sha256": "5cdcc0a6786fe0ae62a890827ab0c14874f0f19a053aa6b164c311a229acc2bc",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-10",
+      "original_sha256": "b18468453820fb0333b5e41fadad561162a72e72c6a41c1b024bd5dac8c96a88",
+      "full_body_sha256": "b18468453820fb0333b5e41fadad561162a72e72c6a41c1b024bd5dac8c96a88",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-11",
+      "original_sha256": "2f9b58029b13f436458d94a5fd2060b30b75ab1118a9896e09fb3d8879784025",
+      "full_body_sha256": "2f9b58029b13f436458d94a5fd2060b30b75ab1118a9896e09fb3d8879784025",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-12",
+      "original_sha256": "dbbae0cd7c21cc669c8d15ece17160ca189c8a228ad696667d3c133146cc073f",
+      "full_body_sha256": "dbbae0cd7c21cc669c8d15ece17160ca189c8a228ad696667d3c133146cc073f",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-13",
+      "original_sha256": "6fb88101ad18336b0563ac5d9ba572457f65ef55cd8b78e782be9f1ed85e63aa",
+      "full_body_sha256": "6fb88101ad18336b0563ac5d9ba572457f65ef55cd8b78e782be9f1ed85e63aa",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-14",
+      "original_sha256": "277ea01ae6116111f444ecf8e6cf5a9ff9998aedc30b29fed72ee0aeaa4046d6",
+      "full_body_sha256": "277ea01ae6116111f444ecf8e6cf5a9ff9998aedc30b29fed72ee0aeaa4046d6",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B30 AC-15",
+      "original_sha256": "499332cc405201df2be36a5c4cdd776e4958b69aaaa11b87e67e4d2ed6775675",
+      "full_body_sha256": "499332cc405201df2be36a5c4cdd776e4958b69aaaa11b87e67e4d2ed6775675",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-1",
+      "original_sha256": "458c3e283b8725d3281c08c1adaf29864b2f6c6388a4ad7d96d50bee2f45da88",
+      "full_body_sha256": "458c3e283b8725d3281c08c1adaf29864b2f6c6388a4ad7d96d50bee2f45da88",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-2",
+      "original_sha256": "81ee628480554cc8b83b4b82673eda918e7a855d1ba130b18be11973638a2905",
+      "full_body_sha256": "81ee628480554cc8b83b4b82673eda918e7a855d1ba130b18be11973638a2905",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-3",
+      "original_sha256": "e9aed9a850230fa80754cfdd27583d5b920aa21510454fe65d81f03884324446",
+      "full_body_sha256": "e9aed9a850230fa80754cfdd27583d5b920aa21510454fe65d81f03884324446",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-4",
+      "original_sha256": "594f8e8625f7a38c8d3411c8f62f5860ac90dccfd811c84cf454561b3c5987aa",
+      "full_body_sha256": "594f8e8625f7a38c8d3411c8f62f5860ac90dccfd811c84cf454561b3c5987aa",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-5",
+      "original_sha256": "d6f90a4dfb5b8e24e82f459fc33e2c9b6c08f13023ad0665c38afe28dbdc1de2",
+      "full_body_sha256": "d6f90a4dfb5b8e24e82f459fc33e2c9b6c08f13023ad0665c38afe28dbdc1de2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-6",
+      "original_sha256": "75a33498a99f71aa92676be139862e3c4a7ec679f707f4b10f00ac588f3723ad",
+      "full_body_sha256": "75a33498a99f71aa92676be139862e3c4a7ec679f707f4b10f00ac588f3723ad",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-7",
+      "original_sha256": "d7414079450c7e09c828a2288726b6500009a955f4cd729e9079a0486bff3b21",
+      "full_body_sha256": "d7414079450c7e09c828a2288726b6500009a955f4cd729e9079a0486bff3b21",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-8",
+      "original_sha256": "5700cd6c536277909a077a59913491d81c5607fabdc5b787232172afaa3ddcf1",
+      "full_body_sha256": "5700cd6c536277909a077a59913491d81c5607fabdc5b787232172afaa3ddcf1",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-9",
+      "original_sha256": "5b84cf90b0bee50adf4c1f5fae19a1dc93a82f6e512f3483480e45b703b66f77",
+      "full_body_sha256": "5b84cf90b0bee50adf4c1f5fae19a1dc93a82f6e512f3483480e45b703b66f77",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-10",
+      "original_sha256": "3acd6d19a981085b3faa2965623d74297123c07924b64eef7f1a36b3b95ede1a",
+      "full_body_sha256": "3acd6d19a981085b3faa2965623d74297123c07924b64eef7f1a36b3b95ede1a",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-11",
+      "original_sha256": "5ac79e6ad44de89c851a5c8a041edd4f24500770f8eda8468f3f5a7e0072a0a2",
+      "full_body_sha256": "5ac79e6ad44de89c851a5c8a041edd4f24500770f8eda8468f3f5a7e0072a0a2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-12",
+      "original_sha256": "bc64260cb6dc24f2f21cb401e0b24c15e9f2541d748da32132ac5c088218d131",
+      "full_body_sha256": "bc64260cb6dc24f2f21cb401e0b24c15e9f2541d748da32132ac5c088218d131",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-13",
+      "original_sha256": "93552ff08b4d7cc196ee9e04be43e40723927a05d11e2c92e86a3a3ea7edfae6",
+      "full_body_sha256": "93552ff08b4d7cc196ee9e04be43e40723927a05d11e2c92e86a3a3ea7edfae6",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-14",
+      "original_sha256": "adaebda39cda6b72427f1f58e084be027b1e9795c6287e4d6ff6763342b7c1a7",
+      "full_body_sha256": "adaebda39cda6b72427f1f58e084be027b1e9795c6287e4d6ff6763342b7c1a7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B31 AC-15",
+      "original_sha256": "fd1ce474920ffd4134b71f0ae116e79e4cd5e0eb01778ea6bbb6c43fc43594f7",
+      "full_body_sha256": "fd1ce474920ffd4134b71f0ae116e79e4cd5e0eb01778ea6bbb6c43fc43594f7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-1",
+      "original_sha256": "9bf3eb13198add654dce39c448dda578b9488d38b00c100481702a7e4ed52b54",
+      "full_body_sha256": "9bf3eb13198add654dce39c448dda578b9488d38b00c100481702a7e4ed52b54",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-2",
+      "original_sha256": "e2a9f0f44cc5568581c060135815ae2578de2bf1a4a85e2d016b6dd3d6f2f3c6",
+      "full_body_sha256": "e2a9f0f44cc5568581c060135815ae2578de2bf1a4a85e2d016b6dd3d6f2f3c6",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-3",
+      "original_sha256": "765504d2bdf35eba74d8fbfa0870932775b0d2e8471dbd86f90292e0d71f52ca",
+      "full_body_sha256": "765504d2bdf35eba74d8fbfa0870932775b0d2e8471dbd86f90292e0d71f52ca",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-4",
+      "original_sha256": "c6fd6926d90f235d82efc8b8698e4d26fa91a071af3d4ec7826ef5a1c909232d",
+      "full_body_sha256": "c6fd6926d90f235d82efc8b8698e4d26fa91a071af3d4ec7826ef5a1c909232d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-5",
+      "original_sha256": "46edf9f7a8d993c6b119903ae4635a11e472087287e20fa5f4fbbe22c680108f",
+      "full_body_sha256": "46edf9f7a8d993c6b119903ae4635a11e472087287e20fa5f4fbbe22c680108f",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-6",
+      "original_sha256": "e6938868faa815c3210d57a9215714ee74971779db0479874ec3fb729999368b",
+      "full_body_sha256": "e6938868faa815c3210d57a9215714ee74971779db0479874ec3fb729999368b",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-7",
+      "original_sha256": "5b7a56d7258a90cae976013c6bdf3faf38c32bc12acca5ed9a4a8ec712d87c96",
+      "full_body_sha256": "5b7a56d7258a90cae976013c6bdf3faf38c32bc12acca5ed9a4a8ec712d87c96",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-8",
+      "original_sha256": "f9ec052c91658a5165e7d8831375fff3999de7fb503e83338bfe3b9cd422e077",
+      "full_body_sha256": "f9ec052c91658a5165e7d8831375fff3999de7fb503e83338bfe3b9cd422e077",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-9",
+      "original_sha256": "6dffb54807d56da184daa34fd66d4379ba169170b1b54bab5433928253f375a5",
+      "full_body_sha256": "6dffb54807d56da184daa34fd66d4379ba169170b1b54bab5433928253f375a5",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-10",
+      "original_sha256": "8a25027b57a59ad8789124e1c044f5ff0a4e1d112032fc92f3ce2273a1dfb164",
+      "full_body_sha256": "8a25027b57a59ad8789124e1c044f5ff0a4e1d112032fc92f3ce2273a1dfb164",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-11",
+      "original_sha256": "ec15d5c53326f0c2c61d1a0bdef6d2b58f2b815fef0bf4149a18f970460c8e94",
+      "full_body_sha256": "ec15d5c53326f0c2c61d1a0bdef6d2b58f2b815fef0bf4149a18f970460c8e94",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-12",
+      "original_sha256": "ddd7d46632755645ad38d32fb9f3476b1cbeea8af27dd6ba6a5fe2901bfd2256",
+      "full_body_sha256": "ddd7d46632755645ad38d32fb9f3476b1cbeea8af27dd6ba6a5fe2901bfd2256",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-13",
+      "original_sha256": "9c9523a5ac4ae7b264e4e00bfc8fb8eda52a046ec0b521478a3c52d2b1734ee3",
+      "full_body_sha256": "9c9523a5ac4ae7b264e4e00bfc8fb8eda52a046ec0b521478a3c52d2b1734ee3",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-14",
+      "original_sha256": "5fead03943c7576c336379ef5d3c28ce649db408467deb402a8d8afe28631384",
+      "full_body_sha256": "5fead03943c7576c336379ef5d3c28ce649db408467deb402a8d8afe28631384",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B32 AC-15",
+      "original_sha256": "dec11c199689943e56631a3fd77bac500f7935b91f767afca8937ee782803cbf",
+      "full_body_sha256": "dec11c199689943e56631a3fd77bac500f7935b91f767afca8937ee782803cbf",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-1",
+      "original_sha256": "ba0437ac97f572f5d0eeb2de4527d6e5838b6329312e3b5528ad14798c6f5e5a",
+      "full_body_sha256": "ba0437ac97f572f5d0eeb2de4527d6e5838b6329312e3b5528ad14798c6f5e5a",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-2",
+      "original_sha256": "fe5141d42f2a3e3eeeabb33abe12b18e731dc6ac9ae0e86d564dac863cd671f5",
+      "full_body_sha256": "fe5141d42f2a3e3eeeabb33abe12b18e731dc6ac9ae0e86d564dac863cd671f5",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-3",
+      "original_sha256": "250a7e20592312890569cfc84b1d30deac5dd32128e160e47f16ff62f0163b94",
+      "full_body_sha256": "250a7e20592312890569cfc84b1d30deac5dd32128e160e47f16ff62f0163b94",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-4",
+      "original_sha256": "7a9fff954ab89c496bad6c84f4c9439b37731ce07f5644d43772be3b2d37bd00",
+      "full_body_sha256": "7a9fff954ab89c496bad6c84f4c9439b37731ce07f5644d43772be3b2d37bd00",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-5",
+      "original_sha256": "ccbb9fe79fd8926a62a768e491452e84ab57b4375c9cdeb4e44152805187ee42",
+      "full_body_sha256": "ccbb9fe79fd8926a62a768e491452e84ab57b4375c9cdeb4e44152805187ee42",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-6",
+      "original_sha256": "c98b58e3f50d5df473618b72f84b5f90095bd5b458401d0769083d1c69db9fc6",
+      "full_body_sha256": "c98b58e3f50d5df473618b72f84b5f90095bd5b458401d0769083d1c69db9fc6",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-7",
+      "original_sha256": "25ec6449b26b09410ea1c0f654072cd91f9e70ed2976028bb851b2336b10eb40",
+      "full_body_sha256": "25ec6449b26b09410ea1c0f654072cd91f9e70ed2976028bb851b2336b10eb40",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-8",
+      "original_sha256": "0fb29bd27874650997e8f1def6ae3b1c384fc5ec21355c1cbaef9584aaae6509",
+      "full_body_sha256": "0fb29bd27874650997e8f1def6ae3b1c384fc5ec21355c1cbaef9584aaae6509",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-9",
+      "original_sha256": "e921c57169d144d7362a5cc5f97fb44abb77c699db085c8e393e8b9206d796d2",
+      "full_body_sha256": "e921c57169d144d7362a5cc5f97fb44abb77c699db085c8e393e8b9206d796d2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-10",
+      "original_sha256": "59167da4c2b789824326370deb5f36d8e6ded73c149e32790a14d13894651a3b",
+      "full_body_sha256": "59167da4c2b789824326370deb5f36d8e6ded73c149e32790a14d13894651a3b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-11",
+      "original_sha256": "7450354cab9c1fd76becd7208c4dd96e7af8bac97c357090bd372c296a1e093b",
+      "full_body_sha256": "7450354cab9c1fd76becd7208c4dd96e7af8bac97c357090bd372c296a1e093b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-12",
+      "original_sha256": "4b2e5add7bae7b8f102856effcb48fd5627856ec299824cc92940c855cbda2a6",
+      "full_body_sha256": "4b2e5add7bae7b8f102856effcb48fd5627856ec299824cc92940c855cbda2a6",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-13",
+      "original_sha256": "874c946e90489cb9ebeb4f1f59d3d18b76cfb83aa4287770a304ca30e52dee4a",
+      "full_body_sha256": "874c946e90489cb9ebeb4f1f59d3d18b76cfb83aa4287770a304ca30e52dee4a",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-14",
+      "original_sha256": "c169250f4cd7763c9294778bd12d1f59090a1e2d88f22d6eb43837a0b870042c",
+      "full_body_sha256": "c169250f4cd7763c9294778bd12d1f59090a1e2d88f22d6eb43837a0b870042c",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B33 AC-15",
+      "original_sha256": "5e82c53fc293643b674663347795b1dcb15d79439cbfde56dca12d7921a0604f",
+      "full_body_sha256": "5e82c53fc293643b674663347795b1dcb15d79439cbfde56dca12d7921a0604f",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-19",
+      "original_sha256": "9bdba839c68fbea195ae26c501a4b4074f10a9493e3d86c8467915ca79d2f30e",
+      "full_body_sha256": "c1f36d2af658e03dde3f2787c2d83ef5a917c3bae71e592d72d84dd8f822a7dd",
+      "coverage": "lossless",
+      "primary_atoms": 12,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-1",
+      "original_sha256": "f3fe9c48637b54c45e38bb809a7d80d8b6a31925706329bb108893d15adf9e15",
+      "full_body_sha256": "f3fe9c48637b54c45e38bb809a7d80d8b6a31925706329bb108893d15adf9e15",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-2",
+      "original_sha256": "3004deb79659f6bfd1c1933e927633dbcebe0fc280bf36d6f98d2402910d6500",
+      "full_body_sha256": "3004deb79659f6bfd1c1933e927633dbcebe0fc280bf36d6f98d2402910d6500",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-3",
+      "original_sha256": "748ba242600beaa6a07708ecbe63cf87687091c4be7b1c16545509785990861e",
+      "full_body_sha256": "748ba242600beaa6a07708ecbe63cf87687091c4be7b1c16545509785990861e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-4",
+      "original_sha256": "a8a84dab71e1515b5f0ca13abe9bbdc3f41584a950ef2637e65cc68d4e9db258",
+      "full_body_sha256": "a8a84dab71e1515b5f0ca13abe9bbdc3f41584a950ef2637e65cc68d4e9db258",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-5",
+      "original_sha256": "21e7b4b22d0083c493e8842044d7c85457156db1999e4809f3d1013aef75a451",
+      "full_body_sha256": "21e7b4b22d0083c493e8842044d7c85457156db1999e4809f3d1013aef75a451",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-6",
+      "original_sha256": "047873cdd5aef8aeea90a23052bc60650abc5e43581cc9eae3d67bcaf426a96e",
+      "full_body_sha256": "047873cdd5aef8aeea90a23052bc60650abc5e43581cc9eae3d67bcaf426a96e",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-7",
+      "original_sha256": "6e1013f3542a9ab43ce728b3c6785d4b0ac68b764a1af8c2fc162dfa2711d4fd",
+      "full_body_sha256": "6e1013f3542a9ab43ce728b3c6785d4b0ac68b764a1af8c2fc162dfa2711d4fd",
+      "coverage": "lossless",
+      "primary_atoms": 4,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-8",
+      "original_sha256": "4d8415468d5f616f9a01a2c7803a8937025e0b93a9e77a97507e735a0a5e6da2",
+      "full_body_sha256": "4d8415468d5f616f9a01a2c7803a8937025e0b93a9e77a97507e735a0a5e6da2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-9",
+      "original_sha256": "13c64d8f32983d9ba4151504db6de0564403b81c93b38694788d164f4734f5b4",
+      "full_body_sha256": "13c64d8f32983d9ba4151504db6de0564403b81c93b38694788d164f4734f5b4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-10",
+      "original_sha256": "917aebf3aec2a4d588ea4ec05f6542492321a91822ca8b3d328b45d5ea97e479",
+      "full_body_sha256": "917aebf3aec2a4d588ea4ec05f6542492321a91822ca8b3d328b45d5ea97e479",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-11",
+      "original_sha256": "e95a70da5fad6da7e36fffef89bd81d3cccd34cb407ef41d38e378dce5e6e6cd",
+      "full_body_sha256": "e95a70da5fad6da7e36fffef89bd81d3cccd34cb407ef41d38e378dce5e6e6cd",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-12",
+      "original_sha256": "0b6a2d4ca27c3f7721e745ab646a1fea106e59063d65aff8f7685334d3463e5b",
+      "full_body_sha256": "0b6a2d4ca27c3f7721e745ab646a1fea106e59063d65aff8f7685334d3463e5b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-13",
+      "original_sha256": "4217133e03382de86328686761f87e4a8e46d390a1aab0ccc3d91658004369e8",
+      "full_body_sha256": "4217133e03382de86328686761f87e4a8e46d390a1aab0ccc3d91658004369e8",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-14",
+      "original_sha256": "7aaf3fea81750c900f45c98a0a512612a1d16d11745b44d86cef56a266d4d19e",
+      "full_body_sha256": "7aaf3fea81750c900f45c98a0a512612a1d16d11745b44d86cef56a266d4d19e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B34 AC-15",
+      "original_sha256": "ebdbcb2651676f0cb9139ea0da71f3cd3d318c502cabd420ba2af23bc3a617a4",
+      "full_body_sha256": "ebdbcb2651676f0cb9139ea0da71f3cd3d318c502cabd420ba2af23bc3a617a4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-1",
+      "original_sha256": "bc50fcc13b10db864b155d9c85a9c79f7000c528cc52610613a74c628a563048",
+      "full_body_sha256": "bc50fcc13b10db864b155d9c85a9c79f7000c528cc52610613a74c628a563048",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-2",
+      "original_sha256": "dfd859bb90121d72d007e4acdd1665f60ab0a63c12b78aea9462f3ac17800114",
+      "full_body_sha256": "dfd859bb90121d72d007e4acdd1665f60ab0a63c12b78aea9462f3ac17800114",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-3",
+      "original_sha256": "7d66f08fdaf3d23f821b108a7ae71ac76d4ea5e7b0cd3e7858e89084d70e32f4",
+      "full_body_sha256": "7d66f08fdaf3d23f821b108a7ae71ac76d4ea5e7b0cd3e7858e89084d70e32f4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-4",
+      "original_sha256": "01bd3a5692b6d7d19fd6ef73b5ce6f45c3d210cee1c4861a7c5679ae0f6163a3",
+      "full_body_sha256": "01bd3a5692b6d7d19fd6ef73b5ce6f45c3d210cee1c4861a7c5679ae0f6163a3",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-5",
+      "original_sha256": "af7715f1292c5a7dddb99f6b8b5eaa821c5d40a17536c841a5d97d75ef1b574f",
+      "full_body_sha256": "af7715f1292c5a7dddb99f6b8b5eaa821c5d40a17536c841a5d97d75ef1b574f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-6",
+      "original_sha256": "fb8596f0820545261e24fb13ed01f35feff2414a6fc25c547e21a179e22a1666",
+      "full_body_sha256": "fb8596f0820545261e24fb13ed01f35feff2414a6fc25c547e21a179e22a1666",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-7",
+      "original_sha256": "682c9ab2ee92266e8456e03e91e8c4061538bdc21be7a565c0de82fee256ffaf",
+      "full_body_sha256": "682c9ab2ee92266e8456e03e91e8c4061538bdc21be7a565c0de82fee256ffaf",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-8",
+      "original_sha256": "e618202c3f69a5eac19a5f7dafbe083e2018885b1b0ddb88ae8f6b6600963e6c",
+      "full_body_sha256": "e618202c3f69a5eac19a5f7dafbe083e2018885b1b0ddb88ae8f6b6600963e6c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-9",
+      "original_sha256": "5986e9b0f354314ce857600de7d98f4ff87a9f93bf94ae555134ff303faf4155",
+      "full_body_sha256": "5986e9b0f354314ce857600de7d98f4ff87a9f93bf94ae555134ff303faf4155",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-10",
+      "original_sha256": "275269c080ed9aef39d641f0e3e6d40910668e16c624fcbd96702d2cee552ec1",
+      "full_body_sha256": "275269c080ed9aef39d641f0e3e6d40910668e16c624fcbd96702d2cee552ec1",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-11",
+      "original_sha256": "4da9625ad1e55adef96a8260711cfceef2937a9805ed81b28cd5c3e0add861dd",
+      "full_body_sha256": "4da9625ad1e55adef96a8260711cfceef2937a9805ed81b28cd5c3e0add861dd",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-12",
+      "original_sha256": "ecf5c65fa0219f5f21d532affae90c7f3f71248dca25b6ca1059b4fc8021674f",
+      "full_body_sha256": "ecf5c65fa0219f5f21d532affae90c7f3f71248dca25b6ca1059b4fc8021674f",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-13",
+      "original_sha256": "ffd0823b8553e8e5ad63fd59ab6c85ef1a69595d965546394ec5a7e6f266e45c",
+      "full_body_sha256": "ffd0823b8553e8e5ad63fd59ab6c85ef1a69595d965546394ec5a7e6f266e45c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-14",
+      "original_sha256": "de3f64e4b1dbfc79224cc21d44b06844588dfdb9e8471bab17a6161347ee2122",
+      "full_body_sha256": "de3f64e4b1dbfc79224cc21d44b06844588dfdb9e8471bab17a6161347ee2122",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B35 AC-15",
+      "original_sha256": "aa7ecb75bd69a03ae25857e81b67aec6a8a6a86e0b590d051bce5eae02b574d2",
+      "full_body_sha256": "aa7ecb75bd69a03ae25857e81b67aec6a8a6a86e0b590d051bce5eae02b574d2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-1",
+      "original_sha256": "6ca6a97d27f20bbb41d442d52926c27c8e188732bcf647727c11e321c62f2b9f",
+      "full_body_sha256": "3b50fa8974be4f7dab3f1c97015f333cbe2be3deb4e12f53837771e725dfc31e",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-2",
+      "original_sha256": "28a2104aeb0f3d1d41803e55aff4ec0bceb1cfea237f882b9a92055c2eaed69b",
+      "full_body_sha256": "df2e2a5edc06f44cdc0149fa88c1523abc1d51fb7a624ff470533b6adf2d5532",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-3",
+      "original_sha256": "fa925425368962659513b986f9073ece818d279bd54e8d2bc6ca09714e0a9dfc",
+      "full_body_sha256": "b60cb3b7868ae747d5a0a1929e74d2426452ea4aceaa2c57cb2aa4afb593fcd2",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-4",
+      "original_sha256": "b8d0d85fa6ed176ef00b0d37ff824b4d0c34063a41fc875767cb88e70bcc90e8",
+      "full_body_sha256": "a20816ae053e3cf3d80e6a3a157e384e78b6fbd9276a8de4651ac8a5a78eaef7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-5",
+      "original_sha256": "5223472903e70180191eb4ccbaaf28a0c517ac3e457d09a0bc93ffe0d70b6aad",
+      "full_body_sha256": "ad2dcd50fb757acb1dded6cdd25f2ab0180b152849a359f6344d86c393a55531",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-6",
+      "original_sha256": "af0b41874c17ceb2d34e2f6df78a2716bba426a10b095f9f0660205c9ffc73a4",
+      "full_body_sha256": "3955a4e53dc3428151286a8ba3569178e6a8e515adb926ed94e10a80b9fd09bc",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-7",
+      "original_sha256": "e291f9661634aab389526822a4bdcdd1453d26c7efe237146ca9f8c2021df1f7",
+      "full_body_sha256": "8a7e2bb194915de7cb63a28394641d05d627c123a32f40e693136b168cc1a19e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-8",
+      "original_sha256": "bf71eb491b43c505d8fcc9f08000fbb08a8c200ff349e18856778c72947824bf",
+      "full_body_sha256": "e0d3b20a7fd96eb6d4f9f565387be79b2b1603e27797c0ac4829b6d0ec0c5c1d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-9",
+      "original_sha256": "a5effab7e7ca63930ace3318d51dee1391b7d2da9cbcf3628f3c326f8427dc61",
+      "full_body_sha256": "a5effab7e7ca63930ace3318d51dee1391b7d2da9cbcf3628f3c326f8427dc61",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-10",
+      "original_sha256": "8d361bd00dcf539fd4372974d7224851b5a1c6565ffc814bdc0e15687c1361ff",
+      "full_body_sha256": "3bd53dd640e4d2c0329bea95a7fb9c3aaa3afff7689ea54d81a91a4f27f16da4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-11",
+      "original_sha256": "380f8f2b12bbb06547d2f47062352d6311938fea45710303eb32669ddbc90f12",
+      "full_body_sha256": "8db8f333bddbf05b3239fcc807113a9fbc6bcbb2e1486f8415aeb6565a84b7d7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-12",
+      "original_sha256": "bf66b9175c4cf59a47635c06e887315b29a093905d88a59dc2097b304e99730f",
+      "full_body_sha256": "a69a1ab7788e524b84e7ea25fe848f1e338c1883ebf595bc7f05272ff1f56e3e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-13",
+      "original_sha256": "31e53c14191aa4180837ecd2c4ad8b15affb9619515f2568ca8dff4c8e1b1b06",
+      "full_body_sha256": "cbbd556d306e112481692fa63a3780cd9ac3089ac58a2b7cb694e5e06f3b43a4",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-14",
+      "original_sha256": "a78b404c06e5d4941408758cccca18167d3ca875ab106bc3722780de41678bf4",
+      "full_body_sha256": "40331c515cb64a0e72392d1566c2d1cb4b5f573e140a12fc7ce7f5eff191f292",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-15",
+      "original_sha256": "6a0994738584ebec8cb3001d0215cad8bcc2225b943bcc026302e0a89dc15f68",
+      "full_body_sha256": "2a5c7152f7aba80f4790dadeb2078013f967fb4d8aa625809ebd04082c406d1b",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B36 AC-16",
+      "original_sha256": "62f0bf38e9ccf88385944325f37de81cb3a73ec51e979b85a57a79f5f5295030",
+      "full_body_sha256": "36db73b6eb2692b3e8006d59641ae7f5a6e449dff3f8edaaa39220a6975bdcb1",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.1",
+      "original_sha256": "3bbf8e25864906260d79034e0be604baec226c674c7b07eea5e4898368412a50",
+      "full_body_sha256": "3bbf8e25864906260d79034e0be604baec226c674c7b07eea5e4898368412a50",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.2",
+      "original_sha256": "edb6a204ca96453f3e0096118ebf628c7b1acb0bc47fdd84293d776b93f4ac6e",
+      "full_body_sha256": "edb6a204ca96453f3e0096118ebf628c7b1acb0bc47fdd84293d776b93f4ac6e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.3",
+      "original_sha256": "fa2f7e483d2a0914e415c0c512c1eed40e0039790a3258b77eb5406ca74c1907",
+      "full_body_sha256": "fa2f7e483d2a0914e415c0c512c1eed40e0039790a3258b77eb5406ca74c1907",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.4",
+      "original_sha256": "1b2149c6f68523ceb242dcd563b539fde7a2e15f0b5e626d4645454603171c18",
+      "full_body_sha256": "1b2149c6f68523ceb242dcd563b539fde7a2e15f0b5e626d4645454603171c18",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.5",
+      "original_sha256": "83e1aa941d47c02d9d1f4abdc086bfb97d142715b465d003db8f7ecf284d7cc2",
+      "full_body_sha256": "83e1aa941d47c02d9d1f4abdc086bfb97d142715b465d003db8f7ecf284d7cc2",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.6",
+      "original_sha256": "19e664ccd34e16d92c7741d2e68aae829786cda3b13f658e6a30d8b52b099d4e",
+      "full_body_sha256": "19e664ccd34e16d92c7741d2e68aae829786cda3b13f658e6a30d8b52b099d4e",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.7",
+      "original_sha256": "e6db1e59c6e15992e1a241062090e257cdd15c883e8a8e5e0d2e1356e4d0304b",
+      "full_body_sha256": "e6db1e59c6e15992e1a241062090e257cdd15c883e8a8e5e0d2e1356e4d0304b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.8",
+      "original_sha256": "149ba9e5a447f12b5bf709c719e7f30eb96255f45536ad1273dac0ccb3a4916d",
+      "full_body_sha256": "149ba9e5a447f12b5bf709c719e7f30eb96255f45536ad1273dac0ccb3a4916d",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.9",
+      "original_sha256": "c1c7148f3fd88addcd8651c56e04e6e53a4832e33412eb0ae0829778d4272647",
+      "full_body_sha256": "c1c7148f3fd88addcd8651c56e04e6e53a4832e33412eb0ae0829778d4272647",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.10",
+      "original_sha256": "d0bab5c2ca4893113660f228332ea73656a33c66a15e1d548e27579d3c40def7",
+      "full_body_sha256": "d0bab5c2ca4893113660f228332ea73656a33c66a15e1d548e27579d3c40def7",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.11",
+      "original_sha256": "2617d861a689785dec3cb808c7c54fcfc574b2a0faaa7a69a683fc3deb18fd29",
+      "full_body_sha256": "2617d861a689785dec3cb808c7c54fcfc574b2a0faaa7a69a683fc3deb18fd29",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.12",
+      "original_sha256": "b49948289f4a47bb58ef4cd5ac0f0a9f6714da3d7dcff603708233604a5f977c",
+      "full_body_sha256": "b49948289f4a47bb58ef4cd5ac0f0a9f6714da3d7dcff603708233604a5f977c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.13",
+      "original_sha256": "c3c730562b9053753728a741ac749d9b2344e2c1debaacba8c51eb357fd3b531",
+      "full_body_sha256": "c3c730562b9053753728a741ac749d9b2344e2c1debaacba8c51eb357fd3b531",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.14",
+      "original_sha256": "141265de4c77b2638b6c2690da9f5cc10ab6aebd40b15c186831b2f74786ad5d",
+      "full_body_sha256": "141265de4c77b2638b6c2690da9f5cc10ab6aebd40b15c186831b2f74786ad5d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.15",
+      "original_sha256": "39de983740be607199409d8e8e09667ea1aefa0109aae14a9b39b72bb1b1c937",
+      "full_body_sha256": "39de983740be607199409d8e8e09667ea1aefa0109aae14a9b39b72bb1b1c937",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.16",
+      "original_sha256": "a1625ac90d035d8f56c39a11d4f5018bac3dbcba56591c8b8d5a930d9529763a",
+      "full_body_sha256": "a1625ac90d035d8f56c39a11d4f5018bac3dbcba56591c8b8d5a930d9529763a",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.17",
+      "original_sha256": "1749762b2a5af9945472a8f4f23e2eccb53580b40b68060f5489b35983a00fa6",
+      "full_body_sha256": "1749762b2a5af9945472a8f4f23e2eccb53580b40b68060f5489b35983a00fa6",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.18",
+      "original_sha256": "90ef70dcf626e2fcc0cc06cf7653e635bd036c200fc4f34a41226de3c4646a0f",
+      "full_body_sha256": "90ef70dcf626e2fcc0cc06cf7653e635bd036c200fc4f34a41226de3c4646a0f",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.19",
+      "original_sha256": "c07cda39de75b72e527f4d6e12cb83e4292e525deecae0629b80a0f673a394fd",
+      "full_body_sha256": "c07cda39de75b72e527f4d6e12cb83e4292e525deecae0629b80a0f673a394fd",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B16.§8.20",
+      "original_sha256": "dc3559884537eeac6116a6540e62e52afdf7f25305dccfb66e928212a6da221d",
+      "full_body_sha256": "dc3559884537eeac6116a6540e62e52afdf7f25305dccfb66e928212a6da221d",
+      "coverage": "lossless",
+      "primary_atoms": 5,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.1",
+      "original_sha256": "61e0d4c24f51b3c6e6a8ddaa2bd51bfc6f44121066cea6eefa65463ba526dae0",
+      "full_body_sha256": "61e0d4c24f51b3c6e6a8ddaa2bd51bfc6f44121066cea6eefa65463ba526dae0",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.2",
+      "original_sha256": "61bab3bd1024460ef3479026299eb70bae0b2b03637d5e82125c1ebe903b9d1d",
+      "full_body_sha256": "61bab3bd1024460ef3479026299eb70bae0b2b03637d5e82125c1ebe903b9d1d",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.3",
+      "original_sha256": "6b711935ebc942e1273f7ddd80bbc754a5c327e0f5d611393507c38b9202052c",
+      "full_body_sha256": "6b711935ebc942e1273f7ddd80bbc754a5c327e0f5d611393507c38b9202052c",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.4",
+      "original_sha256": "a97109c05a8d438be14e1a5e4c26ca8f7d69b12da63c32d02272e98f25e7fd80",
+      "full_body_sha256": "a97109c05a8d438be14e1a5e4c26ca8f7d69b12da63c32d02272e98f25e7fd80",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.5",
+      "original_sha256": "e51a615a33e7bbfe0dcef0773d3715c7e6bc357db2b4744e3d050363b390ab0a",
+      "full_body_sha256": "e51a615a33e7bbfe0dcef0773d3715c7e6bc357db2b4744e3d050363b390ab0a",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.6",
+      "original_sha256": "a59321cd3b7482b53aa454da54e50cad619f016c8a57ea0502e37ac3e5a0c402",
+      "full_body_sha256": "a59321cd3b7482b53aa454da54e50cad619f016c8a57ea0502e37ac3e5a0c402",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.7",
+      "original_sha256": "500038cd95c21b522d6c1538946c3f1769f9b42d0b68e3a7c4df906ed55cd0be",
+      "full_body_sha256": "500038cd95c21b522d6c1538946c3f1769f9b42d0b68e3a7c4df906ed55cd0be",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.8",
+      "original_sha256": "4fd467458476bc160746bfc2c2790a2435e92861fb47811fd47e89c1df212ada",
+      "full_body_sha256": "4fd467458476bc160746bfc2c2790a2435e92861fb47811fd47e89c1df212ada",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.9",
+      "original_sha256": "c83a0919837fdb89bf94f7c687d60a06df1792a4fdc43c3a93c3f328fa10b87c",
+      "full_body_sha256": "c83a0919837fdb89bf94f7c687d60a06df1792a4fdc43c3a93c3f328fa10b87c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.10",
+      "original_sha256": "5e9f83a34d8e79882004bd1ff11705d00e07d7fd2f73e54150e0062a3a00d4ab",
+      "full_body_sha256": "5e9f83a34d8e79882004bd1ff11705d00e07d7fd2f73e54150e0062a3a00d4ab",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.11",
+      "original_sha256": "34c748d134795ced53378ad01cc278aec6d478ec7d728f880ffb3834b55f00f9",
+      "full_body_sha256": "34c748d134795ced53378ad01cc278aec6d478ec7d728f880ffb3834b55f00f9",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.12",
+      "original_sha256": "59a2493916cdb53d350b4eeec4cac549ca451062ebf1e483d731f44992397ec8",
+      "full_body_sha256": "59a2493916cdb53d350b4eeec4cac549ca451062ebf1e483d731f44992397ec8",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.13",
+      "original_sha256": "f74d855f756c3734917102c210223d982a727090cd985ff07aeca2796361b91a",
+      "full_body_sha256": "f74d855f756c3734917102c210223d982a727090cd985ff07aeca2796361b91a",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.14",
+      "original_sha256": "b1f9d4bbf02cf3639cdb63c2cf79dabe1d05124d5df2c40f4d308b5198c2584b",
+      "full_body_sha256": "b1f9d4bbf02cf3639cdb63c2cf79dabe1d05124d5df2c40f4d308b5198c2584b",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.15",
+      "original_sha256": "3ad4650e54f90473606a39a15990bfb3d09b3ad7331a174fee3167c902dda775",
+      "full_body_sha256": "3ad4650e54f90473606a39a15990bfb3d09b3ad7331a174fee3167c902dda775",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.16",
+      "original_sha256": "6d0359ac4f3ef19f245ea92d83013a42307d055713848eca99d545a09c08f25c",
+      "full_body_sha256": "6d0359ac4f3ef19f245ea92d83013a42307d055713848eca99d545a09c08f25c",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.17",
+      "original_sha256": "a6057c65ad299b81bc94a55786f53cc26abba76fdcea726cd8cedfc0038f15ab",
+      "full_body_sha256": "a6057c65ad299b81bc94a55786f53cc26abba76fdcea726cd8cedfc0038f15ab",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.18",
+      "original_sha256": "75a25f12fdbe8b91018515d05011a0fa9ac8851e3a290b9fff5da6d54baf4627",
+      "full_body_sha256": "75a25f12fdbe8b91018515d05011a0fa9ac8851e3a290b9fff5da6d54baf4627",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.19",
+      "original_sha256": "73c9931d0ae5146f36eb308ba51c9fd8ef0862d29a14fb9b0990dc62d5f51554",
+      "full_body_sha256": "73c9931d0ae5146f36eb308ba51c9fd8ef0862d29a14fb9b0990dc62d5f51554",
+      "coverage": "lossless",
+      "primary_atoms": 2,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.20",
+      "original_sha256": "0464229224e2d301accc5a2aad64bbcc2c5f6f3e6bb1d1b2164ced4878e18230",
+      "full_body_sha256": "0464229224e2d301accc5a2aad64bbcc2c5f6f3e6bb1d1b2164ced4878e18230",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.21",
+      "original_sha256": "b483b5a6f97a8a3fc4c8742b7777b9083f8da0d5eded3739751ed510d89afce1",
+      "full_body_sha256": "b483b5a6f97a8a3fc4c8742b7777b9083f8da0d5eded3739751ed510d89afce1",
+      "coverage": "lossless",
+      "primary_atoms": 3,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.22",
+      "original_sha256": "d19ad9bfda5deef9691e91304bbec84f08f9347620da9fedace58961d9ba20e7",
+      "full_body_sha256": "d19ad9bfda5deef9691e91304bbec84f08f9347620da9fedace58961d9ba20e7",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.23",
+      "original_sha256": "3ca2bb3606f250926a29d704bdae41b34568c7d43f821aa4c151d2d0f11d4f88",
+      "full_body_sha256": "3ca2bb3606f250926a29d704bdae41b34568c7d43f821aa4c151d2d0f11d4f88",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.24",
+      "original_sha256": "3889eb0ed5b33a9ffcd833d4eb3e978ad7ce8c04c8e35e9529ee93383bf92eda",
+      "full_body_sha256": "3889eb0ed5b33a9ffcd833d4eb3e978ad7ce8c04c8e35e9529ee93383bf92eda",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    },
+    {
+      "parent": "B18.§8.25",
+      "original_sha256": "7f5c320f9714ecba18b7cf6f02d7a27435d443f2a15fc0c11060e546cdf85fb5",
+      "full_body_sha256": "7f5c320f9714ecba18b7cf6f02d7a27435d443f2a15fc0c11060e546cdf85fb5",
+      "coverage": "lossless",
+      "primary_atoms": 1,
+      "referenced_atoms": 0
+    }
+  ],
+  "atoms": 688,
+  "map_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9"
+}

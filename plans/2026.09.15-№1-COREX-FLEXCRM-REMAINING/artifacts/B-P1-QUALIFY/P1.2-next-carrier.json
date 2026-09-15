@@ -4,13 +4,11 @@
   "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
   "arguments": [
     "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
-    "P1.2",
     "P1.3",
     "P1.4"
   ],
   "context_kind": "continue-root",
   "item_ids": [
-    "P1.2",
     "P1.3",
     "P1.4"
   ],
@@ -19,7 +17,7 @@
     "outcome": "continue-root",
     "reason": "context-telemetry-unavailable",
     "evidence": [
-      "batch:d90fb988586b2ecd74625f1d56ade3cf0f1e93ac70de5c201674a94b3a006bbe",
+      "batch:85f8928dcdcf386aab04fdceaea1176b94c9481cd42ef635d0712b6826383b06",
       "loaded-inputs:reusable",
       "cold-start-cost:0"
     ],

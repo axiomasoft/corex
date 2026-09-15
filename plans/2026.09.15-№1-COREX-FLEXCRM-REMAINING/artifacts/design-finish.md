@@ -625,9 +625,9 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `findings/whole-plan-astra-review.md` | 94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b |
 | `open-questions.md` | ea75c39b48227c5671d7b1979f05e947362e8174a59c802590b5715ab60fb212 |
 | `phases/P1/P1.1.md` | 238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c |
-| `phases/P1/P1.2.md` | 673dbbb652b012623a959d9889b9b3eba90e038dbe60cdbbdfd56d0fd12955ec |
-| `phases/P1/P1.3.md` | 2b085330b2596cac8a932d26faff05be1be865ab3ae33e4bf819a8d3ccce5d20 |
-| `phases/P1/P1.4.md` | b81ccf57e3d6a171ac2277a0f1dfd8bec378ed446e6578dd8fdc2566efe6b8ff |
+| `phases/P1/P1.2.md` | 787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c |
+| `phases/P1/P1.3.md` | 4661b63da5f537d47fa95455f5cd466b7fe33b5e2d7395b2cd3f6dd09dd17411 |
+| `phases/P1/P1.4.md` | f882930a266ece2e0cb70a83a8af9a8a4eca0797a4c31ae2bcaf4bf21dcf6aa3 |
 | `phases/P1/P1.md` | 8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418 |
 | `phases/P10/P10.1.md` | 430eab1d70a403a8cb5137c14cf3702f8a58aa40d6875b78c5a95659d8043f2e |
 | `phases/P10/P10.2.md` | 0e0f51fd66b34e0948ae8f84666ac2443f6d0a3fb723cb4541ae72e6bbf0611c |
@@ -765,3 +765,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 ## D19 execution policy rebind
 
 Owner-approved read-budget advisory scope and P1.4 producer annotation bookkeeping only. No new independent whole-plan review or product acceptance claimed. Original review evidence retained; all stable inputs enumerated and digest-bound.
+
+## P1 bounded declaration rebind
+
+P1.4 consumes all operative map sections (policy0, Parents1.1–1.9, Atoms2.1–2.39, Requirements3.1–3.4) with whole-source and section digests. All aggregate obligations remain; no requirement removed or cache substituted. P1.2–P1.4 Files paths quoted to exclude sentence punctuation from native product paths. P1.1 historical spec/journal remain immutable; its original missing-path graph projection is not proof of absent validated product. Original whole-plan review retained; this is execution carrier bookkeeping, no new independent review claimed.
