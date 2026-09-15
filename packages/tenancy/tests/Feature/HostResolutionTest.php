@@ -234,7 +234,16 @@ it('з: два аккаунта × два домена, чередование �
     }
 });
 
-it('и: подделанные X-Account-Id/X-Forwarded-Host не влияют на резолв', function (): void {
+it('и: следующий host всегда читается из central после инициализации другого account', function (): void {
+    [$accountA] = makeAccountWithDomainHR('first.example.test');
+    [$accountB] = makeAccountWithDomainHR('second.example.test');
+
+    tenancy()->initialize($accountA);
+
+    expect(resolverHR()->resolve('second.example.test')->id)->toBe($accountB->id);
+});
+
+it('й: подделанные X-Account-Id/X-Forwarded-Host не влияют на резолв', function (): void {
     [$account] = makeAccountWithDomainHR('real-host.example.test');
     makeAccountWithDomainHR('evil.example.test');
 

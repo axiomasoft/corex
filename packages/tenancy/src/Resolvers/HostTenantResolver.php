@@ -28,8 +28,9 @@ final class HostTenantResolver extends CachedTenantResolver
     public function resolveWithoutCache(mixed ...$args): Tenant
     {
         $host = self::normalizeHost((string) $args[0]);
+        $centralConnection = (string) config('tenancy.central_connection');
 
-        $domain = Domain::query()
+        $domain = Domain::on(connection: $centralConnection)
             ->whereRaw('lower(host) = ?', [$host])
             ->whereNull('deleted_at')
             ->whereNotNull('verified_at')
@@ -40,7 +41,7 @@ final class HostTenantResolver extends CachedTenantResolver
         }
 
         /** @var (Tenant&Model)|null $account */
-        $account = Account::query()
+        $account = Account::on(connection: $centralConnection)
             ->whereKey($domain->account_id)
             ->whereNull('deleted_at')
             ->whereNotNull('slug')
