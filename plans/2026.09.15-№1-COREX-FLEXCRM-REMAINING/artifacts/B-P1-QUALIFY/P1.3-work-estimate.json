@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 0,
+  "lifecycle": "active",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/B-P1-QUALIFY/checkpoint.md",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

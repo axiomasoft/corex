@@ -627,7 +627,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P1/P1.1.md` | 238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c |
 | `phases/P1/P1.2.md` | 787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c |
 | `phases/P1/P1.3.md` | 4661b63da5f537d47fa95455f5cd466b7fe33b5e2d7395b2cd3f6dd09dd17411 |
-| `phases/P1/P1.4.md` | f882930a266ece2e0cb70a83a8af9a8a4eca0797a4c31ae2bcaf4bf21dcf6aa3 |
+| `phases/P1/P1.4.md` | 73f1b01ca12257b24b02c32e94682d23233d89512f42bb520721909649befc6d |
 | `phases/P1/P1.md` | 8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418 |
 | `phases/P10/P10.1.md` | 430eab1d70a403a8cb5137c14cf3702f8a58aa40d6875b78c5a95659d8043f2e |
 | `phases/P10/P10.2.md` | 0e0f51fd66b34e0948ae8f84666ac2443f6d0a3fb723cb4541ae72e6bbf0611c |
@@ -769,3 +769,11 @@ Owner-approved read-budget advisory scope and P1.4 producer annotation bookkeepi
 ## P1 bounded declaration rebind
 
 P1.4 consumes all operative map sections (policy0, Parents1.1–1.9, Atoms2.1–2.39, Requirements3.1–3.4) with whole-source and section digests. All aggregate obligations remain; no requirement removed or cache substituted. P1.2–P1.4 Files paths quoted to exclude sentence punctuation from native product paths. P1.1 historical spec/journal remain immutable; its original missing-path graph projection is not proof of absent validated product. Original whole-plan review retained; this is execution carrier bookkeeping, no new independent review claimed.
+
+## P1.3 ledger consumption rebind
+
+P1.4 consumes all operative ledger policy0/Requirements1.1–1.4/Foundations2/Cohorts3/Gates4/DI5.1–5.2/AP5.3/source qualifications6.1–6.2, retaining whole-source and selection hashes. Per-read bounds remain hard; D19 keeps aggregate calibration advisory only in B-P1. No source-owner/API/DDL/major/dependency/live choice or new whole-plan audit granted.
+
+## P1.4 bundle metadata repair
+
+All map/ledger operative section selectors remain mandatory in independently numbered Required Reads. Inputs retain whole-source identity via policy0; canonical bundle no longer repeats full selector list in each raw entry. Native per-read bundle estimate17842≤25000/47258bytes≤262144; all selected normative source rows retained, aggregate remains visible advisory. Original oversized-bundle RED retained, no threshold or shared runtime edit.

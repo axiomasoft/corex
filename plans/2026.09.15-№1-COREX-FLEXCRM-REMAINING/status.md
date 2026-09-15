@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-15
-inputs_sha256: ead8a4b260b44520e6cc741bf5149277968fb595bebeec69257864e651899f96
+inputs_sha256: e0245799690ee71ff75e72f6b4c755b5e145503b7e763cddd59254b743c221fc
 generated_by: task plan-views status
 -->
 
@@ -23,7 +23,7 @@ generated_by: task plan-views status
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Freeze требований, provenance и владельцев | 2/4 | 🟡 In progress |
+| P1 | Freeze требований, provenance и владельцев | 3/4 | 🟡 In progress |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 0/4 | ⬜ Not started |
@@ -41,7 +41,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P1.1 | Сверить источники, hashes и исходную provenance | 🟢 Done | 2026-09-15 |
 | P1.2 | Разделить исходные AC на механизм, policy и владельцев | 🟢 Done | 2026-09-15 |
-| P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | ⬜ Not started | — |
+| P1.3 | Квалифицировать эквивалентное поведение и bounded receipts | 🟢 Done | 2026-09-15 |
 | P1.4 | Запечатать requirements-lock и downstream gap set | ⬜ Not started | — |
 
 ## Phase P10
@@ -211,6 +211,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · D19 owner advisory admitted; full17AC sections + B38/B26/FLEX carriers consumed; referenced target snippets read. Semantic atom mapping underway, no acceptance claimed. |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · criteria+semantic PASS;365parents/688atoms/52R;full clauses/thresholds retained, native/product owners split. Source choices flow P1.4;runtime acceptance unclaimed. artifacts/B-P1-QUALIFY/P1.2-semantic-review.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · no-op · All fixed Required Reads and five carriers consumed; P1.2 closed and P1.3 admission ALLOW. Adaptive implementation/provider/config/test/CHANGELOG evidence inspection underway; no runtime acceptance. |
+| 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · evidence+semantic PASS;52R/688atoms/91fullsourceblobs/9A/5E/12G;DI34/AP13remain open;D10local kept,E2/E3cohorts split. artifacts/B-P1-QUALIFY/P1.3-semantic-review.json
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

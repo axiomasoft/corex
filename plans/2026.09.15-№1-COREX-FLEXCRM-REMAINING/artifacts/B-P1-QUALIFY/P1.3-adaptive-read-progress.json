@@ -1,0 +1,606 @@
+{
+  "item": "P1.3",
+  "prior_full_reads": [
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "sha256": "b574072e2b3aeb9a34d946ecae56f8b28cffb2435bfe48064d5b07a9c6a1fab7",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/api/src/ApiServiceProvider.php",
+      "sha256": "e4ccb9efbd4bcefd8edeb03d84410ab92bcd0048d6f1aadd95ff7893b3adb73a",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/tasks/src/TasksServiceProvider.php",
+      "sha256": "6da6d2aff7504e6fa4102bb81af76b2fb47bfec10ea77fd9121377803077bfdf",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/crm/src/CrmServiceProvider.php",
+      "sha256": "4a630ffc097165edb2c1e221601bd4d276b9547dc69b4cd18129577827ba2862",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/core/src/Storage/LocalTenantStorage.php",
+      "sha256": "8715571913b58d63abc4a058cbbe514c2b8c51c435855a0289f24be40615493f",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/core/src/Storage/StorageCapabilities.php",
+      "sha256": "b64570d2c49a888793d121b5d4fcc6d481afff3bfc31527fef89641706720e88",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/core/src/Storage/ExportArchiveRef.php",
+      "sha256": "1bbdaa9c4df4460c359504fb65b7f9a514c879209591c22d75618eef0bc29876",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/tenancy/src/Storage/ContextTenantStorage.php",
+      "sha256": "68d59a3143876c5984d0acaaee1fba5b36af708cffdee103ab51301a8773ba78",
+      "status": "complete full actual read in owning root before context checkpoint"
+    },
+    {
+      "path": "packages/core/src/Money/MoneyCast.php",
+      "sha256": "871c3c7fe53f3c034bc211413d73c6ef36502d0ba9f1ee281da836f08361c65d",
+      "status": "complete full actual read in owning root before context checkpoint"
+    }
+  ],
+  "planned_chunks": [
+    {
+      "path": "packages/modules/src/ModulesServiceProvider.php",
+      "whole_sha256": "91ae0214228e99292bc666382987ffecdcbb27d30f4835880f78ba4a7b8b2561",
+      "offset": 0,
+      "sha256": "c1d32d41fd39b13a21a2daecc6f769934630f0924f7b88701b0c94039af429a2"
+    },
+    {
+      "path": "packages/modules/src/ModulesServiceProvider.php",
+      "whole_sha256": "91ae0214228e99292bc666382987ffecdcbb27d30f4835880f78ba4a7b8b2561",
+      "offset": 11988,
+      "sha256": "c2ec86172614c16d2d5125c067c207bbdb82323ef6d9b998e2cccdc95f21442a"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "whole_sha256": "3e2eb5b05aced59788aea78089052f71c464813365031a9779933526317f3088",
+      "offset": 0,
+      "sha256": "f9be5af6ff53a8c0374f7a176b9a3c1b0f85206550dcda2f77979f0793f994c2"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "whole_sha256": "3e2eb5b05aced59788aea78089052f71c464813365031a9779933526317f3088",
+      "offset": 11971,
+      "sha256": "2261e048a2a8b3a2bbf3f0707e8b84852f5dbe8d447f0ca793632f589d5cca29"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "whole_sha256": "3e2eb5b05aced59788aea78089052f71c464813365031a9779933526317f3088",
+      "offset": 23948,
+      "sha256": "602024d412d87eff8700be04a1399aef47aaed3138c772726a4e7e80aa992b5d"
+    },
+    {
+      "path": "packages/auth/src/CoreAuthServiceProvider.php",
+      "whole_sha256": "3823f81bf137263940a6fd03aa986dd3e0047f854c3c53ef0e07ec60ba1598f9",
+      "offset": 0,
+      "sha256": "3823f81bf137263940a6fd03aa986dd3e0047f854c3c53ef0e07ec60ba1598f9"
+    },
+    {
+      "path": "packages/core/src/Storage/ScopedFilesystem.php",
+      "whole_sha256": "46ac83beb4273c080ccb68b582719501d2e17c81e82a8847d3da8bdd1ca55853",
+      "offset": 0,
+      "sha256": "46ac83beb4273c080ccb68b582719501d2e17c81e82a8847d3da8bdd1ca55853"
+    },
+    {
+      "path": "packages/modules/src/Registry/EntityDefinition.php",
+      "whole_sha256": "732b39dee3f08555c36ab278914d53bd0837be241610222b37c78062044302f1",
+      "offset": 0,
+      "sha256": "732b39dee3f08555c36ab278914d53bd0837be241610222b37c78062044302f1"
+    },
+    {
+      "path": "packages/modules/src/Registry/FieldDefinition.php",
+      "whole_sha256": "6313ff6463f804df45d84b079b51fc3a89c8b27197aa712722b87138d18369ff",
+      "offset": 0,
+      "sha256": "6313ff6463f804df45d84b079b51fc3a89c8b27197aa712722b87138d18369ff"
+    },
+    {
+      "path": "packages/modules/src/Registry/ArrayEntityRegistry.php",
+      "whole_sha256": "a33b5adb95cd3c60c70adcb0967c7e8ffca45b081b3c301eea98fed86cb76dd5",
+      "offset": 0,
+      "sha256": "a33b5adb95cd3c60c70adcb0967c7e8ffca45b081b3c301eea98fed86cb76dd5"
+    },
+    {
+      "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+      "whole_sha256": "1b912de73cbaf52f0476884f16bfe029055bf69dd226567fb34b75a3b6829f7e",
+      "offset": 0,
+      "sha256": "1b912de73cbaf52f0476884f16bfe029055bf69dd226567fb34b75a3b6829f7e"
+    },
+    {
+      "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+      "whole_sha256": "133b771fe5196f1d7bd33d9c73f22affd72ac5408645d5597eee27df7f3350e2",
+      "offset": 0,
+      "sha256": "aed55cd603b5ac1e1ba3fcf944322892012dea7840a966b249e48ba88a9640ba"
+    },
+    {
+      "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+      "whole_sha256": "133b771fe5196f1d7bd33d9c73f22affd72ac5408645d5597eee27df7f3350e2",
+      "offset": 11998,
+      "sha256": "5840565fa4821770740eb91405e0e43b0d5f9defd47aca991d6935f507f8d14e"
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+      "whole_sha256": "cb1e8e565989ddee7d935e2ce1a95734e14244ef447a4b081b4b6fae7b9af477",
+      "offset": 0,
+      "sha256": "cb1e8e565989ddee7d935e2ce1a95734e14244ef447a4b081b4b6fae7b9af477"
+    },
+    {
+      "path": "packages/modules/src/Extend/EntityField.php",
+      "whole_sha256": "1fb60488ed3b7c0b18179d48be2e4a87d01e655c762b350ed70c9e0ea55389b8",
+      "offset": 0,
+      "sha256": "1fb60488ed3b7c0b18179d48be2e4a87d01e655c762b350ed70c9e0ea55389b8"
+    },
+    {
+      "path": "packages/modules/src/Extend/Entity.php",
+      "whole_sha256": "8f4959a97d9a162567019e0e257b4ceba43e14a5e5131e2ce272f5a92bf91723",
+      "offset": 0,
+      "sha256": "8f4959a97d9a162567019e0e257b4ceba43e14a5e5131e2ce272f5a92bf91723"
+    },
+    {
+      "path": "packages/modules/src/Extend/Filament.php",
+      "whole_sha256": "1c8af7bcb24d5aaa79af81fe467d8d722b2f13333bf21ec63f38d855ceefe243",
+      "offset": 0,
+      "sha256": "1c8af7bcb24d5aaa79af81fe467d8d722b2f13333bf21ec63f38d855ceefe243"
+    },
+    {
+      "path": "packages/modules/src/Extend/Extender.php",
+      "whole_sha256": "ab75c40417e468bb905ca9ec6158614ee5549b880ebca1b3b0a66d56439165df",
+      "offset": 0,
+      "sha256": "ab75c40417e468bb905ca9ec6158614ee5549b880ebca1b3b0a66d56439165df"
+    },
+    {
+      "path": "packages/modules/src/Extend/Routes.php",
+      "whole_sha256": "10f82f5666c0d2cfe75c7c17c65e53f5d0404a281db6ef02718c17e92cd8834c",
+      "offset": 0,
+      "sha256": "10f82f5666c0d2cfe75c7c17c65e53f5d0404a281db6ef02718c17e92cd8834c"
+    },
+    {
+      "path": "packages/modules/src/Extend/Workflow.php",
+      "whole_sha256": "8d68c590ee3eb71ea7993808cac692cca21c4dc50ad9f94bf92554818d71cb44",
+      "offset": 0,
+      "sha256": "8d68c590ee3eb71ea7993808cac692cca21c4dc50ad9f94bf92554818d71cb44"
+    },
+    {
+      "path": "packages/modules/src/Extend/Permissions.php",
+      "whole_sha256": "e948e116a506333316e99dd78ee506a60ccc59c210ff7e22013c06119329db5b",
+      "offset": 0,
+      "sha256": "e948e116a506333316e99dd78ee506a60ccc59c210ff7e22013c06119329db5b"
+    },
+    {
+      "path": "packages/modules/src/Extend/Api.php",
+      "whole_sha256": "1dbaece6ae633ce60e67f812e29ed3f6d5428ec28e026c186e2ca7ba3f335da1",
+      "offset": 0,
+      "sha256": "1dbaece6ae633ce60e67f812e29ed3f6d5428ec28e026c186e2ca7ba3f335da1"
+    },
+    {
+      "path": "packages/modules/src/Extend/Menu.php",
+      "whole_sha256": "925c6efa061767f6120ad594cc5c7e1ab54443541565bebc28a873767e514a02",
+      "offset": 0,
+      "sha256": "925c6efa061767f6120ad594cc5c7e1ab54443541565bebc28a873767e514a02"
+    },
+    {
+      "path": "packages/core/src/Settings/DatabaseSettingsRepository.php",
+      "whole_sha256": "d9269c1787f70074c975a6f05510e7cd50b70dd09c035d70a0d9fd26c870052a",
+      "offset": 0,
+      "sha256": "d9269c1787f70074c975a6f05510e7cd50b70dd09c035d70a0d9fd26c870052a"
+    },
+    {
+      "path": "packages/core/src/Features/DatabaseFeatureFlags.php",
+      "whole_sha256": "67c5d010626ec94f1efc7a7f2a4e1f614b8a2f3843acaad97f8703a479f5ef8b",
+      "offset": 0,
+      "sha256": "67c5d010626ec94f1efc7a7f2a4e1f614b8a2f3843acaad97f8703a479f5ef8b"
+    },
+    {
+      "path": "packages/core/src/Audit/AuditObserver.php",
+      "whole_sha256": "83e841879aac33aac018fce2e4ab5d70cf5abdaf031affaba540f4ecf8397ef7",
+      "offset": 0,
+      "sha256": "83e841879aac33aac018fce2e4ab5d70cf5abdaf031affaba540f4ecf8397ef7"
+    },
+    {
+      "path": "packages/core/src/PubSub/PubSubManager.php",
+      "whole_sha256": "dec6720983b527f3e331890a22d63c22dc445558bf2096d2be9d04105c199782",
+      "offset": 0,
+      "sha256": "dec6720983b527f3e331890a22d63c22dc445558bf2096d2be9d04105c199782"
+    },
+    {
+      "path": "packages/api/src/OperationRegistry.php",
+      "whole_sha256": "2fb23a8380e9da942d78bc2280248005ecf7bc342e47206601b8273e5c0869d0",
+      "offset": 0,
+      "sha256": "2fb23a8380e9da942d78bc2280248005ecf7bc342e47206601b8273e5c0869d0"
+    },
+    {
+      "path": "packages/api/src/Internal/DeclaredSchemaContributor.php",
+      "whole_sha256": "d5ae37859472f43eae5eb58c29611a502ba19c4c76fd3ff945c2dc8910509e74",
+      "offset": 0,
+      "sha256": "d5ae37859472f43eae5eb58c29611a502ba19c4c76fd3ff945c2dc8910509e74"
+    },
+    {
+      "path": "packages/auth/src/Identity/PrincipalUserProvider.php",
+      "whole_sha256": "d8a9f2dc4d8cdd1a1578da3d043adcfb156b9a4c9e093ee7b43fa4e9eb194235",
+      "offset": 0,
+      "sha256": "d8a9f2dc4d8cdd1a1578da3d043adcfb156b9a4c9e093ee7b43fa4e9eb194235"
+    },
+    {
+      "path": "packages/tasks/src/Actions/CompleteTask.php",
+      "whole_sha256": "24d408bc3d6ab1e06b8564db8d49177b9ad724940c0e3a70a0209bbaaaa2c2da",
+      "offset": 0,
+      "sha256": "24d408bc3d6ab1e06b8564db8d49177b9ad724940c0e3a70a0209bbaaaa2c2da"
+    },
+    {
+      "path": "packages/tasks/src/Actions/MoveTaskToStage.php",
+      "whole_sha256": "14be1d6b48a94aa3624f816ae0fc8da676362598620dc3633c0bf124db13de12",
+      "offset": 0,
+      "sha256": "14be1d6b48a94aa3624f816ae0fc8da676362598620dc3633c0bf124db13de12"
+    },
+    {
+      "path": "packages/tasks/src/Actions/UpdateTask.php",
+      "whole_sha256": "1da185f1d33081852fb1f5bde51e4ae243e3cdc926c05b993c1753c77b128f05",
+      "offset": 0,
+      "sha256": "1da185f1d33081852fb1f5bde51e4ae243e3cdc926c05b993c1753c77b128f05"
+    },
+    {
+      "path": "packages/tasks/src/Actions/CreateTask.php",
+      "whole_sha256": "a6edfa31423665cb8f2f4b646c7d292ea3fabb39e7daff65191044b5c50ea352",
+      "offset": 0,
+      "sha256": "a6edfa31423665cb8f2f4b646c7d292ea3fabb39e7daff65191044b5c50ea352"
+    },
+    {
+      "path": "packages/tasks/src/Data/UpdateTaskData.php",
+      "whole_sha256": "dea4d5bdfa5c63765732f2ec8de0fe3bbeb2363d126979f24f8eee57507d6289",
+      "offset": 0,
+      "sha256": "dea4d5bdfa5c63765732f2ec8de0fe3bbeb2363d126979f24f8eee57507d6289"
+    },
+    {
+      "path": "packages/tasks/src/Data/TaskDraft.php",
+      "whole_sha256": "25449cd233d8efbdce131882732992225114c47b989011627d9773529e38fba7",
+      "offset": 0,
+      "sha256": "25449cd233d8efbdce131882732992225114c47b989011627d9773529e38fba7"
+    },
+    {
+      "path": "packages/tasks/src/Data/ActorData.php",
+      "whole_sha256": "b7ec903f7f1c947aeb7aeae5091c807e18387c6f03a127d463f9d4b337469257",
+      "offset": 0,
+      "sha256": "b7ec903f7f1c947aeb7aeae5091c807e18387c6f03a127d463f9d4b337469257"
+    },
+    {
+      "path": "packages/tasks/src/Data/TaskReference.php",
+      "whole_sha256": "a607eba74cccc5efd79f01ca8036eb96438a01e4c1592f14324aab077058b1db",
+      "offset": 0,
+      "sha256": "a607eba74cccc5efd79f01ca8036eb96438a01e4c1592f14324aab077058b1db"
+    },
+    {
+      "path": "packages/tasks/src/Data/MoveTaskToStageData.php",
+      "whole_sha256": "b2f50d316ef6ae389c7b6d26fff9ae44fe51800f535e2ddfea112b98aa8c1488",
+      "offset": 0,
+      "sha256": "b2f50d316ef6ae389c7b6d26fff9ae44fe51800f535e2ddfea112b98aa8c1488"
+    },
+    {
+      "path": "packages/tasks/src/Data/CompleteTaskData.php",
+      "whole_sha256": "3a81371b1d06fc2fb108e369ac7da022aaa774b6d889e59c15b6fb4439ff4f95",
+      "offset": 0,
+      "sha256": "3a81371b1d06fc2fb108e369ac7da022aaa774b6d889e59c15b6fb4439ff4f95"
+    },
+    {
+      "path": "packages/tasks/src/Data/EntityReference.php",
+      "whole_sha256": "3fe6984456ae1e63e471d8b2c7ed0ae848f199dff6afd1135b9e383276756277",
+      "offset": 0,
+      "sha256": "3fe6984456ae1e63e471d8b2c7ed0ae848f199dff6afd1135b9e383276756277"
+    },
+    {
+      "path": "packages/tenancy/src/Central/CentralValue.php",
+      "whole_sha256": "7ddf85595948a8d98a557f691557d8df39002e6c35956efbb9a3f834b303a1c8",
+      "offset": 0,
+      "sha256": "7ddf85595948a8d98a557f691557d8df39002e6c35956efbb9a3f834b303a1c8"
+    },
+    {
+      "path": "packages/tenancy/src/Central/CentralUnavailable.php",
+      "whole_sha256": "9e8b799109ae389e8ccdf9156d73c00c655e49355ea7acdd4bf5c4ad2d9438bd",
+      "offset": 0,
+      "sha256": "9e8b799109ae389e8ccdf9156d73c00c655e49355ea7acdd4bf5c4ad2d9438bd"
+    },
+    {
+      "path": "packages/tenancy/src/Central/MembershipQuery.php",
+      "whole_sha256": "53779a348284e550b1d4c8327e22f31025e3813fd44ad4ed389cd7537ea13242",
+      "offset": 0,
+      "sha256": "53779a348284e550b1d4c8327e22f31025e3813fd44ad4ed389cd7537ea13242"
+    },
+    {
+      "path": "packages/tenancy/src/Central/RevokeMembershipReceipt.php",
+      "whole_sha256": "59595d1a1acb20c3f186f898acb5d97983ad34dcc9754e0fb10da4d8d1a65bf4",
+      "offset": 0,
+      "sha256": "59595d1a1acb20c3f186f898acb5d97983ad34dcc9754e0fb10da4d8d1a65bf4"
+    },
+    {
+      "path": "packages/tenancy/src/Central/MembershipReason.php",
+      "whole_sha256": "a336c9c54648939f5b16a489f1bf26fae47a28e061b5ed47d7ec5520f3b146d3",
+      "offset": 0,
+      "sha256": "a336c9c54648939f5b16a489f1bf26fae47a28e061b5ed47d7ec5520f3b146d3"
+    },
+    {
+      "path": "packages/tenancy/src/Central/ActorRef.php",
+      "whole_sha256": "3da396f4ef4b7a6ef36842c109fcd73c37cf8b7ebe1b7f9810a081cf6c58a71d",
+      "offset": 0,
+      "sha256": "3da396f4ef4b7a6ef36842c109fcd73c37cf8b7ebe1b7f9810a081cf6c58a71d"
+    },
+    {
+      "path": "packages/tenancy/src/Central/CentralUnauthorized.php",
+      "whole_sha256": "0cd13e55a389bd629824a29d3b1ab5ccd3e7ed0ea8a7b36cbd2316de02fde5e8",
+      "offset": 0,
+      "sha256": "0cd13e55a389bd629824a29d3b1ab5ccd3e7ed0ea8a7b36cbd2316de02fde5e8"
+    },
+    {
+      "path": "packages/tenancy/src/Central/CentralProtocolViolation.php",
+      "whole_sha256": "fe0023ac6829ee88c88808c7582e0f78aba7ef5d905fe07b1d9dea429f75a45f",
+      "offset": 0,
+      "sha256": "fe0023ac6829ee88c88808c7582e0f78aba7ef5d905fe07b1d9dea429f75a45f"
+    },
+    {
+      "path": "packages/tenancy/src/Central/MembershipSnapshot.php",
+      "whole_sha256": "b8e0e64cf996cb17bd60949b478c4e81b3b120449954d44d6e5586a1767acda0",
+      "offset": 0,
+      "sha256": "b8e0e64cf996cb17bd60949b478c4e81b3b120449954d44d6e5586a1767acda0"
+    },
+    {
+      "path": "packages/tenancy/src/Central/ActorType.php",
+      "whole_sha256": "f815fefda8052ecdb5e0574aca7462d631a83ced9da0c528a6b12da89306dba3",
+      "offset": 0,
+      "sha256": "f815fefda8052ecdb5e0574aca7462d631a83ced9da0c528a6b12da89306dba3"
+    },
+    {
+      "path": "packages/tenancy/src/Central/RevokeMembershipRequest.php",
+      "whole_sha256": "fadfe6083bd620c00b76038a91dc02f90f1554128ab0a3c45332d7a8581e01cd",
+      "offset": 0,
+      "sha256": "fadfe6083bd620c00b76038a91dc02f90f1554128ab0a3c45332d7a8581e01cd"
+    },
+    {
+      "path": "packages/tenancy/src/Central/MembershipState.php",
+      "whole_sha256": "b9f6688bc3a6a72ca9883096875524e31f9e23c030d44c850e61dced7f4d401e",
+      "offset": 0,
+      "sha256": "b9f6688bc3a6a72ca9883096875524e31f9e23c030d44c850e61dced7f4d401e"
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "whole_sha256": "2ec20240da0e6737f71bbe9127f33fdcd8df3099c93982a088ca6c579825e711",
+      "offset": 0,
+      "sha256": "2ec20240da0e6737f71bbe9127f33fdcd8df3099c93982a088ca6c579825e711"
+    },
+    {
+      "path": "packages/tenancy/config/tenancy.php",
+      "whole_sha256": "4965c75e29ea2d3f0bde237500fcd489c05affca354053b6a3ad7245b4cd2117",
+      "offset": 0,
+      "sha256": "e7bc821ec40e90ccde8a78b40fb8698f95d120c10bb0dc6142131ba33d079a44"
+    },
+    {
+      "path": "packages/tenancy/config/tenancy.php",
+      "whole_sha256": "4965c75e29ea2d3f0bde237500fcd489c05affca354053b6a3ad7245b4cd2117",
+      "offset": 11944,
+      "sha256": "5927502755b54d2de4318cb5dc625b57bbe2d34d1083f8bfaeecb58778b812f4"
+    },
+    {
+      "path": "packages/auth/config/corex-auth.php",
+      "whole_sha256": "c81bab14a68a604acc90988c6afbbe1bb25aa4a4bfc78eae015d9bb43cad5ee6",
+      "offset": 0,
+      "sha256": "c81bab14a68a604acc90988c6afbbe1bb25aa4a4bfc78eae015d9bb43cad5ee6"
+    },
+    {
+      "path": "tests/Unit/EntityRegistryTest.php",
+      "whole_sha256": "0ec4a406df2e89ae20729d85cdd3b095d716ca31f0b6ac217ad013121eda2dfc",
+      "offset": 0,
+      "sha256": "0ec4a406df2e89ae20729d85cdd3b095d716ca31f0b6ac217ad013121eda2dfc"
+    },
+    {
+      "path": "packages/tasks/tests/Feature/TasksContractTest.php",
+      "whole_sha256": "5ed09809fbea53a99c797550f43d6276d1c747471df494feba157673ef0c0f22",
+      "offset": 0,
+      "sha256": "2acdb80bc61926d2420658676f8baa55959cf692b3235f36d2fff406132f41a0"
+    },
+    {
+      "path": "packages/tasks/tests/Feature/TasksContractTest.php",
+      "whole_sha256": "5ed09809fbea53a99c797550f43d6276d1c747471df494feba157673ef0c0f22",
+      "offset": 11948,
+      "sha256": "12e90fbcdbe6c05430334332997a17237ec806da01ad85e19458b53823bad81d"
+    },
+    {
+      "path": "packages/tasks/CHANGELOG.md",
+      "whole_sha256": "72d787d9880d884deb25268b799c5fde88e5278dbf61d290ca87b1f013ffb737",
+      "offset": 0,
+      "sha256": "72d787d9880d884deb25268b799c5fde88e5278dbf61d290ca87b1f013ffb737"
+    },
+    {
+      "path": "packages/modules/CHANGELOG.md",
+      "whole_sha256": "7a0e3e2eeb8795a6bc09047b34604decab5b93a77909cef1d6ac3f8348be9533",
+      "offset": 0,
+      "sha256": "7a0e3e2eeb8795a6bc09047b34604decab5b93a77909cef1d6ac3f8348be9533"
+    },
+    {
+      "path": "packages/auth/CHANGELOG.md",
+      "whole_sha256": "97ec975804dc2b3a4d8d04768f6175a84057630220ca908034a366e4b65bc7bc",
+      "offset": 0,
+      "sha256": "97ec975804dc2b3a4d8d04768f6175a84057630220ca908034a366e4b65bc7bc"
+    },
+    {
+      "path": "packages/crm/CHANGELOG.md",
+      "whole_sha256": "b9c449e0511d0b70ce1b1d34e15df5025854a7d5ff95acc908323e88904e98a8",
+      "offset": 0,
+      "sha256": "b9c449e0511d0b70ce1b1d34e15df5025854a7d5ff95acc908323e88904e98a8"
+    },
+    {
+      "path": "packages/core/CHANGELOG.md",
+      "whole_sha256": "00d501f3e18959914f1d3f6f489f6638fdf34ad836736df9783a254e7bd52e28",
+      "offset": 0,
+      "sha256": "00d501f3e18959914f1d3f6f489f6638fdf34ad836736df9783a254e7bd52e28"
+    },
+    {
+      "path": "packages/api/CHANGELOG.md",
+      "whole_sha256": "72f4bf19ef8f76c2b54c4e56b21413eeea89238bb9b472573a3926ad22c6118b",
+      "offset": 0,
+      "sha256": "72f4bf19ef8f76c2b54c4e56b21413eeea89238bb9b472573a3926ad22c6118b"
+    },
+    {
+      "path": "packages/tenancy/CHANGELOG.md",
+      "whole_sha256": "92c2309081bc4f0d839f16da54a21459515845cef367dd62d62edeb766dae1d1",
+      "offset": 0,
+      "sha256": "6ebcaf16ab72446a0bb3a29ff6f0e8771375ac444638b708b8ada95275ca2f80"
+    },
+    {
+      "path": "packages/tenancy/CHANGELOG.md",
+      "whole_sha256": "92c2309081bc4f0d839f16da54a21459515845cef367dd62d62edeb766dae1d1",
+      "offset": 11983,
+      "sha256": "16aaa406b1d01fe99a37adbfafa6f9e3dc095211ea9ce6007f2312ad7ba81532"
+    }
+  ],
+  "consumed_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67
+  ],
+  "rule": "enumeration is not consumption; source-only never executed acceptance",
+  "complete": true,
+  "read_scope": "61 full files, 274796 bytes, 68 actual bounded chunk reads; no truncated output",
+  "source_observation_head": "c587a6a8699e99b946eb118c02d71806618ce476",
+  "additional_full_reads": [
+    {
+      "path": "packages/tenancy/src/Contracts/CentralApiClient.php",
+      "sha256": "da879bdb9ad6fb66a26227af29d859c4a1cc12ff24598a86de9106647328f271",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ApplyMembershipProjection.php",
+      "sha256": "ee4d4bf7cd68bd90ee36b89fdca575981244fbd9c00e3f7eeae30e06ac45deed",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+      "sha256": "a694b53d81208553ef9e97181da5876a134e517e2686db4f52faa1462edb3559",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ClaimAccountSignup.php",
+      "sha256": "9607e8b1e0732eceb64525986e83db170b476a269f672d75f1502ba96445cc17",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php",
+      "sha256": "bd50720757790bceff5b58098d374c87de6e49bbfac2eacbd53c6187bdc9937f",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "tests/Feature/MoneyCastTest.php",
+      "sha256": "52ff5b7eb362d81bdac8143da23ed26097a0408bf6e596ff9622d63435f4d4fe",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/MembershipRuntimeRegistrationTest.php",
+      "sha256": "f7f61d130c11989df3ec99645cdd6e149a04de863c4456c892a5235031d6978a",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/core/tests/Storage/LocalTenantStorageTest.php",
+      "sha256": "d190b5580a55cebe8fe289ab75691ce8af2d594ffb2eaff915db5154bab88eb8",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/SignupIdempotencyTest.php",
+      "sha256": "681500eedb9a57caaf68df9d20417a820a82a5d6a776cd4019da7122c60b946f",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/api/tests/Feature/PlatformTest.php",
+      "sha256": "fb6a35ec3f30419f66bb9bbc098fde22fd4bc8c7d52f13c1ff572521f893993b",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/CentralApiClientTest.php",
+      "sha256": "9e681cea548bd51fc2c109c61fdd5035ef6ea41ec9324bf7fbf4a3ed181fd624",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "tests/Arch/LayerTest.php",
+      "sha256": "c43e53584bf24c0e1b22630448e3cc3365bf9c50d42f4be593c66bc41da3f619",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "packages/tenancy/src/Jobs/RefreshAccountMembership.php",
+      "sha256": "4c5beb490e5529b67517f246b13a96f47c1b7cd8e51d1b7e7ddcd32aa702d321",
+      "status": "complete actual full source body read, not executed test"
+    },
+    {
+      "path": "plans/archive/2026.09.13-№1-COREX-TENANCY-IDENTITY/decisions/D10-p73-local-adoption-acceptance.md",
+      "sha256": "8d039ae8550d23f4a8cb4467117cd664756f4d3d092998ddc7e77c85e8c6d42e",
+      "status": "complete actual full source body read, not executed test"
+    }
+  ]
+}

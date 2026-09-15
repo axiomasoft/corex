@@ -1,0 +1,8 @@
+{
+  "stage": "evidence",
+  "result": "PASS",
+  "sources": 100,
+  "requirements": 52,
+  "parent_criteria": 365,
+  "semantic_review": "required by item contract"
+}

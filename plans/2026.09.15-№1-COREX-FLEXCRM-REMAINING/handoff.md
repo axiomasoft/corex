@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-15 — after P1.2
+# HANDOFF — 2026-09-15 — after P1.3
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.3 P1.4
+**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.4
 
 | Параметр | Значение |
 |:--|:--|
@@ -10,15 +10,15 @@
 | Context | continue-root |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:85f8928dcdcf386aab04fdceaea1176b94c9481cd42ef635d0712b6826383b06", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "continue-root", "reason": "context-telemetry-unavailable", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "continue-root", "reason": "context-telemetry-unavailable", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** P1.1/P1.2 GREEN.365parents/688atoms/52R; exact source clauses/hashes/thresholds and non-AC reusable obligations retained; native/product/provider/ops owners separated.
+**Done:** P1.1/P1.2/P1.3 GREEN:100sources/365parents/688atoms/52R;91fullsourceblobs/9A/5E/12G/34DI/13AP qualified.
 
-**Remaining:** P1.3 ready/Not started with fresh bundle/admission ALLOW; then P1.4. Continue same root; stop after P1.4.
+**Remaining:** P1.4 Not started, native bundle current and admission ALLOW. Continue same root; stop after P1.4.
 
-**Sources of truth:** plan.md; phases/P1/P1.3.md; bundles/P1.3.json; findings/P1-acceptance-map.md; artifacts/B-P1-QUALIFY/P1.2-semantic-review.json; artifacts/B-P1-QUALIFY/checkpoint.md.
+**Sources of truth:** plan.md; phases/P1/P1.4.md; bundles/P1.4.json; findings/P1-acceptance-map.md; findings/P1-evidence-ledger.md; artifacts/B-P1-QUALIFY/P1.3-semantic-review.json; artifacts/B-P1-QUALIFY/checkpoint.md.
 
-**Open risks:** Source-owner schema/confirmation/translation/privacy choices remain explicit for P1.4. No runtime/release/live acceptance claimed; P1.3 must inventory exact A/E/G/34DI/13AP evidence and missing receipts.
+**Open risks:** Source-owner numeric/schema/confirmation/translation/privacy/cache choices; D10 local strict facade kept; E2/E3 source/config/receipt boundaries; E5 older public release kept. All future effective DI/AP/release/runner/consumer outcomes unfilled.
 
-**Workarounds/Deferred/Open questions:** D19 read-budget is advisory only this P1 group, no hard250000 cap; all other limits/checks retained. P1.4 map declarations cover all numbered operative sections with unchanged aggregate. P2 remains outside policy and execution.
+**Workarounds/Deferred/Open questions:** D19 aggregate budget advisory only B-P1, all mandatory reads/per-read bounds retained. P1.4 selectors cover all operative map and ledger sections; owner source branches remain proposals. P2 outside policy and execution.

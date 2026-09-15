@@ -1,0 +1,188 @@
+{
+  "observation_head": "c587a6a8699e99b946eb118c02d71806618ce476",
+  "rule": "source equality is not test/config/environment or release equality",
+  "cohorts": [
+    {
+      "source_ref": "cb79f18095589124759fdd1107144764bb31d094",
+      "package_tree_comparisons": [
+        {
+          "path": "packages/core",
+          "cohort_tree": "305a21b885cde713909e0d6b9c2d6271f19b825f",
+          "observed_tree": "0489b05cb347cab5658f4f1e46424b646736fb77",
+          "equal": false
+        },
+        {
+          "path": "packages/modules",
+          "cohort_tree": "bc3596cc66006af88561d9518826290ccbbf13a0",
+          "observed_tree": "6ebfe99bb3506876b070e3ff992de302f958e238",
+          "equal": false
+        },
+        {
+          "path": "packages/api",
+          "cohort_tree": "98b7547a06754b3f0fb542062d7041e8f151bc63",
+          "observed_tree": "98b7547a06754b3f0fb542062d7041e8f151bc63",
+          "equal": true
+        },
+        {
+          "path": "packages/tasks",
+          "cohort_tree": "7032a8fb60aa76ee88f70df917ff146b8b6e7c70",
+          "observed_tree": "29b5e4dc533379777e53024f5b02213924bcd586",
+          "equal": false
+        },
+        {
+          "path": "packages/tenancy",
+          "cohort_tree": "094bc962e94514496df3565c3b2222bd8848873f",
+          "observed_tree": "d2f120bfb76e89768766b0f1bbb040dc84a4363d",
+          "equal": false
+        },
+        {
+          "path": "packages/auth",
+          "cohort_tree": "8db1c930c4b14e40ebd7f596f428bd10b0bcdb31",
+          "observed_tree": "63691af2969f86afa75990efdb31199aa516544c",
+          "equal": false
+        },
+        {
+          "path": "packages/crm",
+          "cohort_tree": "dc5365d5a22043b12ea490056aa87bda3b604fd5",
+          "observed_tree": "4080df1a6edb34a74bdcb883c8df24549f475487",
+          "equal": false
+        }
+      ],
+      "changed_paths": [
+        "A\tpackages/auth/PACKAGE.md",
+        "M\tpackages/auth/README.md",
+        "A\tpackages/core/PACKAGE.md",
+        "M\tpackages/core/README.md",
+        "M\tpackages/crm/tests/Fixtures/approved-storage.sql",
+        "A\tpackages/modules/PACKAGE.md",
+        "M\tpackages/modules/README.md",
+        "A\tpackages/tasks/PACKAGE.md",
+        "M\tpackages/tasks/README.md",
+        "A\tpackages/tenancy/PACKAGE.md",
+        "M\tpackages/tenancy/README.md",
+        "M\tpackages/tenancy/config/tenancy.php",
+        "A\tpackages/tenancy/database/migrations/root/2026_09_14_160001_add_domain_trust_generation_to_root_domains_table.php",
+        "A\tpackages/tenancy/src/Contracts/DomainChallengeStore.php",
+        "A\tpackages/tenancy/src/Contracts/DomainOwnershipProofVerifier.php",
+        "A\tpackages/tenancy/src/Contracts/DomainTrustAuthorizer.php",
+        "A\tpackages/tenancy/src/Contracts/DomainTrustPolicy.php",
+        "M\tpackages/tenancy/src/Database/TemplateClonePostgreSQLManager.php",
+        "M\tpackages/tenancy/src/Database/TemplateIntegrityVerifier.php",
+        "A\tpackages/tenancy/src/DomainTrust/ChallengeConsumption.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainChallenge.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainChallengeBinding.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainChallengeDraft.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustActor.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustChangeReason.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustCoordinator.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustDenied.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustDisabled.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustOperation.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustStateWriter.php",
+        "A\tpackages/tenancy/src/DomainTrust/DomainTrustTransition.php",
+        "A\tpackages/tenancy/src/DomainTrust/IssuedDomainChallenge.php",
+        "A\tpackages/tenancy/src/DomainTrust/NormalizedHost.php",
+        "A\tpackages/tenancy/src/DomainTrust/ObservedDomainProof.php",
+        "A\tpackages/tenancy/src/Events/DomainTrustChanged.php",
+        "M\tpackages/tenancy/src/Jobs/CreateDatabaseFromTemplate.php",
+        "M\tpackages/tenancy/src/Lifecycle/AccountLifecycle.php",
+        "M\tpackages/tenancy/src/Migrations/MigrationWaveOrchestrator.php",
+        "M\tpackages/tenancy/src/Models/Domain.php",
+        "M\tpackages/tenancy/src/Provisioning/PendingPool.php",
+        "M\tpackages/tenancy/src/Provisioning/StanclTenantDatabaseProvisioner.php",
+        "M\tpackages/tenancy/src/Resolvers/HostTenantResolver.php",
+        "M\tpackages/tenancy/src/TenancyServiceProvider.php",
+        "M\tpackages/tenancy/tests/Feature/AccountLifecycleTest.php",
+        "A\tpackages/tenancy/tests/Feature/DomainTrustTest.php",
+        "M\tpackages/tenancy/tests/Feature/HostResolutionTest.php",
+        "A\tpackages/tenancy/tests/Feature/MiddlewarePriorityTest.php",
+        "M\tpackages/tenancy/tests/Feature/MigrationWaveTest.php",
+        "M\tpackages/tenancy/tests/Feature/PendingPoolTest.php",
+        "M\tpackages/tenancy/tests/Feature/ProvisioningTest.php",
+        "M\tpackages/tenancy/tests/TestCase.php"
+      ],
+      "changed_count": 51
+    },
+    {
+      "source_ref": "6d23d6e3bf9cbe8f609ebf8b8eefb56216a5eb41",
+      "package_tree_comparisons": [
+        {
+          "path": "packages/core",
+          "cohort_tree": "0489b05cb347cab5658f4f1e46424b646736fb77",
+          "observed_tree": "0489b05cb347cab5658f4f1e46424b646736fb77",
+          "equal": true
+        },
+        {
+          "path": "packages/modules",
+          "cohort_tree": "6ebfe99bb3506876b070e3ff992de302f958e238",
+          "observed_tree": "6ebfe99bb3506876b070e3ff992de302f958e238",
+          "equal": true
+        },
+        {
+          "path": "packages/api",
+          "cohort_tree": "98b7547a06754b3f0fb542062d7041e8f151bc63",
+          "observed_tree": "98b7547a06754b3f0fb542062d7041e8f151bc63",
+          "equal": true
+        },
+        {
+          "path": "packages/tasks",
+          "cohort_tree": "29b5e4dc533379777e53024f5b02213924bcd586",
+          "observed_tree": "29b5e4dc533379777e53024f5b02213924bcd586",
+          "equal": true
+        },
+        {
+          "path": "packages/tenancy",
+          "cohort_tree": "d2f120bfb76e89768766b0f1bbb040dc84a4363d",
+          "observed_tree": "d2f120bfb76e89768766b0f1bbb040dc84a4363d",
+          "equal": true
+        },
+        {
+          "path": "packages/auth",
+          "cohort_tree": "63691af2969f86afa75990efdb31199aa516544c",
+          "observed_tree": "63691af2969f86afa75990efdb31199aa516544c",
+          "equal": true
+        },
+        {
+          "path": "packages/crm",
+          "cohort_tree": "4080df1a6edb34a74bdcb883c8df24549f475487",
+          "observed_tree": "4080df1a6edb34a74bdcb883c8df24549f475487",
+          "equal": true
+        }
+      ],
+      "changed_paths": [],
+      "changed_count": 0
+    }
+  ],
+  "D10_explicit_targets": [
+    {
+      "path": "packages/tenancy/src/Contracts/CentralApiClient.php",
+      "accepted_sha256": "da879bdb9ad6fb66a26227af29d859c4a1cc12ff24598a86de9106647328f271",
+      "observed_sha256": "da879bdb9ad6fb66a26227af29d859c4a1cc12ff24598a86de9106647328f271",
+      "equal": true
+    },
+    {
+      "path": "packages/tenancy/src/Central/MembershipSnapshot.php",
+      "accepted_sha256": "b8e0e64cf996cb17bd60949b478c4e81b3b120449954d44d6e5586a1767acda0",
+      "observed_sha256": "b8e0e64cf996cb17bd60949b478c4e81b3b120449954d44d6e5586a1767acda0",
+      "equal": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+      "accepted_sha256": "a694b53d81208553ef9e97181da5876a134e517e2686db4f52faa1462edb3559",
+      "observed_sha256": "a694b53d81208553ef9e97181da5876a134e517e2686db4f52faa1462edb3559",
+      "equal": true
+    },
+    {
+      "path": "packages/tenancy/src/Actions/ApplyMembershipProjection.php",
+      "accepted_sha256": "ee4d4bf7cd68bd90ee36b89fdca575981244fbd9c00e3f7eeae30e06ac45deed",
+      "observed_sha256": "ee4d4bf7cd68bd90ee36b89fdca575981244fbd9c00e3f7eeae30e06ac45deed",
+      "equal": true
+    },
+    {
+      "path": "packages/tenancy/src/Jobs/RefreshAccountMembership.php",
+      "accepted_sha256": "4c5beb490e5529b67517f246b13a96f47c1b7cd8e51d1b7e7ddcd32aa702d321",
+      "observed_sha256": "4c5beb490e5529b67517f246b13a96f47c1b7cd8e51d1b7e7ddcd32aa702d321",
+      "equal": true
+    }
+  ]
+}
