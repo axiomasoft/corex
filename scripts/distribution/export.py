@@ -102,19 +102,37 @@ def archive(path: Path, ref: str, root: str, value: dict, names: set[str]) -> tu
     return digest(raw), hashlib.sha1(raw).hexdigest(), digest(license_body)
 
 
-def export(ref: str, staging: Path) -> dict:
-    value = policy()
-    if ref != value["source_ref"]:
-        raise ExportError("source SHA is not the approved committed candidate")
+def candidate(value: dict) -> tuple[dict[str, str], set[str]]:
+    known = set(policy()["packages"])
+    packages = value.get("packages")
+    cohort = value.get("cohort", packages)
+
+    if not isinstance(packages, dict) or not packages:
+        raise ExportError("candidate packages are required")
+    if not isinstance(cohort, list) or not cohort:
+        raise ExportError("candidate cohort is required")
+    if not set(packages).issubset(known) or not set(cohort).issubset(known):
+        raise ExportError("candidate includes an unapproved CoreX package")
+    if not set(packages).issubset(cohort):
+        raise ExportError("candidate cohort must include exported packages")
+    if not isinstance(value.get("version"), str) or not value["version"]:
+        raise ExportError("candidate version is required")
+    if not isinstance(value.get("include"), list) or not isinstance(value.get("forbidden_segments"), list):
+        raise ExportError("candidate archive rules are required")
+
+    return packages, set(cohort)
+
+
+def export_candidate(ref: str, staging: Path, value: dict) -> dict:
+    packages_to_export, names = candidate(value)
     git("cat-file", "-e", f"{ref}^{{commit}}")
     if staging.exists():
         raise ExportError(f"staging already exists: {staging}")
     artifacts = staging / "artifacts"
     artifacts.mkdir(parents=True)
-    names = set(value["packages"])
     packages: dict[str, dict] = {}
     trees: dict[str, str] = {}
-    for name, root in sorted(value["packages"].items()):
+    for name, root in sorted(packages_to_export.items()):
         filename = name.replace("/", "-") + ".zip"
         archive_sha, archive_sha1, license_sha = archive(artifacts / filename, ref, root, value, names)
         composer = json.loads(git("show", f"{ref}:{root}/composer.json"))
@@ -131,10 +149,19 @@ def export(ref: str, staging: Path) -> dict:
     return manifest
 
 
+def export(ref: str, staging: Path) -> dict:
+    value = policy()
+    if ref != value["source_ref"]:
+        raise ExportError("source SHA is not the approved committed candidate")
+
+    return export_candidate(ref, staging, value)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-sha")
     parser.add_argument("--staging", type=Path)
+    parser.add_argument("--candidate", type=Path)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     try:
@@ -146,9 +173,16 @@ def main() -> int:
                     raise ExportError("independent builds differ")
                 print(json.dumps(left, sort_keys=True))
         elif args.source_sha and args.staging:
-            print(json.dumps(export(args.source_sha, args.staging), ensure_ascii=False, sort_keys=True))
+            if args.candidate is None:
+                manifest = export(args.source_sha, args.staging)
+            else:
+                value = json.loads(args.candidate.read_text(encoding="utf-8"))
+                if value.get("source_ref") != args.source_sha:
+                    raise ExportError("candidate source SHA does not match --source-sha")
+                manifest = export_candidate(args.source_sha, args.staging, value)
+            print(json.dumps(manifest, ensure_ascii=False, sort_keys=True))
         else:
-            parser.error("use --check or both --source-sha and --staging")
+            parser.error("use --check or both --source-sha and --staging, optionally with --candidate")
     except ExportError as error:
         print(f"export denied: {error}", file=sys.stderr)
         return 1
