@@ -32,7 +32,7 @@ foreach ($classes as $class) {
 $manifests = [];
 foreach ([new PanelsModule, new MediaModule, new WakeupModule, new NotificationsModule] as $module) {
     $manifest = $module->manifest();
-    $manifests[$manifest->name] = $manifest->tablePrefix;
+    $manifests[$manifest->composerName] = $manifest->tablePrefix;
 }
 
 if ($manifests !== [
