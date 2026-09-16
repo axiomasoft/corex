@@ -1,5 +1,5 @@
 {
-  "ref": "736c319a7d310582a1b28da92f537e4c17524b82",
+  "ref": "fd0110e2e6fc4e9658d5c2d5367a5b6cc4782977",
   "laravel_constraint": "^12.0",
   "dist_sha256": {
     "corex/core": "eb90ae788e47460ecace93497e82b42bddb92f58812978cff6ff215efe17935a",
@@ -26,7 +26,7 @@
         "corex/notifications": "ntf"
       },
       "php": "8.4.1",
-      "lock_sha256": "0034e4dc99673b0fabf9954f258c3cc610feb9ec9cd964a8a7859066e4a6d2c0"
+      "lock_sha256": "760cd3881ea1efe1584d69580f2c4876ca8c7382283bde234217a274b8982032"
     },
     "consumer-b": {
       "autoload": {
@@ -44,7 +44,7 @@
         "corex/notifications": "ntf"
       },
       "php": "8.4.1",
-      "lock_sha256": "0034e4dc99673b0fabf9954f258c3cc610feb9ec9cd964a8a7859066e4a6d2c0"
+      "lock_sha256": "760cd3881ea1efe1584d69580f2c4876ca8c7382283bde234217a274b8982032"
     }
   }
 }
