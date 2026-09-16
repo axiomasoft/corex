@@ -46,8 +46,8 @@ startup warning only; PHPStan completed with no errors.
 | packages/media/tests/Feature/MediaLifecycleTest.php | 6c9b00639131bce1e052fbde18542dfc74c0a4a70d8980ca15fb5adcea3ebcfa | lifecycle acceptance cases |
 | packages/media/tests/Feature/MediaLifecycleEdgeCasesTest.php | 2f706aecc9c03dd7d5ff59c99ca939f09d1dc3856f1a69c5c1dc35119a3b4db5 | fault and recovery acceptance cases |
 | packages/media/tests/Pg/ConversionConcurrencyTest.php | 291cb068b381d9aaba0e0c19045b29e2e5287682c3bd63e7a40efec27c591a1b | independent PostgreSQL connection proof |
-| composer.lock | af4777c768d5c77c14a247a8369e2f07f185a754d37b061628124651af02f918 | root installation graph |
-| .github/workflows/ci.yml | 3615b307ec6953ddb58cb52e2d99f47a69259725e71dcf78edcf795dbdadb8eb | package CI lane |
+| composer.lock | f02465efe95cfa7ca9ffe984570bdfa418edb81f7a8dd2d9c1fd8d585a21e610 | root installation graph |
+| .github/workflows/ci.yml | 6106ed94183d95219caa587ecd4f143cee29aa941bf10ac80e38541e7f9f9478 | package CI lane |
 
 ## Adoption
 

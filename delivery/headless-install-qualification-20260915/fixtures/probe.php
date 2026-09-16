@@ -26,7 +26,7 @@ foreach ($classes as $class) {
         throw new RuntimeException('Autoload escaped installed vendor: '.$class);
     }
 
-    $autoload[$class] = substr(realpath($file), strlen(realpath(__DIR__))+1);
+    $autoload[$class] = substr(realpath($file), strlen(realpath(__DIR__)) + 1);
 }
 
 $manifests = [];

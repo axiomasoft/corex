@@ -29,7 +29,7 @@ contract guard, anti-weakening, and all 34 mutation checks passed.
 | research/P4-extension-design.md | 957873c6995cb3811983217a67f99d5068416f4f46da8a1653650cbc595d143a | frozen conversion seam and CON invariants |
 | findings/P2-contract-catalogue.md | ee24d2dd236b776ccf14027e7731921d419adb1be2cf39728a2d7ccb0bfb2573 | C-P2-008 and protected-gate status |
 | findings/P3-storage-context.md | 7ef4c868f1ad94685c9a07fe3eaed5c5251a1377cf0694c586c03d7fd191635d | qualified private scoped storage evidence |
-| findings/P4-media-lifecycle.md | 108dc1fb82294882d5091bd15c1c7a14c220e6a3d91ffa65120e43f6bb99ecca | P4.2 producer lifecycle receipt |
+| findings/P4-media-lifecycle.md | 1e5f8e4c435a1866c951d320f24f20ed943b06bd95bf0497c2337e512869c25f | P4.2 producer lifecycle receipt |
 | packages/media/composer.json | 52ed1749963161fada7a1d7b369cbe70be3a34a14daa80ead6b74e81ac569145 | standalone module identity |
 | packages/media/config/corex-media.php | 82edd1b2324de303a2415672bd2172bff47a1a6141f459ca2732b561e79ceab2 | immutable default resource limits |
 | packages/media/src/Contracts/ConversionDriver.php | 91446dd334882575a1c238eb6b0e625ae37b245ffa3703c1fb3a87068f76e0bd | optional driver seam |
@@ -45,8 +45,8 @@ contract guard, anti-weakening, and all 34 mutation checks passed.
 | packages/media/tests/Conversion/ConversionTest.php | f189b372baf99d4b710ba4ce2d8369a578d5ddb06b99f8da7e48cccf09b6f560 | real GD/cleanup conformance |
 | packages/media/tests/Conversion/ConversionEdgeCasesTest.php | 5b4c7a5bac3ed7132bb555b3478a69d90ac4a97acf22a4981a18ee74d3382bf9 | conversion fault conformance |
 | packages/media/tests/Pg/ConversionConcurrencyTest.php | 291cb068b381d9aaba0e0c19045b29e2e5287682c3bd63e7a40efec27c591a1b | independent PostgreSQL connection proof |
-| composer.lock | af4777c768d5c77c14a247a8369e2f07f185a754d37b061628124651af02f918 | root installation graph |
-| .github/workflows/ci.yml | 3615b307ec6953ddb58cb52e2d99f47a69259725e71dcf78edcf795dbdadb8eb | package CI lane |
+| composer.lock | f02465efe95cfa7ca9ffe984570bdfa418edb81f7a8dd2d9c1fd8d585a21e610 | root installation graph |
+| .github/workflows/ci.yml | 6106ed94183d95219caa587ecd4f143cee29aa941bf10ac80e38541e7f9f9478 | package CI lane |
 
 ## Adoption
 

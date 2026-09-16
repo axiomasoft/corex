@@ -37,11 +37,11 @@ Docker service and the sole target `corex_test` before the PG lane.
 | packages/panels/src/Data/PanelContext.php | 9bd86fb930a530fd59c1f17f0e79359dbaead63a97a0874df7c52743fa0ae1f5 | trusted context boundary |
 | packages/panels/src/Data/PanelAccess.php | 787fecd0ce97c8874f4106e67cbc720a3b54392e2f1d7f59b6ff3c00b62132a4 | uncached access result boundary |
 | packages/panels/src/Internal/ModulePanelCatalogue.php | b83f7968b064d23080f21d46255cc2d9544e3d2263986bd027c03d2b9b53ea19 | current-state, fail-closed projection |
-| packages/panels/src/PanelsServiceProvider.php | 6c3346ca6e2a2de86cf237a258a1b1c310870986762393b553b2ffe6c86e4144 | tagged DI installation |
+| packages/panels/src/PanelsServiceProvider.php | 90ad638a21bbd65bc1a4d6e91741dbc8370cd57e4eb33ee7998d23be20634b07 | tagged DI installation |
 | packages/panels/tests/Unit/ModulePanelCatalogueTest.php | 094133e42943832b49ddc9861ed671968c27c20a745a45b79d053cfa4b14ec3a | executed PAN conformance |
 | tests/Feature/ModuleDiscoveryTest.php | a1339b43d19627de3e86336776de34ddc61c80386f5483ba969a284b9ce3d84e | root discovery regression after adding a CoreX module |
-| composer.lock | 3d681209d911835a63973a846d5711dc9e15e8b06efbcda6deda703b6357ba3c | root installation graph including corex/panels |
-| .github/workflows/ci.yml | 1023abb451201365f7f62fd1dcf44ed1d4b7f5ffeb5f3073643031b945e2cfe9 | isolated package CI coverage lane |
+| composer.lock | f02465efe95cfa7ca9ffe984570bdfa418edb81f7a8dd2d9c1fd8d585a21e610 | root installation graph including corex/panels |
+| .github/workflows/ci.yml | 6106ed94183d95219caa587ecd4f143cee29aa941bf10ac80e38541e7f9f9478 | isolated package CI coverage lane |
 
 ## Adoption
 

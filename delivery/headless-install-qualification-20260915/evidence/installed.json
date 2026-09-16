@@ -1,0 +1,50 @@
+{
+  "ref": "736c319a7d310582a1b28da92f537e4c17524b82",
+  "laravel_constraint": "^12.0",
+  "dist_sha256": {
+    "corex/core": "eb90ae788e47460ecace93497e82b42bddb92f58812978cff6ff215efe17935a",
+    "corex/modules": "f6d878f23165dc036eff6fdb86aab30199644e6a253f221628a604beed16fdf2",
+    "corex/panels": "bbbe4f10a333918d8c93425f41996abee2df5b5bf9c09886393cb773a7c01fcc",
+    "corex/media": "ba8c8bc7c907fd574c1ce36678bbdbcb99804d69d5493eb6b420900ce2e0dcf3",
+    "corex/wakeup": "6a5dafdedc541b4e320947285fa03ad9a62410fab59208ccc481dc981f933573",
+    "corex/notifications": "59ee724c652454508bc1917341a5a765c6bd89dc92b108911c307995d666e508"
+  },
+  "consumers": {
+    "consumer-a": {
+      "autoload": {
+        "CoreX\\CoreServiceProvider": "vendor/corex/core/src/CoreServiceProvider.php",
+        "CoreX\\Modules\\ModulesServiceProvider": "vendor/corex/modules/src/ModulesServiceProvider.php",
+        "CoreX\\Panels\\PanelsServiceProvider": "vendor/corex/panels/src/PanelsServiceProvider.php",
+        "CoreX\\Media\\MediaServiceProvider": "vendor/corex/media/src/MediaServiceProvider.php",
+        "CoreX\\Wakeup\\WakeupServiceProvider": "vendor/corex/wakeup/src/WakeupServiceProvider.php",
+        "CoreX\\Notifications\\NotificationsServiceProvider": "vendor/corex/notifications/src/NotificationsServiceProvider.php"
+      },
+      "manifests": {
+        "corex/panels": "pnl",
+        "corex/media": "med",
+        "corex/wakeup": "sys",
+        "corex/notifications": "ntf"
+      },
+      "php": "8.4.1",
+      "lock_sha256": "0034e4dc99673b0fabf9954f258c3cc610feb9ec9cd964a8a7859066e4a6d2c0"
+    },
+    "consumer-b": {
+      "autoload": {
+        "CoreX\\CoreServiceProvider": "vendor/corex/core/src/CoreServiceProvider.php",
+        "CoreX\\Modules\\ModulesServiceProvider": "vendor/corex/modules/src/ModulesServiceProvider.php",
+        "CoreX\\Panels\\PanelsServiceProvider": "vendor/corex/panels/src/PanelsServiceProvider.php",
+        "CoreX\\Media\\MediaServiceProvider": "vendor/corex/media/src/MediaServiceProvider.php",
+        "CoreX\\Wakeup\\WakeupServiceProvider": "vendor/corex/wakeup/src/WakeupServiceProvider.php",
+        "CoreX\\Notifications\\NotificationsServiceProvider": "vendor/corex/notifications/src/NotificationsServiceProvider.php"
+      },
+      "manifests": {
+        "corex/panels": "pnl",
+        "corex/media": "med",
+        "corex/wakeup": "sys",
+        "corex/notifications": "ntf"
+      },
+      "php": "8.4.1",
+      "lock_sha256": "0034e4dc99673b0fabf9954f258c3cc610feb9ec9cd964a8a7859066e4a6d2c0"
+    }
+  }
+}
