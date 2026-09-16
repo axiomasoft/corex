@@ -9,10 +9,20 @@ import subprocess
 import sys
 
 
+def normative_decision(path: Path) -> bool:
+    """Design/phase decisions are sealed; item execution grants have their own gates."""
+    text = path.read_text(encoding='utf-8')
+    item = re.search(r'^item:\s*([^\n]+?)\s*$', text, re.M)
+    if item is None:  # Legacy D1–D8 remain normative stable inputs.
+        return True
+    subject = item[1].strip().strip('"\'')
+    return subject == 'design' or re.fullmatch(r'P\d+', subject) is not None
+
+
 def design_inputs(plan: Path) -> set[str]:
     """Stable design closure; execution outputs and rolling views are not seal inputs."""
     expected = {
-        'plan.md', 'roadmap.md', 'open-questions.md',
+        'plan.md', 'roadmap.md',
         'artifacts/source-inventory.json', 'scripts/task-check.py',
         'scripts/test-design-guards.py', 'findings/whole-plan-astra-review.md',
         'research/01b-acceptance-source-supplement.md',
@@ -21,8 +31,10 @@ def design_inputs(plan: Path) -> set[str]:
     }
     # Keep exact owning contract names explicit for the per-phase checker contracts.
     expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py"})
-    for folder in ('brief', 'research', 'decisions'):
+    for folder in ('brief', 'research'):
         expected.update(str(path.relative_to(plan)) for path in (plan / folder).rglob('*') if path.is_file())
+    expected.update(str(path.relative_to(plan)) for path in (plan / 'decisions').glob('D*.md')
+                    if path.is_file() and normative_decision(path))
     for number in range(1, 12):
         expected.add(f'scripts/validate-p{number}.py')
         expected.add(f'phases/P{number}/P{number}.md')
