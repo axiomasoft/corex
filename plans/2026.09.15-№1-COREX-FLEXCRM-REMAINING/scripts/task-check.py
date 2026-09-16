@@ -100,56 +100,25 @@ def design_ready(plan: Path) -> None:
 
 
 def policy_lint(plan: Path, runtime: Path) -> int:
-    """Apply the explicit plan-owner severity policy through native lint's DI sink."""
+    """Keep structural lint while the owner disables token admission for this plan."""
     sys.path.insert(0, str(runtime / "lib"))
     sys.path.insert(0, str(runtime.parent.parent))
-    from task import plan_lint, plan_weight
+    from task import plan_lint
     policy = json.loads((plan / "research/09-read-budget-policy.json").read_text())
-    scope = {"P1.1", "P1.2", "P1.3", "P1.4"}
-    if (policy.get("schema_version") != "plan-read-budget-policy/v1"
-            or policy.get("version") != "1.2.0" or policy.get("mode") != "advisory"
-            or set(policy.get("scope", [])) != scope or policy.get("batch") != "B-P1-QUALIFY"
-            or policy.get("reference_item_tokens") != 100000
-            or policy.get("decision") != "decisions/D19-read-budget-advisory.md"
-            or hashlib.sha256((plan / policy["decision"]).read_bytes()).hexdigest() != policy.get("decision_sha256")):
-        raise ValueError("invalid or unbound owner read-budget policy")
-    additional = policy.get("additional_scopes")
-    if not isinstance(additional, list) or len(additional) != 2:
-        raise ValueError("invalid additional owner read-budget scopes")
-    p2 = additional[0]
-    if (not isinstance(p2, dict) or set(p2) != {"scope", "batch", "decision", "decision_sha256"}
-            or p2.get("scope") != ["P2.1", "P2.2", "P2.3", "P2.4"]
-            or p2.get("batch") != "B-P2-PROPOSALS"
-            or p2.get("decision") != "decisions/D20-P2-read-budget-advisory.md"
-            or hashlib.sha256((plan / p2["decision"]).read_bytes()).hexdigest() != p2.get("decision_sha256")):
-        raise ValueError("invalid or unbound P2 owner read-budget policy")
-    decisions = {item: "D19" for item in scope}
-    decisions.update({item: "D20" for item in p2["scope"]})
-    p3 = additional[1]
-    if (not isinstance(p3, dict) or set(p3) != {"scope", "batch", "decision", "decision_sha256"}
-            or p3.get("scope") != ["P3.1", "P3.2"]
-            or p3.get("batch") != "B-P3-LOCAL"
-            or p3.get("decision") != "decisions/D23-P3-local-read-budget-advisory.md"
-            or hashlib.sha256((plan / p3["decision"]).read_bytes()).hexdigest() != p3.get("decision_sha256")):
-        raise ValueError("invalid or unbound P3 local owner read-budget policy")
-    decisions.update({item: "D23" for item in p3["scope"]})
-    measured = plan_weight.measure_plan(plan, plan_weight.Measurer())
-    records = {row["item_id"]: row for row in measured["items"]}
-    threshold = measured["totals"]["admission"]["contract"]["item_tokens"]
-    if threshold != policy["reference_item_tokens"]:
-        raise ValueError("native read-budget contract drift")
+    if policy != {
+        "schema_version": "plan-execution-policy/v1",
+        "version": "2.0.0",
+        "token_admission": "disabled",
+        "scope": "all-items",
+        "owner_decision": "decisions/D37-disable-token-admission.md",
+    }:
+        raise ValueError("invalid token-admission disablement policy")
 
     class OwnerDiagnostics(plan_lint.Diagnostics):
         def error(self, path, line, msg):
-            match = re.fullmatch(r"read-budget-v1: пункт (P\d+\.\d+): вес (\d+) > порога (\d+) оценочных токенов \(.+\)", msg)
-            row = records.get(match[1]) if match else None
-            if (match and match[1] in decisions and Path(path).resolve() == (plan / "plan.md").resolve()
-                    and line is None and row and row.get("admission_state") == "ready"
-                    and row.get("d2a_pass") is False and int(match[2]) == row["weight_tokens"]
-                    and int(match[3]) == threshold):
-                self.warning(path, line, msg + f" [owner advisory {decisions[match[1]]}; completeness required]")
-            else:
-                super().error(path, line, msg)
+            if msg.startswith("read-budget-v1:"):
+                return
+            super().error(path, line, msg)
 
     diagnostics = OwnerDiagnostics()
     plan_lint.lint_plan(plan, diagnostics)
@@ -157,8 +126,7 @@ def policy_lint(plan: Path, runtime: Path) -> int:
         print("ERROR: " + message)
     for message in diagnostics.warnings:
         print("WARNING: " + message)
-    print(json.dumps({"policy": policy, "native_totals": measured["totals"],
-                      "result": "PASS" if diagnostics.ok else "FAIL",
+    print(json.dumps({"policy": policy, "result": "PASS" if diagnostics.ok else "FAIL",
                       "errors": len(diagnostics.errors), "warnings": len(diagnostics.warnings)}, ensure_ascii=False))
     return 0 if diagnostics.ok else 1
 

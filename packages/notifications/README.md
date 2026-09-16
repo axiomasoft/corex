@@ -1,0 +1,20 @@
+# corex/notifications
+
+Durable, tenant-local notification inbox primitives for CoreX. The package stores an idempotent
+notification intent and a delivery record in the same transaction. It defaults to denying all
+notification actions until the host application supplies `NotificationPolicy`.
+
+`corex:notifications:sweep` recovers expired leases and dispatches due delivery jobs. Unknown
+external outcomes are retained for reconciliation and are never blindly retried.
+
+Recipient preferences use the existing Settings cascade; their revision is mirrored in the
+tenant-local recipient-state row, so an outdated preference write is rejected rather than silently
+overwriting a newer choice. The built-in `in_app` channel is registered by default; consumer
+providers can add channel drivers and recipient resolution without changing the inbox schema.
+
+When `corex-notifications.digest.enabled` is enabled, the package registers the
+`notification.digest.v1` wakeup consumer. A digest freezes at most 100 notification IDs per
+explicit UTC half-open window. The shared local wakeup runner admits a separate digest delivery;
+its durable SQL due source recreates residual and late closed-window batches after a restart,
+without mutating a completed wakeup request key. Current cancellation and preference state is
+checked before admission. Once admitted, the delivery is an immutable effect.

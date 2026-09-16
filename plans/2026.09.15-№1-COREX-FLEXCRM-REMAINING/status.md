@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-15
-inputs_sha256: bb7eb2177b6b591aa85e6be753936e4f13979b5edab253bbb7070c36325017ce
+through: 2026-09-16
+inputs_sha256: 031e387dd737bcb6f01e1d03fb4683390ed7ca38b49234a198055644f9999285
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-15 |
+| Last Updated | 2026-09-16 |
 
 ## 4. Phase Index & Status Board
 
@@ -27,8 +27,8 @@ generated_by: task plan-views status
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
-| P3 | Довести generic tenancy, storage и identity adapters | 2/7 | 🟡 In progress |
-| P4 | Headless extensions: panels, media, notifications, saved views | 0/8 | ⬜ Not started |
+| P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
+| P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟡 In progress |
 | P5 | Workflow binding и единый durable wakeup seam | 0/6 | ⬜ Not started |
 | P6 | Data extension, import/export и search | 0/8 | ⬜ Not started |
 | P7 | Task primitives, recurrence и internationalization | 0/9 | ⬜ Not started |
@@ -85,22 +85,22 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P3.1 | Квалифицировать storage и физический context lifecycle | 🟢 Done | 2026-09-15 |
 | P3.2 | Квалифицировать concurrent claim, integrity и export-before-drop | 🟢 Done | 2026-09-15 |
-| P3.3 | Квалифицировать identity и accepted central transport | ⬜ Not started | — |
-| P3.4 | Адаптировать durable pair store, inbox и restore barrier | ⬜ Not started | — |
-| P3.5 | Закрепить lease и final credential-write conformance | ⬜ Not started | — |
-| P3.6 | Довести versioned account-list transport и Redis display cache | ⬜ Not started | — |
-| P3.7 | Свести exact local adapter receipts и downstream obligations | ⬜ Not started | — |
+| P3.3 | Квалифицировать identity и accepted central transport | 🟢 Done | 2026-09-16 |
+| P3.4 | Адаптировать durable pair store, inbox и restore barrier | 🟢 Done | 2026-09-16 |
+| P3.5 | Закрепить lease и final credential-write conformance | 🟢 Done | 2026-09-16 |
+| P3.6 | Довести versioned account-list transport и Redis display cache | 🟢 Done | 2026-09-16 |
+| P3.7 | Свести exact local adapter receipts и downstream obligations | 🟢 Done | 2026-09-16 |
 
 ## Phase P4
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P4.1 | Реализовать headless panel descriptors и текущую policy boundary | ⬜ Not started | — |
-| P4.2 | Реализовать media upload/reference/delete lifecycle | ⬜ Not started | — |
-| P4.3 | Реализовать ограниченные idempotent media conversions | ⬜ Not started | — |
-| P4.4 | Реализовать durable notification inbox/outbox | ⬜ Not started | — |
-| P4.5 | Реализовать notification channel/preferences/cancellation adapters | ⬜ Not started | — |
-| P4.6 | Реализовать restart-safe digest через shared wakeup | ⬜ Not started | — |
+| P4.1 | Реализовать headless panel descriptors и текущую policy boundary | 🟢 Done | 2026-09-16 |
+| P4.2 | Реализовать media upload/reference/delete lifecycle | 🟢 Done | 2026-09-16 |
+| P4.3 | Реализовать ограниченные idempotent media conversions | 🟢 Done | 2026-09-16 |
+| P4.4 | Реализовать durable notification inbox/outbox | 🟠 Done with deviations | 2026-09-16 |
+| P4.5 | Реализовать notification channel/preferences/cancellation adapters | 🟠 Done with deviations | 2026-09-16 |
+| P4.6 | Реализовать restart-safe digest через shared wakeup | 🟠 Done with deviations | 2026-09-16 |
 | P4.7 | Реализовать core saved-view ports и safe compile/default lifecycle | ⬜ Not started | — |
 | P4.8 | Проверить installed non-CRM consumers и запечатать P4 receipts | ⬜ Not started | — |
 
@@ -252,7 +252,46 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
 | 2026-09-15 | executor/gpt-5.6-sol/high | plan-exec · closed-green · Seven local cases/root D34/Arch/contracts/antiweakening/D98/package PASS. Native/physical proof; external effective gates stay pending. Receipt: artifacts/B-P3-LOCAL/P3.2-check-results.json
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · Hash-qualified no-delta P3.3: D34/root+tenancy local conformance, branches validation and full review GREEN. D31 budget-only; D32 report-only no-delta anchor. No PHP/public API/schema/dependency/default binding/adoption delta; protected external gates remain future P9/P10. |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P3.4 scoped physical pair/inbox: D33 G-SCHEMA/G-STORAGE, D34/root+tenancy, mutation, branch validation and full review GREEN. Explicit construction only; P3.5 timing/final-write and P9/P10 adoption remain future gates. |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow; P3.4 closure receipt correction only, no product/test/terminal rerun. |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P3.5 final-write boundary and all declared local checks GREEN; no public contract, provider, guard, cookie or consumer registration. P9/P10 effective integration remains future.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P3.6 hidden Redis/list adapters and all declared local checks GREEN; no public contract, provider, default endpoint, guard or consumer registration. P9/P10 remains future.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P3.7 sealed all six local branch receipts and exact P4/P6/P9/P10/P11 edges; effective conditions remain pending. P3 phase is intentionally not closed.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P4.1 panel/1 package and PAN-01–07 are GREEN; no product command, cache, DDL or Flex dependency. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P4.1 lifecycle-only correction: canonical terminal projection regenerated from unchanged GREEN evidence.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P4.2 media/1 lifecycle and MED-01–MED-08 are GREEN. Protected Q-P2-009/010/011 adoption, release, consumer, provider IAM/retention/backup evidence remain future P9/P10 gates, not accepted here. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:86 |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P4.2 closure-projection correction only; product and validation evidence unchanged.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P4.3 closure-projection correction only; product and validation evidence unchanged.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | codex/high | plan-exec · closed-deviations · Durable inbox/outbox delivered; SQLite and PostgreSQL targeted checks pass. |
+| 2026-09-16 | codex/high | plan-exec · closed-deviations · In-app channels, preferences and cancellation delivery checks pass. |
+| 2026-09-16 | codex/high | plan-exec · closed-deviations · Shared wakeup digest, residual batches and PostgreSQL run lock checks pass. |
+| 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
-- —
+- P4.4: known deviation
+- P4.5: known deviation
+- P4.6: known deviation

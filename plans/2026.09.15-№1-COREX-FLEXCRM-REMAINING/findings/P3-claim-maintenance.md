@@ -108,7 +108,7 @@ Complete unchanged frozen acceptance map/requirements were actually read. Origin
 | packages/tenancy/tests/Feature/AccountLifecycleTest.php | cf30b66fd55284aece2ad93a58e8d6e139875011c6864811b7b774e56d412f38 | Exact source/producer/current executed envelope |
 | packages/tenancy/tests/Feature/ClaimLifecycleConformanceTest.php | 1bbb924d262e8fa5d5ae90e6443b82fc5f1640efbc8ec8e518c5fbcb177cb16e | Exact source/producer/current executed envelope |
 | packages/tenancy/tests/Pg/ClaimLifecycleConcurrencyTest.php | 0e2800e908520762cce1203e452d4d0c59331a1e16ea9f27d7c6ccb6a08496a4 | Exact source/producer/current executed envelope |
-| packages/tenancy/CHANGELOG.md | 5c6707cf5d62a622df84976b4d5023629abe1dce764798da7e7f541add2f5bf7 | Exact source/producer/current executed envelope |
+| packages/tenancy/CHANGELOG.md | dbcd243d97363caa359bef85574e072920501d776f0ebc6b4b6fa2bd61323e2b | Exact source/producer/current executed envelope |
 
 ## Adoption
 

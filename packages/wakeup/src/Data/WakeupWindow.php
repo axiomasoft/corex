@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Wakeup\Data;
+
+use DateTimeImmutable;
+use InvalidArgumentException;
+
+final readonly class WakeupWindow
+{
+    public function __construct(public DateTimeImmutable $start, public DateTimeImmutable $end, public string $period)
+    {
+        if (! in_array($period, ['hourly', 'daily', 'custom'], true) || $start >= $end) {
+            throw new InvalidArgumentException('Invalid wakeup window.');
+        }
+    }
+}

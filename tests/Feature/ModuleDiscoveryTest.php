@@ -70,8 +70,16 @@ it('rejects a discovered class that does not extend CorexModule', function (): v
     expect(fn () => $discovery->discover())->toThrow(InvalidManifestException::class);
 });
 
-it('corex:modules:compile does not fail on testbench with no corex-module packages installed', function (): void {
-    $exitCode = Artisan::call('corex:modules:compile');
+it('corex:modules:compile does not fail when discovery reports no CoreX module packages', function (): void {
+    $installedJson = tempnam(sys_get_temp_dir(), 'corex-modules-');
+    file_put_contents($installedJson, '{"packages":[]}');
+    $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(installedJsonPath: $installedJson));
+
+    try {
+        $exitCode = Artisan::call('corex:modules:compile');
+    } finally {
+        unlink($installedJson);
+    }
 
     expect($exitCode)->toBe(0);
 });

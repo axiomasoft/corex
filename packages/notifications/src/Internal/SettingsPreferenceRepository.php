@@ -1,0 +1,107 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Notifications\Internal;
+
+use CoreX\Contracts\SettingsRepository;
+use CoreX\Contracts\SettingsScope;
+use CoreX\Notifications\Contracts\PreferenceRepository;
+use CoreX\Notifications\Data\NotificationContext;
+use CoreX\Notifications\Data\NotificationPreference;
+use CoreX\Notifications\Data\PreferenceInput;
+use Illuminate\Database\ConnectionInterface;
+
+final class SettingsPreferenceRepository implements PreferenceRepository
+{
+    private const NAMESPACE = 'corex.notifications';
+
+    public function __construct(
+        private readonly ConnectionInterface $connection,
+        private readonly SettingsRepository $settings,
+    ) {}
+
+    public function get(NotificationContext $context, string $eventType): NotificationPreference
+    {
+        $recipient = $this->recipient($context);
+        $state = $this->connection->table('ntf_recipient_state')
+            ->where('kind', $recipient['kind'])
+            ->where('id', $recipient['id'])
+            ->first();
+        $value = $this->settings->get(self::NAMESPACE, $eventType, $this->scope($recipient['id']), $this->defaultPreference());
+
+        return $this->preference($value, $state === null ? '1' : (string) $state->preference_revision);
+    }
+
+    public function set(NotificationContext $context, PreferenceInput $input): NotificationPreference
+    {
+        $recipient = $this->recipient($context);
+
+        return $this->connection->transaction(function () use ($recipient, $input): NotificationPreference {
+            $this->connection->table('ntf_recipient_state')->insertOrIgnore([
+                'kind' => $recipient['kind'],
+                'id' => $recipient['id'],
+                'preference_revision' => '1',
+            ]);
+            $state = $this->connection->table('ntf_recipient_state')
+                ->where('kind', $recipient['kind'])
+                ->where('id', $recipient['id'])
+                ->lockForUpdate()
+                ->firstOrFail();
+            $version = (string) $state->preference_revision;
+
+            if (! hash_equals($version, $input->expectedVersion)) {
+                throw new NotificationOperationConflict('Notification preference version conflicts with the current value.');
+            }
+
+            $next = (string) ((int) $version + 1);
+            $value = ['channels' => $input->channels, 'digest' => $input->digest];
+            $this->settings->set(self::NAMESPACE, $input->eventType, $value, $this->scope($recipient['id']));
+            $this->connection->table('ntf_recipient_state')
+                ->where('kind', $recipient['kind'])
+                ->where('id', $recipient['id'])
+                ->update(['preference_revision' => $next]);
+
+            return new NotificationPreference(version: $next, channels: $input->channels, digest: $input->digest);
+        });
+    }
+
+    private function preference(mixed $value, string $version): NotificationPreference
+    {
+        if (! is_array($value) || ! isset($value['channels'], $value['digest']) || ! is_array($value['channels']) || ! is_string($value['digest'])) {
+            throw new NotificationOperationConflict('Notification preference is malformed.');
+        }
+
+        $channels = [];
+        foreach ($value['channels'] as $channel) {
+            if (! is_string($channel)) {
+                throw new NotificationOperationConflict('Notification preference channels are malformed.');
+            }
+
+            $channels[] = $channel;
+        }
+
+        return new NotificationPreference(version: $version, channels: $channels, digest: $value['digest']);
+    }
+
+    /** @return array{channels: list<string>, digest: string} */
+    private function defaultPreference(): array
+    {
+        return ['channels' => ['in_app'], 'digest' => 'instant'];
+    }
+
+    /** @return array{kind: string, id: string} */
+    private function recipient(NotificationContext $context): array
+    {
+        if ($context->actorId === null || $context->actorId === '') {
+            throw new NotificationAccessDenied('Notification preferences require an authenticated recipient.');
+        }
+
+        return ['kind' => $context->actorKind, 'id' => $context->actorId];
+    }
+
+    private function scope(string $recipientId): SettingsScope
+    {
+        return SettingsScope::user($recipientId);
+    }
+}

@@ -1,37 +1,7 @@
 {
-  "schema_version": "plan-read-budget-policy/v1",
-  "version": "1.2.0",
-  "mode": "advisory",
-  "scope": [
-    "P1.1",
-    "P1.2",
-    "P1.3",
-    "P1.4"
-  ],
-  "batch": "B-P1-QUALIFY",
-  "reference_item_tokens": 100000,
-  "decision": "decisions/D19-read-budget-advisory.md",
-  "decision_sha256": "2468dd354eafd9e71b2f786f98f3dfa8be12ada031323e6050b3f587ede89377",
-  "additional_scopes": [
-    {
-      "scope": [
-        "P2.1",
-        "P2.2",
-        "P2.3",
-        "P2.4"
-      ],
-      "batch": "B-P2-PROPOSALS",
-      "decision": "decisions/D20-P2-read-budget-advisory.md",
-      "decision_sha256": "a2094343ea42a67caeb5d3b811dba3aa61ebd014adb0206c40d04356e42d38c4"
-    },
-    {
-      "scope": [
-        "P3.1",
-        "P3.2"
-      ],
-      "batch": "B-P3-LOCAL",
-      "decision": "decisions/D23-P3-local-read-budget-advisory.md",
-      "decision_sha256": "8a747470cd85b2312ef52b6fe5992cbaf3e3e9f15d118e92ddc54470c47b5b83"
-    }
-  ]
+  "schema_version": "plan-execution-policy/v1",
+  "version": "2.0.0",
+  "token_admission": "disabled",
+  "scope": "all-items",
+  "owner_decision": "decisions/D37-disable-token-admission.md"
 }

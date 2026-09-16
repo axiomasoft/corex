@@ -115,6 +115,129 @@ jobs:
       - name: API static analysis
         run: composer --working-dir=packages/api analyse
 
+  notifications-wakeup-tests:
+    runs-on: ubuntu-latest
+    name: Notifications and wakeup packages
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Wakeup tests
+        run: composer --working-dir=packages/wakeup test
+      - name: Notification tests
+        run: composer --working-dir=packages/notifications test
+      - name: Notification and wakeup static analysis
+        run: vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src packages/wakeup/src --memory-limit=1G
+
+  notifications-pg-tests:
+    runs-on: ubuntu-latest
+    name: Notifications package (PG16)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: PostgreSQL delivery admission test
+        run: composer --working-dir=packages/notifications test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+
+  panels-tests:
+    runs-on: ubuntu-latest
+    name: Panels package
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
+      - name: Panels tests and coverage
+        run: composer --working-dir=packages/panels test:coverage
+      - name: Panels static analysis
+        run: composer --working-dir=packages/panels analyse
+
+  media-tests:
+    runs-on: ubuntu-latest
+    name: Media package
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, gd, xdebug
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+      - name: Media tests and coverage
+        run: composer --working-dir=packages/media test:coverage
+      - name: Media static analysis
+        run: composer --working-dir=packages/media analyse
+
+  media-pg-tests:
+    runs-on: ubuntu-latest
+    name: Media package (PG16)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - name: Install dependencies
+        run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+      - name: Media PostgreSQL concurrency test
+        run: composer --working-dir=packages/media test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+
   tenancy-tests:
     runs-on: ubuntu-latest
     strategy:

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Added unregistered internal accounts-list transport and Redis display cache
+  adapters. Both require explicit consumer construction, retain the strict
+  authenticated/no-store channel profile, and never make menu data authority.
+
+- Add an unregistered final credential-write admission boundary that keeps the pair lock, lease samples, callback SQL, and application fence on one connection transaction.
+
+- Added an explicitly constructed, tenant-lane physical pair/inbox mapping for
+  membership adapters. It is denied by default, requires canonical snapshot
+  digests and UUID inbox workers, and is never registered automatically.
+
 - Export and physical DROP now require the existing consumer integrity verifier
   for every archive, including local files. Size-only writers and legacy ready
   flags fail closed until the same qualified verifier is configured for export

@@ -1,0 +1,26 @@
+{
+  "schema_version": "required-read-progress/v1",
+  "item": "P3.4",
+  "bundle": {
+    "path": "bundles/P3.4.json",
+    "sha256": "8465a69826ed94e7040c399abd41ccc175477c56ed2933aaa4e0f806e284d55d",
+    "entries": 103
+  },
+  "reuse": {
+    "qualified_receipt": "artifacts/B-P3-LOCAL/P3.2-required-read-progress.json",
+    "predicate": "complete prior actual read, exact path+selector+source SHA-256+selected SHA-256 equality",
+    "indices": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]
+  },
+  "actual_complete_reads": [
+    {"index": 1, "path": "plan.md", "field": "Required Reads", "ordinal": 1, "selector": {"kind": "whole_file"}, "sha256": "425cdf31937b00f6ded18daf623d05defd217d73b3b358d53c17dd23341a17b3", "selected_sha256": "425cdf31937b00f6ded18daf623d05defd217d73b3b358d53c17dd23341a17b3", "bytes": 39986, "read_status": "complete"},
+    {"index": 96, "path": "findings/P3-identity-transport.md", "field": "Required Reads", "ordinal": 70, "selector": {"kind": "whole_file"}, "sha256": "f31183a086a7472bea79886edc75a87fa91020b090185992c4a5f39dd6855a7b", "selected_sha256": "f31183a086a7472bea79886edc75a87fa91020b090185992c4a5f39dd6855a7b", "bytes": 4690, "read_status": "complete"},
+    {"index": 97, "path": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php", "field": "Required Reads", "ordinal": 71, "selector": {"kind": "whole_file"}, "sha256": "c7f4f62ecafdd1b2ef66c2ee5e888ee0a45023bf52d38839d46fa28fdf3263c9", "selected_sha256": "c7f4f62ecafdd1b2ef66c2ee5e888ee0a45023bf52d38839d46fa28fdf3263c9", "bytes": 10211, "read_status": "complete"},
+    {"index": 98, "path": "packages/tenancy/src/Membership/Internal/Persistence/PairState.php", "field": "Required Reads", "ordinal": 72, "selector": {"kind": "whole_file"}, "sha256": "9b4cdf5be43c7559502a3dbbc2f31bccca365048c1a63b5028e311a0d1b1b243", "selected_sha256": "9b4cdf5be43c7559502a3dbbc2f31bccca365048c1a63b5028e311a0d1b1b243", "bytes": 1161, "read_status": "complete"},
+    {"index": 99, "path": "packages/tenancy/src/Membership/Internal/Inbox/DurableInbox.php", "field": "Required Reads", "ordinal": 73, "selector": {"kind": "whole_file"}, "sha256": "99d7c15f2a76d91c997eb85cf0a2ee5916ab0bc458112235d088f4b4da1788a5", "selected_sha256": "99d7c15f2a76d91c997eb85cf0a2ee5916ab0bc458112235d088f4b4da1788a5", "bytes": 3352, "read_status": "complete"},
+    {"index": 100, "path": "packages/tenancy/src/Membership/Internal/Projection/ReferenceMembershipProjection.php", "field": "Required Reads", "ordinal": 74, "selector": {"kind": "whole_file"}, "sha256": "663fff819f16622d88bfdf2cf47fc66d55dd39b24dfed6e00d628fe8bae7c292", "selected_sha256": "663fff819f16622d88bfdf2cf47fc66d55dd39b24dfed6e00d628fe8bae7c292", "bytes": 4855, "read_status": "complete"},
+    {"index": 101, "path": "packages/tenancy/tests/Support/Membership/PairStoreFixture.php", "field": "Required Reads", "ordinal": 75, "selector": {"kind": "whole_file"}, "sha256": "e6fbbd8d63067e7fb7bd703b41350482111e11775d134f7c3d739d18f60c4ffa", "selected_sha256": "e6fbbd8d63067e7fb7bd703b41350482111e11775d134f7c3d739d18f60c4ffa", "bytes": 1274, "read_status": "complete"},
+    {"index": 102, "path": "packages/tenancy/tests/Pg/MembershipPairStoreTest.php", "field": "Required Reads", "ordinal": 76, "selector": {"kind": "whole_file"}, "sha256": "6c0a3a98cf329cd8d884ff44cfd9f82b8b7ae295ce9cd8af870463fb390c35ec", "selected_sha256": "6c0a3a98cf329cd8d884ff44cfd9f82b8b7ae295ce9cd8af870463fb390c35ec", "bytes": 2236, "read_status": "complete"}
+  ],
+  "all_complete": true,
+  "counts": {"reused": 95, "actual": 8, "total": 103}
+}

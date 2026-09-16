@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Notifications\Internal;
+
+use CoreX\Notifications\Contracts\DigestBuilder;
+use CoreX\Notifications\Data\DigestRef;
+use CoreX\Notifications\Data\DigestWindow;
+use CoreX\Notifications\Data\NotificationContext;
+use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Wakeup\Contracts\WakeupScheduler;
+use CoreX\Wakeup\Data\WakeupRequest;
+use CoreX\Wakeup\Data\WakeupWindow;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Str;
+
+final class SqlDigestBuilder implements DigestBuilder
+{
+    public function __construct(
+        private readonly ConnectionInterface $connection,
+        private readonly WakeupScheduler $wakeup,
+        private readonly bool $enabled,
+    ) {}
+
+    public function build(NotificationContext $context, DigestWindow $window): ?DigestRef
+    {
+        if ($context->actorId === null || $context->actorId === '') {
+            throw new NotificationAccessDenied('Digest building requires an authenticated recipient.');
+        }
+        $recipient = new RecipientReference(kind: $context->actorKind, id: $context->actorId);
+
+        return $this->connection->transaction(function () use ($context, $recipient, $window): ?DigestRef {
+            $runs = $this->connection->table('ntf_digest_runs')->where('recipient_kind', $recipient->kind)->where('recipient_id', $recipient->id)->where('period', $window->period)->where('period_start', $window->start)->orderByDesc('batch_seq')->lockForUpdate()->get();
+            $items = $this->connection->table('ntf_notifications')
+                ->where('recipient_kind', $recipient->kind)
+                ->where('recipient_id', $recipient->id)
+                ->whereNull('cancelled_at')
+                ->where('created_at', '>=', $window->start)
+                ->where('created_at', '<', $window->end)
+                ->whereNotExists(function ($query): void {
+                    $query->selectRaw('1')
+                        ->from('ntf_digest_items')
+                        ->whereColumn('ntf_digest_items.notification_id', 'ntf_notifications.id')
+                        ->where('ntf_digest_items.channel', 'in_app');
+                })
+                ->orderBy('id')
+                ->limit(100)
+                ->lockForUpdate()
+                ->get();
+
+            if ($items->isEmpty()) {
+                if ($runs->isEmpty()) {
+                    return null;
+                }
+
+                $run = $runs->first();
+
+                return new DigestRef(id: $run->id, recipient: $recipient, window: $window, batchSequence: (int) $run->batch_seq);
+            }
+            $ids = $items->pluck('id')->all();
+            $runId = (string) Str::uuid7();
+            $batchSequence = $runs->isEmpty() ? 0 : (int) $runs->first()->batch_seq + 1;
+            $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => $window->start, 'period_end' => $window->end, 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => now()]);
+            foreach ($ids as $id) {
+                $this->connection->table('ntf_digest_items')->insert(['id' => (string) Str::uuid7(), 'run_id' => $runId, 'notification_id' => $id, 'channel' => 'in_app']);
+            }
+
+            if ($this->enabled) {
+                $this->wakeup->schedule(new WakeupRequest(
+                    context: $context->tenant,
+                    kind: 'notification.digest.v1',
+                    requestKey: "notification.digest:{$runId}",
+                    fireAt: $window->end,
+                    window: new WakeupWindow($window->start, $window->end, $window->period),
+                    payload: ['run_id' => $runId],
+                ));
+            }
+
+            return new DigestRef(id: $runId, recipient: $recipient, window: $window, batchSequence: $batchSequence);
+        });
+    }
+}
