@@ -1,34 +1,35 @@
-# HANDOFF — 2026-09-16 — after P4.6
+# HANDOFF — 2026-09-17 — after P7.2
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P4.7 P4.8
+**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P7.3
 
 | Параметр | Значение |
 |---|---|
-| Batch | B-P4-VIEWS-SEAL |
-| Model | gpt-5.6-terra |
-| Thinking | high |
+| Batch | B-P7-TASKS |
+| Model class | implementation |
+| Effort | high |
+| Capabilities | — |
 | Context | continue-root |
+| Суть | Deliver missing TaskPlanningCommand/Access and planning DTOs (PRIM-01..08). |
 
-```session-continuity-decision/v1
-{"evidence":["lifecycle:scope-complete","checkpoint:phases/P4/P4.3.state.md"],"outcome":"continue-root","reason":"authorized-scope-complete","runnable":true,"schema_version":"session-continuity-decision/v1"}
+```
+task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P7.3
 ```
 
-**Done:** P4.4–P4.6 add `corex/notifications` and `corex/wakeup`: durable
-inbox/outbox, channel/preferences/cancellation, and SQL-recoverable scheduled
-digest batches. SQLite (12/41), wakeup (2/9), PostgreSQL (2/2) and PHPStan
-checks pass; the terminal result is `Done with deviations` because this runtime
-has no Xdebug/PCOV coverage driver and did not run the root-wide carriers.
+```session-continuity-decision/v1
+{"evidence":["journal:P7.1:closed-green","journal:P7.2:closed-green","findings/P7-source-qualification.md:p7-utility-receipts/1","findings/P7-recurrence.md:p7-utility-receipts/1"],"outcome":"continue-root","reason":"compatible-active-work","runnable":true,"schema_version":"session-continuity-decision/v1"}
+```
 
-**Remaining:** P4.7–P4.8 are the next saved-views/install-seal batch. Rebuild
-the P4.7 bundle/admission before product work; do not treat this notification
-completion as an installed non-CRM consumer seal.
+**Done:** P7.2 delivers `corex/recurrence` — frozen `recurrence/1` DTOs, `RecurrenceExpander` port, and `RRuleRecurrenceExpander` wrapper over P7.1-qualified `rlanvin/php-rrule` v3.0.0. REC-01..12 PASS in `findings/P7-recurrence.md`.
 
-**Open risks:** Q-P2-009/Q-P2-010/Q-P2-011 remain protected API/schema/storage
-adoption proposals. They do not invalidate the local media receipts, but P9/P10
-must supply the exact installed/release/consumer/provider/IAM/retention/backup
-evidence before product adoption or effective deployment.
+**Ready:** P7.3 owns missing project/sprint/time-log planning commands against the unchanged Task ABI.
 
-**Sources of truth:** `journal.jsonl`; `phases/P4/P4.4.state.md`;
-`phases/P4/P4.5.state.md`; `phases/P4/P4.6.state.md`;
-`findings/P4-notification-outbox.md`; `findings/P4-notification-channels.md`;
-`findings/P4-notification-digest.md`; `status.md`; `plan.md`.
+**Remaining:** P7.3 is the active successor; P7.4–P7.9 and utility seal follow per P7 routing.
+
+**Open risks:** P7.2 proves local pure expansion only; release, hosted, live and consumer acceptance remain external (P9/P10/P11).
+
+**Sources of truth:** `journal.jsonl`; `findings/P7-recurrence.md`; `phases/P7/P7.2.state.md`; `packages/recurrence/`; `findings/P7-source-qualification.md`; `research/P7-utility-design.md`; `status.md`; `plan.md`.
+
+**Workarounds/Deferred/Open questions:**
+- workarounds: —
+- deferred: —
+- open_questions: —

@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-16
-inputs_sha256: 031e387dd737bcb6f01e1d03fb4683390ed7ca38b49234a198055644f9999285
+through: 2026-09-17
+inputs_sha256: 12005c06bd5c00a7ad7b819cfa5e0d3831a3594a1ba9d85a80e6c8e169922a94
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-16 |
+| Last Updated | 2026-09-17 |
 
 ## 4. Phase Index & Status Board
 
@@ -28,10 +28,10 @@ generated_by: task plan-views status
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
-| P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟡 In progress |
-| P5 | Workflow binding и единый durable wakeup seam | 0/6 | ⬜ Not started |
-| P6 | Data extension, import/export и search | 0/8 | ⬜ Not started |
-| P7 | Task primitives, recurrence и internationalization | 0/9 | ⬜ Not started |
+| P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟠 Done with deviations |
+| P5 | Workflow binding и единый durable wakeup seam | 6/6 | 🟢 Done |
+| P6 | Data extension, import/export и search | 8/8 | 🟢 Done |
+| P7 | Task primitives, recurrence и internationalization | 2/9 | 🟡 In progress |
 | P8 | Introspection и transport-neutral tool integration | 0/7 | ⬜ Not started |
 | P9 | Integrated cohort, compatibility, pristine install и release | 0/9 | ⬜ Not started |
 
@@ -101,39 +101,39 @@ generated_by: task plan-views status
 | P4.4 | Реализовать durable notification inbox/outbox | 🟠 Done with deviations | 2026-09-16 |
 | P4.5 | Реализовать notification channel/preferences/cancellation adapters | 🟠 Done with deviations | 2026-09-16 |
 | P4.6 | Реализовать restart-safe digest через shared wakeup | 🟠 Done with deviations | 2026-09-16 |
-| P4.7 | Реализовать core saved-view ports и safe compile/default lifecycle | ⬜ Not started | — |
-| P4.8 | Проверить installed non-CRM consumers и запечатать P4 receipts | ⬜ Not started | — |
+| P4.7 | Реализовать core saved-view ports и safe compile/default lifecycle | 🟠 Done with deviations | 2026-09-16 |
+| P4.8 | Проверить installed non-CRM consumers и запечатать P4 receipts | 🟠 Done with deviations | 2026-09-16 |
 
 ## Phase P5
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P5.1 | Квалифицировать independently owned engine/FSM и immutable ABI | ⬜ Not started | — |
-| P5.2 | Реализовать SQL wakeup/1 и единый boxed local_sweep | ⬜ Not started | — |
-| P5.3 | Добавить root routing hints и reconciliation adapter | ⬜ Not started | — |
-| P5.4 | Реализовать тонкий typed workflow/FSM binding | ⬜ Not started | — |
-| P5.5 | Закрепить exact digest adapter и independent wakeup consumer | ⬜ Not started | — |
-| P5.6 | Проверить cold installed non-CRM profiles и запечатать P5 | ⬜ Not started | — |
+| P5.1 | Квалифицировать independently owned engine/FSM и immutable ABI | 🟢 Done | 2026-09-16 |
+| P5.2 | Реализовать SQL wakeup/1 и единый boxed local_sweep | 🟢 Done | 2026-09-16 |
+| P5.3 | Добавить root routing hints и reconciliation adapter | 🟢 Done | 2026-09-16 |
+| P5.4 | Реализовать тонкий typed workflow/FSM binding | 🟢 Done | 2026-09-16 |
+| P5.5 | Закрепить exact digest adapter и independent wakeup consumer | 🟢 Done | 2026-09-16 |
+| P5.6 | Проверить cold installed non-CRM profiles и запечатать P5 | 🟢 Done | 2026-09-16 |
 
 ## Phase P6
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P6.1 | Квалифицировать data engines, codecs и source-owned ABI | ⬜ Not started | — |
-| P6.2 | Реализовать typed field/store/filter binding без копии движка | ⬜ Not started | — |
-| P6.3 | Провести schema operations через безопасный async engine bridge | ⬜ Not started | — |
-| P6.4 | Реализовать resumable transfer с атомарным checkpoint | ⬜ Not started | — |
-| P6.5 | Реализовать coherent export manifest и безопасный file finalize | ⬜ Not started | — |
-| P6.6 | Реализовать query boundary и PostgreSQL search fallback | ⬜ Not started | — |
-| P6.7 | Реализовать durable index lane, rebuild и swap recovery | ⬜ Not started | — |
-| P6.8 | Доказать cold installed non-domain profiles и запечатать P6 | ⬜ Not started | — |
+| P6.1 | Квалифицировать data engines, codecs и source-owned ABI | 🟢 Done | 2026-09-16 |
+| P6.2 | Реализовать typed field/store/filter binding без копии движка | 🟢 Done | 2026-09-16 |
+| P6.3 | Провести schema operations через безопасный async engine bridge | 🟢 Done | 2026-09-16 |
+| P6.4 | Реализовать resumable transfer с атомарным checkpoint | 🟢 Done | 2026-09-17 |
+| P6.5 | Реализовать coherent export manifest и безопасный file finalize | 🟢 Done | 2026-09-17 |
+| P6.6 | Реализовать query boundary и PostgreSQL search fallback | 🟢 Done | 2026-09-17 |
+| P6.7 | Реализовать durable index lane, rebuild и swap recovery | 🟢 Done | 2026-09-17 |
+| P6.8 | Доказать cold installed non-domain profiles и запечатать P6 | 🟢 Done | 2026-09-17 |
 
 ## Phase P7
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P7.1 | Квалифицировать recurrence/intl/task/source equivalents | ⬜ Not started | — |
-| P7.2 | Реализовать pure bounded recurrence adapter | ⬜ Not started | — |
+| P7.1 | Квалифицировать recurrence/intl/task/source equivalents | 🟢 Done | 2026-09-17 |
+| P7.2 | Реализовать pure bounded recurrence adapter | 🟢 Done | 2026-09-17 |
 | P7.3 | Доставить только missing project/sprint/time-log primitive commands | ⬜ Not started | — |
 | P7.4 | Связать recurrence→tasks с durable wakeup и optional signal | ⬜ Not started | — |
 | P7.5 | Доставить typed locale и explicit translation fallback | ⬜ Not started | — |
@@ -289,9 +289,75 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-16 | codex/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · rag-pending · P5.1 source boundary recorded in findings/P5-engine-qualification.md; external RAG/review required before terminal. |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.1 qualified MIT upstream FSM/engine sources; CoreX binding remains P5.4. |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-deviations · Saved-view ports, schema adapter and VIEW-01–09 are green; panels coverage cannot run because this PHP runtime has no coverage driver. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-deviations · P4 seal and two clean installed consumers are green; PHP 8.5/Laravel 13 and coverage-driver lanes are unavailable and not claimed. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.2 durable wakeup: package/PG, Xdebug coverage 82.0%, PHPStan, Pint and P5 branch receipt GREEN. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.3 root routing: PostgreSQL lease/CAS/reconciliation tests, 86.6% scoped Xdebug coverage, package and root quality gates GREEN. P5.2/P5.3 owner-requested batch is complete. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · no-op · bookkeeping repair
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · no-op · bookkeeping repair
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · no-op · bookkeeping repair
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · no-op · bookkeeping repair
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.4 workflow binding, root package checks and installed consumer receipt PASS.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.5 digest bridge package and PostgreSQL lock checks PASS.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | gpt-5.6-terra/high | plan-exec · closed-green · P5.6 cold installed two-consumer qualification and P5 seal PASS.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · owned attributes engine qualification: PHP 8.3/Laravel 12-13 profile and isolated PostgreSQL evidence GREEN.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · typed field/store/filter binding: JSONB/EAV, active registry snapshot and 50x30 proof GREEN.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · safe async schema bridge: approval, restore epoch, retry, CIC and drift tests GREEN.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P6.4 transfer runner: bounded codecs, fenced PG checkpoint, dedup, savepoint and quarantine verified. |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · in-progress · — |
+| 2026-09-16 | executor/gpt-5.6-terra/high | plan-exec · closed-green · P6.5 export/1: coherent repeatable-read manifests, verified immutable parts, current-authority emission and raw/display split verified. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-exec · local-repair · Historical completion-marker repair for journal line 123; the original close recorded no write-site code.
+write-site: pre_mutation: historical-unrecorded · pre_final: historical-unrecorded |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-exec · local-repair · Historical completion-marker repair for journal line 125; the original close recorded no write-site code.
+write-site: pre_mutation: historical-unrecorded · pre_final: historical-unrecorded |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-exec · local-repair · Historical completion-marker repair for journal line 123; the accepted original close is now explicitly persisted.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-exec · local-repair · Historical completion-marker repair for journal line 125; the accepted original close is now explicitly persisted.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · in-progress · B-P6-SEARCH admitted; P6.6 start. P6.7/P6.8 remain gated by terminal producer evidence. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · P6.6 search/1: PostgreSQL fallback, opaque scope-bound cursor, current-policy hydration, physical A/B isolation and optional Meilisearch adapter receipt verified. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · in-progress · — |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · P6.7 index-lifecycle/1: durable lane, fenced rebuild/swap recovery, actual PG16 and loopback Meilisearch receipts verified. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · in-progress · — |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · P6.8: seven branch receipts sealed with local installed qualification and named downstream gates. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · in-progress · Recovery: terminal evidence rebinding after item-spec metadata normalization; source unchanged; rerun declared package checks. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · Recovery terminal: current P6.6 spec rebound after unchanged-source package checks and P6 seal PASS. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · in-progress · Recovery: terminal evidence rebinding after item-spec metadata normalization; source unchanged; rerun declared package checks. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · Recovery terminal: current P6.7 spec rebound after unchanged-source lifecycle checks and P6 seal PASS. |
+| 2026-09-17 | executor/gpt-5.6-terra/high | plan-run · closed-green · Inline P6 closure: eight GREEN item heads; direct-close gate allow; closure and seal current. artifacts/B-P6-SEARCH/P6-phase-close-admission.json |
+| 2026-09-17 | gpt-5.6-terra/medium | plan-run · in-progress · — |
+| 2026-09-17 | gpt-5.6-terra/medium | plan-run · closed-green · P7.1 source qualification receipt PASS.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.2 bounded recurrence adapter PASS (REC-01..12).
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
 - P4.4: known deviation
 - P4.5: known deviation
 - P4.6: known deviation
+- P4.7: known deviation
+- P4.8: known deviation
