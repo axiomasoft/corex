@@ -8,6 +8,7 @@ use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Commands\SweepWakeups;
 use CoreX\Wakeup\Contracts\DueSource;
 use CoreX\Wakeup\Contracts\WakeupHandler;
+use CoreX\Wakeup\Contracts\WakeupHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Contracts\WakeupSweeper;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
@@ -23,7 +24,15 @@ final class WakeupServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-wakeup.php', 'corex-wakeup');
-        $this->app->scoped(WakeupScheduler::class, fn (Application $app): SqlWakeupScheduler => new SqlWakeupScheduler($app['db']->connection(), $app->make(TenantContextResolver::class), $this->handlers($app)));
+        $this->app->scoped(
+            WakeupScheduler::class,
+            fn (Application $app): SqlWakeupScheduler => new SqlWakeupScheduler(
+                connection: $app['db']->connection(),
+                contexts: $app->make(TenantContextResolver::class),
+                handlers: $this->handlers($app),
+                hints: $this->hints($app),
+            ),
+        );
         $this->app->scoped(WakeupSweeper::class, fn (Application $app): SweepRunner => new SweepRunner($app['db']->connection(), $app->make(TenantContextResolver::class), $this->handlers($app), $this->dueSources($app), (int) $app['config']->get('corex-wakeup.lease_seconds'), (int) $app['config']->get('corex-wakeup.max_attempts')));
 
         if ($this->app->runningInConsole()) {
@@ -61,5 +70,21 @@ final class WakeupServiceProvider extends ServiceProvider
         }
 
         return $sources;
+    }
+
+    /** @return list<WakeupHint> */
+    private function hints(Application $app): array
+    {
+        $hints = [];
+
+        foreach ($app->tagged('corex.wakeup.hints') as $hint) {
+            if (! $hint instanceof WakeupHint) {
+                throw new RuntimeException('Wakeup hints must implement WakeupHint.');
+            }
+
+            $hints[] = $hint;
+        }
+
+        return $hints;
     }
 }

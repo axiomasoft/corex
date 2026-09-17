@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Intl\Data;
+
+final readonly class FormattedMoney
+{
+    public function __construct(
+        public string $text,
+        public string $exactDecimal,
+        public string $currency,
+        public string $locale,
+        public string $method,
+        public bool $wasFallback,
+        public ?string $icuVersion,
+    ) {}
+}

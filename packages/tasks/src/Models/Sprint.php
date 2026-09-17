@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property string $id
  * @property string $project_id
+ * @property string $name
  */
 final class Sprint extends Model
 {

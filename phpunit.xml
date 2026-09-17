@@ -25,6 +25,27 @@
         <testsuite name="ModulesPackage">
             <directory>packages/modules/tests</directory>
         </testsuite>
+        <testsuite name="WorkflowPackage">
+            <directory>packages/workflow/tests</directory>
+        </testsuite>
+        <testsuite name="AttributesPackage">
+            <directory>packages/attributes/tests</directory>
+        </testsuite>
+        <testsuite name="ImportExportPackage">
+            <directory>packages/import-export/tests</directory>
+        </testsuite>
+        <testsuite name="SearchPackage">
+            <directory>packages/search/tests</directory>
+        </testsuite>
+        <testsuite name="SearchMeilisearchPackage">
+            <directory>packages/search-meilisearch/tests</directory>
+        </testsuite>
+        <testsuite name="TasksWorkflowPackage">
+            <directory>packages/tasks-workflow/tests</directory>
+        </testsuite>
+        <testsuite name="IntlPackage">
+            <directory>packages/intl/tests</directory>
+        </testsuite>
 
         <!-- Layer & isolation gates (P3.5): pure static assertions, no DB/container. -->
         <testsuite name="Arch">
@@ -44,6 +65,13 @@
             <directory>packages/api/src</directory>
             <directory>packages/core/src</directory>
             <directory>packages/modules/src</directory>
+            <directory>packages/workflow/src</directory>
+            <directory>packages/attributes/src</directory>
+            <directory>packages/import-export/src</directory>
+            <directory>packages/search/src</directory>
+            <directory>packages/search-meilisearch/src</directory>
+            <directory>packages/tasks-workflow/src</directory>
+            <directory>packages/intl/src</directory>
         </include>
     </source>
 

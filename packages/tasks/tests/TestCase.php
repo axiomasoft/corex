@@ -7,6 +7,7 @@ namespace CoreX\Tasks\Tests;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Testing\TasksTestCase;
 use Mockery;
 use Override;
@@ -32,5 +33,9 @@ abstract class TestCase extends TasksTestCase
         $mutationAccess->shouldReceive('authorizeUpdate')->byDefault()->andReturnNull();
         $mutationAccess->shouldReceive('authorizeComplete')->byDefault()->andReturnNull();
         $this->app->instance(TaskMutationAccess::class, $mutationAccess);
+
+        $planningAccess = Mockery::mock(TaskPlanningAccess::class);
+        $planningAccess->shouldReceive('authorize')->byDefault()->andReturnNull();
+        $this->app->instance(TaskPlanningAccess::class, $planningAccess);
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         executionOrder="random"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnEmptyTestSuite="true"
+         beStrictAboutOutputDuringTests="true"
+>
+    <testsuites>
+        <testsuite name="Wakeup routing">
+            <file>tests/Pg/WakeupRoutingTest.php</file>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src/Wakeup</directory>
+        </include>
+    </source>
+
+    <php>
+        <ini name="memory_limit" value="1G"/>
+        <env name="PGSQL_HOST" value="127.0.0.1"/>
+        <env name="PGSQL_PORT" value="5434"/>
+        <env name="PGSQL_DATABASE" value="corex_test"/>
+        <env name="PGSQL_USERNAME" value="corex"/>
+        <env name="PGSQL_PASSWORD" value="corex"/>
+    </php>
+</phpunit>

@@ -1,0 +1,60 @@
+{
+  "schema": "reference-fixture/1",
+  "snapshotId": "boxes-fixture-v1",
+  "sourceUri": "fixture://boxes",
+  "retrievedAt": "2026-09-15T00:00:00+00:00",
+  "licenseUri": "https://corex.test/licenses/fixture-boxes",
+  "attribution": "CoreX licensed minimal geography fixture (boxes layout)",
+  "sourceVersion": "1.0.0",
+  "importerVersion": "intl/1",
+  "tzdbVersion": "2025a",
+  "coverageNotes": "US country, California subdivision, New York City place, America/New_York timezone",
+  "records": [
+    {
+      "namespace": "iso3166-1",
+      "sourceId": "US",
+      "kind": "country",
+      "names": {"en": "United States", "ru": "Соединённые Штаты"},
+      "aliases": [{"locale": "en", "alias": "USA"}],
+      "timezones": [
+        {"id": "America/New_York", "provenance": "primary"},
+        {"id": "America/Chicago", "provenance": "secondary"}
+      ]
+    },
+    {
+      "namespace": "iso3166-2",
+      "sourceId": "US-CA",
+      "kind": "subdivision",
+      "parent": {"namespace": "iso3166-1", "sourceId": "US"},
+      "countryKey": {"namespace": "iso3166-1", "sourceId": "US"},
+      "names": {"en": "California", "ru": "Калифорния"},
+      "timezones": [{"id": "America/Los_Angeles", "provenance": "primary"}]
+    },
+    {
+      "namespace": "iso3166-2",
+      "sourceId": "US-NY",
+      "kind": "subdivision",
+      "parent": {"namespace": "iso3166-1", "sourceId": "US"},
+      "countryKey": {"namespace": "iso3166-1", "sourceId": "US"},
+      "names": {"en": "New York"},
+      "timezones": [{"id": "America/New_York", "provenance": "primary"}]
+    },
+    {
+      "namespace": "geonames",
+      "sourceId": "5128581",
+      "kind": "place",
+      "parent": {"namespace": "iso3166-2", "sourceId": "US-NY"},
+      "countryKey": {"namespace": "iso3166-1", "sourceId": "US"},
+      "names": {"en": "New York City"},
+      "coordinates": {"lat": "40.7128", "lon": "-74.0060"},
+      "timezones": [{"id": "America/New_York", "provenance": "record"}]
+    },
+    {
+      "namespace": "iana",
+      "sourceId": "America/New_York",
+      "kind": "timezone",
+      "names": {"en": "America/New_York"},
+      "timezones": [{"id": "America/New_York", "provenance": "canonical"}]
+    }
+  ]
+}

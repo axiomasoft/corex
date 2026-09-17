@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4031a8f1d1f46d77d0eaf9087e01a750",
+    "content-hash": "c97bb10cfed5151c8916f701f6c72f1c",
     "packages": [
         {
             "name": "axiomasoft/stancl-jobpipeline",
@@ -384,7 +384,7 @@
         },
         {
             "name": "corex/api",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/api",
@@ -439,7 +439,7 @@
         },
         {
             "name": "corex/core",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
@@ -496,8 +496,136 @@
             }
         },
         {
+            "name": "corex/intl",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/intl",
+                "reference": "4129f109c7b1e7e39db0aa6284d4ef3965c27027"
+            },
+            "require": {
+                "brick/money": "^0.9 || ^0.10",
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "illuminate/translation": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "corex-module",
+            "extra": {
+                "corex": {
+                    "module": "CoreX\\Intl\\IntlModule"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Intl\\IntlServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Intl\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Intl\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/intl/phpstan.neon --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Typed locale, money/rate snapshots, and offline geography reference utilities for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/intl-search",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/intl-search",
+                "reference": "2599812896547daa3200cb72c3144577020f53d6"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/intl": "@dev",
+                "corex/search": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\IntlSearch\\IntlSearchServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\IntlSearch\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\IntlSearch\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/intl-search/phpstan.neon --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional localized projection glue between corex/intl and corex/search.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/media",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/media",
@@ -569,7 +697,7 @@
         },
         {
             "name": "corex/modules",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
@@ -621,11 +749,11 @@
         },
         {
             "name": "corex/notifications",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "0e058135eac8a3409de898b3b72b298ee552cf52"
+                "reference": "71887850df92854e09de131421b37e214d8fe0b7"
             },
             "require": {
                 "corex/core": "@dev",
@@ -670,6 +798,9 @@
                 "test:pg": [
                     "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
                 ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
+                ],
                 "analyse": [
                     "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src --memory-limit=1G"
                 ],
@@ -687,7 +818,7 @@
         },
         {
             "name": "corex/panels",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
@@ -750,8 +881,108 @@
             }
         },
         {
+            "name": "corex/recurrence",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/recurrence",
+                "reference": "d876f4b9deaf25ed6dac9b9c00f932b113dc002f"
+            },
+            "require": {
+                "php": "^8.3",
+                "rlanvin/php-rrule": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Recurrence\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Recurrence\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=vendor/autoload.php"
+                ],
+                "analyse": [
+                    "../../vendor/bin/phpstan analyse -c phpstan.neon src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Bounded RFC 5545 recurrence expansion for CoreX consumers.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/search",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/search",
+                "reference": "1baf2c9fd711715f6af59ee6deee266068386852"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Search\\SearchServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Search\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Search\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Typed, policy-hydrated search boundary for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/tasks",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
@@ -831,12 +1062,85 @@
             }
         },
         {
+            "name": "corex/tasks-workflow",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/tasks-workflow",
+                "reference": "349a8c872c20682ed15b859688aa9854cfc9f446"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "corex/recurrence": "@dev",
+                "corex/tasks": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "corex/wakeup": "@dev",
+                "corex/workflow": "@dev",
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "suggest": {
+                "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06).",
+                "corex/workflow": "Optional completion capture through qualified workflow binding (MAT-07)."
+            },
+            "type": "corex-module",
+            "extra": {
+                "corex": {
+                    "module": "CoreX\\TasksWorkflow\\TasksWorkflowModule"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\TasksWorkflow\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\TasksWorkflow\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "pest"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage pest --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Recurrence-to-task materialization for CoreX with durable wakeup and optional workflow capture.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/tenancy",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "a4dbc6eacc1b50199d33304bd1d61f381ad4fab3"
+                "reference": "76d00e83a2b227c0a15bbe17033e4d3eed00a97d"
             },
             "require": {
                 "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1",
@@ -850,6 +1154,7 @@
                 "php": "^8.4"
             },
             "require-dev": {
+                "corex/wakeup": "@dev",
                 "larastan/larastan": "^3.0",
                 "laravel/pint": "^1.13",
                 "league/flysystem-aws-s3-v3": "3.35.3",
@@ -857,6 +1162,7 @@
                 "pestphp/pest": "^4.0"
             },
             "suggest": {
+                "corex/wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
                 "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage."
             },
             "type": "library",
@@ -913,11 +1219,11 @@
         },
         {
             "name": "corex/wakeup",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
-                "reference": "019917dfa74b6c7d6c3fa57e0ed3b07f79e6ef30"
+                "reference": "b47d59e29f69ca416af330f89263e2ff1adf444a"
             },
             "require": {
                 "corex/core": "@dev",
@@ -950,7 +1256,13 @@
             },
             "scripts": {
                 "test": [
-                    "../../vendor/bin/pest --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
                     "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/wakeup/src --memory-limit=1G"
@@ -1408,7 +1720,7 @@
         },
         {
             "name": "flex/crm",
-            "version": "dev-main",
+            "version": "dev-codex/instruction-layers-f9",
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
@@ -4254,20 +4566,20 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.9.3",
+            "version": "4.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8"
+                "reference": "75d73f48d02797c2c285a7e9f348fadc0102ffe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/1df15849d00943a67d677dc9cfd80795f038c9f8",
-                "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/75d73f48d02797c2c285a7e9f348fadc0102ffe2",
+                "reference": "75d73f48d02797c2c285a7e9f348fadc0102ffe2",
                 "shasum": ""
             },
             "require": {
-                "brick/math": ">=0.8.16 <=0.18",
+                "brick/math": "^0.8.16 || ^0.9 || ^0.10 || ^0.11 || ^0.12 || ^0.13 || ^0.14 || ^0.15 || ^0.16 || ^0.17 || ^0.18 || ^0.19 || ^0.20 || ^1.0",
                 "php": "^8.0",
                 "ramsey/collection": "^1.2 || ^2.0"
             },
@@ -4326,9 +4638,59 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.9.3"
+                "source": "https://github.com/ramsey/uuid/tree/4.9.4"
             },
-            "time": "2026-06-18T03:57:49+00:00"
+            "time": "2026-09-16T11:39:30+00:00"
+        },
+        {
+            "name": "rlanvin/php-rrule",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rlanvin/php-rrule.git",
+                "reference": "93a083db12dcb6f58e4840392a22e158ce96f1ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rlanvin/php-rrule/zipball/93a083db12dcb6f58e4840392a22e158ce96f1ff",
+                "reference": "93a083db12dcb6f58e4840392a22e158ce96f1ff",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "nesbot/carbon": "*",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "^9.0"
+            },
+            "suggest": {
+                "ext-intl": "Intl extension is needed for humanReadable()"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RRule\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Lightweight and fast recurrence rules for PHP (RFC 5545)",
+            "homepage": "https://github.com/rlanvin/php-rrule",
+            "keywords": [
+                "date",
+                "ical",
+                "recurrence",
+                "recurring",
+                "rrule"
+            ],
+            "support": {
+                "issues": "https://github.com/rlanvin/php-rrule/issues",
+                "source": "https://github.com/rlanvin/php-rrule/tree/v3.0.0"
+            },
+            "time": "2026-07-29T06:25:26+00:00"
         },
         {
             "name": "spatie/invade",
@@ -7519,6 +7881,65 @@
                 }
             ],
             "time": "2024-05-06T16:37:16+00:00"
+        },
+        {
+            "name": "corex/workflow",
+            "version": "dev-codex/instruction-layers-f9",
+            "dist": {
+                "type": "path",
+                "url": "packages/workflow",
+                "reference": "e99dadfffca14125a90d66c922f11550c107c836"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "corex": {
+                    "module": "CoreX\\Workflow\\WorkflowModule"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Workflow\\WorkflowServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Workflow\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Workflow\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/workflow/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional durable workflow engine binding for CoreX modules.",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "doctrine/deprecations",
@@ -11538,13 +11959,17 @@
     "stability-flags": {
         "corex/api": 20,
         "corex/core": 20,
+        "corex/intl": 20,
+        "corex/intl-search": 20,
         "corex/media": 20,
         "corex/modules": 20,
         "corex/notifications": 20,
         "corex/panels": 20,
         "corex/tasks": 20,
+        "corex/tasks-workflow": 20,
         "corex/tenancy": 20,
         "corex/wakeup": 20,
+        "corex/workflow": 20,
         "flex/crm": 20
     },
     "prefer-stable": true,

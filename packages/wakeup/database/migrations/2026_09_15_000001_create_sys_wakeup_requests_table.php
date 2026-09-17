@@ -12,9 +12,9 @@ return new class extends Migration
     {
         Schema::create('sys_wakeup_requests', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->string('workspace_scope_key', 160);
-            $table->string('kind', 64);
-            $table->string('request_key', 255);
+            $table->string('workspace_scope_key', 255);
+            $table->string('kind', 128);
+            $table->string('request_key', 128);
             $table->char('request_digest', 64);
             $table->timestampTz('fire_at');
             $table->timestampTz('window_start')->nullable();
@@ -30,7 +30,8 @@ return new class extends Migration
             $table->timestampTz('completed_at')->nullable();
             $table->timestampsTz();
             $table->unique(['workspace_scope_key', 'kind', 'request_key']);
-            $table->index(['status', 'retry_at', 'fire_at'], 'sys_wakeup_due_idx');
+            $table->unique(['workspace_scope_key', 'request_key']);
+            $table->index(['status', 'retry_at', 'fire_at'], 'sys_wakeup_requests_scan_idx');
         });
     }
 };

@@ -10,11 +10,15 @@
 - UUIDv7 генерируются через `HasConfiguredId` при стандартной конфигурации
   CoreX;
 - публичные write-границы: `CreateTaskCommand`, `MoveTaskToStageCommand`,
-  `UpdateTaskCommand` и `CompleteTaskCommand`;
+  `UpdateTaskCommand`, `CompleteTaskCommand`, а также планирование
+  `TaskPlanningCommand` (`createProject`, `createSprint`, `recordTime`);
 - переносимые ссылки на внешние сущности передаются как `EntityReference`,
   без зависимости от моделей host-приложения;
-- host обязан предоставить `TaskAccess` и `TaskMutationAccess`; пакетные
-  реализации по умолчанию запрещают все команды.
+- host обязан предоставить `TaskAccess`, `TaskMutationAccess` и
+  `TaskPlanningAccess`; пакетные реализации по умолчанию запрещают все команды.
+- `TaskPlanningCommand` дедуплицирует запросы через `corex_task_operations`,
+  проверяет tenant/workspace-контекст и атомарно обновляет `spent_minutes` при
+  `recordTime`.
 
 Команды проверяют активность модуля в текущем tenant context, работают через
 текущее соединение модели и открывают вложенную транзакцию. Поэтому standalone

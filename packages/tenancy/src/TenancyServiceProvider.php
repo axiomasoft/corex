@@ -52,8 +52,13 @@ use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Storage\ContextTenantStorage;
+use CoreX\Tenancy\Wakeup\Commands\SweepRootWakeups;
+use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
+use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
 use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspaces\WorkspaceResolver;
+use CoreX\Wakeup\Contracts\WakeupHint;
+use CoreX\Wakeup\Contracts\WakeupSweeper;
 use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
@@ -79,6 +84,7 @@ final class TenancyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-tenancy.php', 'corex-tenancy');
 
         $this->app->singleton(
             StanclTenantDatabaseProvisioner::class,
@@ -212,6 +218,35 @@ final class TenancyServiceProvider extends ServiceProvider
         // key without a consumer is a fabricated contract, D116/D121).
         $this->app->singleton(WorkspaceResolver::class, DatabaseWorkspaceResolver::class);
         $this->app->bindIf(PrincipalWorkspaceResolver::class, DatabaseWorkspaceResolver::class);
+
+        // Wakeup remains entirely optional: the default local_sweep profile
+        // needs neither this binding nor a root connection.
+        if (
+            config('corex-tenancy.wakeup.driver') === 'root_registry'
+            && interface_exists(WakeupHint::class)
+            && interface_exists(WakeupSweeper::class)
+        ) {
+            $this->app->singleton(
+                RootRegistryWakeupHint::class,
+                static fn (Application $app): RootRegistryWakeupHint => new RootRegistryWakeupHint(
+                    root: $app['db']->connection((string) config('corex-tenancy.wakeup.root_connection')),
+                ),
+            );
+            $this->app->tag(RootRegistryWakeupHint::class, 'corex.wakeup.hints');
+            $this->app->singleton(
+                RootWakeupReconciler::class,
+                static fn (Application $app): RootWakeupReconciler => new RootWakeupReconciler(
+                    root: $app['db']->connection((string) config('corex-tenancy.wakeup.root_connection')),
+                    tenancy: $app->make(TenancyManager::class),
+                    sweeper: $app->make(WakeupSweeper::class),
+                    leaseSeconds: (int) config('corex-tenancy.wakeup.lease_seconds'),
+                ),
+            );
+
+            if ($this->app->runningInConsole()) {
+                $this->commands([SweepRootWakeups::class]);
+            }
+        }
 
         // P2.22 — cloud OIDC login lane, entirely opt-in (AC-28): binding a
         // closure does not execute firebase/php-jwt, only resolving it does,

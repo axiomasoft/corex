@@ -21,9 +21,13 @@
         "corex/notifications": "@dev",
         "corex/wakeup": "@dev",
         "corex/tenancy": "@dev",
-        "corex/api": "@dev"
+        "corex/api": "@dev",
+        "corex/tasks-workflow": "@dev",
+        "corex/intl": "@dev",
+        "corex/intl-search": "@dev"
     },
     "require-dev": {
+        "corex/workflow": "@dev",
         "laravel/pint": "^1.13",
         "rector/rector": "^2.0",
         "pestphp/pest": "^4.0",
@@ -38,7 +42,10 @@
             "CoreX\\Api\\Tests\\": "packages/api/tests/",
             "CoreX\\Notifications\\Tests\\": "packages/notifications/tests/",
             "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/",
-            "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/"
+            "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/",
+            "CoreX\\TasksWorkflow\\Tests\\": "packages/tasks-workflow/tests/",
+            "CoreX\\Intl\\Tests\\": "packages/intl/tests/",
+            "CoreX\\IntlSearch\\Tests\\": "packages/intl-search/tests/"
         }
     },
     "repositories": [

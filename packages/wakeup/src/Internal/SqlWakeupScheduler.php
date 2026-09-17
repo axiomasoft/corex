@@ -7,19 +7,29 @@ namespace CoreX\Wakeup\Internal;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Wakeup\Contracts\WakeupHandler;
+use CoreX\Wakeup\Contracts\WakeupHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\CancelResult;
 use CoreX\Wakeup\Data\ScheduleResult;
 use CoreX\Wakeup\Data\WakeupRequest;
-use Illuminate\Database\ConnectionInterface;
+use DateTimeImmutable;
+use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use RuntimeException;
 
 final class SqlWakeupScheduler implements WakeupScheduler
 {
-    /** @param array<string, WakeupHandler> $handlers */
-    public function __construct(private readonly ConnectionInterface $connection, private readonly TenantContextResolver $contexts, private readonly array $handlers) {}
+    /**
+     * @param  array<string, WakeupHandler>  $handlers
+     * @param  list<WakeupHint>  $hints
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly TenantContextResolver $contexts,
+        private readonly array $handlers,
+        private readonly array $hints,
+    ) {}
 
     public function schedule(WakeupRequest $request): ScheduleResult
     {
@@ -31,18 +41,22 @@ final class SqlWakeupScheduler implements WakeupScheduler
 
         $scope = $this->scope($request->context);
         $payload = $this->canonical($request->payload);
-        $digest = hash('sha256', $request->kind."\0".$request->requestKey."\0".$request->fireAt->format('Y-m-d\\TH:i:s.u\\Z')."\0".json_encode($payload, JSON_THROW_ON_ERROR));
+        $encodedPayload = json_encode($payload, JSON_THROW_ON_ERROR);
+        $digest = hash('sha256', 'wakeup/1'."\0".$request->kind."\0".$request->requestKey."\0".$request->fireAt->format('Y-m-d\\TH:i:s.u\\Z')."\0".$encodedPayload);
 
         try {
             $this->connection->table('sys_wakeup_requests')->insert([
                 'id' => (string) Str::uuid7(), 'workspace_scope_key' => $scope, 'kind' => $request->kind,
                 'request_key' => $request->requestKey, 'request_digest' => $digest, 'fire_at' => $request->fireAt,
                 'window_start' => $request->window?->start, 'window_end' => $request->window?->end,
-                'period' => $request->window?->period, 'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
+                'period' => $request->window?->period, 'payload' => $encodedPayload,
                 'status' => 'pending', 'generation' => 0, 'attempt' => 0, 'created_at' => now(), 'updated_at' => now(),
             ]);
         } catch (QueryException $exception) {
-            $existing = $this->connection->table('sys_wakeup_requests')->where('workspace_scope_key', $scope)->where('kind', $request->kind)->where('request_key', $request->requestKey)->first();
+            $existing = $this->connection->table('sys_wakeup_requests')
+                ->where('workspace_scope_key', $scope)
+                ->where('request_key', $request->requestKey)
+                ->first();
 
             if ($existing === null) {
                 throw $exception;
@@ -50,6 +64,8 @@ final class SqlWakeupScheduler implements WakeupScheduler
 
             return new ScheduleResult(status: hash_equals($existing->request_digest, $digest) ? 'existing' : 'conflict', requestKey: $request->requestKey);
         }
+
+        $this->notifyHints(context: $request->context, fireAt: $request->fireAt);
 
         return new ScheduleResult(status: 'created', requestKey: $request->requestKey);
     }
@@ -96,17 +112,84 @@ final class SqlWakeupScheduler implements WakeupScheduler
      * @return array<string, mixed> */
     private function canonical(array $value): array
     {
+        if (($value !== [] && array_is_list($value)) || count($value) > 256) {
+            throw new RuntimeException('Wakeup payload must be a bounded object map.');
+        }
+
         ksort($value);
+
         foreach ($value as $key => $item) {
-            if (! is_string($key) || $key === '' || ! is_null($item) && ! is_bool($item) && ! is_int($item) && ! is_string($item) && ! is_array($item)) {
+            if (! is_string($key) || $key === '') {
                 throw new RuntimeException('Wakeup payload contains an unsupported value.');
             }
 
-            if (is_array($item)) {
-                $value[$key] = array_is_list($item) ? $item : $this->canonical($item);
-            }
+            $value[$key] = $this->canonicalValue(value: $item, depth: 1);
+        }
+
+        if (strlen(json_encode($value, JSON_THROW_ON_ERROR)) > 65_536) {
+            throw new RuntimeException('Wakeup payload exceeds 64KiB.');
         }
 
         return $value;
+    }
+
+    private function canonicalValue(mixed $value, int $depth): mixed
+    {
+        if ($depth > 8) {
+            throw new RuntimeException('Wakeup payload nesting exceeds eight levels.');
+        }
+
+        if (is_null($value) || is_bool($value) || is_int($value) || is_string($value)) {
+            return $value;
+        }
+
+        if (! is_array($value)) {
+            throw new RuntimeException('Wakeup payload contains an unsupported value.');
+        }
+
+        if (count($value) > 256) {
+            throw new RuntimeException('Wakeup payload contains too many values.');
+        }
+
+        if (array_is_list($value)) {
+            return array_map(
+                fn (mixed $item): mixed => $this->canonicalValue(value: $item, depth: $depth + 1),
+                $value,
+            );
+        }
+
+        foreach (array_keys($value) as $key) {
+            if (! is_string($key) || $key === '') {
+                throw new RuntimeException('Wakeup payload contains an unsupported key.');
+            }
+        }
+
+        ksort($value);
+
+        foreach ($value as $key => $item) {
+            $value[$key] = $this->canonicalValue(value: $item, depth: $depth + 1);
+        }
+
+        return $value;
+    }
+
+    private function notifyHints(TenantContext $context, DateTimeImmutable $fireAt): void
+    {
+        if ($this->connection->transactionLevel() > 0) {
+            $this->connection->afterCommit(function () use ($context, $fireAt): void {
+                $this->dispatchHints(context: $context, fireAt: $fireAt);
+            });
+
+            return;
+        }
+
+        $this->dispatchHints(context: $context, fireAt: $fireAt);
+    }
+
+    private function dispatchHints(TenantContext $context, DateTimeImmutable $fireAt): void
+    {
+        foreach ($this->hints as $hint) {
+            $hint->scheduled(context: $context, fireAt: $fireAt);
+        }
     }
 }

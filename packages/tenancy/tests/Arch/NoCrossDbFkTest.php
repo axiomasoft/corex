@@ -162,10 +162,10 @@ $createdTables = static function (string $source): array {
 };
 
 // Конфиг-driven цели FK, существующие в дереве на дату исполнения. Обе — в
-// corex/core, обе резолвятся в `sys_*` (тенант-слой), обе объявлены в
+// corex/core, все резолвятся в `sys_*` (тенант-слой), все объявлены в
 // тенант-слойных миграциях: кросс-слойными они быть не могут, но зафиксированы
 // поимённо, чтобы НОВАЯ динамическая цель не проехала под этим исключением.
-$allowedDynamicTargets = ['Config::featureFlagsTable()', 'Config::departmentsTable()'];
+$allowedDynamicTargets = ['Config::featureFlagsTable()', 'Config::departmentsTable()', 'Config::savedViewScopesTable()'];
 
 /**
  * Все миграции репозитория (в split-зеркале — только собственные).
