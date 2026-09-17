@@ -1,0 +1,21 @@
+{
+  "command": [
+    "bash",
+    "scripts/anti-weakening-gate.sh"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": {
+    "php": "8.4.1"
+  },
+  "started_at": "2026-09-15T19:23:50.811047+00:00",
+  "ended_at": "2026-09-15T19:23:52.639974+00:00",
+  "exit_code": 0,
+  "environment": {
+    "APP_ENV": "testing",
+    "PGSQL_DATABASE": "corex_test",
+    "PGSQL_PORT": "5434",
+    "files": "unique Testbench paths and generated storage roots"
+  },
+  "log": "artifacts/B-P3-LOCAL/P3.2/checks/anti-weakening.log",
+  "sha256": "33edc27b58fdd61a001de6ca02e5110a7d46c3cef971c802d41e188fdf725914"
+}

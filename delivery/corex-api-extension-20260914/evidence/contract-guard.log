@@ -1,3 +1,0 @@
-contract-guard: packages/api/src/Contracts changed WITH CHANGELOG — OK
-contract-guard: packages/tenancy/src/Contracts changed WITH CHANGELOG — OK
-contract-guard: all Contracts changes accompanied by a CHANGELOG — OK

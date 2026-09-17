@@ -1,0 +1,114 @@
+{
+  "result": "PASS",
+  "class": "isolated diagnostic policy guards",
+  "checks": [
+    {
+      "case": "approved-P1.1",
+      "expected_exit": 0,
+      "actual_exit": 0
+    },
+    {
+      "case": "approved-P2.1",
+      "expected_exit": 0,
+      "actual_exit": 0
+    },
+    {
+      "case": "approved-P3.1",
+      "expected_exit": 0,
+      "actual_exit": 0
+    },
+    {
+      "case": "approved-P3.2",
+      "expected_exit": 0,
+      "actual_exit": 0
+    },
+    {
+      "case": "unapproved-P3.3",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "unapproved-P3.7",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "unapproved-P4.1",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "D2b",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "digest",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "missing-input",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "weight",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "threshold",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "path",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "line",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "not-ready",
+      "expected_exit": 1,
+      "actual_exit": 1
+    },
+    {
+      "case": "scope-expansion",
+      "result": "PASS"
+    },
+    {
+      "case": "decision-drift-D19-read-budget-advisory.md",
+      "result": "PASS"
+    },
+    {
+      "case": "decision-drift-D20-P2-read-budget-advisory.md",
+      "result": "PASS"
+    },
+    {
+      "case": "decision-drift-D23-P3-local-read-budget-advisory.md",
+      "result": "PASS"
+    }
+  ],
+  "native_items": [
+    {
+      "item_id": "P3.1",
+      "weight_tokens": 566233,
+      "d2a_pass": false,
+      "d2b_pass": true,
+      "admission_state": "ready"
+    },
+    {
+      "item_id": "P3.2",
+      "weight_tokens": 100049,
+      "d2a_pass": false,
+      "d2b_pass": true,
+      "admission_state": "ready"
+    }
+  ],
+  "shared_runtime_changed": false
+}

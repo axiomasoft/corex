@@ -1,0 +1,58 @@
+
+  [31;1m⨯[39;22m[90;1m.[39;22m[31;1m⨯[39;22m[31;1m⨯[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ClaimLifecycleConcurrencyTest[22m [90m>[39m it recon… [41;1m ErrorException [49;22m  
+[39;1m  Indirect modification of overloaded property Pest\Support\HigherOrderTapProxy::$p32Workers has no effect[39;22m
+
+  at [32mtests/Pg/ClaimLifecycleConcurrencyTest.php[39m:[32m162[39m
+    158▕ {
+    159▕     $test = test();
+    160▕     $payload = ['config' => DB::connection('pgsql')->getConfig(), 'key' => $key, 'cluster' => $test->p32Cluster, 'template' => $test->p32Template, 'digest' => hash('sha256', $key), 'name' => 'p32-'.$key.'-'.$operation, 'op' => $operation, 'account' => $account];
+    161▕     $worker = new P32ClaimWorker(script: $test->p32WorkerScript, payload: $payload);
+  ➜ 162▕     $test->p32Workers[] = $worker;
+    163▕ 
+    164▕     return $worker;
+    165▕ }
+    166▕
+
+  [33m1   [39m[39;1mtests/Pg/ClaimLifecycleConcurrencyTest.php[39;22m:[39;1m200[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ClaimLifecycleConcurrencyTest[22m [90m>[39m it rolls… [41;1m ErrorException [49;22m  
+[39;1m  Indirect modification of overloaded property Pest\Support\HigherOrderTapProxy::$p32Workers has no effect[39;22m
+
+  at [32mtests/Pg/ClaimLifecycleConcurrencyTest.php[39m:[32m162[39m
+    158▕ {
+    159▕     $test = test();
+    160▕     $payload = ['config' => DB::connection('pgsql')->getConfig(), 'key' => $key, 'cluster' => $test->p32Cluster, 'template' => $test->p32Template, 'digest' => hash('sha256', $key), 'name' => 'p32-'.$key.'-'.$operation, 'op' => $operation, 'account' => $account];
+    161▕     $worker = new P32ClaimWorker(script: $test->p32WorkerScript, payload: $payload);
+  ➜ 162▕     $test->p32Workers[] = $worker;
+    163▕ 
+    164▕     return $worker;
+    165▕ }
+    166▕
+
+  [33m1   [39m[39;1mtests/Pg/ClaimLifecycleConcurrencyTest.php[39;22m:[39;1m220[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Pg\ClaimLifecycleConcurrencyTest[22m [90m>[39m it overl… [41;1m ErrorException [49;22m  
+[39;1m  Indirect modification of overloaded property Pest\Support\HigherOrderTapProxy::$p32Workers has no effect[39;22m
+
+  at [32mtests/Pg/ClaimLifecycleConcurrencyTest.php[39m:[32m162[39m
+    158▕ {
+    159▕     $test = test();
+    160▕     $payload = ['config' => DB::connection('pgsql')->getConfig(), 'key' => $key, 'cluster' => $test->p32Cluster, 'template' => $test->p32Template, 'digest' => hash('sha256', $key), 'name' => 'p32-'.$key.'-'.$operation, 'op' => $operation, 'account' => $account];
+    161▕     $worker = new P32ClaimWorker(script: $test->p32WorkerScript, payload: $payload);
+  ➜ 162▕     $test->p32Workers[] = $worker;
+    163▕ 
+    164▕     return $worker;
+    165▕ }
+    166▕
+
+  [33m1   [39m[39;1mtests/Pg/ClaimLifecycleConcurrencyTest.php[39;22m:[39;1m183[39;22m
+
+
+  [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (16 assertions)[39m
+  [90mDuration:[39m [39m0.99s[39m
+  [90mRandom Order Seed:[39m [39m1789500130[39m
+

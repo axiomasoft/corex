@@ -1,0 +1,90 @@
+{
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py",
+        "--stage",
+        "seal"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "exit_code": 0,
+      "stdout": "{\"stage\": \"seal\", \"result\": \"PASS\", \"sources\": 100, \"requirements\": 52, \"parent_criteria\": 365, \"semantic_review\": \"required by item contract\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py",
+        "--stage",
+        "identity"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "exit_code": 0,
+      "stdout": "{\"stage\": \"identity\", \"result\": \"PASS\", \"requirements\": 52, \"semantic_acceptance\": \"required by item contract\", \"runtime_or_live_proof\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+        "--check",
+        "downstream"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "exit_code": 0,
+      "stdout": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-downstream.py\", \"--plan-dir\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\", \"--item\", \"P1.4\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nGREEN: P1.4; consumers=64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+        "--check",
+        "lint"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "exit_code": 0,
+      "stdout": "{\"command\": [\"/usr/bin/python3\", \"/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py\", \"/home/vostrikov/projects/packages/corex/plans/2026.09.15-\\u21161-COREX-FLEXCRM-REMAINING\"], \"cwd\": \"/home/vostrikov/projects/packages/corex\"}\nWARNING: /home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/plan.md: read-budget-v1: пункт P2.2: вес 415207 > порога 100000 оценочных токенов (token-estimate-calibration v2.0.0 (codex/gpt-5.6-terra)) [owner advisory D20; completeness required]\nWARNING: /home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/plan.md: read-budget-v1: пункт P2.3: вес 420398 > порога 100000 оценочных токенов (token-estimate-calibration v2.0.0 (codex/gpt-5.6-terra)) [owner advisory D20; completeness required]\n{\"policy\": {\"schema_version\": \"plan-read-budget-policy/v1\", \"version\": \"1.1.0\", \"mode\": \"advisory\", \"scope\": [\"P1.1\", \"P1.2\", \"P1.3\", \"P1.4\"], \"batch\": \"B-P1-QUALIFY\", \"reference_item_tokens\": 100000, \"decision\": \"decisions/D19-read-budget-advisory.md\", \"decision_sha256\": \"2468dd354eafd9e71b2f786f98f3dfa8be12ada031323e6050b3f587ede89377\", \"additional_scopes\": [{\"scope\": [\"P2.1\", \"P2.2\", \"P2.3\", \"P2.4\"], \"batch\": \"B-P2-PROPOSALS\", \"decision\": \"decisions/D20-P2-read-budget-advisory.md\", \"decision_sha256\": \"a2094343ea42a67caeb5d3b811dba3aa61ebd014adb0206c40d04356e42d38c4\"}]}, \"native_totals\": {\"items\": 78, \"gaps\": 82, \"gap_counts\": {\"unreadable_root\": 0, \"unresolved_entry\": 4, \"missing_file\": 26, \"oversized_file\": 52}, \"max_item_weight_tokens\": 420398, \"min_item_weight_tokens\": 17100, \"max_floor_tokens\": 42161, \"admission\": {\"contract\": {\"path\": \"/home/vostrikov/projects/packages/swissknifeman/packages/task/docs/reference/read-budget-contract.md\", \"version\": \"1.1.0\", \"item_tokens\": 100000}, \"counts\": {\"historical-pre-v2\": 0, \"pending-producer\": 1, \"ready\": 77}, \"gap_counts\": {\"unresolved_entry\": 4, \"producer_pending\": 3, \"missing_without_producer\": 23}, \"ready_failed\": 66}}, \"result\": \"PASS\", \"errors\": 0, \"warnings\": 2}\n",
+      "stderr": ""
+    }
+  ],
+  "semantic": {
+    "status": "green",
+    "item": "P2.2",
+    "coverage": {
+      "identity_R": 10,
+      "wire_profiles": 3,
+      "unregistered_exact_list_candidate": 1,
+      "auth_boundaries": 5,
+      "negative_uncertain_lifetime_cases": 8
+    },
+    "automated_semantic_checks": [
+      "exact DTO query/request/response field order equals parsed pinned PHP source",
+      "state and reason enums equal pinned source",
+      "all source SHA match actual bytes",
+      "all ten mixed R reference full sealed atoms, destinations equal P1 ledger",
+      "internal accounts-list unchanged/non-authority/unregistered; exact existing FQN",
+      "future case owners present; no executed-test or deployment assertion"
+    ],
+    "root_review": [
+      "old/new signatures unchanged; PHP nullable fields, constructor/parser distinction, errors/counters/unknown-fields retained",
+      "selected internal DTO keep plus exact P3 list wire candidate and finite external C09 target packet; no invented issuer/URI/registration",
+      "token/cert authentication distinct from permission, audit actor untrusted, row scoping separately required",
+      "fresh trusted resolver/scoped state keeps lifetimes; absence/default/unsupported deny",
+      "public host may omit private adapter; adapter itself requires AzGuard",
+      "all DI/AP and G adoption remain owning obligations; zero unresolved internal profile choice"
+    ],
+    "grant_count": 0,
+    "runtime_live_proof": false,
+    "products": {
+      "findings/P2-identity-profile.md": "e9819018a40d8d1d99bf41690c6057722536e5b98f8d75d8cb8615a404c057d9",
+      "findings/P2-auth-ownership.md": "041196cc9db87c6f5141c73a0a26f224472082c8c6cf62acfc5af97320ff7af6"
+    }
+  },
+  "write_site": {
+    "pre_mutation": "allow",
+    "pre_final": "allow",
+    "content_hash": "afa726afdbf5e27e9de8a48cf878efb6902e4d0844c685b00518322c4ae276e1"
+  }
+}

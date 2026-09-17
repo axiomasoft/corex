@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/usr/bin/php8.5",
+    "-d",
+    "memory_limit=1G",
+    "/home/vostrikov/projects/packages/corex/packages/tenancy/vendor/bin/pest",
+    "-c",
+    "/home/vostrikov/projects/packages/corex/packages/tenancy/phpunit.xml",
+    "--bootstrap",
+    "/home/vostrikov/projects/packages/corex/packages/tenancy/vendor/autoload.php",
+    "/home/vostrikov/projects/packages/corex/packages/tenancy/tests/Feature/StorageContextConformanceTest.php",
+    "/home/vostrikov/projects/packages/corex/packages/tenancy/tests/Pg/PhysicalContextConformanceTest.php",
+    "--compact"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/packages/tenancy",
+  "started_at": "2026-09-15T19:09:57.291117+00:00",
+  "ended_at": "2026-09-15T19:09:59.560067+00:00",
+  "exit_code": 0,
+  "runtime": {
+    "php": "8.5",
+    "laravel": "13"
+  },
+  "log": "artifacts/B-P3-LOCAL/P3.1/checks/laravel13-php8.5.log",
+  "sha256": "270f0c8bbf2b2eeb5de06a0114ab700206e24bc3e0482a988ee403f34d374c21"
+}

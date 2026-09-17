@@ -1,0 +1,795 @@
+{
+  "admission": {
+    "verdict": "ALLOW",
+    "batch": {
+      "batch_id": "B-P1-QUALIFY",
+      "items": [
+        "P1.1",
+        "P1.2",
+        "P1.3",
+        "P1.4"
+      ],
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "plan-exec",
+      "review": "light",
+      "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "spec_digest": "0e56a6086fb4ff3ccbdf57239dc40131125450a4bc791101820a4fc8271fe2b6",
+      "recommended": true
+    },
+    "requested": [
+      "P1.2"
+    ],
+    "canonical": [
+      "P1.2"
+    ]
+  },
+  "route": {
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "effort": "high",
+    "invocation": "$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1",
+    "model": "gpt-5.6-sol",
+    "model_class": "frontier",
+    "source": "provider-thread-state",
+    "source_version": "codex-turn-context-v1",
+    "thread_id": "01a0a564-4072-7253-91a6-4fa41959a8e2",
+    "ts": "2026-09-15T15:23:40Z"
+  },
+  "contract": {
+    "schema_version": "task-contract/v1",
+    "contract_id": "2026.09.15-№1-corex-flexcrm-remaining-p1-2",
+    "version": {
+      "revision": 1,
+      "content_hash": "2920e251563e869895c887c1bee6ee7a60cf4a419b6945cc29815ccc06251b35",
+      "supersedes": null
+    },
+    "goal": {
+      "outcome": "Сохранить 365 parent criteria и выпустить atomic classified map с owner/R/evidence/destination для каждого проверяемого subcondition.",
+      "non_goals": [
+        "Новые requirements/R IDs, сигнатуры/DDL/engines/package scaffold",
+        "автоматическое acceptance excluded/app portions",
+        "изменение original AC текста/таблицы research."
+      ]
+    },
+    "must": [
+      {
+        "id": "M1",
+        "requirement": "Все 365 parents и R01–R52",
+        "source_ref": "phases/P1.md:7"
+      },
+      {
+        "id": "M2",
+        "requirement": "mixed split, non-AC requirements B38/B26/FLEX-2, source-owner obligations",
+        "source_ref": "phases/P1.md:7"
+      },
+      {
+        "id": "M3",
+        "requirement": "bounded corrected R mappings с объяснением, сохранение всех исходных условий/thresholds.",
+        "source_ref": "phases/P1.md:7"
+      }
+    ],
+    "never": [
+      {
+        "id": "N1",
+        "prohibition": "Новые requirements/R IDs, сигнатуры/DDL/engines/package scaffold",
+        "source_ref": "phases/P1.md:9"
+      },
+      {
+        "id": "N2",
+        "prohibition": "автоматическое acceptance excluded/app portions",
+        "source_ref": "phases/P1.md:9"
+      },
+      {
+        "id": "N3",
+        "prohibition": "изменение original AC текста/таблицы research.",
+        "source_ref": "phases/P1.md:9"
+      }
+    ],
+    "done": {
+      "public_acceptance": [
+        {
+          "id": "A1",
+          "predicate": "findings/P1-acceptance-map.md: lossless parent→atom→R/owner/evidence/destination map плюс пояснения mixed/legacy conflicts. Это acceptance definition, исполненных AC текущий item не заявляет.",
+          "scope": "public",
+          "check": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage criteria` — exit 0; ровно 365 unique parents, каждый ≥1 atom; original text hashes/R retained, 52 coverage rows, 0 dangling atom/R IDs. Содержательная сверка каждого parent против snapshot: 0 dropped clauses/thresholds, CoreX atoms проходят non-CRM test, product/ops atoms имеют own destination. Отдельно проверить B10 AC-18/B11 root operations/B12 AC29/B16 panel+remote providers/B18 CRM+CommerceML и весь B34. Completion Notes фиксируют corrections и residual decisions.",
+          "evidence_ref": "E44"
+        }
+      ]
+    },
+    "authority": {
+      "class": "routine",
+      "granted": true,
+      "granted_by": "phases/P1/P1.2.md:P1.2",
+      "auto_allowed": [
+        "write the item's declared Files",
+        "run the item's Validation",
+        "close the item with the two-commit topology"
+      ],
+      "stop_boundaries": [
+        "tag/push/release",
+        "fleet rollout",
+        "consumer repositories",
+        "FOREMAN outward parts"
+      ],
+      "loop_budget": {
+        "audit_rounds_max": 2,
+        "same_finding_max": 2
+      },
+      "observed_rounds": 0,
+      "audit_cap_remediation": false
+    },
+    "next": {
+      "form": "exec-items",
+      "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2",
+      "context": "continue-root",
+      "origin": "approved-goal",
+      "changed_by": null
+    },
+    "route": {
+      "required": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "actual": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "capabilities": []
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "path": "research/01b-acceptance-source-supplement.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E2",
+        "path": "findings/P1-source-reconciliation.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E3",
+        "path": "docs/dev-doctrine.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E4",
+        "path": "research/04-architecture.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E5",
+        "path": "decisions/D3.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E6",
+        "path": "scripts/validate-p1.py",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E7",
+        "path": "research/01-traceability.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E8",
+        "path": "research/01a-acceptance-index.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E9",
+        "path": "research/03-gates.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E10",
+        "path": "decisions/D4.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E11",
+        "path": "brief/00-owner-request.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E12",
+        "path": "decisions/D1.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E13",
+        "path": "decisions/D2.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E14",
+        "path": "decisions/D3.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E15",
+        "path": "docs/dev-doctrine.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E16",
+        "path": "research/04-architecture.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E17",
+        "path": "findings/P1-source-reconciliation.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E18",
+        "path": "research/01-traceability.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E19",
+        "path": "research/01a-acceptance-index.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E20",
+        "path": "brief/sources/b10.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E21",
+        "path": "brief/sources/b11.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E22",
+        "path": "brief/sources/b12.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E23",
+        "path": "brief/sources/b13.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E24",
+        "path": "brief/sources/b15.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E25",
+        "path": "brief/sources/b16.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E26",
+        "path": "brief/sources/b18.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E27",
+        "path": "brief/sources/b27.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E28",
+        "path": "brief/sources/b28.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E29",
+        "path": "brief/sources/b29.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E30",
+        "path": "brief/sources/b30.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E31",
+        "path": "brief/sources/b31.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E32",
+        "path": "brief/sources/b32.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E33",
+        "path": "brief/sources/b33.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E34",
+        "path": "brief/sources/b34.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E35",
+        "path": "brief/sources/b35.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E36",
+        "path": "brief/sources/b36.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E37",
+        "path": "brief/sources/b38.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E38",
+        "path": "brief/sources/b26.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E39",
+        "path": "brief/sources/flex-p6.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E40",
+        "path": "brief/sources/flex-p91.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E41",
+        "path": "brief/sources/flex-p117.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E42",
+        "path": "research/03-gates.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E43",
+        "path": "scripts/validate-p1.py",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E44",
+        "path": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage criteria` — exit 0; ровно 365 unique parents, каждый ≥1 atom; original text hashes/R retained, 52 coverage rows, 0 dangling atom/R IDs. Содержательная сверка каждого parent против snapshot: 0 dropped clauses/thresholds, CoreX atoms проходят non-CRM test, product/ops atoms имеют own destination. Отдельно проверить B10 AC-18/B11 root operations/B12 AC29/B16 panel+remote providers/B18 CRM+CommerceML и весь B34. Completion Notes фиксируют corrections и residual decisions.",
+        "proof_class": "cross-checked",
+        "algorithm": "shell-command"
+      }
+    ],
+    "portability": {
+      "tier": "committed-bundle",
+      "execution_inputs": [
+        {
+          "path": "research/01b-acceptance-source-supplement.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/P1-source-reconciliation.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "docs/dev-doctrine.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/04-architecture.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D3.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "scripts/validate-p1.py",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01-traceability.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01a-acceptance-index.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/03-gates.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D4.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/00-owner-request.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D1.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D2.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D3.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "docs/dev-doctrine.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/04-architecture.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "findings/P1-source-reconciliation.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01-traceability.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01a-acceptance-index.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b10.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b11.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b12.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b13.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b15.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b16.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b18.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b27.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b28.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b29.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b30.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b31.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b32.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b33.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b34.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b35.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b36.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b38.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/b26.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/flex-p6.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/flex-p91.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/sources/flex-p117.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/03-gates.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "scripts/validate-p1.py",
+          "kind": "committed",
+          "producer": null
+        }
+      ],
+      "provenance_only": [],
+      "privacy": {
+        "minimized": true,
+        "excluded_classes": []
+      },
+      "semantic_carrier": "task:plan-exec",
+      "provider_renderers": {
+        "claude": "/task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2",
+        "codex": "$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2"
+      }
+    },
+    "conflicts": [],
+    "slice": {
+      "subagent_keys": [
+        "goal",
+        "must",
+        "never",
+        "done",
+        "authority",
+        "next",
+        "route",
+        "version"
+      ],
+      "root_only_keys": [
+        "evidence",
+        "portability",
+        "conflicts"
+      ]
+    },
+    "cold_start": {
+      "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "item_id": "P1.2",
+      "reads": [
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E14",
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19",
+        "E20",
+        "E21",
+        "E22",
+        "E23",
+        "E24",
+        "E25",
+        "E26",
+        "E27",
+        "E28",
+        "E29",
+        "E30",
+        "E31",
+        "E32",
+        "E33",
+        "E34",
+        "E35",
+        "E36",
+        "E37",
+        "E38",
+        "E39",
+        "E40",
+        "E41",
+        "E42",
+        "E43"
+      ],
+      "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.2"
+    }
+  },
+  "graph": {
+    "schema_version": "evidence-graph/v1",
+    "item_id": "P1.2",
+    "product_paths": [
+      "findings/P1-acceptance-map.md."
+    ],
+    "digest_inputs": [
+      "docs/dev-doctrine.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/00-owner-request.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/01-owner-design-policy.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b10.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b11.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b12.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b13.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b15.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b16.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b18.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b26.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b27.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b28.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b29.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b30.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b31.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b32.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b33.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b34.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b35.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b36.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/b38.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p117.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p6.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/sources/flex-p91.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D1.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D2.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D3.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D4.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/findings/P1-source-reconciliation.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01-traceability.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01a-acceptance-index.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01b-acceptance-source-supplement.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/03-gates.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/04-architecture.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/05-integrated-design.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py"
+    ],
+    "collisions": [],
+    "nodes": [
+      {
+        "id": "spec",
+        "kind": "item-spec",
+        "path": "phases/P1/P1.2.md",
+        "sha256": "36bb11309c77cddf48dd2a5ad644e9aa12237563b82e0d6848cf10f1e8dd48a9"
+      },
+      {
+        "id": "bundle",
+        "kind": "bundle",
+        "sha256": "822d53a500ec016128aec38a5164defecae65ee934d70db7164af5c19dca5ccc",
+        "declaration_sha256": "ec37b8e7b0d5b173ff1ceb3df147ccc932755de1e4ec3cad453691bb57b8eb9e"
+      },
+      {
+        "id": "product",
+        "kind": "declared-files",
+        "anchor": {
+          "paths": [
+            {
+              "path": "findings/P1-acceptance-map.md.",
+              "state": "missing"
+            }
+          ],
+          "sha256": "cada2dac33844179ce6e8ebf6c2406064c60c95b7cf3aecf08b6acec37b89ff8"
+        }
+      },
+      {
+        "id": "closure",
+        "kind": "closure-projections",
+        "paths": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "spec",
+        "to": "product",
+        "kind": "precedes"
+      },
+      {
+        "from": "bundle",
+        "to": "product",
+        "kind": "digest-input"
+      },
+      {
+        "from": "product",
+        "to": "closure",
+        "kind": "byte-identity"
+      }
+    ],
+    "sha256": "5b174577df7aaa1bea48dddcd683de90bebebc931557ae4a4a0a686f9f2f28fe"
+  }
+}

@@ -16,10 +16,18 @@
         "flex/crm": "@dev",
         "corex/tasks": "@dev",
         "corex/modules": "@dev",
+        "corex/panels": "@dev",
+        "corex/media": "@dev",
+        "corex/notifications": "@dev",
+        "corex/wakeup": "@dev",
         "corex/tenancy": "@dev",
-        "corex/api": "@dev"
+        "corex/api": "@dev",
+        "corex/tasks-workflow": "@dev",
+        "corex/intl": "@dev",
+        "corex/intl-search": "@dev"
     },
     "require-dev": {
+        "corex/workflow": "@dev",
         "laravel/pint": "^1.13",
         "rector/rector": "^2.0",
         "pestphp/pest": "^4.0",
@@ -31,7 +39,13 @@
     "autoload-dev": {
         "psr-4": {
             "CoreX\\Tests\\": "tests/",
-            "CoreX\\Api\\Tests\\": "packages/api/tests/"
+            "CoreX\\Api\\Tests\\": "packages/api/tests/",
+            "CoreX\\Notifications\\Tests\\": "packages/notifications/tests/",
+            "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/",
+            "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/",
+            "CoreX\\TasksWorkflow\\Tests\\": "packages/tasks-workflow/tests/",
+            "CoreX\\Intl\\Tests\\": "packages/intl/tests/",
+            "CoreX\\IntlSearch\\Tests\\": "packages/intl-search/tests/"
         }
     },
     "repositories": [
@@ -50,7 +64,7 @@
     "scripts": {
         "test": "vendor/bin/pest --exclude-group=pg",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in api auth crm tasks tenancy; do composer --working-dir=packages/$p test || exit 1; done",
+        "test:packages": "for p in api auth crm tasks tenancy wakeup notifications recurrence; do composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "contract-guard": "bash scripts/contract-guard.sh",
         "test:coverage": "vendor/bin/pest --coverage --min=80",

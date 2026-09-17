@@ -1,0 +1,38 @@
+{
+  "schema_version": "plan-context-receipt/v1",
+  "item_id": "P1.3",
+  "snapshot_sha256": "942fdc958dd14648621348d5b17925a13b376eee566532064eef83a58f6bb3f1",
+  "members": [
+    {
+      "role": "plan-core",
+      "path": "plan.md",
+      "sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "bytes": 32648
+    },
+    {
+      "role": "phase-context",
+      "path": "phases/P1/P1.md",
+      "sha256": "8c9f6187ee976cca55e44f4d7fe406787b2710a735f07b83e9d4695612501418",
+      "bytes": 10733
+    },
+    {
+      "role": "item-spec",
+      "path": "phases/P1/P1.3.md",
+      "sha256": "4661b63da5f537d47fa95455f5cd466b7fe33b5e2d7395b2cd3f6dd09dd17411",
+      "bytes": 7131
+    },
+    {
+      "role": "bundle",
+      "path": "bundles/P1.3.json",
+      "sha256": "038eff94b8b1b9095388028fdd3d7d1d0d1cf372391ad82f99ce90dd2a678ab8",
+      "bytes": 28370
+    },
+    {
+      "role": "item-state",
+      "path": "phases/P1/P1.3.state.md",
+      "sha256": "099a1ba6aba4a9e669897fae6eb4f76961112a325f6b429bf0b6b2df997e1062",
+      "bytes": 603
+    }
+  ],
+  "full_read_qualification": "all five full bodies actually consumed previously at matching SHA; current state re-exposed in this resume"
+}

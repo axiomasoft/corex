@@ -1,0 +1,38 @@
+{
+    "name": "corex/notifications",
+    "description": "Durable tenant-scoped notification primitives for CoreX.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "corex/core": "@dev",
+        "corex/modules": "@dev",
+        "corex/wakeup": "@dev",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.13",
+        "orchestra/testbench": "^10.0|^11.0",
+        "pestphp/pest": "^4.0"
+    },
+    "autoload": {"psr-4": {"CoreX\\Notifications\\": "src/"}},
+    "autoload-dev": {"psr-4": {"CoreX\\Notifications\\Tests\\": "tests/"}},
+    "extra": {
+        "corex": {"module": "CoreX\\Notifications\\NotificationsModule"},
+        "laravel": {"providers": ["CoreX\\Notifications\\NotificationsServiceProvider"]}
+    },
+    "repositories": [{"type": "path", "url": "../core"}, {"type": "path", "url": "../modules"}, {"type": "path", "url": "../wakeup"}],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {"allow-plugins": {"pestphp/pest-plugin": true}},
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src --memory-limit=1G",
+        "lint:check": "../../vendor/bin/pint --config=pint.json --test"
+    }
+}

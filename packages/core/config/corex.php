@@ -42,6 +42,8 @@ return [
         'department_user' => 'sys_department_user',
         'pubsub_messages' => 'sys_pubsub_messages',
         'pubsub_cursors' => 'sys_pubsub_cursors',
+        'saved_views' => 'sys_saved_views',
+        'saved_view_scopes' => 'sys_saved_view_scopes',
     ],
 
     /*
@@ -86,6 +88,10 @@ return [
     'storage' => [
         'durable_root' => storage_path('app/corex/durable'),
         'ephemeral_root' => storage_path('app/corex/ephemeral'),
+    ],
+
+    'views' => [
+        'connection' => null,
     ],
 
     /*

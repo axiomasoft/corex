@@ -1,0 +1,11 @@
+{
+  "schema_version": "plan-recovery/v1",
+  "allowed": true,
+  "code": "START_ITEM",
+  "requested_item": "P1.3",
+  "active_item": "P1.3",
+  "mode": "start",
+  "run_id": "0c18ac412218b6430918ff44085ffbb27694efc8d902984ac137e57f1d6e779d",
+  "attempt": 1,
+  "reason": "P1.3: закрепить старт до первой product write"
+}

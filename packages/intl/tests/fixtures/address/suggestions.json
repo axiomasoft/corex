@@ -1,0 +1,22 @@
+{
+    "source": "fixture-address/1",
+    "entries": [
+        {
+            "text": "tverskaya",
+            "locale": "ru",
+            "country": "RU",
+            "suggestions": [
+                {"label": "ул Тверская, Москва", "value": "tverskaya-moscow"},
+                {"label": "Тверская область", "value": "tverskaya-region"}
+            ]
+        },
+        {
+            "text": "main street",
+            "locale": "en",
+            "country": "US",
+            "suggestions": [
+                {"label": "Main Street, Springfield", "value": "main-springfield"}
+            ]
+        }
+    ]
+}

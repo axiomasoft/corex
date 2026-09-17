@@ -1,0 +1,425 @@
+{
+  "admission": {
+    "verdict": "ALLOW",
+    "batch": {
+      "batch_id": "B-P1-QUALIFY",
+      "items": [
+        "P1.1",
+        "P1.2",
+        "P1.3",
+        "P1.4"
+      ],
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "plan-exec",
+      "review": "light",
+      "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "spec_digest": "e648006f8e184156fdc8973f79641e29904549adf8759c3e985535352a8fe1c3",
+      "recommended": true
+    },
+    "requested": [
+      "P1.1"
+    ],
+    "canonical": [
+      "P1.1"
+    ]
+  },
+  "route": {
+    "model_class": "frontier",
+    "effort": "high",
+    "source": "provider-thread-state",
+    "ts": "2026-09-15T14:08:58Z",
+    "model": "gpt-5.6-sol",
+    "thread_id": "01a0a564-4072-7253-91a6-4fa41959a8e2",
+    "source_version": "codex-turn-context-v1",
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "invocation": "$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1"
+  },
+  "contract": {
+    "schema_version": "task-contract/v1",
+    "contract_id": "2026.09.15-№1-corex-flexcrm-remaining-p1-1",
+    "version": {
+      "revision": 1,
+      "content_hash": "5ee7f5bbad71803ca9b05e184ff4906c98aa1449e154bb78f21717953ec7e870",
+      "supersedes": null
+    },
+    "goal": {
+      "outcome": "Выпустить source reconciliation для каждого из 100 input records; отделить frozen source, live drift и source-owner binding.",
+      "non_goals": [
+        "Редактирование оригиналов, snapshots/inventory/research",
+        "принятие содержания source-owner без его evidence",
+        "runtime/API/DDL/dependencies, запуск DB/live tests."
+      ]
+    },
+    "must": [
+      {
+        "id": "M1",
+        "requirement": "Все source IDs из artifacts/source-inventory.json",
+        "source_ref": "phases/P1.md:7"
+      },
+      {
+        "id": "M2",
+        "requirement": "fixed R01–R52 и 365 parent inputs",
+        "source_ref": "phases/P1.md:7"
+      },
+      {
+        "id": "M3",
+        "requirement": "snapshot/committed snapshot/blob verification",
+        "source_ref": "phases/P1.md:7"
+      },
+      {
+        "id": "M4",
+        "requirement": "current live hashes и явная disposition working/archive claims.",
+        "source_ref": "phases/P1.md:7"
+      }
+    ],
+    "never": [
+      {
+        "id": "N1",
+        "prohibition": "Редактирование оригиналов, snapshots/inventory/research",
+        "source_ref": "phases/P1.md:9"
+      },
+      {
+        "id": "N2",
+        "prohibition": "принятие содержания source-owner без его evidence",
+        "source_ref": "phases/P1.md:9"
+      },
+      {
+        "id": "N3",
+        "prohibition": "runtime/API/DDL/dependencies, запуск DB/live tests.",
+        "source_ref": "phases/P1.md:9"
+      }
+    ],
+    "done": {
+      "public_acceptance": [
+        {
+          "id": "A1",
+          "predicate": "findings/P1-source-reconciliation.md: таблица 100 IDs и summary source cohort/observation time, drift dispositions, 0 потерянных источников. Future consumers используют frozen bytes, новые live outcomes идут через отдельный decision.",
+          "scope": "public",
+          "check": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage inputs`; затем `python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage sources` — exit 0, 100 source records/52 R/365 parents, hashes совпадают. Содержательная сверка: каждое working binding действительно source-owner evidence с scope/digest, иначе proposal; 0 повышенных без binding claims; live drift имеет owner/resume. Completion Notes фиксируют команды, anchors и covered/uncovered facts.",
+          "evidence_ref": "E14"
+        }
+      ]
+    },
+    "authority": {
+      "class": "routine",
+      "granted": true,
+      "granted_by": "phases/P1/P1.1.md:P1.1",
+      "auto_allowed": [
+        "write the item's declared Files",
+        "run the item's Validation",
+        "close the item with the two-commit topology"
+      ],
+      "stop_boundaries": [
+        "tag/push/release",
+        "fleet rollout",
+        "consumer repositories",
+        "FOREMAN outward parts"
+      ],
+      "loop_budget": {
+        "audit_rounds_max": 2,
+        "same_finding_max": 2
+      },
+      "observed_rounds": 0,
+      "audit_cap_remediation": false
+    },
+    "next": {
+      "form": "exec-items",
+      "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1",
+      "context": "continue-root",
+      "origin": "approved-goal",
+      "changed_by": null
+    },
+    "route": {
+      "required": {
+        "model_class": "implementation",
+        "effort": "medium"
+      },
+      "actual": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "capabilities": []
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "path": "decisions/D3.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E2",
+        "path": "decisions/D4.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E3",
+        "path": "brief/00-owner-request.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E4",
+        "path": "decisions/D1.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E5",
+        "path": "decisions/D2.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E6",
+        "path": "decisions/D3.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E7",
+        "path": "docs/dev-doctrine.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E8",
+        "path": "research/04-architecture.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E9",
+        "path": "research/00-sources.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E10",
+        "path": "artifacts/source-inventory.json",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E11",
+        "path": "research/01-traceability.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E12",
+        "path": "research/01a-acceptance-index.md",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E13",
+        "path": "scripts/validate-p1.py",
+        "proof_class": "unknown",
+        "algorithm": "doc-citation"
+      },
+      {
+        "id": "E14",
+        "path": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage inputs`; затем `python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py --stage sources` — exit 0, 100 source records/52 R/365 parents, hashes совпадают. Содержательная сверка: каждое working binding действительно source-owner evidence с scope/digest, иначе proposal; 0 повышенных без binding claims; live drift имеет owner/resume. Completion Notes фиксируют команды, anchors и covered/uncovered facts.",
+        "proof_class": "cross-checked",
+        "algorithm": "shell-command"
+      }
+    ],
+    "portability": {
+      "tier": "committed-bundle",
+      "execution_inputs": [
+        {
+          "path": "decisions/D3.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D4.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "brief/00-owner-request.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D1.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D2.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "decisions/D3.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "docs/dev-doctrine.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/04-architecture.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/00-sources.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "artifacts/source-inventory.json",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01-traceability.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "research/01a-acceptance-index.md",
+          "kind": "committed",
+          "producer": null
+        },
+        {
+          "path": "scripts/validate-p1.py",
+          "kind": "committed",
+          "producer": null
+        }
+      ],
+      "provenance_only": [],
+      "privacy": {
+        "minimized": true,
+        "excluded_classes": []
+      },
+      "semantic_carrier": "task:plan-exec",
+      "provider_renderers": {
+        "claude": "/task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1",
+        "codex": "$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1"
+      }
+    },
+    "conflicts": [],
+    "slice": {
+      "subagent_keys": [
+        "goal",
+        "must",
+        "never",
+        "done",
+        "authority",
+        "next",
+        "route",
+        "version"
+      ],
+      "root_only_keys": [
+        "evidence",
+        "portability",
+        "conflicts"
+      ]
+    },
+    "cold_start": {
+      "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+      "item_id": "P1.1",
+      "reads": [
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "E10",
+        "E11",
+        "E12",
+        "E13"
+      ],
+      "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1"
+    }
+  },
+  "graph": {
+    "schema_version": "evidence-graph/v1",
+    "item_id": "P1.1",
+    "product_paths": [
+      "findings/P1-source-reconciliation.md."
+    ],
+    "digest_inputs": [
+      "docs/dev-doctrine.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/artifacts/source-inventory.json",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/00-owner-request.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/brief/01-owner-design-policy.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D1.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D2.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D3.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/decisions/D4.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/00-sources.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01-traceability.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/01a-acceptance-index.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/04-architecture.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/research/05-integrated-design.md",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+      "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p1.py"
+    ],
+    "collisions": [],
+    "nodes": [
+      {
+        "id": "spec",
+        "kind": "item-spec",
+        "path": "phases/P1/P1.1.md",
+        "sha256": "238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c"
+      },
+      {
+        "id": "bundle",
+        "kind": "bundle",
+        "sha256": "0d3410f0ec059c1deebfcc0203a121647be823ced8506efcd8c4924652d3ff7a",
+        "declaration_sha256": "2c3ffa0c13968d2f69312752003daacb92a7b29bc8e7bd18705d8aa0fdf2a168"
+      },
+      {
+        "id": "product",
+        "kind": "declared-files",
+        "anchor": {
+          "paths": [
+            {
+              "path": "findings/P1-source-reconciliation.md.",
+              "state": "missing"
+            }
+          ],
+          "sha256": "1914953ae7f678218086605a6a71de6ad91c770fa5698b3d0f06a2c6be952384"
+        }
+      },
+      {
+        "id": "closure",
+        "kind": "closure-projections",
+        "paths": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "spec",
+        "to": "product",
+        "kind": "precedes"
+      },
+      {
+        "from": "bundle",
+        "to": "product",
+        "kind": "digest-input"
+      },
+      {
+        "from": "product",
+        "to": "closure",
+        "kind": "byte-identity"
+      }
+    ],
+    "sha256": "6903fa9fc7ddf3fa1dcac601f7545510197780f9ced7f8c01f137f03a7394918"
+  }
+}

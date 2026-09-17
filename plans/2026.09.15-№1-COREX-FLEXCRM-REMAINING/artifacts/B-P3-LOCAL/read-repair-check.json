@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "same_ordered_path_selector_whole_sha_selected_sha": true,
+  "entry_count": 102,
+  "old_bundle_bytes": 51803,
+  "new_bundle_bytes": 50318,
+  "d2b_pass": true,
+  "weight_tokens": 566233,
+  "state_fresh": true
+}

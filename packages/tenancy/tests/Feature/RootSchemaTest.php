@@ -31,6 +31,8 @@ function rootTableNames(): array
         'root_account_schema_state',
         'root_account_events',
         'root_account_exports',
+        'root_wakeup_hints',
+        'root_wakeup_reconciliation_state',
     ];
 }
 
@@ -93,7 +95,7 @@ function makeAccount(string $clusterId, string $ownerIdentityId, array $override
     return $id;
 }
 
-it('creates all 17 root_ tables on the central connection', function (): void {
+it('creates every declared root_ table on the central connection', function (): void {
     foreach (rootTableNames() as $table) {
         expect(DB::connection('pgsql')->getSchemaBuilder()->hasTable($table))
             ->toBeTrue("expected {$table} to exist");

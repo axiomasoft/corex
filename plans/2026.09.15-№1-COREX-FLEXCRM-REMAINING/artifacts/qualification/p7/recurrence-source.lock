@@ -1,0 +1,9 @@
+{
+  "schema": "utility-source-lock/1",
+  "candidate": "rlanvin/php-rrule",
+  "version": "3.0.0",
+  "commit": "93a083db12dcb6f58e4840392a22e158ce96f1ff",
+  "license": "MIT",
+  "php": ">=7.3",
+  "abi": "RRule\\RRule::getOccurrencesBetween($begin, $end, $limit)"
+}

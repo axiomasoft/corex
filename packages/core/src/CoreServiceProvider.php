@@ -12,9 +12,12 @@ use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
 use CoreX\Contracts\PubSub;
+use CoreX\Contracts\SavedViewRepository;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantStorage;
+use CoreX\Contracts\ViewAccessPolicy;
+use CoreX\Contracts\ViewSchemaProvider;
 use CoreX\Contracts\WorkerRuntime;
 use CoreX\PubSub\DefaultWorkerRuntime;
 use CoreX\PubSub\PrunePubSubMessages;
@@ -25,6 +28,10 @@ use CoreX\Support\ServiceProviderModuleRegistrar;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Views\Internal\DenyViewAccessPolicy;
+use CoreX\Views\Internal\SqlSavedViewRepository;
+use CoreX\Views\Internal\UnavailableViewSchemaProvider;
+use CoreX\Views\Internal\ViewConfigValidator;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -63,6 +70,10 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
+        $this->app->singleton(ViewSchemaProvider::class, UnavailableViewSchemaProvider::class);
+        $this->app->singleton(ViewAccessPolicy::class, DenyViewAccessPolicy::class);
+        $this->app->singleton(ViewConfigValidator::class);
+        $this->app->singleton(SavedViewRepository::class, SqlSavedViewRepository::class);
         $this->app->scoped(TenantStorage::class, function ($app): LocalTenantStorage {
             return new LocalTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),

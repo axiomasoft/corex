@@ -1,0 +1,18 @@
+{
+  "findings/P1-acceptance-map.md": {
+    "whole_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+    "required_sections": 53,
+    "all_operative_table_rows_bound": 1105,
+    "actual_selected_bytes": 592641,
+    "max_section_estimated_tokens": 8963,
+    "claim": "structural selected-byte coverage, not yet actual P1.4 read consumption"
+  },
+  "findings/P1-evidence-ledger.md": {
+    "whole_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+    "required_sections": 13,
+    "all_operative_table_rows_bound": 125,
+    "actual_selected_bytes": 123120,
+    "max_section_estimated_tokens": 9687,
+    "claim": "structural selected-byte coverage, not yet actual P1.4 read consumption"
+  }
+}

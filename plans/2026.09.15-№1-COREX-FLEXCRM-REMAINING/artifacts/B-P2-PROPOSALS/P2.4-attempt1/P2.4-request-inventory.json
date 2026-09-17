@@ -1,0 +1,224 @@
+{
+  "profile": "p2-contract-catalogue/1",
+  "contract_to_requests": {
+    "C-P2-001": [
+      "Q-P2-001",
+      "Q-P2-002"
+    ],
+    "C-P2-004": [
+      "Q-P2-003",
+      "Q-P2-004",
+      "Q-P2-005"
+    ],
+    "C-P2-005": [
+      "Q-P2-006",
+      "Q-P2-007"
+    ],
+    "C-P2-007": [
+      "Q-P2-008"
+    ],
+    "C-P2-008": [
+      "Q-P2-009",
+      "Q-P2-010",
+      "Q-P2-011"
+    ],
+    "C-P2-009": [
+      "Q-P2-012",
+      "Q-P2-013"
+    ],
+    "C-P2-010": [
+      "Q-P2-014",
+      "Q-P2-015"
+    ],
+    "C-P2-011": [
+      "Q-P2-016",
+      "Q-P2-017"
+    ],
+    "C-P2-012": [
+      "Q-P2-018",
+      "Q-P2-019"
+    ],
+    "C-P2-013": [
+      "Q-P2-020",
+      "Q-P2-021",
+      "Q-P2-022"
+    ],
+    "C-P2-014": [
+      "Q-P2-023"
+    ],
+    "C-P2-015": [
+      "Q-P2-024",
+      "Q-P2-025"
+    ],
+    "C-P2-016": [
+      "Q-P2-026",
+      "Q-P2-027"
+    ],
+    "C-P2-017": [
+      "Q-P2-028",
+      "Q-P2-029",
+      "Q-P2-030"
+    ],
+    "C-P2-018": [
+      "Q-P2-031",
+      "Q-P2-032",
+      "Q-P2-033"
+    ],
+    "C-P2-019": [
+      "Q-P2-034",
+      "Q-P2-035"
+    ],
+    "C-P2-020": [
+      "Q-P2-036",
+      "Q-P2-037",
+      "Q-P2-038",
+      "Q-P2-039"
+    ],
+    "C-P2-021": [
+      "Q-P2-040",
+      "Q-P2-041"
+    ],
+    "C-P2-022": [
+      "Q-P2-042",
+      "Q-P2-043"
+    ],
+    "C-P2-023": [
+      "Q-P2-044",
+      "Q-P2-045"
+    ],
+    "C-P2-024": [
+      "Q-P2-046"
+    ],
+    "C-P2-025": [
+      "Q-P2-047",
+      "Q-P2-048"
+    ],
+    "C-P2-026": [
+      "Q-P2-049",
+      "Q-P2-050",
+      "Q-P2-051"
+    ],
+    "C-P2-027": [
+      "Q-P2-052"
+    ],
+    "C-P2-028": [
+      "Q-P2-053",
+      "Q-P2-054"
+    ],
+    "C-P2-029": [
+      "Q-P2-055"
+    ]
+  },
+  "selected_new_operation_gates": {
+    "1": [
+      "G-STORAGE",
+      "G-DEPENDENCY"
+    ],
+    "4": [
+      "G-SCHEMA",
+      "G-STORAGE",
+      "G-TIMING"
+    ],
+    "5": [
+      "G-CENTRAL",
+      "G-API"
+    ],
+    "7": [
+      "G-API"
+    ],
+    "8": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "9": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "10": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "11": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "12": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "13": [
+      "G-API",
+      "G-SCHEMA",
+      "G-DEPENDENCY"
+    ],
+    "14": [
+      "G-API"
+    ],
+    "15": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "16": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "17": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "18": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE"
+    ],
+    "19": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "20": [
+      "G-API",
+      "G-SCHEMA",
+      "G-STORAGE",
+      "G-DEPENDENCY"
+    ],
+    "21": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "22": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "23": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "24": [
+      "G-API"
+    ],
+    "25": [
+      "G-API",
+      "G-SCHEMA"
+    ],
+    "26": [
+      "G-API",
+      "G-SCHEMA",
+      "G-DEPENDENCY"
+    ],
+    "27": [
+      "G-API"
+    ],
+    "28": [
+      "G-API",
+      "G-DEPENDENCY"
+    ],
+    "29": [
+      "G-API"
+    ]
+  },
+  "new_proposals_only": true,
+  "status": "all proposal; no grants",
+  "source_sha256": "8101a51c2cde939584511f9af24da730ce1b2b7438fb8b4037692483fad1348b"
+}

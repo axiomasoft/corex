@@ -1,0 +1,1593 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.15-№1-corex-flexcrm-remaining-p2-3",
+  "version": {
+    "revision": 1,
+    "content_hash": "c0cc6f181769958dd287f1c8b1fbc9141c35cefd0dee9dc06436ad43c16279d6",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Свести минимальные generic deltas в exact proposed PHP/DTO/error/schema/dependency bytes и downstream ownership, используя квалифицированный intake и полный стабильный дизайн P3–P8.",
+    "non_goals": [
+      "Написание library/consumer runtime или migrations, выбор новой фичи без frozen parent/non-AC source",
+      "продуктовые entities/DDL/templates/roles/edition/presets",
+      "clone standalone engines",
+      "blanket SDK/major/source approvals",
+      "новые extenders/bus/registry/CRUD",
+      "объявление future local/installed cases выполненными."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "Generic mechanism atoms R01/R02/R08–R12/R14–R17/R19/R20/R23–R25/R28/R32/R33/R36/R45/R50/R52",
+      "source_ref": "phases/P2.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "остальные R остаются intake dispositions. Storage/lifecycle ports keep-first",
+      "source_ref": "phases/P2.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "saved views/panels/media/notifications/data/search/recurrence/intl/tool bindings",
+      "source_ref": "phases/P2.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "engine ownership/source proposals",
+      "source_ref": "phases/P2.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "all introduced public shape/null/unknown-field/error/version semantics и conditional dependency edges.",
+      "source_ref": "phases/P2.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Написание library/consumer runtime или migrations, выбор новой фичи без frozen parent/non-AC source",
+      "source_ref": "phases/P2.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "продуктовые entities/DDL/templates/roles/edition/presets",
+      "source_ref": "phases/P2.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "clone standalone engines",
+      "source_ref": "phases/P2.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "blanket SDK/major/source approvals",
+      "source_ref": "phases/P2.md:9"
+    },
+    {
+      "id": "N5",
+      "prohibition": "новые extenders/bus/registry/CRUD",
+      "source_ref": "phases/P2.md:9"
+    },
+    {
+      "id": "N6",
+      "prohibition": "объявление future local/installed cases выполненными.",
+      "source_ref": "phases/P2.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "findings/P2-delta-map.md, findings/P2-contract-proposals.md, findings/P2-consumer-cases.md; exact minimal bytes/ownership/BC/gate proposals и observable cases для P3–P8/P9. Internal catalogue acceptance не выдаёт API/schema/dependency/source/major authorization и не является executed conformance.",
+        "scope": "public",
+        "check": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py --stage deltas` — exit 0; 52 rows, unique linked contract IDs, exact proposal sections, ≥2 named consumer cases и minimum failure case для каждого contract. Содержательная сверка old/new with intake/downstream specs: 0 unnecessary ports, 0 unowned types/storage/engine, 0 missing trusted context/null/error/version/migration/source choice in applicable ready subset; proposed protected deltas имеют exact gate/digest request, не approval. 0 dependency cycles, any new contract связан с frozen parent/non-AC source и non-CRM behavior. Save actual cwd/results; owned views+named lint exit 0. Если producer qualification меняет material design assumption, исправить affected specs/integrated finish через existing decision; не silently select incompatible runtime.",
+        "evidence_ref": "E120"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P2/P2.3.md:P2.3",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "exec-items",
+    "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2.3",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "findings/P1-requirements-lock.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "findings/P1-downstream-gaps.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "research/P2-contract-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "research/03-gates.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "research/05-integrated-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "scripts/validate-p2.py",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "phases/P3/P3.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "phases/P4/P4.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "phases/P5/P5.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "phases/P6/P6.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "phases/P7/P7.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "phases/P8/P8.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "plan.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "decisions/D4.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "decisions/D6.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E17",
+      "path": "decisions/D7.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E18",
+      "path": "brief/01-owner-design-policy.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E19",
+      "path": "docs/dev-doctrine.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E20",
+      "path": "research/04-architecture.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E21",
+      "path": "research/02-baseline.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E22",
+      "path": "research/P2-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E23",
+      "path": "research/P2-contract-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E24",
+      "path": "research/05-integrated-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E25",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E26",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E27",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E28",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E29",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E30",
+      "path": "findings/P2-intake.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E31",
+      "path": "findings/P1-requirements-lock.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E32",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E33",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E34",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E35",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E36",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E37",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E38",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E39",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E40",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E41",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E42",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E43",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E44",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E45",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E46",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E47",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E48",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E49",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E50",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E51",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E52",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E53",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E54",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E55",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E56",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E57",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E58",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E59",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E60",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E61",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E62",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E63",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E64",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E65",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E66",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E67",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E68",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E69",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E70",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E71",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E72",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E73",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E74",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E75",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E76",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E77",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E78",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E79",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E80",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E81",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E82",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E83",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E84",
+      "path": "findings/P1-acceptance-map.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E85",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E86",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E87",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E88",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E89",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E90",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E91",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E92",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E93",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E94",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E95",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E96",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E97",
+      "path": "findings/P1-evidence-ledger.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E98",
+      "path": "findings/P1-downstream-gaps.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E99",
+      "path": "research/03-gates.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E100",
+      "path": "scripts/validate-p2.py",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E101",
+      "path": "scripts/task-check.py",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E102",
+      "path": "roadmap.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E103",
+      "path": "phases/P3/P3.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E104",
+      "path": "phases/P4/P4.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E105",
+      "path": "phases/P5/P5.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E106",
+      "path": "phases/P6/P6.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E107",
+      "path": "phases/P7/P7.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E108",
+      "path": "phases/P8/P8.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E109",
+      "path": "packages/core/src/Contracts/TenantStorage.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E110",
+      "path": "packages/core/src/Money/MoneyCast.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E111",
+      "path": "packages/modules/src/Contracts/EntityRegistry.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E112",
+      "path": "packages/modules/src/Extend/Extender.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E113",
+      "path": "packages/modules/src/Extend/Api.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E114",
+      "path": "packages/modules/src/Extend/EntityField.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E115",
+      "path": "packages/modules/src/Extend/Workflow.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E116",
+      "path": "packages/tasks/src/Data/ActorData.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E117",
+      "path": "packages/tasks/src/Data/EntityReference.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E118",
+      "path": "packages/api/src/Contracts/OperationHandler.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E119",
+      "path": "packages/api/src/Contracts/SchemaContributor.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E120",
+      "path": "`python3 plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/validate-p2.py --stage deltas` — exit 0; 52 rows, unique linked contract IDs, exact proposal sections, ≥2 named consumer cases и minimum failure case для каждого contract. Содержательная сверка old/new with intake/downstream specs: 0 unnecessary ports, 0 unowned types/storage/engine, 0 missing trusted context/null/error/version/migration/source choice in applicable ready subset; proposed protected deltas имеют exact gate/digest request, не approval. 0 dependency cycles, any new contract связан с frozen parent/non-AC source и non-CRM behavior. Save actual cwd/results; owned views+named lint exit 0. Если producer qualification меняет material design assumption, исправить affected specs/integrated finish через existing decision; не silently select incompatible runtime.",
+      "proof_class": "cross-checked",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-requirements-lock.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-downstream-gaps.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/P2-contract-design.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/03-gates.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/05-integrated-design.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "scripts/validate-p2.py",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P3/P3.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P4/P4.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P5/P5.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P6/P6.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P7/P7.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P8/P8.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "plan.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D4.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D6.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "decisions/D7.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "brief/01-owner-design-policy.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "docs/dev-doctrine.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/04-architecture.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/02-baseline.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/P2-design-rag.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/P2-contract-design.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/05-integrated-design.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P2-intake.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-requirements-lock.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-acceptance-map.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-evidence-ledger.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "findings/P1-downstream-gaps.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "research/03-gates.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "scripts/validate-p2.py",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "scripts/task-check.py",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "roadmap.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P3/P3.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P4/P4.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P5/P5.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P6/P6.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P7/P7.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "phases/P8/P8.md",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/core/src/Contracts/TenantStorage.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/core/src/Money/MoneyCast.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/modules/src/Contracts/EntityRegistry.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/modules/src/Extend/Extender.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/modules/src/Extend/Api.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/modules/src/Extend/EntityField.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/modules/src/Extend/Workflow.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/tasks/src/Data/ActorData.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/tasks/src/Data/EntityReference.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/api/src/Contracts/OperationHandler.php",
+        "kind": "committed",
+        "producer": null
+      },
+      {
+        "path": "packages/api/src/Contracts/SchemaContributor.php",
+        "kind": "committed",
+        "producer": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": []
+    },
+    "semantic_carrier": "task:plan-exec",
+    "provider_renderers": {
+      "claude": "/task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2.3",
+      "codex": "$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2.3"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+    "item_id": "P2.3",
+    "reads": [
+      "E14",
+      "E15",
+      "E16",
+      "E17",
+      "E18",
+      "E19",
+      "E20",
+      "E21",
+      "E22",
+      "E23",
+      "E24",
+      "E25",
+      "E26",
+      "E27",
+      "E28",
+      "E29",
+      "E30",
+      "E31",
+      "E32",
+      "E33",
+      "E34",
+      "E35",
+      "E36",
+      "E37",
+      "E38",
+      "E39",
+      "E40",
+      "E41",
+      "E42",
+      "E43",
+      "E44",
+      "E45",
+      "E46",
+      "E47",
+      "E48",
+      "E49",
+      "E50",
+      "E51",
+      "E52",
+      "E53",
+      "E54",
+      "E55",
+      "E56",
+      "E57",
+      "E58",
+      "E59",
+      "E60",
+      "E61",
+      "E62",
+      "E63",
+      "E64",
+      "E65",
+      "E66",
+      "E67",
+      "E68",
+      "E69",
+      "E70",
+      "E71",
+      "E72",
+      "E73",
+      "E74",
+      "E75",
+      "E76",
+      "E77",
+      "E78",
+      "E79",
+      "E80",
+      "E81",
+      "E82",
+      "E83",
+      "E84",
+      "E85",
+      "E86",
+      "E87",
+      "E88",
+      "E89",
+      "E90",
+      "E91",
+      "E92",
+      "E93",
+      "E94",
+      "E95",
+      "E96",
+      "E97",
+      "E98",
+      "E99",
+      "E100",
+      "E101",
+      "E102",
+      "E103",
+      "E104",
+      "E105",
+      "E106",
+      "E107",
+      "E108",
+      "E109",
+      "E110",
+      "E111",
+      "E112",
+      "E113",
+      "E114",
+      "E115",
+      "E116",
+      "E117",
+      "E118",
+      "E119"
+    ],
+    "carrier": "task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2.3"
+  }
+}

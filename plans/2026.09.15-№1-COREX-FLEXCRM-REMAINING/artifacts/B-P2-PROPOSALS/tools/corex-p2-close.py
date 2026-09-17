@@ -1,0 +1,15 @@
+from pathlib import Path
+import sys,json,subprocess,hashlib
+from task import task_contract,plan_evidence,plan_recovery,plan_item_state,plan_status,plan_decisions,terminal_policy,journal
+p=Path('plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING');a=p/'artifacts/B-P2-PROPOSALS';i=sys.argv[1];stage={'P2.1':'intake','P2.2':'identity','P2.3':'deltas','P2.4':'seal'}[i]
+commands=[['python3',str(p/'scripts/validate-p1.py'),'--stage','seal'],['python3',str(p/'scripts/validate-p2.py'),'--stage',stage],['python3',str(p/'scripts/task-check.py'),'--check','downstream'],['python3',str(p/'scripts/task-check.py'),'--check','lint']]
+if i=='P2.4':commands.insert(3,['python3','/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-downstream.py','--plan-dir',str(p),'--item','P2.4'])
+checks=[]
+for cmd in commands:
+ r=subprocess.run(cmd,text=True,capture_output=True);checks.append({'command':cmd,'cwd':str(Path.cwd()),'exit_code':r.returncode,'stdout':r.stdout,'stderr':r.stderr});assert r.returncode==0,checks[-1]
+semantic=json.loads((a/f'{i}-semantic.json').read_text());assert semantic['status']=='green';actual=json.loads(Path('/tmp/corex-p2-route.json').read_text());c=task_contract.build(p,i,actual_route=actual);g=plan_evidence.compile_graph(p,i);v=task_contract.evaluate(c,evidence_graph=g,requires_closure_freshness=True);assert v['pre_mutation']=='allow' and v['pre_final']=='allow',v
+report=a/f'{i}-check-results.json';report.write_text(json.dumps({'checks':checks,'semantic':semantic,'write_site':v},ensure_ascii=False,indent=2)+'\n');h=hashlib.sha256(report.read_bytes()).hexdigest();validation=[{'carrier':' '.join(x['command']),'status':'green','evidence_ids':[str(report.relative_to(p)),h]} for x in checks]+[{'carrier':'semantic acceptance: '+stage,'status':'green','evidence_ids':[str((a/f'{i}-semantic.json').relative_to(p))]}]
+d=terminal_policy.build_decision(p,i,result='closed-green',validation=validation);r=json.loads((a/f'{i}-run.json').read_text());e=journal.new_entry(plan_id=p.name,item_id=i,command='plan-exec',actor='executor/gpt-5.6-sol/high',session_id=actual['thread_id'],run_id=r['run_id'],attempt=r['attempt'],result='closed-green',decision=d,note=f'{stage}/P1 seal/downstream/lint+semantic PASS. Catalogue only; gates/DI/AP remain owning obligations. Commands/cwd: artifacts/B-P2-PROPOSALS/{i}-check-results.json\nwrite-site: pre_mutation: allow · pre_final: allow');journal.append_idempotent_terminal(p,e)
+plan_item_state.build_states(p);plan_status.build_status(p);plan_decisions.build_views(p);nextp=plan_recovery.materialize_next_ready(p,i)
+g2=plan_evidence.compile_graph(p,i);anchor=lambda x:next(n['anchor'] for n in x['nodes'] if n['id']=='product');cl=plan_evidence.verify_closure(anchor(g),anchor(g2));(a/f'{i}-closure-freshness.json').write_text(json.dumps(cl,indent=2)+'\n');(a/f'{i}-pre-final.json').write_text(json.dumps(v,indent=2)+'\n');print(i,'closed-green; next bundle',nextp)
+r=subprocess.run(commands[-1],capture_output=True,text=True);(a/f'{i}-post-close-lint.txt').write_text(r.stdout+r.stderr);assert r.returncode==0,r.stdout+r.stderr;print('post-close lint PASS')

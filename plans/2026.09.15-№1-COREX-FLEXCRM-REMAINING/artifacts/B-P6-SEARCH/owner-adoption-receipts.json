@@ -1,0 +1,31 @@
+{
+  "status": "accepted",
+  "owner_response": "Владелец поручил Codex самостоятельно выбрать технические решения через Perplexity и Web и сделать всё необходимое, чтобы P6.6 можно было начать в новой сессии.",
+  "decision": "decisions/D40-p6-search-adoption.md",
+  "decision_sha256": "f73f2eb5168f6c6292326c2997c68a719de2d845f6a250bcbd993c5d04af98aa",
+  "proposal_sha256": "8101a51c2cde939584511f9af24da730ce1b2b7438fb8b4037692483fad1348b",
+  "gate_request_sha256": "77b763002a9509b5ab995046ed838bbcc19f9e6c1786cc6da6a6c994172e5cdd",
+  "requests": [
+    "Q-P2-034",
+    "Q-P2-035",
+    "Q-P2-036",
+    "Q-P2-037",
+    "Q-P2-038",
+    "Q-P2-039"
+  ],
+  "gates": [
+    "G-API",
+    "G-DEPENDENCY",
+    "G-SCHEMA",
+    "G-STORAGE"
+  ],
+  "profiles": [
+    "search/1",
+    "index-lifecycle/1"
+  ],
+  "scope": [
+    "P6.6",
+    "P6.7"
+  ],
+  "product_conformance": false
+}

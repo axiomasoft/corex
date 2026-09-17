@@ -1,0 +1,154 @@
+{
+  "schema_version": "p1-adaptive-consumption/v1",
+  "status": "complete",
+  "bindings": {
+    "R01": [
+      "brief/sources/b33.md §3.9; source SHA256 be6366fc074821e4d5cfd58e3b5c953875a45cce8f948da6f93a57b419d15a27; section SHA256 c67bdb8e82c08afa6604d87bd1602e414039ee2ea389a57188eba0e871e123e5"
+    ],
+    "R02": [
+      "brief/sources/b33.md §2.4; source SHA256 be6366fc074821e4d5cfd58e3b5c953875a45cce8f948da6f93a57b419d15a27; section SHA256 c60614c003925abdcb0aae6e03b412132a127545c413c68ed4eee659fad6f310",
+      "brief/sources/b33.md §3.2; source SHA256 be6366fc074821e4d5cfd58e3b5c953875a45cce8f948da6f93a57b419d15a27; section SHA256 de563588cda17cd9b86f26b8aca300c8ad0267ec1129548c92aacc1b884e8294"
+    ],
+    "R03": [
+      "brief/sources/b34.md §8.4; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 f9df10429c5197c9c22df74536510bab61c42e0a49ba09f9afa81782600d726d"
+    ],
+    "R04": [
+      "brief/sources/b34.md §4.2; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 ed6a299bb4da9a29c78fe0bef57ed3a562145a28e350db13f66ec8f2d90cebe6"
+    ],
+    "R05": [
+      "brief/sources/b34.md §3.3; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 6d52586edee25950b913dd82ed74ec78468f607f6246f64bee7a94735dcb3c1e",
+      "brief/sources/b34.md §4.1; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 0ba16b4056ababa84359e82f59257e62d792b9491e981a26a9ca91e4443d5cb0"
+    ],
+    "R06": [
+      "brief/sources/b34.md §3.2; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 d284ba530947da5b94fc278aa0b1d3c43bea445f3b5878b9b26511a62ca91fc5",
+      "brief/sources/b34.md §4.1; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 0ba16b4056ababa84359e82f59257e62d792b9491e981a26a9ca91e4443d5cb0"
+    ],
+    "R07": [
+      "brief/sources/b34.md §3.4; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 d419a0c225037faf467c8efacfc070b987405c9ef14e39ab76dc1580ff6a8ceb",
+      "brief/sources/b34.md §4.1; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 0ba16b4056ababa84359e82f59257e62d792b9491e981a26a9ca91e4443d5cb0"
+    ],
+    "R08": [
+      "brief/sources/b33.md §7; source SHA256 be6366fc074821e4d5cfd58e3b5c953875a45cce8f948da6f93a57b419d15a27; section SHA256 37ec4ab0baf76f62af392af8d5fb374e34eb0d2501db35c2cc9a8c35de679c8c",
+      "brief/sources/b34.md §7; source SHA256 69605804c77b821e739c9e99099b335d216734366f97de28f2d81a0b9fc3bda6; section SHA256 4c9bfa54af7e55c340f87284de14e9ba75342acfe2aacc9a37c6ee836418fd08"
+    ],
+    "R09": [
+      "brief/sources/b12.md §3.7; source SHA256 4e74c72a0401b5c99fdd16720b5377d0c4f58b65ca24027cbd440670e88b48fd; section SHA256 f20c43241f5efcc9f142b7626a36d35e6853dc00c82f7140410d9975f17f3106"
+    ],
+    "R10": [
+      "brief/sources/b12.md §3.5; source SHA256 4e74c72a0401b5c99fdd16720b5377d0c4f58b65ca24027cbd440670e88b48fd; section SHA256 89cfaa2f4a8c56ece5f0b377bbdb152acc8b339aa328b569e16b5c4627bed086",
+      "brief/sources/b12.md §3.7; source SHA256 4e74c72a0401b5c99fdd16720b5377d0c4f58b65ca24027cbd440670e88b48fd; section SHA256 f20c43241f5efcc9f142b7626a36d35e6853dc00c82f7140410d9975f17f3106"
+    ],
+    "R11": [
+      "brief/sources/b15.md §3.3; source SHA256 810919efe436065b2a883e0953648325a95988e45007513e8a47298e20d59447; section SHA256 b19f67058707c57b5018ca4b2dc68c8ac6fcc662cba1ba4d01324d0719e28f31",
+      "brief/sources/b15.md §2.1; source SHA256 810919efe436065b2a883e0953648325a95988e45007513e8a47298e20d59447; section SHA256 5ddcaa0b8f1aecd2f85306005b7dce52861f51ecfee55de4bb74a2ae3e5e1ea6"
+    ],
+    "R12": [
+      "brief/sources/b18.md §3.1; source SHA256 e5f9feddfd1151c25bb12e5f7600e5b439f507e784aaf714d6be6c4c1f05df34; section SHA256 2d91bea175c91232abce2b950ae520668ba2b65f188ff8288e67a24c191a4aed",
+      "brief/sources/b18.md §3.2; source SHA256 e5f9feddfd1151c25bb12e5f7600e5b439f507e784aaf714d6be6c4c1f05df34; section SHA256 4569e3dd44a345e341c95d12c9ba413e56846563b202c972c65792b401a9634a"
+    ],
+    "R13": [],
+    "R14": [
+      "brief/sources/b16.md §3.1; source SHA256 ed4096e7e7ac522a9a6d89d3c0870b0964ddd91e1ff5c29f3413072642afeaaf; section SHA256 077a7784fcc7c66085836ee852a1e38e551599b65b6591c32e99230a768e7159"
+    ],
+    "R15": [
+      "brief/sources/b16.md §3.5; source SHA256 ed4096e7e7ac522a9a6d89d3c0870b0964ddd91e1ff5c29f3413072642afeaaf; section SHA256 87843cb152622de9315f36f69d5e73410afdb8bc8421102745e5ff049a8ca075"
+    ],
+    "R16": [
+      "brief/sources/b16.md §3.6; source SHA256 ed4096e7e7ac522a9a6d89d3c0870b0964ddd91e1ff5c29f3413072642afeaaf; section SHA256 c46bc79156f8e8f70fcbdf659471fcecc69d4ecd8c7e9d678e216d5540d4a2de"
+    ],
+    "R17": [
+      "brief/sources/b13.md §3.4; source SHA256 e81c0f7ea57837efc66e86955563da567491943741bafb5275a883ed916d24ff; section SHA256 563804e9b13c18a65c60dfa947a32a57218c38fdab575289c2a35498aa49c19f",
+      "brief/sources/b38.md §2.1; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 d3d33f2b510d991e99da9580f1dadd975c6e33f6b1585fd233e05cc260ecf1ea"
+    ],
+    "R18": [],
+    "R19": [],
+    "R20": [
+      "brief/sources/b29.md §4.2; source SHA256 d0ea286ff35b82f8fb90638f8a6ca87826a18389b41f84375a24256a11235d1a; section SHA256 d701133d06250279339aee8d8ca21ea1081f7a6c53b1aa25df4dd045e5a09763",
+      "brief/sources/b38.md §2.3; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 1c7d22253a4d31723a51df16db2cbf1c16f2fa5815fa1cbe9ebb745ae8153cd1"
+    ],
+    "R21": [],
+    "R22": [],
+    "R23": [
+      "brief/sources/b35.md §3.1; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 f170ce7a70d31cd9c2e89d038555959afae383d30bf92ffe49580b4be6d51621",
+      "brief/sources/b35.md §3.2; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 4a8d85f9da038f26fc5d1e80a662fe0e1eff90b20d195d25c8f145d964901b73"
+    ],
+    "R24": [
+      "brief/sources/b35.md §3.7; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 267439816cd09d3c8eb3ecba0caff9c270add098bec60cbc091927301ac1bb38",
+      "brief/sources/b35.md §3.8; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 7709fee45586c94d3b6182a7617fdb6a297017429d025642420e5d0f3c450d87"
+    ],
+    "R25": [
+      "brief/sources/b35.md §3.5; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 a6e07cf9e9cc13a8b4c52706949b2c373120f05ea8f1525ac6b39f2852eca1bf",
+      "brief/sources/b35.md §3.6; source SHA256 1e04b0973e41bdeaf7e253fa351a99b543a24a55d42b17f5a64964c42b05399b; section SHA256 57b39a1f553d76938543b13746d84db9d870b025d39995f0eec3c9b69de50a74"
+    ],
+    "R26": [],
+    "R27": [],
+    "R28": [
+      "brief/sources/b31.md §2.2; source SHA256 8f0942012368d234011345852f359bad4eb627c9d611641119633ae97fe39059; section SHA256 3ad0cab6f7da0d18bb988deafb6e9d50d8b8fb62189acc3744b1bc867f207341"
+    ],
+    "R29": [],
+    "R30": [],
+    "R31": [],
+    "R32": [
+      "brief/sources/b38.md §2.1; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 d3d33f2b510d991e99da9580f1dadd975c6e33f6b1585fd233e05cc260ecf1ea",
+      "brief/sources/b15.md §3.3; source SHA256 810919efe436065b2a883e0953648325a95988e45007513e8a47298e20d59447; section SHA256 b19f67058707c57b5018ca4b2dc68c8ac6fcc662cba1ba4d01324d0719e28f31"
+    ],
+    "R33": [
+      "brief/sources/b26.md §4; source SHA256 49812ed63122507bed5b885ed5ca6ec450ed0ee460987f2c029336e1cb0bdc7d; section SHA256 c6251d1ce66c2a592173a1335bb2d87bedf7211f8af542e51c772246e15d6855",
+      "brief/sources/b26.md §5; source SHA256 49812ed63122507bed5b885ed5ca6ec450ed0ee460987f2c029336e1cb0bdc7d; section SHA256 dcd928918a4462c603ba4973c05f0d99d1525927f8f6d3bd603248ace31e8f40",
+      "brief/sources/b26.md §6; source SHA256 49812ed63122507bed5b885ed5ca6ec450ed0ee460987f2c029336e1cb0bdc7d; section SHA256 f087a3a9e00538080df309b8b492c81c306f0c36a970382cd4f8a5ad3c9406e8",
+      "brief/sources/b26.md §7; source SHA256 49812ed63122507bed5b885ed5ca6ec450ed0ee460987f2c029336e1cb0bdc7d; section SHA256 9c0f37e713e6ac73a53c79471d98198a8b6dbd610190f0ccbe53bb9718d3afa1"
+    ],
+    "R34": [],
+    "R35": [],
+    "R36": [
+      "brief/sources/b32.md §3.3; source SHA256 443b67549c2c469a58ab990b3f48a072112bd8633279d43007d138e1e34cabb4; section SHA256 43dcae857d1c88269e89fa288e3471d4e30fcc5230d2b8e42d0bcf5eb31b73b6",
+      "brief/sources/b38.md §2.1; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 d3d33f2b510d991e99da9580f1dadd975c6e33f6b1585fd233e05cc260ecf1ea"
+    ],
+    "R37": [],
+    "R38": [],
+    "R39": [],
+    "R40": [],
+    "R41": [],
+    "R42": [],
+    "R43": [],
+    "R44": [
+      "brief/sources/flex-p91.md P9.1; source SHA256 b737c32df791404f5d1774cf07cb9e90fd779d500478233d3cef5a2f8e7481f0"
+    ],
+    "R45": [
+      "brief/sources/flex-p6.md P6.5; source SHA256 66bd8384e002f0ab3b3343e91f2120e6419e2de71458c2dba0827a5a40ad94e8"
+    ],
+    "R46": [],
+    "R47": [
+      "brief/sources/flex-p6.md P6.5; source SHA256 66bd8384e002f0ab3b3343e91f2120e6419e2de71458c2dba0827a5a40ad94e8"
+    ],
+    "R48": [],
+    "R49": [
+      "brief/sources/flex-p6.md:L38–40 deferred quartet; source SHA256 66bd8384e002f0ab3b3343e91f2120e6419e2de71458c2dba0827a5a40ad94e8; span SHA256 ea953ac9e40ff05ff215bc75e84ab5846f178de020fa0000b40ffb0511730f3e"
+    ],
+    "R50": [
+      "brief/sources/b38.md §6; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 6fb4412f3e8a1c682b90eef7f4ecb4b25acd879989cc7c1404160525195947e3"
+    ],
+    "R51": [
+      "brief/sources/b38.md §2.3; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 1c7d22253a4d31723a51df16db2cbf1c16f2fa5815fa1cbe9ebb745ae8153cd1",
+      "brief/sources/b38.md §3.3; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 a829858b570baa668adf1e48d4b8acabae1774e719501e6ae92ada058c5e84e8"
+    ],
+    "R52": [
+      "brief/sources/b38.md §4.1; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 89cc87c056131d6c2b94705c65d359c654a473a57507a45cd7e16aa3bc56e4f2",
+      "brief/sources/b38.md §7; source SHA256 ea8276254c90db6c24f97cdac2475e426fc16bad2b4cbdbe9e57d0b9061a66c4; section SHA256 f9cba28861b728a7b4a83d80c9fc1dcac587d84246d4f09093b3ca061af5ae9e"
+    ]
+  },
+  "consumption": "Complete source/section reads in owning root, or exact unchanged source/section digests from prior full P1.1/P1.2 reads; binding generation alone not read proof.",
+  "additional_full_reads": [
+    "b13 §3.4",
+    "b12 §3.6/3.7",
+    "b15 §3.3",
+    "b18 §3.2",
+    "b35 §3.1–3.8",
+    "b16 §3.1/3.5/3.6/§9",
+    "b29 §3.3/4.2",
+    "b32 §3.3/3.4",
+    "b33 §2.4/3.2/3.9",
+    "b34 §3.2/3.4/4.1/4.2/7"
+  ],
+  "unapproved_source_choices": "Source-proposal status preserved; no missing provider/legal/policy decision or external normative receipt fabricated."
+}

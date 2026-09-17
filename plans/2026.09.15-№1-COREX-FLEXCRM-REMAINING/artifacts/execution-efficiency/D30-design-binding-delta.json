@@ -1,0 +1,42 @@
+{
+  "decision": "D30",
+  "scope": "Owner-requested execution requirement only; original architectural/retrieval acceptance unchanged.",
+  "previous_finish_sha256": "44c27300a041a616ab04063a41a8ac732b293181c5c9eed7361155c1709a6dc4",
+  "current_finish_sha256": "96eb99aa87af5c8350e55385b7cb39e80eeb4bd703f8842f928b9909eea49ddb",
+  "previous_source_count": 660,
+  "current_source_count": 661,
+  "removed": [],
+  "added": [
+    "decisions/D30-rational-execution-requirement.md"
+  ],
+  "changed": [
+    {
+      "path": "decisions/_archive.md",
+      "before_sha256": "8f4d4bf2b268d1b4caf38570fca56c1e5cc77ddec30e4fecbaa34f060965ee84",
+      "after_sha256": "b645226b2be14bfad649cf897418e1df65d9ac72660a008e9cbe39c07cd8d3f7"
+    },
+    {
+      "path": "decisions/_current.md",
+      "before_sha256": "b1ad68bf071013358b7818f11d1ba64d9a61072f4d0e1ba75f7d5afa38c57827",
+      "after_sha256": "db6476fb18fcf682ef5deed4fe48df088127a015517b480dab1d80e3e7582333"
+    },
+    {
+      "path": "decisions/_index.md",
+      "before_sha256": "0f0401f3ca028bfa6f2fcbf3f61a9d35c1134f633998f6488314e01850581828",
+      "after_sha256": "537b8e9d627d33a5c8db0eb52f034b941511e8e13152e369c93e9ed644c73b5b"
+    },
+    {
+      "path": "open-questions.md",
+      "before_sha256": "77cdedcda5b8900e0d1a3b0b1f2d11f67fd91b99897147f070771afb62f24345",
+      "after_sha256": "7694dff95d96615d68ba16fe2bec3514a4f9013b3824d154b582670478e57512"
+    },
+    {
+      "path": "plan.md",
+      "before_sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "after_sha256": "425cdf31937b00f6ded18daf623d05defd217d73b3b358d53c17dd23341a17b3"
+    }
+  ],
+  "product_execution_started": false,
+  "runtime_modified": false,
+  "identity_budget_waived": false
+}

@@ -248,6 +248,7 @@ final class AccountLifecycle
             $latestExportStatus = DB::connection($this->centralConnection)->table('root_account_exports')
                 ->where('account_id', $account->id)
                 ->orderByDesc('created_at')
+                ->orderByDesc('id')
                 ->value('status');
 
             if ($latestExportStatus !== 'ready') {

@@ -1,2 +1,0 @@
-# Preserve raw console output (ANSI/trailing spaces); inspect log files directly.
-logs/** -diff -text

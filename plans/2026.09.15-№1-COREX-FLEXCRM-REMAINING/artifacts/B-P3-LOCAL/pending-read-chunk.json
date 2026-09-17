@@ -1,0 +1,20 @@
+[
+  {
+    "index": 101,
+    "declaration_ref": {
+      "field": "Required Reads",
+      "ordinal": 75
+    },
+    "path": "findings/P2-gate-requests.md",
+    "selector": {
+      "kind": "whole_file"
+    },
+    "sha256": "77b763002a9509b5ab995046ed838bbcc19f9e6c1786cc6da6a6c994172e5cdd",
+    "selected_sha256": "77b763002a9509b5ab995046ed838bbcc19f9e6c1786cc6da6a6c994172e5cdd",
+    "bytes": 52609,
+    "offset": 30119,
+    "next_offset": 52609,
+    "chunk_sha256": "915ea387a3651a77d9016e080b8873eabafca0430c0a6f640fba5ba1dfae9f20",
+    "complete": true
+  }
+]

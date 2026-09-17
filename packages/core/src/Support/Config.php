@@ -179,6 +179,16 @@ final class Config
         return (string) config('corex.tables.pubsub_cursors', 'sys_pubsub_cursors');
     }
 
+    public static function savedViewsTable(): string
+    {
+        return (string) config('corex.tables.saved_views', 'sys_saved_views');
+    }
+
+    public static function savedViewScopesTable(): string
+    {
+        return (string) config('corex.tables.saved_view_scopes', 'sys_saved_view_scopes');
+    }
+
     public static function pubsubDriver(): PubSubDriver
     {
         $value = config('corex.pubsub.driver', PubSubDriver::Null);

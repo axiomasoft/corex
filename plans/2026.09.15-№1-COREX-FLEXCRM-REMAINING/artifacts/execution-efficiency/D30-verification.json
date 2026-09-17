@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "checks": [
+    "native decision parser",
+    "native decision projection freshness",
+    "native P3.3 bundle freshness",
+    "plan-owned whole design binding",
+    "authored diff whitespace",
+    "bash launch syntax, without execution",
+    "exact prompt invocation",
+    "unchanged original journal/budget/owner receipts"
+  ],
+  "unchanged": {
+    "journal.jsonl": "unchanged",
+    "research/09-read-budget-policy.json": "unchanged",
+    "decisions/D23-P3-local-read-budget-advisory.md": "unchanged",
+    "decisions/D25-P3-local-owner-adoption.md": "unchanged"
+  },
+  "prompt_sha256": "ef6b717c6928725ab192d814889d6939bccb5aa0d1eb33c3303b34dbbd32f0e6",
+  "launch_sha256": "e37fd1b2c81048c8b7609dbf3a727cf02bb6f6ec8da06908eb34509f95c3fcc9",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "high",
+  "context": "continue-root: exact thread resume",
+  "product_execution": false,
+  "identity_effective_admission": "not granted; current check required before START",
+  "identity_budget_waived": false
+}

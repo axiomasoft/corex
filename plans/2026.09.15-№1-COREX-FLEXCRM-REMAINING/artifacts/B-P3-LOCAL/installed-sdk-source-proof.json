@@ -1,0 +1,37 @@
+[
+  {
+    "package": "aws/aws-crt-php",
+    "version": "v1.2.7",
+    "source_commit": "d71d9906c7bb63a28295447ba12e74723bd3730e",
+    "dist_sha256": "82c04ea2c7985f06e5a1ef4ba56a231e8ac051d490796c406c821c253f6d38be",
+    "matched_archive_files": 28
+  },
+  {
+    "package": "aws/aws-sdk-php",
+    "version": "3.395.2",
+    "source_commit": "d027655c121cc80192275e72d189612efa8dd9a9",
+    "dist_sha256": "2b49fa24118b6fc2cc224ffb67a380449bb8b75a63d0ee96502e3346d2611f19",
+    "matched_archive_files": 3484
+  },
+  {
+    "package": "league/flysystem-aws-s3-v3",
+    "version": "3.35.3",
+    "source_commit": "b03780cb97585ee7e48977f40ed599b33b751634",
+    "dist_sha256": "98a5831eac7034691f5d39231add19c8dff06bc7ea223461ee2f4233e5cba2de",
+    "matched_archive_files": 5
+  },
+  {
+    "package": "mtdowling/jmespath.php",
+    "version": "2.9.2",
+    "source_commit": "2157c5e50e813ec6a96c1eed3be7f64a20fb32a8",
+    "dist_sha256": "2be72e37cd2978c34b528f3138c4e1c261b1a3ff1d075b3bd8997c5f87ba61d8",
+    "matched_archive_files": 19
+  },
+  {
+    "package": "symfony/filesystem",
+    "version": "v7.4.18",
+    "source_commit": "90d412aa5277c6819db39e7605aa46b1019e3232",
+    "dist_sha256": "6464d956bd1472a68452e73c6ffaa7d03d0849afd166e93366e83135dd2dbd86",
+    "matched_archive_files": 12
+  }
+]

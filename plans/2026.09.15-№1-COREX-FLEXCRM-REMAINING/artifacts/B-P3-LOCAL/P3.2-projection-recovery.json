@@ -1,0 +1,10 @@
+{
+  "terminal": "closed-green same original run/attempt; no second START/terminal",
+  "next_bundle": null,
+  "metadata": "decision-metadata-reconciliation.json",
+  "write_site": {
+    "pre_mutation": "allow",
+    "pre_final": "allow",
+    "content_hash": "9c94e8dfa477030b7806f96c7041f2ac6d7d0fb444c4adb16cd3b021ceb35b38"
+  }
+}

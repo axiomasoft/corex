@@ -1,0 +1,27 @@
+{
+  "verdict": "ALLOW",
+  "batch": {
+    "batch_id": "B-P2-PROPOSALS",
+    "items": [
+      "P2.1",
+      "P2.2",
+      "P2.3",
+      "P2.4"
+    ],
+    "route": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "exec": "plan-exec",
+    "review": "light",
+    "routing_digest": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "spec_digest": "9fd71470beebf62d2fc7805202daae97fbc69cf0bf242cc462e4afb20bc8cf80",
+    "recommended": true
+  },
+  "requested": [
+    "P2.4"
+  ],
+  "canonical": [
+    "P2.4"
+  ]
+}

@@ -9,10 +9,20 @@ import subprocess
 import sys
 
 
+def normative_decision(path: Path) -> bool:
+    """Design/phase decisions are sealed; item execution grants have their own gates."""
+    text = path.read_text(encoding='utf-8')
+    item = re.search(r'^item:\s*([^\n]+?)\s*$', text, re.M)
+    if item is None:  # Legacy D1–D8 remain normative stable inputs.
+        return True
+    subject = item[1].strip().strip('"\'')
+    return subject == 'design' or re.fullmatch(r'P\d+', subject) is not None
+
+
 def design_inputs(plan: Path) -> set[str]:
     """Stable design closure; execution outputs and rolling views are not seal inputs."""
     expected = {
-        'plan.md', 'roadmap.md', 'open-questions.md',
+        'plan.md', 'roadmap.md',
         'artifacts/source-inventory.json', 'scripts/task-check.py',
         'scripts/test-design-guards.py', 'findings/whole-plan-astra-review.md',
         'research/01b-acceptance-source-supplement.md',
@@ -21,8 +31,10 @@ def design_inputs(plan: Path) -> set[str]:
     }
     # Keep exact owning contract names explicit for the per-phase checker contracts.
     expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py"})
-    for folder in ('brief', 'research', 'decisions'):
+    for folder in ('brief', 'research'):
         expected.update(str(path.relative_to(plan)) for path in (plan / folder).rglob('*') if path.is_file())
+    expected.update(str(path.relative_to(plan)) for path in (plan / 'decisions').glob('D*.md')
+                    if path.is_file() and normative_decision(path))
     for number in range(1, 12):
         expected.add(f'scripts/validate-p{number}.py')
         expected.add(f'phases/P{number}/P{number}.md')
@@ -99,6 +111,38 @@ def design_ready(plan: Path) -> None:
     print("Design gate PASS: 11 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned")
 
 
+def policy_lint(plan: Path, runtime: Path) -> int:
+    """Keep structural lint while the owner disables token admission for this plan."""
+    sys.path.insert(0, str(runtime / "lib"))
+    sys.path.insert(0, str(runtime.parent.parent))
+    from task import plan_lint
+    policy = json.loads((plan / "research/09-read-budget-policy.json").read_text())
+    if policy != {
+        "schema_version": "plan-execution-policy/v1",
+        "version": "2.0.0",
+        "token_admission": "disabled",
+        "scope": "all-items",
+        "owner_decision": "decisions/D37-disable-token-admission.md",
+    }:
+        raise ValueError("invalid token-admission disablement policy")
+
+    class OwnerDiagnostics(plan_lint.Diagnostics):
+        def error(self, path, line, msg):
+            if msg.startswith("read-budget-v1:"):
+                return
+            super().error(path, line, msg)
+
+    diagnostics = OwnerDiagnostics()
+    plan_lint.lint_plan(plan, diagnostics)
+    for message in diagnostics.errors:
+        print("ERROR: " + message)
+    for message in diagnostics.warnings:
+        print("WARNING: " + message)
+    print(json.dumps({"policy": policy, "result": "PASS" if diagnostics.ok else "FAIL",
+                      "errors": len(diagnostics.errors), "warnings": len(diagnostics.warnings)}, ensure_ascii=False))
+    return 0 if diagnostics.ok else 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", choices=("lint", "downstream", "design"), required=True)
@@ -116,7 +160,7 @@ def main() -> int:
         command = [sys.executable, str(script)]
         command += [str(plan)] if args.check == "lint" else ["--plan-dir", str(plan), "--item", "P1.4"]
         print(json.dumps({"command": command, "cwd": str(Path.cwd())}), flush=True)
-        return subprocess.run(command, check=False).returncode
+        return policy_lint(plan, roots[0]) if args.check == "lint" else subprocess.run(command, check=False).returncode
     except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as exc:
         print(f"Task runtime check FAIL: {exc}", file=sys.stderr)
         return 1

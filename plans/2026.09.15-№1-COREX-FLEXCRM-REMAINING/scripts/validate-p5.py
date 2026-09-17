@@ -34,9 +34,10 @@ def candidate(plan):
             v.require(match is not None and match[1].strip() not in {'','—'}, f'{path}/{field} empty')
         v.require('--check design' in body and 'decisions/D6.md' in body, 'D4/D6 gate missing')
         v.require('[NEEDS CLARIFICATION' not in body, 'unresolved internal choice')
-        reads=body.split('committed sources:')[1].split('**Implementation Rules:**')[0]
-        for read in re.findall(r'(?:packages|docs|tests|delivery)/[\w./-]+',reads):
-            v.require((plan.parents[1]/read.rstrip('.')).is_file(),f'missing committed read: {read}')
+        required_reads = re.search(r'^\*\*Required Reads:\*\*\s*(.*?)(?=^\*\*|\Z)', body, re.M | re.S)
+        v.require(required_reads is not None, f'{path}/Required Reads missing')
+        for read in re.findall(r'`((?:packages|docs|tests|delivery)/[^`]+)`', required_reads[1]):
+            v.require((plan.parents[1]/read.rstrip('.')).is_file(), f'missing committed read: {read}')
     ownership=a.table(plan,'research/P5-wakeup-design.md','R / AC ownership',('R','Producer','Cases / obligations','Consumer / gate')); v.exact(ownership,'R',{'R09','R10'})
     rows=a.table(plan,'research/P5-wakeup-design.md','Required local case IDs',('Report','Required Case IDs'))
     v.exact(rows,'Report',set(REPORTS))
@@ -95,7 +96,7 @@ def seal(plan):
     edges=a.table(plan,path,'Producer edges',('Producer','Contract/version','Consumer','Required receipt','Failure model'))
     v.require({'P4','P7','P8','P9','P10','P11'}<={x['Consumer'] for x in edges},'consumer edges missing')
     rows=a.table(plan,path,'Sealed inputs',('Path','SHA256'));v.exact(rows,'Path',{x['Path'] for x in rows})
-    required=set(REPORTS)|{'research/P5-wakeup-design.md','research/P5-design-rag.md','decisions/D10-workflow-wakeup.md','phases/P5/P5.md','research/05-integrated-design.md','research/03-gates.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','delivery/workflow-wakeup-install-qualification-20260915/receipt.md'}|{f'phases/P5/P5.{n}.md' for n in range(1,7)}
+    required=set(REPORTS)|{'research/P5-wakeup-design.md','research/P5-design-rag.md','decisions/D10-workflow-wakeup.md','phases/P5/P5.md','research/05-integrated-design.md','research/03-gates.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','artifacts/qualification/p5/wakeup-install-receipt.md'}|{f'phases/P5/P5.{n}.md' for n in range(1,7)}
     v.require(required<={x['Path'] for x in rows},'seal mandatory inputs missing')
     for row in rows:v.require(v.digest(a.resolve_input(plan,row['Path']))==row['SHA256'],'seal input changed')
 

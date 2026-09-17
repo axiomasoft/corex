@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "launch": "fresh Codex process, inline prompt",
+  "syntax": "bash -n, without execution",
+  "model": "gpt-5.6-terra",
+  "effort": "high",
+  "launch_sha256": "8b04b226d068edae9c9e0b60494dcd8a03e496ecfd477618846f86ea8c7f9db5",
+  "prior_D30_verification": "historical resume launch before explicit new-session request; not current launch verification",
+  "budget_waived": false,
+  "product_execution": false
+}

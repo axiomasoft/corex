@@ -1,0 +1,24 @@
+
+  [31;1m⨯[39;22m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ClaimLifecycleConformanceTest[22m [90m>[39m it a newer interrup…   
+[39;1m  Exception "Illuminate\Validation\ValidationException" not thrown.[39;22m
+
+  at [32mtests/Feature/ClaimLifecycleConformanceTest.php[39m:[32m253[39m
+    249▕     expect(fn () => $lifecycle->requestExport($account))->toThrow(RuntimeException::class);
+    250▕     $second = DB::table('root_account_exports')->where('id', '!=', $first)->value('id');
+    251▕     expect(strcmp($second, $first))->toBeGreaterThan(0);
+    252▕     DB::table('root_account_exports')->update(['created_at' => '2026-09-15 00:00:00+00']);
+  ➜ 253▕     expect(fn () => $lifecycle->purge($account))->toThrow(ValidationException::class);
+    254▕     expect(fn () => $this->p32Archive->adapter()->drop($account))->toThrow(RuntimeException::class);
+    255▕     expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeTrue();
+    256▕ });
+    257▕
+
+  [33m1   [39m[39;1mtests/Feature/ClaimLifecycleConformanceTest.php[39;22m:[39;1m253[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (11 assertions)[39m
+  [90mDuration:[39m [39m0.73s[39m
+  [90mRandom Order Seed:[39m [39m1789500158[39m
+

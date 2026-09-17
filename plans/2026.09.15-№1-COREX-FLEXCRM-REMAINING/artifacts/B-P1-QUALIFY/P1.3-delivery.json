@@ -1,0 +1,61 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:1e126e8fe48451bde39877bda219bbc59b379ea1e0184c17a2612dadb2c64974",
+    "command_id": "task:plan-exec",
+    "package": "task",
+    "version": "0.18.0"
+  },
+  "commit_sha": "41a2c9317c0f8db62b6422151c3d9b8462dcb877",
+  "continuity": {
+    "evidence": [
+      "batch:ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "continue-root",
+    "reason": "context-telemetry-unavailable",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:8ea12379902058e8fca98d1c4fbe9e07c83549c2d93376d51226166455d00d7e",
+    "plan": "sha256:8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+    "state": "sha256:268b4d538fcbb32827aafdc4b8786add3413c25aa3115f7e75154ee75c8bb5b9"
+  },
+  "journal": {
+    "command": "plan-exec",
+    "line": 41,
+    "result": "closed-green",
+    "run_id": "0c18ac412218b6430918ff44085ffbb27694efc8d902984ac137e57f1d6e779d",
+    "sha256": "sha256:0179d97f2fc4af3eaa3a711c776cfd689d5517bf0d5292c5ed8b650fac5d432b"
+  },
+  "next_exact": "exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.4",
+  "plan_id": "2026.09.15-№1-COREX-FLEXCRM-REMAINING",
+  "rationale": {
+    "open_risks": "Source-owner numeric/schema/confirmation/translation/privacy/cache choices; D10 local strict facade kept; E2/E3 source/config/receipt boundaries; E5 older public release kept. All future effective DI/AP/release/runner/consumer outcomes unfilled.",
+    "remaining": "P1.4 Not started, native bundle current and admission ALLOW. Continue same root; stop after P1.4."
+  },
+  "recommendation": "**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.4\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B-P1-QUALIFY |\n| Model | gpt-5.6-sol |\n| Thinking | high |\n| Context | continue-root |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"continue-root\", \"reason\": \"context-telemetry-unavailable\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "B-P1-QUALIFY",
+    "command": null,
+    "context": "continue-root",
+    "continuity": {
+      "evidence": [
+        "batch:ae25cbd66c031c9a9926719e8d3f37a3027171c07ad1b80b373c3a585af4ace3",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "continue-root",
+      "reason": "context-telemetry-unavailable",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "gpt-5.6-sol",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P1.3"
+}

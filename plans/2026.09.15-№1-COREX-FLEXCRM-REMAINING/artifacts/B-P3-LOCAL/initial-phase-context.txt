@@ -1,0 +1,111 @@
+# P3 — Довести generic tenancy, storage и identity adapters
+
+## Phase Context
+
+P3 detailed plan-only by gpt-5.6-sol/high, provider-attested 2026-09-15. Execution not admitted:
+D4 all P1–P11 detailed + integrated design-finish first. Mandatory neutral Perplexity successful
+после initial failure/немедленного уведомления, raw/digest и primary checks в P3-design-rag.md.
+Design consumes existing source and future producer **contracts**; runtime GREEN not manufactured.
+
+> **Контракт фазы (contract-first).** Потребляет: actual sealed P1/P2 accepted per-row catalogue,
+> exact affected G-API/G-SCHEMA/G-STORAGE/G-DEPENDENCY; negotiated central profile before affected
+> adoption. Производит: exact local supported adapter receipts; storage branch available to P4/P6
+> independently of membership deployment. Released/installed candidate in P9, effective deployment P10.
+
+> **Phase Assurance | v1.**
+> Impact: security-external
+> Integration Seams: tenant-context-to-filesystem · sql-claim-to-template-lifecycle · central-transport-to-pair-inbox · clock-fence-to-final-credential-write · version-source-to-redis-menu
+> Live or Irreversible: no
+> Audit Intent: direct-close-eligible
+> Rationale: Local adapter boundaries include auth/concurrent SQL; each item pins real local tests and fault cases, supported mode and pending deployment distinct. Item Review full for hard seams, no phase audit consent. Current design has no GREEN product.
+
+## Scope Included
+
+R01–R07/R33; preserve A01–A03/A06/A09, physical DB-per-account + boxed separation. Qualified
+storage/claim/lifecycle/identity transport; approved opt-in physical pair/inbox mapping and final-write
+admission; native SDK optional storage, real isolated Redis display cache. Trusted context/default deny.
+
+## Scope Excluded
+
+IdP/AS/central ledger/role/membership writer server, product endpoints/UI, control-plane saga/DNS/TLS,
+fleet operation/deployment, automatic promotion of references, foreign source/runtime changes.
+
+## Dependencies
+
+P2.4 actual catalogue before execution. P3.1/P3.2/P3.3 independent after own receipts;
+P3.3→P3.4→P3.5; P3.3→P3.6; all six→P3.7. P4/P6 consume P3.1 storage branch only;
+P9 consumes final P3.7, P10 effective profile/provider/auth/timing after P9 release. No backwards runtime edge.
+
+## Required Reads
+
+Design: plan.md; status.md; roadmap.md; handoff.md; decisions/D4.md/D5.md/D6.md/D7.md/D8.md;
+brief/00-owner-request.md; brief/01-owner-design-policy.md; docs/dev-doctrine.md;
+research/01-traceability.md; research/01a-acceptance-index.md; research/02-baseline.md;
+research/03-gates.md; research/04-architecture.md; research/05-integrated-design.md;
+research/P2-contract-design.md; selected committed source/tests listed per item, source-observations.
+Execution only: sealed P1/P2 findings and own predecessor outputs; future files not mandatory design inputs.
+
+## Files
+
+Design only: phases/P3/**, research/P3-adapter-design.md, research/P3-design-rag.md,
+artifacts/P3-design/**, scripts/validate-p3.py, decisions/D8.md; affected integrated picture/plan Routing/roadmap/handoff and
+owned generated views/bundle. Runtime allowlists frozen per item; no repo-wide blanket permission.
+
+## Validation
+
+Read-only scripts/validate-p3.py --stage design; named shared lint, next technically runnable P1.1 bundle freshness; P3 bundles deferred until actual
+producers. Source inputs/100-source/52-R/365-parent preservation, seven ordered eleven-field specs,
+R/AC/gate mapping, neutral RAG/raw digest + two independent origins per major choice, typed continuity
+and one Next. At execution D34 both root lanes + affected package, D98 src mutation, isolated native
+SDK/Redis/PG seam faults. All 34 DI/13 AP unchanged, no inferred deployed acceptance.
+
+## Deliverables
+
+Six exact local branch receipt reports and sealed findings/P3-adapter-receipts.md;
+minimal supported adapters/no-delta on exact source. Installed/released proof P9, effective proof P10.
+
+## Routing
+
+D18: execution guide — research/08-execution-batches.md. Группы сохраняют context,
+per-item gates и ready-subset admission; cold installed fixture не новая сессия агента.
+
+| Batch | Items | Model class/effort | Exec | Review | Почему |
+|:--|:--|:--|:--|:--|:--|
+| B-P3-LOCAL | P3.1 | implementation/high | plan-exec | full | recommended: Общий storage/physical PG harness; независимые isolation и claim reviews сохраняются. |
+| B-P3-LOCAL | P3.2 | implementation/high | plan-exec | full | recommended: Общий storage/physical PG harness; независимые isolation и claim reviews сохраняются. |
+| B-P3-IDENTITY | P3.3 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.4 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.5 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.6 | implementation/high | plan-exec | full | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+| B-P3-IDENTITY | P3.7 | implementation/medium | plan-exec | light | recommended: Общие transport/pair/fence/cache inputs; read-only итоговый seal переиспользует проверенные branch receipts, требует P3.1/2. |
+
+## GREEN
+
+All required local R01–R07/R33 conformance on exact supported source/native/physical mapping PASS;
+zero fixture-only production labels, zero lost original atoms. P3.7 seal/current downstream contracts
+complete. Required external provider/DI/AP deployed proofs remain P10, no released claim until P9.
+Missing necessary supported local adapter/mapping/conformance cannot close with mere NO-GO packet.
+
+## DoR
+
+- [x] Seven exact eleven-field specs, FQNs/candidate signatures/DDL/defaults, Files and Validation.
+- [x] Neutral mandatory successful RAG + directly checked independent primary origins; alternatives/impact.
+- [x] DAG and affected protected adoption receipts/absence/default deny specified.
+- [ ] Full P1–P11 integrated design-finish current; actual P1/P2 predecessors accepted.
+- [ ] Actual affected G receipts and next P3 runnable bundle after producers, before runtime.
+
+## Item Index
+
+| Item | Specification |
+|:--|:--|
+| P3.1 | [P3.1](P3.1.md) — storage/context conformance |
+| P3.2 | [P3.2](P3.2.md) — SQL claim/maintenance/export |
+| P3.3 | [P3.3](P3.3.md) — identity/central transport |
+| P3.4 | [P3.4](P3.4.md) — durable pair/inbox/restore |
+| P3.5 | [P3.5](P3.5.md) — final credential lease/fence |
+| P3.6 | [P3.6](P3.6.md) — account-list/Redis display cache |
+| P3.7 | [P3.7](P3.7.md) — local seal/downstream |
+
+## Phase Handoff
+
+Current phase is designed, execution states Not started; handoff.md recommends P4 design only.

@@ -1,0 +1,36 @@
+{
+  "schema_version": "corex-p2-final-verification/v1",
+  "command": [
+    "python3",
+    "plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/task-check.py",
+    "--check",
+    "lint"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "exit_code": 0,
+  "stdout_file": "P2-final-lint.txt",
+  "phase": "P2",
+  "phase_state": "closed-green",
+  "items": {
+    "P2.1": "GREEN",
+    "P2.2": "GREEN",
+    "P2.3": "GREEN",
+    "P2.4": "GREEN"
+  },
+  "next_item": "P3.1",
+  "next_item_started": false,
+  "shared_runtime_changed": false,
+  "git_whitespace_check": {
+    "default_exit_code": 2,
+    "findings": "Seven blank-at-EOF findings only in sealed product markdown and preserved attempt snapshots; bytes retained to preserve source digests.",
+    "excluding_blank_at_eof_command": [
+      "git",
+      "-c",
+      "core.whitespace=-blank-at-eof",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "excluding_blank_at_eof_exit_code": 0
+  }
+}

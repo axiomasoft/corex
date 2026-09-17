@@ -1,0 +1,129 @@
+{
+  "schema_version": "plan-context-receipt/v1",
+  "item_id": "P2.3",
+  "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+  "members": [
+    {
+      "role": "plan-core",
+      "path": "plan.md",
+      "sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "bytes": 32648
+    },
+    {
+      "role": "phase-context",
+      "path": "phases/P2/P2.md",
+      "sha256": "395ee3900d98501338c71670734c8501f122d349df62588768b7f9bc221bf35f",
+      "bytes": 9039
+    },
+    {
+      "role": "item-spec",
+      "path": "phases/P2/P2.3.md",
+      "sha256": "0d9da50a8d1528903b6fcc898c9c3905be2d217ac957bcaa9d92920370c467a6",
+      "bytes": 10638
+    },
+    {
+      "role": "bundle",
+      "path": "bundles/P2.3.json",
+      "sha256": "a594f0d505487383e9678cb2ef3e14193134715881447bda7eefc4218dc8fa0c",
+      "bytes": 59257
+    },
+    {
+      "role": "item-state",
+      "path": "phases/P2/P2.3.state.md",
+      "sha256": "bfa5fdaf934a6e397392cd4c74094df0d7e8ec25c836bd97200fef4438818ae3",
+      "bytes": 601
+    }
+  ],
+  "root_byte_reuse": [
+    {
+      "role": "plan-core",
+      "sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "source_snapshot": "5af744766d23323495c31928a83eb560eebda23568e7431054c81dd2b8386a68",
+      "reason": "byte-identical full terminal root read before D20; no summary substitution"
+    },
+    {
+      "role": "phase-context",
+      "sha256": "395ee3900d98501338c71670734c8501f122d349df62588768b7f9bc221bf35f",
+      "source_snapshot": "5af744766d23323495c31928a83eb560eebda23568e7431054c81dd2b8386a68",
+      "reason": "byte-identical full terminal root read before D20; no summary substitution"
+    }
+  ],
+  "exposed_chunks": [
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "plan-core",
+      "path": "plan.md",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "8f3d6e8713f5827b105391836593885dd77d0e5576a17e604fcdc7d78985ba36",
+      "offset": 0,
+      "next_offset": 32648,
+      "complete": true,
+      "terminal_marker": "plan-context-terminal-v1"
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "phase-context",
+      "path": "phases/P2/P2.md",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "395ee3900d98501338c71670734c8501f122d349df62588768b7f9bc221bf35f",
+      "offset": 0,
+      "next_offset": 9039,
+      "complete": true,
+      "terminal_marker": "plan-context-terminal-v1"
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "item-spec",
+      "path": "phases/P2/P2.3.md",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "0d9da50a8d1528903b6fcc898c9c3905be2d217ac957bcaa9d92920370c467a6",
+      "offset": 0,
+      "next_offset": 10638,
+      "complete": true,
+      "terminal_marker": "plan-context-terminal-v1"
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "bundle",
+      "path": "bundles/P2.3.json",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "a594f0d505487383e9678cb2ef3e14193134715881447bda7eefc4218dc8fa0c",
+      "offset": 0,
+      "next_offset": 22000,
+      "complete": false
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "bundle",
+      "path": "bundles/P2.3.json",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "a594f0d505487383e9678cb2ef3e14193134715881447bda7eefc4218dc8fa0c",
+      "offset": 22000,
+      "next_offset": 44000,
+      "complete": false
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "bundle",
+      "path": "bundles/P2.3.json",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "a594f0d505487383e9678cb2ef3e14193134715881447bda7eefc4218dc8fa0c",
+      "offset": 44000,
+      "next_offset": 59257,
+      "complete": true,
+      "terminal_marker": "plan-context-terminal-v1"
+    },
+    {
+      "schema_version": "plan-context-chunk/v1",
+      "role": "item-state",
+      "path": "phases/P2/P2.3.state.md",
+      "snapshot_sha256": "a2a9c48aed16ab1a7121dd4e86c5bff80cf0682d749854e0bc8e2e8259d3e8b9",
+      "member_sha256": "bfa5fdaf934a6e397392cd4c74094df0d7e8ec25c836bd97200fef4438818ae3",
+      "offset": 0,
+      "next_offset": 601,
+      "complete": true,
+      "terminal_marker": "plan-context-terminal-v1"
+    }
+  ],
+  "status": "complete"
+}

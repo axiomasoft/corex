@@ -1,0 +1,17 @@
+# B-P3-LOCAL — scope complete
+
+P3.1 and P3.2 native closed-green, original attempt 1, same root; no agents. P3 remains open. Product execution stops at P3.2. All mandatory checks and both semantic reports GREEN; do not repeat code checks for bookkeeping.
+
+Owner accepted exact two scoped receipts bound to packet SHA256 4751d9796cd98b6bf73b3b5e21cd451917b8f68d264fb305cc9558de54f0d1e9. Acceptance original preserved; D25 metadata normalization provenance is decision-metadata-reconciliation.json. Budget D23 advisory only local two items; all sources, individual read limits, mandatory checks and shared runtime preserved.
+
+P3.1 run 354839f50fe4c06d63579f587e557fcc8892cd7522c38573506b92aa5cd4f6aa. P3.2 run e59a7a507384076c5c01e2f446b5b156e2d6a53788ebe52f6b2e33b7d1358201. Native journal/state/check-results are authoritative. Decision projection interrupted after P3.2 terminal, recovered without second START/terminal; P3.2-projection-recovery.json records this honestly.
+
+Required actual reads complete: required-read-progress.json 105 selections; P3.2-required-read-progress.json 101 selections. Reuse unchanged qualified actual source reads; do not load whole corpus again. Final own code delta proof P3.2-final-bundle-delta-proof.json. No public Contracts/schema/default DI/shared lock/runtime delta.
+
+Product result: symlink/traversal/context/private filesystem guards and optional ObjectTenantStorage; workspace and physical DB context restore conformance; real separate-worker PG locks/unique-index authority/crash/lost response replay; template exhaustion/tamper; physical pg_dump/pg_restore archive readability/hash/size/account binding and actual DROP crash/retry conformance. Existing lifecycle verifier now mandatory, latest export ties deterministic. All exact reports and root/package/Arch/contracts/antiweakening/D98 checks preserved. Tenancy final 463 passed, 1493 assertions, one intentional SDK-absence skip (actual absence separately qualified). PHP8.4/8.5 × Laravel12/13 scoped compatibility proven in disposable labs; upstream private 83/83 PASS, full public-mode exclusions explicit.
+
+Next handoff B-P3-IDENTITY P3.3–P3.7 only. Historical next-admission BATCH_STALE preserved. D29 repaired only original next P3.3 read carrier, preserving all sources/limits/checks. Native materialize_next_ready produced bundles/P3.3.json; current B-P3-IDENTITY-handoff-admission.json verdict ALLOW for routing/structure only. No identity START or product execution. Actual complete identity reads, strict budget/per-read admission, current route and matching owner receipts still required before future START/protected writes; local D23 does not extend. Native handoff recommends exec-items for identity after actual carrier repair and structural ALLOW; future post-ALLOW command and full scope in handoff.md.
+
+P9/P10 installed/effective production qualifications remain owning gates. No new owner decision required to finish local scope. Only owned disposable MinIO removed after completed checks; existing PG test container preserved. Safe cleanup receipt storage-service-cleanup.json. One scoped final commit and verified native terminal delivery finish this local invocation.
+
+Final handoff-only D29 exposes the pre-existing strict future identity aggregate budget block. It is outside completed B-P3-LOCAL product execution; no waiver granted. Individual oversized duplicate Inputs reads repaired without omitting any source. Final structural reconciliation must retain native future D2a BLOCKED separately from local closure PASS.

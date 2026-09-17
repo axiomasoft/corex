@@ -16,6 +16,9 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="Pg">
+            <directory>tests/Pg</directory>
+        </testsuite>
 
         <!-- P2.13 — статические гейты изоляции (stancl, cross-DB FK, партиция
              путей миграций): без БД и контейнера, поэтому вне pg-лейна. -->

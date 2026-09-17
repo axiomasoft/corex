@@ -22,15 +22,21 @@
         "illuminate/support": "^12.0|^13.0"
     },
     "require-dev": {
+        "league/flysystem-aws-s3-v3": "3.35.3",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.13",
         "orchestra/testbench": "^10.0|^11.0",
-        "pestphp/pest": "^4.0"
+        "pestphp/pest": "^4.0",
+        "corex/wakeup": "@dev"
     },
     "autoload": {
         "psr-4": {
             "CoreX\\Tenancy\\": "src/"
         }
+    },
+    "suggest": {
+        "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
+        "corex/wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it."
     },
     "autoload-dev": {
         "psr-4": {
@@ -48,6 +54,14 @@
         {
             "type": "path",
             "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../wakeup"
+        },
+        {
+            "type": "path",
+            "url": "../modules"
         }
     ],
     "minimum-stability": "dev",

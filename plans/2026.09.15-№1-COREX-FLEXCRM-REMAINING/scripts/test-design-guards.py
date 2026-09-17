@@ -103,6 +103,46 @@ class DesignSealTests(unittest.TestCase):
         finally:
             path.write_bytes(before)
 
+    def test_generated_decision_views_and_open_questions_do_not_invalidate_design(self):
+        for name in ('decisions/_current.md', 'decisions/_archive.md',
+                     'decisions/_index.md', 'open-questions.md'):
+            with self.subTest(name=name):
+                path = self.plan / name
+                before = path.read_bytes()
+                try:
+                    path.write_bytes(before + b'\nexecution bookkeeping\n')
+                    self.check()
+                finally:
+                    path.write_bytes(before)
+
+    def test_new_item_execution_grant_does_not_reopen_whole_plan_design(self):
+        path = self.plan / 'decisions/D999-execution-grant.md'
+        try:
+            path.write_text(
+                '---\nid: D999\ndate: 2026-09-16\nstatus: accepted\n'
+                'item: P5.4\nitems: [P5.4]\nsupersedes: []\nsuperseded_by: null\n---\n'
+                '## Решение\n\nExecution-only grant.\n\n## Почему\n\nOwner authority.\n',
+                encoding='utf-8')
+            self.check()
+        finally:
+            path.unlink()
+
+    def test_new_design_decision_requires_delta_review_and_new_seal(self):
+        path = self.plan / 'decisions/D999-design-change.md'
+        try:
+            path.write_text(
+                '---\nid: D999\ndate: 2026-09-16\nstatus: accepted\n'
+                'item: design\nitems: [design]\nsupersedes: []\nsuperseded_by: null\n---\n'
+                '## Решение\n\nChange a stable contract.\n\n## Почему\n\nNew premise.\n',
+                encoding='utf-8')
+            with self.assertRaises(ValueError):
+                self.check()
+        finally:
+            path.unlink()
+
+    def test_item_spec_semantic_change_still_invalidates_design(self):
+        self.changed_bytes_fail('phases/P5/P5.4.md')
+
 
 class ConsumerVerifierTests(unittest.TestCase):
     def setUp(self):

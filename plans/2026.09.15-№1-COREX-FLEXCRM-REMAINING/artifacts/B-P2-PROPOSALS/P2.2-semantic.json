@@ -1,0 +1,33 @@
+{
+  "status": "green",
+  "item": "P2.2",
+  "coverage": {
+    "identity_R": 10,
+    "wire_profiles": 3,
+    "unregistered_exact_list_candidate": 1,
+    "auth_boundaries": 5,
+    "negative_uncertain_lifetime_cases": 8
+  },
+  "automated_semantic_checks": [
+    "exact DTO query/request/response field order equals parsed pinned PHP source",
+    "state and reason enums equal pinned source",
+    "all source SHA match actual bytes",
+    "all ten mixed R reference full sealed atoms, destinations equal P1 ledger",
+    "internal accounts-list unchanged/non-authority/unregistered; exact existing FQN",
+    "future case owners present; no executed-test or deployment assertion"
+  ],
+  "root_review": [
+    "old/new signatures unchanged; PHP nullable fields, constructor/parser distinction, errors/counters/unknown-fields retained",
+    "selected internal DTO keep plus exact P3 list wire candidate and finite external C09 target packet; no invented issuer/URI/registration",
+    "token/cert authentication distinct from permission, audit actor untrusted, row scoping separately required",
+    "fresh trusted resolver/scoped state keeps lifetimes; absence/default/unsupported deny",
+    "public host may omit private adapter; adapter itself requires AzGuard",
+    "all DI/AP and G adoption remain owning obligations; zero unresolved internal profile choice"
+  ],
+  "grant_count": 0,
+  "runtime_live_proof": false,
+  "products": {
+    "findings/P2-identity-profile.md": "e9819018a40d8d1d99bf41690c6057722536e5b98f8d75d8cb8615a404c057d9",
+    "findings/P2-auth-ownership.md": "041196cc9db87c6f5141c73a0a26f224472082c8c6cf62acfc5af97320ff7af6"
+  }
+}

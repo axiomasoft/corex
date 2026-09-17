@@ -1,0 +1,43 @@
+{
+  "allow": true,
+  "code": "allow",
+  "journal_line": null,
+  "audit_policy": {
+    "action": "direct-close",
+    "audit_required": false,
+    "close_allowed": true,
+    "code": "PHASE_DIRECT_CLOSE_ASSURED",
+    "reasons": [
+      "green-acceptance-no-approved-audit"
+    ],
+    "assurance": {
+      "schema_version": "phase-assurance/v1",
+      "impact": "public-contract",
+      "integration_seams": [
+        "domain-port-to-adapter",
+        "api-policy-context",
+        "central-profile-to-consumer",
+        "catalogue-to-phase-spec"
+      ],
+      "live_or_irreversible": false,
+      "audit_intent": "direct-close-eligible",
+      "rationale": "фаза производит exact proposals, не actual API/schema/profile mutation. Scoped semantic checks и структурные gates каждого item; GREEN не deployed/released acceptance. Independent phase audit только по отдельному owner-bound admission."
+    },
+    "impact": null,
+    "audit_admission": {
+      "allowed": false,
+      "code": "AUDIT_CONSENT_MISSING",
+      "record": null
+    },
+    "diagnostics": [],
+    "next_kind": "close",
+    "next_exact": "close: task:plan-close 2026.09.15-№1-COREX-FLEXCRM-REMAINING P2",
+    "effective_review": "light",
+    "routing_reviews": {
+      "P2.1": "light",
+      "P2.2": "light",
+      "P2.3": "light",
+      "P2.4": "light"
+    }
+  }
+}

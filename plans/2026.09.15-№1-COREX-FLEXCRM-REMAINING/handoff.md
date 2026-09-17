@@ -1,67 +1,35 @@
-# HANDOFF — 2026-09-15 — after P11
+# HANDOFF — 2026-09-17 — after P7.9
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1 P1.2 P1.3 P1.4
+**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P8.1
 
 | Параметр | Значение |
-|:--|:--|
-| Batch | B-P1-QUALIFY |
-| Model class | frontier |
-| Model | gpt-5.6-sol |
-| Effort | high |
+|---|---|
+| Batch | B-P8-TOOLS |
+| Model class | implementation |
+| Effort | medium |
 | Capabilities | — |
-| Суть | Выполнить группу P1.1–P1.4 последовательно с первого ready item |
-| Exec / Review | plan-exec / light |
-| Context | cold-start-root: design-root-terminal |
-| Admission | current scripts/task-check.py --check design exits0; P1.1 bundle current |
+| Context | continue-root |
+| Суть | Registry/API source qualification for headless tool surface. |
 
-**Done:** Whole-plan design review P1–P11, решения D17 и исправления 10 подтверждённых findings. Ни один execution item не закрыт.
-
-**Remaining:** Все 78 execution items в35 envelopes, начиная с B-P1-QUALIFY; actual runtime/release/effective/consumer acceptance по их именованным gates.
-
-**Sources of truth:** plan.md; phases/P1/P1.1.md; decisions/D17-whole-plan-review.md; findings/whole-plan-astra-review.md; artifacts/design-finish.md; bundles/P1.1.json.
-
-## Результат
-
-D18:35 context envelopes (24groups/11solo). Первый carrier остаётся P1.1, explicit
-requested scope включает P1.1–P1.4; full-chain admission пока BATCH_STALE из-за будущих
-producer outputs, sequential in-root admission сохраняет одну сессию по готовности.
-
-
-Полностью проверены11phase contexts/78specs и межфазовые contracts;10 подтверждённых
-findings исправлены, один initial routing finding отклонён как ошибка аудита.
-Исследованы AzGuard и7публичных проектов;7новых нейтральных Perplexity запросов,
-полные дополнительные ответы05–07 и прямые source/test checks закрыли retrieval gaps.
-D17 фиксирует exact producer/DTO/migration/release/verifier/finish corrections.
-Все78 execution items Not started. Design acceptance не PHP/installed/released/live proof.
-
-## Native Codex command
-
-Next выше называет полный requested group scope. Native prompt ниже сначала допускает
-только ready P1.1 и явно поручает остальные три пункта через successive in-root
-admission; он не отправляет неготовую цепочку целиком в admit_batch. Текущий Task lint
-требует перечислять весь оставшийся scope в Next даже для recommended group.
-
-
-Запускать в новой сессии после проверки current finish; в authoring сессии не выполнялся:
-
-```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1
-Scope: выполнить B-P1-QUALIFY (P1.1–P1.4) последовательно в этом root. Сначала прочитать plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/handoff.md, research/08-execution-batches.md и decisions/D18-execution-batches.md относительно этого плана; проверить scripts/task-check.py --check design. Начать с ready P1.1; после каждого actual closure обновить state/bundle следующего ready item и повторить native admission, затем продолжить через task:plan-exec без нового root. Не допускать неготовый full-chain range, не фабриковать future outputs, сохранять все checks/grants; при реальной context boundary сохранить checkpoint и оставшийся scope. За P1.4 не выходить.'
+```
+task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P8.1
 ```
 
-## Источники и gates
+```session-continuity-decision/v1
+{"evidence":["journal:P7.9:closed-green","findings/P7-utility-receipts.md","artifacts/qualification/p7/installed-qualification-receipt.md"],"outcome":"continue-root","reason":"compatible-active-work","runnable":true,"schema_version":"session-continuity-decision/v1"}
+```
 
-plan.md; decisions/D17-whole-plan-review.md; findings/whole-plan-astra-review.md;
-research/05-integrated-design.md; research/06-azguard-patterns.md;
-research/07-open-source-patterns.md; artifacts/design-finish.md;
-artifacts/astra-whole-plan-review/checks; bundles/P1.1.json.
+**Done:** P7.9 seals all eight P7 branch reports and the portable utility installed cohort across R17/R20/R23/R24/R25.
 
-P1.1 создаёт actual source reconciliation, затем P1.2/3 actual atom/equivalent mapping.
-При квалифицированном mismatch возвращаться к affected source/design и обновить finish.
-Public API/schema/dependency, immutable engine/source, private/runner/release, full DI/AP/
-FE/current-month/provider и independently accepting consumer receipts остаются будущими
-named gates. Не переписывать originals или закрывать чужие milestones по документации.
+**Ready:** P8.1 owns registry/API/schema source qualification for the headless tool branch.
 
-Исторические timeout/login/no-answer относятся к прежним фазовым RAG. Нынешние проблемы
-Perplexity — неполные ответы01/02/04 и неверный duplicate-ID claim03; исправления и raw
-история сохранены. No-data/unknown/missing runtime evidence не становится PASS.
+**Remaining:** P8.1–P8.7, then P9/P10/P11 per routing.
+
+**Open risks:** Q-P2-052 external gate still pending before production address-driver adoption; P8 invoke receipt remains future for OPT-07 authority boundary.
+
+**Sources of truth:** `journal.jsonl`; `findings/P7-utility-receipts.md`; `artifacts/qualification/p7/installed-qualification-receipt.md`; `artifacts/qualification/p7/installed.json`; `research/P7-utility-design.md`.
+
+**Workarounds/Deferred/Open questions:**
+- workarounds: —
+- deferred: —
+- open_questions: —

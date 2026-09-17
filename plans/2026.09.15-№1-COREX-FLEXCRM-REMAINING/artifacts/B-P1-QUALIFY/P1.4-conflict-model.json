@@ -1,0 +1,176 @@
+{
+  "status": "REVIEWED",
+  "scope": "deterministic qualification and finite owning branches; no new grant",
+  "conflicts": [
+    {
+      "ID": "C01",
+      "Question": "B12: all primary keys UUID versus wfl_logs identity and no updated_at",
+      "Evidence": "B12 AC-1; B12 §5.2/§5.4; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Accept the explicitly bounded log exception, or revise the engine blueprint under its owner; CoreX does not choose workflow DDL.",
+      "Owner": "Standalone workflow source/engine owner",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Bind exact revised or exception-approved source/DDL SHA before engine conformance and P5 binding; independent generic declaration work may proceed.",
+      "Affected R": "R09 R10"
+    },
+    {
+      "ID": "C02",
+      "Question": "B13: universal UUID primary-key statement versus composite vrt_records code/type/ref",
+      "Evidence": "B13 AC-1 and §2.6; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Accept the composite vertical-ownership registry exception, or owner-revise that schema; do not force a CoreX entity identity rewrite.",
+      "Owner": "FlexCRM domain/vertical schema and source owners",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Exact logical/physical schema choice and migration receipt for the CRM/vertical consumer; unrelated accepted task primitives remain independent.",
+      "Affected R": "R18 R42"
+    },
+    {
+      "ID": "C03",
+      "Question": "B15: UUID table rule versus singleton fld_schema_state smallint key",
+      "Evidence": "B15 AC + schema singleton definition; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Bounded singleton exception, or engine-owner revised DDL; descriptor compilation cannot decide storage.",
+      "Owner": "Standalone attributes engine/schema owner",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Immutable selected engine source and exact schema exception/DDL approval before affected P6 adoption.",
+      "Affected R": "R11"
+    },
+    {
+      "ID": "C04",
+      "Question": "B31: default scope uniqueness versus nullable workspace key semantics",
+      "Evidence": "B31 AC and saved-view schema; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Explicit NULLS NOT DISTINCT/partial-key strategy with proven concurrency, or owner-selected equivalent; no guessed DDL grant.",
+      "Owner": "Saved-view schema/source owner",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Approve exact default-scope uniqueness mapping and execute duplicate/race negatives on selected driver before P4 persistence acceptance.",
+      "Affected R": "R28"
+    },
+    {
+      "ID": "C05",
+      "Question": "B32: all writes require confirmation versus write-med relaxation proposal",
+      "Evidence": "B32 §3.4/§8.4.1/Q25 and AC; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Retain stricter confirmation; or exact scoped relaxation by AI/tool policy owner. Irreversible/external outcomes retain mandatory double confirmation.",
+      "Owner": "Standalone AI + consumer tool policy owners",
+      "Disposition": "proposal",
+      "Decision or resume": "Proposal is unaccepted. Bind exact permission/confirmation policy SHA and classified operations before affected invocation acceptance; no blanket relaxation.",
+      "Affected R": "R27 R35 R36"
+    },
+    {
+      "ID": "C06",
+      "Question": "B35: exact-name translation allowlist versus row 11 description translation",
+      "Evidence": "B35 AC and §9 row 11; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Name-only allowlist; or explicitly add description by consumer translation owner. Universal locale binding remains independent.",
+      "Owner": "Consumer locale/translation source owner",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Exact field allowlist decision and positive/negative translation fixture before product translation acceptance.",
+      "Affected R": "R23 R26"
+    },
+    {
+      "ID": "C07",
+      "Question": "B16: privacy automation versus manual/legal-retention redaction obligations",
+      "Evidence": "B16 §8.18 versus §9 Q3–Q4; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Bounded lawful automatic tombstone/redaction worker; or retained manual/legal procedure with explicit unsupported automation outcome.",
+      "Owner": "Vaulter consumer + privacy/legal retention owners",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Select exact deletion/redaction/retention policy, physical mapping and actor receipt; no unconditional automation acceptance.",
+      "Affected R": "R37"
+    },
+    {
+      "ID": "C08",
+      "Question": "B27: invalid ownable-scope fallback to account versus B11 default-none denial",
+      "Evidence": "B27 §3.12/Q44 versus B11 deny policy; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Strict denial for unknown scope; or owner-selected bounded fallback with authorization negatives. Existing adapter cannot decide consumer policy.",
+      "Owner": "flex/tasks + AzGuard/consumer authorization policy owners",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Accept exact fallback/deny branch and unknown entity/department/scope receipts before affected role-writer adoption.",
+      "Affected R": "R19 R51"
+    },
+    {
+      "ID": "C09",
+      "Question": "B34 cosmetic surviving account-list cache versus later strict no-old-list version-loss rule",
+      "Evidence": "B34 §3.4; archived TENANCY-IDENTITY P7.1 qualified protocol; ledger R07/E1; Pinned original index + acceptance map Parents/Atoms/Requirements; full snapshot/source and parent SHA are in those anchors.",
+      "Alternatives": "Display-only stale cache with independent live authorization and explicit protocol approval; or strict cold lookup on version loss. No permission from stale lists.",
+      "Owner": "Central accounts-list protocol + consumer cache owners",
+      "Disposition": "needs-owner-decision",
+      "Decision or resume": "Exact accepted version/cache/Redis-loss/regrant branch, source/profile SHA and installed negatives before R07 acceptance.",
+      "Affected R": "R07 R40"
+    },
+    {
+      "ID": "C10",
+      "Question": "P1.1 native synthetic .md. path differs from actual closed .md product",
+      "Evidence": "artifacts/B-P1-QUALIFY/P1.1-actual-product-reconciliation.json; actual P1-source-reconciliation SHA c8c6f5368d3d0d1aeb54f12eda521f28f89e3af1eca89fbbf8ea70870056caae",
+      "Alternatives": "Use actual byte-verified product projection; rewriting closed spec/journal would invalidate provenance.",
+      "Owner": "Root executor / CoreX plan maintainer",
+      "Disposition": "reconciled",
+      "Decision or resume": "Actual .md path + full SHA + native terminal/structural/byte proof retained; punctuation is carrier metadata, no source or accepted condition changed.",
+      "Affected R": "R01 R02 R03 R04 R05 R06 R07 R08 R09 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R32 R33 R34 R35 R36 R37 R38 R39 R40 R41 R42 R43 R44 R45 R46 R47 R48 R49 R50 R51 R52"
+    },
+    {
+      "ID": "C11",
+      "Question": "Old release/readiness and local receipts describe different immutable cohorts",
+      "Evidence": "Ledger Cohorts E1–E5, P1.3-cohort-applicability.json; E2 cb79f180 source differs on 51 package paths; current seven package subtrees match E3 6d23d6e3; E5 source 9152dde",
+      "Alternatives": "Qualify by source+environment+covered outcome; timestamp, tree equality or focused test success cannot transfer whole-suite/deployment acceptance.",
+      "Owner": "CoreX release maintainer + accepting consumer/operators",
+      "Disposition": "reconciled",
+      "Decision or resume": "Keep E1 local D10, E2 local install, E3 bounded installed app, E4 candidate-only and E5 old public results distinct. Remaining exact current release/runner/installed/effective receipts stay open.",
+      "Affected R": "R01 R02 R03 R04 R05 R06 R08 R17 R18 R33 R39 R41 R42 R45 R46 R47 R51 R52"
+    },
+    {
+      "ID": "C12",
+      "Question": "R04 strict typed facade already exists; public/effective approval remains absent",
+      "Evidence": "Ledger R04/E1 and D10 five current matching source hashes; changed provider/config not covered by old D10",
+      "Alternatives": "Reuse accepted finite local facade and qualify current BC/profile/binding; only demonstrated missing universal outcome can justify a new seam.",
+      "Owner": "CoreX contract/release + central AS/resource owners",
+      "Disposition": "reconciled",
+      "Decision or resume": "No absent boolean-to-DTO feature asserted. Keep current contract; DI-01–20/34 and AP-02–05/13, exact public major/BC and deployed adoption remain unfilled.",
+      "Affected R": "R04 R05 R06 R40 R45 R46 R52"
+    },
+    {
+      "ID": "C13",
+      "Question": "Tenancy informational config pins differ from immutable composer dependency selection",
+      "Evidence": "Ledger Source anchors tenancy composer/config/CHANGELOG; axiomasoft alpha1 pair versus informational dev-master#76e / rc7",
+      "Alternatives": "Installed dependency identity follows actual approved composer/lock/dist; informational legacy text grants no moving-ref fallback.",
+      "Owner": "Tenancy dependency/source + release owners",
+      "Disposition": "reconciled",
+      "Decision or resume": "Qualify exact license/channel/ref/lock/ZIP/runtime identity before effective adoption; no dependency change or fallback authorization in P1.",
+      "Affected R": "R02 R45 R52"
+    },
+    {
+      "ID": "C14",
+      "Question": "Historical pre-1.0 MINOR prose differs from current Contracts major rule",
+      "Evidence": "Current AGENTS Contracts rule and ledger all seven CHANGELOG anchors; G-API/AP-13",
+      "Alternatives": "Apply current owner rule to actual proposed changes; preserve historical changelogs as scoped history.",
+      "Owner": "CoreX public contract/release owner",
+      "Disposition": "reconciled",
+      "Decision or resume": "No implicit minor/BC grant. Actual old/new API report, per-package CHANGELOG and exact owner-selected major required for new contract delta.",
+      "Affected R": "R04 R10 R11 R12 R14 R15 R16 R17 R20 R23 R24 R25 R28 R32 R36 R45 R50 R51 R52"
+    },
+    {
+      "ID": "C15",
+      "Question": "Layer scanner historical wording/explicit literal exceptions versus current three-level doctrine",
+      "Evidence": "docs/dev-doctrine.md; tests/Arch/LayerTest.php full SHA in ledger S021; current AGENTS",
+      "Alternatives": "Current L0 CoreX / L1 FlexCMS / L2 FlexCRM doctrine; existing history allowances do not establish runtime conformance or permit broader exemptions.",
+      "Owner": "CoreX architecture/test maintainer",
+      "Disposition": "reconciled",
+      "Decision or resume": "Keep non-vacuous scanner; exact selected source require/import/literal and independent-consumer results remain required. No new allowlist, engine, upward dependency or source-clean claim.",
+      "Affected R": "R08 R09 R11 R14 R17 R18 R36 R45 R47 R50 R51 R52"
+    },
+    {
+      "ID": "C16",
+      "Question": "Six whitespace delimiters projected as independent conditions in the closed map",
+      "Evidence": "B11 AC-8.a3/a5/a7/a9/a11 newline fragments; B34 AC-19.a2 space fragment; original parent SHA/body retained in P1.2 model and index",
+      "Alternatives": "Preserve all 688 historical row IDs; attach six delimiter records to preceding substantive conditions. Four inherited PHPStan target predicates remain operative.",
+      "Owner": "Root executor / requirement map maintainer",
+      "Disposition": "reconciled",
+      "Decision or resume": "Effective P1.4 acceptance projection: 682 substantive predicates + six provenance delimiters, all 365 parents/52 R retained. No separate execution receipt for whitespace. Closed P1.2/P1.3 carriers remain immutable; exact six associations listed below and independently checked.",
+      "Affected R": "R39 R40 R43"
+    },
+    {
+      "ID": "C17",
+      "Question": "Working-source identity is not source-owner approval",
+      "Evidence": "P1.1 Sources and source-inventory: 66 untracked, four modified, 30 committed; accepted-source/proposal/historical distinctions pinned",
+      "Alternatives": "Use already bound exact source bytes; otherwise retain explicit proposal and request exact owning source binding when its subset is consumed.",
+      "Owner": "Named source owners from P1.1 reconciliation",
+      "Disposition": "external-receipt",
+      "Decision or resume": "No blanket approval for working blueprints/foreign item states. Exact source-owner binding or named proposal remains mandatory G-SOURCES; independent accepted subsets remain usable.",
+      "Affected R": "R01 R02 R03 R04 R05 R06 R07 R08 R09 R10 R11 R12 R13 R14 R15 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R32 R33 R34 R35 R36 R37 R38 R39 R40 R41 R42 R43 R44 R45 R46 R47 R48 R49 R50 R51 R52"
+    }
+  ]
+}

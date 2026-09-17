@@ -1,0 +1,32 @@
+{
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": true,
+    "context_health": "sufficient",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "e8612c77e4cd536c4bd4bb3b0e4dd3a052ec273d3f62db675c3bb005c5a981f6",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "scope-complete",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "artifacts/B-P2-PROPOSALS/checkpoint.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "evidence": [
+      "batch:e8612c77e4cd536c4bd4bb3b0e4dd3a052ec273d3f62db675c3bb005c5a981f6",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:artifacts/B-P2-PROPOSALS/checkpoint.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  }
+}

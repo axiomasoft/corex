@@ -1,0 +1,25 @@
+{
+    "name": "corex/search-meilisearch",
+    "description": "Optional Meilisearch candidate adapter for corex/search.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "corex/core": "@dev",
+        "corex/search": "@dev",
+        "meilisearch/meilisearch-php": "1.16.1"
+    },
+    "autoload": {"psr-4": {"CoreX\\SearchMeilisearch\\": "src/"}},
+    "autoload-dev": {"psr-4": {"CoreX\\SearchMeilisearch\\Tests\\": "tests/"}},
+    "extra": {"laravel": {"providers": ["CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"]}},
+    "repositories": [{"type": "path", "url": "../core"}, {"type": "path", "url": "../search"}],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=meilisearch",
+        "test:meilisearch": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=meilisearch",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search-meilisearch/src --memory-limit=1G",
+        "lint:check": "../../vendor/bin/pint --test"
+    }
+}

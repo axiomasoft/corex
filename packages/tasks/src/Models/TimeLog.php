@@ -6,9 +6,15 @@ namespace CoreX\Tasks\Models;
 
 use CoreX\Concerns\HasConfiguredId;
 use CoreX\Tasks\Enums\TimeLogSource;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $id
+ * @property int $minutes
+ * @property DateTimeInterface $spent_on
+ */
 final class TimeLog extends Model
 {
     use HasConfiguredId;

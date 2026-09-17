@@ -1,0 +1,215 @@
+[
+  {
+    "command": [
+      "composer",
+      "lint:check"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:14:27.197633+00:00",
+    "ended_at": "2026-09-15T19:14:27.623070+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/root-lint.log",
+    "sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+  },
+  {
+    "command": [
+      "composer",
+      "analyse"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:05:01.908024+00:00",
+    "ended_at": "2026-09-15T19:05:04.269600+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/root-analyse.log",
+    "sha256": "53b21167f0d10d8a75f0dbb67f46f1d6aef06fadce33d4489871c015097a4a00"
+  },
+  {
+    "command": [
+      "composer",
+      "test"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:09:03.955317+00:00",
+    "ended_at": "2026-09-15T19:09:05.864669+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/root-test.log",
+    "sha256": "0bd82d30b5f51bedcb13824484235aeeb1a6292e14d90181cee1174492d83f50"
+  },
+  {
+    "command": [
+      "composer",
+      "test:arch"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:09:03.654035+00:00",
+    "ended_at": "2026-09-15T19:09:03.955066+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/root-arch.log",
+    "sha256": "6398545e279908c97ac6bd39f53b424a8e699a6c75b09682be0a40193bde1e7e"
+  },
+  {
+    "command": [
+      "composer",
+      "contract-guard"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:05:03.025593+00:00",
+    "ended_at": "2026-09-15T19:05:03.257484+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/contract-guard.log",
+    "sha256": "a334227c140656736b9d4e09a826f97fc41a65ad23f44d0ef32a3e169d070f07"
+  },
+  {
+    "command": [
+      "bash",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:09:05.864923+00:00",
+    "ended_at": "2026-09-15T19:09:08.003387+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/anti-weakening.log",
+    "sha256": "33edc27b58fdd61a001de6ca02e5110a7d46c3cef971c802d41e188fdf725914"
+  },
+  {
+    "command": [
+      "composer",
+      "--working-dir=packages/tenancy",
+      "analyse"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:05:04.041161+00:00",
+    "ended_at": "2026-09-15T19:05:05.398854+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/tenancy-analyse.log",
+    "sha256": "24e59243dc0a1217384b54918893f8e7224662724d22f6fc5c673844a4c29f3d"
+  },
+  {
+    "command": [
+      "composer",
+      "test:pg"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:05:05.515395+00:00",
+    "ended_at": "2026-09-15T19:05:21.690126+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/root-pg.log",
+    "sha256": "48274a2e6f744ea52cfd8052908d6010f61d663288bb4b2f980fed38515ac315"
+  },
+  {
+    "command": [
+      "composer",
+      "--working-dir=packages/tenancy",
+      "test"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:05:21.690354+00:00",
+    "ended_at": "2026-09-15T19:06:36.176218+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/tenancy-test.log",
+    "sha256": "c3604c7a8e5d626781441d79eb260df729427b1b2d559053480ab05fbabafca7"
+  },
+  {
+    "command": [
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "runtime": {
+      "php": "8.4.1"
+    },
+    "started_at": "2026-09-15T19:06:36.176685+00:00",
+    "ended_at": "2026-09-15T19:06:44.203355+00:00",
+    "exit_code": 0,
+    "environment": {
+      "APP_ENV": "testing",
+      "PGSQL_DATABASE": "corex_test",
+      "PGSQL_PORT": "5434",
+      "files": "unique Testbench paths and generated storage roots"
+    },
+    "log": "artifacts/B-P3-LOCAL/P3.1/checks/mutations.log",
+    "sha256": "d85696ede8461983e1da64df96426566e7ba1dd821fcf3f460fd7cef9e5a907d"
+  }
+]

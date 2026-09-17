@@ -1,11 +1,18 @@
 # Changelog
 
+## Unreleased
+
+- Added immutable `DataScope`, `RecordRef`, and `WriteToken` boundary DTOs for optional data services.
+
 Все заметные изменения `corex/core` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
 
 ### Fixed
+
+- Scoped storage rejects recursively encoded backslashes/NUL and replaced local
+  root symlinks, including directory listings and usage measurement.
 
 - Feature definitions isolate duplicate inserts in a savepoint, preserving outer
   PostgreSQL transactions and administrator toggles. Database-poll publishers

@@ -57,15 +57,15 @@ function migratePublishedInIsolation(array $files): string
     return $dir;
 }
 
-it('publishes exactly the 8 sys_* migrations and they migrate on a clean PG schema', function (): void {
+it('publishes exactly the 10 sys_* migrations and they migrate on a clean PG schema', function (): void {
     $target = publishTarget();
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
 
     $published = glob($target.'/*_create_sys_*_table.php') ?: [];
-    // P1.24/D44: sys_pubsub_cursors joined sys_pubsub_messages as an 8th
-    // sys_* migration (durable subscriber cursor).
-    expect($published)->toHaveCount(8);
+    // P4.7 adds the saved-view scope lock and views tables as two additive,
+    // tenant-scoped sys_* migrations after the durable PubSub cursor set.
+    expect($published)->toHaveCount(10);
 
     $isolated = migratePublishedInIsolation($published);
 
@@ -73,7 +73,9 @@ it('publishes exactly the 8 sys_* migrations and they migrate on a clean PG sche
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_audit_log'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_feature_flags'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_departments'))->toBeTrue()
-        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_pubsub_cursors'))->toBeTrue();
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_pubsub_cursors'))->toBeTrue()
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_saved_view_scopes'))->toBeTrue()
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_saved_views'))->toBeTrue();
 
 });
 

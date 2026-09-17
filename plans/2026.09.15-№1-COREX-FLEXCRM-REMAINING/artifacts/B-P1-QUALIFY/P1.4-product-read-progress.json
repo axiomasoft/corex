@@ -1,0 +1,290 @@
+{
+  "schema_version": "p1-product-read-progress/v1",
+  "item": "P1.4",
+  "streams": [
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 0,
+      "next_offset": 18000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 18000,
+      "next_offset": 36000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 36000,
+      "next_offset": 54000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 54000,
+      "next_offset": 72000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 72000,
+      "next_offset": 90000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 90000,
+      "next_offset": 108000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 108000,
+      "next_offset": 126000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 126000,
+      "next_offset": 144000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 144000,
+      "next_offset": 162000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 162000,
+      "next_offset": 180000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 180000,
+      "next_offset": 198000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 198000,
+      "next_offset": 216000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 216000,
+      "next_offset": 234000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 234000,
+      "next_offset": 252000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 252000,
+      "next_offset": 270000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 270000,
+      "next_offset": 288000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 288000,
+      "next_offset": 306000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 306000,
+      "next_offset": 324000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 324000,
+      "next_offset": 342000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 342000,
+      "next_offset": 360000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 360000,
+      "next_offset": 378000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 378000,
+      "next_offset": 396000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 396000,
+      "next_offset": 414000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 414000,
+      "next_offset": 432000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 432000,
+      "next_offset": 450000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 450000,
+      "next_offset": 468000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 468000,
+      "next_offset": 486000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 486000,
+      "next_offset": 504000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 504000,
+      "next_offset": 521999,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 521999,
+      "next_offset": 539999,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 539999,
+      "next_offset": 557999,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 557999,
+      "next_offset": 575999,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-acceptance-map.md",
+      "source_sha256": "682e74f02a34abe361be072a22e0e980cb6a8b9f4e0039ab93d8041fe2d4d7b9",
+      "offset": 575999,
+      "next_offset": 592701,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 0,
+      "next_offset": 18000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 18000,
+      "next_offset": 36000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 36000,
+      "next_offset": 54000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 54000,
+      "next_offset": 72000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 72000,
+      "next_offset": 90000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 90000,
+      "next_offset": 108000,
+      "status": "complete actual raw chunk read; untruncated"
+    },
+    {
+      "path": "findings/P1-evidence-ledger.md",
+      "source_sha256": "ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87",
+      "offset": 108000,
+      "next_offset": 123565,
+      "status": "complete actual raw chunk read; untruncated"
+    }
+  ],
+  "complete_chunks": 40,
+  "total_chunks": 40,
+  "next_chunk": null,
+  "products_complete": true
+}

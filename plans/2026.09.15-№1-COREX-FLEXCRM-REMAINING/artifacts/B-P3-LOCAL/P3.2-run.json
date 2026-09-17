@@ -1,0 +1,11 @@
+{
+  "schema_version": "plan-recovery/v1",
+  "allowed": true,
+  "code": "START_ITEM",
+  "requested_item": "P3.2",
+  "active_item": "P3.2",
+  "mode": "start",
+  "run_id": "e59a7a507384076c5c01e2f446b5b156e2d6a53788ebe52f6b2e33b7d1358201",
+  "attempt": 1,
+  "reason": "P3.2: \u0437\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0441\u0442\u0430\u0440\u0442 \u0434\u043e \u043f\u0435\u0440\u0432\u043e\u0439 product write"
+}
