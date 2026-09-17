@@ -109,3 +109,8 @@ P9.1 intake intent→P9.2 build attestation→P9.3/4 recipe/installed→P9.5/6 h
 frontier/high = gpt-5.6-sol/high; первый runnable carrier P1.1, затем P1.2–P1.4
 в том же root по per-item readiness. Подробная карта35 envelopes и порядок при
 P4/P5 interleave/P10 window — research/08-execution-batches.md (D18).
+
+## Operational diagnostic
+
+SKM diagnostic from 2026-09-17: [findings/SKM-diagnostic-2026-09-17.md](findings/SKM-diagnostic-2026-09-17.md).
+It is operational evidence only; it does not change P6 dependencies or acceptance status.

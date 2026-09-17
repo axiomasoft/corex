@@ -26,7 +26,7 @@ Bounded `corex/recurrence` adapter over qualified `rlanvin/php-rrule` v3.0.0. Fr
 
 | Path | SHA256 | Role |
 |---|---|---|
-| `delivery/utility-source-qualification-20260915/fixtures/recurrence-source.lock` | `39dea96b364aea45c996adeea80124917087dc864316919770115d5d74e6e58c` | immutable source pin |
+| `artifacts/qualification/p7/recurrence-source.lock` | `39dea96b364aea45c996adeea80124917087dc864316919770115d5d74e6e58c` | immutable source pin |
 | `research/P7-utility-design.md` | `e8030ad4a090f1bb13f6def331f8858606fe2716754d5e8e9b12c8ef2c4cbc43` | frozen bounded profile |
 | `packages/recurrence/src/Contracts/RecurrenceExpander.php` | `68dc6b7679a8c0023102a183193ac2717fa5bb5486e8672bcb379367868f684b` | public expand port |
 | `packages/recurrence/src/Internal/RRuleRecurrenceExpander.php` | `ca0b30934390f0727e4c5f61d4fe0fb954f39ccf078b6e8a17daf2c1fef3d8c3` | qualified wrapper |

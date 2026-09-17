@@ -87,7 +87,7 @@ def seal(plan):
  rows=a.table(plan,path,'Requirements',('R','Items','Local case receipts','Installed receipts','Pending effective gates','Owner','Resume'));v.exact(rows,'R',RIDS)
  edges=a.table(plan,path,'Producer edges',('Producer','Contract/version','Consumer','Required receipt','Failure model'));v.require({'P8','P9','P10','P11'}<={x['Consumer'] for x in edges},'downstream edges gap')
  anchors=a.table(plan,path,'Sealed inputs',('Path','SHA256'));v.exact(anchors,'Path',{x['Path'] for x in anchors})
- required=set(REPORTS)|{DESIGN,'research/P7-design-rag.md','decisions/D12-portable-utilities.md','research/05-integrated-design.md','research/03-gates.md','phases/P7/P7.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','findings/P2-gate-requests.md','delivery/utility-install-qualification-20260915/receipt.md'}|{f'phases/P7/P7.{i}.md' for i in range(1,10)}
+ required=set(REPORTS)|{DESIGN,'research/P7-design-rag.md','decisions/D12-portable-utilities.md','research/05-integrated-design.md','research/03-gates.md','phases/P7/P7.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','findings/P2-gate-requests.md','artifacts/qualification/p7/installed-qualification-receipt.md'}|{f'phases/P7/P7.{i}.md' for i in range(1,10)}
  v.require(required<={x['Path'] for x in anchors},'mandatory seal inputs gap')
  for x in anchors:v.require(v.digest(a.resolve_input(plan,x['Path']))==x['SHA256'],'seal input changed '+x['Path'])
 

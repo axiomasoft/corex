@@ -34,7 +34,8 @@ def candidate(plan):
    v.require(match is not None and match[1].strip() not in {'','—'},name+'/'+field+' empty')
   v.require('--check design' in body and 'decisions/D6.md' in body,'D4/D6 missing')
   v.require('[NEEDS CLARIFICATION' not in body,'unresolved internal choice')
-  for path in re.findall(r'(?:packages|docs|tests|delivery)/[\w./-]+',body.split('committed sources:')[1].split('**Implementation Rules:**')[0]):
+  reads=body.split('**Required Reads:**',1)[1].split('**Implementation Rules:**',1)[0]
+  for path in re.findall(r'(?:packages|docs|tests|delivery)/[\w./-]+',reads):
    v.require((plan.parents[1]/path.rstrip('.')).is_file(),'missing committed read '+path)
  design=a.file(plan,'research/P6-data-design.md').read_text()
  ownership=a.table(plan,'research/P6-data-design.md','R / AC ownership',('R','Producer','Cases / obligations','Consumer / gate'))
@@ -88,7 +89,7 @@ def seal(plan):
  edges=a.table(plan,path,'Producer edges',('Producer','Contract/version','Consumer','Required receipt','Failure model'))
  v.require({'P7','P8','P9','P10','P11'}<={x['Consumer'] for x in edges},'downstream consumers missing')
  anchors=a.table(plan,path,'Sealed inputs',('Path','SHA256'));v.exact(anchors,'Path',{x['Path'] for x in anchors})
- required=set(REPORTS)|{'research/P6-data-design.md','research/P6-design-rag.md','decisions/D11-data-import-search.md','phases/P6/P6.md','research/05-integrated-design.md','research/03-gates.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','findings/P2-gate-requests.md','delivery/data-search-install-qualification-20260915/receipt.md'}|{f'phases/P6/P6.{i}.md' for i in range(1,9)}
+ required=set(REPORTS)|{'research/P6-data-design.md','research/P6-design-rag.md','decisions/D11-data-import-search.md','phases/P6/P6.md','research/05-integrated-design.md','research/03-gates.md','findings/P1-requirements-lock.md','findings/P1-acceptance-map.md','findings/P2-contract-catalogue.md','findings/P2-contract-proposals.md','findings/P2-gate-requests.md','artifacts/qualification/p6/data-search-install-receipt.md'}|{f'phases/P6/P6.{i}.md' for i in range(1,9)}
  v.require(required<={x['Path'] for x in anchors},'mandatory seal inputs missing')
  for row in anchors:v.require(v.digest(a.resolve_input(plan,row['Path']))==row['SHA256'],'seal input changed')
 def main():

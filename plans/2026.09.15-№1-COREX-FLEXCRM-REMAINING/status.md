@@ -134,13 +134,13 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P7.1 | Квалифицировать recurrence/intl/task/source equivalents | 🟢 Done | 2026-09-17 |
 | P7.2 | Реализовать pure bounded recurrence adapter | 🟢 Done | 2026-09-17 |
-| P7.3 | Доставить только missing project/sprint/time-log primitive commands | ⬜ Not started | — |
-| P7.4 | Связать recurrence→tasks с durable wakeup и optional signal | ⬜ Not started | — |
-| P7.5 | Доставить typed locale и explicit translation fallback | ⬜ Not started | — |
-| P7.6 | Доставить exact money/rate snapshots и provider-neutral conversion | ⬜ Not started | — |
-| P7.7 | Доставить offline versioned geography/reference provider | ⬜ Not started | — |
-| P7.8 | Связать optional localized search/labels и address suggestions | ⬜ Not started | — |
-| P7.9 | Зафиксировать installed portable utility cohort и exact R receipts | ⬜ Not started | — |
+| P7.3 | Доставить только missing project/sprint/time-log primitive commands | 🟢 Done | 2026-09-17 |
+| P7.4 | Связать recurrence→tasks с durable wakeup и optional signal | 🟢 Done | 2026-09-17 |
+| P7.5 | Доставить typed locale и explicit translation fallback | 🟢 Done | 2026-09-17 |
+| P7.6 | Доставить exact money/rate snapshots и provider-neutral conversion | 🟢 Done | 2026-09-17 |
+| P7.7 | Доставить offline versioned geography/reference provider | 🟢 Done | 2026-09-17 |
+| P7.8 | Связать optional localized search/labels и address suggestions | 🟢 Done | 2026-09-17 |
+| P7.9 | Зафиксировать installed portable utility cohort и exact R receipts | 🟢 Done | 2026-09-17 |
 
 ## Phase P8
 

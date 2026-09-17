@@ -38,7 +38,7 @@ not imply publication or product deployment.
 | findings/P4-notification-outbox.md | cb349a921f949841c2c5544b387f663493d9c3ee7d1ae4a5dae9392d133de558 |
 | findings/P4-notification-channels.md | 991d89ce20ee82a37316aa01b2f3c51588852cf55f068c60839b30e93245edeb |
 | findings/P4-notification-digest.md | 71ecafd3ca0ec861275d4c66912132c7a2c24e32602db311df3a5cae3920487d |
-| findings/P4-saved-views.md | 6aae316fb539c5ed58364b437ee720e5d25594cc6384521fd648216de476310e |
+| findings/P4-saved-views.md | 53d3c4926476a09f87a118275bc2e86a7dd94c50b49e3237d4e4f85c77292415 |
 | research/P4-extension-design.md | 957873c6995cb3811983217a67f99d5068416f4f46da8a1653650cbc595d143a |
 | research/P4-design-rag.md | 87ad139479bd4cbd96aef681b5f7ded723206e6ec4735e0114ed3d0555876090 |
 | research/03-gates.md | b9a2ad93007d76152c25dbf2f4c6b908c2182482900c1f7f144c6ffb5857db3f |
@@ -51,5 +51,5 @@ not imply publication or product deployment.
 | phases/P4/P4.4.md | 9079a11b1906ffb233cc8f3a06d0059085b0c062b517378331ba70a82d97a7ed |
 | phases/P4/P4.5.md | 7739d0df3557fc882101e1339a356227f1e502959adf9b798ee3a72ac720dba8 |
 | phases/P4/P4.6.md | 1950310f4ccd9892fdac85c3b85722c33bb35e10e7990de55bc35450e4eb818e |
-| phases/P4/P4.7.md | 23305159eb13b01fb23a81b917a935e4b369a4592bc0961c9822b5babee138f7 |
-| phases/P4/P4.8.md | f1266a955d52149094083674a93c3c388b814065e2b468cfa329c27f2a7dc438 |
+| phases/P4/P4.7.md | 2f869f4a081d72f0dafc9053f06abdbf718f6dc27df1ff56fed7b0aa6916727d |
+| phases/P4/P4.8.md | 96ac3e271f5359a0c4d1c6c0d17e58582430665f11011785b98d33b904ef58c1 |

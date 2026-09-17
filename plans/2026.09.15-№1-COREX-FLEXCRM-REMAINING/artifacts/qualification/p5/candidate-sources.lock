@@ -1,0 +1,30 @@
+# P5.1 immutable candidate sources
+
+## License decision
+
+Both selected dependencies are MIT. MIT permits commercial use, modification,
+distribution, sublicensing and sale provided that the notice is retained. This
+matches CoreX's MIT distribution and does not impose a copyleft obligation on
+the paid FlexCRM product.
+
+## FSM: symfony/workflow 7.4.9
+
+- Source: https://github.com/symfony/workflow
+- Immutable split-repository commit: `0c7651c6c8f152348184d3dc3e7b40039c87d5d0`
+- Canonical component-suite source: https://github.com/symfony/symfony tag
+  `v7.4.9`, commit `c573f81c9bdc13e5a6192e2236120fc157cd97ca`
+- License: MIT; `LICENSE` SHA-256
+  `cbad2ab8fcfa03932eaef0d2c88482f30a4198f18ae7ed6f9cef96a94e861296`
+- Package manifest SHA-256
+  `0a9de2ce793afac42d7b0cc90bbf2fb4abe9de67346f97c5261ae27f31186b80`
+
+## Durable engine: durable-workflow/sdk 2.0.10
+
+- Source: https://github.com/durable-workflow/sdk-php
+- Immutable tag commit: `19b2695d0bbfb37f0dd1ac54632bd5b1d5023b67`
+- License: MIT; `LICENSE` SHA-256
+  `15929b61280a0882c020003c88086b7a63ef86be9df303467479bf607cdda1aa`
+- Package manifest SHA-256
+  `431fbd846994d49963f8a54b56094f7b4aca4e82923ea46ff9003f13bb6cd773`
+
+Neither clean source tree declares a `corex/*` dependency.

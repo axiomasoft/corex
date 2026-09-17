@@ -1,0 +1,7 @@
+{
+  "php": "8.4.1",
+  "icu": "76.1",
+  "tzdb": "2024.2",
+  "sqlite": "available",
+  "postgres": "not exercised by pure recurrence qualification"
+}

@@ -77,6 +77,8 @@ DI/AP/FE/month/provider и independently accepting-consumer receipts по owning
 Auth Laravel12 declaration не считается Laravel13 proof. Unknown/no-data/незакрытое
 окно не превращаются в PASS; исходные thresholds и external residual owners сохранены.
 Design finish не предоставляет protected write grants и не закрывает original milestones.
+D40 subsequently supplies the narrow matching owner receipt for P6.6/P6.7
+`Q-P2-034`–`Q-P2-039`; it does not widen any other phase or external authority.
 
 **Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P1.1 P1.2 P1.3 P1.4
 
@@ -617,15 +619,11 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | decisions/D22-P2-successor-admission.md | e95e76009278edc9a0afced828167bf8fd73112b5dd6f4b58b7fd23fe89b3658 |
 | decisions/D23-P3-local-read-budget-advisory.md | 8a747470cd85b2312ef52b6fe5992cbaf3e3e9f15d118e92ddc54470c47b5b83 |
 | decisions/D24-P3-local-read-carrier-repair.md | fa4e45e0fad170142812f0cf134ff88b42480de536560ebed95f2d7fb5c62a31 |
-| decisions/D25-P3-local-owner-adoption.md | 080ccc67f4f9041ff4ae9292e2b37eecf5cf795da8fba72b1bdbe7529528a075 |
 | decisions/D26-P3-local-usage-adjacency-repair.md | c1941937af863e54058e592b2d2a58255a07081ff2b70abf46530aaa8405a843 |
 | decisions/D27-P3-claim-read-carriers.md | 82a83bdf16a7bce077d510f5da5752c52bfa398adaafa8b7cb3701dd8920f5ac |
 | decisions/D28-local-handoff-producer-readiness.md | fed5502672d518ef09dd027c222e06d2635efef421d74b60dd8d7134f14b1216 |
 | decisions/D29-identity-handoff-read-carrier.md | c25fa1ac70f1bb364ce3b8464edb242adfa5630737be943dfb42992ddd7d3bc9 |
 | decisions/D3.md | 6af2445122495b980efc08f65ae3023c9b76ae388e3e7e355aed1be0bbc79c46 |
-| decisions/D34-P3.5-final-write-adoption.md | 34625ae2e2f8008844db714271e125adac574716dd6e7500f8dc0808176b7a1a |
-| decisions/D35-P3.6-switcher-local-adoption.md | 98ae21f96213001b7d82c79b03d37da196ee4586b485f4ead4073fdc4513c27f |
-| decisions/D36-P4-media-execution-continuity.md | 3c4f0ebfd4abd8a2f8bdb3f6cf1cc93b9821ca4d54b86f4a12563cfd400fb4e4 |
 | decisions/D37-disable-token-admission.md | af0a639b171f0f205255f1e88cefa53524eeadaf5114e1adb15bdc20e6fe80b4 |
 | decisions/D4.md | 618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16 |
 | decisions/D5.md | fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67 |
@@ -633,11 +631,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | decisions/D7.md | 68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832 |
 | decisions/D8.md | 69c62efb10d483ec735d27ae5b00b029c5bb209d1e1b71cb65baeee957d516d4 |
 | decisions/D9-headless-extensions.md | 2aef863b44bef787110781cff3b69b1fd2b585048850074a71a1c5a224e43e68 |
-| decisions/_archive.md | 4a42540bb4da345c47e4633d6eb8b8a117855f9588ebc1a236de54f127e26c94 |
-| decisions/_current.md | baae51dd2dc53860e004039378b176836d0e9ae7be6b4d299b3cab84391f6973 |
-| decisions/_index.md | 59060976877151d21afb980a18a325c3a38195d123fc9e600d0417062d385a8e |
 | findings/whole-plan-astra-review.md | 94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b |
-| open-questions.md | 2870946354b38fb5416f24beed264bbc740a98898c473557728d57b3bd5704b3 |
 | phases/P1/P1.1.md | 238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c |
 | phases/P1/P1.2.md | 787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c |
 | phases/P1/P1.3.md | 4661b63da5f537d47fa95455f5cd466b7fe33b5e2d7395b2cd3f6dd09dd17411 |
@@ -680,27 +674,27 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | phases/P4/P4.4.md | 9079a11b1906ffb233cc8f3a06d0059085b0c062b517378331ba70a82d97a7ed |
 | phases/P4/P4.5.md | 7739d0df3557fc882101e1339a356227f1e502959adf9b798ee3a72ac720dba8 |
 | phases/P4/P4.6.md | 1950310f4ccd9892fdac85c3b85722c33bb35e10e7990de55bc35450e4eb818e |
-| phases/P4/P4.7.md | 23305159eb13b01fb23a81b917a935e4b369a4592bc0961c9822b5babee138f7 |
-| phases/P4/P4.8.md | f1266a955d52149094083674a93c3c388b814065e2b468cfa329c27f2a7dc438 |
+| phases/P4/P4.7.md | 2f869f4a081d72f0dafc9053f06abdbf718f6dc27df1ff56fed7b0aa6916727d |
+| phases/P4/P4.8.md | 96ac3e271f5359a0c4d1c6c0d17e58582430665f11011785b98d33b904ef58c1 |
 | phases/P4/P4.md | c50765731fb64b75f026335aa613ccdcdb7231056116b4e61c16aae44cbad1f0 |
-| phases/P5/P5.1.md | ae548e36e3a28eb8b802db453262329e985d9f362bdf9169a507003278256e34 |
-| phases/P5/P5.2.md | a0b4b45c777376329bf674ba91540d2b8b0700fa4d2d261e5ad63880671fe41e |
-| phases/P5/P5.3.md | 6867806ef177e03c7aae823de414551a009c92c46bcce5352c47e1bdfd403795 |
-| phases/P5/P5.4.md | 608ee2c875a677583040277a9902d3b67502b475071f6e81b6e6aedded9ef146 |
-| phases/P5/P5.5.md | 453824bff9f6ff4c091ac9b9e8e6f716f24e8402365dc919de00aec316f8ff71 |
-| phases/P5/P5.6.md | b110acacef6c6e6b4302fdfa917838b172893acd9bc9355681a8d3b2dc301e35 |
+| phases/P5/P5.1.md | 2a57793277371ddd15e90361efb50dc9eac5b8db9af5d613a3f3842316340dd0 |
+| phases/P5/P5.2.md | a34fa14647884b91cb14343d2df1ed993af97591ff9b6a1ec06842a13ca47b0f |
+| phases/P5/P5.3.md | ae094c4b98549720e9aac0ef9f89e5e2d918395dc3a222133c670973985bb04d |
+| phases/P5/P5.4.md | ca48e8ed61c5648dfdca290bb369602aa01bf2c63eed2790672281db973d244b |
+| phases/P5/P5.5.md | 9d74daf9e876424432e63a913ee07938f4f870a38dcbc1dbb3149dc826c74105 |
+| phases/P5/P5.6.md | 07862a772de3061d26c6a4c529ffdc6caca9569e5c6c0cba1af98ca763c48c6c |
 | phases/P5/P5.md | c81bbdd13b71204284d446aeb6e31e9f417146a875f01617cf5ec5133d6d9d45 |
-| phases/P6/P6.1.md | b8e74d592f307825bcf86679cacb756eeb6b0cf612e1df201dca48df59105d2e |
-| phases/P6/P6.2.md | d78560542eac026bbf72b7e03ff8ef10f6d301e5641bd3996ca4ff431c2142d1 |
-| phases/P6/P6.3.md | ae4378e7c5dd81e3fec72de4483b5b433416ec3c1b2a732eac5e1f868a706522 |
-| phases/P6/P6.4.md | b7ae58b4d59182c7fef9ec4ca17167d3b2b102d227971dd05cb3949f13746115 |
-| phases/P6/P6.5.md | 97385b8dd7903e9d1b723ecb78de53c06818fc1671aa6134e2d819976e6be3b3 |
-| phases/P6/P6.6.md | 18bfda23310a989894ed4233f90db2615564bcde05c312321bf7d8e62512e4ff |
-| phases/P6/P6.7.md | 65ccaabeee6da73644efb3a176783a9e6cfe4c6a479b41aa78101b9f627bed6a |
-| phases/P6/P6.8.md | 4808c683072a1caf546d92c99417e45cd1ad1ea1cc1ea27245f18d6423de70d8 |
-| phases/P6/P6.md | efa2f8d145c16d5dd33f8a98b8bea212b42bf3291d68d6af3e290d0b31e46fca |
-| phases/P7/P7.1.md | 80b982ccc0735f20dbe2d11c5a0657c356248769e310cf7b318b1819ab66ce7e |
-| phases/P7/P7.2.md | 1a909072934ae9449eb102c0bc758e3fe093f3952b7793fb9dd516431557d8f8 |
+| phases/P6/P6.1.md | 948e62b68923e8d02adff3d7f7b7c5121d1bdba08aaeb659f83d6da221bbdad2 |
+| phases/P6/P6.2.md | 9f4bc43e40b4e82892f58398185b66ee203da5defb4595338a9682584a79f63e |
+| phases/P6/P6.3.md | 3cb006fe080ed4374fce4a277b12c1556220af87f56b6eb746b6666fa427dd9b |
+| phases/P6/P6.4.md | 43625a2a29c0df850cec31dcd23bb4eb327ee7f881c1c857ec1721d1ccd47c0f |
+| phases/P6/P6.5.md | 054e14faefd8921fbb84d060d35124b464f5ce5fdc286bff3dced0040e00fd7e |
+| phases/P6/P6.6.md | da86531888352cb73c540b38f07d25bdacc9b00f690cbb278051da739e7a90d0 |
+| phases/P6/P6.7.md | 45c83f8452b50878388ea9cc1da7281eac54b408d1bfe224788f8ed41f2912b6 |
+| phases/P6/P6.8.md | 9e0a63f4781d931b043903f58f9d94a2b03e0d98f0987f9d1cead7c781f613da |
+| phases/P6/P6.md | 695f529b5c085340542ecffd6eb6de5110cabf267ece91a8e5edfcbf26c3b70c |
+| phases/P7/P7.1.md | 22118617a5dfb8a0acaa934b6142780153c880e49ccf06320bcc226830dccb57 |
+| phases/P7/P7.2.md | 67a0f3fc77df5f7c27a8b55fa134d7588b43d142a68ef8bceb7add0bae1dbc6b |
 | phases/P7/P7.3.md | 6a04bc15451bdb2cc7e6cd5b5cd1d3a5a566eb9ee2046b5b5dca18de83762375 |
 | phases/P7/P7.4.md | e11e137bb11cea2339890c7d94c76506b90b4412b9f67e3b1732d608fc009b13 |
 | phases/P7/P7.5.md | dd2a573adfdda896818ba6f5a2dae194a4407531638d4da8559ebdd8bc0d6103 |
@@ -761,24 +755,21 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | research/P8-tool-design.md | ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca |
 | research/P9-cohort-design.md | 87828181adc3de1af50a098e7882faa5204a1d7e610466b36b242c9b2aa85aeb |
 | research/P9-design-rag.md | 1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1 |
-| roadmap.md | 5093dc5695d7866473762f90a4c5c961a4f659c24a6411f360aa18b8ba0f8de1 |
-| scripts/task-check.py | dd97361e366d907719987acf9b8146183bee82332e3243f02db4872a7824ca8b |
-| scripts/test-design-guards.py | 8cfaa13ed785af4c5370483e3e7c24ef5ce1debb5028bb325f4bc45d9ff5cd1b |
+| roadmap.md | 69c98255cce72f3a8ca269596f8934f46bd14ed18b5bd4bc667183f55f69cc5c |
+| scripts/task-check.py | e62d396f2a85805829170a907af5f53e01b4fe5bd577c64b96a2e4bfbcac1cbe |
+| scripts/test-design-guards.py | 918ec9c899b5305188598003f5fde33d6db15b166b1beb7984e5f105b84610e0 |
 | scripts/validate-p1.py | c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8 |
 | scripts/validate-p10.py | 557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49 |
 | scripts/validate-p11.py | 3ad17b7568ca7aef50356e5b0fc4baf7cd03418a9289ccb4f83ed478a5b718c2 |
 | scripts/validate-p2.py | ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3 |
 | scripts/validate-p3.py | 4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787 |
 | scripts/validate-p4.py | 724f046aedcf91e322436a1f7845187ae7e36c8e3c2919d072b7f8c41edccc27 |
-| scripts/validate-p5.py | 64b5aeb9d66523d9180f8ae2ac5287df341e4e1836871a7991441e67ff9d26b9 |
-| scripts/validate-p6.py | 7dff092df1617a4cd96e4dfff47e2677fdedda201673d7f9d989ce439ff94d70 |
+| scripts/validate-p5.py | 17c54b0390a895f57c62d2e5b3d75d0a95fa781cab6889fa2a03c74b6c5911d3 |
+| scripts/validate-p6.py | 7ad71ba478ba0ce878f5a3bfa95b32cc612aea61bb0be04290951bd98f0148b9 |
 | scripts/validate-p7.py | d66e495e378db35096eb980a21c611833d4bed4c7b30bfde34ba6bfeb76f81fb |
 | scripts/validate-p8.py | 2b01d55aeecd7cd9932e1c7b06419b81453b856a02d231ebabb56f8ba8730a1c |
 | scripts/validate-p9.py | 352752c91efc8af60aea8ab566b65c671f8424b4d6948107badab00514cf95d8 |
 | `decisions/D30-rational-execution-requirement.md` | `8f279a972c0eda8975035a03cac565177f7787794f8c41476c8e45da217ba16d` |
-| `decisions/D31-P3-identity-read-budget-advisory.md` | `6a1900674c3db5c55c65811fb857f504e688b016e015e5c0c8bb5bc12f1d2582` |
-| `decisions/D32-P3.3-no-delta-anchor.md` | `d88ca2cca85421fa9d214719e1eb087d098f9f3f94fefe90b967db114501ac5e` |
-| `decisions/D33-P3.4-physical-adoption.md` | `e5d3dfe4ea13a005b8a32641959fd3aef1e1bc2503f1371567c26a530ae88170` |
 
 ## D19 execution policy rebind
 

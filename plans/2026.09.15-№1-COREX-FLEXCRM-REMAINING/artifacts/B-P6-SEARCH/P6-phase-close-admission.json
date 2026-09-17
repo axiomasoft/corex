@@ -1,0 +1,9 @@
+{
+  "phase_id": "P6",
+  "candidate_fingerprint": "888c7b24350fa262ec3bcf5087ea46466762cd3325a2fb09652924239c0f2506",
+  "allow": true,
+  "code": "allow",
+  "audit_policy": "PHASE_DIRECT_CLOSE_ASSURED",
+  "next_exact": "close: task:plan-close 2026.09.15-№1-COREX-FLEXCRM-REMAINING P6",
+  "closure_sha256": "914d1f22b18b71dbbda1d6a1a8c55e9cc5b60f2d788732bd5bb40cabb80db124"
+}
