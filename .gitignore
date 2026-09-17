@@ -11,25 +11,25 @@
 /.agents/
 /.claude/
 /.codex/
+/.cursor/
 /.serena/
 /.swissknifeman/
 /.mcp.json
+/.mcp.json.bak
+/.mcp.json.example
 /.swissknife.json.bak
 
 # Generated Task runtime state and ad-hoc diagnostic output.
 /plans/**/.plan-cache/
 /scratch_gate.log
+__pycache__/
+*.py[cod]
+*.tmp
+*.temp
+*~
 
-# Installed-consumer runs retain their committed locks, evidence and logs only.
-# Their app scaffolding and Composer vendor trees are recreated by qualification.
-/delivery/**/consumer-*/StorageCatalogue.php
-/delivery/**/consumer-*/approved-storage.sql
-/delivery/**/consumer-*/bootstrap/
-/delivery/**/consumer-*/boxed/
-/delivery/**/consumer-*/config/
-/delivery/**/consumer-*/probe.php
-/delivery/**/consumer-*/storage/
-/delivery/**/consumer-*/vendor/
+# Local qualification harness output; committed receipts live under plans/**/artifacts/.
+/delivery/
 
 # CoreX specifications and ADRs are maintained in the Brain vault.
 /docs/03_Dev/

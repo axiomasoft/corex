@@ -1,3 +1,0 @@
-> vendor/bin/pest --group=pg
-Terminated
-Script vendor/bin/pest --group=pg handling the test:pg event returned with error code 143

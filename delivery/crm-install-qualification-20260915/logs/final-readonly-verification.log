@@ -1,4 +1,0 @@
-/corex_pgsql_test image=postgres:16-alpine id=sha256:de3a4eab8fdfa507ea92aac488b916b08089e515db49b055fe71dfa271ba3a28 state=running health=healthy
-/var/run/postgresql:5432 - accepting connections
-063f165e1065053984751f2efc41c18caefe90ac
-cb79f18095589124759fdd1107144764bb31d094
