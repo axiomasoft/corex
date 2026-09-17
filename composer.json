@@ -37,7 +37,8 @@
             "CoreX\\Tests\\": "tests/",
             "CoreX\\Api\\Tests\\": "packages/api/tests/",
             "CoreX\\Notifications\\Tests\\": "packages/notifications/tests/",
-            "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/"
+            "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/",
+            "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/"
         }
     },
     "repositories": [
@@ -56,7 +57,7 @@
     "scripts": {
         "test": "vendor/bin/pest --exclude-group=pg",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in api auth crm tasks tenancy wakeup notifications; do composer --working-dir=packages/$p test || exit 1; done",
+        "test:packages": "for p in api auth crm tasks tenancy wakeup notifications recurrence; do composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "contract-guard": "bash scripts/contract-guard.sh",
         "test:coverage": "vendor/bin/pest --coverage --min=80",

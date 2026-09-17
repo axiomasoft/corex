@@ -20,7 +20,7 @@ use CoreX\Tests\Support\SourceScanner;
 // Foundation = the CoreX\*-namespaced packages (L0 agnostic + L1 domain-base). The
 // crm package IS the Flex\* thematic layer (L2, may depend on corex/*) — it is
 // intentionally excluded from the "may not import Flex" scan.
-$foundationPackages = ['core', 'modules', 'tenancy', 'auth', 'tasks', 'api'];
+$foundationPackages = ['core', 'modules', 'tenancy', 'auth', 'tasks', 'api', 'recurrence'];
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
 // The vendor inversion D70 fixed was exactly this kind of leak.
