@@ -1,0 +1,27 @@
+{
+  "schema": "tool-external-control-plane-map/1",
+  "plane": "control-plane",
+  "disposition": "external-owner",
+  "source": "brief/sources/b33.md §7; brief/sources/b34.md §7",
+  "tools": [
+    {"code": "tenancy.get_account_status", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.retry_provisioning", "effect": "write", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.replenish_pool", "effect": "write", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.list_cells", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.get_cell_health", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.start_migration_batch", "effect": "write", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.get_migration_status", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tenancy.move_account", "effect": "irreversible", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "storage.get_tenant_usage", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "storage.start_export", "effect": "write", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "tls.get_certificates_expiry", "effect": "read", "owner": "Provisioner / storage / TLS ops owner", "source": "B33"},
+    {"code": "identity.get_identity", "effect": "read", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.list_memberships", "effect": "read", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.grant_membership", "effect": "write", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.revoke_membership", "effect": "write", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.resync_account_users", "effect": "write", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.get_sync_status", "effect": "read", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.invalidate_switcher_cache", "effect": "write", "owner": "Control-plane operator / central identity owner", "source": "B34"},
+    {"code": "identity.list_invitations", "effect": "read", "owner": "Control-plane operator / central identity owner", "source": "B34"}
+  ]
+}

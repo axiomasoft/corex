@@ -85,7 +85,7 @@ final class InstalledToolContractTest extends TestCase
     /** @return array<string, mixed> */
     private function loadInstallFixture(string $name): array
     {
-        $path = dirname(__DIR__, 4).'/delivery/tool-install-qualification-20260915/fixtures/'.$name;
+        $path = dirname(__DIR__).'/fixtures/tool-install/'.$name;
         $decoded = json_decode((string) file_get_contents($path), true);
         self::assertIsArray($decoded);
 

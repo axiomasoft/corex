@@ -85,7 +85,7 @@ final class ToolContributionsTest extends TestCase
     /** @return array<string, mixed> */
     private function loadFixture(string $name): array
     {
-        $path = dirname(__DIR__, 4).'/delivery/tool-contribution-qualification-20260915/fixtures/'.$name;
+        $path = dirname(__DIR__).'/fixtures/tool-contribution/'.$name;
         $decoded = json_decode((string) file_get_contents($path), true);
         self::assertIsArray($decoded);
 

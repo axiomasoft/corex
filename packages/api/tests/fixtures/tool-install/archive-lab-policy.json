@@ -1,0 +1,11 @@
+{
+  "schema": "tool-archive-lab-policy/1",
+  "discover_default": "deny",
+  "invoke_default": "deny",
+  "catalogue_cap": 1000,
+  "requires_trusted_request_context": true,
+  "no_private_source": true,
+  "no_http_server": true,
+  "no_mcp_transport_sdk": true,
+  "baseline_install_without_optional_tools": true
+}

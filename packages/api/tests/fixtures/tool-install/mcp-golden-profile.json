@@ -1,0 +1,14 @@
+{
+  "schema": "mcp-tools-projection/1",
+  "protocol": "MCP2025-11-25",
+  "methods": ["tools/list", "tools/call"],
+  "result_root": "structuredContent",
+  "error_shape": "isError",
+  "unknown_tool_code": -32602,
+  "hints": {
+    "readOnlyHint": "sideEffect==read",
+    "destructiveHint": "sideEffect==irreversible",
+    "idempotentHint": "read-only|domain-key|provider-key"
+  },
+  "live_endpoint_required": false
+}

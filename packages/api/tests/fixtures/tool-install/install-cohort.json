@@ -1,0 +1,20 @@
+{
+  "schema": "tool-install-cohort/1",
+  "profile": "archive-lab-tool-surface/1",
+  "packages": [
+    {"path": "packages/core", "name": "corex/core"},
+    {"path": "packages/modules", "name": "corex/modules"},
+    {"path": "packages/api", "name": "corex/api"}
+  ],
+  "require": {
+    "php": "^8.3",
+    "laravel/framework": "^12.0",
+    "corex/api": "dev-main"
+  },
+  "transport_profiles": [
+    "direct/ToolInvoker",
+    "mcp-tools-projection/1"
+  ],
+  "no_path_repositories": true,
+  "no_vendor_symlinks": true
+}
