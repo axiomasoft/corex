@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-18
-inputs_sha256: 3a86c4b22d58b7b88b59a3629aee6f0912c921b1c8b87fd0cad70a165f97c38a
+inputs_sha256: bcdc18c423e509ac396ed7881223d77077c773a7e81a5f1d434bbf592d8683a8
 generated_by: task plan-views status
 -->
 
@@ -33,8 +33,8 @@ generated_by: task plan-views status
 | P5 | Workflow binding и единый durable wakeup seam | 6/6 | 🟢 Done |
 | P6 | Data extension, import/export и search | 8/8 | 🟢 Done |
 | P7 | Task primitives, recurrence и internationalization | 9/9 | 🟢 Done |
-| P8 | Introspection и transport-neutral tool integration | 0/7 | ⬜ Not started |
-| P9 | Integrated cohort, compatibility, pristine install и release | 0/9 | ⬜ Not started |
+| P8 | Introspection и transport-neutral tool integration | 7/7 | 🟢 Done |
+| P9 | Integrated cohort, compatibility, pristine install и release | 4/9 | 🟡 In progress |
 
 ## Phase P1
 
@@ -161,23 +161,23 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P8.1 | Квалифицировать registry/API/schema source и exact delta | ⬜ Not started | — |
-| P8.2 | Добавить explicit typed tool declarations и bounded schema projection | ⬜ Not started | — |
-| P8.3 | Собрать current-policy catalogue без authority cache | ⬜ Not started | — |
-| P8.4 | Ввести guarded headless invocation с owning Action semantics | ⬜ Not started | — |
-| P8.5 | Добавить bounded registry introspection и why CLI | ⬜ Not started | — |
-| P8.6 | Связать exact selected contributions и external ownership map | ⬜ Not started | — |
-| P8.7 | Проверить cold installed consumers и запечатать tool receipts | ⬜ Not started | — |
+| P8.1 | Квалифицировать registry/API/schema source и exact delta | 🟢 Done | 2026-09-18 |
+| P8.2 | Добавить explicit typed tool declarations и bounded schema projection | 🟢 Done | 2026-09-18 |
+| P8.3 | Собрать current-policy catalogue без authority cache | 🟢 Done | 2026-09-18 |
+| P8.4 | Ввести guarded headless invocation с owning Action semantics | 🟢 Done | 2026-09-18 |
+| P8.5 | Добавить bounded registry introspection и why CLI | 🟢 Done | 2026-09-18 |
+| P8.6 | Связать exact selected contributions и external ownership map | 🟢 Done | 2026-09-18 |
+| P8.7 | Проверить cold installed consumers и запечатать tool receipts | 🟢 Done | 2026-09-18 |
 
 ## Phase P9
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P9.1 | Сверить actual producer seals и заморозить состав cohort | ⬜ Not started | — |
-| P9.2 | Собрать воспроизводимые dist и проверить split trees | ⬜ Not started | — |
-| P9.3 | Проверить local matrix и подготовить exact hosted workflow | ⬜ Not started | — |
-| P9.4 | Проверить independent cold candidate и populated upgrade/refusal | ⬜ Not started | — |
-| P9.5 | Получить actual hosted same-cohort jobs | ⬜ Not started | — |
+| P9.1 | Сверить actual producer seals и заморозить состав cohort | 🟢 Done | 2026-09-18 |
+| P9.2 | Собрать воспроизводимые dist и проверить split trees | 🟢 Done | 2026-09-18 |
+| P9.3 | Проверить local matrix и подготовить exact hosted workflow | 🟢 Done | 2026-09-18 |
+| P9.4 | Проверить independent cold candidate и populated upgrade/refusal | 🟢 Done | 2026-09-18 |
+| P9.5 | Получить actual hosted same-cohort jobs | 🟢 Done | 2026-09-18 |
 | P9.6 | Проверить independent optional private auth install | ⬜ Not started | — |
 | P9.7 | Запечатать concrete publication packet и gate request | ⬜ Not started | — |
 | P9.8 | Доставить exact cohort через admitted channels и reconcile | ⬜ Not started | — |
@@ -408,6 +408,54 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
 | 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.1: design binding resealed; DESIGN_PENDING cleared (R4).
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.2: composer lint:check green; 14 R2 files + gitignored delivery fixture pint-only (R2).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.4: package-graph gate guard_contains + host-reserved reservations (A1).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · R3: terminal-evidence P12.5 spec_sha256 mismatch; origin of recorded digest not established from carriers. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · A4: journal batch_id drift vs plan.md Routing for P12.3, P12.5, P12.7. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · A5: P12.1–P12.6 lack journal in-progress start events; not retro-created. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · A2: effort undershoot on four items; P12.2 overshoot also unrecorded at close. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · A3: Review full not executed for five P12 items; compensating full review = P12A.4 (D42). |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · bookkeeping-correction · A7: 472 passed/7 skipped misattributed as 20-package aggregate; belongs to packages/tenancy only. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.5: six bookkeeping corrections appended; receipt gaps closed in findings/P12-rebaseline-receipts.md §Bookkeeping correction.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.6: P9.2 Files A8 fixed; P12A seal p12a-correction-receipts/1; handoff → P8.1; inline P12A phase closure.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · Inline P12A phase closure: six GREEN item heads; p12a-correction-receipts/1 seal; direct-close eligible; unblocks P8.1 (no auto-start).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P8.1: QUAL-01–QUAL-05 PASS; opis/json-schema 2.4.1 qualified; delivery/tool-source-qualification-20260915; handoff → P8.2.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P8.2: DESC-01–DESC-09 PASS; Api::tool/exposeTool + ToolDescriptor + ToolSchemaSupervisor; delivery/p8-descriptors-20260918; handoff → P8.3.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P8.3: CAT-01–CAT-09 PASS; ToolCatalogue/ToolPolicy/CompiledToolCatalogue/DenyToolPolicy/ToolServiceProvider; delivery/p8-catalogue-policy-20260918; handoff → P8.4.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P8.4: INVOKE-01–INVOKE-12 PASS; ToolInvoker/ToolExecutionGuard/GuardedToolInvoker/ReadOnlyToolExecutionGuard/ToolCall/ToolResult/ToolRequestContext; delivery/p8-invocation-20260918; handoff → P8.5.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P8.5: INTRO-01–INTRO-07 PASS; RegistryIntrospection/RegistryMap/ModuleExplanation/ReadRegistryIntrospection/corex:modules:why; delivery/p8-introspection-20260918; handoff → P8.6.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P8.6: CONTRIB-01–CONTRIB-08 PASS; tool-integration.md/ArchiveToolModule/LabToolModule/ToolContributionsTest; delivery/tool-contribution-qualification-20260915; handoff → P8.7.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-run · closed-green · P8.7: INST-01–INST-06 PASS; McpToolsProjection/InstalledToolContractTest; delivery/tool-install-qualification-20260915; p8-tool-receipts/1 seal; hash rebind; handoff → P9.1.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:198 |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · P9.3: MATRIX-01–MATRIX-07 PASS; 106 cells; matrix c67d711a…; runner-plan 9308e523…; remaining-cohort-quality/runner/publish helpers; remaining-cohort-proof workflow; findings/P9-local-matrix.md; handoff → P9.4.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:201 |
 
 ## Owner Gates
 
@@ -417,3 +465,5 @@ write-site: pre_mutation: allow · pre_final: allow |
 - P4.6: known deviation
 - P4.7: known deviation
 - P4.8: known deviation
+- P8.1: known deviation
+- P9.4: known deviation

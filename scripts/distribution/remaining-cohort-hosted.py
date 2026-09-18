@@ -318,6 +318,7 @@ def reconcile_run(packet: dict, run: dict, repository: str | None = None) -> dic
         job.get('conclusion') == 'failure' and job.get('status') == 'completed'
         for job in matched.values()
     )
+    primary_job = next(iter(matched.values()), None)
     return {
         'run_id': run['id'],
         'run_attempt': run.get('run_attempt'),
@@ -325,6 +326,7 @@ def reconcile_run(packet: dict, run: dict, repository: str | None = None) -> dic
         'execution_repository': repository,
         'head_sha': run['head_sha'],
         'workflow_sha': packet.get('workflow_sha256'),
+        'job_id': primary_job['id'] if primary_job is not None else None,
         'jobs_expected': len(required),
         'jobs_matched': len(matched),
         'jobs_missing': missing,
@@ -484,6 +486,7 @@ def execute_reconcile(run_id: int | None = None) -> dict:
         'run_url': selected_run['html_url'] if selected_run else None,
         'run_id': selected_run['id'] if selected_run else None,
         'run_attempt': selected_run.get('run_attempt') if selected_run else None,
+        'job_id': reconcile.get('job_id') if reconcile is not None else None,
         'workflow_sha': packet.get('workflow_sha256'),
     }
 
