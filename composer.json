@@ -75,7 +75,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest --exclude-group=pg,meilisearch --exclude-testsuite=SearchMeilisearchPackage",
+        "test": "vendor/bin/pest --exclude-group=pg,meilisearch --exclude-testsuite=SearchMeilisearchPackage --order-by=defects",
         "test:pg": "vendor/bin/pest --group=pg",
         "test:packages": "for p in api attributes auth core crm transfer intl search-intl media modules notifications panels recurrence search search-meilisearch tasks tasks-workflow tenancy wakeup workflow; do echo \"==> packages/$p\" && composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
