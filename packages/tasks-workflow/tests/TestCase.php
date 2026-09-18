@@ -10,6 +10,7 @@ use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Testing\TasksTestCase as TasksPackageTestCase;
+use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
 use Illuminate\Foundation\Application;
 use Mockery;
@@ -38,6 +39,7 @@ abstract class TestCase extends TasksPackageTestCase
         $this->app->instance(TaskMutationAccess::class, $mutationAccess);
         $this->app->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
 
+        $this->app->forgetInstance(TaskRecurrenceCommand::class);
         $this->app->forgetScopedInstances();
     }
 

@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "ext-bcmath": "*",
         "corex/core": "@dev",
         "corex/modules": "@dev",
         "corex/tasks": "@dev",

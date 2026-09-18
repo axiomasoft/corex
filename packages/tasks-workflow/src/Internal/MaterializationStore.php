@@ -153,7 +153,7 @@ final class MaterializationStore
                 'complete_through' => $completeThrough,
                 'cursor' => $cursor === null ? null : json_encode($cursor, JSON_THROW_ON_ERROR),
                 'restore_epoch' => $restoreEpoch,
-                'generation' => bcadd($generation, '1', 0),
+                'generation' => \bcadd($generation, '1', 0),
             ]);
 
         if ($updated !== 1) {

@@ -192,6 +192,7 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
     $denyAccess = Mockery::mock(TaskAccess::class);
     $denyAccess->shouldReceive('authorizeCreate')->once()->andThrow(new AuthorizationException);
     $this->app->instance(TaskAccess::class, $denyAccess);
+    $this->app->forgetInstance(TaskRecurrenceCommand::class);
     $this->app->forgetScopedInstances();
 
     expect(fn () => app(TaskRecurrenceCommand::class)->materialize(

@@ -327,6 +327,27 @@ jobs:
       - name: Crm coverage (P1.27 compensating gate)
         run: composer --working-dir=packages/crm test:coverage
 
+  packages-tests:
+    runs-on: ubuntu-latest
+    name: Remaining cohort package aggregator
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Per-package test aggregator
+        run: composer test:packages
+
+      - name: Core and modules suites
+        run: vendor/bin/pest packages/core/tests packages/modules/tests
+
   tasks-tests:
     runs-on: ubuntu-latest
     name: Tasks package
