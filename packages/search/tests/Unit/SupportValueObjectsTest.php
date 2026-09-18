@@ -32,13 +32,13 @@ it('keeps neutral search value objects typed and unsupported providers empty', f
 
     expect($provider->capabilities())->toEqual(new SearchCapabilities(fullText: false))
         ->and($page)->toEqual(new CandidatePage(candidates: [], nextAfterId: null, truncated: false))
-        ->and(new Candidate($record)->record)->toBe($record)
-        ->and(new SearchPage(records: [['id' => 'pump-1']], nextAfterId: null, truncated: false)->records)->toHaveCount(1)
-        ->and(new DocumentBatch(documents: [['id' => 'pump-1']], next: new DocumentCursor(value: 'cursor'))->next->value)->toBe('cursor')
-        ->and(new IndexBatch(generation: 'g1', documents: [['id' => 'pump-1']])->generation)->toBe('g1')
-        ->and(new IndexSubmission(taskId: 'task-1', generation: 'g1')->taskId)->toBe('task-1')
-        ->and(new IndexOutcome(status: 'succeeded')->status)->toBe('succeeded')
-        ->and(new IndexSwap(fromGeneration: 'g1', toGeneration: 'g2')->toGeneration)->toBe('g2');
+        ->and((new Candidate($record))->record)->toBe($record)
+        ->and((new SearchPage(records: [['id' => 'pump-1']], nextAfterId: null, truncated: false))->records)->toHaveCount(1)
+        ->and((new DocumentBatch(documents: [['id' => 'pump-1']], next: new DocumentCursor(value: 'cursor')))->next->value)->toBe('cursor')
+        ->and((new IndexBatch(generation: 'g1', documents: [['id' => 'pump-1']]))->generation)->toBe('g1')
+        ->and((new IndexSubmission(taskId: 'task-1', generation: 'g1'))->taskId)->toBe('task-1')
+        ->and((new IndexOutcome(status: 'succeeded'))->status)->toBe('succeeded')
+        ->and((new IndexSwap(fromGeneration: 'g1', toGeneration: 'g2'))->toGeneration)->toBe('g2');
 });
 
 it('rejects unsafe search snapshot and current record values', function (): void {

@@ -215,9 +215,10 @@ final class InstalledToolContractTest extends TestCase
 
         $context = $this->context();
         $descriptor = $this->archiveDescriptor('files.read_retained');
+        $invoker = $this->app->make(ToolInvoker::class);
         $projection = new McpToolsProjection(
             $this->app->make(ToolCatalogue::class),
-            $this->app->make(ToolInvoker::class),
+            $invoker,
         );
 
         $listed = $projection->listTools($context);
@@ -231,7 +232,7 @@ final class InstalledToolContractTest extends TestCase
         self::assertSame($descriptor->contractHash, $entry['contractHash']);
         self::assertTrue($entry['annotations']['readOnlyHint']);
 
-        $direct = $this->app->make(ToolInvoker::class)->invoke(
+        $direct = $invoker->invoke(
             $context,
             new ToolCall(
                 code: $descriptor->code,
