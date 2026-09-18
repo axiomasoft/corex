@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-17
-inputs_sha256: ea94816761f9da51f800d863dcc6f05ccb739094951aeff78ae0402f47f30ff0
+through: 2026-09-18
+inputs_sha256: 2e5b1db5731a50841d4e88d86cf17f0dc635b1f481a915f93cd1542d59170e91
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-17 |
+| Last Updated | 2026-09-18 |
 
 ## 4. Phase Index & Status Board
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
-| P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 0/9 | ⬜ Not started |
+| P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 1/9 | 🟡 In progress |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
 | P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟠 Done with deviations |
@@ -75,7 +75,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P12.1 | Починить контракт модуля, утечку ядра и незаявленные зависимости | ⬜ Not started | — |
+| P12.1 | Починить контракт модуля, утечку ядра и незаявленные зависимости | 🟢 Done | 2026-09-18 |
 | P12.2 | Расширить контур тестов пакетов с 8 до 20 | ⬜ Not started | — |
 | P12.3 | Ввести исполняемый гейт графа пакетов | ⬜ Not started | — |
 | P12.4 | Переименовать `corex/import-export` в `corex/transfer` | ⬜ Not started | — |
@@ -382,6 +382,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.8 optional intl/search bridges PASS (OPT-01..07).
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.9 installed portable utility cohort seal PASS (R17/R20/R23/R24/R25).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.1 repaired IntlModule contract, removed TenancyManager implementation leak, declared cross-package requires (NEW-1, A2b, A3).
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

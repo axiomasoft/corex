@@ -9,13 +9,13 @@
         "corex/modules": "@dev",
         "corex/tasks": "@dev",
         "corex/recurrence": "@dev",
+        "corex/workflow": "@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
     },
     "suggest": {
-        "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06).",
-        "corex/workflow": "Optional completion capture through qualified workflow binding (MAT-07)."
+        "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06)."
     },
     "require-dev": {
         "corex/wakeup": "@dev",

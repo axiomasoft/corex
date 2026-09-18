@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
-use CoreX\Modules\Contracts\ModuleDescriptor;
+use CoreX\Modules\CorexModule;
+use CoreX\Modules\Manifest;
+use Override;
 
-final class IntlModule
+final class IntlModule extends CorexModule
 {
-    public static function descriptor(): ModuleDescriptor
+    #[Override]
+    public function manifest(): Manifest
     {
-        return new ModuleDescriptor(
-            key: 'intl',
-            label: 'Internationalization utilities',
-            providers: [IntlServiceProvider::class],
-        );
+        return Manifest::make('corex/intl')
+            ->title('Internationalization')
+            ->description('Typed locale, money/rate snapshots, and offline geography reference utilities.');
     }
 }
