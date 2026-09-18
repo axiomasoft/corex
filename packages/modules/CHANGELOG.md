@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Added
+
+- `RegistryIntrospection` contract with `RegistryMap` / `ModuleExplanation` DTOs, read-only
+  `ReadRegistryIntrospection` implementation and `corex:modules:why` operator CLI for bounded
+  extension-point and activation diagnostics.
+
 ### Fixed
 
 - Lifecycle checks the activation gate before migrations/hooks, serializes the
@@ -14,6 +20,7 @@
 ### API operations
 
 - Backward-compatible `Api::operation()` declarations with explicit handler, ability, version, schemas and validation rules. Compilation stamps module ownership and rejects duplicate IDs/routes and malformed declarations. Existing resource metadata never becomes implicit CRUD.
+- Explicit tool declarations: `Api::tool()` and `Api::exposeTool()` compile into the existing API slice with canonical tuple/wire validation, contract hashing and duplicate rejection via `ApiToolValidator`.
 
 ### Added
 

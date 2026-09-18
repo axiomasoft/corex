@@ -11,11 +11,15 @@
         "illuminate/support": "^12.0|^13.0",
         "illuminate/validation": "^12.0|^13.0"
     },
+    "suggest": {
+        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
+    },
     "require-dev": {
         "orchestra/testbench": "^10.0|^11.0",
         "pestphp/pest": "^4.0",
         "laravel/pint": "^1.13",
-        "larastan/larastan": "^3.0"
+        "larastan/larastan": "^3.0",
+        "opis/json-schema": "^2.4.1"
     },
     "autoload": {
         "psr-4": {

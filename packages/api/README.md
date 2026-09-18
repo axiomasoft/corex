@@ -201,6 +201,46 @@ profile, and generate clients from that resulting document. No public schema rou
 no principal/module access is granted by this catalogue. Don't expose the complete installed
 catalogue as a tenant's authorization listing. This package does not ship a client generator.
 
+## Tool catalogue and policy
+
+Register `CoreX\Api\ToolServiceProvider::class` alongside `ApiServiceProvider` when exposing the
+optional tool surface. It binds `Contracts\ToolCatalogue` and `Contracts\ToolPolicy` only; no routes,
+migrations or network calls are installed.
+
+`CompiledToolCatalogue` projects explicit compiled tool declarations on every `discover()` call:
+module activation is read fresh from `ModuleRegistry`, consumer `ToolPolicy::discover()` filters the
+result, per-tool `availability['discover'] === false` metadata is honoured, and descriptors are
+returned in deterministic sorted order with a revision hash over the projected set. More than 1000
+matching descriptors yields `catalogue_limit`; the default `DenyToolPolicy` denies both discover and
+invoke until the application replaces the binding.
+
+Bindings are transient. The catalogue is not an authority cache: account, activation and policy
+changes are visible on the next call. `ToolPolicy::invoke()` is separate from discover.
+
+## Guarded invocation
+
+`ToolInvoker::invoke(RequestContext $context, ToolCall $call)` resolves the exact compiled tool
+tuple, validates the expected contract hash, admits and validates arguments against
+`tool-schema/1`, checks `ToolPolicy::invoke()`, then delegates to `ToolExecutionGuard` before
+calling the owning `OperationHandler`. Handlers receive an additive `ToolRequestContext` carrying
+validated `operationKey` and `toolContractHash` metadata; legacy handler signatures are unchanged.
+
+`ToolCall` requires `code`, `toolVersion`, `expectedContractHash`, typed `JsonObject` arguments and
+`requestId`. Optional `operationKey` and `clientProof` are untrusted correlation/evidence only.
+
+`ToolResult` reports `outcome` (`not-executed`, `committed`, `unknown`), optional `structuredData`,
+safe `errorCode`, optional `operationKey` and `replayed`. Safe error codes include
+`tool_unavailable`, `input_invalid`, `tool_revision_conflict`, `approval_required`,
+`approval_invalid`, `idempotency_conflict`, `unknown_effect` and `output_contract_failed`.
+
+Default `ReadOnlyToolExecutionGuard` allows read side-effects only. Mutations require a consumer
+`ToolExecutionGuard` binding that owns approval proof, idempotency and transactional boundaries.
+The generic adapter never interprets client hints as authority and does not provide a generic
+approval ledger.
+
+`Internal\McpToolsProjection` provides fake in-memory `mcp-tools-projection/1` transport parity
+(`MCP2025-11-25`) over the same catalogue and invoker; it installs no routes or live endpoints.
+
 ## Verification
 
 `composer test`, `composer analyse`, `composer test:coverage` (80% floor, coverage driver required).

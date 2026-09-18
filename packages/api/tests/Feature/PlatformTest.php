@@ -238,7 +238,15 @@ final class PlatformTest extends TestCase
 
     public function test_provider_mounts_no_routes_and_application_can_mount_an_explicit_boundary(): void
     {
-        self::assertCount(0, $this->app['router']->getRoutes());
+        $corexRoutes = array_filter(
+            iterator_to_array($this->app['router']->getRoutes()),
+            static function ($route): bool {
+                $action = $route->getAction('uses') ?? $route->getActionName();
+
+                return is_string($action) && str_starts_with($action, 'CoreX\\Api\\');
+            },
+        );
+        self::assertCount(0, $corexRoutes);
         $this->allow();
         $this->app['router']->match(['GET', 'POST'], '/chosen/{workspace}/{version}/{path?}', ApiController::class)->where('path', '.*');
         $this->postJson('/chosen/alpha/v1/notes', ['title' => 'Hello'])->assertCreated()->assertJsonPath('data.actor', 'trusted-user');

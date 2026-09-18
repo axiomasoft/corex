@@ -1,0 +1,266 @@
+<?php
+
+declare(strict_types=1);
+
+use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Contracts\ModuleActivationGate;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Contracts\RegistryIntrospection;
+use CoreX\Modules\Exceptions\InvalidRegistryPoint;
+use CoreX\Modules\Exceptions\RegistryInputUnavailable;
+use CoreX\Modules\Exceptions\StaleRegistryRevision;
+use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\GateDecision;
+use CoreX\Modules\Internal\ReadRegistryIntrospection;
+use CoreX\Modules\Manifest;
+use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Modules\Registry\ArrayModuleStateReader;
+use CoreX\Modules\Registry\CompiledModule;
+use CoreX\Modules\Registry\CompiledModuleRegistry;
+use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Tests\Support\StubToolHandler;
+use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\TenantContext;
+use CoreX\Tests\Stubs\Widget;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+
+beforeEach(function (): void {
+    $this->app->register(ModulesServiceProvider::class);
+    $this->cachePath = sys_get_temp_dir().'/corex_intro_test_'.bin2hex(random_bytes(4)).'.php';
+});
+
+afterEach(function (): void {
+    if (isset($this->cachePath) && is_file($this->cachePath)) {
+        unlink($this->cachePath);
+    }
+});
+
+function introTenant(string $accountId = 'acct-1'): TenantContext
+{
+    return new TenantContext(new AccountRef(
+        id: $accountId,
+        slug: $accountId,
+        status: 'active',
+        features: [],
+        limits: [],
+    ));
+}
+
+function introRegistry(
+    string $path,
+    ModuleStateReader $reader,
+    array $enabled = [],
+): CompiledModuleRegistry {
+    return new CompiledModuleRegistry(
+        cachePath: $path,
+        stateReader: $reader,
+        cache: new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
+        versionResolver: static fn (TenantContext $ctx): int => 0,
+        failIfMissing: false,
+    );
+}
+
+function introIntrospection(
+    ModuleRegistry $registry,
+    string $path,
+    ?ModuleActivationGate $gate = null,
+    bool $failIfMissing = false,
+): ReadRegistryIntrospection {
+    return new ReadRegistryIntrospection(
+        registry: $registry,
+        activationGate: $gate ?? app(ModuleActivationGate::class),
+        cachePath: $path,
+        failIfMissing: $failIfMissing,
+    );
+}
+
+function introCompileFixture(string $path): CompiledModuleRegistry
+{
+    $manifest = Manifest::make('example/demo')
+        ->title('Demo')
+        ->tablePrefix('dem')
+        ->extends([
+            Entity::make(Widget::class)
+                ->handle('dem.widget')
+                ->table('dem_widgets')
+                ->label('Widget', 'Widgets')
+                ->auditable()
+                ->fields([new FieldDefinition('name', 'string')]),
+            Permissions::group('widget', ['view'], 'app'),
+            Menu::item('app', 'dem.widgets')->label('Widgets'),
+            Api::tool('demo.read', StubToolHandler::class, 'demo.read', ['type' => 'object'], ['type' => 'object'], 'read', 'read-only'),
+        ]);
+
+    $compiled = (new RegistryCompiler)->compile([$manifest], installedPackages: ['example/demo']);
+    $module = CompiledModule::fromManifest($manifest);
+    CompiledModuleRegistry::writeAtomic($path, [$module], $compiled);
+
+    return introRegistry($path, new ArrayModuleStateReader([
+        'acct-1' => ['example/demo' => ['state' => 'enabled', 'edition' => 'default']],
+    ]));
+}
+
+it('projects the eight extenders and ownership from compiled bytes (INTRO-01)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $map = introIntrospection($registry, $this->cachePath)->extensionPoints();
+
+    $extenderNames = array_values(array_filter(
+        $map->extensionPoints,
+        static fn (array $point): bool => ($point['kind'] ?? null) === 'extender',
+    ));
+    $names = array_column($extenderNames, 'name');
+
+    expect($map->schemaVersion)->toBe(ReadRegistryIntrospection::MAP_SCHEMA)
+        ->and($names)->toBe([
+            'entity',
+            'entity_field',
+            'permissions',
+            'api',
+            'filament',
+            'menu',
+            'routes',
+            'workflow',
+        ])
+        ->and(collect($map->extensionPoints)->contains(
+            static fn (array $point): bool => ($point['kind'] ?? null) === 'entity' && ($point['handle'] ?? null) === 'dem.widget',
+        ))->toBeTrue()
+        ->and($map->revision)->toBe(ReadRegistryIntrospection::revisionFor($registry->compiled()));
+});
+
+it('explains unknown modules and tenant activation without guessing (INTRO-02)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $introspection = introIntrospection($registry, $this->cachePath);
+
+    $unknown = $introspection->why('example/missing', introTenant());
+    $staticOnly = $introspection->why('example/demo', null);
+    $active = $introspection->why('example/demo', introTenant());
+
+    expect($unknown->status)->toBe('unknown')
+        ->and($unknown->reasons)->toBe(['module_unknown'])
+        ->and($staticOnly->hasTenantVerdict)->toBeFalse()
+        ->and($staticOnly->status)->toBe('declared')
+        ->and($active->hasTenantVerdict)->toBeTrue()
+        ->and($active->status)->toBe('active')
+        ->and($active->reasons)->toBe(['enabled_for_tenant']);
+});
+
+it('renders deterministic CLI output and requires account for tenant verdict (INTRO-03)', function (): void {
+    introCompileFixture($this->cachePath);
+    app()->instance(ModuleRegistry::class, introRegistry(
+        $this->cachePath,
+        new ArrayModuleStateReader([
+            'acct-1' => ['example/demo' => ['state' => 'enabled', 'edition' => 'default']],
+        ]),
+    ));
+
+    Artisan::call('corex:modules:why', ['module' => 'example/demo']);
+    $text = Artisan::output();
+
+    Artisan::call('corex:modules:why', ['module' => 'example/demo', '--json' => true]);
+    $json = json_decode(Artisan::output(), associative: true, flags: JSON_THROW_ON_ERROR);
+
+    Artisan::call('corex:modules:why', ['module' => 'example/demo', '--account' => 'acct-1']);
+    $withAccount = Artisan::output();
+
+    expect($text)->toContain('Tenant verdict: no')
+        ->and($text)->toContain('declaration-only')
+        ->and($json['module'])->toBe('example/demo')
+        ->and($json['hasTenantVerdict'])->toBeFalse()
+        ->and($withAccount)->toContain('Tenant verdict: yes');
+});
+
+it('redacts internal class references and sensitive topology (INTRO-04)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $encoded = json_encode(introIntrospection($registry, $this->cachePath)->extensionPoints()->extensionPoints, JSON_THROW_ON_ERROR);
+
+    expect($encoded)->not->toContain(StubToolHandler::class)
+        ->and($encoded)->not->toContain(Widget::class)
+        ->and($encoded)->not->toContain('database/migrations')
+        ->and($encoded)->not->toContain('connection');
+});
+
+it('reports declared constraints with compatibility passport pending (INTRO-05)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $explanation = introIntrospection($registry, $this->cachePath)->why('example/demo', null);
+
+    expect($explanation->declaredConstraints)->toHaveKey('requires')
+        ->and($explanation->declaredConstraints)->toHaveKey('editions')
+        ->and($explanation->declaredConstraints['compatibilityPassport'])->toBe('pending');
+});
+
+it('does not mutate module state while introspecting (INTRO-06)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $before = filemtime($this->cachePath);
+    $introspection = introIntrospection($registry, $this->cachePath);
+
+    $introspection->extensionPoints();
+    $introspection->why('example/demo', introTenant());
+
+    expect(filemtime($this->cachePath))->toBe($before)
+        ->and(file_get_contents($this->cachePath))->toBe(file_get_contents($this->cachePath));
+});
+
+it('separates missing input, unknown extenders and stale revisions (INTRO-07)', function (): void {
+    $missingPath = sys_get_temp_dir().'/corex_intro_missing_'.bin2hex(random_bytes(4)).'.php';
+    @unlink($missingPath);
+    $registry = introRegistry($missingPath, new ArrayModuleStateReader);
+    $introspection = introIntrospection($registry, $missingPath, failIfMissing: true);
+
+    expect(fn () => $introspection->extensionPoints())
+        ->toThrow(RegistryInputUnavailable::class);
+
+    $registry = introCompileFixture($this->cachePath);
+    $map = introIntrospection($registry, $this->cachePath)->extensionPoints();
+
+    expect(fn () => ReadRegistryIntrospection::assertExtensionPoint('tools'))
+        ->toThrow(InvalidRegistryPoint::class)
+        ->and(fn () => ReadRegistryIntrospection::assertRevision($map, 'stale-revision'))
+        ->toThrow(StaleRegistryRevision::class);
+
+    $emptyPath = sys_get_temp_dir().'/corex_intro_empty_'.bin2hex(random_bytes(4)).'.php';
+    CompiledModuleRegistry::writeAtomic($emptyPath, [CompiledModule::fromManifest(
+        Manifest::make('example/empty')->title('Empty')->tablePrefix('emp'),
+    )]);
+    $emptyMap = introIntrospection(
+        introRegistry($emptyPath, new ArrayModuleStateReader),
+        $emptyPath,
+    )->extensionPoints();
+
+    expect($emptyMap->extensionPoints)->not->toBeEmpty()
+        ->and(collect($emptyMap->extensionPoints)
+            ->filter(static fn (array $point): bool => ($point['kind'] ?? null) === 'extender')
+            ->sum(static fn (array $point): int => (int) ($point['entryCount'] ?? 0)))->toBe(0);
+
+    if (is_file($emptyPath)) {
+        unlink($emptyPath);
+    }
+});
+
+it('reports activation gate denial with tenant verdict (INTRO-02)', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $gate = Mockery::mock(ModuleActivationGate::class);
+    $gate->shouldReceive('check')->once()->andReturn(GateDecision::deny('billing'));
+    $explanation = introIntrospection($registry, $this->cachePath, $gate)->why('example/demo', introTenant());
+
+    expect($explanation->status)->toBe('inactive')
+        ->and($explanation->reasons)->toContain('activation_gate_denied')
+        ->and($explanation->hasTenantVerdict)->toBeTrue();
+});
+
+it('resolves RegistryIntrospection from the container', function (): void {
+    introCompileFixture($this->cachePath);
+    app()->instance(ModuleRegistry::class, introRegistry(
+        $this->cachePath,
+        new ArrayModuleStateReader([
+            'acct-1' => ['example/demo' => ['state' => 'enabled', 'edition' => 'default']],
+        ]),
+    ));
+
+    expect(app(RegistryIntrospection::class))->toBeInstanceOf(ReadRegistryIntrospection::class);
+});
