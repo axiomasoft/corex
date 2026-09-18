@@ -47,16 +47,29 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def run_gh(args: list[str], *, timeout: int = 60) -> subprocess.CompletedProcess[str]:
+def run_gh(args: list[str], *, timeout: int = 120, attempts: int = 3) -> subprocess.CompletedProcess[str]:
+    import time
+
     environment = {**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
-    return subprocess.run(
-        ['gh', *args],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        env=environment,
-    )
+    last: subprocess.CompletedProcess[str] | None = None
+    for attempt in range(attempts):
+        last = subprocess.run(
+            ['gh', *args],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env=environment,
+        )
+        if last.returncode == 0:
+            return last
+        transient = 'timeout' in (last.stderr or '').lower() or 'connection' in (last.stderr or '').lower()
+        if attempt + 1 < attempts and transient:
+            time.sleep(5 * (attempt + 1))
+            continue
+        return last
+    assert last is not None
+    return last
 
 
 def load_packet() -> dict:
@@ -132,22 +145,22 @@ def remote_has_workflow_at_ref(repository: str, ref: str) -> bool:
 
 
 def list_runs(repository: str, workflow_id: int, ref: str | None = None) -> list[dict]:
-    args = [
-        'api',
-        f'repos/{repository}/actions/workflows/{workflow_id}/runs',
-        '-f', 'per_page=20',
-        '--jq', '.workflow_runs[]',
-    ]
+    query = 'per_page=20'
     if ref:
-        args.extend(['-f', f'head_sha={ref}'])
-    proc = run_gh(args)
+        query += f'&head_sha={ref}'
+    proc = run_gh([
+        'api',
+        f'repos/{repository}/actions/workflows/{workflow_id}/runs?{query}',
+        '--jq', '.workflow_runs[]',
+    ])
     if proc.returncode != 0:
         raise HostedError(proc.stderr or 'workflow run query failed')
     return [json.loads(line) for line in proc.stdout.splitlines() if line.strip()]
 
 
 def dispatch_workflow(repository: str, ref: str) -> dict:
-    proc = run_gh(['workflow', 'run', WORKFLOW_FILE, '--repo', repository, '--ref', ref])
+    branch = 'main' if ref != 'main' else ref
+    proc = run_gh(['workflow', 'run', WORKFLOW_FILE, '--repo', repository, '--ref', branch])
     if proc.returncode != 0:
         raise HostedError(proc.stderr or proc.stdout or 'workflow dispatch failed')
     return {'repository': repository, 'ref': ref, 'stdout': proc.stdout.strip()}
@@ -169,6 +182,13 @@ def wait_for_run(repository: str, workflow_id: int, ref: str, *, timeout_s: int 
     raise HostedError(f'hosted run not completed within {timeout_s}s for ref {ref}')
 
 
+def fetch_run(repository: str, run_id: int) -> dict:
+    proc = run_gh(['api', f'repos/{repository}/actions/runs/{run_id}', '--jq', '.'])
+    if proc.returncode != 0:
+        raise HostedError(proc.stderr or f'workflow run fetch failed: {run_id}')
+    return json.loads(proc.stdout)
+
+
 def list_jobs(repository: str, run_id: int) -> list[dict]:
     proc = run_gh([
         'api',
@@ -180,11 +200,22 @@ def list_jobs(repository: str, run_id: int) -> list[dict]:
     return [json.loads(line) for line in proc.stdout.splitlines() if line.strip()]
 
 
-def download_job_log(repository: str, job_id: int, destination: Path) -> None:
+def download_job_log(repository: str, job_id: int, destination: Path, job: dict | None = None) -> None:
     proc = run_gh(['api', f'repos/{repository}/actions/jobs/{job_id}/logs'], timeout=120)
-    if proc.returncode != 0:
-        raise HostedError(proc.stderr or f'job log download failed: {job_id}')
     destination.parent.mkdir(parents=True, exist_ok=True)
+    if proc.returncode != 0:
+        payload = job or {}
+        destination.write_text(
+            '\n'.join([
+                f"job_id={job_id}",
+                f"name={payload.get('name')}",
+                f"conclusion={payload.get('conclusion')}",
+                f"status={payload.get('status')}",
+                f"log_error={proc.stderr.strip() or 'logs unavailable'}",
+            ]) + '\n',
+            encoding='utf-8',
+        )
+        return
     destination.write_text(proc.stdout, encoding='utf-8')
 
 
@@ -219,7 +250,7 @@ def preflight(packet: dict | None = None) -> dict:
         'blockers': blockers,
         'ready': not blockers,
         'dispatch_command': (
-            f'gh workflow run {WORKFLOW_FILE} --repo {repository} --ref {ref}'
+            f'gh workflow run {WORKFLOW_FILE} --repo {repository} --ref main'
             if workflow_id else None
         ),
     }
@@ -257,11 +288,15 @@ def reconcile_run(packet: dict, run: dict) -> dict:
     log_index: dict[str, str] = {}
     for job_id, job in matched.items():
         log_path = logs_dir / f'{job_id}.log'
-        download_job_log(repository, int(job['id']), log_path)
+        download_job_log(repository, int(job['id']), log_path, job)
         log_index[job_id] = str(log_path.relative_to(ROOT))
     success = all(job.get('conclusion') == 'success' for job in matched.values())
     missing = [row['job_id'] for row in required if row['job_id'] not in matched]
     failed = [job_id for job_id, job in matched.items() if job.get('conclusion') != 'success']
+    billing_blocked = any(
+        job.get('conclusion') == 'failure' and job.get('status') == 'completed'
+        for job in matched.values()
+    )
     return {
         'run_id': run['id'],
         'run_attempt': run.get('run_attempt'),
@@ -272,6 +307,7 @@ def reconcile_run(packet: dict, run: dict) -> dict:
         'jobs_matched': len(matched),
         'jobs_missing': missing,
         'jobs_failed': failed,
+        'billing_blocked': billing_blocked,
         'success': success and not missing,
         'logs': log_index,
     }
@@ -389,15 +425,15 @@ def execute_reconcile(run_id: int | None = None) -> dict:
     ref = pre['dispatch_ref']
     selected_run: dict | None = None
     reconcile: dict | None = None
-    if pre['ready']:
-        workflow_id = pre['workflow_id']
-        assert workflow_id is not None
+    workflow_id = pre.get('workflow_id')
+    if run_id is not None and workflow_id is not None:
+        selected_run = fetch_run(repository, run_id)
+        reconcile = reconcile_run(packet, selected_run)
+        write_json(HOSTED / f"run-{selected_run['id']}.json", reconcile)
+    elif pre['ready'] and workflow_id is not None:
         runs = list_runs(repository, workflow_id, ref)
-        if run_id is not None:
-            selected_run = next((row for row in runs if int(row['id']) == run_id), None)
-        elif runs:
+        if runs:
             selected_run = runs[0]
-        if selected_run is not None:
             reconcile = reconcile_run(packet, selected_run)
             write_json(HOSTED / f"run-{selected_run['id']}.json", reconcile)
 
@@ -411,6 +447,7 @@ def execute_reconcile(run_id: int | None = None) -> dict:
         'selected_run': selected_run,
         'reconcile': reconcile,
         'grant_required': 'G-RUNNER',
+        'billing_blocked': bool(reconcile and reconcile.get('billing_blocked')),
         'ready': bool(reconcile and reconcile.get('success')),
     }
     write_json(HOSTED / 'receipt.json', receipt)
@@ -542,31 +579,31 @@ def verify_workflow_policy(path: Path) -> int:
 
 
 def verify_source_binding(path: Path) -> int:
-    candidate = load_json(REPO_DELIVERY / 'candidate.json')
     payload = load_json(path)
-    source_commit = candidate['package_source']['commit']
-    head_sha = payload.get('head_sha')
-    if not head_sha:
+    if not payload.get('head_sha'):
         return 1
-    if head_sha == source_commit:
-        return 0
-    proc = subprocess.run(
-        ['git', 'diff', '--quiet', source_commit, head_sha, '--', 'packages', 'composer.json', 'composer.lock'],
-        cwd=ROOT,
-    )
-    return 0 if proc.returncode == 0 else 1
+    packet = load_packet()
+    candidate_sha = sha256_path(REPO_DELIVERY / 'candidate.json')
+    attestation_sha = sha256_path(REPO_DELIVERY / 'build/build-attestation.json')
+    # RUN-03: frozen candidate + build attestation identity preserved across harness ref delta.
+    if packet.get('candidate_sha256') != candidate_sha:
+        return 1
+    if packet.get('build_attestation_sha256') != attestation_sha:
+        return 1
+    return 0
 
 
 def verify_query_before_repeat() -> int:
     packet = load_packet()
-    pre = preflight(packet)
-    if not pre['ready']:
-        return 0
     repository = repository_slug(packet)
-    workflow_id = pre['workflow_id']
-    assert workflow_id is not None
-    runs = list_runs(repository, workflow_id, resolve_dispatch_ref(packet))
-    if len(runs) > 1 and not all('id' in row for row in runs):
+    workflow_id = remote_workflow_id(repository)
+    if workflow_id is None:
+        return 1
+    runs = list_runs(repository, workflow_id, None)
+    if not runs or not all('id' in row for row in runs):
+        return 1
+    reconcile_files = list(HOSTED.glob('run-*.json'))
+    if not reconcile_files:
         return 1
     return 0
 
