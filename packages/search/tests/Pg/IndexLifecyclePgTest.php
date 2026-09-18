@@ -7,7 +7,7 @@ use CoreX\Search\Internal\Index\DurableIndexRebuild;
 use CoreX\Search\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
 
-uses(PgTestCase::class);
+uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     DB::statement('DROP TABLE IF EXISTS corex_search_dirty');

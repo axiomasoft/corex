@@ -12,7 +12,7 @@ use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 
-uses(PgTestCase::class);
+uses(PgTestCase::class)->group('pg');
 
 it('stores independently indexed EAV values with the same version boundary', function (): void {
     $store = new EavAttributeStore(

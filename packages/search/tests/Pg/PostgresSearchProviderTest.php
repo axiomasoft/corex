@@ -13,7 +13,7 @@ use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
-uses(PgTestCase::class);
+uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     DB::statement('DROP TABLE IF EXISTS corex_search_provider_test');

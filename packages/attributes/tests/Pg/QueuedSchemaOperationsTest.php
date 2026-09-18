@@ -14,7 +14,7 @@ use CoreX\Support\Data\CallableDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use Illuminate\Support\Facades\DB;
 
-uses(PgTestCase::class);
+uses(PgTestCase::class)->group('pg');
 
 function queuedSchemaOperations(string $schemaHash = '', ?DataScopeAuthorizer $authorizer = null): QueuedSchemaOperations
 {

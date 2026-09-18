@@ -16,7 +16,7 @@ use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 
-uses(PgTestCase::class);
+uses(PgTestCase::class)->group('pg');
 
 it('writes reads replays and versions an isolated JSONB attribute document', function (): void {
     $store = new JsonbAttributeStore(

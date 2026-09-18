@@ -20,6 +20,7 @@ use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use CoreX\TasksWorkflow\Internal\MaterializationHasher;
 use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
+use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;
 
-uses()->group('pg');
+uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     $this->resetPgSchema();
