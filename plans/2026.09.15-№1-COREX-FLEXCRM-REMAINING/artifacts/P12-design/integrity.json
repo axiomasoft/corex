@@ -24,7 +24,7 @@
       "file": "perplexity-response.optional-driver.txt",
       "bytes": 1056,
       "sha256": "becdedf7411c0a75820e30206a4b42b37e15e4802ea138f30b0f9c79c2d9bc48",
-      "consumed_by": "P12-design-rag.md §3.2"
+      "consumed_by": "P12-design-rag.md — Choice / independent origin mapping + Alternatives"
     },
     {
       "key": "rename",
@@ -33,7 +33,7 @@
       "file": "perplexity-response.rename.txt",
       "bytes": 951,
       "sha256": "b698912371029945c2904466f77958b1a3451fd396557082747213536287d731",
-      "consumed_by": "P12-design-rag.md §3.4"
+      "consumed_by": "P12-design-rag.md — Choice / independent origin mapping + Alternatives"
     },
     {
       "key": "typed-config",
@@ -42,7 +42,7 @@
       "file": "perplexity-response.typed-config.txt",
       "bytes": 13217,
       "sha256": "186deba321eaf667ccee7106c4e967053dd9c460458bf2fdf77b32450d38ba0d",
-      "consumed_by": "P12-design-rag.md §3.3"
+      "consumed_by": "P12-design-rag.md — Choice / independent origin mapping + Alternatives"
     },
     {
       "key": "closure-boundary",
@@ -51,7 +51,7 @@
       "file": "perplexity-response.closure-boundary.txt",
       "bytes": 12296,
       "sha256": "554c25aff15bc4ad6abefc23e5aa6ff1bae16ae56f4f9ce984cb8b418a3f72e6",
-      "consumed_by": "P12-design-rag.md §3.5"
+      "consumed_by": "P12-design-rag.md — Choice / independent origin mapping + Alternatives"
     }
   ],
   "excluded": [
@@ -60,6 +60,12 @@
       "reason": "request timed out, no response returned",
       "counted_as_evidence": false,
       "compensated_by": "typed-config response enumerates unsafe singleton state"
+    },
+    {
+      "topic": "whether a SQL bind parameter can carry a table or column identifier",
+      "reason": "request timed out, no response returned",
+      "counted_as_evidence": false,
+      "compensated_by": "premise established directly from PostgreSQL sql-prepare and PHP pdo.prepare primary sources"
     }
   ]
 }

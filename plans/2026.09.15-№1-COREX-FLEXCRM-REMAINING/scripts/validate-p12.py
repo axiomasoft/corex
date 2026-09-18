@@ -8,6 +8,7 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 loader = importlib.util.spec_from_file_location('p12_base', Path(__file__).with_name('validate-p4.py'))
@@ -32,7 +33,7 @@ VERDICT_IDS = {
     'A1', 'A2', 'A2a', 'A2b', 'A3', 'NEW-1',
     'B1', 'B2', 'B3', 'B4', 'B5', 'B7',
     'C1', 'C2', 'C3',
-    'D1', 'D2', 'D3', 'D4', 'D5',
+    'TR1', 'TR2', 'TR3', 'TR4', 'TR5',
     'E1', 'E2', 'E3',
     'F1', 'F2', 'F4',
     'G1', 'G2', 'G3',
@@ -79,8 +80,14 @@ def design(plan):
     # Audits are inputs, never specifications: the design must forbid copying their code.
     design_body = a.file(plan, DESIGN).read_text()
     v.require('audits/' in design_body and 'запрещ' in design_body, 'audit non-normative status not stated in design')
+    # A `§N` reference is applied by Bundle v1 as a section selector, so the paragraph must
+    # exist as a heading the resolver can actually find (`## N.`), not merely as prose.
     for anchor in set(DESIGN_ANCHORS.values()):
-        v.require(anchor in design_body, f'design missing paragraph {anchor}')
+        number = anchor.lstrip('§')
+        v.require(re.search(rf'^#+\s+{re.escape(number)}(?:[.\s]|$)', design_body, re.M) is not None,
+                  f'design paragraph {anchor} is not a resolvable heading')
+
+    bundles(plan)
 
     verdicts = a.table(plan, RECONCILIATION, '1. Матрица проверенных утверждений', ('ID', 'Утверждение аудита', 'Verdict', 'Доказательство'))
     v.exact(verdicts, 'ID', VERDICT_IDS)
@@ -89,6 +96,82 @@ def design(plan):
     v.require(any(x['ID'] == 'NEW-1' and 'P0' in x['Verdict'] for x in verdicts), 'self-found P0 not carried as P0')
 
     rag(plan)
+
+
+# P12.9 seals the phase from the eight preceding receipts, so its declared inputs cannot
+# exist before execution starts. Every other item must hand the executor a complete bundle.
+FUTURE_INPUTS = {'findings/P12-rebaseline-receipts.md', 'artifacts/P12-package-graph/report.json'}
+DEPENDENCY_NOT_READY = {9}
+
+
+def task_runtime() -> Path:
+    """Locate the configured Task runtime the same way scripts/task-check.py does."""
+    metadata = subprocess.run(['codex', 'plugin', 'marketplace', 'list', '--json'],
+                              capture_output=True, text=True, check=True)
+    roots = [Path(row['root']) / 'packages/task'
+             for row in json.loads(metadata.stdout).get('marketplaces', [])
+             if row.get('name') == 'swissknifeman']
+    if len(roots) != 1 or not (roots[0] / 'lib/task').is_dir():
+        raise ValueError('expected one configured Swissknifeman Task runtime')
+    return roots[0]
+
+
+def bundles(plan):
+    """Prove the executor actually receives its declared inputs, not just a path list."""
+    sys.path.insert(0, str(task_runtime() / 'lib'))
+    from task import plan_bundle, plan_weight
+
+    repo = plan.parents[1]
+    for n in range(1, ITEMS + 1):
+        body = a.file(plan, f'phases/P12/P12.{n}.md').read_text()
+        for field in ('Inputs', 'Required Reads'):
+            found = re.search(rf'\*\*{field}:\*\*(.*?)(?=\n\*\*|\Z)', body, re.S)
+            raw = ' '.join(found[1].split())
+            entries = plan_weight.split_entries(raw)
+            if field == 'Inputs' and len(entries) == 1:
+                entries = [x.strip() for x in entries[0].split(' · ') if x.strip()]
+            for entry in entries:
+                declared = [t for t, is_declared in plan_weight.path_candidates(entry) if is_declared]
+                v.require(declared, f'P12.{n}/{field}: entry carries no declared path: {entry[:60]}')
+                resolved = []
+                for token in declared:
+                    target = plan_weight.resolve_candidate(token, (plan, repo))
+                    v.require(target is not None or token in FUTURE_INPUTS,
+                              f'P12.{n}/{field}: declared path does not exist: {token}')
+                    if target is not None:
+                        resolved.append(target)
+
+                # Bundle v1 takes the FIRST heading matching `^#+\s+<anchor>[.\s]`, so a
+                # heading like `## §1.` silently yields subsection `1.1` instead of failing.
+                # Require the selected heading to carry exactly the requested number.
+                anchors = re.findall(r'§\s*(\d+(?:\.\d+)*)', entry)
+                if anchors and len(resolved) == 1:
+                    text = resolved[0].read_text()
+                    for anchor in anchors:
+                        line = next((x for x in text.splitlines()
+                                     if re.match(rf'^#+\s+{re.escape(anchor)}(?:[.\s]|$)', x)), None)
+                        v.require(line is not None,
+                                  f'P12.{n}/{field}: §{anchor} not found in {resolved[0].name}')
+                        selected = re.match(r'^#+\s+(\d+(?:\.\d+)*)', line)[1]
+                        v.require(selected == anchor,
+                                  f'P12.{n}/{field}: §{anchor} resolves to section {selected} '
+                                  f'in {resolved[0].name} — heading is not resolver-exact')
+
+        # Prose cross-references are not bundle selectors, but an executor still follows
+        # them, so every `§N` named anywhere in a spec must exist in the design document.
+        design_body = a.file(plan, DESIGN).read_text()
+        for anchor in set(re.findall(r'§\s*(\d+(?:\.\d+)*)', body)):
+            line = next((x for x in design_body.splitlines()
+                         if re.match(rf'^#+\s+{re.escape(anchor)}(?:[.\s]|$)', x)), None)
+            v.require(line is not None and re.match(r'^#+\s+(\d+(?:\.\d+)*)', line)[1] == anchor,
+                      f'P12.{n}: §{anchor} is referenced but has no exact heading in the design')
+
+        if n in DEPENDENCY_NOT_READY:
+            continue
+        try:
+            plan_bundle.render(plan, f'P12.{n}')
+        except plan_bundle.BundleError as exc:
+            raise ValueError(f'P12.{n}: bundle does not assemble: {exc}') from exc
 
 
 def rag(plan):

@@ -188,7 +188,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `artifacts/P11-design/source-preservation.json` | `1de29d93e379d370d4ee44f514ef166f6d1361de160d0dbbb3056c288547df8c` |
 | `artifacts/P11-design/validation.md` | `7467daafa203e973d2e381acebbe0be9646aa6edf11b17c7648866a276456eb3` |
 | `artifacts/P11-design/work-estimate.json` | `392c3963d258fcb4015fe5c09c230140b1ed6813348166efedd2fc879db143c3` |
-| `artifacts/P12-design/integrity.json` | `3453365c7bbc85c97be02225fae864f6afa200ba77748eba099b68594486dc38` |
+| `artifacts/P12-design/integrity.json` | `933ec02a25d5c49bb4113a7d2aacf7ebe4654af26dedfafecd7c5ffd9ef5b6e9` |
 | `artifacts/P12-design/perplexity-query.txt` | `ff8b97399a54cf7cff0c613f1b6803a1cb3c4f363194bea6f3f43b1d2fefdd1a` |
 | `artifacts/P12-design/perplexity-response.closure-boundary.txt` | `554c25aff15bc4ad6abefc23e5aa6ff1bae16ae56f4f9ce984cb8b418a3f72e6` |
 | `artifacts/P12-design/perplexity-response.json` | `d02e930c23a3d870b230e0e71d3db47a6f1ce2fbcb908573b4e1a929d2224ded` |
@@ -198,10 +198,12 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `artifacts/P12-design/primary-1e5f6a6bc01aae5f.gz` | `9bfbb4d7471182f201affb9759c7d0e69ef5b9f325c678e09ff4a9bf344ec665` |
 | `artifacts/P12-design/primary-38a6bce543a72edb.gz` | `6a053bbc131e7cbcdaf2948372076e94375649d1cc70d6af51d889980709e189` |
 | `artifacts/P12-design/primary-4384fc2f5edd6063.gz` | `648064a0b4ba12e5361e12087cabf74705db9c0caec8f1e93e735b658dd38cd8` |
+| `artifacts/P12-design/primary-5cda41ccae8392bd.gz` | `b89e838345c7a417830f947fdec5b3afbdfe5e7d7e0dbcdc15eab60d340bbd04` |
 | `artifacts/P12-design/primary-8ce363aa6546f3c6.gz` | `9049e89df8f176856807a363399f2c729a0699c02add6f0f842a871795db85e1` |
+| `artifacts/P12-design/primary-a5d48dea1f26ff8f.gz` | `f3087b60cce57a57d7af1f0bc9f89daa611acfe07732a2db40856f1a6060fb6a` |
 | `artifacts/P12-design/primary-bbaf6b3c8761cb12.gz` | `4effe13d87dc1b57c7a3c43dbe43bf3b22eb776ebc0c954588ddbb2dccb011db` |
 | `artifacts/P12-design/primary-f9a57d99450d3b85.gz` | `9ae9c2c75ff1c2a70e2d144858a23041c1cc04000a04064b719a1054185387a5` |
-| `artifacts/P12-design/primary-source-retrieval.json` | `e22962b3781c371a972cd303c2a9922f9e2747fe093fd1153a175b3a37847b89` |
+| `artifacts/P12-design/primary-source-retrieval.json` | `a290bdf1d61502bec46aa4c4f7d5a40ff0eb1c658053686dfe19159c8add5421` |
 | `artifacts/P12-design/retrieval-history.json` | `da252fb35dda4c45e6369a93bba5fd1082a196d2d8f43b3f0753c6c11479ced7` |
 | `artifacts/P2-design/continuity-decision.json` | `3304b6d876b4f661d8151ffd3b9018c0749ae7b077c92850d67faa2bb5234ae9` |
 | `artifacts/P2-design/contract-smoke.json` | `a9aae8e59ce273cff18d1376aeb4fc4d9128898400c5425c9326dfbfe457eafb` |
@@ -672,15 +674,15 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P11/P11.6.md` | `4d3db2712d1938191270270c0b09276d3207b6bf75e314ea01d018e5cc53a5bf` |
 | `phases/P11/P11.7.md` | `fe590af9f12a1b3d7fe28ddee814a843e168d3cb075a7f5e097a513b3d39a3cc` |
 | `phases/P11/P11.md` | `a05100b3f35d261b4d3aebc2af62f6528f9a63b61c33bfa0c628c17ab477f40d` |
-| `phases/P12/P12.1.md` | `540bd9336b4d204a9e17454582b36ee8893e20a18ab0baefdf13e8ad1a1ca110` |
-| `phases/P12/P12.2.md` | `eff506b853024e393bdfb342c26cb7ac42aead18c2d0e41598435c337469af31` |
-| `phases/P12/P12.3.md` | `84687fbab4119b00e72f8266c8a1473152ed11249a2652f846d46bc806dbc28f` |
-| `phases/P12/P12.4.md` | `ef83026281976c3ace47cecc7edd8cd4ed15bc369df6dbb8c3ca5c7621b1f034` |
-| `phases/P12/P12.5.md` | `ec35f51b9262289cb9d3ee62ac15ccb8261b6b06b7c7111cdc032d392919efdc` |
-| `phases/P12/P12.6.md` | `23c5bb050f8057f0e04b2d05b69057aaa1ca022fc9e649f6972be73f30a01fec` |
-| `phases/P12/P12.7.md` | `285fe86dbd9248c63b541c97ff1c1f2ce21b75f20b31a5978df1484bcc085e29` |
-| `phases/P12/P12.8.md` | `75f078ffda88f019b036ab4cfe297e4beb581aa85e9dd9ffb0c692fe57c6719a` |
-| `phases/P12/P12.9.md` | `38b77bb7dd3e789d95bf86dba4e2a912682bf0f3f3028ac63547c52bc4a6d66b` |
+| `phases/P12/P12.1.md` | `71ecb1721a8e3905ff215b3e5debc37b7b1ad1d1136740ddb60f51163767318e` |
+| `phases/P12/P12.2.md` | `71d8d697be049668b514af26525b3e101893b1de371e9ddfb084bde2137f79d3` |
+| `phases/P12/P12.3.md` | `459e89871847489d9894dd96b0b580ffa0c578f6e4f9a87de9bdb6f29ca7718f` |
+| `phases/P12/P12.4.md` | `e8bcbc012d88305bf0fcd8fc7ab5019cf284826a065df9e9a0446fce876ca7e8` |
+| `phases/P12/P12.5.md` | `ee0201b85a329bcea26dceee90d0d46e2422e38fe7f28f7a4e1e4dab271f6c4f` |
+| `phases/P12/P12.6.md` | `c5d36d8c9e48cea9b78ded799b91a87cc8012335ae5861a3b9d8b1a9acf32a16` |
+| `phases/P12/P12.7.md` | `f8541aa3f36e902841c9ca17aaa09a12af480a2d4f389cac305d446f44fdd0ef` |
+| `phases/P12/P12.8.md` | `9018b6ea0d478a25128a8e572e25d356a0ab62c23ea10a45d77269714de47bcb` |
+| `phases/P12/P12.9.md` | `259df4b1a1f8496755cbd8ac1789d086a8caed78252da48c28b0a4a4b39a52a4` |
 | `phases/P12/P12.md` | `80512d422e05ef44caa8481d3dbadf44e3c0dd76b994b13848a62479b0668e32` |
 | `phases/P2/P2.1.md` | `4c560a9098c1359754b8f49addf940a9d87427318d504c094760fde284bcb2e1` |
 | `phases/P2/P2.2.md` | `90579b61ab7565fae19f63d7a857c4a17b7c76e2e4cb20756aab055f581167cc` |
@@ -766,9 +768,9 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `research/P10-effective-design.md` | `3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac` |
 | `research/P11-design-rag.md` | `fcc73a3a6562f37de7f0d5d2296baa1fb136bb9bd96f99227f820af0c36b3b34` |
 | `research/P11-reconciliation-design.md` | `32cce51ebff33a8980f54d1864be6a0e5c15adb7a18f8974f7f17d72a5d310af` |
-| `research/P12-audit-reconciliation.md` | `2fa08dbb15842d96f4081fd50a2a6fc8f7ec8edc9e91f0695086fca50bb40ef0` |
-| `research/P12-design-rag.md` | `99565ada2b1239bb906ba0e5d1a7ae60493fa3bda366ff76460ae90d33c5aeb3` |
-| `research/P12-rebaseline-design.md` | `e11d86d06169c8d381512ac857983911711c55b0ff42084e8ed5085aa56869f0` |
+| `research/P12-audit-reconciliation.md` | `ff6f76f9055c8d27ba55656473d633b31355c185d5a68a062a5073d9d421d5e6` |
+| `research/P12-design-rag.md` | `6a28b20f9d0e0abc00320328c0a7ae6f6c03ae4f6752506960b02d64d7ab89b7` |
+| `research/P12-rebaseline-design.md` | `7c6dc130f116e88621c36a1f7647b9d179e84919206bbef7761c8f768628f594` |
 | `research/P2-contract-design.md` | `7eefb1385378065d4e039d81353940516f8d9df413e8274a2dfba8fe3f07ef9e` |
 | `research/P2-design-rag.md` | `b4715c31e66df2de63d07db2ca6539b994089c7c3f1d7b68d4b9b9a9a6251626` |
 | `research/P3-adapter-design.md` | `05dc04b765f133b4779a173c534e15d0ce6eb7ea020f77b5987cf5e391bf5525` |
@@ -791,7 +793,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `scripts/validate-p1.py` | `c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8` |
 | `scripts/validate-p10.py` | `557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49` |
 | `scripts/validate-p11.py` | `3ad17b7568ca7aef50356e5b0fc4baf7cd03418a9289ccb4f83ed478a5b718c2` |
-| `scripts/validate-p12.py` | `b514ec2b72be59b929339d3d0ee723a7082bb4611c290a8c56996ef7e62a4f13` |
+| `scripts/validate-p12.py` | `1a295aad84c2441b4289070c8bc7e7de845de056fd33212394d7ee9f650ca120` |
 | `scripts/validate-p2.py` | `ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3` |
 | `scripts/validate-p3.py` | `4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787` |
 | `scripts/validate-p4.py` | `724f046aedcf91e322436a1f7845187ae7e36c8e3c2919d072b7f8c41edccc27` |
@@ -912,6 +914,42 @@ DDL не меняется ни в одном item, новых зависимос
 статус P7 — `9/9 · 🟢 Done`. Это восстановление проекции журнала, а не новое приёмочное суждение:
 ни один receipt не выдавался и не переоценивался. Отмечу, что дефект `P7.8` соседствует с P0
 контракта модуля `corex/intl`, который приёмка P7.8 пропустила (см. handoff, Open risks).
+
+### Ремонт исполнимости P12 после проверки сборки bundle
+
+Первая печать P12 прошла оба design-гейта, но проверка `plan-views.py bundle` показала, что
+**ни один** из девяти item не собирал bundle — то есть исполнитель не получил бы объявленных
+входов. Найдено и исправлено шесть дефектов, все внесённые при авторстве P12:
+
+| Дефект | Следствие | Правка |
+|:--|:--|:--|
+| Заголовки дизайна вида `## §1.` | Резолвер ищет `## 1.` и молча брал подсекцию `1.1` — усечённый фрагмент **без ошибки** | Заголовки нормализованы в `## 1.`; ссылки `§1` в спеках сохранены |
+| Голые пути (`plan.md`) | Не считаются объявленным путём (нужны `/`+расширение либо бэктики) → `unresolvable_entry` | Все пути в `Inputs`/`Required Reads` взяты в бэктики |
+| ID вердиктов `D1`–`D5` | Совпали с неймспейсом записей решений: резолвер искал `decisions/D1-*.md` | Группа переименована в `TR1`–`TR5` |
+| `decisions/D39.md` | Файла не существует, решение называется `D39-p6-owned-attributes-engine.md` | Путь исправлен |
+| Девять беспутевых прозаических записей | `unresolvable_entry` на процедурных утверждениях | Перенесены в `Implementation Rules`, который bundle не резолвит |
+| `§`-ссылки в записи с чужим путём | Селектор применялся к `composer.json`/`LayerTest.php` | Кросс-ссылки выведены из полей bundle |
+
+Сейчас bundle собирается для P12.1–P12.8; P12.9 остаётся dependency-not-ready, потому что его
+объявленный вход — файл receipt'ов, который создаёт P12.1. Это заявленная семантика плана, а не
+дефект. Во всех девяти item'ах теперь назван единый носитель receipt'ов
+`findings/P12-rebaseline-receipts.md`: раньше item'ы говорили «Receipt» без пути, и исполнителю
+пришлось бы выбирать его самому.
+
+`scripts/validate-p12.py` расширен и проверен негативными прогонами: он требует объявленного
+и существующего пути в каждой записи, точного совпадения номера секции (ловит подмену `1`→`1.1`),
+существования каждой прозаической `§`-ссылки и фактической сборки bundle для P12.1–P12.8.
+
+Отдельно исправлен содержательный дефект доказательной базы: ссылки на `§3.3` RAG-документа были
+висячими (нумерованных секций в нём нет), а утверждение «имя таблицы подставляется не как
+bound-параметр» не подкреплялось ни одной строкой Primary sources. Премисса получена напрямую из
+двух добавленных первичных источников (PostgreSQL `sql-prepare`, PHP `pdo.prepare`, оба HTTP 200,
+байты и SHA256 в `primary-source-retrieval.json`), а формулировка в дизайне сужена до того, что
+источники действительно говорят: параметр несёт типизированное значение, поэтому имя таблицы
+попадает на сервер текстом запроса. Явные утверждения об идентификаторах на странице PDO живут
+только в пользовательских заметках и как первичный источник не цитируются. Повторный запрос к
+Perplexity по этой премиссе завершился таймаутом, зафиксирован в `integrity.json` как
+`counted_as_evidence: false` и доказательством не считается.
 
 ### Остаточные унаследованные ошибки линта (не адресуются P12)
 

@@ -52,5 +52,23 @@
     "sha256": "1cd14622e31f7bd0856be503ad87fc0498668221411a198b3789b9c244eb592f",
     "artifact": "artifacts/P12-design/primary-1e5f6a6bc01aae5f.gz",
     "retrieved_at": "2026-09-18T03:50:19.405533+00:00"
+  },
+  {
+    "url": "https://www.postgresql.org/docs/16/sql-prepare.html",
+    "effective_url": "https://www.postgresql.org/docs/16/sql-prepare.html",
+    "http": 200,
+    "bytes": 23469,
+    "sha256": "261008f160e0a4016828954c6a5778cd729784a804ebeb0b1cff303910cd2f6f",
+    "artifact": "artifacts/P12-design/primary-5cda41ccae8392bd.gz",
+    "retrieved_at": "2026-09-18T04:34:39.343383+00:00"
+  },
+  {
+    "url": "https://www.php.net/manual/en/pdo.prepare.php",
+    "effective_url": "https://www.php.net/manual/en/pdo.prepare.php",
+    "http": 200,
+    "bytes": 84201,
+    "sha256": "9871df0f50453b7b64ee15f7cd8622e86955d88235e9d1f636ace858f3460b0f",
+    "artifact": "artifacts/P12-design/primary-a5d48dea1f26ff8f.gz",
+    "retrieved_at": "2026-09-18T04:34:39.343383+00:00"
   }
 ]

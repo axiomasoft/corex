@@ -5,7 +5,7 @@
 **Вход:** `research/P12-audit-reconciliation.md` (что именно подтверждено), `research/P12-design-rag.md` (внешние факты)
 **Решение:** `decisions/D41-package-boundary-rebaseline.md`
 
-## §0. Как пользоваться этим документом
+## 0. Как пользоваться этим документом
 
 Это **единственный** источник кода для фазы P12. Порядок работы исполнителя:
 
@@ -32,9 +32,9 @@ constructor property promotion; явные типы аргументов и во
 переопределении; именованные аргументы при двух и более однотипных параметрах;
 в `src/Contracts/` — только интерфейсы.
 
-## §1. P12.1 — ремонт трёх P0
+## 1. P12.1 — ремонт трёх P0
 
-### §1.1 Контракт модуля `corex/intl` (дефект NEW-1)
+### 1.1 Контракт модуля `corex/intl` (дефект NEW-1)
 
 `packages/intl/composer.json` объявляет `extra.corex.module = CoreX\Intl\IntlModule`,
 а класс контракту не соответствует. `ModuleDiscovery` проверяет наследование и бросает
@@ -87,7 +87,7 @@ final class IntlModule extends CorexModule
 - Появляется реальная зависимость `corex/intl` → `corex/modules`. Её обязательно
   объявить в `require` (см. §1.3), иначе гейт §2 станет красным.
 
-### §1.2 Утечка `corex/core` → `corex/tenancy` (дефект A2b)
+### 1.2 Утечка `corex/core` → `corex/tenancy` (дефект A2b)
 
 ```5:14:packages/core/src/Tenancy/Contracts/TenancyManager.php
 namespace CoreX\Tenancy\Contracts;
@@ -120,7 +120,7 @@ rg -n "^use CoreX\\\\" packages/core/src --no-heading \
   | rg -v "use CoreX\\\\(Contracts|Support|Tenancy|Modules)\\\\" || echo "clean"
 ```
 
-### §1.3 Незаявленные cross-package зависимости (дефект A3)
+### 1.3 Незаявленные cross-package зависимости (дефект A3)
 
 Привести `require` в соответствие с фактическими импортами. Версии — `"@dev"`, как у всех
 внутренних зависимостей. Если у пакета есть блок `repositories`, добавить туда
@@ -143,9 +143,9 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 это `require`. Если он под охраной и есть работающий fallback — оставить в `suggest`
 и **обязательно** внести в allowlist гейта §2.2 с указанием файла-охранника.
 
-## §2. P12.3 — гейт графа пакетов
+## 2. P12.3 — гейт графа пакетов
 
-### §2.1 Почему repo-local скрипт, а не Deptrac/PHPat
+### 2.1 Почему repo-local скрипт, а не Deptrac/PHPat
 
 `qossmic/deptrac` заброшен (RAG:✅), актуален `deptrac/deptrac`. `phpat/phpat` живой,
 но это новая dev-зависимость и отдельный DSL. В репозитории уже есть работающий паттерн
@@ -156,7 +156,7 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 `SourceScanner`. Это принципиально: гейт обязан быть зелёным/красным независимо от того,
 установлен ли autoloader конкретного пакета.
 
-### §2.2 Три правила гейта
+### 2.2 Три правила гейта
 
 **R1 — undeclared dependency.** Если файл `packages/A/src/**` импортирует класс, владелец
 которого — пакет `B` (`A !== B`), то `packages/A/composer.json` обязан содержать `B`
@@ -172,7 +172,7 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 из каждого файла берётся `namespace X;` и имя объявленного типа; FQCN сопоставляется
 владельцу по самому длинному совпадению префикса — та же дисциплина, что у PSR-4.
 
-### §2.3 Правило host-reserved namespace
+### 2.3 Правило host-reserved namespace
 
 Расщепление неймспейса между пакетами допустимо **только** при одновременном выполнении
 трёх условий:
@@ -206,7 +206,7 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 Гейт печатает это исключение в отчёте на каждом прогоне. Молчаливое прохождение запрещено
 (`root.evidence-integrity`: отключённая проверка не считается зелёной).
 
-### §2.4 Что создать
+### 2.4 Что создать
 
 - `scripts/package-graph-gate.php` — скрипт: строит индекс, применяет R1–R3, печатает
   таблицу нарушений `путь:строка: импорт → пакет-владелец`, пишет машинный отчёт
@@ -220,7 +220,7 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 Требование к диагностике: красный гейт обязан называть файл, строку, импорт и пакет-владельца.
 Вердикт без адреса нарушения не принимается.
 
-## §3. P12.2 — полный контур тестов пакетов
+## 3. P12.2 — полный контур тестов пакетов
 
 `composer.json:67` (`test:packages`) запускает 8 пакетов из 20. Не запускаются:
 `attributes`, `core`, `import-export`, `intl`, `intl-search`, `media`, `modules`, `panels`,
@@ -245,9 +245,9 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 Требование доказательства: receipt обязан содержать вывод, из которого видно 20 запущенных
 пакетов и отсутствие «тихих» пропусков. Ненулевой код возврата любого пакета блокирует item.
 
-## §4. P12.4 — `corex/import-export` → `corex/transfer`
+## 4. P12.4 — `corex/import-export` → `corex/transfer`
 
-### §4.1 Почему hard rename, а без `replace`
+### 4.1 Почему hard rename, а без `replace`
 
 Оба аудита предлагают `"replace": {"corex/import-export": "self.version"}` как способ
 сохранить совместимость. Это неверно: `replace` влияет **только** на solver Composer и
@@ -255,7 +255,7 @@ rg -n "CoreX\\\\Wakeup" packages/tenancy/src packages/tasks-workflow/src --no-he
 потребителей нет, поэтому выбран hard rename без bridge-слоя. `class_alias`-мост
 тоже не вводится: он нужен для уже используемого извне неймспейса.
 
-### §4.2 Дельта переименования
+### 4.2 Дельта переименования
 
 | Было | Стало |
 |:--|:--|
@@ -280,17 +280,17 @@ rg -n -i "import.?export" --hidden -g '!vendor' -g '!node_modules' -g '!.git' . 
 
 Пустой вывод (кроме `audits/`, где имя зафиксировано исторически) — условие закрытия item'а.
 
-### §4.3 Что в этом item'е делать запрещено
+### 4.3 Что в этом item'е делать запрещено
 
 `Support/` → `Data/` — **только перемещение и правка неймспейса**. Разделение
 `DatabaseTransferRunner`, изменение таксономии ошибок, вынос внешнего вызова из
-retryable-транзакции и снятие `catch (Throwable)` (дефекты D2/D3/D4) **отложены**
+retryable-транзакции и снятие `catch (Throwable)` (дефекты TR2/TR3/TR4) **отложены**
 в ADR через P12.9. Смешивать переименование и смену поведения в одном item'е запрещено:
 это сделало бы дифф непроверяемым.
 
-## §5. P12.5 — консолидация search через `SearchManager`
+## 5. P12.5 — консолидация search через `SearchManager`
 
-### §5.1 Дефект
+### 5.1 Дефект
 
 Два провайдера регистрируют один и тот же биндинг:
 
@@ -307,7 +307,7 @@ retryable-транзакции и снятие `catch (Throwable)` (дефект
 при невалидном конфиге `corex/search` молча подставляет `UnsupportedSearchProvider`,
 и неверная конфигурация продакшена выглядит как «поиск ничего не нашёл».
 
-### §5.2 Целевая схема
+### 5.2 Целевая схема
 
 Реестр драйверов вместо конкуренции за биндинг. Ответственности:
 
@@ -413,7 +413,7 @@ final class SearchManager extends Manager
 `SearchManager` — `singleton`, потому что это реестр драйверов и он не держит tenant-состояния.
 `SearchProvider` остаётся `scoped`, как сейчас: сам провайдер держит соединение.
 
-### §5.3 Значение по умолчанию
+### 5.3 Значение по умолчанию
 
 `packages/search/config/corex-search.php` сейчас: `'driver' => 'unsupported'`.
 Заменить на `'driver' => 'null'` — иначе дефолтный конфиг падает на неизвестном драйвере.
@@ -421,7 +421,7 @@ final class SearchManager extends Manager
 конфигурация (выбранный драйвер + сломанные параметры) теперь падает громко.
 Разбор fail-closed/null-driver — RAG:✅ §3.2.
 
-### §5.4 Сторона `search-meilisearch`
+### 5.4 Сторона `search-meilisearch`
 
 Неймспейс: `CoreX\SearchMeilisearch\` → `CoreX\Search\Meilisearch\` (и `...\Tests\`
 соответственно). Допустимо строго по правилу §2.3; перед закрытием item'а убедиться, что
@@ -481,7 +481,7 @@ final class SearchManager extends Manager
   зависимости требует G-DEPENDENCY и отложена в ADR (актуальная ветка SDK — `2.0.0-beta.*`,
   RAG:✅).
 
-## §6. P12.6 — `corex/intl-search` → `corex/search-intl`
+## 6. P12.6 — `corex/intl-search` → `corex/search-intl`
 
 Переименование ради читаемой топологии: имя отражает «адаптер поверх search», а не
 самостоятельную возможность. Механика — как в §4.1: hard rename, без `replace`,
@@ -510,17 +510,18 @@ Bridge-политика, которую item обязан зафиксирова
 `corex/core` (не `panels`/`views`), а `SqlSavedViewLabelReader` не содержит SQL —
 он делегирует `TranslationReader`. См. разбор E2/E3.
 
-## §7. P12.7 — `corex/attributes`: table-map, обязательная валидация, optional `modules`
+## 7. P12.7 — `corex/attributes`: table-map, обязательная валидация, optional `modules`
 
-### §7.1 Типизированный table-map (дефект B1)
+### 7.1 Типизированный table-map (дефект B1)
 
 Имена таблиц захардкожены в четырёх классах: `JsonbAttributeStore.php:155,160`,
 `EavAttributeStore.php:37,54,65,75,96`, `QueuedSchemaOperations.php:39`,
 `SchemaOperationWorker.php:30,36,49,118,155`.
 
 Целевая форма — иммутабельный объект, собираемый из конфига **один раз** в провайдере
-и внедряемый в конструктор. Обоснование (Octane, тестируемость, ранняя валидация) —
-RAG:✅ §3.3.
+и внедряемый в конструктор. Обоснование — RAG:✅ строки Laravel `packages` и `octane`
+в разделе Primary sources `research/P12-design-rag.md`: конфиг читается на границе
+композиции пакета, а boot-time singleton переиспользуется между запросами.
 
 `packages/attributes/src/Data/AttributeTables.php`:
 
@@ -564,13 +565,16 @@ final readonly class AttributeTables
   строкам, символ в символ**. Первым шагом item'а выписать фактические имена командой
   `rg -o "table\('[a-z_]+'\)" packages/attributes/src` и взять их как есть.
   Список полей объекта определяется этим выводом, а не примером выше.
-- Валидация идентификатора обязательна: имя таблицы в query builder подставляется
-  не как bound-параметр (RAG:✅ §3.3), поэтому произвольная строка из конфига неприемлема.
+- Валидация идентификатора обязательна: bind-параметр несёт типизированное *значение*
+  (RAG:✅ строки PostgreSQL `sql-prepare` и PHP `pdo.prepare` в Primary sources), поэтому
+  имя таблицы попадает на сервер как текст запроса, а не как значение. Произвольная
+  строка из конфига неприемлема. Формулировка ограничена тем, что говорят источники:
+  вывод об эксплуатируемости невалидированного идентификатора — локальный.
 - Миграции не меняются. Проверка: `git diff --stat packages/attributes/database/` пуст.
 - `config()` внутри store-классов не появляется. Объект приходит через конструктор;
   `config()` остаётся только в провайдере — это и есть граница композиции.
 
-### §7.2 Обязательная schema-валидация (дефект B4)
+### 7.2 Обязательная schema-валидация (дефект B4)
 
 ```28:31:packages/attributes/src/Internal/Engine/JsonbAttributeStore.php
         private ?FieldCatalogue $catalogue = null,
@@ -585,7 +589,7 @@ Nullable `FieldCatalogue` означает, что запись значений
 на стороне вызова правок не требуется — но тесты, конструирующие store без каталога,
 придётся обновить. Это ожидаемая часть item'а.
 
-### §7.3 `corex/modules` как optional (дефект B2/B3)
+### 7.3 `corex/modules` как optional (дефект B2/B3)
 
 Перенести `"corex/modules"` из `require` в `suggest` в `packages/attributes/composer.json`
 с текстом, называющим, что теряется без пакета. Fallback уже реализован
@@ -602,9 +606,9 @@ Nullable `FieldCatalogue` означает, что запись значений
 - Разделение пакета на три (предложение аудита №2) **не выполняется**: корневая причина —
   обязательность зависимости, а не число пакетов.
 
-## §8. P12.8 — `Closure` из `DataScope` [OWNER-GATE:G-API]
+## 8. P12.8 — `Closure` из `DataScope` [OWNER-GATE:G-API]
 
-### §8.1 Дефект
+### 8.1 Дефект
 
 ```13:20:packages/core/src/Support/Data/DataScope.php
     public function __construct(
@@ -634,7 +638,7 @@ PHP не сериализует `Closure` — попытка даёт `Serializa
 > проверке README (`artifacts/P12-design/`, 2882 байта, HTTP 200): слова `readonly`
 > в нём нет. Аргументом не пользуемся. Обоснование §8.2 от этого не зависит.
 
-### §8.2 Целевая форма
+### 8.2 Целевая форма
 
 `Closure $authorize` заменяется на инжектируемый контракт, возвращающий решение-данные.
 `DataScope` остаётся `final readonly` и становится полностью сериализуемым.
@@ -653,7 +657,7 @@ PHP не сериализует `Closure` — попытка даёт `Serializa
   rg -n "authorize" packages/*/src --no-heading | rg -v "^packages/[^/]+/src/.*Contracts/"
   ```
 
-### §8.3 Почему это единственный G-API-item фазы
+### 8.3 Почему это единственный G-API-item фазы
 
 `DataScope` — часть контракта `shared-data-foundation/1`, поэтому правка требует одобрения
 владельца. Полная декомпозиция на `AccessContext`/`StorageContext` (предложение обоих
@@ -664,7 +668,7 @@ Item не считается закрытым, пока не показан те
 и восстанавливает его без исключения. Без такого теста дефект может вернуться незаметно —
 именно так он и появился.
 
-## §9. Инварианты, общие для всех item'ов
+## 9. Инварианты, общие для всех item'ов
 
 | Инвариант | Как проверяется |
 |:--|:--|
@@ -679,7 +683,7 @@ Item не считается закрытым, пока не показан те
 Коммиты — Russian Conventional Commits. Релиз-видимые изменения — в корневой
 `CHANGELOG.md` под `[Unreleased]`; отдельного ledger'а у пакетов нет.
 
-## §10. Команды верификации
+## 10. Команды верификации
 
 Для затронутого пакета:
 

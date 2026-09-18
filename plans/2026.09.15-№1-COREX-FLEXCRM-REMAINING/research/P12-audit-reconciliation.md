@@ -38,11 +38,11 @@
 | C1 | `SearchServiceProvider` возвращает `UnsupportedSearchProvider` при невалидном конфиге | ПОДТВЕРЖДЕНО | `SearchServiceProvider.php:23-36` |
 | C2 | `search-meilisearch` перерегистрирует тот же биндинг `SearchProvider` | ПОДТВЕРЖДЕНО | `SearchServiceProvider.php:23` и `MeilisearchServiceProvider.php:30` — оба `scoped(SearchProvider::class)`; итог зависит от порядка загрузки providers |
 | C3 | SDK Meilisearch запинен точной версией | ПОДТВЕРЖДЕНО | `search-meilisearch/composer.json:10` — `"meilisearch/meilisearch-php": "1.16.1"` |
-| D1 | Пакет `corex/import-export`, неймспейс `CoreX\ImportExport` | ПОДТВЕРЖДЕНО | `packages/import-export/composer.json` |
-| D2 | `DatabaseTransferRunner` делает всё в одной retryable-транзакции | ПОДТВЕРЖДЕНО | `DatabaseTransferRunner.php` — 231 строка / 11 107 байт; внешняя транзакция `:41` … `}, attempts: 3);` `:130`; вызов target `apply`/`lookup` во вложенной транзакции `:82-91` внутри внешней |
-| D3 | `catch (Throwable)` превращает любую ошибку в `rowFailed` | ПОДТВЕРЖДЕНО | `DatabaseTransferRunner.php:92-97` |
-| D4 | Dry-run не пишет checkpoint, но возвращает инкрементированный sequence | ПОДТВЕРЖДЕНО | `:108` инкремент, `:111-127` пропуск записи, `:129` возврат |
-| D5 | Ключевые DTO лежат в `Support/` | ПОДТВЕРЖДЕНО | Все 9 названных файлов присутствуют в `import-export/src/Support/` |
+| TR1 | Пакет `corex/import-export`, неймспейс `CoreX\ImportExport` | ПОДТВЕРЖДЕНО | `packages/import-export/composer.json` |
+| TR2 | `DatabaseTransferRunner` делает всё в одной retryable-транзакции | ПОДТВЕРЖДЕНО | `DatabaseTransferRunner.php` — 231 строка / 11 107 байт; внешняя транзакция `:41` … `}, attempts: 3);` `:130`; вызов target `apply`/`lookup` во вложенной транзакции `:82-91` внутри внешней |
+| TR3 | `catch (Throwable)` превращает любую ошибку в `rowFailed` | ПОДТВЕРЖДЕНО | `DatabaseTransferRunner.php:92-97` |
+| TR4 | Dry-run не пишет checkpoint, но возвращает инкрементированный sequence | ПОДТВЕРЖДЕНО | `:108` инкремент, `:111-127` пропуск записи, `:129` возврат |
+| TR5 | Ключевые DTO лежат в `Support/` | ПОДТВЕРЖДЕНО | Все 9 названных файлов присутствуют в `import-export/src/Support/` |
 | E1 | `intl-search` требует core + intl + search | ПОДТВЕРЖДЕНО | `intl-search/composer.json:6-11` |
 | E2 | `intl-search` владеет собственной функциональностью и SQL-персистентностью | ОПРОВЕРГНУТО В ЧАСТИ SQL | Классы — тонкие декораторы. `SqlSavedViewLabelReader` не содержит SQL, делегирует `TranslationReader`. Собственный контракт только один: `Contracts/SavedViewLabelReader` |
 | E3 | Saved views принадлежат `corex/panels`/`corex/views` | ОПРОВЕРГНУТО | Владелец — `corex/core`: `core/src/Contracts/SavedViewRepository.php`, `core/src/Views/Internal/SqlSavedViewRepository.php`, биндинг `CoreServiceProvider.php:76` |
@@ -76,7 +76,7 @@
 | Объявить недостающие cross-package зависимости | оба аудита (A3) | P12.1 |
 | `test:packages` на все 20 пакетов, скрипты для `core`/`modules` | аудит №2 (F1/F2) | P12.2 |
 | Гейт графа пакетов: undeclared deps, чужой `Internal`, расщеплённый неймспейс | оба аудита | P12.3 |
-| `import-export` → `transfer`, `Support/` → `Data/` | оба аудита (D1/D5) | P12.4 |
+| `import-export` → `transfer`, `Support/` → `Data/` | оба аудита (TR1/TR5) | P12.4 |
 | `SearchManager`, снятие коллизии биндинга, fail-closed конфиг, `null`-driver | аудит №1 (C1/C2) | P12.5 |
 | `intl-search` → `search-intl`, bridge-политика | аудит №2 (E1) | P12.6 |
 | Типизированный table-map, обязательная schema-валидация, optional `modules` | оба аудита (B1/B2/B4) | P12.7 |
@@ -105,7 +105,7 @@
 | Отложенная работа | Пункт | Куда |
 |:--|:--|:--|
 | Explicit `SetAttribute`/`RemoveAttribute`, presence-тип, различение missing/null/remove | B5 | ledger + ADR-предложение для vault |
-| Разделение `DatabaseTransferRunner` на claim/read/apply/checkpoint, таксономия ошибок, вынос внешнего вызова из retryable-транзакции, снятие `catch (Throwable)` | D2/D3/D4 | ledger + ADR-предложение для vault |
+| Разделение `DatabaseTransferRunner` на claim/read/apply/checkpoint, таксономия ошибок, вынос внешнего вызова из retryable-транзакции, снятие `catch (Throwable)` | TR2/TR3/TR4 | ledger + ADR-предложение для vault |
 | Полная декомпозиция `DataScope` на `AccessContext`/`StorageContext` | A1 | ledger + ADR-предложение для vault |
 | Сокращение `corex/core` | — | ledger + ADR-предложение для vault |
 | Вынос `config()` из domain/repository/engine в типизированные options-объекты | G1 | ledger + ADR-предложение для vault |

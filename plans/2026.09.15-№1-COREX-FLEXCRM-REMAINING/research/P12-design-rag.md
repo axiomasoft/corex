@@ -26,6 +26,8 @@ repository's own code is verified by reading files and is recorded in
 | Laravel | https://laravel.com/docs/13.x/packages | `mergeConfigFrom` is documented as a call inside the service provider's `register` method — configuration is read at the package composition boundary. |
 | Laravel | https://laravel.com/docs/13.x/octane | A singleton resolved during application boot is reused across subsequent requests, which is what makes tenant- or request-derived singleton state unsafe. |
 | Laravel (package README) | https://raw.githubusercontent.com/laravel/serializable-closure/master/README.md | The package's own caveats are exactly two: serialization in REPL environments is unsupported, and multiple same-signature closures on one source line may become indistinguishable. |
+| PostgreSQL | https://www.postgresql.org/docs/16/sql-prepare.html | "Prepared statements can take parameters: values that are substituted into the statement when it is executed", and every parameter carries a `data_type`. A parameter is therefore a typed data value; a table identifier is not one and reaches the server as statement text. |
+| PHP | https://www.php.net/manual/en/pdo.prepare.php | Parameter markers are placeholders "for which real values will be substituted when the statement is executed". Same mechanism statement from a second independent origin. |
 
 ## Choice / independent origin mapping
 
@@ -65,6 +67,17 @@ This matters beyond bookkeeping: the rejected claim was the most convenient argu
 transportability of behavior is not authorization semantics — a signed payload proves the
 callback data was not modified, not that the actor may perform the operation now. That is
 local inference, labelled as such, standing on the verified PHP and Laravel facts.
+
+A second tool retrieval, on whether a bind parameter can carry a table identifier, timed out
+with no response and is excluded from the evidence set. The premise was instead established
+directly from the two primary sources added above. Their normative text states that a
+parameter is a substituted typed *value*; neither page states in its normative body that an
+identifier is rejected as a parameter. The only explicit statements to that effect on the PDO
+page live in user-contributed notes, which are not primary documentation and are not cited.
+The design therefore claims only what the sources support: a table name is not a bind value
+and reaches the server inside the statement text, so a table name taken from configuration
+must be validated as an identifier before use. That an unvalidated identifier is exploitable
+here is local inference from the repository's own query construction, labelled as such.
 
 ## Alternatives
 
