@@ -1,0 +1,65 @@
+{
+  "schema": "p12-design-rag-integrity/1",
+  "date": "2026-09-18",
+  "policy": [
+    "D4 mandatory design RAG",
+    "D6 neutral queries"
+  ],
+  "neutral_queries": true,
+  "query_file": {
+    "file": "perplexity-query.txt",
+    "bytes": 2114,
+    "sha256": "ff8b97399a54cf7cff0c613f1b6803a1cb3c4f363194bea6f3f43b1d2fefdd1a"
+  },
+  "envelope": {
+    "file": "perplexity-response.json",
+    "bytes": 28160,
+    "sha256": "d02e930c23a3d870b230e0e71d3db47a6f1ce2fbcb908573b4e1a929d2224ded"
+  },
+  "responses": [
+    {
+      "key": "optional-driver",
+      "topic": "Optional driver dependency, suggest + class_exists guard, fail-closed config, competing container bindings, driver manager registry",
+      "route": "perplexity mcp search",
+      "file": "perplexity-response.optional-driver.txt",
+      "bytes": 1056,
+      "sha256": "becdedf7411c0a75820e30206a4b42b37e15e4802ea138f30b0f9c79c2d9bc48",
+      "consumed_by": "P12-design-rag.md §3.2"
+    },
+    {
+      "key": "rename",
+      "topic": "Composer package + PSR-4 namespace rename before 1.0: hard rename vs replace vs class_alias",
+      "route": "perplexity mcp search",
+      "file": "perplexity-response.rename.txt",
+      "bytes": 951,
+      "sha256": "b698912371029945c2904466f77958b1a3451fd396557082747213536287d731",
+      "consumed_by": "P12-design-rag.md §3.4"
+    },
+    {
+      "key": "typed-config",
+      "topic": "Typed immutable config object vs global config() helper; configurable table names via typed table map",
+      "route": "perplexity mcp search",
+      "file": "perplexity-response.typed-config.txt",
+      "bytes": 13217,
+      "sha256": "186deba321eaf667ccee7106c4e967053dd9c460458bf2fdf77b32450d38ba0d",
+      "consumed_by": "P12-design-rag.md §3.3"
+    },
+    {
+      "key": "closure-boundary",
+      "topic": "Closure in a DTO crossing a queue/workflow boundary; laravel/serializable-closure vs explicit policy",
+      "route": "perplexity mcp search",
+      "file": "perplexity-response.closure-boundary.txt",
+      "bytes": 12296,
+      "sha256": "554c25aff15bc4ad6abefc23e5aa6ff1bae16ae56f4f9ce984cb8b418a3f72e6",
+      "consumed_by": "P12-design-rag.md §3.5"
+    }
+  ],
+  "excluded": [
+    {
+      "topic": "scoped vs singleton container bindings for tenant-dependent services",
+      "reason": "request timed out, no response returned",
+      "counted_as_evidence": false,
+      "compensated_by": "typed-config response enumerates unsafe singleton state"
+    }
+  ]
+}

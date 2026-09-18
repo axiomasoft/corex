@@ -30,12 +30,12 @@ def design_inputs(plan: Path) -> set[str]:
         'decisions/D17-whole-plan-review.md',
     }
     # Keep exact owning contract names explicit for the per-phase checker contracts.
-    expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py"})
+    expected.update({"research/P2-contract-design.md", "research/P3-adapter-design.md", "research/P4-extension-design.md", "research/P5-wakeup-design.md", "research/P6-data-design.md", "research/P7-utility-design.md", "research/P8-tool-design.md", "research/P9-cohort-design.md", "decisions/D14-release-cohort.md", "scripts/validate-p9.py", "research/P10-effective-design.md", "decisions/D15-effective-acceptance.md", "scripts/validate-p10.py", "research/P11-reconciliation-design.md", "decisions/D16-consumer-reconciliation.md", "scripts/validate-p11.py", "research/P12-rebaseline-design.md", "research/P12-audit-reconciliation.md", "decisions/D41-package-boundary-rebaseline.md", "scripts/validate-p12.py"})
     for folder in ('brief', 'research'):
         expected.update(str(path.relative_to(plan)) for path in (plan / folder).rglob('*') if path.is_file())
     expected.update(str(path.relative_to(plan)) for path in (plan / 'decisions').glob('D*.md')
                     if path.is_file() and normative_decision(path))
-    for number in range(1, 12):
+    for number in range(1, 13):
         expected.add(f'scripts/validate-p{number}.py')
         expected.add(f'phases/P{number}/P{number}.md')
         expected.update(str(path.relative_to(plan)) for path in (plan / f'phases/P{number}').glob(f'P{number}.*.md') if re.fullmatch(r'P\d+\.\d+\.md', path.name))
@@ -58,7 +58,7 @@ def design_inputs(plan: Path) -> set[str]:
 def design_ready(plan: Path) -> None:
     fields = ("Intent", "Why", "Scope Included", "Scope Excluded", "Inputs", "Files", "Required Reads", "Implementation Rules", "Code Guidance", "Validation", "Deliverables")
     expected = design_inputs(plan)
-    for number in range(1, 12):
+    for number in range(1, 13):
         phase = plan / f"phases/P{number}/P{number}.md"
         text = phase.read_text()
         if "СКЕЛЕТ — не детализирован" in text:
@@ -108,7 +108,7 @@ def design_ready(plan: Path) -> None:
     for path, checksum in anchors.items():
         if hashlib.sha256((plan / path).read_bytes()).hexdigest() != checksum:
             raise ValueError(f"DESIGN_PENDING: finish input changed: {path}")
-    print("Design gate PASS: 11 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned")
+    print("Design gate PASS: 12 detailed phases, Perplexity evidence and current sealed whole-plan review; runtime acceptance remains item-owned")
 
 
 def policy_lint(plan: Path, runtime: Path) -> int:

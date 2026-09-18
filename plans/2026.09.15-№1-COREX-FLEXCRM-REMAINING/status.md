@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-17
-inputs_sha256: 12005c06bd5c00a7ad7b819cfa5e0d3831a3594a1ba9d85a80e6c8e169922a94
+inputs_sha256: ea94816761f9da51f800d863dcc6f05ccb739094951aeff78ae0402f47f30ff0
 generated_by: task plan-views status
 -->
 
@@ -26,12 +26,13 @@ generated_by: task plan-views status
 | P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
+| P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 0/9 | ⬜ Not started |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
 | P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟠 Done with deviations |
 | P5 | Workflow binding и единый durable wakeup seam | 6/6 | 🟢 Done |
 | P6 | Data extension, import/export и search | 8/8 | 🟢 Done |
-| P7 | Task primitives, recurrence и internationalization | 2/9 | 🟡 In progress |
+| P7 | Task primitives, recurrence и internationalization | 9/9 | 🟢 Done |
 | P8 | Introspection и transport-neutral tool integration | 0/7 | ⬜ Not started |
 | P9 | Integrated cohort, compatibility, pristine install и release | 0/9 | ⬜ Not started |
 
@@ -69,6 +70,20 @@ generated_by: task plan-views status
 | P11.5 | Подготовить exact consumer acceptance и handoff diff | ⬜ Not started | — |
 | P11.6 | Применить разрешённую dependency reconciliation в FlexCRM | ⬜ Not started | — |
 | P11.7 | Запечатать cross-repo результат и app-only continuation | ⬜ Not started | — |
+
+## Phase P12
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P12.1 | Починить контракт модуля, утечку ядра и незаявленные зависимости | ⬜ Not started | — |
+| P12.2 | Расширить контур тестов пакетов с 8 до 20 | ⬜ Not started | — |
+| P12.3 | Ввести исполняемый гейт графа пакетов | ⬜ Not started | — |
+| P12.4 | Переименовать `corex/import-export` в `corex/transfer` | ⬜ Not started | — |
+| P12.5 | Свести поиск к одному реестру драйверов | ⬜ Not started | — |
+| P12.6 | Переименовать `corex/intl-search` в `corex/search-intl` | ⬜ Not started | — |
+| P12.7 | Типизировать table-map и сделать `corex/modules` опциональным | ⬜ Not started | — |
+| P12.8 | Убрать `Closure` из `DataScope` [OWNER-GATE:G-API] | ⬜ Not started | — |
+| P12.9 | Запечатать фазу и оформить отложенное в ADR | ⬜ Not started | — |
 
 ## Phase P2
 
@@ -352,6 +367,21 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-17 | composer-2.5/high | plan-exec · in-progress · — |
 | 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.2 bounded recurrence adapter PASS (REC-01..12).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · in-progress · — |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.3 task planning primitives PASS (PRIM-01..08).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.4 task recurrence materialization PASS (MAT-01..09).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.5 typed locale and translation fallback PASS (LOC-01..09).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.6 money/rate snapshots PASS (FX-01..10).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.7 geography/reference provider PASS (GEO-01..10).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.8 optional intl/search bridges PASS (OPT-01..07).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-17 | composer-2.5/high | plan-exec · closed-green · P7.9 installed portable utility cohort seal PASS (R17/R20/R23/R24/R25).
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

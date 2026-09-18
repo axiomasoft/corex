@@ -14,10 +14,11 @@ flowchart TD
  P3 -->|file IO only| P6
  P5 -->|task recurrence/wakeup only| P7
  P5 -->|scheduled digest only| P4
- P4 --> P8["P8 Introspection/tool contributions"]
- P5 --> P8
- P6 --> P8
- P7 --> P8
+ P4 --> P12["P12 Package boundary rebaseline"]
+ P5 --> P12
+ P6 --> P12
+ P7 --> P12
+ P12 --> P8["P8 Introspection/tool contributions"]
  P3 --> P9["P9 Installed cohort / release"]
  P8 --> P9
  P9 --> P10["P10 Effective central/cloud acceptance"]
@@ -81,6 +82,22 @@ All product items remain Not started; D17 and current finish seal govern executi
 ## P7 execution subsets (PLAN1.D12; after full design-finish only)
 
 P2→P7.1→P7.2/P7.3/P7.5/P7.6; P7.1+P7.5→P7.7; P7.2+P7.3+P5.2→P7.4, optional P5.4current binding gates onlyFSM. P7.5+P7.7→P7.8 selected P6/P4/consumer-driver capabilities; all8reports→P7.9 installed5Rseal→P8/P9/P10/P11. Pure recurrence/money/locale/reference do not await central membership/Meili/engine. B-P7-INTL shared setup recommended, Files overlaps sequential same-root writes and commonDTO frozen, no child agents. Source/driver/import/install conformance70actual cases,45mixed original parents retained; D17 whole-plan corrections apply; no runtime execution in authoring.
+
+## P12 execution subsets (PLAN1.D41; blocking predecessor of P8)
+
+P12.1 три P0 → P12.2 контур тестов 20 пакетов → P12.3 гейт графа пакетов →
+независимые {P12.4 rename transfer, P12.5 реестр драйверов поиска → P12.6 rename search-intl,
+P12.7 table-map/optional modules} → P12.8 `DataScope` без `Closure` [G-API] → P12.9 печать.
+P12.1 первый, потому что до починки контракта модуля discovery падает и любой прогон тестов
+`corex/intl` недостоверен. P12.3 до переименований: гейт фиксирует уже исправленное
+состояние, а переименования обновляют его конфиг. P12.8 последний перед печатью как
+единственный защищённый item — D41 выдаёт G-API ровно на удаление несериализуемого
+поведения и ничего больше. P1–P7 терминальны и не реопенятся; DDL не меняется ни в одном
+item; новых зависимостей фаза не добавляет. Девять подтверждённых, но не исправленных
+дефектов фиксируются ledger'ом в P12.9 и остаются названными, а не считаются решёнными.
+Структурный чекер — `scripts/validate-p12.py --check design`. Исполнитель — модель класса
+Composer 2.5, поэтому каждая спека называет параграф `research/P12-rebaseline-design.md`
+с готовым кодом, и `[NEEDS CLARIFICATION]` в спеках отсутствует намеренно.
 
 ## P8 execution subsets (PLAN1.D13; after D4 finish)
 

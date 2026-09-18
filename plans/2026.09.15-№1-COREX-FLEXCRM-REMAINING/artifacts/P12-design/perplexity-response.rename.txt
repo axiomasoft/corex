@@ -1,0 +1,4 @@
+"Механизм","Что меняет","Помогает composer require old/package","Сохраняет Old\Namespace\Class в PHP","Когда применять"
+"Жёсткий rename","Имя пакета, namespace, импорты, публичный API","Нет","Нет","Если пакет фактически ещё не имеет внешних пользователей или вы готовы к чистому breaking upgrade"
+"replace","Только информацию для dependency solver Composer","Условно, при установке нового пакета","Нет","Fork, объединение/split пакетов, пакет-приемник, который действительно поставляет заменяемый код"
+"class_alias bridge","PHP runtime API / FQCN","Нет","Да, для class-like symbols","Плавная миграция уже используемого namespace"

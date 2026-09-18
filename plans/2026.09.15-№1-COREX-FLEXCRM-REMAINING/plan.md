@@ -9,11 +9,11 @@
 | Title | План №1 — Оставшиеся reusable требования CoreX для FlexCRM |
 | Layout | v2 |
 | Document Type | Executable Master Plan |
-| Authoring Model | gpt-6-astra (Astra shell); gpt-5.6-sol/high (P1/P2/P3/P4/P5/P6/P7/P8/P9/P10/P11 detail, provider-attested 2026-09-15) |
+| Authoring Model | gpt-6-astra (Astra shell); gpt-5.6-sol/high (P1/P2/P3/P4/P5/P6/P7/P8/P9/P10/P11 detail, provider-attested 2026-09-15); claude-opus-5/high (P12 detail, 2026-09-18) |
 | Repository | corex |
 | Home | repo:corex (новый локальный план; Brain sync не выполнялся) |
 | Related Packages | corex/core, modules, tenancy, api, tasks; остальные только после qualification |
-| Execution Mode | full-plan-first: P1–P11 detail + integrated design-finish before any item execution; then dependency DAG |
+| Execution Mode | full-plan-first: P1–P11 detail + integrated design-finish before any item execution; then dependency DAG. P12 — корректирующая фаза по двум внешним аудитам, блокирующий предшественник P8 (D41) |
 | Target Operator Classes | frontier/high gpt-5.6-sol для детализации; execution models выбирает Sol |
 | Approval Owner | Dmitry Vostrikov; external ownership/authority отдельно по gate ledger |
 | visibility | private |
@@ -31,6 +31,12 @@ atomic AC index сохраняет исходные критерии. P1 зам�
 Принятые foundations A01–A09 сохраняются; Sol проектирует только доказанные дельты.
 CoreX не содержит Flex namespaces/entities/storage/identity/permissions/events/transport assumptions.
 Product modules, standalone engines и central/cloud operations имеют отдельных владельцев.
+P12 добавлена 2026-09-18 по разбору двух независимых внешних аудитов: девять item, из 29
+проверенных утверждений 23 подтверждены чтением кода, 4 опровергнуты, и один P0 не найден
+ни одним аудитом (контракт модуля `corex/intl` ломает discovery). P12 — блокирующий
+предшественник P8; P1–P7 терминальны и не реопенятся; единственное защищённое изменение —
+G-API на `shared-data-foundation/1` в P12.8, покрытое D41. Матрица вердиктов —
+research/P12-audit-reconciliation.md, нормативный код — research/P12-rebaseline-design.md.
 Финальная P11 требует immutable release+consumer receipts и нулевого остатка CoreX-зависимостей.
 Только после этого допустима команда: дальнейшее развитие — в FlexCRM; новые CoreX требования
 оформляются отдельно. Milestones FLEX-2 этим планом не закрываются.
@@ -187,11 +193,21 @@ Batch/Review по сложности, integration/security/public риску. Д
 | solo | P11.5 | implementation/high | plan-exec | full | recommended: Новая finite foreign write surface и full независимый review exact three-file diff; не повышать light qualification batch до full ради packet. |
 | solo | P11.6 | implementation/high | manual | full | recommended: Manual G-CONSUMER-RECONCILE: отдельная accepting/write authority, exclusivity и foreign commit. |
 | solo | P11.7 | implementation/medium | plan-exec | light | recommended: Локальный final consumer seal после manual foreign commit; anchor становится доступен после отдельной write boundary. |
+| solo | P12.1 | implementation/medium | plan-exec | full | recommended: Три P0 в одном корпусе; full review, потому что discovery модулей сейчас падает и регрессия здесь дороже остальных. |
+| B-P12-CONTOUR | P12.2 | implementation/low | plan-exec | light | recommended: Механическое расширение скриптов; проверяется собственным выводом на 20 пакетах. |
+| B-P12-CONTOUR | P12.3 | implementation/high | plan-exec | full | recommended: Новая исполняемая проверка с правилом host-reserved namespace и именованным legacy-исключением; full review, потому что ошибочный гейт даёт ложную зелёную. |
+| solo | P12.4 | implementation/medium | plan-exec | light | recommended: Жёсткий rename без смены поведения; полнота проверяется пустым выводом repo-wide sweep. |
+| solo | P12.5 | implementation/high | plan-exec | full | recommended: Смена схемы резолва биндинга и семантики отказа конфигурации; отдельный full review. |
+| solo | P12.6 | implementation/low | plan-exec | light | recommended: Rename плюс фиксация bridge-политики; опирается на уже закрытый P12.5. |
+| solo | P12.7 | implementation/high | plan-exec | full | recommended: Затрагивает SQL-пути при неизменном DDL; full review требуется именно ради доказательства байтовой идентичности дефолтов. |
+| solo | P12.8 | implementation/high | plan-exec | full | recommended: Единственное защищённое изменение фазы (G-API) и удаление поведения из контракта. |
+| solo | P12.9 | implementation/medium | plan-exec | light | recommended: Печать и оформление отложенного; выполняется после всех восьми. |
 
 ## 4. Update Log
 
 Owned projection: status.md; журнал journal.jsonl владеет update history и actor/model provenance.
 Создан 2026-09-15 plan-designer/gpt-6-astra: верхний слой. P1/P2/P3/P4/P5/P6/P7/P8/P9/P10/P11 детализированы 2026-09-15 plan-designer/gpt-5.6-sol; product execution не начат, история — journal/generated status.
+2026-09-18 claude-opus-5/high: добавлена корректирующая фаза P12 (девять item) по разбору двух внешних аудитов; owning decision — D41; структурный чекер — scripts/validate-p12.py --check design. Исполнитель фазы — модель класса Composer 2.5, поэтому каждая спека называет точный параграф research/P12-rebaseline-design.md с готовым кодом. Реализация не начата.
 
 ## 5. Decision Log
 

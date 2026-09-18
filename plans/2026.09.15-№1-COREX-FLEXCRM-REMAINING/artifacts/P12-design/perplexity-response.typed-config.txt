@@ -1,0 +1,133 @@
+Yes—treat package configuration as composition-time input, not as a globally readable dependency scattered through runtime code. Read Laravel config at the package boundary (usually the service provider), validate/normalize it once into immutable typed objects, and inject those objects into repositories, storage engines, and domain services.
+This produces a package whose actual dependencies are visible in constructor signatures, whose configuration errors fail early, and whose long-lived-worker behavior is easier to reason about. Laravel service providers are explicitly the place where packages bind services and merge/publish configuration; mergeConfigFrom() belongs in register(), with the caveat that Laravel only performs a first-level merge.
+
+## Why avoid config() deep inside code
+
+A repository such as this:
+```
+final class DatabaseCheckpointRepository { public function save(Checkpoint $checkpoint): void { DB::table(config('acme-workflows.tables.checkpoints')) ->insert([...]); } }
+```
+has a hidden dependency on Laravel’s configuration repository and on an untyped string key. Its constructor falsely implies that it has no infrastructure configuration needs.
+Prefer:
+```
+final class DatabaseCheckpointRepository implements CheckpointRepository { public function __construct( private readonly TableMap $tables, ) {} public function save(Checkpoint $checkpoint): void { DB::table($this->tables->checkpoints) ->insert([...]); } }
+```
+That one shift makes several properties explicit.
+This is not an absolute ban on config(): it is fine at the Laravel adapter/composition boundary—service providers, factories, commands, middleware setup, or framework integrations. The issue is allowing it to leak into the package’s operational and domain code.
+
+## Octane implications
+
+Laravel Octane keeps the application in memory and reuses workers across requests, unlike the usual PHP-FPM model where process/container state is discarded after each request. Consequently, singleton state can persist and leak between requests if it is mutable or populated with request-specific data.
+An immutable configuration object is Octane-friendly when it represents truly application-wide, boot-time configuration:
+```
+final readonly class StorageOptions { public function __construct( public string $disk, public int $retentionDays, public bool $encryptPayloads, ) {} }
+```
+Bound as a singleton, it is safe because nothing can mutate it after creation:
+```
+$this->app->singleton(StorageOptions::class, function (): StorageOptions { return new StorageOptions( disk: (string) config('acme-workflows.storage.disk'), retentionDays: (int) config('acme-workflows.storage.retention_days'), encryptPayloads: (bool) config('acme-workflows.storage.encrypt_payloads'), ); });
+```
+The important boundary is:
+- Safe singleton input: package defaults, published application config, fixed table names, static feature flags, static retention policy.
+- Not safe as a singleton: authenticated user, tenant ID, current locale, request headers, request-scoped database connection, per-job override, mutable caches, or “current” values that can vary during worker life.
+Do not turn “read config once” into “read everything at worker boot.” For multi-tenant table naming, tenant-specific databases, or request-scoped behavior, split the configuration:
+```
+final readonly class TableMap { public function __construct( public string $runs, public string $events, public string $locks, ) {} } interface TableMapResolver { public function forTenant(?TenantId $tenantId): TableMap; }
+```
+A static TableMap can be singleton; a resolver that derives tables from tenant/request context should be request/job scoped or stateless and invoked per operation. This prevents a tenant’s state from becoming accidentally retained in an Octane singleton.
+
+## Testability and validation
+
+
+## Tests become plain PHP
+
+Without deep config() calls:
+```
+$repo = new DatabaseCheckpointRepository( tables: new TableMap( checkpoints: 'test_checkpoints', events: 'test_checkpoint_events', locks: 'test_checkpoint_locks', ), );
+```
+You no longer need to boot the package provider just to test table selection. A test can construct invalid settings intentionally and assert a precise exception:
+```
+$this->expectException(InvalidArgumentException::class); new TableMap( checkpoints: 'bad-name; drop table users', events: 'workflow_events', locks: 'workflow_locks', );
+```
+This is especially useful for a reusable package: consumers can instantiate non-Laravel portions in unit tests, while the Laravel service provider remains a thin wiring adapter.
+
+## Validate before building services
+
+Configuration is untrusted deployment input. It may come from a published PHP config file, environment variables, CI substitutions, Helm templates, or a hurried production edit. Treat it like an external input boundary.
+Validation at the provider/factory boundary gives you:
+- Fail-fast startup errors instead of delayed production failures.
+- A single authoritative place for defaults, coercion, constraints, and backward-compatible aliases.
+- Better exception messages, such as “acme-workflows.tables.events must be a valid SQL identifier.”
+- No repeated casting such as (int) config(...) across the codebase.
+- Protection from weak PHP coercion, where "false" and "0" need deliberate handling rather than accidental boolean casts.
+A useful distinction:
+- Structural validation: required keys, allowed enum values, integer ranges, nonempty strings.
+- Semantic validation: table names are unique; retention is compatible with cleanup interval; selected driver has required credentials/options.
+- Environment validation: database tables exist, a disk is writable, encryption keys are available. This may belong in an install/health-check command rather than every provider registration.
+Typed value objects also establish a valuable invariant: once a PackageOptions object exists, its data is already valid. This follows the common value-object model where construction is the validation boundary and readonly properties preserve the validated state.
+
+## Table names and prefixes
+
+For a library package, prefer a typed table map over having repositories concatenate a prefix or individually call config('package.tables.foo').
+
+## Recommended config shape
+
+Avoid exposing only a generic prefix:
+```
+// Less desirable as the sole public contract 'prefix' => 'acme_',
+```
+Instead publish concrete table names as the canonical public API:
+```
+// config/acme-workflows.php return [ 'tables' => [ 'runs' => 'acme_workflow_runs', 'events' => 'acme_workflow_events', 'locks' => 'acme_workflow_locks', 'outbox' => 'acme_workflow_outbox', ], ];
+```
+Concrete names are clearer for migrations, DBAs, foreign keys, schema inspection, upgrades, and collision avoidance. They also let an application relocate one table independently if necessary.
+If prefix ergonomics are important, support it only as an input convenience, then resolve it once to final names:
+```
+return [ 'table_prefix' => env('ACME_WORKFLOWS_TABLE_PREFIX', 'acme_'), 'tables' => [ 'runs' => null, 'events' => null, 'locks' => null, 'outbox' => null, ], ];
+```
+Define a clear precedence rule:
+An explicit tables.* value wins; otherwise the package uses table_prefix + suffix.
+Do not concatenate a prefix at each query site. That invites inconsistent suffixes, accidental double prefixes, and migrations using one naming rule while repositories use another.
+
+## Typed TableMap
+
+```
+<?php namespace Acme\Workflows\Config; use InvalidArgumentException; final readonly class TableMap { public function __construct( public string $runs, public string $events, public string $locks, public string $outbox, ) { foreach (get_object_vars($this) as $property => $table) { if (! preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $table)) { throw new InvalidArgumentException(sprintf( 'Invalid Acme Workflows table name for "%s": "%s".', $property, $table, )); } } $tables = [$this->runs, $this->events, $this->locks, $this->outbox]; if (count($tables) !== count(array_unique($tables))) { throw new InvalidArgumentException( 'Acme Workflows table names must be unique.' ); } } public static function fromArray(array $config): self { $prefix = self::normalizePrefix($config['table_prefix'] ?? 'acme_'); $tables = $config['tables'] ?? []; return new self( runs: self::name($tables['runs'] ?? null, $prefix . 'workflow_runs', 'tables.runs'), events: self::name($tables['events'] ?? null, $prefix . 'workflow_events', 'tables.events'), locks: self::name($tables['locks'] ?? null, $prefix . 'workflow_locks', 'tables.locks'), outbox: self::name($tables['outbox'] ?? null, $prefix . 'workflow_outbox', 'tables.outbox'), ); } private static function name(mixed $value, string $default, string $key): string { if ($value === null) { return $default; } if (! is_string($value) || trim($value) === '') { throw new InvalidArgumentException( "acme-workflows.{$key} must be a non-empty string or null." ); } return trim($value); } private static function normalizePrefix(mixed $prefix): string { if (! is_string($prefix)) { throw new InvalidArgumentException( 'acme-workflows.table_prefix must be a string.' ); } return trim($prefix); } }
+```
+A few design choices matter here:
+- Reject arbitrary SQL fragments. Laravel query-builder table identifiers are not parameter-bound like data values, so table names should never be accepted as arbitrary user/request input.
+- Keep names unqualified by default. Let Laravel’s configured connection/database/schema mechanics determine the database. If you support PostgreSQL schemas, model that deliberately—e.g. SchemaTableName—rather than treating schema.table as an unrestricted string.
+- Use the same TableMap in migrations, repositories, cleanup jobs, and query builders. Otherwise a user override can make runtime code and package migrations disagree.
+- Do not automatically prepend Laravel’s database connection prefix to a package prefix unless you have a carefully documented reason. A connection-level prefix and a package-level naming convention are separate concerns and can otherwise lead to foo_foo_* surprises.
+
+## Provider wiring pattern
+
+Laravel packages normally merge defaults during register() and publish the config in boot(). The merged config lets users override only relevant defaults, but Laravel’s merge is shallow, so nested structures should either be fully supplied by the published config or deliberately normalized in your package factory.
+```
+<?php namespace Acme\Workflows; use Acme\Workflows\Config\TableMap; use Acme\Workflows\Infrastructure\Database\DatabaseCheckpointRepository; use Acme\Workflows\Domain\CheckpointRepository; use Illuminate\Support\ServiceProvider; final class WorkflowsServiceProvider extends ServiceProvider { public function register(): void { $this->mergeConfigFrom( __DIR__ . '/../config/acme-workflows.php', 'acme-workflows', ); $this->app->singleton(TableMap::class, function (): TableMap { $config = config('acme-workflows'); if (! is_array($config)) { throw new \LogicException( 'The acme-workflows configuration must be an array.' ); } return TableMap::fromArray($config); }); $this->app->bind(CheckpointRepository::class, function ($app) { return new DatabaseCheckpointRepository( tables: $app->make(TableMap::class), ); }); } public function boot(): void { $this->publishes([ __DIR__ . '/../config/acme-workflows.php' => config_path('acme-workflows.php'), ], 'acme-workflows-config'); } }
+```
+For more than tables, create a root configuration object:
+```
+final readonly class WorkflowsOptions { public function __construct( public TableMap $tables, public StorageOptions $storage, public RetryPolicy $retries, ) {} }
+```
+Then inject the narrowest dependency each class needs:
+- A SQL repository receives TableMap.
+- A filesystem/blob storage engine receives StorageOptions.
+- A retry scheduler receives RetryPolicy.
+- A top-level factory or orchestration service may receive WorkflowsOptions.
+Avoid passing a giant configuration object into every class merely to avoid config(). That creates a less obvious service-locator-like dependency. Fine-grained immutable value objects preserve explicitness.
+
+## Practical rule
+
+Use this rule of thumb:
+Laravel reads and normalizes config; package services consume typed policy/value objects.
+So:
+- config() in the provider/factory: good.
+- config() in a migration resolver or package setup command: often reasonable.
+- config() in a repository, storage engine, aggregate, domain service, event handler, or test subject: usually a design smell.
+- Mutable singleton “options” objects under Octane: risky.
+- Immutable boot-time TableMap singleton: appropriate.
+- Tenant/request-dependent table map cached as a singleton: unsafe; use a resolver or scoped binding instead.
+This design is particularly valuable for a long-lived Laravel package: it makes the package’s configuration contract explicit, gives you a single place to enforce compatibility and safety rules, and prevents global framework state from becoming an invisible dependency of core persistence and domain logic.
+
+Sources:
+1. [laravel-docs.readthedocs](https://laravel-docs.readthedocs.io/en/stable/packages/)
