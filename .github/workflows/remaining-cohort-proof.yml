@@ -1,0 +1,133 @@
+name: Remaining cohort proof
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  matrix-quality-sqlite:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.3'
+            laravel: '12'
+          - php: '8.3'
+            laravel: '13'
+          - php: '8.4'
+            laravel: '12'
+          - php: '8.4'
+            laravel: '13'
+          - php: '8.5'
+            laravel: '12'
+          - php: '8.5'
+            laravel: '13'
+    name: Cohort sqlite php ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Constrain Laravel version
+        run: composer require "illuminate/contracts:${{ matrix.laravel }}.*" --no-update --no-interaction
+
+      - name: Boxed profile (drop 8.4-only tenancy)
+        if: matrix.php == '8.3'
+        run: composer remove corex/tenancy --no-update --no-interaction
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Platform requirements
+        run: composer check-platform-reqs
+
+      - name: Root tests
+        run: composer test
+
+  matrix-quality-pg:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.4'
+            laravel: '12'
+          - php: '8.4'
+            laravel: '13'
+          - php: '8.5'
+            laravel: '12'
+          - php: '8.5'
+            laravel: '13'
+    name: Cohort pg16 php ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+
+      - name: Constrain Laravel version
+        run: composer require "illuminate/contracts:${{ matrix.laravel }}.*" --no-update --no-interaction
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Platform requirements
+        run: composer check-platform-reqs
+
+      - name: PostgreSQL tests
+        run: composer test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+
+  local-matrix-receipt:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: Local matrix receipt (structural)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Build local matrix and runner plan
+        run: |
+          if [ -f delivery/remaining-cohort-20260915/candidate.json ]; then
+            python3 scripts/distribution/remaining-cohort-quality.py
+          else
+            echo "skip: delivery artifacts absent on hosted runner"
+          fi

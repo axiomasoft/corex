@@ -37,12 +37,14 @@
         "orchestra/testbench": "^10.0|^11.0",
         "phpstan/phpstan": "^2.0",
         "larastan/larastan": "^3.0",
-        "laravel/pao": "^1.1"
+        "laravel/pao": "^1.1",
+        "opis/json-schema": "^2.4.1"
     },
     "autoload-dev": {
         "psr-4": {
             "CoreX\\Tests\\": "tests/",
             "CoreX\\Api\\Tests\\": "packages/api/tests/",
+            "CoreX\\Modules\\Tests\\": "packages/modules/tests/",
             "CoreX\\Attributes\\Tests\\": "packages/attributes/tests/",
             "CoreX\\Transfer\\Tests\\": "packages/transfer/tests/",
             "CoreX\\Notifications\\Tests\\": "packages/notifications/tests/",
@@ -73,7 +75,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest --exclude-group=pg",
+        "test": "vendor/bin/pest --exclude-group=pg,meilisearch",
         "test:pg": "vendor/bin/pest --group=pg",
         "test:packages": "for p in api attributes auth core crm transfer intl search-intl media modules notifications panels recurrence search search-meilisearch tasks tasks-workflow tenancy wakeup workflow; do echo \"==> packages/$p\" && composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "vendor/bin/pest --testsuite=Arch",

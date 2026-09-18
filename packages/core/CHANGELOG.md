@@ -9,6 +9,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced closure-based `DataScope` authorization with serializable `DataScopeAuthorizer` contract (P12.8, G-API/D41).
+
 ### Fixed
 
 - Scoped storage rejects recursively encoded backslashes/NUL and replaced local

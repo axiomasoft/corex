@@ -1,0 +1,65 @@
+{
+  "schema_version": "remaining-cohort-policy/1",
+  "include": [
+    "composer.json",
+    "src/",
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md",
+    "LICENSE"
+  ],
+  "forbidden_segments": [
+    "vendor",
+    "node_modules",
+    "tests",
+    ".env",
+    "auth.json",
+    ".git",
+    ".plan-cache"
+  ],
+  "required_if_present": [
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md"
+  ],
+  "packages": {
+    "corex/core": "packages/core",
+    "corex/modules": "packages/modules",
+    "corex/api": "packages/api",
+    "corex/tasks": "packages/tasks",
+    "corex/tenancy": "packages/tenancy",
+    "corex/panels": "packages/panels",
+    "corex/media": "packages/media",
+    "corex/notifications": "packages/notifications",
+    "corex/wakeup": "packages/wakeup",
+    "corex/workflow": "packages/workflow",
+    "corex/attributes": "packages/attributes",
+    "corex/transfer": "packages/transfer",
+    "corex/search": "packages/search",
+    "corex/search-meilisearch": "packages/search-meilisearch",
+    "corex/recurrence": "packages/recurrence",
+    "corex/tasks-workflow": "packages/tasks-workflow",
+    "corex/intl": "packages/intl",
+    "corex/search-intl": "packages/search-intl"
+  },
+  "external_providers": {
+    "axiomasoft/stancl-tenancy": {
+      "version": "4.0.0-alpha1",
+      "qualified_archive": "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/tenancy-candidate.zip",
+      "qualified_metadata": "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/packages.json"
+    },
+    "axiomasoft/stancl-jobpipeline": {
+      "version": "2.0.0-alpha1",
+      "qualified_archive": "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/jobpipeline-candidate.zip",
+      "qualified_metadata": "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source/packages.json"
+    }
+  }
+}
