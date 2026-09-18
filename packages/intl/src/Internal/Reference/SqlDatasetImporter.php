@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Internal\Reference;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Contracts\DatasetImporter;
 use CoreX\Intl\Data\DatasetCandidate;
 use CoreX\Intl\Data\DatasetGeneration;
@@ -24,12 +25,13 @@ final class SqlDatasetImporter implements DatasetImporter
         private readonly Connection $connection,
         private readonly Repository $config,
         private readonly FixtureReferenceNormalizer $normalizer,
+        private readonly DataScopeAuthorizer $authorizer,
     ) {}
 
     #[Override]
     public function publish(DataScope $scope, DatasetCandidate $candidate, DatasetGeneration $expected): DatasetReceipt
     {
-        if (! ($scope->authorize)('reference-publish', $candidate->manifest->snapshotId, [], 'publish')) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: 'reference-publish', subjectId: $candidate->manifest->snapshotId, fields: [], action: 'publish')->allowed) {
             throw new AccessDeniedException('Reference dataset publication is not authorized.');
         }
 

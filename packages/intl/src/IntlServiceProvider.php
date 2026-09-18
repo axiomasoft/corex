@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Contracts\CurrencyConverter;
 use CoreX\Intl\Contracts\CurrencyMetadata;
 use CoreX\Intl\Contracts\DatasetImporter;
@@ -69,6 +70,7 @@ final class IntlServiceProvider extends ServiceProvider
         $this->app->scoped(RateImporter::class, function (Application $app): RateImporter {
             return new SqlRateImporter(
                 connection: $app['db']->connection(),
+                authorizer: $app->make(DataScopeAuthorizer::class),
                 batchLimit: (int) $app['config']->get('corex-intl.money.batch_limit', 1000),
             );
         });

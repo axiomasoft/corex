@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c97bb10cfed5151c8916f701f6c72f1c",
+    "content-hash": "539ad83de2f68f5c53108120ad06ff67",
     "packages": [
         {
             "name": "axiomasoft/stancl-jobpipeline",
@@ -384,7 +384,7 @@
         },
         {
             "name": "corex/api",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/api",
@@ -438,12 +438,71 @@
             }
         },
         {
+            "name": "corex/attributes",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/attributes",
+                "reference": "4410464fdab52a0a87e5879b9bf6a33626c37a6d"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Attributes\\AttributesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Attributes\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Attributes\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/attributes/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Typed attribute ports and safe schema-operation bridge for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/core",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "a45633debd7c84da72430eea1fb1e0e3407b54ab"
+                "reference": "5aace663100f938dfe12bd8c0a38f545f9723346"
             },
             "require": {
                 "brick/money": "^0.9 || ^0.10",
@@ -472,6 +531,23 @@
                     "CoreX\\": "src/"
                 }
             },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/core/src packages/core/database/migrations --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -497,15 +573,16 @@
         },
         {
             "name": "corex/intl",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "4129f109c7b1e7e39db0aa6284d4ef3965c27027"
+                "reference": "cb8cd09700b64144c1f99db679af96b677096dd9"
             },
             "require": {
                 "brick/money": "^0.9 || ^0.10",
                 "corex/core": "@dev",
+                "corex/modules": "@dev",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
@@ -565,67 +642,8 @@
             }
         },
         {
-            "name": "corex/intl-search",
-            "version": "dev-codex/instruction-layers-f9",
-            "dist": {
-                "type": "path",
-                "url": "packages/intl-search",
-                "reference": "2599812896547daa3200cb72c3144577020f53d6"
-            },
-            "require": {
-                "corex/core": "@dev",
-                "corex/intl": "@dev",
-                "corex/search": "@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "php": "^8.3"
-            },
-            "require-dev": {
-                "larastan/larastan": "^3.0",
-                "laravel/pint": "^1.13",
-                "orchestra/testbench": "^10.0|^11.0",
-                "pestphp/pest": "^4.0"
-            },
-            "type": "corex-module",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "CoreX\\IntlSearch\\IntlSearchServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\IntlSearch\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\IntlSearch\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/intl-search/phpstan.neon --memory-limit=1G"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Optional localized projection glue between corex/intl and corex/search.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "corex/media",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/media",
@@ -697,11 +715,11 @@
         },
         {
             "name": "corex/modules",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
-                "reference": "6b2eda88ed981245251f700f2e703a36c22188e5"
+                "reference": "ad080c28943e43fcfd037525ad8ef27b3a29c0c0"
             },
             "require": {
                 "corex/core": "@dev",
@@ -728,6 +746,20 @@
                     "CoreX\\Modules\\": "src/"
                 }
             },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/modules/src packages/modules/database/migrations --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -749,7 +781,7 @@
         },
         {
             "name": "corex/notifications",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
@@ -818,7 +850,7 @@
         },
         {
             "name": "corex/panels",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
@@ -882,7 +914,7 @@
         },
         {
             "name": "corex/recurrence",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
@@ -924,7 +956,7 @@
         },
         {
             "name": "corex/search",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/search",
@@ -981,8 +1013,124 @@
             }
         },
         {
+            "name": "corex/search-intl",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/search-intl",
+                "reference": "6b773571aed38a0221064020e23c7c02c3dbac68"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/intl": "@dev",
+                "corex/search": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\SearchIntl\\SearchIntlServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\SearchIntl\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\SearchIntl\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search-intl/phpstan.neon --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional localized projection glue between corex/intl and corex/search.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/search-meilisearch",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/search-meilisearch",
+                "reference": "a1e317e24cf5e4f1a3922ffa3d4ccdc4b5ec3186"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/search": "@dev",
+                "meilisearch/meilisearch-php": "1.16.1",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Search\\Meilisearch\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Search\\Meilisearch\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=meilisearch"
+                ],
+                "test:meilisearch": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=meilisearch"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search-meilisearch/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional Meilisearch candidate adapter for corex/search.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/tasks",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
@@ -1063,17 +1211,18 @@
         },
         {
             "name": "corex/tasks-workflow",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "349a8c872c20682ed15b859688aa9854cfc9f446"
+                "reference": "4e3cd8c2b55a311e8d19910255851e3ffa070cb1"
             },
             "require": {
                 "corex/core": "@dev",
                 "corex/modules": "@dev",
                 "corex/recurrence": "@dev",
                 "corex/tasks": "@dev",
+                "corex/workflow": "@dev",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
@@ -1088,8 +1237,7 @@
                 "pestphp/pest": "^4.0"
             },
             "suggest": {
-                "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06).",
-                "corex/workflow": "Optional completion capture through qualified workflow binding (MAT-07)."
+                "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06)."
             },
             "type": "corex-module",
             "extra": {
@@ -1136,7 +1284,7 @@
         },
         {
             "name": "corex/tenancy",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
@@ -1218,8 +1366,65 @@
             }
         },
         {
+            "name": "corex/transfer",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/transfer",
+                "reference": "3e7b2fc066bbbca0480159448af3b1ccda698161"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Transfer\\TransferServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Transfer\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Transfer\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/transfer/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Bounded import and export primitives for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "corex/wakeup",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
@@ -1275,6 +1480,65 @@
                 "MIT"
             ],
             "description": "Durable local wakeup requests for CoreX modules.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "corex/workflow",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/workflow",
+                "reference": "e99dadfffca14125a90d66c922f11550c107c836"
+            },
+            "require": {
+                "corex/core": "@dev",
+                "corex/modules": "@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "type": "corex-module",
+            "extra": {
+                "corex": {
+                    "module": "CoreX\\Workflow\\WorkflowModule"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Workflow\\WorkflowServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Workflow\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Workflow\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/workflow/src --memory-limit=1G"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional durable workflow engine binding for CoreX modules.",
             "transport-options": {
                 "relative": true
             }
@@ -1720,7 +1984,7 @@
         },
         {
             "name": "flex/crm",
-            "version": "dev-codex/instruction-layers-f9",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
@@ -3411,6 +3675,86 @@
             "time": "2026-03-08T20:05:35+00:00"
         },
         {
+            "name": "meilisearch/meilisearch-php",
+            "version": "v1.16.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/meilisearch/meilisearch-php.git",
+                "reference": "f9f63e0e7d12ffaae54f7317fa8f4f4dfa8ae7b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/meilisearch/meilisearch-php/zipball/f9f63e0e7d12ffaae54f7317fa8f4f4dfa8ae7b6",
+                "reference": "f9f63e0e7d12ffaae54f7317fa8f4f4dfa8ae7b6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4 || ^8.0",
+                "php-http/discovery": "^1.7",
+                "psr/http-client": "^1.0",
+                "symfony/polyfill-php81": "^1.33"
+            },
+            "require-dev": {
+                "http-interop/http-factory-guzzle": "^1.2.0",
+                "php-cs-fixer/shim": "^3.59.3",
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^9.5 || ^10.5",
+                "symfony/http-client": "^5.4|^6.0|^7.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Use Guzzle ^7 as HTTP client",
+                "http-interop/http-factory-guzzle": "Factory for guzzlehttp/guzzle",
+                "symfony/http-client": "Use Symfony Http client"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MeiliSearch\\": "src/",
+                    "Meilisearch\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clémentine Urquizar",
+                    "email": "clementine@meilisearch.com"
+                },
+                {
+                    "name": "Bruno Casali",
+                    "email": "bruno@meilisearch.com"
+                },
+                {
+                    "name": "Laurent Cazanove",
+                    "email": "lau.cazanove@gmail.com"
+                },
+                {
+                    "name": "Tomas Norkūnas",
+                    "email": "norkunas.tom@gmail.com"
+                }
+            ],
+            "description": "PHP wrapper for the Meilisearch API",
+            "keywords": [
+                "api",
+                "client",
+                "instant",
+                "meilisearch",
+                "php",
+                "search"
+            ],
+            "support": {
+                "issues": "https://github.com/meilisearch/meilisearch-php/issues",
+                "source": "https://github.com/meilisearch/meilisearch-php/tree/v1.16.1"
+            },
+            "time": "2025-09-18T10:15:45+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "3.12.0",
             "source": {
@@ -3921,6 +4265,85 @@
                 }
             ],
             "time": "2026-02-16T23:10:27+00:00"
+        },
+        {
+            "name": "php-http/discovery",
+            "version": "1.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/discovery.git",
+                "reference": "82fe4c73ef3363caed49ff8dd1539ba06044910d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/82fe4c73ef3363caed49ff8dd1539ba06044910d",
+                "reference": "82fe4c73ef3363caed49ff8dd1539ba06044910d",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": "^7.1 || ^8.0"
+            },
+            "conflict": {
+                "nyholm/psr7": "<1.0",
+                "zendframework/zend-diactoros": "*"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "*",
+                "php-http/client-implementation": "*",
+                "psr/http-client-implementation": "*",
+                "psr/http-factory-implementation": "*",
+                "psr/http-message-implementation": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2|^2.0",
+                "graham-campbell/phpspec-skip-example-extension": "^5.0",
+                "php-http/httplug": "^1.0 || ^2.0",
+                "php-http/message-factory": "^1.0",
+                "phpspec/phpspec": "^5.1 || ^6.1 || ^7.3",
+                "sebastian/comparator": "^3.0.5 || ^4.0.8",
+                "symfony/phpunit-bridge": "^6.4.4 || ^7.0.1"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Http\\Discovery\\Composer\\Plugin",
+                "plugin-optional": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Discovery\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "src/Composer/Plugin.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                }
+            ],
+            "description": "Finds and installs PSR-7, PSR-17, PSR-18 and HTTPlug implementations",
+            "homepage": "http://php-http.org",
+            "keywords": [
+                "adapter",
+                "client",
+                "discovery",
+                "factory",
+                "http",
+                "message",
+                "psr17",
+                "psr7"
+            ],
+            "support": {
+                "issues": "https://github.com/php-http/discovery/issues",
+                "source": "https://github.com/php-http/discovery/tree/1.20.0"
+            },
+            "time": "2024-10-02T11:20:13+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -6291,6 +6714,86 @@
             "time": "2026-04-10T16:19:22+00:00"
         },
         {
+            "name": "symfony/polyfill-php81",
+            "version": "v1.38.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php81.git",
+                "reference": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php81/zipball/6bfb9c766cacffbc8e118cb87217d08ed84e5cd7",
+                "reference": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php81\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.1+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php81/tree/v1.38.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-05-26T12:45:58+00:00"
+        },
+        {
             "name": "symfony/polyfill-php82",
             "version": "v1.38.1",
             "source": {
@@ -7881,65 +8384,6 @@
                 }
             ],
             "time": "2024-05-06T16:37:16+00:00"
-        },
-        {
-            "name": "corex/workflow",
-            "version": "dev-codex/instruction-layers-f9",
-            "dist": {
-                "type": "path",
-                "url": "packages/workflow",
-                "reference": "e99dadfffca14125a90d66c922f11550c107c836"
-            },
-            "require": {
-                "corex/core": "@dev",
-                "corex/modules": "@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "php": "^8.3"
-            },
-            "type": "corex-module",
-            "extra": {
-                "corex": {
-                    "module": "CoreX\\Workflow\\WorkflowModule"
-                },
-                "laravel": {
-                    "providers": [
-                        "CoreX\\Workflow\\WorkflowServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\Workflow\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\Workflow\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
-                ],
-                "test:coverage": [
-                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/workflow/src --memory-limit=1G"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Optional durable workflow engine binding for CoreX modules.",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "doctrine/deprecations",
@@ -11958,16 +12402,19 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "corex/api": 20,
+        "corex/attributes": 20,
         "corex/core": 20,
         "corex/intl": 20,
-        "corex/intl-search": 20,
         "corex/media": 20,
         "corex/modules": 20,
         "corex/notifications": 20,
         "corex/panels": 20,
+        "corex/search-intl": 20,
+        "corex/search-meilisearch": 20,
         "corex/tasks": 20,
         "corex/tasks-workflow": 20,
         "corex/tenancy": 20,
+        "corex/transfer": 20,
         "corex/wakeup": 20,
         "corex/workflow": 20,
         "flex/crm": 20

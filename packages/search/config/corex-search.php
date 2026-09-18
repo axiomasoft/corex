@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'driver' => 'unsupported',
+    'driver' => 'null',
     'cursor_secret' => null,
     'postgres' => [
         'text_search_config' => 'simple',

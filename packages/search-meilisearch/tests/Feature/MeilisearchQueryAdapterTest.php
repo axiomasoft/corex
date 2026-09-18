@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Search\Meilisearch\Internal\MeilisearchQueryAdapter;
 use CoreX\Search\Support\SearchFilter;
 use CoreX\Search\Support\SearchQuery;
-use CoreX\SearchMeilisearch\Internal\MeilisearchQueryAdapter;
 use CoreX\Support\Data\DataScope;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
@@ -23,7 +23,6 @@ it('returns candidate identifiers only from an isolated local Meilisearch servic
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a',
         actorId: 'operator-a',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('b', 64),
     );
 

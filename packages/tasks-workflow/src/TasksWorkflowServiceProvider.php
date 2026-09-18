@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
-use CoreX\Recurrence\Internal\RRuleRecurrenceExpander;
 use CoreX\Tasks\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Models\Task;
@@ -23,7 +23,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-task-recurrence.php', 'corex-task-recurrence');
 
-        $this->app->singleton(RecurrenceExpander::class, RRuleRecurrenceExpander::class);
+        $this->app->singleton(RecurrenceExpander::class, 'CoreX\Recurrence\Internal\RRuleRecurrenceExpander');
 
         $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
             return new SqlTaskRecurrenceMaterializer(
@@ -33,6 +33,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
                 taskAccess: $app->make(TaskAccess::class),
                 config: $app['config'],
                 container: $app,
+                authorizer: $app->make(DataScopeAuthorizer::class),
             );
         });
     }

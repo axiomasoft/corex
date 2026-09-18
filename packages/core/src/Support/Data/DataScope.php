@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Support\Data;
 
-use Closure;
 use CoreX\Tenancy\TenantContext;
 use InvalidArgumentException;
 
@@ -14,7 +13,6 @@ final readonly class DataScope
         public TenantContext $context,
         public string $connectionIdentity,
         public string $actorId,
-        public Closure $authorize,
         public string $restoreEpoch,
     ) {
         self::assertOpaque(value: $connectionIdentity, name: 'connection identity');

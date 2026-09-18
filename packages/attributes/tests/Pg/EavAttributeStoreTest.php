@@ -7,6 +7,7 @@ use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\RecordSelection;
 use CoreX\Attributes\Support\ValuePatch;
 use CoreX\Attributes\Tests\PgTestCase;
+use CoreX\Attributes\Tests\Support\PgTestSupport;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,15 @@ use Illuminate\Support\Facades\DB;
 uses(PgTestCase::class);
 
 it('stores independently indexed EAV values with the same version boundary', function (): void {
-    $store = new EavAttributeStore(DB::connection());
+    $store = new EavAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', [
+            ['code' => 'status', 'type' => 'text'],
+            ['code' => 'score', 'type' => 'int'],
+        ]),
+        authorizer: jsonbAuthorizer(),
+    );
     $record = new RecordRef(entity: 'contact', id: 'record-eav');
     $written = $store->write(
         jsonbScope(),
@@ -31,8 +40,16 @@ it('stores independently indexed EAV values with the same version boundary', fun
 })->group('pg');
 
 it('loads a 50 by 30 EAV selection with one values query', function (): void {
-    $store = new EavAttributeStore(DB::connection());
     $fields = array_map(static fn (int $number): string => sprintf('field_%02d', $number), range(1, 30));
+    $store = new EavAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', array_map(
+            static fn (string $field): array => ['code' => $field, 'type' => 'text'],
+            $fields,
+        )),
+        authorizer: jsonbAuthorizer(),
+    );
     $records = array_map(static fn (int $number): RecordRef => new RecordRef(entity: 'contact', id: "batch-{$number}"), range(1, 50));
 
     foreach ($records as $number => $record) {

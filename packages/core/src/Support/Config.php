@@ -6,6 +6,7 @@ namespace CoreX\Support;
 
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditLogger;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\SettingDefaultsProvider;
@@ -16,6 +17,7 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Support\Data\DenyDataScopeAuthorizer;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -137,6 +139,15 @@ final class Config
     {
         /** @var class-string<DepartmentRepository> $class */
         $class = config('corex.bindings.departments', DatabaseDepartmentRepository::class);
+
+        return $class;
+    }
+
+    /** @return class-string<DataScopeAuthorizer> */
+    public static function dataScopeAuthorizerClass(): string
+    {
+        /** @var class-string<DataScopeAuthorizer> $class */
+        $class = config('corex.bindings.data_scope_authorizer', DenyDataScopeAuthorizer::class);
 
         return $class;
     }

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-18
-inputs_sha256: 2e5b1db5731a50841d4e88d86cf17f0dc635b1f481a915f93cd1542d59170e91
+inputs_sha256: 3a86c4b22d58b7b88b59a3629aee6f0912c921b1c8b87fd0cad70a165f97c38a
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
 | P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
 | P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
-| P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 1/9 | 🟡 In progress |
+| P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 9/9 | 🟢 Done |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
 | P4 | Headless extensions: panels, media, notifications, saved views | 3/8 | 🟠 Done with deviations |
@@ -76,14 +76,14 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P12.1 | Починить контракт модуля, утечку ядра и незаявленные зависимости | 🟢 Done | 2026-09-18 |
-| P12.2 | Расширить контур тестов пакетов с 8 до 20 | ⬜ Not started | — |
-| P12.3 | Ввести исполняемый гейт графа пакетов | ⬜ Not started | — |
-| P12.4 | Переименовать `corex/import-export` в `corex/transfer` | ⬜ Not started | — |
-| P12.5 | Свести поиск к одному реестру драйверов | ⬜ Not started | — |
-| P12.6 | Переименовать `corex/intl-search` в `corex/search-intl` | ⬜ Not started | — |
-| P12.7 | Типизировать table-map и сделать `corex/modules` опциональным | ⬜ Not started | — |
-| P12.8 | Убрать `Closure` из `DataScope` [OWNER-GATE:G-API] | ⬜ Not started | — |
-| P12.9 | Запечатать фазу и оформить отложенное в ADR | ⬜ Not started | — |
+| P12.2 | Расширить контур тестов пакетов с 8 до 20 | 🟢 Done | 2026-09-18 |
+| P12.3 | Ввести исполняемый гейт графа пакетов | 🟢 Done | 2026-09-18 |
+| P12.4 | Переименовать `corex/import-export` в `corex/transfer` | 🟢 Done | 2026-09-18 |
+| P12.5 | Свести поиск к одному реестру драйверов | 🟢 Done | 2026-09-18 |
+| P12.6 | Переименовать `corex/intl-search` в `corex/search-intl` | 🟢 Done | 2026-09-18 |
+| P12.7 | Типизировать table-map и сделать `corex/modules` опциональным | 🟢 Done | 2026-09-18 |
+| P12.8 | Убрать `Closure` из `DataScope` [OWNER-GATE:G-API] | 🟢 Done | 2026-09-18 |
+| P12.9 | Запечатать фазу и оформить отложенное в ADR | 🟢 Done | 2026-09-18 |
 
 ## Phase P2
 
@@ -385,9 +385,33 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.1 repaired IntlModule contract, removed TenancyManager implementation leak, declared cross-package requires (NEW-1, A2b, A3).
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.2 expanded test:packages to 20 packages; added core/modules per-package scripts; root require/autoload-dev for packages using root bootstrap.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.3 package graph gate (R1-R3), legacy CoreX\\Tenancy\\ split, PackageGraphTest.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.4 hard rename corex/import-export to corex/transfer; Support to Data; repo sweep empty.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.5 SearchManager driver registry; fail-closed config; CoreX\Search\Meilisearch\ host-reserved namespace.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.6 hard rename corex/intl-search to corex/search-intl; bridge policy in dev-doctrine; repo sweep empty.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.7 AttributeTables table-map, mandatory FieldCatalogue, corex/modules suggest + allowlist.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.8 DataScope serializable; DataScopeAuthorizer replaces Closure authorize [G-API/D41].
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12.9 phase seal + audit triad 2026-09-17 + deferred ledger (9+5).
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · Inline P12 closure: nine GREEN item heads; direct-close eligible; phase sealed. Unblocks P8. |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-18 | executor/composer-2.5/medium | plan-exec · closed-green · P12A.1: design binding resealed; DESIGN_PENDING cleared (R4).
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
+- P12.2: known deviation
 - P4.4: known deviation
 - P4.5: known deviation
 - P4.6: known deviation

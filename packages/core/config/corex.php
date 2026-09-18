@@ -10,6 +10,7 @@ use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Support\Data\DenyDataScopeAuthorizer;
 use CoreX\Tenancy\NullImpersonationService;
 use CoreX\Tenancy\NullTenancyManager;
 use CoreX\Tenancy\SingleAccountResolver;
@@ -83,6 +84,7 @@ return [
         'setting_defaults' => NullSettingDefaultsProvider::class,
         'feature_flags' => DatabaseFeatureFlags::class,
         'departments' => DatabaseDepartmentRepository::class,
+        'data_scope_authorizer' => DenyDataScopeAuthorizer::class,
     ],
 
     'storage' => [

@@ -8,12 +8,14 @@ use CoreX\Attributes\Contracts\AttributeFilter;
 use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
+use CoreX\Attributes\Data\AttributeTables;
 use CoreX\Attributes\Internal\Engine\EavAttributeStore;
 use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
 use CoreX\Attributes\Internal\Engine\QueuedSchemaOperations;
 use CoreX\Attributes\Internal\Engine\StructuralAttributeFilter;
 use CoreX\Attributes\Internal\Registry\RegistryFieldCatalogue;
 use CoreX\Attributes\Internal\UnavailableAttributes;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,6 +28,18 @@ final class AttributesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-attributes.php', 'corex-attributes');
+        $this->app->singleton(AttributeTables::class, function (Application $app): AttributeTables {
+            /** @var array<string, mixed> $tables */
+            $tables = (array) $app['config']->get('corex-attributes.tables', []);
+
+            return new AttributeTables(
+                documents: (string) ($tables['documents'] ?? 'sys_attribute_documents'),
+                writeTokens: (string) ($tables['write_tokens'] ?? 'sys_attribute_write_tokens'),
+                eavValues: (string) ($tables['eav_values'] ?? 'sys_attribute_eav_values'),
+                eavRecords: (string) ($tables['eav_records'] ?? 'sys_attribute_eav_records'),
+                schemaOperations: (string) ($tables['schema_operations'] ?? 'sys_attribute_schema_operations'),
+            );
+        });
         $this->app->scoped(UnavailableAttributes::class);
 
         $this->app->scoped(AttributeFilter::class, StructuralAttributeFilter::class);
@@ -37,12 +51,14 @@ final class AttributesServiceProvider extends ServiceProvider
                 return $catalogue;
             }
 
+            $tables = $app->make(AttributeTables::class);
+
             if ($app['config']->get('corex-attributes.storage_driver') === 'eav' && (bool) $app['config']->get('corex-attributes.drivers.eav', false) && $app->bound('db')) {
-                return new EavAttributeStore(connection: $app['db']->connection(), catalogue: $catalogue);
+                return new EavAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
             }
 
             if ((bool) $app['config']->get('corex-attributes.drivers.jsonb', false) && $app->bound('db')) {
-                return new JsonbAttributeStore(connection: $app['db']->connection(), catalogue: $catalogue);
+                return new JsonbAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
             }
 
             return $app->make(UnavailableAttributes::class);
@@ -58,7 +74,9 @@ final class AttributesServiceProvider extends ServiceProvider
             if ((bool) $app['config']->get('corex-attributes.drivers.ddl', false) && $app->bound('db')) {
                 return new QueuedSchemaOperations(
                     connection: $app['db']->connection(),
+                    tables: $app->make(AttributeTables::class),
                     catalogue: $catalogue,
+                    authorizer: $app->make(DataScopeAuthorizer::class),
                 );
             }
 

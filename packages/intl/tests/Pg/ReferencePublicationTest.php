@@ -22,7 +22,6 @@ it('GEO-04 publishes reference dataset with CAS generation on PostgreSQL', funct
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
         actorId: 'geo-pg',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('e', 64),
     );
 

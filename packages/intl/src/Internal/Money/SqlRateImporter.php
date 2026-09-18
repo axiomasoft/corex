@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Internal\Money;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Contracts\RateImporter;
 use CoreX\Intl\Data\RateBatch;
 use CoreX\Intl\Data\RateImportReceipt;
@@ -23,13 +24,14 @@ final class SqlRateImporter implements RateImporter
 {
     public function __construct(
         private readonly Connection $connection,
+        private readonly DataScopeAuthorizer $authorizer,
         private readonly int $batchLimit = 1000,
     ) {}
 
     #[Override]
     public function import(DataScope $scope, RateBatch $batch, WriteToken $token): RateImportReceipt
     {
-        if (! ($scope->authorize)('rate-import', $token->operationKey, [], 'import')) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: 'rate-import', subjectId: $token->operationKey, fields: [], action: 'import')->allowed) {
             throw new AccessDeniedException('Rate import is not authorized for the current actor.');
         }
 

@@ -9,9 +9,9 @@
         "corex/search": "@dev",
         "meilisearch/meilisearch-php": "1.16.1"
     },
-    "autoload": {"psr-4": {"CoreX\\SearchMeilisearch\\": "src/"}},
-    "autoload-dev": {"psr-4": {"CoreX\\SearchMeilisearch\\Tests\\": "tests/"}},
-    "extra": {"laravel": {"providers": ["CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"]}},
+    "autoload": {"psr-4": {"CoreX\\Search\\Meilisearch\\": "src/"}},
+    "autoload-dev": {"psr-4": {"CoreX\\Search\\Meilisearch\\Tests\\": "tests/"}},
+    "extra": {"laravel": {"providers": ["CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider"]}},
     "repositories": [{"type": "path", "url": "../core"}, {"type": "path", "url": "../search"}],
     "minimum-stability": "dev",
     "prefer-stable": true,

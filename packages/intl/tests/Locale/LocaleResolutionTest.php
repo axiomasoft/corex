@@ -206,7 +206,6 @@ it('LOC-09 reads localized reference metadata from two providers deterministical
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'sqlite::memory:',
         actorId: 'reader',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('a', 64),
     );
 

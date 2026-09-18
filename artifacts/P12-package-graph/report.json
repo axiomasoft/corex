@@ -1,0 +1,27 @@
+{
+    "schema": "package-graph-report/1",
+    "generated_at": "2026-09-18T08:38:29+00:00",
+    "legacy_namespace_splits": [
+        {
+            "prefix": "CoreX\\Tenancy\\",
+            "packages": [
+                "corex/core",
+                "corex/tenancy"
+            ],
+            "adr": "ADR-CORE-REDUCTION",
+            "expires_when": "corex/core reduction lands; core defines zero classes under CoreX\\Tenancy\\",
+            "reason": "Host defines 16 classes under CoreX\\Tenancy\\; split is a named overdue exception, not silent pass (design §2.3).",
+            "class_counts": {
+                "corex/core": 16,
+                "corex/tenancy": 171
+            }
+        }
+    ],
+    "violations": [],
+    "summary": {
+        "packages_scanned": 20,
+        "classes_indexed": 885,
+        "violation_count": 0,
+        "legacy_split_count": 1
+    }
+}

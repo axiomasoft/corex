@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Search\Meilisearch\Internal\MeilisearchIndexAdapter;
 use CoreX\Search\Support\IndexBatch;
 use CoreX\Search\Support\IndexSwap;
-use CoreX\SearchMeilisearch\Internal\MeilisearchIndexAdapter;
 use Meilisearch\Client;
 
 it('returns an asynchronous task receipt for index submission', function (): void {

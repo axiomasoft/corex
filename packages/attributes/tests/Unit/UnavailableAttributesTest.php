@@ -22,7 +22,7 @@ it('fails closed consistently when an application has not enabled attributes', f
     $hash = str_repeat('a', 64);
     $scope = new DataScope(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', authorize: static fn (): bool => true, restoreEpoch: $hash,
+        connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
     );
     $record = new RecordRef(entity: 'contact', id: 'record-1');
     $schema = new FieldSnapshot(entity: 'contact', schemaVersion: $hash, schemaHash: $hash, activeFields: [['code' => 'name', 'type' => 'text']], driverCapabilities: []);

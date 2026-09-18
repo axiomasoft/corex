@@ -35,5 +35,11 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/modules/src packages/modules/database/migrations --memory-limit=1G",
+        "lint:check": "../../vendor/bin/pint --test"
+    }
 }

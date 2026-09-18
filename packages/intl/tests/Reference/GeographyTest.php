@@ -25,7 +25,6 @@ function geoScope(): DataScope
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'sqlite::memory:',
         actorId: 'geo',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('c', 64),
     );
 }

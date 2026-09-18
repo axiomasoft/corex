@@ -67,7 +67,7 @@ def design(plan):
         reads = body.split('**Required Reads:**')[1].split('**Implementation Rules:**')[0]
         for path in re.findall(r'(?:packages|docs|tests|delivery)/[\w./-]+', reads):
             v.require((plan.parents[1] / path.rstrip('.')).is_file(), f'{name}: missing committed source read: {path}')
-        for moved in ('packages/import-export/', 'packages/intl-search/'):
+        for moved in ('packages/import-export/', 'packages/intl-search/', 'packages/search-intl/'):
             v.require(moved not in reads, f'{name}: Required Reads pins a path this phase renames: {moved}')
 
         # Frozen DDL and dependency discipline must be restated where an executor can see it.

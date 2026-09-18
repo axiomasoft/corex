@@ -11,6 +11,7 @@ use CoreX\Attributes\Support\FilterNode;
 use CoreX\Attributes\Support\RecordSelection;
 use CoreX\Attributes\Support\Schema\SchemaChange;
 use CoreX\Attributes\Support\ValuePatch;
+use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Tenancy\AccountRef;
@@ -71,7 +72,6 @@ it('fails closed while no qualified engine is bound', function (): void {
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'boxed:account-1',
         actorId: 'user-1',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('a', 64),
     );
 
@@ -82,9 +82,10 @@ it('fails closed while no qualified engine is bound', function (): void {
 it('compiles only structural allowlisted filters', function (): void {
     $hash = str_repeat('a', 64);
     $schema = new FieldSnapshot('contact', 'v1', $hash, [['code' => 'email', 'type' => 'email']], []);
-    $scope = new DataScope(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'boxed:account-1', 'user-1', static fn (): bool => true, $hash);
+    $scope = new DataScope(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'boxed:account-1', 'user-1', $hash);
+    $filter = new StructuralAttributeFilter(new AllowAllDataScopeAuthorizer);
 
-    expect((new StructuralAttributeFilter)->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'email', 'value' => 'a@example.test']))->schemaHash)->toBe($hash);
+    expect($filter->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'email', 'value' => 'a@example.test']))->schemaHash)->toBe($hash);
 
-    expect(fn () => (new StructuralAttributeFilter)->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'unknown', 'value' => 'x'])))->toThrow(InvalidArgumentException::class);
+    expect(fn () => $filter->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'unknown', 'value' => 'x'])))->toThrow(InvalidArgumentException::class);
 });

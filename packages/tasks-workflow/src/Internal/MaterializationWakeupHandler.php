@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
+use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\WriteToken;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
@@ -37,22 +39,38 @@ final class MaterializationWakeupHandler implements WakeupHandler
             context: $this->contexts->current(),
             connectionIdentity: ScopeConnectionGuard::identity($connection),
             actorId: 'wakeup:'.$delivery->request->requestKey,
-            authorize: static fn (): bool => true,
             restoreEpoch: str_repeat('0', 64),
         );
 
-        $this->container->make(TaskRecurrenceCommand::class)->materialize(
-            scope: $scope,
-            series: new SeriesReference(id: $seriesId, immutableRevision: $revision, definitionHash: $definitionHash),
-            window: new MaterializationWindow(
-                start: (string) ($payload['start'] ?? date('Y-m-d')),
-                end: (string) ($payload['end'] ?? date('Y-m-d', strtotime('+30 days'))),
-            ),
-            token: new WriteToken(
-                operationKey: 'wakeup:'.$delivery->request->requestKey,
-                payloadHash: hash('sha256', 'wakeup-materialize/1'."\0".$seriesId."\0".$revision),
-                expectedRecordVersion: $revision,
-            ),
-        );
+        $previousAuthorizer = $this->container->bound(DataScopeAuthorizer::class)
+            ? $this->container->make(DataScopeAuthorizer::class)
+            : null;
+
+        $this->container->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
+        $this->container->forgetScopedInstances();
+
+        try {
+            $this->container->make(TaskRecurrenceCommand::class)->materialize(
+                scope: $scope,
+                series: new SeriesReference(id: $seriesId, immutableRevision: $revision, definitionHash: $definitionHash),
+                window: new MaterializationWindow(
+                    start: (string) ($payload['start'] ?? date('Y-m-d')),
+                    end: (string) ($payload['end'] ?? date('Y-m-d', strtotime('+30 days'))),
+                ),
+                token: new WriteToken(
+                    operationKey: 'wakeup:'.$delivery->request->requestKey,
+                    payloadHash: hash('sha256', 'wakeup-materialize/1'."\0".$seriesId."\0".$revision),
+                    expectedRecordVersion: $revision,
+                ),
+            );
+        } finally {
+            if ($previousAuthorizer instanceof DataScopeAuthorizer) {
+                $this->container->instance(DataScopeAuthorizer::class, $previousAuthorizer);
+            } else {
+                $this->container->forgetInstance(DataScopeAuthorizer::class);
+            }
+
+            $this->container->forgetScopedInstances();
+        }
     }
 }

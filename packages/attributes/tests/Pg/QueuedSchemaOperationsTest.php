@@ -8,13 +8,38 @@ use CoreX\Attributes\Internal\ScopeDenied;
 use CoreX\Attributes\Support\Schema\OperationKey;
 use CoreX\Attributes\Support\Schema\SchemaChange;
 use CoreX\Attributes\Tests\PgTestCase;
+use CoreX\Attributes\Tests\Support\PgTestSupport;
+use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Support\Data\CallableDataScopeAuthorizer;
+use CoreX\Support\Data\DataScope;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class);
 
+function queuedSchemaOperations(string $schemaHash = '', ?DataScopeAuthorizer $authorizer = null): QueuedSchemaOperations
+{
+    $hash = $schemaHash !== '' ? $schemaHash : str_repeat('f', 64);
+
+    return new QueuedSchemaOperations(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: schemaCatalogue('contact', $hash),
+        authorizer: $authorizer ?? jsonbAuthorizer(),
+    );
+}
+
+function schemaWorker(?DataScopeAuthorizer $authorizer = null): SchemaOperationWorker
+{
+    return new SchemaOperationWorker(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        authorizer: $authorizer ?? jsonbAuthorizer(),
+    );
+}
+
 it('persists schema work as pending instead of executing DDL in the request path', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $change = new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'score'], approvalDigest: $hash);
     $key = new OperationKey(key: 'schema-1', payloadHash: str_repeat('a', 64));
 
@@ -23,7 +48,7 @@ it('persists schema work as pending instead of executing DDL in the request path
 
     expect(DB::table('pg_indexes')->where('indexname', $index)->exists())->toBeFalse();
 
-    (new SchemaOperationWorker(DB::connection()))->run(jsonbScope(), $receipt->operation);
+    schemaWorker()->run(jsonbScope(), $receipt->operation);
 
     expect($receipt->status)->toBe('pending')
         ->and($operations->inspect(jsonbScope(), $receipt->operation)->status)->toBe('verified')
@@ -34,7 +59,7 @@ it('persists schema work as pending instead of executing DDL in the request path
 
 it('replays an identical schema request without creating a second operation', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $change = new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'replayed_score'], approvalDigest: $hash);
     $key = new OperationKey(key: 'schema-replay', payloadHash: str_repeat('a', 64));
 
@@ -47,7 +72,7 @@ it('replays an identical schema request without creating a second operation', fu
 
 it('reclaims a stale worker claim and completes the managed operation', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $receipt = $operations->request(
         jsonbScope(),
         new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'reclaimed_score'], approvalDigest: $hash),
@@ -59,7 +84,7 @@ it('reclaims a stale worker claim and completes the managed operation', function
         'started_at' => now()->subMinutes(11),
     ]);
 
-    (new SchemaOperationWorker(DB::connection()))->run(jsonbScope(), $receipt->operation);
+    schemaWorker()->run(jsonbScope(), $receipt->operation);
 
     expect($operations->inspect(jsonbScope(), $receipt->operation)->status)->toBe('verified')
         ->and(DB::table('sys_attribute_schema_operations')->where('id', $receipt->operation->id)->value('attempts'))->toBe(2);
@@ -67,13 +92,13 @@ it('reclaims a stale worker claim and completes the managed operation', function
 
 it('reports catalog drift when an owned managed index disappears', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $receipt = $operations->request(
         jsonbScope(),
         new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'drift_score'], approvalDigest: $hash),
         new OperationKey(key: 'schema-drift', payloadHash: str_repeat('c', 64)),
     );
-    (new SchemaOperationWorker(DB::connection()))->run(jsonbScope(), $receipt->operation);
+    schemaWorker()->run(jsonbScope(), $receipt->operation);
     $index = 'sys_attr_doc_'.substr(hash('sha256', "contact\ndrift_score"), 0, 24);
     DB::unprepared("DROP INDEX {$index}");
 
@@ -85,14 +110,14 @@ it('reports catalog drift when an owned managed index disappears', function (): 
 
 it('denies a stale restore epoch before a worker can execute DDL', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $receipt = $operations->request(
         jsonbScope(),
         new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'stale_score'], approvalDigest: $hash),
         new OperationKey(key: 'schema-stale-epoch', payloadHash: str_repeat('e', 64)),
     );
 
-    expect(fn (): mixed => (new SchemaOperationWorker(DB::connection()))->run(
+    expect(fn (): mixed => schemaWorker()->run(
         jsonbScope(restoreEpoch: str_repeat('b', 64)),
         $receipt->operation,
     ))->toThrow(ScopeDenied::class);
@@ -104,10 +129,12 @@ it('denies a stale restore epoch before a worker can execute DDL', function (): 
 
 it('requires the trusted scope to approve the exact schema approval digest', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash, new CallableDataScopeAuthorizer(
+        static fn (DataScope $_scope, string $entity, string $subjectId, array $fields, string $action): bool => $action !== 'schema-approve',
+    ));
 
     expect(fn (): mixed => $operations->request(
-        jsonbScope(authorize: static fn (string $entity, string $record, array $fields, string $action): bool => $action !== 'schema-approve'),
+        jsonbScope(),
         new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'unapproved_score'], approvalDigest: $hash),
         new OperationKey(key: 'schema-unapproved', payloadHash: str_repeat('d', 64)),
     ))->toThrow(ScopeDenied::class);
@@ -117,13 +144,13 @@ it('requires the trusted scope to approve the exact schema approval digest', fun
 
 it('requires a 30-day grace period and export digest before removing a managed index', function (): void {
     $hash = str_repeat('f', 64);
-    $operations = new QueuedSchemaOperations(DB::connection());
+    $operations = queuedSchemaOperations($hash);
     $add = $operations->request(
         jsonbScope(),
         new SchemaChange(entity: 'contact', kind: 'add', expectedSchemaHash: $hash, definition: ['field' => 'retired_score'], approvalDigest: $hash),
         new OperationKey(key: 'schema-retire-add', payloadHash: str_repeat('b', 64)),
     );
-    (new SchemaOperationWorker(DB::connection()))->run(jsonbScope(), $add->operation);
+    schemaWorker()->run(jsonbScope(), $add->operation);
 
     $drop = $operations->request(
         jsonbScope(),
@@ -134,7 +161,7 @@ it('requires a 30-day grace period and export digest before removing a managed i
         ], approvalDigest: $hash),
         new OperationKey(key: 'schema-retire-drop', payloadHash: str_repeat('d', 64)),
     );
-    (new SchemaOperationWorker(DB::connection()))->run(jsonbScope(), $drop->operation);
+    schemaWorker()->run(jsonbScope(), $drop->operation);
 
     $index = 'sys_attr_doc_'.substr(hash('sha256', "contact\nretired_score"), 0, 24);
 

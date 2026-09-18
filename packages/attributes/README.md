@@ -8,8 +8,16 @@ Its only tables are additive `sys_attribute_*` tables.
 
 The application selects either `jsonb` or `eav` storage. Both drivers enforce a trusted `DataScope`,
 including the physical `pgsql:<database>` identity, authorization callback, record version and write
-token. When a registry is bound, reads and writes also validate the active field snapshot and all
-fifteen supported scalar types.
+token. Reads and writes always validate the active field snapshot and all fifteen supported scalar
+types when `corex/modules` is installed and both registries are bound.
+
+Without `corex/modules`, `FieldCatalogue`, `AttributeStore`, and `SchemaOperations` resolve to
+`UnavailableAttributes`. Dynamic attribute fields are unavailable in that configuration; this is an
+observable fail-closed state, not a silent degradation.
+
+Table names are configured once through `corex-attributes.tables` and normalized into an immutable
+`AttributeTables` object at provider registration. Defaults match the shipped `sys_attribute_*`
+migrations byte-for-byte; migrations themselves are not overridden by configuration.
 
 Schema requests persist an idempotent operation only. They do not execute SQL in the request path.
 A trusted asynchronous worker invokes `SchemaOperationWorker` with a fresh `DataScope`; it claims

@@ -31,8 +31,8 @@
         <testsuite name="AttributesPackage">
             <directory>packages/attributes/tests</directory>
         </testsuite>
-        <testsuite name="ImportExportPackage">
-            <directory>packages/import-export/tests</directory>
+        <testsuite name="TransferPackage">
+            <directory>packages/transfer/tests</directory>
         </testsuite>
         <testsuite name="SearchPackage">
             <directory>packages/search/tests</directory>
@@ -67,7 +67,7 @@
             <directory>packages/modules/src</directory>
             <directory>packages/workflow/src</directory>
             <directory>packages/attributes/src</directory>
-            <directory>packages/import-export/src</directory>
+            <directory>packages/transfer/src</directory>
             <directory>packages/search/src</directory>
             <directory>packages/search-meilisearch/src</directory>
             <directory>packages/tasks-workflow/src</directory>

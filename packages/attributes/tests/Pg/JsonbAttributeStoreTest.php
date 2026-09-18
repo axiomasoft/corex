@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
+use CoreX\Attributes\Internal\InvalidAttributeValue;
 use CoreX\Attributes\Internal\KeyConflict;
 use CoreX\Attributes\Internal\ScopeDenied;
 use CoreX\Attributes\Internal\VersionConflict;
@@ -10,28 +11,20 @@ use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\RecordSelection;
 use CoreX\Attributes\Support\ValuePatch;
 use CoreX\Attributes\Tests\PgTestCase;
-use CoreX\Support\Data\DataScope;
+use CoreX\Attributes\Tests\Support\PgTestSupport;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class);
 
-function jsonbScope(string $connectionIdentity = 'pgsql:corex_test', ?string $restoreEpoch = null, ?Closure $authorize = null): DataScope
-{
-    return new DataScope(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: $connectionIdentity,
-        actorId: 'user-1',
-        authorize: $authorize ?? static fn (): bool => true,
-        restoreEpoch: $restoreEpoch ?? str_repeat('a', 64),
-    );
-}
-
 it('writes reads replays and versions an isolated JSONB attribute document', function (): void {
-    $store = new JsonbAttributeStore(DB::connection());
+    $store = new JsonbAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
+        authorizer: jsonbAuthorizer(),
+    );
     $record = new RecordRef(entity: 'contact', id: 'record-1');
     $patch = new ValuePatch(values: ['email' => 'owner@example.test']);
     $token = new WriteToken(operationKey: 'write-1', payloadHash: str_repeat('b', 64), expectedRecordVersion: 'absent');
@@ -60,7 +53,12 @@ it('writes reads replays and versions an isolated JSONB attribute document', fun
 })->group('pg');
 
 it('rejects a scope whose physical database identity differs from the bound connection', function (): void {
-    $store = new JsonbAttributeStore(DB::connection());
+    $store = new JsonbAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
+        authorizer: jsonbAuthorizer(),
+    );
 
     expect(fn (): mixed => $store->read(
         jsonbScope(connectionIdentity: 'pgsql:another_test'),
@@ -70,7 +68,12 @@ it('rejects a scope whose physical database identity differs from the bound conn
 })->group('pg');
 
 it('loads a bounded JSONB record selection with one documents query', function (): void {
-    $store = new JsonbAttributeStore(DB::connection());
+    $store = new JsonbAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
+        authorizer: jsonbAuthorizer(),
+    );
     $records = array_map(static fn (int $number): RecordRef => new RecordRef(entity: 'contact', id: "jsonb-batch-{$number}"), range(1, 50));
 
     foreach ($records as $number => $record) {
@@ -91,4 +94,20 @@ it('loads a bounded JSONB record selection with one documents query', function (
     expect($batch->records)->toHaveCount(50)
         ->and($batch->records[42]->values)->toBe(['email' => 'record-42@example.test'])
         ->and($queries)->toHaveCount(1);
+})->group('pg');
+
+it('rejects writes for fields that are absent from the active schema snapshot', function (): void {
+    $store = new JsonbAttributeStore(
+        connection: DB::connection(),
+        tables: PgTestSupport::tables(),
+        catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
+        authorizer: jsonbAuthorizer(),
+    );
+
+    expect(fn (): mixed => $store->write(
+        jsonbScope(),
+        new RecordRef(entity: 'contact', id: 'record-1'),
+        new ValuePatch(values: ['unknown' => 'value']),
+        new WriteToken(operationKey: 'write-unknown', payloadHash: str_repeat('b', 64), expectedRecordVersion: 'absent'),
+    ))->toThrow(InvalidAttributeValue::class);
 })->group('pg');

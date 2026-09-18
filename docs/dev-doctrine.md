@@ -92,7 +92,19 @@ API, политиками или задачами между проектами.
 - Тег ставится на закрытии фазы по GREEN-аудиту + запись в per-package `CHANGELOG.md`;
   1.0 не ставится, пока контракты не обкатаны потребителями (D17).
 
-Источник: D17; `scripts/contract-guard.sh` (шапка); `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §3.
+### Bridge-пакеты
+
+- Пакет-мост **декорирует** контракты своих хостов и **не владеет** предметными контрактами.
+  Пример: `corex/search-intl` — тонкий адаптер поверх `corex/intl` и `corex/search`, а не
+  самостоятельная возможность.
+- Собственный контракт в `Contracts/` bridge-пакета допустим только если он описывает **саму
+  операцию декорирования** (например, `SavedViewLabelReader` в `corex/search-intl`), а не
+  предметную область хоста. Saved views принадлежат `corex/core` (`SavedViewRepository`), не bridge-пакету.
+- Контроль: правило **R2** гейта графа пакетов (`scripts/package-graph-gate.php` — запрет импорта
+  чужого `Internal`) плюс ревью, что в `packages/<bridge>/src/Contracts/` не появляется контрактов,
+  чьи реализации живут в других пакетах.
+
+Источник: D17; `scripts/contract-guard.sh` (шапка); `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §3; P12.6 (D41).
 
 ## 6. Гейты качества — и их честное состояние
 

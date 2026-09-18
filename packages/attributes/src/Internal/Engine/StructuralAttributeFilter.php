@@ -9,14 +9,17 @@ use CoreX\Attributes\Internal\ScopeDenied;
 use CoreX\Attributes\Support\FieldSnapshot;
 use CoreX\Attributes\Support\FilterNode;
 use CoreX\Attributes\Support\FilterPlan;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use InvalidArgumentException;
 
 final class StructuralAttributeFilter implements AttributeFilter
 {
+    public function __construct(private readonly DataScopeAuthorizer $authorizer) {}
+
     public function compile(DataScope $scope, FieldSnapshot $schema, FilterNode $filter): FilterPlan
     {
-        if (! ($scope->authorize)($schema->entity, '', array_column($schema->activeFields, 'code'), 'filter')) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: $schema->entity, subjectId: '', fields: array_column($schema->activeFields, 'code'), action: 'filter')->allowed) {
             throw new ScopeDenied('The current scope denies this attribute filter.');
         }
 

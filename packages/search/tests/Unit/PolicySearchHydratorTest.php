@@ -7,6 +7,7 @@ use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\CurrentSearchRecord;
 use CoreX\Search\Support\SearchSnapshot;
+use CoreX\Support\Data\CallableDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Tenancy\AccountRef;
@@ -21,20 +22,25 @@ it('drops deleted, stale and policy-denied candidates before returning schema-ap
     $stale = new RecordRef(entity: 'equipment', id: 'stale');
     $scope = new DataScope(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', authorize: static fn (RecordRef $record): bool => $record->id === 'allowed', restoreEpoch: str_repeat('b', 64),
+        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
     );
-    $hydrator = new PolicySearchHydrator(static function (DataScope $_scope, RecordRef $record): ?CurrentSearchRecord {
-        if ($record->id === 'deleted') {
-            return null;
-        }
+    $hydrator = new PolicySearchHydrator(
+        static function (DataScope $_scope, RecordRef $record): ?CurrentSearchRecord {
+            if ($record->id === 'deleted') {
+                return null;
+            }
 
-        return new CurrentSearchRecord(
-            record: $record,
-            schemaHash: $record->id === 'stale' ? str_repeat('c', 64) : str_repeat('a', 64),
-            revision: str_repeat('d', 64),
-            fields: ['id' => $record->id, 'title' => 'Pump', 'internal_note' => 'must not leak'],
-        );
-    });
+            return new CurrentSearchRecord(
+                record: $record,
+                schemaHash: $record->id === 'stale' ? str_repeat('c', 64) : str_repeat('a', 64),
+                revision: str_repeat('d', 64),
+                fields: ['id' => $record->id, 'title' => 'Pump', 'internal_note' => 'must not leak'],
+            );
+        },
+        new CallableDataScopeAuthorizer(
+            static fn (DataScope $_scope, string $entity, string $subjectId): bool => $subjectId === 'allowed',
+        ),
+    );
 
     $page = $hydrator->authorize(
         scope: $scope,

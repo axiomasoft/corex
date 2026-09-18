@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Support\Data\CallableDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
@@ -23,21 +25,39 @@ function dataScope(): DataScope
         ),
         connectionIdentity: 'boxed:account-1',
         actorId: 'user-1',
-        authorize: static fn (string $entity, string $record, array $fields, string $action): bool => $entity === 'contact'
+        restoreEpoch: str_repeat('a', 64),
+    );
+}
+
+function dataScopeAuthorizer(): DataScopeAuthorizer
+{
+    return new CallableDataScopeAuthorizer(
+        static fn (DataScope $_scope, string $entity, string $record, array $fields, string $action): bool => $entity === 'contact'
             && $record === 'record-1'
             && $fields === ['name']
             && $action === 'write',
-        restoreEpoch: str_repeat('a', 64),
     );
 }
 
 it('carries only trusted data-boundary context', function (): void {
     $scope = dataScope();
+    $authorizer = dataScopeAuthorizer();
 
     expect($scope->connectionIdentity)->toBe('boxed:account-1')
         ->and($scope->actorId)->toBe('user-1')
-        ->and(($scope->authorize)('contact', 'record-1', ['name'], 'write'))->toBeTrue()
-        ->and(($scope->authorize)('contact', 'record-1', ['name'], 'read'))->toBeFalse();
+        ->and($authorizer->authorize(scope: $scope, entity: 'contact', subjectId: 'record-1', fields: ['name'], action: 'write')->allowed)->toBeTrue()
+        ->and($authorizer->authorize(scope: $scope, entity: 'contact', subjectId: 'record-1', fields: ['name'], action: 'read')->allowed)->toBeFalse();
+});
+
+it('serializes and unserializes without exceptions', function (): void {
+    $scope = dataScope();
+
+    $restored = unserialize(serialize($scope));
+
+    expect($restored)->toBeInstanceOf(DataScope::class)
+        ->and($restored->connectionIdentity)->toBe($scope->connectionIdentity)
+        ->and($restored->actorId)->toBe($scope->actorId)
+        ->and($restored->restoreEpoch)->toBe($scope->restoreEpoch);
 });
 
 it('rejects invalid trusted data-boundary scalar values', function (string $connectionIdentity, string $actorId, string $restoreEpoch): void {
@@ -45,7 +65,6 @@ it('rejects invalid trusted data-boundary scalar values', function (string $conn
         context: dataScope()->context,
         connectionIdentity: $connectionIdentity,
         actorId: $actorId,
-        authorize: static fn (): bool => false,
         restoreEpoch: $restoreEpoch,
     ))->toThrow(InvalidArgumentException::class);
 })->with([

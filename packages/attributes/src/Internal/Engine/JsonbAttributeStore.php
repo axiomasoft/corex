@@ -6,6 +6,7 @@ namespace CoreX\Attributes\Internal\Engine;
 
 use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
+use CoreX\Attributes\Data\AttributeTables;
 use CoreX\Attributes\Internal\KeyConflict;
 use CoreX\Attributes\Internal\ScopeDenied;
 use CoreX\Attributes\Internal\VersionConflict;
@@ -15,6 +16,7 @@ use CoreX\Attributes\Support\ValueBag;
 use CoreX\Attributes\Support\ValueBatch;
 use CoreX\Attributes\Support\ValuePatch;
 use CoreX\Attributes\Support\WriteResult;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
@@ -27,14 +29,16 @@ final readonly class JsonbAttributeStore implements AttributeStore
 {
     public function __construct(
         private ConnectionInterface $connection,
-        private ?FieldCatalogue $catalogue = null,
+        private AttributeTables $tables,
+        private FieldCatalogue $catalogue,
+        private DataScopeAuthorizer $authorizer,
     ) {}
 
     public function read(DataScope $scope, RecordRef $record, FieldSelection $fields): ValueBag
     {
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
         $this->authorize($scope, $record, $fields->fields, 'read');
-        $this->validator()?->validateSelection(scope: $scope, record: $record, selection: $fields);
+        $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
         $row = $this->documents()->where('entity', $record->entity)->where('record_id', $record->id)->first();
         $values = $row === null ? [] : $this->decode($row->values);
 
@@ -46,7 +50,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
         $fields = array_keys($patch->values);
         $this->authorize($scope, $record, $fields, 'write');
-        $this->validator()?->validatePatch(scope: $scope, record: $record, patch: $patch);
+        $this->validator()->validatePatch(scope: $scope, record: $record, patch: $patch);
 
         return $this->connection->transaction(function () use ($record, $patch, $token): WriteResult {
             $existing = $this->tokens()->where('operation_key', $token->operationKey)->lockForUpdate()->first();
@@ -105,7 +109,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
         foreach ($records->records as $record) {
             $this->authorize($scope, $record, $fields->fields, 'read');
-            $this->validator()?->validateSelection(scope: $scope, record: $record, selection: $fields);
+            $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
         }
 
         $rows = $this->documents()->where(function ($query) use ($records): void {
@@ -145,19 +149,19 @@ final readonly class JsonbAttributeStore implements AttributeStore
     /** @param list<string> $fields */
     private function authorize(DataScope $scope, RecordRef $record, array $fields, string $action): void
     {
-        if (! ($scope->authorize)($record->entity, $record->id, $fields, $action)) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: $record->entity, subjectId: $record->id, fields: $fields, action: $action)->allowed) {
             throw new ScopeDenied('The current scope denies this attribute operation.');
         }
     }
 
     private function documents(): Builder
     {
-        return $this->connection->table('sys_attribute_documents');
+        return $this->connection->table($this->tables->documents);
     }
 
     private function tokens(): Builder
     {
-        return $this->connection->table('sys_attribute_write_tokens');
+        return $this->connection->table($this->tables->writeTokens);
     }
 
     /** @return array<string, mixed> */
@@ -186,8 +190,8 @@ final readonly class JsonbAttributeStore implements AttributeStore
         }
     }
 
-    private function validator(): ?FieldValueValidator
+    private function validator(): FieldValueValidator
     {
-        return $this->catalogue === null ? null : new FieldValueValidator($this->catalogue);
+        return new FieldValueValidator($this->catalogue);
     }
 }

@@ -52,13 +52,12 @@ beforeEach(function (): void {
     );
 });
 
-function matScope(object $test, bool $allowed = true): DataScope
+function matScope(object $test): DataScope
 {
     return new DataScope(
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $test->userId,
-        authorize: static fn (): bool => $allowed,
         restoreEpoch: $test->restoreEpoch,
     );
 }
@@ -180,7 +179,6 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $this->userId,
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('b', 64),
     );
 

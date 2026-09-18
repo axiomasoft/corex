@@ -1,31 +1,29 @@
-# HANDOFF — 2026-09-18 — after P12.1
+# HANDOFF — 2026-09-18 — after P12A.2
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P12.2
+**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P12A.3
 
 | Параметр | Значение |
 |---|---|
-| Batch | B-P12-CONTOUR |
+| Batch | B-P12A-TREE |
 | Model class | implementation |
-| Effort | low |
-| Capabilities | — |
+| Effort | medium |
+| Executor | Cursor / Composer 2.5 |
+| Capabilities | shell, FS, git |
 | Context | continue-root |
-| Суть | Расширить `test:packages` с 8 до 20 пакетов; выдать `corex/core` и `corex/modules` скрипты test/analyse/lint. |
+| Суть | Единственный scoped-коммит с результатом P12 + P12A.1–P12A.2 (R1). |
 
-```
-task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P12.2
-```
+**Done:** P12A.1 🟢 design binding; P12A.2 🟢 `composer lint:check` + per-package lint + `test:packages`. Receipt: `findings/P12A-correction-receipts.md`.
 
-**Done:** P12.1 закрыт: `IntlModule` наследует `CorexModule` (discovery больше не падает); из `TenancyManager` удалён импорт `StanclTenancyManager`; в `require` добавлены `corex/modules` (intl) и `corex/workflow` (tasks-workflow). Receipt — `findings/P12-rebaseline-receipts.md`.
+**Ready:** P12A.3 — дерево зелёное по design и lint; незакоммиченный результат P12.2–P12.9 ждёт коммита.
 
-**Ready:** P12.2 — dependency satisfied (P12.1 🟢). Bundle: `plan-views.py bundle --item P12.2`.
+**Remaining:** P12A.3–P12A.6, затем P8.1–P8.7, затем P9/P10/P11.
 
-**Remaining:** P12.2–P12.9, затем P8.1–P8.7 и далее P9/P10/P11.
+**Open risks:**
+- `git clean -fd` до P12A.3 уничтожит весь change-set P12.
+- Гейт графа (A1) — до P12A.4.
+- P12A.3 требует полной цепочки гейтов до коммита.
 
-**Open risks:** Расщеплённый неймспейс `CoreX\Tenancy\` остаётся legacy-исключением для гейта P12.3. `corex/wakeup` у `tenancy` и `tasks-workflow` остаётся в `suggest` с файлами-охранниками (см. receipt P12.1). 14 унаследованных ошибок `task-check --check lint` — вне scope P12.
-
-**Sources of truth:** `journal.jsonl`; `findings/P12-rebaseline-receipts.md`; `decisions/D41-package-boundary-rebaseline.md`; `research/P12-rebaseline-design.md`; `phases/P12/P12.md`.
+**Sources of truth:** `findings/P12A-correction-receipts.md`; `findings/P12-post-close-audit.md`; `decisions/D42-p12-post-audit.md`; `phases/P12A/P12A.3.md`; `journal.jsonl`.
 
 **Workarounds/Deferred/Open questions:**
-- workarounds: без изменений относительно design-finish.
-- deferred: без изменений — ledger в P12.9.
-- open_questions: —
+- Исполнение плана — Cursor, Composer 2.5 (`implementation/medium`), batch `B-P12A-TREE` до P12A.3.

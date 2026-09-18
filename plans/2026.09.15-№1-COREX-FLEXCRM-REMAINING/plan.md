@@ -202,12 +202,19 @@ Batch/Review по сложности, integration/security/public риску. Д
 | solo | P12.7 | implementation/high | plan-exec | full | recommended: Затрагивает SQL-пути при неизменном DDL; full review требуется именно ради доказательства байтовой идентичности дефолтов. |
 | solo | P12.8 | implementation/high | plan-exec | full | recommended: Единственное защищённое изменение фазы (G-API) и удаление поведения из контракта. |
 | solo | P12.9 | implementation/medium | plan-exec | light | recommended: Печать и оформление отложенного; выполняется после всех восьми. |
+| B-P12A-TREE | P12A.1 | implementation/medium | plan-exec | light | recommended: Снятие `DESIGN_PENDING`, стилевая правка без смены поведения и следом коммит — один контекст одного дерева и одна цепочка гейтов. |
+| B-P12A-TREE | P12A.2 | implementation/medium | plan-exec | light | recommended: Снятие `DESIGN_PENDING`, стилевая правка без смены поведения и следом коммит — один контекст одного дерева и одна цепочка гейтов. |
+| B-P12A-TREE | P12A.3 | implementation/medium | plan-exec | light | recommended: Снятие `DESIGN_PENDING`, стилевая правка без смены поведения и следом коммит — один контекст одного дерева и одна цепочка гейтов. |
+| solo | P12A.4 | implementation/medium | plan-exec | full | D42: ошибочный гейт даёт ложную зелёную, и ровно этот дефект (A1) прошёл в P12 из-за неисполненного `full` review P12.3; красная ветвь требует контролируемого обратимого нарушения в дереве. |
+| B-P12A-SEAL | P12A.5 | implementation/medium | plan-exec | light | recommended: Дозапись bookkeeping и печать фазы делят один journal/receipt-контекст. |
+| B-P12A-SEAL | P12A.6 | implementation/medium | plan-exec | light | recommended: Дозапись bookkeeping и печать фазы делят один journal/receipt-контекст. |
 
 ## 4. Update Log
 
 Owned projection: status.md; журнал journal.jsonl владеет update history и actor/model provenance.
 Создан 2026-09-15 plan-designer/gpt-6-astra: верхний слой. P1/P2/P3/P4/P5/P6/P7/P8/P9/P10/P11 детализированы 2026-09-15 plan-designer/gpt-5.6-sol; product execution не начат, история — journal/generated status.
 2026-09-18 claude-opus-5/high: добавлена корректирующая фаза P12 (девять item) по разбору двух внешних аудитов; owning decision — D41; структурный чекер — scripts/validate-p12.py --check design. Исполнитель фазы — модель класса Composer 2.5, поэтому каждая спека называет точный параграф research/P12-rebaseline-design.md с готовым кодом. Реализация не начата.
+2026-09-18 auditor/claude-opus-5/high: выполнен adversarial post-close аудит P12 — findings/P12-post-close-audit.md, вердикт RED (R1 незакоммиченный результат P12.2–P12.9; R2 красный composer lint:check как доказанная регрессия P12; R3 несовпадающий spec_sha256 terminal-evidence P12.5; R4 DESIGN_PENDING design-гейта; A1–A8). P12.1–P12.9 не реопенены и остаются 🟢: дефекты относятся к закрытию, а не к принятым контрактам. Добавлена корректирующая фаза P12A (шесть item), наследующая от P12 роль блокирующего предшественника P8; owning decision — D42. Реализация не начата.
 
 ## 5. Decision Log
 

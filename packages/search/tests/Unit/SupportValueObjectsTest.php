@@ -25,7 +25,7 @@ it('keeps neutral search value objects typed and unsupported providers empty', f
     $record = new RecordRef(entity: 'equipment', id: 'pump-1');
     $scope = new DataScope(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', authorize: static fn (): bool => true, restoreEpoch: str_repeat('a', 64),
+        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('a', 64),
     );
     $provider = new UnsupportedSearchProvider;
     $page = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('b', 64), text: 'pump'));

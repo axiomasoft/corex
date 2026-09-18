@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Internal\Engine;
 
+use CoreX\Attributes\Data\AttributeTables;
 use CoreX\Attributes\Internal\ScopeDenied;
 use CoreX\Attributes\Support\Schema\OperationRef;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use DateInterval;
 use DateTimeImmutable;
@@ -16,7 +18,11 @@ use Throwable;
 
 final readonly class SchemaOperationWorker
 {
-    public function __construct(private ConnectionInterface $connection) {}
+    public function __construct(
+        private ConnectionInterface $connection,
+        private AttributeTables $tables,
+        private DataScopeAuthorizer $authorizer,
+    ) {}
 
     public function run(DataScope $scope, OperationRef $operation): void
     {
@@ -27,13 +33,13 @@ final readonly class SchemaOperationWorker
             $definition = json_decode($row->definition, true, 16, JSON_THROW_ON_ERROR);
             $this->apply(entity: $row->entity, definition: $definition);
 
-            $this->connection->table('sys_attribute_schema_operations')->where('id', $operation->id)->update([
+            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'verified',
                 'error_code' => null,
                 'finished_at' => now(),
             ]);
         } catch (Throwable $exception) {
-            $this->connection->table('sys_attribute_schema_operations')->where('id', $operation->id)->update([
+            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'failed',
                 'error_code' => 'ddl_execution_failed',
                 'finished_at' => now(),
@@ -46,10 +52,12 @@ final readonly class SchemaOperationWorker
     private function claim(DataScope $scope, OperationRef $operation): object
     {
         return $this->connection->transaction(function () use ($scope, $operation): object {
-            $operations = $this->connection->table('sys_attribute_schema_operations');
+            $operations = $this->connection->table($this->tables->schemaOperations);
             $row = $operations->where('id', $operation->id)->lockForUpdate()->first();
 
-            if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! ($scope->authorize)($row->entity, '', [], 'schema') || ! ($scope->authorize)($row->entity, '', [$row->approval_digest], 'schema-approve')) {
+            if ($row === null || $row->restore_epoch !== $scope->restoreEpoch
+                || ! $this->authorizer->authorize(scope: $scope, entity: $row->entity, subjectId: '', fields: [], action: 'schema')->allowed
+                || ! $this->authorizer->authorize(scope: $scope, entity: $row->entity, subjectId: '', fields: [$row->approval_digest], action: 'schema-approve')->allowed) {
                 throw new ScopeDenied('The schema operation cannot run in the current scope.');
             }
 
@@ -115,7 +123,7 @@ final readonly class SchemaOperationWorker
             $fieldLiteral = $this->literal($field);
             $entityLiteral = $this->literal($entity);
             // PostgreSQL forbids CREATE INDEX CONCURRENTLY in a transaction. Claiming is complete above.
-            $this->connection->unprepared("CREATE INDEX CONCURRENTLY {$index} ON sys_attribute_documents ((values->>{$fieldLiteral})) WHERE entity = {$entityLiteral}");
+            $this->connection->unprepared("CREATE INDEX CONCURRENTLY {$index} ON {$this->tables->documents} ((values->>{$fieldLiteral})) WHERE entity = {$entityLiteral}");
         }
 
         if (! $this->indexExists($index)) {
@@ -152,7 +160,7 @@ final readonly class SchemaOperationWorker
     {
         return $this->connection->table('pg_indexes')
             ->where('schemaname', 'public')
-            ->where('tablename', 'sys_attribute_documents')
+            ->where('tablename', $this->tables->documents)
             ->where('indexname', $index)
             ->exists();
     }

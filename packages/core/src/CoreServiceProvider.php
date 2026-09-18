@@ -8,6 +8,7 @@ use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\PruneAuditLog;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\AuditRetention;
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
@@ -65,6 +66,7 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
         $this->app->singleton(TenancyManager::class, Config::tenancyManagerClass());
         $this->app->singleton(ImpersonationService::class, Config::impersonationServiceClass());
+        $this->app->singleton(DataScopeAuthorizer::class, Config::dataScopeAuthorizerClass());
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
         $this->app->singleton(FeatureFlags::class, Config::featureFlagsClass());
         $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());

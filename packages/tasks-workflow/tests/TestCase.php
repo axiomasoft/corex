@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Tests;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Testing\TasksTestCase as TasksPackageTestCase;
@@ -34,6 +36,7 @@ abstract class TestCase extends TasksPackageTestCase
         $mutationAccess->shouldReceive('authorizeComplete')->byDefault()->andReturnNull();
         $mutationAccess->shouldReceive('authorizeUpdate')->byDefault()->andReturnNull();
         $this->app->instance(TaskMutationAccess::class, $mutationAccess);
+        $this->app->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
 
         $this->app->forgetScopedInstances();
     }

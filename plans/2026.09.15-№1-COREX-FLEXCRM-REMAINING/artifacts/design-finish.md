@@ -645,11 +645,13 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `decisions/D37-disable-token-admission.md` | `af0a639b171f0f205255f1e88cefa53524eeadaf5114e1adb15bdc20e6fe80b4` |
 | `decisions/D4.md` | `618495807599d167c46e933d05927e895ac81d249c0ef9f6cf6ac6c02b65ef16` |
 | `decisions/D41-package-boundary-rebaseline.md` | `936570e99ff32038be288a8015fb41961d009408e65da76ab095e3d9f7778f48` |
+| `decisions/D42-p12-post-audit.md` | `80d6d035d89435f2c7547f8e4dd793cc70dd64e4c04d88af68b4f8e142496ba5` |
 | `decisions/D5.md` | `fc3c85cc58f7280f90487623c900f94602ad9e3d2ee11dd58d1729bf622cdf67` |
 | `decisions/D6.md` | `c547fe6117e1dd166820483dd3909661e6a63cb01880f28862b932a81b978e4e` |
 | `decisions/D7.md` | `68d714b48321f16fe4e311f19d5f764630632db8fe840dc67d992127d55df832` |
 | `decisions/D8.md` | `69c62efb10d483ec735d27ae5b00b029c5bb209d1e1b71cb65baeee957d516d4` |
 | `decisions/D9-headless-extensions.md` | `2aef863b44bef787110781cff3b69b1fd2b585048850074a71a1c5a224e43e68` |
+| `findings/P12-post-close-audit.md` | `71a7601dfa2f0ad7c63bb50427ea8a542686bb6a67806a6496940d7520d771a5` |
 | `findings/whole-plan-astra-review.md` | `94802b4c906b347203a7c45e4fd687d3a9814cc2fe2574bd0ae6ce8d27d7ac5b` |
 | `phases/P1/P1.1.md` | `238d75f26d1f881d6918b6cf520250e047d68e050e215090d2fa619d9573da3c` |
 | `phases/P1/P1.2.md` | `787b7a695e11880c121465764f12a47797530426b504e3320c5e6c6ec6924c2c` |
@@ -683,7 +685,14 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P12/P12.7.md` | `f8541aa3f36e902841c9ca17aaa09a12af480a2d4f389cac305d446f44fdd0ef` |
 | `phases/P12/P12.8.md` | `9018b6ea0d478a25128a8e572e25d356a0ab62c23ea10a45d77269714de47bcb` |
 | `phases/P12/P12.9.md` | `259df4b1a1f8496755cbd8ac1789d086a8caed78252da48c28b0a4a4b39a52a4` |
-| `phases/P12/P12.md` | `80512d422e05ef44caa8481d3dbadf44e3c0dd76b994b13848a62479b0668e32` |
+| `phases/P12/P12.md` | `8218c0595f4aafe91f3877ae43b6d74703488bd803f65c8d6aef4bc57ad76693` |
+| `phases/P12A/P12A.1.md` | `75e8c96ca8c950251b3720c3ada9dbd80b911557c027d483a461e3a5e2d02ceb` |
+| `phases/P12A/P12A.2.md` | `c17cc4d13b357d0f02e5d81c965f39459bc28fbbde24ee319178bf0197659329` |
+| `phases/P12A/P12A.3.md` | `05252fbbc0fc0fa6cccee8e48e917d8c08fb99d136023805789c3b733198f811` |
+| `phases/P12A/P12A.4.md` | `b5cefa2ade7c2753996daada3782108c7531196b5cc0f62a819f68f2d055ab97` |
+| `phases/P12A/P12A.5.md` | `a98904c87a25c23f4af52a24981e337253156cfded1d7144c043efe977acd996` |
+| `phases/P12A/P12A.6.md` | `f020c91a3208a0e36b1d18c891c215d912a74ca71a2859d88cc95479b0d7572b` |
+| `phases/P12A/P12A.md` | `138870341402d0c6c76ef3970f29f1f4b382a9d0e1d6810535d18f734492ded0` |
 | `phases/P2/P2.1.md` | `4c560a9098c1359754b8f49addf940a9d87427318d504c094760fde284bcb2e1` |
 | `phases/P2/P2.2.md` | `90579b61ab7565fae19f63d7a857c4a17b7c76e2e4cb20756aab055f581167cc` |
 | `phases/P2/P2.3.md` | `0d9da50a8d1528903b6fcc898c9c3905be2d217ac957bcaa9d92920370c467a6` |
@@ -750,7 +759,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P9/P9.8.md` | `68fa0383610479490b9e45cad12078e8f78751ef5f9a5867bb10ffcd480d74b4` |
 | `phases/P9/P9.9.md` | `760a1e8d729f277ccd69b14633512ce06261a2be82a3c6aab2b8536f175a3999` |
 | `phases/P9/P9.md` | `b26325f2a95b53f7cd6b37214b2c93f8200b2dc918a06e16b4f29338ebbfd89a` |
-| `plan.md` | `c9e2962defdece0462c4eb69f54bf1406da9805883c42349e15e0d622739e1f7` |
+| `plan.md` | `72df7e8b5dc2144264ae5568d9ea9c1b7d362034d2095f9a30e0e7e0253f74fa` |
 | `research/00-sources.md` | `0cec5f58a1bcab6f6e0bfa32b3b09269b50c7cd7d7a030b1a78bdca6a58189f3` |
 | `research/01-traceability.md` | `818d0faef9074b7c38c97f1b6fc2c09641bbe0928f272552d2d435d0515cde93` |
 | `research/01a-acceptance-index.md` | `49e7888b52214d2a64592a3748561ce128914ad136ad8d582f6c97fbb51d4360` |
@@ -787,13 +796,13 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `research/P8-tool-design.md` | `ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca` |
 | `research/P9-cohort-design.md` | `87828181adc3de1af50a098e7882faa5204a1d7e610466b36b242c9b2aa85aeb` |
 | `research/P9-design-rag.md` | `1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1` |
-| `roadmap.md` | `f9bb98d223ac33d25483522d6b5176989757a4c3eb37b3eaee32cfdbf094d950` |
-| `scripts/task-check.py` | `29f4ee64603343ff94319925f0bb5d3f56d3ddebb7e662349246d995ae885ee3` |
+| `roadmap.md` | `88e3061e5ac3ac6e459ea6bcfbb2f0e73dd075e621ef6b916aa0cefa40b1ec6d` |
+| `scripts/task-check.py` | `dc478e5f0bdb90f0a108fba0bed5ba0374d96c30cf73ecc143c211a3aefa55b5` |
 | `scripts/test-design-guards.py` | `918ec9c899b5305188598003f5fde33d6db15b166b1beb7984e5f105b84610e0` |
 | `scripts/validate-p1.py` | `c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8` |
 | `scripts/validate-p10.py` | `557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49` |
 | `scripts/validate-p11.py` | `3ad17b7568ca7aef50356e5b0fc4baf7cd03418a9289ccb4f83ed478a5b718c2` |
-| `scripts/validate-p12.py` | `1a295aad84c2441b4289070c8bc7e7de845de056fd33212394d7ee9f650ca120` |
+| `scripts/validate-p12.py` | `a500887e2b23e04f677409960f335db8ceb2ce8519b49a46fd54121e86b47663` |
 | `scripts/validate-p2.py` | `ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3` |
 | `scripts/validate-p3.py` | `4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787` |
 | `scripts/validate-p4.py` | `724f046aedcf91e322436a1f7845187ae7e36c8e3c2919d072b7f8c41edccc27` |
@@ -969,3 +978,14 @@ Perplexity по этой премиссе завершился таймауто�
 и правка их receipt'ов и журнала выходит за авторизованный scope этой корректирующей фазы.
 Поэтому `--check lint` остаётся красным, и это заявляется прямо: зелёными считаются только
 `--check design` и `scripts/validate-p12.py --check design`.
+
+## D42 corrective-phase delta — 2026-09-18
+
+P12A добавлена как корректирующая фаза по post-close аудиту P12 (`findings/P12-post-close-audit.md`,
+вердикт RED; admission — `decisions/D42-p12-post-audit.md`). В печать внесены девять новых входов:
+`phases/P12A/P12A.md` и шесть item-спек, `findings/P12-post-close-audit.md`,
+`decisions/D42-p12-post-audit.md`. Обновлены хеши `phases/P12/P12.md` (регенерация при закрытии P12.9),
+`plan.md`, `roadmap.md`, `scripts/validate-p12.py` и `scripts/task-check.py` — sealed-спеки не менялись,
+обновлён binding. Прежний интегрированный семантический review сохраняется; замены whole-plan replay
+не заявляется.
+

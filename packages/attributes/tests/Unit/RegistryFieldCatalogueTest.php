@@ -96,7 +96,7 @@ it('projects active compiled entity fields without creating another registry', f
         drivers: ['jsonb' => true, 'eav' => true, 'ddl' => true],
     );
 
-    $snapshot = $catalogue->snapshot(new DataScope($context, 'boxed:account-1', 'user-1', static fn (): bool => true, str_repeat('a', 64)), 'contact');
+    $snapshot = $catalogue->snapshot(new DataScope($context, 'boxed:account-1', 'user-1', str_repeat('a', 64)), 'contact');
 
     expect($snapshot->activeFields)->toBe([[
         'code' => 'website',

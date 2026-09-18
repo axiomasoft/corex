@@ -22,7 +22,6 @@ it('FX-04 imports concurrent rate batches into one immutable row set', function 
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
         actorId: 'fx-pg',
-        authorize: static fn (): bool => true,
         restoreEpoch: str_repeat('d', 64),
     );
 

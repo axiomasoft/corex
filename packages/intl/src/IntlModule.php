@@ -15,6 +15,7 @@ final class IntlModule extends CorexModule
     {
         return Manifest::make('corex/intl')
             ->title('Internationalization')
-            ->description('Typed locale, money/rate snapshots, and offline geography reference utilities.');
+            ->description('Typed locale, money/rate snapshots, and offline geography reference utilities.')
+            ->tablePrefix('int');
     }
 }

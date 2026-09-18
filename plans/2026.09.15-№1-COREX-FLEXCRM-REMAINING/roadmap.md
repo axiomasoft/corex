@@ -18,7 +18,8 @@ flowchart TD
  P5 --> P12
  P6 --> P12
  P7 --> P12
- P12 --> P8["P8 Introspection/tool contributions"]
+ P12 --> P12A["P12A Коррекция закрытия P12"]
+ P12A --> P8["P8 Introspection/tool contributions"]
  P3 --> P9["P9 Installed cohort / release"]
  P8 --> P9
  P9 --> P10["P10 Effective central/cloud acceptance"]
@@ -98,6 +99,22 @@ item; новых зависимостей фаза не добавляет. Де
 Структурный чекер — `scripts/validate-p12.py --check design`. Исполнитель — модель класса
 Composer 2.5, поэтому каждая спека называет параграф `research/P12-rebaseline-design.md`
 с готовым кодом, и `[NEEDS CLARIFICATION]` в спеках отсутствует намеренно.
+
+## P12A execution subsets (PLAN1.D42; blocking predecessor of P8 вместо P12)
+
+P12A.1 снятие `DESIGN_PENDING` → P12A.2 зелёный `composer lint:check` → P12A.3 единственный
+scoped-коммит → P12A.4 проверка охраны и резервации в гейте → P12A.5 коррекция bookkeeping
+дозаписью → P12A.6 `Files` P9.2, печать, handoff. Порядок линейный и вынужденный:
+`plan.md` запрещает product mutation при `DESIGN_PENDING`; коммитить красный `lint:check`
+значит закрепить регрессию в истории; до коммита результат P12 уничтожается любой
+`git clean -fd`; ужесточение гейта должно дать дифф поверх зафиксированной ревизии;
+receipt P12A.4 входит в исправляемый bookkeeping. Фаза создана по вердикту RED
+`findings/P12-post-close-audit.md`. P12.1–P12.9 остаются 🟢 и не реопенятся: дефекты
+относятся к закрытию, а не к принятым контрактам. DDL не меняется ни в одном item;
+новых зависимостей и новых owner-gate фаза не добавляет; девять отложенных пунктов
+остаются названными. Исполнитель — модель класса Composer 2.5; единственное отклонение
+от общей глубины — `full` review P12A.4 как компенсирующий контроль за пропущенный
+`full` review P12.3.
 
 ## P8 execution subsets (PLAN1.D13; after D4 finish)
 

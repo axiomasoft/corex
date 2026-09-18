@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\SearchMeilisearch\Internal;
+namespace CoreX\Search\Meilisearch\Internal;
 
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Support\Candidate;

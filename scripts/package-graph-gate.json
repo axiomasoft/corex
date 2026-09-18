@@ -1,0 +1,69 @@
+{
+    "allowlist": [
+        {
+            "from": "corex/tenancy",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
+            "reason": "Optional wakeup integration guarded by interface_exists() before registration (P12.1 receipt)."
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
+            "reason": "WakeupScheduler resolved only when config enables it and container is bound (P12.1 receipt)."
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tasks-workflow/src/Internal/CompletionCaptureObserver.php",
+            "reason": "WorkflowBinding optional path guarded by interface_exists() and app()->bound() (P12.1 receipt)."
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php",
+            "reason": "WakeupHandler bridge implementation; wired only when corex/wakeup is installed."
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tenancy/src/Wakeup/Internal/RootRegistryWakeupHint.php",
+            "reason": "Root-registry wakeup hint adapter; registered only when corex/wakeup is present."
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/wakeup",
+            "guard_file": "packages/tenancy/src/Wakeup/Internal/RootWakeupReconciler.php",
+            "reason": "Root wakeup reconciler; registered only when corex/wakeup is present."
+        },
+        {
+            "from": "corex/attributes",
+            "to": "corex/modules",
+            "guard_file": "packages/attributes/src/AttributesServiceProvider.php",
+            "reason": "EntityRegistry and ModuleRegistry resolved only when both are bound in the container (P12.7 receipt)."
+        },
+        {
+            "from": "corex/attributes",
+            "to": "corex/modules",
+            "guard_file": "packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php",
+            "reason": "RegistryFieldCatalogue is constructed only from the guarded FieldCatalogue binding in AttributesServiceProvider (P12.7 receipt)."
+        }
+    ],
+    "reservations": [
+        {
+            "prefix": "CoreX\\Search\\Meilisearch\\",
+            "host": "corex/search",
+            "owner": "corex/search-meilisearch",
+            "reason": "host-reserved adapter namespace; host defines zero classes under the prefix"
+        }
+    ],
+    "legacy_namespace_splits": [
+        {
+            "prefix": "CoreX\\Tenancy\\",
+            "packages": ["corex/core", "corex/tenancy"],
+            "adr": "ADR-CORE-REDUCTION",
+            "expires_when": "corex/core reduction lands; core defines zero classes under CoreX\\Tenancy\\",
+            "reason": "Host defines 16 classes under CoreX\\Tenancy\\; split is a named overdue exception, not silent pass (design §2.3)."
+        }
+    ]
+}

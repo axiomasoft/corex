@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Exceptions\InvalidSearchConfiguration;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\UnsupportedSearchProvider;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\Search\Support\SearchSnapshot;
 use CoreX\Support\Data\DataScope;
+use InvalidArgumentException;
 use Orchestra\Testbench\TestCase;
 
 final class SearchServiceProviderTest extends TestCase
@@ -22,6 +24,30 @@ final class SearchServiceProviderTest extends TestCase
     public function test_it_boots_without_database_schemas_sdk_credentials_or_network_activity(): void
     {
         expect($this->app->make(SearchProvider::class))->toBeInstanceOf(UnsupportedSearchProvider::class);
+    }
+
+    public function test_null_driver_returns_unsupported_search_provider(): void
+    {
+        $this->app['config']->set('corex-search.driver', 'null');
+
+        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(UnsupportedSearchProvider::class);
+    }
+
+    public function test_postgres_driver_with_weak_cursor_secret_throws(): void
+    {
+        $this->app['config']->set('corex-search.driver', 'postgres');
+        $this->app['config']->set('corex-search.cursor_secret', 'short');
+
+        expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))
+            ->toThrow(InvalidSearchConfiguration::class);
+    }
+
+    public function test_meilisearch_driver_without_adapter_throws(): void
+    {
+        $this->app['config']->set('corex-search.driver', 'meilisearch');
+
+        expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))
+            ->toThrow(InvalidArgumentException::class);
     }
 
     public function test_it_selects_the_postgresql_provider_only_for_an_explicit_ready_profile(): void

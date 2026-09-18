@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
+use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Recurrence\Data\ExpansionLimits;
@@ -41,6 +42,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         private readonly TaskAccess $taskAccess,
         private readonly Repository $config,
         private readonly Container $container,
+        private readonly DataScopeAuthorizer $authorizer,
     ) {}
 
     #[Override]
@@ -52,7 +54,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
     ): MaterializationReceipt {
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
 
-        if (! ($scope->authorize)('task-series', $series->id, [], 'materialize')) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: 'task-series', subjectId: $series->id, fields: [], action: 'materialize')->allowed) {
             throw UnsupportedMaterialization::connection('Materialization is not authorized for the current actor.');
         }
 

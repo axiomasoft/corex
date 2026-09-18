@@ -82,7 +82,6 @@ function pgScope(object $test): DataScope
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:'.DB::connection('pgsql')->getDatabaseName(),
         actorId: $test->userId,
-        authorize: static fn (): bool => true,
         restoreEpoch: $test->restoreEpoch,
     );
 }
@@ -187,7 +186,6 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:another_account',
         actorId: $this->userId,
-        authorize: static fn (): bool => true,
         restoreEpoch: $this->restoreEpoch,
     );
 
