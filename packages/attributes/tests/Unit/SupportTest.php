@@ -18,7 +18,7 @@ use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
 
 it('keeps field selections bounded and unique', function (): void {
-    expect(new FieldSelection(fields: ['email', 'status'])->fields)->toBe(['email', 'status']);
+    expect((new FieldSelection(fields: ['email', 'status']))->fields)->toBe(['email', 'status']);
 
     expect(fn (): FieldSelection => new FieldSelection(fields: ['email', 'email']))
         ->toThrow(InvalidArgumentException::class);
@@ -49,7 +49,7 @@ it('accepts only canonical schema-bound attribute data', function (): void {
     );
 
     expect($snapshot->schemaHash)->toBe($hash)
-        ->and(new ValuePatch(values: ['email' => null])->values)->toBe(['email' => null]);
+        ->and((new ValuePatch(values: ['email' => null]))->values)->toBe(['email' => null]);
 });
 
 it('rejects unapproved or oversized schema-change inputs', function (): void {

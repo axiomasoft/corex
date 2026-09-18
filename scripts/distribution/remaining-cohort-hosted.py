@@ -20,6 +20,8 @@ EVIDENCE = PLAN_DELIVERY / 'evidence'
 HOSTED_SCRIPT = Path(__file__).resolve()
 COHORT_WORKFLOW = ROOT / '.github/workflows/remaining-cohort-proof.yml'
 WORKFLOW_FILE = 'remaining-cohort-proof.yml'
+DEFAULT_MIRROR_REPOSITORY = 'academici/corex-mirror'
+_EXECUTION_REPO_OVERRIDE: str | None = None
 
 
 class HostedError(RuntimeError):
@@ -101,8 +103,23 @@ def load_packet() -> dict:
     return packet
 
 
-def repository_slug(packet: dict) -> str:
+def canonical_repository(packet: dict) -> str:
     return packet['dispatch']['repository']
+
+
+def repository_slug(packet: dict) -> str:
+    """Authority-bound repository from runner-packet (unchanged by mirror execution)."""
+    return canonical_repository(packet)
+
+
+def execution_repository(packet: dict) -> str:
+    """Repository where workflow dispatch/query/reconcile actually runs."""
+    if _EXECUTION_REPO_OVERRIDE:
+        return _EXECUTION_REPO_OVERRIDE
+    env = os.environ.get('COREX_HOSTED_EXECUTION_REPOSITORY', '').strip()
+    if env:
+        return env
+    return canonical_repository(packet)
 
 
 def frozen_dispatch_ref(packet: dict) -> str:
@@ -111,7 +128,7 @@ def frozen_dispatch_ref(packet: dict) -> str:
 
 
 def resolve_dispatch_ref(packet: dict) -> str:
-    repository = repository_slug(packet)
+    repository = execution_repository(packet)
     frozen = frozen_dispatch_ref(packet)
     if remote_has_workflow_at_ref(repository, frozen):
         return frozen
@@ -221,7 +238,8 @@ def download_job_log(repository: str, job_id: int, destination: Path, job: dict 
 
 def preflight(packet: dict | None = None) -> dict:
     packet = packet or load_packet()
-    repository = repository_slug(packet)
+    canonical = canonical_repository(packet)
+    repository = execution_repository(packet)
     frozen = frozen_dispatch_ref(packet)
     ref = resolve_dispatch_ref(packet)
     blockers: list[str] = []
@@ -236,9 +254,12 @@ def preflight(packet: dict | None = None) -> dict:
     proc = run_gh(['api', 'user', '--jq', '.login'])
     if proc.returncode != 0:
         blockers.append('gh api unreachable or unauthenticated')
+    mirror = repository != canonical
     return {
         'schema_version': 'hosted-preflight/1',
-        'repository': repository,
+        'repository': canonical,
+        'execution_repository': repository,
+        'mirror_execution': mirror,
         'dispatch_ref': ref,
         'runner_packet_sha256': sha256_path(packet['_packet_path']),
         'workflow_id': workflow_id,
@@ -273,8 +294,8 @@ def job_name_matches(job: dict, expected: dict) -> bool:
     return True
 
 
-def reconcile_run(packet: dict, run: dict) -> dict:
-    repository = repository_slug(packet)
+def reconcile_run(packet: dict, run: dict, repository: str | None = None) -> dict:
+    repository = repository or execution_repository(packet)
     plan = packet['_plan']
     jobs = list_jobs(repository, int(run['id']))
     required = plan.get('jobs', [])
@@ -301,6 +322,7 @@ def reconcile_run(packet: dict, run: dict) -> dict:
         'run_id': run['id'],
         'run_attempt': run.get('run_attempt'),
         'run_url': run['html_url'],
+        'execution_repository': repository,
         'head_sha': run['head_sha'],
         'workflow_sha': packet.get('workflow_sha256'),
         'jobs_expected': len(required),
@@ -421,20 +443,21 @@ def execute_reconcile(run_id: int | None = None) -> dict:
     pre = preflight(packet)
     write_json(HOSTED / 'preflight.json', pre)
 
-    repository = repository_slug(packet)
+    canonical = canonical_repository(packet)
+    repository = pre.get('execution_repository') or execution_repository(packet)
     ref = pre['dispatch_ref']
     selected_run: dict | None = None
     reconcile: dict | None = None
     workflow_id = pre.get('workflow_id')
     if run_id is not None and workflow_id is not None:
         selected_run = fetch_run(repository, run_id)
-        reconcile = reconcile_run(packet, selected_run)
+        reconcile = reconcile_run(packet, selected_run, repository)
         write_json(HOSTED / f"run-{selected_run['id']}.json", reconcile)
     elif pre['ready'] and workflow_id is not None:
         runs = list_runs(repository, workflow_id, ref)
         if runs:
             selected_run = runs[0]
-            reconcile = reconcile_run(packet, selected_run)
+            reconcile = reconcile_run(packet, selected_run, repository)
             write_json(HOSTED / f"run-{selected_run['id']}.json", reconcile)
 
     receipt = {
@@ -442,7 +465,9 @@ def execute_reconcile(run_id: int | None = None) -> dict:
         'candidate_sha256': candidate_sha,
         'runner_packet_sha256': packet_sha,
         'dispatch_ref': ref,
-        'repository': repository,
+        'repository': canonical,
+        'execution_repository': repository,
+        'mirror_execution': repository != canonical,
         'preflight': pre,
         'selected_run': selected_run,
         'reconcile': reconcile,
@@ -524,10 +549,15 @@ def execute_reconcile(run_id: int | None = None) -> dict:
         ('delivery/remaining-cohort-20260915/hosted/receipt.json', receipt_sha, 'hosted receipt'),
         ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
     ]
+    mirror_note = (
+        f'mirror execution on `{repository}` (canonical `{canonical}`)'
+        if repository != canonical else 'canonical repository'
+    )
     adoption_rows = [
         ('runner-packet/1', 'G-RUNNER', f'`{packet_sha}`', 'P9.4', 'PASS', 'dispatch exact packet jobs'),
         ('hosted-receipt/1', 'G-RUNNER', f'`{receipt_sha}`', 'P9.5', 'PASS' if receipt['ready'] else 'PENDING', 'P9.6 private read pending'),
         ('p9-cohort/1 candidate', 'G-RELEASE', f'`{candidate_sha}`', 'P9.1', 'PASS', 'unchanged intake identity'),
+        ('hosted-execution-surface', 'G-RUNNER', f'`{repository}`', 'P9.5', 'PASS' if receipt['ready'] else 'PENDING', mirror_note),
     ]
     build_report(candidate_sha, packet_sha, receipt_sha, case_rows, evidence_rows, input_rows, adoption_rows)
     return {
@@ -595,7 +625,7 @@ def verify_source_binding(path: Path) -> int:
 
 def verify_query_before_repeat() -> int:
     packet = load_packet()
-    repository = repository_slug(packet)
+    repository = execution_repository(packet)
     workflow_id = remote_workflow_id(repository)
     if workflow_id is None:
         return 1
@@ -622,7 +652,16 @@ def main() -> int:
     parser.add_argument('--verify-workflow-policy', type=Path)
     parser.add_argument('--verify-source-binding', type=Path)
     parser.add_argument('--verify-query-before-repeat', action='store_true')
+    parser.add_argument(
+        '--execution-repo',
+        metavar='OWNER/REPO',
+        help=f'Run dispatch/query/reconcile on alternate repo (default mirror: {DEFAULT_MIRROR_REPOSITORY} via env COREX_HOSTED_EXECUTION_REPOSITORY)',
+    )
     args = parser.parse_args()
+
+    global _EXECUTION_REPO_OVERRIDE
+    if args.execution_repo:
+        _EXECUTION_REPO_OVERRIDE = args.execution_repo
 
     try:
         if args.preflight:
@@ -634,7 +673,7 @@ def main() -> int:
             if not pre['ready']:
                 print(json.dumps({'runs': [], 'preflight': pre}), ensure_ascii=False)
                 return 1
-            runs = list_runs(repository_slug(packet), pre['workflow_id'], pre['dispatch_ref'])
+            runs = list_runs(execution_repository(packet), pre['workflow_id'], pre['dispatch_ref'])
             print(json.dumps({'runs': runs, 'preflight': pre}, ensure_ascii=False))
             return 0
         if args.dispatch:
@@ -643,7 +682,7 @@ def main() -> int:
             if not pre['ready']:
                 print(json.dumps({'result': 'BLOCKED', 'preflight': pre}), ensure_ascii=False)
                 return 2
-            repository = repository_slug(packet)
+            repository = execution_repository(packet)
             ref = pre['dispatch_ref']
             dispatch_workflow(repository, ref)
             if args.wait:

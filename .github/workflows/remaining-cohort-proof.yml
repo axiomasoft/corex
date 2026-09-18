@@ -43,6 +43,9 @@ jobs:
         if: matrix.php == '8.3'
         run: composer remove corex/tenancy --no-update --no-interaction
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -94,6 +97,9 @@ jobs:
       - name: Constrain Laravel version
         run: composer require "illuminate/contracts:${{ matrix.laravel }}.*" --no-update --no-interaction
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -122,6 +128,8 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
           coverage: xdebug
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Build local matrix and runner plan
