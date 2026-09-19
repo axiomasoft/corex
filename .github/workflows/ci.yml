@@ -89,6 +89,13 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
+      - name: Prepare PostgreSQL test databases
+        run: |
+          for database in corex_test corex_search_a_test corex_search_b_test; do
+            PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
+              || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
+          done
+
       - name: PG tests
         run: composer test:pg
         env:
@@ -501,6 +508,13 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      meilisearch:
+        image: getmeili/meilisearch:v1.16
+        env:
+          MEILI_NO_ANALYTICS: 'true'
+          MEILI_ENV: development
+        ports:
+          - 7700:7700
     steps:
       - uses: actions/checkout@v4
 
@@ -515,6 +529,13 @@ jobs:
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare PostgreSQL test databases
+        run: |
+          for database in corex_test corex_search_a_test corex_search_b_test; do
+            PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
+              || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
+          done
 
       - name: Effective coverage floor
         run: |

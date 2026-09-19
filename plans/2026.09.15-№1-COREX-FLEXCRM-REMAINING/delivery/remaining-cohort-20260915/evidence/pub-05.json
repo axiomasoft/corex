@@ -7,12 +7,12 @@
   "command": "/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-publish.py --verify-pub-05",
   "cwd": "/home/vostrikov/projects/packages/corex",
   "runtime": "python=3.12",
-  "start": "2026-09-19T09:32:28.622683+00:00",
-  "end": "2026-09-19T09:32:28.674364+00:00",
+  "start": "2026-09-19T10:36:09.306443+00:00",
+  "end": "2026-09-19T10:36:09.357166+00:00",
   "exit": 0,
   "result": "PASS",
   "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
-  "recipe_commit": "1696cb3ede6db7f27a5950383c981ad1ebe8b3dc",
+  "recipe_commit": "561b3460ea587c4f398bb984850761dc35d72785",
   "candidate_sha256": "056f6ed3316c6a1cf8c188bd64aca32f86e4a612abbcad67bacb589c75892b28",
   "lock_sha256": "b77e1dff582dd449792730e1cf37b35b719f4425e46fdc5a2cc4f92efe58ff9f",
   "config_sha256": "26963675ebca736c66038acec7ca4a69a649be624a05c471ec1f074b1bd32ab6",
@@ -33,8 +33,7 @@
       "target_fingerprint": "946f4e209671f6bc586c6a72a43c49aef0db6c023a31147ba52b75cd66026c0b",
       "current_state": null,
       "result": "unknown",
-      "query_error": "tag query transport failure for axiomasoft/corex-api:0.4.0-alpha.20260918",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "query_error": "tag query transport failure for axiomasoft/corex-api:0.4.0-alpha.20260918"
     },
     {
       "operation_id": "release-asset-corex-api",
@@ -43,9 +42,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:915584ca8548b1f0aa2d6012d8373c1db10c5c7df7604ec800e7b9903416e2f2",
-      "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:immutable reference collision"
+      "current_state": "sha256:6c5dd96ccaf5cdda85a7dfcc28a56c5d42742998e5ef33f3e6d8267cbf4c257c",
+      "result": "collision"
     },
     {
       "operation_id": "push-tag-corex-attributes",
@@ -54,10 +52,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "df712926316603cd09a8c1c2cfca3ea9075e4665e1c8c73f0d8cb2b878888885",
-      "current_state": null,
-      "result": "unknown",
-      "query_error": "tag query transport failure for axiomasoft/corex-attributes:0.4.0-alpha.20260918",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "current_state": "252b6c794ad47a577f16319905fee8b6a6144051392dcc2b796b546017a97026",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-attributes",
@@ -66,9 +62,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:246df9e128568e72400577be1901902bd813e73aae7511b59c1a5dbaa02fa576",
-      "current_state": "sha256:246df9e128568e72400577be1901902bd813e73aae7511b59c1a5dbaa02fa576",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-core",
@@ -77,9 +72,9 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "9a1459b73ab364f0fb43c39de21c4c697c3d3a4df9953a97121b7f89b0445bbf",
-      "current_state": "b3fc8e6b880dc493c8400321c7f40add6e7990f5ceb221ceb7b46aefa1a9f2f2",
-      "result": "collision",
-      "publish_result": "denied:immutable reference collision"
+      "current_state": null,
+      "result": "unknown",
+      "query_error": "tag query transport failure for axiomasoft/corex-core:0.4.0-alpha.20260918"
     },
     {
       "operation_id": "release-asset-corex-core",
@@ -88,9 +83,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:0c260c589c65fd1502368df664c82b3ddc9902b23eeea84ed7a2e2ee4355b9f8",
-      "current_state": "sha256:0c260c589c65fd1502368df664c82b3ddc9902b23eeea84ed7a2e2ee4355b9f8",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-intl",
@@ -99,9 +93,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "965f80cf3e17f1e4cf565d9c9920a68db74c8cfe83598702e0350afb258916e6",
-      "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "current_state": "f2df8498ca65e59629bea8b147d6e60f3ad4e9422c504d20de1a5fd487043c3c",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-intl",
@@ -111,8 +104,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:f00708465a2d5a543e93865e40c49ac71442f16c28c6f65d865f8c3321ba1984",
       "current_state": "sha256:f00708465a2d5a543e93865e40c49ac71442f16c28c6f65d865f8c3321ba1984",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-media",
@@ -121,9 +113,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "ab73893dde20c00aa611d081aa297da14bf5fb9f2f346ac160a2aa3c2ff67996",
-      "current_state": "303fc8d9fba1f4285ceb0fd664a02cf21241d6bfa2f1c0db0a1608acfada03d1",
-      "result": "collision",
-      "publish_result": "denied:immutable reference collision"
+      "current_state": "9987e46ae8b99bce06e57c2e726fe808a0f639034dff9f9e652a902c1d821c97",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-media",
@@ -133,8 +124,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:b4e5d0df1b78e66111cbed2e3e9440607ae9dec4762955d90eaf86f67b78397e",
       "current_state": "sha256:b4e5d0df1b78e66111cbed2e3e9440607ae9dec4762955d90eaf86f67b78397e",
-      "result": "matching-no-op",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-modules",
@@ -143,9 +133,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "bcc0b5bbfebb61028790392bc7f623f6ba9749dbf911ab8dc4872eeb4e1d5684",
-      "current_state": "0a7bed9921b9b7f433a5ff0108da9816e9fa09f51b496e34e8a3520e1f82bb66",
-      "result": "collision",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "current_state": "385300ff1c4fa337869da8667fe27f21e7c8e7edda0e557d924b01d1da7c9b73",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-modules",
@@ -155,8 +144,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:2d3f26ccf80f931e65838c9b19dc0acd89d8c7435f7faa17393a92415043b955",
       "current_state": "sha256:2d3f26ccf80f931e65838c9b19dc0acd89d8c7435f7faa17393a92415043b955",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-notifications",
@@ -167,8 +155,7 @@
       "target_fingerprint": "ba16061bee906b47e18e0cfb735a3ba0070c1785a59583edfe83aba3f3b198b1",
       "current_state": null,
       "result": "unknown",
-      "query_error": "tag query transport failure for axiomasoft/corex-notifications:0.4.0-alpha.20260918",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "query_error": "tag query transport failure for axiomasoft/corex-notifications:0.4.0-alpha.20260918"
     },
     {
       "operation_id": "release-asset-corex-notifications",
@@ -178,8 +165,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:80a7ca1404c9473c834c226a574d7e31f780035f6a2bf5183df5173c1e070ec6",
       "current_state": "sha256:80a7ca1404c9473c834c226a574d7e31f780035f6a2bf5183df5173c1e070ec6",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-panels",
@@ -188,9 +174,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "49b019c53a586fdcb3c682903fae4e170d2aea414c6c7f4903d7a11a9de9f20b",
-      "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "current_state": "4d7ff3d5ac84a58dd16dc063812c2b935f1c3b8ce6490f4301c25d87014c2b14",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-panels",
@@ -200,8 +185,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:034f29b472b5609db2b984e7f3f381e56374f84eaeb5e2cc64d0aaca13e3c0e8",
       "current_state": "sha256:034f29b472b5609db2b984e7f3f381e56374f84eaeb5e2cc64d0aaca13e3c0e8",
-      "result": "matching-no-op",
-      "publish_result": "matching-no-op"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-recurrence",
@@ -210,9 +194,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "2e5d5088dd3113c403c7b65a4cbe04611ba0cd289d9c3a97ceda70a86403b7e1",
-      "current_state": "4e71c07f5ace3fd2a15ff39094f5b4ba03e40c71fa38b8df2aef5d8e14fcb08b",
-      "result": "collision",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-recurrence",
@@ -221,9 +204,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:e3e421ed50c9f681f1dc7c21edcc86159998758f9ee0b9b36e7e58c6ca8c7683",
-      "current_state": "sha256:e3e421ed50c9f681f1dc7c21edcc86159998758f9ee0b9b36e7e58c6ca8c7683",
-      "result": "matching-no-op",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-search",
@@ -232,9 +214,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "1eb814dd4de96792210370c41c98b48477aa886afa8740d222145a9212cb8cbf",
-      "current_state": "a81e1831a93ce6d88feab103edf71623249ef45545ef91e5a8c01c802f513514",
-      "result": "collision",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-search",
@@ -243,9 +224,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:5527ed2efe9dd848605dd7301e044d643ae992db3416a133729998a5e0932de8",
-      "current_state": "sha256:5527ed2efe9dd848605dd7301e044d643ae992db3416a133729998a5e0932de8",
-      "result": "matching-no-op",
-      "publish_result": "published-verified"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-search-intl",
@@ -254,10 +234,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "796d817e5ddbc8eff10e02fa8f47ace6818e69f84b0662e09115472648473127",
-      "current_state": null,
-      "result": "unknown",
-      "query_error": "tag fingerprint clone transport failure for axiomasoft/corex-search-intl:0.4.0-alpha.20260918",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": "9f87a1c1c06d1116f9b27a0fea5d0c593f6b97403a5891c9ce963c3c492d8e70",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-search-intl",
@@ -267,8 +245,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:111c3cb97d24d4e7dc56f2ae3b9d600437875146dde60a2e14c9a38bf80ed94e",
       "current_state": "sha256:111c3cb97d24d4e7dc56f2ae3b9d600437875146dde60a2e14c9a38bf80ed94e",
-      "result": "matching-no-op",
-      "publish_result": "published-verified"
+      "result": "matching-no-op"
     },
     {
       "operation_id": "push-tag-corex-search-meilisearch",
@@ -278,8 +255,8 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "2babaf25280b39d6eba73411f0588e81b4352ae0c3518ec61a49e585e05415db",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "result": "unknown",
+      "query_error": "tag query transport failure for axiomasoft/corex-search-meilisearch:0.4.0-alpha.20260918"
     },
     {
       "operation_id": "release-asset-corex-search-meilisearch",
@@ -289,8 +266,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:8a211da3b5786557743647962e3d1c9c99c8cadbbef38e55e7b1e3cefe2151c7",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-tasks",
@@ -300,8 +276,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "c46a83dbdb61d0e43fcc3100b3f908c66ffd064c0b35518a7259f80602c96c63",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-tasks",
@@ -311,8 +286,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:f2ce6fa9042ab84b71ff735a96632845d110756f05b04a27b5e3d0efc4ba3919",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-tasks-workflow",
@@ -322,8 +296,8 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "1f1c22627324a7a6155bc6b575baed19d651ddc7e0be7a36f82c07a0d3f10b32",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "result": "unknown",
+      "query_error": "tag query transport failure for axiomasoft/corex-tasks-workflow:0.4.0-alpha.20260918"
     },
     {
       "operation_id": "release-asset-corex-tasks-workflow",
@@ -333,8 +307,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:32cb3f012b51d9dcd82ea9e75eae2a358028b3bc9985388a4188a9bde5bc8457",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-tenancy",
@@ -344,8 +317,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "46a21af36a9f14c5bcc720e9ee3ac7cd3838dafe407f8e46e6b41f38d9698e9d",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-tenancy",
@@ -355,8 +327,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:38ad2944d82c65737970884157e13565a9a5ed9f3df3c57a5c5b34cf967b9cf9",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-transfer",
@@ -365,9 +336,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "c13b95dcbfe8ef9685736ee07be7a81eb27ec3e3f70949e839bdd5f5bf09dea9",
-      "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": "320779da92380c1de94058dde32e4f25160265f5868b546dd852e72717b0ffff",
+      "result": "collision"
     },
     {
       "operation_id": "release-asset-corex-transfer",
@@ -377,8 +347,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:69e31ec4d5944245cf71a4db691e10142d684e7447833b02ad8b0bc47de6b499",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-wakeup",
@@ -387,9 +356,8 @@
       "kind": "tag",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "f0eb690143aa9d9bf34e98654bd1c97f0d4d6a1a2b4eddd9864b98470e016b80",
-      "current_state": "39737818fa99e265d48a5408eb879f29008fe7f05fbe1bd54f838451ae7d1a32",
-      "result": "collision",
-      "publish_result": "denied:write result mismatch; no automatic retry"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-wakeup",
@@ -398,9 +366,8 @@
       "kind": "release",
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:6281867d5bdb5ec8b4d52daad55916f2dc9ed21360c95d5fd8ab355a6f924239",
-      "current_state": "sha256:6281867d5bdb5ec8b4d52daad55916f2dc9ed21360c95d5fd8ab355a6f924239",
-      "result": "matching-no-op",
-      "publish_result": "published-verified"
+      "current_state": null,
+      "result": "absent"
     },
     {
       "operation_id": "push-tag-corex-workflow",
@@ -410,8 +377,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "2bd838e98c39a268671630de2ce1ae0c1276fc23647aca35b8f7ba08189d6cfa",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:unknown outcome unresolved; no automatic retry"
+      "result": "absent"
     },
     {
       "operation_id": "release-asset-corex-workflow",
@@ -421,8 +387,7 @@
       "reference": "0.4.0-alpha.20260918",
       "target_fingerprint": "sha256:c9c5a914f7d6d90b4a559307530f2b660aa8ce5c396d9861c80f0a5b35456412",
       "current_state": null,
-      "result": "absent",
-      "publish_result": "denied:release create failed; reconcile before any retry"
+      "result": "absent"
     }
   ]
 }

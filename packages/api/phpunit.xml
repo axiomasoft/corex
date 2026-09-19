@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="true" failOnWarning="true" failOnRisky="true" failOnEmptyTestSuite="true">
-    <testsuites><testsuite name="API"><directory>tests/Feature</directory></testsuite></testsuites>
+    <testsuites>
+        <testsuite name="API">
+            <directory>tests/Feature</directory>
+            <directory>tests/Unit</directory>
+        </testsuite>
+    </testsuites>
     <source><include><directory>src</directory></include></source>
     <php>
         <env name="APP_ENV" value="testing" force="true"/>
