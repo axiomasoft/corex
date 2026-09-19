@@ -7,15 +7,27 @@
 
 ## 1. Правило исполнения этого плана
 
-Единица запуска верхнего слоя — **детализация одной фазы**: `task:plan-design <ID> Pn` на
-frontier/high. Детализация обязана произвести три носителя:
+Три стадии строго по порядку (D14):
+
+| Стадия | Что запускается | Сколько раз | Состояние сегодня |
+|:--|:--|:--|:--|
+| 1 — детализация | `task:plan-design <ID> Pn`, модель по §3.1a | 17 (по фазе) | P1 готова; осталось 16 |
+| 2 — общий аудит | `task:plan-audit <ID> design` на frontier/high | 1 | не начата |
+| 3 — исполнение | `task:plan-exec <ID> Pn.m` | по items | не начата |
+
+Единица запуска стадии 1 — **детализация одной фазы**. Детализация обязана произвести три
+носителя:
 
 1. `research/Pn-design.md` — готовый нормативный текст и готовый код для каждого item'а
    (исполнитель класса implementation = Composer 2.5 ничего не домысливает);
 2. `research/Pn-design-rag.md` — внешние подтверждения фазы с первичными источниками;
 3. `phases/Pn/Pn.m.md` — item-спеки в пределах бюджета 200K на item.
 
-Только после этого фаза исполняется вызовами `task:plan-exec <ID> Pn.m`.
+**Детализированная фаза не исполняется сразу.** Ни один `task:plan-exec` не запускается,
+пока не детализирована последняя фаза и не закрыт общий аудит: сквозные контракты связывают
+фазы между собой, а ни один проход детализации не видит плана целиком. Порядок детализации
+свободен в пределах графа §2: фаза детализируется, когда детализированы фазы, чьи контракты
+она потребляет.
 
 ## 2. Граф фаз
 
@@ -53,27 +65,31 @@ P1 ─┬─> P2 ──> P3 ─┬─> P4 ──> P5 ──> P6 ─┬─> P9
 | P16 | P15 | Каталоги двигаются последними, уже под целевыми именами. |
 | P17 | все | Приёмка 1.0 доказывает результат всего плана. |
 
-## 3. Карта исполнения (верхний слой)
+## 3. Карта стадии 1 — проходы детализации
 
-| Item | Batch | Запуск | Model class/Effort | Гейт владельца | Примечание |
+| Фаза | Batch | Запуск | Модель прохода | Гейт владельца | Состояние |
 |---|---|---|---|---|---|
-| P1 | solo | plan-design | frontier/high | Q1–Q3 до P15 | Первый запуск; блокирует всё |
-| P2 | solo | plan-design | frontier/high | — | read-only артефакты |
-| P3 | solo | plan-design | frontier/high | — | новые dev-зависимости требуют решения фазы |
-| P4 | solo | plan-design | frontier/high | ✅ G-API: смена `shared-data-foundation/1` | публичный контракт |
-| P5 | solo | plan-design | frontier/high | ✅ G-DDL: таблицы outbox/inbox | новые таблицы вне FROZEN v1.0 |
-| P6 | solo | plan-design | frontier/high | ✅ G-API: перенос публичных неймспейсов ядра | потребители FlexCRM |
-| P7 | solo | plan-design | frontier/high | — | — |
-| P8 | solo | plan-design | frontier/high | — | — |
-| P9 | solo | plan-design | frontier/high | — | поведение не меняется, доказать байтово |
-| P10 | solo | plan-design | frontier/high | ✅ G-DDL при таблице определений | живые значения атрибутов |
-| P11 | solo | plan-design | frontier/high | — | — |
-| P12 | solo | plan-design | frontier/high | — | публичные коды ошибок — часть API-контракта |
-| P13 | solo | plan-design | frontier/high | ✅ G-API: `operation-contract/1` | внешний контракт |
-| P14 | solo | plan-design | frontier/high | ✅ G-DDL: bulk/webhook таблицы · ✅ G-SECRET: ротация секретов | внешние необратимые эффекты |
-| P15 | solo | plan-design | frontier/high | ✅ Q1/Q2 закрыты | ренеймы пакетов/классов |
-| P16 | solo | plan-design | frontier/high | — | — |
-| P17 | solo | plan-design | frontier/high | ✅ G-RELEASE | тег 1.0 |
+| P1 | solo | plan-design | Claude Opus 5 (high) | Q1–Q2 до P15 | ✅ детализирована 2026-09-19 |
+| P2 | solo | plan-design | Grok 4.6 (high) | — | ⬜ не детализирована |
+| P3 | solo | plan-design | Grok 4.6 (high) | — | ⬜ не детализирована |
+| P4 | solo | plan-design | Claude Opus 5 (high) | ✅ G-API: смена `shared-data-foundation/1` | ⬜ не детализирована |
+| P5 | solo | plan-design | Claude Opus 5 (high) | ✅ G-DDL: таблицы outbox/inbox | ⬜ не детализирована |
+| P6 | solo | plan-design | Grok 4.6 (high) | ✅ G-API: перенос публичных неймспейсов ядра | ⬜ не детализирована |
+| P7 | solo | plan-design | Claude Sonnet 5 | — | ⬜ не детализирована |
+| P8 | solo | plan-design | Claude Sonnet 5 | — | ⬜ не детализирована |
+| P9 | solo | plan-design | Grok 4.6 (high) | — | ⬜ не детализирована |
+| P10 | solo | plan-design | Grok 4.6 (high) | ✅ G-DDL при таблице определений | ⬜ не детализирована |
+| P11 | solo | plan-design | Grok 4.6 (high) | — | ⬜ не детализирована |
+| P12 | solo | plan-design | Grok 4.6 (high) | — | ⬜ не детализирована |
+| P13 | solo | plan-design | Claude Opus 5 (high) | ✅ G-API: `operation-contract/1` | ⬜ не детализирована |
+| P14 | solo | plan-design | Claude Opus 5 (high) | ✅ G-DDL: bulk/webhook таблицы · ✅ G-SECRET: ротация секретов | ⬜ не детализирована |
+| P15 | solo | plan-design | Claude Sonnet 5 | ✅ Q1/Q2 закрыты | ⬜ не детализирована |
+| P16 | solo | plan-design | Claude Sonnet 5 | — | ⬜ не детализирована |
+| P17 | solo | plan-design | Grok 4.6 (high) | ✅ G-RELEASE | ⬜ не детализирована |
+
+После последней строки этой таблицы — стадия 2: `task:plan-audit <ID> design` на
+Claude Opus 5 (thinking, high), свежим независимым корнем. Стадия 3 начинается
+вызовом `task:plan-exec <ID> P1.1`.
 
 ## 4. Соответствие фазам аудита
 
@@ -108,7 +124,7 @@ mutation-прогона одновременно.
 
 | Где | Что утверждает | Блокирует |
 |---|---|---|
-| P1 (Q1–Q3) | Имена пакетов `api`/`auth` и судьба тумбстоуна `import-export` | P15, P16 |
+| P1 (Q1–Q2) | Имена пакетов `api` и `auth`; Q3 закрыт решением D13 | P15, P16 |
 | P4 | Смена контракта `shared-data-foundation/1` (форма `DataScope`) | P5, P13 |
 | P5 | Новые таблицы outbox/inbox вне FROZEN v1.0 | P12, P14 |
 | P6 | Перенос публичных неймспейсов `corex/core` | P9, потребители FlexCRM |

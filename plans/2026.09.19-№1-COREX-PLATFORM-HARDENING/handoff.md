@@ -1,19 +1,26 @@
 # HANDOFF — 2026-09-19 — after P1
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P1.1
+**Next:** design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P2
 
 | Параметр | Значение |
 |---|---|
 | Batch | solo |
-| Model class | implementation — Composer 2.5, стандартный тир (D10) |
-| Effort | medium — транскрипция готового текста `research/P1-design.md` §2, без открытых решений |
-| Capabilities | чтение репозитория, запись в `docs/`, `composer lint:check` |
+| Model class | frontier — Grok 4.6, effort `high` (D10, `plan.md` §3.1a) |
+| Effort | high — дизайн выбирает схему артефактов инвентаризации и устройство сканеров |
+| Capabilities | perplexity-search (обязательный внешний RAG фазы), чтение репозитория |
 | Context | cold-start-root: design-root-terminal |
-| Суть | Создать `docs/architecture/constitution.md` — 58 статей в восьми группах плюс 22 анти-цели, каждая с владельцем правила и честным `Enforcement` — и четыре записи существующих исключений |
+| Суть | Детализировать P2: схема `artifacts/architecture/files.csv`, три графа зависимостей, реестры `table-ownership.md` и `configuration.md`, базовый scorecard пакета, самопроверка сканера против измеренной базы |
 
 ```
-task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P1.1
+task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P2
 ```
+
+**Жизненный цикл плана (D14, зафиксирован владельцем 2026-09-19).** Стадия 1 — детализация
+всех 17 фаз, по одному проходу на фазу, модель по `plan.md` §3.1a. Стадия 2 — общий аудит
+плана `task:plan-audit <ID> design` на Claude Opus 5 (thinking, high), свежим независимым
+корнем. Стадия 3 — исполнение items. **Ни один `task:plan-exec` не запускается, пока не
+детализирована последняя фаза и не закрыт общий аудит**: семь готовых items фазы P1 ждут
+конца стадии 2. Осталось детализировать 16 фаз.
 
 **Done:**
 
@@ -58,8 +65,9 @@ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P1.1
 
 **Remaining:**
 
-- P1 — детализирована, исполнение не начато: семь items в статусе `⬜ Not started`.
-- P2–P17 — скелеты; ни один item не детализирован.
+- Стадия 1: детализировать 16 фаз — P2–P17. Модель каждого прохода — `plan.md` §3.1a.
+- Стадия 2: общий аудит плана; не начат.
+- Стадия 3: исполнение. Семь items фазы P1 готовы и ждут конца стадии 2 (D14).
 - Q1 (имя `corex/api`) и Q2 (имя `corex/auth`) — решения владельца; блокируют только P15.
 - Незакрытое внешнее подтверждение фазы P1: числовые пороги перехода между профилями
   структуры извне не получены (провайдер вернул усечённый ответ). Пороги обоснованы

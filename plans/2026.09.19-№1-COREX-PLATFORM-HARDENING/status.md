@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-19
-inputs_sha256: a31efadd7b62d3ccb4ab63c2eee4c636d320b730836db3a3e90f032cab442f81
+inputs_sha256: 015bd44aefb40e191d0e356e747235275a202004ad44efa9ad4a9bf19b9c3b10
 generated_by: task plan-views status
 -->
 
@@ -139,6 +139,7 @@ generated_by: task plan-views status
 |:--|:--|:--|
 | 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · Верхний слой: plan.md, 17 скелетов фаз, матрица вердиктов, измеренная база, 19 внешних подтверждений, D1-D10. Бэкфилл-запись авторинга (D22). |
 | 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · Детализация P1: research/P1-design.md, research/P1-design-rag.md + artifacts/P1-design-rag (9 запросов), item-спеки P1.1-P1.7, Routing 3.1a, решения D11-D13, поправки измерения (838->888, 85->86, N02 opровергнут). |
+| 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · D14 владельца: жизненный цикл плана - детализация всех 17 фаз, затем общий аудит plan-audit design, и только потом исполнение. Зафиксировано в plan.md 2/3.1a/3.1b, roadmap.md 1/3, handoff указывает на P2. |
 
 ## Owner Gates
 
