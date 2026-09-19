@@ -1,0 +1,48 @@
+---
+id: D6
+date: 2026-09-19
+status: accepted
+item: P4
+items: [P4, P5, P13]
+supersedes: []
+superseded_by: null
+---
+# D6 — `DataScope` становится набором скаляров с версией плюс отдельным codec'ом
+
+**Actor:** plan-designer/frontier/high
+**Evidence:** RAG:— `packages/core/src/Support/Data/DataScope.php` объявляет
+`public TenantContext $context`, а `TenantContext` несёт `AccountRef`, необязательный
+`WorkspaceRef` и приватный `bool $boxed`; производственная точка конструирования `DataScope`
+одна (`packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php:38`); прецедент
+codec'а — `packages/search/src/Internal/Query/SearchCursorCodec.php`; `DataScopeCodec` отсутствует.
+RAG:✅ 2026-09-19 — payload джоба должен содержать скаляры, а не живые контекстные объекты;
+`scoped()` не сбрасывает статику, глобали и мутации конфига.
+
+## Решение
+
+`DataScope` пересобирается как versioned readonly-набор скаляров (идентификаторы аккаунта,
+воркспейса, соединения, актора, restore-эпохи и номер версии формата). Кодирование и
+декодирование на границе persistence/transport выносится в отдельный codec. Восстановление
+рантайм-контекста из scope — отдельная ответственность и отдельный контракт; существующий
+`TenantContextResolver::current()` («текущий контекст процесса») не переопределяется и не
+смешивается с восстановлением.
+
+## Почему
+
+Пока durable-граница пересекается container-shaped объектом, сериализация остаётся неявной:
+форма payload'а меняется вместе с внутренним устройством `TenantContext`, и ни один гейт этого
+не заметит. Это одно из четырёх исправлений с наибольшей отдачей по обоим аудитам, и оно
+дешёвое: конструирование в production происходит в одном месте, во всех остальных пакетах
+`DataScope` только передаётся параметром.
+
+Альтернатива «оставить объект, но запретить его сериализацию тестом» отклонена: тест
+запрещает симптом, а не причину, и ломается при каждом изменении `TenantContext`.
+
+## Consequences
+
+Меняется контракт `shared-data-foundation/1` — требуется owner-gate G-API и уведомление
+потребителей (FlexCRM). Затрагиваются все пакеты, принимающие `DataScope` параметром
+(attributes, search, transfer, intl, tasks-workflow) — но только на уровне типа, без смены
+семантики вызовов. P5 строит envelope поверх скалярного scope; P13 использует его как
+`ScopeRef` во внешних операциях. Гейт сериализуемости durable-payload появляется в P3 и
+проверяет это машинно.
