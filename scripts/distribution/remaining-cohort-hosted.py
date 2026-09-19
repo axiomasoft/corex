@@ -18,7 +18,7 @@ if str(_DISTRIBUTION) not in sys.path:
 from plan_close_deferral import DeferralDenied, refuse_remote
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
 PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
 HOSTED = REPO_DELIVERY / 'hosted'

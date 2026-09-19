@@ -34,6 +34,7 @@
 
 ### Changed
 
+- PLAN1 `2026.09.15-№1-COREX-FLEXCRM-REMAINING` перенесён в `plans/archive/` после терминального закрытия; скрипты `remaining-cohort-*` и `plans/ACTIVE.md` указывают на архивный путь.
 - `phases/P9/P9.2.md`: пути `Files` обновлены с `import-export`/`intl-search` на `transfer`/`search-intl` после rename P12.4/P12.6 (P12A.6, A8).
 - `corex/attributes`: имена таблиц через иммутабельный `AttributeTables`; обязательная schema-валидация в store-движках; `corex/modules` перенесён в `suggest` с guarded fallback (P12.7).
 - `corex/search`: `SearchManager` с реестром драйверов (`null`, `postgres`); fail-closed конфигурация; дефолт `corex-search.driver` — `null` (P12.5).

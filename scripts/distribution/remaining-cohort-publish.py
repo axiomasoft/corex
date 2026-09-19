@@ -25,7 +25,7 @@ from publish_guard import Admission, Evidence, Operation, PublicationDenied, Unk
 
 ROOT = Path(__file__).resolve().parents[2]
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN = ROOT / 'plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
 PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
 EVIDENCE = PLAN_DELIVERY / 'evidence'
 PUBLICATION_DIR = REPO_DELIVERY / 'publication'
