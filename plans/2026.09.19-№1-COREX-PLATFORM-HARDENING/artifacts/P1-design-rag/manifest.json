@@ -1,0 +1,121 @@
+{
+  "artifact": "rag-capture/1",
+  "plan": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "phase": "P1",
+  "captured_at": "2026-09-19",
+  "tool": "perplexity MCP · search",
+  "capture_kind": "response-text",
+  "capture_note": "Захват текста ответа из сессии детализации фазы P1; провайдер не возвращает подписанный payload. SHA256 считается по файлам этого каталога и фиксирует их неизменность после сохранения, но не доказывает байтовую идентичность сетевому ответу. Длинные иллюстративные листинги сокращены до сигнатур с пометкой [листинг сокращён]; смысловые утверждения, имена ключей, версии и названия механизмов сохранены дословно.",
+  "query_scope_rule": "D6: нейтральная формулировка, без имени CoreX/FlexCRM, внутренних путей, ID и схем. Внешний источник подтверждает только названную общую практику (RAG:✅).",
+  "known_provider_defect": "Ответ, начинающийся с таблицы, возвращается усечённым — приходит только таблица, без сопровождающей прозы. Затронуты P1-Q2, P1-Q5, P1-Q6, P1-Q9; статус таких записей — success-partial. Несущая недостающая часть добиралась отдельным запросом (P1-Q2 → P1-Q3, P1-Q5 → P1-Q6); недобранная часть P1-Q9 оставлена как [UNVERIFIED] в местах использования.",
+  "files": [
+    { "path": "README.md", "sha256": "fc725b2fd39101c6f70312d352f0bd3fc7c5250be361d79542264ba9c1dbe19d" },
+    { "path": "q01-q05.md", "sha256": "8d044ce3d222244bcf39afc0842bb0275f113787e289e184fb55093bde0ea8fb" },
+    { "path": "q06-q09.md", "sha256": "960dd4e7f9c397674281791847cf1bbd0bc5ce3775d9af3e895a314646cc51cd" }
+  ],
+  "queries": [
+    {
+      "id": "P1-Q1",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "Composer extra key in composer.json for declaring custom package metadata: what is the official schema guidance, and real examples of ecosystems using extra.* to declare package kind, stability or plugin metadata (Symfony, Drupal, Laravel, TYPO3)?",
+      "sources": [
+        "https://getcomposer.org/doc/04-schema.md",
+        "https://getcomposer.org/schema.json",
+        "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108345-Deprecation-of-ext-emconf-php.html",
+        "https://getcomposer.org/doc/articles/custom-installers.md"
+      ],
+      "used_by": ["D3", "D11", "P1.2", "research/P1-design.md §3"]
+    },
+    {
+      "id": "P1-Q2",
+      "status": "success-partial",
+      "capture": "q01-q05.md",
+      "query": "PHPDoc @api and @internal annotations as public API markers in PHP libraries: exact semantics, who uses them (Symfony, Doctrine, PHPUnit, Sylius), how PHPStan and psalm enforce @internal across package boundaries, and whether @api is opt-in allowlist or documentation only",
+      "sources": [],
+      "used_by": ["D4", "P1.5", "research/P1-design.md §6"],
+      "note": "Вернулась только сравнительная таблица маркеров без прозы и без списка URL. Несущая часть (enforcement и его границы) добрана P1-Q3."
+    },
+    {
+      "id": "P1-Q3",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "How does PHPStan report usage of @internal classes from outside the declaring namespace or package? Is there a rule or level for internal-tag enforcement, and how do monorepo projects configure it? Also Symfony backward compatibility promise rules for @internal and @experimental classes.",
+      "sources": [
+        "https://phpstan.org/writing-php-code/phpdocs-basics",
+        "https://phpstan.org/error-identifiers/method.internal",
+        "https://phpstan.org/config-reference",
+        "https://github.com/phpstan/phpstan/discussions/6913",
+        "https://github.com/phpstan/phpstan/discussions/5471",
+        "https://symfony.com/doc/current/contributing/code/bc.html"
+      ],
+      "used_by": ["D4", "D12", "P1.5", "research/P1-design.md §6"],
+      "note": "Несущий источник D12: нативная проверка @internal в PHPStan привязана к КОРНЮ неймспейса, а не к пакету, поэтому на общем корне даёт ложно-зелёное."
+    },
+    {
+      "id": "P1-Q4",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "Data ownership rules in modular monoliths: one table one owning module, forbidding cross-module direct SQL writes, foreign keys across module boundaries, and how teams enforce schema ownership in a shared database. Practices and known guidance from Shopify modular monolith, Spring Modulith, and modular monolith literature.",
+      "sources": [
+        "https://shopify.engineering/shopify-monolith",
+        "https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity",
+        "https://docs.spring.io/spring-modulith/reference/appendix.html"
+      ],
+      "used_by": ["A17", "A107", "N10", "P1.6", "research/P1-design.md §7"]
+    },
+    {
+      "id": "P1-Q5",
+      "status": "success-partial",
+      "capture": "q01-q05.md",
+      "query": "Difference between domain event, integration event and command as three distinct message classes: naming and versioning rules for integration event contracts, why in-process framework events should not be automatically promoted to published integration contracts, and required envelope fields.",
+      "sources": [],
+      "used_by": ["A90", "A91", "P1.6", "research/P1-design.md §8"],
+      "note": "Вернулась только таблица трёх классов сообщений. Обязательные поля конверта добраны P1-Q6."
+    },
+    {
+      "id": "P1-Q6",
+      "status": "success-partial",
+      "capture": "q06-q09.md",
+      "query": "CloudEvents specification required context attributes for event envelopes (id, source, type, specversion, time, subject) and guidance on event type versioning. Explain in prose why published integration event schemas need explicit versioning separate from internal class names.",
+      "sources": ["https://github.com/cloudevents/spec"],
+      "used_by": ["A91", "A92", "P1.6", "research/P1-design.md §8"],
+      "note": "Вернулась только таблица атрибутов. Прозаическое объяснение отделения версии схемы от имени класса не получено; утверждение опирается на строку `type` этой таблицы и строку Integration event таблицы P1-Q5."
+    },
+    {
+      "id": "P1-Q7",
+      "status": "success",
+      "capture": "q06-q09.md",
+      "query": "How to stop an architecture guidelines document from drifting out of sync with the codebase: architecture fitness functions, executable architecture rules in CI, relationship between ADRs and a living architecture handbook, and the rule that each normative statement has exactly one owning document. Explain in prose with concrete practices.",
+      "sources": ["https://github.com/architecture-decision-record/architecture-decision-record"],
+      "used_by": ["A01", "A16", "A110", "P1.1", "P1.7", "research/P1-design.md §2"],
+      "note": "Несущий источник формы статьи конституции: стабильный rule-id, обязательное поле Enforcement, экспирующие исключения, правило одного владельца нормативного утверждения."
+    },
+    {
+      "id": "P1-Q8",
+      "status": "success-no-sources",
+      "capture": "q06-q09.md",
+      "query": "Why are class names like Manager, Helper, Util, Info, Data, Common and Processor considered naming antipatterns in object-oriented design, and what precise suffix vocabulary do experienced PHP and Laravel teams recommend instead (Factory, Repository, Resolver, Builder, Policy, Registry, Provider)? Explain in prose with the criterion for when a suffix is meaningful.",
+      "sources": [],
+      "used_by": ["A08", "A77", "A78", "A82", "P1.3", "research/P1-design.md §5"],
+      "note": "Провайдер отдал синтез без цитат. Используется как подтверждение общей практики и как источник критерия пригодности суффикса; единственным основанием запрета конкретного имени не является — запреты опираются на фактически встречающиеся имена (RAG:—)."
+    },
+    {
+      "id": "P1-Q9",
+      "status": "success-partial",
+      "capture": "q06-q09.md",
+      "query": "Package by layer versus package by feature versus bounded-context-first directory structure: at what codebase size does layer-first grouping stop working, what guidance exists on the number of direct children of a source root, and why single-class directories are considered noise. Explain in prose with concrete thresholds used in practice.",
+      "sources": [],
+      "used_by": ["A25", "A26", "A27", "P1.4", "research/P1-design.md §4"],
+      "note": "Вернулась только таблица трёх структур с их failure modes. Числовые пороги извне НЕ получены: пороги профилей A/B/C остаются локальным решением по измеренному распределению (research/00-baseline-metrics.md §1, RAG:—), а внешняя часть утверждения о порогах несёт [UNVERIFIED]."
+    }
+  ],
+  "unresolved": [
+    {
+      "question": "Числовые внешние пороги для перехода layer-first → feature-first → bounded-context-first и для числа прямых детей корня исходников",
+      "status": "unresolved",
+      "consequence": "Пороги профилей структуры A/B/C обоснованы измеренным распределением 20 пакетов, а не внешним источником. Внешняя часть утверждения помечена [UNVERIFIED] в research/P1-design.md §4; добор не блокирует P1, потому что решение и так принимается по собственным числам.",
+      "retry_owner": "P16 (раскатка профилей) — добрать при наличии потребности"
+    }
+  ]
+}

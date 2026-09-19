@@ -11,7 +11,7 @@
 |:--|:--|--:|:--|:--|:--|--:|
 | api | corex/api | 55 | нет | да | да | 0 |
 | attributes | corex/attributes | 36 | нет | да | да | 1 |
-| auth | corex/auth | 34 | нет | да | да | 3 |
+| auth | corex/auth | 34 | нет | да | да | 4 |
 | core | corex/core | 109 | нет | да | да | 11 |
 | crm | flex/crm | 56 | да (`module`) | да | да | 10 |
 | import-export | — (тумбстоун) | 0 | — | нет | нет | 0 |
@@ -31,7 +31,13 @@
 | wakeup | corex/wakeup | 16 | да (`module`) | да | да | 1 |
 | workflow | corex/workflow | 14 | да (`module`) | да | да | 1 |
 
-Итого: 20 живых пакетов + 1 тумбстоун; 838 PHP-файлов в `src`; 85 файлов миграций.
+Итого: 20 живых пакетов + 1 тумбстоун; **888** PHP-файлов в `src`; **86** файлов миграций.
+
+> **Поправка 2026-09-19 (детализация P1).** Исходная редакция страницы давала «838 файлов»
+> и «85 миграций». Оба числа — ошибки сложения, а не измерения: сумма самой таблицы выше
+> даёт 888, а у `auth` четыре миграции (четвёртая — `tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php`),
+> а не три. Проверка: `find packages/*/src -name '*.php' | wc -l` = 888,
+> `find packages/*/database/migrations -name '*.php' | wc -l` = 86. Разбор — `P1-design.md` §12.
 
 **`extra.corex` есть в 9 пакетах и содержит только ключ `module`** (имя класса модуля).
 Ни `package-type`, ни `stability`, ни `public-api` не объявлены нигде.
@@ -131,9 +137,13 @@ seam'ы `ToolExecutionGuard`/`ToolPolicy`/`PrincipalResolver`/`ContextResolver`,
 
 ### Измеренные дырки в контуре
 
-- `composer test:packages` перечисляет **17 пакетов из 21**: нет `panels`, `recurrence`,
-  `search-meilisearch`, `import-export` (у panels/media есть отдельные CI-джобы, у recurrence
-  и search-meilisearch — нет).
+- ~~`composer test:packages` перечисляет **17 пакетов из 21**~~ — **опровергнуто 2026-09-19**
+  при детализации P1. Фактически цикл перечисляет **все 20 живых пакетов**: api, attributes,
+  auth, core, crm, transfer, intl, search-intl, media, modules, notifications, panels,
+  recurrence, search, search-meilisearch, tasks, tasks-workflow, tenancy, wakeup, workflow.
+  `import-export` включён быть не может — у тумбстоуна нет `composer.json`. Проверка —
+  чтение `scripts.test:packages` корневого `composer.json`. Следствие: вердикт N02 матрицы
+  становится ✗, соответствующая работа из P3 снимается (`P1-design.md` §12).
 - Корневой `phpstan.neon` анализирует **7 пакетов** (api, core, crm, tasks, modules, tenancy,
   workflow); `transfer`, `search`, `intl`, `media`, `notifications`, `attributes`, `auth`,
   `panels`, `recurrence`, `wakeup`, `tasks-workflow`, `search-intl`, `search-meilisearch`
