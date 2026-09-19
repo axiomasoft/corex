@@ -25,9 +25,15 @@ task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P1
 - Измерена база: `research/00-baseline-metrics.md` — 21 пакет, 838 файлов в `src`,
   152 `config(`, 0 `static $`, 85 миграций, карта префиксов таблиц, полный список существующих
   гейтов и трёх дырок контура.
-- Собраны внешние подтверждения: `research/perplexity-2026-09-19.md` — 19 успешных запросов,
-  первичные источники Shopify, Stripe, GitLab, Atlassian, Grafana, Salesforce, Microsoft,
-  Google AIP, Symfony, Drupal, Shopware, Laravel, PostgreSQL, Standard Webhooks, OpenTelemetry.
+- Собраны внешние подтверждения: сводка `research/perplexity-2026-09-19.md` (19 успешных
+  запросов; первичные источники Shopify, Stripe, GitLab, Atlassian, Grafana, Salesforce,
+  Microsoft, Google AIP, Symfony, Drupal, Shopware, Laravel, PostgreSQL, Standard Webhooks,
+  OpenTelemetry) плюс **сырые ответы** в `artifacts/rag-2026-09-19/` с `manifest.json`
+  (точные строки запросов, статусы, источники, SHA256 файлов захвата, пять таймаутов и один
+  незакрытый пробел).
+- Зафиксированы провенанс входов `inputs/sources.md` (пути и SHA256 обоих аудитов как
+  non-normative сырья) и правило владения артефактами в `plan.md` §2: обоснование плана живёт
+  внутри папки плана, продукт репозитория — в дереве кода.
 - Созданы 17 скелетов фаз `phases/P1..P17/Pn.md` с контрактом фазы, Phase Assurance, DoR,
   Scope Included/Excluded, зависимостями, планируемым составом items и формой Validation.
 - Зафиксированы `roadmap.md` (граф фаз, соответствие фазам аудита, бюджет контекста, гейты

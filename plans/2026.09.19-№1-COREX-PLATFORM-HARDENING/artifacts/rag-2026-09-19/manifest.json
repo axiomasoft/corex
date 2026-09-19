@@ -1,0 +1,182 @@
+{
+  "artifact": "rag-capture/1",
+  "plan": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "captured_at": "2026-09-19",
+  "tool": "perplexity MCP · search",
+  "capture_kind": "response-text",
+  "capture_note": "Захват текста ответа из сессии авторинга; провайдер не возвращает подписанный payload. SHA256 считается по файлам этого каталога и фиксирует их неизменность после сохранения, но не доказывает байтовую идентичность сетевому ответу. Длинные иллюстративные листинги сокращены до сигнатур с пометкой [листинг сокращён]; смысловые утверждения, числа, имена заголовков, статусов и версий сохранены дословно.",
+  "query_scope_rule": "D6: нейтральная формулировка, без имени CoreX/FlexCRM, внутренних путей, ID и схем. Внешний источник подтверждает только названную общую практику (RAG:✅).",
+  "files": [
+    { "path": "README.md", "sha256": "22753d14adf651548f9e9cfab4abc14ed55384318bc57f920ce6851529f70223" },
+    { "path": "q01-q05.md", "sha256": "2532fe38cf4fcb01a46f2f98318e998ad6ed0e78c2d3b5cf3acbf24c2b67cc04" },
+    { "path": "q06-q10.md", "sha256": "8c5b280ac5e43b7ca314b3e895add655dd9d816eeb4cad92bd5d32ecd5ce33da" },
+    { "path": "q11-q15.md", "sha256": "ef25e1ed39e2f43882db13e26dbd7b2dbcf237a9e9f4bacbfa3b9e740340016c" },
+    { "path": "q16-q19.md", "sha256": "cc3126f8f71a28e8c8fec8560384e8fdf653c90ec59c4b4e5dc459a50723c3ea" }
+  ],
+  "queries": [
+    {
+      "id": "Q1",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "Shopify API version format YYYY-MM, support window length, and publicApiVersions statuses",
+      "sources": ["https://shopify.dev/docs/api/usage/versioning"],
+      "used_by": ["S03", "S04", "D2"]
+    },
+    {
+      "id": "Q2",
+      "status": "success-partial",
+      "capture": "q01-q05.md",
+      "query": "Shopify GraphQL Admin API rate limits: calculated query cost, leaky bucket, requested vs actual cost, maximum single query cost points, throttleStatus extensions fields. Official documentation details.",
+      "sources": ["https://shopify.dev/docs/apps/build/apis/graphql-admin/rate-limits"],
+      "used_by": ["S08", "S09", "S10", "S11"],
+      "note": "Ответ вернулся усечённым — только таблицей restore rate по тарифам. Остальные утверждения взяты из самого аудита, ссылающегося на тот же первичный источник."
+    },
+    {
+      "id": "Q3",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "Stripe API idempotency keys: exact semantics when same key is reused with a different request body, how long keys are retained, idempotency error type, recommended key generation. Also compare with Square/PayPal idempotency contracts.",
+      "sources": ["https://stripe.com/docs", "https://docs.stripe.com/error-low-level"],
+      "used_by": ["S23", "S24"]
+    },
+    {
+      "id": "Q4",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "PHP backward compatibility checking tools for library public API: roave/backward-compatibility-check, api-diff, tomasvotruba/class-leak, PHPStan @api and @internal enforcement. Which are maintained in 2026 and how are they used in CI for monorepo packages?",
+      "sources": ["https://packagist.org/packages/roave/backward-compatibility-check", "https://packagist.org/packages/tomasvotruba/class-leak", "https://phpstan.org", "https://github.com/radarlabs/api-diff"],
+      "used_by": ["A18", "A83", "D4"]
+    },
+    {
+      "id": "Q5",
+      "status": "success",
+      "capture": "q01-q05.md",
+      "query": "deptrac vs phpat vs custom PHPStan rules for enforcing package dependency boundaries in PHP monorepo 2026",
+      "sources": ["https://github.com/qossmic/deptrac", "https://phpat.dev", "https://phpstan.org"],
+      "used_by": ["A85", "Q5 open-questions"]
+    },
+    {
+      "id": "Q6",
+      "status": "success",
+      "capture": "q06-q10.md",
+      "query": "RFC 9457 Problem Details for HTTP APIs versus custom error envelope with stable machine-readable error codes: which do major API style guides recommend in 2026?",
+      "sources": ["https://www.rfc-editor.org/rfc/rfc9457", "https://opensource.zalando.com/restful-api-guidelines/", "https://github.com/microsoft/api-guidelines", "https://google.github.io/styleguide/jsoncstyleguide.xml"],
+      "used_by": ["S20", "S21", "S22"]
+    },
+    {
+      "id": "Q7",
+      "status": "success",
+      "capture": "q06-q10.md",
+      "query": "keyset cursor pagination contract design: opaque signed cursor encoding sort values and tie-breaker, ordering version, expiry; pitfalls with concurrent inserts and changing sort",
+      "sources": ["https://graphql.org/learn/pagination/", "https://www.postgresql.org/docs/current/indexes-ordering.html", "https://www.rfc-editor.org/rfc/rfc7519"],
+      "used_by": ["S25", "S26"]
+    },
+    {
+      "id": "Q8",
+      "status": "success",
+      "capture": "q06-q10.md",
+      "query": "transactional outbox pattern in Laravel: schema, relay worker, idempotent consumer, pitfalls",
+      "sources": ["https://laravel.com/docs/queues"],
+      "used_by": ["A91", "A92", "N05"]
+    },
+    {
+      "id": "Q9",
+      "status": "success",
+      "capture": "q06-q10.md",
+      "query": "Best practice for typed immutable configuration objects in Laravel packages instead of calling config() helper deep inside services: validation at boot, Symfony Config Definition comparison, testability",
+      "sources": [],
+      "used_by": ["A06", "A20", "A76", "N12"],
+      "note": "Ответ вернулся табличной сводкой слоёв без списка URL."
+    },
+    {
+      "id": "Q10",
+      "status": "success",
+      "capture": "q06-q10.md",
+      "query": "Laravel Octane and queue workers: state leakage of request-scoped singletons, scoped bindings, resetting tenant/locale/auth context between requests and jobs; official guidance and known failure modes",
+      "sources": ["https://laravel.com/docs/12.x/container", "https://laravel.com/docs/12.x/octane", "https://laravel.com/docs/queues"],
+      "used_by": ["A19", "P4"]
+    },
+    {
+      "id": "Q11",
+      "status": "success",
+      "capture": "q11-q15.md",
+      "query": "Long-running and bulk operation API design compared: Google AIP-151 long-running operations, Microsoft Graph long running operations, Salesforce Bulk API 2.0 job lifecycle, Shopify bulkOperationRunQuery. Common contract: submit, poll status, result URL, cancel, expiry.",
+      "sources": ["https://google.aip.dev/151", "https://learn.microsoft.com/graph", "https://developer.salesforce.com/docs (Bulk API 2.0)", "https://shopify.dev/docs/api/usage/bulk-operations"],
+      "used_by": ["S12", "S13", "S14", "S19", "D9"]
+    },
+    {
+      "id": "Q12",
+      "status": "success",
+      "capture": "q11-q15.md",
+      "query": "Webhook delivery best practices 2026: Standard Webhooks specification, HMAC signature headers, timestamp replay protection, retry with exponential backoff, delivery history, secret rotation, versioned payload schema",
+      "sources": ["https://github.com/standard-webhooks/standard-webhooks/blob/main/spec/standard-webhooks.md"],
+      "used_by": ["S29", "S30", "N06"]
+    },
+    {
+      "id": "Q13",
+      "status": "success",
+      "capture": "q11-q15.md",
+      "query": "Extension registry design: Drupal plugin managers and typed data, Symfony tagged services and compiler passes producing immutable compiled containers, Shopware plugin lifecycle (install/activate/deactivate/uninstall). How do they guarantee deterministic ordering, duplicate detection and cache invalidation?",
+      "sources": ["https://api.drupal.org/api/drupal/core!lib!Drupal!Core!TypedData!TypedDataManager.php/class/TypedDataManager/11.x", "https://symfony.com/doc/current/service_container/tags.html", "https://symfony.com/doc/current/service_container/compiler_passes.html", "https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/plugin-lifecycle.html", "https://developer.shopware.com/docs/resources/references/core-reference/commands-reference.html"],
+      "used_by": ["A21", "A87", "A88", "A89", "S05", "D5"]
+    },
+    {
+      "id": "Q14",
+      "status": "success",
+      "capture": "q11-q15.md",
+      "query": "OpenTelemetry PHP SDK and Laravel instrumentation maturity in 2026; PSR-3 structured logging context; Prometheus/OTel metric label cardinality limits and why tenant id should not be an unbounded label.",
+      "sources": ["https://opentelemetry.io/docs/languages/php/"],
+      "used_by": ["A95", "A96"],
+      "note": "Требование ограниченной cardinality подтверждено сводно, без числового предела конкретной TSDB."
+    },
+    {
+      "id": "Q15",
+      "status": "success",
+      "capture": "q11-q15.md",
+      "query": "Laravel GraphQL 2026: lighthouse vs webonyx graphql-php query complexity limits, maintenance",
+      "sources": ["https://packagist.org/packages/nuwave/lighthouse", "https://webonyx.github.io/graphql-php/"],
+      "used_by": ["S18", "D7"]
+    },
+    {
+      "id": "Q16",
+      "status": "success",
+      "capture": "q16-q19.md",
+      "query": "PostgreSQL custom fields: EAV vs JSONB GIN index trade-offs for filtering and sorting",
+      "sources": ["https://www.postgresql.org/docs/current/indexes-ordering.html"],
+      "used_by": ["A55", "A56"]
+    },
+    {
+      "id": "Q17",
+      "status": "success",
+      "capture": "q16-q19.md",
+      "query": "Why OAuth client scopes must not replace per-user domain authorization and field-level security: layered authorization model in Salesforce and GraphQL field-level authorization guidance",
+      "sources": ["https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_connectedapp.htm", "https://graphql.org/learn/authorization/", "https://www.graphql-js.org/docs/authorization-strategies/", "https://docs.gitlab.com/development/graphql_guide/authorization/"],
+      "used_by": ["S28", "A100"]
+    },
+    {
+      "id": "Q18",
+      "status": "success",
+      "capture": "q16-q19.md",
+      "query": "API versioning strategy for self-hosted / on-premise products where server and clients upgrade independently: date-based versions vs semantic versioning vs capability negotiation. Recommendations and real examples (GitLab, Atlassian Data Center, Grafana).",
+      "sources": ["https://docs.gitlab.com/api/rest/", "https://developer.atlassian.com/platform/marketplace/atlassian-rest-api-policy/", "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/apis/"],
+      "used_by": ["D2", "S03", "S04", "S06", "S07", "S31"],
+      "note": "Несущий источник решения D2 — отклонения date-based версий как основного механизма совместимости."
+    },
+    {
+      "id": "Q19",
+      "status": "success",
+      "capture": "q16-q19.md",
+      "query": "stancl/tenancy v4 status 2026 for Laravel 12/13 multi-database tenancy: bootstrappers, queue tenancy, known caveats with long-running workers and Octane.",
+      "sources": ["https://v4.tenancyforlaravel.com/changelog/", "https://v4.tenancyforlaravel.com/bootstrappers/", "https://v4.tenancyforlaravel.com/bootstrappers/database/", "https://v4.tenancyforlaravel.com/bootstrappers/cache/", "https://v4.tenancyforlaravel.com/bootstrappers/queue/", "https://v4.tenancyforlaravel.com/broadcasting/", "https://v4.tenancyforlaravel.com/multi-database-tenancy/"],
+      "used_by": ["P4", "P9"]
+    }
+  ],
+  "failed_attempts": [
+    { "query": "Shopify Admin API versioning policy 2026 (полная формулировка)", "status": "timeout", "resolved_by": "Q1" },
+    { "query": "Enforcing architecture boundaries in PHP monorepos in 2026 (полная формулировка)", "status": "timeout", "resolved_by": "Q5" },
+    { "query": "transactional outbox pattern implementation in Laravel (полная формулировка)", "status": "timeout", "resolved_by": "Q8" },
+    { "query": "PostgreSQL 16/17 dynamic custom fields storage: EAV vs JSONB (полная формулировка)", "status": "timeout", "resolved_by": "Q16" },
+    { "query": "Adding GraphQL to an existing Laravel REST platform in 2026 (полная формулировка)", "status": "timeout", "resolved_by": "Q15" },
+    { "query": "Akeneo PIM and Pimcore dynamic attribute/class definition models: stable attribute identity, schema evolution", "status": "unresolved", "resolved_by": null, "consequence": "Пункт A53 несёт [UNVERIFIED] на части «как это делают PIM-платформы»; часть «стабильного id в дереве нет» остаётся RAG:—. Обязателен добор запроса при детализации P10 (DoR фазы)." }
+  ]
+}
