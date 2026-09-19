@@ -48,18 +48,27 @@ def stage() -> Path:
     return STAGING
 
 
-def register() -> None:
-    staging = stage()
-    repository = staging.resolve().as_uri()
+def register_composer(cwd: Path, repository: str) -> None:
     proc = subprocess.run(
         ['composer', 'config', 'repositories.stancl-providers', 'composer', repository],
-        cwd=ROOT,
+        cwd=cwd,
         capture_output=True,
         text=True,
     )
     if proc.returncode != 0:
-        raise StageError(proc.stderr.strip() or proc.stdout.strip() or 'composer config failed')
-    print(json.dumps({'result': 'PASS', 'repository': repository, 'staging': str(staging)}))
+        raise StageError(proc.stderr.strip() or proc.stdout.strip() or f'composer config failed in {cwd}')
+
+
+def register() -> None:
+    staging = stage()
+    repository = staging.resolve().as_uri()
+    targets = [ROOT]
+    tenancy = ROOT / 'packages' / 'tenancy'
+    if (tenancy / 'composer.json').is_file():
+        targets.append(tenancy)
+    for cwd in targets:
+        register_composer(cwd, repository)
+    print(json.dumps({'result': 'PASS', 'repository': repository, 'staging': str(staging), 'registered': [str(p) for p in targets]}))
 
 
 def main() -> int:

@@ -391,13 +391,27 @@ jobs:
   tasks-tests:
     runs-on: ubuntu-latest
     name: Tasks package
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
@@ -408,6 +422,15 @@ jobs:
 
       - name: Tasks tests
         run: composer --working-dir=packages/tasks test
+
+      - name: Tasks tests (PG16)
+        run: composer --working-dir=packages/tasks test:pg
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
 
       - name: Tasks coverage (P1.27 compensating gate)
         run: composer --working-dir=packages/tasks test:coverage
@@ -440,6 +463,17 @@ jobs:
 
       - name: Stage sealed stancl provider candidates
         run: python3 scripts/distribution/stage-stancl-providers.py
+
+      - name: Configure AzGuard private Composer channel
+        env:
+          AZGUARD_TOKEN: ${{ secrets.AZGUARD_TOKEN }}
+        run: |
+          if [ -z "${AZGUARD_TOKEN}" ]; then
+            echo "AZGUARD_TOKEN secret is required for auth-tests (D83)." >&2
+            exit 1
+          fi
+          composer --working-dir=packages/auth config github-oauth.github.com "${AZGUARD_TOKEN}"
+          composer --working-dir=packages/auth config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
 
       - name: Install dependencies
         run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress

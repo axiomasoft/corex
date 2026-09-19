@@ -40,6 +40,7 @@ parameters:
         - packages/tenancy/src
 
     bootstrapFiles:
+        - tests/phpstan-stubs/AwsS3Client.php
         # Auth remains intentionally absent from the root dependency graph:
         # its private AzGuard dependency is available only in this package's
         # own test environment. Loading that installed package autoloader lets
