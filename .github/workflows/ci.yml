@@ -41,6 +41,9 @@ jobs:
         if: matrix.php == '8.3'
         run: composer remove corex/tenancy --no-update --no-interaction
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -80,6 +83,9 @@ jobs:
       - name: Constrain Laravel version
         run: composer require "illuminate/contracts:${{ matrix.laravel }}" --no-update --no-interaction
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -108,6 +114,9 @@ jobs:
           coverage: xdebug
       - name: Constrain Laravel version
         run: composer --working-dir=packages/api require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/api update --prefer-dist --no-interaction --no-progress
       - name: API tests and coverage
@@ -125,6 +134,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
           coverage: none
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Wakeup tests
@@ -158,6 +170,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
           coverage: none
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: PostgreSQL delivery admission test
@@ -179,6 +194,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
           coverage: xdebug
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
       - name: Panels tests and coverage
@@ -196,6 +214,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, gd, xdebug
           coverage: xdebug
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
       - name: Media tests and coverage
@@ -227,6 +248,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
           coverage: none
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
       - name: Media PostgreSQL concurrency test
@@ -270,6 +294,9 @@ jobs:
 
       - name: Constrain Laravel version
         run: composer --working-dir=packages/tenancy require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
@@ -315,6 +342,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
           coverage: xdebug
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/crm update --prefer-dist --no-interaction --no-progress
 
@@ -339,6 +369,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
           coverage: xdebug
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -359,6 +392,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
           coverage: xdebug
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
@@ -395,6 +431,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
           coverage: none
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress
 
@@ -424,6 +463,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
           coverage: none
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -468,6 +510,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
           coverage: xdebug
 
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -497,6 +542,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
           coverage: none
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -544,6 +592,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
           coverage: none
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
