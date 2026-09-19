@@ -189,7 +189,7 @@
 | S15 | Контроллер — только transport adapter | `RAG:—` `ApiController` уже тонкий (14 строк); толстый именно `Dispatcher` | ✎ Работа переносится на разделение `Dispatcher` | P13 |
 | S16 | Контракт `Operation::definition()` + `OperationDefinition` (name, version, input/result type, mode, scopes, idempotency, cost, deprecation) | `RAG:—` сейчас `Operation` — readonly DTO из манифеста + `OperationHandler::handle()` | ✎ Достраивается поверх существующей декларативной модели модулей, без перевода на статический метод класса | P13 |
 | S17 | `OperationMode`: query / command / async_command / bulk_query / bulk_command | `RAG:—` режимов нет; есть `mode` декларации `entity/extendResource/operation/tool` — другое понятие | ✅ | P13 |
-| S18 | Транспортные адаптеры Http/GraphQL/OpenApi/Tools/Console с чёткой границей ответственности | `RAG:—` Http/OpenApi/Tools есть, GraphQL нет | ✎ GraphQL отложен (D7), остальные разводятся | P13, ⏳ |
+| S18 | Транспортные адаптеры Http/GraphQL/OpenApi/Tools/Console с чёткой границей ответственности | `RAG:—` Http/OpenApi/Tools есть, GraphQL нет | ✎ Разводятся существующие три адаптера; GraphQL не проектируется, задел — транспорт-нейтральность контракта (D7) | P13 |
 | S19 | Async command возвращает acceptance (`202 Accepted`), а не `200 {"status":"queued"}` | `RAG:✅` MS Graph: 202 + Location/Operation-Location | ✅ | P13 |
 | S20 | Конверт ошибок с `code`/`message`/`path`/`category`/`retryable`/`details` + `meta.requestId/correlationId/apiVersion` | `RAG:—` конверт `{data,error,meta}` уже есть, `X-Request-ID` есть; `category`/`retryable`/`path` нет | ✎ Расширение существующего конверта + контент-негоциация `application/problem+json` (RFC 9457) для транспортных ошибок: `RAG:✅` IETF/Zalando за problem+json, Microsoft/Google — за собственный конверт с иерархией кодов; берём оба слоя | P12, P13 |
 | S21 | Категории ошибок (authentication/authorization/validation/conflict/not_found/rate_limit/unsupported/unavailable/internal) | `RAG:—` частично в `ErrorMapper` | ✅ | P12 |
@@ -243,8 +243,9 @@
 | ✗ ОПРОВЕРГНУТО | 3 |
 | **Итого разобрано** | **165** (A: 111 · S: 40 · N: 14) |
 
-Отдельной строкой ⏳: GraphQL-транспорт (внутри S18, решение D7) — единственный пункт,
-принятый по существу, но вынесенный за пределы 1.0.
+Отдельной строкой ⏳: GraphQL-транспорт (внутри S18, решение D7). Он не проектируется и не
+получает ни одного item'а; задел исчерпывается транспорт-нейтральностью контракта операции,
+которая требуется P13 и без GraphQL.
 
 Опровергнутые предпосылки аудитов (не создают работы): A52 (subject identity уже opaque),
 A64 (`search-intl` не владеет saved views), A71 (`RecordRules` не существует).
