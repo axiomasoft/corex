@@ -1,0 +1,7 @@
+{
+  "schema_version": "p11-ledger-owner-receipt/1",
+  "accepting_actor": "executor/P11.4",
+  "item": "P11.4",
+  "scope": "dependency-ledger-qualification",
+  "note": "CoreX executor provenance for ledger reconciliation; consumer acceptance remains independently owned."
+}

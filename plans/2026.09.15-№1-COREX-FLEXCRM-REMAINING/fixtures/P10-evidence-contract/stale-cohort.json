@@ -1,0 +1,61 @@
+{
+  "schema_version": "p10-local-intake-evidence/1",
+  "id": "SELF-VALID",
+  "proof_class": "source",
+  "accepting_actor": "executor/P10.1",
+  "owner_receipt_path": "artifacts/P10-intake/owner-receipt.json",
+  "owner_receipt_sha256": "512477f5cc3d1047a0d107b357181bbfc3d9fc6cd1f45497104e2a563f841db3",
+  "owning_repository": "axiomasoft/corex",
+  "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "source_tree": "packages/",
+  "artifact_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "config_sha256": "59967cae16741ef0ad6bde92b5a60c6bf4552f925e79ad28b375ac0762e8a673",
+  "profile_sha256": "c01b7dfc76d2bb11d04b3f3b3f88382571c63a34dbb7d5a19a83473bc05e6240",
+  "schema_sha256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac",
+  "fixture_sha256": "b5cdada5a952bad68163ec3f3a522327fb7e0baa9ddb11518ac9d17d8ef90d20",
+  "cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_version_vector": {
+    "corex/core": "0.4.0-alpha.20260918",
+    "corex/modules": "0.4.0-alpha.20260918",
+    "corex/api": "0.4.0-alpha.20260918",
+    "corex/tasks": "0.4.0-alpha.20260918",
+    "corex/tenancy": "0.4.0-alpha.20260918",
+    "corex/panels": "0.4.0-alpha.20260918",
+    "corex/media": "0.4.0-alpha.20260918",
+    "corex/notifications": "0.4.0-alpha.20260918",
+    "corex/wakeup": "0.4.0-alpha.20260918",
+    "corex/workflow": "0.4.0-alpha.20260918",
+    "corex/attributes": "0.4.0-alpha.20260918",
+    "corex/transfer": "0.4.0-alpha.20260918",
+    "corex/search": "0.4.0-alpha.20260918",
+    "corex/search-meilisearch": "0.4.0-alpha.20260918",
+    "corex/recurrence": "0.4.0-alpha.20260918",
+    "corex/tasks-workflow": "0.4.0-alpha.20260918",
+    "corex/intl": "0.4.0-alpha.20260918",
+    "corex/search-intl": "0.4.0-alpha.20260918"
+  },
+  "environment_id": "p10-intake-lab",
+  "observed_exit": 0,
+  "evidence_inputs": [
+    {
+      "Path": "research/P10-effective-design.md",
+      "SHA256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac"
+    }
+  ],
+  "command": "synthetic",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": "python",
+  "start": "2026-01-01T00:00:00+00:00",
+  "end": "2026-01-01T00:00:01+00:00",
+  "log_path": "fixtures/P10-evidence-contract/valid.log",
+  "log_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "assertions": [
+    {
+      "condition": "SELF-VALID",
+      "expected": "1",
+      "observed": "1",
+      "assertion": "equal",
+      "result": "PASS"
+    }
+  ]
+}

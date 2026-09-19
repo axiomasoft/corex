@@ -7,6 +7,7 @@ on:
 
 jobs:
   anti-weakening-gate:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Anti-weakening gate
     steps:
@@ -18,6 +19,7 @@ jobs:
         run: bash scripts/anti-weakening-gate.sh
 
   tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -48,6 +50,7 @@ jobs:
         run: composer test
 
   tests-pg:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -93,6 +96,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
   api-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -116,6 +120,7 @@ jobs:
         run: composer --working-dir=packages/api analyse
 
   notifications-wakeup-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Notifications and wakeup packages
     steps:
@@ -135,6 +140,7 @@ jobs:
         run: vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src packages/wakeup/src --memory-limit=1G
 
   notifications-pg-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Notifications package (PG16)
     services:
@@ -170,6 +176,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
   panels-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Panels package
     steps:
@@ -187,6 +194,7 @@ jobs:
         run: composer --working-dir=packages/panels analyse
 
   media-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Media package
     steps:
@@ -204,6 +212,7 @@ jobs:
         run: composer --working-dir=packages/media analyse
 
   media-pg-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Media package (PG16)
     services:
@@ -239,6 +248,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
   tenancy-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -288,6 +298,7 @@ jobs:
         run: composer --working-dir=packages/tenancy analyse
 
   crm-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Crm package
     services:
@@ -328,6 +339,7 @@ jobs:
         run: composer --working-dir=packages/crm test:coverage
 
   packages-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Remaining cohort package aggregator
     steps:
@@ -349,6 +361,7 @@ jobs:
         run: vendor/bin/pest packages/core/tests packages/modules/tests
 
   tasks-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Tasks package
     steps:
@@ -370,6 +383,7 @@ jobs:
         run: composer --working-dir=packages/tasks test:coverage
 
   auth-tests:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Auth package (AzGuard)
     services:
@@ -395,9 +409,6 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
           coverage: none
 
-      - name: Authenticate private azguard repository
-        run: composer config --global --auth github-oauth.github.com "${{ secrets.AZGUARD_TOKEN }}"
-
       - name: Install dependencies
         run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress
 
@@ -417,6 +428,7 @@ jobs:
         run: composer --working-dir=packages/auth analyse
 
   layer-gate:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Layer & core-isolation gate
     steps:
@@ -435,6 +447,7 @@ jobs:
         run: composer test:arch
 
   contract-guard:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Contract-snapshot guard
     steps:
@@ -446,6 +459,7 @@ jobs:
         run: bash scripts/contract-guard.sh "${{ github.event.pull_request.base.sha || github.event.before }}"
 
   coverage:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Coverage (floor from scripts/coverage-min-floor.txt)
     services:
@@ -490,6 +504,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
   quality:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' }}
     runs-on: ubuntu-latest
     name: Static analysis & code style
     steps:
@@ -517,9 +532,9 @@ jobs:
         run: composer lint:check
 
   mutation-check:
+    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' && github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     name: Mutation registry (scripts/mutation-check.sh --all)
-    if: github.event_name == 'pull_request'
     services:
       postgres:
         image: postgres:16

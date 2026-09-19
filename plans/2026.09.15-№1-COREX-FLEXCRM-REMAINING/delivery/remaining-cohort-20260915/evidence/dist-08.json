@@ -1,0 +1,25 @@
+{
+  "schema_version": "p9-evidence/1",
+  "proof_class": "executed",
+  "id": "DIST-08",
+  "cohort": "p9-cohort/1",
+  "cell": "dist-local",
+  "command": "/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-export.py --verify-upstream-providers /home/vostrikov/projects/packages/corex/delivery/remaining-cohort-20260915/candidate.json",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": "python=3.12",
+  "start": "2026-09-18T17:29:05.857864+00:00",
+  "end": "2026-09-18T17:29:07.280111+00:00",
+  "exit": 0,
+  "result": "PASS",
+  "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "recipe_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "candidate_sha256": "056f6ed3316c6a1cf8c188bd64aca32f86e4a612abbcad67bacb589c75892b28",
+  "lock_sha256": "b77e1dff582dd449792730e1cf37b35b719f4425e46fdc5a2cc4f92efe58ff9f",
+  "config_sha256": "07ee47018d701ea432bbcd2b2ff899fea3a921f9d5df548954b6d2568f24b0df",
+  "fixture_sha256": "056f6ed3316c6a1cf8c188bd64aca32f86e4a612abbcad67bacb589c75892b28",
+  "log_path": "delivery/remaining-cohort-20260915/evidence/dist-08.log",
+  "log_sha256": "3ecc4c6a873566af485f198ff073713a5a7f499e57e400ca28d215c344729949",
+  "cases": [
+    "DIST-08"
+  ]
+}

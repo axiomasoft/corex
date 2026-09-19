@@ -1,0 +1,31 @@
+{
+  "schema_version": "p11-pins-gap/1",
+  "item": "P11.2",
+  "generated_at": "2026-09-19T04:20:27.616713+00:00",
+  "released_cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "released_vector_sample": "0.4.0-alpha.20260918",
+  "p10_consumer_input_mode": "readiness",
+  "p10_required_gaps": 169,
+  "consumer_evidence_imports": 1,
+  "stale_observation_only": {
+    "import_path": "artifacts/P11-intake/imports/400ef0151ebe68d1661c530e95052b5c12bd08e4775ff4af52942f69156ef9c9.json",
+    "note": "Design-time sanitized consumer handoff observation; not acceptance.",
+    "waiting_on": "separate owning package acceptance P6.5 under D41/D42"
+  },
+  "required_profiles": [
+    "base",
+    "construction",
+    "property-management"
+  ],
+  "resume": "FlexCRM consumer owner supplies sanitized p11-consumer-evidence/1 imports for released cohort f44c0c6fe757aeb8\u2026; historical local cohorts cannot stand in (PINS-05).",
+  "blocking_cases": [
+    "PINS-01",
+    "PINS-02",
+    "PINS-03",
+    "PINS-04",
+    "PINS-05",
+    "PINS-06",
+    "PINS-07"
+  ]
+}

@@ -138,6 +138,7 @@ No forced engine edge or concurrent shared writes. Exact protocol is in P6 stabl
 P4.4 NotificationChannelDriver precedes P4.5; P5.2+P4.4/5→P5.5→P4.6 DueSource/digest FK.
 P9.1 intake intent→P9.2 build attestation→P9.3/4 recipe/installed→P9.5/6 hosted/private
 →P9.7 packet→P9.8 publication→P9.9 released install; no backward hash into intake.
+P11.7 final seal → **PLAN-CLOSE-CI** (D44): CI/workflows/package-graph gate only; не блокирует P9.8–P11 product path.
 
 **Единственный рекомендуемый следующий scope после actual finish:** B-P1-QUALIFY,
 frontier/high = gpt-5.6-sol/high; первый runnable carrier P1.1, затем P1.2–P1.4

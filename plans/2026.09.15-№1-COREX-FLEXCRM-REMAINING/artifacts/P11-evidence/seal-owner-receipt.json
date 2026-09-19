@@ -1,0 +1,7 @@
+{
+  "schema_version": "p11-seal-owner-receipt/1",
+  "accepting_actor": "executor/P11.7",
+  "item": "P11.7",
+  "scope": "final-cross-repo-seal",
+  "note": "CoreX executor provenance for final reconciliation seal; consumer acceptance remains independently owned."
+}

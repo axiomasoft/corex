@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Create deterministic, local-only CoreX package distribution candidates."""
+"""Create deterministic, local-only CoreX package distribution candidates.
+
+Historical four-package export uses export-policy.json. The remaining public cohort
+(P9) uses scripts/distribution/remaining-cohort-export.py with
+remaining-cohort-policy.json and the frozen delivery/remaining-cohort-20260915/candidate.json.
+"""
 
 from __future__ import annotations
 

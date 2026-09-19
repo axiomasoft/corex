@@ -1,0 +1,38 @@
+{
+  "schema_version": "p11-reconciliation-evidence/1",
+  "id": "TESTS-04",
+  "proof_class": "qualification",
+  "accepting_actor": "executor/P11.3",
+  "owner_receipt_path": "artifacts/P11-evidence/tests-owner-receipt.json",
+  "owner_receipt_sha256": "39aa8e18069fd91256dc613348b8bb852526e336ae2a92996a89ba71283a3a37",
+  "repo": "corex",
+  "commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "stage": "qualification",
+  "actor_proof": "owner-policy/p11-tests-lab",
+  "covered_atoms": "non-crm-proof",
+  "command": "/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/scripts/reconcile-consumer.py --prepare-tests --case TESTS-04",
+  "runtime": "python=3.12",
+  "start": "2026-09-19T05:06:50.465026+00:00",
+  "end": "2026-09-19T05:06:50.465099+00:00",
+  "observed_exit": 0,
+  "assertions": [
+    {
+      "condition": "TESTS-04",
+      "expected": "P9 independent non-CRM installed proof separately hash-qualified",
+      "observed": "case=RELEASE-03",
+      "assertion": "two solutions never substitute for agnosticism proof",
+      "result": "PASS",
+      "covered_atoms": "non-crm-proof"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "Path": "artifacts/P11-intake/imports/d02e3fb3f1b49f4a25a8531f4714d5816a3fb47c5b61901d643b967a4c033523.json",
+      "SHA256": "d02e3fb3f1b49f4a25a8531f4714d5816a3fb47c5b61901d643b967a4c033523"
+    },
+    {
+      "Path": "delivery/remaining-cohort-20260915/evidence/release-03.json",
+      "SHA256": "1c9637e24373aa46cf3edcee92d3b2d103a6938ebff3c27b3c99e1798e423ece"
+    }
+  ]
+}

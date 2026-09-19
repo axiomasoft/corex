@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Tasks\Testing\TasksTestCase;
-use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\Testing\CoreXTestCase;
 use CoreX\Tests\TestCase;
 use Flex\Crm\Testing\CrmTestCase;

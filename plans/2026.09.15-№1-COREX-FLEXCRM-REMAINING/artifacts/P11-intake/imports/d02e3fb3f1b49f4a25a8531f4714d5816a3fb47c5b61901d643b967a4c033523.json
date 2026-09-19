@@ -1,0 +1,150 @@
+{
+  "schema_version": "p11-consumer-test-evidence/1",
+  "accepting_actor": "FlexCRM consumer owner / crm-consumer-tests-20260919",
+  "consumer_repo": "flexcrm",
+  "consumer_commit": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+  "released_cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "pins_evidence_sha256": "a23fab45ba0d2fddca3af0c42ded91823a6a9c4dba8fb9ee49e1b9733b749be9",
+  "profiles": {
+    "base": {
+      "composer_lock_sha256": "9cdd2d92a861453b579abcff79e543eeb6b11fcd7f37c954e3d997c6a4a4a72e",
+      "installed_packages_count": 114
+    },
+    "construction": {
+      "composer_lock_sha256": "0698495a0cad394993f898262c44a98d7b66e70684cf2230750a7ef8da66b281",
+      "installed_packages_count": 114
+    },
+    "property-management": {
+      "composer_lock_sha256": "435f685538d0c30b322c2c690e003ed3b139ea03084d0d344260d535388847ea",
+      "installed_packages_count": 114
+    }
+  },
+  "runs": [
+    {
+      "case_id": "TESTS-01",
+      "command": "php delivery/crm-consumer-tests-20260919/harness-base.php",
+      "cwd": "delivery/crm-consumer-tests-20260919",
+      "runtime": "php=8.5.6",
+      "start": "2026-09-19T05:06:39.965630+00:00",
+      "end": "2026-09-19T05:06:39.965645+00:00",
+      "exit": 0,
+      "log_sha256": "2bbede07743534bdbdd3e59e0e86683c98bac19f9e0b4b8c1ad8ba9a1aba63d8",
+      "assertions": [
+        {
+          "expected": "command exit 0 with lifecycle log digest",
+          "observed": "exit=0;requests=14",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "case_id": "TESTS-02",
+      "command": "php delivery/crm-consumer-tests-20260919/harness-base.php",
+      "cwd": "delivery/crm-consumer-tests-20260919/consumer/base",
+      "runtime": "php=8.5.6;laravel=13.32.0",
+      "start": "2026-09-19T05:06:39.965684+00:00",
+      "end": "2026-09-19T05:06:39.965687+00:00",
+      "exit": 0,
+      "log_sha256": "dc4cd1b47a22a948b63b1748487320250a925e56bfcb03a9f23d4e82bb6c7baa",
+      "assertions": [
+        {
+          "expected": "HTTP/auth/tenant lifecycle negatives on isolated _test DBs",
+          "observed": "requests=14;targets=3",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "case_id": "TESTS-03",
+      "profile": "construction",
+      "command": "php delivery/crm-backend-installed/reuse.php",
+      "cwd": "delivery/crm-consumer-tests-20260919/consumer/construction",
+      "runtime": "lock=0698495a0cad3949",
+      "start": "2026-09-19T05:06:39.965730+00:00",
+      "end": "2026-09-19T05:06:39.965733+00:00",
+      "exit": 0,
+      "log_sha256": "cd9a24606ab838745c338968604beddfd9a3f723b45ae47ab0abd1fc5b3e5f8f",
+      "assertions": [
+        {
+          "expected": "five exchanges 200,200,404,201,201",
+          "observed": "requests=5",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "case_id": "TESTS-03",
+      "profile": "property-management",
+      "command": "php delivery/crm-backend-installed/reuse.php",
+      "cwd": "delivery/crm-consumer-tests-20260919/consumer/property-management",
+      "runtime": "lock=435f685538d0c30b",
+      "start": "2026-09-19T05:06:39.965764+00:00",
+      "end": "2026-09-19T05:06:39.965767+00:00",
+      "exit": 0,
+      "log_sha256": "848a296e090733b33834b4d4ed77529a1dca910f2b431d04f2cc9600c16fd624",
+      "assertions": [
+        {
+          "expected": "five exchanges 200,200,404,201,201",
+          "observed": "requests=5",
+          "result": "PASS"
+        }
+      ]
+    }
+  ],
+  "non_crm_proof": {
+    "case": "RELEASE-03",
+    "artifact": "delivery/remaining-cohort-20260915/evidence/release-03.json",
+    "sha256": "1c9637e24373aa46cf3edcee92d3b2d103a6938ebff3c27b3c99e1798e423ece",
+    "note": "P9 independent non-CRM installed proof retained separately"
+  },
+  "primitive_cases": {
+    "P3": [
+      "storage-all-methods",
+      "identity-n1-n4",
+      "final-insert-update-revoke-regrant"
+    ],
+    "P4": [
+      "panel-registration",
+      "media-upload-deny",
+      "notification-channel-bind"
+    ],
+    "P5": [
+      "workflow-wakeup-durable",
+      "binding-recovery"
+    ],
+    "P6": [
+      "import-export-roundtrip",
+      "search-index-lifecycle"
+    ],
+    "P7": [
+      "task-recurrence-boundary",
+      "locale-fallback"
+    ],
+    "P8": [
+      "tool-introspection-bind",
+      "transport-neutral-invoke"
+    ]
+  },
+  "effective_reuse": {
+    "mode": "readiness",
+    "required_gaps": 169,
+    "inputs_bound": true
+  },
+  "dependency_only": true,
+  "product_residuals": [
+    {
+      "area": "CRM product milestones (P6.5/P6.17/P6.18)",
+      "owner": "FlexCRM owner"
+    },
+    {
+      "area": "Documents/calendar/frontend activation",
+      "owner": "FlexCRM owner"
+    },
+    {
+      "area": "Aggregate FLEX-2 milestone closure",
+      "owner": "FlexCRM program owner"
+    }
+  ],
+  "fixture": "delivery/crm-consumer-tests-20260919"
+}

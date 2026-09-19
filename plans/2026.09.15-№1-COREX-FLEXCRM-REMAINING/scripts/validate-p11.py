@@ -35,6 +35,15 @@ def wanted(stage):
     return {f'{prefix}-{i:02}' for i in range(1, count + 1)}
 
 
+def input_file(plan, path):
+    v.require(not Path(path).is_absolute(), 'nonportable input')
+    for root in (plan, plan.parents[1]):
+        target = (root / path).resolve()
+        if target.is_relative_to(root.resolve()) and target.is_file():
+            return target
+    raise ValueError('missing portable producer input ' + path)
+
+
 def design(plan):
     phase = a.file(plan, 'phases/P11/P11.md').read_text()
     v.require('СКЕЛЕТ — не детализирован' not in phase and 'Phase Assurance | v1' in phase, 'phase detail/assurance missing')
@@ -96,7 +105,7 @@ def report(plan, stage):
     inputs = a.table(plan, path, 'Inputs', ('Path', 'SHA256'))
     v.exact(inputs, 'Path', {x['Path'] for x in inputs})
     for row in inputs:
-        v.require(v.digest(a.file(plan, row['Path'])) == row['SHA256'], 'stale report input')
+        v.require(v.digest(input_file(plan, row['Path'])) == row['SHA256'], 'stale report input')
     evidence = a.table(plan, path, 'Evidence', ('ID', 'Repo', 'Commit', 'Stage', 'Actor proof', 'Covered atoms', 'Artifact', 'SHA256', 'Command', 'Runtime', 'Start', 'End', 'Exit', 'Outcome'))
     v.exact(evidence, 'ID', {x['ID'] for x in evidence})
     by_id = {x['ID']: x for x in evidence}

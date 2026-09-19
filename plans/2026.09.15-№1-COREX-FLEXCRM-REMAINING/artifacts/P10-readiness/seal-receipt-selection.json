@@ -1,0 +1,8 @@
+{
+  "schema_version": "receipt-selection/1",
+  "item": "P10.9",
+  "mode": "readiness",
+  "subconditions_pending": 169,
+  "b33_ac_parents_pending": 15,
+  "note": "Readiness only; actual p10-effective-receipts/1 requires all branches GREEN."
+}

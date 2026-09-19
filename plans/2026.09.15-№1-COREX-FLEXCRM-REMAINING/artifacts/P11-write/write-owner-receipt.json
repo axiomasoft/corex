@@ -1,0 +1,7 @@
+{
+  "schema_version": "p11-write-owner-receipt/1",
+  "accepting_actor": "executor/P11.6",
+  "item": "P11.6",
+  "scope": "foreign-three-file-write",
+  "note": "CoreX executor provenance for protected foreign write; grant separately authenticated."
+}

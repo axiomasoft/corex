@@ -27,6 +27,7 @@ __pycache__/
 *.tmp
 *.temp
 *~
+.composer*
 
 # Local qualification harness output; committed receipts live under plans/**/artifacts/.
 /delivery/

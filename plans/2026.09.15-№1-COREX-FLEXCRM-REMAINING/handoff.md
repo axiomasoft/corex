@@ -1,30 +1,36 @@
-# HANDOFF — 2026-09-18 — after P9.5
+# HANDOFF — 2026-09-19 — after P11.7
 
-**Next:** exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P9.6
+**Next:** `exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING PLAN-CLOSE-CI` (deferred; no automatic launch)
 
 | Параметр | Значение |
 |---|---|
-| Batch | solo:P9.6 |
+| Batch | solo:PLAN-CLOSE-CI |
 | Model class | implementation |
-| Effort | high |
-| Executor | Cursor / Composer 2.5 |
-| Capabilities | shell, FS, git, gh |
+| Effort | medium |
 | Context | continue-root |
-| Суть | Independent optional private auth install (G-PRIVATE); azguard публичный — секрет не нужен. |
+| Суть | P11.7 closed: SEAL-01..06; flexcrm@929a7c3f; CoreX dependency reconciliation sealed; app-only continuation bound. |
 
-**Done:** P9.5 closed-green — mirror run `35349147513` @ `a2783c1` on `academici/corex-mirror`; 11/11 jobs green; RUN-01–RUN-07 PASS; hosted receipt `6e9e83eb…`; `findings/P9-hosted-runs.md`; stancl staging + test stabilisation (`64789b1`).
+**P11.7 attempt 1 (🟢 Done):**
 
-**Ready:** P9.6 private-read packet (`remaining-cohort-private.py`).
+| Carrier | Result |
+|---|---|
+| `task-check.py --check design` | PASS |
+| `reconcile-consumer.py --prepare-seal` | PASS — final cross-repo seal |
+| `validate-p11.py --stage seal` | PASS |
+| `reconcile-consumer.py --self-test` | PASS |
 
-**Remaining:** P9.6 → P9.7–P9.9, P10, P11.
+**Seal summary:**
 
-**Open risks:**
-- Hosted execution uses mirror (`academici/corex-mirror`); canonical authority remains `axiomasoft/corex` + frozen runner-packet.
-- P9.6 G-PRIVATE — отдельный owner gate; azguard public, без AZGUARD_TOKEN.
+- Report: `findings/P11-final-reconciliation.md` (p11-reconciliation-report/1)
+- Consumer commit: **929a7c3f7994edc4…** on `consumer-dependency-reconciliation`
+- Selected atoms: **146**; required CoreX gaps: **0**
+- App-only statement: sealed in flexcrm `plans/FLEX-2/handoff.md`
+- Accepting actor: FlexCRM consumer owner / crm-consumer-tests-20260919
 
-**Sources of truth:** `findings/P9-hosted-runs.md`; `delivery/remaining-cohort-20260915/hosted/run-35349147513.json`; `delivery/remaining-cohort-20260915/hosted/receipt.json`; `delivery/remaining-cohort-20260915/runner-packet.json` (`a93f5923…`); `journal.jsonl`.
+**Remaining:**
 
-```bash
-python3 scripts/distribution/remaining-cohort-private.py --preflight
-exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING P9.6
-```
+- `PLAN-CLOSE-CI`: D44 CI/workflows/package-graph gate (terminal; deferred per owner policy)
+- P10 effective seal still readiness-only (`required_gaps=169`)
+- FLEX-2 product milestones (P6.5/P6.17/P6.18) remain separately owned in FlexCRM
+
+**⛔ До `PLAN-CLOSE-CI`:** remote central/cloud ops, `gh`, CI/workflows — только producer-requests packet.

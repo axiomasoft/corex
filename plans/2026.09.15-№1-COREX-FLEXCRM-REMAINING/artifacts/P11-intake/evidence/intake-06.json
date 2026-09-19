@@ -1,0 +1,38 @@
+{
+  "schema_version": "p11-reconciliation-evidence/1",
+  "id": "INTAKE-06",
+  "proof_class": "qualification",
+  "accepting_actor": "executor/P11.1",
+  "owner_receipt_path": "artifacts/P11-intake/owner-receipt.json",
+  "owner_receipt_sha256": "20a6b95b97ff86064dfbb12db291c3573e6e21e1f8f413312c5d15dc27391c7e",
+  "repo": "corex",
+  "commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "stage": "qualification",
+  "actor_proof": "owner-policy/p11-intake-lab",
+  "covered_atoms": "scope-closure",
+  "command": "/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/scripts/reconcile-consumer.py --prepare-intake --case INTAKE-06",
+  "runtime": "python=3.12",
+  "start": "2026-09-19T04:10:00.954432+00:00",
+  "end": "2026-09-19T04:10:00.954491+00:00",
+  "observed_exit": 0,
+  "assertions": [
+    {
+      "condition": "INTAKE-06",
+      "expected": "R47 excluded from prerequisite closure; R52 verified as producer invariant",
+      "observed": "R47 final action excluded; R52 invariant evidence present in downstream gaps",
+      "assertion": "no reverse edge from P1/P9/P10 to consumer acceptance",
+      "result": "PASS",
+      "covered_atoms": "scope-closure"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "Path": "findings/P1-downstream-gaps.md",
+      "SHA256": "6284a6d649f3f4bbbe5468dfb502e7915fe90b38ddf7f9a7441995baf0b11e3a"
+    },
+    {
+      "Path": "research/P11-reconciliation-design.md",
+      "SHA256": "32cce51ebff33a8980f54d1864be6a0e5c15adb7a18f8974f7f17d72a5d310af"
+    }
+  ]
+}

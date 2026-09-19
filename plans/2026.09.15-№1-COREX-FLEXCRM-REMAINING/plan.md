@@ -55,6 +55,7 @@ research/P12-audit-reconciliation.md, нормативный код — research
 - Test topology per-package; D34 оба root lanes + affected package; D98 mutation при src; no weakened floors.
 - Installed proof включает independent non-CRM consumer; два solutions FlexCRM не заменяют этот тест универсальности.
 - Runtime/source, local tests, installed candidate, released package, hosted CI и live deployment — разные evidence classes.
+- **D44/D45 plan-close deferral:** `scripts/.plan-close-deferred` — no CI, no `--write`, no mass GitHub reconcile в P9.8–P11; только локальный product-код (`brief/02-ci-deferral-executor.md`). Remote publication + CI — один раз в `PLAN-CLOSE-CI` после P11.7.
 - External/central/cloud gates — research/03-gates.md; missing receipt = named owner + exact resume, не fake acceptance.
 - Продолжать независимые ready subsets по DAG; ожидание membership deployment не задерживает pure utilities.
 - Новый механизм расширения/девятый extender только RFC; standalone engines не клонируются в CoreX.
@@ -208,6 +209,7 @@ Batch/Review по сложности, integration/security/public риску. Д
 | solo | P12A.4 | implementation/medium | plan-exec | full | D42: ошибочный гейт даёт ложную зелёную, и ровно этот дефект (A1) прошёл в P12 из-за неисполненного `full` review P12.3; красная ветвь требует контролируемого обратимого нарушения в дереве. |
 | B-P12A-SEAL | P12A.5 | implementation/medium | plan-exec | light | recommended: Дозапись bookkeeping и печать фазы делят один journal/receipt-контекст. |
 | B-P12A-SEAL | P12A.6 | implementation/medium | plan-exec | light | recommended: Дозапись bookkeeping и печать фазы делят один journal/receipt-контекст. |
+| solo | PLAN-CLOSE-CI | implementation/medium | plan-exec | light | **terminal after P11.7:** D44 — свести CI/workflows/package-graph gate; не смешивать с product items P9.8–P11. |
 
 ## 4. Update Log
 
@@ -215,6 +217,7 @@ Owned projection: status.md; журнал journal.jsonl владеет update hi
 Создан 2026-09-15 plan-designer/gpt-6-astra: верхний слой. P1/P2/P3/P4/P5/P6/P7/P8/P9/P10/P11 детализированы 2026-09-15 plan-designer/gpt-5.6-sol; product execution не начат, история — journal/generated status.
 2026-09-18 claude-opus-5/high: добавлена корректирующая фаза P12 (девять item) по разбору двух внешних аудитов; owning decision — D41; структурный чекер — scripts/validate-p12.py --check design. Исполнитель фазы — модель класса Composer 2.5, поэтому каждая спека называет точный параграф research/P12-rebaseline-design.md с готовым кодом. Реализация не начата.
 2026-09-18 auditor/claude-opus-5/high: выполнен adversarial post-close аудит P12 — findings/P12-post-close-audit.md, вердикт RED (R1 незакоммиченный результат P12.2–P12.9; R2 красный composer lint:check как доказанная регрессия P12; R3 несовпадающий spec_sha256 terminal-evidence P12.5; R4 DESIGN_PENDING design-гейта; A1–A8). P12.1–P12.9 не реопенены и остаются 🟢: дефекты относятся к закрытию, а не к принятым контрактам. Добавлена корректирующая фаза P12A (шесть item), наследующая от P12 роль блокирующего предшественника P8; owning decision — D42. Реализация не начата.
+2026-09-18 owner/Cursor: D44 — CI/workflow fixes отложены до terminal `PLAN-CLOSE-CI` после P11.7; P9.8 publication paused mid-write по owner stop.
 
 ## 5. Decision Log
 

@@ -11,6 +11,12 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+_DISTRIBUTION = Path(__file__).resolve().parent
+if str(_DISTRIBUTION) not in sys.path:
+    sys.path.insert(0, str(_DISTRIBUTION))
+
+from plan_close_deferral import DeferralDenied, refuse_remote
+
 ROOT = Path(__file__).resolve().parents[2]
 PLAN = ROOT / 'plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
@@ -236,7 +242,9 @@ def download_job_log(repository: str, job_id: int, destination: Path, job: dict 
     destination.write_text(proc.stdout, encoding='utf-8')
 
 
-def preflight(packet: dict | None = None) -> dict:
+def preflight(packet: dict | None = None, *, allow_remote: bool = True) -> dict:
+    if allow_remote:
+        refuse_remote('remaining-cohort-hosted.py --preflight', resume='--finalize on cached hosted/receipt.json')
     packet = packet or load_packet()
     canonical = canonical_repository(packet)
     repository = execution_repository(packet)
@@ -436,7 +444,172 @@ def case_catalog() -> list[tuple[str, str, str]]:
     ]
 
 
+def verify_preflight_retained() -> int:
+    path = HOSTED / 'preflight.json'
+    if not path.is_file():
+        return 1
+    payload = load_json(path)
+    if payload.get('schema_version') != 'hosted-preflight/1':
+        return 1
+    if payload.get('grant_required') != 'G-RUNNER':
+        return 1
+    return 0
+
+
+def verify_query_before_repeat_cached() -> int:
+    if not list(HOSTED.glob('run-*.json')):
+        return 1
+    receipt_path = HOSTED / 'receipt.json'
+    if not receipt_path.is_file():
+        return 1
+    receipt = load_json(receipt_path)
+    reconcile = receipt.get('reconcile') or {}
+    if not reconcile.get('run_id'):
+        return 1
+    return 0
+
+
+def build_hosted_report_from_cache(
+    receipt: dict,
+    reconcile: dict,
+    selected_run: dict,
+    packet: dict,
+    candidate_sha: str,
+    source_commit: str,
+    packet_sha: str,
+    receipt_sha: str,
+    *,
+    local_only: bool,
+) -> dict:
+    script = Path(__file__).resolve()
+    run_path = HOSTED / f"run-{selected_run['id']}.json"
+    if not run_path.is_file():
+        raise HostedError(f'missing cached run artifact: {run_path}')
+    hosted_meta = {
+        'run_url': selected_run.get('html_url'),
+        'run_id': selected_run.get('id'),
+        'run_attempt': selected_run.get('run_attempt'),
+        'job_id': reconcile.get('job_id'),
+        'workflow_sha': packet.get('workflow_sha256'),
+    }
+    checks: list[tuple[str, list[str], list[str], dict, str]] = []
+    if local_only:
+        checks.append((
+            'RUN-07',
+            [sys.executable, str(script), '--verify-preflight-retained'],
+            ['RUN-07'],
+            hosted_meta,
+            'hosted-preflight',
+        ))
+    else:
+        checks.append((
+            'RUN-07',
+            [sys.executable, str(script), '--preflight'],
+            ['RUN-07'],
+            hosted_meta,
+            'hosted-preflight',
+        ))
+
+    checks.extend([
+        ('RUN-01', [sys.executable, str(script), '--verify-run-binding', str(run_path)], ['RUN-01'], hosted_meta, 'hosted-remote'),
+        ('RUN-02', [sys.executable, str(script), '--verify-jobs-success', str(run_path)], ['RUN-02'], hosted_meta, 'hosted-remote'),
+        (
+            'RUN-06',
+            [sys.executable, str(script), '--verify-query-before-repeat-cached' if local_only else '--verify-query-before-repeat'],
+            ['RUN-06'],
+            hosted_meta,
+            'hosted-remote' if not local_only else 'hosted-local',
+        ),
+    ])
+    if COHORT_WORKFLOW.is_file():
+        checks.append((
+            'RUN-04',
+            [sys.executable, str(script), '--verify-workflow-policy', str(COHORT_WORKFLOW)],
+            ['RUN-04'],
+            hosted_meta,
+            'hosted-local',
+        ))
+    checks.extend([
+        ('RUN-05', [sys.executable, str(script), '--verify-retained-logs', str(run_path)], ['RUN-05'], hosted_meta, 'hosted-remote'),
+        ('RUN-03', [sys.executable, str(script), '--verify-source-binding', str(run_path)], ['RUN-03'], hosted_meta, 'hosted-remote'),
+    ])
+
+    evidence_rows: list[tuple[str, Path, dict]] = []
+    case_results: dict[str, str] = {}
+    for case, command, case_ids, meta, cell in checks:
+        log_path = EVIDENCE / f'{case.lower()}.log'
+        envelope, path = build_evidence(case, command, candidate_sha, source_commit, case_ids, meta, log_path, cell=cell)
+        case_results[case] = envelope['result']
+        evidence_rows.append((case, path, envelope))
+
+    catalog = {row[0]: row for row in case_catalog()}
+    case_rows: list[tuple[str, str, str, str, str, str, str]] = []
+    for case_id, r_ac, expected in catalog.values():
+        result = case_results.get(case_id, 'PENDING')
+        owner = 'P9.5'
+        resume = 'owner G-RUNNER dispatch on exact runner-packet/1' if result != 'PASS' else 'P9.6 private read'
+        case_rows.append((case_id, r_ac, expected, f'evidence:{case_id}' if case_id in case_results else '—', result, owner, resume))
+
+    canonical = canonical_repository(packet)
+    repository = receipt.get('execution_repository') or execution_repository(packet)
+    input_rows = [
+        ('delivery/remaining-cohort-20260915/candidate.json', candidate_sha, 'frozen intake identity'),
+        ('delivery/remaining-cohort-20260915/runner-packet.json', packet_sha, 'final runner packet'),
+        ('delivery/remaining-cohort-20260915/runner-plan.json', sha256_path(REPO_DELIVERY / 'runner-plan.json'), 'immutable hosted runner plan'),
+        ('delivery/remaining-cohort-20260915/installed-candidate/receipt.json', sha256_path(REPO_DELIVERY / 'installed-candidate/receipt.json'), 'installed candidate receipt'),
+        ('.github/workflows/remaining-cohort-proof.yml', sha256_path(COHORT_WORKFLOW) if COHORT_WORKFLOW.is_file() else '', 'hosted workflow helper'),
+        ('delivery/remaining-cohort-20260915/hosted/receipt.json', receipt_sha, 'hosted receipt'),
+        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+    ]
+    mirror_note = (
+        f'mirror execution on `{repository}` (canonical `{canonical}`)'
+        if repository != canonical else 'canonical repository'
+    )
+    adoption_rows = [
+        ('runner-packet/1', 'G-RUNNER', f'`{packet_sha}`', 'P9.4', 'PASS', 'dispatch exact packet jobs'),
+        ('hosted-receipt/1', 'G-RUNNER', f'`{receipt_sha}`', 'P9.5', 'PASS' if receipt.get('ready') else 'PENDING', 'P9.6 private read pending'),
+        ('p9-cohort/1 candidate', 'G-RELEASE', f'`{candidate_sha}`', 'P9.1', 'PASS', 'unchanged intake identity'),
+        ('hosted-execution-surface', 'G-RUNNER', f'`{repository}`', 'P9.5', 'PASS' if receipt.get('ready') else 'PENDING', mirror_note),
+    ]
+    build_report(candidate_sha, packet_sha, receipt_sha, case_rows, evidence_rows, input_rows, adoption_rows)
+    return {
+        'result': 'PASS' if receipt.get('ready') and all(value == 'PASS' for value in case_results.values()) else 'BLOCKED',
+        'ready': receipt.get('ready'),
+        'case_results': case_results,
+        'receipt_sha256': receipt_sha,
+    }
+
+
+def finalize_report() -> dict:
+    receipt_path = HOSTED / 'receipt.json'
+    if not receipt_path.is_file():
+        raise HostedError('hosted receipt missing; run reconcile before deferral or use PLAN-CLOSE-CI')
+    receipt = load_json(receipt_path)
+    selected_run = receipt.get('selected_run')
+    reconcile = receipt.get('reconcile')
+    if selected_run is None or reconcile is None:
+        raise HostedError('hosted receipt incomplete; cached reconcile required for --finalize')
+    packet = load_packet()
+    candidate = load_json(REPO_DELIVERY / 'candidate.json')
+    candidate_sha = sha256_path(REPO_DELIVERY / 'candidate.json')
+    source_commit = candidate['package_source']['commit']
+    packet_sha = sha256_path(packet['_packet_path'])
+    receipt_sha = sha256_path(receipt_path)
+    return build_hosted_report_from_cache(
+        receipt,
+        reconcile,
+        selected_run,
+        packet,
+        candidate_sha,
+        source_commit,
+        packet_sha,
+        receipt_sha,
+        local_only=True,
+    )
+
+
 def execute_reconcile(run_id: int | None = None) -> dict:
+    refuse_remote('remaining-cohort-hosted.py --reconcile', resume='--finalize on cached hosted/receipt.json')
     packet = load_packet()
     candidate = load_json(REPO_DELIVERY / 'candidate.json')
     candidate_sha = sha256_path(REPO_DELIVERY / 'candidate.json')
@@ -479,97 +652,27 @@ def execute_reconcile(run_id: int | None = None) -> dict:
     }
     write_json(HOSTED / 'receipt.json', receipt)
     receipt_sha = sha256_path(HOSTED / 'receipt.json')
-
-    script = Path(__file__).resolve()
-    checks: list[tuple[str, list[str], list[str], dict, str]] = []
-    hosted_meta = {
-        'run_url': selected_run['html_url'] if selected_run else None,
-        'run_id': selected_run['id'] if selected_run else None,
-        'run_attempt': selected_run.get('run_attempt') if selected_run else None,
-        'job_id': reconcile.get('job_id') if reconcile is not None else None,
-        'workflow_sha': packet.get('workflow_sha256'),
-    }
-
-    checks.append((
-        'RUN-07',
-        [sys.executable, str(script), '--preflight'],
-        ['RUN-07'],
-        hosted_meta,
-        'hosted-preflight',
-    ))
-
-    if reconcile is not None:
-        checks.extend([
-            ('RUN-01', [sys.executable, str(script), '--verify-run-binding', str(HOSTED / f"run-{selected_run['id']}.json")], ['RUN-01'], hosted_meta, 'hosted-remote'),
-            ('RUN-02', [sys.executable, str(script), '--verify-jobs-success', str(HOSTED / f"run-{selected_run['id']}.json")], ['RUN-02'], hosted_meta, 'hosted-remote'),
-            ('RUN-06', [sys.executable, str(script), '--verify-query-before-repeat'], ['RUN-06'], hosted_meta, 'hosted-remote'),
-        ])
-        if COHORT_WORKFLOW.is_file():
-            checks.append((
-                'RUN-04',
-                [sys.executable, str(script), '--verify-workflow-policy', str(COHORT_WORKFLOW)],
-                ['RUN-04'],
-                hosted_meta,
-                'hosted-local',
-            ))
-        checks.append((
-            'RUN-05',
-            [sys.executable, str(script), '--verify-retained-logs', str(HOSTED / f"run-{selected_run['id']}.json")],
-            ['RUN-05'],
-            hosted_meta,
-            'hosted-remote',
-        ))
-        checks.append((
-            'RUN-03',
-            [sys.executable, str(script), '--verify-source-binding', str(HOSTED / f"run-{selected_run['id']}.json")],
-            ['RUN-03'],
-            hosted_meta,
-            'hosted-remote',
-        ))
-
-    evidence_rows: list[tuple[str, Path, dict]] = []
-    case_results: dict[str, str] = {}
-    for case, command, case_ids, meta, cell in checks:
-        log_path = EVIDENCE / f'run-{case.lower()}.log'
-        envelope, path = build_evidence(case, command, candidate_sha, source_commit, case_ids, meta, log_path, cell=cell)
-        case_results[case] = envelope['result']
-        evidence_rows.append((case, path, envelope))
-
-    catalog = {row[0]: row for row in case_catalog()}
-    case_rows: list[tuple[str, str, str, str, str, str, str]] = []
-    for case_id, r_ac, expected in catalog.values():
-        result = case_results.get(case_id, 'PENDING')
-        owner = 'P9.5'
-        resume = 'owner G-RUNNER dispatch on exact runner-packet/1' if result != 'PASS' else 'P9.6 private read'
-        case_rows.append((case_id, r_ac, expected, f'evidence:{case_id}' if case_id in case_results else '—', result, owner, resume))
-
-    input_rows = [
-        ('delivery/remaining-cohort-20260915/candidate.json', candidate_sha, 'frozen intake identity'),
-        ('delivery/remaining-cohort-20260915/runner-packet.json', packet_sha, 'final runner packet'),
-        ('delivery/remaining-cohort-20260915/runner-plan.json', sha256_path(REPO_DELIVERY / 'runner-plan.json'), 'immutable hosted runner plan'),
-        ('delivery/remaining-cohort-20260915/installed-candidate/receipt.json', sha256_path(REPO_DELIVERY / 'installed-candidate/receipt.json'), 'installed candidate receipt'),
-        ('.github/workflows/remaining-cohort-proof.yml', sha256_path(COHORT_WORKFLOW) if COHORT_WORKFLOW.is_file() else '', 'hosted workflow helper'),
-        ('delivery/remaining-cohort-20260915/hosted/receipt.json', receipt_sha, 'hosted receipt'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
-    ]
-    mirror_note = (
-        f'mirror execution on `{repository}` (canonical `{canonical}`)'
-        if repository != canonical else 'canonical repository'
+    if selected_run is None or reconcile is None:
+        return {
+            'result': 'BLOCKED',
+            'ready': False,
+            'case_results': {},
+            'preflight': pre,
+            'receipt_sha256': receipt_sha,
+        }
+    outcome = build_hosted_report_from_cache(
+        receipt,
+        reconcile,
+        selected_run,
+        packet,
+        candidate_sha,
+        source_commit,
+        packet_sha,
+        receipt_sha,
+        local_only=False,
     )
-    adoption_rows = [
-        ('runner-packet/1', 'G-RUNNER', f'`{packet_sha}`', 'P9.4', 'PASS', 'dispatch exact packet jobs'),
-        ('hosted-receipt/1', 'G-RUNNER', f'`{receipt_sha}`', 'P9.5', 'PASS' if receipt['ready'] else 'PENDING', 'P9.6 private read pending'),
-        ('p9-cohort/1 candidate', 'G-RELEASE', f'`{candidate_sha}`', 'P9.1', 'PASS', 'unchanged intake identity'),
-        ('hosted-execution-surface', 'G-RUNNER', f'`{repository}`', 'P9.5', 'PASS' if receipt['ready'] else 'PENDING', mirror_note),
-    ]
-    build_report(candidate_sha, packet_sha, receipt_sha, case_rows, evidence_rows, input_rows, adoption_rows)
-    return {
-        'result': 'PASS' if receipt['ready'] and all(value == 'PASS' for value in case_results.values()) else 'BLOCKED',
-        'ready': receipt['ready'],
-        'case_results': case_results,
-        'preflight': pre,
-        'receipt_sha256': receipt_sha,
-    }
+    outcome['preflight'] = pre
+    return outcome
 
 
 def verify_run_binding(path: Path) -> int:
@@ -627,6 +730,7 @@ def verify_source_binding(path: Path) -> int:
 
 
 def verify_query_before_repeat() -> int:
+    refuse_remote('remaining-cohort-hosted.py --verify-query-before-repeat', resume='--finalize')
     packet = load_packet()
     repository = execution_repository(packet)
     workflow_id = remote_workflow_id(repository)
@@ -646,6 +750,7 @@ def main() -> int:
     parser.add_argument('--preflight', action='store_true')
     parser.add_argument('--query', action='store_true')
     parser.add_argument('--reconcile', action='store_true')
+    parser.add_argument('--finalize', action='store_true', help='Rebuild evidence/report from cached hosted/receipt.json (D44/D45 local-only)')
     parser.add_argument('--dispatch', action='store_true', help='G-RUNNER: dispatch workflow on resolved ref')
     parser.add_argument('--wait', action='store_true', help='Wait for dispatched run completion')
     parser.add_argument('--run-id', type=int)
@@ -655,6 +760,8 @@ def main() -> int:
     parser.add_argument('--verify-workflow-policy', type=Path)
     parser.add_argument('--verify-source-binding', type=Path)
     parser.add_argument('--verify-query-before-repeat', action='store_true')
+    parser.add_argument('--verify-query-before-repeat-cached', action='store_true')
+    parser.add_argument('--verify-preflight-retained', action='store_true')
     parser.add_argument(
         '--execution-repo',
         metavar='OWNER/REPO',
@@ -667,10 +774,15 @@ def main() -> int:
         _EXECUTION_REPO_OVERRIDE = args.execution_repo
 
     try:
+        if args.finalize:
+            outcome = finalize_report()
+            print(json.dumps(outcome, ensure_ascii=False))
+            return 0 if outcome['result'] == 'PASS' else 2
         if args.preflight:
             print(json.dumps(preflight(), ensure_ascii=False))
             return 0
         if args.query:
+            refuse_remote('remaining-cohort-hosted.py --query', resume='--finalize')
             packet = load_packet()
             pre = preflight(packet)
             if not pre['ready']:
@@ -680,6 +792,7 @@ def main() -> int:
             print(json.dumps({'runs': runs, 'preflight': pre}, ensure_ascii=False))
             return 0
         if args.dispatch:
+            refuse_remote('remaining-cohort-hosted.py --dispatch', resume='PLAN-CLOSE-CI')
             packet = load_packet()
             pre = preflight(packet)
             if not pre['ready']:
@@ -708,12 +821,16 @@ def main() -> int:
             return verify_source_binding(args.verify_source_binding)
         if args.verify_query_before_repeat:
             return verify_query_before_repeat()
+        if args.verify_query_before_repeat_cached:
+            return verify_query_before_repeat_cached()
+        if args.verify_preflight_retained:
+            return verify_preflight_retained()
         if args.reconcile or len(sys.argv) == 1:
             outcome = execute_reconcile(args.run_id)
             print(json.dumps(outcome, ensure_ascii=False))
             return 0 if outcome['result'] == 'PASS' else 2
         parser.error('no mode selected')
-    except (HostedError, subprocess.TimeoutExpired, OSError, json.JSONDecodeError, KeyError) as exc:
+    except (HostedError, DeferralDenied, subprocess.TimeoutExpired, OSError, json.JSONDecodeError, KeyError) as exc:
         print(f'hosted proof denied: {exc}', file=sys.stderr)
         return 1
 

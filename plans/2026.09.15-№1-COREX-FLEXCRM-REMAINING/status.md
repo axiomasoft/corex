@@ -17,15 +17,15 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-18 |
+| Last Updated | 2026-09-19 |
 
 ## 4. Phase Index & Status Board
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P1 | Freeze требований, provenance и владельцев | 4/4 | 🟢 Done |
-| P10 | Реальная external/central/cloud acceptance | 0/9 | ⬜ Not started |
-| P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 0/7 | ⬜ Not started |
+| P10 | Реальная external/central/cloud acceptance | 9/9 | 🟠 Done with deviations |
+| P11 | Reconciliation: закрыть CoreX-зависимости и передать работу FlexCRM | 7/7 | 🟢 Done |
 | P12 | Ребейзлайн границ пакетов по двум внешним аудитам | 9/9 | 🟢 Done |
 | P2 | Минимальные reusable contracts и границы адаптеров | 4/4 | 🟢 Done |
 | P3 | Довести generic tenancy, storage и identity adapters | 7/7 | 🟢 Done |
@@ -49,27 +49,27 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P10.1 | Заморозить receipt intake и подготовить локальный verifier | ⬜ Not started | — |
-| P10.2 | Квалифицировать effective central DI и owning MVP receipts | ⬜ Not started | — |
-| P10.3 | Квалифицировать effective cloud DI и полный entry inventory | ⬜ Not started | — |
-| P10.4 | Принять actual security AP и baseline adoption | ⬜ Not started | — |
-| P10.5 | Принять actual final-write races и nonrollback restore | ⬜ Not started | — |
-| P10.6 | Квалифицировать elapsed domains и FE-60 cleanup | ⬜ Not started | — |
-| P10.7 | Квалифицировать полный месяц p99.9 и pair capacity | ⬜ Not started | — |
-| P10.8 | Принять реальные selected B33 provider/control-plane ops | ⬜ Not started | — |
-| P10.9 | Собрать current effective seal для consumer P11 | ⬜ Not started | — |
+| P10.1 | Заморозить receipt intake и подготовить локальный verifier | 🟢 Done | 2026-09-18 |
+| P10.2 | Квалифицировать effective central DI и owning MVP receipts | 🟠 Done with deviations | 2026-09-18 |
+| P10.3 | Квалифицировать effective cloud DI и полный entry inventory | 🟠 Done with deviations | 2026-09-18 |
+| P10.4 | Принять actual security AP и baseline adoption | 🟠 Done with deviations | 2026-09-18 |
+| P10.5 | Принять actual final-write races и nonrollback restore | 🟠 Done with deviations | 2026-09-19 |
+| P10.6 | Квалифицировать elapsed domains и FE-60 cleanup | 🟠 Done with deviations | 2026-09-19 |
+| P10.7 | Квалифицировать полный месяц p99.9 и pair capacity | 🟠 Done with deviations | 2026-09-19 |
+| P10.8 | Принять реальные selected B33 provider/control-plane ops | 🟠 Done with deviations | 2026-09-19 |
+| P10.9 | Собрать current effective seal для consumer P11 | 🟠 Done with deviations | 2026-09-19 |
 
 ## Phase P11
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P11.1 | Квалифицировать producers и подготовить reconciliation verifier | ⬜ Not started | — |
-| P11.2 | Сверить actual consumer locks и installed package identities | ⬜ Not started | — |
-| P11.3 | Принять executed consumer integration receipts | ⬜ Not started | — |
-| P11.4 | Замкнуть frozen R и atomic AC dependency coverage | ⬜ Not started | — |
-| P11.5 | Подготовить exact consumer acceptance и handoff diff | ⬜ Not started | — |
-| P11.6 | Применить разрешённую dependency reconciliation в FlexCRM | ⬜ Not started | — |
-| P11.7 | Запечатать cross-repo результат и app-only continuation | ⬜ Not started | — |
+| P11.1 | Квалифицировать producers и подготовить reconciliation verifier | 🟢 Done | 2026-09-19 |
+| P11.2 | Сверить actual consumer locks и installed package identities | 🟢 Done | 2026-09-19 |
+| P11.3 | Принять executed consumer integration receipts | 🟢 Done | 2026-09-19 |
+| P11.4 | Замкнуть frozen R и atomic AC dependency coverage | 🟢 Done | 2026-09-19 |
+| P11.5 | Подготовить exact consumer acceptance и handoff diff | 🟢 Done | 2026-09-19 |
+| P11.6 | Применить разрешённую dependency reconciliation в FlexCRM | 🟢 Done | 2026-09-19 |
+| P11.7 | Запечатать cross-repo результат и app-only continuation | 🟢 Done | 2026-09-19 |
 
 ## Phase P12
 
@@ -178,9 +178,10 @@ generated_by: task plan-views status
 | P9.3 | Проверить local matrix и подготовить exact hosted workflow | 🟢 Done | 2026-09-18 |
 | P9.4 | Проверить independent cold candidate и populated upgrade/refusal | 🟢 Done | 2026-09-18 |
 | P9.5 | Получить actual hosted same-cohort jobs | 🟢 Done | 2026-09-18 |
-| P9.6 | Проверить independent optional private auth install | ⬜ Not started | — |
-| P9.7 | Запечатать concrete publication packet и gate request | ⬜ Not started | — |
-| P9.8 | Доставить exact cohort через admitted channels и reconcile | ⬜ Not started | — |
+| P9.6 | Проверить independent optional private auth install | 🟢 Done | 2026-09-18 |
+| P9.7 | Запечатать concrete publication packet и gate request | 🟢 Done | 2026-09-18 |
+| P9.8 | Доставить exact cohort через admitted channels и reconcile | 🟡 Paused | 2026-09-18 |
+| PLAN-CLOSE-CI | Свести CI/workflows (D44, после P11.7) | ⬜ Not started | — |
 | P9.9 | Проверить released consumers и выдать compatibility passport/seal | ⬜ Not started | — |
 
 ## 6. Update Log

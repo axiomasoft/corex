@@ -528,6 +528,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `brief/00-owner-request.md` | `aa86b6854d8873028f3460afe55ce9a9b4f8a300a9810dd37f5054812b7a34a2` |
 | `brief/01-owner-design-policy.md` | `cebda2cf4cc82630f5b2d02cffc5dc857922125737c538b32f8b68643934181a` |
 | `brief/02-astra-whole-plan-review.md` | `47c2ba432612d6b014bddc10124fb01007f1b9f7c880105619727400bb967458` |
+| `brief/02-ci-deferral-executor.md` | `b1916f0d2e727cd0841bee392e18a712318f41e052ba32f93100686f98b540ea` |
 | `brief/sources/archive-corex-core-handoff.md` | `74206f155f659be1ba39b906c51efb1f8f91beae9611c92a787b2b853bbb8ba9` |
 | `brief/sources/archive-corex-core-plan.md` | `701524c977850c3060ced600d7c2496f9b63484bbfc633129d7627a1adba66bb` |
 | `brief/sources/archive-flex-code-handoff.md` | `70efaeac4843aab2f96a708d3037c826f7c9b37644885e0c0035c8b448ec558e` |
@@ -667,7 +668,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P10/P10.7.md` | `2a119835b2b5ab91cdbef7f4e8c36faa22d40a685051d3698ae5c1c2006453ae` |
 | `phases/P10/P10.8.md` | `44bedb80840788c58cf57ed5ba2a22a05a010f61328136688837ba68ba4eab7d` |
 | `phases/P10/P10.9.md` | `43f75295d3a2004c90a03cfd820be4185eb1c6ab7e8d436cac5c0befa60b6681` |
-| `phases/P10/P10.md` | `27c09ad50bed6ded5c49b596d82db6d49ab1689703b7bf11d3c51a9ae5fc5097` |
+| `phases/P10/P10.md` | `6ef93e23154c7dffdf4372e2ee32caf1ea1246db0479d3fe8ac15bbc35447efd` |
 | `phases/P11/P11.1.md` | `794dfee9e85a11f9fcb17634c6a0aed5c12826c3bf26f2e0bf6502fef21ae738` |
 | `phases/P11/P11.2.md` | `6e58e39559f60ebc783f517bb1e7820670951e9234eb8fa086e52f4f27561698` |
 | `phases/P11/P11.3.md` | `1282238b3557482de31eee65e3dbf254b9f1ba463c30d31184a0c3fbbeaf03ba` |
@@ -675,7 +676,7 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P11/P11.5.md` | `b7a09e32c98fac7897206b0d6709eb9c5dfd41a8974d0ffa282b06fc4acf9287` |
 | `phases/P11/P11.6.md` | `4d3db2712d1938191270270c0b09276d3207b6bf75e314ea01d018e5cc53a5bf` |
 | `phases/P11/P11.7.md` | `fe590af9f12a1b3d7fe28ddee814a843e168d3cb075a7f5e097a513b3d39a3cc` |
-| `phases/P11/P11.md` | `a05100b3f35d261b4d3aebc2af62f6528f9a63b61c33bfa0c628c17ab477f40d` |
+| `phases/P11/P11.md` | `70af6894c34cec7451ebe3edd418de4028b9cea38a0c446aca3277d3a725d44a` |
 | `phases/P12/P12.1.md` | `71ecb1721a8e3905ff215b3e5debc37b7b1ad1d1136740ddb60f51163767318e` |
 | `phases/P12/P12.2.md` | `71d8d697be049668b514af26525b3e101893b1de371e9ddfb084bde2137f79d3` |
 | `phases/P12/P12.3.md` | `459e89871847489d9894dd96b0b580ffa0c578f6e4f9a87de9bdb6f29ca7718f` |
@@ -749,17 +750,17 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `phases/P8/P8.6.md` | `57f66238ac62c3e3e38275d1dbec5bf17a5b4da4ce5c83a5fbc653a3bf067db7` |
 | `phases/P8/P8.7.md` | `670863303d0ce78451e6f5796d5d639c8a8882ba8ce6abaff1c61415d388c127` |
 | `phases/P8/P8.md` | `dd4609e9e73414ed7f40d39aab20a8ea1b74788c630d5aa26775ef9ad2b2b22f` |
-| `phases/P9/P9.1.md` | `ceb95f40cc3991a76fc65e89a63cbc39764c3ed1eafbef739ed0fcf3dc7da50d` |
-| `phases/P9/P9.2.md` | `a886cca9342109927b38bb00781953b7e4be6afa7ccf5eea734b27520b1509cc` |
+| `phases/P9/P9.1.md` | `b62f6245b83e218e4a83674d1b3971138e45b9b58c700b83a3d492ff339ae501` |
+| `phases/P9/P9.2.md` | `130118e93e07be12b1d31fe4a57549336c4bc4eda796621ad08143af729bbcbd` |
 | `phases/P9/P9.3.md` | `374c5e29eb424b5e9a6a1f517d4baa14e2f7a4bebf94e7a8cb718ee486662939` |
 | `phases/P9/P9.4.md` | `ee074137076a81c669afaddc9d41f7f34cd6513d9b21b69a5396381514b7537b` |
 | `phases/P9/P9.5.md` | `8fd49b1a430255a8c747c674cf980515ba494fb8f8756a98ff58958f7721d5fe` |
 | `phases/P9/P9.6.md` | `fbc3186f840012d906c81dba72a87a8d7bf48169d2b941d6c1489f4ecefdab77` |
 | `phases/P9/P9.7.md` | `be3207274a4c7a3ee43408c33eee70ef903c32491d31273a7f566b276ff40b43` |
-| `phases/P9/P9.8.md` | `68fa0383610479490b9e45cad12078e8f78751ef5f9a5867bb10ffcd480d74b4` |
-| `phases/P9/P9.9.md` | `760a1e8d729f277ccd69b14633512ce06261a2be82a3c6aab2b8536f175a3999` |
-| `phases/P9/P9.md` | `b26325f2a95b53f7cd6b37214b2c93f8200b2dc918a06e16b4f29338ebbfd89a` |
-| `plan.md` | `72df7e8b5dc2144264ae5568d9ea9c1b7d362034d2095f9a30e0e7e0253f74fa` |
+| `phases/P9/P9.8.md` | `e8109f6e66f63f0d352ce8affec537130d4be4e564d800b9925d0322d2db297d` |
+| `phases/P9/P9.9.md` | `377b344bb7ae87c6136424f42f110cdbf5a9dc3482158275394eb15426d707cb` |
+| `phases/P9/P9.md` | `3089713f968c35da69f32dc757ea69823420851f65a42624239d6068aae1f842` |
+| `plan.md` | `f3a5ee88800baae3b6f540bb66a4f13ad69bec4e2cb6122a662ee64e79e670bd` |
 | `research/00-sources.md` | `0cec5f58a1bcab6f6e0bfa32b3b09269b50c7cd7d7a030b1a78bdca6a58189f3` |
 | `research/01-traceability.md` | `818d0faef9074b7c38c97f1b6fc2c09641bbe0928f272552d2d435d0515cde93` |
 | `research/01a-acceptance-index.md` | `49e7888b52214d2a64592a3748561ce128914ad136ad8d582f6c97fbb51d4360` |
@@ -796,12 +797,12 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `research/P8-tool-design.md` | `ded33e03fc260e632c06a4fec0e66e404cb29e6383e921e24c679ffadd8802ca` |
 | `research/P9-cohort-design.md` | `87828181adc3de1af50a098e7882faa5204a1d7e610466b36b242c9b2aa85aeb` |
 | `research/P9-design-rag.md` | `1d731248f60816445d947d9018f92344e1fc83487a04c372d81e886a130701b1` |
-| `roadmap.md` | `88e3061e5ac3ac6e459ea6bcfbb2f0e73dd075e621ef6b916aa0cefa40b1ec6d` |
+| `roadmap.md` | `3b19c1b1da1e08697a09932ea0be674d491dfc7836069faab6557b5ca38475d4` |
 | `scripts/task-check.py` | `dc478e5f0bdb90f0a108fba0bed5ba0374d96c30cf73ecc143c211a3aefa55b5` |
 | `scripts/test-design-guards.py` | `918ec9c899b5305188598003f5fde33d6db15b166b1beb7984e5f105b84610e0` |
 | `scripts/validate-p1.py` | `c38b23e475cf2fdc8fe4134cd04d42cf627e9c23c6a2d28384b0b5123f2adee8` |
-| `scripts/validate-p10.py` | `557ee231bd5e786551a24b638224dcd1c494870fea2cd83e61677e790c596c49` |
-| `scripts/validate-p11.py` | `3ad17b7568ca7aef50356e5b0fc4baf7cd03418a9289ccb4f83ed478a5b718c2` |
+| `scripts/validate-p10.py` | `303c31e7a585450b050867e75e31d1e397ed412b85cf46817bedb9ce7e9d34bb` |
+| `scripts/validate-p11.py` | `c6a5847548ed5313cc796c83f9ad8320d8a6186e298d2608a2c799ca170f795b` |
 | `scripts/validate-p12.py` | `a500887e2b23e04f677409960f335db8ceb2ce8519b49a46fd54121e86b47663` |
 | `scripts/validate-p2.py` | `ffe778784b0c34a833ecc1819eadf2803d5db77fde333aa6a6fe077adc83d2e3` |
 | `scripts/validate-p3.py` | `4ca8724ac8c16acf097740d3eaa2bb276ca50aff94433a9abd4eedd6a8641787` |
@@ -811,7 +812,6 @@ Final phase/lint/downstream/views и13existing guard tests повторно PASS
 | `scripts/validate-p7.py` | `8c0cb2fd623fe7278729b52ec26e06fe51585a3f2d8410833704096caa29f570` |
 | `scripts/validate-p8.py` | `2b01d55aeecd7cd9932e1c7b06419b81453b856a02d231ebabb56f8ba8730a1c` |
 | `scripts/validate-p9.py` | `352752c91efc8af60aea8ab566b65c671f8424b4d6948107badab00514cf95d8` |
-
 ## D19 execution policy rebind
 
 Owner-approved read-budget advisory scope and P1.4 producer annotation bookkeeping only. No new independent whole-plan review or product acceptance claimed. Original review evidence retained; all stable inputs enumerated and digest-bound.

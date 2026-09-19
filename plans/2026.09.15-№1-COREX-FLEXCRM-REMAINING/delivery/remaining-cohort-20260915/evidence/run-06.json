@@ -3,21 +3,21 @@
   "proof_class": "executed",
   "id": "RUN-06",
   "cohort": "p9-cohort/1",
-  "cell": "hosted-remote",
-  "command": "/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-hosted.py --verify-query-before-repeat",
+  "cell": "hosted-local",
+  "command": "/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-hosted.py --verify-query-before-repeat-cached",
   "cwd": "/home/vostrikov/projects/packages/corex",
   "runtime": "python=3.12",
-  "start": "2026-09-18T14:30:19.701663+00:00",
-  "end": "2026-09-18T14:30:21.852425+00:00",
+  "start": "2026-09-19T05:39:59.770525+00:00",
+  "end": "2026-09-19T05:39:59.795527+00:00",
   "exit": 0,
   "result": "PASS",
-  "source_commit": "769365cb5b4e580532d0fe8f5654e59e4c36859b",
-  "recipe_commit": "a2783c1807259b90e5b488a1b5ee7bfd89c5cd75",
-  "candidate_sha256": "cd764b9657b643eeccd324b4afefe6681078df6049a0e0640effbac332a9061c",
+  "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "recipe_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "candidate_sha256": "056f6ed3316c6a1cf8c188bd64aca32f86e4a612abbcad67bacb589c75892b28",
   "lock_sha256": "b77e1dff582dd449792730e1cf37b35b719f4425e46fdc5a2cc4f92efe58ff9f",
-  "config_sha256": "9d04fff79d9a733560a690c1d2367715771748856b2f78fab258a2d08291edcb",
-  "fixture_sha256": "a93f5923dc92fad9ebb619e332dd9af5f48d1e4999530d4e65e2c70772e7e4b9",
-  "log_path": "delivery/remaining-cohort-20260915/evidence/run-run-06.log",
+  "config_sha256": "7d87e9d11efc2af0ec7757a03e7772bdd92302a3df9dbce3d84dfd731a864324",
+  "fixture_sha256": "b09528be89e13544d7e1b03d15b265d73101e9090489f7b3c7aadf38c79c985e",
+  "log_path": "delivery/remaining-cohort-20260915/evidence/run-06.log",
   "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "cases": [
     "RUN-06"
@@ -26,5 +26,5 @@
   "run_id": 35349147513,
   "run_attempt": 1,
   "job_id": 105612801790,
-  "workflow_sha": "12e6736bb63071cfe83fe094f526a3232c72d1241ab53099ab7966c516cc40fc"
+  "workflow_sha": "6bd0896520a19d3920adcb9f3db9cd04a8e897b9344f128b783d814ee8f0cae1"
 }

@@ -1,0 +1,7 @@
+{
+  "schema_version": "p11-verifier-self-test/1",
+  "item": "P11.1",
+  "exit_code": 0,
+  "generated_at": "2026-09-19T04:10:00.989514+00:00",
+  "note": "Synthetic refusal harness only; not consumer acceptance."
+}

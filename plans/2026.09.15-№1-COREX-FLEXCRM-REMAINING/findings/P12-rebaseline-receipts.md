@@ -319,3 +319,132 @@ All PASS — sections §P12.1–§P12.8 above.
 **Deferred:** 9 named in `docs/audit-2026-09-17-deferred.md` · **Rejected:** 5 ideas in same ledger
 
 **Result:** PASS · **write-site:** pre_mutation: allow · pre_final: allow
+
+## Bookkeeping correction (P12A.5)
+
+**Item:** P12A.5 · **Actor:** executor/composer-2.5/medium · **Date:** 2026-09-18  
+**Purpose:** Close receipt gaps A6/A7 and supply factual command output per `findings/P12-post-close-audit.md` without rewriting original P12 sections.
+
+### P12.2 — packages without `tests/` (A6)
+
+```text
+$ for pkg in packages/*/; do [ -d "${pkg}tests" ] || basename "$pkg"; done
+(empty — all 20 packages have tests/)
+```
+
+### P12.2 / A7 — `composer test:packages` attribution
+
+```text
+$ composer test:packages
+…
+==> packages/tenancy
+  Tests:    7 skipped, 472 passed (1505 assertions)
+==> packages/wakeup
+…
+exit=0
+```
+
+Misattribution corrected: `472 passed, 7 skipped` is the **packages/tenancy** banner only.  
+**2026-09-18 aggregate across 20 packages:** 804 passed, 7 skipped, exit=0 (summed from per-package pest/json output in the same run).
+
+### P12.3 — package-graph gate red branch (A6)
+
+Green branch (2026-09-18):
+
+```text
+$ php scripts/package-graph-gate.php
+LEGACY NAMESPACE SPLIT: CoreX\Tenancy\ …
+HOST-RESERVED NAMESPACE: CoreX\Search\Meilisearch\ …
+UNDECLARED DEPENDENCY EXCEPTION: corex/tasks-workflow -> corex/wakeup …
+package-graph-gate: OK
+exit=0
+```
+
+Red branch (controlled violation — reproduced in P12A.4, output unchanged):
+
+```text
+# temporary probe class under CoreX\Search\Meilisearch\ in packages/search/src/
+packages/search-meilisearch/composer.json:1: CoreX\Search\Meilisearch\ [R3] → corex/search, corex/search-meilisearch (host-reserved namespace conditions not met)
+exit=1
+```
+
+See `findings/P12A-correction-receipts.md` §P12A.4 for full R1/R3 red-branch transcripts.
+
+### P12.4 — repo sweep + history (A6)
+
+```text
+$ rg -l 'import-export|CoreX\\ImportExport' --glob '!audits/**' --glob '!plans/**' --glob '!docs/audit-*' --glob '!CHANGELOG.md' --glob '!packages/transfer/**' .
+(empty)
+
+$ git log --follow --oneline -3 -- packages/transfer/composer.json
+769365c feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2
+39403c1 feat: portable utilities и data/wakeup слой P5–P7
+```
+
+Rename history preserved via `--follow` from predecessor path `packages/import-export/`.
+
+### P12.5 — four observable config checks (A6)
+
+From `packages/search/tests/Unit/SearchServiceProviderTest.php` and `packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php`:
+
+```text
+$ cd packages/search && composer test --filter='null_driver|weak_cursor|without_adapter|postgresql_provider'
+{"tool":"pest","result":"passed","tests":4,"passed":4}
+exit=0
+
+$ cd packages/search-meilisearch && composer test --filter='registration_order'
+{"tool":"pest","result":"passed","tests":1,"passed":1}
+exit=0
+```
+
+| Check | Test | Result |
+|:--|:--|:--|
+| `driver: null` → `UnsupportedSearchProvider` | `test_null_driver_returns_unsupported_search_provider` | PASS |
+| `driver: postgres` + weak secret → exception | `test_postgres_driver_with_weak_cursor_secret_throws` | PASS |
+| `driver: meilisearch` without adapter → exception | `test_meilisearch_driver_without_adapter_throws` | PASS |
+| Adapter resolves regardless of provider order | `test_meilisearch_driver_resolves_regardless_of_provider_registration_order` | PASS |
+
+### P12.6 — repo sweep + history (A6)
+
+```text
+$ rg -l 'intl-search|CoreX\\IntlSearch' --glob '!audits/**' --glob '!plans/**' --glob '!docs/audit-*' --glob '!CHANGELOG.md' --glob '!packages/search-intl/**' .
+(empty outside renamed package tree)
+
+$ git log --follow --oneline -3 -- packages/search-intl/composer.json
+769365c feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2
+39403c1 feat: portable utilities и data/wakeup слой P5–P7
+```
+
+### P12.7 — table names unchanged (A6)
+
+Config defaults (symbol-for-symbol with provider fallbacks):
+
+```text
+documents: sys_attribute_documents
+write_tokens: sys_attribute_write_tokens
+eav_values: sys_attribute_eav_values
+eav_records: sys_attribute_eav_records
+schema_operations: sys_attribute_schema_operations
+```
+
+```text
+$ git diff --stat packages/attributes/database/
+(pусто)
+```
+
+`rg "config\(" packages/attributes/src/Internal/Engine/` — пусто (unchanged from audit GREEN table).
+
+### P12.8 — authorize call sites before/after (A6)
+
+```text
+$ git grep -n '(\$scope->authorize)' 904ac87 -- 'packages/*/src'
+(no matches at P12.1 close)
+
+$ git show 904ac87:packages/core/src/Support/Data/DataScope.php | rg 'Closure \$authorize'
+public Closure $authorize,
+
+$ rg '\(\$scope->authorize\)' packages/*/src
+(empty — replaced by DataScopeAuthorizer injection)
+```
+
+**Result:** PASS · **write-site:** pre_mutation: allow · pre_final: allow

@@ -19,12 +19,13 @@ $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/package-graph-gate.json';
 $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
 
-$config = loadConfig($configPath);
+$config = loadConfig($configPath, $repoRoot);
 $packages = discoverPackages($repoRoot);
 $classIndex = buildClassIndex($repoRoot, $packages);
 
 $violations = [];
 $legacySplits = [];
+$activeReservations = [];
 
 foreach ($packages as $dirName => $meta) {
     $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
@@ -74,6 +75,8 @@ foreach ($packages as $dirName => $meta) {
                 $ownerPackage,
                 $relativeFile,
                 $config['allowlist'],
+                $config['undeclared_dependency_exceptions'],
+                $repoRoot,
             )) {
                 $violations[] = violation(
                     rule: 'R1',
@@ -88,7 +91,24 @@ foreach ($packages as $dirName => $meta) {
     }
 }
 
-foreach (detectNamespaceOwnershipConflicts($classIndex, $packages, $config) as $conflict) {
+foreach (evaluateReservations($classIndex, $packages, $config['reservations']) as $evaluation) {
+    if ($evaluation['kind'] === 'active') {
+        $activeReservations[] = $evaluation;
+
+        continue;
+    }
+
+    $violations[] = violation(
+        rule: 'R3',
+        file: $evaluation['file'],
+        line: $evaluation['line'],
+        import: $evaluation['prefix'],
+        owner: $evaluation['owner'],
+        message: $evaluation['message'],
+    );
+}
+
+foreach (detectNamespaceOwnershipConflicts($classIndex, $packages, $config, $activeReservations) as $conflict) {
     if ($conflict['kind'] === 'legacy') {
         $legacySplits[] = $conflict;
 
@@ -121,12 +141,34 @@ $report = [
         ],
         $legacySplits,
     ),
+    'reservations' => array_map(
+        static fn (array $reservation): array => [
+            'prefix' => $reservation['prefix'],
+            'host' => $reservation['host'],
+            'owner' => $reservation['owner'],
+            'reason' => $reservation['reason'],
+            'class_counts' => $reservation['class_counts'],
+        ],
+        $activeReservations,
+    ),
+    'undeclared_dependency_exceptions' => array_map(
+        static fn (array $entry): array => [
+            'from' => $entry['from'],
+            'to' => $entry['to'],
+            'import_file' => $entry['import_file'],
+            'adr' => $entry['adr'],
+            'expires_when' => $entry['expires_when'],
+            'reason' => $entry['reason'],
+        ],
+        $config['undeclared_dependency_exceptions'],
+    ),
     'violations' => $violations,
     'summary' => [
         'packages_scanned' => count($packages),
         'classes_indexed' => count($classIndex),
         'violation_count' => count($violations),
         'legacy_split_count' => count($legacySplits),
+        'reservation_count' => count($activeReservations),
     ],
 ];
 
@@ -139,6 +181,28 @@ foreach ($legacySplits as $split) {
         implode(', ', $split['packages']),
         $split['adr'],
         $split['expires_when'],
+    ));
+}
+
+foreach ($activeReservations as $reservation) {
+    fwrite(STDERR, sprintf(
+        "HOST-RESERVED NAMESPACE: %s host=%s owner=%s — %s; class_counts=%s\n",
+        $reservation['prefix'],
+        $reservation['host'],
+        $reservation['owner'],
+        $reservation['reason'],
+        json_encode($reservation['class_counts'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+    ));
+}
+
+foreach ($config['undeclared_dependency_exceptions'] as $exception) {
+    fwrite(STDERR, sprintf(
+        "UNDECLARED DEPENDENCY EXCEPTION: %s -> %s in %s — ADR %s; expires when: %s\n",
+        (string) ($exception['from'] ?? ''),
+        (string) ($exception['to'] ?? ''),
+        (string) ($exception['import_file'] ?? ''),
+        (string) ($exception['adr'] ?? ''),
+        (string) ($exception['expires_when'] ?? ''),
     ));
 }
 
@@ -155,9 +219,14 @@ fwrite(STDOUT, "package-graph-gate: OK\n");
 exit(EXIT_OK);
 
 /**
- * @return array{allowlist: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>}
+ * @return array{
+ *     allowlist: list<array<string, mixed>>,
+ *     undeclared_dependency_exceptions: list<array<string, string>>,
+ *     reservations: list<array<string, string>>,
+ *     legacy_namespace_splits: list<array<string, mixed>>
+ * }
  */
-function loadConfig(string $path): array
+function loadConfig(string $path, string $repoRoot): array
 {
     if (! is_file($path)) {
         fwrite(STDERR, "package-graph-gate: missing config {$path}\n");
@@ -171,11 +240,16 @@ function loadConfig(string $path): array
         exit(EXIT_CONFIG);
     }
 
-    return [
+    $config = [
         'allowlist' => $decoded['allowlist'] ?? [],
+        'undeclared_dependency_exceptions' => $decoded['undeclared_dependency_exceptions'] ?? [],
         'reservations' => $decoded['reservations'] ?? [],
         'legacy_namespace_splits' => $decoded['legacy_namespace_splits'] ?? [],
     ];
+
+    validateAllowlistEntries($config['allowlist'], $repoRoot);
+
+    return $config;
 }
 
 /**
@@ -345,10 +419,17 @@ function violatesForeignInternal(string $import, string $fromPackage, string $ow
 
 /**
  * @param  array{name: string, dir: string, require: list<string>, psr4: array<string, string>}  $fromMeta
- * @param  list<array<string, string>>  $allowlist
+ * @param  list<array<string, mixed>>  $allowlist
+ * @param  list<array<string, string>>  $exceptions
  */
-function violatesUndeclaredDependency(array $fromMeta, string $toPackage, string $relativeFile, array $allowlist): bool
-{
+function violatesUndeclaredDependency(
+    array $fromMeta,
+    string $toPackage,
+    string $relativeFile,
+    array $allowlist,
+    array $exceptions,
+    string $repoRoot,
+): bool {
     if (in_array($toPackage, $fromMeta['require'], true)) {
         return false;
     }
@@ -362,7 +443,85 @@ function violatesUndeclaredDependency(array $fromMeta, string $toPackage, string
             continue;
         }
 
-        if (($entry['guard_file'] ?? '') === $relativeFile) {
+        if (($entry['import_file'] ?? '') !== $relativeFile) {
+            continue;
+        }
+
+        if (allowlistGuardIsValid($entry, $repoRoot)) {
+            return false;
+        }
+    }
+
+    foreach ($exceptions as $entry) {
+        if (($entry['from'] ?? '') !== $fromMeta['name']) {
+            continue;
+        }
+
+        if (($entry['to'] ?? '') !== $toPackage) {
+            continue;
+        }
+
+        if (($entry['import_file'] ?? '') === $relativeFile) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * @param  list<array<string, mixed>>  $allowlist
+ */
+function validateAllowlistEntries(array $allowlist, string $repoRoot): void
+{
+    foreach ($allowlist as $entry) {
+        $guardFile = (string) ($entry['guard_file'] ?? '');
+        $importFile = (string) ($entry['import_file'] ?? '');
+        $patterns = $entry['guard_contains'] ?? [];
+
+        if ($guardFile === '' || $importFile === '' || ! is_file($repoRoot.'/'.$guardFile)) {
+            fwrite(STDERR, sprintf(
+                "package-graph-gate: invalid allowlist entry for %s -> %s (%s)\n",
+                (string) ($entry['from'] ?? ''),
+                (string) ($entry['to'] ?? ''),
+                $importFile,
+            ));
+            exit(EXIT_CONFIG);
+        }
+
+        if (! is_array($patterns) || $patterns === []) {
+            fwrite(STDERR, sprintf(
+                "package-graph-gate: missing guard_contains for %s -> %s (%s)\n",
+                (string) ($entry['from'] ?? ''),
+                (string) ($entry['to'] ?? ''),
+                $importFile,
+            ));
+            exit(EXIT_CONFIG);
+        }
+    }
+}
+
+/**
+ * @param  array<string, mixed>  $entry
+ */
+function allowlistGuardIsValid(array $entry, string $repoRoot): bool
+{
+    $guardFile = (string) ($entry['guard_file'] ?? '');
+    $guardPath = $repoRoot.'/'.$guardFile;
+
+    if ($guardFile === '' || ! is_file($guardPath)) {
+        return false;
+    }
+
+    $contents = (string) file_get_contents($guardPath);
+    $patterns = $entry['guard_contains'] ?? [];
+
+    if (! is_array($patterns) || $patterns === []) {
+        return false;
+    }
+
+    foreach ($patterns as $pattern) {
+        if (! is_string($pattern) || ! str_contains($contents, $pattern)) {
             return false;
         }
     }
@@ -373,10 +532,97 @@ function violatesUndeclaredDependency(array $fromMeta, string $toPackage, string
 /**
  * @param  array<string, string>  $classIndex
  * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
- * @param  array{allowlist: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>}  $config
+ * @param  list<array<string, string>>  $reservations
  * @return list<array<string, mixed>>
  */
-function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, array $config): array
+function evaluateReservations(array $classIndex, array $packages, array $reservations): array
+{
+    $evaluations = [];
+    $packageByName = [];
+
+    foreach ($packages as $meta) {
+        $packageByName[$meta['name']] = $meta;
+    }
+
+    foreach ($reservations as $reservation) {
+        $prefix = (string) ($reservation['prefix'] ?? '');
+        $host = (string) ($reservation['host'] ?? '');
+        $owner = (string) ($reservation['owner'] ?? '');
+        $reason = (string) ($reservation['reason'] ?? '');
+        $hostMeta = $packageByName[$host] ?? null;
+        $ownerMeta = $packageByName[$owner] ?? null;
+
+        if ($prefix === '' || $hostMeta === null || $ownerMeta === null) {
+            $evaluations[] = [
+                'kind' => 'violation',
+                'prefix' => $prefix,
+                'file' => 'scripts/package-graph-gate.json',
+                'line' => 1,
+                'owner' => $host,
+                'message' => 'reservation references unknown host or owner package',
+            ];
+
+            continue;
+        }
+
+        $classCounts = classCountsUnderPrefix($prefix, $classIndex, [$host, $owner]);
+        $hostClassCount = $classCounts[$host] ?? 0;
+        $ownerClassCount = $classCounts[$owner] ?? 0;
+        $ownerRequiresHost = in_array($host, $ownerMeta['require'], true);
+
+        if ($hostClassCount === 0 && $ownerClassCount > 0 && $ownerRequiresHost) {
+            $evaluations[] = [
+                'kind' => 'active',
+                'prefix' => $prefix,
+                'host' => $host,
+                'owner' => $owner,
+                'reason' => $reason,
+                'class_counts' => $classCounts,
+            ];
+
+            continue;
+        }
+
+        $messages = [];
+
+        if ($hostClassCount > 0) {
+            $messages[] = 'host defines classes under reserved prefix';
+        }
+
+        if ($ownerClassCount === 0) {
+            $messages[] = 'owner defines zero classes under reserved prefix';
+        }
+
+        if (! $ownerRequiresHost) {
+            $messages[] = 'owner does not require host in composer.json require';
+        }
+
+        $evaluations[] = [
+            'kind' => 'violation',
+            'prefix' => $prefix,
+            'file' => 'packages/'.$ownerMeta['dir'].'/composer.json',
+            'line' => 1,
+            'owner' => $host.', '.$owner,
+            'message' => 'host-reserved namespace conditions not met: '.implode('; ', $messages),
+        ];
+    }
+
+    return $evaluations;
+}
+
+/**
+ * @param  array<string, string>  $classIndex
+ * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
+ * @param  array{
+ *     allowlist: list<array<string, mixed>>,
+ *     undeclared_dependency_exceptions: list<array<string, string>>,
+ *     reservations: list<array<string, string>>,
+ *     legacy_namespace_splits: list<array<string, mixed>>
+ * }  $config
+ * @param  list<array<string, mixed>>  $activeReservations
+ * @return list<array<string, mixed>>
+ */
+function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, array $config, array $activeReservations): array
 {
     $conflicts = [];
     $seenLegacy = [];
@@ -459,7 +705,7 @@ function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, a
                 continue;
             }
 
-            if (findReservation($overlap, $owners, $config['reservations']) !== null) {
+            if (isPrefixCoveredByActiveReservation($overlap, $activeReservations)) {
                 continue;
             }
 
@@ -562,25 +808,19 @@ function isPrefixCoveredByLegacy(string $prefix, array $legacySplits, array $own
 }
 
 /**
- * @param  list<string>  $packages
- * @param  list<array<string, string>>  $reservations
+ * @param  list<array<string, mixed>>  $activeReservations
  */
-function findReservation(string $prefix, array $packages, array $reservations): ?array
+function isPrefixCoveredByActiveReservation(string $prefix, array $activeReservations): bool
 {
-    foreach ($reservations as $reservation) {
-        if (($reservation['prefix'] ?? '') !== $prefix) {
-            continue;
-        }
+    foreach ($activeReservations as $reservation) {
+        $reservedPrefix = (string) ($reservation['prefix'] ?? '');
 
-        $host = (string) ($reservation['host'] ?? '');
-        $owner = (string) ($reservation['owner'] ?? '');
-
-        if (in_array($host, $packages, true) && in_array($owner, $packages, true) && count($packages) === 2) {
-            return $reservation;
+        if ($prefix === $reservedPrefix || str_starts_with($prefix, $reservedPrefix) || str_starts_with($reservedPrefix, $prefix)) {
+            return true;
         }
     }
 
-    return null;
+    return false;
 }
 
 /**

@@ -1,0 +1,65 @@
+{
+  "schema_version": "p10-local-intake-evidence/1",
+  "id": "MONTH-07",
+  "proof_class": "source",
+  "accepting_actor": "executor/P10.7",
+  "owner_receipt_path": "artifacts/P10-readiness/monthly-owner-receipt.json",
+  "owner_receipt_sha256": "59d864ab44e254e9b21008c75ac174486bb2db9e8843cd18551e446febc89919",
+  "owning_repository": "axiomasoft/corex",
+  "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "source_tree": "packages/",
+  "artifact_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "config_sha256": "59967cae16741ef0ad6bde92b5a60c6bf4552f925e79ad28b375ac0762e8a673",
+  "profile_sha256": "c01b7dfc76d2bb11d04b3f3b3f88382571c63a34dbb7d5a19a83473bc05e6240",
+  "schema_sha256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac",
+  "fixture_sha256": "f4bf82cc3ffb7da1011df8f3b0ab46f0023ca763d5aec28bd5dcbc5e3809c4ff",
+  "cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_version_vector": {
+    "corex/core": "0.4.0-alpha.20260918",
+    "corex/modules": "0.4.0-alpha.20260918",
+    "corex/api": "0.4.0-alpha.20260918",
+    "corex/tasks": "0.4.0-alpha.20260918",
+    "corex/tenancy": "0.4.0-alpha.20260918",
+    "corex/panels": "0.4.0-alpha.20260918",
+    "corex/media": "0.4.0-alpha.20260918",
+    "corex/notifications": "0.4.0-alpha.20260918",
+    "corex/wakeup": "0.4.0-alpha.20260918",
+    "corex/workflow": "0.4.0-alpha.20260918",
+    "corex/attributes": "0.4.0-alpha.20260918",
+    "corex/transfer": "0.4.0-alpha.20260918",
+    "corex/search": "0.4.0-alpha.20260918",
+    "corex/search-meilisearch": "0.4.0-alpha.20260918",
+    "corex/recurrence": "0.4.0-alpha.20260918",
+    "corex/tasks-workflow": "0.4.0-alpha.20260918",
+    "corex/intl": "0.4.0-alpha.20260918",
+    "corex/search-intl": "0.4.0-alpha.20260918"
+  },
+  "environment_id": "p10-monthly-readiness-lab",
+  "observed_exit": 0,
+  "command": "/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/scripts/effective-acceptance.py --prepare-monthly-readiness --case MONTH-07",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": "python=3.12",
+  "start": "2026-09-19T03:53:28.544525+00:00",
+  "end": "2026-09-19T03:53:28.544634+00:00",
+  "log_path": "artifacts/P10-readiness/evidence/month-07.log",
+  "log_sha256": "b4b5f548bbfb4a9d31a62f95e5316634afed79508667a5d188c8fbd489bd5f64",
+  "assertions": [
+    {
+      "condition": "MONTH-07",
+      "expected": "Max read interval and scheduler/network/DB/error budgets independent of percentile",
+      "observed": "monthly/pair row present in producer packet; per-account tails in design",
+      "assertion": "no averaged percentiles; pair capacity separate from p99.9 rank",
+      "result": "PASS"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "Path": "artifacts/P10-intake/producer-requests.md",
+      "SHA256": "c730a579121061f7281af25b03ed28ced1e4f03f38a86fbaab0154f91ac56d0a"
+    },
+    {
+      "Path": "packages/tenancy/src/Membership/Internal/Persistence/PairWitness.php",
+      "SHA256": "b50adeb20276019740fc1e5ddc61406d23081466ca7c24c67dfadfee04bf69bd"
+    }
+  ]
+}

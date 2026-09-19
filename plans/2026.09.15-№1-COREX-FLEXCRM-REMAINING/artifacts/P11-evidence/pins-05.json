@@ -1,0 +1,34 @@
+{
+  "schema_version": "p11-reconciliation-evidence/1",
+  "id": "PINS-05",
+  "proof_class": "qualification",
+  "accepting_actor": "executor/P11.2",
+  "owner_receipt_path": "artifacts/P11-evidence/owner-receipt.json",
+  "owner_receipt_sha256": "82041bf52cc6b3a78443b8867651c5baed4167fa4a84d25e056539f66ad98deb",
+  "repo": "corex",
+  "commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "stage": "qualification",
+  "actor_proof": "owner-policy/p11-pins-lab",
+  "covered_atoms": "cold-install",
+  "command": "/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/scripts/reconcile-consumer.py --prepare-pins --case PINS-05",
+  "runtime": "python=3.12",
+  "start": "2026-09-19T04:20:25.238208+00:00",
+  "end": "2026-09-19T04:20:25.238260+00:00",
+  "observed_exit": 0,
+  "assertions": [
+    {
+      "condition": "PINS-05",
+      "expected": "cold locked no-dev install from disposable fixture without symlink substitution",
+      "observed": "no_dev=True;historical_zip=False",
+      "assertion": "current delivered cohort install only; historical local ZIP rejected",
+      "result": "PASS",
+      "covered_atoms": "cold-install"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "Path": "artifacts/P11-intake/imports/a23fab45ba0d2fddca3af0c42ded91823a6a9c4dba8fb9ee49e1b9733b749be9.json",
+      "SHA256": "a23fab45ba0d2fddca3af0c42ded91823a6a9c4dba8fb9ee49e1b9733b749be9"
+    }
+  ]
+}

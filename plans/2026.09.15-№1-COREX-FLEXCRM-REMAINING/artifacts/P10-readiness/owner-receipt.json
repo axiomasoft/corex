@@ -1,0 +1,7 @@
+{
+  "schema_version": "p10-readiness-owner-receipt/1",
+  "accepting_actor": "executor/P10.2",
+  "item": "P10.2",
+  "scope": "readiness-qualification-only",
+  "note": "Structural/tooling readiness; not deployed DI acceptance."
+}

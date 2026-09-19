@@ -1,0 +1,1750 @@
+{
+  "schema_version": "p11-consumer-evidence/1",
+  "accepting_actor": "FlexCRM consumer owner / crm-consumer-pins-20260919",
+  "consumer_repo": "flexcrm",
+  "consumer_commit": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+  "released_cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "profiles": {
+    "base": {
+      "composer_json_sha256": "4f6e667ea986db106e95ec978f56559ca9332c1309adbb230866ec03d45c9744",
+      "composer_lock_sha256": "dcd4c9258c008835a7a3fcba3a360add90733ebe90eb331c809489a658560060",
+      "installed_packages": {
+        "axiomasoft/stancl-jobpipeline": {
+          "version": "2.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7"
+        },
+        "axiomasoft/stancl-tenancy": {
+          "version": "4.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "ef69374969eef0a39a7df24538b07b4805ba0156"
+        },
+        "bacon/bacon-qr-code": {
+          "version": "v3.1.1",
+          "source_ref": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
+          "dist_sha256": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
+        },
+        "brick/math": {
+          "version": "0.14.8",
+          "source_ref": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+          "dist_sha256": "63422359a44b7f06cae63c3b429b59e8efcc0629"
+        },
+        "brick/money": {
+          "version": "0.10.3",
+          "source_ref": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3",
+          "dist_sha256": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3"
+        },
+        "carbonphp/carbon-doctrine-types": {
+          "version": "3.2.1",
+          "source_ref": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+          "dist_sha256": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc"
+        },
+        "corex/api": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "946f4e209671f6bc586c6a72a43c49aef0db6c023a31147ba52b75cd66026c0b",
+          "dist_sha256": "915584ca8548b1f0aa2d6012d8373c1db10c5c7df7604ec800e7b9903416e2f2"
+        },
+        "corex/core": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "9a1459b73ab364f0fb43c39de21c4c697c3d3a4df9953a97121b7f89b0445bbf",
+          "dist_sha256": "0c260c589c65fd1502368df664c82b3ddc9902b23eeea84ed7a2e2ee4355b9f8"
+        },
+        "corex/modules": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "bcc0b5bbfebb61028790392bc7f623f6ba9749dbf911ab8dc4872eeb4e1d5684",
+          "dist_sha256": "2d3f26ccf80f931e65838c9b19dc0acd89d8c7435f7faa17393a92415043b955"
+        },
+        "corex/tasks": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "c46a83dbdb61d0e43fcc3100b3f908c66ffd064c0b35518a7259f80602c96c63",
+          "dist_sha256": "f2ce6fa9042ab84b71ff735a96632845d110756f05b04a27b5e3d0efc4ba3919"
+        },
+        "corex/tenancy": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "46a21af36a9f14c5bcc720e9ee3ac7cd3838dafe407f8e46e6b41f38d9698e9d",
+          "dist_sha256": "38ad2944d82c65737970884157e13565a9a5ed9f3df3c57a5c5b34cf967b9cf9"
+        },
+        "dasprid/enum": {
+          "version": "1.0.7",
+          "source_ref": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
+          "dist_sha256": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
+        },
+        "dflydev/dot-access-data": {
+          "version": "v3.0.3",
+          "source_ref": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+          "dist_sha256": "a23a2bf4f31d3518f3ecb38660c95715dfead60f"
+        },
+        "doctrine/deprecations": {
+          "version": "1.1.6",
+          "source_ref": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+          "dist_sha256": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
+        },
+        "doctrine/inflector": {
+          "version": "2.1.0",
+          "source_ref": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+          "dist_sha256": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+        },
+        "doctrine/lexer": {
+          "version": "3.0.1",
+          "source_ref": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+          "dist_sha256": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+        },
+        "dragonmantank/cron-expression": {
+          "version": "v3.6.0",
+          "source_ref": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+          "dist_sha256": "d61a8a9604ec1f8c3d150d09db6ce98b32675013"
+        },
+        "egulias/email-validator": {
+          "version": "4.0.4",
+          "source_ref": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+          "dist_sha256": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
+        },
+        "firebase/php-jwt": {
+          "version": "v7.1.1",
+          "source_ref": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a",
+          "dist_sha256": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a"
+        },
+        "flex/crm": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": null,
+          "dist_sha256": "2ee1706162082eefc5f5298975a4df8048311cee"
+        },
+        "flexcrm/auth": {
+          "version": "0.1.2",
+          "source_ref": null,
+          "dist_sha256": "11aa318e76436b67b9f67bd0836f808ff3c06a38"
+        },
+        "flexcrm/crm": {
+          "version": "0.1.4",
+          "source_ref": null,
+          "dist_sha256": "7e962fb2df9ac3aed4d9defd15b7749e9d36175c"
+        },
+        "flexcrm/tasks": {
+          "version": "0.1.1",
+          "source_ref": null,
+          "dist_sha256": "bebbb32c4e915933ac6e8b3a4e144b265d295e34"
+        },
+        "fruitcake/php-cors": {
+          "version": "v1.4.0",
+          "source_ref": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379",
+          "dist_sha256": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379"
+        },
+        "giggsey/libphonenumber-for-php-lite": {
+          "version": "9.0.39",
+          "source_ref": "35cd53ef595b709218756965a3fc22263ed9b24e",
+          "dist_sha256": "35cd53ef595b709218756965a3fc22263ed9b24e"
+        },
+        "graham-campbell/result-type": {
+          "version": "v1.2.0",
+          "source_ref": "adccca3324eece92ca35463648c12b9e6293c05b",
+          "dist_sha256": "adccca3324eece92ca35463648c12b9e6293c05b"
+        },
+        "guzzlehttp/guzzle": {
+          "version": "8.2.0",
+          "source_ref": "93939470950a9b11e2e84204166ef5e048c55fe4",
+          "dist_sha256": "93939470950a9b11e2e84204166ef5e048c55fe4"
+        },
+        "guzzlehttp/promises": {
+          "version": "3.0.2",
+          "source_ref": "42118e66a53c492effaf92bc357e931985d5c6f9",
+          "dist_sha256": "42118e66a53c492effaf92bc357e931985d5c6f9"
+        },
+        "guzzlehttp/psr7": {
+          "version": "3.1.0",
+          "source_ref": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74",
+          "dist_sha256": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74"
+        },
+        "guzzlehttp/uri-template": {
+          "version": "v2.0.1",
+          "source_ref": "7a466ad606491eb6528c717482f7cca77f1851f3",
+          "dist_sha256": "7a466ad606491eb6528c717482f7cca77f1851f3"
+        },
+        "laravel/fortify": {
+          "version": "v1.39.0",
+          "source_ref": "b1fc50707bbe007fd92165d8b7d460ab549b355a",
+          "dist_sha256": "b1fc50707bbe007fd92165d8b7d460ab549b355a"
+        },
+        "laravel/framework": {
+          "version": "v13.32.0",
+          "source_ref": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96",
+          "dist_sha256": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96"
+        },
+        "laravel/passkeys": {
+          "version": "v0.2.1",
+          "source_ref": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c",
+          "dist_sha256": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c"
+        },
+        "laravel/prompts": {
+          "version": "v0.3.24",
+          "source_ref": "5d3cdef29e93ca3b62b1871359db3078cd99908b",
+          "dist_sha256": "5d3cdef29e93ca3b62b1871359db3078cd99908b"
+        },
+        "laravel/sanctum": {
+          "version": "v4.3.3",
+          "source_ref": "fee27a573d1a013af3721d86153a65e0b11927e6",
+          "dist_sha256": "fee27a573d1a013af3721d86153a65e0b11927e6"
+        },
+        "laravel/serializable-closure": {
+          "version": "v2.0.16",
+          "source_ref": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed",
+          "dist_sha256": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed"
+        },
+        "laravel/tinker": {
+          "version": "v3.0.2",
+          "source_ref": "4faba77764bd33411735936acdf30446d058c78b",
+          "dist_sha256": "4faba77764bd33411735936acdf30446d058c78b"
+        },
+        "league/commonmark": {
+          "version": "2.10.1",
+          "source_ref": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+          "dist_sha256": "9d489ab67a02960fd8ffe624d93f751daf95439e"
+        },
+        "league/config": {
+          "version": "v1.2.0",
+          "source_ref": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3",
+          "dist_sha256": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3"
+        },
+        "league/flysystem": {
+          "version": "3.36.0",
+          "source_ref": "f7fb152932f30072d573510cbd4dd657d6475b25",
+          "dist_sha256": "f7fb152932f30072d573510cbd4dd657d6475b25"
+        },
+        "league/flysystem-local": {
+          "version": "3.35.3",
+          "source_ref": "a099b24dce160f3b2239043d13d47c4a1a214ea4",
+          "dist_sha256": "a099b24dce160f3b2239043d13d47c4a1a214ea4"
+        },
+        "league/mime-type-detection": {
+          "version": "1.17.0",
+          "source_ref": "f5f47eff7c48ed1003069a2ca67f316fb4021c76",
+          "dist_sha256": "f5f47eff7c48ed1003069a2ca67f316fb4021c76"
+        },
+        "league/uri": {
+          "version": "7.8.1",
+          "source_ref": "08cf38e3924d4f56238125547b5720496fac8fd4",
+          "dist_sha256": "08cf38e3924d4f56238125547b5720496fac8fd4"
+        },
+        "league/uri-interfaces": {
+          "version": "7.8.1",
+          "source_ref": "85d5c77c5d6d3af6c54db4a78246364908f3c928",
+          "dist_sha256": "85d5c77c5d6d3af6c54db4a78246364908f3c928"
+        },
+        "monolog/monolog": {
+          "version": "3.12.0",
+          "source_ref": "72c534fc0ab181ef52d92a68382318631e301608",
+          "dist_sha256": "72c534fc0ab181ef52d92a68382318631e301608"
+        },
+        "nesbot/carbon": {
+          "version": "3.14.0",
+          "source_ref": "0023eaa2c9110e47446dd512a263c69c40cd41f2",
+          "dist_sha256": "0023eaa2c9110e47446dd512a263c69c40cd41f2"
+        },
+        "nette/schema": {
+          "version": "v1.3.6",
+          "source_ref": "c54350438cd6914616f790a49cb424605f421562",
+          "dist_sha256": "c54350438cd6914616f790a49cb424605f421562"
+        },
+        "nette/utils": {
+          "version": "v4.1.5",
+          "source_ref": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+          "dist_sha256": "b043439dbdf954e6c28b5ea7e34b0100f83165e0"
+        },
+        "nikic/php-parser": {
+          "version": "v5.9.0",
+          "source_ref": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
+          "dist_sha256": "9e33da9553fe7786f0962b35f4e4ecf01be89def"
+        },
+        "nunomaduro/termwind": {
+          "version": "v2.4.0",
+          "source_ref": "712a31b768f5daea284c2169a7d227031001b9a8",
+          "dist_sha256": "712a31b768f5daea284c2169a7d227031001b9a8"
+        },
+        "paragonie/constant_time_encoding": {
+          "version": "v3.1.3",
+          "source_ref": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77",
+          "dist_sha256": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77"
+        },
+        "phpdocumentor/reflection-common": {
+          "version": "2.2.0",
+          "source_ref": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
+          "dist_sha256": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
+        },
+        "phpdocumentor/reflection-docblock": {
+          "version": "6.0.3",
+          "source_ref": "7bae67520aa9f5ecc506d646810bd40d9da54582",
+          "dist_sha256": "7bae67520aa9f5ecc506d646810bd40d9da54582"
+        },
+        "phpdocumentor/type-resolver": {
+          "version": "2.0.0",
+          "source_ref": "327a05bbee54120d4786a0dc67aad30226ad4cf9",
+          "dist_sha256": "327a05bbee54120d4786a0dc67aad30226ad4cf9"
+        },
+        "phpoption/phpoption": {
+          "version": "1.10.0",
+          "source_ref": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+          "dist_sha256": "67b192b6a42ec03944b972d6e633ddec78ad2c6d"
+        },
+        "phpstan/phpdoc-parser": {
+          "version": "2.3.5",
+          "source_ref": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9",
+          "dist_sha256": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9"
+        },
+        "pragmarx/google2fa": {
+          "version": "v9.1.0",
+          "source_ref": "f00bc788c555adfb6765c437ff3538e59cd88af1",
+          "dist_sha256": "f00bc788c555adfb6765c437ff3538e59cd88af1"
+        },
+        "psr/clock": {
+          "version": "1.0.0",
+          "source_ref": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+          "dist_sha256": "e41a24703d4560fd0acb709162f73b8adfc3aa0d"
+        },
+        "psr/container": {
+          "version": "2.0.2",
+          "source_ref": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+          "dist_sha256": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+        },
+        "psr/event-dispatcher": {
+          "version": "1.0.0",
+          "source_ref": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+          "dist_sha256": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+        },
+        "psr/http-client": {
+          "version": "1.0.3",
+          "source_ref": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+          "dist_sha256": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
+        },
+        "psr/http-factory": {
+          "version": "1.1.0",
+          "source_ref": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+          "dist_sha256": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
+        },
+        "psr/http-message": {
+          "version": "2.0",
+          "source_ref": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+          "dist_sha256": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+        },
+        "psr/log": {
+          "version": "3.0.2",
+          "source_ref": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+          "dist_sha256": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+        },
+        "psr/simple-cache": {
+          "version": "3.0.0",
+          "source_ref": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+          "dist_sha256": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+        },
+        "psy/psysh": {
+          "version": "v0.12.24",
+          "source_ref": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+          "dist_sha256": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1"
+        },
+        "ramsey/collection": {
+          "version": "2.1.1",
+          "source_ref": "344572933ad0181accbf4ba763e85a0306a8c5e2",
+          "dist_sha256": "344572933ad0181accbf4ba763e85a0306a8c5e2"
+        },
+        "ramsey/uuid": {
+          "version": "4.9.4",
+          "source_ref": "75d73f48d02797c2c285a7e9f348fadc0102ffe2",
+          "dist_sha256": "75d73f48d02797c2c285a7e9f348fadc0102ffe2"
+        },
+        "spatie/invade": {
+          "version": "2.1.1",
+          "source_ref": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
+          "dist_sha256": "f929c7b6e75fceeefa7b41a491e91274bafb17af"
+        },
+        "spomky-labs/cbor-php": {
+          "version": "3.4.2",
+          "source_ref": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6",
+          "dist_sha256": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6"
+        },
+        "spomky-labs/pki-framework": {
+          "version": "1.6.3",
+          "source_ref": "792e909d4e387adffe3c4f404451c7d57a3d2022",
+          "dist_sha256": "792e909d4e387adffe3c4f404451c7d57a3d2022"
+        },
+        "stancl/virtualcolumn": {
+          "version": "v1.5.0",
+          "source_ref": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
+          "dist_sha256": "75718edcfeeb19abc1970f5395043f7d43cce5bc"
+        },
+        "symfony/clock": {
+          "version": "v8.1.0",
+          "source_ref": "701ef4de9705d6c32292ebee5e8044094a09fbf6",
+          "dist_sha256": "701ef4de9705d6c32292ebee5e8044094a09fbf6"
+        },
+        "symfony/console": {
+          "version": "v8.1.7",
+          "source_ref": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d",
+          "dist_sha256": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d"
+        },
+        "symfony/css-selector": {
+          "version": "v8.1.6",
+          "source_ref": "08e2905152a39cf3fd1745d83f8c483e258887d9",
+          "dist_sha256": "08e2905152a39cf3fd1745d83f8c483e258887d9"
+        },
+        "symfony/deprecation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+          "dist_sha256": "f3202fa1b5097b0af062dc978b32ecf63404e31d"
+        },
+        "symfony/error-handler": {
+          "version": "v8.1.5",
+          "source_ref": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce",
+          "dist_sha256": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce"
+        },
+        "symfony/event-dispatcher": {
+          "version": "v8.1.5",
+          "source_ref": "7458da64220376b2e0dc2d8451bf43382c1ad297",
+          "dist_sha256": "7458da64220376b2e0dc2d8451bf43382c1ad297"
+        },
+        "symfony/event-dispatcher-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+          "dist_sha256": "c7de7a00ffb67842132da02ea92988a39ccd9f4e"
+        },
+        "symfony/finder": {
+          "version": "v8.1.7",
+          "source_ref": "4fbe46a3eb64abf8a57f0364075b91f4a233e062",
+          "dist_sha256": "4fbe46a3eb64abf8a57f0364075b91f4a233e062"
+        },
+        "symfony/http-foundation": {
+          "version": "v8.1.7",
+          "source_ref": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17",
+          "dist_sha256": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17"
+        },
+        "symfony/http-kernel": {
+          "version": "v8.1.7",
+          "source_ref": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85",
+          "dist_sha256": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85"
+        },
+        "symfony/mailer": {
+          "version": "v8.1.7",
+          "source_ref": "8783380ecdafa23d36fc90c5873fd44b635c6e10",
+          "dist_sha256": "8783380ecdafa23d36fc90c5873fd44b635c6e10"
+        },
+        "symfony/mime": {
+          "version": "v8.1.7",
+          "source_ref": "773ac57f20e2795bdadb65b5b1b5f4850d498283",
+          "dist_sha256": "773ac57f20e2795bdadb65b5b1b5f4850d498283"
+        },
+        "symfony/polyfill-ctype": {
+          "version": "v1.37.0",
+          "source_ref": "141046a8f9477948ff284fa65be2095baafb94f2",
+          "dist_sha256": "141046a8f9477948ff284fa65be2095baafb94f2"
+        },
+        "symfony/polyfill-intl-grapheme": {
+          "version": "v1.41.0",
+          "source_ref": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d",
+          "dist_sha256": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d"
+        },
+        "symfony/polyfill-intl-idn": {
+          "version": "v1.42.0",
+          "source_ref": "51b5ff5ba85452b31ec6f55490b08148612339d9",
+          "dist_sha256": "51b5ff5ba85452b31ec6f55490b08148612339d9"
+        },
+        "symfony/polyfill-intl-normalizer": {
+          "version": "v1.42.0",
+          "source_ref": "aa20edea75bd9c48cfecc8360922e5a6e5c44502",
+          "dist_sha256": "aa20edea75bd9c48cfecc8360922e5a6e5c44502"
+        },
+        "symfony/polyfill-mbstring": {
+          "version": "v1.38.2",
+          "source_ref": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+          "dist_sha256": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
+        },
+        "symfony/polyfill-php80": {
+          "version": "v1.37.0",
+          "source_ref": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+          "dist_sha256": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
+        },
+        "symfony/polyfill-php81": {
+          "version": "v1.38.1",
+          "source_ref": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7",
+          "dist_sha256": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7"
+        },
+        "symfony/polyfill-php82": {
+          "version": "v1.38.1",
+          "source_ref": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+          "dist_sha256": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b"
+        },
+        "symfony/polyfill-php84": {
+          "version": "v1.38.1",
+          "source_ref": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+          "dist_sha256": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
+        },
+        "symfony/polyfill-php85": {
+          "version": "v1.41.0",
+          "source_ref": "255fab485aaa1006ed411040c42aecd7b5302d7a",
+          "dist_sha256": "255fab485aaa1006ed411040c42aecd7b5302d7a"
+        },
+        "symfony/polyfill-php86": {
+          "version": "v1.41.0",
+          "source_ref": "6bc356ed3d8dbfeea8f0de235e34d670704e880e",
+          "dist_sha256": "6bc356ed3d8dbfeea8f0de235e34d670704e880e"
+        },
+        "symfony/polyfill-uuid": {
+          "version": "v1.37.0",
+          "source_ref": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94",
+          "dist_sha256": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94"
+        },
+        "symfony/process": {
+          "version": "v8.1.7",
+          "source_ref": "10823b09358e690df4ff943e24e8492bb1019fc3",
+          "dist_sha256": "10823b09358e690df4ff943e24e8492bb1019fc3"
+        },
+        "symfony/property-access": {
+          "version": "v8.1.4",
+          "source_ref": "1a41232c678972b93ce499a504e19ea09dfcd0b2",
+          "dist_sha256": "1a41232c678972b93ce499a504e19ea09dfcd0b2"
+        },
+        "symfony/property-info": {
+          "version": "v8.1.7",
+          "source_ref": "b42ee98197831d33788c33492cfc35ba62d1f701",
+          "dist_sha256": "b42ee98197831d33788c33492cfc35ba62d1f701"
+        },
+        "symfony/routing": {
+          "version": "v8.1.6",
+          "source_ref": "3c188091b6b4fa2e4bc83a135caede12deb8576c",
+          "dist_sha256": "3c188091b6b4fa2e4bc83a135caede12deb8576c"
+        },
+        "symfony/serializer": {
+          "version": "v8.1.7",
+          "source_ref": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321",
+          "dist_sha256": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321"
+        },
+        "symfony/service-contracts": {
+          "version": "v3.7.3",
+          "source_ref": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+          "dist_sha256": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257"
+        },
+        "symfony/string": {
+          "version": "v8.1.7",
+          "source_ref": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c",
+          "dist_sha256": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c"
+        },
+        "symfony/translation": {
+          "version": "v8.1.5",
+          "source_ref": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a",
+          "dist_sha256": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a"
+        },
+        "symfony/translation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+          "dist_sha256": "ccb206b98faccc511ebae8e5fad50f2dc0b30621"
+        },
+        "symfony/type-info": {
+          "version": "v8.1.5",
+          "source_ref": "ceb48db5b38d6a48640c414be0c69d53980ae5c5",
+          "dist_sha256": "ceb48db5b38d6a48640c414be0c69d53980ae5c5"
+        },
+        "symfony/uid": {
+          "version": "v8.1.5",
+          "source_ref": "a08aef47989093f32fe50fd11859be1b427df389",
+          "dist_sha256": "a08aef47989093f32fe50fd11859be1b427df389"
+        },
+        "symfony/var-dumper": {
+          "version": "v8.1.7",
+          "source_ref": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5",
+          "dist_sha256": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5"
+        },
+        "tijsverkoyen/css-to-inline-styles": {
+          "version": "v2.4.0",
+          "source_ref": "f0292ccf0ec75843d65027214426b6b163b48b41",
+          "dist_sha256": "f0292ccf0ec75843d65027214426b6b163b48b41"
+        },
+        "vlucas/phpdotenv": {
+          "version": "v5.7.0",
+          "source_ref": "301c07936b16d88628b126b01d082ba153cf4c40",
+          "dist_sha256": "301c07936b16d88628b126b01d082ba153cf4c40"
+        },
+        "voku/portable-ascii": {
+          "version": "2.1.1",
+          "source_ref": "8e1051fe39379367aecf014f41744ce7539a856f",
+          "dist_sha256": "8e1051fe39379367aecf014f41744ce7539a856f"
+        },
+        "web-auth/cose-lib": {
+          "version": "4.8.2",
+          "source_ref": "8849e8bf043a2d42d0bec5bda5db2469ad376148",
+          "dist_sha256": "8849e8bf043a2d42d0bec5bda5db2469ad376148"
+        },
+        "web-auth/webauthn-lib": {
+          "version": "5.3.9",
+          "source_ref": "727e378fb7a36c26be5c911e4a0120c146741ce7",
+          "dist_sha256": "727e378fb7a36c26be5c911e4a0120c146741ce7"
+        },
+        "webmozart/assert": {
+          "version": "2.4.1",
+          "source_ref": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+          "dist_sha256": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+        }
+      }
+    },
+    "construction": {
+      "composer_json_sha256": "7153f6ae7098afc616dd66e353fcc3b31e8875201e558f451e0b8467566a27dd",
+      "composer_lock_sha256": "a550cdde85595d14332abd43c70c3d083baff62effb229ee478c0052575be626",
+      "installed_packages": {
+        "axiomasoft/stancl-jobpipeline": {
+          "version": "2.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7"
+        },
+        "axiomasoft/stancl-tenancy": {
+          "version": "4.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "ef69374969eef0a39a7df24538b07b4805ba0156"
+        },
+        "bacon/bacon-qr-code": {
+          "version": "v3.1.1",
+          "source_ref": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
+          "dist_sha256": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
+        },
+        "brick/math": {
+          "version": "0.14.8",
+          "source_ref": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+          "dist_sha256": "63422359a44b7f06cae63c3b429b59e8efcc0629"
+        },
+        "brick/money": {
+          "version": "0.10.3",
+          "source_ref": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3",
+          "dist_sha256": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3"
+        },
+        "carbonphp/carbon-doctrine-types": {
+          "version": "3.2.1",
+          "source_ref": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+          "dist_sha256": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc"
+        },
+        "corex/api": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "946f4e209671f6bc586c6a72a43c49aef0db6c023a31147ba52b75cd66026c0b",
+          "dist_sha256": "915584ca8548b1f0aa2d6012d8373c1db10c5c7df7604ec800e7b9903416e2f2"
+        },
+        "corex/core": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "9a1459b73ab364f0fb43c39de21c4c697c3d3a4df9953a97121b7f89b0445bbf",
+          "dist_sha256": "0c260c589c65fd1502368df664c82b3ddc9902b23eeea84ed7a2e2ee4355b9f8"
+        },
+        "corex/modules": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "bcc0b5bbfebb61028790392bc7f623f6ba9749dbf911ab8dc4872eeb4e1d5684",
+          "dist_sha256": "2d3f26ccf80f931e65838c9b19dc0acd89d8c7435f7faa17393a92415043b955"
+        },
+        "corex/tasks": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "c46a83dbdb61d0e43fcc3100b3f908c66ffd064c0b35518a7259f80602c96c63",
+          "dist_sha256": "f2ce6fa9042ab84b71ff735a96632845d110756f05b04a27b5e3d0efc4ba3919"
+        },
+        "corex/tenancy": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "46a21af36a9f14c5bcc720e9ee3ac7cd3838dafe407f8e46e6b41f38d9698e9d",
+          "dist_sha256": "38ad2944d82c65737970884157e13565a9a5ed9f3df3c57a5c5b34cf967b9cf9"
+        },
+        "dasprid/enum": {
+          "version": "1.0.7",
+          "source_ref": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
+          "dist_sha256": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
+        },
+        "dflydev/dot-access-data": {
+          "version": "v3.0.3",
+          "source_ref": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+          "dist_sha256": "a23a2bf4f31d3518f3ecb38660c95715dfead60f"
+        },
+        "doctrine/deprecations": {
+          "version": "1.1.6",
+          "source_ref": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+          "dist_sha256": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
+        },
+        "doctrine/inflector": {
+          "version": "2.1.0",
+          "source_ref": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+          "dist_sha256": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+        },
+        "doctrine/lexer": {
+          "version": "3.0.1",
+          "source_ref": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+          "dist_sha256": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+        },
+        "dragonmantank/cron-expression": {
+          "version": "v3.6.0",
+          "source_ref": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+          "dist_sha256": "d61a8a9604ec1f8c3d150d09db6ce98b32675013"
+        },
+        "egulias/email-validator": {
+          "version": "4.0.4",
+          "source_ref": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+          "dist_sha256": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
+        },
+        "firebase/php-jwt": {
+          "version": "v7.1.1",
+          "source_ref": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a",
+          "dist_sha256": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a"
+        },
+        "flex/crm": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": null,
+          "dist_sha256": "2ee1706162082eefc5f5298975a4df8048311cee"
+        },
+        "flexcrm/auth": {
+          "version": "0.1.2",
+          "source_ref": null,
+          "dist_sha256": "11aa318e76436b67b9f67bd0836f808ff3c06a38"
+        },
+        "flexcrm/crm": {
+          "version": "0.1.4",
+          "source_ref": null,
+          "dist_sha256": "7e962fb2df9ac3aed4d9defd15b7749e9d36175c"
+        },
+        "flexcrm/tasks": {
+          "version": "0.1.1",
+          "source_ref": null,
+          "dist_sha256": "bebbb32c4e915933ac6e8b3a4e144b265d295e34"
+        },
+        "fruitcake/php-cors": {
+          "version": "v1.4.0",
+          "source_ref": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379",
+          "dist_sha256": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379"
+        },
+        "giggsey/libphonenumber-for-php-lite": {
+          "version": "9.0.39",
+          "source_ref": "35cd53ef595b709218756965a3fc22263ed9b24e",
+          "dist_sha256": "35cd53ef595b709218756965a3fc22263ed9b24e"
+        },
+        "graham-campbell/result-type": {
+          "version": "v1.2.0",
+          "source_ref": "adccca3324eece92ca35463648c12b9e6293c05b",
+          "dist_sha256": "adccca3324eece92ca35463648c12b9e6293c05b"
+        },
+        "guzzlehttp/guzzle": {
+          "version": "8.2.0",
+          "source_ref": "93939470950a9b11e2e84204166ef5e048c55fe4",
+          "dist_sha256": "93939470950a9b11e2e84204166ef5e048c55fe4"
+        },
+        "guzzlehttp/promises": {
+          "version": "3.0.2",
+          "source_ref": "42118e66a53c492effaf92bc357e931985d5c6f9",
+          "dist_sha256": "42118e66a53c492effaf92bc357e931985d5c6f9"
+        },
+        "guzzlehttp/psr7": {
+          "version": "3.1.0",
+          "source_ref": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74",
+          "dist_sha256": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74"
+        },
+        "guzzlehttp/uri-template": {
+          "version": "v2.0.1",
+          "source_ref": "7a466ad606491eb6528c717482f7cca77f1851f3",
+          "dist_sha256": "7a466ad606491eb6528c717482f7cca77f1851f3"
+        },
+        "laravel/fortify": {
+          "version": "v1.39.0",
+          "source_ref": "b1fc50707bbe007fd92165d8b7d460ab549b355a",
+          "dist_sha256": "b1fc50707bbe007fd92165d8b7d460ab549b355a"
+        },
+        "laravel/framework": {
+          "version": "v13.32.0",
+          "source_ref": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96",
+          "dist_sha256": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96"
+        },
+        "laravel/passkeys": {
+          "version": "v0.2.1",
+          "source_ref": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c",
+          "dist_sha256": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c"
+        },
+        "laravel/prompts": {
+          "version": "v0.3.24",
+          "source_ref": "5d3cdef29e93ca3b62b1871359db3078cd99908b",
+          "dist_sha256": "5d3cdef29e93ca3b62b1871359db3078cd99908b"
+        },
+        "laravel/sanctum": {
+          "version": "v4.3.3",
+          "source_ref": "fee27a573d1a013af3721d86153a65e0b11927e6",
+          "dist_sha256": "fee27a573d1a013af3721d86153a65e0b11927e6"
+        },
+        "laravel/serializable-closure": {
+          "version": "v2.0.16",
+          "source_ref": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed",
+          "dist_sha256": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed"
+        },
+        "laravel/tinker": {
+          "version": "v3.0.2",
+          "source_ref": "4faba77764bd33411735936acdf30446d058c78b",
+          "dist_sha256": "4faba77764bd33411735936acdf30446d058c78b"
+        },
+        "league/commonmark": {
+          "version": "2.10.1",
+          "source_ref": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+          "dist_sha256": "9d489ab67a02960fd8ffe624d93f751daf95439e"
+        },
+        "league/config": {
+          "version": "v1.2.0",
+          "source_ref": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3",
+          "dist_sha256": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3"
+        },
+        "league/flysystem": {
+          "version": "3.36.0",
+          "source_ref": "f7fb152932f30072d573510cbd4dd657d6475b25",
+          "dist_sha256": "f7fb152932f30072d573510cbd4dd657d6475b25"
+        },
+        "league/flysystem-local": {
+          "version": "3.35.3",
+          "source_ref": "a099b24dce160f3b2239043d13d47c4a1a214ea4",
+          "dist_sha256": "a099b24dce160f3b2239043d13d47c4a1a214ea4"
+        },
+        "league/mime-type-detection": {
+          "version": "1.17.0",
+          "source_ref": "f5f47eff7c48ed1003069a2ca67f316fb4021c76",
+          "dist_sha256": "f5f47eff7c48ed1003069a2ca67f316fb4021c76"
+        },
+        "league/uri": {
+          "version": "7.8.1",
+          "source_ref": "08cf38e3924d4f56238125547b5720496fac8fd4",
+          "dist_sha256": "08cf38e3924d4f56238125547b5720496fac8fd4"
+        },
+        "league/uri-interfaces": {
+          "version": "7.8.1",
+          "source_ref": "85d5c77c5d6d3af6c54db4a78246364908f3c928",
+          "dist_sha256": "85d5c77c5d6d3af6c54db4a78246364908f3c928"
+        },
+        "monolog/monolog": {
+          "version": "3.12.0",
+          "source_ref": "72c534fc0ab181ef52d92a68382318631e301608",
+          "dist_sha256": "72c534fc0ab181ef52d92a68382318631e301608"
+        },
+        "nesbot/carbon": {
+          "version": "3.14.0",
+          "source_ref": "0023eaa2c9110e47446dd512a263c69c40cd41f2",
+          "dist_sha256": "0023eaa2c9110e47446dd512a263c69c40cd41f2"
+        },
+        "nette/schema": {
+          "version": "v1.3.6",
+          "source_ref": "c54350438cd6914616f790a49cb424605f421562",
+          "dist_sha256": "c54350438cd6914616f790a49cb424605f421562"
+        },
+        "nette/utils": {
+          "version": "v4.1.5",
+          "source_ref": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+          "dist_sha256": "b043439dbdf954e6c28b5ea7e34b0100f83165e0"
+        },
+        "nikic/php-parser": {
+          "version": "v5.9.0",
+          "source_ref": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
+          "dist_sha256": "9e33da9553fe7786f0962b35f4e4ecf01be89def"
+        },
+        "nunomaduro/termwind": {
+          "version": "v2.4.0",
+          "source_ref": "712a31b768f5daea284c2169a7d227031001b9a8",
+          "dist_sha256": "712a31b768f5daea284c2169a7d227031001b9a8"
+        },
+        "paragonie/constant_time_encoding": {
+          "version": "v3.1.3",
+          "source_ref": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77",
+          "dist_sha256": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77"
+        },
+        "phpdocumentor/reflection-common": {
+          "version": "2.2.0",
+          "source_ref": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
+          "dist_sha256": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
+        },
+        "phpdocumentor/reflection-docblock": {
+          "version": "6.0.3",
+          "source_ref": "7bae67520aa9f5ecc506d646810bd40d9da54582",
+          "dist_sha256": "7bae67520aa9f5ecc506d646810bd40d9da54582"
+        },
+        "phpdocumentor/type-resolver": {
+          "version": "2.0.0",
+          "source_ref": "327a05bbee54120d4786a0dc67aad30226ad4cf9",
+          "dist_sha256": "327a05bbee54120d4786a0dc67aad30226ad4cf9"
+        },
+        "phpoption/phpoption": {
+          "version": "1.10.0",
+          "source_ref": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+          "dist_sha256": "67b192b6a42ec03944b972d6e633ddec78ad2c6d"
+        },
+        "phpstan/phpdoc-parser": {
+          "version": "2.3.5",
+          "source_ref": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9",
+          "dist_sha256": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9"
+        },
+        "pragmarx/google2fa": {
+          "version": "v9.1.0",
+          "source_ref": "f00bc788c555adfb6765c437ff3538e59cd88af1",
+          "dist_sha256": "f00bc788c555adfb6765c437ff3538e59cd88af1"
+        },
+        "psr/clock": {
+          "version": "1.0.0",
+          "source_ref": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+          "dist_sha256": "e41a24703d4560fd0acb709162f73b8adfc3aa0d"
+        },
+        "psr/container": {
+          "version": "2.0.2",
+          "source_ref": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+          "dist_sha256": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+        },
+        "psr/event-dispatcher": {
+          "version": "1.0.0",
+          "source_ref": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+          "dist_sha256": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+        },
+        "psr/http-client": {
+          "version": "1.0.3",
+          "source_ref": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+          "dist_sha256": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
+        },
+        "psr/http-factory": {
+          "version": "1.1.0",
+          "source_ref": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+          "dist_sha256": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
+        },
+        "psr/http-message": {
+          "version": "2.0",
+          "source_ref": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+          "dist_sha256": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+        },
+        "psr/log": {
+          "version": "3.0.2",
+          "source_ref": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+          "dist_sha256": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+        },
+        "psr/simple-cache": {
+          "version": "3.0.0",
+          "source_ref": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+          "dist_sha256": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+        },
+        "psy/psysh": {
+          "version": "v0.12.24",
+          "source_ref": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+          "dist_sha256": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1"
+        },
+        "ramsey/collection": {
+          "version": "2.1.1",
+          "source_ref": "344572933ad0181accbf4ba763e85a0306a8c5e2",
+          "dist_sha256": "344572933ad0181accbf4ba763e85a0306a8c5e2"
+        },
+        "ramsey/uuid": {
+          "version": "4.9.4",
+          "source_ref": "75d73f48d02797c2c285a7e9f348fadc0102ffe2",
+          "dist_sha256": "75d73f48d02797c2c285a7e9f348fadc0102ffe2"
+        },
+        "spatie/invade": {
+          "version": "2.1.1",
+          "source_ref": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
+          "dist_sha256": "f929c7b6e75fceeefa7b41a491e91274bafb17af"
+        },
+        "spomky-labs/cbor-php": {
+          "version": "3.4.2",
+          "source_ref": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6",
+          "dist_sha256": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6"
+        },
+        "spomky-labs/pki-framework": {
+          "version": "1.6.3",
+          "source_ref": "792e909d4e387adffe3c4f404451c7d57a3d2022",
+          "dist_sha256": "792e909d4e387adffe3c4f404451c7d57a3d2022"
+        },
+        "stancl/virtualcolumn": {
+          "version": "v1.5.0",
+          "source_ref": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
+          "dist_sha256": "75718edcfeeb19abc1970f5395043f7d43cce5bc"
+        },
+        "symfony/clock": {
+          "version": "v8.1.0",
+          "source_ref": "701ef4de9705d6c32292ebee5e8044094a09fbf6",
+          "dist_sha256": "701ef4de9705d6c32292ebee5e8044094a09fbf6"
+        },
+        "symfony/console": {
+          "version": "v8.1.7",
+          "source_ref": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d",
+          "dist_sha256": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d"
+        },
+        "symfony/css-selector": {
+          "version": "v8.1.6",
+          "source_ref": "08e2905152a39cf3fd1745d83f8c483e258887d9",
+          "dist_sha256": "08e2905152a39cf3fd1745d83f8c483e258887d9"
+        },
+        "symfony/deprecation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+          "dist_sha256": "f3202fa1b5097b0af062dc978b32ecf63404e31d"
+        },
+        "symfony/error-handler": {
+          "version": "v8.1.5",
+          "source_ref": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce",
+          "dist_sha256": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce"
+        },
+        "symfony/event-dispatcher": {
+          "version": "v8.1.5",
+          "source_ref": "7458da64220376b2e0dc2d8451bf43382c1ad297",
+          "dist_sha256": "7458da64220376b2e0dc2d8451bf43382c1ad297"
+        },
+        "symfony/event-dispatcher-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+          "dist_sha256": "c7de7a00ffb67842132da02ea92988a39ccd9f4e"
+        },
+        "symfony/finder": {
+          "version": "v8.1.7",
+          "source_ref": "4fbe46a3eb64abf8a57f0364075b91f4a233e062",
+          "dist_sha256": "4fbe46a3eb64abf8a57f0364075b91f4a233e062"
+        },
+        "symfony/http-foundation": {
+          "version": "v8.1.7",
+          "source_ref": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17",
+          "dist_sha256": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17"
+        },
+        "symfony/http-kernel": {
+          "version": "v8.1.7",
+          "source_ref": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85",
+          "dist_sha256": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85"
+        },
+        "symfony/mailer": {
+          "version": "v8.1.7",
+          "source_ref": "8783380ecdafa23d36fc90c5873fd44b635c6e10",
+          "dist_sha256": "8783380ecdafa23d36fc90c5873fd44b635c6e10"
+        },
+        "symfony/mime": {
+          "version": "v8.1.7",
+          "source_ref": "773ac57f20e2795bdadb65b5b1b5f4850d498283",
+          "dist_sha256": "773ac57f20e2795bdadb65b5b1b5f4850d498283"
+        },
+        "symfony/polyfill-ctype": {
+          "version": "v1.37.0",
+          "source_ref": "141046a8f9477948ff284fa65be2095baafb94f2",
+          "dist_sha256": "141046a8f9477948ff284fa65be2095baafb94f2"
+        },
+        "symfony/polyfill-intl-grapheme": {
+          "version": "v1.41.0",
+          "source_ref": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d",
+          "dist_sha256": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d"
+        },
+        "symfony/polyfill-intl-idn": {
+          "version": "v1.42.0",
+          "source_ref": "51b5ff5ba85452b31ec6f55490b08148612339d9",
+          "dist_sha256": "51b5ff5ba85452b31ec6f55490b08148612339d9"
+        },
+        "symfony/polyfill-intl-normalizer": {
+          "version": "v1.42.0",
+          "source_ref": "aa20edea75bd9c48cfecc8360922e5a6e5c44502",
+          "dist_sha256": "aa20edea75bd9c48cfecc8360922e5a6e5c44502"
+        },
+        "symfony/polyfill-mbstring": {
+          "version": "v1.38.2",
+          "source_ref": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+          "dist_sha256": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
+        },
+        "symfony/polyfill-php80": {
+          "version": "v1.37.0",
+          "source_ref": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+          "dist_sha256": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
+        },
+        "symfony/polyfill-php81": {
+          "version": "v1.38.1",
+          "source_ref": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7",
+          "dist_sha256": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7"
+        },
+        "symfony/polyfill-php82": {
+          "version": "v1.38.1",
+          "source_ref": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+          "dist_sha256": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b"
+        },
+        "symfony/polyfill-php84": {
+          "version": "v1.38.1",
+          "source_ref": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+          "dist_sha256": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
+        },
+        "symfony/polyfill-php85": {
+          "version": "v1.41.0",
+          "source_ref": "255fab485aaa1006ed411040c42aecd7b5302d7a",
+          "dist_sha256": "255fab485aaa1006ed411040c42aecd7b5302d7a"
+        },
+        "symfony/polyfill-php86": {
+          "version": "v1.41.0",
+          "source_ref": "6bc356ed3d8dbfeea8f0de235e34d670704e880e",
+          "dist_sha256": "6bc356ed3d8dbfeea8f0de235e34d670704e880e"
+        },
+        "symfony/polyfill-uuid": {
+          "version": "v1.37.0",
+          "source_ref": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94",
+          "dist_sha256": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94"
+        },
+        "symfony/process": {
+          "version": "v8.1.7",
+          "source_ref": "10823b09358e690df4ff943e24e8492bb1019fc3",
+          "dist_sha256": "10823b09358e690df4ff943e24e8492bb1019fc3"
+        },
+        "symfony/property-access": {
+          "version": "v8.1.4",
+          "source_ref": "1a41232c678972b93ce499a504e19ea09dfcd0b2",
+          "dist_sha256": "1a41232c678972b93ce499a504e19ea09dfcd0b2"
+        },
+        "symfony/property-info": {
+          "version": "v8.1.7",
+          "source_ref": "b42ee98197831d33788c33492cfc35ba62d1f701",
+          "dist_sha256": "b42ee98197831d33788c33492cfc35ba62d1f701"
+        },
+        "symfony/routing": {
+          "version": "v8.1.6",
+          "source_ref": "3c188091b6b4fa2e4bc83a135caede12deb8576c",
+          "dist_sha256": "3c188091b6b4fa2e4bc83a135caede12deb8576c"
+        },
+        "symfony/serializer": {
+          "version": "v8.1.7",
+          "source_ref": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321",
+          "dist_sha256": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321"
+        },
+        "symfony/service-contracts": {
+          "version": "v3.7.3",
+          "source_ref": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+          "dist_sha256": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257"
+        },
+        "symfony/string": {
+          "version": "v8.1.7",
+          "source_ref": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c",
+          "dist_sha256": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c"
+        },
+        "symfony/translation": {
+          "version": "v8.1.5",
+          "source_ref": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a",
+          "dist_sha256": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a"
+        },
+        "symfony/translation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+          "dist_sha256": "ccb206b98faccc511ebae8e5fad50f2dc0b30621"
+        },
+        "symfony/type-info": {
+          "version": "v8.1.5",
+          "source_ref": "ceb48db5b38d6a48640c414be0c69d53980ae5c5",
+          "dist_sha256": "ceb48db5b38d6a48640c414be0c69d53980ae5c5"
+        },
+        "symfony/uid": {
+          "version": "v8.1.5",
+          "source_ref": "a08aef47989093f32fe50fd11859be1b427df389",
+          "dist_sha256": "a08aef47989093f32fe50fd11859be1b427df389"
+        },
+        "symfony/var-dumper": {
+          "version": "v8.1.7",
+          "source_ref": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5",
+          "dist_sha256": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5"
+        },
+        "tijsverkoyen/css-to-inline-styles": {
+          "version": "v2.4.0",
+          "source_ref": "f0292ccf0ec75843d65027214426b6b163b48b41",
+          "dist_sha256": "f0292ccf0ec75843d65027214426b6b163b48b41"
+        },
+        "vlucas/phpdotenv": {
+          "version": "v5.7.0",
+          "source_ref": "301c07936b16d88628b126b01d082ba153cf4c40",
+          "dist_sha256": "301c07936b16d88628b126b01d082ba153cf4c40"
+        },
+        "voku/portable-ascii": {
+          "version": "2.1.1",
+          "source_ref": "8e1051fe39379367aecf014f41744ce7539a856f",
+          "dist_sha256": "8e1051fe39379367aecf014f41744ce7539a856f"
+        },
+        "web-auth/cose-lib": {
+          "version": "4.8.2",
+          "source_ref": "8849e8bf043a2d42d0bec5bda5db2469ad376148",
+          "dist_sha256": "8849e8bf043a2d42d0bec5bda5db2469ad376148"
+        },
+        "web-auth/webauthn-lib": {
+          "version": "5.3.9",
+          "source_ref": "727e378fb7a36c26be5c911e4a0120c146741ce7",
+          "dist_sha256": "727e378fb7a36c26be5c911e4a0120c146741ce7"
+        },
+        "webmozart/assert": {
+          "version": "2.4.1",
+          "source_ref": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+          "dist_sha256": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+        }
+      }
+    },
+    "property-management": {
+      "composer_json_sha256": "03b42872cd2b1b9682c04c274165b117424f1cf25f5c5385a11082cf2133feca",
+      "composer_lock_sha256": "fa4e841888892e30dcb2f89532d150e02e4ea7dab08ba65c9dcdecea7bfb0bfc",
+      "installed_packages": {
+        "axiomasoft/stancl-jobpipeline": {
+          "version": "2.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7"
+        },
+        "axiomasoft/stancl-tenancy": {
+          "version": "4.0.0-alpha1",
+          "source_ref": null,
+          "dist_sha256": "ef69374969eef0a39a7df24538b07b4805ba0156"
+        },
+        "bacon/bacon-qr-code": {
+          "version": "v3.1.1",
+          "source_ref": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
+          "dist_sha256": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
+        },
+        "brick/math": {
+          "version": "0.14.8",
+          "source_ref": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+          "dist_sha256": "63422359a44b7f06cae63c3b429b59e8efcc0629"
+        },
+        "brick/money": {
+          "version": "0.10.3",
+          "source_ref": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3",
+          "dist_sha256": "b1b0bb6035d26a58f29b1c06b1265c01a0b5c9c3"
+        },
+        "carbonphp/carbon-doctrine-types": {
+          "version": "3.2.1",
+          "source_ref": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+          "dist_sha256": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc"
+        },
+        "corex/api": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "946f4e209671f6bc586c6a72a43c49aef0db6c023a31147ba52b75cd66026c0b",
+          "dist_sha256": "915584ca8548b1f0aa2d6012d8373c1db10c5c7df7604ec800e7b9903416e2f2"
+        },
+        "corex/core": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "9a1459b73ab364f0fb43c39de21c4c697c3d3a4df9953a97121b7f89b0445bbf",
+          "dist_sha256": "0c260c589c65fd1502368df664c82b3ddc9902b23eeea84ed7a2e2ee4355b9f8"
+        },
+        "corex/modules": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "bcc0b5bbfebb61028790392bc7f623f6ba9749dbf911ab8dc4872eeb4e1d5684",
+          "dist_sha256": "2d3f26ccf80f931e65838c9b19dc0acd89d8c7435f7faa17393a92415043b955"
+        },
+        "corex/tasks": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "c46a83dbdb61d0e43fcc3100b3f908c66ffd064c0b35518a7259f80602c96c63",
+          "dist_sha256": "f2ce6fa9042ab84b71ff735a96632845d110756f05b04a27b5e3d0efc4ba3919"
+        },
+        "corex/tenancy": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": "46a21af36a9f14c5bcc720e9ee3ac7cd3838dafe407f8e46e6b41f38d9698e9d",
+          "dist_sha256": "38ad2944d82c65737970884157e13565a9a5ed9f3df3c57a5c5b34cf967b9cf9"
+        },
+        "dasprid/enum": {
+          "version": "1.0.7",
+          "source_ref": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
+          "dist_sha256": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
+        },
+        "dflydev/dot-access-data": {
+          "version": "v3.0.3",
+          "source_ref": "a23a2bf4f31d3518f3ecb38660c95715dfead60f",
+          "dist_sha256": "a23a2bf4f31d3518f3ecb38660c95715dfead60f"
+        },
+        "doctrine/deprecations": {
+          "version": "1.1.6",
+          "source_ref": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca",
+          "dist_sha256": "d4fe3e6fd9bb9e72557a19674f44d8ac7db4c6ca"
+        },
+        "doctrine/inflector": {
+          "version": "2.1.0",
+          "source_ref": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+          "dist_sha256": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+        },
+        "doctrine/lexer": {
+          "version": "3.0.1",
+          "source_ref": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+          "dist_sha256": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+        },
+        "dragonmantank/cron-expression": {
+          "version": "v3.6.0",
+          "source_ref": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+          "dist_sha256": "d61a8a9604ec1f8c3d150d09db6ce98b32675013"
+        },
+        "egulias/email-validator": {
+          "version": "4.0.4",
+          "source_ref": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+          "dist_sha256": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
+        },
+        "firebase/php-jwt": {
+          "version": "v7.1.1",
+          "source_ref": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a",
+          "dist_sha256": "9bc93bd7e3ee5bead4cd23c365ec12f3c1fb0a6a"
+        },
+        "flex/crm": {
+          "version": "0.4.0-alpha.20260918",
+          "source_ref": null,
+          "dist_sha256": "2ee1706162082eefc5f5298975a4df8048311cee"
+        },
+        "flexcrm/auth": {
+          "version": "0.1.2",
+          "source_ref": null,
+          "dist_sha256": "11aa318e76436b67b9f67bd0836f808ff3c06a38"
+        },
+        "flexcrm/crm": {
+          "version": "0.1.4",
+          "source_ref": null,
+          "dist_sha256": "7e962fb2df9ac3aed4d9defd15b7749e9d36175c"
+        },
+        "flexcrm/tasks": {
+          "version": "0.1.1",
+          "source_ref": null,
+          "dist_sha256": "bebbb32c4e915933ac6e8b3a4e144b265d295e34"
+        },
+        "fruitcake/php-cors": {
+          "version": "v1.4.0",
+          "source_ref": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379",
+          "dist_sha256": "38aaa6c3fd4c157ffe2a4d10aa8b9b16ba8de379"
+        },
+        "giggsey/libphonenumber-for-php-lite": {
+          "version": "9.0.39",
+          "source_ref": "35cd53ef595b709218756965a3fc22263ed9b24e",
+          "dist_sha256": "35cd53ef595b709218756965a3fc22263ed9b24e"
+        },
+        "graham-campbell/result-type": {
+          "version": "v1.2.0",
+          "source_ref": "adccca3324eece92ca35463648c12b9e6293c05b",
+          "dist_sha256": "adccca3324eece92ca35463648c12b9e6293c05b"
+        },
+        "guzzlehttp/guzzle": {
+          "version": "8.2.0",
+          "source_ref": "93939470950a9b11e2e84204166ef5e048c55fe4",
+          "dist_sha256": "93939470950a9b11e2e84204166ef5e048c55fe4"
+        },
+        "guzzlehttp/promises": {
+          "version": "3.0.2",
+          "source_ref": "42118e66a53c492effaf92bc357e931985d5c6f9",
+          "dist_sha256": "42118e66a53c492effaf92bc357e931985d5c6f9"
+        },
+        "guzzlehttp/psr7": {
+          "version": "3.1.0",
+          "source_ref": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74",
+          "dist_sha256": "a3059ba1a84c9139c4ae03cf0f45bea276c97c74"
+        },
+        "guzzlehttp/uri-template": {
+          "version": "v2.0.1",
+          "source_ref": "7a466ad606491eb6528c717482f7cca77f1851f3",
+          "dist_sha256": "7a466ad606491eb6528c717482f7cca77f1851f3"
+        },
+        "laravel/fortify": {
+          "version": "v1.39.0",
+          "source_ref": "b1fc50707bbe007fd92165d8b7d460ab549b355a",
+          "dist_sha256": "b1fc50707bbe007fd92165d8b7d460ab549b355a"
+        },
+        "laravel/framework": {
+          "version": "v13.32.0",
+          "source_ref": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96",
+          "dist_sha256": "cdd8b33c246719acdd118c705ce8c7ab5ef48a96"
+        },
+        "laravel/passkeys": {
+          "version": "v0.2.1",
+          "source_ref": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c",
+          "dist_sha256": "a76656ada41b2b4a591f075eddae5ddc67e8ab9c"
+        },
+        "laravel/prompts": {
+          "version": "v0.3.24",
+          "source_ref": "5d3cdef29e93ca3b62b1871359db3078cd99908b",
+          "dist_sha256": "5d3cdef29e93ca3b62b1871359db3078cd99908b"
+        },
+        "laravel/sanctum": {
+          "version": "v4.3.3",
+          "source_ref": "fee27a573d1a013af3721d86153a65e0b11927e6",
+          "dist_sha256": "fee27a573d1a013af3721d86153a65e0b11927e6"
+        },
+        "laravel/serializable-closure": {
+          "version": "v2.0.16",
+          "source_ref": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed",
+          "dist_sha256": "7cfc24e4fa2cca045fb8dd2a797a2b2b13b655ed"
+        },
+        "laravel/tinker": {
+          "version": "v3.0.2",
+          "source_ref": "4faba77764bd33411735936acdf30446d058c78b",
+          "dist_sha256": "4faba77764bd33411735936acdf30446d058c78b"
+        },
+        "league/commonmark": {
+          "version": "2.10.1",
+          "source_ref": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+          "dist_sha256": "9d489ab67a02960fd8ffe624d93f751daf95439e"
+        },
+        "league/config": {
+          "version": "v1.2.0",
+          "source_ref": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3",
+          "dist_sha256": "754b3604fb2984c71f4af4a9cbe7b57f346ec1f3"
+        },
+        "league/flysystem": {
+          "version": "3.36.0",
+          "source_ref": "f7fb152932f30072d573510cbd4dd657d6475b25",
+          "dist_sha256": "f7fb152932f30072d573510cbd4dd657d6475b25"
+        },
+        "league/flysystem-local": {
+          "version": "3.35.3",
+          "source_ref": "a099b24dce160f3b2239043d13d47c4a1a214ea4",
+          "dist_sha256": "a099b24dce160f3b2239043d13d47c4a1a214ea4"
+        },
+        "league/mime-type-detection": {
+          "version": "1.17.0",
+          "source_ref": "f5f47eff7c48ed1003069a2ca67f316fb4021c76",
+          "dist_sha256": "f5f47eff7c48ed1003069a2ca67f316fb4021c76"
+        },
+        "league/uri": {
+          "version": "7.8.1",
+          "source_ref": "08cf38e3924d4f56238125547b5720496fac8fd4",
+          "dist_sha256": "08cf38e3924d4f56238125547b5720496fac8fd4"
+        },
+        "league/uri-interfaces": {
+          "version": "7.8.1",
+          "source_ref": "85d5c77c5d6d3af6c54db4a78246364908f3c928",
+          "dist_sha256": "85d5c77c5d6d3af6c54db4a78246364908f3c928"
+        },
+        "monolog/monolog": {
+          "version": "3.12.0",
+          "source_ref": "72c534fc0ab181ef52d92a68382318631e301608",
+          "dist_sha256": "72c534fc0ab181ef52d92a68382318631e301608"
+        },
+        "nesbot/carbon": {
+          "version": "3.14.0",
+          "source_ref": "0023eaa2c9110e47446dd512a263c69c40cd41f2",
+          "dist_sha256": "0023eaa2c9110e47446dd512a263c69c40cd41f2"
+        },
+        "nette/schema": {
+          "version": "v1.3.6",
+          "source_ref": "c54350438cd6914616f790a49cb424605f421562",
+          "dist_sha256": "c54350438cd6914616f790a49cb424605f421562"
+        },
+        "nette/utils": {
+          "version": "v4.1.5",
+          "source_ref": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+          "dist_sha256": "b043439dbdf954e6c28b5ea7e34b0100f83165e0"
+        },
+        "nikic/php-parser": {
+          "version": "v5.9.0",
+          "source_ref": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
+          "dist_sha256": "9e33da9553fe7786f0962b35f4e4ecf01be89def"
+        },
+        "nunomaduro/termwind": {
+          "version": "v2.4.0",
+          "source_ref": "712a31b768f5daea284c2169a7d227031001b9a8",
+          "dist_sha256": "712a31b768f5daea284c2169a7d227031001b9a8"
+        },
+        "paragonie/constant_time_encoding": {
+          "version": "v3.1.3",
+          "source_ref": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77",
+          "dist_sha256": "d5b01a39b3415c2cd581d3bd3a3575c1ebbd8e77"
+        },
+        "phpdocumentor/reflection-common": {
+          "version": "2.2.0",
+          "source_ref": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
+          "dist_sha256": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
+        },
+        "phpdocumentor/reflection-docblock": {
+          "version": "6.0.3",
+          "source_ref": "7bae67520aa9f5ecc506d646810bd40d9da54582",
+          "dist_sha256": "7bae67520aa9f5ecc506d646810bd40d9da54582"
+        },
+        "phpdocumentor/type-resolver": {
+          "version": "2.0.0",
+          "source_ref": "327a05bbee54120d4786a0dc67aad30226ad4cf9",
+          "dist_sha256": "327a05bbee54120d4786a0dc67aad30226ad4cf9"
+        },
+        "phpoption/phpoption": {
+          "version": "1.10.0",
+          "source_ref": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+          "dist_sha256": "67b192b6a42ec03944b972d6e633ddec78ad2c6d"
+        },
+        "phpstan/phpdoc-parser": {
+          "version": "2.3.5",
+          "source_ref": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9",
+          "dist_sha256": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9"
+        },
+        "pragmarx/google2fa": {
+          "version": "v9.1.0",
+          "source_ref": "f00bc788c555adfb6765c437ff3538e59cd88af1",
+          "dist_sha256": "f00bc788c555adfb6765c437ff3538e59cd88af1"
+        },
+        "psr/clock": {
+          "version": "1.0.0",
+          "source_ref": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+          "dist_sha256": "e41a24703d4560fd0acb709162f73b8adfc3aa0d"
+        },
+        "psr/container": {
+          "version": "2.0.2",
+          "source_ref": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+          "dist_sha256": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+        },
+        "psr/event-dispatcher": {
+          "version": "1.0.0",
+          "source_ref": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+          "dist_sha256": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+        },
+        "psr/http-client": {
+          "version": "1.0.3",
+          "source_ref": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+          "dist_sha256": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
+        },
+        "psr/http-factory": {
+          "version": "1.1.0",
+          "source_ref": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+          "dist_sha256": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
+        },
+        "psr/http-message": {
+          "version": "2.0",
+          "source_ref": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+          "dist_sha256": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+        },
+        "psr/log": {
+          "version": "3.0.2",
+          "source_ref": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+          "dist_sha256": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+        },
+        "psr/simple-cache": {
+          "version": "3.0.0",
+          "source_ref": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+          "dist_sha256": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+        },
+        "psy/psysh": {
+          "version": "v0.12.24",
+          "source_ref": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+          "dist_sha256": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1"
+        },
+        "ramsey/collection": {
+          "version": "2.1.1",
+          "source_ref": "344572933ad0181accbf4ba763e85a0306a8c5e2",
+          "dist_sha256": "344572933ad0181accbf4ba763e85a0306a8c5e2"
+        },
+        "ramsey/uuid": {
+          "version": "4.9.4",
+          "source_ref": "75d73f48d02797c2c285a7e9f348fadc0102ffe2",
+          "dist_sha256": "75d73f48d02797c2c285a7e9f348fadc0102ffe2"
+        },
+        "spatie/invade": {
+          "version": "2.1.1",
+          "source_ref": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
+          "dist_sha256": "f929c7b6e75fceeefa7b41a491e91274bafb17af"
+        },
+        "spomky-labs/cbor-php": {
+          "version": "3.4.2",
+          "source_ref": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6",
+          "dist_sha256": "8f5ea00a07ad529d20886505cdbeb2b9ac7bb2d6"
+        },
+        "spomky-labs/pki-framework": {
+          "version": "1.6.3",
+          "source_ref": "792e909d4e387adffe3c4f404451c7d57a3d2022",
+          "dist_sha256": "792e909d4e387adffe3c4f404451c7d57a3d2022"
+        },
+        "stancl/virtualcolumn": {
+          "version": "v1.5.0",
+          "source_ref": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
+          "dist_sha256": "75718edcfeeb19abc1970f5395043f7d43cce5bc"
+        },
+        "symfony/clock": {
+          "version": "v8.1.0",
+          "source_ref": "701ef4de9705d6c32292ebee5e8044094a09fbf6",
+          "dist_sha256": "701ef4de9705d6c32292ebee5e8044094a09fbf6"
+        },
+        "symfony/console": {
+          "version": "v8.1.7",
+          "source_ref": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d",
+          "dist_sha256": "29afb89f4e941f68a6e90f28e3f52ff1f6793a7d"
+        },
+        "symfony/css-selector": {
+          "version": "v8.1.6",
+          "source_ref": "08e2905152a39cf3fd1745d83f8c483e258887d9",
+          "dist_sha256": "08e2905152a39cf3fd1745d83f8c483e258887d9"
+        },
+        "symfony/deprecation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+          "dist_sha256": "f3202fa1b5097b0af062dc978b32ecf63404e31d"
+        },
+        "symfony/error-handler": {
+          "version": "v8.1.5",
+          "source_ref": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce",
+          "dist_sha256": "8b2a4289ffe5e2dc8fcf645b8e7870e1fa0325ce"
+        },
+        "symfony/event-dispatcher": {
+          "version": "v8.1.5",
+          "source_ref": "7458da64220376b2e0dc2d8451bf43382c1ad297",
+          "dist_sha256": "7458da64220376b2e0dc2d8451bf43382c1ad297"
+        },
+        "symfony/event-dispatcher-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+          "dist_sha256": "c7de7a00ffb67842132da02ea92988a39ccd9f4e"
+        },
+        "symfony/finder": {
+          "version": "v8.1.7",
+          "source_ref": "4fbe46a3eb64abf8a57f0364075b91f4a233e062",
+          "dist_sha256": "4fbe46a3eb64abf8a57f0364075b91f4a233e062"
+        },
+        "symfony/http-foundation": {
+          "version": "v8.1.7",
+          "source_ref": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17",
+          "dist_sha256": "d8fdc670ed510a69e3a9eb4f5eac89f5ed627e17"
+        },
+        "symfony/http-kernel": {
+          "version": "v8.1.7",
+          "source_ref": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85",
+          "dist_sha256": "ec7a3a5832c22cf880cf27d2fdc7ad2e94838e85"
+        },
+        "symfony/mailer": {
+          "version": "v8.1.7",
+          "source_ref": "8783380ecdafa23d36fc90c5873fd44b635c6e10",
+          "dist_sha256": "8783380ecdafa23d36fc90c5873fd44b635c6e10"
+        },
+        "symfony/mime": {
+          "version": "v8.1.7",
+          "source_ref": "773ac57f20e2795bdadb65b5b1b5f4850d498283",
+          "dist_sha256": "773ac57f20e2795bdadb65b5b1b5f4850d498283"
+        },
+        "symfony/polyfill-ctype": {
+          "version": "v1.37.0",
+          "source_ref": "141046a8f9477948ff284fa65be2095baafb94f2",
+          "dist_sha256": "141046a8f9477948ff284fa65be2095baafb94f2"
+        },
+        "symfony/polyfill-intl-grapheme": {
+          "version": "v1.41.0",
+          "source_ref": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d",
+          "dist_sha256": "bb899c1db0aa8127dc3afe8cda4a67eb24915f8d"
+        },
+        "symfony/polyfill-intl-idn": {
+          "version": "v1.42.0",
+          "source_ref": "51b5ff5ba85452b31ec6f55490b08148612339d9",
+          "dist_sha256": "51b5ff5ba85452b31ec6f55490b08148612339d9"
+        },
+        "symfony/polyfill-intl-normalizer": {
+          "version": "v1.42.0",
+          "source_ref": "aa20edea75bd9c48cfecc8360922e5a6e5c44502",
+          "dist_sha256": "aa20edea75bd9c48cfecc8360922e5a6e5c44502"
+        },
+        "symfony/polyfill-mbstring": {
+          "version": "v1.38.2",
+          "source_ref": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+          "dist_sha256": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
+        },
+        "symfony/polyfill-php80": {
+          "version": "v1.37.0",
+          "source_ref": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+          "dist_sha256": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
+        },
+        "symfony/polyfill-php81": {
+          "version": "v1.38.1",
+          "source_ref": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7",
+          "dist_sha256": "6bfb9c766cacffbc8e118cb87217d08ed84e5cd7"
+        },
+        "symfony/polyfill-php82": {
+          "version": "v1.38.1",
+          "source_ref": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+          "dist_sha256": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b"
+        },
+        "symfony/polyfill-php84": {
+          "version": "v1.38.1",
+          "source_ref": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+          "dist_sha256": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
+        },
+        "symfony/polyfill-php85": {
+          "version": "v1.41.0",
+          "source_ref": "255fab485aaa1006ed411040c42aecd7b5302d7a",
+          "dist_sha256": "255fab485aaa1006ed411040c42aecd7b5302d7a"
+        },
+        "symfony/polyfill-php86": {
+          "version": "v1.41.0",
+          "source_ref": "6bc356ed3d8dbfeea8f0de235e34d670704e880e",
+          "dist_sha256": "6bc356ed3d8dbfeea8f0de235e34d670704e880e"
+        },
+        "symfony/polyfill-uuid": {
+          "version": "v1.37.0",
+          "source_ref": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94",
+          "dist_sha256": "26dfec253c4cf3e51b541b52ddf7e42cb0908e94"
+        },
+        "symfony/process": {
+          "version": "v8.1.7",
+          "source_ref": "10823b09358e690df4ff943e24e8492bb1019fc3",
+          "dist_sha256": "10823b09358e690df4ff943e24e8492bb1019fc3"
+        },
+        "symfony/property-access": {
+          "version": "v8.1.4",
+          "source_ref": "1a41232c678972b93ce499a504e19ea09dfcd0b2",
+          "dist_sha256": "1a41232c678972b93ce499a504e19ea09dfcd0b2"
+        },
+        "symfony/property-info": {
+          "version": "v8.1.7",
+          "source_ref": "b42ee98197831d33788c33492cfc35ba62d1f701",
+          "dist_sha256": "b42ee98197831d33788c33492cfc35ba62d1f701"
+        },
+        "symfony/routing": {
+          "version": "v8.1.6",
+          "source_ref": "3c188091b6b4fa2e4bc83a135caede12deb8576c",
+          "dist_sha256": "3c188091b6b4fa2e4bc83a135caede12deb8576c"
+        },
+        "symfony/serializer": {
+          "version": "v8.1.7",
+          "source_ref": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321",
+          "dist_sha256": "9a88015b4bb1a2bc5a3bbdf6ca3025444ba67321"
+        },
+        "symfony/service-contracts": {
+          "version": "v3.7.3",
+          "source_ref": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257",
+          "dist_sha256": "15e6a07ec2a2c75ceb1b21dd98105ee8456d2257"
+        },
+        "symfony/string": {
+          "version": "v8.1.7",
+          "source_ref": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c",
+          "dist_sha256": "d950140b5f56f31901e5b7a0c04ffc3a3deb943c"
+        },
+        "symfony/translation": {
+          "version": "v8.1.5",
+          "source_ref": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a",
+          "dist_sha256": "d9e1caba0d6b6f9a26710af8a2f88d37f001215a"
+        },
+        "symfony/translation-contracts": {
+          "version": "v3.7.1",
+          "source_ref": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+          "dist_sha256": "ccb206b98faccc511ebae8e5fad50f2dc0b30621"
+        },
+        "symfony/type-info": {
+          "version": "v8.1.5",
+          "source_ref": "ceb48db5b38d6a48640c414be0c69d53980ae5c5",
+          "dist_sha256": "ceb48db5b38d6a48640c414be0c69d53980ae5c5"
+        },
+        "symfony/uid": {
+          "version": "v8.1.5",
+          "source_ref": "a08aef47989093f32fe50fd11859be1b427df389",
+          "dist_sha256": "a08aef47989093f32fe50fd11859be1b427df389"
+        },
+        "symfony/var-dumper": {
+          "version": "v8.1.7",
+          "source_ref": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5",
+          "dist_sha256": "741a8c4c948b0bb9bd3653daacd3644c73c40ea5"
+        },
+        "tijsverkoyen/css-to-inline-styles": {
+          "version": "v2.4.0",
+          "source_ref": "f0292ccf0ec75843d65027214426b6b163b48b41",
+          "dist_sha256": "f0292ccf0ec75843d65027214426b6b163b48b41"
+        },
+        "vlucas/phpdotenv": {
+          "version": "v5.7.0",
+          "source_ref": "301c07936b16d88628b126b01d082ba153cf4c40",
+          "dist_sha256": "301c07936b16d88628b126b01d082ba153cf4c40"
+        },
+        "voku/portable-ascii": {
+          "version": "2.1.1",
+          "source_ref": "8e1051fe39379367aecf014f41744ce7539a856f",
+          "dist_sha256": "8e1051fe39379367aecf014f41744ce7539a856f"
+        },
+        "web-auth/cose-lib": {
+          "version": "4.8.2",
+          "source_ref": "8849e8bf043a2d42d0bec5bda5db2469ad376148",
+          "dist_sha256": "8849e8bf043a2d42d0bec5bda5db2469ad376148"
+        },
+        "web-auth/webauthn-lib": {
+          "version": "5.3.9",
+          "source_ref": "727e378fb7a36c26be5c911e4a0120c146741ce7",
+          "dist_sha256": "727e378fb7a36c26be5c911e4a0120c146741ce7"
+        },
+        "webmozart/assert": {
+          "version": "2.4.1",
+          "source_ref": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+          "dist_sha256": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+        }
+      }
+    }
+  },
+  "cold_install": {
+    "no_dev": true,
+    "no_symlink": true,
+    "historical_local_zip": false,
+    "fixture": "delivery/crm-consumer-pins-20260919"
+  },
+  "app_binding": {
+    "commit": "baf1423c3f711a03740fc3e9ba9f615e2920e8d3",
+    "working_delta": "none",
+    "target_release": "0.4.0-alpha.20260918"
+  },
+  "source_reference": "FlexCRM cold install against CoreX released-installed delivery endpoint"
+}

@@ -1,0 +1,22 @@
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Api\Tests\Feature\ToolInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mread transport and direct call share catalogue policy and handler i[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid input rejected before handler invoke 02[39m[90m                     [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmutation default guard denies and client hints cannot bypass invoke[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mconsumer guard binds approval to principal scope hash and args invo[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdomain key idempotency replays equal requests and conflicts on mism[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstale resource version denies before effect invoke 06[39m[90m               [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprovider key timeout keeps unknown outcome and stable operation key[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90moutput schema mismatch rolls back local transaction invoke 08[39m[90m       [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreplay requires current visibility invoke 09[39m[90m                        [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdraft and irreversible receive guarded treatment and read cannot mu[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90munexpected exceptions produce safe error without secrets invoke 11[39m[90m  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler reuses verified context and http provider requires wrapper[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstale contract hash rejected invoke revision[39m
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Api\Tests\Feature\ToolGuardConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mequal key requests replay under row lock without duplicate effects[39m[90m  [39m [90m0.18s[39m  
+
+  [90mTests:[39m    [32;1m14 passed[39;22m[90m (47 assertions)[39m
+  [90mDuration:[39m [39m1.84s[39m
+

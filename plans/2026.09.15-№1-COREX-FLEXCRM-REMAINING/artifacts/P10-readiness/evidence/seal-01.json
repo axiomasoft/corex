@@ -1,0 +1,89 @@
+{
+  "schema_version": "p10-local-intake-evidence/1",
+  "id": "SEAL-01",
+  "proof_class": "source",
+  "accepting_actor": "executor/P10.9",
+  "owner_receipt_path": "artifacts/P10-readiness/seal-owner-receipt.json",
+  "owner_receipt_sha256": "dec95db3069f9cda184ce9b46abdc36ba57338d7bc4b9985cdee6c1e17653afb",
+  "owning_repository": "axiomasoft/corex",
+  "source_commit": "0ca85d24edd631314c2ca410ea8b9fad4002419c",
+  "source_tree": "packages/",
+  "artifact_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "config_sha256": "59967cae16741ef0ad6bde92b5a60c6bf4552f925e79ad28b375ac0762e8a673",
+  "profile_sha256": "c01b7dfc76d2bb11d04b3f3b3f88382571c63a34dbb7d5a19a83473bc05e6240",
+  "schema_sha256": "3067c20f88fa2e8d00f729fd1c3cf9f01b3e4aeddc314afa1d26966f760a30ac",
+  "fixture_sha256": "f4bf82cc3ffb7da1011df8f3b0ab46f0023ca763d5aec28bd5dcbc5e3809c4ff",
+  "cohort_sha256": "f44c0c6fe757aeb85376024aaeff06d2e166ae8a8d15967313653d7437a475ee",
+  "released_version_vector": {
+    "corex/core": "0.4.0-alpha.20260918",
+    "corex/modules": "0.4.0-alpha.20260918",
+    "corex/api": "0.4.0-alpha.20260918",
+    "corex/tasks": "0.4.0-alpha.20260918",
+    "corex/tenancy": "0.4.0-alpha.20260918",
+    "corex/panels": "0.4.0-alpha.20260918",
+    "corex/media": "0.4.0-alpha.20260918",
+    "corex/notifications": "0.4.0-alpha.20260918",
+    "corex/wakeup": "0.4.0-alpha.20260918",
+    "corex/workflow": "0.4.0-alpha.20260918",
+    "corex/attributes": "0.4.0-alpha.20260918",
+    "corex/transfer": "0.4.0-alpha.20260918",
+    "corex/search": "0.4.0-alpha.20260918",
+    "corex/search-meilisearch": "0.4.0-alpha.20260918",
+    "corex/recurrence": "0.4.0-alpha.20260918",
+    "corex/tasks-workflow": "0.4.0-alpha.20260918",
+    "corex/intl": "0.4.0-alpha.20260918",
+    "corex/search-intl": "0.4.0-alpha.20260918"
+  },
+  "environment_id": "p10-seal-readiness-lab",
+  "observed_exit": 0,
+  "command": "/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-\u21161-COREX-FLEXCRM-REMAINING/scripts/effective-acceptance.py --prepare-seal-readiness --case SEAL-01",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "runtime": "python=3.12",
+  "start": "2026-09-19T03:53:28.708618+00:00",
+  "end": "2026-09-19T03:53:28.708789+00:00",
+  "log_path": "artifacts/P10-readiness/evidence/seal-01.log",
+  "log_sha256": "58c5d6990c85fdcd57e5cf3e8883f1250d83ccf4a9e0eb3744be0dd1144e4255",
+  "assertions": [
+    {
+      "condition": "SEAL-01",
+      "expected": "All eight branch readiness reports present with case PASS and subconditions inventoried",
+      "observed": "branches=8;subconditions=169",
+      "assertion": "every predecessor report in readiness qualification mode with deferred PENDING conditions",
+      "result": "PASS"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "Path": "findings/P10-intake.md",
+      "SHA256": "1ecf5e610c657d853cfb0e84591a5307bf32326b6e14321b04659292354acd2c"
+    },
+    {
+      "Path": "findings/P10-central-qualification.md",
+      "SHA256": "52055d497be53d0b489eb4edf2684cbc9f848c5f12fbb158eb4805495d6104b7"
+    },
+    {
+      "Path": "findings/P10-cloud-qualification.md",
+      "SHA256": "52af710f470cc4b28310126ccc91e6d60ffea9bdf9972a2002ed2880d160d328"
+    },
+    {
+      "Path": "findings/P10-security-acceptance.md",
+      "SHA256": "92df804d2059e1db0a7088811c4968d84b35b4aab61eddc68d22cbf157e58cf7"
+    },
+    {
+      "Path": "findings/P10-race-restore-acceptance.md",
+      "SHA256": "3f9be78c67b3499690d5479b85635462f1180e78528b95fa43ebd9c1159f24a2"
+    },
+    {
+      "Path": "findings/P10-fe60-acceptance.md",
+      "SHA256": "fb4ccc086e8655aee93d106653b8c94521270d0275ba08774e5c05cb5a25413f"
+    },
+    {
+      "Path": "findings/P10-monthly-acceptance.md",
+      "SHA256": "fe1bd0df0e719e4c84d59f07a4438df16a6269441287596fae715738791494c2"
+    },
+    {
+      "Path": "findings/P10-ops-acceptance.md",
+      "SHA256": "186d06e6f56a36fdf28a7606e46aa9730e78ae02a057f9208b7129f0ca974a50"
+    }
+  ]
+}

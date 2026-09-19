@@ -138,6 +138,68 @@ def input_file(plan, path):
     raise ValueError('missing portable producer input ' + path)
 
 
+READINESS_REPORTS = {
+    'findings/P10-central-qualification.md': 'P10.2',
+    'findings/P10-cloud-qualification.md': 'P10.3',
+    'findings/P10-security-acceptance.md': 'P10.4',
+    'findings/P10-race-restore-acceptance.md': 'P10.5',
+    'findings/P10-fe60-acceptance.md': 'P10.6',
+    'findings/P10-monthly-acceptance.md': 'P10.7',
+    'findings/P10-ops-acceptance.md': 'P10.8',
+}
+READINESS_DEFERRED = {
+    'P10.2': 'DI-01',
+    'P10.3': 'DI-21',
+    'P10.4': 'AP-01',
+    'P10.5': 'AP-06',
+    'P10.6': 'DI-31',
+    'P10.7': 'DI-32',
+    'P10.8': 'B33',
+}
+
+
+def readiness(plan, report):
+    v.require(report in READINESS_REPORTS, 'readiness stage limited to central/cloud readiness reports')
+    owner_item = READINESS_REPORTS[report]
+    body = a.file(plan, report).read_text()
+    v.require('**Mode:** readiness qualification' in body, 'not a readiness report')
+    v.require('p10-qualification/1' in body, 'branch schema version missing')
+    cases = a.table(plan, report, 'Cases', ('Case', 'R/AC', 'Expected', 'Actual evidence', 'Result', 'Owner', 'Resume'))
+    v.exact(cases, 'Case', wanted(report))
+    for row in cases:
+        v.require(row['Result'] == 'PASS', 'readiness case not PASS')
+    evidence = a.table(plan, report, 'Evidence', ('ID', 'Path', 'SHA256', 'Kind', 'Environment', 'Cohort', 'Command', 'Start', 'End', 'Result'))
+    by_id = {}
+    for row in evidence:
+        file = a.file(plan, row['Path'])
+        v.require(v.digest(file) == row['SHA256'], 'evidence digest stale')
+        v.require('/P10-readiness/' in row['Path'], 'readiness evidence must stay local')
+        raw = json.loads(file.read_text())
+        v.require(raw.get('schema_version') == 'p10-local-intake-evidence/1', 'wrong readiness evidence class')
+        v.require(row['Result'] == 'PASS', 'readiness evidence row red')
+        by_id[row['ID']] = raw
+    for row in cases:
+        ids = re.findall(r'evidence:([\w.-]+)', row['Actual evidence'])
+        v.require(ids and all(x in by_id for x in ids), 'readiness case not bound to evidence')
+    subconditions = a.table(plan, DESIGN, 'Subcondition invariants', ('Subcondition', 'Owner item', 'Required stage', 'Observable obligation'))
+    needed = {r['Subcondition'] for r in subconditions if r['Owner item'] == owner_item}
+    if needed:
+        rows = a.table(plan, report, 'Conditions', ('Subcondition', 'Stage', 'Evidence IDs', 'Result', 'Owner', 'Resume'))
+        v.exact(rows, 'Subcondition', needed)
+        for row in rows:
+            v.require(row['Result'] == 'PENDING', 'readiness condition must stay PENDING')
+    remaining = a.table(plan, report, 'Remaining', ('Condition', 'Owner', 'Exact receipt', 'Resume'))
+    deferred_marker = READINESS_DEFERRED[owner_item]
+    v.require(any(deferred_marker in row['Condition'] for row in remaining), 'missing deferred row')
+    inputs = a.table(plan, report, 'Inputs', ('Path', 'SHA256', 'Role'))
+    for row in inputs:
+        v.require(row['Path'] != report and v.digest(input_file(plan, row['Path'])) == row['SHA256'], 'self/stale readiness input')
+    tool = a.file(plan, 'scripts/effective-acceptance.py')
+    import subprocess
+    result = subprocess.run([sys.executable, str(tool), '--verify', str(a.file(plan, report))], check=False)
+    v.require(result.returncode == 0, 'prepared readiness verifier red')
+
+
 def branch(plan, report):
     v.require(report in REPORTS, 'unknown branch report')
     body = a.file(plan, report).read_text()
@@ -196,10 +258,59 @@ def branch(plan, report):
     v.require(result.returncode == 0, 'prepared domain verifier red')
 
 
+def seal_readiness(plan):
+    branch(plan, 'findings/P10-intake.md')
+    for report in READINESS_REPORTS:
+        readiness(plan, report)
+    path = 'findings/P10-effective-receipts.md'
+    body = a.file(plan, path).read_text()
+    v.require('**Mode:** readiness qualification' in body, 'not seal readiness report')
+    v.require('p10-qualification/1' in body, 'seal schema version missing')
+    cases = a.table(plan, path, 'Cases', ('Case', 'R/AC', 'Expected', 'Actual evidence', 'Result', 'Owner', 'Resume'))
+    v.exact(cases, 'Case', wanted(path))
+    for row in cases:
+        v.require(row['Result'] == 'PASS', 'seal readiness case not PASS')
+    evidence = a.table(
+        plan, path, 'Evidence',
+        ('ID', 'Path', 'SHA256', 'Kind', 'Environment', 'Cohort', 'Command', 'Start', 'End', 'Result'),
+    )
+    for row in evidence:
+        v.require('/P10-readiness/' in row['Path'], 'seal readiness evidence must stay local')
+        v.require(v.digest(a.file(plan, row['Path'])) == row['SHA256'], 'seal evidence digest stale')
+    rows = a.table(plan, path, 'Requirements', ('R', 'Released cohort', 'Effective targets', 'DI', 'AP', 'Ops', 'Receipt', 'Result', 'Residual owner'))
+    v.exact(rows, 'R', {'R39', 'R40', 'R46'})
+    v.require(all(row['Result'] == 'PASS' for row in rows), 'required R readiness not PASS')
+    invariants = a.table(plan, DESIGN, 'Subcondition invariants', ('Subcondition', 'Owner item', 'Required stage', 'Observable obligation'))
+    rows = a.table(plan, path, 'Conditions', ('Subcondition', 'Stage', 'Evidence IDs', 'Result', 'Owner', 'Resume'))
+    v.require({x['Subcondition'] for x in invariants} <= {x['Subcondition'] for x in rows}, 'seal subcondition coverage gap')
+    for row in rows:
+        v.require(row['Result'] == 'PENDING', 'seal readiness condition must stay PENDING')
+    rows = a.table(plan, path, 'Sealed inputs', ('Path', 'SHA256'))
+    v.exact(rows, 'Path', {x['Path'] for x in rows})
+    required = set(REPORTS) - {path} | {DESIGN, 'findings/P9-cohort-receipt.md', 'scripts/effective-acceptance.py'}
+    v.require(required <= {r['Path'] for r in rows}, 'seal readiness inputs incomplete')
+    for row in rows:
+        v.require(row['Path'] != path and v.digest(input_file(plan, row['Path'])) == row['SHA256'], 'self/stale seal readiness input')
+    remaining = a.table(plan, path, 'Remaining', ('Condition', 'Owner', 'Exact receipt', 'Resume'))
+    v.require(any('effective seal' in row['Condition'].lower() for row in remaining), 'missing deferred effective seal row')
+    result = json.loads(a.file(plan, 'artifacts/P10-effective/dependency-receipts.json').read_text())
+    v.require(result.get('schema_version') == 'p10-consumer-input/1', 'consumer input schema missing')
+    v.require(result.get('mode') == 'readiness', 'consumer input must be readiness mode')
+    v.require(result.get('released_version_vector') and result.get('effective_targets'), 'consumer vector/targets missing')
+    v.require(len(result.get('required_gaps', [])) == 169, 'consumer readiness gaps incomplete')
+    tool = a.file(plan, 'scripts/effective-acceptance.py')
+    import subprocess
+    proc = subprocess.run([sys.executable, str(tool), '--verify', str(a.file(plan, path))], check=False)
+    v.require(proc.returncode == 0, 'prepared seal verifier red')
+
+
 def seal(plan):
+    path = list(REPORTS)[-1]
+    if '**Mode:** readiness qualification' in a.file(plan, path).read_text():
+        seal_readiness(plan)
+        return
     for report in REPORTS:
         branch(plan, report)
-    path = list(REPORTS)[-1]
     v.require('p10-effective-receipts/1' in a.file(plan, path).read_text(), 'effective seal missing')
     rows = a.table(plan, path, 'Requirements', ('R', 'Released cohort', 'Effective targets', 'DI', 'AP', 'Ops', 'Receipt', 'Result', 'Residual owner'))
     v.exact(rows, 'R', {'R39', 'R40', 'R46'})
@@ -218,7 +329,7 @@ def seal(plan):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--stage', choices=('candidate', 'design', 'branch', 'seal'), required=True)
+    parser.add_argument('--stage', choices=('candidate', 'design', 'branch', 'readiness', 'seal'), required=True)
     parser.add_argument('--report')
     parser.add_argument('--plan-dir', type=Path, default=Path(__file__).resolve().parent.parent)
     args = parser.parse_args()
@@ -226,6 +337,8 @@ def main():
         candidate(args.plan_dir) if args.stage == 'candidate' else design(args.plan_dir)
         if args.stage == 'branch':
             branch(args.plan_dir, args.report)
+        if args.stage == 'readiness':
+            readiness(args.plan_dir, args.report)
         if args.stage == 'seal':
             seal(args.plan_dir)
         print(json.dumps(dict(stage=args.stage, result='PASS', specs=9, di=34, ap=13, subconditions=169, case_contracts=59, original_parents=31, runtime_or_live_proof=False)))

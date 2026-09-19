@@ -1,0 +1,7 @@
+{
+  "schema_version": "receipt-selection/1",
+  "item": "P10.5",
+  "mode": "readiness",
+  "ap_subconditions_pending": 21,
+  "note": "Readiness only; actual effective AP requires artifacts/P10-external imports."
+}

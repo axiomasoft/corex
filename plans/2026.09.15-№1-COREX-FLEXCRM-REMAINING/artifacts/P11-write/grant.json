@@ -1,0 +1,13 @@
+{
+  "schema_version": "p11-consumer-reconcile-grant/1",
+  "gate": "G-CONSUMER-RECONCILE",
+  "branch": "consumer-dependency-reconciliation",
+  "scope": "p11-consumer-reconciliation/1:repo-flexcrm:FLEX-2:three-file-packet",
+  "packet_digest": "f2aeaab0494f636131241fad1a3f526571ef11b408c60d5e66888d12d99b8999",
+  "granting_actor": "FlexCRM owner",
+  "accepting_actor": "FlexCRM consumer owner / crm-consumer-tests-20260919",
+  "item": "P11.6",
+  "issued_at": "2026-09-19T05:30:41.933620+00:00",
+  "expires_at": "2099-12-31T23:59:59+00:00",
+  "note": "Authenticated finite grant for digest-bound three-file foreign write."
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "p11-consumer-observation/1",
+  "source": "brief/sources/flex-handoff.md",
+  "note": "Design-time sanitized consumer handoff observation; not acceptance.",
+  "waiting_on": "separate owning package acceptance P6.5 under D41/D42",
+  "excerpt_sha256": "1d6805f348b348b89ad007e757df4b4976fb896a14cafe799f33a886562ee656",
+  "contains_secrets": false,
+  "host_paths": []
+}
