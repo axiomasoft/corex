@@ -165,6 +165,23 @@ outbox и webhook-поверхности, пакет `packages/api` без со�
 | P16 | implementation/medium | plan-exec | light | Ни одного, если поведение не меняется; доказательство неизменности обязательно. |
 | P17 | implementation/high | plan-exec | full | Все items. |
 
+### 3.3 Модели Cursor под классы (D10)
+
+Класс — каноническая запись route; модель выбирается по риску фазы. Ставки за млн input/output
+из документации Cursor на 2026-09-19.
+
+| Класс/усилие | Модель Cursor | in/out за млн | Фазы |
+|:--|:--|:--|:--|
+| frontier/high | Claude Opus 5 (thinking, high) | $5 / $25 | P1, P4, P5, P13, P14 — нормативные и необратимые |
+| frontier/high | Grok 4.6 (effort `high`) | $2 / $6 | P2, P3, P6, P9, P10, P11, P12, P17 — дефолт design-прохода |
+| implementation/high | Claude Sonnet 5 (thinking) | $2 / $10 | P7, P8, P15, P16 — транскрипция уже принятых правил |
+| implementation/medium–high | Composer 2.5, стандартный тир | $0.5 / $2.5 | исполнение всех items |
+
+Не использовать для design-проходов: GPT-5.6 Sol и Gemini 3.1 Pro (доплата за длинный контекст
+свыше 272k и 200k; промо-цена Sol истекает 21.11.2026), Claude Fable 5.1 (вдвое дороже Opus 5 без
+задокументированного преимущества). Items — только стандартный Composer 2.5, не Fast-тир
+($3/$15). Смена модели внутри класса допустима, смена класса вниз — нет.
+
 ## 4. Update Log
 
 | Дата | Кто (role/model) | Что |

@@ -5,7 +5,7 @@
 | Параметр | Значение |
 |---|---|
 | Batch | n/a |
-| Model class | frontier |
+| Model class | frontier — Claude Opus 5 (thinking, high) по D10 |
 | Effort | high — нормативный слой, от которого зависят 16 остальных фаз; ошибка воспроизводится в каждом последующем item'е |
 | Capabilities | perplexity-search (обязательный внешний RAG фазы) |
 | Context | cold-start-root: design-root-terminal |
