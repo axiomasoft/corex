@@ -5,7 +5,7 @@ on:
 
 jobs:
   public-candidates:
-    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' && (github.ref == 'refs/heads/main') }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -40,7 +40,7 @@ jobs:
         run: python3 scripts/distribution/pristine-proof.py --laravel ${{ matrix.laravel }} ${{ matrix.arguments }}
 
   remaining-cohort-structural:
-    if: ${{ hashFiles('scripts/.plan-close-deferred') == '' && (github.ref == 'refs/heads/main') }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Remaining cohort structural proof
     steps:

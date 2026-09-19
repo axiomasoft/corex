@@ -698,6 +698,15 @@ def ensure_repository(repository: str) -> None:
         raise PublicationPacketError(f'repository create failed for {repository}: {proc.stderr.strip()}')
 
 
+def _init_staging_repository(work: Path, repository: str) -> None:
+    work.mkdir(parents=True, exist_ok=True)
+    run_git(['init', '-b', 'main'], cwd=work)
+    run_git(['config', 'user.email', 'release@corex.local'], cwd=work)
+    run_git(['config', 'user.name', 'CoreX Release'], cwd=work)
+    if run_git(['remote', 'get-url', 'origin'], cwd=work, check=False).returncode != 0:
+        run_git(['remote', 'add', 'origin', f'https://github.com/{repository}.git'], cwd=work)
+
+
 def materialize_split_staging(package: str, staging_root: Path, repository: str, export_mod) -> Path:
     tree = build_split_tree(package, export_mod)
     candidate = load_json(REPO_DELIVERY / 'candidate.json')
@@ -707,20 +716,31 @@ def materialize_split_staging(package: str, staging_root: Path, repository: str,
         shutil.rmtree(work)
     exists = repository_exists(repository)
     if exists is True and not plan_close_deferred():
-        run_git(['clone', f'https://github.com/{repository}.git', str(work)], cwd=staging_root)
-        run_git(['rm', '-rf', '.'], cwd=work, check=False)
-        for item in work.iterdir():
-            if item.name == '.git':
-                continue
-            if item.is_dir():
-                shutil.rmtree(item)
-            else:
-                item.unlink()
+        clone = run_git(
+            ['clone', f'https://github.com/{repository}.git', str(work)],
+            cwd=staging_root,
+            check=False,
+        )
+        if clone.returncode != 0:
+            LOGGER.warning(
+                'staging clone failed for %s (%s); initializing fresh worktree',
+                repository,
+                (clone.stderr or '').strip(),
+            )
+            if work.exists():
+                shutil.rmtree(work)
+            _init_staging_repository(work, repository)
+        else:
+            run_git(['rm', '-rf', '.'], cwd=work, check=False)
+            for item in work.iterdir():
+                if item.name == '.git':
+                    continue
+                if item.is_dir():
+                    shutil.rmtree(item)
+                else:
+                    item.unlink()
     else:
-        work.mkdir(parents=True)
-        run_git(['init', '-b', 'main'], cwd=work)
-        run_git(['config', 'user.email', 'release@corex.local'], cwd=work)
-        run_git(['config', 'user.name', 'CoreX Release'], cwd=work)
+        _init_staging_repository(work, repository)
     write_tree_to_dir(tree, work)
     run_git(['add', '-A'], cwd=work)
     run_git(
@@ -1180,6 +1200,9 @@ def execute_publication(*, write: bool = False) -> dict:
                 publish_result = publish(evidence, admission, transport)
             except PublicationDenied as exc:
                 publish_result = f'denied:{exc}'
+            except Exception as exc:
+                LOGGER.exception('publication apply failed for %s', row['operation_id'])
+                publish_result = f'error:{exc}'
             try:
                 reconciled = reconcile_operation(row, repository_available=repo_available, export_mod=export_mod)
             except PublicationPacketError as exc:
