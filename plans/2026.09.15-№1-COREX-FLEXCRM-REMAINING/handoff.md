@@ -1,36 +1,28 @@
-# HANDOFF — 2026-09-19 — after P11.7
+# HANDOFF — 2026-09-19 — after PLAN-CLOSE-CI
 
-**Next:** `exec-items: task:plan-exec 2026.09.15-№1-COREX-FLEXCRM-REMAINING PLAN-CLOSE-CI` (deferred; no automatic launch)
+**Next:** none for `2026.09.15-№1-COREX-FLEXCRM-REMAINING` terminal close; owner backlog below.
 
 | Параметр | Значение |
 |---|---|
 | Batch | solo:PLAN-CLOSE-CI |
-| Model class | implementation |
-| Effort | medium |
-| Context | continue-root |
-| Суть | P11.7 closed: SEAL-01..06; flexcrm@929a7c3f; CoreX dependency reconciliation sealed; app-only continuation bound. |
+| Disposition | 🟡 closed with owner residuals |
+| Суть | D44 CI/deferral work delivered on `main` → `academici/corex-mirror`; P9.8 cohort publication not complete. |
 
-**P11.7 attempt 1 (🟢 Done):**
+## PLAN-CLOSE-CI summary
 
-| Carrier | Result |
+| Area | Result |
 |---|---|
-| `task-check.py --check design` | PASS |
-| `reconcile-consumer.py --prepare-seal` | PASS — final cross-repo seal |
-| `validate-p11.py --stage seal` | PASS |
-| `reconcile-consumer.py --self-test` | PASS |
+| Deferral guards | Removed |
+| CI / workflows | Product fixes through `dbe0f3c` (monitor latest mirror `CI` run) |
+| `findings/PLAN-CLOSE-ci.md` | Terminal receipt |
+| P9.8 publication | **BLOCKED** — `findings/P9-publication.md`; ledger `pending` |
 
-**Seal summary:**
+## Owner backlog (outside this plan item)
 
-- Report: `findings/P11-final-reconciliation.md` (p11-reconciliation-report/1)
-- Consumer commit: **929a7c3f7994edc4…** on `consumer-dependency-reconciliation`
-- Selected atoms: **146**; required CoreX gaps: **0**
-- App-only statement: sealed in flexcrm `plans/FLEX-2/handoff.md`
-- Accepting actor: FlexCRM consumer owner / crm-consumer-tests-20260919
+1. **P9.8** — resolve immutable tag collisions (PUB-07) or approve new cohort version; then `--write` / reconcile to `complete`.
+2. **Mirror CI** — confirm green after latest pushes; API coverage/flakes if still red.
+3. **P9.9** — released-install remote proof when publication unblocks.
+4. **P10** effective seal still readiness-only (`required_gaps=169`).
+5. **FLEX-2** product milestones remain in FlexCRM.
 
-**Remaining:**
-
-- `PLAN-CLOSE-CI`: D44 CI/workflows/package-graph gate (terminal; deferred per owner policy)
-- P10 effective seal still readiness-only (`required_gaps=169`)
-- FLEX-2 product milestones (P6.5/P6.17/P6.18) remain separately owned in FlexCRM
-
-**⛔ До `PLAN-CLOSE-CI`:** remote central/cloud ops, `gh`, CI/workflows — только producer-requests packet.
+**Paused by:** `2026.09.19-№1-COREX-PLATFORM-HARDENING` (platform hardening plan owns follow-on engineering).

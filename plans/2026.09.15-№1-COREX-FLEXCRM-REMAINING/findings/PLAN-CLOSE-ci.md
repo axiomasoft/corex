@@ -1,7 +1,9 @@
 # PLAN-CLOSE-CI — terminal receipt
 
 **Item:** `phases/PLAN-CLOSE/PLAN-CLOSE-CI.md`  
-**Commits (product):** `1696cb3`, `b4302c6`, `561b346`, `981884b`, CI follow-up on `main` (stancl tenancy register, auth/tasks/pg, API unit suite, PHPStan S3 stub).
+**Disposition:** 🟡 **Closed (residual owner)** — 2026-09-19. CI/deferral scope delivered; full cohort publication not complete.
+
+**Commits (product):** `1696cb3` … `dbe0f3c` (+ auth public GitHub VCS on close).
 
 ## Deferral
 
@@ -17,9 +19,9 @@
 | 35430335542 | `1696cb3` | 0s / no jobs | Invalid workflow guards → removed in `b4302c6` |
 | 35432897570 | `b4302c6` | `composer update` fail (stancl) | `561b346`: `stage-stancl-providers.py` before every `composer update` in `ci.yml` + `distribution-proof.yml` |
 | 35434414648 | `561b346` | PG + API coverage + root coverage | PG: create `corex_search_{a,b}_test`; coverage job: same + Meilisearch service `:7700`; API: include `tests/Unit` in `packages/api/phpunit.xml` (was excluded → ~71.6% on CI) |
-| 35435304191 | `981884b` | PG green; API ~72.3%; auth/tasks/tenancy/quality | `stage-stancl-providers` also registers `packages/tenancy`; auth path repos + `AZGUARD_TOKEN`; tasks PG service + `test:pg`; PHPStan AWS stub; API unit tests |
+| 35435304191 | `981884b` | PG green; API ~72.3%; auth/tasks/tenancy/quality | `stage-stancl-providers` also registers `packages/tenancy`; auth path repos + public AzGuard VCS; tasks PG service + `test:pg`; PHPStan AWS stub; API unit tests |
 
-**Expected after next push:** mirror CI green except publication-dependent items; auth job requires `secrets.AZGUARD_TOKEN` on `academici/corex-mirror`.
+**Expected after next push:** mirror CI green except publication-dependent items; auth job registers public GitHub VCS `axiomasoft/azguard` (no secrets) then `composer update` in `packages/auth`.
 
 ## Local gates (post-fix tree)
 
@@ -42,7 +44,7 @@
 
 | Deliverable | Status |
 |---|---|
-| Green mirror CI | In flight (fixes committed; await run) |
-| Ledger `complete` | **Pending** (publication) |
+| Green mirror CI | **Delivered fixes** — verify latest run on `academici/corex-mirror` |
+| Ledger `complete` | **Owner** (P9.8 / PUB-07) |
 | `findings/PLAN-CLOSE-ci.md` | This file |
-| Plan terminal handoff | Update `handoff.md` when CI green + owner resolves publication collisions |
+| Plan terminal handoff | `handoff.md`, `phases/PLAN-CLOSE/PLAN-CLOSE-CI.state.md` |

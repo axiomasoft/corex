@@ -42,8 +42,8 @@ parameters:
     bootstrapFiles:
         - tests/phpstan-stubs/AwsS3Client.php
         # Auth remains intentionally absent from the root dependency graph:
-        # its private AzGuard dependency is available only in this package's
-        # own test environment. Loading that installed package autoloader lets
+        # AzGuard resolves only in packages/auth's own Composer install.
+        # Loading that installed package autoloader lets
         # this rules-only pass parse the auth suite without adding Larastan.
         - packages/auth/vendor/autoload.php
 

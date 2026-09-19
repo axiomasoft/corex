@@ -17,7 +17,7 @@
 | Target Operator Classes | frontier/high gpt-5.6-sol для детализации; execution models выбирает Sol |
 | Approval Owner | Dmitry Vostrikov; external ownership/authority отдельно по gate ledger |
 | visibility | private |
-| Paused By | 2026.09.19-№1-COREX-PLATFORM-HARDENING (2026-09-19); остаток `PLAN-CLOSE-CI` (D44) сохраняется за этим планом |
+| Paused By | 2026.09.19-№1-COREX-PLATFORM-HARDENING (2026-09-19); `PLAN-CLOSE-CI` closed 🟡 2026-09-19 (P9.8 publication owner residual) |
 
 ## 1. Context
 

@@ -464,16 +464,8 @@ jobs:
       - name: Stage sealed stancl provider candidates
         run: python3 scripts/distribution/stage-stancl-providers.py
 
-      - name: Configure AzGuard private Composer channel
-        env:
-          AZGUARD_TOKEN: ${{ secrets.AZGUARD_TOKEN }}
-        run: |
-          if [ -z "${AZGUARD_TOKEN}" ]; then
-            echo "AZGUARD_TOKEN secret is required for auth-tests (D83)." >&2
-            exit 1
-          fi
-          composer --working-dir=packages/auth config github-oauth.github.com "${AZGUARD_TOKEN}"
-          composer --working-dir=packages/auth config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
+      - name: Register public AzGuard GitHub VCS
+        run: composer --working-dir=packages/auth config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
 
       - name: Install dependencies
         run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress

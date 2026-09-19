@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- PLAN-CLOSE-CI: снят `scripts/.plan-close-deferred`; CI на `academici/corex-mirror` — stancl provider staging, PG test DB prep, Meilisearch в coverage job, jobs auth/tasks/tenancy; публичный AzGuard VCS (`axiomasoft/azguard`) без секретов.
 - Гейт графа пакетов: allowlist проверяет содержимое `guard_file` по `guard_contains`; host-reserved namespace валидируется по трём условиям §2.3; резервации и именованные исключения печатаются в отчёте (P12A.4, A1).
 - `corex/core`: `DataScope` больше не несёт `Closure $authorize` — проверка доступа через контракт `DataScopeAuthorizer`, резолвимый на исполняющей стороне; объект полностью сериализуем (P12.8, G-API/D41).
 - `corex/intl`: `IntlModule` приведён к контракту `CorexModule` — discovery модулей больше не падает на `InvalidManifestException`.

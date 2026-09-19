@@ -181,7 +181,7 @@ generated_by: task plan-views status
 | P9.6 | Проверить independent optional private auth install | 🟢 Done | 2026-09-18 |
 | P9.7 | Запечатать concrete publication packet и gate request | 🟢 Done | 2026-09-18 |
 | P9.8 | Доставить exact cohort через admitted channels и reconcile | 🟡 Paused | 2026-09-18 |
-| PLAN-CLOSE-CI | Свести CI/workflows (D44, после P11.7) | ⬜ Not started | — |
+| PLAN-CLOSE-CI | Свести CI/workflows (D44, после P11.7) | 🟡 Closed (residual: P9.8 publication, mirror CI verify) | 2026-09-19 |
 | P9.9 | Проверить released consumers и выдать compatibility passport/seal | ⬜ Not started | — |
 
 ## 6. Update Log

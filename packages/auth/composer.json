@@ -50,6 +50,10 @@
         {
             "type": "path",
             "url": "../modules"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/axiomasoft/azguard.git"
         }
     ],
     "minimum-stability": "dev",
