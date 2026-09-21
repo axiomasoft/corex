@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "65441b16218ebfc04889385b8b9a1aeff066d217",
+  "continuity": {
+    "evidence": [
+      "persisted-context:design-root-terminal"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:48ae559f08a030198aab9e512ab7011c073d4726c388c56edac3381088c63d83",
+    "plan": "sha256:f233bebc6a3efd7b5e1c497ae00987fb275cf1b5615aa650261f53188277805c",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P13",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": "",
+    "remaining": ""
+  },
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P13\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier/high; Codex projection: GPT-6 Astra, fallback GPT-5.6 Sol (D37) |\n| Effort | high — operation contract, transport compatibility and owner-bound G-API |\n| Capabilities | Perplexity MCP, primary-source verification, repository reads |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Детализировать P13 поверх P12 error descriptors и operation observer, не начиная execution. |\n\n**Native Codex launch:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra \\\n  -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access \\\n  '$ task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P13'\n```\n\n**Жизненный цикл (D14).** Стадия 1 детализировала P1–P12. Остались\nP13–P17. Затем один независимый whole-plan audit на GPT-6 Astra; только\nпосле него начинается исполнение. **P12 items сейчас не запускать.**",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P12"
+}

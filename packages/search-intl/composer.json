@@ -28,6 +28,15 @@
         }
     },
     "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\SearchIntl\\Contracts",
+                "CoreX\\SearchIntl\\Data"
+            ]
+        },
         "laravel": {
             "providers": [
                 "CoreX\\SearchIntl\\SearchIntlServiceProvider"
@@ -35,9 +44,18 @@
         }
     },
     "repositories": [
-        {"type": "path", "url": "../core"},
-        {"type": "path", "url": "../intl"},
-        {"type": "path", "url": "../search"}
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../intl"
+        },
+        {
+            "type": "path",
+            "url": "../search"
+        }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -1,0 +1,12 @@
+{
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "effort": "high",
+  "invocation": "$ task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P15",
+  "model": "gpt-5.6-sol",
+  "model_class": "frontier",
+  "source": "provider-thread-state",
+  "source_version": "codex-turn-context-v1",
+  "thread_id": "01a0bd56-3ab7-7862-bdba-84de4b14c88e",
+  "ts": "2026-09-20T05:43:26Z"
+}
+

@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "65441b16218ebfc04889385b8b9a1aeff066d217",
+  "continuity": {
+    "evidence": [
+      "persisted-context:design-root-terminal"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:3195449d8f491dbd76679c02ebf740e1a297c0b741f5a6ceaebeb704cdc0fbdb",
+    "plan": "sha256:dc49bfbad78a28deb317161e2098bb243eab2ccf1c2208a43e2bd7081b8f7703",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "audit-design: task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": null,
+    "remaining": ""
+  },
+  "recommendation": "**Next:** audit-design: task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Effort | high |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Независимый repeat design audit после DA01–DA14 remediation. |",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

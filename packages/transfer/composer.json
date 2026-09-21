@@ -9,10 +9,38 @@
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
     },
-    "autoload": {"psr-4": {"CoreX\\Transfer\\": "src/"}},
-    "autoload-dev": {"psr-4": {"CoreX\\Transfer\\Tests\\": "tests/"}},
-    "extra": {"laravel": {"providers": ["CoreX\\Transfer\\TransferServiceProvider"]}},
-    "repositories": [{"type": "path", "url": "../core"}],
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Transfer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Transfer\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Transfer\\Contracts",
+                "CoreX\\Transfer\\Data"
+            ]
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Transfer\\TransferServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {

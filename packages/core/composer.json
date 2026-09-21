@@ -38,6 +38,20 @@
         }
     },
     "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "foundation",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Contracts",
+                "CoreX\\Data",
+                "CoreX\\Enums",
+                "CoreX\\Events",
+                "CoreX\\Exceptions",
+                "CoreX\\Models",
+                "CoreX\\Concerns"
+            ]
+        },
         "laravel": {
             "providers": [
                 "CoreX\\CoreServiceProvider"

@@ -16,6 +16,15 @@
 
 ### Added
 
+- P2.4: реестр конфигурации (docs/architecture/configuration.md) — 161 ключ из 18 config-файлов, 17 undeclared-read, CFG-006 exception для corex-intl-search.
+- P2.3: реестр владения таблицами (docs/architecture/table-ownership.md) — 99 таблиц, 4 пакета-владельца sys_*, DATA-004 exception aut_role_assignments.
+- P1.7: реестр референсов, отклонённые решения, README каталога architecture (docs/architecture/references.md, docs/rejected-optimizations.md, docs/architecture/README.md).
+- P1.6: четыре политики CFG/DATA/MSG/EXT — классификации, процедуры, конверт и реестры (docs/architecture/config-policy.md, data-ownership-policy.md, message-policy.md, extension-policy.md).
+- P1.5: политика публичной поверхности — три носителя, граница `@internal` vs пакет, BC-список (docs/architecture/api-policy.md).
+- P1.2: схема `extra.corex` и заполнение 20 `composer.json` (docs/architecture/taxonomy.md).
+- P1.3: словарь имён и реестр переименований (docs/architecture/naming.md, rename-registry.md).
+- P1.4: профили структуры A/B/C и назначение по пакетам (docs/architecture/structure-profiles.md).
+- P1.1: архитектурная конституция — 58 статей, 22 анти-цели, каталог исключений (docs/architecture/constitution.md).
 - P8.1 source qualification: `findings/P8-source-qualification.md` (QUAL-01–05), delivery `tool-source-qualification-20260915/`; кандидат `opis/json-schema` 2.4.1 квалифицирован, не установлен в root vendor.
 - P8.2 tool declarations: `Api::tool` / `Api::exposeTool` в `corex/modules`, `ToolDescriptor` и bounded `tool-schema/1` validation (`ToolSchemaSupervisor` + optional Opis) в `corex/api`; `findings/P8-descriptors.md` (DESC-01–09).
 - P8.3 tool catalogue/policy: `ToolCatalogue`, `ToolPolicy`, `CompiledToolCatalogue`, `DenyToolPolicy`, `ToolServiceProvider` в `corex/api`; current-policy discover без authority cache; `findings/P8-catalogue-policy.md` (CAT-01–09).

@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "65441b16218ebfc04889385b8b9a1aeff066d217",
+  "continuity": {
+    "evidence": [
+      "persisted-context:whole-plan-independent-audit"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "whole-plan-independent-audit",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:f28aea327077f2979e9717762823e3cbf2f95334ca7eddef677764ef9c75121b",
+    "plan": "sha256:0eb58ba46c04a6f55fe108f4604b6393c13d3b6b20f53dd614cc1deaba1f8d54",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "audit-design: task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": "",
+    "remaining": ""
+  },
+  "recommendation": "**Next:** audit-design: task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | whole plan |\n| Model class | frontier; Codex GPT-6 Astra (D37), fallback only GPT-5.6 Sol |\n| Effort | high |\n| Capabilities | repository reads, independent whole-plan design audit, no product execution |\n| Context | cold-start-root: whole-plan-independent-audit |\n| Суть | Stage 2: independently audit all 17 detailed phases, cross-phase contracts, verdict coverage, dependencies and owner gates before any item execution. |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design'\n```",
+  "route": {
+    "batch": "whole plan",
+    "command": null,
+    "context": "cold-start-root: whole-plan-independent-audit",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P17"
+}

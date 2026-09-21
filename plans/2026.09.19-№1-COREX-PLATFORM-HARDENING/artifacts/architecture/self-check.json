@@ -1,0 +1,29 @@
+{
+    "schema": "inventory-self-check/1",
+    "ok": true,
+    "expected": {
+        "src_php_files": 888,
+        "config_lines": 153,
+        "static_dollar_lines": 0,
+        "internal_directories": 19,
+        "internal_files": 169,
+        "migration_files": 86
+    },
+    "observed": {
+        "src_php_files": 888,
+        "config_lines": 153,
+        "static_dollar_lines": 0,
+        "internal_directories": 19,
+        "internal_files": 169,
+        "migration_files": 86
+    },
+    "deltas": {
+        "src_php_files": 0,
+        "config_lines": 0,
+        "static_dollar_lines": 0,
+        "internal_directories": 0,
+        "internal_files": 0,
+        "migration_files": 0
+    },
+    "row_count": 888
+}

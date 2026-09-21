@@ -3,7 +3,11 @@
     "description": "CoreX module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "modules", "entity-registry"],
+    "keywords": [
+        "laravel",
+        "modules",
+        "entity-registry"
+    ],
     "authors": [
         {
             "name": "Dmitry Vostrikov",
@@ -28,6 +32,19 @@
         }
     },
     "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "foundation",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Modules\\Contracts",
+                "CoreX\\Modules\\Data",
+                "CoreX\\Modules\\Enums",
+                "CoreX\\Modules\\Events",
+                "CoreX\\Modules\\Exceptions",
+                "CoreX\\Modules\\Extend"
+            ]
+        },
         "laravel": {
             "providers": [
                 "CoreX\\Modules\\ModulesServiceProvider"

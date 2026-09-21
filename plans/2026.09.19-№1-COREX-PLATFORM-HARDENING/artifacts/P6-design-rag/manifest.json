@@ -1,0 +1,102 @@
+{
+  "artifact": "rag-capture/1",
+  "plan": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "phase": "P6",
+  "captured_at": "2026-09-19",
+  "tool": "perplexity MCP · search",
+  "capture_kind": "response-text",
+  "capture_note": "Захват текста ответа из сессии детализации фазы P6; провайдер не возвращает подписанный payload. SHA256 считается по файлам этого каталога и фиксирует их неизменность после сохранения, но не доказывает байтовой идентичности сетевому ответу. Длинные иллюстративные листинги сокращены до сигнатур с пометкой [листинг сокращён]; смысловые утверждения, имена механизмов, значения по умолчанию, предупреждения и URL сохранены.",
+  "query_scope_rule": "D6 плана: нейтральная формулировка, без имени CoreX/FlexCRM, внутренних путей, ID правил и схемы БД. Внешний источник подтверждает только названную общую практику (RAG:✅).",
+  "known_provider_defect": "Таймаут MCP на этой фазе не воспроизвёлся. Известный с P1 дефект «ответ, начатый таблицей, усекается» на этой фазе НЕ воспроизвёлся: все пять запросов несли явную инструкцию «no tables».",
+  "known_transport_defect": "Владелец наблюдал на P5, что один вызов MCP-инструмента порождает пять и более одинаковых запросов на стороне провайдера. Дефект принадлежит MCP-транспорту Perplexity, а не плану; на содержание ответов он не влияет, но делает счётчик запросов провайдера непригодным как мера объёма RAG этой фазы. Исправление не выполнялось по прямому указанию владельца; дефект зафиксирован здесь как наблюдение.",
+  "files": [
+    { "path": "README.md", "sha256": "1ef9093ce88cc2377e724d37b0337f9799086fe5b955dd268f9be07612cfc3cf" },
+    { "path": "q01-q03.md", "sha256": "ee16788f8f202c303d5547f1ee5155f54c5d4a49a4390232b31c926d85130d3e" },
+    { "path": "q04-q05.md", "sha256": "41a4c1b93490df1c0a3799611f8122948015571f454febcdd8c45655b9793482" }
+  ],
+  "queries": [
+    {
+      "id": "P6-Q1",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. Modular monolith internal modules versus splitting a kernel into many Composer packages: when are namespace directories plus architecture tests enough, and when does a separate package become justified? Cite Fowler modular monolith, Symfony bundles versus components, Drupal modules, Shopware. What costs does a one-file Composer package add (version, CI, split repo, BC surface)? Name primary-source URLs.",
+      "sources": [
+        "https://martinfowler.com/bliki/MonolithFirst.html",
+        "https://symfony.com/doc/current/bundles.html",
+        "https://simonbrown.je/modular-monolith/",
+        "https://getcomposer.org/doc/02-libraries.md",
+        "https://www.drupal.org/docs/user_guide/en/understanding-modules.html"
+      ],
+      "used_by": ["D8", "D32", "P6.1", "research/P6-design.md §0", "roadmap.md §7"]
+    },
+    {
+      "id": "P6-Q2",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. PHP PSR-4 namespace moves of public classes: is class_alias from the new FQCN to the old FQCN a SemVer-compatible deprecation, or still a break? How should stub files versus a Composer autoload files aliases.php be written so PHPStan and Roave BackwardCompatibilityCheck treat the old name as existing? Cite PHP class_alias docs, Composer autoload files, Roave/BackwardCompatibilityCheck, Symfony deprecation policy. Name primary-source URLs.",
+      "sources": [
+        "https://www.php.net/manual/en/function.class-alias.php",
+        "https://getcomposer.org/doc/04-schema.md",
+        "https://github.com/Roave/BackwardCompatibilityCheck",
+        "https://symfony.com/doc/current/contributing/code/bc.html",
+        "https://symfony.com/doc/current/contributing/code/conventions.html#deprecations"
+      ],
+      "used_by": ["D32", "P6.1", "research/P6-design.md §4"]
+    },
+    {
+      "id": "P6-Q3",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. Composer autoload versus autoload-dev: when package A is required by package B as a production path repository, does B receive A's autoload-dev? Why is shipping an Orchestra Testbench TestCase subclass in a Laravel package production PSR-4 autoload a problem if Testbench is only require-dev? What is the accepted placement for a reusable package TestCase? Cite Composer docs autoload-dev, orchestra/testbench, Laravel package development docs. Name primary-source URLs.",
+      "sources": [
+        "https://getcomposer.org/doc/04-schema.md",
+        "https://packages.tools/testbench",
+        "https://laravel.com/docs/13.x/packages"
+      ],
+      "used_by": ["D33", "P6.5", "research/P6-design.md §8"]
+    },
+    {
+      "id": "P6-Q4",
+      "status": "success",
+      "capture": "q04-q05.md",
+      "query": "Answer in prose, no tables. Architectural fitness functions for internal dependency direction inside one PHP package: how should an allowed-dependency matrix be enforced, and why must a gate include a planted negative test that names the offending file? Contrast Pest Arch, Deptrac, PHPat, and a stdlib source scan of use statements. Cite ThoughtWorks evolutionary architecture fitness functions, PHPUnit/Pest arch docs. Name primary-source URLs.",
+      "sources": [
+        "https://www.thoughtworks.com/en-us/radar/techniques/architectural-fitness-function",
+        "https://www.thoughtworks.com/en-us/insights/articles/fitness-function-driven-development",
+        "https://pestphp.com/docs/arch-testing",
+        "https://deptrac.github.io/deptrac/",
+        "https://www.phpat.dev/getting-started/"
+      ],
+      "used_by": ["D17", "P6.2", "research/P6-design.md §6"]
+    },
+    {
+      "id": "P6-Q5",
+      "status": "success",
+      "capture": "q04-q05.md",
+      "query": "Answer in prose, no tables. DDD shared kernel versus capability modules: which of money (currency VO plus Eloquent cast), feature flags, append-only audit log, hierarchical settings, and organisational departments typically belong in a platform foundation versus a bounded capability? What litmus questions decide foundation membership? Cite Evans DDD shared kernel, Microsoft .NET architecture modular monolith, Drupal core versus modules. Name primary-source URLs.",
+      "sources": [
+        "https://www.dddcommunity.org/wp-content/uploads/files/discussion/PatternSummariesUnderCreativeCommons.doc",
+        "https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures",
+        "https://www.drupal.org/docs/user_guide/en/understanding-modules.html"
+      ],
+      "used_by": ["D34", "P6.3", "P6.4", "research/P6-design.md §5", "research/P6-design.md §10"]
+    }
+  ],
+  "unresolved": [
+    {
+      "gap": "Обязательность немедленного переноса публичного FQCN вместе с объявлением зоны",
+      "why": "Источника «зона = новый неймспейс в том же миноре» нет; Symfony против смены имени без депрекации",
+      "carried_as": "D32: зона = карта + гейт; целевые FQCN — вход P15"
+    },
+    {
+      "gap": "Что autoload-dev ядра протечёт в пакетные сьюты монорепо",
+      "why": "Источник прямо против: autoload-dev и require-dev — root-only",
+      "carried_as": "D33: production-autoload сохраняется до P16"
+    },
+    {
+      "gap": "Численный порог «достаточно потребителей для пакета»",
+      "why": "Внешней нормы нет; Q1 говорит «хотя бы два независимых приложения»",
+      "carried_as": "roadmap.md §7: свой lifecycle / внешний потребитель без ядра / brick/money как тяжёлая зависимость"
+    }
+  ]
+}

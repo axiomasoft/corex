@@ -1,0 +1,374 @@
+{
+    "schema": "package-graph/namespace-import/1",
+    "nodes": [
+        "corex/api",
+        "corex/attributes",
+        "corex/auth",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow",
+        "flex/crm"
+    ],
+    "edges": [
+        {
+            "from": "corex/api",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 11
+        },
+        {
+            "from": "corex/api",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 9
+        },
+        {
+            "from": "corex/attributes",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 32
+        },
+        {
+            "from": "corex/attributes",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 9
+        },
+        {
+            "from": "corex/auth",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 11
+        },
+        {
+            "from": "corex/auth",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 25
+        },
+        {
+            "from": "corex/intl",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/intl",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/media",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 7
+        },
+        {
+            "from": "corex/media",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/modules",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 44
+        },
+        {
+            "from": "corex/notifications",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 10
+        },
+        {
+            "from": "corex/notifications",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/notifications",
+            "to": "corex/wakeup",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 11
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 7
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/search",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/search-intl",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 3
+        },
+        {
+            "from": "corex/search-intl",
+            "to": "corex/intl",
+            "via": [
+                "use"
+            ],
+            "count": 11
+        },
+        {
+            "from": "corex/search-intl",
+            "to": "corex/search",
+            "via": [
+                "use"
+            ],
+            "count": 6
+        },
+        {
+            "from": "corex/search-meilisearch",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/search-meilisearch",
+            "to": "corex/search",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/tasks",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 20
+        },
+        {
+            "from": "corex/tasks",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 6
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 22
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/recurrence",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/tasks",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 17
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/wakeup",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 6
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/workflow",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 5
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 101
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/wakeup",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 7
+        },
+        {
+            "from": "corex/transfer",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 12
+        },
+        {
+            "from": "corex/wakeup",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 13
+        },
+        {
+            "from": "corex/wakeup",
+            "to": "corex/modules",
+            "via": [
+                "use"
+            ],
+            "count": 2
+        },
+        {
+            "from": "corex/workflow",
+            "to": "corex/core",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 6
+        },
+        {
+            "from": "corex/workflow",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 6
+        },
+        {
+            "from": "flex/crm",
+            "to": "corex/api",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 16
+        },
+        {
+            "from": "flex/crm",
+            "to": "corex/core",
+            "via": [
+                "use"
+            ],
+            "count": 18
+        },
+        {
+            "from": "flex/crm",
+            "to": "corex/modules",
+            "via": [
+                "class",
+                "use"
+            ],
+            "count": 11
+        }
+    ],
+    "gate_missed_edges": []
+}

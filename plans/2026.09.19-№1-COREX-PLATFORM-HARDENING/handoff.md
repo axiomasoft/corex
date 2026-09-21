@@ -1,109 +1,43 @@
-# HANDOFF — 2026-09-19 — after P1
+# HANDOFF — 2026-09-21 — after P2.3 + P2.4
 
-**Next:** design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P2
+## ⚠ LAUNCH — обязательный вывод в чат (plan.md Execution Rules)
+
+Исполнитель **в конце каждой** `task:plan-exec` / handoff **копирует этот блок в ответ владельцу**
+без сокращений. Одна строка `task:plan-exec …` без `--model` — дефект.
+
+| Model class | Effort | Native `--model` |
+|:--|:--|:--|
+| implementation | medium | `composer-2.5` |
+
+```bash
+agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P2.5'
+```
+
+**Next:** `task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P2.5`
 
 | Параметр | Значение |
-|---|---|
+|:--|:--|
 | Batch | solo |
-| Model class | frontier — Grok 4.6, effort `high` (D10, `plan.md` §3.1a) |
-| Effort | high — дизайн выбирает схему артефактов инвентаризации и устройство сканеров |
-| Capabilities | perplexity-search (обязательный внешний RAG фазы), чтение репозитория |
-| Context | cold-start-root: design-root-terminal |
-| Суть | Детализировать P2: схема `artifacts/architecture/files.csv`, три графа зависимостей, реестры `table-ownership.md` и `configuration.md`, базовый scorecard пакета, самопроверка сканера против измеренной базы |
+| Model class | implementation |
+| Effort | medium |
+| Native model | `composer-2.5` (pin §3.1 P2.5 · plan.md Execution Rules) |
+| Capabilities | repository read/write; PHP scanner; plan lifecycle |
+| Context | continue-root |
+| Суть | Пер-классовые вердикты + Core Litmus Test → `verdicts.csv` (§7). |
 
-```
-task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P2
-```
+**Done:** P2.3: `TableExtractor`, CLI `tables`; `artifacts/architecture/tables.csv` (99 таблиц);
+`docs/architecture/table-ownership.md` (шапка §5.4 + sys_ §5.3 + таблица); 4 пакета-владельца sys_*;
+`aut_role_assignments` exception D102; receipt §P2.3; journal closed-green.
+P2.4: `ConfigExtractor`, CLI `config`; `artifacts/architecture/config-keys.csv` (161 ключ);
+`docs/architecture/configuration.md` (шапка §6.3 + таблица); CFG-006 corex-intl-search;
+17 undeclared-read; receipt §P2.4; journal closed-green.
+composer lint:check зелёный.
 
-**Жизненный цикл плана (D14, зафиксирован владельцем 2026-09-19).** Стадия 1 — детализация
-всех 17 фаз, по одному проходу на фазу, модель по `plan.md` §3.1a. Стадия 2 — общий аудит
-плана `task:plan-audit <ID> design` на Claude Opus 5 (thinking, high), свежим независимым
-корнем. Стадия 3 — исполнение items. **Ни один `task:plan-exec` не запускается, пока не
-детализирована последняя фаза и не закрыт общий аудит**: семь готовых items фазы P1 ждут
-конца стадии 2. Осталось детализировать 16 фаз.
+**Remaining:** P2.5 (вердикты + Core Litmus Test), P2.6 (scorecard).
 
-**Done:**
+**Open risks:** `git diff packages/*/composer.json` от P1.2 — не от P2; гейт graph не трогали.
 
-- **Детализирована фаза P1.** `phases/P1/P1.md` развёрнут из скелета в контракт фазы:
-  Phase Context с двумя инвариантами (разделение владения «конституция — инвариант, политика —
-  процедура» и запрет лгать в поле `Enforcement`), заполненный DoR, Scope Included/Excluded,
-  внутрифазовые зависимости, индекс items и форма приёмки из шести проверок.
-- **Написаны семь item-спек** `P1.1`–`P1.7` по 11 полям: конституция; таксономия и заполнение
-  `extra.corex` в 20 пакетах; гид имён и реестр переименований; профили структуры; политика
-  публичной поверхности; четыре политики (конфигурация, данные, сообщения, расширение);
-  референсы, отклонённые решения, README-индекс и сверка с доктриной. Каждая спека называет
-  точный параграф `research/P1-design.md` с готовым текстом.
-- **Написан `research/P1-design.md`** — готовый нормативный текст двенадцати документов
-  `docs/architecture/**` и `docs/rejected-optimizations.md`: форма статьи, 58 статей с
-  владельцем и enforcement, 22 анти-цели с условием отмены, схема `extra.corex` и
-  распределение по 20 пакетам, профили структуры с порогами, словарь суффиксов, реестр из
-  27 переименований, закрытый список из 10 ломающих изменений, четыре политики, реестр 19
-  референсов.
-- **Собран внешний RAG фазы:** `research/P1-design-rag.md` плюс `artifacts/P1-design-rag/`
-  с `manifest.json` (9 запросов, точные строки, статусы, первичные источники, SHA256 файлов
-  захвата). Первичные источники: Composer, TYPO3, PHPStan, Symfony, Shopify, Spring Modulith,
-  CloudEvents, ADR-репозиторий.
-- **Два внешних подтверждения изменили принятые решения** — главный результат прохода:
-  - **D11** — официальная схема Composer относит категорию установки к `type`, а
-    release-стабильность к версии пакета. Поэтому `extra.corex` объявляет **архитектурные**
-    оси, ортогональные осям Composer, и получает `schema-version`.
-  - **D12** — нативная проверка `@internal` статанализом сравнивает **корни** неймспейсов, а
-    все `corex/*` живут под корнем `CoreX\`, то есть на межпакетной границе она всегда
-    зелёная. Машинным носителем границы остаётся `scripts/package-graph-gate.php`;
-    `@internal` — маркер BC-промиса. Без этого P3 построил бы всегда-зелёный гейт.
-- **D13** закрывает Q3: тумбстоун `packages/import-export` остаётся до 1.0 и объявляется
-  исключённым из всех контуров статьёй `PKG-009`.
-- **Исправлены три дефекта измерения верхнего слоя** (`research/P1-design.md` §12): итог файлов
-  888 вместо 838 (ошибка сложения собственной таблицы), миграций 86 вместо 85 (у `auth` их
-  четыре), и вердикт **N02 переведён ✅ → ✗**: `composer test:packages` фактически покрывает
-  все 20 живых пакетов, соответствующая работа из P3 снята.
-- **Приведены к канону предсуществующие носители плана:** формат `Phase Assurance` во всех 17
-  фазах (seam-id вместо прозы, закрытый enum `Impact`, `yes`/`no` в `Live or Irreversible`),
-  состав секций `plan.md` под layout v2, Routing разделён на исполнимую таблицу items и список
-  проходов детализации, создан слой `brief/`, инициализирован `journal.jsonl`, сгенерированы
-  `status.md`, виды решений, состояния items и bundle `P1.1`.
+**Sources of truth:** `journal.jsonl`; `phases/P2/P2.5.md`; `research/P2-design.md` §7;
+`artifacts/architecture/files.csv`; `findings/P2-inventory-receipts.md`.
 
-**Remaining:**
-
-- Стадия 1: детализировать 16 фаз — P2–P17. Модель каждого прохода — `plan.md` §3.1a.
-- Стадия 2: общий аудит плана; не начат.
-- Стадия 3: исполнение. Семь items фазы P1 готовы и ждут конца стадии 2 (D14).
-- Q1 (имя `corex/api`) и Q2 (имя `corex/auth`) — решения владельца; блокируют только P15.
-- Незакрытое внешнее подтверждение фазы P1: числовые пороги перехода между профилями
-  структуры извне не получены (провайдер вернул усечённый ответ). Пороги обоснованы
-  измеренным распределением 20 пакетов, внешняя часть утверждения несёт `[UNVERIFIED]`.
-- Незакрытое внешнее подтверждение верхнего слоя: практика PIM-платформ по эволюции
-  определений атрибутов — добирается при детализации P10.
-
-**Sources of truth:** `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md` ·
-`phases/P1/P1.md` и `phases/P1/P1.1.md`–`P1.7.md` · `research/P1-design.md` ·
-`research/P1-design-rag.md` · `findings/audit-verdicts.md` ·
-`research/00-baseline-metrics.md` · `decisions/` (D1–D13) · `docs/dev-doctrine.md` ·
-`audits/*` (только non-normative сырьё)
-
-**Open risks:**
-
-- Конституция создаётся **до** гейтов (P3), поэтому большая часть её статей закрывается на
-  момент закрытия P1 значением `нет — P<n>`. Это сознательно: честное «объявлено» лучше
-  ложного «исполняется». Риск — что раздел с объявленными статьями так и останется
-  объявленным; его снимает P3, а видимость даёт сводный реестр в `README.md` (P1.7).
-- `docs/03_Dev/Architecture_CoreX.md` расходится с деревом по составу пакетов (описывает
-  `commerce`, `cms`, `messenger`, `filament`, `ai`, `1c-sync`, `billing`, `components`,
-  которых нет, и называет модульную систему `flex/modules`). P1.7 лишь помечает документ
-  историческим: его ревизия — отдельное решение вне P1.
-- P4 и P6 меняют публичные контракты ядра; без owner-gate G-API они не начинаются.
-- P5, P10, P13, P14 требуют новых таблиц вне `FROZEN v1.0` — каждый случай отдельный G-DDL.
-- P14 — единственная фаза с внешними необратимыми эффектами; в тестах доставки только на
-  локальные приёмники.
-
-**Workarounds/Deferred/Open questions:**
-
-- workarounds: MCP-инструмент Perplexity усекает ответ, начинающийся с таблицы — четыре из
-  девяти ответов пришли только таблицей. Несущая недостающая часть добиралась
-  переформулированным запросом, недобранная помечена `[UNVERIFIED]`. Дефект зафиксирован в
-  `artifacts/P1-design-rag/manifest.json` (`known_provider_defect`) как известное ограничение
-  для последующих детализаций фаз.
-- deferred: GraphQL-транспорт (D7); выделение пакетов из ядра (D8); каталоги
-  `capabilities/`/`integrations/` (A24); выделение транспортных подпакетов API (S34); остаток
-  сравнительного прохода по шести платформам (research-item P13).
-- open_questions: Q1, Q2 в `open-questions.md` — требуют владельца. Q3 закрыт D13.
+**Workarounds / Deferred / Open questions:** Q1/Q2 без изменений.

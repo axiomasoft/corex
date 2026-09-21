@@ -1,0 +1,36 @@
+{
+  "phase": "P9",
+  "accessed_at": "2026-09-19",
+  "tool": "direct primary-source HTTP fetch",
+  "transport_notes": [
+    "Perplexity MCP was not available in this Codex session.",
+    "The configured web transport failed twice with connection failed.",
+    "Primary source pages were then fetched directly in read-only mode."
+  ],
+  "artifacts": [
+    {
+      "id": "P9-Q1",
+      "file": "q01-bounded-context.md",
+      "sha256": "7e28e78608ab482dd3ca200b95c7a2be7a066f1d416f60d36d4955487ba09e8f",
+      "url": "https://martinfowler.com/bliki/BoundedContext.html"
+    },
+    {
+      "id": "P9-Q2",
+      "file": "q02-ddd-layers.md",
+      "sha256": "41395d1a313354a5634700d330ee7cc683aa59eda3fdeeeb69cbea5919c86654",
+      "url": "https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice"
+    },
+    {
+      "id": "P9-Q3",
+      "file": "q03-composer-psr4.md",
+      "sha256": "30116556b86092e9826feb82e16b7061635f9cd017add64229c3481e12d6cf08",
+      "url": "https://getcomposer.org/doc/04-schema.md#psr-4"
+    },
+    {
+      "id": "P9-Q4",
+      "file": "q04-tenancy-bootstrappers.md",
+      "sha256": "533fc5f6d85f0456d675ad8869904e58976c2d972559d0beba66c274e832c338",
+      "url": "https://v4.tenancyforlaravel.com/bootstrappers/"
+    }
+  ]
+}

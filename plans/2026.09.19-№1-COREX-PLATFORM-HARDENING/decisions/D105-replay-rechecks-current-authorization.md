@@ -1,0 +1,34 @@
+---
+id: D105
+date: 2026-09-20
+status: accepted
+item: P13.8
+items: [P13, P13.6, P13.8, P13.12, P17.3]
+supersedes: [D71]
+superseded_by: null
+---
+# D105 — Replay preserves one effect but rechecks current read authorization
+
+**Actor:** plan-designer/codex-gpt-5.6-sol/high
+**Evidence:** `RAG:—` DA03 proves handler-owned record policy is skipped when a
+stored semantic outcome is replayed after permissions change.
+
+## Решение
+
+The five independent layers remain an intersection. Each replayable operation that can
+return protected records declares a side-effect-free result authorization/projection
+seam. Both fresh and stored outcomes pass current tenant, record and field policy before
+transport projection. Current denial beats replay; current field pruning beats stored
+shape. The handler/effect is never called again. Missing replay policy for a protected
+operation fails descriptor compilation/admission.
+
+## Почему
+
+Idempotency freezes mutation outcome, not a principal's future authority to read it.
+Re-running the handler is unsafe; re-running pure authorization is required.
+
+## Consequences
+
+P13.6 owns the side-effect-free replay-authorizer seam and routes stored outcomes through
+the same post-effect guard as fresh outcomes; P13.8 supplies the record/field policy
+projection and HTTP→tool revocation/pruning proof; P17.3 consumes it.

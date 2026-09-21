@@ -1,0 +1,65 @@
+{
+  "phase": "P13",
+  "accessed_at": "2026-09-20",
+  "tool": "Perplexity browser MCP",
+  "transport_notes": [
+    "The user explicitly requested Perplexity; one broad and four focused browser-MCP queries completed.",
+    "The broad comparison omitted part of its citation list, so its unsupported rows were not promoted into decisions and three focused vendor-pair queries were run.",
+    "The generic web connector failed with connection failed and direct Perplexity API failed DNS resolution; neither failed path is counted green.",
+    "One raw browser-MCP invocation was blocked by a local daemon-safety hook false positive; no command ran, the neutral retry completed.",
+    "Vendor-specific current defaults and limits remain non-normative; accepted CoreX decisions rest on repository evidence, recorded decisions and standards/primary-source contracts already pinned by the plan."
+  ],
+  "artifacts": [
+    {
+      "id": "P13-Q1",
+      "file": "P13-Q1-platform-comparison.md",
+      "sha256": "7bf8a0fdf77d3253a06a6391d406faa657356622ecfd79a7ec8c74b3e5f38087",
+      "sources": ["perplexity-web-mcp:search"]
+    },
+    {
+      "id": "P13-Q2",
+      "file": "P13-Q2-deprecation-standards.md",
+      "sha256": "1fd58f9809313797377c6a4de543b8d9d3a0f257b8732880d83dd0de14a2573a",
+      "sources": [
+        "perplexity-web-mcp:search",
+        "https://www.rfc-editor.org/rfc/rfc9745",
+        "https://www.rfc-editor.org/rfc/rfc8594",
+        "https://www.rfc-editor.org/rfc/rfc5829"
+      ]
+    },
+    {
+      "id": "P13-Q3",
+      "file": "P13-Q3-slack-twilio.md",
+      "sha256": "24541552c27fa272daac2b77621d80b2a7cc65a13e2496b54b1604110be83c59",
+      "sources": [
+        "perplexity-web-mcp:search",
+        "https://api.slack.com/docs/pagination",
+        "https://www.twilio.com/docs/usage/api",
+        "https://www.twilio.com/docs/openapi"
+      ]
+    },
+    {
+      "id": "P13-Q4",
+      "file": "P13-Q4-hubspot-notion.md",
+      "sha256": "94686502b0a529e44157f7afbf48f41bc8bf3be4ec4a5da3ceb5eabe521897b3",
+      "sources": [
+        "perplexity-web-mcp:search",
+        "https://developers.hubspot.com/docs/api-reference/versioning",
+        "https://developers.notion.com/reference/versioning",
+        "https://developers.notion.com/reference/pagination"
+      ]
+    },
+    {
+      "id": "P13-Q5",
+      "file": "P13-Q5-github-contentful.md",
+      "sha256": "62116957e7cdcdf5133dbf13961f9e971ea420bd8fdeafe201ca22f9fe0df80c",
+      "sources": [
+        "perplexity-web-mcp:search",
+        "https://docs.github.com/en/rest/about-the-rest-api/api-versions",
+        "https://docs.github.com/en/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api",
+        "https://www.contentful.com/developers/docs/references/content-management-api/",
+        "https://github.com/contentful/open-api"
+      ]
+    }
+  ]
+}

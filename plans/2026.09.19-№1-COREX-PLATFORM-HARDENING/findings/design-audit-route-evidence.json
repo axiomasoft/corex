@@ -1,0 +1,11 @@
+{
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "effort": "high",
+  "invocation": "$ task:plan-audit 2026.09.19-№1-COREX-PLATFORM-HARDENING design",
+  "model": "gpt-6-astra",
+  "model_class": "frontier",
+  "source": "provider-thread-state",
+  "source_version": "codex-turn-context-v1",
+  "thread_id": "01a0bea6-928a-7962-99fa-cd96123aa51b",
+  "ts": "2026-09-20T12:10:30Z"
+}

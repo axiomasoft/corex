@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-19
-inputs_sha256: 015bd44aefb40e191d0e356e747235275a202004ad44efa9ad4a9bf19b9c3b10
+through: 2026-09-21
+inputs_sha256: 2f4e25d8538cbf40b22ed1fe3c097dfa3dfbc259b1fcef3aa09483fa4a8638b8
 generated_by: task plan-views status
 -->
 
@@ -16,122 +16,287 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | ⬜ Not started |
-| Last Updated | 2026-09-19 |
+| Status | 🟡 In progress |
+| Last Updated | 2026-09-21 |
 
 ## 4. Phase Index & Status Board
 
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
-| P1 | Архитектурная конституция и нормативный слой | 0/7 | ⬜ Not started |
-| P10 | Attributes: сменный источник определений, стабильная идентичность, эволюция схемы | 0/0 | ⬜ Not started |
-| P11 | Модель расширения: типизированные реестры, compile → frozen, lifecycle | 0/0 | ⬜ Not started |
-| P12 | Таксономия ошибок и наблюдаемость операций | 0/0 | ⬜ Not started |
-| P13 | Внешний API как продукт: ядро контракта операций | 0/0 | ⬜ Not started |
-| P14 | Нагрузочный контур API: бюджеты стоимости, bulk-операции, webhooks | 0/0 | ⬜ Not started |
-| P15 | Раскатка словаря имён по реестру переименований | 0/0 | ⬜ Not started |
-| P16 | Раскатка профилей структуры по остальным пакетам | 0/0 | ⬜ Not started |
-| P17 | Доказательства универсальности и Definition of Done 1.0 | 0/0 | ⬜ Not started |
-| P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 0/0 | ⬜ Not started |
-| P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 0/0 | ⬜ Not started |
-| P4 | Durable-граница и контекст исполнения | 0/0 | ⬜ Not started |
-| P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 0/0 | ⬜ Not started |
-| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 0/0 | ⬜ Not started |
-| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 0/0 | ⬜ Not started |
-| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/0 | ⬜ Not started |
-| P9 | Tenancy: bounded contexts вместо смешанной оси | 0/0 | ⬜ Not started |
+| P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
+| P10 | Attributes: независимые определения и безопасная эволюция | 0/8 | ⬜ Not started |
+| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 0/8 | ⬜ Not started |
+| P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
+| P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
+| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
+| P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
+| P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
+| P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
+| P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 2/6 | 🟡 In progress |
+| P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 0/7 | ⬜ Not started |
+| P4 | Durable-граница и контекст исполнения | 0/12 | ⬜ Not started |
+| P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 0/12 | ⬜ Not started |
+| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 0/6 | ⬜ Not started |
+| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 0/12 | ⬜ Not started |
+| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
+| P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
 ## Phase P1
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P1.1 | Конституция: форма статьи, восемь групп инвариантов, анти-цели | ⬜ Not started | — |
-| P1.2 | Таксономия: схема `extra.corex` и её заполнение в 20 пакетах | ⬜ Not started | — |
-| P1.3 | Гид имён и реестр переименований | ⬜ Not started | — |
-| P1.4 | Профили структуры A/B/C | ⬜ Not started | — |
-| P1.5 | Политика публичной поверхности | ⬜ Not started | — |
-| P1.6 | Четыре политики: конфигурация, владение данными, сообщения, расширение | ⬜ Not started | — |
-| P1.7 | Референсы, отклонённые решения, README-индекс и сверка с доктриной | ⬜ Not started | — |
+| P1.1 | Конституция: форма статьи, восемь групп инвариантов, анти-цели | 🟢 Done | 2026-09-20 |
+| P1.2 | Таксономия: схема `extra.corex` и её заполнение в 20 пакетах | 🟢 Done | 2026-09-21 |
+| P1.3 | Гид имён и реестр переименований | 🟢 Done | 2026-09-21 |
+| P1.4 | Профили структуры A/B/C | 🟢 Done | 2026-09-21 |
+| P1.5 | Политика публичной поверхности | 🟢 Done | 2026-09-21 |
+| P1.6 | Четыре политики: конфигурация, владение данными, сообщения, расширение | 🟢 Done | 2026-09-21 |
+| P1.7 | Референсы, отклонённые решения, README-индекс и сверка с доктриной | 🟢 Done | 2026-09-21 |
 
 ## Phase P10
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P10.1 | Module-free catalogue и composition | ⬜ Not started | — |
+| P10.2 | Stable identity и canonical snapshot | ⬜ Not started | — |
+| P10.3 | G-DDL и authoritative composite catalogue | ⬜ Not started | — |
+| P10.4 | Reversible schema evolution | ⬜ Not started | — |
+| P10.5 | Entity storage resolver и index policy | ⬜ Not started | — |
+| P10.6 | Восемь write checks | ⬜ Not started | — |
+| P10.7 | Transactional mutation message | ⬜ Not started | — |
+| P10.8 | Subsystems, ratchets и final proof | ⬜ Not started | — |
 
 ## Phase P11
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P11.1 | Registry vocabulary, identity and version metadata | ⬜ Not started | — |
+| P11.2 | Deterministic compiler and canonical frozen snapshot | ⬜ Not started | — |
+| P11.3 | Runtime publication, collector freeze and refresh boundaries | ⬜ Not started | — |
+| P11.4 | Workflow definition stamps in existing durable carriers | ⬜ Not started | — |
+| P11.5 | Versioned wakeup handler registry and stamped envelopes | ⬜ Not started | — |
+| P11.6 | Complete tasks-workflow materialization provenance | ⬜ Not started | — |
+| P11.7 | Versioned notification digest wakeups | ⬜ Not started | — |
+| P11.8 | Extension contract suite, ratchet gate and final proof | ⬜ Not started | — |
 
 ## Phase P12
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P12.1 | Core error vocabulary, policy and zone classification | ⬜ Not started | — |
+| P12.2 | API error projection and internal correlation without wire change | ⬜ Not started | — |
+| P12.3 | Attributes error distinctions and result/exception proof | ⬜ Not started | — |
+| P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | ⬜ Not started | — |
+| P12.5 | Bounded metrics, P5 trace carrier and optional OpenTelemetry bridge | ⬜ Not started | — |
+| P12.6 | Universal impersonation provenance on core audit entries | ⬜ Not started | — |
+| P12.7 | Impersonation session invariants and cleanup | ⬜ Not started | — |
+| P12.8 | Error, observability and impersonation contract ratchets | ⬜ Not started | — |
 
 ## Phase P13
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P13.1 | Compiled operation semantics and modes | ⬜ Not started | — |
+| P13.2 | One transport-neutral operation invocation seam | ⬜ Not started | — |
+| P13.3 | Immutable API profile, capabilities and deprecation catalogue | ⬜ Not started | — |
+| P13.4 | Package routes, discovery and HTTP operation projection | ⬜ Not started | — |
+| P13.5 | Tenant idempotency store and schema | ⬜ Not started | — |
+| P13.6 | Idempotent operation invocation and replay | ⬜ Not started | — |
+| P13.7 | Signed scoped cursor and ordering registry | ⬜ Not started | — |
+| P13.8 | Resource identifiers and five authorization layers | ⬜ Not started | — |
+| P13.9 | External error envelope and Problem Details | ⬜ Not started | — |
+| P13.10 | Deterministic v1 contract snapshots | ⬜ Not started | — |
+| P13.11 | API compatibility gate and CI ratchet | ⬜ Not started | — |
+| P13.12 | Final operation-contract ratchets and freeze | ⬜ Not started | — |
 
 ## Phase P14
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P14.1 | Compiled cost recipes | ⬜ Not started | — |
+| P14.2 | Pure estimator and API projection | ⬜ Not started | — |
+| P14.3 | Budget, bulk and webhook schema ownership | ⬜ Not started | — |
+| P14.4 | Atomic hierarchical budget and settlement | ⬜ Not started | — |
+| P14.5 | Shared invocation cost admission | ⬜ Not started | — |
+| P14.6 | Bulk lifecycle contract and SQL store | ⬜ Not started | — |
+| P14.7 | Transfer import cancellation and enforced limits | ⬜ Not started | — |
+| P14.8 | Public export runner and bounded capture | ⬜ Not started | — |
+| P14.9 | Transfer adapter and durable bulk worker | ⬜ Not started | — |
+| P14.10 | Bulk endpoints and protected results | ⬜ Not started | — |
+| P14.11 | Declared webhook topics and subscription policy | ⬜ Not started | — |
+| P14.12 | Transactional outbox fan-out and delivery identity | ⬜ Not started | — |
+| P14.13 | Standard Webhooks signer and synthetic rotation | ⬜ Not started | — |
+| P14.14 | SSRF policy and pinned HTTPS transport | ⬜ Not started | — |
+| P14.15 | Leased delivery, retry and dead-letter | ⬜ Not started | — |
+| P14.16 | Webhook management, history and bounded replay | ⬜ Not started | — |
+| P14.17 | Retention and recovery cleanup | ⬜ Not started | — |
+| P14.18 | Load-contour snapshots and compatibility gate | ⬜ Not started | — |
+| P14.19 | Typed options and guarded activation wiring | ⬜ Not started | — |
+| P14.20 | Package surfaces and integrated contract fixtures | ⬜ Not started | — |
+| P14.21 | Documentation and phase qualification receipt | ⬜ Not started | — |
 
 ## Phase P15
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P15.1 | Modules vocabulary и ModuleDefinition | ⬜ Not started | — |
+| P15.2 | Attributes vocabulary | ⬜ Not started | — |
+| P15.3 | Search unavailable provider | ⬜ Not started | — |
+| P15.4 | Meilisearch provider vocabulary | ⬜ Not started | — |
+| P15.5 | Transfer executor and sink | ⬜ Not started | — |
+| P15.6 | Tasks Workflow integration vocabulary | ⬜ Not started | — |
+| P15.7 | Wakeup public contract vocabulary | ⬜ Not started | — |
+| P15.8 | API operation class vocabulary | ⬜ Not started | — |
+| P15.9 | Tenancy available accounts result | ⬜ Not started | — |
+| P15.10 | Core semantic-zone FQCN moves | ⬜ Not started | — |
+| P15.11 | Conditional API package identity rename | ⬜ Not started | — |
+| P15.12 | Conditional Auth package identity rename | ⬜ Not started | — |
+| P15.13 | Registry and surface reconciliation | ⬜ Not started | — |
+| P15.14 | P15 full qualification and negative completeness proof | ⬜ Not started | — |
 
 ## Phase P16
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P16.1 | Intl subsystem-first physical layout | ⬜ Not started | — |
+| P16.2 | Notifications subsystem-first physical layout | ⬜ Not started | — |
+| P16.3 | Tasks subsystem-first physical layout | ⬜ Not started | — |
+| P16.4 | API profile C operation surface | ⬜ Not started | — |
+| P16.5 | API Cost and Bulk contexts | ⬜ Not started | — |
+| P16.6 | API Webhooks context | ⬜ Not started | — |
+| P16.7 | Modules root consistency | ⬜ Not started | — |
+| P16.8 | CRM feature-first physical layout | ⬜ Not started | — |
+| P16.9 | Panels research verdict and no-move proof | ⬜ Not started | — |
+| P16.10 | Dev-only Testing boundary | ⬜ Not started | — |
+| P16.11 | Producer-adjusted compact/Profile-B matrix and Transfer growth map | ⬜ Not started | — |
+| P16.12 | Structural metadata and gate reconciliation | ⬜ Not started | — |
+| P16.13 | Full structural qualification and negative proofs | ⬜ Not started | — |
 
 ## Phase P17
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P17.1 | Frozen release cohort and deterministic candidate repository | ⬜ Not started | — |
+| P17.2 | External extension fixture matrix | ⬜ Not started | — |
+| P17.3 | External REST and MCP consumers | ⬜ Not started | — |
+| P17.4 | External bulk and webhook consumers | ⬜ Not started | — |
+| P17.5 | Independent equipment-registry consumer | ⬜ Not started | — |
+| P17.6 | Pristine installation and compatibility profiles | ⬜ Not started | — |
+| P17.7 | Supported-version upgrade proof | ⬜ Not started | — |
+| P17.8 | Final scorecard and documentation/public-example contract | ⬜ Not started | — |
+| P17.9 | Normative 27-row DoD manifest and generated document | ⬜ Not started | — |
+| P17.10 | Executable DoD gate and anti-false-green proof | ⬜ Not started | — |
+| P17.11 | Stable metadata and sealed release preflight | ⬜ Not started | — |
+| P17.12 | G-RELEASE publication and exact-tag post-publication proof | ⬜ Not started | — |
 
 ## Phase P2
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P2.1 | Сканер символов и импортов, `files.csv`, самопроверка базы | 🟢 Done | 2026-09-21 |
+| P2.2 | Три графа зависимостей и отчёт расхождений | 🟢 Done | 2026-09-21 |
+| P2.3 | Реестр владения таблицами и разрешение префикса `sys_` | ⬜ Not started | — |
+| P2.4 | Реестр конфигурации и сохранённый ключ `corex-intl-search` | ⬜ Not started | — |
+| P2.5 | Пер-классовые вердикты и Core Litmus Test | ⬜ Not started | — |
+| P2.6 | Базовый scorecard 20 пакетов × 12 критериев | ⬜ Not started | — |
 
 ## Phase P3
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P3.1 | Контур PHPStan по currently-green пакетам (N03) | ⬜ Not started | — |
+| P3.2 | Tokenizer-граф: group-use, FQCN, extends | ⬜ Not started | — |
+| P3.3 | R4 / R4b / R5 в гейте графа | ⬜ Not started | — |
+| P3.4 | Roave BC-дифф, PHP 8.4, blocking только stable | ⬜ Not started | — |
+| P3.5 | Маркер DurablePayload и PHPStan-правило | ⬜ Not started | — |
+| P3.6 | Гейт имён и наблюдательный `config()` | ⬜ Not started | — |
+| P3.7 | A57/A61/A99 и T1/T2/T4 владения таблицами | ⬜ Not started | — |
 
 ## Phase P4
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P4.1 | Транзитная форма `DataScope`: скаляры, `VERSION`, `fromTenantContext()` | ⬜ Not started | — |
+| P4.2 | Контракт `TenantContextRestorer` и сверяющая реализация | ⬜ Not started | — |
+| P4.3 | Миграция `attributes`: каталог полей на restorer, конструирование в тестах | ⬜ Not started | — |
+| P4.4 | Миграция `tasks-workflow`: материализатор и wakeup-handler | ⬜ Not started | — |
+| P4.5 | Миграция конструирования в тестах `search`, `search-intl`, `search-meilisearch` | ⬜ Not started | — |
+| P4.6 | Миграция конструирования в тестах `intl` и `transfer` | ⬜ Not started | — |
+| P4.7 | Флип к скалярам, маркер `DurablePayload`, ужесточение правила на `array<mixed>` | ⬜ Not started | — |
+| P4.8 | `DataScopeCodec`: версия формата, отказ на неизвестной и на неполной | ⬜ Not started | — |
+| P4.9 | Часы PSR-20: `psr/clock`, `SystemClock`, `FrozenClock`, `LaravelClock` | ⬜ Not started | — |
+| P4.10 | Часы в durable-путях `wakeup`: lease, backoff, наступление срока | ⬜ Not started | — |
+| P4.11 | Доказательство изоляции контекста между единицами работы | ⬜ Not started | — |
+| P4.12 | Аудит `singleton`/`scoped` и гейт контекст-зависимых конструкторов | ⬜ Not started | — |
 
 ## Phase P5
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P5.1 | `message-policy.md` до исполнимого вида: типы полей, процедура объявления, не-обещания | ⬜ Not started | — |
+| P5.2 | `MessageEnvelope`, `MessagePayload`, `MessageContract` и два enum'а | ⬜ Not started | — |
+| P5.3 | Реестр объявленных контрактов и отказ на необъявленном (`MSG-002`) | ⬜ Not started | — |
+| P5.4 | DDL `sys_outbox_messages` и `sys_inbox_messages`, блок `corex.messaging`, владение таблицами | ⬜ Not started | — |
+| P5.5 | `Outbox::append()` внутри бизнес-транзакции | ⬜ Not started | — |
+| P5.6 | `OutboxRelay`: lease со `SKIP LOCKED`, fence-отметка, backoff, dead-letter | ⬜ Not started | — |
+| P5.7 | Порт `MessagePublisher` и команда relay с кооперативной остановкой | ⬜ Not started | — |
+| P5.8 | `Inbox::claim()`: `ON CONFLICT DO NOTHING` в транзакции бизнес-изменения | ⬜ Not started | — |
+| P5.9 | Retention outbox: два окна; inbox не чистится | ⬜ Not started | — |
+| P5.10 | Наблюдаемость доставки: четыре числа и команда-probe (вход P12) | ⬜ Not started | — |
+| P5.11 | Зона `Messaging`: два правила arch-гейта и обе негативные посадки | ⬜ Not started | — |
+| P5.12 | Доказательства гарантий: падение, дубль, конкуренция, откат | ⬜ Not started | — |
 
 ## Phase P6
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P6.1 | Карта зон: матрица, 109 файлов, Support/Data, целевые FQCN P15 | ⬜ Not started | — |
+| P6.2 | Arch-гейт зон: R-Z0, R-Z1, R-Z2, три посадки, PubSub ∈ Messaging | ⬜ Not started | — |
+| P6.3 | Исполняемый Core Litmus Test для Foundation | ⬜ Not started | — |
+| P6.4 | Features, Departments, Money: вердикты и кандидаты `roadmap.md` §7 | ⬜ Not started | — |
+| P6.5 | Testing: канонический `autoload-dev`, гейт R-T1, staging N09 | ⬜ Not started | — |
+| P6.6 | Свод доказательств границ зон и неизменности потребителей | ⬜ Not started | — |
 
 ## Phase P7
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P7.1 | Шаблон Options, SecretRef, CoreOptions, Config::bind | ⬜ Not started | — |
+| P7.2 | TenancyOptions, три policy, провайдер | ⬜ Not started | — |
+| P7.3 | Инъекция impersonation/status HTTP | ⬜ Not started | — |
+| P7.4 | Инъекция lifecycle/database/host | ⬜ Not started | — |
+| P7.5 | Инъекция workspace и OIDC-контроллеров | ⬜ Not started | — |
+| P7.6 | AuthOptions, провайдер, identity | ⬜ Not started | — |
+| P7.7 | Инъекция AuthOptions в access/matrix | ⬜ Not started | — |
+| P7.8 | ModulesOptions | ⬜ Not started | — |
+| P7.9 | MediaOptions | ⬜ Not started | — |
+| P7.10 | Команда `corex:config:validate` и redaction | ⬜ Not started | — |
+| P7.11 | Блокирующий гейт `config()` | ⬜ Not started | — |
+| P7.12 | D100 behavior proof: dynamic default connection and TTL matrix | ⬜ Not started | — |
 
 ## Phase P8
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P8.1 | Контракт PackageRegistrar, каталог биндингов, правило модуля | ⬜ Not started | — |
+| P8.2 | Tenancy: Runtime, Database, Provisioning | ⬜ Not started | — |
+| P8.3 | Tenancy: Identity, Workspace, DomainTrust, Authentication, Wakeup | ⬜ Not started | — |
+| P8.4 | Tenancy boot: Console, Http, Events; порядок bootstrapper'ов | ⬜ Not started | — |
+| P8.5 | Декомпозиция ModulesServiceProvider | ⬜ Not started | — |
+| P8.6 | Гейт порога размера провайдера | ⬜ Not started | — |
 
 ## Phase P9
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
+| P9.1 | Карта и compatibility baseline | ⬜ Not started | — |
+| P9.2 | Runtime и Laravel boundary | ⬜ Not started | — |
+| P9.3 | Membership без `Internal` | ⬜ Not started | — |
+| P9.4 | Account и Provisioning | ⬜ Not started | — |
+| P9.5 | Identity и Authentication/OIDC | ⬜ Not started | — |
+| P9.6 | Workspace, DomainTrust, Impersonation | ⬜ Not started | — |
+| P9.7 | Integration/Wakeup | ⬜ Not started | — |
+| P9.8 | Финальный ratchet и compatibility proof | ⬜ Not started | — |
 
 ## 6. Update Log
 
@@ -140,6 +305,47 @@ generated_by: task plan-views status
 | 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · Верхний слой: plan.md, 17 скелетов фаз, матрица вердиктов, измеренная база, 19 внешних подтверждений, D1-D10. Бэкфилл-запись авторинга (D22). |
 | 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · Детализация P1: research/P1-design.md, research/P1-design-rag.md + artifacts/P1-design-rag (9 запросов), item-спеки P1.1-P1.7, Routing 3.1a, решения D11-D13, поправки измерения (838->888, 85->86, N02 opровергнут). |
 | 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · D14 владельца: жизненный цикл плана - детализация всех 17 фаз, затем общий аудит plan-audit design, и только потом исполнение. Зафиксировано в plan.md 2/3.1a/3.1b, roadmap.md 1/3, handoff указывает на P2. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · Детализация P2: research/P2-design.md, research/P2-design-rag.md + artifacts/P2-design-rag (5 запросов), item-спеки P2.1-P2.6, Routing 3.1 P2.*, решения D15-D16 (измерение отдельно от суждения; stdlib-сканер без php-parser). Самопроверка пинится на 888/86, не 838/85. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · Детализация P3: research/P3-design.md, research/P3-design-rag.md + artifacts/P3-design-rag (6 запросов), item-спеки P3.1-P3.7, Routing 3.1 P3.*, решения D17-D19 (нет Deptrac; Roave 8.22 на PHP 8.4 blocking только stable; DATA-003 не обещается). N02 не возвращается. |
+| 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:6 |
+| 2026-09-19 | plan-designer/claude-opus-5/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:7 |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · Детализация P6: P6-design.md + RAG 5 запросов, спеки P6.1-P6.6, Routing 3.1, D32-D34 (зоны без смены FQCN; Testing staging до P16; литмус №3). G-API снят с P6, остаётся на P15. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · D35: Claude снят с живого маршрута. Оставшиеся design P7-P17 и аудит стадии 2 — Grok 4.6 high; запас Sol; крайний случай Astra (gpt-6-astra). P1/P4/P5 на Opus не переигрываются. Items — Composer 2.5. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · D36: бывший Opus (P13, P14, аудит стадии 2) на GPT-5.6 Sol, не на Grok. Запас Astra, затем Grok. Остальные незакрытые design — Grok. Astra не дефолт. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · D37: модель по объёму планирования. Grok: P7/P8/P11/P12/P15/P16/P17. Sol: P9/P10. Astra: P13/P14 и аудит стадии 2. Лестницы Astra→Sol, Sol→Grok, Grok→Sol. Astra не в Grok-фазы. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · Детализация P7: P7-design.md + RAG 5 запросов, спеки P7.1-P7.11, Routing 3.1, D38-D41 (Options только у src-чтений; Config holder; SecretRef+boot; policy не bag). G-gate CRM allowlist. Next: plan-design P8. |
+| 2026-09-19 | plan-designer/cursor-grok-4.6/high | plan-design · no-op · Детализация P8: P8-design.md + RAG 5 запросов, спеки P8.1-P8.6, Routing 3.1, D42-D45 (registrar не ServiceProvider; модули по биндингам; Laravel/; гейт 20+ratchet). Next: plan-design P9. |
+| 2026-09-19 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:14 |
+| 2026-09-19 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:15 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:16 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:17 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:18 |
+| 2026-09-20 | plan-designer/codex-gpt-6-astra/high | plan-design · no-op · P14 design: 21 items, D74–D84; Q4 closed; atomic budgets, bulk/transfer limits/public ports, webhook signing/SSRF/retry/replay. G-DDL P14.3 and G-SECRET P14.19 pending. Route mapping repaired at Task source; no execution. Next P15. |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:20 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:21 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:22 |
+| 2026-09-20 | plan-auditor/codex-gpt-6-astra/high | plan-audit · audit-red · note сокращена; полный текст: journal.jsonl:23 |
+| 2026-09-20 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · note сокращена; полный текст: journal.jsonl:24 |
+| 2026-09-20 | plan-auditor/codex-gpt-6-astra/high | plan-audit · audit-red · note сокращена; полный текст: journal.jsonl:25 |
+| 2026-09-20 | plan-auditor/codex-gpt-6/effort-unverified | plan-audit · audit-green · Stage 2 GREEN: bounded independent DA09 delta review passed; prior 13 GREEN findings reused unchanged. No product execution or owner-gate grant. Route effort remains unverified (ROUTE_LAUNCH_MISMATCH). |
+| 2026-09-20 | plan-exec/cursor-grok-4.6-high/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: --model cursor-grok-4.6-high unmapped in Cursor class_selectors; P1.1 pin is implementation/medium=composer-2.5. Invalid prior result=done dropped. Product files remain unverified. |
+| 2026-09-20 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P1.1: qualify constitution (wrap, PKG-009/STR boundary, design tables) |
+| 2026-09-20 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.1 GREEN: constitution 58+22, exceptions, CHANGELOG; prose ≤100 (Python check) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · batch exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · batch exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · batch exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.2 GREEN: deliverables + validation |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.3 GREEN: deliverables + validation |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.4 GREEN: deliverables + validation |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P1.5 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.5 GREEN: api-policy.md + CHANGELOG |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P1.6 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.6 GREEN: four policy docs + CHANGELOG + receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P1.7 GREEN: references, rejected-optimizations, architecture README, doctrine link, receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.1 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.1 GREEN: inventory scanner, CSV artifacts, self-check, receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.2 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.2 GREEN: GraphBuilder, three graphs, discrepancies, receipt |
 
 ## Owner Gates
 

@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "65441b16218ebfc04889385b8b9a1aeff066d217",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:f01ceaf3917079d458d3ebe1dbc654c8b096db470cc22d7a9a5f821f06dad35e",
+    "plan": "sha256:0eb58ba46c04a6f55fe108f4604b6393c13d3b6b20f53dd614cc1deaba1f8d54",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "manual: Доработать дизайн PLAN2 по DA01–DA14 из findings/design-audit-2026-09-20.md, начиная с P3.4; не исполнять items до снятия замечаний Stage 2.",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": "",
+    "remaining": ""
+  },
+  "recommendation": "**Next:** manual: Доработать дизайн PLAN2 по DA01–DA14 из findings/design-audit-2026-09-20.md, начиная с P3.4; не исполнять items до снятия замечаний Stage 2.\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Effort | high |\n| Capabilities | design correction; repository reads; no product execution |\n| Context | continue-root |\n| Суть | Исправить подтверждённые дефекты дизайна по аудиту; это рекомендация, не запуск. |",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "continue-root",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

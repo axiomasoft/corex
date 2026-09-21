@@ -3,7 +3,13 @@
     "description": "CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications.",
     "type": "corex-module",
     "license": "MIT",
-    "keywords": ["laravel", "tasks", "kanban", "projects", "multi-tenancy"],
+    "keywords": [
+        "laravel",
+        "tasks",
+        "kanban",
+        "projects",
+        "multi-tenancy"
+    ],
     "authors": [
         {
             "name": "Dmitry Vostrikov",
@@ -36,7 +42,18 @@
     },
     "extra": {
         "corex": {
-            "module": "CoreX\\Tasks\\TasksModule"
+            "schema-version": 1,
+            "module": "CoreX\\Tasks\\TasksModule",
+            "package-type": "capability",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Tasks\\Contracts",
+                "CoreX\\Tasks\\Data",
+                "CoreX\\Tasks\\Enums",
+                "CoreX\\Tasks\\Events",
+                "CoreX\\Tasks\\Exceptions",
+                "CoreX\\Tasks\\Models"
+            ]
         },
         "laravel": {
             "providers": [

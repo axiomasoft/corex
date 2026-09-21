@@ -1,0 +1,55 @@
+{
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "42824489f49d4c469904588df33a7d79dff3252c43541b300974aaf2e2ea061d",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "design-root-terminal",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "findings/P14-route-evidence.json",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "evidence": [
+      "batch:42824489f49d4c469904588df33a7d79dff3252c43541b300974aaf2e2ea061d",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "checkpoint:findings/P14-route-evidence.json"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "next": {
+    "kind": "design-phase",
+    "command_id": "task:plan-design",
+    "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+    "arguments": [
+      "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+      "P15"
+    ],
+    "context_kind": "cold-start-root",
+    "item_ids": [],
+    "cold_start_scope": [],
+    "continuity": {
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "evidence": [
+        "batch:42824489f49d4c469904588df33a7d79dff3252c43541b300974aaf2e2ea061d",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "checkpoint:findings/P14-route-evidence.json"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    }
+  }
+}

@@ -3,7 +3,12 @@
     "description": "CoreX physical DB-per-account tenancy — root-schema control plane on stancl/tenancy v4 (B-11, D13).",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "multi-tenancy", "stancl", "saas"],
+    "keywords": [
+        "laravel",
+        "multi-tenancy",
+        "stancl",
+        "saas"
+    ],
     "authors": [
         {
             "name": "Dmitry Vostrikov",
@@ -44,6 +49,17 @@
         }
     },
     "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Tenancy\\Contracts",
+                "CoreX\\Tenancy\\Events",
+                "CoreX\\Tenancy\\Exceptions",
+                "CoreX\\Tenancy\\Models"
+            ]
+        },
         "laravel": {
             "providers": [
                 "CoreX\\Tenancy\\TenancyServiceProvider"

@@ -1,0 +1,103 @@
+{
+  "artifact": "rag-capture/1",
+  "plan": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "phase": "P4",
+  "captured_at": "2026-09-19",
+  "tool": "perplexity MCP · search",
+  "capture_kind": "response-text",
+  "capture_note": "Захват текста ответа из сессии детализации фазы P4; провайдер не возвращает подписанный payload. SHA256 считается по файлам этого каталога и фиксирует их неизменность после сохранения, но не доказывает байтовую идентичность сетевому ответу. Длинные иллюстративные листинги сокращены до сигнатур с пометкой [листинг сокращён]; смысловые утверждения, имена механизмов, значения по умолчанию и URL сохранены.",
+  "query_scope_rule": "D6 плана: нейтральная формулировка, без имени CoreX/FlexCRM, внутренних путей, ID правил и схемы БД. Внешний источник подтверждает только названную общую практику (RAG:✅).",
+  "known_provider_defect": "Ответ, начинающийся с таблицы, усекается — известен с P1. На P4 воспроизведён один раз (P4-Q6, попытка 1). Повтор с явным запретом таблиц дал полный ответ.",
+  "files": [
+    { "path": "README.md", "sha256": "b3b334e202a8b6294b7b104616efe007e51c9d58a59e93c9b1d3b63b4043dee1" },
+    { "path": "q01-q03.md", "sha256": "0bb5a9dba18ef72fc54049170cae71b4df151bf035f929bb6d62acc219d97b84" },
+    { "path": "q04-q06.md", "sha256": "4018d2d7bdaca54f9223acffb8b2afe0aba7da7ba7ce0fc472f007123bcd87f4" }
+  ],
+  "queries": [
+    {
+      "id": "P4-Q1",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Explain in prose first, do not start with a table. In 2026 should a PHP library define its own Clock interface or depend on psr/clock PSR-20 ClockInterface? Current status and adoption of PSR-20, what ClockInterface::now() returns, and accepted frozen/mock clock patterns for tests (psr/clock, symfony/clock, lcobucci/clock). How does Laravel Carbon::setTestNow relate to injected clocks. Name primary-source URLs.",
+      "sources": [
+        "https://www.php-fig.org/psr/psr-20/",
+        "https://www.php-fig.org/psr/psr-20/meta/",
+        "https://packagist.org/packages/psr/clock",
+        "https://packagist.org/providers/psr/clock-implementation",
+        "https://symfony.com/doc/current/components/clock.html",
+        "https://github.com/lcobucci/clock",
+        "https://laravel.com/docs/12.x/mocking#interacting-with-time",
+        "https://github.com/briannesbitt/Carbon"
+      ],
+      "used_by": ["D20", "P4.9", "P4.10", "research/P4-design.md §7"]
+    },
+    {
+      "id": "P4-Q2",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Explain in prose first, do not start with a table. Versioning a serialized payload that crosses a durable boundary (queue job, outbox row, checkpoint): explicit format version field, rejecting unknown versions instead of defaulting, failing on missing required keys instead of partial objects, deterministic key ordering for hashing and idempotency fingerprints, upcasting older versions. Event-sourcing upcaster practice and RFC 8785 JSON Canonicalization Scheme. Name primary-source URLs.",
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc8785.html",
+        "https://www.rfc-editor.org/info/rfc8785/",
+        "https://martendb.io/events/versioning.html",
+        "https://martinfowler.com/eaaDev/EventSourcing.html"
+      ],
+      "used_by": ["P4.8", "research/P4-design.md §5", "research/P4-design.md §6"]
+    },
+    {
+      "id": "P4-Q3",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Explain in prose first, do not start with a table. In a long-running Laravel worker or Octane process, what exactly is reset between two consecutive jobs or requests and what is not? Container scoped bindings and forgetScopedInstances, singleton instances that captured a request or config, static properties, config repository mutations, and app()->instance() overrides. How do you write a test that proves no state leaks between two consecutive units of work for different tenants, including when the first unit throws an exception? Name primary-source URLs from Laravel Octane and queue documentation.",
+      "sources": [
+        "https://laravel.com/docs/12.x/octane",
+        "https://laravel.com/docs/12.x/queues",
+        "https://laravel.com/docs/12.x/container",
+        "https://api.laravel.com/docs/13.x/Illuminate/Container/Container.html",
+        "https://github.com/laravel/octane"
+      ],
+      "used_by": ["D23", "P4.11", "P4.12", "research/P4-design.md §8", "research/P4-design.md §9"]
+    },
+    {
+      "id": "P4-Q4",
+      "status": "success",
+      "capture": "q04-q06.md",
+      "query": "Explain in prose first, do not start with a table. Multi-tenant PHP/Laravel with a separate database per tenant: how should a queued job carry tenant identity and re-establish the tenant database connection in the worker? Why should the payload carry only a scalar tenant identifier rather than a hydrated tenant object, how does stancl/tenancy QueueTenancyBootstrapper initialize and end tenancy around each job, what happens on retries and failed jobs, and how do you assert at runtime that the worker is operating on the intended tenant connection. Name primary-source URLs.",
+      "sources": [
+        "https://tenancyforlaravel.com/docs/v3/tenancy-bootstrappers/",
+        "https://tenancyforlaravel.com/docs/v3/queues/",
+        "https://api.tenancyforlaravel.com/master/stancl/tenancy/bootstrappers/queuetenancybootstrapper",
+        "https://laravel.com/docs/queues"
+      ],
+      "used_by": ["D22", "P4.2", "P4.11", "research/P4-design.md §4"]
+    },
+    {
+      "id": "P4-Q5",
+      "status": "success",
+      "capture": "q04-q06.md",
+      "query": "Explain in prose first, do not start with a table. Backward compatibility of a public PHP value object when its constructor signature changes: which changes roave/backward-compatibility-check reports as breaking (adding a required parameter, reordering parameters, renaming a promoted property, adding a property to a final readonly class), why named arguments make parameter names part of the public API, and recommended migration patterns such as static named constructors, defaults at the end, and deprecation windows. Symfony backward compatibility promise for constructors and PHP 8 named arguments RFC. Name primary-source URLs.",
+      "sources": [
+        "https://wiki.php.net/rfc/named_params",
+        "https://symfony.com/doc/current/contributing/code/bc.html",
+        "https://github.com/Roave/BackwardCompatibilityCheck",
+        "https://github.com/Roave/BackwardCompatibilityCheck/issues/264"
+      ],
+      "used_by": ["D21", "P4.1", "P4.7", "research/P4-design.md §2", "research/P4-design.md §3"]
+    },
+    {
+      "id": "P4-Q6",
+      "status": "success",
+      "capture": "q04-q06.md",
+      "retries": 2,
+      "retry_reason": "Попытка 1 воспроизвела известный дефект провайдера: ответ начат таблицей и усечён до пяти строк. Попытка 2 с явным «Answer in continuous prose only. Do not use any tables anywhere» вернула полный ответ; захвачена она.",
+      "query": "Answer in continuous prose only. Do not use any tables anywhere in the answer. Question: in PostgreSQL-backed worker queues, should lease expiry, retry backoff deadlines and idempotency retention cutoffs be computed by the application clock or by the database server using now(), transaction_timestamp(), statement_timestamp() or clock_timestamp()? Explain clock skew between application hosts, why now() is frozen for the whole transaction, when clock_timestamp() is required, and which time reads are merely audit timestamps that do not need determinism. Name primary-source PostgreSQL documentation URLs.",
+      "sources": [
+        "https://www.postgresql.org/docs/current/functions-datetime.html",
+        "https://www.postgresql.org/docs/18/functions-datetime.html",
+        "https://www.postgresql.org/docs/current/tutorial-transactions.html"
+      ],
+      "used_by": ["D23", "P4.10", "research/P4-design.md §7.3"]
+    }
+  ],
+  "unresolved": []
+}

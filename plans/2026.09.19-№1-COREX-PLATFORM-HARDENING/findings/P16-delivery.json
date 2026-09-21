@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "65441b16218ebfc04889385b8b9a1aeff066d217",
+  "continuity": {
+    "evidence": [
+      "persisted-context:design-root-terminal"
+    ],
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:fb490e22f58374b91893f3118efe9bef5d925432c90e46958f9e8046b99b0ecb",
+    "plan": "sha256:6b0b9e6407b1fe4297c6ec0186975c280305acc2ce9cfcce40c6133783e2335d",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P17",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": "",
+    "remaining": ""
+  },
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P17\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier; Codex GPT-5.6 Sol — fallback Grok-слота D37 |\n| Effort | high |\n| Capabilities | repository reads, Perplexity, plan authoring |\n| Context | cold-start-root: design-root-terminal |\n| Суть | Детализировать P17: universal-extension fixtures, release gates и коммерческий 1.0 DoD после P16 structural contracts. |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-5.6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-design 2026.09.19-№1-COREX-PLATFORM-HARDENING P17'\n```",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "cold-start-root: design-root-terminal",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P16"
+}

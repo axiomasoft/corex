@@ -1,0 +1,382 @@
+{
+    "schema": "package-graph/runtime/1",
+    "nodes": [
+        "corex/api",
+        "corex/attributes",
+        "corex/auth",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow",
+        "flex/crm"
+    ],
+    "edges": [
+        {
+            "from": "corex/auth",
+            "to": "corex/core",
+            "site": "config",
+            "certainty": "convention",
+            "file": "packages/auth/config/corex-auth.php"
+        },
+        {
+            "from": "corex/auth",
+            "to": "corex/modules",
+            "site": "listen",
+            "certainty": "static",
+            "file": "packages/auth/src/CoreAuthServiceProvider.php"
+        },
+        {
+            "from": "corex/auth",
+            "to": "corex/modules",
+            "site": "listen",
+            "certainty": "static",
+            "file": "packages/auth/src/CoreAuthServiceProvider.php"
+        },
+        {
+            "from": "corex/core",
+            "to": "corex/core",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/core/src/CoreServiceProvider.php"
+        },
+        {
+            "from": "corex/intl",
+            "to": "corex/intl",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/intl/src/IntlServiceProvider.php"
+        },
+        {
+            "from": "corex/media",
+            "to": "corex/media",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/media/src/MediaServiceProvider.php"
+        },
+        {
+            "from": "corex/modules",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/modules/src/ModulesServiceProvider.php"
+        },
+        {
+            "from": "corex/modules",
+            "to": "corex/modules",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/modules/src/ModulesServiceProvider.php"
+        },
+        {
+            "from": "corex/notifications",
+            "to": "corex/notifications",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/notifications/src/NotificationsServiceProvider.php"
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/panels/src/PanelsServiceProvider.php"
+        },
+        {
+            "from": "corex/tasks-workflow",
+            "to": "corex/recurrence",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/core",
+            "site": "bind",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/tenancy",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/tenancy",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/tenancy",
+            "to": "corex/tenancy",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "from": "corex/wakeup",
+            "to": "corex/wakeup",
+            "site": "self-resource",
+            "kind": "self-resource",
+            "certainty": "static",
+            "file": "packages/wakeup/src/WakeupServiceProvider.php"
+        }
+    ],
+    "unresolved": [
+        {
+            "name": "'corex-modules.wiring'",
+            "site": "bind",
+            "certainty": "unresolved",
+            "file": "packages/modules/src/ModulesServiceProvider.php"
+        },
+        {
+            "name": "'eloquent.deleting: *'",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "'eloquent.restoring: *'",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "'eloquent.saving: *'",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "Account",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "AzGuardRoleModel",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/auth/config/corex-auth.php"
+        },
+        {
+            "name": "AzGuard\\Contracts\\ContextGuard",
+            "site": "bind",
+            "certainty": "unresolved",
+            "file": "packages/auth/src/CoreAuthServiceProvider.php"
+        },
+        {
+            "name": "AzGuard\\Contracts\\PermissionLayer",
+            "site": "bind",
+            "certainty": "unresolved",
+            "file": "packages/auth/src/CoreAuthServiceProvider.php"
+        },
+        {
+            "name": "Bootstrappers\\CacheTenancyBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Bootstrappers\\DatabaseSessionBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Bootstrappers\\DatabaseTenancyBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Bootstrappers\\FilesystemTenancyBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Bootstrappers\\Integrations\\ScoutPrefixBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Bootstrappers\\QueueTenancyBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "CreateDatabaseFromTemplate",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "DatabaseDepartmentRepository",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "DatabaseFeatureFlags",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "DatabaseSettingsRepository",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "DenyDataScopeAuthorizer",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "HostTenantResolver",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "Illuminate\\Queue\\Events\\JobExceptionOccurred",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "NullAuditRetention",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "NullImpersonationService",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "NullSettingDefaultsProvider",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "NullTenancyManager",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "QueuedAuditLogger",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "SingleAccountResolver",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/core/config/corex.php"
+        },
+        {
+            "name": "Stancl\\Tenancy\\Contracts\\UniqueIdentifierGenerator",
+            "site": "bind",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "Stancl\\Tenancy\\Events\\TenancyEnded",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "Stancl\\Tenancy\\Events\\TenancyInitialized",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "Stancl\\Tenancy\\Events\\TenantCreated",
+            "site": "listen",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/src/TenancyServiceProvider.php"
+        },
+        {
+            "name": "TemplateClonePostgreSQLManager",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "UUIDv7Generator",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        },
+        {
+            "name": "WorkspaceContextBootstrapper",
+            "site": "config",
+            "certainty": "unresolved",
+            "file": "packages/tenancy/config/tenancy.php"
+        }
+    ]
+}

@@ -1,0 +1,100 @@
+{
+  "artifact": "rag-capture/1",
+  "plan": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "phase": "P7",
+  "captured_at": "2026-09-19",
+  "tool": "perplexity MCP · search",
+  "capture_kind": "response-text",
+  "capture_note": "Захват текста ответа из сессии детализации фазы P7; провайдер не возвращает подписанный payload. SHA256 считается по файлам этого каталога и фиксирует их неизменность после сохранения, но не доказывает байтовой идентичности сетевому ответу. Длинные иллюстративные листинги сокращены до сигнатур с пометкой [листинг сокращён]; смысловые утверждения, имена механизмов, значения по умолчанию, предупреждения и URL сохранены.",
+  "query_scope_rule": "D6 плана: нейтральная формулировка, без имени CoreX/FlexCRM, внутренних путей, ID правил и схемы БД. Внешний источник подтверждает только названную общую практику (RAG:✅).",
+  "known_provider_defect": "Таймаут MCP на этой фазе не воспроизвёлся. Известный с P1 дефект «ответ, начатый таблицей, усекается» на этой фазе НЕ воспроизвёлся: все пять запросов несли явную инструкцию «no tables».",
+  "known_transport_defect": "Владелец наблюдал на P5, что один вызов MCP-инструмента порождает пять и более одинаковых запросов на стороне провайдера. Дефект принадлежит MCP-транспорту Perplexity, а не плану; на содержание ответов он не влияет, но делает счётчик запросов провайдера непригодным как мера объёма RAG этой фазы. Исправление не выполнялось по прямому указанию владельца; дефект зафиксирован здесь как наблюдение.",
+  "files": [
+    { "path": "README.md", "sha256": "4df0a5930b55e7cdd9c4d9e809617df525ea6b5edb729046b6f07ada02ac3f7b" },
+    { "path": "q01-q03.md", "sha256": "776647b3a5d50a2552d3cc6865cf88ee1eadc687fa2f42d8cc84f2015b9414cd" },
+    { "path": "q04-q05.md", "sha256": "5d409dfd632c8a8becbe400a37ce4d835a17a39fbca172434bdd2c31a34c4fde" }
+  ],
+  "queries": [
+    {
+      "id": "P7-Q1",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. In a PHP Laravel package, how should typed configuration objects be built so services remain testable without a container? Contrast: a factory Options::fromArray(array $config) that never calls config(), versus reading config() inside the factory or inside domain services. Where may config() be called (service provider, console command) and why not in middleware or repositories? How does Symfony OptionsResolver relate to a readonly PHP DTO, and is OptionsResolver a substitute for the typed object? Cite Laravel package development docs, Laravel config repository, Symfony OptionsResolver 7 docs. Name primary-source URLs.",
+      "sources": [
+        "https://laravel.com/docs/12.x/packages",
+        "https://laravel.com/docs/12.x/configuration",
+        "https://github.com/laravel/framework/blob/11.x/src/Illuminate/Config/Repository.php",
+        "https://github.com/laravel/framework/blob/11.x/src/Illuminate/Foundation/helpers.php",
+        "https://symfony.com/doc/7.0/components/options_resolver.html"
+      ],
+      "used_by": ["D39", "P7.1", "research/P7-design.md §3"]
+    },
+    {
+      "id": "P7-Q2",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. How should a PHP object holding a secret prevent accidental leakage via string interpolation, (string) cast, var_dump, print_r, exception traces, and logs? Cover __toString, __debugInfo, and PHP 8.2 SensitiveParameter. Why is a reveal() method named explicitly? What does SensitiveParameter attribute actually hide and not hide? Cite php.net manuals for __toString, __debugInfo, SensitiveParameter. Name primary-source URLs.",
+      "sources": [
+        "https://www.php.net/manual/en/language.oop5.magic.php",
+        "https://www.php.net/manual/en/migration82.new-features.php",
+        "https://www.php.net/manual/en/class.sensitiveparameter.php",
+        "https://www.php.net/manual/en/sensitiveparametervalue.debuginfo.php",
+        "https://www.php.net/manual/en/sensitiveparametervalue.getvalue.php"
+      ],
+      "used_by": ["D40", "P7.1", "P7.10", "research/P7-design.md §4"]
+    },
+    {
+      "id": "P7-Q3",
+      "status": "success",
+      "capture": "q01-q03.md",
+      "query": "Answer in prose, no tables. Should invalid application configuration fail at process boot or only when a diagnose CLI command runs? Symfony compiled container and Laravel config:cache: when is a bad value detected? What should a config validation command print (effective driver, adapter availability, accumulated violations) and what must it never print (secret values)? Cite Symfony configuration validation, Laravel artisan config:cache / config:show. Name primary-source URLs.",
+      "sources": [
+        "https://symfony.com/doc/current/components/config/definition.html",
+        "https://symfony.com/doc/current/service_container/extensions.html",
+        "https://symfony.com/doc/current/configuration.html",
+        "https://laravel.com/docs/12.x/configuration"
+      ],
+      "used_by": ["D40", "P7.10", "research/P7-design.md §12"]
+    },
+    {
+      "id": "P7-Q4",
+      "status": "success",
+      "capture": "q04-q05.md",
+      "query": "Answer in prose, no tables. Why wrap several related configuration keys (for example impersonation enabled, require-approved-by, max session lifetime, read-only HTTP methods) into one immutable policy object injected into middleware, instead of each middleware calling config() for four keys? Contrast with a generic Options bag. Cite Fowler encapsulated context/policy, Microsoft options pattern, Laravel middleware docs. Name primary-source URLs.",
+      "sources": [
+        "https://martinfowler.com/bliki/FunctionAsObject.html",
+        "https://learn.microsoft.com/en-us/dotnet/core/extensions/options",
+        "https://laravel.com/docs/13.x/middleware"
+      ],
+      "used_by": ["D41", "P7.2", "P7.3", "research/P7-design.md §6"]
+    },
+    {
+      "id": "P7-Q5",
+      "status": "success",
+      "capture": "q04-q05.md",
+      "query": "Answer in prose, no tables. Architectural fitness functions that fail CI when a forbidden API such as Laravel config() is called outside an allow-list of composition-root files (service providers, console commands). Why must the gate include a planted negative test that names the offending file? Contrast observational (warn, exit 0) versus blocking (exit 1). Cite ThoughtWorks fitness-function-driven development, Pest PHP arch testing. Name primary-source URLs.",
+      "sources": [
+        "https://www.thoughtworks.com/en-us/insights/articles/fitness-function-driven-development",
+        "https://pestphp.com/docs/arch-testing"
+      ],
+      "used_by": ["D38", "P7.11", "research/P7-design.md §13"]
+    }
+  ],
+  "unresolved": [
+    {
+      "gap": "Обязательность Options на опубликованный config.php без src-чтений",
+      "why": "Источника «каждый config.php = класс» нет",
+      "carried_as": "D38: Options только у пакетов с измеренным config() в src"
+    },
+    {
+      "gap": "Запрет статического holder над immutable deployment-снимком на Octane",
+      "why": "Q10 запрещает мутацию конфига и per-request глобали; снимок процесса не меняется",
+      "carried_as": "D39: E-CONFIG-HOLDER"
+    },
+    {
+      "gap": "Численный порог «достаточно ключей для policy-класса»",
+      "why": "Внешней нормы нет; Q4 говорит про cross-field инвариант или нескольких потребителей",
+      "carried_as": "D41: три policy tenancy; panel остаётся скаляром"
+    }
+  ]
+}

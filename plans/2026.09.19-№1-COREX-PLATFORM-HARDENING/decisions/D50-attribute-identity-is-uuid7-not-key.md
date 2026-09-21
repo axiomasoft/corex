@@ -1,0 +1,34 @@
+---
+id: D50
+date: 2026-09-20
+status: accepted
+item: P10.2
+items: [P10, P10.1, P10.2, P10.3, P10.4]
+supersedes: []
+superseded_by: null
+---
+
+# D50 — Identity атрибута — UUIDv7, а key изменяем
+
+**Actor:** plan-designer/codex-gpt-5.6-sol/high
+
+**Evidence:** `RAG:✅` RFC 9562 §5.7 стандартизует UUIDv7; Laravel 12 предоставляет
+`Str::uuid7()`; фактический ADR-003 CoreX уже использует UUIDv7 по умолчанию.
+
+## Решение
+
+Новые определения получают явный UUIDv7 `AttributeId`, независимый от entity/key.
+Переименование сохраняет id и повышает revision. Старые module definitions без id
+получают deterministic UUIDv5 compatibility bridge и `legacy_identity=true`;
+переименование/DB evolution запрещены до явного pin UUIDv7.
+
+## Почему
+
+Key — адрес для человека и API, поэтому меняется. Генерация canonical identity из key
+делает rename скрытым delete+create. UUIDv7 согласован с платформой и не требует новой
+runtime dependency.
+
+## Consequences
+
+`FieldSnapshot` additively несёт id/key/revision; `code` остаётся alias до P15.
+Q6 закрыт. Legacy bridge тестируется как ограничение, а не как второй канон.

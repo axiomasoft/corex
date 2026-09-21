@@ -1,0 +1,15 @@
+{
+  "query": "Using primary Standard Webhooks specification and OWASP SSRF Prevention Cheat Sheet, give precise outbound webhook requirements: stable webhook-id on retry/manual replay versus event identity per subscription, exact HMAC signed bytes and key decoding, multi-signature rotation, timestamp verification, redirects and DNS rebinding/connection IP pinning including IPv6/mapped addresses, retryable HTTP codes versus permanent rejection, deduplication guarantees. Separate what Standard Webhooks specifies from local policy choices. Include exact source URLs. Concise, no codebase assumptions.",
+  "response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "\"Вопрос\",\"Standard Webhooks\",\"Локальная политика\"\n\"webhook-id при retry\",\"Один уникальный идентификатор относится к конкретному triggered event и остаётся тем же при каждом повторе неуспешной доставки.\",\"Сохранять ID вместе с неизменяемой записью delivery/event в outbox; не генерировать новый ID для retry.\"\n\"webhook-id при manual replay\",\"Спецификация требует возможность manual replay как полезную дополнительную функцию, но не определяет, должен ли replay сохранять или менять ID.\",\"Выбрать и документировать семантику. Для повторной попытки доставки того же логического сообщения использовать тот же webhook-id. Для намеренно новой доставки того же доменного события — новый webhook-id, но передавать отдельный стабильный event_id в теле/метаданных.\"\n\"Event identity vs subscription identity\",\"Спецификация говорит об ID, связанном с “specific event triggered”, но не задаёт явную модель fan-out и не определяет, является ли ID глобальным по доменному событию или отдельным на endpoint/subscription.\",\"Для fan-out безопаснее считать webhook-id идентификатором delivery для конкретной subscription/endpoint: уникальность обеспечивать минимум в области (subscription_id, webhook_id). Независимый доменный event_id включать в payload, если его требуется связывать между несколькими подписками.\"\n\"Дедупликация у получателя\",\"Получатель должен использовать webhook-id как idempotency key, чтобы не обработать один webhook многократно; спецификация приводит пример хранения ID в Redis 5 минут.\",\"Не обещать exactly-once. Доставка должна считаться at-least-once: получатель обязан быть идемпотентным, а отправитель может получить timeout/обрыв после того, как получатель уже выполнил side effect. TTL дедупликации выбрать исходя из максимального окна retry и manual replay — обычно не менее периода ретраев; для финансовых/необратимых эффектов хранить durable idempotency record дольше.\""
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  }
+}

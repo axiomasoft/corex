@@ -1,0 +1,36 @@
+---
+id: D67
+date: 2026-09-20
+status: accepted
+item: P13
+items: [P13, P13.3, P13.4, P13.10]
+supersedes: []
+superseded_by: null
+---
+# D67 — API profile is immutable code projection; capability stays live
+
+**Actor:** plan-designer/codex-gpt-5.6-sol/high
+**Evidence:** RAG:— D58 separates deployment code fingerprint from tenant activation.
+RAG:✅ current self-hosted API research supports stable major versions plus live
+capability negotiation rather than inferring installation state from a version.
+
+## Решение
+
+- `ApiProfile` is an immutable typed projection of the compiled module snapshot and
+  typed API options; it has no register/replace/freeze API of its own.
+- Profile fingerprint excludes tenant activation, authorization and host paths.
+- Effective capability is resolved live for authenticated context and never exposes
+  driver, connection, class, table or secret details.
+- Version selection is an HTTP/tool projection; handlers receive one resolved
+  operation descriptor and contain no version branches.
+
+## Почему
+
+Code compatibility and tenant availability change on different clocks. Hashing live
+activation into a code profile would manufacture per-tenant registry authority.
+
+## Consequences
+
+P13.3 owns profile/options/capability/deprecation. Snapshots describe the installed
+code profile, while `/capabilities` describes the effective caller view.
+

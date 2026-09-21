@@ -153,6 +153,7 @@ API, политиками или задачами между проектами.
 
 ## 8. Как этим пользоваться будущему плану
 
+- Реестр инвариантов и карта enforcement: [`docs/architecture/README.md`](architecture/README.md).
 - Этот файл — входная точка. Слои знаний плана: `plans/archive/COREX-CORE/findings/` (сырьё),
   `plans/archive/COREX-CORE/research/` (синтез), `plan.md` §5 (решения). Спека и ADR — в Brain-vault,
   не в репозитории; vault правит владелец.

@@ -1,0 +1,58 @@
+# P13 — RAG и внешние подтверждения
+
+**Снято:** 2026-09-20. **Метод:** Perplexity browser MCP — один широкий и
+четыре узких запроса; ранее проверенные primary sources P12 и верхнего слоя
+переиспользованы. Generic web connector вернул `connection failed`, direct
+Perplexity API не разрешил DNS; эти проверки не засчитаны зелёными.
+
+| Query | Verdict | Влияние на дизайн |
+|:--|:--|:--|
+| P13-Q1 six-platform comparison | partial | Подтвердил общие patterns, но ответ потерял часть citation URLs; не используется как самостоятельное доказательство. |
+| P13-Q2 HTTP deprecation standards | confirmed | RFC 9745 `Deprecation`, RFC 8594 `Sunset`, RFC 5829 successor-version — только HTTP projection одного descriptor. |
+| P13-Q3 Slack/Twilio | corroborating | Cursor/page token берётся из ответа; endpoint-specific limits и отсутствие global idempotency запрещают переносить vendor assumptions в core contract. |
+| P13-Q4 HubSpot/Notion | corroborating | Версия может быть path/header/date, additive fields всё равно требуют tolerant readers; CoreX сохраняет D2 long-lived major + capability. |
+| P13-Q5 GitHub/Contentful | corroborating | Conditional GET не равен mutation idempotency; optimistic version check и pinned OpenAPI полезны, но не заменяют operation contract. |
+
+## Primary sources
+
+- RFC 9745 Deprecation: https://www.rfc-editor.org/rfc/rfc9745
+- RFC 8594 Sunset: https://www.rfc-editor.org/rfc/rfc8594
+- RFC 5829 version links: https://www.rfc-editor.org/rfc/rfc5829
+- RFC 9457 Problem Details: https://www.rfc-editor.org/rfc/rfc9457
+- GitHub REST versions: https://docs.github.com/en/rest/about-the-rest-api/api-versions
+- GitHub pagination: https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api
+- GitHub OpenAPI: https://docs.github.com/en/rest/about-the-rest-api/about-the-openapi-description-for-the-rest-api
+- Slack pagination: https://api.slack.com/docs/pagination
+- Slack method reference example: https://api.slack.com/methods/conversations.list
+- Twilio API overview: https://www.twilio.com/docs/usage/api
+- Twilio error dictionary: https://www.twilio.com/docs/api/errors
+- Twilio OpenAPI: https://www.twilio.com/docs/openapi
+- HubSpot versioning: https://developers.hubspot.com/docs/api-reference/versioning
+- Notion versioning: https://developers.notion.com/reference/versioning
+- Notion pagination: https://developers.notion.com/reference/pagination
+- Notion status/error codes: https://developers.notion.com/reference/status-codes
+- Contentful CMA: https://www.contentful.com/developers/docs/references/content-management-api/
+- Contentful OpenAPI: https://github.com/contentful/open-api
+- Stripe idempotency (верхний слой Q3): https://docs.stripe.com/api/idempotent_requests
+
+## Принятые выводы
+
+1. Version selector — transport concern; behavioral descriptor не ветвится по
+   header/path внутри handler. CoreX следует уже принятому D2, а не копирует
+   date cadence внешних SaaS.
+2. Cursor opaque, response-provided and scoped; он не обещает snapshot consistency.
+3. Retry instruction не доказывает replay-safe mutation. P13 требует собственный
+   idempotency store для declared mutation operations.
+4. OpenAPI/schema полезны только pinned + diffed; behavioral guarantees живут в
+   `operations.json`.
+5. Conditional reads и optimistic concurrency остаются operation-specific; они не
+   заменяют idempotency.
+
+## Граница подтверждения
+
+Perplexity summaries — retrieval leads. Из-за дефекта прямого транспорта в этой
+сессии vendor-specific числа, current default versions и endpoint limits не стали
+нормативными P13 facts. Нормативные решения опираются на код, D2/D56–D61 и уже
+проверенные RFC/Stripe sources. CoreX-specific DDL, signatures, routes, error codes,
+hashes, field policy и compatibility rules — локальные D65–D73.
+

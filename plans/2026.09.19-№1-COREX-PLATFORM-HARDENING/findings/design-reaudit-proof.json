@@ -1,0 +1,112 @@
+{
+  "kind": "design-contract-consistency; not runtime test",
+  "DA09": [
+    {
+      "symbol": "CoreX\\Audit\\NullAuditRetention",
+      "source_zone": "Foundation",
+      "target_zone": "Audit",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Audit\\QueuedAuditLogger",
+      "source_zone": "Foundation",
+      "target_zone": "Audit",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Departments\\DatabaseDepartmentRepository",
+      "source_zone": "Foundation",
+      "target_zone": "Departments",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Features\\DatabaseFeatureFlags",
+      "source_zone": "Foundation",
+      "target_zone": "Features",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Settings\\DatabaseSettingsRepository",
+      "source_zone": "Foundation",
+      "target_zone": "Settings",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Settings\\NullSettingDefaultsProvider",
+      "source_zone": "Foundation",
+      "target_zone": "Settings",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\Contracts\\ImpersonationService",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\Contracts\\TenancyManager",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\Contracts\\TenantContextResolver",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\NullImpersonationService",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\NullTenancyManager",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    },
+    {
+      "symbol": "CoreX\\Tenancy\\SingleAccountResolver",
+      "source_zone": "Foundation",
+      "target_zone": "TenancyContracts",
+      "rule": "R-Z1"
+    }
+  ],
+  "DA14": {
+    "paths": 23,
+    "packages": 20
+  },
+  "plan_lint": "0 errors, 0 warnings",
+  "lifecycle": {
+    "validation": [
+      "focused"
+    ],
+    "review": "none",
+    "audit_action": "return-owning-continuation",
+    "route_evidence": "reuse",
+    "projections": [],
+    "commits": 1,
+    "context": "continue-root",
+    "semantic_next": "exec-items",
+    "foreign_baseline": "visible-non-gating"
+  },
+  "read_only_verification": {
+    "existing_files_changed": [
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/handoff.md",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/journal.jsonl",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/status.md"
+    ],
+    "new_files": [
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/design-reaudit-2026-09-20.md",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/design-reaudit-delivery.json",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/design-reaudit-evidence.json",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/design-reaudit-proof.json",
+      "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/design-reaudit-route.json"
+    ],
+    "candidate_byte_identical": true,
+    "product_byte_identical": true,
+    "delivery_receipt_verified": true
+  }
+}

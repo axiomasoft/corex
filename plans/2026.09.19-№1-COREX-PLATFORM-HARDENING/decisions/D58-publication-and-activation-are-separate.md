@@ -1,0 +1,42 @@
+---
+id: D58
+date: 2026-09-20
+status: accepted
+item: P11
+items: [P11, P11.3]
+supersedes: []
+superseded_by: null
+---
+# D58 — Publication snapshot и tenant activation — разные оси
+
+**Actor:** plan-designer/codex-gpt-5.6-sol/high
+**Evidence:** RAG:— compiled file уже пишется tmp+rename, а
+tenant enable/disable уже поднимает monotonic count `mod_lifecycle_log`.
+RAG:✅ P11-Q1/Q2: Laravel queue workers и Octane держат booted application в
+памяти и получают новый code через graceful restart/reload; общего atomic
+fleet cutover документация не обещает.
+
+## Решение
+
+- Registry fingerprint описывает один code/deployment snapshot и одинаков для
+  всех tenants на этом deployment.
+- Activation epoch описывает enable/disable/upgrade/archive/purge в tenant DB
+  и не входит в code fingerprint.
+- FPM читает snapshot на boot; queue worker сбрасывает memo до job; Octane
+  получает snapshot через deploy `octane:reload`.
+- Одна request/job не переключает snapshot посередине. Fleet-wide atomicity
+  не обещается.
+- Universal per-extension FSM не вводится. Registry lifecycle и existing
+  module lifecycle вместе дают declare→validate→publish/freeze→enable/execute/disable.
+
+## Почему
+
+Смешивание code fingerprint с tenant activation порождает account-specific compiled
+files и неуправляемую cache cardinality. Смена snapshot посередине
+job ломает повторяемость. Явные оси и границы работы проще и
+сильнее, чем hot-swap с ложной иллюзией global atomicity.
+
+## Consequences
+
+Deploy runbook обязан перезагружать Octane/queue workers. Durable work не
+полагается на синхронность fleet и несёт extension stamp по D59.

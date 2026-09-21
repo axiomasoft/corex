@@ -1,0 +1,120 @@
+{
+  "generated_at": "2026-09-20T06:26:08.290Z",
+  "command": "plan-views.py bundle --stdout",
+  "persisted_future_bundles": false,
+  "items": [
+    {
+      "item": "P15.1",
+      "status": "rendered",
+      "manifest_sha256": "27bb88af3275d42b184f05c322864ff13bb73c297f8b6df212f2d70713778590",
+      "inputs": 5,
+      "required_reads": 10,
+      "serialized_bytes": 7223
+    },
+    {
+      "item": "P15.2",
+      "status": "rendered",
+      "manifest_sha256": "e7f1018152c4b5501cf6afc0e5ff85bd7b59546868d11cfad9f22158192ec28a",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4721
+    },
+    {
+      "item": "P15.3",
+      "status": "rendered",
+      "manifest_sha256": "a36d6fbd3592ab20f74243a5e55afa1501a175fca6b645b621b8401160e048d4",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4733
+    },
+    {
+      "item": "P15.4",
+      "status": "rendered",
+      "manifest_sha256": "1fb52d3168dcd6de6c219aa402de3db6ceb1116d8c0aa934a53ba3052221a79b",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4733
+    },
+    {
+      "item": "P15.5",
+      "status": "rendered",
+      "manifest_sha256": "5fbabac5b4d63e1b51feccba0cdb3876b30619a28fdafa73ea0324341c25c7fe",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4733
+    },
+    {
+      "item": "P15.6",
+      "status": "rendered",
+      "manifest_sha256": "4cec318b5b4c17764b64f0c479bea9f8ff9c5725de074a7ce7ec25632f29803b",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4905
+    },
+    {
+      "item": "P15.7",
+      "status": "rendered",
+      "manifest_sha256": "782b1b989e4e8e344c633693ac20569fb136e38a0f097c105700aacdc1a0ae98",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 5020
+    },
+    {
+      "item": "P15.8",
+      "status": "rendered",
+      "manifest_sha256": "388145cb7c8036faed0b77cd823a1a644c458629ceae7026c2d449526ee59a4c",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4860
+    },
+    {
+      "item": "P15.9",
+      "status": "rendered",
+      "manifest_sha256": "aa199f40edb52e0e9963ab138dc75ca82a2f48d415c1ed9d10cbd0aee161b8e7",
+      "inputs": 4,
+      "required_reads": 6,
+      "serialized_bytes": 4721
+    },
+    {
+      "item": "P15.10",
+      "status": "rendered",
+      "manifest_sha256": "fbf8f105988f1371dc827d8090d157f73412a9dd88a269d6817382e75f76a00a",
+      "inputs": 4,
+      "required_reads": 7,
+      "serialized_bytes": 5401
+    },
+    {
+      "item": "P15.11",
+      "status": "rendered",
+      "manifest_sha256": "efda8a04cefa8e705e0de81f34e49306e44c0516b1adb3edcffbb9ef195aa18d",
+      "inputs": 3,
+      "required_reads": 7,
+      "serialized_bytes": 4855
+    },
+    {
+      "item": "P15.12",
+      "status": "rendered",
+      "manifest_sha256": "632a14b92e671d67e9a4bef4fc49a34786e044f02595a941038f2913542de4af",
+      "inputs": 3,
+      "required_reads": 7,
+      "serialized_bytes": 4846
+    },
+    {
+      "item": "P15.13",
+      "status": "rendered",
+      "manifest_sha256": "b3c94b8d84791462bbc73c7b9d0fb3be90efc6e4221b4827b0377277509165f6",
+      "inputs": 13,
+      "required_reads": 14,
+      "serialized_bytes": 11555
+    },
+    {
+      "item": "P15.14",
+      "status": "rendered",
+      "manifest_sha256": "cd0df93cfbb3150710e3abfdc4342a72a2c7ecb973d3d051374e3a995b9bfbe4",
+      "inputs": 2,
+      "required_reads": 5,
+      "serialized_bytes": 3322
+    }
+  ]
+}
+

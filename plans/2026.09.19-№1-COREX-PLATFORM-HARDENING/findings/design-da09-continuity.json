@@ -1,0 +1,57 @@
+{
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "89f0c66579cecd46f195410d8dd10e97ace65a95b3d63a2d3b28b0c07180a401",
+    "loaded_inputs_reusable": false,
+    "cold_start_cost": 0,
+    "lifecycle": "design-root-terminal",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "findings/design-da09-delta-review-2026-09-20.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "cold-start-root",
+    "reason": "design-root-terminal",
+    "evidence": [
+      "batch:89f0c66579cecd46f195410d8dd10e97ace65a95b3d63a2d3b28b0c07180a401",
+      "loaded-inputs:not-reusable",
+      "cold-start-cost:0",
+      "checkpoint:findings/design-da09-delta-review-2026-09-20.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "next": {
+    "kind": "exec-items",
+    "command_id": "task:plan-exec",
+    "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+    "arguments": [
+      "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+      "P1.1"
+    ],
+    "context_kind": "cold-start-root",
+    "item_ids": [
+      "P1.1"
+    ],
+    "cold_start_scope": [],
+    "continuity": {
+      "outcome": "cold-start-root",
+      "reason": "design-root-terminal",
+      "evidence": [
+        "batch:89f0c66579cecd46f195410d8dd10e97ace65a95b3d63a2d3b28b0c07180a401",
+        "loaded-inputs:not-reusable",
+        "cold-start-cost:0",
+        "checkpoint:findings/design-da09-delta-review-2026-09-20.md"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    }
+  }
+}

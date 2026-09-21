@@ -1,0 +1,32 @@
+---
+id: D100
+date: 2026-09-20
+status: accepted
+item: P7.1
+items: [P7, P7.1, P7.12, P9.2]
+supersedes: []
+superseded_by: null
+---
+# D100 — Default DB is resolved per operation and explicit null TTL is preserved
+
+**Actor:** plan-designer/codex-gpt-5.6-sol/high
+**Evidence:** `RAG:—` DA01 traces Stancl changing the default connection during
+tenant enter/leave; DA13 traces `?? 3600` collapsing explicit null into missing.
+
+## Решение
+
+`SqlSavedViewRepository` stores only an explicit `views.connection` override. With no
+override it asks the injected Laravel database manager/resolver for the current default
+at each operation. `CoreOptions::fromArray()` uses key existence for
+`settings.cache_ttl`: missing means 3600, explicit null remains null, zero remains zero.
+
+## Почему
+
+A singleton may outlive multiple tenancy contexts; resolving a mutable default once
+turns context into stale state. Null is an intentional cache-disable value, not absence.
+
+## Consequences
+
+P7.1 owns the implementation, P7.12 owns the focused central→tenant→central and
+missing/null/zero/positive proof, and P9.2 proves that tenancy enter/leave actually changes
+and restores the current default consumed by that singleton.

@@ -1,11 +1,11 @@
 ---
 id: D5
 date: 2026-09-19
-status: accepted
+status: superseded
 item: P11
 items: [P1, P11, P13]
 supersedes: []
-superseded_by: null
+superseded_by: D57
 ---
 # D5 — Реестры расширений компилируются в immutable snapshot с fingerprint'ом
 

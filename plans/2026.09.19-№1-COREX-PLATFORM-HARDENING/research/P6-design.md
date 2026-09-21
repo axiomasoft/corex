@@ -1,0 +1,516 @@
+# Дизайн фазы P6 — зоны `corex/core`
+
+**Статус:** нормативный вход items P6.1–P6.6. Это **источник готовой карты,
+готового кода гейтов и готовых формулировок документов**, а не эскиз. Каждый
+item называет здесь свой параграф; спека без такого указателя — дефект дизайна.
+
+**Что этот документ НЕ делает.** Он не создаёт Composer-пакетов (D8). Он не
+меняет публичные FQCN существующих типов (D32) и не удаляет `CoreX\Testing`
+из production-autoload (D33). Он не меняет DDL и семантику Settings/Audit/
+Views. Он не исполняется до конца стадии 2 плана (D14).
+
+**Входы:** `01-shapes-runtime.md` §3; `P2-design.md` §7.1; `P3-design.md` §0;
+`P5-design.md` §11; `P6-design-rag.md`; `00-baseline-metrics.md` §1, §8;
+`findings/audit-verdicts.md` A29–A32, N09; D8, D12, D17, D31–D34;
+листинг `packages/core/src` (109 файлов, 17 каталогов).
+
+---
+
+## 0. Инварианты, обязательные для всех items фазы
+
+1. **Язык — русский**, идентификаторы зон, правил, классов — латиницей.
+2. **Ширина строки ≤ 100 символов.** Таблицы могут её превышать, проза — нет.
+3. **Публичный FQCN существующих типов не меняется (D32).** Карта и гейт
+   классифицируют файлы; P15 двигает имена.
+4. **Негативная проверка обязательна (`RAG:✅` P6-Q4).** Правило без посадки,
+   краснеющей с именем файла и символа, считается непроверенным.
+5. **Deptrac/PHPat/Pest Arch не вводятся (D17, LayerTest).** Гейт — Pest-тест
+   на `SourceScanner` (и tokenizer P3.2, когда тот терминален).
+6. **Ни один существующий порог не понижается.**
+   `bash scripts/anti-weakening-gate.sh` — обязательный Validation.
+7. **Один пакет на item**, кроме корневого гейта в `tests/Arch`.
+8. **Маркеры:** факт о репозитории — `RAG:—`; внешняя практика — `RAG:✅`
+   со ссылкой на `P6-design-rag.md`. Из `audits/*` не копируется ни код,
+   ни формулировка.
+9. **CHANGELOG.** Item, меняющий продукт, дописывает одну строку в корневой
+   `CHANGELOG.md` под `[Unreleased]` → `### Added`.
+10. **Семантика возможностей не меняется.** Settings, Audit, Views, Features,
+    Departments, Money делают то же, что делали; меняется только охрана
+    направления импорта.
+
+---
+
+## 1. Несущие решения детализации
+
+| ID | Решение | Где в коде |
+|:--|:--|:--|
+| D32 | Зона = карта + гейт; FQCN существующих типов не двигается; `PubSub/` ∈ Messaging по пути | §2, §3, §6 |
+| D33 | Testing: `autoload-dev` каноничен, production-autoload живёт до P16 | §8 |
+| D34 | Литмус №3 дисквалифицирует Foundation; зоны Features/Departments/Money; E-BASEMODEL | §2, §5, §9 |
+
+Эскиз `01-shapes-runtime.md` §3 **принят с расширением матрицы** (D34): три
+малые зоны и Composition как именованное исключение, не зона.
+
+---
+
+## 2. Матрица зон
+
+Стрелка — «может зависеть от». Composition и Testing в матрицу не входят.
+
+```text
+Foundation        → (никого), кроме E-BASEMODEL → Audit
+TenancyContracts  → Foundation
+Audit             → Foundation, TenancyContracts
+Settings          → Foundation, TenancyContracts
+SavedViews        → Foundation, TenancyContracts
+Storage           → Foundation, TenancyContracts
+Messaging         → Foundation, TenancyContracts
+Features          → Foundation, TenancyContracts
+Departments       → Foundation, TenancyContracts
+Money             → Foundation, TenancyContracts
+```
+
+`RAG:✅` P6-Q1: такая матрица и есть граница модульного монолита.
+`RAG:—` эскиз перечислял семь зон; три добавленные — однофайловые/двухфайловые
+возможности, которые литмус выводит из Foundation (D34), а D8 запрещает
+делать пакетами.
+
+**Composition** (не зона): `CoreServiceProvider.php`, `Support/Config.php`,
+`Support/CoreOptions.php`, `Support/ServiceProviderModuleRegistrar.php`; D101 также
+добавляет два exact registrar-пути. Им можно импортировать любую зону
+(это composition root). Их `Internal` по-прежнему закрыт правилом R-Z2.
+
+**Testing** (не зона): `src/Testing/**`. Не участвует в R-Z1. R-T1 (P6.5)
+запрещает новый production-импорт `CoreX\Testing` вне `*/src/Testing`.
+
+**E-BASEMODEL:** единственный путь
+`packages/core/src/Models/BaseModel.php` может импортировать
+`CoreX\Concerns\HasAuditLog`. Любой другой файл Foundation, импортирующий
+Audit, — нарушение R-Z1.
+
+Запланированные P4/P5 пути, которых в дереве ещё нет, входят в карту как
+члены зон и не требуют файлов сегодня:
+
+- `src/Support/Time/**` — Foundation (D20)
+- `src/Messaging/**` — Messaging (D31); `src/PubSub/**` — тоже Messaging (D32)
+
+---
+
+## 3. Карта принадлежности (109 файлов)
+
+`RAG:—` числа D8/baseline: 109 PHP в `packages/core/src`. Каждый файл — ровно
+одна зона или Composition/Testing. Колонка «литмус» — применение §5 к
+кандидатам Foundation; для остальных зон «—».
+
+### 3.1 Каталоги, совпадающие с зоной
+
+| Путь | Файлов | Зона |
+|:--|--:|:--|
+| `Audit/` | 6 | Audit |
+| `Departments/` | 2 | Departments |
+| `Features/` | 1 | Features |
+| `Money/` | 1 | Money |
+| `PubSub/` | 7 | Messaging |
+| `Settings/` | 2 | Settings |
+| `Storage/` | 6 | Storage |
+| `Tenancy/` | 16 | TenancyContracts |
+| `Testing/` | 2 | Testing |
+| `Views/` | 13 | SavedViews |
+
+### 3.2 Dump-каталоги (явная принадлежность)
+
+**Contracts/ (18)** — пакетная поверхность API-009, зона по смыслу контракта:
+
+| Файл | Зона |
+|:--|:--|
+| `Auditable.php` `AuditEntry.php` `AuditLogger.php` `AuditRetention.php` | Audit |
+| `DataScopeAuthorizer.php` | Foundation |
+| `DepartmentRepository.php` | Departments |
+| `FeatureFlagDefinition.php` `FeatureFlags.php` | Features |
+| `ModuleRegistrar.php` | Foundation |
+| `PubSub.php` `WorkerRuntime.php` | Messaging |
+| `SavedViewRepository.php` `ViewAccessPolicy.php` `ViewSchemaProvider.php` | SavedViews |
+| `SettingDefaultsProvider.php` `SettingsRepository.php` `SettingsScope.php` | Settings |
+| `TenantStorage.php` | Storage |
+
+**Models/ (6):**
+
+| Файл | Зона | Литмус |
+|:--|:--|:--|
+| `BaseModel.php` | Foundation | warning:3 + E-BASEMODEL |
+| `AuditLog.php` | Audit | — |
+| `Department.php` | Departments | — |
+| `FeatureFlag.php` `FeatureOverride.php` | Features | — |
+| `Setting.php` | Settings | — |
+
+**Concerns/ (2):** `HasAuditLog.php` → Audit; `HasConfiguredId.php` →
+Foundation (warning:3; Eloquent, но identity-примитив для всех моделей).
+
+**Enums/ (5):** `ActorType` `IdStrategy` → Foundation; `PubSubDriver` →
+Messaging; `SettingScope` → Settings; `ImpersonationRestrictedAction` →
+TenancyContracts.
+
+**Events/ (5):** `DomainEvent` `Cancellable` → Foundation; `DepartmentMoved` →
+Departments; `FeatureFlagToggled` → Features; `SettingChanged` → Settings.
+
+**Exceptions/ (6):** `CentralContextException` `ImpersonationRestrictedException`
+→ TenancyContracts; `CrossWorkspaceMoveException` `DepartmentCycleException` →
+Departments; `SettingValueTooLargeException` `UnsupportedScopeException` →
+Settings.
+
+**Data/ (1):** `DataScopeAccessDecision.php` → Foundation. Каталог из одного
+класса выражает границу Foundation (STR-004). Целевой FQCN для P15 —
+`CoreX\Support\Data\DataScopeAccessDecision`. В P6 файл не двигается:
+он является return type публичного `DataScopeAuthorizer`.
+
+**Support/ (9):** `Config.php` и `ServiceProviderModuleRegistrar.php` →
+Composition. `Data/*` (6) → Foundation. `Schema/IdColumns.php` → Foundation
+(warning:3).
+
+**Корень:** `CoreServiceProvider.php` → Composition.
+
+### 3.3 Самопроверка карты
+
+Сумма §3.1 + §3.2 + корень = 109. Расхождение при исполнении P6.1 — дефект
+карты, а не повод пропустить файл.
+
+---
+
+## 4. Dump-каталоги, API-009 и P15
+
+`RAG:✅` P6-Q2: смена неймспейса публичного класса несовместима.
+`RAG:—` API-009: контракт пакета живёт в `src/Contracts/`.
+`RAG:—` все классы `final` — forwarding-subclass невозможен.
+
+P6 не разносит `Contracts/` и `Models/` по каталогам зон. Целевые FQCN
+(вход P15, писать в `docs/architecture/core-zones.md` §«P15») — таблица:
+
+| Сейчас | Цель | Условие |
+|:--|:--|:--|
+| `CoreX\PubSub\*` | `CoreX\Messaging\*` | G-API P15; гейт P6 уже считает путь Messaging |
+| `CoreX\Contracts\Audit*` `Auditable` | `CoreX\Audit\Contracts\*` | G-API P15; API-009 уточняется статьёй либо исключение |
+| `CoreX\Models\AuditLog` | `CoreX\Audit\Internal\AuditLog` | `@internal` уже по смыслу |
+| `CoreX\Views\*` | `CoreX\SavedViews\*` | только если P15 примет имя зоны, а не каталога |
+| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Support\Data\DataScopeAccessDecision` | нет внешних импортов кроме ядра |
+
+`Views` как имя каталога остаётся: переименование в `SavedViews` есть смена
+публичного неймспейса `CoreX\Views\Data\*`, которым пользуется `panels`.
+
+---
+
+## 5. Исполняемый Core Litmus Test (A29)
+
+Шесть условий P2-design.md §7.1 применяются **только** к типам, которые карта
+§3 кладёт в Foundation. Кодирование:
+
+1. На тип ссылаются ≥3 composer-пакета, либо он в Contracts/Enums/Exceptions
+   и его импортируют ≥2 пакета. В P6, до CSV P2, достаточно grep по
+   `packages/*/src` (не tests). Ненаблюдаемое = `unresolved`, не fail.
+2. Сегменты имени не содержат `Media Search Task Workflow Wakeup Panel Crm
+   Notification`. `Audit` в имени Foundation-типа — fail (зона, не foundation).
+3. **Жёсткое (D34):** нет импорта `Illuminate\Database\Eloquent`,
+   `Illuminate\Http`, `Illuminate\Foundation\Application`. Fail → тип не имеет
+   права быть в Foundation, кроме путей allowlist `LITMUS_ELOQUENT`.
+4. `notes` не содержит `product-only`.
+5. Файл ≤ 200 строк или тип в Contracts/Enums/Data.
+6. `zone_or_context` не совпадает с именем живого пакета-соседа.
+
+Allowlist `LITMUS_ELOQUENT` (warning, не MOVE) — ровно три пути:
+
+```text
+packages/core/src/Models/BaseModel.php
+packages/core/src/Concerns/HasConfiguredId.php
+packages/core/src/Support/Schema/IdColumns.php
+```
+
+Любой другой Foundation-файл с Eloquent/HTTP/Application — красное R-L3.
+Расширение allowlist — запись в D-лог, не правка константы втихую
+(`anti-weakening-gate.sh`).
+
+
+---
+
+## 6. Arch-гейт — готовый код (P6.2)
+
+Файл `tests/Arch/CoreZoneTest.php`. Сканер — существующий
+`tests/Support/SourceScanner.php`. Tokenizer P3.2, когда терминален, заменяет
+сбор импортов; до него — `filesMatching` по `use`. Это честно называется
+**import-scan** (`RAG:✅` P6-Q4: FQCN без `use` сканер не видит; полное ребро
+даёт P3.2).
+
+### 6.1 Данные матрицы
+
+```php
+/** @var array<string, list<string>> */
+private const ALLOWED = [
+    'Foundation' => [],
+    'TenancyContracts' => ['Foundation'],
+    'Audit' => ['Foundation', 'TenancyContracts'],
+    'Settings' => ['Foundation', 'TenancyContracts'],
+    'SavedViews' => ['Foundation', 'TenancyContracts'],
+    'Storage' => ['Foundation', 'TenancyContracts'],
+    'Messaging' => ['Foundation', 'TenancyContracts'],
+    'Features' => ['Foundation', 'TenancyContracts'],
+    'Departments' => ['Foundation', 'TenancyContracts'],
+    'Money' => ['Foundation', 'TenancyContracts'],
+];
+
+/** @var list<string> */
+private const COMPOSITION = [
+    'packages/core/src/CoreServiceProvider.php',
+    'packages/core/src/Support/Config.php',
+    'packages/core/src/Support/CoreOptions.php',
+    'packages/core/src/Support/ServiceProviderModuleRegistrar.php',
+    'packages/core/src/Support/PackageRegistrar.php',
+    'packages/core/src/Support/RegistersNothingOnBoot.php',
+];
+
+private const E_BASEMODEL = 'packages/core/src/Models/BaseModel.php';
+```
+
+Принадлежность файла зоне — функция `zoneOf(string $relative): ?string`:
+
+1. `src/Testing/` → `null` (не зона).
+2. Путь из `COMPOSITION` → `null`.
+3. Exact Support types `ViolationList.php`, `InvalidConfiguration.php`, `SecretRef.php`
+   → Foundation; then prefix: `Audit/`→Audit, `Departments/`→Departments, `Features/`→Features,
+   `Money/`→Money, `PubSub/`→Messaging, `Messaging/`→Messaging,
+   `Settings/`→Settings, `Storage/`→Storage, `Tenancy/`→TenancyContracts,
+   `Views/`→SavedViews, `Support/Time/`→Foundation, `Support/Data/`→Foundation.
+4. Иначе — таблица dump-файлов §3.2, зашитая как `DUMP_ZONE` (относительный
+   путь → зона). Файл вне таблицы — fail R-Z0 «неклассифицирован».
+
+Импорт `CoreX\X` режется до первого сегмента после `CoreX\` и через ту же
+функцию (для dump — по FQCN-таблице, зеркалу §3.2). Импорты не-`CoreX\`
+игнорируются. Импорт своей зоны разрешён всегда.
+
+### 6.2 Правила
+
+- **R-Z0.** Каждый PHP под `packages/core/src` кроме Testing/Composition имеет
+  зону.
+- **R-Z1.** `use CoreX\…` файла зоны A указывает на зону B, где B=A или B ∈
+  `ALLOWED[A]`. Исключение: путь E-BASEMODEL может указывать на Audit.
+- **R-Z2.** Файл вне каталогов своей зоны не импортирует
+  `CoreX\<Ns>\Internal\*`. Composition — единственный allowlist, поимённо,
+  не шаблоном `*ServiceProvider.php`. Для Messaging каталоги зоны ∈
+  {`Messaging`, `PubSub`}. Для SavedViews каталог зоны = `Views`.
+
+Сообщение обязано содержать код правила, относительный путь файла и
+запрещённый символ.
+
+Чистый combined P6+P7+P8 прогон обязан показать, что exact-путь
+`Support/CoreOptions.php` принимает его 12 объявленных cross-zone imports.
+Это позитивный witness закрытого `COMPOSITION`, а не исключение в R-Z1:
+`ALLOWED['Foundation']` остаётся `[]`, посадка Foundation → SavedViews/Internal
+из §6.3 остаётся красной, а unknown `Support/Probe.php` — R-Z0.
+
+`tests/Arch/MessagingZoneTest.php` после P6.2 **удаляется**: его R-M1/R-M2
+поглощены R-Z1/R-Z2. Это не ослабление: матрица строже (закрытый allow-list
+зон вместо восьми неймспейсов dump). В receipt записать, что P5.11
+supersede'нут этим файлом.
+
+### 6.3 Посадки (обязательны до GREEN)
+
+1. Временно добавить `use CoreX\Views\Internal\SqlSavedViewRepository;` в
+   `packages/core/src/Support/Data/RecordRef.php` (Foundation). R-Z1 краснеет
+   с `RecordRef.php` и `SqlSavedViewRepository`. Снять.
+2. Временно добавить `use CoreX\Views\Internal\SqlSavedViewRepository;` в
+   `packages/core/src/Tenancy/AccountRef.php`. R-Z1 краснеет: TenancyContracts
+   ↛ SavedViews. Снять.
+3. Для R-Z2: импорт `CoreX\Views\Internal\SqlSavedViewRepository` в
+   `packages/core/src/Enums/ActorType.php`. R-Z2 краснеет. Снять.
+
+Посадки живут в `try/finally` как в `PackageGraphTest`. Вывод дословно в
+`findings/P6-receipts.md`.
+
+### 6.4 Форма теста
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use CoreX\Tests\Support\SourceScanner;
+
+test('every core src file is classified into a zone or composition/testing',
+    function (): void {
+        $offenders = [];
+        foreach (corePhpFiles() as $relative) {
+            if (isSkipped($relative)) {
+                continue;
+            }
+            if (zoneOf($relative) === null) {
+                $offenders[] = $relative;
+            }
+        }
+        expect($offenders)->toBe([]);
+    });
+
+test('zone files import only allowed CoreX zones (R-Z1)', function (): void {
+    expect(rz1Offenders())->toBe([]);
+});
+
+test('foreign files do not import zone Internal (R-Z2)', function (): void {
+    expect(rz2Offenders())->toBe([]);
+});
+```
+
+Функции `corePhpFiles`, `zoneOf`, `rz1Offenders` — в том же файле, не в
+новом хелпере: один Files-слот. Готовые тела — перенос таблиц §2–§3.2
+в `const`. Не выносить матрицу в JSON: тогда появятся два источника.
+
+---
+
+## 7. Messaging поглощает PubSub по пути
+
+D31: P5 не трогает `CoreX\PubSub\**`. D32: P6 тоже не трогает FQCN.
+`zoneOf('src/PubSub/PubSubManager.php') === 'Messaging'`.
+R-Z1 для этих файлов — как для `src/Messaging/**`.
+
+`findings/P5-zone-map.md` обещал отметку «перенос — P6». P6.2 в receipt
+пишет: «физический перенос не выполнен, D32; целевой FQCN — таблица §4».
+Это не дефект P5.11, а уточнение следствия D31.
+
+`PrunePubSubMessages` продолжает брать время из `new DateTimeImmutable`.
+Расхождение с инъектированным Clock messaging-relay — именованный долг
+`findings/P6-receipts.md`, адресат P7 (Options) / оставшиеся `now()` вне
+P4.10. P6 часы не инъектирует: это не граница зон.
+
+---
+
+## 8. Testing — staging N09 (P6.5)
+
+`RAG:✅` P6-Q3: `autoload-dev` потребителю path-пакета не отдаётся.
+
+Готовый фрагмент `packages/core/composer.json`:
+
+```json
+"autoload": {
+    "psr-4": {
+        "CoreX\\": "src/"
+    }
+},
+"autoload-dev": {
+    "psr-4": {
+        "CoreX\\Testing\\": "src/Testing/"
+    }
+}
+```
+
+Production `CoreX\\` → `src/` **сохраняется**, иначе `src/Testing` пропадает
+у потребителей. `autoload-dev` дублирует канон для того дня, когда P16 снимет
+production-покрытие (тогда останется только `autoload-dev`).
+
+Гейт `tests/Arch/TestingAutoloadTest.php`:
+
+- **R-T1.** Файл `packages/*/src/**/*.php`, путь которого не содержит
+  `/Testing/`, не содержит `use CoreX\Testing\\`. Текущие нарушители —
+  ровно три файла, allowlist `RT1_EXISTING`:
+  `packages/crm/src/Testing/CrmTestCase.php`,
+  `packages/auth/src/Testing/CoreAuthTestCase.php`,
+  `packages/tasks/src/Testing/TasksTestCase.php`.
+  Новый файл вне этих трёх — красное. Снятие allowlist — P16.
+- Посадка: временный `use CoreX\Testing\CoreXTestCase;` в
+  `packages/core/src/Enums/ActorType.php` → R-T1 с именем файла. Снять.
+
+Комментарий в `composer.json` над `autoload-dev`: «canonical mapping; production
+psr-4 still covers src/Testing until P16 (D33)».
+
+---
+
+## 9. Support и Data — обоснование, не расформирование
+
+Профиль C (STR-006) группирует `Data/` по домену. Здесь домен — Foundation:
+`DataScope`, `RecordRef`, `WriteToken`, authorizers, `DataScopeAccessDecision`.
+Расформирование с перемещением в `Support/Data` меняет FQCN решения доступа
+и контракта `DataScopeAuthorizer` — D32 запрещает.
+
+`Support/Config` — boot-адаптер до P7 (эскиз §4, скелет фазы). 31 ключ,
+единственное легальное место `config()` до типизированных Options. В матрице
+это Composition, не Foundation: Config импортирует Audit, Settings, Features,
+Departments, Tenancy — иначе гейт был бы красным в день включения.
+
+`Support/CoreOptions` — такой же exact Composition holder по D101: его
+`fromArray()` задаёт defaults из Audit, Settings, Features, Departments и
+TenancyContracts. Это не расширяет Foundation и не создаёт allowlist для
+`Support/**`: любой неназванный тип по-прежнему неклассифицирован.
+
+`ServiceProviderModuleRegistrar` принимает `Application` — литмус №3,
+Composition.
+
+Итог P6.1 в `core-zones.md`: каталоги `Support/` и `Data/` **обоснованы** как
+физический дом Foundation + Composition; не удаляются и не переименовываются.
+
+---
+
+## 10. Features, Departments, Money (P6.4)
+
+`RAG:✅` P6-Q5. Вердикты:
+
+| Зона | Почему не Foundation | Кандидат на пакет | Кандидат уровня 1 |
+|:--|:--|:--|:--|
+| Features | литмус №2 (имя возможности) и №3 (Eloquent) | нет: 1 файл / 121 строка | нет: движок оценки платформенный |
+| Departments | №2, №3; оргдерево с path/cycle/workspace | нет: 2 файла | **да** — продуктовая оргструктура |
+| Money | №3 (`CastsAttributes`); `brick/money` уже в `require` ядра | **да** — тяжёлая зависимость D8 | нет |
+
+`roadmap.md` §7 дополняется двумя строками (готовые формулировки):
+
+1. Выделение `corex/money`: условие — внешний или boxed-потребитель, которому
+   нужен `corex/core` без `brick/money`, и оплаченная стоимость split-зеркала.
+2. Вынесение Departments на уровень 1 (FlexCMS): условие — второй продукт
+   без оргдерева, либо подтверждённое расхождение смысла «отдел» между auth и
+   CRM. До условия зона остаётся в ядре.
+
+Семантика репозитория отделов не меняется.
+
+---
+
+## 11. Документ `docs/architecture/core-zones.md` (P6.1)
+
+Готовая структура документа, исполнитель переносит разделы 2–5, 9–10 этого
+файла без пересказа:
+
+1. Шапка: версия 1.0.0, статус нормативный, ссылки D8 D32 D33 D34.
+2. Матрица §2.
+3. Таблица принадлежности §3.
+4. Правила R-Z0 R-Z1 R-Z2 R-L3 R-T1 и исключения COMPOSITION, E-BASEMODEL,
+   LITMUS_ELOQUENT, RT1_EXISTING.
+5. Обоснование Support/Data.
+6. Целевые FQCN для P15 (§4).
+7. Кандидаты на пакет / уровень 1 (§10).
+8. Чего документ не обещает: пакеты, смена FQCN, вынос Testing в этом релизе,
+   DATA-003 (чужая таблица ORM — P9, D19).
+
+Enforcement статей: `composer test` → `tests/Arch/CoreZoneTest.php` и
+`TestingAutoloadTest.php`. Не PHPStan `@internal` (D12).
+
+---
+
+## 12. Соответствие items
+
+| Item | Параграф | Продукт |
+|:--|:--|:--|
+| P6.1 | §2–§5, §9–§11 | `docs/architecture/core-zones.md` |
+| P6.2 | §6–§7 | `tests/Arch/CoreZoneTest.php`; удаление `MessagingZoneTest.php` |
+| P6.3 | §5 | `tests/Arch/CoreLitmusTest.php` |
+| P6.4 | §10 | `roadmap.md` §7; `findings/P6-departments.md` |
+| P6.5 | §8 | `packages/core/composer.json`; `tests/Arch/TestingAutoloadTest.php` |
+| P6.6 | §6.3, §13 | `findings/P6-receipts.md` — свод посадок и `test:packages` |
+
+Порядок по данным: `P6.1 → P6.2 → P6.3 → P6.6`; `P6.4` и `P6.5` после P6.1,
+параллельны между собой. P6.6 последний: читает все гейты.
+
+---
+
+## 13. Что фаза не обещает
+
+| Не обещано | Почему | Где |
+|:--|:--|:--|
+| Новые Composer-пакеты | D8, P6-Q1 | D8, §10 |
+| Смена публичного FQCN | `final` + Roave + Files | D32, §4 |
+| Полный вынос Testing из production-autoload | Composer autoload-dev root-only | D33, §8 |
+| DATA-003 «пакет не пишет в чужую таблицу ORM» | D19 адресовал полное — P9 | D19 |
+| Инъекция Clock в `PrunePubSubMessages` | не граница зон | §7, receipt |
+| Pest Arch / Deptrac | D17, вакуум LayerTest | §0, P6-Q4 |
+| Переименование `Views` → `SavedViews` | публичный неймспейс panels | §4 |
+| Снятие E-BASEMODEL | меняет семантику аудита BaseModel | D34 |

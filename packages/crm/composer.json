@@ -3,7 +3,13 @@
     "description": "CoreX CRM module — pipelines, stages and deals on corex/core (ULID, tenancy, money).",
     "type": "corex-module",
     "license": "MIT",
-    "keywords": ["laravel", "crm", "pipeline", "deals", "multi-tenancy"],
+    "keywords": [
+        "laravel",
+        "crm",
+        "pipeline",
+        "deals",
+        "multi-tenancy"
+    ],
     "authors": [
         {
             "name": "Dmitry Vostrikov",
@@ -40,7 +46,17 @@
     },
     "extra": {
         "corex": {
-            "module": "Flex\\Crm\\CrmModule"
+            "schema-version": 1,
+            "module": "Flex\\Crm\\CrmModule",
+            "package-type": "product",
+            "stability": "experimental",
+            "public-api": [
+                "Flex\\Crm\\Contracts",
+                "Flex\\Crm\\Data",
+                "Flex\\Crm\\Enums",
+                "Flex\\Crm\\Events",
+                "Flex\\Crm\\Models"
+            ]
         },
         "laravel": {
             "providers": [

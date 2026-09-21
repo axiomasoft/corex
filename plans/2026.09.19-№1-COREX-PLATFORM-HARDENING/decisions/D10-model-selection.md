@@ -1,11 +1,11 @@
 ---
 id: D10
 date: 2026-09-19
-status: accepted
+status: superseded
 item: P1
 items: [P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17]
 supersedes: []
-superseded_by: null
+superseded_by: D35
 ---
 # D10 — Модели Cursor под классы маршрутизации
 

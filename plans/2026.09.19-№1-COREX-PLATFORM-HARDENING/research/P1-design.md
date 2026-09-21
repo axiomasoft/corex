@@ -635,6 +635,15 @@ BC-гейта P3 и приёмки P17 означало бы дать обеща
 | `MeilisearchQueryAdapter` | `MeilisearchSearchProvider` | search-meilisearch | P15 | — | A62 |
 | `UnsupportedSearchProvider` | `UnavailableSearchProvider` | search | P15 | — | A63 |
 | `DueSource` | `DueWakeupSource` | wakeup | P15 | — | A70 |
+| `WakeupHandler` | `DueWakeupHandler` | wakeup | P15 | — | A70 |
+| `WakeupHint` | `WakeupScheduleHint` | wakeup | P15 | — | A70 |
+| `WakeupSweeper` | `DueWakeupSweeper` | wakeup | P15 | — | A70 |
+| `WakeupHandler` | `DueWakeupHandler` | wakeup | P15 | — | A70 |
+| `WakeupHint` | `WakeupScheduleHint` | wakeup | P15 | — | A70 |
+| `WakeupSweeper` | `DueWakeupSweeper` | wakeup | P15 | — | A70 |
+| `WakeupHandler` | `DueWakeupHandler` | wakeup | P15 | — | A70 |
+| `WakeupHint` | `WakeupScheduleHint` | wakeup | P15 | — | A70 |
+| `WakeupSweeper` | `DueWakeupSweeper` | wakeup | P15 | — | A70 |
 | `Dispatcher` | `OperationDispatcher` | api | P15 | после разделения ответственностей в P13 | A68 |
 | `ErrorBoundary` | `OperationErrorBoundary` | api | P15 | — | A68 |
 | `RequestMetadata` | `InvocationMetadata` | api | P15 | — | A68 |

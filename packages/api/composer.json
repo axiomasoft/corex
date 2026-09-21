@@ -53,5 +53,16 @@
         "test:coverage": "pest --coverage --min=80",
         "analyse": "phpstan analyse --memory-limit=1G",
         "lint:check": "pint --test"
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "experimental",
+            "public-api": [
+                "CoreX\\Api\\Contracts",
+                "CoreX\\Api\\Data"
+            ]
+        }
     }
 }
