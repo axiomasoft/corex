@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-22
-inputs_sha256: 875db3211511dec8dbb70b5b19e6155d5ede4c2a6ef9acaf1bcf7a6104ac123b
+inputs_sha256: 85c6660fd979d359380376226ed9c2b418bb17cdbc2cc33d7950c796285cd68e
 generated_by: task plan-views status
 -->
 
@@ -36,7 +36,7 @@ generated_by: task plan-views status
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
-| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 1/6 | 🟡 In progress |
+| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 3/6 | 🟡 In progress |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 0/12 | ⬜ Not started |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
@@ -257,8 +257,8 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P6.1 | Карта зон: матрица, 109 файлов, Support/Data, целевые FQCN P15 | 🟢 Done | 2026-09-22 |
-| P6.2 | Arch-гейт зон: R-Z0, R-Z1, R-Z2, три посадки, PubSub ∈ Messaging | ⬜ Not started | — |
-| P6.3 | Исполняемый Core Litmus Test для Foundation | ⬜ Not started | — |
+| P6.2 | Arch-гейт зон: R-Z0, R-Z1, R-Z2, три посадки, PubSub ∈ Messaging | 🟢 Done | 2026-09-22 |
+| P6.3 | Исполняемый Core Litmus Test для Foundation | 🟢 Done | 2026-09-22 |
 | P6.4 | Features, Departments, Money: вердикты и кандидаты `roadmap.md` §7 | ⬜ Not started | — |
 | P6.5 | Testing: канонический `autoload-dev`, гейт R-T1, staging N09 | ⬜ Not started | — |
 | P6.6 | Свод доказательств границ зон и неизменности потребителей | ⬜ Not started | — |
@@ -447,6 +447,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-22 | gpt-5.6-sol/xhigh | plan-exec · closed-green · P5.18 GREEN from persisted attempt-1 matrix plus attempt-2 package carriers. Owner direction honored: lifecycle-only, no validation rerun or added SKM review. write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-22 | grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-22 | grok-4.7/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:138 |
+| 2026-09-22 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-22 | grok-4.7/high | plan-exec · closed-green · P6.2 GREEN: CoreZoneTest R-Z0/R-Z1/R-Z2, PubSub is Messaging, MessagingZoneTest absorbed. Six public imports are exact file+symbol edges (D116). pest tests/Arch 38 passed. pint --test exit 0. |
+| 2026-09-22 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-22 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P6.3 GREEN: CoreLitmusTest checks six A29 conditions for Foundation. Condition 3 is fail-closed R-L3 outside three LITMUS_ELOQUENT paths. pest tests/Arch 44 passed. pint --test exit 0. |
 
 ## Owner Gates
 
@@ -466,3 +470,4 @@ write-site: pre_mutation: allow · pre_final: allow |
 - P5.12: known deviation
 - P5.17: known deviation
 - P6.1: known deviation
+- P6.2: known deviation

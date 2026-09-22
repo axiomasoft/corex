@@ -1,39 +1,44 @@
-# HANDOFF — 2026-09-22 — after P6.1
+# HANDOFF — 2026-09-22 — after P6.3
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.2
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.4
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
 | Model class | implementation/high |
 | Effort | high |
-| Native model | composer-2.5 |
+| Native model | cursor-grok-4.7-high |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | Arch-гейт зон R-Z0/R-Z1/R-Z2 по карте P6.1, три посадки, PubSub остаётся Messaging. |
+| Суть | Кандидаты Features, Departments и Money: вердикт и roadmap §7. |
 
 ```session-continuity-decision/v1
-{"outcome":"continue-root","reason":"authorized-scope-complete","evidence":["batch:fc11daaba04d87c6d634315fc01576d4666aeed2982b3f94abfe48a34bbcfdca","loaded-inputs:reusable","cold-start-cost:0","lifecycle:scope-complete","checkpoint:journal:P6.1:run:e3a6694473455f0e5392e42ba06f62a5ddbbea45a85cd6798dd88884cddf9dd4"],"runnable":true,"schema_version":"session-continuity-decision/v1"}
+{"outcome":"continue-root","reason":"authorized-scope-complete","evidence":["batch:4a2f9c615d676d13fe2514fc809667c35700dd308a1380700272e2d55b029c9c","loaded-inputs:not-reusable","cold-start-cost:0","lifecycle:scope-complete","checkpoint:journal:P6.3:run:8e640128884e2841c18490ee0e14733cbc21afe8f2e7c8096ae2077f6ab6b0b5"],"runnable":true,"schema_version":"session-continuity-decision/v1"}
 ```
 
 ```text
-$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.2
+$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.4
 ```
 
 ```bash
-agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.2'
+agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P6.4'
 ```
 
-**Done:** P6.1 закрыт GREEN. `docs/architecture/core-zones.md` классифицирует 146 PHP-файлов живого дерева; baseline 109 заменён правилом живого подсчёта. Раздел «не обещает» называет D32 и D33. `composer lint:check` exit 0. Чужой diff `packages/` (37 файлов) не входит в item.
+**Done:** P6.3 закрыт GREEN. `tests/Arch/CoreLitmusTest` проверяет шесть условий
+литмуса только для Foundation. Условие 3 закрыто R-L3 вне трёх путей
+`LITMUS_ELOQUENT`. `vendor/bin/pest tests/Arch` — 44 passed.
+`vendor/bin/pint --test` — exit 0.
 
-**Remaining:** P6.2 и последующие items фазы P6. P6.4 и P6.5 готовы по данным после P6.1; порядок фазы — `P6.1 → {P6.2, P6.4, P6.5} → P6.3 → P6.6`.
+**Remaining:** P6.4 и P6.5 готовы по данным. P6.6 последний.
+Порядок фазы — `{P6.4, P6.5}` → `P6.6`.
 
-**Sources of truth:** `phases/P6/P6.1.state.md` · `docs/architecture/core-zones.md` · `findings/P6-receipts.md` · `journal.jsonl` · `bundles/P6.2.json`
+**Sources of truth:** `phases/P6/P6.3.state.md` · `tests/Arch/CoreLitmusTest.php` · `docs/architecture/core-zones.md` · `decisions/D34-litmus-eloquent-disqualifies-foundation.md` · `findings/P6-receipts.md` · `journal.jsonl`
 
-**Open risks:** Число 109 в Validation P6.1 остаётся текстом дизайна; карта следует Implementation Rules и живому `find`.
+**Open risks:** Чужой diff в `packages/core/src` не входит в P6.3.
+Снятие шести рёбер D116 — отдельный item под G-API.
 
 **Workarounds/Deferred/Open questions:**
 
-- workarounds: вход P6.2 «результат P6.1» свёрнут в запись D101, иначе bundle не собирался.
-- deferred: исполнение P6.2 вне admitted scope этой сессии.
+- workarounds: —
+- deferred: перенос `DataScope::fromTenantContext` и поля `DomainEvent::$tenant`.
 - open_questions: —

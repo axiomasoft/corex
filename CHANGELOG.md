@@ -16,6 +16,9 @@
 
 ### Added
 
+- P6.3: arch-гейт `tests/Arch/CoreLitmusTest` проверяет шесть условий
+  литмуса только для Foundation. Условие 3 закрыто правилом R-L3,
+  кроме трёх путей `LITMUS_ELOQUENT`.
 - P2.4: реестр конфигурации (docs/architecture/configuration.md) — 161 ключ из 18 config-файлов, 17 undeclared-read, CFG-006 exception для corex-intl-search.
 - P2.3: реестр владения таблицами (docs/architecture/table-ownership.md) — 99 таблиц, 4 пакета-владельца sys_*, DATA-004 exception aut_role_assignments.
 - P1.7: реестр референсов, отклонённые решения, README каталога architecture (docs/architecture/references.md, docs/rejected-optimizations.md, docs/architecture/README.md).

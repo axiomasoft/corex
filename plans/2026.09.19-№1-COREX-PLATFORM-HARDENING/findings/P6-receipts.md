@@ -22,3 +22,67 @@
 - `composer lint:check` этой сессии — exit 0.
 - `git diff --stat -- 'packages/'` показывает 37 ранее изменённых файлов чужого контура.
   P6.1 не меняет `packages/`.
+
+## P6.2 — Arch-гейт зон
+
+`tests/Arch/CoreZoneTest` кодирует матрицу §2 и карту P6.1. `PubSub/` ∈ Messaging
+по пути; физический перенос не выполнен, D32. Целевой FQCN — таблица §4
+`docs/architecture/core-zones.md`. P5.11 (`MessagingZoneTest`, R-M1/R-M2)
+поглощён R-Z1/R-Z2. `ALLOWED['Foundation']` пуст. `CoreOptions`,
+`PackageRegistrar` и `RegistersNothingOnBoot` — exact COMPOSITION; `ViolationList`,
+`InvalidConfiguration`, `SecretRef` — Foundation. Файла `Support/CoreOptions.php`
+в дереве нет, поэтому 12 cross-zone imports ещё не наблюдаются; путь уже в
+закрытом списке COMPOSITION.
+
+### Негативные посадки (дословный вывод коллекторов)
+
+```
+R-Z1 packages/core/src/Support/Data/RecordRef.php imports CoreX\Views\Internal\SqlSavedViewRepository
+R-Z1 packages/core/src/Tenancy/AccountRef.php imports CoreX\Views\Internal\SqlSavedViewRepository
+R-Z2 packages/core/src/Enums/ActorType.php imports CoreX\Views\Internal\SqlSavedViewRepository
+R-Z0 packages/core/src/Support/Probe.php unclassified
+```
+
+После снятия посадок файлы восстановлены, `Support/Probe.php` удалён.
+R-Z0, R-Z1 и R-Z2 на чистом дереве зелёные. Ложный `use CoreX\Audit\CurrentActor`
+в `ImpersonationService` снят: тип был только в `{@see}` докблока.
+Шесть публичных импортов закрыты D116 по паре «файл + символ».
+`ALLOWED['Foundation']` пуст. Посадки выше остаются красными на время прогона
+и зелёными после восстановления.
+
+## P6.3 — Core Litmus Test
+
+`tests/Arch/CoreLitmusTest` кодирует шесть условий A29 только для Foundation.
+Список файлов — константа из 24 путей живой карты `docs/architecture/core-zones.md`
+(baseline дизайна в 109 файлов снят P6.1). Это не дополнение «все остальные».
+Условие 3 fail-closed (D34): импорт `Illuminate\Database\Eloquent`,
+`Illuminate\Http` или `Illuminate\Foundation\Application` даёт R-L3.
+Условие 1 ниже порога grep по `packages/*/src` — warning, не fail.
+Ненаблюдаемая ссылка — `unresolved`, не fail. Условие 5 длиннее 200 строк
+вне `Contracts` / `Enums` / `Data` — `unresolved` (P2 §7.1).
+
+### LITMUS_ELOQUENT
+
+```text
+packages/core/src/Models/BaseModel.php
+packages/core/src/Concerns/HasConfiguredId.php
+packages/core/src/Support/Schema/IdColumns.php
+```
+
+Четвёртый путь требует запись в Decision Log.
+
+### Негативная посадка R-L3
+
+В `packages/core/src/Support/Data/RecordRef.php` на время прогона вставлен
+`use Illuminate\Database\Eloquent\Model;`, затем файл восстановлен в `finally`.
+
+```text
+R-L3 packages/core/src/Support/Data/RecordRef.php imports Illuminate\Database\Eloquent\Model
+```
+
+Сообщение содержит `R-L3`, `RecordRef.php` и `Eloquent`. После снятия посадки
+чистое дерево зелёное: `BaseModel` и `HasConfiguredId` остаются в allowlist.
+
+Цитата Inputs у P6.4 свёрнута с каталога `packages/core/src/Departments`
+на файл `packages/core/src/Departments/Department.php`, чтобы bundle
+преемника резолвился. Смысл входа не менялся.
