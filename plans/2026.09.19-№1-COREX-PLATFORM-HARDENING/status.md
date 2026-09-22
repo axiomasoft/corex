@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-21
-inputs_sha256: 2f4e25d8538cbf40b22ed1fe3c097dfa3dfbc259b1fcef3aa09483fa4a8638b8
+through: 2026-09-22
+inputs_sha256: 875db3211511dec8dbb70b5b19e6155d5ede4c2a6ef9acaf1bcf7a6104ac123b
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-21 |
+| Last Updated | 2026-09-22 |
 
 ## 4. Phase Index & Status Board
 
@@ -32,11 +32,11 @@ generated_by: task plan-views status
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
-| P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 2/6 | 🟡 In progress |
-| P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 0/7 | ⬜ Not started |
-| P4 | Durable-граница и контекст исполнения | 0/12 | ⬜ Not started |
-| P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 0/12 | ⬜ Not started |
-| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 0/6 | ⬜ Not started |
+| P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
+| P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
+| P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
+| P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
+| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 1/6 | 🟡 In progress |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 0/12 | ⬜ Not started |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
@@ -195,62 +195,68 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P2.1 | Сканер символов и импортов, `files.csv`, самопроверка базы | 🟢 Done | 2026-09-21 |
 | P2.2 | Три графа зависимостей и отчёт расхождений | 🟢 Done | 2026-09-21 |
-| P2.3 | Реестр владения таблицами и разрешение префикса `sys_` | ⬜ Not started | — |
-| P2.4 | Реестр конфигурации и сохранённый ключ `corex-intl-search` | ⬜ Not started | — |
-| P2.5 | Пер-классовые вердикты и Core Litmus Test | ⬜ Not started | — |
-| P2.6 | Базовый scorecard 20 пакетов × 12 критериев | ⬜ Not started | — |
+| P2.3 | Реестр владения таблицами и разрешение префикса `sys_` | 🟢 Done | 2026-09-21 |
+| P2.4 | Реестр конфигурации и сохранённый ключ `corex-intl-search` | 🟢 Done | 2026-09-21 |
+| P2.5 | Пер-классовые вердикты и Core Litmus Test | 🟢 Done | 2026-09-21 |
+| P2.6 | Базовый scorecard 20 пакетов × 12 критериев | 🟢 Done | 2026-09-21 |
 
 ## Phase P3
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P3.1 | Контур PHPStan по currently-green пакетам (N03) | ⬜ Not started | — |
-| P3.2 | Tokenizer-граф: group-use, FQCN, extends | ⬜ Not started | — |
-| P3.3 | R4 / R4b / R5 в гейте графа | ⬜ Not started | — |
-| P3.4 | Roave BC-дифф, PHP 8.4, blocking только stable | ⬜ Not started | — |
-| P3.5 | Маркер DurablePayload и PHPStan-правило | ⬜ Not started | — |
-| P3.6 | Гейт имён и наблюдательный `config()` | ⬜ Not started | — |
-| P3.7 | A57/A61/A99 и T1/T2/T4 владения таблицами | ⬜ Not started | — |
+| P3.1 | Контур PHPStan по currently-green пакетам (N03) | 🟢 Done | 2026-09-21 |
+| P3.2 | Tokenizer-граф: group-use, FQCN, extends | 🟢 Done | 2026-09-21 |
+| P3.3 | R4 / R4b / R5 в гейте графа | 🟢 Done | 2026-09-21 |
+| P3.4 | Roave BC-дифф, PHP 8.4, blocking только stable | 🟢 Done | 2026-09-21 |
+| P3.5 | Маркер DurablePayload и PHPStan-правило | 🟢 Done | 2026-09-21 |
+| P3.6 | Гейт имён и наблюдательный `config()` | 🟢 Done | 2026-09-21 |
+| P3.7 | A57/A61/A99 и T1/T2/T4 владения таблицами | 🟢 Done | 2026-09-21 |
 
 ## Phase P4
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P4.1 | Транзитная форма `DataScope`: скаляры, `VERSION`, `fromTenantContext()` | ⬜ Not started | — |
-| P4.2 | Контракт `TenantContextRestorer` и сверяющая реализация | ⬜ Not started | — |
-| P4.3 | Миграция `attributes`: каталог полей на restorer, конструирование в тестах | ⬜ Not started | — |
-| P4.4 | Миграция `tasks-workflow`: материализатор и wakeup-handler | ⬜ Not started | — |
-| P4.5 | Миграция конструирования в тестах `search`, `search-intl`, `search-meilisearch` | ⬜ Not started | — |
-| P4.6 | Миграция конструирования в тестах `intl` и `transfer` | ⬜ Not started | — |
-| P4.7 | Флип к скалярам, маркер `DurablePayload`, ужесточение правила на `array<mixed>` | ⬜ Not started | — |
-| P4.8 | `DataScopeCodec`: версия формата, отказ на неизвестной и на неполной | ⬜ Not started | — |
-| P4.9 | Часы PSR-20: `psr/clock`, `SystemClock`, `FrozenClock`, `LaravelClock` | ⬜ Not started | — |
-| P4.10 | Часы в durable-путях `wakeup`: lease, backoff, наступление срока | ⬜ Not started | — |
-| P4.11 | Доказательство изоляции контекста между единицами работы | ⬜ Not started | — |
-| P4.12 | Аудит `singleton`/`scoped` и гейт контекст-зависимых конструкторов | ⬜ Not started | — |
+| P4.1 | Транзитная форма `DataScope`: скаляры, `VERSION`, `fromTenantContext()` | 🟢 Done | 2026-09-21 |
+| P4.2 | Контракт `TenantContextRestorer` и сверяющая реализация | 🟢 Done | 2026-09-21 |
+| P4.3 | Миграция `attributes`: каталог полей на restorer, конструирование в тестах | 🟢 Done | 2026-09-21 |
+| P4.4 | Миграция `tasks-workflow`: материализатор и wakeup-handler | 🟢 Done | 2026-09-21 |
+| P4.5 | Миграция конструирования в тестах `search`, `search-intl`, `search-meilisearch` | 🟢 Done | 2026-09-21 |
+| P4.6 | Миграция конструирования в тестах `intl` и `transfer` | 🟢 Done | 2026-09-21 |
+| P4.7 | Флип к скалярам, маркер `DurablePayload`, ужесточение правила на `array<mixed>` | 🟢 Done | 2026-09-21 |
+| P4.8 | `DataScopeCodec`: версия формата, отказ на неизвестной и на неполной | 🟢 Done | 2026-09-21 |
+| P4.9 | Часы PSR-20: `psr/clock`, `SystemClock`, `FrozenClock`, `LaravelClock` | 🟢 Done | 2026-09-21 |
+| P4.10 | Часы в durable-путях `wakeup`: lease, backoff, наступление срока | 🟢 Done | 2026-09-21 |
+| P4.11 | Доказательство изоляции контекста между единицами работы | 🟢 Done | 2026-09-21 |
+| P4.12 | Аудит `singleton`/`scoped` и гейт контекст-зависимых конструкторов | 🟢 Done | 2026-09-21 |
 
 ## Phase P5
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P5.1 | `message-policy.md` до исполнимого вида: типы полей, процедура объявления, не-обещания | ⬜ Not started | — |
-| P5.2 | `MessageEnvelope`, `MessagePayload`, `MessageContract` и два enum'а | ⬜ Not started | — |
-| P5.3 | Реестр объявленных контрактов и отказ на необъявленном (`MSG-002`) | ⬜ Not started | — |
-| P5.4 | DDL `sys_outbox_messages` и `sys_inbox_messages`, блок `corex.messaging`, владение таблицами | ⬜ Not started | — |
-| P5.5 | `Outbox::append()` внутри бизнес-транзакции | ⬜ Not started | — |
-| P5.6 | `OutboxRelay`: lease со `SKIP LOCKED`, fence-отметка, backoff, dead-letter | ⬜ Not started | — |
-| P5.7 | Порт `MessagePublisher` и команда relay с кооперативной остановкой | ⬜ Not started | — |
-| P5.8 | `Inbox::claim()`: `ON CONFLICT DO NOTHING` в транзакции бизнес-изменения | ⬜ Not started | — |
-| P5.9 | Retention outbox: два окна; inbox не чистится | ⬜ Not started | — |
-| P5.10 | Наблюдаемость доставки: четыре числа и команда-probe (вход P12) | ⬜ Not started | — |
-| P5.11 | Зона `Messaging`: два правила arch-гейта и обе негативные посадки | ⬜ Not started | — |
-| P5.12 | Доказательства гарантий: падение, дубль, конкуренция, откат | ⬜ Not started | — |
+| P5.1 | `message-policy.md` до исполнимого вида: типы полей, процедура объявления, не-обещания | 🟢 Done | 2026-09-21 |
+| P5.2 | `MessageEnvelope`, `MessagePayload`, `MessageContract` и два enum'а | 🟢 Done | 2026-09-21 |
+| P5.3 | Реестр объявленных контрактов и отказ на необъявленном (`MSG-002`) | 🟢 Done | 2026-09-21 |
+| P5.4 | DDL `sys_outbox_messages` и `sys_inbox_messages`, блок `corex.messaging`, владение таблицами | 🟢 Done | 2026-09-21 |
+| P5.5 | `Outbox::append()` внутри бизнес-транзакции | 🟢 Done | 2026-09-21 |
+| P5.6 | `OutboxRelay`: lease со `SKIP LOCKED`, fence-отметка, backoff, dead-letter | 🟠 Done with deviations | 2026-09-22 |
+| P5.7 | Порт `MessagePublisher` и команда relay с кооперативной остановкой | 🟢 Done | 2026-09-21 |
+| P5.8 | `Inbox::claim()`: `ON CONFLICT DO NOTHING` в транзакции бизнес-изменения | 🟢 Done | 2026-09-22 |
+| P5.9 | Retention outbox: два окна; inbox не чистится | 🟢 Done | 2026-09-21 |
+| P5.10 | Наблюдаемость доставки: четыре числа и команда-probe (вход P12) | 🟢 Done | 2026-09-21 |
+| P5.11 | Зона `Messaging`: два правила arch-гейта и обе негативные посадки | 🟢 Done | 2026-09-21 |
+| P5.12 | Доказательства гарантий: падение, дубль, конкуренция, откат | 🟢 Done | 2026-09-21 |
+| P5.13 | Repair root execution of tasks-workflow PG tests | 🟢 Done | 2026-09-22 |
+| P5.14 | Make wakeup clock composition package-safe | 🟢 Done | 2026-09-22 |
+| P5.15 | Classify the Messaging public surface | 🟢 Done | 2026-09-22 |
+| P5.16 | Align configurable messaging table names with DDL | 🟢 Done | 2026-09-22 |
+| P5.17 | Close reproduced P5 formatting debt | 🟢 Done | 2026-09-22 |
+| P5.18 | Independent P1–P5 joined qualification and carrier reconciliation | 🟢 Done | 2026-09-22 |
 
 ## Phase P6
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P6.1 | Карта зон: матрица, 109 файлов, Support/Data, целевые FQCN P15 | ⬜ Not started | — |
+| P6.1 | Карта зон: матрица, 109 файлов, Support/Data, целевые FQCN P15 | 🟢 Done | 2026-09-22 |
 | P6.2 | Arch-гейт зон: R-Z0, R-Z1, R-Z2, три посадки, PubSub ∈ Messaging | ⬜ Not started | — |
 | P6.3 | Исполняемый Core Litmus Test для Foundation | ⬜ Not started | — |
 | P6.4 | Features, Departments, Money: вердикты и кандидаты `roadmap.md` §7 | ⬜ Not started | — |
@@ -346,7 +352,117 @@ generated_by: task plan-views status
 | 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.1 GREEN: inventory scanner, CSV artifacts, self-check, receipt |
 | 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.2 exec start |
 | 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.2 GREEN: GraphBuilder, three graphs, discrepancies, receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.3 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.3 GREEN: TableExtractor, tables.csv 99 rows, table-ownership.md, 4 sys_ owners, D102 exception, lint green |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.4 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.4 GREEN: ConfigExtractor, config-keys.csv 161 keys, configuration.md, CFG-006 note, 17 undeclared-read, lint green |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.5 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.5 GREEN: VerdictRules, verdicts.csv 888 rows, 27 core MOVE, files.csv unchanged, lint green |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P2.6 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P2.6 GREEN: Scorecard.php, scorecard 20x12, scorecard.md heterogeneity, cmp stable, lint green |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.1 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.1 GREEN: phpstan-contour 19/20, neon 19 src paths, analyse green, probe OK |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.2 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.2 GREEN: extractReferences tokenizer, parseUseImport 0, gate OK, 2 negative probes |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.3 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.3 GREEN: R4/R4b/R5, extra.corex, 176 R4 exceptions, 318 R4b snapshot, 4 negative probes |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.4 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.4 GREEN: Roave 8.22, bc-check.sh D98, CI PHP 8.4, force-stable + infra probes |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.5 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.5 GREEN: DurablePayload marker, PHPStan deny-list + promoted rule, RuleTestCase |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P3.6 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P3.6 GREEN: naming gate grandfather=1, config C1=45 observational, Arch probes |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P3.7 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P3.7 GREEN: AchievedInvariant A57/A61/A99, table-ownership-gate T1/T2/T4, D19 DATA-003 out of scope |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.1 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.1 GREEN: transit DataScope scalars VERSION fromTenantContext, SupportDataTest §2.3, receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.2 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.2 GREEN: TenantContextRestorer, GuardedTenantContextRestorer, ScopeContextMismatch, scoped bind, receipt §P4.2 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.3 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.3 GREEN: RegistryFieldCatalogue restorer, attributes fromTenantContext tests, receipt §P4.3 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.4 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.4 GREEN: tasks-workflow materializer restorer, fromTenantContext handler/tests, receipt §P4.4 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.5 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.5 GREEN: search-package tests fromTenantContext, src untouched, receipt §P4.5 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.6 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.6 GREEN: intl+transfer tests fromTenantContext, flip-readiness rg in receipt §P4.6 |
+| 2026-09-21 | owner/human | plan-design · no-op · D109: G-API granted for P4.7 DataScope flip on main (owner: improvements OK, record grant) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.7 exec start (G-API D109) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.7 GREEN: scalar DataScope+DurablePayload, untypedArrayProperty rule, receipt §P4.7 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.8 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.8 GREEN: DataScopeCodec, ArrayDataScopeCodec, InvalidScopePayload, singleton bind, receipt §P4.8 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.9 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.9 GREEN: psr/clock provide, SystemClock/FrozenClock/LaravelClock, singleton bind, ClockTest travelTo, receipt §P4.9 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.10 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.10 GREEN: wakeup ClockInterface lease/backoff, FrozenClock tests, receipt §P4.10 D23 debt, CHANGELOG |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P4.11 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P4.11 GREEN: WorkUnitIsolationTest+Pg, five §8.2 assertions, static $=0, receipt §P4.11 config note |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P4.12 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P4.12 GREEN: SingletonInjectionGate+Test, allowlist 2xP6, P4-binding-audit, receipt §P4.12 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.1 exec start |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.1 GREEN: message-policy five sections, MSG-00 1→3, receipt §P5.1 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.2 exec start (batch B7) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.2 GREEN: messaging vocabulary §2.7, 13 tests §2.8, receipt §P5.2 causationId |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.3 exec start (batch B7) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.3 GREEN: MessageContractRegistry empty bind, 6 tests §3.7, receipt limits §3.3/§3.4 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.4 exec start (solo, G-DDL D110) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.4 GREEN: outbox/inbox DDL partial indexes, corex.messaging+9 accessors, ownership, MessagingSchemaTest §4.6, D110 G-DDL, receipt §P5.4 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.5 exec start (solo) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.5 GREEN: Outbox/SqlOutbox append in txn, OutboxRefused MSG-008/007, scoped bind, OutboxAppendTest+Pg rollback, receipt §5.5 transaction price |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · no-op · P5.6 exec start (solo) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.7 exec start (solo) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.7 GREEN: MessagePublisher/DurableMessagePublisher, RelayOutbox+SIGTERM, host binding fail-closed, §6.3 tests, PubSub/ unchanged |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.9 GREEN: corex:messaging:prune two windows, inbox untouched, FrozenClock PruneOutboxTest §8, receipt clock debt vs PrunePubSubMessages P6 |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.10 GREEN: DeliveryHealth SqlDeliveryHealth corex:messaging:health probe, pg §9.4, duplicate rate not produced receipt |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.11 exec start (solo) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.11 GREEN: MessagingZoneTest R-M1/R-M2 probes, P5-zone-map.md, D31 PubSub untouched |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · in-progress · P5.12 exec start (solo) |
+| 2026-09-21 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.12 GREEN: DeliveryGuaranteesTest 6 witnesses §12, RecordingPublisher; SqlInbox unblock P5.8 dependency |
+| 2026-09-22 | plan-exec/grok-4.7/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: agent argv has no --model (observed 0). Session identity Grok 4.7 is unmapped in Cursor class_selectors. P5.8 pin is implementation/high=composer-2.5. Product untouched. |
+| 2026-09-22 | plan-exec/grok-4.7/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: agent argv has no --model (observed 0). Session identity Grok 4.7 is unmapped in Cursor class_selectors. P5.8 pin is implementation/high=composer-2.5. Product untouched. |
+| 2026-09-22 | plan-exec/cursor-composer-2.5/high | plan-exec · closed-green · P5.8 GREEN: InboxClaimTest §7.4(1-4), InboxConcurrencyTest §7.4(5); docblock §7.2 + SqlInbox comment; receipt §P5.8 |
+| 2026-09-22 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-22 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-deviations · P5.6: OutboxRelay validated; 36 PG + 84 non-PG tests green. Deviations: varchar(32) failure class and overbroad now() acceptance regex. |
+| 2026-09-22 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | plan-designer/codex-gpt-5.6-sol/high | plan-design · no-op · Roadmap design D114: added exact Codex-native projection to D112/plan.md §3.3, advanced live frontier from closed P5.6 to P5.13, and rendered the single Codex successor. Scope, effort, review and owner gates unchanged; no product execution. Next: plan-exec P5.13. |
+| 2026-09-22 | codex | plan-exec · in-progress · — |
+| 2026-09-22 | frontier/medium | plan-exec · closed-green · P5.13 GREEN: explicit file-level PgTestCase/pg binding; package lanes green; root SQLite has only foreign P5.15 package-graph RED. |
+| 2026-09-22 | grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-22 | grok-4.7/high | plan-exec · closed-green · P5.14 GREEN: wakeup binds SystemClock only when ClockInterface is unbound; FrozenClock override and notifications resolution stay green.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-22 | grok-4.7/high | plan-exec · closed-green · P5.15 GREEN: Messaging Contracts/Data public roots, command @internal, R4b final-docblock lookup |
+| 2026-09-22 | frontier/xhigh | plan-run · in-progress · — |
+| 2026-09-22 | frontier/xhigh | plan-run · closed-green · P5.16 GREEN: configurable messaging DDL uses Config accessors and grammar-wrapped raw index targets; custom-name PG witness passed; non-test DDL excluded by D115. |
+| 2026-09-22 | frontier/xhigh | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | cursor-auto/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: Cursor agent argv has no --model; cli-config is Auto/default without reasoning_effort. P5.17 pin is implementation/medium=composer-2.5 (Cursor) or gpt-5.6-terra (Codex). Product untouched. |
+| 2026-09-22 | composer-2.5/medium | plan-exec · closed-green · P5.17 GREEN: three declared files already Pint-clean (no-op format); root lint green; focused PG 7 + SQLite 5; receipt §P5.17. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | composer-2.5/medium | plan-exec · in-progress · P5.17 attempt 2: bind run_id for terminal reconcile after attempt-1 missing run_id |
+| 2026-09-22 | composer-2.5/medium | plan-exec · closed-green · P5.17 GREEN: three files already Pint-clean; root lint green; PG 7 + SQLite 5; receipt §P5.17. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | gpt-5.6-sol/xhigh | plan-exec · in-progress · — |
+| 2026-09-22 | gpt-5.6-sol/xhigh | plan-exec · blocked · P5.18 RED: tasks-workflow package runner exits 255 on duplicate PgTestCase binding. Owner P5.13; P6.1 remains blocked. Evidence: findings/P5-qualification-2026-09-22.md |
+| 2026-09-22 | gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-22 | gpt-5.6-sol/high | plan-exec · closed-green · P5.13 corrective GREEN: directory config assigns only pg group; file remains sole PgTestCase binding; exact package Composer test 13/68. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | gpt-5.6-sol/xhigh | plan-exec · in-progress · — |
+| 2026-09-22 | gpt-5.6-sol/xhigh | plan-exec · closed-green · P5.18 GREEN from persisted attempt-1 matrix plus attempt-2 package carriers. Owner direction honored: lifecycle-only, no validation rerun or added SKM review. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-22 | grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-22 | grok-4.7/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:138 |
 
 ## Owner Gates
 
-- —
+- P3.4: known deviation
+- P3.5: known deviation
+- P3.6: known deviation
+- P3.7: known deviation
+- P4.1: known deviation
+- P4.3: known deviation
+- P4.4: known deviation
+- P4.5: known deviation
+- P4.6: known deviation
+- P5.1: known deviation
+- P5.6: known deviation
+- P5.8: known deviation
+- P5.11: known deviation
+- P5.12: known deviation
+- P5.17: known deviation
+- P6.1: known deviation
