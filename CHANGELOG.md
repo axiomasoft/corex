@@ -16,6 +16,7 @@
 
 ### Added
 
+- P6.4: roadmap candidates money package and departments level-1
 - P6.3: arch-гейт `tests/Arch/CoreLitmusTest` проверяет шесть условий
   литмуса только для Foundation. Условие 3 закрыто правилом R-L3,
   кроме трёх путей `LITMUS_ELOQUENT`.

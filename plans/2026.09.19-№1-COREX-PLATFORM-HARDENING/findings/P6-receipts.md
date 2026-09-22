@@ -86,3 +86,25 @@ R-L3 packages/core/src/Support/Data/RecordRef.php imports Illuminate\Database\El
 Цитата Inputs у P6.4 свёрнута с каталога `packages/core/src/Departments`
 на файл `packages/core/src/Departments/Department.php`, чтобы bundle
 преемника резолвился. Смысл входа не менялся.
+
+## P6.4 — Кандидаты Features, Departments и Money
+
+`roadmap.md` §7 получил две строки из `research/P6-design.md` §10 дословно.
+Строка `corex/money` требует внешнего или boxed-потребителя без `brick/money`
+и оплаченный split. Строка Departments — уровень 1 (FlexCMS): второй продукт
+без оргдерева либо расхождение смысла «отдел» между auth и CRM; до условия
+зона остаётся в ядре. Пункт A30 не переписан: к нему добавлена ссылка
+«Money — отдельная строка P6.4; Features/Settings пакетом не становятся».
+
+`findings/P6-departments.md` называет трёх потребителей — ядро, auth и
+tenancy — и `ScopePredicate`. Вынос не объявлен. PHP в `packages/` этим
+item не менялся: `git diff --stat -- packages/` сохранил прежний чужой
+контур (38 путей, sha256 stat
+`3944b5d71a335f1944b96f4697e998c078f36410e150efb69bf5efaaac3c547e`).
+
+`CHANGELOG.md` — одна строка `P6.4: roadmap candidates money package and
+departments level-1`.
+
+Цитата Inputs у P6.5 свёрнута с фразы «три пути RT1_EXISTING» на три файла
+allowlist из §8: `CrmTestCase.php`, `CoreAuthTestCase.php`,
+`TasksTestCase.php`. Смысл входа не менялся; bundle преемника резолвится.
