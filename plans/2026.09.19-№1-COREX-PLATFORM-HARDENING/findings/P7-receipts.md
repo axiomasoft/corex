@@ -71,6 +71,122 @@ bash scripts/anti-weakening-gate.sh
 ANTI-WEAKENING GATE: OK
 ```
 
+## P7.9 — MediaOptions, SqlMediaLibrary, ConversionCoordinator
+
+`MediaOptions::fromArray` валидирует `corex-media`; `MediaServiceProvider` делает один
+`get('corex-media')` и `instance(MediaOptions::class)`. `SqlMediaLibrary` и
+`ConversionCoordinator` читают снимок Options. `rg -n 'config\('` по
+`packages/media/src` пуст (composition — `$app['config']->get` только в провайдере).
+
+`packages/media/tests/Unit/MediaOptionsTest.php` — `max_upload_bytes <= 0`, пустой
+`allowed_mime_types`.
+
+### Validation
+
+```
+composer --working-dir=packages/media lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/media analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/media test
+exit 0
+{"tool":"pest","result":"passed","tests":19,"passed":19,"assertions":54}
+```
+
+```
+composer --working-dir=packages/media test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":1,"passed":1,"assertions":1}
+```
+
+## P7.8 — ModulesOptions, провайдер, registry cache
+
+`ModulesOptions::fromArray` валидирует `corex-modules` (ttl > 0, prefix непустой,
+`connection` nullable). `ModulesServiceProvider` — один `get('corex-modules')` и
+`instance(ModulesOptions::class)`; hot-path connection/cache через Options.
+`RepositoryModuleRegistryCache` получает `ModulesOptions`, без `config()`.
+
+`packages/modules/tests/Unit/ModulesOptionsTest.php` — ttl ≤ 0.
+
+### Validation
+
+```
+composer --working-dir=packages/modules lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/modules analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/modules test
+exit 0
+{"tool":"pest","result":"passed","tests":28,"passed":28,"assertions":109}
+```
+
+```
+rg 'config\(' packages/modules/src/Registry/RepositoryModuleRegistryCache.php
+exit 1
+(no matches)
+```
+
+## P7.7 — access/matrix на AuthOptions
+
+Семь потребителей `corex-auth.*` в access/matrix читают `AuthOptions`;
+`rg -n 'config\('` по этим файлам пуст. В `packages/auth/src` вызовов
+`config(` нет (только docblock в провайдере).
+
+### Validation
+
+```
+composer --working-dir=packages/auth lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/auth analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/auth test
+exit 0
+{"tool":"pest","result":"passed","tests":38,"passed":38,"assertions":65}
+```
+
+```
+composer --working-dir=packages/auth test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":112,"passed":112,"assertions":293}
+```
+
+## P7.6 — AuthOptions, провайдер, identity
+
+`AuthOptions::fromArray` валидирует `corex-auth`; `CoreAuthServiceProvider`
+делает один `get('corex-auth')` и `instance(AuthOptions::class)`;
+`PrincipalUserProvider` и проекция `az-guard.*` берут снимок Options.
+
+`packages/auth/tests/Unit/AuthOptionsTest.php` — пустой panel, неполные
+`identity.columns`, нормализация `workspace_scope_class`.
+
+### Validation
+
+Те же команды, что в блоке P7.7 (пакетный прогон покрывает P7.6+P7.7).
+
 ## P7.5 — workspace/OIDC; остаток `config(` tenancy
 
 `ResolveWorkspace`, `OidcLoginController` и `LogoutController` больше не

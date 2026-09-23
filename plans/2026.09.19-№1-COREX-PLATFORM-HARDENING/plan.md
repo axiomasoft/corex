@@ -9,11 +9,11 @@
 | Title | План №1 — Платформенное доведение CoreX до коммерческого 1.0 |
 | Layout | v2 |
 | Document Type | Executable Master Plan |
-| Authoring Model | claude-opus-5/high (верхний слой, 2026-09-19, provider-attested); P14: gpt-6-astra/high; P15–P17 and DA01–DA14 remediation: gpt-5.6-sol/high (2026-09-20, provider-thread-state); DA09 closure: codex-gpt-6/effort-unverified (2026-09-20, `ROUTE_LAUNCH_MISMATCH` disclosed) |
+| Authoring Model | claude-opus-5/high (верхний слой, 2026-09-19, provider-attested); P14: gpt-6-astra/high; P15–P17 and DA01–DA14 remediation: gpt-5.6-sol/high (2026-09-20, provider-thread-state); DA09 closure: codex-gpt-6/effort-unverified (2026-09-20, `ROUTE_LAUNCH_MISMATCH` disclosed); roadmap D114: gpt-5.6-sol/high (2026-09-22, provider-thread-state); D118 execution batching: gpt-6-astra (2026-09-23, current session) |
 | Repository | corex |
 | Related Packages | все 21 каталога `packages/*`; нормативные документы `docs/architecture/**`; корневые гейты `scripts/**`, `tests/Arch/**`, `.github/workflows/**` |
 | Execution Mode | phase-first: верхний слой + скелеты 17 фаз; каждая фаза детализируется отдельным `task:plan-design <ID> Pn` перед исполнением |
-| Target Operator Classes | frontier/high (детализация фаз, дизайн-решения, аудит) · implementation/medium–high = **Composer 2.5** (исполнение items) |
+| Target Operator Classes | D118: Composer 2.5 / Grok 4.6 for bounded leaves, Grok 4.7 for integration, GPT-5.6 Sol for DDL/durable/security and phase qualification; final freeze uses Codex GPT-6 Sol or Cursor GPT-5.6 Sol xhigh/max |
 | Approval Owner | Dmitry Vostrikov |
 | Home | repo:corex (локальный план; Brain sync не выполнялся) |
 | visibility | private |
@@ -24,6 +24,14 @@
 
 | Дата | Кто (role/model) | Что |
 |:--|:--|:--|
+| 2026-09-23 | plan-exec / cursor-composer-2.5/medium | P7.6–P7.7 закрыты: AuthOptions, identity и access/matrix без `config()` — детали см. phases/P7/P7.6.state.md и P7.7.state.md |
+| 2026-09-23 | owner + plan-maintenance / gpt-6-astra | D118: post-P6 execution grouped into bounded batches with artifact inputs, exact model pins and intermediate qualification; P7.1 is the live frontier. |
+| 2026-09-23 | owner + plan-exec / gpt-6-sol/medium | D117: владелец разрешил текущую независимую GPT-6-сессию только для P6.6 вместо pinned `gpt-5.6-sol/high`; остальные условия item сохранены. |
+| 2026-09-22 | owner + plan-design / codex-gpt-5.6-sol/high | D114: D112 projected to exact Codex selectors; current P5.13 launch is `gpt-5.6-terra/medium`, with no change to scope, effort, review or owner gates. |
+| 2026-09-22 | owner + plan-design / current session | D112: для всех оставшихся execution scopes зафиксированы exact native model, effort и independent qualification boundary; executor fallback запрещён. |
+| 2026-09-22 | owner + plan-design / current session | D111: P1–P5 execution audit RED; P5.13–P5.18 remediation added, P6 blocked by P5.18, live execution routing changed from Composer-only to risk-routed Composer/Grok 4.7/Sol. |
+| 2026-09-21 | owner / human | D109: выдан `[OWNER-GATE:G-API]` на P4.7 (флип `DataScope`, `main`, scope по `P4.7.md`). |
+| 2026-09-21 | plan-exec / cursor-composer-2.5/medium | P2.5 закрыт: `verdicts.csv` (888), `VerdictRules` + CLI `verdicts`, 27 MOVE `corex/core`; receipt §P2.5 |
 | 2026-09-21 | plan-exec / cursor-composer-2.5/medium | P1.5 закрыт: `api-policy.md` — три носителя, граница `@internal` vs пакет (D12), BC-список; детали см. phases/P1/P1.5.state.md |
 | 2026-09-21 | plan-exec / cursor-composer-2.5/medium | Execution Rules: handoff и Next в чате обязаны указывать native `--model` вместе с class/effort; handoff P1.5 — строка Native model. |
 | 2026-09-21 | plan-exec / cursor-composer-2.5/medium | Execution Rules + handoff: блок **⚠ LAUNCH** в начале handoff; завершение plan-exec в чате обязано копировать LAUNCH (class/effort/`composer-2.5`/полная `agent` команда). |
@@ -89,9 +97,10 @@ outbox и webhook-поверхности, пакет `packages/api` без со�
 - Один item за раз; статус живёт в generated state, фаза закрывается по фактическим receipt'ам.
 - Статусы — 6 канонических строк байт-в-байт (plan-protocol §4). GREEN только при зелёных
   Validation-носителях; пропущенная или недоступная проверка раскрывается, а не считается зелёной.
-- **Исполнитель items — модель класса implementation = Composer 2.5.** Поэтому каждая item-спека
-  ОБЯЗАНА называть точный параграф `research/Pn-design.md` с готовым нормативным текстом или
-  готовым кодом. Спека без такого указателя — дефект дизайна, а не задача на импровизацию.
+- **Исполнение items маршрутизируется по риску (D111).** Composer 2.5 — только
+  ограниченные листовые правки; Grok 4.7 — cross-package/provider/public-surface integration;
+  GPT-5.6 Sol — durable, DDL, security, public-contract и сводная квалификация. Каждая item-спека
+  ОБЯЗАНА называть точный нормативный параграф; спека без него — дефект дизайна.
 - **Бюджет контекста item'а — 200K токенов.** Жёсткие лимиты спеки: ≤14 Required Reads,
   ≤2500 строк обязательного чтения, ≤8 файлов в Files, один пакет (или один пакет + корневой
   гейт) на item. Не влезает — item делится при детализации фазы, а не при исполнении.
@@ -106,6 +115,10 @@ outbox и webhook-поверхности, пакет `packages/api` без со�
 - Нормативные входы каждой фазы: `docs/architecture/**` (создаётся P1), `docs/dev-doctrine.md`,
   `findings/audit-verdicts.md`, `research/00-baseline-metrics.md`. Расхождение плана с кодом —
   эскалация, не импровизация.
+- Перед P7–P17 запуском читать `execution-batches.md`: раздел «Как исполнять
+  батч», строку своей фазы в карте входов/выходов и строку своей сессии.
+  Item `Required Reads` сохраняет приоритет и читается полностью; карта не
+  разрешает пропускать обязательные входы или закрывать несколько items одним receipt.
 - **Эскизы верхнего слоя обязательны к прочтению при детализации.** `research/01-shapes-runtime.md`
   (P4–P8), `research/02-shapes-platform.md` (P1–P3, P10, P11), `research/03-shapes-api.md`
   (P12–P14) несут форму несущих контрактов, готовые сигнатуры, DDL-эскизы, перечни инвариантов и
@@ -141,16 +154,13 @@ outbox и webhook-поверхности, пакет `packages/api` без со�
 - Новые runtime-зависимости запрещены; dev-зависимости (BC-чекер, boundary-анализатор) вводятся
   только названными в решениях items и только в `require-dev`.
 - После закрытия item/фазы — перезапись `handoff.md`; журнал append-only.
-- **`handoff.md` и Next в чате.** Каждый handoff и любая рекомендация «запусти в новой
-  сессии» обязаны нести **две** модели: (1) класс/усилие из §3.1 (`implementation/medium` …)
-  и (2) **нативный slug Cursor** для флага `--model`. Для исполнения items класса
-  `implementation/*` slug — `composer-2.5` (стандартный тир, не Fast; D10/D35). Для
-  `plan-design` / `plan-audit` — slug из D35–D37 для объявленного frontier/high или
-  implementation/high. Блок **Native Cursor command** всегда включает `--model <slug>`;
-  строка `task:plan-exec …` без модели — дефект handoff. Таблица handoff обязана иметь
-  строку **Native model** рядом с **Model class**. В `handoff.md` блок **⚠ LAUNCH** в начале
-  файла — канон для копирования в чат; исполнитель закрывает item этим блоком, а не только
-  текстом «Next: Pn.m».
+- **`handoff.md` и Next в чате.** Каждый handoff и рекомендация нового запуска
+  несут lifecycle class/effort и native slug **активного provider** из §3.3 и
+  `execution-batches.md`. Старое правило «весь implementation → Composer»
+  историческое (D118). Блок launch включает `--model <slug>`; строка
+  `task:plan-exec …` без модели — дефект. Таблица handoff имеет **Native model**
+  рядом с **Model class**. Исполнитель копирует актуальный launch block, а не
+  только текст «Next: Pn.m».
 - **Завершение `task:plan-exec` в чате.** Последний абзац ответа — секция **LAUNCH** из
   `handoff.md` (таблица class/effort/native model + полная команда `agent … --model …`).
   Пропуск — дефект приёмки сессии наравне с пропуском Validation.
@@ -163,9 +173,11 @@ Routing покрывает каждый исполнимый item построч
 исполнения для items каждой будущей фазы; детализация обязана воспроизвести его построчно или
 ужесточить с записью причины в D-лог. Ослабление объявленного route запрещено.
 
-Строки §3.1 объявляют route **на момент исполнения**. По D14 исполнение не начинается, пока
-не детализирована последняя фаза и не закрыт общий аудит плана, поэтому сегодня единственная
-запускаемая единица работы — очередной проход детализации из §3.1a.
+Строки §3.1 несут item-level lifecycle class и batch ID; исходный class/effort
+может быть ниже native effort D118. Для P7–P17 actual session batching,
+native model/effort и read/acceptance recipe определяет
+`execution-batches.md` (D118); каждый item всё равно закрывается отдельно.
+Стадии 1 и 2 завершены; текущий исполнимый frontier — P7.1.
 
 ### 3.1 Исполнимые items
 
@@ -208,205 +220,198 @@ Routing покрывает каждый исполнимый item построч
 | B7 | P5.3 | implementation/high | plan-exec | full | recommended: тот же параграф дизайна, те же Required Reads, та же проверка; отдельная сессия дала бы второе чтение `MessageContract` ради шести тестовых случаев. |
 | solo | P5.4 | implementation/high | plan-exec | full | Единственный DDL-item фазы и единственный носитель owner-gate `G-DDL`: объединение с чем-либо скрыло бы гейт внутри батча. Он же объявляет весь блок `corex.messaging`, который остальные items только читают. |
 | solo | P5.5 | implementation/high | plan-exec | full | Инвариант «вставка в одной транзакции с бизнес-изменением» — единственная причина существования фазы; его доказательство требует отдельного pg-теста отката, и ошибка здесь обесценивает весь остальной механизм. |
-| solo | P5.6 | implementation/high | plan-exec | full | Lease-механика — самый рискованный item фазы: ошибка в fence-предикате или в моменте инкремента `attempts` даёт дубли либо вечно живую строку. Семь pg-тестов, включая конкуренцию на двух соединениях, исчерпывают бюджет сессии. |
+| solo | P5.6 | frontier/high | plan-exec | full | Resume/recovery on GPT-5.6 Sol after missing terminal evidence. Lease/fence/backoff is a durable boundary; an independent pass reruns acceptance and emits the only valid terminal result. |
 | solo | P5.7 | implementation/high | plan-exec | full | Кооперативная остановка по сигналу — отдельный класс риска (обработчик сигнала, прерываемый `sleep`, бюджет таймингов), не пересекающийся с механикой захвата; присоединение к P5.6 вывело бы сессию за бюджет 200K. |
 | solo | P5.8 | implementation/high | plan-exec | full | Атомарность отметки и бизнес-эффекта — второй несущий инвариант фазы, с собственным доказательством гонки на двух соединениях; по данным зависит только от P5.4 и исполним независимо от ветки outbox. |
 | B8 | P5.9 | implementation/high | plan-exec | full | recommended: retention и наблюдаемость — две read/maintenance-поверхности над одной таблицей, обе консольные, обе на тех же pg-фикстурах и том же `FrozenClock`; общий контекст чтения экономит повторную подготовку данных во всех четырёх состояниях строки. |
 | B8 | P5.10 | implementation/high | plan-exec | full | recommended: тот же набор состояний строки, та же форма команды, та же проверка; отдельная сессия дала бы второе наполнение таблицы ради пяти утверждений. |
 | solo | P5.11 | implementation/high | plan-exec | full | Гейт по определению может дать ложно-зелёное; приёмка требует двух посаженных нарушений и снятия обеих посадок — процедура, которую нельзя делить с продуктовым item'ом. Единственный item фазы, пишущий в корневой `tests/`. |
 | solo | P5.12 | implementation/high | plan-exec | full | Доказательства обязаны уметь покраснеть; присоединение к продуктовому item'у создало бы соблазн «подправить тест» вместо фиксации находки — та же причина, что у P4.11. Требует готовыми все четыре механизма фазы, поэтому идёт последним. |
+| solo | P5.13 | implementation/medium | plan-exec | full | Composer 2.5: bounded test-harness repair with exact two-file behavior and deterministic package/root witnesses. |
+| solo | P5.14 | frontier/high | plan-exec | full | Grok 4.7: cross-package provider composition across wakeup and notifications; reverse-consumer qualification is mandatory. |
+| solo | P5.15 | frontier/high | plan-exec | full | Grok 4.7: public/internal surface classification changes SemVer metadata and the package firewall. |
+| solo | P5.16 | frontier/xhigh | plan-run | full | GPT-5.6 Sol, G-DDL-P5R: configurable migration identity and raw PostgreSQL identifiers are a durable schema boundary. |
+| solo | P5.17 | implementation/medium | plan-exec | light | Composer 2.5: exact three-file formatting-only repair; no semantic discretion. |
+| solo | P5.18 | frontier/xhigh | plan-exec | full | GPT-5.6 Sol: independent joined qualification; no product repair, all root/package gates and carrier reconciliation. |
 | solo | P6.1 | implementation/high | plan-exec | full | Карта 109 файлов — вход всех последующих гейтов и P15; ошибка классификации воспроизводится в R-Z0/R-Z1. Reuse невозможен. |
 | solo | P6.2 | implementation/high | plan-exec | full | Arch-гейт зон по определению может быть всегда-зелёным; три посадки и поглощение MessagingZoneTest не делятся с документом. |
 | solo | P6.3 | implementation/high | plan-exec | full | Литмус с жёстким условием 3 (D34); allowlist Eloquent обязан уметь не расти. Отдельно от P6.2: другой набор посадок и другой Required Reads. |
 | solo | P6.4 | implementation/high | plan-exec | full | Кандидаты §7 и продуктовый вердикт Departments — суждение, не код; в одной сессии с гейтом отразило бы намерение. Review `full` сохранён: §3.2 запрещает ослаблять route фазы. |
 | solo | P6.5 | implementation/high | plan-exec | full | Staging N09 меняет composer.json ядра и вводит гейт, который может быть всегда-зелёным; полный вынос сломал бы test:packages (D33). |
-| solo | P6.6 | implementation/high | plan-exec | full | Свод доказательств обязан уметь покраснеть; присоединение к продуктовому item'у создало бы соблазн подправить гейт — как P5.12. |
+| solo | P6.6 | frontier/medium | plan-exec | full | D117: owner разрешил текущую `gpt-6-sol/medium`-сессию; свод обязан уметь покраснеть, review `full` сохранён. |
 | solo | P7.1 | implementation/medium | plan-exec | light | Шаблон и CoreOptions — вход всех остальных; reuse невозможен. |
 | solo | P7.12 | implementation/medium | plan-exec | full | D100 proof отделён от восьмифайлового P7.1: behavior witnesses должны уметь покраснеть без product writes. |
 | solo | P7.2 | implementation/medium | plan-exec | light | 75 чтений tenancy и три policy (D41); объединение с инъекцией HTTP скрыло бы объём провайдера. |
-| B12 | P7.3 | implementation/medium | plan-exec | light | recommended: три item'а инъекции tenancy читают один `TenancyOptions` и один провайдер; общий контекст экономит повторное чтение §6–§7. |
-| B12 | P7.4 | implementation/medium | plan-exec | light | recommended: та же фабрика, другая группа файлов; порядок внутри батча — по Files, не по данным. |
-| B12 | P7.5 | implementation/medium | plan-exec | light | recommended: замыкает tenancy-инъекцию; команды остаются composition. |
-| B13 | P7.6 | implementation/medium | plan-exec | light | recommended: AuthOptions и его потребители — один пакет, один параграф §8. |
-| B13 | P7.7 | implementation/medium | plan-exec | light | recommended: семь читателей `panel` после готового DTO; отдельная сессия дала бы второе чтение §8. |
-| B14 | P7.8 | implementation/medium | plan-exec | light | recommended: малые пакеты по одному шаблону §9 после P7.1; разный Files, общий fromArray. |
-| B14 | P7.9 | implementation/medium | plan-exec | light | recommended: тот же шаблон, пакет `media`; не сливать с tenancy. |
+| E07d | P7.3 | implementation/medium | plan-exec | light | recommended: три item'а инъекции tenancy читают один `TenancyOptions` и один провайдер; общий контекст экономит повторное чтение §6–§7. |
+| E07d | P7.4 | implementation/medium | plan-exec | light | recommended: та же фабрика, другая группа файлов; порядок внутри батча — по Files, не по данным. |
+| E07d | P7.5 | implementation/medium | plan-exec | light | recommended: замыкает tenancy-инъекцию; команды остаются composition. |
+| E07e | P7.6 | implementation/medium | plan-exec | light | recommended: AuthOptions и его потребители — один пакет, один параграф §8. |
+| E07e | P7.7 | implementation/medium | plan-exec | light | recommended: семь читателей `panel` после готового DTO; отдельная сессия дала бы второе чтение §8. |
+| E07f | P7.8 | implementation/medium | plan-exec | light | recommended: малые пакеты по одному шаблону §9 после P7.1; разный Files, общий fromArray. |
+| E07f | P7.9 | implementation/medium | plan-exec | light | recommended: тот же шаблон, пакет `media`; не сливать с tenancy. |
 | solo | P7.10 | implementation/medium | plan-exec | full | Секреты и redaction (§3.2 исключение): команда обязана уметь не напечатать plaintext. |
 | solo | P7.11 | implementation/medium | plan-exec | full | Ужесточение §3.2: блокирующий гейт по определению ложно-зелёный без посадки; observational P3.6 нельзя делить с product-item. |
 | solo | P8.1 | implementation/medium | plan-exec | light | Контракт и каталог — вход всех registrar'ов; reuse невозможен. |
-| B15 | P8.2 | implementation/medium | plan-exec | light | recommended: два item'а tenancy register() читают один каталог и один провайдер. |
-| B15 | P8.3 | implementation/medium | plan-exec | light | recommended: та же форма §5.1, другая группа модулей; optional-предикаты. |
+| E08b | P8.2 | implementation/medium | plan-exec | light | recommended: два item'а tenancy register() читают один каталог и один провайдер. |
+| E08b | P8.3 | implementation/medium | plan-exec | light | recommended: та же форма §5.1, другая группа модулей; optional-предикаты. |
 | solo | P8.4 | implementation/medium | plan-exec | full | Порядок bootstrapper'ов tenancy (§3.2 исключение): нарушение ломает изоляцию молча. |
 | solo | P8.5 | implementation/medium | plan-exec | light | Другой пакет; не сливать с tenancy. |
 | solo | P8.6 | implementation/medium | plan-exec | full | Гейт по определению ложно-зелёный без посадки; ratchet нельзя делить с product-item. |
 | solo | P9.1 | implementation/high | plan-exec | full | Атомарная карта и baseline — вход всех переносов; reuse невозможен. |
 | solo | P9.2 | implementation/high | plan-exec | full | Bootstrapper order/lifetime и composition seams не делятся с доменными переносами. |
 | solo | P9.3 | implementation/high | plan-exec | full | 51 файл Membership/Central и смена внутренних namespaces исчерпывают item-бюджет. |
-| B16 | P9.4 | implementation/high | plan-exec | full | recommended: три непересекающихся группы читают одну compatibility map/PSR-4 проекцию. |
-| B16 | P9.5 | implementation/high | plan-exec | full | recommended: OIDC/Identity не пересекается с Files P9.4/P9.6, но делит baseline. |
-| B16 | P9.6 | implementation/high | plan-exec | full | recommended: три готовых context-ветки и та же Models/Events compatibility matrix. |
+| E09d | P9.4 | implementation/high | plan-exec | full | recommended: три непересекающихся группы читают одну compatibility map/PSR-4 проекцию. |
+| E09d | P9.5 | implementation/high | plan-exec | full | recommended: OIDC/Identity не пересекается с Files P9.4/P9.6, но делит baseline. |
+| E09d | P9.6 | implementation/high | plan-exec | full | recommended: три готовых context-ветки и та же Models/Events compatibility matrix. |
 | solo | P9.7 | implementation/high | plan-exec | full | Optional cross-package boundary и негативную посадку не сливать с product moves. |
 | solo | P9.8 | implementation/high | plan-exec | full | Final proof/ratchet обязан уметь покраснеть и исправлять owning item, а не expected output. |
-| solo | P10.1 | implementation/high | plan-exec | full | Composition меняет fail-closed поведение пакета без modules; отдельный baseline для остальных items. |
-| solo | P10.2 | implementation/high | plan-exec | full | Stable identity и snapshot — additive public surface, от которой зависят DDL и evolution. |
+| E10a | P10.1 | implementation/high | plan-exec | full | Composition меняет fail-closed поведение пакета без modules; отдельный baseline для остальных items. |
+| E10a | P10.2 | implementation/high | plan-exec | full | Stable identity и snapshot — additive public surface, от которой зависят DDL и evolution. |
 | solo | P10.3 | implementation/high | plan-exec | full | Единственный G-DDL item фазы; schema, merge и cache authority проверяются вместе. |
 | solo | P10.4 | implementation/high | plan-exec | full | Dual-write/backfill живых значений и rollback исчерпывают item-бюджет. |
 | solo | P10.5 | implementation/high | plan-exec | full | Storage routing и index DDL имеют отдельное измеримое PostgreSQL-доказательство. |
-| solo | P10.6 | implementation/high | plan-exec | full | Восемь security checks требуют независимой negative matrix на двух engines. |
-| solo | P10.7 | implementation/high | plan-exec | full | Transactional outbox и privacy payload — отдельная durable boundary. |
+| E10e | P10.6 | implementation/high | plan-exec | full | Восемь security checks требуют независимой negative matrix на двух engines. |
+| E10e | P10.7 | implementation/high | plan-exec | full | Transactional outbox и privacy payload — отдельная durable boundary. |
 | solo | P10.8 | implementation/high | plan-exec | full | Final moves/ratchets обязаны краснеть независимо от product implementation. |
 | solo | P11.1 | implementation/high | plan-exec | full | Identity/version primitives — вход compiler и всех durable consumers; они закрепляют additive public surface. |
-| B17 | P11.2 | implementation/high | plan-exec | full | recommended: compiler и runtime publication разделяют одни canonical bytes/fingerprint и один набор corrupt-artifact fixtures. |
-| B17 | P11.3 | implementation/high | plan-exec | full | recommended: тот же compiled artifact, но отдельный runtime item с freeze/worker-boundary доказательством. |
+| E11b | P11.2 | implementation/high | plan-exec | full | recommended: compiler и runtime publication разделяют одни canonical bytes/fingerprint и один набор corrupt-artifact fixtures. |
+| E11b | P11.3 | implementation/high | plan-exec | full | recommended: тот же compiled artifact, но отдельный runtime item с freeze/worker-boundary доказательством. |
 | solo | P11.4 | implementation/high | plan-exec | full | Workflow имеет свой existing durable carrier и compatibility matrix; с wakeup Files не пересекается. |
 | solo | P11.5 | implementation/high | plan-exec | full | Wakeup handler registry, envelope, quarantine и read-only preflight образуют одну atomic durable boundary. |
-| B18 | P11.6 | implementation/high | plan-exec | full | recommended: tasks-workflow и notifications — два независимых consumer proof на одном готовом P11.5 contract. |
-| B18 | P11.7 | implementation/high | plan-exec | full | recommended: второй consumer закрывает legacy/mismatch matrix, не деля Files с P11.6. |
+| E11e | P11.6 | implementation/high | plan-exec | full | recommended: tasks-workflow и notifications — два независимых consumer proof на одном готовом P11.5 contract. |
+| E11e | P11.7 | implementation/high | plan-exec | full | recommended: второй consumer закрывает legacy/mismatch matrix, не деля Files с P11.6. |
 | solo | P11.8 | implementation/high | plan-exec | full | Contract suite и ratchet обязаны читать фактический результат всех веток и идти последним. |
 | solo | P12.1 | implementation/medium | plan-exec | full | Public error vocabulary и compatibility policy — вход API/P13; P6 zone gate обязан увидеть новые core paths. |
-| B19 | P12.2 | implementation/medium | plan-exec | full | recommended: API и attributes потребляют один descriptor matrix; API item отдельно доказывает неизменность wire. |
-| B19 | P12.3 | implementation/medium | plan-exec | light | recommended: bounded package proof на той же error matrix; Files с API не пересекаются. |
-| B20 | P12.4 | implementation/medium | plan-exec | light | recommended: observer contract/null/PSR-3 и OTel adapter делят event fixtures; contract идёт первым и закрывается отдельно. |
-| B20 | P12.5 | implementation/medium | plan-exec | full | recommended: optional SDK, async context/link и cardinality gate — integration boundary; не делит Files с observer DTO. |
-| solo | P12.6 | implementation/medium | plan-exec | full | Every-audit-record invariant меняет security/compliance seam и должен быть доказан на direct caller. |
-| solo | P12.7 | implementation/medium | plan-exec | full | Nested session, failed-login cleanup, expiry/revocation и write policy требуют отдельного PG/security прохода. |
+| E12b | P12.2 | implementation/medium | plan-exec | full | recommended: API и attributes потребляют один descriptor matrix; API item отдельно доказывает неизменность wire. |
+| E12b | P12.3 | implementation/medium | plan-exec | light | recommended: bounded package proof на той же error matrix; Files с API не пересекаются. |
+| E12c | P12.4 | implementation/medium | plan-exec | light | recommended: observer contract/null/PSR-3 и OTel adapter делят event fixtures; contract идёт первым и закрывается отдельно. |
+| E12c | P12.5 | implementation/medium | plan-exec | full | recommended: optional SDK, async context/link и cardinality gate — integration boundary; не делит Files с observer DTO. |
+| E12d | P12.6 | implementation/medium | plan-exec | full | Every-audit-record invariant меняет security/compliance seam и должен быть доказан на direct caller. |
+| E12d | P12.7 | implementation/medium | plan-exec | full | Nested session, failed-login cleanup, expiry/revocation и write policy требуют отдельного PG/security прохода. |
 | solo | P12.8 | implementation/medium | plan-exec | full | Ratchets и final proof обязаны краснеть независимо от product items и идти последними. |
-| solo | P13.1 | implementation/high | plan-exec | full | recommended: compiled descriptor — producer всей фазы; legacy defaults и mode matrix должны быть закреплены до любого transport/runtime consumer. |
-| B21 | P13.2 | implementation/high | plan-exec | full | recommended: shared invoker и profile читают один P13.1 descriptor/P11 fingerprint; Files различны, общий контекст экономит повторное чтение registry/tool seams. |
-| B21 | P13.3 | implementation/high | plan-exec | full | recommended: profile/options/capability projection строится поверх того же descriptor и остаётся независимо исполнимым под current dependency checks. |
-| solo | P13.4 | implementation/high | plan-exec | full | recommended: package routes меняют внешний HTTP mount и async/deprecation semantics; отдельный route table proof не смешивается с product primitives. |
+| E13a | P13.1 | implementation/high | plan-exec | full | recommended: compiled descriptor — producer всей фазы; legacy defaults и mode matrix должны быть закреплены до любого transport/runtime consumer. |
+| E13a | P13.2 | implementation/high | plan-exec | full | recommended: shared invoker и profile читают один P13.1 descriptor/P11 fingerprint; Files различны, общий контекст экономит повторное чтение registry/tool seams. |
+| E13b | P13.3 | implementation/high | plan-exec | full | recommended: profile/options/capability projection строится поверх того же descriptor и остаётся независимо исполнимым под current dependency checks. |
+| E13b | P13.4 | implementation/high | plan-exec | full | recommended: package routes меняют внешний HTTP mount и async/deprecation semantics; отдельный route table proof не смешивается с product primitives. |
 | solo | P13.5 | implementation/high | plan-exec | full | recommended: единственный P13 item с G-DDL; tenant table, lease/fence и rollback нельзя скрывать внутри батча. |
 | solo | P13.6 | implementation/high | plan-exec | full | recommended: effect-count/replay matrix объединяет готовые invoker/store и требует отдельной reconciliation boundary после возможного unknown effect. |
 | solo | P13.7 | implementation/high | plan-exec | full | recommended: durable cursor format, key rotation and ordering version have an independent compatibility/cryptographic proof. |
 | solo | P13.8 | implementation/high | plan-exec | full | recommended: five-layer authorization and N08 field leak are a security boundary with cross-transport negative fixtures. |
-| B22 | P13.9 | implementation/high | plan-exec | full | recommended: error wire projection and snapshots share the exact P12 error/OpenAPI schemas; serializer closes first. |
-| B22 | P13.10 | implementation/high | plan-exec | full | recommended: generator consumes the completed wire/profile schemas in the same session but closes separately with byte/digest proof. |
+| E13g | P13.9 | implementation/high | plan-exec | full | recommended: error wire projection and snapshots share the exact P12 error/OpenAPI schemas; serializer closes first. |
+| E13g | P13.10 | implementation/high | plan-exec | full | recommended: generator consumes the completed wire/profile schemas in the same session but closes separately with byte/digest proof. |
 | solo | P13.11 | implementation/high | plan-exec | full | recommended: compatibility gate must attack the generated baseline independently; planted red fixtures cannot be co-authored with product serializers. |
 | solo | P13.12 | implementation/high | plan-exec | full | recommended: sole G-API freeze and final cross-transport/anti-GraphQL ratchets consume every branch and remain isolated from implementation groups. |
-| B23 | P14.1 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| B23 | P14.2 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14a | P14.1 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14a | P14.2 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
 | solo | P14.3 | implementation/high | plan-exec | full | recommended: G-DDL schema/connection boundary. |
-| B24 | P14.4 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| B24 | P14.5 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14c | P14.4 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14c | P14.5 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
 | solo | P14.6 | implementation/high | plan-exec | full | recommended: durable state machine and PG CAS. |
-| B25 | P14.7 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| B25 | P14.8 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| solo | P14.9 | implementation/high | plan-exec | full | recommended: public optional adapter and recovery boundary. |
-| solo | P14.10 | implementation/high | plan-exec | full | recommended: external resource authorization and result access. |
-| B26 | P14.11 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| B26 | P14.12 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14e | P14.7 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14e | P14.8 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14f | P14.9 | implementation/high | plan-exec | full | recommended: public optional adapter and recovery boundary. |
+| E14f | P14.10 | implementation/high | plan-exec | full | recommended: external resource authorization and result access. |
+| E14g | P14.11 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14g | P14.12 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
 | solo | P14.13 | implementation/high | plan-exec | full | recommended: independent signing/rotation security review. |
 | solo | P14.14 | implementation/high | plan-exec | full | recommended: independent SSRF transport security review. |
-| B27 | P14.15 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
-| B27 | P14.16 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14j | P14.15 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
+| E14j | P14.16 | implementation/high | plan-exec | full | recommended: shared producer/consumer, required reads and validation context; ready subsets permitted. |
 | solo | P14.17 | implementation/high | plan-exec | full | recommended: destructive retention qualified on isolated stores. |
 | solo | P14.18 | implementation/high | plan-exec | full | recommended: compatibility gate and planted failures separate from producer. |
 | solo | P14.19 | implementation/high | plan-exec | full | recommended: G-SECRET activation-policy boundary. |
 | solo | P14.20 | implementation/high | plan-exec | full | recommended: integrated package qualification after wiring. |
 | solo | P14.21 | implementation/high | plan-exec | full | recommended: final qualification joins all branches and documents limits. |
 | solo | P15.1 | implementation/medium | plan-exec | full | Public modules FQCN set and nine discovery consumers; G-API-P15. |
-| B28 | P15.2 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
-| B28 | P15.3 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
-| B28 | P15.4 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
-| B28 | P15.5 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
-| B28 | P15.6 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
-| solo | P15.7 | implementation/medium | plan-exec | full | Four public wakeup contracts; G-API-P15. |
-| solo | P15.8 | implementation/medium | plan-exec | full | Four public API classes with wire-invariance proof; G-API-P15. |
+| E15b | P15.2 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
+| E15b | P15.3 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
+| E15b | P15.4 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
+| E15b | P15.5 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
+| E15b | P15.6 | implementation/medium | plan-exec | light | recommended: independent bounded package rename lane. |
+| E15c | P15.7 | implementation/medium | plan-exec | full | Four public wakeup contracts; G-API-P15. |
+| E15c | P15.8 | implementation/medium | plan-exec | full | Four public API classes with wire-invariance proof; G-API-P15. |
 | solo | P15.9 | implementation/medium | plan-exec | light | One tenancy result rename with serialization invariant. |
 | solo | P15.10 | implementation/medium | plan-exec | full | Five public core FQCN groups; G-API-P15. |
-| solo | P15.11 | implementation/medium | plan-exec | full | Conditional package identity branch; G-PKG-API. |
-| solo | P15.12 | implementation/medium | plan-exec | full | Conditional package identity branch; G-PKG-AUTH. |
-| B29 | P15.13 | implementation/medium | plan-exec | full | recommended sequential closure: registry/surface reconciliation. |
-| B29 | P15.14 | implementation/medium | plan-exec | full | recommended sequential closure: integrated and negative gate proof. |
-| B30 | P16.1 | implementation/medium | plan-exec | light | recommended: stable-FQCN PSR-4 move pattern for one profile-B package. |
-| B30 | P16.2 | implementation/medium | plan-exec | light | recommended: stable-FQCN PSR-4 move pattern for one profile-B package. |
-| B30 | P16.3 | implementation/medium | plan-exec | light | recommended: same move pattern plus bounded Tasks harness preparation. |
-| B31 | P16.4 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: operation surface first. |
-| B31 | P16.5 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: Cost/Bulk consume moved surface. |
-| B31 | P16.6 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: Webhooks completes package. |
-| B32 | P16.7 | implementation/medium | plan-exec | light | recommended: bounded profile-B root cleanup with stable FQCN. |
-| B32 | P16.8 | implementation/medium | plan-exec | light | recommended: bounded profile-B move using the same manifest/autoload proof. |
+| E15f | P15.11 | implementation/medium | plan-exec | full | Conditional package identity branch; G-PKG-API. |
+| E15f | P15.12 | implementation/medium | plan-exec | full | Conditional package identity branch; G-PKG-AUTH. |
+| solo | P15.13 | implementation/medium | plan-exec | full | recommended sequential closure: registry/surface reconciliation. |
+| solo | P15.14 | implementation/medium | plan-exec | full | recommended sequential closure: integrated and negative gate proof. |
+| E16a | P16.1 | implementation/medium | plan-exec | light | recommended: stable-FQCN PSR-4 move pattern for one profile-B package. |
+| E16a | P16.2 | implementation/medium | plan-exec | light | recommended: stable-FQCN PSR-4 move pattern for one profile-B package. |
+| E16a | P16.3 | implementation/medium | plan-exec | light | recommended: same move pattern plus bounded Tasks harness preparation. |
+| E16b | P16.4 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: operation surface first. |
+| E16b | P16.5 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: Cost/Bulk consume moved surface. |
+| E16b | P16.6 | implementation/medium | plan-exec | light | recommended sequential API profile-C rollout: Webhooks completes package. |
+| E16c | P16.7 | implementation/medium | plan-exec | light | recommended: bounded profile-B root cleanup with stable FQCN. |
+| E16c | P16.8 | implementation/medium | plan-exec | light | recommended: bounded profile-B move using the same manifest/autoload proof. |
 | solo | P16.9 | implementation/medium | plan-exec | light | Panels no-move/docs item has no shared product setup. |
 | solo | P16.10 | implementation/medium | plan-exec | light | Atomic cross-package dev-autoload cutover; partial execution is broken. |
 | solo | P16.11 | implementation/medium | plan-exec | light | Read-only no-move census and one architecture growth map. |
-| B33 | P16.12 | implementation/medium | plan-exec | light | recommended sequential closure: path-bearing metadata reconciliation. |
-| B33 | P16.13 | implementation/medium | plan-exec | light | recommended sequential closure: integrated planted-negative proof. |
+| solo | P16.12 | implementation/medium | plan-exec | light | recommended sequential closure: path-bearing metadata reconciliation. |
+| solo | P16.13 | implementation/medium | plan-exec | light | recommended sequential closure: integrated planted-negative proof. |
 | solo | P17.1 | implementation/high | plan-exec | full | Release cohort/candidate is the immutable input to every other acceptance proof. |
-| B34 | P17.2 | implementation/high | plan-exec | full | recommended: external fixtures share one candidate repository but close independently. |
-| B34 | P17.3 | implementation/high | plan-exec | full | recommended: REST/MCP clients reuse the candidate server and published snapshots. |
-| B34 | P17.4 | implementation/high | plan-exec | full | recommended: bulk/webhook clients reuse the same isolated API fixture and local receiver. |
-| B34 | P17.5 | implementation/high | plan-exec | full | recommended: independent consumer reuses the candidate repository, never package source. |
-| B35 | P17.6 | implementation/high | plan-exec | full | recommended sequential release evidence: pristine profiles before final DoD. |
-| B35 | P17.7 | implementation/high | plan-exec | full | recommended: upgrade proof reuses the exact candidate and distribution harness. |
+| E17b | P17.2 | implementation/high | plan-exec | full | recommended: external fixtures share one candidate repository but close independently. |
+| E17b | P17.3 | implementation/high | plan-exec | full | recommended: REST/MCP clients reuse the candidate server and published snapshots. |
+| E17b | P17.4 | implementation/high | plan-exec | full | recommended: bulk/webhook clients reuse the same isolated API fixture and local receiver. |
+| E17b | P17.5 | implementation/high | plan-exec | full | recommended: independent consumer reuses the candidate repository, never package source. |
+| E17c | P17.6 | implementation/high | plan-exec | full | recommended sequential release evidence: pristine profiles before final DoD. |
+| E17c | P17.7 | implementation/high | plan-exec | full | recommended: upgrade proof reuses the exact candidate and distribution harness. |
 | solo | P17.8 | implementation/high | plan-exec | full | Scorecard/docs are an independent measurement and must not be tuned inside product fixtures. |
-| B36 | P17.9 | implementation/high | plan-exec | full | recommended sequential gate work: freeze the 27-row manifest first. |
-| B36 | P17.10 | implementation/high | plan-exec | full | recommended sequential gate work: execute and mutation-prove the frozen manifest. |
+| E17e | P17.9 | implementation/high | plan-exec | full | recommended sequential gate work: freeze the 27-row manifest first. |
+| E17e | P17.10 | implementation/high | plan-exec | full | recommended sequential gate work: execute and mutation-prove the frozen manifest. |
 | solo | P17.11 | implementation/high | plan-exec | full | Sealed no-write preflight joins every routine proof and emits the owner-review packet. |
 | solo | P17.12 | implementation/high | manual | full | required: only exact G-RELEASE may authorize irreversible packet-bound publication. |
-
 Группировка — рекомендация: готовое подмножество исполнимо, порядок внутри батча свободен.
 P1.1 предшествует всем items P1; P1.7 следует за ними. P2.1 предшествует B2;
 P2.5 следует за B2; P2.6 — последний в фазе. P3.2 предшествует P3.3;
 P3.1 независим от P3.2. В P4 порядок жёсткий по данным:
 `P4.1 → P4.2 → {B5, B6} → P4.7 → P4.8`, `P4.9 → P4.10`, `P4.11` после `P4.7`;
 ветка часов и гейт биндингов по файлам независимы от ветки `DataScope`.
-В P5 порядок тоже жёсткий по данным:
+В P5 исходный порядок жёсткий по данным:
 `P5.1 → B7 → P5.5 → P5.6 → P5.7 → B8 → P5.11 → P5.12`, `P5.4 → {P5.5, P5.8}`,
 `P5.8` перед `P5.12`; `P5.4` независим от `P5.3` и может идти сразу после `P5.2`,
-а ветка inbox (`P5.8`) независима от ветки relay.
+а ветка inbox (`P5.8`) независима от ветки relay. После execution-audit:
+resume `P5.6` → `{P5.13, P5.14, P5.15, P5.16, P5.17}` → `P5.18` → `P6.1`.
 В P6 порядок по данным: `P6.1 → {P6.2, P6.4, P6.5}`; `P6.3` после `P6.1`;
 `P6.6` последний. Все items P6 — `solo`: гейты и документ нельзя сливать
 (ложно-зелёное), а P6.4/P6.5 не делят Files с гейтом.
-В P7 порядок по данным: `P7.1 → P7.2 → B12`; `{B13, B14}` после `P7.1`;
-`P7.7` после `P7.6`; `P7.10` после `P7.2`; `P7.11` последний.
-В P8 порядок по данным: `P8.1 → B15 → P8.4`; `P8.5` после `P8.1`;
-`P8.6` последний. P8.4 и P8.6 — `solo` (`full`): порядок bootstrapper'ов
-и гейт нельзя сливать с product-item.
-В P9 порядок: `P9.1 → P9.2 → P9.3 → B16 → P9.7 → P9.8`;
-B16 — recommended и может исполнить готовое подмножество. P9.8 всегда последний.
-В P10 порядок: `P10.1 → P10.2 → P10.3 → P10.4`; после P10.3 независимы
-`P10.5` и `P10.6`; `P10.7` ждёт P10.4/P10.6; P10.8 всегда последний.
-В P11 порядок: `P11.1 → B17`; после P11.3 независимы `P11.4`
-и `P11.5`; `B18` ждёт P11.5; P11.8 всегда последний. B17/B18 — recommended
-и могут исполнить готовое подмножество; closure остаётся поitemным.
-В P12 порядок: `P12.1 → {B19, P12.4, P12.6}`; P12.5 ждёт P12.4,
-P12.7 ждёт P12.6, P12.8 всегда последний. B19/B20 — recommended,
-причём B20 идёт последовательно P12.4→P12.5; closure поitemный.
-В P13 порядок: `P13.1 → {B21, P13.7, P13.8}`; P13.4 ждёт P13.3;
-P13.6 ждёт P13.2/P13.5; B22 идёт последовательно P13.9→P13.10 после
-P13.2/P13.3; P13.11 ждёт P13.10; P13.12 всегда последний. P13.5 и
-P13.12 — solo из-за G-DDL/G-API. Исполнение любых P2.*–P14.* ждёт конца
-стадии 2 (D14).
+P7–P17: конкретные последовательности батчей, модели и границы review приведены
+в `execution-batches.md`; ниже — несокращаемые зависимости. Все predecessor
+outputs читаются **после** их терминального checkpoint, даже если items стоят
+рядом в одном батче.
 
-P14: B23=P14.1→P14.2; B24=P14.4→P14.5; B25=P14.7→P14.8;
-B26=P14.11→P14.12; B27=P14.15→P14.16; G-DDL P14.3 и G-SECRET P14.19 solo.
-Все ветви сходятся P14.19→P14.20→P14.21. P14 детализирована GPT-6 Astra/high 2026-09-20.
-
-P15: P15.1 и B28 (P15.2–P15.6) могут идти после общих producer dependencies; P15.7,
-P15.8 и P15.10 требуют G-API-P15. P15.11/P15.12 независимы друг от друга и завершаются
-accepted-веткой либо skipped по явному owner evidence. P15.13 ждёт terminal/skipped
-P15.1–P15.12; B29 идёт строго P15.13→P15.14. P15 детализирована GPT-5.6 Sol/high
-2026-09-20 как допустимый fallback Grok-слота D37.
-
-P16: B30 package items независимы; B31 идёт строго P16.4→P16.5→P16.6; B32 items
-независимы. P16.10 ждёт P16.3/P16.8; P16.11 независим после producers; P16.12 ждёт
-P16.1–P16.11, затем B33 идёт P16.12→P16.13. D92 сохраняет FQCN, поэтому G-API не
-вводится. P16 детализирована GPT-5.6 Sol/high 2026-09-20 как допустимый fallback
-Grok-слота D37; Perplexity использован точечно для panels vocabulary.
-
-P17: P17.1 замораживает release cohort; B34 — рекомендованная группа независимых
-внешних fixtures на одном candidate repository; B35 идёт после соответствующих fixtures.
-P17.8 независим после producer-фаз; B36 идёт строго P17.9→P17.10. P17.11 ждёт
-P17.1–P17.10. P17.12 — отдельный `manual` item под G-RELEASE, всегда после P17.11.
-P17 детализирована GPT-5.6 Sol/high 2026-09-20 как допустимый fallback Grok-слота D37;
-Perplexity использован одним узким запросом по release/install behavior.
+- P7: P7.1 → P7.12 и P7.2; P7.3–P7.5 после P7.2; P7.7 после P7.6;
+  P7.10 после P7.2; P7.11 последним после всех readers и D100 proof.
+- P8: P8.1 → P8.2 → P8.3 → P8.4; P8.5 после P8.1; P8.6 последним.
+- P9: P9.1 → P9.2 → P9.3 → P9.4–P9.6 → P9.7 → P9.8; P9.8 отдельно
+  сверяет живую карту и оба DB lane.
+- P10: P10.1 → P10.2 → P10.3 → P10.4; P10.5/P10.6 после P10.3;
+  P10.7 после P10.4/P10.6; P10.8 последним. P10.3 отдельно под G-DDL.
+- P11: P11.1 → P11.2 → P11.3; затем P11.4/P11.5; P11.6/P11.7 после
+  P11.5; P11.8 последним.
+- P12: P12.1 → P12.2/P12.3, P12.4 и P12.6; P12.5 после P12.4,
+  P12.7 после P12.6; P12.8 последним.
+- P13: P13.1 → P13.2; P13.4 после P13.3; P13.6 после P13.2/P13.5;
+  P13.9/P13.10 после P13.2/P13.3; P13.11 после P13.10; P13.12
+  последним под G-API. P13.5 отдельно под G-DDL.
+- P14: P14.1→P14.2, P14.4→P14.5, P14.7→P14.8,
+  P14.11→P14.12, P14.15→P14.16; P14.3 и P14.19 отдельно под G-DDL
+  и G-SECRET. Все ветви сходятся P14.19→P14.20→P14.21.
+- P15: P15.11/P15.12 — условные owner branches; P15.13 ждёт их
+  terminal/skipped результат и все P15.1–P15.10; P15.14 после P15.13.
+- P16: P16.4→P16.5→P16.6; P16.10 ждёт P16.3/P16.8; P16.12 ждёт
+  P16.1–P16.11; P16.13 последним.
+- P17: P17.1 фиксирует candidate; внешние fixtures P17.2–P17.5 и
+  install/upgrade P17.6–P17.7 используют его digest; P17.9→P17.10;
+  P17.11 ждёт P17.1–P17.10; P17.12 — отдельный manual под G-RELEASE.
 
 ### 3.1a Стадия 1 — проходы детализации оставшихся фаз
 
 Каждый проход — `solo`, `Exec: plan-design`, отдельный корень по
 `cold-start-root: design-root-terminal`: фазы имеют разные нормативные входы и разные
 источники подтверждения, одна сессия на две фазы не экономит чтение и переполняет бюджет
-контекста. Модель прохода — из §3.3 (D37) по объёму планирования. P1 этот проход прошла 2026-09-19
+контекста. Ниже записана история уже завершённых design-проходов по D37; это **не
+execution routing**. Живые execution-модели определяют §3.3 / D118. P1 этот проход прошла 2026-09-19
 на Claude Opus 5 (thinking, high). P2 этот проход прошла 2026-09-19
 на Grok 4.6 (effort `high`). P3 этот проход прошла 2026-09-19
 на Grok 4.6 (effort `high`). P4 и P5 этот проход прошли 2026-09-19
@@ -424,7 +429,7 @@ Astra-слота D37; Perplexity browser MCP использован. P14 про�
 на GPT-6 Astra (effort `high`). P15–P17 прошли 2026-09-20 на GPT-5.6 Sol
 (effort `high`) как допустимый fallback Grok-слота D37; Perplexity использован.
 
-| Фаза | Модель прохода (§3.3) | Review | Почему |
+| Фаза | Историческая модель design-прохода | Review | Почему |
 |:--|:--|:--|:--|
 | P2 | Grok 4.6 (`high`) | light | Машинная инвентаризация: дизайн выбирает схему артефактов и сканеры, риск локален и обратим. |
 | P3 | Grok 4.6 (`high`) | full | Исполняемые гейты: ошибочный гейт даёт ложно-зелёное по всему репозиторию — ровно этот дефект уже случался в PLAN1 P12.3. |
@@ -461,8 +466,8 @@ Astra-слота D37; Perplexity browser MCP использован. P14 про�
 | P2 | implementation/medium | plan-exec | light | Ни одного: артефакты read-only. |
 | P3 | implementation/high | plan-exec | full | Все items: гейт по определению может дать ложно-зелёное. |
 | P4 | implementation/high | plan-exec | full | Все items. |
-| P5 | implementation/high | plan-exec | full | Все items, кроме документа политики сообщений. |
-| P6 | implementation/high | plan-exec | full | Arch-гейты зон и литмус; D32 снял перенос FQCN, review не ослабляется. |
+| P5 | risk-routed per D111 | plan-exec/plan-run | full | Composer only for P5.13/P5.17; Grok 4.7 for integration; Sol for P5.6/P5.16/P5.18. |
+| P6 | implementation/high | plan-exec | full | Arch-гейты зон и литмус; только P6.6 имеет owner-route exception D117, review не ослабляется. |
 | P7 | implementation/medium | plan-exec | light | Секреты и redaction — `full`. |
 | P8 | implementation/medium | plan-exec | light | Порядок bootstrapper'ов tenancy — `full`. |
 | P9 | implementation/high | plan-exec | full | Все items. |
@@ -475,29 +480,37 @@ Astra-слота D37; Perplexity browser MCP использован. P14 про�
 | P16 | implementation/medium | plan-exec | light | Ни одного, если поведение не меняется; доказательство неизменности обязательно. |
 | P17 | implementation/high | plan-exec; P17.12 `manual` | full | Все items; P17.12 — G-RELEASE и exact packet. |
 
-### 3.3 Модели Cursor под классы (D37)
+### 3.3 Native execution pins после P6 (D118)
 
-Класс — каноническая запись route; модель выбирается по объёму планирования фазы (D37).
-Ставки за млн input/output из документации Cursor на 2026-09-19. Claude подключить нельзя (D35).
-Sol запускается всегда.
+`execution-batches.md` задаёт **полный** batch → item → model маршрут P7–P17,
+порядок, артефакты и проверки. Таблица ниже задаёт exact provider selectors и
+усилие для обозначений этого маршрута. Для P1–P6 D112/D114 остаются
+историческим route evidence; их будущие pins заменены D118. При отсутствии
+selector/effort исполнитель фиксирует waiting route до product mutation, не
+выбирает fallback самостоятельно. В текущем Codex provider соответствующая
+проекция справа; launch печатает только свой provider.
 
-| Класс/усилие | Модель Cursor | in/out за млн | Фазы |
-|:--|:--|:--|:--|
-| frontier/high | GPT-6 Astra | — | P13, P14 и аудит стадии 2 |
-| frontier/high | GPT-5.6 Sol | $4 / $20 | P9, P10 |
-| frontier/high | Grok 4.6 (effort `high`) | $2 / $6 | P8, P11, P12, P15, P16, P17; уже исполнены P2, P3, P6, P7 |
-| implementation/medium–high | Composer 2.5, стандартный тир | $0.5 / $2.5 | исполнение всех items |
+| Код | Cursor native | Codex native | Effort | Применение |
+|:--|:--|:--|:--|:--|
+| C | `composer-2.5` | `gpt-5.6-terra` | medium | ограниченная механика по готовой карте |
+| G46 | `cursor-grok-4.6-high` | `gpt-5.6-sol` | high | локальная интеграция по готовому design |
+| G47 | `grok-4.7-high` | `gpt-5.6-sol` | high | несколько consumers/provider или новый public seam |
+| S56 | `gpt-5.6-sol-high` (`-xhigh` для phase-final review) | `gpt-5.6-sol` | high; xhigh для phase-final review | DDL, durable/security, joined proof |
+| F | P13.12: `gpt-5.6-sol-xhigh`; P17.11–P17.12: `gpt-5.6-sol-max` | `gpt-6-sol` | Cursor xhigh/max; Codex high/max | contract freeze и sealed release |
 
-P1, P4, P5 уже детализированы на Claude Opus 5 — не переигрываются. Не использовать
-Gemini 3.1 Pro и Claude. Лестница Astra-слотов: Astra → Sol. Sol-слотов: Sol → Grok.
-Grok-слотов: Grok → Sol. Astra не подставляется в Grok-фазы. Items — только стандартный
-Composer 2.5, не Fast-тир ($3/$15). Смена класса вниз запрещена.
+Для одного батча используется одна модель из его строки; квалификационные
+`review` батчи стартуют новым корнем/сессией и не реализуют продукт вместо
+авторов. Внутри батча состояние, scope, checks и receipt принадлежат
+**каждому** item. Готовое подмножество может выполняться отдельно; фактический
+batch тогда фиксируется в handoff. Все `Authority`/owner gates из item-спек
+сохраняются. На phase-final переходах P8.6, P10.8, P12.8, P13.12, P14.21 и
+P16.13 выполняется также межфазная сверка из `execution-batches.md`.
 
 ## 5. Decision Log
 
 Решения живут в `decisions/<D-id>.md`; текущее/архивное представление собирается
 `python3 packages/task/scripts/plan-views.py decisions --plan-dir plans/2026.09.19-№1-COREX-PLATFORM-HARDENING`
-и читается в `decisions/_current.md`. Принято D1–D88 и D91–D97; D89–D90 proposed;
+и читается в `decisions/_current.md`. Принято D1–D88, D91–D118; D89–D90 proposed;
 D57 supersedes D5.
 
 ## 7. Contracts
