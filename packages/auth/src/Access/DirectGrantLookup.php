@@ -6,6 +6,7 @@ namespace CoreX\Auth\Access;
 
 use AzGuard\Models\DirectGrant;
 use CoreX\Auth\Contracts\Principal;
+use CoreX\Auth\Support\AuthOptions;
 
 /**
  * Whether a principal holds an active AzGuard direct grant for one compiled
@@ -19,6 +20,10 @@ use CoreX\Auth\Contracts\Principal;
  */
 final readonly class DirectGrantLookup
 {
+    public function __construct(
+        private AuthOptions $options,
+    ) {}
+
     public function hasActive(Principal $p, string $key): bool
     {
         return DirectGrant::query()
@@ -32,6 +37,6 @@ final readonly class DirectGrantLookup
 
     private function panel(): string
     {
-        return (string) config('corex-auth.panel', 'app');
+        return $this->options->panel;
     }
 }

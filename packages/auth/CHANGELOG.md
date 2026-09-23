@@ -7,6 +7,10 @@
 
 ### Changed
 
+- P7.7: `DefaultAccessChecker`, matrix/access helpers и компилятор матрицы
+  получают `AuthOptions` вместо прямых вызовов `config('corex-auth.*')`.
+- P7.6: `AuthOptions::fromArray` валидирует снимок `corex-auth`; провайдер и
+  `PrincipalUserProvider` читают identity и pins из Options.
 - Released metadata no longer declares development `path` repositories or an
   unconfirmed AzGuard remote. Private AzGuard resolution is a consumer-owned,
   canonical immutable channel; credentials are never stored in this package.

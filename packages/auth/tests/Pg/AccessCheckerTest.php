@@ -19,6 +19,7 @@ use CoreX\Auth\Models\RoleAssignment;
 use CoreX\Auth\Models\RoleMatrixRow;
 use CoreX\Auth\RecordContext;
 use CoreX\Auth\Roles\RoleCloner;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Auth\Tests\Stubs\FakeTenancyManager;
@@ -149,7 +150,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class)))->compile($roleId);
+        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
     };
 
     $this->newRole = function (array $overrides = []): Role {

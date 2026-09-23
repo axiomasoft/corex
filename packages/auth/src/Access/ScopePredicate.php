@@ -7,6 +7,7 @@ namespace CoreX\Auth\Access;
 use CoreX\Auth\Contracts\Principal;
 use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Auth\Enums\Scope;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Models\Department;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\WorkspaceRef;
@@ -37,6 +38,7 @@ final readonly class ScopePredicate
 {
     public function __construct(
         private TenancyManager $tenancyManager,
+        private AuthOptions $options,
     ) {}
 
     /**
@@ -264,7 +266,7 @@ final readonly class ScopePredicate
      */
     private function applyAccount(Builder $q): Builder
     {
-        $scopeClass = config('corex-auth.workspace_scope_class');
+        $scopeClass = $this->options->workspaceScopeClass;
 
         if (is_string($scopeClass) && $scopeClass !== '') {
             $q->withoutGlobalScope($scopeClass);

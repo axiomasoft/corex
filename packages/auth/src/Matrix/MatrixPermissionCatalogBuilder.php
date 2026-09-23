@@ -10,6 +10,7 @@ use AzGuard\Registry\Definitions\SimplePermissionDefinition;
 use AzGuard\Registry\Resolver\EffectivePermissionResolver;
 use CoreX\Auth\Enums\Scope;
 use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Auth\Support\AuthOptions;
 use Override;
 
 /**
@@ -30,13 +31,14 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
      * the constructor's type-hint.
      */
     public function __construct(
+        private AuthOptions $options,
         private ?ActiveEntityFilter $activeEntities = null,
     ) {}
 
     #[Override]
     public function supports(string $panelId): bool
     {
-        return $panelId === (string) config('corex-auth.panel', 'app');
+        return $panelId === $this->options->panel;
     }
 
     /** @return list<PermissionDefinition> */

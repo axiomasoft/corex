@@ -9,6 +9,7 @@ use CoreX\Auth\Contracts\RoleMatrixCompiler as RoleMatrixCompilerContract;
 use CoreX\Auth\Enums\Scope;
 use CoreX\Auth\Models\Role;
 use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Auth\Support\AuthOptions;
 use Illuminate\Support\Facades\DB;
 use Override;
 
@@ -31,13 +32,14 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerCon
      */
     public function __construct(
         private ScopeMapVersion $scopeMapVersion,
+        private AuthOptions $options,
         private ?ActiveEntityFilter $activeEntities = null,
     ) {}
 
     #[Override]
     public function compile(string $roleId): void
     {
-        $panel = (string) config('corex-auth.panel', 'app');
+        $panel = $this->options->panel;
 
         DB::transaction(function () use ($roleId, $panel): void {
             $role = Role::query()->findOrFail($roleId);

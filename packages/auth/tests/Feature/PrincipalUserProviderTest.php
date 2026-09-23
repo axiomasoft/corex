@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Auth\Access\PrincipalIdentity;
 use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Auth\Identity\PrincipalUserProvider;
+use CoreX\Auth\Support\AuthOptions;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,13 +32,7 @@ beforeEach(function (): void {
 function makeDefaultProviderPUP(): PrincipalUserProvider
 {
     return new PrincipalUserProvider(
-        connection: null,
-        table: 'users',
-        idColumn: 'id',
-        emailColumn: 'email',
-        passwordColumn: 'password_hash',
-        activeColumn: 'is_active',
-        deletedAtColumn: 'deleted_at',
+        options: AuthOptions::fromArray([]),
     );
 }
 
@@ -188,6 +183,10 @@ it('works against a table with entirely different column names, driven purely by
             'deleted_at' => 'deleted_at',
         ],
     ]);
+    app()->instance(
+        AuthOptions::class,
+        AuthOptions::fromArray((array) config('corex-auth')),
+    );
 
     $attempted = Auth::attempt(['email' => 'custom@example.test', 'password' => 'correct-password']);
 

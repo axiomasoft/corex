@@ -6,6 +6,7 @@ namespace CoreX\Auth\Identity;
 
 use CoreX\Auth\Access\PrincipalIdentity;
 use CoreX\Auth\Enums\PrincipalType;
+use CoreX\Auth\Support\AuthOptions;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\Query\Builder;
@@ -17,7 +18,7 @@ use SensitiveParameter;
 /**
  * The boxed-and-cloud login lane's own {@see UserProvider} (D125, OQ-18
  * variant A): reads a users-shaped table through query-builder, entirely by
- * {@see config('corex-auth.identity')} — connection/table/column names — so
+ * {@see AuthOptions} identity fields — connection/table/column names — so
  * `corex/auth` never imports a model from `corex/tenancy` (AC-28). Every
  * lookup goes through {@see query()}, which always applies the "live user"
  * filter (active = true AND deleted_at IS NULL): without it in
@@ -32,19 +33,13 @@ use SensitiveParameter;
 final class PrincipalUserProvider implements UserProvider
 {
     public function __construct(
-        private readonly ?string $connection,
-        private readonly string $table,
-        private readonly string $idColumn,
-        private readonly string $emailColumn,
-        private readonly string $passwordColumn,
-        private readonly string $activeColumn,
-        private readonly string $deletedAtColumn,
+        private readonly AuthOptions $options,
     ) {}
 
     #[Override]
     public function retrieveById($identifier): ?Authenticatable
     {
-        $row = $this->query()->where($this->idColumn, $identifier)->first();
+        $row = $this->query()->where($this->idColumn(), $identifier)->first();
 
         return $this->toPrincipal($row);
     }
@@ -80,7 +75,7 @@ final class PrincipalUserProvider implements UserProvider
         // validated separately by validateCredentials()); the unique index on
         // this schema is `lower(email)`, so the match is case-insensitive.
         $row = $this->query()
-            ->whereRaw('lower('.$this->emailColumn.') = ?', [mb_strtolower($email)])
+            ->whereRaw('lower('.$this->emailColumn().') = ?', [mb_strtolower($email)])
             ->first();
 
         return $this->toPrincipal($row);
@@ -116,17 +111,17 @@ final class PrincipalUserProvider implements UserProvider
         }
 
         $this->query()
-            ->where($this->idColumn, $user->getAuthIdentifier())
-            ->update([$this->passwordColumn => Hash::make($password)]);
+            ->where($this->idColumn(), $user->getAuthIdentifier())
+            ->update([$this->passwordColumn() => Hash::make($password)]);
     }
 
     /** "Live user" filter shared by every lookup — see class docblock. */
     private function query(): Builder
     {
-        return DB::connection($this->connection)
-            ->table($this->table)
-            ->where($this->activeColumn, true)
-            ->whereNull($this->deletedAtColumn);
+        return DB::connection($this->options->identityConnection)
+            ->table($this->options->identityTable)
+            ->where($this->activeColumn(), true)
+            ->whereNull($this->deletedAtColumn());
     }
 
     private function toPrincipal(?object $row): ?PrincipalIdentity
@@ -135,12 +130,37 @@ final class PrincipalUserProvider implements UserProvider
             return null;
         }
 
-        $hash = $row->{$this->passwordColumn} ?? null;
+        $hash = $row->{$this->passwordColumn()} ?? null;
 
         return new PrincipalIdentity(
             type: PrincipalType::User,
-            id: (string) $row->{$this->idColumn},
+            id: (string) $row->{$this->idColumn()},
             passwordHash: is_string($hash) ? $hash : null,
         );
+    }
+
+    private function idColumn(): string
+    {
+        return $this->options->identityColumns['id'];
+    }
+
+    private function emailColumn(): string
+    {
+        return $this->options->identityColumns['email'];
+    }
+
+    private function passwordColumn(): string
+    {
+        return $this->options->identityColumns['password'];
+    }
+
+    private function activeColumn(): string
+    {
+        return $this->options->identityColumns['active'];
+    }
+
+    private function deletedAtColumn(): string
+    {
+        return $this->options->identityColumns['deleted_at'];
     }
 }

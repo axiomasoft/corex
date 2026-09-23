@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Auth\Matrix;
 
 use Closure;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
@@ -24,6 +25,7 @@ final readonly class ScopeMapVersion
     public function __construct(
         private TenantContextResolver $tenantContext,
         private CacheFactory $cache,
+        private AuthOptions $options,
     ) {}
 
     public function current(string $roleId): int
@@ -67,9 +69,6 @@ final readonly class ScopeMapVersion
 
     private function store(): Repository
     {
-        /** @var ?string $storeName */
-        $storeName = config('corex-auth.cache.store');
-
-        return $this->cache->store($storeName);
+        return $this->cache->store($this->options->cacheStore);
     }
 }

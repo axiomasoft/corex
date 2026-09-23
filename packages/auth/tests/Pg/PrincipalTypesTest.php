@@ -13,6 +13,7 @@ use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\Models\Role;
 use CoreX\Auth\Models\RoleAssignment;
 use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -48,7 +49,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class)))->compile($roleId);
+        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
     };
 
     $this->newRole = function (PrincipalType ...$assignableTo): Role {

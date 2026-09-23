@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Auth\Matrix\ScopeMapVersion;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Tenancy\SingleAccountResolver;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
@@ -17,7 +18,11 @@ $container->instance('config', new Repository([
     'cache' => ['default' => 'file', 'stores' => ['file' => ['driver' => 'file', 'path' => $argv[1]]]],
 ]));
 $container->instance('files', new Filesystem);
-$versions = new ScopeMapVersion(new SingleAccountResolver, new CacheManager($container));
+$versions = new ScopeMapVersion(
+    new SingleAccountResolver,
+    new CacheManager($container),
+    AuthOptions::fromArray(['cache' => ['store' => 'file']]),
+);
 for ($iteration = 0; $iteration < 100; $iteration++) {
     $versions->bump('concurrent-role');
 }

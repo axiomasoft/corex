@@ -20,6 +20,7 @@ use CoreX\Auth\Extend\PermissionsMerger;
 use CoreX\Auth\Identity\PrincipalUserProvider;
 use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tenancy\TenantContextGuard;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
@@ -36,6 +37,10 @@ final class CoreAuthServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');
+
+        $raw = $this->app['config']->get('corex-auth', []);
+        $options = AuthOptions::fromArray(is_array($raw) ? $raw : []);
+        $this->app->instance(AuthOptions::class, $options);
 
         // Provide AzGuard's optional ContextGuard binding (ADR-009): contextual
         // checks (hasPermissionIn) resolve entities via corex/core's registry.
@@ -62,11 +67,11 @@ final class CoreAuthServiceProvider extends ServiceProvider
         // inventory-2026-07-26.md §6) — the config switch (D101 risk note)
         // lets a target build step aside for another package's layer instead
         // of conflicting over it.
-        if ((bool) config('corex-auth.bind_permission_layer', true)) {
+        if ($options->bindPermissionLayer) {
             $this->app->bind(PermissionLayer::class, WorkspacePermissionLayer::class);
         }
 
-        $this->applyAzGuardPins();
+        $this->applyAzGuardPins($options);
     }
 
     public function boot(): void
@@ -79,12 +84,9 @@ final class CoreAuthServiceProvider extends ServiceProvider
         $manager->registerGrantSource(AutMatrixGrantSource::class);
         $manager->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
 
-        /** @var mixed $scopeClass */
-        $scopeClass = config('corex-auth.workspace_scope_class');
-
         WorkspaceScopeWiring::wire(
             $this->app->make(EntityRegistry::class),
-            is_string($scopeClass) ? $scopeClass : null,
+            $this->app->make(AuthOptions::class)->workspaceScopeClass,
         );
 
         Event::listen(ModuleEnabled::class, PermissionsMerger::class);
@@ -101,13 +103,17 @@ final class CoreAuthServiceProvider extends ServiceProvider
      * — well before any migrate call — is early enough regardless of
      * provider registration order.
      */
-    private function applyAzGuardPins(): void
+    private function applyAzGuardPins(AuthOptions $options): void
     {
         $config = $this->app['config'];
+        $pins = $options->azguardPins;
+        $tableNames = is_array($pins['table_names'] ?? null) ? $pins['table_names'] : [];
+        $columnNames = is_array($pins['column_names'] ?? null) ? $pins['column_names'] : [];
+        $models = is_array($pins['models'] ?? null) ? $pins['models'] : [];
 
-        $config->set('az-guard.table_names.roles', config('corex-auth.azguard_pins.table_names.roles'));
-        $config->set('az-guard.column_names.morph_type', config('corex-auth.azguard_pins.column_names.morph_type'));
-        $config->set('az-guard.models.role', config('corex-auth.azguard_pins.models.role'));
+        $config->set('az-guard.table_names.roles', $tableNames['roles'] ?? 'az_guard_roles');
+        $config->set('az-guard.column_names.morph_type', $columnNames['morph_type'] ?? 'uuid');
+        $config->set('az-guard.models.role', $models['role'] ?? null);
     }
 
     /**
@@ -118,25 +124,13 @@ final class CoreAuthServiceProvider extends ServiceProvider
      */
     private function registerIdentityProvider(): void
     {
-        if (! (bool) config('corex-auth.identity.enabled', true)) {
+        if (! $this->app->make(AuthOptions::class)->identityEnabled) {
             return;
         }
 
-        Auth::provider('corex-principal', static function (): PrincipalUserProvider {
-            /** @var array<string, string> $columns */
-            $columns = (array) config('corex-auth.identity.columns', []);
-            $connection = config('corex-auth.identity.connection');
-
-            return new PrincipalUserProvider(
-                connection: is_string($connection) ? $connection : null,
-                table: (string) config('corex-auth.identity.table', 'users'),
-                idColumn: (string) ($columns['id'] ?? 'id'),
-                emailColumn: (string) ($columns['email'] ?? 'email'),
-                passwordColumn: (string) ($columns['password'] ?? 'password_hash'),
-                activeColumn: (string) ($columns['active'] ?? 'is_active'),
-                deletedAtColumn: (string) ($columns['deleted_at'] ?? 'deleted_at'),
-            );
-        });
+        Auth::provider('corex-principal', fn (): PrincipalUserProvider => new PrincipalUserProvider(
+            options: $this->app->make(AuthOptions::class),
+        ));
     }
 
     private function registerPublishing(): void

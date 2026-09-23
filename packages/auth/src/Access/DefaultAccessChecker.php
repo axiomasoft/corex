@@ -10,6 +10,7 @@ use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Auth\Enums\Scope;
 use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\RecordContext;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use Illuminate\Database\Query\Builder;
@@ -46,6 +47,7 @@ final class DefaultAccessChecker implements AccessChecker
         private readonly ScopeMapVersion $scopeMapVersion,
         private readonly ScopePredicate $scopePredicate,
         private readonly DirectGrantLookup $directGrants,
+        private readonly AuthOptions $options,
     ) {}
 
     #[Override]
@@ -194,6 +196,6 @@ final class DefaultAccessChecker implements AccessChecker
 
     private function panel(): string
     {
-        return (string) config('corex-auth.panel', 'app');
+        return $this->options->panel;
     }
 }

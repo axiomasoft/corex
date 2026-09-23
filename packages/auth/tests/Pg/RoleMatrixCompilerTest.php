@@ -13,6 +13,7 @@ use CoreX\Auth\Matrix\MatrixValidator;
 use CoreX\Auth\Matrix\ScopeMapVersion;
 use CoreX\Auth\Models\Role;
 use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -67,7 +68,7 @@ beforeEach(function (): void {
 
 function makeCompiler(): DatabaseRoleMatrixCompiler
 {
-    return new DatabaseRoleMatrixCompiler(App::make(ScopeMapVersion::class));
+    return new DatabaseRoleMatrixCompiler(App::make(ScopeMapVersion::class), App::make(AuthOptions::class));
 }
 
 // AC-22 — matrix row (scope ≠ none) compiles to exactly the D100 key grammar.
@@ -132,7 +133,7 @@ it('leaves no new keys and no version bump when compilation fails mid-transactio
         }
     });
 
-    expect(fn () => (new DatabaseRoleMatrixCompiler($scopeMapVersion))->compile($role->id))
+    expect(fn () => (new DatabaseRoleMatrixCompiler($scopeMapVersion, App::make(AuthOptions::class)))->compile($role->id))
         ->toThrow(RuntimeException::class, 'injected mid-compile failure');
 
     $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->first();
@@ -205,7 +206,7 @@ it('exposes compiled keys through MatrixPermissionCatalogBuilder for the configu
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'delete', 'scope' => 'none']);
 
-    $builder = new MatrixPermissionCatalogBuilder;
+    $builder = new MatrixPermissionCatalogBuilder(App::make(AuthOptions::class));
 
     expect($builder->supports('app'))->toBeTrue()
         ->and($builder->supports('admin'))->toBeFalse();
@@ -299,7 +300,7 @@ it('excludes catalog keys whose owning module is inactive', function (): void {
 
     $keys = array_map(
         static fn ($definition): string => $definition->key(),
-        (new MatrixPermissionCatalogBuilder)->build('app'),
+        (new MatrixPermissionCatalogBuilder(App::make(AuthOptions::class)))->build('app'),
     );
 
     expect($keys)->not->toContain('app.crm.deal.read');

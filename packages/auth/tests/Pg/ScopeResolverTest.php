@@ -17,6 +17,7 @@ use CoreX\Auth\Models\Role;
 use CoreX\Auth\Models\RoleAssignment;
 use CoreX\Auth\Models\RoleMatrixRow;
 use CoreX\Auth\RecordContext;
+use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Auth\Tests\Stubs\FakeTenancyManager;
@@ -64,7 +65,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/auth-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class)))->compile($roleId);
+        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
     };
 
     $this->newRole = function (array $overrides = []): Role {
@@ -275,6 +276,10 @@ it('cascade_view off hides child-workspace rows; on shows them', function (): vo
 // D109 — account lifts EXACTLY the pinned scope class, never an unrelated one.
 it('account scope lifts exactly the pinned workspace scope class, never an unrelated global scope', function (): void {
     config(['corex-auth.workspace_scope_class' => FakeWorkspaceScope::class]);
+    app()->instance(
+        AuthOptions::class,
+        AuthOptions::fromArray((array) config('corex-auth')),
+    );
 
     $workspaceId = ($this->makeWorkspace)('wsAccount');
     $otherWorkspaceId = ($this->makeWorkspace)('wsAccountOther');

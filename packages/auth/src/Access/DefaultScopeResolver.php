@@ -8,6 +8,7 @@ use CoreX\Auth\Contracts\AccessChecker;
 use CoreX\Auth\Contracts\Principal;
 use CoreX\Auth\Contracts\ScopeResolver;
 use CoreX\Auth\RecordContext;
+use CoreX\Auth\Support\AuthOptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -30,6 +31,7 @@ final readonly class DefaultScopeResolver implements ScopeResolver
         private ScopePredicate $predicate,
         private ScopeAvailability $availability,
         private DirectGrantLookup $directGrants,
+        private AuthOptions $options,
     ) {}
 
     /**
@@ -56,6 +58,6 @@ final readonly class DefaultScopeResolver implements ScopeResolver
 
     private function panel(): string
     {
-        return (string) config('corex-auth.panel', 'app');
+        return $this->options->panel;
     }
 }
