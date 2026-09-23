@@ -1,27 +1,28 @@
-# HANDOFF — 2026-09-23 — after P7.7
+# HANDOFF — 2026-09-23 — after P7.9
 
-**Next:** `/task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.8-P7.9`
+**Next:** `/task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.11`
 
-**Sources of truth:** `findings/P7-receipts.md` §P7.6–P7.7 · `journal.jsonl` · item-коммит `cff0164`
+**Sources of truth:** `findings/P7-receipts.md` §P7.8–P7.9 · `journal.jsonl` · item-коммиты `a92fa95`, `7950167`
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E07f |
+| Batch | E07h review |
 | Model class | implementation/medium |
-| Effort | medium |
-| Native model | composer-2.5 |
+| Effort | high |
+| Native model | grok-4.7 |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | P7.8 ModulesOptions и P7.9 MediaOptions по §9. |
+| Суть | Блокирующий гейт `config()` после всех Options readers. |
 
 ```text
-$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.8-P7.9
+$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.11
 ```
 
-**Done:** P7.6–P7.7 GREEN (`cff0164`). `AuthOptions::fromArray`, один `get('corex-auth')` в провайдере,
-identity и семь access/matrix readers без `config()`. pest 38/112 pg, phpstan 0, pint ok.
+**Done:** P7.8–P7.9 GREEN (`a92fa95`, `7950167`). `ModulesOptions` / `MediaOptions::fromArray`,
+один `get()` в провайдерах; registry cache и internal media без `config()`. modules pest 28/109;
+media pest 19/54, pg 1/1; phpstan 0; pint ok.
 
-**Remaining:** P7.8 → P7.9 (Modules/Media Options), затем P7.11 review.
+**Remaining:** P7.11 review (blocking C1 gate), затем P8 readiness.
 
-**Pointers:** `research/P7-design.md` §9; `phases/P7/P7.8.md`;
+**Pointers:** `phases/P7/P7.11.md`; `research/P7-design.md` §13;
 `findings/P7-receipts.md` · `journal.jsonl` · `execution-batches.md`.
