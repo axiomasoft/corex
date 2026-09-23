@@ -1,0 +1,11 @@
+{
+    "blocking": true,
+    "allow_globs": [
+        "*/src/*ServiceProvider.php",
+        "*/src/**/Commands/*.php",
+        "*/src/Console/*.php"
+    ],
+    "allow_paths": {
+        "packages/crm/src/Support/RecordRules.php": "E-FLEX-CRM-SEARCH-LANGUAGE"
+    }
+}

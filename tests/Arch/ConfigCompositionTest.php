@@ -1,0 +1,62 @@
+<?php
+
+declare(strict_types=1);
+
+// P7.11 — blocking config() composition gate. The plant must name the file.
+
+test('config composition gate exits 0 on a clean tree', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/config-composition-gate.php').' 2>&1';
+    $output = [];
+    $exitCode = 0;
+
+    exec($command, $output, $exitCode);
+
+    $joined = implode("\n", $output);
+
+    expect($exitCode)->toBe(0)
+        ->and($joined)->toContain('config-composition-gate: OK')
+        ->and($joined)->toContain('blocking=true')
+        ->and($joined)->toContain('C1 count=0')
+        ->and($joined)->not->toMatch('/^C1 /m');
+});
+
+test('config composition gate exits 1 and names the planted file', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/ConfigCompositionProbe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Support;
+
+final class ConfigCompositionProbe
+{
+    public function probe(): void
+    {
+        config('probe-key');
+    }
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/config-composition-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('ConfigCompositionProbe.php')
+            ->and($joined)->toContain('C1');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+    }
+});

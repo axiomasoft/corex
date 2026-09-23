@@ -21,6 +21,10 @@
 
 ### Added
 
+- P7.11: гейт `config()` вне composition стал блокирующим (`blocking: true`);
+  `Support/Config.php` снят с allowlist; `RecordRules.php` оставлен с причиной
+  `E-FLEX-CRM-SEARCH-LANGUAGE`. Посадка `ConfigCompositionProbe.php` даёт
+  exit 1 и `C1`.
 - P7.10: `corex:config:validate` печатает эффективные драйверы и доступность
   адаптеров, накапливает нарушения Options и не выводит значения секретов.
 - P7.9: `MediaOptions` связывается в `MediaServiceProvider`; `SqlMediaLibrary` и

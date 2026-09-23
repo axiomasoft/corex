@@ -1,5 +1,43 @@
 # P7 receipts
 
+## P7.11 — блокирующий гейт `config()`
+
+`scripts/composition-boundary.json` перенесён из §13: `blocking: true`,
+globs composition, `allow_paths` только для
+`packages/crm/src/Support/RecordRules.php` (`E-FLEX-CRM-SEARCH-LANGUAGE`).
+`Support/Config.php` в allowlist нет. Сканер прежний: `token_get_all`,
+`T_STRING config` и `(`. `**` в glob — ноль или больше сегментов, поэтому
+`*/src/**/Commands/*.php` покрывает `src/Commands`. Класс §12
+`CoreX\Support\Console\ValidateConfigCommand` сопоставляется с glob
+`*/src/Console/*.php` через путь `src/Support/Console`.
+
+Чистое дерево, exit 0:
+
+```
+config-composition-gate: blocking=true
+config-composition-gate: C1 count=0
+config-composition-gate: OK
+```
+
+Посадка `packages/core/src/Support/ConfigCompositionProbe.php`, exit 1
+(файл снят в `finally`):
+
+```
+C1 packages/core/src/Support/ConfigCompositionProbe.php:11 config()
+config-composition-gate: blocking=true
+config-composition-gate: C1 count=1
+```
+
+`vendor/bin/pest --testsuite=Arch --filter=ConfigComposition|NamingAndConfig`:
+6 passed, 19 assertions. `composer test:arch` целиком: 46 passed, 3 failed.
+Провалы не из файлов P7.11: `CoreZoneTest` R-Z0 на
+`ValidateConfigCommand.php`; `PackageGraphTest` — 16 R4/R4b на Options,
+добавленных P7.1–P7.9.
+
+Inputs-проза P7.1–P7.9 свёрнута на `findings/P7-receipts.md`, иначе bundle
+не резолвится. Свидетель P3.6 в `NamingAndConfigGateTest` ждёт exit 1 на
+той же посадке.
+
 ## P7.10 — `corex:config:validate` и redaction
 
 `ValidateConfigCommand` регистрируется в `CoreServiceProvider`. Для связанных

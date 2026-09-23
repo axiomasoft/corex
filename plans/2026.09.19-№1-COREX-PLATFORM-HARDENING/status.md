@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: 9769a74139359665e3cf4080bf2b14fb274125be68a6c876e13e29ab01ab0b48
+inputs_sha256: 4a3a44507c27e8b0e17b2ad7517f1f004ba99ecf7ad2d5b0aaace470d94c3968
 generated_by: task plan-views status
 -->
 
@@ -37,7 +37,7 @@ generated_by: task plan-views status
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
-| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 11/12 | 🟡 In progress |
+| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
@@ -277,7 +277,7 @@ generated_by: task plan-views status
 | P7.8 | ModulesOptions | 🟢 Done | 2026-09-23 |
 | P7.9 | MediaOptions | 🟢 Done | 2026-09-23 |
 | P7.10 | Команда `corex:config:validate` и redaction | 🟢 Done | 2026-09-23 |
-| P7.11 | Блокирующий гейт `config()` | ⬜ Not started | — |
+| P7.11 | Блокирующий гейт `config()` | 🟢 Done | 2026-09-23 |
 | P7.12 | D100 behavior proof: dynamic default connection and TTL matrix | 🟢 Done | 2026-09-23 |
 
 ## Phase P8
@@ -489,6 +489,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | plan-run/cursor-composer-2.5/medium | plan-run · closed-green · P7.8 GREEN: ModulesOptions, provider, registry cache. pest 28/109, phpstan 0, pint ok. |
 | 2026-09-23 | plan-run/cursor-composer-2.5/medium | plan-run · in-progress · P7.9 exec continue |
 | 2026-09-23 | plan-run/cursor-composer-2.5/medium | plan-run · closed-green · P7.9 GREEN: MediaOptions, SqlMediaLibrary, ConversionCoordinator. pest 19/54, pg 1/1, phpstan 0, pint ok. |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · closed-green · P7.11 GREEN: blocking config() gate, CRM allow_paths, plant exit 1. Arch suite still has 3 foreign failures (CoreZone R-Z0 ValidateConfigCommand; PackageGraph R4/R4b Options). lint:check red on pre-existing TenancyOptions pint. |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-close · in-progress · Inline phase close owned by final P7.11 invocation. |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-close · closed-green · P7 direct-close after P7.11 GREEN; generated phase closure current. |
 
 ## Owner Gates
 
