@@ -23,6 +23,7 @@ use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Support\ModulesOptions;
 use CoreX\Modules\Tests\Support\StubToolHandler;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
@@ -60,7 +61,10 @@ function introRegistry(
     return new CompiledModuleRegistry(
         cachePath: $path,
         stateReader: $reader,
-        cache: new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
+        cache: new RepositoryModuleRegistryCache(
+            Cache::store(),
+            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+        ),
         versionResolver: static fn (TenantContext $ctx): int => 0,
         failIfMissing: false,
     );

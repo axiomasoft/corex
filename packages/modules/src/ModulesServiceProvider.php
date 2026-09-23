@@ -27,6 +27,7 @@ use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Settings\CompiledSettingDefaultsProvider;
+use CoreX\Modules\Support\ModulesOptions;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
@@ -55,6 +56,10 @@ final class ModulesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-modules.php', 'corex-modules');
+
+        $raw = $this->app['config']->get('corex-modules', []);
+        $options = ModulesOptions::fromArray(is_array($raw) ? $raw : []);
+        $this->app->instance(ModulesOptions::class, $options);
 
         // Bind the concrete singleton first so module providers can resolve
         // it directly to call register() (not part of the read-only contract),
@@ -87,22 +92,16 @@ final class ModulesServiceProvider extends ServiceProvider
         // class-string autowires $connection = null and silently reads the ambient
         // default, so with a configured module DB the enabled set comes back empty
         // and every module reads inactive (a defect a targeted audit caught).
-        $this->app->singleton(ModuleStateReader::class, static function (): DatabaseModuleStateReader {
-            /** @var string|null $connection */
-            $connection = config('corex-modules.connection');
-
-            return new DatabaseModuleStateReader($connection);
+        $this->app->singleton(ModuleStateReader::class, static function (Application $app): DatabaseModuleStateReader {
+            return new DatabaseModuleStateReader($app->make(ModulesOptions::class)->connection);
         });
 
         // RecordsRegistrar and the lifecycle read/write the module connection
         // (config('corex-modules.connection'), null = app default) — the same
         // seam the epoch and state reader use, so auto-claims land in the module
         // DB, not the ambient default.
-        $this->app->singleton(RecordsRegistrar::class, static function (): DatabaseRecordsRegistrar {
-            /** @var string|null $connection */
-            $connection = config('corex-modules.connection');
-
-            return new DatabaseRecordsRegistrar($connection);
+        $this->app->singleton(RecordsRegistrar::class, static function (Application $app): DatabaseRecordsRegistrar {
+            return new DatabaseRecordsRegistrar($app->make(ModulesOptions::class)->connection);
         });
 
         // codeVersions / migrationPaths (composer name → value) come from
@@ -114,8 +113,7 @@ final class ModulesServiceProvider extends ServiceProvider
         $this->app->singleton(ModuleLifecycle::class, function (Application $app): DatabaseModuleLifecycle {
             /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
             $wiring = $app->make('corex-modules.wiring');
-            /** @var string|null $connection */
-            $connection = config('corex-modules.connection');
+            $connection = $app->make(ModulesOptions::class)->connection;
 
             return new DatabaseModuleLifecycle(
                 registry: $app->make(ModuleRegistry::class),
@@ -132,13 +130,11 @@ final class ModulesServiceProvider extends ServiceProvider
         // Registry cache WITHOUT tags: store/ttl/prefix from config
         // (no hardcoded 3600). store = null ⇒ the app's default store.
         $this->app->singleton(ModuleRegistryCache::class, static function (Application $app): RepositoryModuleRegistryCache {
-            /** @var string|null $store */
-            $store = config('corex-modules.cache.store');
+            $options = $app->make(ModulesOptions::class);
 
             return new RepositoryModuleRegistryCache(
-                store: $app->make(CacheFactory::class)->store($store),
-                ttl: (int) config('corex-modules.cache.ttl', 3600),
-                prefix: (string) config('corex-modules.cache.prefix', 'corex-modules'),
+                store: $app->make(CacheFactory::class)->store($options->cacheStore),
+                options: $options,
             );
         });
 
@@ -295,8 +291,7 @@ final class ModulesServiceProvider extends ServiceProvider
      */
     private function registryVersion(): int
     {
-        /** @var string|null $connection */
-        $connection = config('corex-modules.connection');
+        $connection = $this->app->make(ModulesOptions::class)->connection;
 
         if (! Schema::connection($connection)->hasTable('mod_lifecycle_log')) {
             return 0;
