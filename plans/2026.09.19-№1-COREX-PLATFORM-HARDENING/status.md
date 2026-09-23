@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: 7b4702554a26ae790e6d9f1f01a7df9e4062b19fd125a7a317116c205772bd46
+inputs_sha256: 1ffe9807deadd6f26742a0e7cff9fc2e35149d7abb19fc562414569cd37752b6
 generated_by: task plan-views status
 -->
 
@@ -37,7 +37,7 @@ generated_by: task plan-views status
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
-| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 1/12 | 🟡 In progress |
+| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 2/12 | 🟡 In progress |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
@@ -278,7 +278,7 @@ generated_by: task plan-views status
 | P7.9 | MediaOptions | ⬜ Not started | — |
 | P7.10 | Команда `corex:config:validate` и redaction | ⬜ Not started | — |
 | P7.11 | Блокирующий гейт `config()` | ⬜ Not started | — |
-| P7.12 | D100 behavior proof: dynamic default connection and TTL matrix | ⬜ Not started | — |
+| P7.12 | D100 behavior proof: dynamic default connection and TTL matrix | 🟢 Done | 2026-09-23 |
 
 ## Phase P8
 
@@ -462,6 +462,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · routing-rejected · ECONOMY_ROUTE_OVERSHOOT: live grok-4.7 frontier/high vs §3.1 implementation/medium review light. D118 pins G47; runtime admits declared route or explicit owner plan-run. Product untouched. |
 | 2026-09-23 | plan-run/grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-23 | plan-run/grok-4.7/high | plan-run · closed-green · P7.1 GREEN: CoreOptions, SecretRef, Config holder, saved-view constructor. sqlite 84/197, pg 37/180, CoreZoneTest 7/26.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · closed-green · P7.12 GREEN: D100 TTL matrix, SecretRef redaction, one repository central→tenant→central. sqlite 93/223, pg 37/180. src diff is foreign baseline.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
