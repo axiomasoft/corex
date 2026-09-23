@@ -21,6 +21,18 @@
 
 ### Added
 
+- P8.5: `corex/modules` выносит Registry/Lifecycle/Settings/Boot
+  в `Laravel/*Registrar` без смены ключа, concrete и lifetime; провайдер
+  оставляет Options, publishes и optimizes.
+- P8.4: boot tenancy вынесен в Console/Http/Events registrar'ы; проекция stancl
+  и `UniqueIdentifierGenerator` живут в `RuntimeRegistrar::boot`. Порядок семи
+  bootstrapper'ов совпадает с `bootstrapper_order` и `tenancy.bootstrappers`.
+- P8.3: Identity/Workspace/DomainTrust registrar'ы; Authentication и Wakeup
+  включаются только по предикату, без повторного `if` внутри класса.
+- P8.2: `corex/tenancy` выносит Runtime/Database/Provisioning register()-биндинги
+  в `Laravel/*Registrar` без смены ключа, concrete и lifetime.
+- P8.1: публичный `PackageRegistrar` и trait `RegistersNothingOnBoot` — composition API
+  без наследования `ServiceProvider`; в `public-api` ровно эти два символа.
 - P7.11: гейт `config()` вне composition стал блокирующим (`blocking: true`);
   `Support/Config.php` снят с allowlist; `RecordRules.php` оставлен с причиной
   `E-FLEX-CRM-SEARCH-LANGUAGE`. Посадка `ConfigCompositionProbe.php` даёт

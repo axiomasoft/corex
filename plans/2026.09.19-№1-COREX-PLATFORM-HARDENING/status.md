@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: 4a3a44507c27e8b0e17b2ad7517f1f004ba99ecf7ad2d5b0aaace470d94c3968
+inputs_sha256: d876eb2113f5a6e1420929321efd8a5d2ca554393bbaeb5dbb17d087af0296a9
 generated_by: task plan-views status
 -->
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
-| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
+| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 5/6 | 🟡 In progress |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
 ## Phase P1
@@ -284,11 +284,11 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P8.1 | Контракт PackageRegistrar, каталог биндингов, правило модуля | ⬜ Not started | — |
-| P8.2 | Tenancy: Runtime, Database, Provisioning | ⬜ Not started | — |
-| P8.3 | Tenancy: Identity, Workspace, DomainTrust, Authentication, Wakeup | ⬜ Not started | — |
-| P8.4 | Tenancy boot: Console, Http, Events; порядок bootstrapper'ов | ⬜ Not started | — |
-| P8.5 | Декомпозиция ModulesServiceProvider | ⬜ Not started | — |
+| P8.1 | Контракт PackageRegistrar, каталог биндингов, правило модуля | 🟢 Done | 2026-09-23 |
+| P8.2 | Tenancy: Runtime, Database, Provisioning | 🟢 Done | 2026-09-23 |
+| P8.3 | Tenancy: Identity, Workspace, DomainTrust, Authentication, Wakeup | 🟢 Done | 2026-09-23 |
+| P8.4 | Tenancy boot: Console, Http, Events; порядок bootstrapper'ов | 🟢 Done | 2026-09-23 |
+| P8.5 | Декомпозиция ModulesServiceProvider | 🟢 Done | 2026-09-23 |
 | P8.6 | Гейт порога размера провайдера | ⬜ Not started | — |
 
 ## Phase P9
@@ -493,6 +493,19 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · closed-green · P7.11 GREEN: blocking config() gate, CRM allow_paths, plant exit 1. Arch suite still has 3 foreign failures (CoreZone R-Z0 ValidateConfigCommand; PackageGraph R4/R4b Options). lint:check red on pre-existing TenancyOptions pint. |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-close · in-progress · Inline phase close owned by final P7.11 invocation. |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-close · closed-green · P7 direct-close after P7.11 GREEN; generated phase closure current. |
+| 2026-09-23 | plan-exec/grok-4.7-high/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: argv --model grok-4.7-high, prompt still P7.1; cli-config composer-2.5 has no reasoning_effort. P8.1 pin is implementation/medium review light, so frontier is ECONOMY_ROUTE_OVERSHOOT. No product writes. |
+| 2026-09-23 | plan-exec/cursor-grok-4.6/high | plan-exec · routing-rejected · ECONOMY_ROUTE_OVERSHOOT: bound cli-config grok-4.6/high frontier; pin implementation/medium review light. argv --model grok-4.7-high unbound (prompt not in argv). No product writes. |
+| 2026-09-23 | plan-run/grok-4.7-high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/grok-4.7-high | plan-run · closed-green · P8.1 GREEN: PackageRegistrar, empty boot trait, binding catalog, module rule. pest 98/244, phpstan 0, pint ok. D118 G47. |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P8.2 GREEN: Runtime/Database/Provisioning registrars, provider loop, lifetime tests. tenancy pest 480/1623, phpstan 0, pint ok. Root test:pg foreign: MigrationPublish 12 vs 10 (untracked P5 outbox/inbox), ModuleLifecycle sqlite hashtext. D118 G46. |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P8.3 GREEN: Identity/Workspace/DomainTrust; conditional Authentication/Wakeup. tenancy pest 487/1708, phpstan 0, pint ok. CompositionBindingsTest 11/195 both OIDC/wakeup modes. Root test:pg foreign as P8.2. D118 G46 E08b. |
+| 2026-09-23 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P8.4 GREEN. FQCN: DatabaseTenancyBootstrapper, WorkspaceContextBootstrapper, CacheTenancyBootstrapper, DatabaseSessionBootstrapper, QueueTenancyBootstrapper, FilesystemTenancyBootstrapper, ScoutPrefixBootstrapper. pest 488/1724. test:pg foreign as P8.2. |
+| 2026-09-23 | grok-4.6/high | plan-exec · routing-rejected · ECONOMY_ROUTE_OVERSHOOT: bound cli-config grok-4.6/high frontier vs pin implementation/medium review light. E08d cursor-grok-4.6-high does not match the pin. No product writes. Retry on composer-2.5/medium. |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | grok-4.7/high | plan-run · closed-green · P8.5 GREEN: Registry/Lifecycle/Settings/Boot registrars; provider bind sites empty. modules pest 33/178, phpstan 0, pint ok. Owner plan-run on grok-4.6 overshoot vs implementation/medium pin. |
 
 ## Owner Gates
 
