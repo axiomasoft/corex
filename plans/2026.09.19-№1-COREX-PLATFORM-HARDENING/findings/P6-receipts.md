@@ -108,3 +108,47 @@ departments level-1`.
 Цитата Inputs у P6.5 свёрнута с фразы «три пути RT1_EXISTING» на три файла
 allowlist из §8: `CrmTestCase.php`, `CoreAuthTestCase.php`,
 `TasksTestCase.php`. Смысл входа не менялся; bundle преемника резолвится.
+
+## P6.5 — Testing: канонический autoload-dev и R-T1
+
+`packages/core/composer.json` получил канонический `autoload-dev`
+`CoreX\Testing\` → `src/Testing/`. Уже существовавший префикс
+`CoreX\Testing\Fixtures\` → `tests/Fixtures/` сохранён: это не харнесс
+`src/Testing`. Комментарий D33 лежит в `_comment` над `psr-4`, потому что
+JSON не принимает `//`. Production `autoload.psr-4` `CoreX\` → `src/`
+не сужен.
+
+Production autoload сохранён, снятие — P16.
+
+`RT1_EXISTING` — ровно три пути §8:
+
+```text
+packages/crm/src/Testing/CrmTestCase.php
+packages/auth/src/Testing/CoreAuthTestCase.php
+packages/tasks/src/Testing/TasksTestCase.php
+```
+
+Четвёртый импорт `use CoreX\Testing\` из `packages/*/src` — дефект
+потребителя, не расширение константы. Снятие allowlist — P16.
+
+### Негативная посадка R-T1
+
+В `packages/core/src/Enums/ActorType.php` на время прогона вставлен
+`use CoreX\Testing\CoreXTestCase;`, затем файл восстановлен в `finally`.
+
+```text
+R-T1 packages/core/src/Enums/ActorType.php imports CoreX\Testing\CoreXTestCase
+```
+
+Сообщение содержит `R-T1` и `ActorType.php`. После снятия чистое дерево
+зелёное: три staged-потребителя остаются в allowlist.
+
+`composer dump-autoload -o` — exit 0. `jq` на
+`.autoload."psr-4"."CoreX\\"` печатает `src/`. `pest --testsuite=Arch` —
+47 passed. `composer --working-dir=packages/core test` — 84 passed.
+`composer lint:check` — exit 0. `bash scripts/anti-weakening-gate.sh` —
+OK (`sqlite 546 -> 552`, `pg 508 -> 508`).
+
+Цитата Inputs у P6.6 свёрнута с фразы «receipt'ы P6.1–P6.5» на
+`findings/P6-receipts.md`, где эти блоки уже лежат. Смысл входа не
+менялся; bundle преемника резолвится.

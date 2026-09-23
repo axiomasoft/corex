@@ -16,6 +16,8 @@
 
 ### Added
 
+- P6.5: канонический `autoload-dev` `CoreX\Testing` → `src/Testing`
+  в `corex/core` и arch-гейт R-T1. Production autoload сохранён до P16 (D33).
 - P6.4: roadmap candidates money package and departments level-1
 - P6.3: arch-гейт `tests/Arch/CoreLitmusTest` проверяет шесть условий
   литмуса только для Foundation. Условие 3 закрыто правилом R-L3,

@@ -32,6 +32,12 @@
     "require-dev": {
         "orchestra/testbench": "^10.0|^11.0"
     },
+    "autoload-dev": {
+        "_comment": "canonical mapping; production psr-4 still covers src/Testing until P16 (D33)",
+        "psr-4": {
+            "CoreX\\Testing\\": "src/Testing/"
+        }
+    },
     "autoload": {
         "psr-4": {
             "CoreX\\": "src/"
