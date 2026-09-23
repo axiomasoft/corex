@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
@@ -37,10 +38,17 @@ final class ImpersonationGrant extends Model
 
     protected $guarded = [];
 
+    public function __construct(
+        array $attributes = [],
+        private readonly ?TenancyOptions $options = null,
+    ) {
+        parent::__construct($attributes);
+    }
+
     #[Override]
     public function getConnectionName(): string
     {
-        return (string) config('tenancy.central_connection');
+        return ($this->options ?? app(TenancyOptions::class))->centralConnection;
     }
 
     /** @return array<string, string> */

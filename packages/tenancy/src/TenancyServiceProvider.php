@@ -21,28 +21,31 @@ use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
 use CoreX\Tenancy\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Database\TemplateIntegrityLock;
 use CoreX\Tenancy\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
 use CoreX\Tenancy\DomainTrust\DomainTrustCoordinator;
 use CoreX\Tenancy\DomainTrust\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\DomainTrustStateWriter;
 use CoreX\Tenancy\Http\Controllers\LogoutController;
+use CoreX\Tenancy\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
 use CoreX\Tenancy\Http\Middleware\DenyImpersonatedWrites;
 use CoreX\Tenancy\Http\Middleware\EnforceSessionLifetime;
 use CoreX\Tenancy\Http\Middleware\ImpersonationSessionGuard;
+use CoreX\Tenancy\Http\Middleware\RequireActiveMembership;
 use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Http\Middleware\ResolveWorkspace;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
 use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
-use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Models\ImpersonationGrant;
 use CoreX\Tenancy\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Oidc\JwksKeySet;
 use CoreX\Tenancy\Oidc\OidcClient;
@@ -52,6 +55,10 @@ use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Storage\ContextTenantStorage;
+use CoreX\Tenancy\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Support\ImpersonationPolicy;
+use CoreX\Tenancy\Support\StatusGatePolicy;
+use CoreX\Tenancy\Support\TenancyOptions;
 use CoreX\Tenancy\Wakeup\Commands\SweepRootWakeups;
 use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
 use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
@@ -86,10 +93,89 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tenancy.php', 'corex-tenancy');
 
+        [$tenancyConfig, $corexTenancyConfig] = $this->mergedTenancyConfigArrays();
+
+        $this->app->bind(
+            TenancyOptions::class,
+            fn (): TenancyOptions => $this->resolveTenancyOptions(),
+        );
+        $this->app->bind(
+            ImpersonationPolicy::class,
+            static fn (Application $app): ImpersonationPolicy => $app->make(TenancyOptions::class)->impersonation,
+        );
+        $this->app->bind(
+            AccountLifecyclePolicy::class,
+            static fn (Application $app): AccountLifecyclePolicy => $app->make(TenancyOptions::class)->lifecycle,
+        );
+        $this->app->bind(
+            StatusGatePolicy::class,
+            static fn (Application $app): StatusGatePolicy => $app->make(TenancyOptions::class)->statusGate,
+        );
+
+        $this->app->bind(
+            ImpersonationGrant::class,
+            static fn (Application $app): ImpersonationGrant => new ImpersonationGrant(
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            ImpersonationSessionGuard::class,
+            static fn (Application $app): ImpersonationSessionGuard => new ImpersonationSessionGuard(
+                impersonation: $app->make(ImpersonationService::class),
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            DenyImpersonatedWrites::class,
+            static fn (Application $app): DenyImpersonatedWrites => new DenyImpersonatedWrites(
+                impersonation: $app->make(ImpersonationService::class),
+                statusGate: $app->make(StatusGatePolicy::class),
+            ),
+        );
+        $this->app->bind(
+            AccountStatusGate::class,
+            static fn (Application $app): AccountStatusGate => new AccountStatusGate(
+                statusGate: $app->make(StatusGatePolicy::class),
+            ),
+        );
+        $this->app->bind(
+            EnforceSessionLifetime::class,
+            static fn (Application $app): EnforceSessionLifetime => new EnforceSessionLifetime(
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            HostTenantResolver::class,
+            static fn (Application $app): HostTenantResolver => new HostTenantResolver(
+                app: $app,
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            TemplateClonePostgreSQLManager::class,
+            static fn (Application $app): TemplateClonePostgreSQLManager => new TemplateClonePostgreSQLManager(
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            RequireActiveMembership::class,
+            static fn (Application $app): RequireActiveMembership => new RequireActiveMembership(
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $this->app->bind(
+            ResolveWorkspace::class,
+            static fn (Application $app): ResolveWorkspace => new ResolveWorkspace(
+                manager: $app->make(TenancyManager::class),
+                resolver: $app->make(WorkspaceResolver::class),
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+
         $this->app->singleton(
             StanclTenantDatabaseProvisioner::class,
             static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
-                centralConnection: (string) config('tenancy.central_connection'),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
         );
@@ -99,7 +185,7 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->singleton(
             DatabaseTemplateIntegrityVerifier::class,
             static fn (Application $app): DatabaseTemplateIntegrityVerifier => new DatabaseTemplateIntegrityVerifier(
-                centralConnection: (string) config('tenancy.central_connection'),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 serializer: $app->make(SchemaCatalogueSerializer::class),
                 lock: $app->make(TemplateIntegrityLock::class),
             ),
@@ -111,14 +197,16 @@ final class TenancyServiceProvider extends ServiceProvider
 
         $this->app->scoped(
             DomainTrustStateWriter::class,
-            static fn (): DomainTrustStateWriter => new DomainTrustStateWriter(
-                centralConnection: (string) config('tenancy.central_connection'),
+            static fn (Application $app): DomainTrustStateWriter => new DomainTrustStateWriter(
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
         $this->app->scoped(
             DomainTrustCoordinator::class,
             static function (Application $app): DomainTrustCoordinator {
-                if (! (bool) config('tenancy.domain_trust.enabled')) {
+                $options = $app->make(TenancyOptions::class);
+
+                if (! $options->domainTrustEnabled) {
                     throw new DomainTrustDisabled('Custom-domain verification is disabled.');
                 }
 
@@ -128,7 +216,7 @@ final class TenancyServiceProvider extends ServiceProvider
                     proofVerifier: $app->make(DomainOwnershipProofVerifier::class),
                     authorizer: $app->make(DomainTrustAuthorizer::class),
                     stateWriter: $app->make(DomainTrustStateWriter::class),
-                    challengeTtlSeconds: (int) config('tenancy.domain_trust.challenge_ttl_seconds'),
+                    challengeTtlSeconds: $options->domainTrustChallengeTtlSeconds,
                 );
             },
         );
@@ -136,7 +224,7 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->singleton(
             PendingPool::class,
             static fn (Application $app): PendingPool => new PendingPool(
-                centralConnection: (string) config('tenancy.central_connection'),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
                 templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
@@ -146,8 +234,8 @@ final class TenancyServiceProvider extends ServiceProvider
         // isolated to this package; corex/core only sees the contract).
         $this->app->singleton(
             StanclTenantDatabaseLifecycle::class,
-            static fn (): StanclTenantDatabaseLifecycle => new StanclTenantDatabaseLifecycle(
-                (string) config('tenancy.central_connection'),
+            static fn (Application $app): StanclTenantDatabaseLifecycle => new StanclTenantDatabaseLifecycle(
+                $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
         $this->app->singleton(TenantDatabaseLifecycle::class, static fn (Application $app): StanclTenantDatabaseLifecycle => $app->make(StanclTenantDatabaseLifecycle::class));
@@ -160,12 +248,13 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->scoped(
             AccountLifecycle::class,
             static fn (Application $app): AccountLifecycle => new AccountLifecycle(
-                centralConnection: (string) config('tenancy.central_connection'),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 pendingPool: $app->make(PendingPool::class),
                 fsm: $app->make(AccountLifecycleFsm::class),
                 tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
                 impersonationGuard: $app->make(ImpersonationGuard::class),
                 templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                lifecycle: $app->make(AccountLifecyclePolicy::class),
             ),
         );
 
@@ -173,7 +262,7 @@ final class TenancyServiceProvider extends ServiceProvider
         $this->app->singleton(
             MigrationWaveOrchestrator::class,
             static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
-                centralConnection: (string) config('tenancy.central_connection'),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 tenancy: $app->make(TenancyManager::class),
                 templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
             ),
@@ -198,16 +287,16 @@ final class TenancyServiceProvider extends ServiceProvider
             static fn (Application $app): ContextTenantStorage => new ContextTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),
                 filesystems: new FilesystemManager($app),
-                durableDriver: (string) config('tenancy.storage.durable_driver'),
-                durableRoot: (string) config('tenancy.storage.durable_root'),
-                ephemeralRoot: (string) config('tenancy.storage.ephemeral_root'),
+                durableDriver: $app->make(TenancyOptions::class)->storageDurableDriver,
+                durableRoot: $app->make(TenancyOptions::class)->storageDurableRoot,
+                ephemeralRoot: $app->make(TenancyOptions::class)->storageEphemeralRoot,
             ),
         );
 
         $this->app->singleton(
             DatabaseIdentitySyncer::class,
             static fn (Application $app): DatabaseIdentitySyncer => new DatabaseIdentitySyncer(
-                (string) config('tenancy.central_connection'),
+                $app->make(TenancyOptions::class)->centralConnection,
                 $app->make(TenancyManager::class),
             ),
         );
@@ -221,25 +310,29 @@ final class TenancyServiceProvider extends ServiceProvider
 
         // Wakeup remains entirely optional: the default local_sweep profile
         // needs neither this binding nor a root connection.
+        $wakeupDriver = is_string($corexTenancyConfig['wakeup']['driver'] ?? null)
+            ? $corexTenancyConfig['wakeup']['driver']
+            : 'local_sweep';
+
         if (
-            config('corex-tenancy.wakeup.driver') === 'root_registry'
+            $wakeupDriver === 'root_registry'
             && interface_exists(WakeupHint::class)
             && interface_exists(WakeupSweeper::class)
         ) {
             $this->app->singleton(
                 RootRegistryWakeupHint::class,
                 static fn (Application $app): RootRegistryWakeupHint => new RootRegistryWakeupHint(
-                    root: $app['db']->connection((string) config('corex-tenancy.wakeup.root_connection')),
+                    root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
                 ),
             );
             $this->app->tag(RootRegistryWakeupHint::class, 'corex.wakeup.hints');
             $this->app->singleton(
                 RootWakeupReconciler::class,
                 static fn (Application $app): RootWakeupReconciler => new RootWakeupReconciler(
-                    root: $app['db']->connection((string) config('corex-tenancy.wakeup.root_connection')),
+                    root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
                     tenancy: $app->make(TenancyManager::class),
                     sweeper: $app->make(WakeupSweeper::class),
-                    leaseSeconds: (int) config('corex-tenancy.wakeup.lease_seconds'),
+                    leaseSeconds: $app->make(TenancyOptions::class)->wakeupLeaseSeconds,
                 ),
             );
 
@@ -254,22 +347,24 @@ final class TenancyServiceProvider extends ServiceProvider
         // boot() under the SAME flag below). No `if (cloud)` business-logic
         // branch — a config-gated container binding (D10), same idiom as
         // the `host_identification.enabled` block further down.
-        if ((bool) config('tenancy.oidc.enabled')) {
+        $oidcEnabled = (bool) ($tenancyConfig['oidc']['enabled'] ?? false);
+
+        if ($oidcEnabled) {
             $this->app->singleton(
                 OidcDiscovery::class,
-                static fn (): OidcDiscovery => new OidcDiscovery(
-                    issuer: (string) config('tenancy.oidc.issuer'),
-                    cacheStore: self::configStringOrNull('tenancy.oidc.discovery.cache_store'),
-                    cacheTtl: (int) config('tenancy.oidc.discovery.cache_ttl', 3600),
+                static fn (Application $app): OidcDiscovery => new OidcDiscovery(
+                    issuer: (string) $app->make(TenancyOptions::class)->oidcIssuer,
+                    cacheStore: $app->make(TenancyOptions::class)->oidcDiscoveryCacheStore,
+                    cacheTtl: $app->make(TenancyOptions::class)->oidcDiscoveryCacheTtl,
                 ),
             );
 
             $this->app->singleton(
                 JwksKeySet::class,
-                static fn (): JwksKeySet => new JwksKeySet(
-                    cacheStore: self::configStringOrNull('tenancy.oidc.jwks.cache_store'),
-                    cacheTtl: (int) config('tenancy.oidc.jwks.cache_ttl', 3600),
-                    refetchCooldownSeconds: (int) config('tenancy.oidc.jwks.refetch_cooldown_seconds', 60),
+                static fn (Application $app): JwksKeySet => new JwksKeySet(
+                    cacheStore: $app->make(TenancyOptions::class)->oidcJwksCacheStore,
+                    cacheTtl: $app->make(TenancyOptions::class)->oidcJwksCacheTtl,
+                    refetchCooldownSeconds: $app->make(TenancyOptions::class)->oidcJwksRefetchCooldownSeconds,
                 ),
             );
 
@@ -277,10 +372,10 @@ final class TenancyServiceProvider extends ServiceProvider
                 IdTokenVerifier::class,
                 static fn (Application $app): IdTokenVerifier => new IdTokenVerifier(
                     jwks: $app->make(JwksKeySet::class),
-                    issuer: (string) config('tenancy.oidc.issuer'),
-                    clientId: (string) config('tenancy.oidc.client_id'),
-                    allowedAlgs: (array) config('tenancy.oidc.allowed_algs', ['RS256']),
-                    leewaySeconds: (int) config('tenancy.oidc.leeway_seconds', 30),
+                    issuer: (string) $app->make(TenancyOptions::class)->oidcIssuer,
+                    clientId: (string) $app->make(TenancyOptions::class)->oidcClientId,
+                    allowedAlgs: $app->make(TenancyOptions::class)->oidcAllowedAlgs,
+                    leewaySeconds: $app->make(TenancyOptions::class)->oidcLeewaySeconds,
                 ),
             );
 
@@ -288,16 +383,28 @@ final class TenancyServiceProvider extends ServiceProvider
                 OidcClient::class,
                 static fn (Application $app): OidcClient => new OidcClient(
                     discovery: $app->make(OidcDiscovery::class),
-                    clientId: (string) config('tenancy.oidc.client_id'),
-                    clientSecret: self::configStringOrNull('tenancy.oidc.client_secret'),
-                    redirectUri: (string) config('tenancy.oidc.redirect_uri'),
+                    clientId: (string) $app->make(TenancyOptions::class)->oidcClientId,
+                    clientSecret: $app->make(TenancyOptions::class)->oidcClientSecret?->reveal(),
+                    redirectUri: (string) $app->make(TenancyOptions::class)->oidcRedirectUri,
                 ),
             );
 
             $this->app->singleton(
                 LogoutController::class,
-                static fn (): LogoutController => new LogoutController(
-                    centralConnection: (string) config('tenancy.central_connection'),
+                static fn (Application $app): LogoutController => new LogoutController(
+                    options: $app->make(TenancyOptions::class),
+                ),
+            );
+            $this->app->singleton(
+                OidcLoginController::class,
+                static fn (Application $app): OidcLoginController => new OidcLoginController(
+                    discovery: $app->make(OidcDiscovery::class),
+                    client: $app->make(OidcClient::class),
+                    verifier: $app->make(IdTokenVerifier::class),
+                    syncer: $app->make(IdentitySyncer::class),
+                    impersonation: $app->make(ImpersonationService::class),
+                    impersonationPolicy: $app->make(ImpersonationPolicy::class),
+                    options: $app->make(TenancyOptions::class),
                 ),
             );
 
@@ -309,7 +416,13 @@ final class TenancyServiceProvider extends ServiceProvider
             // unconditionally within this block just means the container
             // has something to resolve for OidcLoginController's
             // constructor regardless of that inner sub-flag.
-            $this->app->scoped(ImpersonationService::class, DatabaseImpersonationService::class);
+            $this->app->scoped(
+                ImpersonationService::class,
+                static fn (Application $app): DatabaseImpersonationService => new DatabaseImpersonationService(
+                    impersonationPolicy: $app->make(ImpersonationPolicy::class),
+                    options: $app->make(TenancyOptions::class),
+                ),
+            );
         }
 
         // Mirror stancl's own TenancyServiceProvider::register() bootstrapper
@@ -325,7 +438,11 @@ final class TenancyServiceProvider extends ServiceProvider
         // WorkspaceContextBootstrapper (P2.6) is NOT part of stancl's default
         // list, so its own static hook is never reached from there — called
         // explicitly here, exactly once.
-        foreach (config('tenancy.bootstrapper_order', []) as $bootstrapper) {
+        $bootstrapperOrder = is_array($tenancyConfig['bootstrapper_order'] ?? null)
+            ? $tenancyConfig['bootstrapper_order']
+            : [];
+
+        foreach ($bootstrapperOrder as $bootstrapper) {
             if ($bootstrapper === WorkspaceContextBootstrapper::class) {
                 WorkspaceContextBootstrapper::__constructStatic($this->app);
             }
@@ -336,6 +453,8 @@ final class TenancyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $options = $this->app->make(TenancyOptions::class);
+
         // root_* migrations are PG-only DDL (jsonb/CHECK/UNIQUE NULLS NOT
         // DISTINCT) targeting the CENTRAL connection, never a tenant/account
         // database (D14). Publish-only, not loadMigrationsFrom (mirrors
@@ -362,14 +481,14 @@ final class TenancyServiceProvider extends ServiceProvider
         // over stancl's own TenancyServiceProvider::register() regardless of
         // provider registration order — see config/tenancy.php comment.
         config([
-            'tenancy.models.tenant' => config('tenancy.tenant_model'),
-            'tenancy.database.central_connection' => config('tenancy.central_connection'),
-            'tenancy.database.managers.pgsql' => config('tenancy.tenant_database_manager'),
-            'tenancy.bootstrappers' => config('tenancy.bootstrapper_order'),
-            'tenancy.cache.prefix' => config('tenancy.cache_prefix'),
+            'tenancy.models.tenant' => $options->tenantModel,
+            'tenancy.database.central_connection' => $options->centralConnection,
+            'tenancy.database.managers.pgsql' => $options->tenantDatabaseManager,
+            'tenancy.bootstrappers' => $options->bootstrapperOrder,
+            'tenancy.cache.prefix' => $options->cachePrefix,
         ]);
 
-        $this->app->bind(UniqueIdentifierGenerator::class, config('tenancy.id_generator'));
+        $this->app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -382,7 +501,7 @@ final class TenancyServiceProvider extends ServiceProvider
 
         Event::listen(
             TenantCreated::class,
-            JobPipeline::make(config('tenancy.provisioning.pipeline', [CreateDatabaseFromTemplate::class]))
+            JobPipeline::make($options->provisioningPipeline)
                 ->send(static fn (TenantCreated $event): mixed => $event->tenant)
                 ->shouldBeQueued(false)
                 ->toListener(),
@@ -417,7 +536,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // no root-DB resolver config, no middleware aliases/group. The
         // package still pushes nothing onto the consumer's global stack
         // either way (D10) — the 'tenant' group below is opt-in per route.
-        if (config('tenancy.host_identification.enabled')) {
+        if ($options->hostIdentificationEnabled) {
             // Идентифицируем account до auth: пользователь лежит в tenant БД.
             $this->app->afterResolving(HttpKernel::class, static function (HttpKernel $kernel): void {
                 if (method_exists($kernel, 'addToMiddlewarePriorityBefore')) {
@@ -433,9 +552,9 @@ final class TenancyServiceProvider extends ServiceProvider
             // TenancyServiceProvider::register() regardless of provider order.
             config([
                 'tenancy.identification.resolvers.'.HostTenantResolver::class => [
-                    'cache' => config('tenancy.host_identification.cache'),
-                    'cache_ttl' => config('tenancy.host_identification.cache_ttl'),
-                    'cache_store' => config('tenancy.host_identification.cache_store'),
+                    'cache' => $options->hostIdentificationCache,
+                    'cache_ttl' => $options->hostIdentificationCacheTtl,
+                    'cache_store' => $options->hostIdentificationCacheStore,
                 ],
                 // Appended, not overwritten — an existing consumer-configured
                 // middleware list (e.g. stancl's own defaults) must survive.
@@ -476,7 +595,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // block above so EnforceSessionLifetime lands after ScopeSessions
         // in the 'tenant' pipeline (it reads the already-tenant-scoped
         // session).
-        if ((bool) config('tenancy.oidc.enabled')) {
+        if ($options->oidcEnabled) {
             $this->loadRoutesFrom(__DIR__.'/../routes/oidc.php');
 
             $router = $this->app->make(Router::class);
@@ -496,7 +615,7 @@ final class TenancyServiceProvider extends ServiceProvider
             // idiom, AC-15); `DenyImpersonatedWrites` last, so a session
             // already dead on TTL/revocation never reaches the write
             // check at all.
-            if ((bool) config('tenancy.oidc.impersonation.enabled')) {
+            if ($options->impersonation->enabled) {
                 $router->aliasMiddleware('tenancy.impersonation.allow', AllowImpersonatedWrites::class);
 
                 $router->middlewareGroup('tenant', [
@@ -514,11 +633,27 @@ final class TenancyServiceProvider extends ServiceProvider
         }
     }
 
-    /** @return non-empty-string|null */
-    private static function configStringOrNull(string $key): ?string
+    private function resolveTenancyOptions(): TenancyOptions
     {
-        $value = config($key);
+        [$tenancy, $corexTenancy] = $this->mergedTenancyConfigArrays();
 
-        return is_string($value) && $value !== '' ? $value : null;
+        return TenancyOptions::fromArray(
+            tenancy: $tenancy,
+            corexTenancy: $corexTenancy,
+        );
+    }
+
+    /**
+     * @return array{0: array<string, mixed>, 1: array<string, mixed>}
+     */
+    private function mergedTenancyConfigArrays(): array
+    {
+        $tenancy = $this->app['config']->get('tenancy', []);
+        $corexTenancy = $this->app['config']->get('corex-tenancy', []);
+
+        return [
+            is_array($tenancy) ? $tenancy : [],
+            is_array($corexTenancy) ? $corexTenancy : [],
+        ];
     }
 }

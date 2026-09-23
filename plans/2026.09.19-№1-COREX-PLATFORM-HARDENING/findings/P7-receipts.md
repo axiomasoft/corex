@@ -1,5 +1,88 @@
 # P7 receipts
 
+## P7.5 — workspace/OIDC; остаток `config(` tenancy
+
+`ResolveWorkspace`, `OidcLoginController` и `LogoutController` больше не
+вызывают `config(`. После P7.3–P7.5 в `packages/tenancy/src` остаются
+только composition-чтения:
+
+```
+$ rg -n 'config\(' packages/tenancy/src
+packages/tenancy/src/Commands/PendingCreateCommand.php:25:        $centralConnection = (string) config('tenancy.central_connection');
+packages/tenancy/src/Commands/IdentitiesReconcileCommand.php:25:        $centralConnection = (string) config('tenancy.central_connection');
+packages/tenancy/src/TenancyServiceProvider.php:483:        config([
+packages/tenancy/src/TenancyServiceProvider.php:553:            config([
+packages/tenancy/src/TenancyServiceProvider.php:562:                    ...config('tenancy.identification.middleware', []),
+```
+
+Команды — CFG-002 (composition). Провайдер пишет проекцию stancl и
+мержит чужой `tenancy.identification.middleware`.
+
+### Validation
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":476,"passed":476,"assertions":1513}
+```
+
+```
+./vendor/bin/pest --group=pg (packages/tenancy)
+exit 0
+{"tool":"pest","result":"passed","tests":228,"passed":228,"assertions":865}
+```
+
+## P7.2 — TenancyOptions, три policy, провайдер
+
+
+`packages/tenancy/tests/Unit/TenancyOptionsTest.php`
+
+- valid snapshot resolves `centralConnection`, `wakeupDriver`, `status_gate` methods
+- `oidc.enabled` without `client_secret` → `oidc.client_secret` violation
+- `wakeup.driver=root_registry` with empty `root_connection` → violation
+- both cross-field failures accumulate in one `InvalidConfiguration`
+
+`TenancyServiceProvider` reads `tenancy` / `corex-tenancy` only at the
+composition boundary; service closures resolve `TenancyOptions` after
+Testbench `defineEnvironment()` so OIDC test fixtures stay valid.
+
+### Validation
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":476,"passed":476,"assertions":1513}
+```
+
+```
+../../vendor/bin/pest --group=pg (packages/tenancy)
+exit 0
+```
+
 ## P7.12 — D100 behavior proof
 
 Witnesses consume `CoreOptions::fromArray()` and one `SqlSavedViewRepository`

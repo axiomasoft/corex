@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Http\Middleware;
 use Carbon\CarbonImmutable;
 use Closure;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ final class ImpersonationSessionGuard
 {
     public function __construct(
         private readonly ImpersonationService $impersonation,
+        private readonly TenancyOptions $options,
     ) {}
 
     /** @return Response|mixed */
@@ -43,7 +45,7 @@ final class ImpersonationSessionGuard
             abort(401);
         }
 
-        $revokedAt = DB::connection((string) config('tenancy.central_connection'))
+        $revokedAt = DB::connection($this->options->centralConnection)
             ->table('root_impersonation_grants')
             ->where('id', $state->grantId)
             ->value('revoked_at');

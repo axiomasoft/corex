@@ -19,6 +19,7 @@ use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Support\AccountLifecyclePolicy;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -43,6 +44,8 @@ use RuntimeException;
  */
 final class AccountLifecycle
 {
+    private readonly AccountLifecyclePolicy $lifecycle;
+
     public function __construct(
         private readonly string $centralConnection,
         private readonly PendingPool $pendingPool,
@@ -50,7 +53,10 @@ final class AccountLifecycle
         private readonly TenantDatabaseLifecycle $tenantDatabaseLifecycle,
         private readonly ImpersonationGuard $impersonationGuard,
         private readonly TemplateIntegrityVerifier $templateIntegrityVerifier,
-    ) {}
+        ?AccountLifecyclePolicy $lifecycle = null,
+    ) {
+        $this->lifecycle = $lifecycle ?? app(AccountLifecyclePolicy::class);
+    }
 
     /**
      * Claims a pending-pool row (premortem A6 — atomic via
@@ -103,7 +109,7 @@ final class AccountLifecycle
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
         $this->assertAccountIntegrity($account->id);
 
-        $trialEndsAt = now()->addDays((int) config('tenancy.trial_days', 14));
+        $trialEndsAt = now()->addDays($this->lifecycle->trialDays);
 
         DB::connection($this->centralConnection)->transaction(function () use ($account, $trialEndsAt): void {
             $this->assertLockedTransition($account->id, 'trial');
@@ -116,7 +122,7 @@ final class AccountLifecycle
             DB::connection($this->centralConnection)->table('root_domains')->insert([
                 'id' => (string) Str::uuid7(),
                 'account_id' => $account->id,
-                'host' => $slug.'.'.(string) config('tenancy.platform_domain'),
+                'host' => $slug.'.'.$this->lifecycle->platformDomain,
                 'type' => 'platform',
                 'is_primary' => true,
                 'verified_at' => now(),
@@ -185,7 +191,7 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $graceUntil = now()->addDays((int) config('tenancy.grace_days', 30));
+        $graceUntil = now()->addDays($this->lifecycle->graceDays);
         $purgeAfter = $graceUntil->clone()->addDays(30);
 
         DB::connection($this->centralConnection)->transaction(function () use ($account, $graceUntil, $purgeAfter): void {

@@ -21,6 +21,15 @@
 
 ### Added
 
+- P7.5: workspace и OIDC-контроллеры читают `ImpersonationPolicy` /
+  `TenancyOptions` вместо `config()`.
+- P7.4: lifecycle, host, template integrity и membership читают
+  `AccountLifecyclePolicy` / `TenancyOptions` вместо `config()`.
+- P7.3: impersonation/status HTTP читают `ImpersonationPolicy`,
+  `StatusGatePolicy` и `TenancyOptions` вместо `config()`.
+- P7.2: `TenancyOptions` и три policy связываются в `TenancyServiceProvider`;
+  `oidc.client_secret` типизирован как `SecretRef`, boot-валидация накапливает
+  нарушения через `InvalidConfiguration`.
 - P7.1: `CoreOptions` и `SecretRef` связывают снимок `corex` в `Config`
   при загрузке провайдера. Saved views берут явное соединение из
   конструктора и текущий default на каждую операцию.

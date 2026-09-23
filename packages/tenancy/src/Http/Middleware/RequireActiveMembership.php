@@ -6,16 +6,21 @@ namespace CoreX\Tenancy\Http\Middleware;
 
 use Closure;
 use CoreX\Tenancy\Models\User;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 final class RequireActiveMembership
 {
+    public function __construct(
+        private readonly ?TenancyOptions $options = null,
+    ) {}
+
     /** @return Response|mixed */
     public function handle(Request $request, Closure $next): mixed
     {
-        $guard = (string) config('tenancy.membership_guard.guard', 'web');
+        $guard = ($this->options ?? app(TenancyOptions::class))->membershipGuard;
         $identityId = Auth::guard($guard)->id();
 
         $user = $identityId === null ? null : User::query()->find($identityId);

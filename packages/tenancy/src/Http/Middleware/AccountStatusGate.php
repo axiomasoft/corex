@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Http\Middleware;
 
 use Closure;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Support\StatusGatePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -18,6 +19,13 @@ use Illuminate\Http\Response;
  */
 final class AccountStatusGate
 {
+    private readonly StatusGatePolicy $statusGate;
+
+    public function __construct(?StatusGatePolicy $statusGate = null)
+    {
+        $this->statusGate = $statusGate ?? app(StatusGatePolicy::class);
+    }
+
     /** @return Response|mixed */
     public function handle(Request $request, Closure $next): mixed
     {
@@ -26,7 +34,12 @@ final class AccountStatusGate
 
         return match ($account->status) {
             'trial', 'active' => $next($request),
-            'suspended' => $this->ownerOnRoute($request, $next, $account, 'payment_route'),
+            'suspended' => $this->ownerOnRoute(
+                $request,
+                $next,
+                $account,
+                $this->statusGate->paymentRoute,
+            ),
             'grace' => $this->graceGate($request, $next, $account),
             'exporting', 'deleted' => abort(410),
             default => abort(403),
@@ -34,9 +47,13 @@ final class AccountStatusGate
     }
 
     /** @return Response|mixed */
-    private function ownerOnRoute(Request $request, Closure $next, Account $account, string $routeConfigKey): mixed
-    {
-        if (! $this->isOwner($account) || ! $this->matchesConfiguredRoute($request, config("tenancy.status_gate.{$routeConfigKey}"))) {
+    private function ownerOnRoute(
+        Request $request,
+        Closure $next,
+        Account $account,
+        ?string $route,
+    ): mixed {
+        if (! $this->isOwner($account) || ! $this->matchesConfiguredRoute($request, $route)) {
             abort(403);
         }
 
@@ -50,8 +67,8 @@ final class AccountStatusGate
             abort(403);
         }
 
-        $readOnly = in_array($request->method(), (array) config('tenancy.status_gate.read_only_methods', []), true);
-        $onExportRoute = $this->matchesConfiguredRoute($request, config('tenancy.status_gate.export_route'));
+        $readOnly = $this->statusGate->isReadOnlyMethod($request->method());
+        $onExportRoute = $this->matchesConfiguredRoute($request, $this->statusGate->exportRoute);
 
         if (! $readOnly && ! $onExportRoute) {
             abort(403);

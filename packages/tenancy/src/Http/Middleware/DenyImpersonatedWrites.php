@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Http\Middleware;
 
 use Closure;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use CoreX\Tenancy\Support\StatusGatePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,6 +24,7 @@ final class DenyImpersonatedWrites
 {
     public function __construct(
         private readonly ImpersonationService $impersonation,
+        private readonly StatusGatePolicy $statusGate,
     ) {}
 
     /** @return Response|mixed */
@@ -32,9 +34,7 @@ final class DenyImpersonatedWrites
             return $next($request);
         }
 
-        $readOnlyMethods = (array) config('tenancy.status_gate.read_only_methods', ['GET', 'HEAD', 'OPTIONS']);
-
-        if (in_array($request->method(), $readOnlyMethods, true)) {
+        if ($this->statusGate->isReadOnlyMethod($request->method())) {
             return $next($request);
         }
 

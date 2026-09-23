@@ -12,6 +12,8 @@ use CoreX\Tenancy\Events\ImpersonationStarted;
 use CoreX\Tenancy\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\ImpersonationState;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Support\ImpersonationPolicy;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -48,6 +50,11 @@ final class DatabaseImpersonationService implements ImpersonationService
 
     private ?ImpersonationState $memoState = null;
 
+    public function __construct(
+        private readonly ImpersonationPolicy $impersonationPolicy,
+        private readonly TenancyOptions $options,
+    ) {}
+
     #[Override]
     public function start(string $grantId, string $staffIdentityId): void
     {
@@ -56,7 +63,7 @@ final class DatabaseImpersonationService implements ImpersonationService
         /** @var Account $account */
         $account = tenancy()->tenant;
 
-        $requireApprovedBy = (bool) config('tenancy.oidc.impersonation.require_approved_by', false);
+        $requireApprovedBy = $this->impersonationPolicy->requireApprovedBy;
 
         // D143 — ONE atomic UPDATE: one-time-use, TTL, revocation, staff
         // presenter, non-empty reason, (optional) 4-eyes, and `is_staff` all
@@ -197,11 +204,11 @@ final class DatabaseImpersonationService implements ImpersonationService
 
     private function guard(): string
     {
-        return (string) config('tenancy.oidc.guard', 'web');
+        return $this->options->oidcGuard;
     }
 
     private function centralConnection(): string
     {
-        return (string) config('tenancy.central_connection');
+        return $this->options->centralConnection;
     }
 }

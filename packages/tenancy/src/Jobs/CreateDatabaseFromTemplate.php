@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Jobs;
 
 use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,9 +31,11 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
         public readonly Account $tenant,
     ) {}
 
-    public function handle(TemplateIntegrityVerifier $templateIntegrityVerifier): bool
-    {
-        $tenant = Account::on((string) config('tenancy.central_connection'))->findOrFail($this->tenant->id);
+    public function handle(
+        TemplateIntegrityVerifier $templateIntegrityVerifier,
+        TenancyOptions $options,
+    ): bool {
+        $tenant = Account::on($options->centralConnection)->findOrFail($this->tenant->id);
 
         $templateIntegrityVerifier->assertCurrent(
             version: (int) $tenant->template_version,

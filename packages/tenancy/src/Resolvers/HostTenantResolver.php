@@ -8,6 +8,8 @@ use CoreX\Tenancy\DomainTrust\NormalizedHost;
 use CoreX\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Models\Domain;
+use CoreX\Tenancy\Support\TenancyOptions;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Override;
@@ -24,11 +26,18 @@ use Stancl\Tenancy\Resolvers\Contracts\CachedTenantResolver;
  */
 final class HostTenantResolver extends CachedTenantResolver
 {
+    public function __construct(
+        Application $app,
+        private readonly ?TenancyOptions $options = null,
+    ) {
+        parent::__construct($app);
+    }
+
     #[Override]
     public function resolveWithoutCache(mixed ...$args): Tenant
     {
         $host = self::normalizeHost((string) $args[0]);
-        $centralConnection = (string) config('tenancy.central_connection');
+        $centralConnection = $this->tenancyOptions()->centralConnection;
 
         $domain = Domain::on(connection: $centralConnection)
             ->whereRaw('lower(host) = ?', [$host])
@@ -66,6 +75,11 @@ final class HostTenantResolver extends CachedTenantResolver
         return $tenant->domains
             ->map(fn (Domain $domain): string => $this->formatCacheKey(self::normalizeHost($domain->host)))
             ->all();
+    }
+
+    private function tenancyOptions(): TenancyOptions
+    {
+        return $this->options ?? app(TenancyOptions::class);
     }
 
     public static function normalizeHost(string $host): string

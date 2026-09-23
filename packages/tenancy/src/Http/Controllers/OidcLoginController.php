@@ -12,6 +12,8 @@ use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Oidc\OidcClient;
 use CoreX\Tenancy\Oidc\OidcDiscovery;
+use CoreX\Tenancy\Support\ImpersonationPolicy;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,8 @@ final class OidcLoginController
         private readonly IdTokenVerifier $verifier,
         private readonly IdentitySyncer $syncer,
         private readonly ImpersonationService $impersonation,
+        private readonly ImpersonationPolicy $impersonationPolicy,
+        private readonly TenancyOptions $options,
     ) {}
 
     public function redirect(Request $request): RedirectResponse
@@ -225,7 +229,7 @@ final class OidcLoginController
         // Fail-closed gate kept from P2.22 (D145 does not change this
         // outcome, only what runs AFTER it): an `imp` claim while the
         // feature is off is rejected, never silently accepted.
-        if (! (bool) config('tenancy.oidc.impersonation.enabled')) {
+        if (! $this->impersonationPolicy->enabled) {
             throw OidcAuthenticationException::impersonationDenied();
         }
 
@@ -238,11 +242,11 @@ final class OidcLoginController
 
     private function guard(): string
     {
-        return (string) config('tenancy.oidc.guard', 'web');
+        return $this->options->oidcGuard;
     }
 
     private function centralConnection(): string
     {
-        return (string) config('tenancy.central_connection');
+        return $this->options->centralConnection;
     }
 }

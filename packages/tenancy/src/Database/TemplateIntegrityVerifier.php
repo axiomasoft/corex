@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Database;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\QualifiedTemplate;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContra
         private readonly string $centralConnection,
         private readonly SchemaCatalogueSerializer $serializer,
         private readonly TemplateIntegrityLock $lock,
+        private readonly ?TenancyOptions $options = null,
     ) {}
 
     public function qualify(ClaimRequest $request): QualifiedTemplate
@@ -79,7 +81,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContra
 
             $manifest = $this->manifestFor((string) $template->id);
             $manifest->assertTrusted(
-                trustedKeys: (array) config('tenancy.template_integrity.trusted_keys', []),
+                trustedKeys: $this->tenancyOptions()->templateIntegrityTrustedKeys,
                 serializer: $this->serializer,
             );
             $actualHash = $this->actualHash($template);
@@ -110,7 +112,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContra
 
     private function manifestFor(string $templateId): TemplateManifest
     {
-        $manifests = (array) config('tenancy.template_integrity.manifests', []);
+        $manifests = $this->tenancyOptions()->templateIntegrityManifests;
         $manifest = $manifests[$templateId] ?? null;
 
         if (! is_array($manifest)) {
@@ -118,5 +120,10 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContra
         }
 
         return TemplateManifest::fromConfig($manifest);
+    }
+
+    private function tenancyOptions(): TenancyOptions
+    {
+        return $this->options ?? app(TenancyOptions::class);
     }
 }

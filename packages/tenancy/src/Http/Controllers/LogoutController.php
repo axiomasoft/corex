@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Http\Controllers;
 
 use Carbon\CarbonImmutable;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 final class LogoutController
 {
     public function __construct(
-        private readonly string $centralConnection,
+        private readonly TenancyOptions $options,
     ) {}
 
     public function logout(Request $request): RedirectResponse
@@ -44,7 +45,7 @@ final class LogoutController
     {
         $now = CarbonImmutable::now();
 
-        $sessionIds = DB::connection($this->centralConnection)
+        $sessionIds = DB::connection($this->options->centralConnection)
             ->table('root_idp_sessions')
             ->where('identity_id', $identityId)
             ->whereNull('revoked_at')
@@ -54,13 +55,13 @@ final class LogoutController
             return;
         }
 
-        DB::connection($this->centralConnection)
+        DB::connection($this->options->centralConnection)
             ->table('root_idp_sessions')
             ->where('identity_id', $identityId)
             ->whereNull('revoked_at')
             ->update(['revoked_at' => $now]);
 
-        DB::connection($this->centralConnection)
+        DB::connection($this->options->centralConnection)
             ->table('root_oauth_refresh_tokens')
             ->whereIn('session_id', $sessionIds)
             ->whereNull('revoked_at')
@@ -69,6 +70,6 @@ final class LogoutController
 
     private function guard(): string
     {
-        return (string) config('tenancy.oidc.guard', 'web');
+        return $this->options->oidcGuard;
     }
 }

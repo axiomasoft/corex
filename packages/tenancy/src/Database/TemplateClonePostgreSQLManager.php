@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Database;
 
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
@@ -37,6 +38,10 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
     private const int QUARANTINE_RETRIES = 5;
 
     private const int QUARANTINE_BACKOFF_MS = 200;
+
+    public function __construct(
+        private readonly ?TenancyOptions $options = null,
+    ) {}
 
     public function createDatabase(TenantWithDatabase $tenant): bool
     {
@@ -98,7 +103,7 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 
     private function resolveReadyTemplate(int $version): object
     {
-        $template = DB::connection(config('tenancy.central_connection'))
+        $template = DB::connection($this->centralConnection())
             ->table('root_templates')
             ->where('version', $version)
             ->first();
@@ -114,7 +119,7 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 
     private function resolveCluster(string $clusterId): object
     {
-        $cluster = DB::connection(config('tenancy.central_connection'))
+        $cluster = DB::connection($this->centralConnection())
             ->table('root_clusters')
             ->where('id', $clusterId)
             ->first();
@@ -124,5 +129,10 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
         }
 
         return $cluster;
+    }
+
+    private function centralConnection(): string
+    {
+        return ($this->options ?? app(TenancyOptions::class))->centralConnection;
     }
 }

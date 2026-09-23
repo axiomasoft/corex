@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Http\Middleware;
 use Carbon\CarbonImmutable;
 use Closure;
 use CoreX\Tenancy\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Auth;
  */
 final class EnforceSessionLifetime
 {
+    public function __construct(
+        private readonly TenancyOptions $options,
+    ) {}
+
     /** @return Response|mixed */
     public function handle(Request $request, Closure $next): mixed
     {
@@ -30,7 +35,7 @@ final class EnforceSessionLifetime
             return $next($request);
         }
 
-        $maxMinutes = (int) config('tenancy.oidc.max_session_lifetime_minutes', 720);
+        $maxMinutes = $this->options->oidcMaxSessionLifetimeMinutes;
 
         if (! CarbonImmutable::parse($authAt)->addMinutes($maxMinutes)->isPast()) {
             return $next($request);
@@ -45,6 +50,6 @@ final class EnforceSessionLifetime
 
     private function guard(): string
     {
-        return (string) config('tenancy.oidc.guard', 'web');
+        return $this->options->oidcGuard;
     }
 }

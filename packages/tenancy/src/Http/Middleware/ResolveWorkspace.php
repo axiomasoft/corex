@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Http\Middleware;
 
 use Closure;
 use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Support\TenancyOptions;
 use CoreX\Tenancy\Workspaces\NoDefaultWorkspaceException;
 use CoreX\Tenancy\Workspaces\WorkspaceResolver;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -31,6 +32,7 @@ final class ResolveWorkspace
     public function __construct(
         private readonly TenancyManager $manager,
         private readonly WorkspaceResolver $resolver,
+        private readonly ?TenancyOptions $options = null,
     ) {}
 
     /** @return Response|mixed */
@@ -68,8 +70,8 @@ final class ResolveWorkspace
     /** Marker's FIRST occurrence in `$request->segments()`; no marker → default (null). */
     private function extractSlug(Request $request): ?string
     {
-        $configured = config('tenancy.workspace.path_segment');
-        $marker = is_string($configured) && $configured !== '' ? $configured : 'w';
+        $configured = ($this->options ?? app(TenancyOptions::class))->workspacePathSegment;
+        $marker = $configured ?? 'w';
 
         $segments = $request->segments();
         $index = array_search($marker, $segments, true);
