@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: c2510133e2aa59affed148e768cb0e5b912b54daae7a81714e712bb972b0e44a
+inputs_sha256: 7b4702554a26ae790e6d9f1f01a7df9e4062b19fd125a7a317116c205772bd46
 generated_by: task plan-views status
 -->
 
@@ -36,8 +36,8 @@ generated_by: task plan-views status
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
-| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 5/6 | 🟡 In progress |
-| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 0/12 | ⬜ Not started |
+| P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
+| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 1/12 | 🟡 In progress |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
@@ -261,13 +261,13 @@ generated_by: task plan-views status
 | P6.3 | Исполняемый Core Litmus Test для Foundation | 🟢 Done | 2026-09-22 |
 | P6.4 | Features, Departments, Money: вердикты и кандидаты `roadmap.md` §7 | 🟢 Done | 2026-09-22 |
 | P6.5 | Testing: канонический `autoload-dev`, гейт R-T1, staging N09 | 🟢 Done | 2026-09-23 |
-| P6.6 | Свод доказательств границ зон и неизменности потребителей | ⬜ Not started | — |
+| P6.6 | Свод доказательств границ зон и неизменности потребителей | 🟢 Done | 2026-09-23 |
 
 ## Phase P7
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P7.1 | Шаблон Options, SecretRef, CoreOptions, Config::bind | ⬜ Not started | — |
+| P7.1 | Шаблон Options, SecretRef, CoreOptions, Config::bind | 🟢 Done | 2026-09-23 |
 | P7.2 | TenancyOptions, три policy, провайдер | ⬜ Not started | — |
 | P7.3 | Инъекция impersonation/status HTTP | ⬜ Not started | — |
 | P7.4 | Инъекция lifecycle/database/host | ⬜ Not started | — |
@@ -455,6 +455,14 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-22 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P6.4: две строки roadmap §7 дословно из §10, находка Departments (ядро, auth, tenancy, ScopePredicate), CHANGELOG. packages/ не менялся. |
 | 2026-09-23 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-23 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P6.5 GREEN: canonical autoload-dev CoreX\Testing → src/Testing; production CoreX\ → src/ kept until P16. R-T1 allowlist is the three src/Testing consumers. pest tests/Arch 47 passed. core package 84 passed. pint --test exit 0. |
+| 2026-09-23 | plan-exec/gpt-6-sol/medium | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/gpt-6-sol/medium | plan-exec · closed-green · P6.6 GREEN: five required negative plantings red/restored; graph, core sqlite/pg, 20 package suites, root test/analyse/lint and anti-weakening green. Existing foreign packages/tests diff disclosed. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-exec/gpt-6-sol/medium | plan-close · in-progress · Inline phase close owned by final P6.6 invocation. |
+| 2026-09-23 | plan-exec/gpt-6-sol/medium | plan-close · closed-green · P6 direct-close after P6.6 GREEN; six item states terminal, generated phase closure current. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · routing-rejected · ECONOMY_ROUTE_OVERSHOOT: live grok-4.7 frontier/high vs §3.1 implementation/medium review light. D118 pins G47; runtime admits declared route or explicit owner plan-run. Product untouched. |
+| 2026-09-23 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/grok-4.7/high | plan-run · closed-green · P7.1 GREEN: CoreOptions, SecretRef, Config holder, saved-view constructor. sqlite 84/197, pg 37/180, CoreZoneTest 7/26.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

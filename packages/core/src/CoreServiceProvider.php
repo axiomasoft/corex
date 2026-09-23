@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX;
 
-use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\PruneAuditLog;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\AuditRetention;
 use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Contracts\DataScopeCodec;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
@@ -20,22 +20,45 @@ use CoreX\Contracts\TenantStorage;
 use CoreX\Contracts\ViewAccessPolicy;
 use CoreX\Contracts\ViewSchemaProvider;
 use CoreX\Contracts\WorkerRuntime;
+use CoreX\Messaging\Commands\PruneOutboxMessages;
+use CoreX\Messaging\Commands\RelayOutbox;
+use CoreX\Messaging\Commands\ShowDeliveryHealth;
+use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Contracts\MessageContractRegistry;
+use CoreX\Messaging\Contracts\Outbox;
+use CoreX\Messaging\Contracts\OutboxRelay;
+use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Internal\SqlDeliveryHealth;
+use CoreX\Messaging\Internal\SqlInbox;
+use CoreX\Messaging\Internal\SqlOutbox;
+use CoreX\Messaging\Internal\SqlOutboxRelay;
 use CoreX\PubSub\DefaultWorkerRuntime;
 use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
 use CoreX\Storage\LocalTenantStorage;
 use CoreX\Support\Config;
+use CoreX\Support\CoreOptions;
+use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\ServiceProviderModuleRegistrar;
+use CoreX\Support\Time\LaravelClock;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
+use CoreX\Tenancy\GuardedTenantContextRestorer;
 use CoreX\Views\Internal\DenyViewAccessPolicy;
 use CoreX\Views\Internal\SqlSavedViewRepository;
 use CoreX\Views\Internal\UnavailableViewSchemaProvider;
 use CoreX\Views\Internal\ViewConfigValidator;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\DateFactory;
 use Illuminate\Support\ServiceProvider;
+use LogicException;
 use Override;
+use Psr\Clock\ClockInterface;
 
 final class CoreServiceProvider extends ServiceProvider
 {
@@ -55,27 +78,89 @@ final class CoreServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
-        $this->app->singleton(SettingDefaultsProvider::class, Config::settingDefaultsProviderClass());
-        $this->app->singleton(SettingsRepository::class, Config::settingsRepositoryClass());
-        $this->app->singleton(AuditLogger::class, Config::auditLoggerClass());
+        $raw = $this->app['config']->get('corex', []);
+        $options = CoreOptions::fromArray(is_array($raw) ? $raw : []);
+        $this->app->instance(CoreOptions::class, $options);
+        Config::bind($options);
 
-        /** @var class-string<AuditRetention> $auditRetention */
-        $auditRetention = config('corex.bindings.audit_retention', NullAuditRetention::class);
-        $this->app->singleton(AuditRetention::class, $auditRetention);
+        $this->app->singleton(SettingDefaultsProvider::class, $options->settingDefaultsProvider);
+        $this->app->singleton(SettingsRepository::class, $options->settingsRepository);
+        $this->app->singleton(AuditLogger::class, $options->auditLogger);
+        $this->app->singleton(AuditRetention::class, $options->auditRetention);
 
-        $this->app->singleton(TenantContextResolver::class, Config::tenantContextResolverClass());
-        $this->app->singleton(TenancyManager::class, Config::tenancyManagerClass());
-        $this->app->singleton(ImpersonationService::class, Config::impersonationServiceClass());
-        $this->app->singleton(DataScopeAuthorizer::class, Config::dataScopeAuthorizerClass());
+        $this->app->singleton(TenantContextResolver::class, $options->tenantContextResolver);
+        $this->app->scoped(
+            TenantContextRestorer::class,
+            static fn ($app): GuardedTenantContextRestorer => new GuardedTenantContextRestorer(
+                resolver: $app->make(TenantContextResolver::class),
+            ),
+        );
+        $this->app->singleton(TenancyManager::class, $options->tenancyManager);
+        $this->app->singleton(ImpersonationService::class, $options->impersonationService);
+        $this->app->singleton(DataScopeAuthorizer::class, $options->dataScopeAuthorizer);
+        $this->app->singleton(DataScopeCodec::class, ArrayDataScopeCodec::class);
+        $this->app->singleton(
+            MessageContractRegistry::class,
+            static fn (): ArrayMessageContractRegistry => new ArrayMessageContractRegistry(contracts: []),
+        );
+        $this->app->scoped(
+            Outbox::class,
+            static fn ($app): SqlOutbox => new SqlOutbox(
+                connection: $app->make(ConnectionInterface::class),
+                contracts: $app->make(MessageContractRegistry::class),
+                clock: $app->make(ClockInterface::class),
+            ),
+        );
+        $this->app->scoped(
+            OutboxRelay::class,
+            static fn ($app): SqlOutboxRelay => new SqlOutboxRelay(
+                connection: $app->make(Connection::class),
+                clock: $app->make(ClockInterface::class),
+                leaseSeconds: Config::messagingLeaseSeconds(),
+                maxAttempts: Config::messagingMaxAttempts(),
+                backoffCapSeconds: Config::messagingBackoffCapSeconds(),
+            ),
+        );
+        $this->app->scoped(
+            Inbox::class,
+            static fn ($app): SqlInbox => new SqlInbox(
+                connection: $app->make(ConnectionInterface::class),
+                clock: $app->make(ClockInterface::class),
+            ),
+        );
+        $this->app->scoped(
+            SqlDeliveryHealth::class,
+            static fn ($app): SqlDeliveryHealth => new SqlDeliveryHealth(
+                connection: $app->make(ConnectionInterface::class),
+                clock: $app->make(ClockInterface::class),
+            ),
+        );
+        $this->app->singleton(ClockInterface::class, static fn ($app): LaravelClock => new LaravelClock(
+            dates: $app->make(DateFactory::class),
+        ));
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
-        $this->app->singleton(FeatureFlags::class, Config::featureFlagsClass());
-        $this->app->singleton(DepartmentRepository::class, Config::departmentRepositoryClass());
+        $this->app->singleton(FeatureFlags::class, $options->featureFlags);
+        $this->app->singleton(DepartmentRepository::class, $options->departmentRepository);
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
         $this->app->singleton(ViewSchemaProvider::class, UnavailableViewSchemaProvider::class);
         $this->app->singleton(ViewAccessPolicy::class, DenyViewAccessPolicy::class);
         $this->app->singleton(ViewConfigValidator::class);
-        $this->app->singleton(SavedViewRepository::class, SqlSavedViewRepository::class);
+        $this->app->singleton(SavedViewRepository::class, function ($app) use ($options): SqlSavedViewRepository {
+            $database = $app->make('db');
+
+            if (! $database instanceof DatabaseManager) {
+                throw new LogicException('Database manager is not bound.');
+            }
+
+            return new SqlSavedViewRepository(
+                schemas: $app->make(ViewSchemaProvider::class),
+                policy: $app->make(ViewAccessPolicy::class),
+                validator: $app->make(ViewConfigValidator::class),
+                options: $options,
+                database: $database,
+            );
+        });
         $this->app->scoped(TenantStorage::class, function ($app): LocalTenantStorage {
             return new LocalTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),
@@ -89,7 +174,13 @@ final class CoreServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([PruneAuditLog::class, PrunePubSubMessages::class]);
+            $this->commands([
+                PruneAuditLog::class,
+                PrunePubSubMessages::class,
+                PruneOutboxMessages::class,
+                RelayOutbox::class,
+                ShowDeliveryHealth::class,
+            ]);
         }
 
         // NO loadMigrationsFrom: every sys_* migration is PG-only

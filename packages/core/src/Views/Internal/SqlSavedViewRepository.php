@@ -7,6 +7,8 @@ namespace CoreX\Views\Internal;
 use CoreX\Contracts\SavedViewRepository;
 use CoreX\Contracts\ViewAccessPolicy;
 use CoreX\Contracts\ViewSchemaProvider;
+use CoreX\Support\Config;
+use CoreX\Support\CoreOptions;
 use CoreX\Views\Data\SavedQuery;
 use CoreX\Views\Data\SavedViewRef;
 use CoreX\Views\Data\SaveViewInput;
@@ -15,6 +17,7 @@ use CoreX\Views\Data\ViewContext;
 use CoreX\Views\Data\ViewScope;
 use CoreX\Views\Data\ViewSubject;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -23,7 +26,13 @@ use RuntimeException;
 /** @internal */
 final class SqlSavedViewRepository implements SavedViewRepository
 {
-    public function __construct(private readonly ViewSchemaProvider $schemas, private readonly ViewAccessPolicy $policy, private readonly ViewConfigValidator $validator) {}
+    public function __construct(
+        private readonly ViewSchemaProvider $schemas,
+        private readonly ViewAccessPolicy $policy,
+        private readonly ViewConfigValidator $validator,
+        private readonly ?CoreOptions $options = null,
+        private readonly ?DatabaseManager $database = null,
+    ) {}
 
     public function viewsFor(ViewContext $context, ViewScope $scope): array
     {
@@ -172,16 +181,38 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function db(): ConnectionInterface
     {
-        return DB::connection(config('corex.views.connection') ?: config('database.default'));
+        $name = $this->resolvedOptions()->viewsConnection ?? $this->manager()->getDefaultConnection();
+
+        return $this->manager()->connection($name);
     }
 
     private function viewsTable(): string
     {
-        return (string) config('corex.tables.saved_views', 'sys_saved_views');
+        return $this->resolvedOptions()->savedViewsTable;
     }
 
     private function scopesTable(): string
     {
-        return (string) config('corex.tables.saved_view_scopes', 'sys_saved_view_scopes');
+        return $this->resolvedOptions()->savedViewScopesTable;
+    }
+
+    private function resolvedOptions(): CoreOptions
+    {
+        return $this->options ?? Config::options();
+    }
+
+    private function manager(): DatabaseManager
+    {
+        if ($this->database instanceof DatabaseManager) {
+            return $this->database;
+        }
+
+        $resolved = DB::getFacadeRoot();
+
+        if (! $resolved instanceof DatabaseManager) {
+            throw new RuntimeException('Database manager is not available.');
+        }
+
+        return $resolved;
     }
 }

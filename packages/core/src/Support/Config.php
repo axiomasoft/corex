@@ -4,67 +4,120 @@ declare(strict_types=1);
 
 namespace CoreX\Support;
 
-use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
-use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Enums\IdStrategy;
 use CoreX\Enums\PubSubDriver;
-use CoreX\Features\DatabaseFeatureFlags;
-use CoreX\Settings\DatabaseSettingsRepository;
-use CoreX\Settings\NullSettingDefaultsProvider;
-use CoreX\Support\Data\DenyDataScopeAuthorizer;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\NullImpersonationService;
-use CoreX\Tenancy\NullTenancyManager;
-use CoreX\Tenancy\SingleAccountResolver;
+use LogicException;
 
 /**
- * Typed accessor over config('corex.*') — keeps string keys in one place.
+ * Holder over the CoreOptions snapshot bound at boot.
  */
 final class Config
 {
+    private static ?CoreOptions $bound = null;
+
+    private static ?bool $octaneOptInOverride = null;
+
+    public static function bind(CoreOptions $options): void
+    {
+        self::$bound = $options;
+    }
+
+    public static function unbind(): void
+    {
+        self::$bound = null;
+    }
+
+    public static function enableOctaneWorkerOptIn(): void
+    {
+        self::$octaneOptInOverride = true;
+    }
+
+    public static function options(): CoreOptions
+    {
+        $resolved = self::optionsFromApplication();
+
+        if ($resolved instanceof CoreOptions) {
+            self::$bound = $resolved;
+
+            return $resolved;
+        }
+
+        if (self::$bound instanceof CoreOptions) {
+            return self::$bound;
+        }
+
+        throw new LogicException('CoreOptions is not bound; call Config::bind at boot.');
+    }
+
+    /**
+     * A booted application may replace `corex` after provider registration
+     * (test setup, a migrate that follows a table-name override). The holder
+     * then parses that repository value. `enableOctaneWorkerOptIn()` stays
+     * independent of the snapshot.
+     */
+    private static function optionsFromApplication(): ?CoreOptions
+    {
+        if (! function_exists('app')) {
+            return null;
+        }
+
+        $application = app();
+
+        if (! $application->bound('config')) {
+            return null;
+        }
+
+        $raw = $application->make('config')->get('corex', []);
+
+        if (! is_array($raw)) {
+            return null;
+        }
+
+        return CoreOptions::fromArray($raw);
+    }
+
     public static function idStrategy(): IdStrategy
     {
-        $value = config('corex.ids.strategy', IdStrategy::Uuid7);
-
-        return $value instanceof IdStrategy ? $value : IdStrategy::from((string) $value);
+        return self::options()->idStrategy;
     }
 
     public static function settingsTable(): string
     {
-        return (string) config('corex.tables.settings', 'sys_settings');
+        return self::options()->settingsTable;
     }
 
     public static function auditLogsTable(): string
     {
-        return (string) config('corex.tables.audit_logs', 'sys_audit_log');
+        return self::options()->auditLogsTable;
     }
 
     public static function featureFlagsTable(): string
     {
-        return (string) config('corex.tables.feature_flags', 'sys_feature_flags');
+        return self::options()->featureFlagsTable;
     }
 
     public static function featureOverridesTable(): string
     {
-        return (string) config('corex.tables.feature_overrides', 'sys_feature_overrides');
+        return self::options()->featureOverridesTable;
     }
 
     public static function departmentsTable(): string
     {
-        return (string) config('corex.tables.departments', 'sys_departments');
+        return self::options()->departmentsTable;
     }
 
     public static function departmentUserTable(): string
     {
-        return (string) config('corex.tables.department_user', 'sys_department_user');
+        return self::options()->departmentUserTable;
     }
 
     // ─── Tenant context ───────────────────────────────────────────────────
@@ -73,7 +126,7 @@ final class Config
     public static function tenantContextResolverClass(): string
     {
         /** @var class-string<TenantContextResolver> $class */
-        $class = config('corex.tenant_context.resolver', SingleAccountResolver::class);
+        $class = self::options()->tenantContextResolver;
 
         return $class;
     }
@@ -82,7 +135,7 @@ final class Config
     public static function tenancyManagerClass(): string
     {
         /** @var class-string<TenancyManager> $class */
-        $class = config('corex.tenant_context.manager', NullTenancyManager::class);
+        $class = self::options()->tenancyManager;
 
         return $class;
     }
@@ -91,7 +144,7 @@ final class Config
     public static function impersonationServiceClass(): string
     {
         /** @var class-string<ImpersonationService> $class */
-        $class = config('corex.tenant_context.impersonation', NullImpersonationService::class);
+        $class = self::options()->impersonationService;
 
         return $class;
     }
@@ -102,7 +155,7 @@ final class Config
     public static function settingsRepositoryClass(): string
     {
         /** @var class-string<SettingsRepository> $class */
-        $class = config('corex.bindings.settings', DatabaseSettingsRepository::class);
+        $class = self::options()->settingsRepository;
 
         return $class;
     }
@@ -111,7 +164,7 @@ final class Config
     public static function auditLoggerClass(): string
     {
         /** @var class-string<AuditLogger> $class */
-        $class = config('corex.bindings.audit_logger', QueuedAuditLogger::class);
+        $class = self::options()->auditLogger;
 
         return $class;
     }
@@ -120,7 +173,7 @@ final class Config
     public static function settingDefaultsProviderClass(): string
     {
         /** @var class-string<SettingDefaultsProvider> $class */
-        $class = config('corex.bindings.setting_defaults', NullSettingDefaultsProvider::class);
+        $class = self::options()->settingDefaultsProvider;
 
         return $class;
     }
@@ -129,7 +182,7 @@ final class Config
     public static function featureFlagsClass(): string
     {
         /** @var class-string<FeatureFlags> $class */
-        $class = config('corex.bindings.feature_flags', DatabaseFeatureFlags::class);
+        $class = self::options()->featureFlags;
 
         return $class;
     }
@@ -138,7 +191,7 @@ final class Config
     public static function departmentRepositoryClass(): string
     {
         /** @var class-string<DepartmentRepository> $class */
-        $class = config('corex.bindings.departments', DatabaseDepartmentRepository::class);
+        $class = self::options()->departmentRepository;
 
         return $class;
     }
@@ -147,7 +200,7 @@ final class Config
     public static function dataScopeAuthorizerClass(): string
     {
         /** @var class-string<DataScopeAuthorizer> $class */
-        $class = config('corex.bindings.data_scope_authorizer', DenyDataScopeAuthorizer::class);
+        $class = self::options()->dataScopeAuthorizer;
 
         return $class;
     }
@@ -156,60 +209,56 @@ final class Config
 
     public static function auditEnabled(): bool
     {
-        return (bool) config('corex.audit.enabled', true);
+        return self::options()->auditEnabled;
     }
 
     // ─── Settings cache ───────────────────────────────────────────────────
 
     public static function settingsCacheStore(): string
     {
-        return (string) config('corex.settings.cache_store', 'array');
+        return self::options()->settingsCacheStore;
     }
 
     public static function settingsCacheTtl(): ?int
     {
-        $value = config('corex.settings.cache_ttl', 3600);
-
-        return $value !== null ? (int) $value : null;
+        return self::options()->settingsCacheTtl;
     }
 
     public static function settingsCachePrefix(): string
     {
-        return (string) config('corex.settings.cache_prefix', 'corex.settings');
+        return self::options()->settingsCachePrefix;
     }
 
     // ─── PubSub ───────────────────────────────────────────────────────────
 
     public static function pubsubMessagesTable(): string
     {
-        return (string) config('corex.tables.pubsub_messages', 'sys_pubsub_messages');
+        return self::options()->pubsubMessagesTable;
     }
 
     public static function pubsubCursorsTable(): string
     {
-        return (string) config('corex.tables.pubsub_cursors', 'sys_pubsub_cursors');
+        return self::options()->pubsubCursorsTable;
     }
 
     public static function savedViewsTable(): string
     {
-        return (string) config('corex.tables.saved_views', 'sys_saved_views');
+        return self::options()->savedViewsTable;
     }
 
     public static function savedViewScopesTable(): string
     {
-        return (string) config('corex.tables.saved_view_scopes', 'sys_saved_view_scopes');
+        return self::options()->savedViewScopesTable;
     }
 
     public static function pubsubDriver(): PubSubDriver
     {
-        $value = config('corex.pubsub.driver', PubSubDriver::Null);
-
-        return $value instanceof PubSubDriver ? $value : PubSubDriver::from((string) $value);
+        return self::options()->pubsubDriver;
     }
 
     public static function pubsubPollIntervalMicroseconds(): int
     {
-        return (int) config('corex.pubsub.poll_interval_microseconds', 50_000);
+        return self::options()->pubsubPollIntervalMicroseconds;
     }
 
     /**
@@ -219,11 +268,14 @@ final class Config
      * guard requires this explicit signal instead. Never set by
      * request-handling code.
      *
+     * The boot snapshot stays false. A worker command calls
+     * {@see self::enableOctaneWorkerOptIn()} before `subscribe()`.
+     *
      * @internal spec: D44
      */
     public static function pubsubOctaneWorkerOptIn(): bool
     {
-        return (bool) config('corex.pubsub.octane_worker_opt_in', false);
+        return self::$octaneOptInOverride ?? self::options()->pubsubOctaneWorkerOptIn;
     }
 
     /**
@@ -237,16 +289,63 @@ final class Config
      */
     public static function pubsubRetention(): string
     {
-        return (string) config('corex.pubsub.retention', '30 days');
+        return self::options()->pubsubRetention;
+    }
+
+    // ─── Messaging ──────────────────────────────────────────────────────
+
+    public static function outboxMessagesTable(): string
+    {
+        return self::options()->outboxMessagesTable;
+    }
+
+    public static function inboxMessagesTable(): string
+    {
+        return self::options()->inboxMessagesTable;
+    }
+
+    public static function messagingLeaseSeconds(): int
+    {
+        return self::options()->messagingLeaseSeconds;
+    }
+
+    public static function messagingBatchSize(): int
+    {
+        return self::options()->messagingBatchSize;
+    }
+
+    public static function messagingMaxAttempts(): int
+    {
+        return self::options()->messagingMaxAttempts;
+    }
+
+    public static function messagingBackoffCapSeconds(): int
+    {
+        return self::options()->messagingBackoffCapSeconds;
+    }
+
+    public static function messagingOutboxRetention(): string
+    {
+        return self::options()->messagingOutboxRetention;
+    }
+
+    public static function messagingDeadRetention(): string
+    {
+        return self::options()->messagingDeadRetention;
+    }
+
+    public static function messagingInboxRetention(): ?string
+    {
+        return self::options()->messagingInboxRetention;
     }
 
     public static function storageDurableRoot(): string
     {
-        return (string) config('corex.storage.durable_root', storage_path('app/corex/durable'));
+        return self::options()->storageDurableRoot;
     }
 
     public static function storageEphemeralRoot(): string
     {
-        return (string) config('corex.storage.ephemeral_root', storage_path('app/corex/ephemeral'));
+        return self::options()->storageEphemeralRoot;
     }
 }

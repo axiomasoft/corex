@@ -6,7 +6,12 @@
 
 ### Fixed
 
-- PLAN-CLOSE-CI: снят `scripts/.plan-close-deferred`; CI на `academici/corex-mirror` — stancl provider staging, PG test DB prep, Meilisearch в coverage job, jobs auth/tasks/tenancy; публичный AzGuard VCS (`axiomasoft/azguard`) без секретов.
+- P5.16: PostgreSQL-миграции messaging создают outbox/inbox по настроенным именам таблиц; цели raw partial indexes безопасно экранируются грамматикой соединения.
+- P5.15: `corex/core` объявляет публичными корнями только `CoreX\Messaging\Contracts` и `CoreX\Messaging\Data`; команды `PruneOutboxMessages`, `RelayOutbox` и `ShowDeliveryHealth` помечены `@internal` и не входят в поддерживаемый API. R4b читает class-level docblock у `final` / `abstract` / `readonly` типов.
+- P5.14: `corex/wakeup` связывает внутренние PSR-20 часы `SystemClock` только если контейнер ещё не содержит `ClockInterface`, поэтому `corex/notifications` резолвит wakeup без `CoreServiceProvider`; заранее переданный `FrozenClock` остаётся тем же экземпляром.
+- P5.13: PostgreSQL-тесты materialization в `tasks-workflow` явно привязаны к `PgTestCase` и группе `pg` при запуске из корневого Pest.
+- P3.3: гейт графа пакетов — правила R4 (импорт вне `public-api`), R4b (незаявленная поверхность со снимком `package-graph-undeclared-surface.json`), R5 (направление `package-type`); чтение `extra.corex` в `discoverPackages`; allowlist `public_api_exceptions` (176 frozen edges).
+- P3.2: гейт графа пакетов — сбор рёбер через `token_get_all` (group-use, FQCN, extends/implements, traits); слепое пятно `parseUseImport` снято (G-GATE-BLIND). снят `scripts/.plan-close-deferred`; CI на `academici/corex-mirror` — stancl provider staging, PG test DB prep, Meilisearch в coverage job, jobs auth/tasks/tenancy; публичный AzGuard VCS (`axiomasoft/azguard`) без секретов.
 - Гейт графа пакетов: allowlist проверяет содержимое `guard_file` по `guard_contains`; host-reserved namespace валидируется по трём условиям §2.3; резервации и именованные исключения печатаются в отчёте (P12A.4, A1).
 - `corex/core`: `DataScope` больше не несёт `Closure $authorize` — проверка доступа через контракт `DataScopeAuthorizer`, резолвимый на исполняющей стороне; объект полностью сериализуем (P12.8, G-API/D41).
 - `corex/intl`: `IntlModule` приведён к контракту `CorexModule` — discovery модулей больше не падает на `InvalidManifestException`.
@@ -16,12 +21,43 @@
 
 ### Added
 
+- P7.1: `CoreOptions` и `SecretRef` связывают снимок `corex` в `Config`
+  при загрузке провайдера. Saved views берут явное соединение из
+  конструктора и текущий default на каждую операцию.
 - P6.5: канонический `autoload-dev` `CoreX\Testing` → `src/Testing`
   в `corex/core` и arch-гейт R-T1. Production autoload сохранён до P16 (D33).
 - P6.4: roadmap candidates money package and departments level-1
 - P6.3: arch-гейт `tests/Arch/CoreLitmusTest` проверяет шесть условий
   литмуса только для Foundation. Условие 3 закрыто правилом R-L3,
   кроме трёх путей `LITMUS_ELOQUENT`.
+- P6.2: корневой arch-гейт `tests/Arch/CoreZoneTest` (R-Z0, R-Z1, R-Z2).
+  `PubSub/` входит в Messaging по пути; FQCN не двигается (D32). `MessagingZoneTest` поглощён.
+  Шесть публичных импортов закрыты по паре «файл + символ» (D116), матрица зон не открыта.
+- P6.1: `docs/architecture/core-zones.md` — нормативная карта десяти внутренних зон `corex/core`, Composition/Testing, полный текущий контур 146 PHP-файлов, закрытые исключения и целевые FQCN для P15.
+- P5.11: arch-гейт `tests/Arch/MessagingZoneTest` (R-M1 закрытый allow-list импортов зоны `Messaging`, R-M2 запрет `Messaging\Internal` вне composition root); `findings/P5-zone-map.md` для P6.
+- P5.8: `corex/core` — контракт `Inbox`, `SqlInbox::claim()` (`insertOrIgnore` / MSG-006, только внутри транзакции), `InboxRefused`; `InboxClaimTest` §7.4(1–4), pg `InboxConcurrencyTest` §7.4(5).
+- P5.12: pg-доказательства `DeliveryGuaranteesTest` (шесть witnesses §12: at-least-once после падения relay, идемпотентный inbox-потребитель, конкурентный lease, атомарность outbox+бизнес, durable handoff, bounded reclaim/dead); фикстура `RecordingPublisher`.
+- P5.6: `corex/core` — контракт `OutboxRelay`, `SqlOutboxRelay` (короткий lease со `SKIP LOCKED`, fence-отметки, backoff, dead-letter), `LeasedMessage`, `OutboxLeaseLost`; pg-тесты §5.11.
+- P5.10: `corex/core` — `DeliveryHealth`, `SqlDeliveryHealth`, команда `corex:messaging:health` (probe `--max-age`); pg-тесты §9.4.
+- P5.9: `corex/core` — команда `corex:messaging:prune` (два окна retention outbox, inbox не трогается); тесты §8.
+- P5.7: `corex/core` — контракты `MessagePublisher` / `DurableMessagePublisher` (durable-ack, без lossy default), команда `corex:messaging:relay` с кооперативной остановкой; тесты §6.3.
+- P5.5: `corex/core` — контракт `Outbox`, `SqlOutbox::append()` в открытой транзакции (`OutboxRefused` / `MSG-008`, `MSG-007`), `scoped`-привязка; тесты sqlite и pg-отката.
+- P5.4: `corex/core` — tenant DDL `sys_outbox_messages` / `sys_inbox_messages` (частичные индексы горячего пути), блок `corex.messaging` и аксессоры в `Support/Config`; записи владения вне `DB_SCHEMA.md` FROZEN v1.0.
+- P5.2: `corex/core` — словарь messaging: `MessageEnvelope`, `MessagePayload`, `MessageContract`, `PiiClass`, `MessageClass`, `InvalidMessage` (канонизация payload, `DurablePayload` на конверте).
+- P5.3: `corex/core` — `MessageContractRegistry`, `ArrayMessageContractRegistry`, `UnknownMessageContract`; пустой реестр по умолчанию в `CoreServiceProvider` (`MSG-002`).
+- P5.1: `docs/architecture/message-policy.md` — типы и пределы полей конверта, процедура объявления интеграционного контракта, не-обещания (порядок, at-least-once, `MSG-008` vs `afterCommit`), форма потребителя, retention outbox/inbox.
+- P4.12: Arch-гейт `SingletonInjectionTest` + `SingletonInjectionGate` — запрет `Application` / `Request` / `Config\Repository` в конструкторах классов, зарегистрированных через `->singleton(` с литералом `::class`; allowlist `scripts/singleton-injection-allowlist.json`; аудит `findings/P4-binding-audit.md`.
+- P4.9: `corex/core` — зависимость `psr/clock` и `provide` `psr/clock-implementation`; `SystemClock`, `FrozenClock`, `LaravelClock` (`CoreX\Support\Time`); singleton-привязка `Psr\Clock\ClockInterface` → `LaravelClock`.
+- P4.10: `corex/wakeup` — durable-пути `SweepRunner` и `SqlWakeupScheduler` на инъектированном `Psr\Clock\ClockInterface`; тесты backoff и границы lease через `FrozenClock`.
+- P4.8: `corex/core` — контракт `DataScopeCodec`, `ArrayDataScopeCodec` (versioned wire-массив с фиксированным порядком ключей), `InvalidScopePayload`; singleton-привязка в `CoreServiceProvider`.
+- P4.2: `corex/core` — контракт `TenantContextRestorer`, `GuardedTenantContextRestorer` (сверка скоупа с активным контекстом, D22) и `ScopeContextMismatch`; `scoped`-привязка в `CoreServiceProvider`.
+- P4.1: `corex/core` — транзитная форма `DataScope`: публичные скаляры `accountId`, `workspaceId`, `boxed`, `version`, константа `VERSION` и именованный конструктор `fromTenantContext()`; поле `TenantContext $context` сохранено до P4.7 (D21).
+- P3.7: Arch-тесты инвариантов A57/A61/A99 и гейт владения таблиц `scripts/table-ownership-gate.php` (T1/T2/T4; DATA-003 вне скоупа — D19).
+- P3.6: гейт имён публичного API (`scripts/naming-gate.php`, снимок `naming-gate-grandfather.json`) и наблюдательный гейт `config()` вне composition boundary (`scripts/config-composition-gate.php`, `composition-boundary.json`; N12 allowlist для `Support/Config.php`).
+- P3.5: маркер `CoreX\Contracts\DurablePayload` и PHPStan-правило `corex.durablePayload.nonSerializableProperty` на объявленных свойствах помеченных типов (deny-list; `array<mixed>` — предел до P4).
+- P3.4: Roave BC-дифф — `roave/backward-compatibility-check` ^8.22, `scripts/bc-check.sh`, `composer bc-check`, CI job `backward-compatibility` на PHP 8.4; blocking только для `stability=stable` (D98).
+- P3.1: контур PHPStan — `scripts/phpstan-contour.php`, `composer analyse:packages`, `phpstan-contour.json` (20 пакетов); корневой `phpstan.neon` расширен с 7 до 19 зелёных `src` (debt: `corex/attributes`).
+- P2.6: базовый архитектурный scorecard пакетов (docs/architecture/scorecard.md).
 - P2.4: реестр конфигурации (docs/architecture/configuration.md) — 161 ключ из 18 config-файлов, 17 undeclared-read, CFG-006 exception для corex-intl-search.
 - P2.3: реестр владения таблицами (docs/architecture/table-ownership.md) — 99 таблиц, 4 пакета-владельца sys_*, DATA-004 exception aut_role_assignments.
 - P1.7: реестр референсов, отклонённые решения, README каталога architecture (docs/architecture/references.md, docs/rejected-optimizations.md, docs/architecture/README.md).
@@ -49,6 +85,7 @@
 
 ### Changed
 
+- **BREAKING** `corex/core`: `DataScope` — скалярный versioned конструктор, удалено публичное свойство `TenantContext $context`, тип помечен `DurablePayload`; PHPStan-правило `corex.durablePayload.untypedArrayProperty` отвергает `array` без типа значения и `array<mixed>` (P4.7, D6/D21, G-API).
 - PLAN1 `2026.09.15-№1-COREX-FLEXCRM-REMAINING` перенесён в `plans/archive/` после терминального закрытия; скрипты `remaining-cohort-*` и `plans/ACTIVE.md` указывают на архивный путь.
 - `phases/P9/P9.2.md`: пути `Files` обновлены с `import-export`/`intl-search` на `transfer`/`search-intl` после rename P12.4/P12.6 (P12A.6, A8).
 - `corex/attributes`: имена таблиц через иммутабельный `AttributeTables`; обязательная schema-валидация в store-движках; `corex/modules` перенесён в `suggest` с guarded fallback (P12.7).
