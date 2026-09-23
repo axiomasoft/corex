@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: 34deab16d094e920a084e48427a58944b0f11d16b109933c0568a2ce98f9ccbb
+inputs_sha256: 50791bfa85bcb095ddb9214fecfac0566d4c5880de22a722f08c21f11b61c4d3
 generated_by: task plan-views status
 -->
 
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 6/6 | 🟢 Done |
-| P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
+| P9 | Tenancy: bounded contexts вместо смешанной оси | 1/8 | 🟡 In progress |
 
 ## Phase P1
 
@@ -295,7 +295,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P9.1 | Карта и compatibility baseline | ⬜ Not started | — |
+| P9.1 | Карта и compatibility baseline | 🟢 Done | 2026-09-23 |
 | P9.2 | Runtime и Laravel boundary | ⬜ Not started | — |
 | P9.3 | Membership без `Internal` | ⬜ Not started | — |
 | P9.4 | Account и Provisioning | ⬜ Not started | — |
@@ -510,6 +510,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | grok-4.7/high | plan-exec · closed-green · P8.6 GREEN: provider-size gate, measured ratchet core=26 tenancy=0 modules=0, plant names ProviderSizeProbeProvider.php. Arch suite still red on foreign CoreZone/Layer/PackageGraph baseline. |
 | 2026-09-23 | grok-4.7/high | plan-close · in-progress · Inline phase close owned by final P8.6 invocation. |
 | 2026-09-23 | grok-4.7/high | plan-close · closed-green · P8 direct-close after P8.6 GREEN; generated phase closure current. |
+| 2026-09-23 | plan-exec/cursor-grok-4.7-high/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: --model grok-4.7-high unmapped; cli-config selectedModel=composer-2.5 has no reasoning_effort. Pin implementation/high review=full. No product writes. |
+| 2026-09-23 | grok-4.7-high/high | plan-exec · in-progress · — |
+| 2026-09-23 | grok-4.7-high/high | plan-exec · closed-green · P9.1 GREEN: 174-file map, baseline, structure gate; both fixtures red for their own reason. |
 
 ## Owner Gates
 

@@ -1,36 +1,31 @@
-# HANDOFF — 2026-09-23 — after P8.6
+# HANDOFF — 2026-09-23 — after P9.1
 
-**Next:** `waiting: P9.1 Inputs «P8 binding catalog» and «post-P8 source tree» have no resolvable path`
+**Next:** `$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.2`
 
-**Sources of truth:** `findings/P8-receipts.md` ·
-`scripts/provider-size.json` · `execution-commands.md` · `journal.jsonl`
+**Sources of truth:** `findings/P9-receipts.md` ·
+`findings/P9-tenancy-map.md` · `findings/P9-compatibility-baseline.json` ·
+`journal.jsonl`
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
-| Model class | — |
-| Effort | — |
-| Native model | — |
-| Capabilities | — |
+| Batch | solo |
+| Model | implementation |
+| Thinking | high |
 | Context | continue-root |
-| Суть | P9.1 ждёт разрешимые Inputs. |
+| Команда | `$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.2` |
+| Суть | P9.2 переносит Runtime и Laravel boundary. Владелец этой сессии закрыл только P9.1; команда — рекомендация, не запуск. Review full. |
 
-# НЕ раньше: Inputs P9.1 называют путь каталога биндингов и дерево
-post-P8 так, чтобы bundle собрался.
+P9.1 закрыт GREEN: карта 174 файлов, compatibility baseline, каркас
+`tenancy-structure-gate.py`, обе негативные fixtures красные по своей
+причине. D48 relay не построен: owner Runtime, триггеры не измерены.
 
-P8 закрыт direct-close после P8.6. Следующий item — P9.1, но его
-Inputs `P8 binding catalog` и `post-P8 source tree` не резолвятся
-в файл, поэтому запуск сейчас не готов.
+**Done:** P9.1 GREEN. Inventory, fingerprint и structure gate приняты.
 
-**Done:** P8.6 GREEN. Блокирующий гейт размера провайдера, ratchet
-измерен (core 26, tenancy 0, modules 0), посадка называет
-`ProviderSizeProbeProvider.php`.
+**Remaining:** P9.2–P9.8 и P10–P17.
 
-**Remaining:** P9–P17.
+**Open risks:** D48 multi-account relay остаётся открытым до starvation,
+SLO breach или manual fan-out. Чужой messaging slice держит локальные
+правки precision/publish-count вне commit P9.1.
 
-**Open risks:** корневой Arch-набор красный на чужом baseline: CoreZone
-R-Z0 `ValidateConfigCommand`, LayerTest `RuntimeRegistrar` /
-`FilesystemManager`, PackageGraph R4/R4b Options и Laravel registrar'ы.
-
-**Pointers:** `phases/P9/P9.1.md`; `findings/P8-receipts.md` ·
+**Pointers:** `phases/P9/P9.2.md`; `findings/P9-receipts.md` ·
 `journal.jsonl`.
