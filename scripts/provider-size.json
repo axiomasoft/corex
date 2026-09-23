@@ -1,0 +1,32 @@
+{
+    "max_bindings": 20,
+    "methods": [
+        "singleton",
+        "scoped",
+        "bind",
+        "bindIf"
+    ],
+    "ratchet": {
+        "packages/api/src/ApiServiceProvider.php": 1,
+        "packages/api/src/ToolServiceProvider.php": 0,
+        "packages/attributes/src/AttributesServiceProvider.php": 6,
+        "packages/auth/src/CoreAuthServiceProvider.php": 6,
+        "packages/core/src/CoreServiceProvider.php": 26,
+        "packages/crm/src/CrmServiceProvider.php": 0,
+        "packages/intl/src/IntlServiceProvider.php": 14,
+        "packages/media/src/MediaServiceProvider.php": 7,
+        "packages/modules/src/ModulesServiceProvider.php": 0,
+        "packages/notifications/src/NotificationsServiceProvider.php": 12,
+        "packages/panels/src/PanelsServiceProvider.php": 2,
+        "packages/search-intl/src/SearchIntlServiceProvider.php": 2,
+        "packages/search-meilisearch/src/MeilisearchServiceProvider.php": 0,
+        "packages/search/src/SearchServiceProvider.php": 2,
+        "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php": 2,
+        "packages/tasks/src/TasksServiceProvider.php": 8,
+        "packages/tenancy/src/TenancyServiceProvider.php": 0,
+        "packages/transfer/src/TransferServiceProvider.php": 0,
+        "packages/wakeup/src/WakeupServiceProvider.php": 3,
+        "packages/workflow/src/WorkflowServiceProvider.php": 1
+    },
+    "note": "Числа ratchet — измерение после P8.5. E-CORE-PROVIDER: CoreServiceProvider не дробится, его факт заморожен."
+}

@@ -1,36 +1,36 @@
-# HANDOFF — 2026-09-23 — after P8.5
+# HANDOFF — 2026-09-23 — after P8.6
 
-**Next:** `exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.6`
+**Next:** `waiting: P9.1 Inputs «P8 binding catalog» and «post-P8 source tree» have no resolvable path`
 
 **Sources of truth:** `findings/P8-receipts.md` ·
-`findings/P8-binding-catalog.md` · `execution-commands.md` · `journal.jsonl`
+`scripts/provider-size.json` · `execution-commands.md` · `journal.jsonl`
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E08e |
-| Model class | frontier/high |
-| Effort | high |
-| Native model | grok-4.7-high |
+| Batch | n/a |
+| Model class | — |
+| Effort | — |
+| Native model | — |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | Гейт порога размера провайдера: 20 + ratchet + посадка. |
+| Суть | P9.1 ждёт разрешимые Inputs. |
 
-P8.5 закрыт owner plan-run на Grok 4.6 (overshoot vs pin
-implementation/medium; owner явно оставил этот маршрут). P8.6 — review
-`full`, поэтому `frontier/high`.
+# НЕ раньше: Inputs P9.1 называют путь каталога биндингов и дерево
+post-P8 так, чтобы bundle собрался.
 
-```bash
-agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.6'
-```
+P8 закрыт direct-close после P8.6. Следующий item — P9.1, но его
+Inputs `P8 binding catalog` и `post-P8 source tree` не резолвятся
+в файл, поэтому запуск сейчас не готов.
 
-**Done:** P8.5 GREEN. Registry/Lifecycle/Settings/Boot registrar'ы.
-Провайдер без call site биндингов. modules pest 33/178, phpstan 0, pint ok.
+**Done:** P8.6 GREEN. Блокирующий гейт размера провайдера, ratchet
+измерен (core 26, tenancy 0, modules 0), посадка называет
+`ProviderSizeProbeProvider.php`.
 
-**Remaining:** P8.6.
+**Remaining:** P9–P17.
 
-**Open risks:** корневой `composer test:pg` по-прежнему красный на чужом
-baseline: `MigrationPublishTest` 12 vs 10 и `ModuleLifecycleTest` /
-`hashtext` на sqlite. Arch CoreZone R-Z0 `ValidateConfigCommand`.
+**Open risks:** корневой Arch-набор красный на чужом baseline: CoreZone
+R-Z0 `ValidateConfigCommand`, LayerTest `RuntimeRegistrar` /
+`FilesystemManager`, PackageGraph R4/R4b Options и Laravel registrar'ы.
 
-**Pointers:** `phases/P8/P8.6.md`; `research/P8-design.md` §10;
-`findings/P8-receipts.md` · `journal.jsonl`.
+**Pointers:** `phases/P9/P9.1.md`; `findings/P8-receipts.md` ·
+`journal.jsonl`.

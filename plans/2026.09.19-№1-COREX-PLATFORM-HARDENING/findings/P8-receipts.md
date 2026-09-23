@@ -191,3 +191,59 @@ bash scripts/anti-weakening-gate.sh
 ANTI-WEAKENING GATE: OK
 sqlite 546 -> 581, pg 508 -> 508
 ```
+
+# P8.6 receipt
+
+Гейт `scripts/provider-size-gate.php` считает call site
+`singleton|scoped|bind|bindIf` как `T_STRING` после `->` только внутри
+класса, который расширяет `Illuminate\Support\ServiceProvider`. Снимок
+`scripts/provider-size.json` записан измерением, не оценкой 18.
+`CoreServiceProvider` — 26 (20 `singleton` + 6 `scoped`); E-CORE-PROVIDER
+замораживает это число и по-прежнему запрещает рост. Tenancy и modules — 0.
+Файл без ключа в снимке обязан быть ≤ 20. Посадка не названа
+`*ServiceProvider.php`, поэтому сканер обходит все `packages/*/src/**/*.php`.
+
+## Посадка
+
+```
+php scripts/provider-size-gate.php
+EXIT:1
+provider-size-gate: packages/core/src/Support/ProviderSizeProbeProvider.php singleton=21 scoped=0 bind=0 bindIf=0 total=21 exceeds max_bindings=20
+```
+
+Файл посадки снят в `finally`. Повтор на чистом дереве:
+
+```
+php scripts/provider-size-gate.php
+exit 0
+provider-size-gate: OK
+```
+
+## Validation
+
+```
+vendor/bin/pest --testsuite=Arch --filter=ProviderSizeTest
+exit 0
+{"tool":"pest","result":"passed","tests":3,"passed":3,"assertions":13}
+```
+
+Чистое дерево, ratchet tenancy=0, modules=0, max_bindings=20 — в том же
+тесте. Третий тест: `HelperServiceProvider` без `extends ServiceProvider`
+и с 21 `singleton` не краснит гейт.
+
+```
+composer test:arch
+exit 1
+{"tool":"pest","result":"failed","tests":52,"passed":48,"failed":4}
+```
+
+Четыре красных — чужой baseline: CoreZone R-Z0
+`ValidateConfigCommand.php`, LayerTest `RuntimeRegistrar.php`
+`FilesystemManager`, PackageGraph R4/R4b Options и Laravel registrar'ы.
+`ProviderSizeTest` в этих четырёх нет.
+
+```
+bash scripts/anti-weakening-gate.sh
+ANTI-WEAKENING GATE: OK
+sqlite 546 -> 586, pg 508 -> 508
+```

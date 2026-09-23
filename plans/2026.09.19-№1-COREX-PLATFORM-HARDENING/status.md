@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: d876eb2113f5a6e1420929321efd8a5d2ca554393bbaeb5dbb17d087af0296a9
+inputs_sha256: 34deab16d094e920a084e48427a58944b0f11d16b109933c0568a2ce98f9ccbb
 generated_by: task plan-views status
 -->
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
-| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 5/6 | 🟡 In progress |
+| P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 6/6 | 🟢 Done |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
 ## Phase P1
@@ -289,7 +289,7 @@ generated_by: task plan-views status
 | P8.3 | Tenancy: Identity, Workspace, DomainTrust, Authentication, Wakeup | 🟢 Done | 2026-09-23 |
 | P8.4 | Tenancy boot: Console, Http, Events; порядок bootstrapper'ов | 🟢 Done | 2026-09-23 |
 | P8.5 | Декомпозиция ModulesServiceProvider | 🟢 Done | 2026-09-23 |
-| P8.6 | Гейт порога размера провайдера | ⬜ Not started | — |
+| P8.6 | Гейт порога размера провайдера | 🟢 Done | 2026-09-23 |
 
 ## Phase P9
 
@@ -506,6 +506,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | grok-4.6/high | plan-exec · routing-rejected · ECONOMY_ROUTE_OVERSHOOT: bound cli-config grok-4.6/high frontier vs pin implementation/medium review light. E08d cursor-grok-4.6-high does not match the pin. No product writes. Retry on composer-2.5/medium. |
 | 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
 | 2026-09-23 | grok-4.7/high | plan-run · closed-green · P8.5 GREEN: Registry/Lifecycle/Settings/Boot registrars; provider bind sites empty. modules pest 33/178, phpstan 0, pint ok. Owner plan-run on grok-4.6 overshoot vs implementation/medium pin. |
+| 2026-09-23 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-23 | grok-4.7/high | plan-exec · closed-green · P8.6 GREEN: provider-size gate, measured ratchet core=26 tenancy=0 modules=0, plant names ProviderSizeProbeProvider.php. Arch suite still red on foreign CoreZone/Layer/PackageGraph baseline. |
+| 2026-09-23 | grok-4.7/high | plan-close · in-progress · Inline phase close owned by final P8.6 invocation. |
+| 2026-09-23 | grok-4.7/high | plan-close · closed-green · P8 direct-close after P8.6 GREEN; generated phase closure current. |
 
 ## Owner Gates
 

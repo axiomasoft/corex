@@ -21,6 +21,10 @@
 
 ### Added
 
+- P8.6: блокирующий гейт `scripts/provider-size-gate.php` считает call site
+  `singleton|scoped|bind|bindIf` только в классах `ServiceProvider`; порог 20
+  и ratchet измеренного дерева. Посадка `ProviderSizeProbeProvider.php`
+  завершается exit 1 и называет файл.
 - P8.5: `corex/modules` выносит Registry/Lifecycle/Settings/Boot
   в `Laravel/*Registrar` без смены ключа, concrete и lifetime; провайдер
   оставляет Options, publishes и optimizes.
