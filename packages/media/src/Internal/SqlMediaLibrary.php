@@ -15,6 +15,7 @@ use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaReadRef;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Support\MediaOptions;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ final class SqlMediaLibrary implements MediaLibrary
         private readonly MediaPolicy $policy,
         private readonly MediaOperationStore $operations,
         private readonly ConversionCoordinator $conversions,
+        private readonly MediaOptions $options,
     ) {}
 
     public function store(MediaContext $context, UploadInput $input): MediaFileRef
@@ -50,10 +52,7 @@ final class SqlMediaLibrary implements MediaLibrary
             throw new MediaOperationConflict('Media upload is invalid.');
         }
 
-        /** @var list<string> $purposes */
-        $purposes = config('corex-media.purposes', []);
-
-        if (! in_array($input->purpose, $purposes, true)) {
+        if (! in_array($input->purpose, $this->options->purposes, true)) {
             throw new MediaOperationConflict('Media upload purpose is not registered.');
         }
 
@@ -75,23 +74,20 @@ final class SqlMediaLibrary implements MediaLibrary
         $id = (string) Str::uuid();
         $key = "media/originals/{$id}";
         $size = $input->file->getSize();
-        $maxUploadBytes = (int) config('corex-media.max_upload_bytes');
 
-        if ($size < 1 || $size > $maxUploadBytes) {
+        if ($size < 1 || $size > $this->options->maxUploadBytes) {
             throw new MediaOperationConflict('Media upload size is invalid.');
         }
         $mime = $input->file->getMimeType() ?? 'application/octet-stream';
-        /** @var list<string> $allowedMimeTypes */
-        $allowedMimeTypes = config('corex-media.allowed_mime_types', []);
 
-        if (! in_array($mime, $allowedMimeTypes, true)) {
+        if (! in_array($mime, $this->options->allowedMimeTypes, true)) {
             throw new MediaOperationConflict('Media upload MIME type is invalid.');
         }
 
         $image = @getimagesize($path);
 
         if ($image !== false) {
-            $maxImagePixels = (int) config('corex-media.max_image_pixels');
+            $maxImagePixels = $this->options->maxImagePixels;
             [$width, $height] = $image;
 
             if ($width < 1 || $height < 1 || $width > intdiv($maxImagePixels, $height)) {

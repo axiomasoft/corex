@@ -18,6 +18,7 @@ use CoreX\Media\Internal\ConversionProfiles;
 use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Jobs\ConvertMedia;
+use CoreX\Media\Support\MediaOptions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
@@ -95,7 +96,7 @@ it('rejects output facts that exceed the immutable conversion profile', function
     ]);
     $operations = app(MediaOperationStore::class);
     $operations->enqueueConversion($file->id, 'bounded', $digest, 1);
-    $coordinator = new ConversionCoordinator(app('db')->connection(), app(TenantStorage::class), $profiles, $operations);
+    $coordinator = new ConversionCoordinator(app('db')->connection(), app(TenantStorage::class), $profiles, $operations, app(MediaOptions::class));
 
     expect(fn (): mixed => $coordinator->process($file->id, 'bounded'))->toThrow(MediaOperationConflict::class);
 

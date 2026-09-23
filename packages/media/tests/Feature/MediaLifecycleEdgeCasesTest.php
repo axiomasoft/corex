@@ -18,6 +18,7 @@ use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Jobs\PurgeMedia;
 use CoreX\Media\MediaModule;
+use CoreX\Media\Support\MediaOptions;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -150,6 +151,7 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
         $policy,
         app(MediaOperationStore::class),
         app(ConversionCoordinator::class),
+        app(MediaOptions::class),
     );
 
     $file = $library->store(mediaEdgeContext(), edgeUpload('read-recheck', 'bytes'));

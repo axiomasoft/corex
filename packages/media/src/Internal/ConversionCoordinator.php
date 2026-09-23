@@ -9,6 +9,7 @@ use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 use CoreX\Media\Data\MediaConversionRef;
+use CoreX\Media\Support\MediaOptions;
 use Illuminate\Database\ConnectionInterface;
 use Throwable;
 
@@ -19,6 +20,7 @@ final class ConversionCoordinator
         private readonly TenantStorage $storage,
         private readonly ConversionProfiles $profiles,
         private readonly MediaOperationStore $operations,
+        private readonly MediaOptions $options,
     ) {}
 
     public function request(string $fileId, string $profileKey): ?MediaConversionRef
@@ -84,12 +86,12 @@ final class ConversionCoordinator
             }
 
             try {
-                $sourceBytes = stream_get_contents($stream, (int) config('corex-media.max_upload_bytes') + 1);
+                $sourceBytes = stream_get_contents($stream, $this->options->maxUploadBytes + 1);
             } finally {
                 fclose($stream);
             }
 
-            if (! is_string($sourceBytes) || $sourceBytes === '' || strlen($sourceBytes) > (int) config('corex-media.max_upload_bytes')) {
+            if (! is_string($sourceBytes) || $sourceBytes === '' || strlen($sourceBytes) > $this->options->maxUploadBytes) {
                 throw new MediaOperationConflict('The conversion source exceeds byte limits.');
             }
 
