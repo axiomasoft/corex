@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-23
-inputs_sha256: 1ffe9807deadd6f26742a0e7cff9fc2e35149d7abb19fc562414569cd37752b6
+inputs_sha256: 4b868a6daedaf293f3422513824cff160e2049e3ef1591d5df5a65da07eea7ca
 generated_by: task plan-views status
 -->
 
@@ -37,7 +37,7 @@ generated_by: task plan-views status
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
 | P5 | Messaging-основа: envelope, три класса сообщений, outbox и inbox | 17/18 | 🟠 Done with deviations |
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
-| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 2/12 | 🟡 In progress |
+| P7 | Типизированная конфигурация и политики вместо runtime `config()` | 7/12 | 🟡 In progress |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 0/6 | ⬜ Not started |
 | P9 | Tenancy: bounded contexts вместо смешанной оси | 0/8 | ⬜ Not started |
 
@@ -268,15 +268,15 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P7.1 | Шаблон Options, SecretRef, CoreOptions, Config::bind | 🟢 Done | 2026-09-23 |
-| P7.2 | TenancyOptions, три policy, провайдер | ⬜ Not started | — |
-| P7.3 | Инъекция impersonation/status HTTP | ⬜ Not started | — |
-| P7.4 | Инъекция lifecycle/database/host | ⬜ Not started | — |
-| P7.5 | Инъекция workspace и OIDC-контроллеров | ⬜ Not started | — |
+| P7.2 | TenancyOptions, три policy, провайдер | 🟢 Done | 2026-09-23 |
+| P7.3 | Инъекция impersonation/status HTTP | 🟢 Done | 2026-09-23 |
+| P7.4 | Инъекция lifecycle/database/host | 🟢 Done | 2026-09-23 |
+| P7.5 | Инъекция workspace и OIDC-контроллеров | 🟢 Done | 2026-09-23 |
 | P7.6 | AuthOptions, провайдер, identity | ⬜ Not started | — |
 | P7.7 | Инъекция AuthOptions в access/matrix | ⬜ Not started | — |
 | P7.8 | ModulesOptions | ⬜ Not started | — |
 | P7.9 | MediaOptions | ⬜ Not started | — |
-| P7.10 | Команда `corex:config:validate` и redaction | ⬜ Not started | — |
+| P7.10 | Команда `corex:config:validate` и redaction | 🟢 Done | 2026-09-23 |
 | P7.11 | Блокирующий гейт `config()` | ⬜ Not started | — |
 | P7.12 | D100 behavior proof: dynamic default connection and TTL matrix | 🟢 Done | 2026-09-23 |
 
@@ -466,6 +466,19 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · closed-green · P7.12 GREEN: D100 TTL matrix, SecretRef redaction, one repository central→tenant→central. sqlite 93/223, pg 37/180. src diff is foreign baseline.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P7.2 GREEN: TenancyOptions + 3 policy; provider on Options bind. pest 476/1513, phpstan 0, pint passed. Cross-field receipt in TenancyOptionsTest. |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P7.3 GREEN: six HTTP/impersonation consumers on ImpersonationPolicy/StatusGatePolicy/TenancyOptions. pest 476/1513, pg 228/865, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P7.4 GREEN: six lifecycle/database/host consumers on AccountLifecyclePolicy/TenancyOptions. pest 476/1513, pg 228/865, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-23 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P7.5 GREEN: workspace/OIDC on ImpersonationPolicy/TenancyOptions. Remainder: 2 Commands + provider stancl projection. pest 476/1513, pg 228/865, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-23 | plan-exec/grok-4.7/high | plan-exec · closed-green · P7.10 GREEN: corex:config:validate redacts secrets. pint ok, phpstan 0, pest 97/243, anti-weakening ok. |
 
 ## Owner Gates
 
@@ -486,3 +499,4 @@ write-site: pre_mutation: allow · pre_final: allow |
 - P5.17: known deviation
 - P6.1: known deviation
 - P6.2: known deviation
+- P7.2: known deviation

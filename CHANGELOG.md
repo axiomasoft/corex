@@ -21,6 +21,8 @@
 
 ### Added
 
+- P7.10: `corex:config:validate` печатает эффективные драйверы и доступность
+  адаптеров, накапливает нарушения Options и не выводит значения секретов.
 - P7.5: workspace и OIDC-контроллеры читают `ImpersonationPolicy` /
   `TenancyOptions` вместо `config()`.
 - P7.4: lifecycle, host, template integrity и membership читают

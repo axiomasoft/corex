@@ -37,6 +37,7 @@ use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
 use CoreX\Storage\LocalTenantStorage;
 use CoreX\Support\Config;
+use CoreX\Support\Console\ValidateConfigCommand;
 use CoreX\Support\CoreOptions;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\ServiceProviderModuleRegistrar;
@@ -180,6 +181,7 @@ final class CoreServiceProvider extends ServiceProvider
                 PruneOutboxMessages::class,
                 RelayOutbox::class,
                 ShowDeliveryHealth::class,
+                ValidateConfigCommand::class,
             ]);
         }
 

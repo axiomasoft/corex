@@ -1,5 +1,76 @@
 # P7 receipts
 
+## P7.10 — `corex:config:validate` и redaction
+
+`ValidateConfigCommand` регистрируется в `CoreServiceProvider`. Для связанных
+Options (Core, Tenancy, Auth, Modules, Media — `class_exists` и `bound`) команда
+вызывает `fromArray` и печатает все нарушения за один проход. Эффективные
+драйверы и доступность адаптеров идут в stdout; ошибки — в stderr. Секреты
+известных путей печатаются как `present`/`absent`. Дефолтный hex
+`corex-intl.reference.cursor_secret` даёт `WARNING [secret-default]`;
+`packages/intl/config/corex-intl.php` не менялся.
+
+Негатив сажает `super-secret-value-test` в `SecretRef` (`tenancy.oidc.client_secret`)
+и в строковый `corex-search.cursor_secret`. Строки нет в stdout, stderr и message
+exception. Два нарушения `settings.cache_store` и `settings.cache_ttl` печатаются
+вместе.
+
+### Вывод команды
+
+Дефолтная конфигурация тестов, exit 0:
+
+```
+driver pubsub.driver=null
+driver tenancy.wakeup.driver=absent
+driver tenancy.oidc.enabled=absent
+adapter pubsub.redis=not-selected
+adapter wakeup.root_registry=not-selected
+secret tenancy.oidc.client_secret=absent
+secret corex-intl.reference.cursor_secret=absent
+secret corex-search.cursor_secret=absent
+secret corex-search-meilisearch.key=absent
+```
+
+Тот же прогон с секретом и дефолтным intl hex (значения заменены на `present`), exit 0:
+
+```
+driver pubsub.driver=null
+driver tenancy.wakeup.driver=absent
+driver tenancy.oidc.enabled=absent
+adapter pubsub.redis=not-selected
+adapter wakeup.root_registry=not-selected
+secret tenancy.oidc.client_secret=present
+secret corex-intl.reference.cursor_secret=present
+WARNING [secret-default] corex-intl.reference.cursor_secret
+secret corex-search.cursor_secret=absent
+secret corex-search-meilisearch.key=absent
+```
+
+### Validation
+
+```
+composer --working-dir=packages/core lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/core analyse
+exit 0
+{"tool":"phpstan","result":"passed","errors":0}
+```
+
+```
+composer --working-dir=packages/core test
+exit 0
+{"tool":"pest","result":"passed","tests":97,"passed":97,"assertions":243}
+```
+
+```
+bash scripts/anti-weakening-gate.sh
+ANTI-WEAKENING GATE: OK
+```
+
 ## P7.5 — workspace/OIDC; остаток `config(` tenancy
 
 `ResolveWorkspace`, `OidcLoginController` и `LogoutController` больше не

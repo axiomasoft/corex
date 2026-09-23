@@ -1,4 +1,4 @@
-# HANDOFF — 2026-09-23 — after P7.5
+# HANDOFF — 2026-09-23 — after P7.10
 
 **Next:** run-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.6-P7.7
 
@@ -10,16 +10,15 @@
 | Native model | composer-2.5 |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | P7.6 инъекция AuthOptions в access/matrix readers. |
+| Суть | P7.6 AuthOptions и инъекция в access/matrix. |
 
 ```text
 $ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.6-P7.7
 ```
 
-**Done:** P7.5 GREEN. Workspace and OIDC controllers take
-`ImpersonationPolicy` / `TenancyOptions`. Remainder in tenancy `src`:
-two Commands (CFG-002) and provider stancl projection. pest 476/1513,
-pg 228/865, analyse 0, pint ok.
+**Done:** P7.10 GREEN. `corex:config:validate` печатает драйверы и адаптеры,
+накапливает нарушения Options и не выводит секреты. pint ok, phpstan 0,
+pest 97/243, anti-weakening ok.
 
 **Remaining:** P7.6 → P7.7 (AuthOptions), затем P7.8+.
 
