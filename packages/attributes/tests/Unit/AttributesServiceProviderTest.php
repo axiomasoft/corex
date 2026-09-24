@@ -9,9 +9,9 @@ use CoreX\Attributes\Contracts\AttributeFilter;
 use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
-use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
 use CoreX\Attributes\Internal\Laravel\AttributeComposition;
 use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
+use CoreX\Attributes\Internal\Storage\ResolvingAttributeStore;
 use CoreX\Attributes\Internal\UnavailableAttributes;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\CoreServiceProvider;
@@ -40,7 +40,7 @@ final class AttributesServiceProviderTest extends TestCase
     public function test_it_resolves_a_static_catalogue_without_modules(): void
     {
         expect($this->app->make(FieldCatalogue::class))->toBeInstanceOf(StaticFieldCatalogue::class)
-            ->and($this->app->make(AttributeStore::class))->toBeInstanceOf(JsonbAttributeStore::class)
+            ->and($this->app->make(AttributeStore::class))->toBeInstanceOf(ResolvingAttributeStore::class)
             ->and($this->app->make(AttributeFilter::class))->not->toBeInstanceOf(UnavailableAttributes::class)
             ->and($this->app->make(SchemaOperations::class))->toBeInstanceOf(UnavailableAttributes::class);
     }

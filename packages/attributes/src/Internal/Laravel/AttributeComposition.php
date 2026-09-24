@@ -15,12 +15,14 @@ final readonly class AttributeComposition
      * @param  list<string>  $sources
      * @param  array<string, list<array<string, mixed>>>  $definitions
      * @param  array<string, bool>  $drivers
+     * @param  array<string, 'jsonb'|'eav'>  $storageByEntity
      */
     public function __construct(
         public array $sources,
         public string $storageDriver,
         public array $definitions,
         public array $drivers,
+        public array $storageByEntity = [],
     ) {}
 
     /** @param  array<string, mixed>  $config */
@@ -31,6 +33,7 @@ final readonly class AttributeComposition
         $storageDriver = self::storageDriver($violations, $config['storage_driver'] ?? 'jsonb');
         $definitions = self::definitions($violations, $config['definitions'] ?? []);
         $drivers = self::drivers($violations, $config['drivers'] ?? []);
+        $storageByEntity = self::storageByEntity($violations, $config['storage_by_entity'] ?? []);
         $violations->failIfAny();
 
         return new self(
@@ -38,6 +41,7 @@ final readonly class AttributeComposition
             storageDriver: $storageDriver,
             definitions: $definitions,
             drivers: $drivers,
+            storageByEntity: $storageByEntity,
         );
     }
 
@@ -88,6 +92,7 @@ final readonly class AttributeComposition
 
         $static = array_search('static', $sources, true);
         $module = array_search('module', $sources, true);
+
         if ($static !== false && $module !== false && $module < $static) {
             $violations->add('sources', 'module must follow static');
         }
@@ -104,6 +109,36 @@ final readonly class AttributeComposition
         $violations->add('storage_driver', 'must be jsonb or eav');
 
         return 'jsonb';
+    }
+
+    /**
+     * @return array<string, 'jsonb'|'eav'>
+     */
+    private static function storageByEntity(ViolationList $violations, mixed $value): array
+    {
+        if ($value === []) {
+            return [];
+        }
+
+        if (! is_array($value) || array_is_list($value)) {
+            $violations->add('storage_by_entity', 'must be an entity map');
+
+            return [];
+        }
+
+        $map = [];
+        foreach ($value as $entity => $driver) {
+            if (! is_string($entity) || preg_match('/\A[a-z][a-z0-9_]{0,63}\z/D', $entity) !== 1
+                || ! is_string($driver) || ! in_array($driver, ['jsonb', 'eav'], true)) {
+                $violations->add('storage_by_entity', 'must map each entity to jsonb or eav');
+
+                return [];
+            }
+
+            $map[$entity] = $driver;
+        }
+
+        return $map;
     }
 
     /**

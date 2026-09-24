@@ -8,6 +8,7 @@ use CoreX\Attributes\Contracts\AttributeFilter;
 use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
+use CoreX\Attributes\Data\AttributeStoragePolicy;
 use CoreX\Attributes\Data\AttributeTables;
 use CoreX\Attributes\Internal\Engine\EavAttributeStore;
 use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
@@ -16,6 +17,8 @@ use CoreX\Attributes\Internal\Engine\StructuralAttributeFilter;
 use CoreX\Attributes\Internal\Laravel\AttributeComposition;
 use CoreX\Attributes\Internal\Registry\RegistryFieldCatalogue;
 use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
+use CoreX\Attributes\Internal\Storage\ConfiguredAttributeStoreResolver;
+use CoreX\Attributes\Internal\Storage\ResolvingAttributeStore;
 use CoreX\Attributes\Internal\UnavailableAttributes;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Modules\Contracts\EntityRegistry;
@@ -58,15 +61,28 @@ final class AttributesServiceProvider extends ServiceProvider
             $catalogue = $app->make(FieldCatalogue::class);
             $tables = $app->make(AttributeTables::class);
 
-            if ($composition->storageDriver === 'eav' && ($composition->drivers['eav'] ?? false) && $app->bound('db')) {
-                return new EavAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
+            if (! $app->bound('db')) {
+                return $app->make(UnavailableAttributes::class);
             }
 
-            if (($composition->drivers['jsonb'] ?? false) && $app->bound('db')) {
-                return new JsonbAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
+            $connection = $app['db']->connection();
+            $authorizer = $app->make(DataScopeAuthorizer::class);
+            $jsonb = ($composition->drivers['jsonb'] ?? false)
+                ? new JsonbAttributeStore(connection: $connection, tables: $tables, catalogue: $catalogue, authorizer: $authorizer)
+                : null;
+            $eav = ($composition->drivers['eav'] ?? false)
+                ? new EavAttributeStore(connection: $connection, tables: $tables, catalogue: $catalogue, authorizer: $authorizer)
+                : null;
+
+            if ($jsonb === null && $eav === null) {
+                return $app->make(UnavailableAttributes::class);
             }
 
-            return $app->make(UnavailableAttributes::class);
+            return new ResolvingAttributeStore(new ConfiguredAttributeStoreResolver(
+                policy: new AttributeStoragePolicy(default: $composition->storageDriver, entities: $composition->storageByEntity),
+                jsonb: $jsonb,
+                eav: $eav,
+            ));
         });
 
         $this->app->scoped(SchemaOperations::class, function (Application $app): SchemaOperations {

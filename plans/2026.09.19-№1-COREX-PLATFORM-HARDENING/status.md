@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-24
-inputs_sha256: a207a8059c549c0be9e94fd4e732a1fa92f2a87ffbfdf65f598514f95a2aaadc
+inputs_sha256: b1b330be4f573ffb942bf4d3e511ad7ecf451aea222110cae6bbc9d2731d4b93
 generated_by: task plan-views status
 -->
 
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
-| P10 | Attributes: независимые определения и безопасная эволюция | 2/8 | 🟡 In progress |
+| P10 | Attributes: независимые определения и безопасная эволюция | 5/8 | 🟡 In progress |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 0/8 | ⬜ Not started |
 | P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
@@ -59,9 +59,9 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P10.1 | Module-free catalogue и composition | 🟢 Done | 2026-09-24 |
 | P10.2 | Stable identity и canonical snapshot | 🟢 Done | 2026-09-24 |
-| P10.3 | G-DDL и authoritative composite catalogue | ⬜ Not started | — |
-| P10.4 | Reversible schema evolution | ⬜ Not started | — |
-| P10.5 | Entity storage resolver и index policy | ⬜ Not started | — |
+| P10.3 | G-DDL и authoritative composite catalogue | 🟢 Done | 2026-09-24 |
+| P10.4 | Reversible schema evolution | 🟢 Done | 2026-09-24 |
+| P10.5 | Entity storage resolver и index policy | 🟢 Done | 2026-09-24 |
 | P10.6 | Восемь write checks | ⬜ Not started | — |
 | P10.7 | Transactional mutation message | ⬜ Not started | — |
 | P10.8 | Subsystems, ratchets и final proof | ⬜ Not started | — |
@@ -537,6 +537,14 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | plan-run/grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-24 | plan-run/grok-4.7/high | plan-run · closed-green · P10.2 GREEN: UUIDv7 identity, canonical snapshot, legacy UUIDv5 bridge. pest 23/57, phpstan 0, pint ok.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · closed-green · P10.3 GREEN: three-table attribute catalogue DDL, transactional immutable revisions/reservations, authoritative composite and fail-closed cache. attributes 33/75 + pg 19/56; root pg 187/707. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · local-repair · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:226 |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · local-repair · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P10.5 GREEN: entity resolver, measured expression index, promoted seam |
 
 ## Owner Gates
 
