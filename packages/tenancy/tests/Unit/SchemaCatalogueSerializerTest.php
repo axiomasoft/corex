@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer;
 
 it('encodes equivalent catalogue maps into identical canonical bytes', function (): void {
     $serializer = new SchemaCatalogueSerializer;

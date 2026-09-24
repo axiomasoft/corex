@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Actions\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\ClaimConflict;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\ClaimUnavailable;

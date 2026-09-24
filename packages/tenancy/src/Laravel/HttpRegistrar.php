@@ -19,7 +19,7 @@ use CoreX\Tenancy\Models\ImpersonationGrant;
 use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Support\StatusGatePolicy;
 use CoreX\Tenancy\Support\TenancyOptions;
-use CoreX\Tenancy\Workspaces\WorkspaceResolver;
+use CoreX\Tenancy\Workspace\WorkspaceResolver;
 use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Foundation\CachesRoutes;

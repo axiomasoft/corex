@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Authentication\Oidc\OidcClient;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Events\ImpersonationEnded;
 use CoreX\Tenancy\Events\ImpersonationStarted;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Models\User;
-use CoreX\Tenancy\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\Authenticatable;

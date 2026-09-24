@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests;
 
-use CoreX\Tenancy\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Testing\IsolatesDatabasePath;

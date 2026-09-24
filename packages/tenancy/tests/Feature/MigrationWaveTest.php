@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Models\AccountSchemaState;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;

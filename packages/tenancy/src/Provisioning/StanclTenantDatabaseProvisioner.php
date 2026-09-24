@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Provisioning;
 
 use CoreX\Tenancy\Contracts\TenantDatabaseProvisioner;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\ProvisionParams;
 use Stancl\Tenancy\Events\TenantCreated;
 

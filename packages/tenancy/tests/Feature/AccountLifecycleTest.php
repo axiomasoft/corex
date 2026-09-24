@@ -3,19 +3,19 @@
 declare(strict_types=1);
 
 use CoreX\Exceptions\ImpersonationRestrictedException;
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Events\AccountPurged;
 use CoreX\Tenancy\Events\AccountSuspended;
 use CoreX\Tenancy\Events\GraceStarted;
 use CoreX\Tenancy\Events\TrialStarted;
 use CoreX\Tenancy\ImpersonationGuard;
 use CoreX\Tenancy\ImpersonationState;
-use CoreX\Tenancy\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\NullImpersonationService;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;

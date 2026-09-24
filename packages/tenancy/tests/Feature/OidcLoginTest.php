@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Authentication\Oidc\OidcClient;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;

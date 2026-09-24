@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Database\TemplateIntegrityException;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityException;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;

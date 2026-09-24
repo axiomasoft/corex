@@ -1,3 +1,152 @@
+# P9.6 receipt
+
+12 файлов карты P9.6 перенесены. `Workspaces` стал `Workspace` с
+namespace context-first `CoreX\Tenancy\Workspace`. Модели Domain,
+Invitation, Workspace, WorkspaceMember, ImpersonationGrant и события
+DomainTrustChanged, ImpersonationStarted, ImpersonationEnded сохраняют
+FQCN через PSR-4 maps. Registrar'ы остаются в `Laravel/`; импорты
+workspace обновлены.
+
+Пустые `src/Workspaces` и `src/Models`. `src/Events` содержит только
+пустой leftover `Identity/` от dual-map P9.3. Trusted host, grant clock
+и listener patterns не менялись. `packages/tenancy/database/**` без diff.
+`scripts/tenancy-structure-gate.py check` остаётся красным до P9.8.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy dump-autoload -o
+exit 0
+Generated optimized autoload files containing 10184 classes
+```
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan 175/175, errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
+```
+composer test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":181,"passed":181,"assertions":687}
+```
+
+```
+git diff --exit-code -- packages/tenancy/database
+exit 0
+```
+
+# P9.5 receipt
+
+10 файлов карты P9.5 перенесены. OIDC стал `Authentication/Oidc` с
+namespace context-first `CoreX\Tenancy\Authentication\Oidc`. Контроллеры,
+`OidcAuthenticationException`, `User`, `UserSynced` и
+`SyncIdentityToAccount` сохраняют FQCN через PSR-4 maps.
+`AuthenticationRegistrar` остаётся в `Laravel/`; импорты OIDC обновлены.
+`routes/oidc.php` без изменения name/method/URI/action.
+
+Пустые `src/Oidc`, `src/Http/Controllers`, `src/Exceptions`, `src/Jobs`.
+`oidc.enabled=false` по-прежнему нулевой composition. Публичные контракты
+не менялись. `packages/tenancy/database/**` без diff.
+`scripts/tenancy-structure-gate.py check` остаётся красным до P9.8.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy dump-autoload -o
+exit 0
+Generated optimized autoload files containing 10184 classes
+```
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan 175/175, errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
+```
+composer test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":181,"passed":181,"assertions":687}
+```
+
+```
+git diff --exit-code -- packages/tenancy/database
+exit 0
+```
+
+# P9.4 receipt
+
+20 файлов карты P9.4 перенесены. Account models/events/lifecycle живут в
+`Account/`. Provisioning принял action, database, jobs, migrations и
+`MigrationBatch`. `TemplateClonePostgreSQLManager` сохраняет FQCN
+`CoreX\Tenancy\Database`: Composer classmap, а не PSR-4 prefix `Database\`,
+иначе PHPStan дважды грузит context-first siblings. События account,
+`CreateDatabaseFromTemplate`, модели Account/AccountExport/AccountSchemaState
+и MigrationBatch сохраняют FQCN через массивы каталогов PSR-4.
+
+Пустые `src/Actions`, `src/Database`, `src/Lifecycle`, `src/Migrations`.
+`Jobs/SyncIdentityToAccount` остаётся до P9.5. Публичные контракты и
+registrar не менялись. `packages/tenancy/database/**` без diff.
+`scripts/tenancy-structure-gate.py check` остаётся красным до P9.8.
+Binding fingerprint не менялся: единственная разрешённая дельта — D49.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan 175/175, errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
+```
+composer test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":181,"passed":181,"assertions":687}
+```
+
+```
+git diff --exit-code -- packages/tenancy/database
+exit 0
+```
+
 # P9.3 receipt
 
 55 файлов P9.3 перенесены. `Membership/Internal` снят: десять подсистем

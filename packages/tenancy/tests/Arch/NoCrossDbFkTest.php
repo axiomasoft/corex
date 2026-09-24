@@ -323,7 +323,7 @@ test('root-directory migrations create only root_ tables and tenant-directory mi
 
 test('the central and tenant runners load disjoint migration paths', function () use ($packageRoot): void {
     $provider = (string) file_get_contents($packageRoot.'/src/TenancyServiceProvider.php');
-    $orchestrator = (string) file_get_contents($packageRoot.'/src/Migrations/MigrationWaveOrchestrator.php');
+    $orchestrator = (string) file_get_contents($packageRoot.'/src/Provisioning/Migrations/MigrationWaveOrchestrator.php');
 
     // Публикация разведена по тегам: root-директория — только под
     // `tenancy-migrations` (central-коннект), tenant-директория — только под

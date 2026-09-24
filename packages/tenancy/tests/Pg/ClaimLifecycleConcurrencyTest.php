@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Actions\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\ClaimConflict;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\QualifiedTemplate;
@@ -116,7 +116,7 @@ use Illuminate\Database\Capsule\Manager;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
-use CoreX\Tenancy\Actions\ClaimAccountSignup;
+use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\QualifiedTemplate;

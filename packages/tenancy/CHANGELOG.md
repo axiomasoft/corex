@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- P9.6 turns `Workspaces` into `Workspace` and keeps DomainTrust/Impersonation/Workspace model and event FQCNs via PSR-4 maps.
+
+- P9.5 moves OIDC into `Authentication/Oidc` as a context-first adapter. Identity user/event/job and OIDC HTTP/exception classes keep FQCNs via PSR-4 maps. Routes and `oidc.enabled` stay the same.
+
+- P9.4 moves account lifecycle into `Account/` and physical-database provisioning into `Provisioning/`. `TemplateClonePostgreSQLManager` keeps `CoreX\Tenancy\Database` via classmap; account events, `CreateDatabaseFromTemplate`, and account/migration models keep FQCNs via PSR-4 maps.
+
 - P9.3 removes `Membership\Internal` and absorbs `Central` into `Membership\Transport`. `Expiry` is the path `Expiration`; class names stay. Membership events and `RefreshAccountMembership` keep their FQCNs.
 
 - P9.2 moves runtime adapters into `Runtime/` and Laravel seams into `Laravel/` without renaming stable FQCNs. Storage classes are context-first under `CoreX\Tenancy\Runtime\Storage`. `TenantContextRestorer` is now the scoped connection-guarded wrapper: it delegates the semantic check and refuses a mismatched active connection. It does not look up or initialize an account from the payload.

@@ -6,13 +6,13 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Support\PackageRegistrar;
 use CoreX\Support\RegistersNothingOnBoot;
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
 use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;

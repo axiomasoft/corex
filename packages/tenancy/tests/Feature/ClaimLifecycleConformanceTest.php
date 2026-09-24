@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Actions\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Database\TemplateIntegrityException;
-use CoreX\Tenancy\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Events\AccountPurged;
 use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\NullImpersonationService;
+use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\ClaimUnavailable;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityException;
+use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Tests\TestCase;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Commands;
 
-use CoreX\Tenancy\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use Illuminate\Console\Command;
 
 /**

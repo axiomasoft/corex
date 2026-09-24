@@ -7,8 +7,8 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Support\PackageRegistrar;
 use CoreX\Support\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
-use CoreX\Tenancy\Workspaces\DatabaseWorkspaceResolver;
-use CoreX\Tenancy\Workspaces\WorkspaceResolver;
+use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspace\WorkspaceResolver;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
