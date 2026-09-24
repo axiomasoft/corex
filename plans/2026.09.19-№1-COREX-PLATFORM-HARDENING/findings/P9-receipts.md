@@ -1,3 +1,66 @@
+# P9.7 receipt
+
+3 файла карты P9.7 перенесены в `Integration/Wakeup` с namespace
+context-first `CoreX\Tenancy\Integration\Wakeup`. `corex/wakeup` остаётся
+`suggest` + dev-only. Optional predicate, tag `corex.wakeup.hints` и
+сигнатура `corex:wakeup:root-sweep` не менялись. Registrar остаётся в
+`Laravel/`. Adapter-классы помечены `@internal`.
+
+Package-graph allowlist называет `Integration/Wakeup` adapters; негативная
+посадка `tests/fixtures/package-graph/tenancy-wakeup-foreign-context.php`
+из `Account/` даёт `[R1]`. Полный `package-graph-gate` остаётся красным
+на 64 чужих R4/R4b после P9.2–P9.6 до P9.8. Пустой leftover `src/Wakeup`.
+`packages/tenancy/database/**` без diff.
+`scripts/tenancy-structure-gate.py check` остаётся красным до P9.8.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy dump-autoload -o
+exit 0
+Generated optimized autoload files containing 10184 classes
+```
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan 175/175, errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
+```
+composer test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":181,"passed":181,"assertions":687}
+```
+
+```
+vendor/bin/pest tests/Arch/PackageGraphTest.php --filter='wakeup import outside Integration/Wakeup'
+exit 0
+{"tool":"pest","result":"passed","tests":1,"passed":1,"assertions":5}
+```
+
+```
+rg -n 'Wakeup\\\\Internal|Wakeup/Internal' packages/tenancy
+exit 1 (no matches)
+```
+
+```
+git diff --exit-code -- packages/tenancy/database
+exit 0
+```
+
 # P9.6 receipt
 
 12 файлов карты P9.6 перенесены. `Workspaces` стал `Workspace` с

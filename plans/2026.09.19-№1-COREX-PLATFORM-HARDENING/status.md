@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-24
-inputs_sha256: 90b25f96c52ae5efecad7f543222fd6ff98f0bf001fc10d1e325f4ab006507ca
+inputs_sha256: 095deb1e8c47c5c24906041edda8e725656c2ecd70a227de24a63ce4baee1c15
 generated_by: task plan-views status
 -->
 
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 6/6 | 🟢 Done |
-| P9 | Tenancy: bounded contexts вместо смешанной оси | 6/8 | 🟡 In progress |
+| P9 | Tenancy: bounded contexts вместо смешанной оси | 7/8 | 🟡 In progress |
 
 ## Phase P1
 
@@ -301,7 +301,7 @@ generated_by: task plan-views status
 | P9.4 | Account и Provisioning | 🟢 Done | 2026-09-24 |
 | P9.5 | Identity и Authentication/OIDC | 🟢 Done | 2026-09-24 |
 | P9.6 | Workspace, DomainTrust, Impersonation | 🟢 Done | 2026-09-24 |
-| P9.7 | Integration/Wakeup | ⬜ Not started | — |
+| P9.7 | Integration/Wakeup | 🟢 Done | 2026-09-24 |
 | P9.8 | Финальный ratchet и compatibility proof | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -525,6 +525,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P9.5 GREEN: Authentication/Oidc context-first, Identity FQCN maps, routes and oidc.enabled unchanged. |
 | 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
 | 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P9.6 GREEN: Workspaces became Workspace; DomainTrust/Impersonation/Workspace models and events keep FQCN. |
+| 2026-09-24 | plan-exec/cursor-grok-4.6/high | plan-exec · in-progress · — |
+| 2026-09-24 | plan-exec/cursor-grok-4.6/high | plan-exec · closed-green · P9.7 GREEN: Integration/Wakeup host-first adapters; optional wakeup predicate/tag/command unchanged; allowlist names only Integration/Wakeup; foreign-context fixture is R1. |
 
 ## Owner Gates
 

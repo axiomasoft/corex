@@ -23,6 +23,8 @@ use CoreX\Tenancy\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
+use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
+use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\DatabaseRegistrar;
 use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
@@ -46,8 +48,6 @@ use CoreX\Tenancy\Support\TenancyOptions;
 use CoreX\Tenancy\TenancyManagerContextResolver;
 use CoreX\Tenancy\Tests\Concerns\AssertsContainerBindings;
 use CoreX\Tenancy\Tests\TestCase;
-use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
-use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
 use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspace\WorkspaceResolver;
 

@@ -17,7 +17,7 @@
 
     <source>
         <include>
-            <directory>src/Wakeup</directory>
+            <directory>src/Integration/Wakeup</directory>
         </include>
     </source>
 

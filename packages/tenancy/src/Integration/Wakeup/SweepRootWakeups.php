@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Wakeup\Commands;
+namespace CoreX\Tenancy\Integration\Wakeup;
 
-use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
 use Illuminate\Console\Command;
 
+/** @internal Host-first wakeup command. Not package public API. */
 final class SweepRootWakeups extends Command
 {
     protected $signature = 'corex:wakeup:root-sweep {--limit=100 : Maximum due account hints} {--reconcile : Rebuild one bounded page of advisory hints} {--cursor= : Resume after this account id}';

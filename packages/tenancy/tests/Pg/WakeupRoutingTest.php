@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
+use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
+use CoreX\Tenancy\Integration\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Tenancy\Tests\TestCase;
-use CoreX\Tenancy\Wakeup\Commands\SweepRootWakeups;
-use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
-use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
 use CoreX\Tenancy\WorkspaceRef;
 use CoreX\Wakeup\Contracts\WakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;

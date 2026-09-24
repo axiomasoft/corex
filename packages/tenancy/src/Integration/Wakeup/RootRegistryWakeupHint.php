@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Wakeup\Internal;
+namespace CoreX\Tenancy\Integration\Wakeup;
 
 use CoreX\Tenancy\TenantContext;
 use CoreX\Wakeup\Contracts\WakeupHint;
@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Throwable;
 
 /**
+ * @internal Host-first wakeup adapter. Not package public API.
+ *
  * Best-effort root routing hint. The tenant request remains authoritative;
  * losing this table merely makes the root process discover work later.
  */

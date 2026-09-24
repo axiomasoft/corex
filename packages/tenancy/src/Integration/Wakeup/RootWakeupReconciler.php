@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Wakeup\Internal;
+namespace CoreX\Tenancy\Integration\Wakeup;
 
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
@@ -14,6 +14,8 @@ use RuntimeException;
 use Throwable;
 
 /**
+ * @internal Host-first wakeup adapter. Not package public API.
+ *
  * Claims one root hint at a time and invokes the existing tenant-local
  * sweeper through TenancyManager. It never constructs a tenant DSN itself.
  */

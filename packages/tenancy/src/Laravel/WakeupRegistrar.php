@@ -6,10 +6,10 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Support\PackageRegistrar;
 use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
+use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
+use CoreX\Tenancy\Integration\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\Support\TenancyOptions;
-use CoreX\Tenancy\Wakeup\Commands\SweepRootWakeups;
-use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
-use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Override;

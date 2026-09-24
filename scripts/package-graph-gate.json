@@ -24,24 +24,24 @@
         {
             "from": "corex/tenancy",
             "to": "corex/wakeup",
-            "import_file": "packages/tenancy/src/Wakeup/Internal/RootRegistryWakeupHint.php",
+            "import_file": "packages/tenancy/src/Integration/Wakeup/RootRegistryWakeupHint.php",
             "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_contains": [
                 "interface_exists(WakeupHint::class)",
                 "interface_exists(WakeupSweeper::class)"
             ],
-            "reason": "Root-registry wakeup hint adapter; registered only when corex/wakeup is present."
+            "reason": "Integration/Wakeup root-registry hint adapter; registered only when corex/wakeup is present."
         },
         {
             "from": "corex/tenancy",
             "to": "corex/wakeup",
-            "import_file": "packages/tenancy/src/Wakeup/Internal/RootWakeupReconciler.php",
+            "import_file": "packages/tenancy/src/Integration/Wakeup/RootWakeupReconciler.php",
             "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_contains": [
                 "interface_exists(WakeupHint::class)",
                 "interface_exists(WakeupSweeper::class)"
             ],
-            "reason": "Root wakeup reconciler; registered only when corex/wakeup is present."
+            "reason": "Integration/Wakeup root reconciler; registered only when corex/wakeup is present."
         },
         {
             "from": "corex/attributes",

@@ -21,6 +21,7 @@
 
 ### Added
 
+- P9.7: optional `corex/wakeup` adapter живёт в `Integration/Wakeup`; package-graph allowlist называет только эту host-first boundary.
 - P9.6: `Workspaces` стал `Workspace`; модели и события DomainTrust/Impersonation/Workspace стоят рядом с owners и сохраняют FQCN.
 - P9.5: OIDC живёт в `Authentication/Oidc` как context-first adapter; identity sync — в `Identity/` с сохранёнными FQCN моделей, событий, job и HTTP-контроллеров. Routes и `oidc.enabled` не менялись.
 - P9.4: Account lifecycle и physical-database provisioning собраны в `Account/` и `Provisioning/`. `TemplateClonePostgreSQLManager` сохраняет FQCN через classmap; события, job и models — через PSR-4 maps.

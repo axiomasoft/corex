@@ -89,3 +89,33 @@ PHP;
         ->and($joined)->toContain('[R3]')
         ->and($joined)->toContain('host defines classes under reserved prefix');
 });
+
+test('package graph gate reports R1 for wakeup import outside Integration/Wakeup', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $fixture = $repoRoot.'/tests/fixtures/package-graph/tenancy-wakeup-foreign-context.php';
+    $probePath = $repoRoot.'/packages/tenancy/src/Account/WakeupForeignContextProbe.php';
+
+    expect(is_file($fixture))->toBeTrue();
+    copy($fixture, $probePath);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('[R1]')
+            ->and($joined)->toContain('WakeupForeignContextProbe.php')
+            ->and($joined)->toContain('corex/wakeup');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
