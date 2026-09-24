@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-24
-inputs_sha256: 3223ec4d202cec86697e1083e4a5c3a78e3fd1d5d8b9ce5a35a5797846780ea0
+inputs_sha256: bf5067dbbf0d420035b4c2ecf1b9fa2c802306e36c2ec909e299874e7b2db5c6
 generated_by: task plan-views status
 -->
 
@@ -25,7 +25,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
-| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 1/8 | 🟡 In progress |
+| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 4/8 | 🟡 In progress |
 | P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
@@ -71,9 +71,9 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P11.1 | Registry vocabulary, identity and version metadata | 🟢 Done | 2026-09-24 |
-| P11.2 | Deterministic compiler and canonical frozen snapshot | ⬜ Not started | — |
-| P11.3 | Runtime publication, collector freeze and refresh boundaries | ⬜ Not started | — |
-| P11.4 | Workflow definition stamps in existing durable carriers | ⬜ Not started | — |
+| P11.2 | Deterministic compiler and canonical frozen snapshot | 🟢 Done | 2026-09-24 |
+| P11.3 | Runtime publication, collector freeze and refresh boundaries | 🟢 Done | 2026-09-24 |
+| P11.4 | Workflow definition stamps in existing durable carriers | 🟢 Done | 2026-09-24 |
 | P11.5 | Versioned wakeup handler registry and stamped envelopes | ⬜ Not started | — |
 | P11.6 | Complete tasks-workflow materialization provenance | ⬜ Not started | — |
 | P11.7 | Versioned notification digest wakeups | ⬜ Not started | — |
@@ -84,7 +84,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P12.1 | Core error vocabulary, policy and zone classification | ⬜ Not started | — |
-| P12.2 | API error projection and internal correlation without wire change | ⬜ Not started | — |
+| P12.2 | API error projection and internal correlation without wire change | ⬜ Not started | 2026-09-24 |
 | P12.3 | Attributes error distinctions and result/exception proof | ⬜ Not started | — |
 | P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | ⬜ Not started | — |
 | P12.5 | Bounded metrics, P5 trace carrier and optional OpenTelemetry bridge | ⬜ Not started | — |
@@ -555,6 +555,13 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | executor/gpt-6-sol/xhigh | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P11.1 GREEN: Manifest::replace, InstalledPackageVersion discovery, ExtensionStamp, identity table. modules pest 37/200, phpstan 0, pint ok. |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · routing-rejected · note сокращена; полный текст: journal.jsonl:240 |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · E11b exec start P11.2-P11.3; owner granted grok+2-item batch |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P11.2 GREEN: NormalizedExtension IR, point-specific identity, explicit replacement, corex-registry/1 fingerprint, detached snapshot. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · E11b continue P11.3 after P11.2 GREEN |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P11.3 GREEN: entity collector freeze after projection, fingerprint introspection, JobProcessing pin, octane:reload documented. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P11.4 GREEN: workflow definition stamp in existing intent payload; fingerprint excluded from replay hash; legacy refs not rewritten. workflow pest 15/39, phpstan 0, pint ok. write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

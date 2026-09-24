@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Workflow\Internal;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
@@ -34,7 +35,11 @@ final class SqlWorkflowBinding implements WorkflowBinding
         $this->assertContext($request->context->account->id, $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
         $this->assertTriggerDeclaration($request);
-        $payload = [
+        $stamp = WorkflowDefinitionStamp::fromRequest(
+            request: $request,
+            registryFingerprint: $this->registryFingerprint(),
+        );
+        $business = [
             'event_id' => $request->eventId,
             'event_name' => $request->eventName,
             'entity_handle' => $request->entityHandle,
@@ -48,7 +53,8 @@ final class SqlWorkflowBinding implements WorkflowBinding
             definitionRef: $request->definitionRef,
             versionRef: $request->versionRef,
             subjectRef: $request->subjectRef,
-            payload: $payload,
+            business: $business,
+            stamp: $stamp,
         );
     }
 
@@ -72,11 +78,26 @@ final class SqlWorkflowBinding implements WorkflowBinding
         return $this->engine->fire($request);
     }
 
-    /** @param array<string, mixed> $payload */
-    private function captureIntent(string $requestKey, string $kind, string $module, string $definitionRef, string $versionRef, string $subjectRef, array $payload): CaptureResult
-    {
-        $encoded = json_encode($payload, JSON_THROW_ON_ERROR);
-        $hash = hash('sha256', "engine-binding/1\0{$kind}\0{$requestKey}\0{$encoded}");
+    /**
+     * @param  array<string, mixed>  $business
+     */
+    private function captureIntent(
+        string $requestKey,
+        string $kind,
+        string $module,
+        string $definitionRef,
+        string $versionRef,
+        string $subjectRef,
+        array $business,
+        ExtensionStamp $stamp,
+    ): CaptureResult {
+        $stored = WorkflowDefinitionStamp::storedPayload($business, $stamp);
+        $encoded = json_encode($stored, JSON_THROW_ON_ERROR);
+        $hash = WorkflowDefinitionStamp::payloadHash(
+            kind: $kind,
+            requestKey: $requestKey,
+            canonical: WorkflowDefinitionStamp::canonicalPayload($stored),
+        );
 
         try {
             $this->connection->table('sys_workflow_intents')->insert([
@@ -105,10 +126,62 @@ final class SqlWorkflowBinding implements WorkflowBinding
                 throw $exception;
             }
 
-            return new CaptureResult(status: hash_equals((string) $existing->payload_hash, $hash) ? 'existing' : 'conflict');
+            return new CaptureResult(status: $this->admitExisting(
+                existing: $existing,
+                kind: $kind,
+                requestKey: $requestKey,
+                business: $business,
+                stamp: $stamp,
+                versionedHash: $hash,
+            ));
         }
 
         return new CaptureResult(status: 'created');
+    }
+
+    /**
+     * @param  array<string, mixed>  $business
+     */
+    private function admitExisting(object $existing, string $kind, string $requestKey, array $business, ExtensionStamp $stamp, string $versionedHash): string
+    {
+        $stored = json_decode((string) $existing->payload, true);
+        $schema = WorkflowDefinitionStamp::schemaOf(
+            stored: is_array($stored) ? $stored : null,
+            definitionRef: (string) $existing->definition_ref,
+            versionRef: (string) $existing->version_ref,
+        );
+
+        if ($schema === 'versioned') {
+            $identity = is_array($stored['identity'] ?? null) ? $stored['identity'] : [];
+            $sameIdentity = ($identity['id'] ?? null) === $stamp->id
+                && ($identity['version'] ?? null) === $stamp->version
+                && ($identity['point'] ?? null) === $stamp->point;
+
+            return $sameIdentity && hash_equals((string) $existing->payload_hash, $versionedHash)
+                ? 'existing'
+                : 'conflict';
+        }
+
+        if ($schema === 'legacy') {
+            $legacyHash = WorkflowDefinitionStamp::legacyPayloadHash(
+                kind: $kind,
+                requestKey: $requestKey,
+                businessPayload: $business,
+            );
+
+            return hash_equals((string) $existing->payload_hash, $legacyHash) ? 'existing' : 'conflict';
+        }
+
+        return 'conflict';
+    }
+
+    private function registryFingerprint(): ?string
+    {
+        if ($this->modules === null) {
+            return null;
+        }
+
+        return $this->modules->compiled()->fingerprint;
     }
 
     private function assertTriggerDeclaration(TriggerRequest $request): void

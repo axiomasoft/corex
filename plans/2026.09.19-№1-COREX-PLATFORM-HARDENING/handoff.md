@@ -1,34 +1,38 @@
-# HANDOFF — 2026-09-24 — after P11.1
+# HANDOFF — 2026-09-24 — after P11.4
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.2
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.5
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E11b |
+| Batch | E11d |
 | Model | implementation |
 | Thinking | high |
 | Context | cold-start-root: whole-plan-independent-audit |
-| Суть | P11.2 — нормализовать declarations, отклонить duplicate/replacement и опубликовать canonical fingerprint. |
+| Суть | P11.5 — versioned wakeup registry, stamped envelope, quarantine and read-only preflight. |
 
 **Provider-native command:**
 
 ```bash
-agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.2'
+agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.5'
 ```
 
-**Sources of truth:** `phases/P11/P11.2.md` · `phases/P11/P11.3.md` ·
-`phases/P11/P11.1.md` · `journal.jsonl`.
+**Sources of truth:** `phases/P11/P11.5.md` · `phases/P11/P11.4.md` ·
+`decisions/D59-durable-work-pins-extension-version.md` ·
+`decisions/D103-registry-fingerprint-is-provenance-only.md` · `journal.jsonl`.
 
-**Done:** P11.1 GREEN. Modules expose repeatable `Manifest::replace()`, Composer
-version/reference discovery and dependency-neutral `ExtensionStamp`. Extension
-policy names the canonical id of every compiled point. Modules package lint,
-analysis and tests passed.
+**Done:** E11c GREEN. P11.4 stamps workflow trigger identity and version inside the
+existing intent payload. The replay hash excludes `registryFingerprint`. Legacy
+non-empty refs keep the `engine-binding/1` comparison and are not rewritten.
+Workflow lint, analysis and tests passed (15/39).
 
-**Remaining:** P11.2–P17 and other unfinished plan phases according to the
-current status and admission gates.
+**Remaining:** P11.5–P11.8, then P12–P17 according to the current status and
+admission gates. Do not start P12.1 from this handoff.
 
-**Open risks:** D48 multi-account relay remains conditional on a measured
-starvation, SLO breach, or manual fan-out trigger. No P11.1 acceptance deviation.
+**Open risks:** Consumer tests that register entities after the app is fully
+booted will hit `RegistryFrozen`. Auth/CRM package lanes were not re-run in
+E11c. D48 multi-account relay remains conditional. No P11.4 acceptance
+deviation.
 
-**Pointers:** `phases/P11/P11.2.md` · `phases/P11/P11.3.md` ·
-`docs/architecture/extension-policy.md` · `execution-commands.md` · `journal.jsonl`.
+**Pointers:** `phases/P11/P11.5.md` · `findings/P11-receipts.md` ·
+`packages/workflow/src/Internal/SqlWorkflowBinding.php` ·
+`execution-commands.md` · `journal.jsonl`.
