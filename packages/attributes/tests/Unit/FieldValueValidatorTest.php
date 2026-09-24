@@ -33,7 +33,7 @@ it('accepts all supported typed values from the active registry snapshot', funct
             return $this->snapshot;
         }
     };
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
     );
@@ -64,7 +64,7 @@ it('rejects an unknown field and floating point money values', function (): void
             return $this->snapshot;
         }
     };
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
     );

@@ -68,7 +68,7 @@ it('rejects unapproved or oversized schema-change inputs', function (): void {
 });
 
 it('fails closed while no qualified engine is bound', function (): void {
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'boxed:account-1',
         actorId: 'user-1',
@@ -82,7 +82,7 @@ it('fails closed while no qualified engine is bound', function (): void {
 it('compiles only structural allowlisted filters', function (): void {
     $hash = str_repeat('a', 64);
     $schema = new FieldSnapshot('contact', 'v1', $hash, [['code' => 'email', 'type' => 'email']], []);
-    $scope = new DataScope(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'boxed:account-1', 'user-1', $hash);
+    $scope = DataScope::fromTenantContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'boxed:account-1', 'user-1', $hash);
     $filter = new StructuralAttributeFilter(new AllowAllDataScopeAuthorizer);
 
     expect($filter->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'email', 'value' => 'a@example.test']))->schemaHash)->toBe($hash);

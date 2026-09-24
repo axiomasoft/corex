@@ -11,7 +11,7 @@
         "illuminate/support": "^12.0|^13.0"
     },
     "suggest": {
-        "corex/modules": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it AttributeStore and SchemaOperations resolve to UnavailableAttributes."
+        "corex/modules": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
     },
     "autoload": {
         "psr-4": {

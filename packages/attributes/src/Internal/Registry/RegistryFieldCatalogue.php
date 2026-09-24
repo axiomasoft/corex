@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Attributes\Internal\Registry;
 
 use CoreX\Attributes\Contracts\FieldCatalogue;
+use CoreX\Attributes\Data\AttributeDefinition;
+use CoreX\Attributes\Data\AttributeId;
+use CoreX\Attributes\Data\AttributeLifecycle;
+use CoreX\Attributes\Data\IndexPolicy;
 use CoreX\Attributes\Support\FieldSnapshot;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Extend\EntityField;
 use CoreX\Support\Data\DataScope;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use RuntimeException;
 
 final readonly class RegistryFieldCatalogue implements FieldCatalogue
@@ -18,13 +23,16 @@ final readonly class RegistryFieldCatalogue implements FieldCatalogue
     public function __construct(
         private EntityRegistry $entities,
         private ModuleRegistry $modules,
+        private TenantContextRestorer $contexts,
         private array $drivers,
     ) {}
 
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
+        $context = $this->contexts->restore($scope);
+
         $active = array_filter(
-            $this->entities->all($scope->context),
+            $this->entities->all($context),
             static fn ($definition): bool => $definition->handle === $entity,
         );
 
@@ -32,7 +40,7 @@ final readonly class RegistryFieldCatalogue implements FieldCatalogue
             throw new RuntimeException('The entity is not active for the current tenant.');
         }
 
-        $fields = [];
+        $definitions = [];
         foreach ($this->modules->compiled()->entityFields as $compiled) {
             $field = $compiled->extender;
 
@@ -40,29 +48,54 @@ final readonly class RegistryFieldCatalogue implements FieldCatalogue
                 continue;
             }
 
-            if ($compiled->sleeping && ! $this->modules->isActive($compiled->declaringModule, $scope->context)) {
+            if ($compiled->sleeping && ! $this->modules->isActive($compiled->declaringModule, $context)) {
                 continue;
             }
 
-            $fields[] = [
-                'code' => $field->fieldHandle,
-                'type' => $this->fieldType($field),
-                'required' => $field->isRequired,
-                'searchable' => $field->isSearchable,
-                'meta' => $field->meta,
-            ];
+            $definitions[] = $this->definition($entity, $field);
         }
 
-        usort($fields, static fn (array $left, array $right): int => $left['code'] <=> $right['code']);
-        $payload = json_encode($fields, JSON_THROW_ON_ERROR);
-        $hash = hash('sha256', $entity."\n".$payload);
+        $definitions = AttributeDefinition::canonicalList($definitions);
 
         return new FieldSnapshot(
             entity: $entity,
-            schemaVersion: $hash,
-            schemaHash: $hash,
-            activeFields: $fields,
+            schemaVersion: 'attributes/2',
+            schemaHash: AttributeDefinition::schemaHash($entity, $definitions),
+            activeFields: array_map(
+                static fn (AttributeDefinition $definition): array => $definition->snapshotRow(),
+                $definitions,
+            ),
             driverCapabilities: $this->drivers,
+        );
+    }
+
+    private function definition(string $entity, EntityField $field): AttributeDefinition
+    {
+        $meta = $field->meta;
+        $pinned = $meta['attribute_id'] ?? null;
+        if (is_string($pinned) && $pinned !== '') {
+            $id = AttributeId::v7($pinned);
+        } else {
+            $id = AttributeId::legacy($entity, $field->fieldHandle);
+            $meta['legacy_identity'] = true;
+        }
+
+        unset($meta['attribute_id']);
+
+        return new AttributeDefinition(
+            id: $id,
+            entity: $entity,
+            key: $field->fieldHandle,
+            revision: 1,
+            type: $this->fieldType($field),
+            lifecycle: AttributeLifecycle::Active,
+            required: $field->isRequired,
+            searchable: $field->isSearchable,
+            constraints: [],
+            readKeys: [],
+            writeKeys: [],
+            index: IndexPolicy::None,
+            meta: $meta,
         );
     }
 

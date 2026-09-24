@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-24
-inputs_sha256: 095deb1e8c47c5c24906041edda8e725656c2ecd70a227de24a63ce4baee1c15
+inputs_sha256: a207a8059c549c0be9e94fd4e732a1fa92f2a87ffbfdf65f598514f95a2aaadc
 generated_by: task plan-views status
 -->
 
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
-| P10 | Attributes: независимые определения и безопасная эволюция | 0/8 | ⬜ Not started |
+| P10 | Attributes: независимые определения и безопасная эволюция | 2/8 | 🟡 In progress |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 0/8 | ⬜ Not started |
 | P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 6/6 | 🟢 Done |
-| P9 | Tenancy: bounded contexts вместо смешанной оси | 7/8 | 🟡 In progress |
+| P9 | Tenancy: bounded contexts вместо смешанной оси | 8/8 | 🟢 Done |
 
 ## Phase P1
 
@@ -57,8 +57,8 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P10.1 | Module-free catalogue и composition | ⬜ Not started | — |
-| P10.2 | Stable identity и canonical snapshot | ⬜ Not started | — |
+| P10.1 | Module-free catalogue и composition | 🟢 Done | 2026-09-24 |
+| P10.2 | Stable identity и canonical snapshot | 🟢 Done | 2026-09-24 |
 | P10.3 | G-DDL и authoritative composite catalogue | ⬜ Not started | — |
 | P10.4 | Reversible schema evolution | ⬜ Not started | — |
 | P10.5 | Entity storage resolver и index policy | ⬜ Not started | — |
@@ -302,7 +302,7 @@ generated_by: task plan-views status
 | P9.5 | Identity и Authentication/OIDC | 🟢 Done | 2026-09-24 |
 | P9.6 | Workspace, DomainTrust, Impersonation | 🟢 Done | 2026-09-24 |
 | P9.7 | Integration/Wakeup | 🟢 Done | 2026-09-24 |
-| P9.8 | Финальный ratchet и compatibility proof | ⬜ Not started | — |
+| P9.8 | Финальный ratchet и compatibility proof | 🟢 Done | 2026-09-24 |
 
 ## 6. Update Log
 
@@ -527,6 +527,16 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P9.6 GREEN: Workspaces became Workspace; DomainTrust/Impersonation/Workspace models and events keep FQCN. |
 | 2026-09-24 | plan-exec/cursor-grok-4.6/high | plan-exec · in-progress · — |
 | 2026-09-24 | plan-exec/cursor-grok-4.6/high | plan-exec · closed-green · P9.7 GREEN: Integration/Wakeup host-first adapters; optional wakeup predicate/tag/command unchanged; allowlist names only Integration/Wakeup; foreign-context fixture is R1. |
+| 2026-09-24 | codex/gpt-6 | plan-exec · in-progress · — |
+| 2026-09-24 | codex/gpt-6 | plan-exec · closed-green · P9.8 GREEN: 13 roots, 175 classes, D49 decorator, DATA-003 226 owned writes, public owner ports, full package/root/PG/static checks; pre_mutation and pre_final allow. |
+| 2026-09-24 | codex/gpt-6 | plan-close · in-progress · Inline P9 phase close after P9.8 GREEN; assurance direct-close allowed. |
+| 2026-09-24 | codex/gpt-6 | plan-close · closed-green · P9 direct-close: all eight items GREEN; final structure, DATA-003, package and PostgreSQL evidence current. |
+| 2026-09-24 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-24 | plan-run/grok-4.7/high | plan-run · closed-green · P10.1 GREEN: static catalogue and AttributeComposition bind without modules; jsonb store stays available; invalid source order fails. pest 19/46, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-24 | plan-run/grok-4.7/high | plan-run · closed-green · P10.2 GREEN: UUIDv7 identity, canonical snapshot, legacy UUIDv5 bridge. pest 23/57, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

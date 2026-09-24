@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Attributes\Data\AttributeId;
 use CoreX\Attributes\Internal\Registry\RegistryFieldCatalogue;
 use CoreX\Modules\Compiler\CompiledEntityField;
 use CoreX\Modules\Compiler\CompiledRegistry;
@@ -93,16 +94,28 @@ it('projects active compiled entity fields without creating another registry', f
                 return $this->compiled;
             }
         },
+        contexts: fixedTenantContextRestorer($context),
         drivers: ['jsonb' => true, 'eav' => true, 'ddl' => true],
     );
 
-    $snapshot = $catalogue->snapshot(new DataScope($context, 'boxed:account-1', 'user-1', str_repeat('a', 64)), 'contact');
+    $snapshot = $catalogue->snapshot(DataScope::fromTenantContext($context, 'boxed:account-1', 'user-1', str_repeat('a', 64)), 'contact');
 
-    expect($snapshot->activeFields)->toBe([[
-        'code' => 'website',
-        'type' => 'text',
-        'required' => false,
-        'searchable' => true,
-        'meta' => [],
-    ]])->and($snapshot->driverCapabilities)->toBe(['jsonb' => true, 'eav' => true, 'ddl' => true]);
+    expect($snapshot->schemaVersion)->toBe('attributes/2')
+        ->and($snapshot->activeFields)->toBe([[
+            'code' => 'website',
+            'constraints' => [],
+            'id' => AttributeId::legacy('contact', 'website')->value,
+            'index' => 'none',
+            'key' => 'website',
+            'lifecycle' => 'active',
+            'meta' => ['legacy_identity' => true],
+            'read_keys' => [],
+            'required' => false,
+            'revision' => 1,
+            'searchable' => true,
+            'type' => 'text',
+            'write_keys' => [],
+        ]])
+        ->and($snapshot->schemaHash)->toBe($snapshot->schemaHash)
+        ->and($snapshot->driverCapabilities)->toBe(['jsonb' => true, 'eav' => true, 'ddl' => true]);
 });

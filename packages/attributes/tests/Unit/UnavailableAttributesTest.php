@@ -20,7 +20,7 @@ use CoreX\Tenancy\TenantContext;
 
 it('fails closed consistently when an application has not enabled attributes', function (): void {
     $hash = str_repeat('a', 64);
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
     );

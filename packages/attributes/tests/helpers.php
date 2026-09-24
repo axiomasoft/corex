@@ -9,16 +9,30 @@ use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Support\Data\CallableDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use CoreX\Tenancy\TenantContext;
 
 function jsonbScope(string $connectionIdentity = 'pgsql:corex_test', ?string $restoreEpoch = null): DataScope
 {
-    return new DataScope(
+    return DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: $connectionIdentity,
         actorId: 'user-1',
         restoreEpoch: $restoreEpoch ?? str_repeat('a', 64),
     );
+}
+
+function fixedTenantContextRestorer(TenantContext $context): TenantContextRestorer
+{
+    return new class($context) implements TenantContextRestorer
+    {
+        public function __construct(private TenantContext $context) {}
+
+        public function restore(DataScope $scope): TenantContext
+        {
+            return $this->context;
+        }
+    };
 }
 
 function jsonbAuthorizer(?Closure $authorize = null): DataScopeAuthorizer

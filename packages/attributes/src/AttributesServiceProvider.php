@@ -13,11 +13,14 @@ use CoreX\Attributes\Internal\Engine\EavAttributeStore;
 use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
 use CoreX\Attributes\Internal\Engine\QueuedSchemaOperations;
 use CoreX\Attributes\Internal\Engine\StructuralAttributeFilter;
+use CoreX\Attributes\Internal\Laravel\AttributeComposition;
 use CoreX\Attributes\Internal\Registry\RegistryFieldCatalogue;
+use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
 use CoreX\Attributes\Internal\UnavailableAttributes;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -40,24 +43,26 @@ final class AttributesServiceProvider extends ServiceProvider
                 schemaOperations: (string) ($tables['schema_operations'] ?? 'sys_attribute_schema_operations'),
             );
         });
+        $this->app->singleton(AttributeComposition::class, function (Application $app): AttributeComposition {
+            /** @var array<string, mixed> $config */
+            $config = (array) $app['config']->get('corex-attributes', []);
+
+            return AttributeComposition::fromArray($config);
+        });
         $this->app->scoped(UnavailableAttributes::class);
 
         $this->app->scoped(AttributeFilter::class, StructuralAttributeFilter::class);
 
         $this->app->scoped(AttributeStore::class, function (Application $app): AttributeStore {
+            $composition = $app->make(AttributeComposition::class);
             $catalogue = $app->make(FieldCatalogue::class);
-
-            if ($catalogue instanceof UnavailableAttributes) {
-                return $catalogue;
-            }
-
             $tables = $app->make(AttributeTables::class);
 
-            if ($app['config']->get('corex-attributes.storage_driver') === 'eav' && (bool) $app['config']->get('corex-attributes.drivers.eav', false) && $app->bound('db')) {
+            if ($composition->storageDriver === 'eav' && ($composition->drivers['eav'] ?? false) && $app->bound('db')) {
                 return new EavAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
             }
 
-            if ((bool) $app['config']->get('corex-attributes.drivers.jsonb', false) && $app->bound('db')) {
+            if (($composition->drivers['jsonb'] ?? false) && $app->bound('db')) {
                 return new JsonbAttributeStore(connection: $app['db']->connection(), tables: $tables, catalogue: $catalogue, authorizer: $app->make(DataScopeAuthorizer::class));
             }
 
@@ -65,13 +70,14 @@ final class AttributesServiceProvider extends ServiceProvider
         });
 
         $this->app->scoped(SchemaOperations::class, function (Application $app): SchemaOperations {
-            $catalogue = $app->make(FieldCatalogue::class);
-
-            if ($catalogue instanceof UnavailableAttributes) {
-                return $catalogue;
+            if (! $app->bound(EntityRegistry::class) || ! $app->bound(ModuleRegistry::class)) {
+                return $app->make(UnavailableAttributes::class);
             }
 
-            if ((bool) $app['config']->get('corex-attributes.drivers.ddl', false) && $app->bound('db')) {
+            $composition = $app->make(AttributeComposition::class);
+            $catalogue = $app->make(FieldCatalogue::class);
+
+            if (($composition->drivers['ddl'] ?? false) && $app->bound('db')) {
                 return new QueuedSchemaOperations(
                     connection: $app['db']->connection(),
                     tables: $app->make(AttributeTables::class),
@@ -84,15 +90,23 @@ final class AttributesServiceProvider extends ServiceProvider
         });
 
         $this->app->scoped(FieldCatalogue::class, function (Application $app): FieldCatalogue {
-            if ($app->bound(EntityRegistry::class) && $app->bound(ModuleRegistry::class)) {
-                return new RegistryFieldCatalogue(
+            $composition = $app->make(AttributeComposition::class);
+            $modulesBound = $app->bound(EntityRegistry::class) && $app->bound(ModuleRegistry::class);
+            $catalogue = new StaticFieldCatalogue(
+                definitions: $composition->definitions,
+                drivers: $composition->drivers,
+            );
+
+            if ($modulesBound && in_array('module', $composition->effectiveSources(modulesBound: true), true)) {
+                return $catalogue->appending(new RegistryFieldCatalogue(
                     entities: $app->make(EntityRegistry::class),
                     modules: $app->make(ModuleRegistry::class),
-                    drivers: (array) $app['config']->get('corex-attributes.drivers'),
-                );
+                    contexts: $app->make(TenantContextRestorer::class),
+                    drivers: $composition->drivers,
+                ));
             }
 
-            return $app->make(UnavailableAttributes::class);
+            return $catalogue;
         });
     }
 }

@@ -6,6 +6,8 @@ return [
     /* Storage and DDL drivers are selected by the application, never by request input. */
     'drivers' => ['jsonb' => true, 'eav' => true, 'ddl' => true],
     'storage_driver' => 'jsonb',
+    'sources' => ['static'],
+    'definitions' => [],
     'tables' => [
         'documents' => 'sys_attribute_documents',
         'write_tokens' => 'sys_attribute_write_tokens',
