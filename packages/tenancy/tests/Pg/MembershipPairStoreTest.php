@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Internal\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairWitness;
+use CoreX\Tenancy\Membership\Persistence\PairKey;
+use CoreX\Tenancy\Membership\Persistence\PairStore;
+use CoreX\Tenancy\Membership\Persistence\PairWitness;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Support\Facades\DB;

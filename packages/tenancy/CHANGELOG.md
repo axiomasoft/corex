@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- P9.3 removes `Membership\Internal` and absorbs `Central` into `Membership\Transport`. `Expiry` is the path `Expiration`; class names stay. Membership events and `RefreshAccountMembership` keep their FQCNs.
+
+- P9.2 moves runtime adapters into `Runtime/` and Laravel seams into `Laravel/` without renaming stable FQCNs. Storage classes are context-first under `CoreX\Tenancy\Runtime\Storage`. `TenantContextRestorer` is now the scoped connection-guarded wrapper: it delegates the semantic check and refuses a mismatched active connection. It does not look up or initialize an account from the payload.
+
 - Added unregistered internal accounts-list transport and Redis display cache
   adapters. Both require explicit consumer construction, retain the strict
   authenticated/no-store channel profile, and never make menu data authority.

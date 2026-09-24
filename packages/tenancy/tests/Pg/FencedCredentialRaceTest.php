@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Internal\Credentials\CredentialIssuanceDenied;
-use CoreX\Tenancy\Membership\Internal\Credentials\FencedCredentialIssuer;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
+use CoreX\Tenancy\Membership\Credentials\CredentialIssuanceDenied;
+use CoreX\Tenancy\Membership\Credentials\FencedCredentialIssuer;
+use CoreX\Tenancy\Membership\Persistence\PairKey;
+use CoreX\Tenancy\Membership\Persistence\PairStore;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\CredentialFixture;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;
 use CoreX\Tenancy\Tests\TestCase;

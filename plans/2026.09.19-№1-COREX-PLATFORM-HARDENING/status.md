@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-23
-inputs_sha256: 50791bfa85bcb095ddb9214fecfac0566d4c5880de22a722f08c21f11b61c4d3
+through: 2026-09-24
+inputs_sha256: e2cceefc2d1b931f79e67f605268c2a7ae21331ad8aefa3cfb95cad1b4d00d1b
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-23 |
+| Last Updated | 2026-09-24 |
 
 ## 4. Phase Index & Status Board
 
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 | P6 | `corex/core` как foundation: внутренние зоны вместо склада возможностей | 6/6 | 🟢 Done |
 | P7 | Типизированная конфигурация и политики вместо runtime `config()` | 12/12 | 🟢 Done |
 | P8 | Composition roots: декомпозиция service provider'ов через registrar-модель | 6/6 | 🟢 Done |
-| P9 | Tenancy: bounded contexts вместо смешанной оси | 1/8 | 🟡 In progress |
+| P9 | Tenancy: bounded contexts вместо смешанной оси | 3/8 | 🟡 In progress |
 
 ## Phase P1
 
@@ -296,8 +296,8 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P9.1 | Карта и compatibility baseline | 🟢 Done | 2026-09-23 |
-| P9.2 | Runtime и Laravel boundary | ⬜ Not started | — |
-| P9.3 | Membership без `Internal` | ⬜ Not started | — |
+| P9.2 | Runtime и Laravel boundary | 🟢 Done | 2026-09-24 |
+| P9.3 | Membership без `Internal` | 🟢 Done | 2026-09-24 |
 | P9.4 | Account и Provisioning | ⬜ Not started | — |
 | P9.5 | Identity и Authentication/OIDC | ⬜ Not started | — |
 | P9.6 | Workspace, DomainTrust, Impersonation | ⬜ Not started | — |
@@ -513,6 +513,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-23 | plan-exec/cursor-grok-4.7-high/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: --model grok-4.7-high unmapped; cli-config selectedModel=composer-2.5 has no reasoning_effort. Pin implementation/high review=full. No product writes. |
 | 2026-09-23 | grok-4.7-high/high | plan-exec · in-progress · — |
 | 2026-09-23 | grok-4.7-high/high | plan-exec · closed-green · P9.1 GREEN: 174-file map, baseline, structure gate; both fixtures red for their own reason. |
+| 2026-09-24 | plan-exec/cursor-grok-4.7-high/unmapped | plan-exec · routing-rejected · ROUTE_LAUNCH_MISMATCH: agent argv prompt is task:plan-exec P9.1 with --model grok-4.7-high (unmapped; selectors list grok-4.7). cli-config selectedModel=composer-2.5 has no reasoning_effort. Owner message requests P9.2. No product writes. |
+| 2026-09-24 | grok-4.7-high/high | plan-exec · in-progress · — |
+| 2026-09-24 | grok-4.7-high/high | plan-exec · closed-green · P9.2 GREEN: Runtime/Laravel move, PSR-4 preserved FQCN, scoped connection-guarded restorer. tenancy pest 491/1747, phpstan 0, root pg 181/687. |
+| 2026-09-24 | grok-4.7-high/high | plan-exec · closed-green · P9.2 GREEN run-bound: Runtime/Laravel move, PSR-4 preserved FQCN, scoped connection-guarded restorer. tenancy pest 491/1747, phpstan 0, root pg 181/687. |
+| 2026-09-24 | grok-4.7-high/high | plan-exec · in-progress · — |
+| 2026-09-24 | grok-4.7-high/high | plan-exec · closed-green · P9.3 GREEN: Membership without Internal, Central absorbed into Transport, FQCN preserved for events and refresh job. |
 
 ## Owner Gates
 

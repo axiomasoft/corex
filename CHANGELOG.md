@@ -21,6 +21,8 @@
 
 ### Added
 
+- P9.3: Membership разложен на десять подсистем без `Internal`; `Expiry` стал путём `Expiration`. `Central` поглощён в `Membership/Transport`. События membership и `RefreshAccountMembership` сохраняют FQCN через PSR-4 maps.
+- P9.2: runtime tenancy и Laravel boundary собраны в `Runtime/` и `Laravel/`; стабильные FQCN сохранены PSR-4 maps. `ConnectionGuardedTenantContextRestorer` сверяет активное соединение и не инициализирует tenancy из payload. Единственная binding-дельта — scoped `TenantContextRestorer`.
 - P8.6: блокирующий гейт `scripts/provider-size-gate.php` считает call site
   `singleton|scoped|bind|bindIf` только в классах `ServiceProvider`; порог 20
   и ratchet измеренного дерева. Посадка `ProviderSizeProbeProvider.php`

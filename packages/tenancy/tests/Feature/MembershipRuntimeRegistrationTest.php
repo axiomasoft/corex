@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Actions\ApplyMembershipProjection;
 use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Http\Middleware\RequireActiveMembership;
-use CoreX\Tenancy\Membership\Internal\Projection\ReferenceMembershipProjection;
+use CoreX\Tenancy\Membership\Projection\ApplyMembershipProjection;
+use CoreX\Tenancy\Membership\Projection\ReferenceMembershipProjection;
 use Illuminate\Routing\Router;
 
 it('does not register unfinished membership runtime consumers', function (): void {

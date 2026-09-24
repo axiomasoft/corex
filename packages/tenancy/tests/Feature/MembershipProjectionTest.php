@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Actions\ApplyMembershipProjection;
-use CoreX\Tenancy\Central\CentralUnavailable;
-use CoreX\Tenancy\Central\MembershipQuery;
-use CoreX\Tenancy\Central\MembershipSnapshot;
-use CoreX\Tenancy\Central\MembershipState;
-use CoreX\Tenancy\Central\RevokeMembershipReceipt;
-use CoreX\Tenancy\Central\RevokeMembershipRequest;
 use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Http\Middleware\RequireActiveMembership;
+use CoreX\Tenancy\Membership\Projection\ApplyMembershipProjection;
+use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
+use CoreX\Tenancy\Membership\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Transport\MembershipSnapshot;
+use CoreX\Tenancy\Membership\Transport\MembershipState;
+use CoreX\Tenancy\Membership\Transport\RevokeMembershipReceipt;
+use CoreX\Tenancy\Membership\Transport\RevokeMembershipRequest;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Tests\Stubs\StubIdentity;
 use Illuminate\Http\Request;

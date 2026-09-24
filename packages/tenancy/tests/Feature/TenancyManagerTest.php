@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Exceptions\CentralContextException;
 use CoreX\Tenancy\AccountRef;
+use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Models\Account;
@@ -97,9 +98,20 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     expect($manager->initialized())->toBeFalse()
         ->and($manager->context())->toBeNull();
 
+    $reader = new class
+    {
+        public function currentDefault(): string
+        {
+            return DB::getDefaultConnection();
+        }
+    };
+
+    expect($reader->currentDefault())->toBe('pgsql');
+
     $manager->initialize($ref);
 
     expect($manager->initialized())->toBeTrue()
+        ->and($reader->currentDefault())->toBe('tenant')
         ->and(DB::connection('tenant')->getDatabaseName())->toBe(TENANT_DB_TM)
         ->and(config('session.connection'))->toBe('tenant');
 
@@ -116,7 +128,23 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     $manager->end();
 
     expect($manager->initialized())->toBeFalse()
+        ->and($reader->currentDefault())->toBe('pgsql')
         ->and($manager->context())->toBeNull();
+
+    $bootstrapper = app(WorkspaceContextBootstrapper::class);
+    $manager->initialize($ref);
+    $manager->setWorkspace($workspace);
+    $bootstrapper->revert();
+    $bootstrapper->revert();
+    expect($manager->context()->workspace)->toBeNull();
+    $manager->setWorkspace($workspace);
+    $bootstrapper->bootstrap($account);
+    $bootstrapper->bootstrap($account);
+    $bootstrapper->revert();
+    $bootstrapper->revert();
+    expect($manager->context()->workspace)->toBeNull();
+    $manager->end();
+    expect($reader->currentDefault())->toBe('pgsql');
 });
 
 it('runFor() initializes, runs the closure, and always ends — nesting restores the outer account (AC-28 б)', function (): void {

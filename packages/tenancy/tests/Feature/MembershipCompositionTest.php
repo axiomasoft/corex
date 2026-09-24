@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Central\MembershipSnapshot;
-use CoreX\Tenancy\Central\MembershipState;
-use CoreX\Tenancy\Membership\Internal\Credentials\CredentialCookieQueue;
-use CoreX\Tenancy\Membership\Internal\Credentials\FencedCredentialIssuer;
-use CoreX\Tenancy\Membership\Internal\Expiry\ExpiryScheduler;
-use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairState;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairStoreViolation;
-use CoreX\Tenancy\Membership\Internal\Persistence\PairWitness;
-use CoreX\Tenancy\Membership\Internal\Projection\ProjectionDenied;
-use CoreX\Tenancy\Membership\Internal\Projection\ReferenceMembershipProjection;
+use CoreX\Tenancy\Membership\Credentials\CredentialCookieQueue;
+use CoreX\Tenancy\Membership\Credentials\FencedCredentialIssuer;
+use CoreX\Tenancy\Membership\Expiration\ExpiryScheduler;
+use CoreX\Tenancy\Membership\Inbox\DurableInbox;
+use CoreX\Tenancy\Membership\Persistence\PairKey;
+use CoreX\Tenancy\Membership\Persistence\PairState;
+use CoreX\Tenancy\Membership\Persistence\PairStore;
+use CoreX\Tenancy\Membership\Persistence\PairStoreViolation;
+use CoreX\Tenancy\Membership\Persistence\PairWitness;
+use CoreX\Tenancy\Membership\Projection\ProjectionDenied;
+use CoreX\Tenancy\Membership\Projection\ReferenceMembershipProjection;
+use CoreX\Tenancy\Membership\Transport\MembershipSnapshot;
+use CoreX\Tenancy\Membership\Transport\MembershipState;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\CredentialFixture;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\InboxFixture;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;

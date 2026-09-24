@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-23 — after P9.1
+# HANDOFF — 2026-09-24 — after P9.3
 
-**Next:** `$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.2`
+**Next:** `$ task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.4-P9.6`
 
 **Sources of truth:** `findings/P9-receipts.md` ·
 `findings/P9-tenancy-map.md` · `findings/P9-compatibility-baseline.json` ·
@@ -8,24 +8,30 @@
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | solo |
-| Model | implementation |
+| Batch | E09d |
+| Model | frontier |
 | Thinking | high |
 | Context | continue-root |
-| Команда | `$ task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.2` |
-| Суть | P9.2 переносит Runtime и Laravel boundary. Владелец этой сессии закрыл только P9.1; команда — рекомендация, не запуск. Review full. |
+| Команда | `$ task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.4-P9.6` |
+| Суть | P9.4–P9.6 переносят Account/Provisioning, Identity/Authentication и Workspace/DomainTrust/Impersonation. Review full. |
 
-P9.1 закрыт GREEN: карта 174 файлов, compatibility baseline, каркас
-`tenancy-structure-gate.py`, обе негативные fixtures красные по своей
-причине. D48 relay не построен: owner Runtime, триггеры не измерены.
+P9.3 закрыт GREEN: Membership без `Internal`, `Central` в `Membership/Transport`,
+события и `RefreshAccountMembership` сохраняют FQCN. Structure gate остаётся
+красным до P9.8: он сверяет pre-move baseline P9.1.
 
-**Done:** P9.1 GREEN. Inventory, fingerprint и structure gate приняты.
+**Done:** P9.3 GREEN. Membership tree, transport merge, preserved FQCN maps, receipt.
 
-**Remaining:** P9.2–P9.8 и P10–P17.
+**Remaining:** P9.4–P9.8 и P10–P17.
 
 **Open risks:** D48 multi-account relay остаётся открытым до starvation,
-SLO breach или manual fan-out. Чужой messaging slice держит локальные
-правки precision/publish-count вне commit P9.1.
+SLO breach или manual fan-out. Structure gate не принимает пост-переносное
+дерево до P9.8.
 
-**Pointers:** `phases/P9/P9.2.md`; `findings/P9-receipts.md` ·
+**Pointers:** `phases/P9/P9.4.md`; `findings/P9-receipts.md` ·
 `journal.jsonl`.
+
+**Native model:** `cursor-grok-4.6-high`
+
+```bash
+agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.4-P9.6'
+```

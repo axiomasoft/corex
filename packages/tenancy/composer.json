@@ -36,7 +36,29 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Tenancy\\": "src/"
+            "CoreX\\Tenancy\\Events\\Identity\\": [
+                "src/Events/Identity/",
+                "src/Membership/Events/"
+            ],
+            "CoreX\\Tenancy\\Jobs\\": [
+                "src/Jobs/",
+                "src/Membership/Jobs/"
+            ],
+            "CoreX\\Tenancy\\Bootstrappers\\": "src/Laravel/Bootstrappers/",
+            "CoreX\\Tenancy\\Commands\\": "src/Laravel/Commands/",
+            "CoreX\\Tenancy\\Exceptions\\": [
+                "src/Exceptions/",
+                "src/Runtime/Exceptions/"
+            ],
+            "CoreX\\Tenancy\\Http\\Middleware\\": "src/Laravel/Http/Middleware/",
+            "CoreX\\Tenancy\\Listeners\\": "src/Laravel/Listeners/",
+            "CoreX\\Tenancy\\Resolvers\\": "src/Laravel/Resolvers/",
+            "CoreX\\Tenancy\\Scopes\\": "src/Laravel/Scopes/",
+            "CoreX\\Tenancy\\Support\\": "src/Laravel/Support/",
+            "CoreX\\Tenancy\\": [
+                "src/",
+                "src/Runtime/"
+            ]
         }
     },
     "suggest": {

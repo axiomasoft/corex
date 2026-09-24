@@ -1,3 +1,90 @@
+# P9.3 receipt
+
+55 файлов P9.3 перенесены. `Membership/Internal` снят: десять подсистем
+`Credentials`, `Expiration`, `Identity`, `Inbox`, `Persistence`,
+`Projection`, `Refresh`, `Switcher`, `Timing`, `Transport`. Каталог
+`Expiry` стал путём `Expiration`; имя класса `ExpiryScheduler` не менялось.
+12 классов `Central` слиты в `Membership/Transport` вместе с прежним
+transport (22 файла, без коллизии имён и без дубля protocol DTO).
+`ApplyMembershipProjection` — `CoreX\Tenancy\Membership\Projection`.
+`MembershipGranted`, `MembershipRevoked` и `RefreshAccountMembership`
+сохраняют FQCN: PSR-4 `Events\Identity` и `Jobs` указывают на массив
+каталогов. Публичные контракты и registrar не менялись.
+
+Пустые `src/Membership/Internal` и `src/Central`. Namespace
+`Membership\Internal` и `Tenancy\Central` в `packages/tenancy/src` отсутствуют.
+`scripts/tenancy-structure-gate.py check` по-прежнему сверяет pre-move
+baseline P9.1 и остаётся красным до P9.8. Binding fingerprint не менялся:
+единственная разрешённая дельта по-прежнему D49.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+{"tool":"pint","result":"passed"}
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan 175/175, errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
+```
+composer test:pg
+exit 0
+{"tool":"pest","result":"passed","tests":181,"passed":181,"assertions":687}
+```
+
+# P9.2 receipt
+
+25 файлов P9.2 перенесены: Laravel seams (`Bootstrappers`, `Commands`,
+`Http/Middleware`, `Listeners`, `Resolvers`, `Scopes`, `Support`) и Runtime
+(`StanclTenancyManager`, `TenancyManagerContextResolver`,
+`Exceptions/TenantCouldNotBeIdentifiedByHostException`, `Storage/**`).
+Стабильные FQCN сохранены точечными PSR-4 maps в `packages/tenancy/composer.json`.
+`Storage` — context-first `CoreX\Tenancy\Runtime\Storage`. Provider и
+P8 registrar'ы не двигались. `RuntimeRegistrar` не перенесён в `Runtime`.
+
+D49: scoped `TenantContextRestorer` →
+`CoreX\Tenancy\Runtime\ConnectionGuardedTenantContextRestorer`.
+Сначала semantic-сверка `GuardedTenantContextRestorer`, затем identity
+активного соединения (`driver:database` или `boxed:<accountId>`).
+Неизвестный account не читает соединение и не делает lookup.
+`double_init_revert.measured=true`. Один цикл central→tenant→central
+отдаёт long-lived consumer текущие default `pgsql`, `tenant`, `pgsql`.
+
+D48 relay не построен.
+
+`scripts/tenancy-structure-gate.py check` сверяет живое дерево с
+pre-move baseline P9.1, поэтому после переноса он красный до P9.8.
+
+## Validation
+
+```
+composer --working-dir=packages/tenancy lint:check
+exit 0
+```
+
+```
+composer --working-dir=packages/tenancy analyse
+exit 0
+phpstan errors 0
+```
+
+```
+composer --working-dir=packages/tenancy test
+exit 0
+{"tool":"pest","result":"passed","tests":498,"passed":491,"skipped":7,"assertions":1747}
+```
+
 # P9.1 receipt
 
 Post-P8 дерево `packages/tenancy/src`: 174 PHP-файла, coverage 100%,

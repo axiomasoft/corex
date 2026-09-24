@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Laravel;
+
+use CoreX\Support\PackageRegistrar;
+use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Wakeup\Commands\SweepRootWakeups;
+use CoreX\Tenancy\Wakeup\Internal\RootRegistryWakeupHint;
+use CoreX\Tenancy\Wakeup\Internal\RootWakeupReconciler;
+use Illuminate\Console\Application as Artisan;
+use Illuminate\Contracts\Foundation\Application;
+use Override;
+
+/** @internal Composition registrar. Not package public API. */
+final class WakeupRegistrar implements PackageRegistrar
+{
+    private const WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\WakeupSweeper';
+
+    #[Override]
+    public function register(Application $app): void
+    {
+        $app->singleton(
+            RootRegistryWakeupHint::class,
+            static fn (Application $app): RootRegistryWakeupHint => new RootRegistryWakeupHint(
+                root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
+            ),
+        );
+        $app->tag(RootRegistryWakeupHint::class, 'corex.wakeup.hints');
+        $app->singleton(
+            RootWakeupReconciler::class,
+            static fn (Application $app): RootWakeupReconciler => new RootWakeupReconciler(
+                root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
+                tenancy: $app->make(TenancyManager::class),
+                sweeper: $app->make(self::WAKEUP_SWEEPER),
+                leaseSeconds: $app->make(TenancyOptions::class)->wakeupLeaseSeconds,
+            ),
+        );
+    }
+
+    #[Override]
+    public function boot(Application $app): void
+    {
+        if (! $app->runningInConsole()) {
+            return;
+        }
+
+        Artisan::starting(static function (Artisan $artisan): void {
+            $artisan->resolveCommands([SweepRootWakeups::class]);
+        });
+    }
+}

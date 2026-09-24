@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests\Support\Membership;
 
-use CoreX\Tenancy\Central\CentralUnavailable;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountClickAuthorizer;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountMenuCache;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountMenuReader;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountsReadTransport;
-use CoreX\Tenancy\Membership\Internal\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Switcher\AccountClickAuthorizer;
+use CoreX\Tenancy\Membership\Switcher\AccountMenuCache;
+use CoreX\Tenancy\Membership\Switcher\AccountMenuReader;
+use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
+use CoreX\Tenancy\Membership\Switcher\AccountsReadTransport;
+use CoreX\Tenancy\Membership\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
 use Throwable;
 
 /** Disposable reference cache/transport; no Redis, endpoint, or runtime binding. */

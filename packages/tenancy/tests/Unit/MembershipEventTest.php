@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Central\CentralProtocolViolation;
-use CoreX\Tenancy\Central\CentralUnauthorized;
-use CoreX\Tenancy\Central\MembershipQuery;
-use CoreX\Tenancy\Membership\Internal\Transport\JwsVerifier;
-use CoreX\Tenancy\Membership\Internal\Transport\StrictJson;
-use CoreX\Tenancy\Membership\Internal\Transport\Value;
+use CoreX\Tenancy\Membership\Transport\CentralProtocolViolation;
+use CoreX\Tenancy\Membership\Transport\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Transport\JwsVerifier;
+use CoreX\Tenancy\Membership\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Transport\StrictJson;
+use CoreX\Tenancy\Membership\Transport\Value;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 
 it('rejects duplicate scalar arrays conflicting query and noncanonical encoding', function (string $wire): void {
