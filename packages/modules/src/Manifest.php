@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Modules;
 
 use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Compiler\ExtensionReplacement;
 use CoreX\Modules\Exceptions\InvalidManifestException;
 use CoreX\Modules\Extend\Extender;
 
@@ -65,6 +66,13 @@ final class Manifest
 
     /** @var array<class-string, list<class-string>> */
     public array $listeners = [];
+
+    /**
+     * Explicit point/target/replacement directives. Repeatable; order of calls is declaration order.
+     *
+     * @var list<ExtensionReplacement>
+     */
+    public array $replacements = [];
 
     public ?string $onEnableHook = null;
 
@@ -199,6 +207,23 @@ final class Manifest
     public function onPurge(string $hookClass): self
     {
         $this->onPurgeHook = $hookClass;
+
+        return $this;
+    }
+
+    public function replace(string $point, string $targetId, string $replacementId): self
+    {
+        foreach (['point' => $point, 'targetId' => $targetId, 'replacementId' => $replacementId] as $field => $value) {
+            if (trim($value) === '') {
+                throw InvalidManifestException::emptyReplacement($this->composerName, $field);
+            }
+        }
+
+        $this->replacements[] = new ExtensionReplacement(
+            point: $point,
+            targetId: $targetId,
+            replacementId: $replacementId,
+        );
 
         return $this;
     }

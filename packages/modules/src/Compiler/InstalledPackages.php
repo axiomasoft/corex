@@ -23,6 +23,61 @@ final class InstalledPackages
     /** @return list<string> */
     public static function discover(?string $installedJsonPath = null): array
     {
+        $names = [];
+
+        foreach (self::packages($installedJsonPath) as $package) {
+            if (is_array($package) && is_string($package['name'] ?? null)) {
+                $names[] = $package['name'];
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * Package name, version and Composer reference. Name-only {@see discover()} stays unchanged.
+     *
+     * Source reference wins over dist reference. A missing reference is explicit null.
+     * Install path, timestamp, hostname, tenant and activation state are ignored.
+     *
+     * @return array<string, InstalledPackageVersion>
+     */
+    public static function discoverVersions(?string $installedJsonPath = null): array
+    {
+        $versions = [];
+
+        foreach (self::packages($installedJsonPath) as $package) {
+            if (! is_array($package) || ! is_string($package['name'] ?? null) || trim($package['name']) === '') {
+                continue;
+            }
+
+            $version = $package['version'] ?? null;
+
+            if (! is_string($version) || trim($version) === '') {
+                continue;
+            }
+
+            $name = $package['name'];
+
+            if (isset($versions[$name])) {
+                continue;
+            }
+
+            $versions[$name] = new InstalledPackageVersion(
+                name: $name,
+                version: $version,
+                reference: self::reference($package),
+            );
+        }
+
+        ksort($versions);
+
+        return $versions;
+    }
+
+    /** @return list<mixed> */
+    private static function packages(?string $installedJsonPath): array
+    {
         $path = $installedJsonPath ?? base_path('vendor/composer/installed.json');
 
         if (! is_file($path)) {
@@ -38,14 +93,36 @@ final class InstalledPackages
         /** @var list<mixed> $packages */
         $packages = is_array($data['packages'] ?? null) ? $data['packages'] : $data;
 
-        $names = [];
+        return $packages;
+    }
 
-        foreach ($packages as $package) {
-            if (is_array($package) && is_string($package['name'] ?? null)) {
-                $names[] = $package['name'];
-            }
+    /** @param array<string, mixed> $package */
+    private static function reference(array $package): ?string
+    {
+        $source = self::nestedReference(package: $package, key: 'source');
+
+        if ($source !== null) {
+            return $source;
         }
 
-        return $names;
+        return self::nestedReference(package: $package, key: 'dist');
+    }
+
+    /** @param array<string, mixed> $package */
+    private static function nestedReference(array $package, string $key): ?string
+    {
+        $node = $package[$key] ?? null;
+
+        if (! is_array($node)) {
+            return null;
+        }
+
+        $reference = $node['reference'] ?? null;
+
+        if (! is_string($reference) || trim($reference) === '') {
+            return null;
+        }
+
+        return $reference;
     }
 }

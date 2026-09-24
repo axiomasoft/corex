@@ -1,29 +1,34 @@
-# HANDOFF — 2026-09-24 — after P10.5
+# HANDOFF — 2026-09-24 — after P11.1
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.6
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.2
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | solo |
+| Batch | E11b |
 | Model | implementation |
 | Thinking | high |
-| Context | continue-root |
-| Суть | P10.6 — восемь fail-closed write checks и schema-revision precondition. |
+| Context | cold-start-root: whole-plan-independent-audit |
+| Суть | P11.2 — нормализовать declarations, отклонить duplicate/replacement и опубликовать canonical fingerprint. |
 
-**Sources of truth:** `phases/P10/P10.5.md` ·
-`decisions/D53-storage-is-per-entity-indexes-are-measured.md` · `journal.jsonl` ·
-`packages/attributes/src/Internal/Storage/ResolvingAttributeStore.php` ·
-`packages/attributes/src/Internal/Schema/AttributeIndexPlanner.php`.
+**Provider-native command:**
 
-**Done:** P10.5 GREEN. AttributeStore резолвится по entity, mixed loadMany сохраняет
-порядок, неизвестный driver и per-field map красные. Expression B-tree создаётся
-только после чистого cast и EXPLAIN, имя из id+revision, порядок включает record id.
-Promoted остаётся seam без foreign DDL.
+```bash
+agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.2'
+```
 
-**Remaining:** P10.6–P10.8 и P11–P17.
+**Sources of truth:** `phases/P11/P11.2.md` · `phases/P11/P11.3.md` ·
+`phases/P11/P11.1.md` · `journal.jsonl`.
 
-**Open risks:** D48 multi-account relay ждёт starvation, SLO breach или manual
-fan-out trigger. P10.6 не должен раскрывать существование поля во внешнем отказе.
+**Done:** P11.1 GREEN. Modules expose repeatable `Manifest::replace()`, Composer
+version/reference discovery and dependency-neutral `ExtensionStamp`. Extension
+policy names the canonical id of every compiled point. Modules package lint,
+analysis and tests passed.
 
-**Pointers:** `phases/P10/P10.6.md` · `phases/P10/P10.md` ·
-`research/P10-design.md` · `journal.jsonl`.
+**Remaining:** P11.2–P17 and other unfinished plan phases according to the
+current status and admission gates.
+
+**Open risks:** D48 multi-account relay remains conditional on a measured
+starvation, SLO breach, or manual fan-out trigger. No P11.1 acceptance deviation.
+
+**Pointers:** `phases/P11/P11.2.md` · `phases/P11/P11.3.md` ·
+`docs/architecture/extension-policy.md` · `execution-commands.md` · `journal.jsonl`.

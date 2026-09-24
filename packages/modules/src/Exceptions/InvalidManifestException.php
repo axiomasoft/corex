@@ -31,6 +31,15 @@ final class InvalidManifestException extends RuntimeException
         ));
     }
 
+    public static function emptyReplacement(string $composerName, string $field): self
+    {
+        return new self(sprintf(
+            'Module [%s] replacement [%s] must be a non-empty string.',
+            $composerName,
+            $field,
+        ));
+    }
+
     public static function notACorexModule(string $class): self
     {
         return new self(sprintf(

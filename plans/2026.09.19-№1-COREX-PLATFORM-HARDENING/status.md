@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-24
-inputs_sha256: b1b330be4f573ffb942bf4d3e511ad7ecf451aea222110cae6bbc9d2731d4b93
+inputs_sha256: 3223ec4d202cec86697e1083e4a5c3a78e3fd1d5d8b9ce5a35a5797846780ea0
 generated_by: task plan-views status
 -->
 
@@ -24,8 +24,8 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
-| P10 | Attributes: независимые определения и безопасная эволюция | 5/8 | 🟡 In progress |
-| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 0/8 | ⬜ Not started |
+| P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
+| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 1/8 | 🟡 In progress |
 | P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
@@ -62,15 +62,15 @@ generated_by: task plan-views status
 | P10.3 | G-DDL и authoritative composite catalogue | 🟢 Done | 2026-09-24 |
 | P10.4 | Reversible schema evolution | 🟢 Done | 2026-09-24 |
 | P10.5 | Entity storage resolver и index policy | 🟢 Done | 2026-09-24 |
-| P10.6 | Восемь write checks | ⬜ Not started | — |
-| P10.7 | Transactional mutation message | ⬜ Not started | — |
-| P10.8 | Subsystems, ratchets и final proof | ⬜ Not started | — |
+| P10.6 | Восемь write checks | 🟢 Done | 2026-09-24 |
+| P10.7 | Transactional mutation message | 🟢 Done | 2026-09-24 |
+| P10.8 | Subsystems, ratchets и final proof | 🟢 Done | 2026-09-24 |
 
 ## Phase P11
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P11.1 | Registry vocabulary, identity and version metadata | ⬜ Not started | — |
+| P11.1 | Registry vocabulary, identity and version metadata | 🟢 Done | 2026-09-24 |
 | P11.2 | Deterministic compiler and canonical frozen snapshot | ⬜ Not started | — |
 | P11.3 | Runtime publication, collector freeze and refresh boundaries | ⬜ Not started | — |
 | P11.4 | Workflow definition stamps in existing durable carriers | ⬜ Not started | — |
@@ -545,6 +545,16 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | executor/gpt-5.6-sol/high | plan-exec · local-repair · write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P10.5 GREEN: entity resolver, measured expression index, promoted seam |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-run · closed-green · P10.6 GREEN: eight ordered fail-closed checks, schema precondition, opaque per-field authority, constraints and atomic both-engine denial; attributes 55/174 + pg 38/198; root pg 206/849; phpstan 0; scoped Pint passed. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-24 | executor/gpt-5.6-sol/high | plan-run · closed-green · P10.7 GREEN: metadata-only contract, additive registry, atomic JSONB/EAV outbox; replay none, refusal rolls back. 59/191 + pg 42/228; root pg 210/879; phpstan 0; scoped Pint passed. Full lint: only 3 pre-existing P10 files. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/codex-gpt-6/effort-unverified | plan-exec · in-progress · — |
+| 2026-09-24 | executor/gpt-6-sol/xhigh | plan-exec · closed-green · P10.8 GREEN: 62-file Profile B, ratchets and negative fixtures; no public change. Attributes SQLite 65/204 + PG 42/228; root SQLite 494/1654 + PG 210/879; analysis, lint and architecture green. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/gpt-6-sol/xhigh | plan-close · closed-green · P10 direct-close after P10.8 GREEN; eight item states terminal, Profile B layout, owned DDL, compatibility and both database lanes validated. |
+| 2026-09-24 | executor/gpt-6-sol/xhigh | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P11.1 GREEN: Manifest::replace, InstalledPackageVersion discovery, ExtensionStamp, identity table. modules pest 37/200, phpstan 0, pint ok. |
 
 ## Owner Gates
 

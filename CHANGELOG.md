@@ -21,6 +21,9 @@
 
 ### Added
 
+- P11.1: `corex/modules` adds repeatable `Manifest::replace()`, Composer version/reference discovery (`InstalledPackageVersion`) and dependency-neutral `ExtensionStamp`. Extension policy names the canonical id of every compiled point.
+- P10.8: \`corex/attributes\` groups schema, values, query, storage, integration and Laravel internals in six top-level subsystems with explicit Composer namespace maps. The architecture gate rejects search imports, runtime config reads, foreign DDL and field-level storage drivers; both database lanes and the public API sweep are recorded in \`findings/P10-receipts.md\`.
+- P9.8: tenancy 13-directory structure and compatibility fingerprint ratchet; DATA-003 source-write ownership gate with a foreign-table negative fixture. Cross-package writes now use owner ports for task operation receipts and identity password rehash; core context signature types are explicitly public, while the restorer implementation remains private.
 - P9.7: optional `corex/wakeup` adapter живёт в `Integration/Wakeup`; package-graph allowlist называет только эту host-first boundary.
 - P9.6: `Workspaces` стал `Workspace`; модели и события DomainTrust/Impersonation/Workspace стоят рядом с owners и сохраняют FQCN.
 - P9.5: OIDC живёт в `Authentication/Oidc` как context-first adapter; identity sync — в `Identity/` с сохранёнными FQCN моделей, событий, job и HTTP-контроллеров. Routes и `oidc.enabled` не менялись.
