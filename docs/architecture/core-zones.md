@@ -46,7 +46,7 @@ Money             → Foundation, TenancyContracts
 | `Features/` | 1 | Features |
 | `Messaging/` | 19 | Messaging |
 | `Money/` | 1 | Money |
-| `Observability/` | 7 | Foundation |
+| `Observability/` | 9 | Foundation |
 | `PHPStan/` | 1 | Foundation |
 | `PubSub/` | 7 | Messaging |
 | `Settings/` | 2 | Settings |

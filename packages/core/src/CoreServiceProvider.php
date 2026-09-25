@@ -12,6 +12,7 @@ use CoreX\Contracts\DataScopeCodec;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
+use CoreX\Contracts\OperationObserver;
 use CoreX\Contracts\PubSub;
 use CoreX\Contracts\SavedViewRepository;
 use CoreX\Contracts\SettingDefaultsProvider;
@@ -27,11 +28,14 @@ use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\OutboxRelay;
+use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Internal\NullTraceContextBridge;
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use CoreX\Messaging\Internal\SqlInbox;
 use CoreX\Messaging\Internal\SqlOutbox;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
+use CoreX\Observability\NullOperationObserver;
 use CoreX\PubSub\DefaultWorkerRuntime;
 use CoreX\PubSub\PrunePubSubMessages;
 use CoreX\PubSub\PubSubManager;
@@ -104,12 +108,15 @@ final class CoreServiceProvider extends ServiceProvider
             MessageContractRegistry::class,
             static fn (): ArrayMessageContractRegistry => new ArrayMessageContractRegistry(contracts: []),
         );
+        $this->app->singleton(OperationObserver::class, NullOperationObserver::class);
+        $this->app->singleton(TraceContextBridge::class, NullTraceContextBridge::class);
         $this->app->scoped(
             Outbox::class,
             static fn ($app): SqlOutbox => new SqlOutbox(
                 connection: $app->make(ConnectionInterface::class),
                 contracts: $app->make(MessageContractRegistry::class),
                 clock: $app->make(ClockInterface::class),
+                traces: $app->make(TraceContextBridge::class),
             ),
         );
         $this->app->scoped(
