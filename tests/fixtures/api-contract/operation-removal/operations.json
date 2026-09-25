@@ -1,0 +1,42 @@
+[
+    {
+        "id": "notes.list",
+        "method": "GET",
+        "path": "/notes",
+        "deprecation": null,
+        "pagination": {
+            "ordering": "notes.list.v1",
+            "direction": "asc",
+            "fields": [
+                "created_at",
+                "id"
+            ],
+            "types": [
+                "string",
+                "string"
+            ],
+            "unique": "id",
+            "envelope": "page",
+            "cursor": "api-cursor/1"
+        },
+        "request_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        },
+        "response_schema": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            },
+            "required": [
+                "items"
+            ]
+        }
+    }
+]

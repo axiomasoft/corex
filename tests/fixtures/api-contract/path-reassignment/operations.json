@@ -1,0 +1,84 @@
+[
+    {
+        "id": "notes.read",
+        "method": "GET",
+        "path": "/records/{id}",
+        "deprecation": {
+            "id": "notes.read.v1",
+            "deprecatedAt": "2026-09-01",
+            "sunsetAt": null,
+            "successor": "notes.get",
+            "migrationUri": "https://example.test/migrate"
+        },
+        "pagination": null,
+        "request_schema": {
+            "type": "object",
+            "properties": {
+                "q": {
+                    "type": "string",
+                    "nullable": true
+                }
+            },
+            "required": []
+        },
+        "response_schema": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "open",
+                        "closed"
+                    ],
+                    "nullable": true
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ]
+        }
+    },
+    {
+        "id": "notes.list",
+        "method": "GET",
+        "path": "/notes",
+        "deprecation": null,
+        "pagination": {
+            "ordering": "notes.list.v1",
+            "direction": "asc",
+            "fields": [
+                "created_at",
+                "id"
+            ],
+            "types": [
+                "string",
+                "string"
+            ],
+            "unique": "id",
+            "envelope": "page",
+            "cursor": "api-cursor/1"
+        },
+        "request_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        },
+        "response_schema": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            },
+            "required": [
+                "items"
+            ]
+        }
+    }
+]

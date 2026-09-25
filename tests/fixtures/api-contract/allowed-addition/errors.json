@@ -1,0 +1,21 @@
+[
+    {
+        "category": "authorization",
+        "code": "access_denied",
+        "detail_keys": [
+            "reason",
+            "actor"
+        ],
+        "owner": "corex/api",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "note_locked",
+        "detail_keys": [],
+        "owner": "corex/api",
+        "path": null,
+        "retryable": false
+    }
+]

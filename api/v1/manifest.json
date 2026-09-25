@@ -1,0 +1,11 @@
+{
+    "contract_fingerprint": "d93adfbffaed29653e79770a83674d6296021f6f5a3868cb3fa2b72095516cc1",
+    "files": {
+        "errors.json": "de949cf2a6663be077fb5b9ff2bce2280b9a04d6162d02e4206c28a2b601572c",
+        "openapi.json": "d5b194c8bbd83a1b907ca88eb0310c70ca779fb90e735ba7b081a2171be5dc33",
+        "operations.json": "70d89fb287b21bb9187bad545f4b3c7b42a1b063aa880226f091d7e254b8d9a6"
+    },
+    "major": "v1",
+    "registry_fingerprint": "e77aae74b043c15f4369dc1b5356bed81462f1caa6ff55237b0893225134f17f",
+    "schema": "corex-api-snapshot/1"
+}

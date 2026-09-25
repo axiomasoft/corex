@@ -1,30 +1,31 @@
-# HANDOFF — 2026-09-25 — after P13.2
+# HANDOFF — 2026-09-25 — after P13.11
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.3
-
-## ⚠ LAUNCH
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.12
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E13b |
-| Model | implementation |
-| Thinking | high |
+| Batch | solo |
+| Model class | implementation |
+| Effort | high |
+| Capabilities | — |
 | Context | continue-root |
-| Суть | P13.3 — immutable API profile and options over the compiled operation descriptor. |
+| Суть | P13.12 — freeze operation-contract/1 after the compatibility gate. |
 
-```session-continuity-decision/v1
-{"evidence": ["item:P12.8", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P12.8:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```bash
+agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.12'
 ```
 
-**Done:** P13.1 and P13.2 are GREEN. Declarations project operation-contract/1, and HTTP plus exposed tools share one invoker. Standalone tools stay on the P11 guard path.
+```session-continuity-decision/v1
+{"evidence": ["item:P13.11", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P13.11:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```
 
-**Remaining:** P13-P17 remain after their declared dependencies and owner grants.
+**Done:** P13.1–P13.11 are GREEN. The v1 compatibility gate rejects the eight forbidden deltas and allows additive changes.
 
-**Sources of truth:** `phases/P12/P12.closed.md` · `findings/P12-receipts.md` ·
-`journal.jsonl`.
+**Remaining:** P13.12–P17 remain after their declared dependencies and owner grants.
 
-**Open risks:** P13 owns HTTP error projection and contract snapshots. P13.5 still
-requires G-DDL, and P13.12 requires G-API before freezing `operation-contract/1`.
+**Sources of truth:** `phases/P13/P13.11.md` · `phases/P13/P13.11.state.md` · `journal.jsonl`.
+
+**Open risks:** Snapshot `--check` is green after a contract_hash refresh. The package-graph gate still exposes pre-existing P13.3/P13.4 public-surface findings.
 
 **Workarounds/Deferred/Open questions:**
 - workarounds: —

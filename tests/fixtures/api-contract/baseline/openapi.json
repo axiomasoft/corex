@@ -1,0 +1,9 @@
+{
+    "info": {
+        "title": "corex",
+        "version": "v1"
+    },
+    "openapi": "3.1.0",
+    "paths": {},
+    "servers": []
+}

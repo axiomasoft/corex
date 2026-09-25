@@ -1,0 +1,54 @@
+[
+    {
+        "ability": "notes.read",
+        "capabilities": [],
+        "contract_hash": "1cc6c94f921322e8a840915dd7ae883d671e9966f4da273a62bf67ec1b1088f6",
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "notes.create",
+        "idempotency": "optional",
+        "method": "POST",
+        "mode": "command",
+        "module": "example/notes",
+        "pagination": null,
+        "path": "/notes",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 201,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "notes.read",
+        "capabilities": [],
+        "contract_hash": "808f7d3adfe3d8fe14f527607da7ffdf46e101845c207481d0501ee78e2df40d",
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "notes.read",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "example/notes",
+        "pagination": null,
+        "path": "/notes/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    }
+]

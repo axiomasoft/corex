@@ -90,6 +90,27 @@ Enforcement межпакетной границы — **гейт графа па
 Этот список — вход гейта P3 и P13, а не пожелание. Каждый пункт обязан быть проверяем
 машинно либо назван как непроверяемый явно.
 
+## Совместимость `api/v1`
+
+`scripts/check-api-contract.php` сравнивает разобранные `operations.json` и
+`errors.json` с committed baseline. OpenAPI остаётся HTTP-проекцией. Гейт не
+обновляет baseline: запись снимка — отдельная команда генератора. Маркер
+deprecation не разрешает удаление внутри major.
+
+| Правило | Вердикт | Допустимое добавление |
+|:--|:--|:--|
+| `operation-removal` | удаление operation id либо смена method/path | новая operation |
+| `response-field-removal` | удаление поля ответа | новое поле ответа |
+| `required-input-addition` | новое обязательное входное поле | необязательное входное поле |
+| `type-change` | смена `type` | — |
+| `nullability-change` | смена `nullable` в любую сторону | — |
+| `enum-removal` | удаление значения enum | новое значение enum |
+| `error-contract-drift` | удаление code, смена category/path/retryable, удаление detail key | новый code, новый detail key |
+| `pagination-reinterpretation` | смена envelope, cursor format или ordering id | — |
+
+Неизвестный ключ снимка или схемы закрывается `unknown-schema` и JSON pointer.
+Webhook-правила в этот реестр добавляет P14.
+
 ## Контракт ошибки
 
 Общий словарь — `ErrorCategory`, `UnavailabilityReason`, неизменяемый `ErrorDescriptor`
