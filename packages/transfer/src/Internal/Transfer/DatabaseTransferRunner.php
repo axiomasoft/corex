@@ -7,6 +7,7 @@ namespace CoreX\Transfer\Internal\Transfer;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\WriteToken;
+use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ImportTarget;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferRunner;
@@ -14,7 +15,9 @@ use CoreX\Transfer\Contracts\TransferSource;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\ConflictRule;
 use CoreX\Transfer\Data\MappingSnapshot;
+use CoreX\Transfer\Data\RowBatch;
 use CoreX\Transfer\Data\SourceCursor;
+use CoreX\Transfer\Data\SourceManifest;
 use CoreX\Transfer\Data\StepToken;
 use CoreX\Transfer\Data\TargetResult;
 use CoreX\Transfer\Data\TransferLimits;
@@ -35,101 +38,163 @@ final readonly class DatabaseTransferRunner implements TransferRunner
         private ConflictRule $conflictRule,
         private TransferLimits $limits,
         private DataScopeAuthorizer $authorizer,
+        private CancellationSignal $cancellation = new NeverCancelled,
+        private ?ExecutionGuard $guard = null,
     ) {}
 
     #[Override]
     public function step(DataScope $scope, TransferRef $transfer, StepToken $token): TransferReceipt
     {
-        return $this->connection->transaction(function () use ($scope, $transfer, $token): TransferReceipt {
-            $job = $this->connection->table('corex_transfer_jobs')->where('id', $transfer->id)->lockForUpdate()->first();
+        try {
+            return $this->connection->transaction(function () use ($scope, $transfer, $token): TransferReceipt {
+                $job = $this->connection->table('corex_transfer_jobs')->where('id', $transfer->id)->lockForUpdate()->first();
 
-            if ($job === null) {
-                throw new TransferUnavailable('Transfer job is not available.');
-            }
+                if ($job === null) {
+                    throw new TransferUnavailable('Transfer job is not available.');
+                }
 
-            $this->assertFence(job: $job, scope: $scope, token: $token);
-            $cursor = $this->cursor(job: $job);
-            $manifest = $this->source->describe(scope: $scope);
+                $this->assertFence(job: $job, scope: $scope, token: $token);
+                $cursor = $this->cursor(job: $job);
+                $manifest = $this->source->describe(scope: $scope);
 
-            if ($manifest->sha256 !== $token->sourceHash || $manifest->schemaHash !== $token->schemaHash) {
-                throw new TransferUnavailable('Source changed; transfer resume is refused.');
-            }
+                if ($manifest->sha256 !== $token->sourceHash || $manifest->schemaHash !== $token->schemaHash) {
+                    throw new TransferUnavailable('Source changed; transfer resume is refused.');
+                }
 
-            $batch = $this->source->read(source: $manifest, after: $cursor, limits: $this->limits);
-            $gaps = [];
-            $stats = $this->stats(job: $job);
-            $dryRun = $job->mode === 'dryRun';
+                $gaps = [];
+                $stats = $this->stats(job: $job);
+                $dryRun = $job->mode === 'dryRun';
+                $guard = $this->guard ?? ExecutionGuard::production(limits: $this->limits);
 
-            foreach ($batch->rows as $row) {
-                $mapped = $this->mapper->map(row: $row, mapping: $this->mapping);
+                if ($this->cancellation->isCancelled()) {
+                    return $this->cancelled(jobId: $transfer->id, cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats, dryRun: $dryRun);
+                }
 
-                if ($mapped->record === null) {
-                    $stats['invalid'] = ($stats['invalid'] ?? 0) + 1;
-                    $gaps[] = $row->ordinal;
+                $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats);
+                $batch = $this->source->read(source: $manifest, after: $cursor, limits: $this->limits);
+                $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats);
+                $this->assertSourceBounds(manifest: $manifest, batch: $batch);
 
-                    if (! $dryRun) {
-                        $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: str_repeat('0', 64), epoch: $token->epoch, errorCode: $mapped->errorCode);
+                foreach ($batch->rows as $row) {
+                    $guard->assertWithin(cursor: $cursor, checkpointSequence: $token->checkpointSequence, stats: $stats);
+                    $mapped = $this->mapper->map(row: $row, mapping: $this->mapping);
+
+                    if ($mapped->record === null) {
+                        $stats['invalid'] = ($stats['invalid'] ?? 0) + 1;
+                        $gaps[] = $row->ordinal;
+
+                        if (! $dryRun) {
+                            $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: str_repeat('0', 64), epoch: $token->epoch, errorCode: $mapped->errorCode);
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    if ($dryRun) {
+                        $decision = $this->target->preview(scope: $scope, record: $mapped->record, rule: $this->conflictRule);
+                        $stats[$decision->status] = ($stats[$decision->status] ?? 0) + 1;
+
+                        continue;
+                    }
+
+                    try {
+                        $result = $this->connection->transaction(function () use ($scope, $transfer, $token, $row, $mapped): TargetResult {
+                            $writeToken = $this->writeToken(record: $mapped->record);
+                            $existing = $this->lockReference(jobId: $transfer->id, record: $mapped->record);
+                            $result = $existing ? $this->target->lookup(scope: $scope, token: $writeToken) : $this->target->apply(scope: $scope, record: $mapped->record, rule: $this->conflictRule, token: $writeToken);
+                            $this->storeReference(record: $mapped->record, result: $result);
+                            $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $mapped->record->payloadHash, epoch: $token->epoch);
+
+                            return $result;
+                        });
+                    } catch (TransferLimitReached $reached) {
+                        throw $reached;
+                    } catch (Throwable) {
+                        $stats['invalid'] = ($stats['invalid'] ?? 0) + 1;
+                        $stats['errors'] = ($stats['errors'] ?? 0) + 1;
+                        $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: $mapped->record->payloadHash, epoch: $token->epoch, errorCode: 'rowFailed');
+
+                        continue;
+                    }
+
+                    $stats[$result->status] = ($stats[$result->status] ?? 0) + 1;
+
+                    if ($result->status === 'unknown') {
+                        $gaps[] = $row->ordinal;
+                    }
                 }
 
-                if ($dryRun) {
-                    $decision = $this->target->preview(scope: $scope, record: $mapped->record, rule: $this->conflictRule);
-                    $stats[$decision->status] = ($stats[$decision->status] ?? 0) + 1;
+                $next = $gaps === [] ? $batch->next : $cursor;
+                $sequence = (string) ((int) $token->checkpointSequence + 1);
+                $state = $gaps !== [] ? 'unknown' : ($batch->remaining ? 'running' : 'completed');
 
-                    continue;
+                if (! $dryRun) {
+                    $changed = $this->connection->table('corex_transfer_jobs')
+                        ->where('id', $transfer->id)
+                        ->where('checkpoint_seq', $token->checkpointSequence)
+                        ->where('claim_epoch', $token->epoch)
+                        ->update([
+                            'checkpoint_seq' => $sequence,
+                            'cursor' => json_encode(['ordinal' => $next->ordinal, 'boundaryByteOffset' => $next->boundaryByteOffset], JSON_THROW_ON_ERROR),
+                            'stats' => json_encode($stats, JSON_THROW_ON_ERROR),
+                            'state' => $state,
+                            'updated_at' => now(),
+                        ]);
+
+                    if ($changed !== 1) {
+                        throw new TransferUnavailable('Transfer checkpoint lease was superseded.');
+                    }
                 }
 
-                try {
-                    $result = $this->connection->transaction(function () use ($scope, $transfer, $token, $row, $mapped): TargetResult {
-                        $writeToken = $this->writeToken(record: $mapped->record);
-                        $existing = $this->lockReference(jobId: $transfer->id, record: $mapped->record);
-                        $result = $existing ? $this->target->lookup(scope: $scope, token: $writeToken) : $this->target->apply(scope: $scope, record: $mapped->record, rule: $this->conflictRule, token: $writeToken);
-                        $this->storeReference(record: $mapped->record, result: $result);
-                        $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $mapped->record->payloadHash, epoch: $token->epoch);
+                return new TransferReceipt(state: $state, cursor: $next, checkpointSequence: $sequence, stats: $stats, gaps: $gaps, errorCode: $gaps === [] ? null : 'unknownTarget');
+            }, attempts: 3);
+        } catch (TransferLimitReached $reached) {
+            return new TransferReceipt(
+                state: 'running',
+                cursor: $reached->cursor,
+                checkpointSequence: $reached->checkpointSequence,
+                stats: $reached->stats,
+                gaps: [],
+                errorCode: $reached->errorCode,
+            );
+        }
+    }
 
-                        return $result;
-                    });
-                } catch (Throwable) {
-                    $stats['invalid'] = ($stats['invalid'] ?? 0) + 1;
-                    $stats['errors'] = ($stats['errors'] ?? 0) + 1;
-                    $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: $mapped->record->payloadHash, epoch: $token->epoch, errorCode: 'rowFailed');
+    /**
+     * @param  array<string, int>  $stats
+     */
+    private function cancelled(string $jobId, SourceCursor $cursor, string $checkpointSequence, array $stats, bool $dryRun): TransferReceipt
+    {
+        if (! $dryRun) {
+            $this->connection->table('corex_transfer_jobs')->where('id', $jobId)->update([
+                'state' => 'cancelled',
+                'updated_at' => now(),
+            ]);
+        }
 
-                    continue;
-                }
+        return new TransferReceipt(
+            state: 'cancelled',
+            cursor: $cursor,
+            checkpointSequence: $checkpointSequence,
+            stats: $stats,
+            gaps: [],
+            errorCode: null,
+        );
+    }
 
-                $stats[$result->status] = ($stats[$result->status] ?? 0) + 1;
+    private function assertSourceBounds(SourceManifest $manifest, RowBatch $batch): void
+    {
+        if (count($batch->rows) > $this->limits->batchRows || $manifest->length > $this->limits->maxFileBytes) {
+            throw new TransferUnavailable('Source batch exceeds the qualified limits.');
+        }
 
-                if ($result->status === 'unknown') {
-                    $gaps[] = $row->ordinal;
-                }
+        foreach ($batch->rows as $row) {
+            $encoded = json_encode($row->values, JSON_THROW_ON_ERROR);
+
+            if (strlen($encoded) > $this->limits->maxRecordBytes) {
+                throw new TransferUnavailable('Source record exceeds the qualified limits.');
             }
-
-            $next = $gaps === [] ? $batch->next : $cursor;
-            $sequence = (string) ((int) $token->checkpointSequence + 1);
-            $state = $gaps !== [] ? 'unknown' : ($batch->remaining ? 'running' : 'completed');
-
-            if (! $dryRun) {
-                $changed = $this->connection->table('corex_transfer_jobs')
-                    ->where('id', $transfer->id)
-                    ->where('checkpoint_seq', $token->checkpointSequence)
-                    ->where('claim_epoch', $token->epoch)
-                    ->update([
-                        'checkpoint_seq' => $sequence,
-                        'cursor' => json_encode(['ordinal' => $next->ordinal, 'boundaryByteOffset' => $next->boundaryByteOffset], JSON_THROW_ON_ERROR),
-                        'stats' => json_encode($stats, JSON_THROW_ON_ERROR),
-                        'state' => $state,
-                        'updated_at' => now(),
-                    ]);
-
-                if ($changed !== 1) {
-                    throw new TransferUnavailable('Transfer checkpoint lease was superseded.');
-                }
-            }
-
-            return new TransferReceipt(state: $state, cursor: $next, checkpointSequence: $sequence, stats: $stats, gaps: $gaps, errorCode: $gaps === [] ? null : 'unknownTarget');
-        }, attempts: 3);
+        }
     }
 
     private function assertFence(object $job, DataScope $scope, StepToken $token): void

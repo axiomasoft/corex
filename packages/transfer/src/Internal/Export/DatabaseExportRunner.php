@@ -7,17 +7,24 @@ namespace CoreX\Transfer\Internal\Export;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\TenantStorage;
 use CoreX\Support\Data\DataScope;
+use CoreX\Transfer\Contracts\CancellationSignal;
+use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\ExportSource;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\Export\ExportCursor;
 use CoreX\Transfer\Data\Export\ExportManifest;
 use CoreX\Transfer\Data\Export\ExportPart;
+use CoreX\Transfer\Data\SourceCursor;
 use CoreX\Transfer\Data\TransferLimits;
+use CoreX\Transfer\Internal\Transfer\ExecutionGuard;
+use CoreX\Transfer\Internal\Transfer\NeverCancelled;
+use CoreX\Transfer\Internal\Transfer\TransferLimitReached;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use JsonException;
+use Override;
 
-final readonly class DatabaseExportRunner
+final readonly class DatabaseExportRunner implements ExportRunner
 {
     public function __construct(
         private ConnectionInterface $connection,
@@ -26,8 +33,11 @@ final readonly class DatabaseExportRunner
         private TransferLimits $limits,
         private CanonicalExportCodec $codec,
         private DataScopeAuthorizer $authorizer,
+        private CancellationSignal $cancellation = new NeverCancelled,
+        private ?ExecutionGuard $guard = null,
     ) {}
 
+    #[Override]
     public function seal(DataScope $scope, string $jobId, ExportManifest $draft, ExportCursor $after): ExportManifest
     {
         $this->assertCaptureAccess(scope: $scope, manifest: $draft);
@@ -68,19 +78,37 @@ final readonly class DatabaseExportRunner
             $parts = [];
             $cursor = $after;
             $partNumber = 0;
+            $guard = $this->guard ?? ExecutionGuard::production(limits: $this->limits);
+            $written = [];
 
-            do {
-                $this->assertCaptureAccess(scope: $scope, manifest: $draft);
-                $page = $this->source->page(scope: $scope, manifest: $draft, after: $cursor, limits: $this->limits);
-                $part = $this->stagePart(manifest: $draft, number: (string) $partNumber, records: $page->rows);
-                $parts[] = $part;
-                $cursor = $page->next ?? $cursor;
-                $partNumber++;
+            try {
+                do {
+                    $this->assertCaptureAccess(scope: $scope, manifest: $draft);
+                    $this->assertBudget(guard: $guard, manifest: $draft);
 
-                if ($partNumber > $this->limits->batchRows) {
-                    throw new ExportUnavailable('Export part count exceeds the qualified profile.');
-                }
-            } while (! $page->complete);
+                    if ($this->cancellation->isCancelled()) {
+                        throw new ExportUnavailable('Export capture was cancelled.');
+                    }
+
+                    $page = $this->source->page(scope: $scope, manifest: $draft, after: $cursor, limits: $this->limits);
+                    $this->assertPageBounds(records: $page->rows);
+                    $this->assertBudget(guard: $guard, manifest: $draft);
+
+                    if ($this->cancellation->isCancelled()) {
+                        throw new ExportUnavailable('Export capture was cancelled.');
+                    }
+
+                    $part = $this->stagePart(manifest: $draft, number: (string) $partNumber, records: $page->rows);
+                    $written[] = $part->immutableRef;
+                    $parts[] = $part;
+                    $cursor = $page->next ?? $cursor;
+                    $partNumber++;
+                } while (! $page->complete);
+            } catch (TransferLimitReached|ExportUnavailable $failed) {
+                $this->discardOrphans(refs: $written);
+
+                throw $failed;
+            }
 
             $partsHash = hash('sha256', implode("\n", array_map(
                 static fn (ExportPart $part): string => "{$part->number}:{$part->sha256}:{$part->byteLength}",
@@ -109,13 +137,19 @@ final readonly class DatabaseExportRunner
         }, attempts: 3);
     }
 
+    #[Override]
     public function emit(DataScope $scope, ExportManifest $manifest, ExportCursor $cursor): string
     {
         $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
+        $stored = $this->connection->table('corex_export_manifests')->where('id', $manifest->id)->first();
         $part = $this->connection->table('corex_export_parts')
             ->where('manifest_id', $manifest->id)
             ->where('part_no', $cursor->partNumber)
             ->first();
+
+        if ($stored === null || $stored->state !== 'sealed' || ! hash_equals((string) $stored->parts_hash, $manifest->partsHash)) {
+            throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
+        }
 
         if ($part === null || ! hash_equals($manifest->partsHash, $cursor->manifestHash)) {
             throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
@@ -171,6 +205,35 @@ final readonly class DatabaseExportRunner
         );
 
         return $part;
+    }
+
+    private function assertBudget(ExecutionGuard $guard, ExportManifest $manifest): void
+    {
+        $guard->assertWithin(
+            cursor: new SourceCursor(ordinal: '0', boundaryByteOffset: '0', sourceHash: $manifest->schemaHash),
+            checkpointSequence: '0',
+            stats: [],
+        );
+    }
+
+    /** @param list<CanonicalRecord> $records */
+    private function assertPageBounds(array $records): void
+    {
+        if (count($records) > $this->limits->batchRows) {
+            throw new ExportUnavailable('Export page exceeds the qualified row limit.');
+        }
+    }
+
+    /** @param list<string> $refs */
+    private function discardOrphans(array $refs): void
+    {
+        $disk = $this->storage->disk();
+
+        foreach ($refs as $ref) {
+            if ($disk->exists($ref)) {
+                $disk->delete($ref);
+            }
+        }
     }
 
     private function assertCaptureAccess(DataScope $scope, ExportManifest $manifest): void
