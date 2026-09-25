@@ -27,16 +27,28 @@
         "illuminate/database": "^12.0|^13.0",
         "illuminate/filesystem": "^12.0|^13.0",
         "illuminate/http": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0"
+        "illuminate/support": "^12.0|^13.0",
+        "psr/clock": "^1.0"
+    },
+    "provide": {
+        "psr/clock-implementation": "1.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^10.0|^11.0"
+        "open-telemetry/api": "^1.4",
+        "open-telemetry/sdk": "^1.4",
+        "orchestra/testbench": "^10.0|^11.0",
+        "psr/log": "^3.0"
+    },
+    "suggest": {
+        "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
+        "psr/log": "Optional PSR-3 projection of operation lifecycle events."
     },
     "autoload-dev": {
         "_comment": "canonical mapping; production psr-4 still covers src/Testing until P16 (D33)",
         "psr-4": {
             "CoreX\\Testing\\": "src/Testing/"
-        }
+        },
+        "classmap": ["tests/Fixtures"]
     },
     "autoload": {
         "psr-4": {
@@ -55,7 +67,25 @@
                 "CoreX\\Events",
                 "CoreX\\Exceptions",
                 "CoreX\\Models",
-                "CoreX\\Concerns"
+                "CoreX\\Concerns",
+                "CoreX\\Observability",
+                "CoreX\\Messaging\\Contracts",
+                "CoreX\\Messaging\\Data",
+                "CoreX\\Support\\ViolationList",
+                "CoreX\\Support\\InvalidConfiguration",
+                "CoreX\\Support\\SecretRef",
+                "CoreX\\Support\\Data\\DataScope",
+                "CoreX\\Support\\PackageRegistrar",
+                "CoreX\\Support\\RegistersNothingOnBoot",
+                "CoreX\\Tenancy\\Contracts\\TenantContextResolver",
+                "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+                "CoreX\\Tenancy\\Contracts\\TenancyManager",
+                "CoreX\\Tenancy\\Contracts\\TenantDatabaseLifecycle",
+                "CoreX\\Tenancy\\Contracts\\ImpersonationService",
+                "CoreX\\Tenancy\\ImpersonationGuard",
+                "CoreX\\Tenancy\\AccountRef",
+                "CoreX\\Tenancy\\TenantContext",
+                "CoreX\\Tenancy\\WorkspaceRef"
             ]
         },
         "laravel": {
@@ -70,7 +100,7 @@
         "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg",
         "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --group=pg",
         "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg --coverage --min=80",
-        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/core/src packages/core/database/migrations --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/core/src packages/core/database/migrations packages/core/tests/Unit/PackageRegistrarTest.php --memory-limit=1G",
         "lint:check": "../../vendor/bin/pint --test"
     }
 }

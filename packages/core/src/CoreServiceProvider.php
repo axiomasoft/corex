@@ -108,8 +108,8 @@ final class CoreServiceProvider extends ServiceProvider
             MessageContractRegistry::class,
             static fn (): ArrayMessageContractRegistry => new ArrayMessageContractRegistry(contracts: []),
         );
-        $this->app->singleton(OperationObserver::class, NullOperationObserver::class);
-        $this->app->singleton(TraceContextBridge::class, NullTraceContextBridge::class);
+        $this->app->instance(OperationObserver::class, new NullOperationObserver);
+        $this->app->instance(TraceContextBridge::class, new NullTraceContextBridge);
         $this->app->scoped(
             Outbox::class,
             static fn ($app): SqlOutbox => new SqlOutbox(
