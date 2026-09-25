@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-24
-inputs_sha256: bf5067dbbf0d420035b4c2ecf1b9fa2c802306e36c2ec909e299874e7b2db5c6
+through: 2026-09-25
+inputs_sha256: 61802eb670c7823f253575d1a31318ed4ff82b1857fb7fc44f8a4d6e846b1286
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-24 |
+| Last Updated | 2026-09-25 |
 
 ## 4. Phase Index & Status Board
 
@@ -25,8 +25,8 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
-| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 4/8 | 🟡 In progress |
-| P12 | Таксономия ошибок и наблюдаемость операций | 0/8 | ⬜ Not started |
+| P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
+| P12 | Таксономия ошибок и наблюдаемость операций | 1/8 | 🟡 In progress |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
@@ -74,16 +74,16 @@ generated_by: task plan-views status
 | P11.2 | Deterministic compiler and canonical frozen snapshot | 🟢 Done | 2026-09-24 |
 | P11.3 | Runtime publication, collector freeze and refresh boundaries | 🟢 Done | 2026-09-24 |
 | P11.4 | Workflow definition stamps in existing durable carriers | 🟢 Done | 2026-09-24 |
-| P11.5 | Versioned wakeup handler registry and stamped envelopes | ⬜ Not started | — |
-| P11.6 | Complete tasks-workflow materialization provenance | ⬜ Not started | — |
-| P11.7 | Versioned notification digest wakeups | ⬜ Not started | — |
-| P11.8 | Extension contract suite, ratchet gate and final proof | ⬜ Not started | — |
+| P11.5 | Versioned wakeup handler registry and stamped envelopes | 🟢 Done | 2026-09-24 |
+| P11.6 | Complete tasks-workflow materialization provenance | 🟢 Done | 2026-09-24 |
+| P11.7 | Versioned notification digest wakeups | 🟢 Done | 2026-09-24 |
+| P11.8 | Extension contract suite, ratchet gate and final proof | 🟢 Done | 2026-09-24 |
 
 ## Phase P12
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P12.1 | Core error vocabulary, policy and zone classification | ⬜ Not started | — |
+| P12.1 | Core error vocabulary, policy and zone classification | 🟢 Done | 2026-09-25 |
 | P12.2 | API error projection and internal correlation without wire change | ⬜ Not started | 2026-09-24 |
 | P12.3 | Attributes error distinctions and result/exception proof | ⬜ Not started | — |
 | P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | ⬜ Not started | — |
@@ -562,6 +562,19 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P11.3 GREEN: entity collector freeze after projection, fingerprint introspection, JobProcessing pin, octane:reload documented. write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-24 | executor/cursor-grok-4.7/high | plan-exec · closed-green · P11.4 GREEN: workflow definition stamp in existing intent payload; fingerprint excluded from replay hash; legacy refs not rewritten. workflow pest 15/39, phpstan 0, pint ok. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | codex-gpt-6/high | plan-exec · in-progress · — |
+| 2026-09-24 | codex-gpt-6/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:248 |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · E11e exec start P11.6-P11.7; owner plan-run on G46 pin |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P11.6 GREEN: complete materialization payload, task-materialization/1 stamp, typed failure instead of silent no-op. pest 10/54, pg 7/74, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · E11e continue P11.7 after P11.6 GREEN |
+| 2026-09-24 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P11.7 GREEN: notification-digest/1 stamp, default-denied legacy, explicit opt-in, mismatch quarantine. pest 19/73, pg 2/2, phpstan 0, pint ok.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-24 | plan-exec/codex-gpt-6-sol/xhigh | plan-exec · in-progress · — |
+| 2026-09-24 | plan-exec/codex-gpt-6-sol/xhigh | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:254 |
+| 2026-09-24 | plan-exec/codex-gpt-6-sol/xhigh | plan-close · closed-green · P11 direct-close after eight GREEN items. Compiled registry, freeze, stamps, consumers, contract suite, ratchet and PostgreSQL closure passed. |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P12.1 GREEN: error vocabulary, compatibility policy, Foundation zone paths |
 
 ## Owner Gates
 

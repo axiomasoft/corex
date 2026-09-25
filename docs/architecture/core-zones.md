@@ -33,7 +33,7 @@ Money             → Foundation, TenancyContracts
 
 ## 2. Карта принадлежности
 
-Карта соответствует текущему дереву: 146 PHP-файлов. Исходный baseline P6 содержал 109
+Контрольная сумма карты — 150 PHP-файлов, включая четыре Foundation-файла словаря ошибок P12.1. Исходный baseline P6 содержал 109
 файлов; 37 файлов появились в уже выполненных P4/P5. Они классифицированы здесь, а не
 исключены из карты.
 
@@ -59,14 +59,15 @@ Money             → Foundation, TenancyContracts
 
 ### 2.2 Каталоги со смешанной принадлежностью
 
-**`Contracts/` (20):**
+**`Contracts/` (22):**
 
 | Файлы | Зона |
 |:--|:--|
 | `AuditEntry.php`, `AuditLogger.php`, `AuditRetention.php`, `Auditable.php` | Audit |
-| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DurablePayload.php`, `ModuleRegistrar.php` | Foundation |
+| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `ModuleRegistrar.php` | Foundation |
 | `DepartmentRepository.php` | Departments |
 | `FeatureFlagDefinition.php`, `FeatureFlags.php` | Features |
+| `IdentityPasswordRehasher.php` | TenancyContracts |
 | `PubSub.php`, `WorkerRuntime.php` | Messaging |
 | `SavedViewRepository.php`, `ViewAccessPolicy.php`, `ViewSchemaProvider.php` | SavedViews |
 | `SettingDefaultsProvider.php`, `SettingsRepository.php`, `SettingsScope.php` | Settings |
@@ -89,11 +90,11 @@ Money             → Foundation, TenancyContracts
 | `HasAuditLog.php` | Audit |
 | `HasConfiguredId.php` | Foundation; LITMUS_ELOQUENT |
 
-**`Enums/` (7):**
+**`Enums/` (9):**
 
 | Файлы | Зона |
 |:--|:--|
-| `ActorType.php`, `IdStrategy.php` | Foundation |
+| `ActorType.php`, `ErrorCategory.php`, `IdStrategy.php`, `UnavailabilityReason.php` | Foundation |
 | `ImpersonationRestrictedAction.php` | TenancyContracts |
 | `MessageClass.php`, `PiiClass.php`, `PubSubDriver.php` | Messaging |
 | `SettingScope.php` | Settings |
@@ -117,11 +118,11 @@ Money             → Foundation, TenancyContracts
 | `SettingValueTooLargeException.php`, `UnsupportedScopeException.php` | Settings |
 | `InboxRefused.php`, `InvalidMessage.php`, `OutboxLeaseLost.php`, `OutboxRefused.php`, `UnknownMessageContract.php` | Messaging |
 
-**Остальные пути (4):**
+**Остальные пути (5):**
 
 | Путь | Зона / область |
 |:--|:--|
-| `Data/DataScopeAccessDecision.php` | Foundation |
+| `Data/DataScopeAccessDecision.php`, `Data/ErrorDescriptor.php` | Foundation |
 | `Support/Config.php` | Composition |
 | `Support/ServiceProviderModuleRegistrar.php` | Composition |
 | `CoreServiceProvider.php` | Composition |
@@ -130,11 +131,11 @@ Money             → Foundation, TenancyContracts
 
 | Foundation | TenancyContracts | Audit | Settings | SavedViews | Storage |
 |--:|--:|--:|--:|--:|--:|
-| 24 | 22 | 12 | 10 | 16 | 7 |
+| 28 | 22 | 12 | 10 | 16 | 7 |
 
 | Messaging | Features | Departments | Money | Composition | Testing | Итого |
 |--:|--:|--:|--:|--:|--:|--:|
-| 36 | 6 | 7 | 1 | 3 | 2 | 146 |
+| 36 | 6 | 7 | 1 | 3 | 2 | 150 |
 
 ## 3. Правила и именованные исключения
 
@@ -162,6 +163,22 @@ packages/core/src/Support/ServiceProviderModuleRegistrar.php
 
 **E-BASEMODEL:** `packages/core/src/Models/BaseModel.php` — единственный файл Foundation,
 которому разрешён импорт Audit-типа `CoreX\Concerns\HasAuditLog`.
+
+**E-ZONE-EDGE (D116):** шесть публичных импортов разрешены только парой
+«файл + символ». Матрица зон от этого не расширяется.
+
+```text
+packages/core/src/Support/Data/DataScope.php
+    CoreX\Tenancy\TenantContext
+packages/core/src/Events/DomainEvent.php
+    CoreX\Tenancy\TenantContext
+    CoreX\Tenancy\Contracts\TenantContextResolver
+packages/core/src/Events/FeatureFlagToggled.php
+    CoreX\Contracts\SettingsScope
+packages/core/src/Features/DatabaseFeatureFlags.php
+    CoreX\Contracts\SettingsScope
+    CoreX\Enums\SettingScope
+```
 
 **LITMUS_ELOQUENT:**
 

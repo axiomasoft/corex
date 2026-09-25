@@ -81,13 +81,54 @@ Enforcement межпакетной границы — **гейт графа па
 4. Сужение типа параметра и расширение типа возвращаемого значения.
 5. Смена допустимости `null` в любую сторону на публичной сигнатуре.
 6. Удаление случая enum, входящего в публичный тип.
-7. Смена стабильного кода ошибки либо его категории.
+7. Удаление или переименование стабильного кода ошибки, смена его category,
+   семантики RFC 6901 `path`, `retryable`, либо удаление документированного detail key.
 8. Смена контракта пагинации и порядка выдачи.
 9. Удаление темы webhook либо смена её payload'а без новой версии.
 10. Перенос публичного символа в другой неймспейс без сохранения прежнего.
 
 Этот список — вход гейта P3 и P13, а не пожелание. Каждый пункт обязан быть проверяем
 машинно либо назван как непроверяемый явно.
+
+## Контракт ошибки
+
+Общий словарь — `ErrorCategory`, `UnavailabilityReason`, неизменяемый `ErrorDescriptor`
+и интерфейс `DescribesError`. Код остаётся у пакета-владельца: центрального enum кодов нет.
+Исключение реализует интерфейс на публичной границе; типизированный result может нести
+тот же descriptor без исключения. Базовой иерархии `CoreXException` нет.
+
+Стабильные поля — `code`, `category`, RFC 6901 `path`, `retryable` и документированные
+ключи `details`. Сообщение, класс исключения и stack trace в контракт не входят. HTTP-статус
+— проекция транспорта; его не хранит descriptor.
+
+`path` равен `null` либо JSON Pointer: пустая строка — корень документа, непустой путь
+начинается с `/`, экранирование только `~0` и `~1`. `retryable=true` значит лишь то, что
+тот же semantic input может успеть позже. Это не разрешение на автоматический повтор:
+вызывающий ещё проверяет идемпотентность и `Retry-After`.
+
+| Reason | Смысл | Category | Default retryable |
+|:--|:--|:--|:--|
+| `capability_unavailable` | пакет, provider или backend отсутствует либо недоступен | `unavailable` | решает producer |
+| `capability_disabled` | capability есть, но выключена конфигурацией или активацией | `unavailable` | `false` |
+| `operation_unsupported` | выбранный driver не реализует операцию | `unsupported` | `false` |
+| `access_denied` | actor или policy запрещает действие | `authorization` | `false` |
+| `feature_not_entitled` | authoritative edition или license не даёт feature | `authorization` | `false` |
+
+Пять reason не склеиваются. `feature_not_entitled` не эмитится без источника entitlement.
+Это не шестой статус и не синоним отказа доступа.
+
+Ломающее изменение контракта ошибки: удалить или переименовать code, сменить meaning,
+category, семантику path или retryability, удалить документированный detail key.
+Аддитивное: новый code, новый необязательный detail key, более точное человеческое сообщение.
+
+| Situation | Form |
+|:--|:--|
+| Expected business denial | Typed result/decision with stable reason |
+| Normal query absence | nullable/optional result |
+| Programmer/configuration defect | typed exception |
+| Infrastructure failure | typed exception with safe descriptor |
+| Optimistic/concurrent conflict | domain conflict exception or explicit typed conflict |
+| Batch partial failure | report with per-record descriptors; do not throw away successes |
 
 ## Правило межпакетного импорта
 
