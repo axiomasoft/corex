@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-25
-inputs_sha256: 61802eb670c7823f253575d1a31318ed4ff82b1857fb7fc44f8a4d6e846b1286
+inputs_sha256: ac82f4ba08bd5bda90df7f6de0b800a1d2db3e89a9fbe7264b82adef6b31f1bc
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
-| P12 | Таксономия ошибок и наблюдаемость операций | 1/8 | 🟡 In progress |
+| P12 | Таксономия ошибок и наблюдаемость операций | 4/8 | 🟡 In progress |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
@@ -84,9 +84,9 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P12.1 | Core error vocabulary, policy and zone classification | 🟢 Done | 2026-09-25 |
-| P12.2 | API error projection and internal correlation without wire change | ⬜ Not started | 2026-09-24 |
-| P12.3 | Attributes error distinctions and result/exception proof | ⬜ Not started | — |
-| P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | ⬜ Not started | — |
+| P12.2 | API error projection and internal correlation without wire change | 🟢 Done | 2026-09-25 |
+| P12.3 | Attributes error distinctions and result/exception proof | 🟢 Done | 2026-09-25 |
+| P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | 🟢 Done | 2026-09-25 |
 | P12.5 | Bounded metrics, P5 trace carrier and optional OpenTelemetry bridge | ⬜ Not started | — |
 | P12.6 | Universal impersonation provenance on core audit entries | ⬜ Not started | — |
 | P12.7 | Impersonation session invariants and cleanup | ⬜ Not started | — |
@@ -575,6 +575,14 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-24 | plan-exec/codex-gpt-6-sol/xhigh | plan-close · closed-green · P11 direct-close after eight GREEN items. Compiled registry, freeze, stamps, consumers, contract suite, ratchet and PostgreSQL closure passed. |
 | 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P12.1 GREEN: error vocabulary, compatibility policy, Foundation zone paths |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P12.2 GREEN: descriptor-aware ApiError/ErrorMapper, internal correlation, old wire unchanged. api pest 102/578, analyse 0, pint passed, serializer rg empty.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P12.3 GREEN: three machine-distinct attributes failures; ScopeDenied stays authority-only. pest 70/243, pg 45/242, analyse 0, pint passed.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.4 GREEN: operation lifecycle, null observer, static PSR-3 projection. core pest 133/358, zone 8/33, phpstan 0, pint ok. |
 
 ## Owner Gates
 

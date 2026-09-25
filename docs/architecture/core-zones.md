@@ -46,6 +46,7 @@ Money             → Foundation, TenancyContracts
 | `Features/` | 1 | Features |
 | `Messaging/` | 19 | Messaging |
 | `Money/` | 1 | Money |
+| `Observability/` | 7 | Foundation |
 | `PHPStan/` | 1 | Foundation |
 | `PubSub/` | 7 | Messaging |
 | `Settings/` | 2 | Settings |
@@ -59,12 +60,12 @@ Money             → Foundation, TenancyContracts
 
 ### 2.2 Каталоги со смешанной принадлежностью
 
-**`Contracts/` (22):**
+**`Contracts/` (23):**
 
 | Файлы | Зона |
 |:--|:--|
 | `AuditEntry.php`, `AuditLogger.php`, `AuditRetention.php`, `Auditable.php` | Audit |
-| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `ModuleRegistrar.php` | Foundation |
+| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `ModuleRegistrar.php`, `OperationObserver.php` | Foundation |
 | `DepartmentRepository.php` | Departments |
 | `FeatureFlagDefinition.php`, `FeatureFlags.php` | Features |
 | `IdentityPasswordRehasher.php` | TenancyContracts |
