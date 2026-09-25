@@ -19,5 +19,6 @@ final readonly class ImpersonationState
         public string $staffIdentityId,
         public string $targetUserId,
         public DateTimeImmutable $expiresAt,
+        public ?string $reason = null,
     ) {}
 }

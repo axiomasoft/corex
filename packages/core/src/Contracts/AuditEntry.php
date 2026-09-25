@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Contracts;
 
 use CoreX\Enums\ActorType;
+use CoreX\Tenancy\ImpersonationState;
 use DateTimeImmutable;
 
 /**
@@ -56,6 +57,34 @@ final readonly class AuditEntry
             context: $this->context,
             occurredAt: $occurredAt,
             workspaceId: $workspaceId,
+        );
+    }
+
+    /**
+     * Return a copy whose actor and reserved impersonation context come from
+     * authority. Caller context is preserved except `impersonation`, which
+     * cannot spoof grant, target, or reason. Snapshot fields already present
+     * are kept so either copy order yields the full entry.
+     */
+    public function withImpersonation(ImpersonationState $state): self
+    {
+        return new self(
+            action: $this->action,
+            actorType: ActorType::Support,
+            actorId: $state->staffIdentityId,
+            entityType: $this->entityType,
+            entityId: $this->entityId,
+            changes: $this->changes,
+            context: [
+                ...array_diff_key($this->context, ['impersonation' => true]),
+                'impersonation' => [
+                    'grant' => $state->grantId,
+                    'target_user_id' => $state->targetUserId,
+                    'reason' => $state->reason,
+                ],
+            ],
+            occurredAt: $this->occurredAt,
+            workspaceId: $this->workspaceId,
         );
     }
 }

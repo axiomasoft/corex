@@ -19,6 +19,7 @@ final class ImpersonationEnded extends DomainEvent
         public readonly string $grantId,
         public readonly string $staffIdentityId,
         public readonly string $targetUserId,
+        public readonly ?string $reason = null,
     ) {
         parent::__construct();
     }

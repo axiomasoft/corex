@@ -75,7 +75,7 @@ it('CurrentActor reports Support + staff id + grant/target context while imperso
     expect(CurrentActor::type())->toBe(ActorType::Support)
         ->and(CurrentActor::id())->toBe('staff-у')
         ->and(CurrentActor::context())->toHaveKey('impersonation')
-        ->and(CurrentActor::context()['impersonation'])->toBe(['grant' => 'grant-у', 'target_user_id' => 'target-у']);
+        ->and(CurrentActor::context()['impersonation'])->toBe(['grant' => 'grant-у', 'target_user_id' => 'target-у', 'reason' => null]);
 });
 
 it('CurrentActor never reports actor_type=user under impersonation, even when authenticated (ф)', function (): void {

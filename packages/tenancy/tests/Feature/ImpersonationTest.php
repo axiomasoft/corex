@@ -9,6 +9,7 @@ use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Events\ImpersonationEnded;
 use CoreX\Tenancy\Events\ImpersonationStarted;
+use CoreX\Tenancy\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Models\User;
 use CoreX\Tenancy\Tests\TestCase;
@@ -61,6 +62,7 @@ it('isolates impersonation state across requests in one worker container', funct
                 'corex.impersonation.staff_identity_id' => 'staff-test',
                 'corex.impersonation.target_user_id' => 'target-test',
                 'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
+                'corex.impersonation.reason' => 'support ticket #1',
             ]);
         }
         expect(app(ImpersonationService::class)->active())->toBe($impersonated ? 'grant-test' : null);
@@ -573,7 +575,10 @@ it('к/н: target-пользователя не существует → 403, н
     expect(auth('web')->check())->toBeFalse();
 
     $grant = grantRowIM($grantId);
-    expect($grant->used_at)->not->toBeNull();
+    expect($grant->used_at)->not->toBeNull()
+        ->and(auth('web')->check())->toBeFalse()
+        ->and(session('corex.impersonation.grant_id'))->toBeNull()
+        ->and(DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.failed')->count())->toBe(1);
 });
 
 // ── л–у — happy path & its observable effects ────────────────────────────
@@ -608,7 +613,7 @@ it('л/м/о/п/с/т/у: валидный грант — target≠sub, root_acc
     expect($actor)->toEqual(['type' => 'support', 'id' => $staffId, 'grant' => $grantId]);
 
     // (п) ImpersonationStarted fired.
-    Event::assertDispatched(ImpersonationStarted::class, static fn (ImpersonationStarted $e): bool => $e->grantId === $grantId && $e->staffIdentityId === $staffId && $e->targetUserId === $targetId);
+    Event::assertDispatched(ImpersonationStarted::class, static fn (ImpersonationStarted $e): bool => $e->grantId === $grantId && $e->staffIdentityId === $staffId && $e->targetUserId === $targetId && $e->reason === 'support ticket #1');
 
     // (с) staff is NOT a member — no root_identity_accounts row for it.
     expect(DB::connection('pgsql')->table('root_identity_accounts')->where('identity_id', $staffId)->exists())->toBeFalse();
@@ -753,4 +758,59 @@ it('а: imp в токене при impersonation.enabled=false → 403 (регр
 
     callbackIM($state, $nonce)->assertStatus(403);
     expect(auth('web')->check())->toBeFalse();
+});
+
+it('rejects a nested start before the second grant is consumed', function (): void {
+    $account = initAccountWithTenantIM();
+    $staffId = makeStaffIdentityIM();
+    $targetId = makeIdentityIM();
+    seedTenantUserIM($account, $targetId, ['email' => 'nested@example.test']);
+    $first = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId]);
+    $second = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId]);
+    $service = app(ImpersonationService::class);
+
+    $service->start($first, $staffId);
+
+    expect(fn () => $service->start($second, $staffId))->toThrow(OidcAuthenticationException::class)
+        ->and(grantRowIM($second)->used_at)->toBeNull()
+        ->and($service->state()?->grantId)->toBe($first)
+        ->and($service->state()?->reason)->toBe('support ticket #1');
+});
+
+it('backfills a legacy session from the claimed grant reason', function (): void {
+    $account = initAccountWithTenantIM();
+    $staffId = makeStaffIdentityIM();
+    $targetId = makeIdentityIM();
+    $grantId = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId, 'used_at' => now()]);
+    app()->forgetInstance(ImpersonationService::class);
+
+    session([
+        'corex.impersonation.grant_id' => $grantId,
+        'corex.impersonation.staff_identity_id' => $staffId,
+        'corex.impersonation.target_user_id' => $targetId,
+        'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
+    ]);
+
+    $state = app(ImpersonationService::class)->state();
+
+    expect($state?->reason)->toBe('support ticket #1')
+        ->and(session('corex.impersonation.reason'))->toBe('support ticket #1');
+});
+
+it('closes a legacy session whose claimed grant has no reason', function (): void {
+    $account = initAccountWithTenantIM();
+    $staffId = makeStaffIdentityIM();
+    $targetId = makeIdentityIM();
+    $grantId = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId, 'used_at' => now(), 'reason' => '']);
+    app()->forgetInstance(ImpersonationService::class);
+
+    session([
+        'corex.impersonation.grant_id' => $grantId,
+        'corex.impersonation.staff_identity_id' => $staffId,
+        'corex.impersonation.target_user_id' => $targetId,
+        'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
+    ]);
+
+    expect(app(ImpersonationService::class)->state())->toBeNull()
+        ->and(session('corex.impersonation.grant_id'))->toBeNull();
 });

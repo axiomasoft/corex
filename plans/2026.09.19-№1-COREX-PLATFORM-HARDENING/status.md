@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-25
-inputs_sha256: 1881750af0fe07a7b8a6e9baa66ea062122fdd72418bbe1f595730a6a5119e88
+inputs_sha256: b020f8fde4089932119dc622134eeb89a17bb66d40c7630c4da03895a5358728
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
-| P12 | Таксономия ошибок и наблюдаемость операций | 5/8 | 🟡 In progress |
+| P12 | Таксономия ошибок и наблюдаемость операций | 7/8 | 🟡 In progress |
 | P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
@@ -88,8 +88,8 @@ generated_by: task plan-views status
 | P12.3 | Attributes error distinctions and result/exception proof | 🟢 Done | 2026-09-25 |
 | P12.4 | Vendor-neutral operation lifecycle and PSR-3 adapter | 🟢 Done | 2026-09-25 |
 | P12.5 | Bounded metrics, P5 trace carrier and optional OpenTelemetry bridge | 🟢 Done | 2026-09-25 |
-| P12.6 | Universal impersonation provenance on core audit entries | ⬜ Not started | — |
-| P12.7 | Impersonation session invariants and cleanup | ⬜ Not started | — |
+| P12.6 | Universal impersonation provenance on core audit entries | 🟢 Done | 2026-09-25 |
+| P12.7 | Impersonation session invariants and cleanup | 🟢 Done | 2026-09-25 |
 | P12.8 | Error, observability and impersonation contract ratchets | ⬜ Not started | — |
 
 ## Phase P13
@@ -585,6 +585,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.4 GREEN: operation lifecycle, null observer, static PSR-3 projection. core pest 133/358, zone 8/33, phpstan 0, pint ok. |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.5 GREEN: metric allow-list, null trace bridge, outbox carrier, optional OTel schema 1.32.0. core pest 139/387, pg health 7/27, zone 8/33, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.6 GREEN: synchronous audit stamp carries staff, grant, target and reason; spoofed context loses; non-impersonated rows stay equivalent. |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.7 GREEN: nested start is denied before claim; reason stays on the session, mirrors and events; failed target login clears auth. |
 
 ## Owner Gates
 

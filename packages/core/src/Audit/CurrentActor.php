@@ -54,6 +54,7 @@ final class CurrentActor
             $context['impersonation'] = [
                 'grant' => $state->grantId,
                 'target_user_id' => $state->targetUserId,
+                'reason' => $state->reason,
             ];
         }
 

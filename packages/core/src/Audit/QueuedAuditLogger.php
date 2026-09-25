@@ -7,6 +7,7 @@ namespace CoreX\Audit;
 use CoreX\Contracts\AuditEntry;
 use CoreX\Contracts\AuditLogger;
 use CoreX\Support\Config;
+use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 
 /**
@@ -47,6 +48,12 @@ final class QueuedAuditLogger implements AuditLogger
         // before the worker runs (the journal records what happened).
         if (! Config::auditEnabled()) {
             return;
+        }
+
+        $state = app(ImpersonationService::class)->state();
+
+        if ($state !== null) {
+            $entry = $entry->withImpersonation($state);
         }
 
         $resolver = $this->tenantContext ?? app(TenantContextResolver::class);

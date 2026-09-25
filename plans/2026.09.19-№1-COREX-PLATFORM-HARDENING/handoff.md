@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-25 — after P12.5
+# HANDOFF — 2026-09-25 — after P12.7
 
-**Next:** run-items: task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.6
+**Next:** run-items: task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.8
 
 ## ⚠ LAUNCH
 
@@ -10,20 +10,20 @@
 | Model | frontier |
 | Thinking | high |
 | Context | continue-root |
-| Суть | P12.6 — impersonation provenance on core audit entries. P12.7 bundle still names the pre-P9 guard path. |
+| Суть | P12.8 — final P12 ratchets and proof. |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:E12d", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P12.5:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:E12d", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P12.7:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** E12c GREEN. P12.4 added the operation lifecycle and a redacting PSR-3
-adapter. P12.5 added the metric allow-list, a null trace bridge, outbox carrier
-injection and an optional OpenTelemetry adapter pinned to schema 1.32.0. Core
-pest 139/387, zone 8/33, delivery-health pg 7/27, analyse 0, pint passed.
+**Done:** E12d GREEN. P12.6 stamps every audit record with staff, grant, target
+and reason. P12.7 rejects nested starts, carries reason through session and
+mirrors, and clears auth after a failed target login. Impersonation and
+write-guard tests 31/79, tenancy analyse 0, pint passed.
 
-**Remaining:** P12.6–P12.8 and P13–P17 remain after their dependencies.
+**Remaining:** P12.8 and P13–P17 remain after their dependencies.
 
-**Sources of truth:** `phases/P12/P12.5.md` · `findings/P12-receipts.md` ·
+**Sources of truth:** `phases/P12/P12.7.md` · `findings/P12-receipts.md` ·
 `journal.jsonl`.
 
 **Open risks:** HTTP emission of category/retryable/correlation stays in P13.
