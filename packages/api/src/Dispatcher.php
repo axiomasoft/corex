@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Api;
 
 use CoreX\Api\Contracts\ContextResolver;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\OperationHandler;
+use CoreX\Api\Contracts\OperationInvoker;
 use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\RequestContext;
 use CoreX\Api\Contracts\ResponseSerializer;
+use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Internal\ErrorMapper;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\JsonResponse;
@@ -23,14 +21,13 @@ final class Dispatcher
 {
     public function __construct(
         private readonly OperationRegistry $operations,
-        private readonly ModuleRegistry $modules,
         private readonly PrincipalResolver $principals,
         private readonly ContextResolver $contexts,
-        private readonly OperationAuthorizer $authorizer,
         private readonly ResponseSerializer $serializer,
         private readonly Factory $validation,
         private readonly Container $container,
         private readonly ErrorMapper $errors,
+        private readonly OperationInvoker $invoker,
     ) {}
 
     /** The application explicitly mounts this boundary after its trusted tenancy/auth pipeline. */
@@ -46,34 +43,25 @@ final class Dispatcher
             $principal = $this->principals->resolve($request)
                 ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
             $context = $this->contexts->resolve($request, $principal, $metadata);
-
-            if (! $this->modules->isActive($operation->module, $context->tenant())) {
-                throw new ApiError('module_unavailable', 404, 'Operation not found.');
-            }
-
-            if (! $this->authorizer->allows($operation, $context)) {
-                throw new ApiError('forbidden', 403, 'Operation is not permitted.');
-            }
-
             $input = $this->input($request, $operation);
-            $previousContext = $request->attributes->get(RequestContext::class);
-            $request->attributes->set(RequestContext::class, $context);
+            $previousRequest = $this->container->bound('request') ? $this->container->make('request') : null;
+            $this->container->instance('request', $request);
 
             try {
-                $handler = $this->container->make($operation->handler);
-
-                if (! $handler instanceof OperationHandler) {
-                    throw new ApiError('internal_error', 500, 'Operation could not be completed.');
-                }
-
-                return $this->serializer->success($handler->handle($context, $input, $parameters), $operation->successStatus, $metadata);
+                $result = $this->invoker->invoke(new OperationInvocation(
+                    operation: $operation,
+                    context: $context,
+                    input: $input,
+                    parameters: $parameters,
+                    idempotencyKey: null,
+                ));
             } finally {
-                if ($previousContext === null) {
-                    $request->attributes->remove(RequestContext::class);
-                } else {
-                    $request->attributes->set(RequestContext::class, $previousContext);
+                if ($previousRequest !== null) {
+                    $this->container->instance('request', $previousRequest);
                 }
             }
+
+            return $this->serializer->success($result->data, $operation->successStatus, $metadata);
         } catch (Throwable $error) {
             return $this->serializer->error($this->errors->map($error), $metadata);
         }

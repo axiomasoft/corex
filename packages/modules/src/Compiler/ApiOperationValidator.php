@@ -30,6 +30,8 @@ final class ApiOperationValidator
         }
 
         self::validateRules($api->inputRules);
+        self::normalizeLegacyContract($api);
+        self::validateContract($api);
 
         self::assertJsonValue($api->requestSchema);
         self::assertJsonValue($api->responseSchema);
@@ -72,6 +74,164 @@ final class ApiOperationValidator
         }
 
         throw new CompilationException('Ambiguous API routes with equal specificity.');
+    }
+
+    private static function normalizeLegacyContract(Api $api): void
+    {
+        if ($api->operationModeExplicit) {
+            return;
+        }
+
+        $mutation = in_array($api->method, ['POST', 'PUT', 'PATCH', 'DELETE'], true);
+        $api->operationMode = $mutation ? 'command' : 'query';
+
+        if (! $api->idempotencyExplicit) {
+            $api->idempotencyRequirement = $mutation ? 'optional' : 'forbidden';
+        }
+    }
+
+    private static function validateContract(Api $api): void
+    {
+        $owner = $api->declaringModule ?? $api->operationId;
+        $mode = $api->operationMode;
+        $method = $api->method;
+        $idempotency = $api->idempotencyRequirement;
+        $allowed = [
+            'query' => ['GET' => ['forbidden']],
+            'command' => ['POST' => ['optional', 'required'], 'PUT' => ['optional', 'required'], 'PATCH' => ['optional', 'required'], 'DELETE' => ['optional', 'required']],
+            'async_command' => ['POST' => ['required']],
+            'bulk_query' => ['POST' => ['required']],
+            'bulk_command' => ['POST' => ['required']],
+        ];
+
+        if (! isset($allowed[$mode][$method]) || ! in_array($idempotency, $allowed[$mode][$method], true)) {
+            throw new CompilationException("Illegal operation contract [{$api->operationId}] owned by [{$owner}]: {$mode}/{$method}/{$idempotency}.");
+        }
+
+        if ($mode === 'async_command' && $api->successStatus !== 202) {
+            throw new CompilationException("Async command [{$api->operationId}] owned by [{$owner}] requires success status 202.");
+        }
+
+        if (in_array($mode, ['bulk_query', 'bulk_command'], true)) {
+            $api->executionSupported = false;
+
+            if ($api->bulkExecutionEnabled) {
+                throw new CompilationException("Bulk operation [{$api->operationId}] owned by [{$owner}] cannot enable execution.");
+            }
+        }
+
+        self::assertUniqueStrings($api->requiredScopes, "duplicate scope on [{$api->operationId}] owned by [{$owner}]");
+        self::assertUniqueStrings($api->capabilities, "duplicate capability on [{$api->operationId}] owned by [{$owner}]");
+        self::assertFieldList($api->readFields, $api->operationId, $owner, 'read');
+        self::assertFieldList($api->writeFields, $api->operationId, $owner, 'write');
+
+        foreach ($api->capabilities as $capability) {
+            if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/D', $capability) !== 1) {
+                throw new CompilationException("Invalid capability [{$capability}] on [{$api->operationId}] owned by [{$owner}].");
+            }
+        }
+
+        if ($api->pagination !== null) {
+            self::assertPagination($api->pagination, $api->operationId, $owner);
+        }
+
+        if ($api->deprecation !== null) {
+            self::assertDeprecation($api->deprecation, $api->operationId, $owner);
+        }
+
+        $idempotentMutation = $mode !== 'query' && in_array($idempotency, ['optional', 'required'], true);
+
+        if ($idempotentMutation && $api->idempotencyExplicit && ! in_array($api->effectMode, ['tenant_transactional', 'same_transaction_outbox', 'reconciliation_contract'], true)) {
+            throw new CompilationException("Unsafe idempotent effect mode on [{$api->operationId}] owned by [{$owner}].");
+        }
+
+        if ($api->effectMode !== null && ! in_array($api->effectMode, ['tenant_transactional', 'same_transaction_outbox', 'reconciliation_contract'], true)) {
+            throw new CompilationException("Unsafe idempotent effect mode on [{$api->operationId}] owned by [{$owner}].");
+        }
+    }
+
+    /** @param  array<mixed>  $values */
+    private static function assertUniqueStrings(array $values, string $message): void
+    {
+        foreach ($values as $value) {
+            if (! is_string($value) || $value === '') {
+                throw new CompilationException($message);
+            }
+        }
+
+        if (count($values) !== count(array_unique($values))) {
+            throw new CompilationException($message);
+        }
+    }
+
+    /** @param  array<mixed>|null  $fields */
+    private static function assertFieldList(?array $fields, string $operationId, string $owner, string $side): void
+    {
+        if ($fields === null) {
+            return;
+        }
+
+        if (! array_is_list($fields)) {
+            throw new CompilationException("Invalid {$side} fields on [{$operationId}] owned by [{$owner}].");
+        }
+
+        self::assertUniqueStrings($fields, "duplicate {$side} field on [{$operationId}] owned by [{$owner}]");
+    }
+
+    /** @param  array<mixed>  $pagination */
+    private static function assertPagination(array $pagination, string $operationId, string $owner): void
+    {
+        if (array_is_list($pagination)) {
+            throw new CompilationException("Invalid pagination on [{$operationId}] owned by [{$owner}].");
+        }
+
+        foreach ($pagination as $key => $value) {
+            if (! is_string($key) || $key === '' || ! self::isScalarOrList($value)) {
+                throw new CompilationException("Invalid pagination on [{$operationId}] owned by [{$owner}].");
+            }
+        }
+    }
+
+    /** @param  array<mixed>  $deprecation */
+    private static function assertDeprecation(array $deprecation, string $operationId, string $owner): void
+    {
+        $keys = array_keys($deprecation);
+        sort($keys);
+
+        if ($keys !== ['deprecatedAt', 'id', 'migrationUri', 'successor', 'sunsetAt']) {
+            throw new CompilationException("Invalid deprecation on [{$operationId}] owned by [{$owner}].");
+        }
+
+        foreach (['id', 'deprecatedAt', 'migrationUri'] as $required) {
+            if (! is_string($deprecation[$required]) || $deprecation[$required] === '') {
+                throw new CompilationException("Invalid deprecation on [{$operationId}] owned by [{$owner}].");
+            }
+        }
+
+        foreach (['successor', 'sunsetAt'] as $optional) {
+            if ($deprecation[$optional] !== null && (! is_string($deprecation[$optional]) || $deprecation[$optional] === '')) {
+                throw new CompilationException("Invalid deprecation on [{$operationId}] owned by [{$owner}].");
+            }
+        }
+    }
+
+    private static function isScalarOrList(mixed $value): bool
+    {
+        if (is_array($value)) {
+            if (! array_is_list($value)) {
+                return false;
+            }
+
+            foreach ($value as $item) {
+                if (! is_scalar($item)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return is_scalar($value);
     }
 
     private static function validateRules(mixed $rules): void

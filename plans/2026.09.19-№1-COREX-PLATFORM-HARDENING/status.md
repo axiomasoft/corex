@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-25
-inputs_sha256: b020f8fde4089932119dc622134eeb89a17bb66d40c7630c4da03895a5358728
+inputs_sha256: 6f86f637721cb8793bc2310d4f705428fabe86a9560e0daf714971abe03c2c28
 generated_by: task plan-views status
 -->
 
@@ -26,8 +26,8 @@ generated_by: task plan-views status
 | P1 | Архитектурная конституция и нормативный слой | 7/7 | 🟢 Done |
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
-| P12 | Таксономия ошибок и наблюдаемость операций | 7/8 | 🟡 In progress |
-| P13 | Внешний API как продукт: ядро контракта операций | 0/12 | ⬜ Not started |
+| P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
+| P13 | Внешний API как продукт: ядро контракта операций | 2/12 | 🟡 In progress |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
@@ -90,14 +90,14 @@ generated_by: task plan-views status
 | P12.5 | Bounded metrics, P5 trace carrier and optional OpenTelemetry bridge | 🟢 Done | 2026-09-25 |
 | P12.6 | Universal impersonation provenance on core audit entries | 🟢 Done | 2026-09-25 |
 | P12.7 | Impersonation session invariants and cleanup | 🟢 Done | 2026-09-25 |
-| P12.8 | Error, observability and impersonation contract ratchets | ⬜ Not started | — |
+| P12.8 | Error, observability and impersonation contract ratchets | 🟢 Done | 2026-09-25 |
 
 ## Phase P13
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P13.1 | Compiled operation semantics and modes | ⬜ Not started | — |
-| P13.2 | One transport-neutral operation invocation seam | ⬜ Not started | — |
+| P13.1 | Compiled operation semantics and modes | 🟢 Done | 2026-09-25 |
+| P13.2 | One transport-neutral operation invocation seam | 🟢 Done | 2026-09-25 |
 | P13.3 | Immutable API profile, capabilities and deprecation catalogue | ⬜ Not started | — |
 | P13.4 | Package routes, discovery and HTTP operation projection | ⬜ Not started | — |
 | P13.5 | Tenant idempotency store and schema | ⬜ Not started | — |
@@ -589,6 +589,14 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.6 GREEN: synchronous audit stamp carries staff, grant, target and reason; spoofed context loses; non-impersonated rows stay equivalent. |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P12.7 GREEN: nested start is denied before claim; reason stays on the session, mirrors and events; failed target login clears auth. |
+| 2026-09-25 | plan-exec/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/gpt-5.6-sol/high | plan-exec · closed-green · P12.8 GREEN: public error, bounded observability and direct-audit ratchets; all package, root, PostgreSQL, no-dev OpenTelemetry and old-wire lanes green. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-exec/gpt-5.6-sol/high | plan-close · closed-green · P12 direct-close after eight GREEN items; contract ratchets, package/root/PostgreSQL matrix, optional OpenTelemetry and unchanged wire all passed. |
+| 2026-09-25 | plan-exec/gpt-5.6-sol/high | plan-exec · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.1 GREEN: operation-contract metadata, enums, contract hash. modules 73, api 103, phpstan 0. |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.2 GREEN: shared OperationInvoker for HTTP and exposed tools. api 106, phpstan 0. |
 
 ## Owner Gates
 

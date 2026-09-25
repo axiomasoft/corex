@@ -78,6 +78,38 @@ final class Api implements Extender
     /** @var array<string, string> */
     public array $parameterMap = [];
 
+    public string $operationMode = 'query';
+
+    public bool $operationModeExplicit = false;
+
+    /** @var list<string> */
+    public array $requiredScopes = [];
+
+    public string $idempotencyRequirement = 'forbidden';
+
+    public bool $idempotencyExplicit = false;
+
+    /** @var list<string>|null */
+    public ?array $readFields = null;
+
+    /** @var list<string>|null */
+    public ?array $writeFields = null;
+
+    /** @var array<string, scalar|list<scalar>>|null */
+    public ?array $pagination = null;
+
+    /** @var list<string> */
+    public array $capabilities = [];
+
+    /** @var array<string, scalar|null>|null */
+    public ?array $deprecation = null;
+
+    public ?string $effectMode = null;
+
+    public bool $bulkExecutionEnabled = false;
+
+    public bool $executionSupported = true;
+
     private function __construct()
     {
         //
@@ -142,10 +174,121 @@ final class Api implements Extender
         return $this;
     }
 
-    /** @param  list<string>  $only */
-    public function fields(array $only): self
+    /**
+     * Resource metadata keeps a single allow-list. An operation declaration
+     * normalizes that list into equal read and write lists; pass `$write` for
+     * distinct allow-lists.
+     *
+     * @param  list<string>  $read
+     * @param  list<string>|null  $write
+     */
+    public function fields(array $read = [], ?array $write = null): self
     {
-        $this->onlyFields = $only;
+        if ($this->mode !== 'operation') {
+            $this->onlyFields = $read;
+
+            return $this;
+        }
+
+        $this->readFields = $read;
+        $this->writeFields = $write ?? $read;
+        $this->onlyFields = $this->readFields;
+
+        return $this;
+    }
+
+    public function asQuery(): self
+    {
+        return $this->mode('query');
+    }
+
+    public function asCommand(): self
+    {
+        return $this->mode('command');
+    }
+
+    public function asAsyncCommand(): self
+    {
+        $this->successStatus = 202;
+
+        return $this->mode('async_command');
+    }
+
+    public function asBulkQuery(): self
+    {
+        $this->bulkExecutionEnabled = false;
+        $this->executionSupported = false;
+
+        return $this->mode('bulk_query');
+    }
+
+    public function asBulkCommand(): self
+    {
+        $this->bulkExecutionEnabled = false;
+        $this->executionSupported = false;
+
+        return $this->mode('bulk_command');
+    }
+
+    public function requiresScopes(string ...$scopes): self
+    {
+        $this->requiredScopes = array_values($scopes);
+
+        return $this;
+    }
+
+    public function idempotency(string $requirement): self
+    {
+        $this->idempotencyRequirement = $requirement;
+        $this->idempotencyExplicit = true;
+
+        return $this;
+    }
+
+    /** @param  array<string, scalar|list<scalar>>  $pagination */
+    public function paginate(array $pagination): self
+    {
+        $this->pagination = $pagination;
+
+        return $this;
+    }
+
+    public function capability(string ...$capabilities): self
+    {
+        $this->capabilities = array_values($capabilities);
+
+        return $this;
+    }
+
+    public function deprecated(
+        string $id,
+        string $deprecatedAt,
+        ?string $sunsetAt,
+        ?string $successor,
+        string $migrationUri,
+    ): self {
+        $this->deprecation = [
+            'id' => $id,
+            'deprecatedAt' => $deprecatedAt,
+            'sunsetAt' => $sunsetAt,
+            'successor' => $successor,
+            'migrationUri' => $migrationUri,
+        ];
+
+        return $this;
+    }
+
+    public function effect(string $mode): self
+    {
+        $this->effectMode = $mode;
+
+        return $this;
+    }
+
+    private function mode(string $mode): self
+    {
+        $this->operationMode = $mode;
+        $this->operationModeExplicit = true;
 
         return $this;
     }

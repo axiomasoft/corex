@@ -1,34 +1,30 @@
-# HANDOFF — 2026-09-25 — after P12.7
+# HANDOFF — 2026-09-25 — after P13.2
 
-**Next:** run-items: task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.8
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.3
 
 ## ⚠ LAUNCH
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E12d |
-| Model | frontier |
+| Batch | E13b |
+| Model | implementation |
 | Thinking | high |
 | Context | continue-root |
-| Суть | P12.8 — final P12 ratchets and proof. |
+| Суть | P13.3 — immutable API profile and options over the compiled operation descriptor. |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:E12d", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P12.7:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["item:P12.8", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P12.8:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** E12d GREEN. P12.6 stamps every audit record with staff, grant, target
-and reason. P12.7 rejects nested starts, carries reason through session and
-mirrors, and clears auth after a failed target login. Impersonation and
-write-guard tests 31/79, tenancy analyse 0, pint passed.
+**Done:** P13.1 and P13.2 are GREEN. Declarations project operation-contract/1, and HTTP plus exposed tools share one invoker. Standalone tools stay on the P11 guard path.
 
-**Remaining:** P12.8 and P13–P17 remain after their dependencies.
+**Remaining:** P13-P17 remain after their declared dependencies and owner grants.
 
-**Sources of truth:** `phases/P12/P12.7.md` · `findings/P12-receipts.md` ·
+**Sources of truth:** `phases/P12/P12.closed.md` · `findings/P12-receipts.md` ·
 `journal.jsonl`.
 
-**Open risks:** HTTP emission of category/retryable/correlation stays in P13.
-Root `composer.json` already had unrelated edits, so the OpenTelemetry dev
-dependency is installed in the worktree and declared on `packages/core`.
+**Open risks:** P13 owns HTTP error projection and contract snapshots. P13.5 still
+requires G-DDL, and P13.12 requires G-API before freezing `operation-contract/1`.
 
 **Workarounds/Deferred/Open questions:**
 - workarounds: —

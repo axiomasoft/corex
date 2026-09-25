@@ -22,7 +22,7 @@ final class OperationRegistry
                 continue;
             }
 
-            $operation = Operation::fromDeclaration($api);
+            $operation = Operation::fromDeclaration($api, $this->modules->compiled()->fingerprint);
             $key = $operation->method.':'.preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', $operation->path);
 
             if (isset($keys[$key]) || isset($keys['id:'.$operation->id])) {

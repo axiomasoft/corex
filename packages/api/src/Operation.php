@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Api;
 
 use CoreX\Api\Contracts\OperationHandler;
+use CoreX\Api\Enums\IdempotencyRequirement;
+use CoreX\Api\Enums\OperationMode;
+use CoreX\Api\Internal\OperationContractHasher;
 use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Extend\Api;
 use LogicException;
@@ -30,9 +33,26 @@ final readonly class Operation
         public array $responseSchema,
         public array $inputRules,
         public int $successStatus,
+        public OperationMode $mode = OperationMode::Query,
+        /** @var list<string> */
+        public array $requiredScopes = [],
+        public IdempotencyRequirement $idempotency = IdempotencyRequirement::Forbidden,
+        /** @var list<string>|null */
+        public ?array $readFields = null,
+        /** @var list<string>|null */
+        public ?array $writeFields = null,
+        /** @var array<string, mixed>|null */
+        public ?array $pagination = null,
+        /** @var list<string> */
+        public array $capabilities = [],
+        /** @var array<string, scalar|null>|null */
+        public ?array $deprecation = null,
+        public string $contractHash = '',
+        public ?string $effectMode = null,
+        public bool $executionSupported = true,
     ) {}
 
-    public static function fromDeclaration(Api $api): self
+    public static function fromDeclaration(Api $api, string $registryFingerprint = ''): self
     {
         ApiOperationValidator::validate($api);
 
@@ -52,6 +72,17 @@ final readonly class Operation
             responseSchema: $api->responseSchema,
             inputRules: $api->inputRules,
             successStatus: $api->successStatus,
+            mode: OperationMode::from($api->operationMode),
+            requiredScopes: $api->requiredScopes,
+            idempotency: IdempotencyRequirement::from($api->idempotencyRequirement),
+            readFields: $api->readFields,
+            writeFields: $api->writeFields,
+            pagination: $api->pagination,
+            capabilities: $api->capabilities,
+            deprecation: $api->deprecation,
+            contractHash: OperationContractHasher::hash($api, $registryFingerprint),
+            effectMode: $api->effectMode,
+            executionSupported: $api->executionSupported,
         );
     }
 }

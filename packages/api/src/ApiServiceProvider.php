@@ -6,12 +6,14 @@ namespace CoreX\Api;
 
 use CoreX\Api\Contracts\ContextResolver;
 use CoreX\Api\Contracts\OperationAuthorizer;
+use CoreX\Api\Contracts\OperationInvoker;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\RequestContextProvider;
 use CoreX\Api\Contracts\ResponseSerializer;
 use CoreX\Api\Contracts\SchemaContributor;
 use CoreX\Api\Internal\CurrentRequestContext;
 use CoreX\Api\Internal\DeclaredSchemaContributor;
+use CoreX\Api\Internal\DefaultOperationInvoker;
 use CoreX\Api\Internal\DenyOperationAuthorizer;
 use CoreX\Api\Internal\DenyPrincipalResolver;
 use CoreX\Api\Internal\EnvelopeSerializer;
@@ -32,6 +34,7 @@ final class ApiServiceProvider extends ServiceProvider
         $this->app->bindIf(PrincipalResolver::class, DenyPrincipalResolver::class);
         $this->app->bindIf(RequestContextProvider::class, CurrentRequestContext::class);
         $this->app->bindIf(OperationAuthorizer::class, DenyOperationAuthorizer::class);
+        $this->app->bindIf(OperationInvoker::class, DefaultOperationInvoker::class);
         $this->app->bindIf(ResponseSerializer::class, EnvelopeSerializer::class);
         $this->app->bindIf(SchemaContributor::class, DeclaredSchemaContributor::class);
 

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Api\Internal;
 
 use Closure;
+use CoreX\Api\ApiError;
 use CoreX\Api\Contracts\OperationHandler;
+use CoreX\Api\Contracts\OperationInvoker;
 use CoreX\Api\Contracts\RequestContext;
 use CoreX\Api\Contracts\ToolExecutionGuard;
 use CoreX\Api\Contracts\ToolInvoker;
@@ -13,9 +15,11 @@ use CoreX\Api\Contracts\ToolPolicy;
 use CoreX\Api\Contracts\ToolSchemaValidator;
 use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\JsonValue;
+use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Data\ToolCall;
 use CoreX\Api\Data\ToolDescriptor;
 use CoreX\Api\Data\ToolResult;
+use CoreX\Api\Operation;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Extend\Api;
 use Illuminate\Contracts\Container\Container;
@@ -33,6 +37,7 @@ final class GuardedToolInvoker implements ToolInvoker
         private readonly ToolSchemaValidator $schemas,
         private readonly ToolExecutionGuard $guard,
         private readonly Container $container,
+        private readonly OperationInvoker $operations,
     ) {}
 
     #[Override]
@@ -143,20 +148,40 @@ final class GuardedToolInvoker implements ToolInvoker
         ToolCall $call,
     ): ToolResult {
         try {
-            $handler = $this->container->make($declaration->handler ?? throw new LogicException('Tool handler missing.'));
+            [$input, $parameters] = $this->mapArguments(declaration: $declaration, arguments: $call->arguments);
 
-            if (! $handler instanceof OperationHandler) {
-                return $this->denied('internal_error', $call);
+            $replayed = false;
+
+            if ($declaration->toolKind === 'exposed') {
+                try {
+                    $result = $this->operations->invoke(new OperationInvocation(
+                        operation: $this->exposedOperation($declaration),
+                        context: $context,
+                        input: $input,
+                        parameters: $parameters,
+                        idempotencyKey: $call->operationKey,
+                    ));
+                } catch (ApiError $error) {
+                    return $this->denied($error->errorCode, $call);
+                }
+
+                $output = $result->data;
+                $replayed = $result->replayed;
+            } else {
+                $handler = $this->container->make($declaration->handler ?? throw new LogicException('Tool handler missing.'));
+
+                if (! $handler instanceof OperationHandler) {
+                    return $this->denied('internal_error', $call);
+                }
+
+                $toolContext = new ToolRequestContext(
+                    context: $context,
+                    operationKey: $call->operationKey,
+                    toolContractHash: $tool->contractHash,
+                );
+                $output = $handler->handle(context: $toolContext, input: $input, parameters: $parameters);
             }
 
-            $toolContext = new ToolRequestContext(
-                context: $context,
-                operationKey: $call->operationKey,
-                toolContractHash: $tool->contractHash,
-            );
-
-            [$input, $parameters] = $this->mapArguments(declaration: $declaration, arguments: $call->arguments);
-            $output = $handler->handle(context: $toolContext, input: $input, parameters: $parameters);
             $structured = JsonObject::fromArray($output);
 
             $outputError = $this->validateOutput(tool: $tool, structured: $structured, call: $call);
@@ -170,7 +195,7 @@ final class GuardedToolInvoker implements ToolInvoker
                 structuredData: $structured,
                 errorCode: null,
                 operationKey: $call->operationKey,
-                replayed: false,
+                replayed: $replayed,
             );
         } catch (Throwable $exception) {
             if ($tool->idempotency === 'provider-key') {
@@ -179,6 +204,19 @@ final class GuardedToolInvoker implements ToolInvoker
 
             return $this->denied('internal_error', $call);
         }
+    }
+
+    private function exposedOperation(Api $declaration): Operation
+    {
+        $ref = $declaration->operationRef ?? throw new LogicException('Exposed tool is missing operationRef.');
+
+        foreach ($this->modules->compiled()->api as $api) {
+            if ($api->mode === 'operation' && $api->version.':'.$api->operationId === $ref) {
+                return Operation::fromDeclaration($api, $this->modules->compiled()->fingerprint);
+            }
+        }
+
+        throw new ApiError('operation_not_found', 404, 'Operation not found.');
     }
 
     /**
