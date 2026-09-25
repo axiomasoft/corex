@@ -14,3 +14,4 @@
 - Guarded headless invocation (`ToolInvoker`, `GuardedToolInvoker`, `ToolCall`, `ToolResult`, `ToolRequestContext`) with schema validation, contract-hash checks, additive tool metadata on trusted context and `ToolExecutionGuard` seam. Default `ReadOnlyToolExecutionGuard` admits read tools only; consumer guards own approval, idempotency and mutation policy.
 - Fake MCP transport parity via `Internal\McpToolsProjection` (`mcp-tools-projection/1`, protocol `MCP2025-11-25`) mapping tools/list and tools/call onto the same catalogue and invoker without installing routes or live endpoints.
 - Installed consumer qualification tests (`InstalledToolContractTest`) and delivery `tool-install-qualification-20260915/` cold ZIP install verifier.
+- Tenant-local idempotency persistence contracts (`IdempotencyStore`, `IdempotencyScope`, `IdempotencyAttempt`), fenced SQL lease/outcome storage, finite terminal retention and an opt-in `corex-api-migrations-tenant` publication tag.

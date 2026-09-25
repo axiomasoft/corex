@@ -7,7 +7,7 @@
         "bindIf"
     ],
     "ratchet": {
-        "packages/api/src/ApiServiceProvider.php": 1,
+        "packages/api/src/ApiServiceProvider.php": 3,
         "packages/api/src/ToolServiceProvider.php": 0,
         "packages/attributes/src/AttributesServiceProvider.php": 6,
         "packages/auth/src/CoreAuthServiceProvider.php": 6,

@@ -12,6 +12,7 @@
 
 | Таблицы | Владелец |
 |:--|:--|
+| `sys_api_idempotency` | `corex/api` |
 | `sys_attribute_documents`, `sys_attribute_eav_records`, `sys_attribute_eav_values`, `sys_attribute_schema_operations`, `sys_attribute_write_tokens` | `corex/attributes` |
 | `sys_audit_log`, `sys_department_user`, `sys_departments`, `sys_feature_flags`, `sys_feature_overrides`, `sys_pubsub_cursors`, `sys_pubsub_messages`, `sys_saved_view_scopes`, `sys_saved_views`, `sys_settings` | `corex/core` |
 | `sys_wakeup_requests` | `corex/wakeup` |
@@ -23,6 +24,7 @@
 
 | table | owning_package | tenant_scope | writers | readers | pii_class | cross_package_access | indexes | restore_policy | retention_policy | upgrade_strategy | object_class | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
+| sys_api_idempotency | corex/api | tenant | corex/api | corex/api | pii-pseudonymous | forbidden | unique(['scope_hash', 'key_hash']); index(['state', 'expires_at']) | tenant-backup | finite terminal retention; started rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D104, G-DDL P13.5); raw idempotency keys are never stored |
 | sys_attribute_documents | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_eav_records | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_eav_values | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id', 'field']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
