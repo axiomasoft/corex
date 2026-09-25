@@ -1,0 +1,92 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Api\Internal\Webhook;
+
+use CoreX\Api\Contracts\WebhookPayloadProjector;
+use CoreX\Api\Internal\JsonCanonical;
+use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Data\MessageEnvelope;
+use DateInterval;
+use Illuminate\Database\Connection;
+use Psr\Clock\ClockInterface;
+use RuntimeException;
+
+/** Materializes one delivery per active subscription inside the inbox transaction. */
+final readonly class WebhookFanout
+{
+    public const string Consumer = 'api.webhooks.v1';
+
+    public const int BodyLimit = 20 * 1024;
+
+    /**
+     * @param  array<string, WebhookPayloadProjector>  $projectors
+     */
+    public function __construct(
+        private Connection $connection,
+        private Inbox $inbox,
+        private WebhookTopicCatalogue $catalogue,
+        private array $projectors,
+        private ClockInterface $clock,
+    ) {}
+
+    public function accept(MessageEnvelope $message): void
+    {
+        $this->connection->transaction(function () use ($message): void {
+            if (! $this->inbox->claim(self::Consumer, $message->messageId, $message->name)) {
+                return;
+            }
+
+            $topic = $this->catalogue->get($message->name, $message->contractVersion);
+            $projector = $this->projectors[$topic->projectorService] ?? null;
+
+            if (! $projector instanceof WebhookPayloadProjector) {
+                throw new RuntimeException('Webhook projector is not installed.');
+            }
+
+            $rows = $this->connection->table('sys_api_webhook_subscriptions')
+                ->where('status', 'active')
+                ->where('topic', $message->name)
+                ->where('topic_version', $message->contractVersion)
+                ->orderBy('id')
+                ->get();
+
+            if ($rows->count() > 100) {
+                throw new RuntimeException('Webhook fan-out exceeds 100 matching subscriptions.');
+            }
+
+            $projected = $projector->project($message, $topic);
+            $encoded = JsonCanonical::encode($projected);
+            $oversize = strlen($encoded) > self::BodyLimit;
+            $body = $oversize ? JsonCanonical::encode(['error' => 'payload_too_large']) : $encoded;
+            $now = $this->clock->now();
+
+            foreach ($rows as $row) {
+                $this->connection->table('sys_api_webhook_deliveries')->insertOrIgnore([
+                    'id' => substr(hash('sha256', $row->id.'|'.$message->messageId), 0, 32),
+                    'subscription_id' => $row->id,
+                    'subscription_revision' => $row->revision,
+                    'event_id' => $message->messageId,
+                    'topic' => $topic->name,
+                    'topic_version' => $topic->version,
+                    'major' => $topic->major,
+                    'endpoint_snapshot' => $row->endpoint_url,
+                    'scope' => JsonCanonical::encode($message->scope),
+                    'body' => $body,
+                    'body_hash' => hash('sha256', $body),
+                    'status' => $oversize ? 'dead' : 'pending',
+                    'attempt' => 0,
+                    'replay_count' => 0,
+                    'lease_owner' => null,
+                    'lease_until' => null,
+                    'next_attempt_at' => $now,
+                    'created_at' => $now,
+                    'finished_at' => $oversize ? $now : null,
+                    'expires_at' => $now->add(new DateInterval('P7D')),
+                    'last_error' => $oversize ? 'payload_too_large' : null,
+                ]);
+            }
+        });
+    }
+}

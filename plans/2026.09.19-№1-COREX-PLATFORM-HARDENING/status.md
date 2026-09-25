@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-25
-inputs_sha256: 6f86f637721cb8793bc2310d4f705428fabe86a9560e0daf714971abe03c2c28
+inputs_sha256: 052a4755eb41e3ad894cdd97796888feafd87ff6df3102c7af979e5abd1c94f4
 generated_by: task plan-views status
 -->
 
@@ -27,8 +27,8 @@ generated_by: task plan-views status
 | P10 | Attributes: независимые определения и безопасная эволюция | 8/8 | 🟢 Done |
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
 | P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
-| P13 | Внешний API как продукт: ядро контракта операций | 2/12 | 🟡 In progress |
-| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 0/21 | ⬜ Not started |
+| P13 | Внешний API как продукт: ядро контракта операций | 12/12 | 🟢 Done |
+| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 12/21 | 🟡 In progress |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
@@ -98,33 +98,33 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P13.1 | Compiled operation semantics and modes | 🟢 Done | 2026-09-25 |
 | P13.2 | One transport-neutral operation invocation seam | 🟢 Done | 2026-09-25 |
-| P13.3 | Immutable API profile, capabilities and deprecation catalogue | ⬜ Not started | — |
-| P13.4 | Package routes, discovery and HTTP operation projection | ⬜ Not started | — |
-| P13.5 | Tenant idempotency store and schema | ⬜ Not started | — |
-| P13.6 | Idempotent operation invocation and replay | ⬜ Not started | — |
-| P13.7 | Signed scoped cursor and ordering registry | ⬜ Not started | — |
-| P13.8 | Resource identifiers and five authorization layers | ⬜ Not started | — |
-| P13.9 | External error envelope and Problem Details | ⬜ Not started | — |
-| P13.10 | Deterministic v1 contract snapshots | ⬜ Not started | — |
-| P13.11 | API compatibility gate and CI ratchet | ⬜ Not started | — |
-| P13.12 | Final operation-contract ratchets and freeze | ⬜ Not started | — |
+| P13.3 | Immutable API profile, capabilities and deprecation catalogue | 🟢 Done | 2026-09-25 |
+| P13.4 | Package routes, discovery and HTTP operation projection | 🟢 Done | 2026-09-25 |
+| P13.5 | Tenant idempotency store and schema | 🟢 Done | 2026-09-25 |
+| P13.6 | Idempotent operation invocation and replay | 🟢 Done | 2026-09-25 |
+| P13.7 | Signed scoped cursor and ordering registry | 🟢 Done | 2026-09-25 |
+| P13.8 | Resource identifiers and five authorization layers | 🟢 Done | 2026-09-25 |
+| P13.9 | External error envelope and Problem Details | 🟢 Done | 2026-09-25 |
+| P13.10 | Deterministic v1 contract snapshots | 🟢 Done | 2026-09-25 |
+| P13.11 | API compatibility gate and CI ratchet | 🟢 Done | 2026-09-25 |
+| P13.12 | Final operation-contract ratchets and freeze | 🟢 Done | 2026-09-25 |
 
 ## Phase P14
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P14.1 | Compiled cost recipes | ⬜ Not started | — |
-| P14.2 | Pure estimator and API projection | ⬜ Not started | — |
-| P14.3 | Budget, bulk and webhook schema ownership | ⬜ Not started | — |
-| P14.4 | Atomic hierarchical budget and settlement | ⬜ Not started | — |
-| P14.5 | Shared invocation cost admission | ⬜ Not started | — |
-| P14.6 | Bulk lifecycle contract and SQL store | ⬜ Not started | — |
-| P14.7 | Transfer import cancellation and enforced limits | ⬜ Not started | — |
-| P14.8 | Public export runner and bounded capture | ⬜ Not started | — |
-| P14.9 | Transfer adapter and durable bulk worker | ⬜ Not started | — |
-| P14.10 | Bulk endpoints and protected results | ⬜ Not started | — |
-| P14.11 | Declared webhook topics and subscription policy | ⬜ Not started | — |
-| P14.12 | Transactional outbox fan-out and delivery identity | ⬜ Not started | — |
+| P14.1 | Compiled cost recipes | 🟢 Done | 2026-09-25 |
+| P14.2 | Pure estimator and API projection | 🟢 Done | 2026-09-25 |
+| P14.3 | Budget, bulk and webhook schema ownership | 🟢 Done | 2026-09-25 |
+| P14.4 | Atomic hierarchical budget and settlement | 🟢 Done | 2026-09-25 |
+| P14.5 | Shared invocation cost admission | 🟢 Done | 2026-09-25 |
+| P14.6 | Bulk lifecycle contract and SQL store | 🟢 Done | 2026-09-25 |
+| P14.7 | Transfer import cancellation and enforced limits | 🟢 Done | 2026-09-25 |
+| P14.8 | Public export runner and bounded capture | 🟢 Done | 2026-09-25 |
+| P14.9 | Transfer adapter and durable bulk worker | 🟢 Done | 2026-09-25 |
+| P14.10 | Bulk endpoints and protected results | 🟢 Done | 2026-09-25 |
+| P14.11 | Declared webhook topics and subscription policy | 🟢 Done | 2026-09-25 |
+| P14.12 | Transactional outbox fan-out and delivery identity | 🟢 Done | 2026-09-25 |
 | P14.13 | Standard Webhooks signer and synthetic rotation | ⬜ Not started | — |
 | P14.14 | SSRF policy and pinned HTTPS transport | ⬜ Not started | — |
 | P14.15 | Leased delivery, retry and dead-letter | ⬜ Not started | — |
@@ -597,6 +597,64 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.1 GREEN: operation-contract metadata, enums, contract hash. modules 73, api 103, phpstan 0. |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.2 GREEN: shared OperationInvoker for HTTP and exposed tools. api 106, phpstan 0. |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P13.3 GREEN: immutable API profile, live capability, redacted public map. api 111, phpstan 0. |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P13.4 GREEN: package routes, discovery, async Location and deprecation headers. api 116, phpstan 0. |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · closed-green · P13.5 GREEN: tenant-local HMAC idempotency store, fenced leases, atomic outcomes, finite retention and explicit migration publication. SQLite/API/PostgreSQL validation passed. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · P13.4 route fixture omitted the newly required P13.6 Idempotency-Key; bounded one-file test repair admitted. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · P13.4 route fixture repaired; exact original carrier reran green (27 tests, 121 assertions; PG lane intentionally separate). |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Public-error fixture lacks the P13.6 literal codes and stored-outcome adapter; bounded one-file contract synchronization admitted. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Public-error fixture synchronized; exact focused carrier reran green (3 tests, 3 assertions). |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-green · P13.6 GREEN: shared transactional idempotency, semantic replay, current-authority projection, rollback and ambiguous-commit proof. API and PostgreSQL validation passed. |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P13.7 GREEN: api-cursor/1 signed scoped cursor, ordering registry, key rotation and negative scope/tamper matrix. api pest 134/778, phpstan 0, pint ok. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Idempotent scope denial reproduced a persisted failed outcome; bounded P13.6 classifier repair admitted. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Idempotent scope and field denials now remain pre-admission and leave no terminal row; exact carrier reran green. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Public-error contract rejected the P13.8 codes and dynamic RFC 6901 error path; bounded scanner and fixture synchronization admitted. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · local-repair · Public-error scanner now honors hash-pinned adapters for dynamic paths and the API error contract is synchronized; exact carrier reran green. |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:297 |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.9 GREEN: JSON envelope and RFC 9457 problem details share one descriptor. Accept negotiation, Vary, and named Retry-After policy. API pest 144/1005, phpstan 0, pint passed, error-contract 3/3. |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P13.10 GREEN: corex:api-snapshots writes deterministic v1 openapi, operations, errors and manifest. Repeat bytes match; --check fails one-byte drift. API pest 145/1023, phpstan 0, pint passed. |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P13.11 GREEN: api-contract gate, eight red proofs, additive OK, CI step. Snapshot --check green after contract_hash refresh. |
+| 2026-09-25 | plan-run/codex-gpt-6-sol/xhigh | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/codex-gpt-6-sol/xhigh | plan-run · closed-green · P13.12 GREEN: operation-contract/1 local freeze; 13-row matrix, cross-transport parity, anti-GraphQL and root gates. Adjacent predecessor repairs and experimental BC report are explicit in P13 receipt. |
+| 2026-09-25 | plan-run/codex-gpt-6-sol/xhigh | plan-close · closed-green · P13 direct-close after twelve GREEN items; operation-contract/1 ratchets, package/root/PG matrix and G-API receipt passed. |
+| 2026-09-25 | plan-run/codex-gpt-6-sol/xhigh | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P14.1 GREEN: Api::cost compiled recipes, legacy hash unchanged, bulk requires explicit recipe. modules pest 83/328, phpstan 0, pint ok. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P14.2 GREEN: trailing Operation cost, pure DeclaredCostEstimator, additive hash. api pest 149/1064, modules 83/328, root 694/2762, phpstan 0, pint ok. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · local-repair · Closed bounded local repair; exact original carrier reran green. |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · local-repair · Closed bounded local repair; exact original carrier reran green. |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · closed-green · P14.3 GREEN: six explicit budget/tenant tables, SQLite and PG constraints, isolated connections, inert publication and scoped rollback. package/root/PG gates green; package suite PG skips covered by dedicated root PG lane. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · closed-green · P14.4 GREEN: atomic four-level SQL budget, HMAC scope isolation, exactly-once settlement/refund, debt and expiry semantics. SQLite 7/34, PG 1/14, API 158/1152, root 703/2850. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · local-repair · Updated the owned error-contract adapter hash after the shared invoker changed; exact root carrier reran green. |
+| 2026-09-25 | plan-run/codex-gpt-5.6-sol/high | plan-run · closed-green · P14.5 GREEN: shared budget admission orders reserve/handler/settlement, releases unstarted idempotency ownership, charges replay base only, and projects safe HTTP/tool cost metadata. API 162/1189, root 707/2887, PG 1/14. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-25 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-green · P14.6 GREEN: tenant bulk CAS store, idempotent submit/polling, cancellation fence and expired-lease takeover. SQLite 4/39, PG 1/28, API 166/1228, root 711/2926, root PG 222/1047. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P14.7 GREEN: import cancellation at the read boundary and runtime/memory limits roll the batch back without a row-failure swallow. transfer pest 8/24, pg 23/83, root pest 712/2931, root pg 235/1100, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/cursor-grok-4.7/high | plan-run · closed-green · P14.8 GREEN: public ExportRunner seal/emit, per-page cancel and memory limits, row/byte caps independent of part count, and a scope-checked transfer result reader. transfer pest 8/24, pg 23/83, root pest 712/2931, root pg 235/1100, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/cursor-composer-2.5/unmapped | plan-run · routing-rejected · ROUTE_LAUNCH_MISMATCH: cli-config selectedModel is composer-2.5 with no reasoning_effort; agent argv has no --model. P14.9 pin is implementation/high via grok-4.7/high. Product untouched. |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.9 GREEN: host BulkTransferFactory, one leased transfer step, missing factory/package fails before submit, checkpoint resume does not repeat sink effects, unsealed export rotates attempt, stamp drift fails closed. pest 4/4, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.10 GREEN: bulk submit returns 202/Location and the same idempotent id; poll, cancel, not-ready, sealed and expired results; foreign caller and revoked field access do not read the manifest; failure pages reject limit>100. pest 9/9, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.11 GREEN: unknown contract/version/schema and class names rejected; sensitive topics need an ability; secret class always denied; optimistic revision, cap 100, foreign tenant denied. pest 6/6, phpstan 0, pint ok. |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.12 GREEN: inbox and delivery inserts roll back together; duplicate event creates one delivery; forwarding preserved; oversize is dead; lossy publisher rejected. pest 4/4, phpstan 0, pint ok. |
 
 ## Owner Gates
 
