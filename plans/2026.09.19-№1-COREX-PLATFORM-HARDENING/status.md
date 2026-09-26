@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-26
-inputs_sha256: 9f257fdb19c66c108511b069346b5a6fefbd2237662c6ec6363efd0d2b156107
+inputs_sha256: 91d323982a0ad8f0805d089e0c2a7fae295d96aa04a347b46e1500534db4951a
 generated_by: task plan-views status
 -->
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
 | P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
 | P13 | Внешний API как продукт: ядро контракта операций | 12/12 | 🟢 Done |
-| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 13/21 | 🟡 In progress |
+| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 20/21 | 🟡 In progress |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
@@ -126,13 +126,13 @@ generated_by: task plan-views status
 | P14.11 | Declared webhook topics and subscription policy | 🟢 Done | 2026-09-25 |
 | P14.12 | Transactional outbox fan-out and delivery identity | 🟢 Done | 2026-09-25 |
 | P14.13 | Standard Webhooks signer and synthetic rotation | 🟢 Done | 2026-09-26 |
-| P14.14 | SSRF policy and pinned HTTPS transport | ⬜ Not started | — |
-| P14.15 | Leased delivery, retry and dead-letter | ⬜ Not started | — |
-| P14.16 | Webhook management, history and bounded replay | ⬜ Not started | — |
-| P14.17 | Retention and recovery cleanup | ⬜ Not started | — |
-| P14.18 | Load-contour snapshots and compatibility gate | ⬜ Not started | — |
-| P14.19 | Typed options and guarded activation wiring | ⬜ Not started | — |
-| P14.20 | Package surfaces and integrated contract fixtures | ⬜ Not started | — |
+| P14.14 | SSRF policy and pinned HTTPS transport | 🟢 Done | 2026-09-26 |
+| P14.15 | Leased delivery, retry and dead-letter | 🟢 Done | 2026-09-26 |
+| P14.16 | Webhook management, history and bounded replay | 🟢 Done | 2026-09-26 |
+| P14.17 | Retention and recovery cleanup | 🟢 Done | 2026-09-26 |
+| P14.18 | Load-contour snapshots and compatibility gate | 🟢 Done | 2026-09-26 |
+| P14.19 | Typed options and guarded activation wiring | 🟢 Done | 2026-09-26 |
+| P14.20 | Package surfaces and integrated contract fixtures | 🟢 Done | 2026-09-26 |
 | P14.21 | Documentation and phase qualification receipt | ⬜ Not started | — |
 
 ## Phase P15
@@ -657,6 +657,25 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.12 GREEN: inbox and delivery inserts roll back together; duplicate event creates one delivery; forwarding preserved; oversize is dead; lossy publisher rejected. pest 4/4, phpstan 0, pint ok. |
 | 2026-09-26 | plan-exec/codex-gpt-6-sol/medium | plan-exec · in-progress · — |
 | 2026-09-26 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:337 |
+| 2026-09-26 | frontier/high | plan-exec · in-progress · — |
+| 2026-09-26 | gpt-5.6-sol/high | plan-exec · closed-green · P14.14 GREEN: 39 tests/118 assertions; package+root lint and root PHPStan green; security review clean. Foreign baseline: API 4 transfer failures/6 PG skips; root 5 arch failures; BC pre-existing breaks/infrastructure. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | gpt-5.6-sol/high | plan-exec · local-repair · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · local-repair · P14.15 validation reproduced the predecessor-owned P14.9 optional transfer dev-autoload gap; bounded one-file Composer dev dependency repair admitted before mutation. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · local-repair · P14.9 optional transfer dev-autoload repair verified by the exact original carrier: API package 234 passed, 1539 assertions, 7 PostgreSQL tests intentionally skipped pending isolated DB lane. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · closed-green · P14.15 GREEN: leased delivery/retry/dead-letter and ACK-loss fencing. API 234/1539; package PG 5/101; root PG 236/1120; lint/PHPStan green. Foreign baseline: root 5 arch failures; 6 stale mutation patches. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · in-progress · — |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · local-repair · P14.16 reproduced the predecessor-owned P13.6 HTTP idempotency header drop; bounded one-file Dispatcher repair admitted before mutation. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · local-repair · P13.6 Dispatcher repair verified by the exact original carrier: required webhook replay receives the HTTP idempotency key. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/gpt-5.6-sol/high | plan-run · closed-green · P14.16 GREEN: scoped management/history and bounded replay; focused 10/64, PG 6/107, lint/static scoped green. Foreign CompiledRegistry baseline and P14.18 error snapshot disclosed. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | plan-exec/grok-4.7-high/high | plan-exec · in-progress · P14.17 exec start: clock-controlled bulk, webhook and budget retention |
+| 2026-09-26 | plan-exec/grok-4.7-high/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:350 |
+| 2026-09-26 | plan-exec/grok-4.7-high/high | plan-exec · in-progress · P14.18 exec start: load-contour snapshots and compatibility gate |
+| 2026-09-26 | plan-exec/grok-4.7-high/high | plan-exec · closed-green · P14.18 GREEN: load-contour snapshots and planted compatibility gate. webhooks.json plus cost enforcement, bulk states and six safe codes. Arch 21/84. ContractSnapshotTest blocked by foreign CompiledRegistry fingerprint. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | executor/codex-gpt-6-astra/high | plan-run · in-progress · — |
+| 2026-09-26 | executor/codex-gpt-6-astra/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:354 |
+| 2026-09-26 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-26 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P14.20 GREEN: optional transfer, boxed/cloud, Laravel 13, HTTP/tool, PG receiver, webhook negatives. Broad api pest and root arch stay red on foreign hashCanonical. No live send. |
 
 ## Owner Gates
 

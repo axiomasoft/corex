@@ -1,31 +1,45 @@
-# HANDOFF — 2026-09-26 — after P14.13
+# HANDOFF — 2026-09-26 — after P14.20
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.14
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.21
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | E14i |
+| Batch | solo |
 | Model class | implementation |
-| Model | gpt-5.6-sol |
+| Model | grok-4.7-high |
 | Thinking | high |
-| Native model | gpt-5.6-sol-high |
+| Native model | grok-4.7-high |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | P14.14 hardens HTTPS webhook transport against SSRF, DNS rebinding and unsafe redirects. |
+| Суть | P14.21 writes the phase qualification receipt: acceptance matrix, retained limits, and docs. It does not send live webhooks. |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:aa37cf06152ad0dc290ab4dd1a822eda1ae78c6c6a7a5ce57ac66f8eb2bc924a", "loaded-inputs:not-reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:journal:P14.13:closed-green"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence":["batch:0e0b46dc439fb79c7b5674f828f520910e420656fb9936df4f502d084ce2bca5","loaded-inputs:not-reusable","cold-start-cost:13400","lifecycle:scope-complete","checkpoint:journal:P14.20:line356"],"outcome":"continue-root","reason":"authorized-scope-complete","runnable":true,"schema_version":"session-continuity-decision/v1"}
 ```
 
-**Done:** P14.13 GREEN. Standard Webhooks raw-byte HMAC, strict 32-byte `whsec_` secrets, deterministic two-key overlap and explicit readiness/revocation semantics are covered by synthetic tests; the scoped security review is clean.
+**Done:** P14.20 GREEN. Package surface keeps transfer optional, boxed and cloud scopes stay on the configured connection, HTTP and tool share one handler, and an isolated PostgreSQL fan-out delivers once to an in-process receiver.
 
-**Remaining:** P14.14–P14.21. Следующая группа — P14.14 (E14i). G-SECRET остаётся только у P14.19.
+**Remaining:** P14.21. It is the next ready frontier and owns the documentation and phase qualification receipt. Do not start it from this close.
 
-**Sources of truth:** `phases/P14/P14.13.md` · `phases/P14/P14.13.state.md` · `journal.jsonl`.
+**Sources of truth:** `phases/P14/P14.20.md` · `phases/P14/P14.20.state.md` · `findings/P14-receipts.md` · `journal.jsonl`.
 
-**Open risks:** Full package/root suites retain unrelated pre-existing Bulk/Attributes/package-graph failures. Production webhook sends and live secret rotation were not performed or authorized.
+**Open risks:** The unrelated dirty-worktree `CompiledRegistry::hashCanonical()` gap still breaks broad api pest and root arch. P14.20 scoped checks are green: 7 tests / 62 assertions, including one PostgreSQL test. No production rollout, live webhook send, real key rotation, or DDL was performed.
 
 **Workarounds/Deferred/Open questions:**
-- workarounds: —
-- deferred: production rollout and live rotation; G-SECRET for P14.19
+
+- workarounds: P14.20 fixtures build a registry with `fingerprint` and do not call the broken compiler
+- deferred: broad suite repair to the modules compiler owner; phase qualification receipt to P14.21
 - open_questions: —
+
+## LAUNCH
+
+| Параметр | Значение |
+|:--|:--|
+| Batch | solo |
+| Model class | implementation |
+| Effort | high |
+| Native model | grok-4.7-high |
+
+```bash
+agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.21'
+```
