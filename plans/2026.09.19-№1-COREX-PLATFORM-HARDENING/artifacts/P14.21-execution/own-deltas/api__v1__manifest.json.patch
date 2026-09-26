@@ -1,0 +1,21 @@
+diff --git a/build/P14.21/baseline/api/v1/manifest.json b/api/v1/manifest.json
+index 5a672cc..ffb9c87 100644
+--- a/build/P14.21/baseline/api/v1/manifest.json
++++ b/api/v1/manifest.json
+@@ -1,12 +1,12 @@
+ {
+-    "contract_fingerprint": "c80be31c96ea233859f209def8c6b933b9eeeac27a97bf63d61dcc602158fe41",
++    "contract_fingerprint": "956aedacb0583d4fa63c38f41d4351ecfdc98a1d9670d7d0d01e4d015e6754bf",
+     "files": {
+-        "errors.json": "9865ad75b3ad93e27e6802cf64378ac2174d266bdb7ed4af346fbdc265abf2c0",
++        "errors.json": "5cdfc9f10ef65e95a68a4307030d3554a0dcc2452f1526644d2c744f50283534",
+         "openapi.json": "946dfdc6c70303ca716161b7d64b45786979d68d39396a464a6f7dfb47b6eabe",
+-        "operations.json": "4e602b78eab7833a2870f79d33f9f8157a6294a75cb3764145e1636808a8e6fb",
++        "operations.json": "59ba7e38e43f58f882003338d51ec61f968b9a91d711cc9f8100268cc5d87fc6",
+         "webhooks.json": "af380203beaa1accbee1296510329991e58adba88c17d54e2a9a3d1ca4759a65"
+     },
+     "major": "v1",
+-    "registry_fingerprint": "a33b239bda63e2769961ff489bfd3eb2ef4b7c9ae08f4c624169a7cc05d362a3",
++    "registry_fingerprint": "2ccd40362ed99cbef6697b4fe26beb44aa5ceaa2f00111c171c19a58caac4056",
+     "schema": "corex-api-snapshot/1"
+ }

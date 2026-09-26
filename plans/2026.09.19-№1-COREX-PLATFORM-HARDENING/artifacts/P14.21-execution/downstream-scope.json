@@ -1,0 +1,64 @@
+{
+  "incoming_carrier": "composer lint:check",
+  "incoming_log": "root-lint-bookkeeping.log",
+  "outgoing": {
+    "gate": "downstream-gate-v1",
+    "version": "1.0.0",
+    "producer_item": "P14.21",
+    "producer_commit": "7a802cf32c865a487d3a4a8c4a3a25c8d45c0158",
+    "consumers": [
+      {
+        "item": "P17.8",
+        "matched_paths": [
+          "CHANGELOG.md"
+        ],
+        "validation": "Exactly 20 scorecard rows and 12 criteria; byte-stable rerun; all `<2` cells explained; forbidden KPI terms absent. Every cohort README satisfies four topics and every PHP example compiles/imports only public API. Missing heading and Internal example planted negatives fail.",
+        "owns_git_ref": false,
+        "consumer_spec_sha256": "7a363f806aed290b69b60d38612b7c84b6644beb9bd9bb868f0917cafb2db647",
+        "outcome": "unknown",
+        "commands": [],
+        "deferred_reason": "Future release-owned acceptance; no executable validation in current scope"
+      },
+      {
+        "item": "P17.11",
+        "matched_paths": [
+          "CHANGELOG.md"
+        ],
+        "validation": "All package/root/PG/architecture/public/BC/API/anti-weakening/mutation/P17 checks green with no skip; two builds match; all remote reads resolve absent or byte-identical allowable state. Plant changed packet byte and remote collision; both refuse. Assert no remote mutation and no per-package changelog diff.",
+        "owns_git_ref": false,
+        "consumer_spec_sha256": "1d00e667f65d34c42e812d5c2666718563b7c3f4862daa96bed336e4dc31ca45",
+        "outcome": "unknown",
+        "commands": [],
+        "deferred_reason": "Future release-owned acceptance; no executable validation in current scope"
+      },
+      {
+        "item": "P17.12",
+        "matched_paths": [
+          "CHANGELOG.md"
+        ],
+        "validation": "Dry-run and synthetic partial-resume tests green before live work. Live ledger has one terminal result per packet operation and no unknown/collision. Fresh consumers install exact `1.0.0` tags on applicable profiles and match candidate archive/tree digests. Root tag/release note and split refs agree; G-RELEASE provenance is present.",
+        "owns_git_ref": false,
+        "consumer_spec_sha256": "3dc22244118864631480e60a2b9dfced26ef7c06846a56a009d5c8ba4310427f",
+        "outcome": "unknown",
+        "commands": [],
+        "deferred_reason": "Future release-owned acceptance; no executable validation in current scope"
+      }
+    ],
+    "outcome": "unknown",
+    "blocks": false
+  },
+  "records": [
+    "findings/P10.8-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P11.8-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P12.8-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P13.12-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P13.4-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P9.5-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P9.6-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P9.7-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P9.8-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "findings/P14.21-downstream-P17.8-7a363f806aed-7a802cf32c86.md",
+    "findings/P14.21-downstream-P17.11-1d00e667f65d-7a802cf32c86.md",
+    "findings/P14.21-downstream-P17.12-3dc222441188-7a802cf32c86.md"
+  ]
+}

@@ -1,0 +1,247 @@
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/journal.jsonl:157: TERMINAL_EVIDENCE_REQUIRED: нет closed terminal-evidence/v1
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:15: item P1.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P10/P10.md:15: item P10.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P10/P10.md:15: item P10.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P10/P10.md:15: item P10.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P11/P11.md:15: item P11.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P11/P11.md:15: item P11.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P11/P11.md:15: item P11.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P11/P11.md:15: item P11.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P12/P12.md:15: item P12.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P12/P12.md:15: item P12.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P12/P12.md:15: item P12.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P12/P12.md:15: item P12.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P12/P12.md:15: item P12.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.9: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.10: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:15: item P13.11: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.9: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.10: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.11: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.12: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.13: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.15: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.16: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.17: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.18: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.19: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.20: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P14/P14.md:15: item P14.21: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:15: item P2.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:15: item P3.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.9: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.10: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.11: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:15: item P4.12: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.9: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.10: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.11: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.12: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.13: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.15: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.17: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:15: item P5.18: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:15: item P6.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.9: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.10: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:15: item P7.11: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:15: item P8.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.1: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.2: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.3: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.4: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.5: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.6: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.7: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P9/P9.md:15: item P9.8: закрыт «🟢 Done» без напечатанных кодов границ pre_mutation/pre_final в Completion Notes (ожидается строка `write-site: pre_mutation: <код> · pre_final: <код>`)
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.1: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.6: нет текущей записи результата для потребителя P12.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.7: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P11.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P10.8: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.1: нет текущей записи результата для потребителя P11.2
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.2: нет текущей записи результата для потребителя P13.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.5: нет текущей записи результата для потребителя P13.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P11.8: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.2: нет текущей записи результата для потребителя P13.6
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.2: нет текущей записи результата для потребителя P13.9
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.2: нет текущей записи результата для потребителя P14.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.5: нет текущей записи результата для потребителя P16.10
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.6: нет текущей записи результата для потребителя P12.7
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.8: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.8: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.8: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.8: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P12.8: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.1: нет текущей записи результата для потребителя P13.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.1: нет текущей записи результата для потребителя P14.1
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.1: нет текущей записи результата для потребителя P14.2
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.10: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.10: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.11: нет текущей записи результата для потребителя P15.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.11: нет текущей записи результата для потребителя P15.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.11: нет текущей записи результата для потребителя P16.10
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.11: нет текущей записи результата для потребителя P16.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.11: нет текущей записи результата для потребителя P17.9
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.12: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.12: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.12: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.12: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P13.4
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P13.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P13.6
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P14.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.2: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.3: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.4: нет текущей записи результата для потребителя P13.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.4: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.4: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.4: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.5: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.5: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.6: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.6: нет текущей записи результата для потребителя P14.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.6: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.7: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.7: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.8: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.8: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.9: нет текущей записи результата для потребителя P13.10
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.9: нет текущей записи результата для потребителя P14.3
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.9: нет текущей записи результата для потребителя P14.5
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P13.9: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.1: нет текущей записи результата для потребителя P15.1
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.1: нет текущей записи результата для потребителя P16.7
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.20: нет текущей записи результата для потребителя P16.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.21: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.21: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.21: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P14.3: нет текущей записи результата для потребителя P14.19
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P9.7
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P9.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P11.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.5: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P9.7
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P9.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P11.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.6: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P9.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P11.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P14.20
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P16.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.7: нет текущей записи результата для потребителя P17.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P10.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P11.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P12.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P13.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P13.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P14.21
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P15.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P15.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P16.10
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P16.12
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P17.8
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P17.9
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P17.11
+ERROR: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/plan.md: downstream-gate-v1: пункт P9.8: нет текущей записи результата для потребителя P17.12
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P1/P1.md:52: фаза P1 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [52]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P13/P13.md:35: фаза P13 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [35]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P2/P2.md:49: фаза P2 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [49]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P3/P3.md:41: фаза P3 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [41]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P4/P4.md:58: фаза P4 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [58]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P5/P5.md:64: фаза P5 в статусе «🟠 Done with deviations», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [64]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P6/P6.md:43: фаза P6 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [43]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P7/P7.md:41: фаза P7 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [41]) — DoR-гейт не пройден (SKILL §7)
+WARN: plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/phases/P8/P8.md:43: фаза P8 в статусе «🟢 Done», но несёт 1 маркер(ов) [NEEDS CLARIFICATION] (строки [43]) — DoR-гейт не пройден (SKILL §7)
+plan-lint: ПРОВАЛ (1 план(ов), 237 ошибок, 9 предупреждений)

@@ -1,0 +1,91 @@
+# P14 execution qualification — P14.21
+
+Кандидат проверен 2026-09-26 в текущем checkout; run `28e7a6a9b496ad724e2ca0981ab3a277b0febe96672a0b6f48dda3e3a74dbe5b`, attempt 1.
+Дизайн: [P14 §0–14](../research/P14-design.md), [D84](../decisions/D84-replay-retention-boundary.md). Это локальная qualification, без production rollout, внешних sends, migration или rotation.
+
+## Проверяемые носители
+
+Полные argv, cwd, environment, exit codes, SHA-256 логов и JUnit находятся в [commands.json](../artifacts/P14.21-execution/commands.json).
+JUnit архивы содержат конкретные testcase names; во всех положительных полосах failures=errors=skips=0. PG env установлен явно, включая API tests без group tag. Counts полос пересекаются и не суммируются.
+
+| Носитель | Результат |
+|:--|:--|
+| `root-lint` — `composer lint:check` | exit 0; [log](../artifacts/P14.21-execution/root-lint-final.log) |
+| `root-analyse` — `composer analyse` | exit 0; [log](../artifacts/P14.21-execution/root-analyse-final.log) |
+| `root-test` — `composer test -- --log-junit build/P14.21/root-test.xml` | exit 0; 815 tests; 0 skipped; [log](../artifacts/P14.21-execution/root-test-final.log) |
+| `root-pg` — `composer test:pg -- --log-junit build/P14.21/root-pg.xml` | exit 0; 239 tests; 0 skipped; [log](../artifacts/P14.21-execution/root-pg-final.log) |
+| `api-lint-check` — `composer --working-dir=packages/api lint:check` | exit 0; [log](../artifacts/P14.21-execution/api-lint-check-final.log) |
+| `api-analyse` — `composer --working-dir=packages/api analyse` | exit 0; [log](../artifacts/P14.21-execution/api-analyse-final.log) |
+| `api-test` — `composer --working-dir=packages/api test -- --log-junit ../../build/P14.21/api-test.xml` | exit 0; 267 tests; 0 skipped; [log](../artifacts/P14.21-execution/api-test-final.log) |
+| `api-pg` — `vendor/bin/pest --configuration=phpunit.xml packages/api/tests/Feature --group=pg --log-junit build/P14.21/api-pg.xml` | exit 0; 8 tests; 0 skipped; [log](../artifacts/P14.21-execution/api-pg-final.log) |
+| `modules-lint-check` — `composer --working-dir=packages/modules lint:check` | exit 0; [log](../artifacts/P14.21-execution/modules-lint-check-final.log) |
+| `modules-analyse` — `composer --working-dir=packages/modules analyse` | exit 0; [log](../artifacts/P14.21-execution/modules-analyse-final.log) |
+| `modules-test` — `composer --working-dir=packages/modules test -- --log-junit ../../build/P14.21/modules-test.xml` | exit 0; 83 tests; 0 skipped; [log](../artifacts/P14.21-execution/modules-test-final.log) |
+| `transfer-lint-check` — `composer --working-dir=packages/transfer lint:check` | exit 0; [log](../artifacts/P14.21-execution/transfer-lint-check-final.log) |
+| `transfer-analyse` — `composer --working-dir=packages/transfer analyse` | exit 0; [log](../artifacts/P14.21-execution/transfer-analyse-final.log) |
+| `transfer-test` — `composer --working-dir=packages/transfer test -- --log-junit ../../build/P14.21/transfer-test.xml` | exit 0; 8 tests; 0 skipped; [log](../artifacts/P14.21-execution/transfer-test-final.log) |
+| `transfer-pg` — `composer --working-dir=packages/transfer test:pg -- --log-junit ../../build/P14.21/transfer-pg.xml` | exit 0; 23 tests; 0 skipped; [log](../artifacts/P14.21-execution/transfer-pg-final.log) |
+| `arch` — `composer test:arch` | exit 0; 89 tests / 286 assertions; [log](../artifacts/P14.21-execution/arch-final.log) |
+| `api-contract` — `composer api-contract` | exit 0; [log](../artifacts/P14.21-execution/api-contract-final.log) |
+| `snapshot-compatibility` — `php scripts/check-api-contract.php --baseline build/P14.21/baseline/api/v1 --candidate api/v1` | exit 0; [log](../artifacts/P14.21-execution/snapshot-compatibility-final.log) |
+| `package-graph` — `composer package-graph-gate` | exit 0; [log](../artifacts/P14.21-execution/package-graph-final.log) |
+| `provider-size` — `php scripts/provider-size-gate.php` | exit 0; [log](../artifacts/P14.21-execution/provider-size-final.log) |
+| `extension-contract` — `php scripts/extension-contract-gate.php` | exit 0; [log](../artifacts/P14.21-execution/extension-contract-final.log) |
+| `table-ownership` — `composer table-ownership-gate` | exit 0; [log](../artifacts/P14.21-execution/table-ownership-final.log) |
+| `contract-guard` — `composer contract-guard` | exit 0; [log](../artifacts/P14.21-execution/contract-guard-final.log) |
+| `mutations` — `bash scripts/mutation-check.sh --all` | exit 0; 34/34 nonempty sabotage carriers refuse; source bytes restored; [log](../artifacts/P14.21-execution/mutations-final.log) |
+
+Root `composer test` также повторён без дополнительных аргументов после repair; 815 tests / 3493 assertions. Root PG: 239 / 1149; API: 267 / 1877; modules: 83 / 328; transfer: 8 / 24 + PG 23 / 83. API PG fallback: 8 / 130.
+
+BC: `BC_CHECK_ONLY=modules composer bc-check` и `BC_CHECK_ONLY=transfer composer bc-check` — compatible, exit 0. `BC_CHECK_ONLY=api composer bc-check` — exit 0 по experimental report-only policy, **9 historical breaks** против старого baseline (`Dispatcher`, `GuardedToolInvoker`, `ApiController`). Это не clean API BC и не разрешение stable release; [полный отчёт](../artifacts/P14.21-execution/bc-api.log). Skipped BC lanes нет.
+
+## Acceptance / threat matrix §14
+
+Конкретные testcase names, class/file и SHA-256 исходного JUnit: [acceptance-matrix.json](../artifacts/P14.21-execution/acceptance-matrix.json).
+
+| Риск | Проверяемый отказ / поведение | Носитель |
+|:--|:--|:--|
+| R1 | Low-cost forgery / overflow / no estimator I/O | `root-test`; GREEN |
+| R2 | Four-bucket hierarchy and concurrent global reserve | `api-test, root-pg`; GREEN |
+| R3 | Single settlement, debt, no expired/missing refund | `api-test`; GREEN |
+| R4 | HTTP/tool cost metadata, replay base-only, Retry-After | `api-test`; GREEN |
+| R5 | Duplicate bulk submit, polling without notification, fenced revision | `api-test`; GREEN |
+| R6 | Import checkpoint crash, revocation and cooperative cancellation | `api-test, transfer-pg`; GREEN |
+| R7 | Unsealed export restart, immutable verified sealed parts | `transfer-pg`; GREEN |
+| R8 | Foreign/revoked bulk result never reads storage, bounded failure page | `api-test`; GREEN |
+| R9 | Atomic inbox/fanout, duplicate event materialization | `api-test`; GREEN |
+| R10 | Independent HMAC bytes, raw tamper and timestamp tolerance | `api-test`; GREEN |
+| R11 | Old/new overlap, explicit readiness/revoke | `api-test`; GREEN |
+| R12 | SSRF DNS set validation, pin/TLS, redirect/body/header bounds | `api-test`; GREEN |
+| R13 | ACK loss, stable identity/body, receiver dedup and lease fence | `api-test`; GREEN |
+| R14 | Same-byte replay, finite ranges/cycles, expiry and idempotency | `api-test`; GREEN |
+| R15 | PII/secret exclusion from topic projection and public attempts | `api-test`; GREEN |
+| R16 | Planted compatibility breaks refuse, additive topics accepted, stable snapshots | `root-test`; GREEN |
+
+R12 URL-policy negative data sets дополнительно покрывают private/mixed/IPv6/IP-literal/host syntax; локальный TLS receiver проверяет wire bytes и hostname. Production policy не получает loopback exception. R16 запускает planted frozen-contract violations с exit 1 и additive optional fixtures с exit 0; generator `--check` проверяет пять snapshots и manifest, а не переписывает baseline молча.
+
+## Восстановленные обязательные проверки
+
+Исходные root analyse/test были RED: 7 analysis errors, а suite — 662 passed, 5 failures, 148 errors (815 total). P11 canonical hash/snapshot publication отсутствовали в dirty baseline; P14 HTTP projection теряла cost metadata/Retry-After; existing safe error declarations и webhook topic projection не были внесены в gates. Bounded repair восстановил уже принятые contracts без новых dependencies или смены public signatures. Подробности и original-carrier fingerprint: [repair-pre.json](../artifacts/P14.21-execution/repair-pre.json), baseline logs; post-validation receipt сохраняется в journal и artifacts.
+
+Обязательный mutation-check сначала отказал на 6 stale patches. Старый failed 3-way rollback сбросил dirty bytes; они восстановлены из pre-run копии. Harness теперь сохраняет исходные bytes и logical index entries до apply и возвращает их при отказе; 6 patches реанкорены к тем же sabotage boundaries. Исправлен renamed state-reader filter; empty carrier отвергается, поэтому прежний vacuous результат не считается GREEN. Финальный all run: 34/34 nonempty RED under sabotage, harness exit 0; [negative dirty+staged restoration proof](../artifacts/P14.21-execution/mutation-restoration.json).
+
+## Эксплуатационная граница и retained limits
+
+- Cost support по умолчанию выключен (`cost.enabled=false`). После явного включения global budget enforced, account/client/actor observe по умолчанию; observe может накапливать debt. Host задаёт budgets, общий configured connection и стабильный installation id/HMAC secret. Refund однократный; unknown/expired/missing settlement не освобождает estimate. HTTP/tool используют общий invoker; replay стоит admission base 1.
+- Bulk требует optional публичный TransferFactory и host admission adapter, который связывает trusted scope/client/definition и текущую authorization/field policy. Literal bulk routes потребляют admitted bindings; общий HTTP/tool dispatcher сам по себе не доказывает этот host integration. Default result reader deny. Import resumable по atomic checkpoint; cancel cooperative и сохраняет уже committed эффекты, без обещания rollback всего job. Уже начатый remote call не прерывается автоматически.
+- Export unsealed attempt abort/restart; sealed immutable parts проверяются по hashes под текущей authority. Transfer defaults: input/result 1 GiB, row 1 MiB, 256 fields, JSON depth 32, batch 500, retained row errors 1000, runtime 30 s, memory 128 MiB. Guards на boundaries; blocking call требует host timeout/worker backstop. Additional cap/stamp fixtures находятся в transfer PG receipt.
+- Webhooks at-least-once без ordering. Durable receiver inbox+effect обязательны при ACK loss; sender lease fence не отменяет ушедший HTTP. Canonical body 20 KiB; active subscriptions/account и matching/event 100; keys 32 bytes, максимум 2 в overlap, timestamp ±300 s; revoke требует explicit readiness (compromise branch допускает немедленную потерю continuity).
+- HTTPS:443; весь DNS set validated и pinned, TLS hostname/SNI preserved, redirects/proxies/fallback DNS denied. Connect/total timeouts 3/10 s, discarded response 64 KiB, headers 16 KiB. Retry: lease 30 s; 12 attempts / 72 h per cycle; full jitter base 5 s, cap 1 h, min 1 s; bounded Retry-After 24 h.
+- D84 replay: та же delivery/id/body/destination, максимум 3 cycles внутри абсолютных 7 d; range ≤24 h, ≤100 entries, fixed upper bound, parent idempotency и scoped cursor. Body TTL 7 d; metadata/attempts 30 d; shorter PII TTL сокращает replay horizon вместе с body. Active delivery не prune; batch ≤100. Delivery tombstone и P5 inbox сохраняются весь redelivery horizon, по умолчанию indefinite. History retention не означает новую delivery после expiry.
+- Worker требует active trusted tenant; multi-account scheduler отсутствует. Delivery default off; локальная проверка не даёт live-send или production secret/migration authority. Existing local G-API/G-SECRET grants и P14.13/P14.14 security review provenance сохраняются; signer, rotation и SSRF algorithm этим repair не менялись.
+
+Host setup и все caps: [API README](../../../packages/api/README.md), [API policy](../../../docs/architecture/api-policy.md), [message policy](../../../docs/architecture/message-policy.md).
+
+## Freshness
+
+Exact relevant product/test/tool/config inputs (including negative fixtures, snapshots and package manifests) и aggregate SHA-256: [inputs.json](../artifacts/P14.21-execution/inputs.json). [preflight.json](../artifacts/P14.21-execution/preflight.json) фиксирует host/container split и isolated target. Qualification не заявляет coverage percentage, live performance SLA или migration readiness production. Dirty predecessor work остаётся отдельно от scoped commit; receipt квалифицирует фактический checkout.
+
+## Protocol lint disclosure
+
+Полный plan-lint был RED: 237 errors / 9 warnings. Current-item write-site projection и 12 downstream edges записаны; повтор canonical lint (pure graph cache, checks unchanged) оставил 224 historical errors / 9 warnings, без ошибки для P14.21 как producer/consumer. Это не GREEN всего plan-lint. Historical missing write-site rows, old journal terminal evidence и чужие downstream records остаются baseline вне этого item; [отчёт](../artifacts/P14.21-execution/plan-lint-final.log), [классификация](../artifacts/P14.21-execution/protocol-lint.json). Future P17 release consumers имеют явный unknown (placeholder/prose/version literal), не skipped-green; их acceptance не выполнена этим локальным запуском.

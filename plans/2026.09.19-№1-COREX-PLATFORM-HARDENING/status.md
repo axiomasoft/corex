@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-26
-inputs_sha256: 91d323982a0ad8f0805d089e0c2a7fae295d96aa04a347b46e1500534db4951a
+inputs_sha256: ed3487db745b5f1e8c8a5f604776489262e105e92326519baf752cd132fb8135
 generated_by: task plan-views status
 -->
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
 | P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
 | P13 | Внешний API как продукт: ядро контракта операций | 12/12 | 🟢 Done |
-| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 20/21 | 🟡 In progress |
+| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
@@ -133,7 +133,7 @@ generated_by: task plan-views status
 | P14.18 | Load-contour snapshots and compatibility gate | 🟢 Done | 2026-09-26 |
 | P14.19 | Typed options and guarded activation wiring | 🟢 Done | 2026-09-26 |
 | P14.20 | Package surfaces and integrated contract fixtures | 🟢 Done | 2026-09-26 |
-| P14.21 | Documentation and phase qualification receipt | ⬜ Not started | — |
+| P14.21 | Documentation and phase qualification receipt | 🟢 Done | 2026-09-26 |
 
 ## Phase P15
 
@@ -676,6 +676,15 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-26 | executor/codex-gpt-6-astra/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:354 |
 | 2026-09-26 | plan-exec/cursor-grok-4.7/high | plan-exec · in-progress · — |
 | 2026-09-26 | plan-exec/cursor-grok-4.7/high | plan-exec · closed-green · P14.20 GREEN: optional transfer, boxed/cloud, Laravel 13, HTTP/tool, PG receiver, webhook negatives. Broad api pest and root arch stay red on foreign hashCanonical. No live send. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · in-progress · — |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · local-repair · Restore P11 canonical registry and detached publication; preserve P14 HTTP cost/Retry-After; classify existing topic projection and register existing error declarations. Exact root carrier will be rerun. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · local-repair · Exact composer test rerun: 815 passed / 3493 assertions. Root/package analyse, PostgreSQL and frozen snapshot gates recovered; no production action. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · local-repair · Mandatory mutation carrier failed on stale patches; restore pre-run bytes and index, reanchor unchanged sabotage boundaries, reject empty test filters. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · local-repair · Exact all-mutations carrier exit 0: 34 nonempty sabotage refusals. Target hashes restored; failed apply preserves dirty source and logical staged entries. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · closed-green · P14.21 GREEN: docs, 16-row acceptance/hashes, root 815 and PG 239, affected suites, 34 nonempty mutation refusals. Repairs qualified; API historical experimental BC breaks disclosed. Local synthetic receiver only. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-close · closed-green · P14 direct-close after all 21 GREEN items. Qualification covers full root/package/isolated PG, 16 threats, snapshots and repaired mutation gates. Live sends, production DDL/rotation and release remain outside authority. |
+| 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · no-op · Qualified write-site codes from the persisted contract receipt; closure bookkeeping only.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

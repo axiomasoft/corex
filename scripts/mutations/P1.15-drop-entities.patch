@@ -1,9 +1,8 @@
 diff --git a/packages/modules/src/Compiler/CompiledRegistry.php b/packages/modules/src/Compiler/CompiledRegistry.php
-index 6273e4c..c0c9627 100644
 --- a/packages/modules/src/Compiler/CompiledRegistry.php
 +++ b/packages/modules/src/Compiler/CompiledRegistry.php
-@@ -70,7 +70,7 @@ final readonly class CompiledRegistry
-     public function toArray(): array
+@@ -123,7 +123,7 @@
+     private function projectSlices(): array
      {
          return [
 -            'entities' => array_map(static fn (EntityDefinition $entity): array => $entity->toArray(), $this->entities),

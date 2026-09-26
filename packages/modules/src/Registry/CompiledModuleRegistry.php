@@ -99,10 +99,14 @@ final class CompiledModuleRegistry implements ModuleRegistry
     public function compiled(): CompiledRegistry
     {
         if ($this->registry !== null) {
-            return $this->registry;
+            return CompiledRegistry::fromArray($this->registry->toArray());
         }
 
         $data = $this->readCache();
+
+        if ($data === [] && ! $this->failIfMissing && ! is_file($this->cachePath)) {
+            return $this->registry = CompiledRegistry::empty();
+        }
 
         /** @var array<string, mixed> $registry */
         $registry = is_array($data['registry'] ?? null) ? $data['registry'] : [];

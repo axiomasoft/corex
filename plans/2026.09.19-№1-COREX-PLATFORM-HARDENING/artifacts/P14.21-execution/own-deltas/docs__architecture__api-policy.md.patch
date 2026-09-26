@@ -1,0 +1,69 @@
+diff --git a/build/P14.21/baseline/docs/architecture/api-policy.md b/docs/architecture/api-policy.md
+index 47477d2..e5473ee 100644
+--- a/build/P14.21/baseline/docs/architecture/api-policy.md
++++ b/docs/architecture/api-policy.md
+@@ -133,7 +133,63 @@ deprecation не разрешает удаление внутри major.
+ | `pagination-reinterpretation` | смена envelope, cursor format или ordering id | — |
+ 
+ Неизвестный ключ снимка или схемы закрывается `unknown-schema` и JSON pointer.
+-Webhook-правила в этот реестр добавляет P14.
++P14 добавляет `webhooks.json` в тот же generator и manifest. Гейт также отвергает
++удаление topic, required payload input addition, response-field removal,
++type/nullability change, PII widening, signature/id semantics drift, major rebind
++и смену default cost enforcement. Новые optional topics/fields допустимы.
++Baseline не обновляется автоматически; механическая регенерация проходит сравнение
++с прежним кандидатом и byte-check. Наличие пустого topic list не означает,
++что приложение объявило или разрешило webhook topics.
++
++## Нагрузочный контракт API
++
++`operation-cost/1`, `bulk-operation/1` и `webhook-delivery/1` потребляют тот же
++compiled module registry, P13 invoker, P5 сообщения и P4 scope/Clock. Cost recipe
++объявляется только через `Api::cost()`. Legacy default: base=1, остальные веса=0,
++max_units=10000. Формула — base + row×max(pageRows,exportRows) + field×selectedFields
+++ relation×relationNodes + attribute_filter×attributeFilters + highlight×flag
+++ side_effect×sideEffects. Structural caps и проверка overflow действуют до handler
++и в observe mode; bulk требует явную recipe и bounded input.
++
++При включённом cost control global всегда enforce; account/client/actor по умолчанию
++observe. Capacity=10000 и refill=1000 units/sec — локальные defaults, не тариф или SLO.
++Shipped `cost.enabled=false` требует явного setup и activation: этот флаг не означает
++observe и не доказывает работающую защиту. После activation отсутствие shared SQL
++authority запрещает handler. Все узлы используют один installation budget store;
++tenant payload остаётся физически tenant-local. Две explicit connection identities
++проверяются до SQL; scopes берутся из trusted context, keys — HMAC, metrics без ids.
++
++Atomic reserve всех ancestors предшествует эффекту. Terminal settlement возвращает
++units однократно; actual>estimate создаёт debt, отсутствие server counters означает
++actual=estimate. Pre-handler reject возвращает estimate, crash/unknown/expiry не даёт
++refund. Replay обслуживается за base=1. HTTP/tool metadata совпадают; 429 несёт
++расчётный Retry-After, инфраструктурный отказ не выдаётся за исчерпание бюджета.
++
++Transfer остаётся единственным import/export engine. Optional factory — installed
++host DI, public transfer ports; API не пишет чужие таблицы и не исполняет class names
++из payload. Literal bulk routes требуют уже admitted scope/client/definition и host
++auth/field-policy adapter. Worker rechecks scope, authorization, restore epoch и
++extension stamp на каждом bounded step; polling pending rows переживает потерю queue.
++Cancellation ждёт не более одного bounded batch и сохраняет уже committed effects.
++Import resumes committed checkpoint; unsealed export restart — новый полный capture.
++Unknown outcomes требуют reconciliation; rollback не отменяет network effects.
++Current result access проверяет scope/field policy/hash; foreign ids скрыты за 404.
++
++Hard profile transfer: 1 GiB/source, 1 MiB/row, 256 fields, depth32, batch500,
++errors1000, runtime30s, memory128MiB. Проверки cooperative; один read/write call не
++preemptible. Host process limits, edge/body/request-rate/concurrency caps остаются
++обязательной частью установки. Input parameters≤20KiB, failures page≤100,
++result TTL24h≤metadata TTL30d; active jobs не prune. Retention не воскрешает cancelled
++job и не превращает unknown в success. Ни billing, GraphQL, hard real-time cap,
++универсального exactly-once, ни cross-account scheduler этот контракт не обещает.
++
++Schema ownership, PII и retention — [table-ownership.md](table-ownership.md).
++Миграции публикуются budget/tenant tags и применяются host явно; boot не исполняет DDL.
++Remote webhook delivery выключена по умолчанию и требует key/worker/transport readiness.
++Local grants и synthetic tests не разрешают production migration/rotation или live sends.
++Setup, endpoint semantics и оставшиеся host boundaries —
++[API README](../../packages/api/README.md); текущие commands/hashes/negative fixtures —
++[P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).
+ 
+ ## Контракт ошибки
+ 

@@ -21,6 +21,7 @@
 
 ### Added
 
+- P14.21: документация `operation-cost/1`, `bulk-operation/1` и `webhook-delivery/1`: explicit shared/tenant schema setup, global enforcement и lower-scope observe, conservative settlement, partial cancellation, import recovery/export restart, synthetic signing/rotation, pinned HTTPS, bounded retry/replay/retention. Пять снимков `api/v1` используют один generator и compatibility gate; итоговая матрица и текущие команды/хеши — `findings/P14-execution-validation.md`. Remote delivery остаётся выключена; local qualification не является разрешением live rollout, production DDL или rotation.
 - P12.8: root ratchets freeze the P12 public error vocabulary, bounded observability labels and direct-audit impersonation stamp; the phase receipt records package, architecture, PostgreSQL, optional-OpenTelemetry and planted-negative evidence.
 - P11.1: `corex/modules` adds repeatable `Manifest::replace()`, Composer version/reference discovery (`InstalledPackageVersion`) and dependency-neutral `ExtensionStamp`. Extension policy names the canonical id of every compiled point.
 - P10.8: \`corex/attributes\` groups schema, values, query, storage, integration and Laravel internals in six top-level subsystems with explicit Composer namespace maps. The architecture gate rejects search imports, runtime config reads, foreign DDL and field-level storage drivers; both database lanes and the public API sweep are recorded in \`findings/P10-receipts.md\`.

@@ -1,0 +1,17 @@
+{
+  "root_lint": {
+    "argv": [
+      "composer",
+      "lint:check"
+    ],
+    "exit_code": 0,
+    "log": "root-lint-bookkeeping.log",
+    "sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+  },
+  "resolved_observation": {
+    "exit_code": 1,
+    "path": "regenerate.php",
+    "cause": "Raw build helper copied into artifacts was picked up by Pint. It is preserved as regenerate.php.txt, for reproduction at its original build/P14.21 location; no product bytes changed.",
+    "original_log_preserved": false
+  }
+}

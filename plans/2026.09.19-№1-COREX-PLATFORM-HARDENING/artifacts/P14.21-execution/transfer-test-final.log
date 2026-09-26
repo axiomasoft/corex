@@ -1,0 +1,2 @@
+> ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg '--log-junit' '../../build/P14.21/transfer-test.xml'
+{"tool":"pest","result":"passed","tests":8,"passed":8,"assertions":24,"duration_ms":9}

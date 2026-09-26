@@ -1,0 +1,14 @@
+diff --git a/build/P14.21/baseline/tests/Feature/ModuleRegistryTest.php b/tests/Feature/ModuleRegistryTest.php
+index 0fd4808..ec00051 100644
+--- a/build/P14.21/baseline/tests/Feature/ModuleRegistryTest.php
++++ b/tests/Feature/ModuleRegistryTest.php
+@@ -407,7 +407,8 @@ it('pins compiled() for one job and reloads only after flush', function (): void
+     ], []);
+     CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/beta', 'Beta', 'bet', [], [], [])], $second);
+ 
+-    expect($registry->compiled())->toBe($pinned)
++    expect($registry->compiled())->not->toBe($pinned)
++        ->and($registry->compiled()->toArray())->toBe($pinned->toArray())
+         ->and($registry->compiled()->fingerprint)->toBe($first->fingerprint);
+ 
+     $registry->flush();

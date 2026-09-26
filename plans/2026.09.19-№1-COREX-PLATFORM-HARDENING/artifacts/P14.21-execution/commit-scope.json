@@ -1,0 +1,148 @@
+[
+  {
+    "path": "CHANGELOG.md",
+    "method": "merge",
+    "conflicts": 1,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "api/v1/errors.json",
+    "method": "merge",
+    "conflicts": 1,
+    "initial_dirty": true,
+    "staging": "delta-artifact; predecessor-dependent content stays in worktree"
+  },
+  {
+    "path": "api/v1/manifest.json",
+    "method": "merge",
+    "conflicts": 1,
+    "initial_dirty": true,
+    "staging": "delta-artifact; predecessor-dependent content stays in worktree"
+  },
+  {
+    "path": "api/v1/operations.json",
+    "method": "merge",
+    "conflicts": 2,
+    "initial_dirty": true,
+    "staging": "delta-artifact; predecessor-dependent content stays in worktree"
+  },
+  {
+    "path": "docs/architecture/api-policy.md",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "docs/architecture/message-policy.md",
+    "method": "merge",
+    "conflicts": 1,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "docs/reference.md",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "packages/api/README.md",
+    "method": "merge",
+    "conflicts": 3,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "packages/api/src/Dispatcher.php",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/extension-contract-gate.php",
+    "method": "initial-untracked",
+    "delta_lines": 12,
+    "staging": "delta-artifact; predecessor-dependent content stays in worktree"
+  },
+  {
+    "path": "scripts/mutation-check.sh",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/API-module-activation.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/P1.15-drop-entities.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/P1.16-statereader-bare-binding.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/P1.16-tags-back.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/P1.21-killswitch-writeseam.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "scripts/mutations/P1.25-null-provider-binding.patch",
+    "method": "merge",
+    "conflicts": 0,
+    "initial_dirty": false,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  },
+  {
+    "path": "tests/Feature/ModuleRegistryTest.php",
+    "method": "merge",
+    "conflicts": 1,
+    "initial_dirty": true,
+    "staging": "delta-artifact; predecessor-dependent content stays in worktree"
+  },
+  {
+    "path": "tests/fixtures/public-error-contract.php",
+    "method": "merge",
+    "conflicts": 2,
+    "initial_dirty": true,
+    "staging": "own delta merged into HEAD; initial dirty content unstaged"
+  }
+]

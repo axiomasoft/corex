@@ -1,0 +1,2 @@
+> cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/modules/src packages/modules/database/migrations --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}

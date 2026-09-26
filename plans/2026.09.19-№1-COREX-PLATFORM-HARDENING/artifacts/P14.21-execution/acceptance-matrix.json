@@ -1,0 +1,848 @@
+[
+  {
+    "id": "R1",
+    "risk": "Low-cost forgery / overflow / no estimator I/O",
+    "carrier": "root-test",
+    "junit_sha256": "9b24361e5771bc918306ce0541dd429b0e3c0f6288ecd9b5920ff6eabd9dcec0",
+    "tests": [
+      {
+        "class": "Packages\\api\\tests\\Unit\\OperationCostTest",
+        "name": "it estimates table-driven weights, page, export, field, relation, filter, highlight and side-effect cases",
+        "file": "packages/api/tests/Unit/OperationCostTest.php::it estimates table-driven weights, page, export, field, relation, filter, highlight and side-effect cases",
+        "status": "passed"
+      },
+      {
+        "class": "Packages\\api\\tests\\Unit\\OperationCostTest",
+        "name": "it denies overflow and absent bounded export",
+        "file": "packages/api/tests/Unit/OperationCostTest.php::it denies overflow and absent bounded export",
+        "status": "passed"
+      },
+      {
+        "class": "Packages\\api\\tests\\Unit\\OperationCostTest",
+        "name": "it does not call database, cache or network while estimating",
+        "file": "packages/api/tests/Unit/OperationCostTest.php::it does not call database, cache or network while estimating",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R2",
+    "risk": "Four-bucket hierarchy and concurrent global reserve",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Reserve debits four hmac buckets without persisting scope identifiers",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Reserve debits four hmac buckets without persisting scope identifiers",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Default global enforcement observes lower scope debt",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Default global enforcement observes lower scope debt",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Enforced deficit rolls back every bucket debit and reservation",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Enforced deficit rolls back every bucket debit and reservation",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "root-pg",
+        "junit_sha256": "179baed6924c417fae31fb27311de4ce9861f5d034fdfb2903a23d23bd10145a",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+            "name": "Postgresql concurrent reserve admits only available global capacity",
+            "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Postgresql concurrent reserve admits only available global capacity",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R3",
+    "risk": "Single settlement, debt, no expired/missing refund",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Settlement refunds once and conflicting terminal outcome cannot refund twice",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Settlement refunds once and conflicting terminal outcome cannot refund twice",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Reject refunds once and actual overrun becomes debt",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Reject refunds once and actual overrun becomes debt",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationBudgetTest",
+        "name": "Expired and missing reservations never refund",
+        "file": "Operation Budget (CoreX\\Api\\Tests\\Feature\\OperationBudget)::Expired and missing reservations never refund",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R4",
+    "risk": "HTTP/tool cost metadata, replay base-only, Retry-After",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\CostInvocationTest",
+        "name": "Http and exposed tool share cost metadata without scope keys",
+        "file": "Cost Invocation (CoreX\\Api\\Tests\\Feature\\CostInvocation)::Http and exposed tool share cost metadata without scope keys",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\OperationParityTest",
+        "name": "Http and exposed tool share one handler call",
+        "file": "Operation Parity (CoreX\\Api\\Tests\\Feature\\OperationParity)::Http and exposed tool share one handler call",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\CostInvocationTest",
+        "name": "Budget denial rolls back unstarted idempotency and replay charges base only",
+        "file": "Cost Invocation (CoreX\\Api\\Tests\\Feature\\CostInvocation)::Budget denial rolls back unstarted idempotency and replay charges base only",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\CostInvocationTest",
+        "name": "Http rate limit keeps retry after and store failure has no retry header",
+        "file": "Cost Invocation (CoreX\\Api\\Tests\\Feature\\CostInvocation)::Http rate limit keeps retry after and store failure has no retry header",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R5",
+    "risk": "Duplicate bulk submit, polling without notification, fenced revision",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkStoreTest",
+        "name": "Same submission returns one operation and pending polling needs no notification",
+        "file": "Bulk Store (CoreX\\Api\\Tests\\Feature\\BulkStore)::Same submission returns one operation and pending polling needs no notification",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkStoreTest",
+        "name": "Expired lease takeover and stale revision are rejected",
+        "file": "Bulk Store (CoreX\\Api\\Tests\\Feature\\BulkStore)::Expired lease takeover and stale revision are rejected",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R6",
+    "risk": "Import checkpoint crash, revocation and cooperative cancellation",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkTransferTest",
+        "name": "Import resume does not repeat sink effects around checkpoint crashes",
+        "file": "Bulk Transfer (CoreX\\Api\\Tests\\Feature\\BulkTransfer)::Import resume does not repeat sink effects around checkpoint crashes",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkTransferTest",
+        "name": "Stamp drift fails before the next batch and observers cannot change outcomes",
+        "file": "Bulk Transfer (CoreX\\Api\\Tests\\Feature\\BulkTransfer)::Stamp drift fails before the next batch and observers cannot change outcomes",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "transfer-pg",
+        "junit_sha256": "4b5307862f6f8bb8bf7ffb4117b0bb88df28fd6eda15dd7b6b48caba783df4e9",
+        "tests": [
+          {
+            "class": "Packages\\transfer\\tests\\Feature\\TransferCancellationTest",
+            "name": "it returns cancelled at the read boundary without the next target call",
+            "file": "packages/transfer/tests/Feature/TransferCancellationTest.php::it returns cancelled at the read boundary without the next target call",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "carrier": "transfer-pg",
+        "junit_sha256": "4b5307862f6f8bb8bf7ffb4117b0bb88df28fd6eda15dd7b6b48caba783df4e9",
+        "tests": [
+          {
+            "class": "Packages\\transfer\\tests\\Feature\\TransferCancellationTest",
+            "name": "it does not write checkpoint, source, or target state when a dry run is cancelled",
+            "file": "packages/transfer/tests/Feature/TransferCancellationTest.php::it does not write checkpoint, source, or target state when a dry run is cancelled",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "carrier": "transfer-pg",
+        "junit_sha256": "4b5307862f6f8bb8bf7ffb4117b0bb88df28fd6eda15dd7b6b48caba783df4e9",
+        "tests": [
+          {
+            "class": "Packages\\transfer\\tests\\Pg\\DatabaseTransferRunnerTest",
+            "name": "it commits local result and fenced checkpoint in one PostgreSQL transaction",
+            "file": "packages/transfer/tests/Pg/DatabaseTransferRunnerTest.php::it commits local result and fenced checkpoint in one PostgreSQL transaction",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R7",
+    "risk": "Unsealed export restart, immutable verified sealed parts",
+    "carrier": "transfer-pg",
+    "junit_sha256": "4b5307862f6f8bb8bf7ffb4117b0bb88df28fd6eda15dd7b6b48caba783df4e9",
+    "tests": [
+      {
+        "class": "Packages\\transfer\\tests\\Pg\\ExportPgTest",
+        "name": "it aborts an unsealed capture instead of resuming its mutable snapshot",
+        "file": "packages/transfer/tests/Pg/ExportPgTest.php::it aborts an unsealed capture instead of resuming its mutable snapshot",
+        "status": "passed"
+      },
+      {
+        "class": "Packages\\transfer\\tests\\Pg\\ExportPgTest",
+        "name": "it seals verified immutable parts and emits them only under current authority",
+        "file": "packages/transfer/tests/Pg/ExportPgTest.php::it seals verified immutable parts and emits them only under current authority",
+        "status": "passed"
+      },
+      {
+        "class": "Packages\\transfer\\tests\\Pg\\ExportPgTest",
+        "name": "it captures source pages inside a repeatable-read transaction",
+        "file": "packages/transfer/tests/Pg/ExportPgTest.php::it captures source pages inside a repeatable-read transaction",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "api-test",
+        "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Feature\\BulkTransferTest",
+            "name": "Repeat create returns the current token and export rotates an unsealed attempt",
+            "file": "Bulk Transfer (CoreX\\Api\\Tests\\Feature\\BulkTransfer)::Repeat create returns the current token and export rotates an unsealed attempt",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R8",
+    "risk": "Foreign/revoked bulk result never reads storage, bounded failure page",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkResultAccessTest",
+        "name": "Foreign caller and revoked field access do not read the result",
+        "file": "Bulk Result Access (CoreX\\Api\\Tests\\Feature\\BulkResultAccess)::Foreign caller and revoked field access do not read the result",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\BulkResultAccessTest",
+        "name": "Failure cursor rejects limits above 100",
+        "file": "Bulk Result Access (CoreX\\Api\\Tests\\Feature\\BulkResultAccess)::Failure cursor rejects limits above 100",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "api-test",
+        "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Feature\\BulkStoreTest",
+            "name": "Wrong active connection and unsafe input references fail closed",
+            "file": "Bulk Store (CoreX\\Api\\Tests\\Feature\\BulkStore)::Wrong active connection and unsafe input references fail closed",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R9",
+    "risk": "Atomic inbox/fanout, duplicate event materialization",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookFanoutTest",
+        "name": "Projection failure rolls back inbox and delivery together",
+        "file": "Webhook Fanout (CoreX\\Api\\Tests\\Feature\\WebhookFanout)::Projection failure rolls back inbox and delivery together",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookFanoutTest",
+        "name": "Duplicate event creates one delivery and forwards the existing publisher",
+        "file": "Webhook Fanout (CoreX\\Api\\Tests\\Feature\\WebhookFanout)::Duplicate event creates one delivery and forwards the existing publisher",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookFanoutTest",
+        "name": "Postgresql inbox and delivery roll back together",
+        "file": "Webhook Fanout (CoreX\\Api\\Tests\\Feature\\WebhookFanout)::Postgresql inbox and delivery roll back together",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R10",
+    "risk": "Independent HMAC bytes, raw tamper and timestamp tolerance",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookSignatureTest",
+        "name": "Independent known hmac bytes and exact headers",
+        "file": "Webhook Signature (CoreX\\Api\\Tests\\Unit\\WebhookSignature)::Independent known hmac bytes and exact headers",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookSignatureTest",
+        "name": "Receiver denies raw tamper stale and future timestamps",
+        "file": "Webhook Signature (CoreX\\Api\\Tests\\Unit\\WebhookSignature)::Receiver denies raw tamper stale and future timestamps",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R11",
+    "risk": "Old/new overlap, explicit readiness/revoke",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookRotationTest",
+        "name": "Old and new signatures verify during overlap in deterministic order",
+        "file": "Webhook Rotation (CoreX\\Api\\Tests\\Unit\\WebhookRotation)::Old and new signatures verify during overlap in deterministic order",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookRotationTest",
+        "name": "Http success does not infer readiness and regular revoke requires confirmation",
+        "file": "Webhook Rotation (CoreX\\Api\\Tests\\Unit\\WebhookRotation)::Http success does not infer readiness and regular revoke requires confirmation",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookRotationTest",
+        "name": "Compromise can revoke without readiness confirmation",
+        "file": "Webhook Rotation (CoreX\\Api\\Tests\\Unit\\WebhookRotation)::Compromise can revoke without readiness confirmation",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R12",
+    "risk": "SSRF DNS set validation, pin/TLS, redirect/body/header bounds",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+        "name": "Public dns set is canonicalized and pinned deterministically",
+        "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Public dns set is canonicalized and pinned deterministically",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+        "name": "Organization owned ranges are denied after public validation",
+        "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Organization owned ranges are denied after public validation",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookTransportTest",
+        "name": "Loopback tls receiver preserves hostname and exact wire body",
+        "file": "Webhook Transport (CoreX\\Api\\Tests\\Feature\\WebhookTransport)::Loopback tls receiver preserves hostname and exact wire body",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookTransportTest",
+        "name": "Redirect is returned once and never followed",
+        "file": "Webhook Transport (CoreX\\Api\\Tests\\Feature\\WebhookTransport)::Redirect is returned once and never followed",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookTransportTest",
+        "name": "Response body and headers have hard caps",
+        "file": "Webhook Transport (CoreX\\Api\\Tests\\Feature\\WebhookTransport)::Response body and headers have hard caps",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookTransportTest",
+        "name": "Socket peer must equal the prevalidated pin",
+        "file": "Webhook Transport (CoreX\\Api\\Tests\\Feature\\WebhookTransport)::Socket peer must equal the prevalidated pin",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "api-test",
+        "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"unspecified\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"unspecified\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"private\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"private\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"shared address space\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"shared address space\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"loopback\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"loopback\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"link local\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"link local\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"metadata\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"metadata\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"benchmark\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"benchmark\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"documentation\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"documentation\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"multicast\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"multicast\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv6 loopback\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv6 loopback\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv4 mapped ipv6\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv4 mapped ipv6\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"teredo\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"teredo\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"six to four\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"six to four\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv6 documentation\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"ipv6 documentation\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Private reserved metadata mapped and mixed dns sets are denied with data set \"mixed public and private\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Private reserved metadata mapped and mixed dns sets are denied with data set \"mixed public and private\"",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "carrier": "api-test",
+        "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"http\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"http\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"non standard port\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"non standard port\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"userinfo\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"userinfo\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"query credentials\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"query credentials\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"fragment\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"fragment\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"ip literal\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"ip literal\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"ipv6 literal\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"ipv6 literal\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"ambiguous integer host\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"ambiguous integer host\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"ambiguous dotted octal\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"ambiguous dotted octal\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"unicode idn\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"unicode idn\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"trailing dot\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"trailing dot\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"encoded newline\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"encoded newline\"",
+            "status": "passed"
+          },
+          {
+            "class": "CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicyTest",
+            "name": "Ambiguous or credential bearing urls are denied with data set \"backslash authority ambiguity\"",
+            "file": "Webhook Url Policy (CoreX\\Api\\Tests\\Unit\\WebhookUrlPolicy)::Ambiguous or credential bearing urls are denied with data set \"backslash authority ambiguity\"",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R13",
+    "risk": "ACK loss, stable identity/body, receiver dedup and lease fence",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookDeliveryTest",
+        "name": "Ack loss repeats same id and body with fresh signature and one receiver effect",
+        "file": "Webhook Delivery (CoreX\\Api\\Tests\\Feature\\WebhookDelivery)::Ack loss repeats same id and body with fresh signature and one receiver effect",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookDeliveryTest",
+        "name": "Response matrix is fenced and retry is bounded",
+        "file": "Webhook Delivery (CoreX\\Api\\Tests\\Feature\\WebhookDelivery)::Response matrix is fenced and retry is bounded",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookDeliveryTest",
+        "name": "Retry after jitter attempt and seventy two hour horizons are finite",
+        "file": "Webhook Delivery (CoreX\\Api\\Tests\\Feature\\WebhookDelivery)::Retry after jitter attempt and seventy two hour horizons are finite",
+        "status": "passed"
+      }
+    ]
+  },
+  {
+    "id": "R14",
+    "risk": "Same-byte replay, finite ranges/cycles, expiry and idempotency",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookReplayTest",
+        "name": "Replay keeps delivery identity bytes destination and monotonic attempt sequence",
+        "file": "Webhook Replay (CoreX\\Api\\Tests\\Feature\\WebhookReplay)::Replay keeps delivery identity bytes destination and monotonic attempt sequence",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookReplayTest",
+        "name": "Active lease changed or disabled destination removed topic expiry and cycle cap refuse",
+        "file": "Webhook Replay (CoreX\\Api\\Tests\\Feature\\WebhookReplay)::Active lease changed or disabled destination removed topic expiry and cycle cap refuse",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookReplayTest",
+        "name": "Range is bounded to twenty four hours one hundred and a fixed upper bound",
+        "file": "Webhook Replay (CoreX\\Api\\Tests\\Feature\\WebhookReplay)::Range is bounded to twenty four hours one hundred and a fixed upper bound",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookManagementTest",
+        "name": "Shared dispatcher preserves idempotency key for required replay",
+        "file": "Webhook Management (CoreX\\Api\\Tests\\Feature\\WebhookManagement)::Shared dispatcher preserves idempotency key for required replay",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "api-test",
+        "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+        "tests": [
+          {
+            "class": "CoreX\\Api\\Tests\\Feature\\ApiRetentionTest",
+            "name": "Expired webhook body cannot replay and tombstone preserves dedup",
+            "file": "Api Retention (CoreX\\Api\\Tests\\Feature\\ApiRetention)::Expired webhook body cannot replay and tombstone preserves dedup",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R15",
+    "risk": "PII/secret exclusion from topic projection and public attempts",
+    "carrier": "api-test",
+    "junit_sha256": "75975dfead8299bf59a4e6746056b2b8da97164287f4308f73b6cd8750a0143e",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookSubscriptionTest",
+        "name": "Sensitive topics require an ability and secrets are always denied",
+        "file": "Webhook Subscription (CoreX\\Api\\Tests\\Feature\\WebhookSubscription)::Sensitive topics require an ability and secrets are always denied",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookSubscriptionTest",
+        "name": "Projector exports only the public allow list",
+        "file": "Webhook Subscription (CoreX\\Api\\Tests\\Feature\\WebhookSubscription)::Projector exports only the public allow list",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookRedactionTest",
+        "name": "Public attempt history has an exact safe shape",
+        "file": "Webhook Redaction (CoreX\\Api\\Tests\\Feature\\WebhookRedaction)::Public attempt history has an exact safe shape",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\WebhookManagementTest",
+        "name": "Detail attempts and subscription projection are public safe",
+        "file": "Webhook Management (CoreX\\Api\\Tests\\Feature\\WebhookManagement)::Detail attempts and subscription projection are public safe",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "root-test",
+        "junit_sha256": "9b24361e5771bc918306ce0541dd429b0e3c0f6288ecd9b5920ff6eabd9dcec0",
+        "tests": [
+          {
+            "class": "Packages\\core\\tests\\Unit\\OperationObserverTest",
+            "name": "it omits canary secrets from failure logs",
+            "file": "packages/core/tests/Unit/OperationObserverTest.php::it omits canary secrets from failure logs",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "carrier": "root-test",
+        "junit_sha256": "9b24361e5771bc918306ce0541dd429b0e3c0f6288ecd9b5920ff6eabd9dcec0",
+        "tests": [
+          {
+            "class": "Tests\\Arch\\ObservabilityContractTest",
+            "name": "P12 observability gate rejects raw Throwable logging",
+            "file": "tests/Arch/ObservabilityContractTest.php::P12 observability gate rejects raw Throwable logging",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R16",
+    "risk": "Planted compatibility breaks refuse, additive topics accepted, stable snapshots",
+    "carrier": "root-test",
+    "junit_sha256": "9b24361e5771bc918306ce0541dd429b0e3c0f6288ecd9b5920ff6eabd9dcec0",
+    "tests": [
+      {
+        "class": "CoreX\\Api\\Tests\\Unit\\WebhookCompatibilityTest",
+        "name": "Planted webhook incompatibilities fail and additive topics pass",
+        "file": "Webhook Compatibility (CoreX\\Api\\Tests\\Unit\\WebhookCompatibility)::Planted webhook incompatibilities fail and additive topics pass",
+        "status": "passed"
+      },
+      {
+        "class": "CoreX\\Api\\Tests\\Feature\\ContractSnapshotTest",
+        "name": "Generation is byte stable and check detects drift",
+        "file": "Contract Snapshot (CoreX\\Api\\Tests\\Feature\\ContractSnapshot)::Generation is byte stable and check detects drift",
+        "status": "passed"
+      }
+    ],
+    "additional_carriers": [
+      {
+        "carrier": "root-test",
+        "junit_sha256": "9b24361e5771bc918306ce0541dd429b0e3c0f6288ecd9b5920ff6eabd9dcec0",
+        "tests": [
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"operation removal\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"operation removal\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"path reassignment\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"path reassignment\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"response field removal\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"response field removal\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"required input addition\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"required input addition\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"type change\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"type change\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"nullability change\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"nullability change\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"enum removal\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"enum removal\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"error contract drift\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"error contract drift\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"pagination reinterpretation\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"pagination reinterpretation\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"topic removal\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"topic removal\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"required payload addition\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"required payload addition\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload response field removal\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload response field removal\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload type change\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload type change\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload nullability change\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"payload nullability change\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"pii widening\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"pii widening\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"signature semantics\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"signature semantics\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"id semantics\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"id semantics\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"major rebind\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"major rebind\"\"",
+            "status": "passed"
+          },
+          {
+            "class": "Tests\\Arch\\ApiContractCompatibilityTest",
+            "name": "api contract gate rejects each forbidden intra-major delta with data set \"dataset \"cost default enforcement\"\"",
+            "file": "tests/Arch/ApiContractCompatibilityTest.php::api contract gate rejects each forbidden intra-major delta with data set \"dataset \"cost default enforcement\"\"",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  }
+]

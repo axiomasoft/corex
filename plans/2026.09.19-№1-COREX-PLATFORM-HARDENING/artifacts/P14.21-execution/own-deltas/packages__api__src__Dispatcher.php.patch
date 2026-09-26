@@ -1,0 +1,51 @@
+diff --git a/build/P14.21/baseline/packages/api/src/Dispatcher.php b/packages/api/src/Dispatcher.php
+index bfaa27e..0695508 100644
+--- a/build/P14.21/baseline/packages/api/src/Dispatcher.php
++++ b/packages/api/src/Dispatcher.php
+@@ -15,6 +15,7 @@ use Illuminate\Contracts\Validation\Factory;
+ use Illuminate\Http\JsonResponse;
+ use Illuminate\Http\Request;
+ use JsonException;
++use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+ use Throwable;
+ 
+ final class Dispatcher
+@@ -39,7 +40,7 @@ final class Dispatcher
+ 
+         try {
+             [$operation, $parameters] = $this->operations->match($version, $request->method(), '/'.ltrim($path, '/'));
+-            $metadata = new RequestMetadata($requestId, $version, $operation->id, $request->method());
++            $metadata = new RequestMetadata($requestId, $version, $operation->id, $request->method(), $metadata->correlationId, $metadata->accept);
+             $principal = $this->principals->resolve($request)
+                 ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
+             $context = $this->contexts->resolve($request, $principal, $metadata);
+@@ -61,9 +62,27 @@ final class Dispatcher
+                 }
+             }
+ 
+-            return $this->serializer->success($result->data, $operation->successStatus, $metadata);
++            $response = $this->serializer->success($result->data, $operation->successStatus, $metadata);
++
++            if ($result->metadata !== []) {
++                $body = $response->getData(true);
++                $body['meta'] = [...$body['meta'], ...$result->metadata];
++                $response->setData($body);
++            }
++
++            return $response;
+         } catch (Throwable $error) {
+-            return $this->serializer->error($this->errors->map($error), $metadata);
++            $response = $this->serializer->error($this->errors->map($error), $metadata);
++
++            if ($response->getStatusCode() === 429 && $error instanceof HttpExceptionInterface) {
++                $seconds = filter_var($error->getHeaders()['Retry-After'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
++
++                if ($seconds !== false) {
++                    $response->headers->set('Retry-After', (string) $seconds);
++                }
++            }
++
++            return $response;
+         }
+     }
+ 

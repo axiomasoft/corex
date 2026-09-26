@@ -1,0 +1,102 @@
+diff --git a/build/P14.21/baseline/scripts/mutation-check.sh b/scripts/mutation-check.sh
+old mode 100644
+new mode 100755
+index d2aed21..d73e2bb
+--- a/build/P14.21/baseline/scripts/mutation-check.sh
++++ b/scripts/mutation-check.sh
+@@ -37,7 +37,7 @@ declare -A TEST_CMD=(
+     [P1.15-silent-empty]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='fail-loud'"
+     [P1.16-tags-back]="vendor/bin/pest --exclude-group=pg tests/Feature/ModuleRegistryTest.php --filter='non-taggable file store'"
+     [P1.16-no-epoch-bump]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='shared-DB epoch'"
+-    [P1.16-statereader-bare-binding]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='resolves ModuleStateReader from the container'"
++    [P1.16-statereader-bare-binding]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='resolves ModuleStateReader from the registered ModulesOptions connection'"
+     [P1.17-tableprefix-skip]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='no tablePrefix'"
+     [P1.17-stage-order-swap]="vendor/bin/pest --exclude-group=pg tests/Feature/RegistryCompilerTest.php --filter='AC-18'"
+     [P1.18-purge-order]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='reverse creation order'"
+@@ -89,55 +89,56 @@ run_case() {
+         [ -n "$line" ] && TARGETS+=("$line")
+     done < <(git apply --numstat "$PATCH" 2>/dev/null | awk '{print $3}')
+ 
+-    # Слепок таргет-путей ДО любого наложения — эталон для доказательства отката.
+-    BEFORE_HASH=$(git hash-object -- "${TARGETS[@]}" 2>/dev/null || true)
++    # Preserve exact dirty bytes and index entries, including failed 3-way attempts.
++    local SNAPSHOT_DIR
++    SNAPSHOT_DIR=$(mktemp -d)
++    BEFORE_HASH=$(git hash-object -- "${TARGETS[@]}")
++    git ls-files --stage -- "${TARGETS[@]}" > "$SNAPSHOT_DIR/index"
++    for target in "${TARGETS[@]}"; do
++        mkdir -p "$SNAPSHOT_DIR/$(dirname "$target")"
++        cp -p -- "$target" "$SNAPSHOT_DIR/$target"
++    done
++
++    cleanup() {
++        for target in "${TARGETS[@]}"; do
++            cp -p -- "$SNAPSHOT_DIR/$target" "$target"
++        done
++        git update-index --index-info < "$SNAPSHOT_DIR/index"
++        AFTER_HASH=$(git hash-object -- "${TARGETS[@]}")
++        if [ "$AFTER_HASH" != "$BEFORE_HASH" ]; then
++            echo "mutation-check[$KEY]: original bytes could not be restored" >&2
++            exit 3
++        fi
++    }
++    trap cleanup RETURN
+ 
+     APPLY_MODE=strict
+     if ! git apply --check --whitespace=nowarn "$PATCH" 2>/dev/null; then
+         APPLY_MODE=3way
+     fi
+-
+     if [ "$APPLY_MODE" = "3way" ]; then
+         if ! git apply --whitespace=nowarn -3 "$PATCH" 2>/dev/null; then
+-            # `--check -3` может отрапортовать успех даже при реальном конфликте
+-            # склейки (git-квирк) — поэтому решает РЕАЛЬНОЕ наложение, не check.
+-            # Конфликт = граница ДЕЙСТВИТЕЛЬНО сдвинулась, не только контекст.
+-            git apply -R --whitespace=nowarn -3 "$PATCH" 2>/dev/null || true
+-            git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+-            git checkout -- "${TARGETS[@]}" 2>/dev/null || true
+-            echo "mutation-check: патч $PATCH не применяется к текущему дереву (ни строгий apply, ни чистый 3-way — граница сдвинулась)" >&2
++            echo "mutation-check: patch $PATCH cannot apply; original bytes retained" >&2
+             return 2
+         fi
+-        echo "mutation-check[$KEY]: ГРОМКО — контекст патча $PATCH протух, применён 3-way-фоллбэк (git apply -3); кейс $KEY требует реанкора" >&2
++        echo "mutation-check[$KEY]: stale patch context; 3-way fallback applied, reanchor required" >&2
+     else
+         echo "mutation-check[$KEY]: применяю $PATCH"
+         git apply --whitespace=nowarn "$PATCH"
+     fi
+ 
+-    cleanup() {
+-        if [ "$APPLY_MODE" = "3way" ]; then
+-            git apply -R --whitespace=nowarn -3 "$PATCH" 2>/dev/null || true
+-        else
+-            git apply -R --whitespace=nowarn "$PATCH" 2>/dev/null || true
+-        fi
+-        git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+-
+-        AFTER_HASH=$(git hash-object -- "${TARGETS[@]}" 2>/dev/null || true)
+-        if [ "$AFTER_HASH" != "$BEFORE_HASH" ]; then
+-            echo "mutation-check[$KEY]: ГРОМКО — ОТКАТ НЕ ПОДТВЕРЖДЁН для $PATCH (таргет-пути разошлись со слепком до наложения); принудительно восстанавливаю дерево и останавливаюсь" >&2
+-            git checkout -- "${TARGETS[@]}" 2>/dev/null || true
+-            git reset -- "${TARGETS[@]}" >/dev/null 2>&1 || true
+-            exit 3
+-        fi
+-    }
+-    trap cleanup RETURN
+-
+     echo "mutation-check[$KEY]: гоняю: $CMD"
+     set +e
+-    bash -c "$CMD"
++    bash -c "$CMD" > "$SNAPSHOT_DIR/test.log" 2>&1
+     STATUS=$?
++    cat "$SNAPSHOT_DIR/test.log"
+     set -e
+ 
++    if rg -q 'No tests found|"tests"[[:space:]]*:[[:space:]]*0([,}])' "$SNAPSHOT_DIR/test.log"; then
++        echo "mutation-check[$KEY]: FAIL — carrier executed no tests" >&2
++        return 2
++    fi
++
+     if [ "$STATUS" -eq 0 ]; then
+         echo "mutation-check[$KEY]: FAIL — тест остался зелёным под патчем-саботажем (граница НЕ пинится, exit=0)" >&2
+         return 1

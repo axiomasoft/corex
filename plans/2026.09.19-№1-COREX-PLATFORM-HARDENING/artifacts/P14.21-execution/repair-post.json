@@ -1,0 +1,119 @@
+{
+  "schema_version": "repair-decision/v1",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "item_id": "P14.21",
+  "origin": "validation",
+  "original_carrier": {
+    "command": "composer test",
+    "digest": "4d0a498346388de1e2871d8e695d776325c3ceab2e99cc5fa65b9a246fbcc07a",
+    "result": "red"
+  },
+  "baseline": {
+    "reproduced": true,
+    "carrier": {
+      "command": "composer test",
+      "digest": "4d0a498346388de1e2871d8e695d776325c3ceab2e99cc5fa65b9a246fbcc07a",
+      "result": "red"
+    }
+  },
+  "candidate": {
+    "delta_proved": false,
+    "evidence_ids": []
+  },
+  "affected_paths": [
+    {
+      "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+      "owner_item": "P11.2",
+      "declared_file": false
+    },
+    {
+      "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+      "owner_item": "P11.3",
+      "declared_file": false
+    },
+    {
+      "path": "tests/Feature/ModuleRegistryTest.php",
+      "owner_item": "P11.3",
+      "declared_file": false
+    },
+    {
+      "path": "packages/api/src/Dispatcher.php",
+      "owner_item": "P14.5",
+      "declared_file": false
+    },
+    {
+      "path": "tests/fixtures/public-error-contract.php",
+      "owner_item": "P14.18",
+      "declared_file": false
+    },
+    {
+      "path": "scripts/extension-contract-gate.php",
+      "owner_item": "P14.11",
+      "declared_file": false
+    },
+    {
+      "path": "api/v1/errors.json",
+      "owner_item": "P14.18",
+      "declared_file": false
+    },
+    {
+      "path": "api/v1/manifest.json",
+      "owner_item": "P14.18",
+      "declared_file": false
+    },
+    {
+      "path": "api/v1/openapi.json",
+      "owner_item": "P14.18",
+      "declared_file": false
+    },
+    {
+      "path": "api/v1/operations.json",
+      "owner_item": "P14.18",
+      "declared_file": false
+    },
+    {
+      "path": "api/v1/webhooks.json",
+      "owner_item": "P14.18",
+      "declared_file": false
+    }
+  ],
+  "bounded_diff": {
+    "files_changed": 11,
+    "max_files": 11,
+    "reversible": true
+  },
+  "material_surface": {
+    "public": false,
+    "frozen": false,
+    "security": false,
+    "schema": false,
+    "dependency": false,
+    "authority": false,
+    "irreversible": false,
+    "product": false,
+    "test_topology": false
+  },
+  "pre_validation": [
+    {
+      "command": "composer test",
+      "digest": "4d0a498346388de1e2871d8e695d776325c3ceab2e99cc5fa65b9a246fbcc07a",
+      "result": "red"
+    }
+  ],
+  "post_validation": [
+    {
+      "command": "composer test",
+      "digest": "4d0a498346388de1e2871d8e695d776325c3ceab2e99cc5fa65b9a246fbcc07a",
+      "result": "green"
+    }
+  ],
+  "evidence_ids": [
+    "build/P14.21/root-test.log",
+    "research/P11-design.md:5-6",
+    "phases/P14/P14.5.md",
+    "build/P14.21/repair-targeted.log",
+    "artifacts/P14.21-execution/root-exact-final.log",
+    "artifacts/P14.21-execution/commands.json"
+  ],
+  "design": null
+}

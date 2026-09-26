@@ -1,0 +1,49 @@
+diff --git a/build/P14.21/baseline/api/v1/errors.json b/api/v1/errors.json
+index e9efa18..3209c46 100644
+--- a/build/P14.21/baseline/api/v1/errors.json
++++ b/api/v1/errors.json
+@@ -167,6 +167,14 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "not_found",
++        "code": "not_found",
++        "detail_keys": [],
++        "owner": "corex/api",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "not_found",
+         "code": "operation_not_found",
+@@ -231,6 +239,14 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "validation",
++        "code": "unknown_message_contract",
++        "detail_keys": [],
++        "owner": "corex/api",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "validation",
+         "code": "validation_failed",
+@@ -265,6 +281,14 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "validation",
++        "code": "webhook_subscription_cap",
++        "detail_keys": [],
++        "owner": "corex/api",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "conflict",
+         "code": "attribute_schema_conflict",

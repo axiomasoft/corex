@@ -1,0 +1,28 @@
+diff --git a/build/P14.21/baseline/scripts/mutations/API-module-activation.patch b/scripts/mutations/API-module-activation.patch
+index 87ee267..48e42ce 100644
+--- a/build/P14.21/baseline/scripts/mutations/API-module-activation.patch
++++ b/scripts/mutations/API-module-activation.patch
+@@ -1,11 +1,12 @@
+-diff --git a/packages/api/src/Dispatcher.php b/packages/api/src/Dispatcher.php
+---- a/packages/api/src/Dispatcher.php
+-+++ b/packages/api/src/Dispatcher.php
+-@@ -46,6 +46,6 @@
+-                 ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
+-             $context = $this->contexts->resolve($request, $principal, $metadata);
+-
+--            if (! $this->modules->isActive($operation->module, $context->tenant())) {
+-+            if (false && ! $this->modules->isActive($operation->module, $context->tenant())) {
+-                 throw new ApiError('module_unavailable', 404, 'Operation not found.');
+-             }
++diff --git a/packages/api/src/Internal/DefaultOperationInvoker.php b/packages/api/src/Internal/DefaultOperationInvoker.php
++--- a/packages/api/src/Internal/DefaultOperationInvoker.php
+++++ b/packages/api/src/Internal/DefaultOperationInvoker.php
++@@ -39,7 +39,7 @@
++             throw new ApiError('operation_unsupported', 404, 'Operation is not executable.');
++         }
++ 
++-        if (! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
+++        if (false && ! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
++             throw new ApiError('module_unavailable', 404, 'Operation not found.');
++         }
++ 

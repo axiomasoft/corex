@@ -1,45 +1,28 @@
-# HANDOFF — 2026-09-26 — after P14.20
+# HANDOFF — 2026-09-26 — after P14.21
 
-**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.21
+**Next:** exec-items: task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.1
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
 | Model class | implementation |
-| Model | grok-4.7-high |
-| Thinking | high |
-| Native model | grok-4.7-high |
+| Model | gpt-6-sol |
+| Thinking | medium |
+| Native model | gpt-6-sol |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | P14.21 writes the phase qualification receipt: acceptance matrix, retained limits, and docs. It does not send live webhooks. |
+| Суть | P15.1: public modules FQCN migration and nine discovery consumers; requires its scoped G-API-P15 grant. |
 
 ```session-continuity-decision/v1
-{"evidence":["batch:0e0b46dc439fb79c7b5674f828f520910e420656fb9936df4f502d084ce2bca5","loaded-inputs:not-reusable","cold-start-cost:13400","lifecycle:scope-complete","checkpoint:journal:P14.20:line356"],"outcome":"continue-root","reason":"authorized-scope-complete","runnable":true,"schema_version":"session-continuity-decision/v1"}
+{"evidence":["batch:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","loaded-inputs:reusable","cold-start-cost:0","lifecycle:scope-complete","checkpoint:journal:P14.21:line362;closure:phases/P14/P14.closed.md"],"outcome":"continue-root","reason":"authorized-scope-complete","runnable":true,"schema_version":"session-continuity-decision/v1"}
 ```
 
-**Done:** P14.20 GREEN. Package surface keeps transfer optional, boxed and cloud scopes stay on the configured connection, HTTP and tool share one handler, and an isolated PostgreSQL fan-out delivers once to an in-process receiver.
+**Done:** P14.21 и P14 GREEN. Documentation, 16-row matrix, actual commands/log hashes/JUnit; root 815 tests and PG 239; API 267, modules 83, transfer 8 plus PG 23; mutation 34 nonempty refusals. Missing canonical registry, HTTP cost projection and stale mutation carriers repaired within the admitted attempt.
 
-**Remaining:** P14.21. It is the next ready frontier and owns the documentation and phase qualification receipt. Do not start it from this close.
+**Remaining:** P15.1 — actual ready successor, bundle materialized. User authorized P14.21 only; scope-complete retains continue-root and recommends P15.1 without starting it.
 
-**Sources of truth:** `phases/P14/P14.20.md` · `phases/P14/P14.20.state.md` · `findings/P14-receipts.md` · `journal.jsonl`.
+**Sources of truth:** `phases/P14/P14.21.md` · `phases/P14/P14.21.state.md` · `phases/P14/P14.closed.md` · `findings/P14-execution-validation.md` · `artifacts/P14.21-execution/commands.json` · `journal.jsonl`.
 
-**Open risks:** The unrelated dirty-worktree `CompiledRegistry::hashCanonical()` gap still breaks broad api pest and root arch. P14.20 scoped checks are green: 7 tests / 62 assertions, including one PostgreSQL test. No production rollout, live webhook send, real key rotation, or DDL was performed.
+**Open risks:** Full plan-lint retains 224 historical errors / 9 warnings; current P14.21 producer/consumer diagnostics are clear. Future release downstream rows are unknown, not green. API BC reports nine historical breaks against the old baseline under experimental policy (exit 0); this is not clean stable-release BC. Qualification covers the actual dirty checkout; unrelated predecessor changes remain unstaged and dependent own deltas are preserved as scoped patch artifacts. Bulk needs trusted host admission/field-policy bindings. Delivery stays off; no live sends, production migration, real secret rotation or publication was authorized.
 
-**Workarounds/Deferred/Open questions:**
-
-- workarounds: P14.20 fixtures build a registry with `fingerprint` and do not call the broken compiler
-- deferred: broad suite repair to the modules compiler owner; phase qualification receipt to P14.21
-- open_questions: —
-
-## LAUNCH
-
-| Параметр | Значение |
-|:--|:--|
-| Batch | solo |
-| Model class | implementation |
-| Effort | high |
-| Native model | grok-4.7-high |
-
-```bash
-agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.21'
-```
+**Workarounds/Deferred/Open questions:** No deferred required qualification check. Host rollout and stable-release BC remain their own future authority. P15 naming is outside this invocation.

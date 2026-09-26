@@ -1,0 +1,1837 @@
+{
+  "observations": [
+    {
+      "id": "mutations",
+      "argv": [
+        "bash",
+        "scripts/mutation-check.sh",
+        "--all"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "environment": {
+        "APP_ENV": "testing",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      },
+      "exit_code": 1,
+      "duration_ms": 68476,
+      "log": "build/P14.21/mutations-final.log",
+      "log_sha256": "310d60cd4ce22679d250105d3d4dcf0a074802531edbc55b47d644b5e96158a0",
+      "results": [
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 61,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_default_authentication_and_authorization_deny",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 108,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 62,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_missing_boxed_and_disabled_contexts_fail_closed",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 139,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 8,
+          "passed": 5,
+          "assertions": 13,
+          "duration_ms": 96,
+          "failed": 3,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #5",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #6",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #7",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 480,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Tests\\PHPStan\\ModuleBoundaryRulesTest::test_foreign_prefix_sql_no_false_positive",
+              "file": "/home/vostrikov/projects/packages/corex/tests/PHPStan/ModuleBoundaryRulesTest.php",
+              "line": 49,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+'22: Direct DB access to table \"mod_pending\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+30: Direct DB access to table \"mod_id\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n '"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 5,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 98,
+          "errors": 5,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 80,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_writeAtomic_throws_and_leaves_the_destination_intact_when_the_atomic_move_fails",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 325,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 81,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_throws_in_production_style_strict_mode_when_the_compiled_registry_file_is_absent__fail_loud_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 337,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 201,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 614,
+              "message": "Failed asserting that true is false."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 94,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_runs_the_closed_set_pipeline_stages_in_the_declared_PipelineStages__ORDER__observably__AC_18_",
+              "file": "/home/vostrikov/projects/packages/corex/packages/modules/src/Compiler/RegistryCompiler.php",
+              "line": 109,
+              "message": "Call to undefined method CoreX\\Modules\\Compiler\\CompiledRegistry::hashCanonical()"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 3,
+          "duration_ms": 82,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_rejects_a_manifest_with_no_tablePrefix___call_—_D37__no_auto_derivation",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/RegistryCompilerTest.php",
+              "line": 93,
+              "message": "Failed asserting that 'Module [corex/stub-no-prefix] reached compile with a null tablePrefix — validateRequiredFields() bypassed. tablePrefix is mandatory (D37) and validation must reject a prefix-less manifest before the pipeline runs; hitting this defensive guard means that invariant was broken.' [UTF-8](length: 277) contains \"missing tablePrefix()\" [ASCII](length: 21)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 174,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 262,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleEnableFailedException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 210,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+              "line": 601,
+              "message": "SQLSTATE[2BP01]: Dependent objects still exist: 7 ERROR:  cannot drop table stf_parents because other objects depend on it\nDETAIL:  constraint stf_children_parent_id_foreign on table stf_children depends on table stf_parents\nHINT:  Use DROP ... CASCADE to drop the dependent objects too. (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: drop table if exists \"stf_parents\")"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 343,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/MigrationPublishTest.php",
+              "line": 166,
+              "message": "Failed asserting that an array is empty."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 264,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 153,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'bpchar'\n+'uuid'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 102,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_ with data set \"dataset \"uuid7 -> uuid\"\"",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 118,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'uuid'\n+'character'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 242,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 319,
+              "message": "Expecting […] not to have key 'password'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 5,
+          "duration_ms": 259,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 294,
+              "message": "Expecting […] not to have key 'id'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 224,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 422,
+              "message": "Failed asserting that 1 is identical to 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 223,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/SettingsTest.php",
+              "line": 164,
+              "message": "Exception \"Illuminate\\Database\\QueryException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 2,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 516,
+          "failed": 2,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 188,
+              "message": "Failed asserting that false is true."
+            },
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 213,
+              "message": "Failed asserting that false is true."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 269,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Support/Testing/Fakes/EventFake.php",
+              "line": 195,
+              "message": "The unexpected [CoreX\\Events\\DepartmentMoved] event was dispatched.\nFailed asserting that actual size 1 matches expected size 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 300,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 334,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'01a0df0d099270f6ae83a63f5e8e7799.01a0df0d09a27061b80e9378241306d2'\n+'01a0df0d09a17399ac7d14fbd76e0428.01a0df0d099270f6ae83a63f5e8e7799.01a0df0d09a27061b80e9378241306d2'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 232,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 283,
+              "message": "Failed asserting that an instance of class ErrorException is an instance of class Illuminate\\Database\\Eloquent\\ModelNotFoundException."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 60153,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubTest::__pest_evaluable_it__a__P1_24_A29__subscribe___refuses_a_faked_Octane_runtime_without_explicit_opt_in__negative_guard_test_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubTest.php",
+              "line": 118,
+              "message": "Failed asserting that 'read error on connection to 127.0.0.1:6379' [ASCII](length: 42) contains \"Octane runtime\" [ASCII](length: 14)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 248,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubDatabasePollTest.php",
+              "line": 99,
+              "message": "Failed asserting that two arrays are identical.\n--- Expected\n+++ Actual\n@@ @@\n-Array &0 []\n+Array &0 [\n+    0 => Array &1 [\n+        'module' => 'crm',\n+    ],\n+    1 => Array &2 [\n+        'module' => 'tasks',\n+    ],\n+    2 => Array &3 [\n+        'module' => 'sales',\n+    ],\n+]"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 155,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 649,
+              "message": "Failed asserting that an instance of class CoreX\\Modules\\Events\\ModuleEnabled is an instance of class CoreX\\Events\\DomainEvent."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 256,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 348,
+              "message": "Exception \"CoreX\\Exceptions\\CrossWorkspaceMoveException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 249,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 478,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException\" not thrown."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mutations",
+      "argv": [
+        "bash",
+        "scripts/mutation-check.sh",
+        "--all"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "environment": {
+        "APP_ENV": "testing",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      },
+      "exit_code": 0,
+      "duration_ms": 69289,
+      "log": "build/P14.21/mutations-final.log",
+      "log_sha256": "d0794a53ccd3160bbb87c296cbc94027b2cb2cd12c8b0dacf8102a4f7abb8218",
+      "results": [
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 62,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_default_authentication_and_authorization_deny",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 108,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 65,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_context_and_module_state_are_read_on_every_dispatch",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 160,
+              "message": "Failed asserting that 201 is identical to 404."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 60,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_missing_boxed_and_disabled_contexts_fail_closed",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 139,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 8,
+          "passed": 5,
+          "assertions": 13,
+          "duration_ms": 93,
+          "failed": 3,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #5",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #6",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #7",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 268,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Tests\\PHPStan\\ModuleBoundaryRulesTest::test_foreign_prefix_sql_no_false_positive",
+              "file": "/home/vostrikov/projects/packages/corex/tests/PHPStan/ModuleBoundaryRulesTest.php",
+              "line": 49,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+'22: Direct DB access to table \"mod_pending\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+30: Direct DB access to table \"mod_id\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n '"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 5,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 101,
+          "errors": 5,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 2,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 95,
+          "failed": 2,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_corex_modules_compile_persists_the_entity__permissions_and_menu_slices__not_just_a_counter__A10_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 255,
+              "message": "Failed asserting that an array has the key 'pft.thing'"
+            },
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_projects_the_compiled_entities_into_EntityRegistry_at_boot_—_runtime_path__no_explicit_register__",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 279,
+              "message": "Failed asserting that false is true."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 79,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_writeAtomic_throws_and_leaves_the_destination_intact_when_the_atomic_move_fails",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 325,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 81,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_throws_in_production_style_strict_mode_when_the_compiled_registry_file_is_absent__fail_loud_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 337,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 183,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 614,
+              "message": "Failed asserting that true is false."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 0,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 1,
+          "raw": [
+            "No tests found."
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 79,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_reads_active___isActive___on_a_non_taggable_file_store_without_BadMethodCallException__A1_A2_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Cache/Repository.php",
+              "line": 850,
+              "message": "This cache store does not support tagging."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 83,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_runs_the_closed_set_pipeline_stages_in_the_declared_PipelineStages__ORDER__observably__AC_18_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/RegistryCompilerTest.php",
+              "line": 304,
+              "message": "Failed asserting that two arrays are identical.\n--- Expected\n+++ Actual\n@@ @@\n     2 => 'CoreX\\Modules\\Extend\\Permissions',\n     3 => 'CoreX\\Modules\\Extend\\Api',\n     4 => 'CoreX\\Modules\\Extend\\Filament',\n-    5 => 'CoreX\\Modules\\Extend\\Menu',\n-    6 => 'CoreX\\Modules\\Extend\\Routes',\n+    5 => 'CoreX\\Modules\\Extend\\Routes',\n+    6 => 'CoreX\\Modules\\Extend\\Menu',\n     7 => 'CoreX\\Modules\\Extend\\Workflow',\n ]"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 3,
+          "duration_ms": 83,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_rejects_a_manifest_with_no_tablePrefix___call_—_D37__no_auto_derivation",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/RegistryCompilerTest.php",
+              "line": 93,
+              "message": "Failed asserting that 'Module [corex/stub-no-prefix] reached compile with a null tablePrefix — validateRequiredFields() bypassed. tablePrefix is mandatory (D37) and validation must reject a prefix-less manifest before the pipeline runs; hitting this defensive guard means that invariant was broken.' [UTF-8](length: 277) contains \"missing tablePrefix()\" [ASCII](length: 21)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 172,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 262,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleEnableFailedException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 201,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+              "line": 601,
+              "message": "SQLSTATE[2BP01]: Dependent objects still exist: 7 ERROR:  cannot drop table stf_parents because other objects depend on it\nDETAIL:  constraint stf_children_parent_id_foreign on table stf_children depends on table stf_parents\nHINT:  Use DROP ... CASCADE to drop the dependent objects too. (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: drop table if exists \"stf_parents\")"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 282,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/MigrationPublishTest.php",
+              "line": 166,
+              "message": "Failed asserting that an array is empty."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 249,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 153,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'bpchar'\n+'uuid'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 92,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_ with data set \"dataset \"uuid7 -> uuid\"\"",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 118,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'uuid'\n+'character'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 257,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 319,
+              "message": "Expecting […] not to have key 'password'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 5,
+          "duration_ms": 301,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 294,
+              "message": "Expecting […] not to have key 'id'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 231,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 422,
+              "message": "Failed asserting that 1 is identical to 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 258,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 381,
+              "message": "Failed asserting that 1 is identical to 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 247,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/SettingsTest.php",
+              "line": 164,
+              "message": "Exception \"Illuminate\\Database\\QueryException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 2,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 447,
+          "failed": 2,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 188,
+              "message": "Failed asserting that false is true."
+            },
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 213,
+              "message": "Failed asserting that false is true."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 295,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Support/Testing/Fakes/EventFake.php",
+              "line": 195,
+              "message": "The unexpected [CoreX\\Events\\DepartmentMoved] event was dispatched.\nFailed asserting that actual size 1 matches expected size 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 259,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 334,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'01a0df10f57372c9ad0218fa15fc1edf.01a0df10f58371d282b2f1a56e82b119'\n+'01a0df10f58271a88ea47a4e906760ec.01a0df10f57372c9ad0218fa15fc1edf.01a0df10f58371d282b2f1a56e82b119'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 257,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 283,
+              "message": "Failed asserting that an instance of class ErrorException is an instance of class Illuminate\\Database\\Eloquent\\ModelNotFoundException."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 60148,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubTest::__pest_evaluable_it__a__P1_24_A29__subscribe___refuses_a_faked_Octane_runtime_without_explicit_opt_in__negative_guard_test_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubTest.php",
+              "line": 118,
+              "message": "Failed asserting that 'read error on connection to 127.0.0.1:6379' [ASCII](length: 42) contains \"Octane runtime\" [ASCII](length: 14)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 268,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubDatabasePollTest.php",
+              "line": 99,
+              "message": "Failed asserting that two arrays are identical.\n--- Expected\n+++ Actual\n@@ @@\n-Array &0 []\n+Array &0 [\n+    0 => Array &1 [\n+        'module' => 'crm',\n+    ],\n+    1 => Array &2 [\n+        'module' => 'tasks',\n+    ],\n+    2 => Array &3 [\n+        'module' => 'sales',\n+    ],\n+]"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 157,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 649,
+              "message": "Failed asserting that an instance of class CoreX\\Modules\\Events\\ModuleEnabled is an instance of class CoreX\\Events\\DomainEvent."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 275,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/SettingsTest.php",
+              "line": 265,
+              "message": "Failed asserting that null is identical to 'manifest-default'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 283,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 348,
+              "message": "Exception \"CoreX\\Exceptions\\CrossWorkspaceMoveException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 195,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 478,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException\" not thrown."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mutations",
+      "argv": [
+        "bash",
+        "scripts/mutation-check.sh",
+        "--all"
+      ],
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "environment": {
+        "APP_ENV": "testing",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      },
+      "exit_code": 0,
+      "duration_ms": 69791,
+      "log": "build/P14.21/mutations-final.log",
+      "log_sha256": "c6ae416c342e9456594f5d0b10992b1c5345e2e8739f2edaf65ce1a0996a563d",
+      "results": [
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 63,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_default_authentication_and_authorization_deny",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 108,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 66,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_context_and_module_state_are_read_on_every_dispatch",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 160,
+              "message": "Failed asserting that 201 is identical to 404."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 61,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_missing_boxed_and_disabled_contexts_fail_closed",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 139,
+              "message": "Failed asserting that 201 is identical to 403."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 8,
+          "passed": 5,
+          "assertions": 13,
+          "duration_ms": 93,
+          "failed": 3,
+          "failures": [
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #5",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #6",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            },
+            {
+              "test": "CoreX\\Api\\Tests\\Feature\\PlatformTest::test_malformed_or_forged_input_is_rejected with data set #7",
+              "file": "/home/vostrikov/projects/packages/corex/packages/api/tests/Feature/PlatformTest.php",
+              "line": 181,
+              "message": "Failed asserting that 201 is identical to 422."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 270,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "CoreX\\Tests\\PHPStan\\ModuleBoundaryRulesTest::test_foreign_prefix_sql_no_false_positive",
+              "file": "/home/vostrikov/projects/packages/corex/tests/PHPStan/ModuleBoundaryRulesTest.php",
+              "line": 49,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+'22: Direct DB access to table \"mod_pending\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+30: Direct DB access to table \"mod_id\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n+39: Direct DB access to table \"mod_records\" of a foreign prefix (module owns \"bil_\") is forbidden (B-10 §7.4 п.9) — go through the owner's contract.\n '"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 5,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 101,
+          "errors": 5,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_AC_25_a___б__publish→subscribe_delivers_the_payload_via_the_poll_cursor__from_a_console_worker_context",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it_persists_rows_in_the_configured_table_with_a_bigint_cursor",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_rolling_restart_of_the_SAME_subscriber_resumes_from_its_persisted_cursor__not_from_0_or_from_a_fresh_max_id_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            },
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__д__corex_pubsub_prune_truncates_rows_older_than_the_threshold__leaving_fresh_rows_intact",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php",
+              "line": 67,
+              "message": "SQLSTATE[08006] [7] connection to server at \"127.0.0.1\", port 1 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections? (Connection: pgsql, Host: 127.0.0.1, Port: 1, Database: corex_test, SQL: DROP SCHEMA IF EXISTS public CASCADE)"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 2,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 95,
+          "failed": 2,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_corex_modules_compile_persists_the_entity__permissions_and_menu_slices__not_just_a_counter__A10_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 255,
+              "message": "Failed asserting that an array has the key 'pft.thing'"
+            },
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_projects_the_compiled_entities_into_EntityRegistry_at_boot_—_runtime_path__no_explicit_register__",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 279,
+              "message": "Failed asserting that false is true."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 78,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_writeAtomic_throws_and_leaves_the_destination_intact_when_the_atomic_move_fails",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 325,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 79,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_throws_in_production_style_strict_mode_when_the_compiled_registry_file_is_absent__fail_loud_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleRegistryTest.php",
+              "line": 337,
+              "message": "Exception \"RuntimeException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 210,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_propagates_a_disable_to_another_node_without_a_forget___there_—_shared_DB_epoch__D39__test_г_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 614,
+              "message": "Failed asserting that true is false."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 154,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_resolves_ModuleStateReader_from_the_registered_ModulesOptions_connection__not_the_app_default__D63_D65_Major_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+              "line": 435,
+              "message": "SQLSTATE[HY000]: General error: 1 no such table: mod_modules (Connection: testbench, Database: :memory:, SQL: select \"name\", \"state\", \"edition\" from \"mod_modules\" where \"state\" = enabled)"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 0,
+          "duration_ms": 78,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleRegistryTest::__pest_evaluable_it_reads_active___isActive___on_a_non_taggable_file_store_without_BadMethodCallException__A1_A2_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Cache/Repository.php",
+              "line": 850,
+              "message": "This cache store does not support tagging."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 82,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_runs_the_closed_set_pipeline_stages_in_the_declared_PipelineStages__ORDER__observably__AC_18_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/RegistryCompilerTest.php",
+              "line": 304,
+              "message": "Failed asserting that two arrays are identical.\n--- Expected\n+++ Actual\n@@ @@\n     2 => 'CoreX\\Modules\\Extend\\Permissions',\n     3 => 'CoreX\\Modules\\Extend\\Api',\n     4 => 'CoreX\\Modules\\Extend\\Filament',\n-    5 => 'CoreX\\Modules\\Extend\\Menu',\n-    6 => 'CoreX\\Modules\\Extend\\Routes',\n+    5 => 'CoreX\\Modules\\Extend\\Routes',\n+    6 => 'CoreX\\Modules\\Extend\\Menu',\n     7 => 'CoreX\\Modules\\Extend\\Workflow',\n ]"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 3,
+          "duration_ms": 83,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\RegistryCompilerTest::__pest_evaluable_it_rejects_a_manifest_with_no_tablePrefix___call_—_D37__no_auto_derivation",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/RegistryCompilerTest.php",
+              "line": 93,
+              "message": "Failed asserting that 'Module [corex/stub-no-prefix] reached compile with a null tablePrefix — validateRequiredFields() bypassed. tablePrefix is mandatory (D37) and validation must reject a prefix-less manifest before the pipeline runs; hitting this defensive guard means that invariant was broken.' [UTF-8](length: 277) contains \"missing tablePrefix()\" [ASCII](length: 21)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 180,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_whole_transition_back_and_throws_when_migration_K_fails_—_all_or_nothing__a_fixed_retry_starts_clean__AC_7__D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 262,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleEnableFailedException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 213,
+          "errors": 1,
+          "error_details": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_purges_every_owned_object_in_reverse_creation_order_—_FK_child_before_parent__and_column_index_without_dropping_the_borrowed_table__AC_10__D31__D41_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
+              "line": 601,
+              "message": "SQLSTATE[2BP01]: Dependent objects still exist: 7 ERROR:  cannot drop table stf_parents because other objects depend on it\nDETAIL:  constraint stf_children_parent_id_foreign on table stf_children depends on table stf_parents\nHINT:  Use DROP ... CASCADE to drop the dependent objects too. (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: drop table if exists \"stf_parents\")"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 370,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\MigrationPublishTest::__pest_evaluable_it_declares_explicit_µs_precision_on_every_sys____mod____timestamptz_column__D32_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/MigrationPublishTest.php",
+              "line": 166,
+              "message": "Failed asserting that an array is empty."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 239,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_core_tables_build_and_accept_a_settings_row_under_the_ulid_id_strategy",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 153,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'bpchar'\n+'uuid'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 104,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ConfigurableIdTest::__pest_evaluable_it_IdColumns_emits_the_id_strategy_correct_native_column_type_on_PG__information__schema_ with data set \"dataset \"uuid7 -> uuid\"\"",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ConfigurableIdTest.php",
+              "line": 118,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'uuid'\n+'character'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 2,
+          "duration_ms": 276,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_excludes_password_remember__token_even_when__guarded______makes_them_fillable__D63_Blocker_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 319,
+              "message": "Expecting […] not to have key 'password'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 5,
+          "duration_ms": 232,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_omits_guarded_non_fillable_attributes_from_the_diff_on_create__A17_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 294,
+              "message": "Expecting […] not to have key 'id'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 312,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_killswitch_aborts_in_the_observer_itself_—_an_unconditional_logger_stays_untouched__P1_21_observer_isolation_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 422,
+              "message": "Failed asserting that 1 is identical to 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 258,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\AuditLogTest::__pest_evaluable_it_killswitch_silences_a_direct_AuditLogger__record___at_the_write_seam__not_only_the_observer__D63_D66_defense_in_depth_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/AuditLogTest.php",
+              "line": 381,
+              "message": "Failed asserting that 1 is identical to 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 245,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_rejects_a_duplicate_account_level_row_at_the_DB_constraint__UNIQUE_NULLS_NOT_DISTINCT___bypassing_the_repository",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/SettingsTest.php",
+              "line": 164,
+              "message": "Exception \"Illuminate\\Database\\QueryException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 2,
+          "passed": 0,
+          "assertions": 4,
+          "duration_ms": 540,
+          "failed": 2,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__a___a_user_override_wins_for_a_user_scoped_read__and_the_workspace_override_is_independently_reachable",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 188,
+              "message": "Failed asserting that false is true."
+            },
+            {
+              "test": "P\\Tests\\Feature\\FeatureFlagsTest::__pest_evaluable_it_AC_22__b___a_department_override_is_independently_reachable__and_the_workspace_override_still_resolves_alongside_it",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/FeatureFlagsTest.php",
+              "line": 213,
+              "message": "Failed asserting that false is true."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 251,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24c__after_commit___a_move_rolled_back_by_an_outer_transaction_emits_NO_event__A6_",
+              "file": "/home/vostrikov/projects/packages/corex/vendor/laravel/framework/src/Illuminate/Support/Testing/Fakes/EventFake.php",
+              "line": 195,
+              "message": "The unexpected [CoreX\\Events\\DepartmentMoved] event was dispatched.\nFailed asserting that actual size 1 matches expected size 0."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 297,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___rewrites_ONLY_the_moving_workspace__never_a_same_path_row_in_another__D63_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 334,
+              "message": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'01a0df16567c721ca25e3c3b182acabc.01a0df16569a71489d37e4a96859d2e5'\n+'01a0df16569970cc886908d4c247673b.01a0df16567c721ca25e3c3b182acabc.01a0df16569a71489d37e4a96859d2e5'"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 268,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___move___on_a_soft_deleted_department_throws_instead_of_a_silent_no_op__A5_If_then_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 283,
+              "message": "Failed asserting that an instance of class ErrorException is an instance of class Illuminate\\Database\\Eloquent\\ModelNotFoundException."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 60140,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubTest::__pest_evaluable_it__a__P1_24_A29__subscribe___refuses_a_faked_Octane_runtime_without_explicit_opt_in__negative_guard_test_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubTest.php",
+              "line": 118,
+              "message": "Failed asserting that 'read error on connection to 127.0.0.1:6379' [ASCII](length: 42) contains \"Octane runtime\" [ASCII](length: 14)."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 290,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__г__D44__a_new_subscriber_does_NOT_replay_pre_existing_history_by_default__skips_straight_to_max_id__",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/PubSubDatabasePollTest.php",
+              "line": 99,
+              "message": "Failed asserting that two arrays are identical.\n--- Expected\n+++ Actual\n@@ @@\n-Array &0 []\n+Array &0 [\n+    0 => Array &1 [\n+        'module' => 'crm',\n+    ],\n+    1 => Array &2 [\n+        'module' => 'tasks',\n+    ],\n+    2 => Array &3 [\n+        'module' => 'sales',\n+    ],\n+]"
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 195,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_eventId__occurredAt__tenant_and_the_canonical_B_10_§3_1_name_on_every_lifecycle_event__P1_25__A68__test_а_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 649,
+              "message": "Failed asserting that an instance of class CoreX\\Modules\\Events\\ModuleEnabled is an instance of class CoreX\\Events\\DomainEvent."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 230,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared_SettingDefault_through_the_container_bound_SettingDefaultsProvider_once_corex_modules_is_registered__P1_25__A68__test_в_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/SettingsTest.php",
+              "line": 265,
+              "message": "Failed asserting that null is identical to 'manifest-default'."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 266,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___move___into_a_parent_in_ANOTHER_workspace_is_rejected_and_moves_nothing__P1_29_M_2__symmetric_to_D67_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/DepartmentTest.php",
+              "line": 348,
+              "message": "Exception \"CoreX\\Exceptions\\CrossWorkspaceMoveException\" not thrown."
+            }
+          ]
+        },
+        {
+          "tool": "pest",
+          "result": "failed",
+          "tests": 1,
+          "passed": 0,
+          "assertions": 1,
+          "duration_ms": 203,
+          "failed": 1,
+          "failures": [
+            {
+              "test": "P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_back_and_rethrows_when_a_catch_up_migration_fails_—_schema__version_stays_put__P1_29_M_1__symmetric_to_enable_D40_",
+              "file": "/home/vostrikov/projects/packages/corex/tests/Feature/ModuleLifecycleTest.php",
+              "line": 478,
+              "message": "Exception \"CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException\" not thrown."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "limitation": "Initial failed log was overwritten by rerun. Historical command/exit/hash observation is retained; the old log hash is not advertised as an available artifact.",
+  "initial_failure": "6 stale patches; failed 3-way rollback reset dirty bytes, then restored from pre-run backups",
+  "discarded_green": "Intermediate 34-case run had an empty state-reader filter; not accepted as qualification"
+}

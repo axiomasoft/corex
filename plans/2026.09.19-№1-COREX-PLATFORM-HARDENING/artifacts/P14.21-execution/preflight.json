@@ -1,0 +1,22 @@
+{
+  "observed": "2026-09-26",
+  "app_env": "testing",
+  "root_default_db": "sqlite/:memory:",
+  "pgsql": {
+    "container": "corex_pgsql_test",
+    "healthy": true,
+    "version": "16.14",
+    "host": "127.0.0.1",
+    "port": 5434,
+    "database": "corex_test",
+    "name_guard": "*_test",
+    "pg_isready_exit": 0,
+    "current_database_verified": true
+  },
+  "schema_setup": "Disposable test migrations and api_p14* schemas; no production DDL",
+  "network": "Synthetic in-process receiver and explicit local TLS fixture only; no live external receiver",
+  "php": "8.4.1",
+  "composer": "2.8.3",
+  "framework": "Laravel 13.31",
+  "api_pg_fallback": "No package test:pg script: declared Feature pg group through root phpunit.xml, 8 tests, no skips"
+}

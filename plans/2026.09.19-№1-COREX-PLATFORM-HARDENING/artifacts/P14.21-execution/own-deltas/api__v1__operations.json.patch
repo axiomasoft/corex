@@ -1,0 +1,22 @@
+diff --git a/build/P14.21/baseline/api/v1/operations.json b/api/v1/operations.json
+index 5a5a6a0..4ecac7a 100644
+--- a/build/P14.21/baseline/api/v1/operations.json
++++ b/api/v1/operations.json
+@@ -287,7 +287,7 @@
+     {
+         "ability": "notes.read",
+         "capabilities": [],
+-        "contract_hash": "2f7f22552096be83873797e4ffe46bbb3f3f4ef16f0298dcce3079af37fe4228",
++        "contract_hash": "0550f5d1efa7cbae12308da1351f9729e512b363807e39d1be529306a53ae6e9",
+         "cost": {
+             "enforcement": {
+                 "account": "observe",
+@@ -331,7 +331,7 @@
+     {
+         "ability": "notes.read",
+         "capabilities": [],
+-        "contract_hash": "af31be1f5d5470b3775a4d362d3325c304b37d6d49667146bf4e6ab50fe9f057",
++        "contract_hash": "93f9104954827fb1b76b5c9b019f20356d4eb9cfd3d375b566ecddd4621312f7",
+         "cost": {
+             "enforcement": {
+                 "account": "observe",

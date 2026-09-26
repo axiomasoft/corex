@@ -1,0 +1,21 @@
+diff --git a/build/P14.21/baseline/scripts/mutations/P1.16-tags-back.patch b/scripts/mutations/P1.16-tags-back.patch
+index aff8fb9..508f605 100644
+--- a/build/P14.21/baseline/scripts/mutations/P1.16-tags-back.patch
++++ b/scripts/mutations/P1.16-tags-back.patch
+@@ -1,12 +1,11 @@
+ diff --git a/packages/modules/src/Registry/RepositoryModuleRegistryCache.php b/packages/modules/src/Registry/RepositoryModuleRegistryCache.php
+-index 6ab532b..a5b2b59 100644
+ --- a/packages/modules/src/Registry/RepositoryModuleRegistryCache.php
+ +++ b/packages/modules/src/Registry/RepositoryModuleRegistryCache.php
+-@@ -30,6 +30,6 @@ final class RepositoryModuleRegistryCache implements ModuleRegistryCache
++@@ -31,6 +31,6 @@
+          // tags(): the account id already namespaces the key.
+-         $key = sprintf('%s:account:%s:v%d:enabled', $this->prefix, $accountId, $version);
++         $key = sprintf('%s:account:%s:v%d:enabled', $this->options->cachePrefix, $accountId, $version);
+  
+--        return $this->store->remember($key, $this->ttl, $resolver);
+-+        return $this->store->tags(["account:{$accountId}:modules"])->remember($key, $this->ttl, $resolver);
++-        return $this->store->remember($key, $this->options->cacheTtl, $resolver);
+++        return $this->store->tags(["account:{$accountId}:modules"])->remember($key, $this->options->cacheTtl, $resolver);
+      }
+  }

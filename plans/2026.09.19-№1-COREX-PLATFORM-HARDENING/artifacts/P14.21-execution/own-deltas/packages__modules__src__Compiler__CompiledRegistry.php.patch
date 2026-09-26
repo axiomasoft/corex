@@ -1,0 +1,160 @@
+diff --git a/build/P14.21/baseline/packages/modules/src/Compiler/CompiledRegistry.php b/packages/modules/src/Compiler/CompiledRegistry.php
+index 12f6c6c..3aa62da 100644
+--- a/build/P14.21/baseline/packages/modules/src/Compiler/CompiledRegistry.php
++++ b/packages/modules/src/Compiler/CompiledRegistry.php
+@@ -5,6 +5,7 @@ declare(strict_types=1);
+ namespace CoreX\Modules\Compiler;
+ 
+ use CoreX\Contracts\FeatureFlagDefinition;
++use CoreX\Modules\Exceptions\CompilationException;
+ use CoreX\Modules\Extend\Api;
+ use CoreX\Modules\Extend\Extender;
+ use CoreX\Modules\Extend\Filament;
+@@ -27,6 +28,15 @@ use ReflectionClass;
+  */
+ final readonly class CompiledRegistry
+ {
++    public const SCHEMA = 'corex-registry/1';
++
++    /** @var array<string, mixed> Detached scalar publication, independent of hydrated extenders. */
++    private array $snapshot;
++
++    public string $schemaVersion;
++
++    public string $fingerprint;
++
+     /**
+      * @param  array<string, EntityDefinition>  $entities  keyed by handle
+      * @param  list<CompiledEntityField>  $entityFields
+@@ -40,6 +50,10 @@ final readonly class CompiledRegistry
+      * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags`
+      * @param  array<string, array<class-string, list<class-string>>>  $listeners  manifest-declared event listeners, keyed by module composer name
+      * @param  string  $fingerprint  point-specific registry fingerprint read by operation contracts
++     * @param  array<string, mixed>  $compiler
++     * @param  list<array<string, mixed>>  $modules
++     * @param  list<array<string, mixed>>  $extensions
++     * @param  list<array<string, mixed>>  $replacements
+      *
+      * @internal spec: P1.25, B-10 §3.1
+      */
+@@ -55,8 +69,24 @@ final readonly class CompiledRegistry
+         public array $settings = [],
+         public array $featureFlags = [],
+         public array $listeners = [],
+-        public string $fingerprint = '',
+-    ) {}
++        string $fingerprint = '',
++        public array $compiler = [],
++        public array $modules = [],
++        public array $extensions = [],
++        public array $replacements = [],
++    ) {
++        $this->schemaVersion = self::SCHEMA;
++        $this->fingerprint = $fingerprint !== '' ? $fingerprint : self::hashCanonical($compiler, $modules, $extensions, $replacements);
++        $this->snapshot = [
++            ...$this->projectSlices(),
++            'schema' => $this->schemaVersion,
++            'fingerprint' => $this->fingerprint,
++            'compiler' => $compiler,
++            'modules' => $modules,
++            'extensions' => $extensions,
++            'replacements' => $replacements,
++        ];
++    }
+ 
+     public static function empty(): self
+     {
+@@ -82,9 +112,15 @@ final readonly class CompiledRegistry
+      * concrete extender class per slice is fixed, so {@see fromArray()} knows
+      * exactly which class to rehydrate without a discriminator.
+      *
+-     * @return array{entities: array<string, array<string, mixed>>, entityFields: list<array<string, mixed>>, permissions: list<array<string, mixed>>, api: list<array<string, mixed>>, filament: list<array<string, mixed>>, menu: list<array<string, mixed>>, routes: list<array<string, mixed>>, workflow: list<array<string, mixed>>, settings: list<array<string, mixed>>, featureFlags: list<array<string, mixed>>, listeners: array<string, array<class-string, list<class-string>>>}
++     * @return array<string, mixed>
+      */
+     public function toArray(): array
++    {
++        return $this->snapshot;
++    }
++
++    /** @return array<string, mixed> */
++    private function projectSlices(): array
+     {
+         return [
+             'entities' => array_map(static fn (EntityDefinition $entity): array => $entity->toArray(), $this->entities),
+@@ -102,10 +138,28 @@ final readonly class CompiledRegistry
+     }
+ 
+     /**
+-     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}  $data
++     * @param  array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}  $data
+      */
+     public static function fromArray(array $data): self
+     {
++        if (! isset($data['schema'])) {
++            throw CompilationException::corruptArtifact('missing schema');
++        }
++
++        if ($data['schema'] !== self::SCHEMA) {
++            throw CompilationException::corruptArtifact('unknown schema');
++        }
++
++        if (! isset($data['fingerprint'])) {
++            throw CompilationException::corruptArtifact('missing fingerprint');
++        }
++
++        $expected = self::hashCanonical($data['compiler'] ?? [], $data['modules'] ?? [], $data['extensions'] ?? [], $data['replacements'] ?? []);
++
++        if (! hash_equals($expected, $data['fingerprint'])) {
++            throw CompilationException::corruptArtifact('fingerprint mismatch');
++        }
++
+         return new self(
+             entities: array_map(
+                 static fn (array $entity): EntityDefinition => EntityDefinition::fromArray($entity),
+@@ -128,9 +182,46 @@ final readonly class CompiledRegistry
+             ),
+             featureFlags: array_map(self::featureFlagFromArray(...), $data['featureFlags'] ?? []),
+             listeners: $data['listeners'] ?? [],
++            compiler: $data['compiler'] ?? [],
++            modules: $data['modules'] ?? [],
++            extensions: $data['extensions'] ?? [],
++            replacements: $data['replacements'] ?? [],
++            fingerprint: $data['fingerprint'],
+         );
+     }
+ 
++    /**
++     * @param  array<string, mixed>  $compiler
++     * @param  list<array<string, mixed>>  $modules
++     * @param  list<array<string, mixed>>  $extensions
++     * @param  list<array<string, mixed>>  $replacements
++     */
++    public static function hashCanonical(array $compiler, array $modules, array $extensions, array $replacements): string
++    {
++        $payload = self::canonical([
++            'schema' => self::SCHEMA,
++            'compiler' => $compiler,
++            'modules' => $modules,
++            'extensions' => $extensions,
++            'replacements' => $replacements,
++        ]);
++
++        return hash('sha256', self::SCHEMA."\0".json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
++    }
++
++    private static function canonical(mixed $value): mixed
++    {
++        if (! is_array($value)) {
++            return $value;
++        }
++
++        if (! array_is_list($value)) {
++            ksort($value, SORT_STRING);
++        }
++
++        return array_map(self::canonical(...), $value);
++    }
++
+     /** @param  array{key: string, default: bool, module: string|null, payload: array<string, mixed>|null}  $data */
+     private static function featureFlagFromArray(array $data): FeatureFlagDefinition
+     {
