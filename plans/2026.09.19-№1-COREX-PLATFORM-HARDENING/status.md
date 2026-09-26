@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-25
-inputs_sha256: 052a4755eb41e3ad894cdd97796888feafd87ff6df3102c7af979e5abd1c94f4
+through: 2026-09-26
+inputs_sha256: 9f257fdb19c66c108511b069346b5a6fefbd2237662c6ec6363efd0d2b156107
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-25 |
+| Last Updated | 2026-09-26 |
 
 ## 4. Phase Index & Status Board
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P11 | Модель расширения: typed registries, compile → frozen, durable stamps | 8/8 | 🟢 Done |
 | P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
 | P13 | Внешний API как продукт: ядро контракта операций | 12/12 | 🟢 Done |
-| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 12/21 | 🟡 In progress |
+| P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 13/21 | 🟡 In progress |
 | P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
 | P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
@@ -125,7 +125,7 @@ generated_by: task plan-views status
 | P14.10 | Bulk endpoints and protected results | 🟢 Done | 2026-09-25 |
 | P14.11 | Declared webhook topics and subscription policy | 🟢 Done | 2026-09-25 |
 | P14.12 | Transactional outbox fan-out and delivery identity | 🟢 Done | 2026-09-25 |
-| P14.13 | Standard Webhooks signer and synthetic rotation | ⬜ Not started | — |
+| P14.13 | Standard Webhooks signer and synthetic rotation | 🟢 Done | 2026-09-26 |
 | P14.14 | SSRF policy and pinned HTTPS transport | ⬜ Not started | — |
 | P14.15 | Leased delivery, retry and dead-letter | ⬜ Not started | — |
 | P14.16 | Webhook management, history and bounded replay | ⬜ Not started | — |
@@ -655,6 +655,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.11 GREEN: unknown contract/version/schema and class names rejected; sensitive topics need an ability; secret class always denied; optimistic revision, cap 100, foreign tenant denied. pest 6/6, phpstan 0, pint ok. |
 | 2026-09-25 | plan-run/grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-25 | plan-run/grok-4.7/high | plan-run · closed-green · P14.12 GREEN: inbox and delivery inserts roll back together; duplicate event creates one delivery; forwarding preserved; oversize is dead; lossy publisher rejected. pest 4/4, phpstan 0, pint ok. |
+| 2026-09-26 | plan-exec/codex-gpt-6-sol/medium | plan-exec · in-progress · — |
+| 2026-09-26 | plan-exec/codex-gpt-5.6-sol/high | plan-exec · closed-green · note сокращена; полный текст: journal.jsonl:337 |
 
 ## Owner Gates
 
