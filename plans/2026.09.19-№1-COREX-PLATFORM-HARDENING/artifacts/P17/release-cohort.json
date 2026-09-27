@@ -1,0 +1,188 @@
+{
+  "excluded": [
+    {
+      "path": "packages/crm",
+      "reason": "flex-product-consumer"
+    },
+    {
+      "path": "packages/import-export",
+      "reason": "tombstone"
+    }
+  ],
+  "packages": [
+    {
+      "archive_sha256": "2d37df4fd02831e37912ec8816a0d7e22f92191a389428f6c4efb4f8c538af75",
+      "composer_sha256": "c47747e70da9bb7418a52c555dcfbfd5a91418400bc21a2a117ea6f8fddf4d3a",
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-access",
+      "name": "corex/access",
+      "path": "packages/access",
+      "tree_sha256": "700a760fa2329e60174d6144fdbbbeebe16c775f7b9f6e7ad6d8cff6bdb1fd0d"
+    },
+    {
+      "archive_sha256": "3d44b28190bfbe9c9ca0169aae1fea015d6d0d3a2e70ff43991eba3c93973534",
+      "composer_sha256": "33e08824e99663379c6aa625786847ffdb094559680353dfdea7dd51a53bd60a",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-attributes",
+      "name": "corex/attributes",
+      "path": "packages/attributes",
+      "tree_sha256": "68a01244db0e251c6b4d914018ab04ee6156dbb25d20205d0bdf2586ad3e8103"
+    },
+    {
+      "archive_sha256": "c48dce21ffb14b66946bc28d927a1ee5f783c7acdb11e1e38d3be335736055d2",
+      "composer_sha256": "97c9293bf5e200d77796c3819a6321e01f2c91899def95d67beb6cd2ff787949",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-core",
+      "name": "corex/core",
+      "path": "packages/core",
+      "tree_sha256": "b8a30958b97f8351e6bfda4ffaf5f5a7c3b7e73ccb53374e5b032090ba3a8cf0"
+    },
+    {
+      "archive_sha256": "7c1158e1612afa756f655a95387aaba96b4cb93c191438b96d6d4439d5b8abaa",
+      "composer_sha256": "19b7d54b886ebe8229853dfcdcdd39ea62dae7fc062dbd1a520c850af773588f",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-intl",
+      "name": "corex/intl",
+      "path": "packages/intl",
+      "tree_sha256": "c673694091ea057d241b0824bd2e338b88a285d40dd3c85ee945c69d27656d1b"
+    },
+    {
+      "archive_sha256": "39b92b0da6a683085dcbe409a693172848401981424dc6b18b12acea0c2b547e",
+      "composer_sha256": "b837626876cdaded9eeb0983ed6a562382401be866b309b4d04fdd1e1c9ae2bb",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-media",
+      "name": "corex/media",
+      "path": "packages/media",
+      "tree_sha256": "f558af9d545bb317756489f086f60e5c44c41fad41c67005cf478e69ca09bf2f"
+    },
+    {
+      "archive_sha256": "dbf6f3dd4040cf1fab3d152e0b7ac7986af4c8a752ebb2b6b28847e18fb9de0e",
+      "composer_sha256": "cdf97156ec78d858536431578ac9fcc83e207e34c01b68649d09b3aa715f818d",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-modules",
+      "name": "corex/modules",
+      "path": "packages/modules",
+      "tree_sha256": "06d15d7ce1ecbb1051c26ca6120f8c17f4b3be715e777aa255b063dff9da2f60"
+    },
+    {
+      "archive_sha256": "17f9de4c9b7c31b205dce73173c42e9d39a5625773a4676aa737c2e6ae911063",
+      "composer_sha256": "59f2310e10f921bfdd28d5f8369675e63ca061a18bef64a6d7ce950096b10ccf",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-notifications",
+      "name": "corex/notifications",
+      "path": "packages/notifications",
+      "tree_sha256": "d74e6ac0181d5f26dfec12c71bfb80d007f1c5497fcd3bcdc3b721c162760848"
+    },
+    {
+      "archive_sha256": "0cac7cadbe1d0f6db86923c5cbd4314ac3505febf4105e3bced38a2fd2506eab",
+      "composer_sha256": "8676252c3568ea0f211886f494ece45ff5853c825d442c96a98c640d4ba7671d",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-operations",
+      "name": "corex/operations",
+      "path": "packages/operations",
+      "tree_sha256": "db77af2e8b5a57971d381c4d4d57c79475853a17bfb4f6319e54339e2fb72dcf"
+    },
+    {
+      "archive_sha256": "500b7833b4349d9c62d88545e35a114f4943c864de8a756caa3bbfe60986fab4",
+      "composer_sha256": "bb593fd5fc2c5ec695ccd3905c26610a675b13afcd6941a2b22f1ef0563f5a52",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-panels",
+      "name": "corex/panels",
+      "path": "packages/panels",
+      "tree_sha256": "daf95596941e30f447e87ec91ebd3f681b2154f70447114064a3ab5195afefa0"
+    },
+    {
+      "archive_sha256": "49da5a483388a8de2ed653c8d4a94e77381125b8a1482fa2fdaed902a1bce500",
+      "composer_sha256": "7b4eaacda08f1b6f672e4f4f01a13250c62a040738653493bab92a4b1ad783a1",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-recurrence",
+      "name": "corex/recurrence",
+      "path": "packages/recurrence",
+      "tree_sha256": "182cf22317163bd89a6c39313d5686e5ed6c3d69957091602258cb9aa6e0a814"
+    },
+    {
+      "archive_sha256": "f1e5b2d2d3363d3f71b40fb3481abbadc26526635340a03bcc795816af179ed6",
+      "composer_sha256": "7a621ca47c75db1f4f548af3499b53e6a070096dd61cbf363befae06216c047d",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search",
+      "name": "corex/search",
+      "path": "packages/search",
+      "tree_sha256": "fc50bd8493657c997cc5b288d7f4b2e968722b61788627c9f4b41686b67cc1e9"
+    },
+    {
+      "archive_sha256": "9527199ce48a438b1d21502f266102759227461714e051b3cb6d1e3d6dc647b0",
+      "composer_sha256": "8112e1725d83c0bb24bc34756d4deb34360c0e15f1bb8e671463f9c30beafcc2",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-intl",
+      "name": "corex/search-intl",
+      "path": "packages/search-intl",
+      "tree_sha256": "cc62e260a989a284d1c3a0d59da45f21f219300e403eafb7704724e4562f416a"
+    },
+    {
+      "archive_sha256": "f70b1153a62dd5abc9d9e9929833fcc04577c4a6be516a005976bcd098233b32",
+      "composer_sha256": "6c7eae5a6eb2bb23cfc62b1c11979aeef7c1a5e629777827312e9e9fd044f7e6",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-meilisearch",
+      "name": "corex/search-meilisearch",
+      "path": "packages/search-meilisearch",
+      "tree_sha256": "462b1804b883722fd5cd3a288b65cb8a18df7d730eac9979bc4b72fc7458c92c"
+    },
+    {
+      "archive_sha256": "a9a69355cb9db69dc42e627f1360f1574e967a59d123b02fa65a7077b36f37da",
+      "composer_sha256": "ca918a5e206087152518d81ca28be86f328b93ea53024366a0990adbfaa5ffa2",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks",
+      "name": "corex/tasks",
+      "path": "packages/tasks",
+      "tree_sha256": "da52df891e3a2f584bab63821fff6def741c809fcf026adb0c19740a19d4daf3"
+    },
+    {
+      "archive_sha256": "f0aa324b45c59c80f50af456800f3d9c032e32200aa9cb1df0a37b21c34228bf",
+      "composer_sha256": "96668bae3bbbe2d92fbe8049a22dfbd71533aa64b27dd5ac8815d4482c2b4678",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks-workflow",
+      "name": "corex/tasks-workflow",
+      "path": "packages/tasks-workflow",
+      "tree_sha256": "9f40e5d2ccd8a00de7f939f877d8d4c17e94dc9042ad1adbb04bd80349be6116"
+    },
+    {
+      "archive_sha256": "bd67dfc235e0d0bfbfe84fe3ac0a464999e9257fd815421913f29319eff12095",
+      "composer_sha256": "204c718cd89f7f2b0e1a20c2bbe1e34a734279945df4ccb346452f033323de4a",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tenancy",
+      "name": "corex/tenancy",
+      "path": "packages/tenancy",
+      "tree_sha256": "fc8e8d8fef7587988094896ec28a6e5c98294d7a633c84e935ab976258110f09"
+    },
+    {
+      "archive_sha256": "76e5d61974d5d2a4cdf2b8989d04ac2727d72088a59b6738cd5bdf04de4197b1",
+      "composer_sha256": "b5cb7d8b4bced5395eed173c9ecaea703c78891f5b26a222f9f90b19870a053b",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-transfer",
+      "name": "corex/transfer",
+      "path": "packages/transfer",
+      "tree_sha256": "fcb5927e4f8e9792f70def9d7428674b3ee127f0d0bdeb22736d6e0732f89238"
+    },
+    {
+      "archive_sha256": "1eaf53cc4f2b02a5d2d6cbfdcd5ae8c85cb03230dc983db70f01e731cb5b4852",
+      "composer_sha256": "e72bd89b8984556b04c1b0580b9cda63f606ec14c858634e1d075518eea1d31b",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-wakeup",
+      "name": "corex/wakeup",
+      "path": "packages/wakeup",
+      "tree_sha256": "c7d7c6d02f656801a96f0ef0dccd25d9d165d3dcd2b91c5fb5d11b3c67c738a2"
+    },
+    {
+      "archive_sha256": "1d83c530482ea40bd99aaf69471339e87ff931a75e95fa3686d8a70631299a9e",
+      "composer_sha256": "085f269a8c19ff2d057d0355638465f4e8d447eaa11aa79fc9520323c136e520",
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-workflow",
+      "name": "corex/workflow",
+      "path": "packages/workflow",
+      "tree_sha256": "229fa3f73f8f457a2e738305fdeb2ff4542186a6abdbec5bbe510ffa16370f1b"
+    }
+  ],
+  "schema_version": "corex-release-cohort/1",
+  "source_commit": "5db31fd4aebf1dcd172754479ad9cf9da59719d6",
+  "version": "1.0.0"
+}

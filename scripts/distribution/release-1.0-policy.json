@@ -1,0 +1,121 @@
+{
+  "schema_version": "corex-release-policy/1",
+  "include": [
+    "composer.json",
+    "src/",
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md",
+    "LICENSE"
+  ],
+  "forbidden_segments": [
+    "vendor",
+    "node_modules",
+    "tests",
+    ".env",
+    "auth.json",
+    ".git",
+    ".plan-cache"
+  ],
+  "required_if_present": [
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md"
+  ],
+  "channels": {
+    "packages/access": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-access"
+    },
+    "packages/attributes": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-attributes"
+    },
+    "packages/core": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-core"
+    },
+    "packages/intl": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-intl"
+    },
+    "packages/media": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-media"
+    },
+    "packages/modules": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-modules"
+    },
+    "packages/notifications": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-notifications"
+    },
+    "packages/operations": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-operations"
+    },
+    "packages/panels": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-panels"
+    },
+    "packages/recurrence": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-recurrence"
+    },
+    "packages/search": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search"
+    },
+    "packages/search-intl": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-intl"
+    },
+    "packages/search-meilisearch": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-meilisearch"
+    },
+    "packages/tasks": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks"
+    },
+    "packages/tasks-workflow": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks-workflow"
+    },
+    "packages/tenancy": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tenancy"
+    },
+    "packages/transfer": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-transfer"
+    },
+    "packages/wakeup": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-wakeup"
+    },
+    "packages/workflow": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-workflow"
+    }
+  },
+  "excluded": [
+    {
+      "path": "packages/crm",
+      "reason": "flex-product-consumer"
+    },
+    {
+      "path": "packages/import-export",
+      "reason": "tombstone"
+    }
+  ]
+}

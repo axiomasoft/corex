@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-27
-inputs_sha256: da1d3efd00977e3424d90ff12e046bd5d807a53c96acc471a7405580f11de227
+inputs_sha256: 99c115956e14bfce54712d2783d93f380791ae5e26c62fd3136492c2b7e7b0f8
 generated_by: task plan-views status
 -->
 
@@ -31,7 +31,7 @@ generated_by: task plan-views status
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
 | P15 | Раскатка словаря имён по реестру переименований | 14/14 | 🟢 Done |
 | P16 | Раскатка профилей структуры по остальным пакетам | 13/13 | 🟢 Done |
-| P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
+| P17 | Доказательства универсальности и Definition of Done 1.0 | 1/12 | 🟡 In progress |
 | P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
@@ -176,7 +176,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P17.1 | Frozen release cohort and deterministic candidate repository | ⬜ Not started | — |
+| P17.1 | Frozen release cohort and deterministic candidate repository | 🟢 Done | 2026-09-27 |
 | P17.2 | External extension fixture matrix | ⬜ Not started | — |
 | P17.3 | External REST and MCP consumers | ⬜ Not started | — |
 | P17.4 | External bulk and webhook consumers | ⬜ Not started | — |
@@ -737,6 +737,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-27 | plan-exec/direct/medium | plan-exec · closed-green · P16.7 GREEN from findings/P16-move-receipts.md (E16c). The move session left no journal row; P16.13 records it. |
 | 2026-09-27 | plan-exec/direct/medium | plan-exec · in-progress · P16.8 journal row opened from existing receipt findings/P16-move-receipts.md. |
 | 2026-09-27 | plan-exec/direct/medium | plan-exec · closed-green · P16.8 GREEN from findings/P16-move-receipts.md (E16c). The move session left no journal row; P16.13 records it. |
+| 2026-09-27 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
+| 2026-09-27 | executor/gpt-5.6-sol/high | plan-exec · closed-green · P17.1 GREEN: 19-package post-P15 cohort frozen from committed source; deterministic dist-only repository rebuilt twice; strict Composer validation and exact 1.0.0 lookup pass; negative matrix pass; no external writes. |
 
 ## Owner Gates
 
