@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-27
-inputs_sha256: 67b2b79628c90bc6474bb52cc7b5e877546956bce8b20e735e60cde54859f963
+inputs_sha256: 9a6743ab50e99d9ae733ebfdf4730c0202dcc954288ec3f4d1bd4154d5989b6e
 generated_by: task plan-views status
 -->
 
@@ -41,6 +41,13 @@ generated_by: task plan-views status
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-27 | claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-27 | codex/gpt-6-astra/high | plan-audit · in-progress · Independent P00 design audit; repository evidence and bounded static reproductions. |
+| 2026-09-27 | codex/gpt-6-astra/high | plan-audit · audit-attention · 4 Major + 1 Minor. See findings/design-audit-2026-09-27.md; P00 design correction required. Product unchanged. |
+| 2026-09-27 | codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-27 | codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-27 | codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-27 | cursor/grok-4.7/high | plan-audit · in-progress · Independent delta review A1-A5, cursor/grok-4.7/high; provider session evidence in findings/design-remediation-independent-review.json. |
+| 2026-09-27 | cursor/grok-4.7/high | plan-audit · audit-green · A1-A5 resolved. Independent cursor/grok-4.7/high GREEN on exact finish fingerprint; findings/design-remediation-independent-review.json. |
 
 ## Owner Gates
 

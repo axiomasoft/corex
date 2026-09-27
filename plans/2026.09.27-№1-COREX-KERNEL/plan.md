@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (Claude Code, 2026-09-27) |
+| Authoring Model | claude-opus-5-5/high (initial); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -138,6 +138,8 @@ operations, независимые модули, детерминированн�
 |:--|:--|:--|
 | 2026-09-27 | План создан: верификация аудита, ресерч, D01–D23, целевая архитектура, P00 детализирована, P01–P09 skeleton (карта фаз — `roadmap.md`) | claude-opus-5-5/high |
 | 2026-09-27 | `task:plan-design P00`: D24 (skeleton P01–P09 → `backlog/`, цикл finish + design audit на фазу); досье P00 дополнено (`research/P00-design-rag.md`, `examples.md`, no-search record); Code Guidance P00.2/P00.3 | claude-opus-5-5/high |
+
+| 2026-09-27 | P00 audit remediation A1–A5: graph prerequisites before split, deterministic map/doctrine checks, fresh supersede baseline, portable chatom read; B00-A same-session Codex + Cursor reviewer, semantic route unchanged; scope remains design only | codex/gpt-6-astra/high |
 
 ## 5. Decision Log
 

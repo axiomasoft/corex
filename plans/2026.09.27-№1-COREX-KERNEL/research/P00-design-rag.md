@@ -13,3 +13,9 @@
 | E5 | Vendor `corex` на Packagist занят сторонним владельцем; `axiomasoft` пуст | composer-имена `axiomasoft/corex[-<name>]` (D02) | RAG:✅ `artifacts/research-rag/http-01-registry-probes.md` |
 
 Ограничение: доступность конкретных имён `axiomasoft/corex-*` на Packagist не проверялась — vendor пуст (E5), публикация — owner-gate P09.
+
+## Audit remediation 2026-09-27
+
+A1–A5 исправлены по коду checkout `b624936` и локальным статическим примерам (RAG:—).
+Новых внешних предпосылок не добавлено; исходные captures переиспользуются.
+Проверки — `findings/design-remediation-checks.json`; независимый delta-review следует после finish.

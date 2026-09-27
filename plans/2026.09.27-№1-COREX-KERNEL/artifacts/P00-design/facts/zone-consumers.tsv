@@ -14,9 +14,9 @@ Money	crm,modules	2	2
 Root	access,attributes,crm,intl,notifications,operations,search-intl,tasks,tasks-workflow,tenancy,wakeup	11	12
 SavedViews	panels	1	7
 Settings	modules,notifications	2	13
-Storage	media,tenancy,transfer	3	36
+Storage	media,tenancy,transfer	3	37
 Support	access,attributes,crm,media,modules,operations,tenancy	7	71
 Support\Data	attributes,intl,operations,search,search-intl,search-meilisearch,tasks-workflow,tenancy,transfer	9	212
 Support\Schema	access,crm	2	2
 Support\Time	attributes,notifications,operations,wakeup	4	26
-Tenancy	access,attributes,crm,intl,media,modules,notifications,operations,panels,search,search-intl,search-meilisearch,tasks,tasks-workflow,tenancy,transfer,wakeup,workflow	18	412
+Tenancy	access,attributes,crm,intl,media,modules,notifications,operations,panels,search,search-intl,search-meilisearch,tasks,tasks-workflow,tenancy,transfer,wakeup,workflow	18	414

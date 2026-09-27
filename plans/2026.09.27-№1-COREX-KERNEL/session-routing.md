@@ -11,7 +11,7 @@ runbooks (по образцу chatom PLAN2 `session-routing.md`).
 |:--|:--|:--|:--|
 | claude-code | `opus` (claude-opus-5-5) | автор плана: дизайн фаз, frontier-решения P00, ведение процесса (D21) | `high` |
 | codex | `gpt-6-sol` | стандартная implementation и owning auto-fix | из sheet |
-| codex | `gpt-6-astra` | frontier review/audit | `high`/`xhigh` |
+| codex | `gpt-6-astra` | frontier execution P00 и review/audit | `high`/`xhigh` |
 | cursor | `grok-4.6` | bounded rename/tools/snapshots, ревью механических items | `high` |
 | cursor | `grok-4.7` | frontier execution и API/SPI/transactions/security ревью | `high` |
 
@@ -45,3 +45,10 @@ Claude Code: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-CO
 
 Любой агент завершает команду переписанным `handoff.md` с одним semantic Next и launch-block из строки execution-sheet.
 Следующий агент стартует только по этому Next (`git pull --ff-only` из корня клона).
+
+## Текущая сессия — 2026-09-27
+
+По запросу владельца завершить readiness в этой сессии B00-A выполняется Codex gpt-6-astra/high,
+независимый reviewer — Cursor grok-4.7/high. Семантические frontier/high и full сохранены.
+Claude CLI недоступен из-за истёкшего OAuth; это не снижает класс/effort и не требует нового root.
+Исполнение остаётся отдельным шагом после GREEN дизайна.

@@ -29,7 +29,8 @@ corex/operations	packages/operations/src/Webhooks/Contracts/	CoreX\Api\Contracts
 corex/core	packages/core/src/Tenancy/	CoreX\	axiomasoft/corex	CoreX\Context\	P02	F2 освобождает CoreX\Tenancy
 corex/core	packages/core/src/Money/	CoreX\	axiomasoft/corex-intl	CoreX\Intl\Money\	P02	F3
 corex/core	packages/core/src/SavedViews/	CoreX\	axiomasoft/corex-panels	CoreX\Panels\SavedViews\	P02	F4
-corex/core	packages/core/src/	CoreX\	axiomasoft/corex	CoreX\	P02	остаток ядра (longest-match)
+corex/core	packages/core/src/CoreServiceProvider.php	CoreX\	axiomasoft/corex	CoreX\	P02	точный root symbol
+corex/core	packages/core/src/Settings/	CoreX\	axiomasoft/corex	CoreX\Settings\	P02	явный модуль
 corex/core	packages/core/tests/Support/	CoreX\Testing\	axiomasoft/corex	CoreX\Testing\	P02	reserved segment
 corex/modules	packages/modules/src/	CoreX\Modules\	axiomasoft/corex	CoreX\Modules\	P02	F1 merge
 corex/attributes	packages/attributes/src/	CoreX\Attributes\	axiomasoft/corex-custom-fields	CoreX\CustomFields\	P02	F7
@@ -37,9 +38,15 @@ corex/access	packages/access/src/	CoreX\Auth\	axiomasoft/corex-access	CoreX\Acce
 corex/search-meilisearch	packages/search-meilisearch/src/	CoreX\Search\Meilisearch\	axiomasoft/corex-search-meilisearch	CoreX\SearchMeilisearch\	P02	F11
 ```
 
-Longest-match: `packages/core/src/Tenancy/Contracts/TenancyManager.php` → строка `packages/core/src/Tenancy/`; `packages/core/src/Settings/…`
-→ `packages/core/src/` (остаток ядра). Строка `packages/operations/src/` без подкаталога не нужна, если все подкаталоги и
-корневые файлы покрыты; корневые файлы `src/*.php` (`ApiServiceProvider.php`) покрываются строкой `packages/operations/src/`.
+Longest-match: Tenancy/Contracts/TenancyManager.php → Tenancy/; Settings/* → Settings/.
+Root fallback `packages/<pkg>/src/` запрещён (`root-fallback`). Корневые файлы перечисляются точно:
+
+```tsv
+corex/operations	packages/operations/src/ApiServiceProvider.php	CoreX\Api\	axiomasoft/corex-operations	CoreX\Operations\	P02	точный файл; webhooks wiring переносится по dependency-edges
+```
+
+Каталог `Tools/Contracts/` остаётся более специфичным, чем `Tools/`. Удаление Tools/ оставляет
+ToolServiceProvider.php без покрытия, даже если точная строка ApiServiceProvider.php присутствует.
 
 Файловая строка (плоский `packages/core/src/Contracts/`, зона — по `CONTRACT_ZONE` в `zone-consumers.py`):
 
@@ -52,8 +59,11 @@ corex/core	packages/core/src/Contracts/SavedViewRepository.php	CoreX\	axiomasoft
 | Вход | Вывод | exit |
 |:--|:--|:--|
 | Полные карты | `maps OK: <N> prefixes, <M> packages` | 0 |
-| Удалена строка `packages/operations/src/Tools/` | `uncovered: packages/operations/src/Tools/ToolServiceProvider.php (…)` (все файлы каталога) | 1 |
+| Удалена строка `packages/operations/src/Tools/` | `uncovered: packages/operations/src/Tools/ToolServiceProvider.php (…)` (файлы без оставшейся более специфичной строки) | 1 |
 | Строка `…src/Webhooks/` c `new_prefix=CoreX\Tools\Webhooks\` | `root-collision: CoreX\Tools -> axiomasoft/corex-tools, axiomasoft/corex-webhooks` | 1 |
+| Добавлена строка `packages/operations/src/` | `root-fallback` | 1 |
+| Возвращено engine → webhooks как keep при webhooks → engine | `dependency-cycle` | 1 |
+| Все 58 статей + naming.md §1 + naming.md NEW-1 + api-policy.md §1 | `doctrine OK: 58 articles` | 0 |
 | Строка с `old_path=packages/panels/src/Legacy/` (каталога нет) | `dead-row: packages/panels/src/Legacy/` | 1 |
 | Ядро владеет `CoreX\Ledger` вне §Kernel modules | `foreign-root: CoreX\Ledger (axiomasoft/corex) not in kernel modules` | 1 |
 | `--doctrine`, `PKG-003` отсутствует в delta | `doctrine-missing: PKG-003` | 1 |
@@ -73,6 +83,16 @@ corex/core	packages/core/src/Contracts/SavedViewRepository.php	CoreX\	axiomasoft
 | Module | Назначение | Источник |
 |:--|:--|:--|
 | `CoreX\Context` | Контекст исполнения (account, workspace, актор) и SPI его жизненного цикла. | `core/src/Tenancy` (F2) |
+
+## Root symbols
+| FQCN | Владелец |
+|:--|:--|
+| `CoreX\CoreServiceProvider` | `axiomasoft/corex` |
+
+## Reserved segments
+| Namespace | Владелец | Назначение |
+|:--|:--|:--|
+| `CoreX\Testing` | `axiomasoft/corex` | dev-only; PSR-4 tests/Support, classmap fixtures указываются файловыми строками |
 
 ## Identifiers per package
 | Пакет | config | publish-tags | env | artisan |
@@ -107,11 +127,29 @@ corex/core	packages/core/src/Contracts/SavedViewRepository.php	CoreX\	axiomasoft
 PLAN2 `plan.md` Meta:
 ```diff
 -| Paused By | — |
-+| Paused By | PLAN3 `2026.09.27-№1-COREX-KERNEL` (D23, 2026-09-27) |
++| Paused By | PLAN3 `2026.09.27-№1-COREX-KERNEL` (PLAN3.D23, 2026-09-27) |
 ```
 
 PLAN2 `handoff.md` (Done/Remaining/Sources сохраняются):
 ```diff
 -**Next:** waiting: определить producer scope для исправления DOD-24/25; P17.12 не готов.
-+**Next:** waiting: PLAN2 superseded by PLAN3 (`plans/2026.09.27-№1-COREX-KERNEL`, PLAN3.D23); закрытие — решение владельца после релиза PLAN3.
++**Next:** waiting: PLAN2 superseded by PLAN3 (`plans/2026.09.27-№1-COREX-KERNEL`, PLAN3.D23); condition=решение владельца о возобновлении или архивировании после релиза PLAN3; target=manual: согласовать состояние PLAN2 по этому решению.
 ```
+
+## 7 Проверки P00.2 / P00.3
+
+P00.2: архитектура без запрещённых маркеров → `architecture OK`, exit 0; добавление `≈` → nonzero;
+нечитаемый файл → nonzero (не принимать отсутствие файла за отсутствие маркера).
+
+P00.3: baseline снимается непосредственно перед правками, содержит текущие bytes трёх файлов
+и hashes защищённых carriers PLAN2. `check-supersede.py` реализован в design support.
+
+| Пример | Ожидание |
+|:--|:--|
+| Три правки выше, остальной текст и protected carriers сохранены | `supersede OK: 3 files, protected carriers unchanged`, exit 0 |
+| Вместе с Next удалён Done или изменён PLAN2 journal | `supersede ERROR`, exit 1 |
+| Нет PLAN3 в Paused By либо Next без condition/target | `supersede ERROR`, exit 1 |
+| D128 уже заменён на D138 до baseline | допустимо, прежний crash не требуется |
+
+Повторный snapshot по существующему пути запрещён; при возобновлении использовать сохранённый baseline.
+Чужое параллельное изменение protected carriers — сверить отдельно, не откатывать ради проверки.

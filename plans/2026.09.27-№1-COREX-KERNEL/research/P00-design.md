@@ -1,7 +1,7 @@
 # P00 — Досье дизайна (frontier)
 
 Статус: design-time факты и рекомендации для P00.1/P00.2. Frontier-формат (варианты, критерии, рекомендация, acceptance);
-runbook не требуется. Факты — `RAG:—`, воспроизводятся командами из корня репозитория (`ea0b024`).
+runbook не требуется. Факты — `RAG:—`, воспроизводятся командами из корня репозитория (zone-consumers: `b624936`; import-matrix: исторический снимок `ea0b024`, не актуальный граф).
 
 ## 1 Факты
 
@@ -12,7 +12,7 @@ runbook не требуется. Факты — `RAG:—`, воспроизво�
 | Потребители зон ядра (вне `packages/core`) | см. файл | `python3 artifacts/P00-design/scripts/zone-consumers.py` → `facts/zone-consumers.tsv` |
 | Потребители `corex/modules` | 12 пакетов объявляют require: access, attributes, crm, intl, media, notifications, operations, panels, tasks, tasks-workflow, wakeup, workflow; не требуют: recurrence, search, search-intl, search-meilisearch, tenancy, transfer | `grep -l '"corex/modules"' packages/*/composer.json` |
 | Зависимости `corex/modules` | только `corex/core` + illuminate | `packages/modules/composer.json` |
-| Tenancy-зона ядра | 18 пакетов-потребителей, 412 импортов: `AccountRef`, `WorkspaceRef`, `TenantContext`, `ImpersonationGuard/State`, `Null*`, `ProvisionParams`, `SingleAccountResolver`, `DatabaseConnectionConfig`, `Contracts\{AccountConnectionResolver, ImpersonationService, TenancyManager, TenantContextResolver, TenantContextRestorer, TenantDatabaseLifecycle, TenantDatabaseProvisioner}` | `ls packages/core/src/Tenancy{,/Contracts}` |
+| Tenancy-зона ядра | 18 пакетов-потребителей, 414 импортов: `AccountRef`, `WorkspaceRef`, `TenantContext`, `ImpersonationGuard/State`, `Null*`, `ProvisionParams`, `SingleAccountResolver`, `DatabaseConnectionConfig`, `Contracts\{AccountConnectionResolver, ImpersonationService, TenancyManager, TenantContextResolver, TenantContextRestorer, TenantDatabaseLifecycle, TenantDatabaseProvisioner}` | `ls packages/core/src/Tenancy{,/Contracts}` |
 | SavedViews | 1 потребитель (panels, 7 импортов) | zone-consumers |
 | Money | 2 потребителя (crm, modules — по 1 импорту `MoneyCast`); ядро требует `brick/money` только ради него; `corex/intl` уже требует `brick/money` и владеет Currency/Money-форматированием | zone-consumers, `packages/core/composer.json`, `packages/intl/composer.json` |
 | Departments | 0 внешних потребителей в `src`, но вплетён в ядро: `Settings` (scope отдела), `Features` (overrides), `Enums\SettingScope`, `Contracts\SettingsScope`; `access/ScopePredicate` | `grep -rln Department packages/*/src` |
@@ -31,7 +31,7 @@ runbook не требуется. Факты — `RAG:—`, воспроизво�
 | F6 | Features, Settings, Audit, Storage, Messaging, Observability, Data, Time, Errors, Config | A: ядро · B: пакеты | платформенные сервисы, нужные каждому приложению; механизмы надёжности | **A** — модули ядра |
 | F7 | `corex/attributes` (EAV) | `custom-fields` · `fields` · оставить | освободить `CoreX\Attributes` для `#[Api]/#[Spi]`; имя = назначение | **`corex-custom-fields`**, `CoreX\CustomFields` |
 | F8 | `corex/wakeup` | `timers` · `wakeup` · `wakeups` | назначение: durable tenant-local wakeup requests | **оставить `wakeup`** (`CoreX\Wakeup`): термин точный, «timers» шире смысла |
-| F9 | Split operations | 2/3/4 пакета | независимый потребитель | 3: `corex-operations` (`CoreX\Operations`: Definition, Invocation, Idempotency, Versioning, Validation, Authorization, Pagination, Errors, Http, OpenApi, Bulk, Cost, Laravel), `corex-tools` (`CoreX\Tools`: Tools/*), `corex-webhooks` (`CoreX\Webhooks`: Webhooks/*); проверить при исполнении связность `Tools`/`Webhooks` → engine (импорты) и записать в `package-map.tsv` направление рёбер |
+| F9 | Split operations | 2/3/4 пакета | независимый потребитель | 3: `corex-operations` (`CoreX\Operations`: Definition, Invocation, Idempotency, Versioning, Validation, Authorization, Pagination, Errors, Http, OpenApi, Bulk, Cost, Laravel), `corex-tools` (`CoreX\Tools`: Tools/*), `corex-webhooks` (`CoreX\Webhooks`: Webhooks/*); проверить оба направления и записать граф + решения разрыва циклов в `dependency-edges.tsv` (§5.7); snapshot/provider wiring — явный шов, не слепой перенос каталогов |
 | F10 | access | `CoreX\Access` | имя пакета = namespace | `corex-access`, `CoreX\Access`; AzGuard-часть — P07 (D14) |
 | F11 | search-meilisearch | `CoreX\SearchMeilisearch` | один корень на пакет (D04) | да |
 | F12 | Атрибуты API | `CoreX\Attributes\{Api,Spi}` | идентично chatom `Chatom\Attributes` | да (после F7) |
@@ -45,7 +45,7 @@ runbook не требуется. Факты — `RAG:—`, воспроизво�
 
 ## 4 Acceptance P00.1
 
-`check-maps.py` exit 0; каждая строка §2 имеет вердикт в glossary с одной фразой обоснования; D24+ записаны для F1–F12
+`check-maps.py` exit 0; каждая строка §2 имеет вердикт в glossary с одной фразой обоснования; D25+ записаны для F1–F12
 (accepted, author-choice), либо open-question с owner-gate.
 
 ## 5 Схемы карт и алгоритм `check-maps.py` (P00.1, P00.2)
@@ -67,25 +67,71 @@ runbook не требуется. Факты — `RAG:—`, воспроизво�
 (плоский `packages/core/src/Contracts/`, зоны — `CONTRACT_ZONE` в `zone-consumers.py`), `old_prefix` — PSR-4 префикс, которому каталог принадлежит сейчас,
 `new_prefix` — FQCN-префикс каталога после P02/P03 (namespace = путь, D04).
 
-Алгоритм `check-maps.py` (stdlib, запуск из корня репозитория; exit 1 с перечнем нарушений, иначе `maps OK: <N> prefixes, <M> packages`):
-1. Источник истины — `autoload.psr-4` и `autoload-dev.psr-4` всех `packages/*/composer.json` (корневой `composer.json`
-   дублирует их — не источник). Строка из `namespace-map.tsv` с `old_prefix`, которого нет в psr-4 пакета `old_package`, — ошибка.
-2. Каждый `*.php` под `packages/*/{src,tests,database}` сопоставляется строке с **самым длинным** `old_path`, являющимся
-   префиксом пути файла. Файл без строки — ошибка `uncovered`; строка без файлов — ошибка `dead-row`; две строки с
-   одинаковым `old_path` — ошибка `duplicate`.
-3. Корень владения: `seg(new_prefix)` = первые два сегмента (`CoreX\Context`). Для каждого `seg` множество `new_package`
-   — ровно один элемент (иначе `root-collision`). Ядро (`axiomasoft/corex`) владеет только сегментами из §Kernel modules
-   glossary; пакет — только своим корнем `CoreX\<Pascal>` (иначе `foreign-root`).
-4. Каждый `new_package` из namespace-map есть в `package-map.tsv.new_name`; каждый `new_name` (кроме `tombstone-remove`)
-   владеет ≥1 строкой namespace-map.
-5. `artifacts/P00/zone-consumers.tsv` — колонки 1–4 совпадают с выводом `zone-consumers.py` (вызвать как модуль или
-   subprocess), колонка 5 `verdict ∈ {keep, move→<new_name>}`; каждая зона имеет вердикт.
-6. `--doctrine`: множество ID `^### ([A-Z]+-[0-9]+)` из `docs/architecture/constitution.md` (сейчас 58) равно множеству
-   ID в колонке 2 таблицы `artifacts/P00/doctrine-delta.md`, каждый ID ровно один раз; `action ∈ {keep, rewrite, remove, add}`;
-   для `rewrite|add` колонки `phase` (`P01`…`P09`) и `gate` непусты. Строки `add` без ID constitution используют `NEW-<n>`.
+Алгоритм `check-maps.py` (stdlib, из корня репозитория; exit 1 с кодами нарушений, иначе `maps OK: <N> prefixes, <M> packages`):
+1. Источник текущих namespace — PHP-декларации и `autoload{,-dev}.psr-4` пакетов. Для именованных
+   символов проверить соответствие `old_prefix` **и пути** реальной autoload-записи, а не только наличие
+   префикса в JSON. Для classmap-фикстур `old_prefix` — фактический namespace; для файлов без namespace
+   (Pest/anonymous migrations) оба prefix = `—`, ownership определяется путём, не выдуманным FQCN.
+2. Match — точный файл либо каталог с `/` на конце; выбирается самый длинный подходящий `old_path`.
+   Каждый PHP-файл `packages/*/{src,tests,database}` покрыт; ошибки: `uncovered`, `dead-row`, `duplicate`.
+   **Root fallback запрещён:** строки `packages/<pkg>/src/` не рекурсивны — вместо них перечислить
+   корневые файлы точно и каждый непосредственный подкаталог отдельно. Попытка добавить такую строку
+   даёт `root-fallback`. Это исключает молчаливый захват потерянного Tools/SavedViews чужим владельцем.
+3. Для каталога конечный namespace = `new_prefix` + относительный каталог файла; для точного файла
+   `new_prefix` — целевой namespace самого файла. Класс сохраняет basename. Проверять **конечные FQCN**:
+   уникальность (без учёта регистра, `fqcn-collision`), один пакет на первые два сегмента (`root-collision`),
+   принадлежность корню из package-map (`foreign-root`). Корень product берётся из карты (`Flex\Crm`),
+   не навязывать ему `CoreX`. Для ядра разрешены только модули glossary и отдельный закрытый список
+   `## Root symbols` (например `CoreX\CoreServiceProvider`); wildcard `CoreX\` не разрешает чужие сегменты.
+   `CoreX\Testing` должен быть объявлен в `## Reserved segments` с владельцем и назначением dev-only.
+   Namespace-less файлы проверяются на покрытие и уникальный целевой путь; их не включать в FQCN-граф.
+   Целевой путь вычислять из целевого package-map.new_dir, дерева src/tests/database исходного файла
+   и namespace относительно корня пакета; нестандартные dev roots явно объявить в glossary.
+4. Каждый `new_package` namespace-map присутствует в package-map; каждому исходному каталогу соответствует
+   запись (split operations — три записи, merge modules — общий target). Tombstone не имеет PHP-строк;
+   новые metapackage/integration без исходного кода перечисляются отдельно в glossary, не как фиктивные переносы.
+5. `zone-consumers.tsv`: колонки 1–4 равны свежему выводу `zone-consumers.py`; колонка 5 — `keep` либо
+   `move→<new_name>`. Каждая измеренная зона имеет вердикт; нулевые внешние потребители рассматриваются
+   по карте ядра, отсутствие зоны в use-scan не доказывает отсутствие внутренних зависимостей.
+6. `--doctrine`: ключ строки **(документ, ID)**. Только строки `document=constitution.md` с ID из
+   текущего набора `^### ([A-Z]+-[0-9]+)` сравниваются с этим набором (сейчас 58), каждый ровно один раз;
+   неизвестный ID вида `AAA-NNN` в constitution — `doctrine-unknown`. Строки политик `§N` и новые правила
+   `NEW-<n>` проверяются отдельно: уникальность ключа, существующий документ (либо явно объявленный новый),
+   `action ∈ {keep,rewrite,remove,add}`; `NEW-*` требует `add`; rewrite/add требуют непустые правило,
+   phase (`P01`…`P09`) и gate. `§1` в двух разных политиках допустим. Для политики §N должен существовать
+   соответствующий раздел; непустой текст строки не заменяет проверку. Вывод `doctrine OK: <N> articles`.
+7. `--dependencies`: `artifacts/P00/dependency-edges.tsv` имеет колонки
+   `source_file source_symbol target_symbol current_owner target_owner disposition projected_source projected_target resolution owner_phase`.
+   `current_owner` — будущий пакет source_file, `target_owner` — будущий пакет target_symbol по картам;
+   это граф **целевой** топологии, включая edges, которые сегодня внутри одного пакета.
+   Статически извлечь use, FQCN и PHPDoc типов в src, разрешить объявления через карту символов;
+   отдельно перечислить строковую/DI/provider композицию для operations split, Money и SavedViews.
+   Неизвестный символ/неразобранный import в затронутом шве — `unresolved-edge`, а не пропуск.
+   Каждое обнаруженное ребро должно иметь ровно одну строку; пропуск/дубликат — ошибка.
+   disposition = keep/remove/invert/move; keep сохраняет оба endpoint в projected_source/target,
+   remove имеет оба projected endpoint `—`, invert/move содержат окончательные имена пакетов
+   (проверить их наличие в package-map). Граф строится только по этим колонкам; изменения требуют
+   конкретного resolution (файл, выбранный шов/владелец и проверка поведения), owner_phase=P02 и D#.
+   Проверить граф **после описанных resolutions**: без циклов (`dependency-cycle`), без ядро→пакет
+   (`kernel-dependency`) и без чужого Internal (`internal-edge`). Исполнение resolutions и зелёные
+   behavioral/package gates — предусловие механического split внутри P02, не отложенная работа P06.
+   Вывод `dependencies OK: acyclic, kernel-independent`; это доказательство полноты плана разреза,
+   а не утверждение о уже изменённом коде.
 
-Негативный контроль (обязателен, выполняется исполнителем, результат — в Completion Notes): временно удалить одну строку
-namespace-map → `uncovered`, exit 1; продублировать `seg` на второй пакет → `root-collision`, exit 1; вернуть → exit 0.
+**Обязательный шов F9:** `OpenApi/Internal/ContractSnapshotBuilder.php` использует `WebhookTopic`,
+`Webhooks/Laravel/WebhookRouteRegistrar.php` — `OperationRegistry`; `ApiServiceProvider.php` регистрирует
+`WebhookRegistrar` и `DeliverWebhooks`. P00.1 выбирает и фиксирует разрыв: engine экспортирует
+нейтральную точку внесения секций snapshot, webhooks владеет своей проекцией/регистрацией/командами;
+агрегация не импортирует типы webhooks. Конкретные имена этой внутренней точки и файловая карта —
+frontier-результат P00.1. `ApiOptions`/schema registrar и обратные edges Money/SavedViews проверяются
+тем же графом. P00.1 не реализует шов, но не закрывает карту без выбранного решения и владельца P02.
+
+Негативный контроль на временной копии карт (исходные Inputs не менять): удалить строку Tools/ при
+наличии точной строки ApiServiceProvider.php → `uncovered`; добавить src/ fallback → `root-fallback`;
+назначить один конечный сегмент двум пакетам → `root-collision`; вернуть обратное engine→webhooks
+в keep → `dependency-cycle`. Каждый sabotage даёт exit 1, неизменённая копия после возврата — exit 0.
+Для doctrine: смешанная таблица всех статей + policy §1 + NEW-1 проходит; удаление статьи и дубликат
+одного (документ, ID) дают соответственно `doctrine-missing` и `doctrine-duplicate`.
 
 ## 6 Failure playbook
 
@@ -102,4 +148,4 @@ namespace-map → `uncovered`, exit 1; продублировать `seg` на �
 - Факты, которые исполнитель ищет сам: вердикты по 21 зоне (`zone-consumers.tsv`) и 21 каталогу — вывод из §1/§2 по критериям,
   не поиск; строки namespace-map — перечисление psr-4 + подкаталогов `packages/core/src/*` (команда §5 п.2 проверяет полноту).
 - Решения, оставшиеся исполнителю: frontier-вердикты по F1–F12 в пределах рекомендаций §2 (отклонение → D# с обоснованием).
-- Доказательство: `check-maps.py` (exit 0 + негативный контроль), `check-maps.py --doctrine`, `zone-consumers.py --check`, ревью.
+- Доказательство: `check-maps.py` (exit 0 + негативный контроль), `check-maps.py --doctrine`, `check-maps.py --dependencies`, `zone-consumers.py --check`, ревью.

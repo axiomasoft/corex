@@ -6,3 +6,5 @@
   граница `@internal` в PHPStan, split/lockstep, vendor на Packagist) покрыты captures того же дня
   `artifacts/research-rag/{pplx-01,pplx-02,pplx-10,pplx-11,http-01}-*.md`. Остальные решения P00 — факты репозитория (`RAG:—`).
 - Синтез: `research/P00-design-rag.md`.
+
+- Remediation A1–A5: codex/gpt-6-astra/high; только repo-grounded contract corrections, новых внешних решений нет.

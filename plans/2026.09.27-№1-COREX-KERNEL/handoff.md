@@ -1,31 +1,28 @@
 # HANDOFF — 2026-09-27 — after P00
 
-**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
+| Batch | B00-A |
 | Model class | frontier |
 | Effort | high |
 | Capabilities | — |
-| Context | cold-start-root: whole-plan-independent-audit |
-| Суть | Независимый design audit (reviewer ≠ автор-opus; пул — `session-routing.md`) по fingerprint finish: P00 (3 items) + D24 + execution-sheet строка 1. После GREEN — строка 1 execution-sheet (B00-A). |
-
-**Provider-native command:**
+| Context | continue-root |
+| Суть | Исполнение готовой P00. |
 
 ```text
-task:plan-audit 2026.09.27-№1-COREX-KERNEL design
+$ task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3
 ```
 
-**Done:** аудит верифицирован (`findings/00-audit-verification.md`); ресерч — 11 perplexity + 1 http captures; D01–D24 приняты;
-целевая архитектура; `plan.md`; P00 детализирована и финализирована (досье `research/P00-design.md` §1–§7, `research/P00-design-rag.md`,
-`artifacts/P00-design/examples.md`, no-search record); P01–P09 — skeleton в `backlog/` (D24); design finish — whole-plan
-пересчёт групп: B00-A (P00.1→P00.2→P00.3, frontier/high, full) без изменений, fingerprint записан в `journal.jsonl`.
+**Done:** A1–A5 исправлены; finish и независимый delta audit GREEN (cursor/grok-4.7/high), fingerprint `e8524b9f64353b897decff9a8246fa85c39ae888a7a244fefe4369c3979b40c2`. Локальные проверки и dry bundle render зелёные. Дизайн готов к исполнению, items ещё не исполнялись.
 
-**Remaining:** design audit → исполнение P00 (B00-A) → дизайн P01 (`backlog/P01.md` → `phases/P01/`) → finish → audit → исполнение
-P01 … (D21, D24).
+**Remaining:** B00-A (P00.1 → P00.2 → P00.3), затем дизайн P01 по фактическим результатам P00 (D21/D24).
 
-**Open risks:** окружение PHP 8.4 (Q1) блокирует исполнение P01+; trust провайдеров (Q4); `plan-lint` PLAN2 падает
-`DecisionError` (существующий дефект, P00.3 не чинит).
+**Sources of truth:** `plan.md`, `roadmap.md` execution-sheet, `phases/P00/`, `journal.jsonl`, `findings/design-remediation.md`, `findings/design-remediation-independent-review.json`.
 
-**Sources of truth:** `plan.md`, `roadmap.md` execution-sheet, `decisions/` (D21, D24 — цикл фаз), `research/P00-design.md`.
+**Open risks:** Блокирующих замечаний к текущему дизайну P00 нет. Окружение PHP 8.4 для P01+ устанавливается/проверяется в P01; готовность runtime будущих фаз здесь не заявляется.
+
+**Workarounds/Deferred/Open questions:** Claude CLI OAuth истёк; B00-A назначен текущему Codex, независимый reviewer Cursor. Семантический класс/effort сохранён. PLAN2 и его чужие изменения сохранены.
+
+Continuity: `findings/design-ready-continuity.json`, lifecycle `scope-complete`, reason `authorized-scope-complete`. Поручение подготовить план выполнено; новый root не требуется.

@@ -39,4 +39,4 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 | Admission | Command | Route | Review | Executor (provider/model + effort) | Independent Reviewer + effort or self-check | Auto-fix executor + effort/limit | Checkpoint | Order / short risk reason |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|
-| 1 · B00-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3` | `frontier/high` | `full` | `claude-code/opus/high` | `codex/gpt-6-astra/high`, fresh | `claude-code/opus/high`, ≤2 rounds | — | P00.1 → P00.2 → P00.3; имена и карты ядра |
+| 1 · B00-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | — | P00.1 → P00.2 → P00.3; имена и карты ядра |

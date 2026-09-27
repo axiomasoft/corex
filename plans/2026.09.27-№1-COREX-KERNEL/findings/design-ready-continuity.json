@@ -1,0 +1,79 @@
+{
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "45fadeba6cae2896c0c81b56dfedcd8f2f14babc43f8a476dacc8f13bcc68dce",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "scope-complete",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "findings/design-remediation.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "evidence": [
+      "batch:45fadeba6cae2896c0c81b56dfedcd8f2f14babc43f8a476dacc8f13bcc68dce",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:findings/design-remediation.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "carrier": {
+    "kind": "run-items",
+    "command_id": "task:plan-run",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "arguments": [
+      "2026.09.27-№1-COREX-KERNEL",
+      "P00.1",
+      "P00.2",
+      "P00.3"
+    ],
+    "context_kind": "continue-root",
+    "item_ids": [
+      "P00.1",
+      "P00.2",
+      "P00.3"
+    ],
+    "cold_start_scope": [],
+    "continuity": {
+      "outcome": "continue-root",
+      "reason": "authorized-scope-complete",
+      "evidence": [
+        "batch:45fadeba6cae2896c0c81b56dfedcd8f2f14babc43f8a476dacc8f13bcc68dce",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "lifecycle:scope-complete",
+        "checkpoint:findings/design-remediation.md"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    }
+  },
+  "batch_evidence": {
+    "schema_version": "batch-receipt/v1",
+    "batch_id": "B00-A",
+    "membership": [
+      "P00.1",
+      "P00.2",
+      "P00.3"
+    ],
+    "invocation_digest": "f09f71b908cab98b45d8d96d1a55c83468b1146ecebf6d187a0c98db1d30c037",
+    "completed_prefix": [],
+    "routing_digest": "bba7a87b92487ba7922befe11d19ba521abdb0412d1d980c115563b8b9dbe182",
+    "spec_digest": "45fadeba6cae2896c0c81b56dfedcd8f2f14babc43f8a476dacc8f13bcc68dce",
+    "handoff_digest": "0d249819cff64419c587cd2ad731ad2685802c228c1d28e32d57eb4f50ba0dc4",
+    "stop_disposition": "continue"
+  },
+  "route_evidence": "Same Codex root as provider-attested findings/design-audit-2026-09-27-continuity.json; independent reviewer attested by provider_init; no product execution claimed."
+}
