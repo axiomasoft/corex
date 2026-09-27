@@ -40,7 +40,7 @@ it('uses allowlisted schema identifiers and bound text-query values', function (
         }
     };
     $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a',
         actorId: 'operator-a',
@@ -68,7 +68,7 @@ it('uses an opaque cursor bound to its scope and query', function (): void {
         }
     };
     $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
     );
@@ -109,11 +109,11 @@ it('keeps physically separate account databases and their cursors isolated', fun
     };
     $providerA = new PostgresSearchProvider(connection: DB::connection('search_a'), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
     $providerB = new PostgresSearchProvider(connection: DB::connection('search_b'), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scopeA = new DataScope(
+    $scopeA = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
     );
-    $scopeB = new DataScope(
+    $scopeB = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-b', slug: 'account-b', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-b', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
     );

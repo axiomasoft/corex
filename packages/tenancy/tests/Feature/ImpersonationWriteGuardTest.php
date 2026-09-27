@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Internal\AuditLog;
 use CoreX\Enums\ImpersonationRestrictedAction;
 use CoreX\Exceptions\ImpersonationRestrictedException;
-use CoreX\Models\AuditLog;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
 use CoreX\Tenancy\Http\Middleware\DenyImpersonatedWrites;

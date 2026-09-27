@@ -12,7 +12,7 @@
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
-| NEW-1 | `IntlModule` наследует `CorexModule`, `manifest()` вместо несуществующего `ModuleDescriptor` | `ModuleDiscovery` обрабатывает `corex/intl` без `InvalidManifestException` |
+| NEW-1 | `IntlModule` наследует `ModuleDefinition`, `manifest()` вместо несуществующего `ModuleDescriptor` | `ModuleDiscovery` обрабатывает `corex/intl` без `InvalidManifestException` |
 | A2b | Удалён `use CoreX\Tenancy\StanclTenancyManager` из контракта `TenancyManager` в ядре | `rg StanclTenancyManager packages/core/src/Tenancy/Contracts/` — пусто |
 | A3 | В `require` добавлены `corex/modules` (intl), `corex/workflow` (tasks-workflow); wakeup — `suggest` с guarded binding | `composer.json` пакетов; allowlist P12.3 |
 

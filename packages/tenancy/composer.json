@@ -36,25 +36,19 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Tenancy\\Events\\Identity\\": [
-                "src/Events/Identity/",
-                "src/Membership/Events/"
-            ],
+            "CoreX\\Tenancy\\Events\\Identity\\": "src/Membership/Events/",
             "CoreX\\Tenancy\\Events\\": [
-                "src/Events/",
                 "src/Account/Events/",
                 "src/Identity/Events/",
                 "src/DomainTrust/Events/",
                 "src/Impersonation/Events/"
             ],
             "CoreX\\Tenancy\\Jobs\\": [
-                "src/Jobs/",
                 "src/Membership/Jobs/",
                 "src/Provisioning/Jobs/",
                 "src/Identity/Jobs/"
             ],
             "CoreX\\Tenancy\\Models\\": [
-                "src/Models/",
                 "src/Account/Models/",
                 "src/Provisioning/Models/",
                 "src/Identity/Models/",
@@ -65,7 +59,6 @@
             "CoreX\\Tenancy\\Bootstrappers\\": "src/Laravel/Bootstrappers/",
             "CoreX\\Tenancy\\Commands\\": "src/Laravel/Commands/",
             "CoreX\\Tenancy\\Exceptions\\": [
-                "src/Exceptions/",
                 "src/Runtime/Exceptions/",
                 "src/Authentication/Exceptions/"
             ],
@@ -128,6 +121,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "process-timeout": 900,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }

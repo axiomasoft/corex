@@ -8,8 +8,8 @@ use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Transfer\Contracts\ImportTarget;
 use CoreX\Transfer\Contracts\RecordMapper;
+use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\ConflictRule;
@@ -24,8 +24,8 @@ use CoreX\Transfer\Data\StepToken;
 use CoreX\Transfer\Data\TargetResult;
 use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Data\TransferRef;
-use CoreX\Transfer\Internal\Transfer\DatabaseTransferRunner;
 use CoreX\Transfer\Internal\Transfer\ExecutionGuard;
+use CoreX\Transfer\Internal\Transfer\SqlTransferExecutor;
 use CoreX\Transfer\Internal\Transfer\TransferLimitReached;
 use CoreX\Transfer\Internal\Transfer\TransferUnavailable;
 use CoreX\Transfer\Tests\PgTestCase;
@@ -152,7 +152,7 @@ function limitToken(string $hash): StepToken
     return new StepToken('0', '1', $hash, $hash, $hash, $hash);
 }
 
-function limitRunner(SourceManifest $manifest, object $calls, int $rows, TransferLimits $limits, ?ExecutionGuard $guard = null, ?TransferLimitReached $raise = null): DatabaseTransferRunner
+function limitRunner(SourceManifest $manifest, object $calls, int $rows, TransferLimits $limits, ?ExecutionGuard $guard = null, ?TransferLimitReached $raise = null): SqlTransferExecutor
 {
     $source = new class($manifest, $rows) implements TransferSource
     {
@@ -184,7 +184,7 @@ function limitRunner(SourceManifest $manifest, object $calls, int $rows, Transfe
             return new MappingResult('mapped', $this->record, null);
         }
     };
-    $target = new class($calls, $raise) implements ImportTarget
+    $target = new class($calls, $raise) implements TransferSink
     {
         public function __construct(private object $calls, private ?TransferLimitReached $raise) {}
 
@@ -212,7 +212,7 @@ function limitRunner(SourceManifest $manifest, object $calls, int $rows, Transfe
         }
     };
 
-    return new DatabaseTransferRunner(
+    return new SqlTransferExecutor(
         DB::connection(),
         $source,
         $mapper,

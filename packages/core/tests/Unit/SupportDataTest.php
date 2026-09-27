@@ -9,10 +9,11 @@ use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
+use CoreX\Tenancy\WorkspaceRef;
 
 function dataScope(): DataScope
 {
-    return new DataScope(
+    return DataScope::fromTenantContext(
         context: new TenantContext(
             account: new AccountRef(
                 id: 'account-1',
@@ -49,6 +50,99 @@ it('carries only trusted data-boundary context', function (): void {
         ->and($authorizer->authorize(scope: $scope, entity: 'contact', subjectId: 'record-1', fields: ['name'], action: 'read')->allowed)->toBeFalse();
 });
 
+it('derives durable scalars from tenant context', function (): void {
+    $boxed = dataScope();
+
+    expect($boxed->accountId)->toBe('account-1')
+        ->and($boxed->workspaceId)->toBeNull()
+        ->and($boxed->boxed)->toBeTrue()
+        ->and($boxed->version)->toBe(DataScope::VERSION);
+
+    $account = new AccountRef(
+        id: 'account-2',
+        slug: 'account-2',
+        status: 'active',
+        features: [],
+        limits: [],
+    );
+    $workspace = new WorkspaceRef(
+        id: 'workspace-1',
+        slug: 'main',
+        type: 'team',
+        path: '/main',
+        parentId: null,
+    );
+    $withWorkspace = DataScope::fromTenantContext(
+        context: new TenantContext(account: $account, workspace: $workspace, boxed: false),
+        connectionIdentity: 'tenant:account-2',
+        actorId: 'user-2',
+        restoreEpoch: str_repeat('b', 64),
+    );
+
+    expect($withWorkspace->accountId)->toBe('account-2')
+        ->and($withWorkspace->workspaceId)->toBe('workspace-1')
+        ->and($withWorkspace->boxed)->toBeFalse()
+        ->and($withWorkspace->version)->toBe(DataScope::VERSION);
+});
+
+it('builds the same scope via fromTenantContext as via scalar constructor', function (): void {
+    $context = new TenantContext(
+        account: new AccountRef(
+            id: 'account-1',
+            slug: 'account-1',
+            status: 'active',
+            features: [],
+            limits: [],
+        ),
+        boxed: true,
+    );
+    $restoreEpoch = str_repeat('c', 64);
+
+    $fromScalars = new DataScope(
+        accountId: 'account-1',
+        workspaceId: null,
+        connectionIdentity: 'boxed:account-1',
+        actorId: 'user-1',
+        restoreEpoch: $restoreEpoch,
+        boxed: true,
+    );
+    $fromNamed = DataScope::fromTenantContext(
+        context: $context,
+        connectionIdentity: 'boxed:account-1',
+        actorId: 'user-1',
+        restoreEpoch: $restoreEpoch,
+    );
+
+    expect($fromNamed->accountId)->toBe($fromScalars->accountId)
+        ->and($fromNamed->workspaceId)->toBe($fromScalars->workspaceId)
+        ->and($fromNamed->boxed)->toBe($fromScalars->boxed)
+        ->and($fromNamed->version)->toBe($fromScalars->version)
+        ->and($fromNamed->connectionIdentity)->toBe($fromScalars->connectionIdentity)
+        ->and($fromNamed->actorId)->toBe($fromScalars->actorId)
+        ->and($fromNamed->restoreEpoch)->toBe($fromScalars->restoreEpoch);
+});
+
+it('rejects empty account identity in the scalar constructor', function (): void {
+    expect(fn (): DataScope => new DataScope(
+        accountId: '',
+        workspaceId: null,
+        connectionIdentity: 'boxed:empty',
+        actorId: 'user-1',
+        restoreEpoch: str_repeat('d', 64),
+    ))->toThrow(InvalidArgumentException::class, 'Invalid account identity.');
+});
+
+it('rejects unsupported data scope version', function (): void {
+    expect(fn (): DataScope => new DataScope(
+        accountId: 'account-1',
+        workspaceId: null,
+        connectionIdentity: 'boxed:account-1',
+        actorId: 'user-1',
+        restoreEpoch: str_repeat('e', 64),
+        version: 1,
+    ))->toThrow(InvalidArgumentException::class, 'Unsupported data scope version [1].');
+});
+
 it('serializes and unserializes without exceptions', function (): void {
     $scope = dataScope();
 
@@ -62,7 +156,8 @@ it('serializes and unserializes without exceptions', function (): void {
 
 it('rejects invalid trusted data-boundary scalar values', function (string $connectionIdentity, string $actorId, string $restoreEpoch): void {
     expect(fn (): DataScope => new DataScope(
-        context: dataScope()->context,
+        accountId: 'account-1',
+        workspaceId: null,
         connectionIdentity: $connectionIdentity,
         actorId: $actorId,
         restoreEpoch: $restoreEpoch,

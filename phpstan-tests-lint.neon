@@ -26,15 +26,15 @@ parameters:
 
     paths:
         - tests
-        - packages/api/tests
-        - packages/auth/tests
+        - packages/operations/tests
+        - packages/access/tests
         - packages/crm/tests
         - packages/tasks/tests
         - packages/tenancy/tests
 
     scanDirectories:
-        - packages/auth/src
-        - packages/auth/database/seeders
+        - packages/access/src
+        - packages/access/database/seeders
         - packages/crm/src
         - packages/tasks/src
         - packages/tenancy/src
@@ -42,10 +42,10 @@ parameters:
     bootstrapFiles:
         - tests/phpstan-stubs/AwsS3Client.php
         # Auth remains intentionally absent from the root dependency graph:
-        # AzGuard resolves only in packages/auth's own Composer install.
+        # AzGuard resolves only in packages/access's own Composer install.
         # Loading that installed package autoloader lets
         # this rules-only pass parse the auth suite without adding Larastan.
-        - packages/auth/vendor/autoload.php
+        - packages/access/vendor/autoload.php
 
     level: 0
 
@@ -118,14 +118,14 @@ parameters:
         # create this deliberately malformed/cross-branch fixture.
         -
             identifier: corexModules.directSystemTableWrite
-            path: packages/auth/tests/Pg/ScopeResolverTest.php
+            path: packages/access/tests/Pg/ScopeResolverTest.php
             count: 1
         # AccessChecker uses the same real core ltree department fixture to
         # prove its public record path, then removes its table for the
         # fail-closed path; sibling/NULL/non-user cases deny.
         -
             identifier: corexModules.directSystemTableWrite
-            path: packages/auth/tests/Pg/AccessCheckerTest.php
+            path: packages/access/tests/Pg/AccessCheckerTest.php
             count: 2
         # WorkspaceResolver verifies the tenancy/auth boundary with raw core
         # department membership rows. Keep the exception exact: any additional

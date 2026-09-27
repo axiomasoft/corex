@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs;
 
+use CoreX\Audit\Contracts\Auditable;
 use CoreX\Concerns\HasConfiguredId;
-use CoreX\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 /**

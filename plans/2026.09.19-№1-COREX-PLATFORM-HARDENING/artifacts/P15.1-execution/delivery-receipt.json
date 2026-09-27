@@ -1,0 +1,65 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:9cf2b9df3668132211fa5051765f1a2c870022992f09db15c40cde97e016cdb8",
+    "command_id": "task:plan-exec",
+    "package": "task",
+    "version": "0.24.3"
+  },
+  "commit_sha": "a3cf8eae2dea7d58d40e7a6e73c5be8ede8b6470",
+  "continuity": {
+    "evidence": [
+      "batch:E15b",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:journal:P15.1:line367"
+    ],
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:bf5387f98671b1cbf8472410863a5a81324dccb2768b12a13a2ded71b60f453e",
+    "plan": "sha256:e4461122ccd5956dd8d946abc68d33c844be801b3e838a4116dc73a58577bb7a",
+    "state": "sha256:afaedd4ae6e35d26052bf52da264c348b15bdfdadfd383bbcbb81589acc886a7"
+  },
+  "journal": {
+    "command": "plan-exec",
+    "line": 367,
+    "result": "closed-green",
+    "run_id": "p151-grok-4-7-high",
+    "sha256": "sha256:76d46049ee017e4d9e58d318279282b52b8fd1bc0f88f1718c2b1bec11e4613f"
+  },
+  "next_exact": "exec-items: task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.2-P15.6",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "rationale": {
+    "open_risks": "`composer dump-autoload --optimize --strict-psr` exits 1 on pre-existing attributes/api test doubles. The renamed classes are not in that list. The worktree still holds predecessor edits; do not stage them with the rename.",
+    "remaining": "P15.2–P15.6 are the next batch. P15.1 has no item commit: unrelated dirty paths overlap the rename. Cursor still has no owner-session launch adapter, so the contract compiler cannot record `pre_mutation=allow` even with D130."
+  },
+  "recommendation": "**Next:** exec-items: task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.2-P15.6\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | E15b |\n| Model class | implementation |\n| Model | composer-2.5 |\n| Thinking | medium |\n| Native model | composer-2.5 |\n| Capabilities | — |\n| Context | continue-root |\n| Суть | P15.2–P15.6: independent rename lanes after the modules vocabulary move. |\n\n```session-continuity-decision/v1\n{\"evidence\":[\"batch:E15b\",\"loaded-inputs:reusable\",\"cold-start-cost:0\",\"lifecycle:scope-complete\",\"checkpoint:journal:P15.1:line367\"],\"outcome\":\"continue-root\",\"reason\":\"authorized-scope-complete\",\"runnable\":true,\"schema_version\":\"session-continuity-decision/v1\"}\n```\n\n```bash\nagent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.2-P15.6'\n```",
+  "route": {
+    "batch": "E15b",
+    "command": null,
+    "context": "continue-root",
+    "continuity": {
+      "evidence": [
+        "batch:E15b",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "lifecycle:scope-complete",
+        "checkpoint:journal:P15.1:line367"
+      ],
+      "outcome": "continue-root",
+      "reason": "authorized-scope-complete",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "composer-2.5",
+    "thinking": "medium"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P15.1"
+}

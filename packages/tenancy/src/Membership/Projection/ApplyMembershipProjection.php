@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
+/** @internal */
 final readonly class ApplyMembershipProjection
 {
     public function __construct(

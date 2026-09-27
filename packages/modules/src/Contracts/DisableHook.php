@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
-use CoreX\Modules\ModuleContext;
+use CoreX\Modules\ModuleRuntimeContext;
 
 /**
  * Module-authored teardown of non-data side effects on disable (cron,
@@ -14,5 +14,5 @@ use CoreX\Modules\ModuleContext;
  */
 interface DisableHook
 {
-    public function __invoke(ModuleContext $ctx): void;
+    public function __invoke(ModuleRuntimeContext $ctx): void;
 }

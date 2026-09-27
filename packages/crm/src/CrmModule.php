@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
-use CoreX\Modules\CorexModule;
 use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use Flex\Crm\Api\CreateCompanyOperation;
 use Flex\Crm\Api\CreateContactCompanyOperation;
 use Flex\Crm\Api\CreateContactOperation;
@@ -25,12 +25,12 @@ use Flex\Crm\Models\Pipeline;
 use Flex\Crm\Models\Stage;
 use Override;
 
-final class CrmModule extends CorexModule
+final class CrmModule extends ModuleDefinition
 {
     #[Override]
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('flex/crm')->title('CRM')->tablePrefix('crm')->extends([
+        return ModuleManifest::make('flex/crm')->title('CRM')->tablePrefix('crm')->extends([
             Entity::make(Pipeline::class)->handle('crm.pipeline')->table('crm_pipelines')->label('Pipeline', 'Pipelines')->titleAttribute('name'),
             Entity::make(Stage::class)->handle('crm.stage')->table('crm_stages')->label('Stage', 'Stages')->titleAttribute('name'),
             Entity::make(Deal::class)->handle('crm.deal')->table('crm_deals')->label('Deal', 'Deals')->titleAttribute('title')->auditable(),

@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EXPORTER = ROOT / "scripts/distribution/export.py"
 REF = "8c83864f02017134b325224c6c8be590a3971485"
 AZGUARD = "axioma-studio/azguard-core"
-AUTH = "corex/auth"
+AUTH = "corex/access"
 VERSION = "0.1.0-p4.3"
 AZGUARD_VERSION = "0.2.0-p4.5"
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -80,7 +80,7 @@ def azguard_archive(destination: Path) -> tuple[str, str, dict[str, str]]:
 
 def auth_archive(destination: Path) -> str:
     entries: list[tuple[str, bytes]] = []
-    package = ROOT / "packages/auth"
+    package = ROOT / "packages/access"
     for path in package.rglob("*"):
         if not path.is_file() or any(part in {"vendor", ".git", ".env", "auth.json"} for part in path.relative_to(package).parts):
             continue
@@ -105,7 +105,7 @@ def repository(root: Path) -> tuple[Path, dict]:
     private_sha, composer_sha, private_requires = azguard_archive(private_zip)
     auth_sha = auth_archive(auth_zip)
     metadata["packages"][AZGUARD] = {AZGUARD_VERSION: {"name": AZGUARD, "version": AZGUARD_VERSION, "require": private_requires, "dist": {"type": "zip", "url": private_zip.as_uri(), "reference": REF}, "source": {"type": "git", "url": "https://github.com/axiomasoft/azguard.git", "reference": REF}}}
-    auth_composer = json.loads((ROOT / "packages/auth/composer.json").read_text())
+    auth_composer = json.loads((ROOT / "packages/access/composer.json").read_text())
     auth_composer["version"] = VERSION
     auth_composer["require"]["corex/core"] = VERSION
     auth_composer["require"]["corex/modules"] = VERSION

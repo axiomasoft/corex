@@ -98,7 +98,7 @@ prerequisites; UUIDv7 is the FlexCRM profile.
 Extend through composition of Actions and existing manifest listeners:
 
 ```php
-return Manifest::make('acme/integration')->title('Integration')->tablePrefix('aci')
+return ModuleManifest::make('acme/integration')->title('Integration')->tablePrefix('aci')
     ->listens([CompanyCreated::class => [CompanyListener::class]]);
 ```
 

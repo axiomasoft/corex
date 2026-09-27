@@ -17,7 +17,7 @@ use Override;
 /** @internal Composition registrar. Not package public API. */
 final class WakeupRegistrar implements PackageRegistrar
 {
-    private const WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\WakeupSweeper';
+    private const WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper';
 
     #[Override]
     public function register(Application $app): void

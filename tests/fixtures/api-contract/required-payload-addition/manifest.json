@@ -1,0 +1,11 @@
+{
+    "contract_fingerprint": "baseline",
+    "files": {
+        "errors.json": "0",
+        "openapi.json": "0",
+        "operations.json": "0"
+    },
+    "major": "v1",
+    "registry_fingerprint": "baseline",
+    "schema": "corex-api-snapshot/1"
+}

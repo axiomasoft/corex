@@ -20,7 +20,7 @@ use CoreX\Tests\Support\SourceScanner;
 // Foundation = the CoreX\*-namespaced packages (L0 agnostic + L1 domain-base). The
 // crm package IS the Flex\* thematic layer (L2, may depend on corex/*) — it is
 // intentionally excluded from the "may not import Flex" scan.
-$foundationPackages = ['core', 'modules', 'tenancy', 'auth', 'tasks', 'api', 'recurrence'];
+$foundationPackages = ['core', 'modules', 'tenancy', 'access', 'tasks', 'operations', 'recurrence'];
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
 // The vendor inversion D70 fixed was exactly this kind of leak.
@@ -91,9 +91,10 @@ test('tenant content does not bypass its owning storage adapter', function (): v
     );
 
     $allowed = [
-        'packages/tenancy/src/Storage/ContextTenantStorage.php',
-        'packages/tenancy/src/Storage/ObjectTenantStorage.php',
+        'packages/tenancy/src/Runtime/Storage/ContextTenantStorage.php',
+        'packages/tenancy/src/Runtime/Storage/ObjectTenantStorage.php',
         'packages/tenancy/src/TenancyServiceProvider.php',
+        'packages/tenancy/src/Laravel/RuntimeRegistrar.php',
     ];
 
     $unexpected = array_values(array_filter(

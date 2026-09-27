@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Membership\Transport;
 
 use DateTimeImmutable;
 
+/** @internal */
 final readonly class RevokeMembershipReceipt
 {
     public function __construct(

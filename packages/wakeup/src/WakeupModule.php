@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use Override;
 
-final class WakeupModule extends CorexModule
+final class WakeupModule extends ModuleDefinition
 {
     #[Override]
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/wakeup')
+        return ModuleManifest::make('corex/wakeup')
             ->title('Wakeup')
             ->description('Durable local wakeup requests.')
             ->tablePrefix('sys');

@@ -21,7 +21,37 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Intl\\": "src/"
+            "CoreX\\Intl\\": "src/",
+            "CoreX\\Intl\\Contracts\\": [
+                "src/Locale/Contracts/",
+                "src/Translation/Contracts/",
+                "src/Currency/Contracts/",
+                "src/Formatting/Contracts/",
+                "src/Territory/Contracts/"
+            ],
+            "CoreX\\Intl\\Data\\": [
+                "src/Locale/Data/",
+                "src/Translation/Data/",
+                "src/Currency/Data/",
+                "src/Formatting/Data/",
+                "src/Territory/Data/"
+            ],
+            "CoreX\\Intl\\Exceptions\\": [
+                "src/Locale/Exceptions/",
+                "src/Currency/Exceptions/",
+                "src/Formatting/Exceptions/",
+                "src/Territory/Exceptions/"
+            ],
+            "CoreX\\Intl\\Internal\\Locale\\": [
+                "src/Locale/Internal/",
+                "src/Translation/Internal/"
+            ],
+            "CoreX\\Intl\\Internal\\Money\\": [
+                "src/Currency/Internal/",
+                "src/Formatting/Internal/"
+            ],
+            "CoreX\\Intl\\Internal\\Address\\": "src/Territory/Internal/Address/",
+            "CoreX\\Intl\\Internal\\Reference\\": "src/Territory/Internal/Reference/"
         }
     },
     "autoload-dev": {

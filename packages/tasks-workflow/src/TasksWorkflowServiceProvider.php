@@ -8,10 +8,12 @@ use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Tasks\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Contracts\TaskAccess;
+use CoreX\Tasks\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
-use CoreX\TasksWorkflow\Internal\CompletionCaptureObserver;
+use CoreX\TasksWorkflow\Internal\CaptureTaskCompletion;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -34,12 +36,14 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
                 config: $app['config'],
                 container: $app,
                 authorizer: $app->make(DataScopeAuthorizer::class),
+                contexts: $app->make(TenantContextRestorer::class),
+                receipts: $app->make(TaskOperationReceipts::class),
             );
         });
     }
 
     public function boot(): void
     {
-        Task::observe($this->app->make(CompletionCaptureObserver::class));
+        Task::observe($this->app->make(CaptureTaskCompletion::class));
     }
 }

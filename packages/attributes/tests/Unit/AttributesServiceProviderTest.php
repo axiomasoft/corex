@@ -10,11 +10,12 @@ use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
 use CoreX\Attributes\Internal\Laravel\AttributeComposition;
-use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
+use CoreX\Attributes\Internal\Schema\StaticFieldCatalogue;
 use CoreX\Attributes\Internal\Storage\ResolvingAttributeStore;
 use CoreX\Attributes\Internal\UnavailableAttributes;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\CoreServiceProvider;
+use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Support\Data\DenyDataScopeAuthorizer;
 use CoreX\Support\InvalidConfiguration;
 use Orchestra\Testbench\TestCase;
@@ -42,7 +43,8 @@ final class AttributesServiceProviderTest extends TestCase
         expect($this->app->make(FieldCatalogue::class))->toBeInstanceOf(StaticFieldCatalogue::class)
             ->and($this->app->make(AttributeStore::class))->toBeInstanceOf(ResolvingAttributeStore::class)
             ->and($this->app->make(AttributeFilter::class))->not->toBeInstanceOf(UnavailableAttributes::class)
-            ->and($this->app->make(SchemaOperations::class))->toBeInstanceOf(UnavailableAttributes::class);
+            ->and($this->app->make(SchemaOperations::class))->toBeInstanceOf(UnavailableAttributes::class)
+            ->and($this->app->make(MessageContractRegistry::class)->has('attributes.values.changed', 1))->toBeTrue();
     }
 
     public function test_it_rejects_an_invalid_source_order(): void

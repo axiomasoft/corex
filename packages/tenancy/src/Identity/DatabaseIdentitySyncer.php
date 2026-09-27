@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Identity;
 
 use Carbon\CarbonImmutable;
+use CoreX\Contracts\IdentityPasswordRehasher;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Events\UserSynced;
@@ -12,6 +13,7 @@ use CoreX\Tenancy\Jobs\SyncIdentityToAccount;
 use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Models\User;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Throwable;
 
 /**
@@ -25,12 +27,28 @@ use Throwable;
  * `sync_status=failed` (AC-16 г): retried later by `identities:reconcile`,
  * never left to throw across the whole fan-out.
  */
-final class DatabaseIdentitySyncer implements IdentitySyncer
+final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer
 {
     public function __construct(
         private readonly string $centralConnection,
         private readonly TenancyManager $tenancy,
     ) {}
+
+    /** @param array<string, string> $columns */
+    public function rehash(string $identityId, string $expectedHash, string $replacementHash, string $table, array $columns, ?string $connection): void
+    {
+        if ($table !== 'users' || ($columns['id'] ?? null) !== 'id' || ($columns['password'] ?? null) !== 'password_hash'
+            || ($columns['active'] ?? null) !== 'is_active' || ($columns['deleted_at'] ?? null) !== 'deleted_at') {
+            throw new InvalidArgumentException('The tenancy identity writer only owns the canonical users credential mapping.');
+        }
+
+        User::on($connection)
+            ->whereKey($identityId)
+            ->where('password_hash', $expectedHash)
+            ->where('is_active', true)
+            ->whereNull('deleted_at')
+            ->update(['password_hash' => $replacementHash]);
+    }
 
     public function syncToAccount(string $identityId, string $accountId): void
     {

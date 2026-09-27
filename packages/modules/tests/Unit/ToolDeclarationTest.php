@@ -7,7 +7,7 @@ use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Tests\Support\StubToolHandler;
 
 $objectSchema = static fn (): array => [
@@ -20,7 +20,7 @@ $objectSchema = static fn (): array => [
 ];
 
 it('compiles explicit tool declarations into the existing API slice (DESC-01)', function () use ($objectSchema): void {
-    $manifest = Manifest::make('example/tools')
+    $manifest = ModuleManifest::make('example/tools')
         ->title('Tools')
         ->tablePrefix('tls')
         ->extends([
@@ -49,7 +49,7 @@ it('compiles explicit tool declarations into the existing API slice (DESC-01)', 
 });
 
 it('does not expose unannotated operations as tools (DESC-02)', function () use ($objectSchema): void {
-    $manifest = Manifest::make('example/tools')
+    $manifest = ModuleManifest::make('example/tools')
         ->title('Tools')
         ->tablePrefix('tls')
         ->extends([
@@ -76,10 +76,10 @@ it('keeps stable tool tuple and contract hash across declaration order (DESC-03)
         ->titled('Second', 'Second tool');
 
     $forward = (new RegistryCompiler)->compile([
-        Manifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$first, $second]),
+        ModuleManifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$first, $second]),
     ], installedPackages: []);
     $reverse = (new RegistryCompiler)->compile([
-        Manifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$second, $first]),
+        ModuleManifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$second, $first]),
     ], installedPackages: []);
 
     $forwardHash = ToolDescriptor::fromDeclaration(collect($forward->api)->first(fn (Api $api): bool => $api->toolCode === 'alpha.first'))->contractHash;
@@ -90,13 +90,13 @@ it('keeps stable tool tuple and contract hash across declaration order (DESC-03)
 
 it('rejects invalid canonical namespaces and wire collisions (DESC-04)', function () use ($objectSchema): void {
     expect(fn () => (new RegistryCompiler)->compile([
-        Manifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
+        ModuleManifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
             Api::tool('bad_namespace.create', StubToolHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
     expect(fn () => (new RegistryCompiler)->compile([
-        Manifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
+        ModuleManifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
             Api::tool('bad.create', StubToolHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
             Api::tool('bad.create', StubToolHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only', toolVersion: 'v1'),
         ]),
@@ -107,28 +107,28 @@ it('rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-
     $operation = Api::operation('notes.list', 'GET', '/notes', StubToolHandler::class, 'notes.read', $objectSchema(), $objectSchema());
 
     expect(fn () => (new RegistryCompiler)->compile([
-        Manifest::make('example/dup')->title('Dup')->tablePrefix('dup')->extends([
+        ModuleManifest::make('example/dup')->title('Dup')->tablePrefix('dup')->extends([
             Api::tool('dup.read', StubToolHandler::class, 'dup.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
             Api::tool('dup.read', StubToolHandler::class, 'dup.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
     expect(fn () => (new RegistryCompiler)->compile([
-        Manifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
+        ModuleManifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
             $operation,
             Api::exposeTool('foreign.list', 'v1', 'exp.read', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
     expect(fn () => (new RegistryCompiler)->compile([
-        Manifest::make('example/handler')->title('Handler')->tablePrefix('hdl')->extends([
+        ModuleManifest::make('example/handler')->title('Handler')->tablePrefix('hdl')->extends([
             Api::tool('hdl.read', stdClass::class, 'hdl.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 });
 
 it('compiles exposeTool against a same-module operation without adding HTTP routes (DESC-01 expose)', function () use ($objectSchema): void {
-    $manifest = Manifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
+    $manifest = ModuleManifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
         Api::operation('notes.list', 'GET', '/notes', StubToolHandler::class, 'notes.read', $objectSchema(), $objectSchema()),
         Api::exposeTool('notes.list', 'v1', 'notes.list', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
     ]);

@@ -176,9 +176,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
 
     public static function revisionFor(CompiledRegistry $compiled): string
     {
-        $payload = json_encode($compiled->toArray(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
-
-        return hash('sha256', $payload);
+        return $compiled->fingerprint;
     }
 
     private function compiledRegistry(): CompiledRegistry
@@ -441,15 +439,15 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         $installed = InstalledPackages::discover();
 
         foreach ($module->requires as $requirement) {
-            if ($requirement['type'] !== 'module') {
-                if (! in_array($requirement['target'], $installed, true)) {
+            if ($requirement['kind'] !== 'module') {
+                if (! in_array($requirement['package'], $installed, true)) {
                     return false;
                 }
 
                 continue;
             }
 
-            if (! array_key_exists($requirement['target'], $modules)) {
+            if (! array_key_exists($requirement['package'], $modules)) {
                 return false;
             }
         }

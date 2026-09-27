@@ -7,7 +7,7 @@ namespace CoreX\Tenancy\Integration\Wakeup;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use RuntimeException;
@@ -24,7 +24,7 @@ final class RootWakeupReconciler
     public function __construct(
         private readonly Connection $root,
         private readonly TenancyManager $tenancy,
-        private readonly WakeupSweeper $sweeper,
+        private readonly DueWakeupSweeper $sweeper,
         private readonly int $leaseSeconds,
     ) {}
 

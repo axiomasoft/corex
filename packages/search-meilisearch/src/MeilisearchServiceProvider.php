@@ -6,7 +6,7 @@ namespace CoreX\Search\Meilisearch;
 
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Meilisearch\Exceptions\InvalidMeilisearchConfiguration;
-use CoreX\Search\Meilisearch\Internal\MeilisearchQueryAdapter;
+use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
 use CoreX\Search\SearchManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -46,7 +46,7 @@ final class MeilisearchServiceProvider extends ServiceProvider
                 throw InvalidMeilisearchConfiguration::invalidKey();
             }
 
-            return new MeilisearchQueryAdapter(
+            return new MeilisearchSearchProvider(
                 client: new Client($host, $key),
                 indexUid: $indexUid,
             );

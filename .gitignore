@@ -12,6 +12,7 @@
 /.claude/
 /.codex/
 /.cursor/
+**/.cursor/
 /.serena/
 /.swissknifeman/
 /.mcp.json
@@ -31,6 +32,9 @@ __pycache__/
 
 # Local qualification harness output; committed receipts live under plans/**/artifacts/.
 /delivery/
+/artifacts/bc-*/
+/artifacts/bc-check-*.log
+/artifacts/bc-check-*.txt
 
 # CoreX specifications and ADRs are maintained in the Brain vault.
 /docs/03_Dev/

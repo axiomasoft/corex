@@ -18,7 +18,7 @@ beforeEach(function (): void {
 });
 
 it('FX-04 imports concurrent rate batches into one immutable row set', function (): void {
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
         actorId: 'fx-pg',

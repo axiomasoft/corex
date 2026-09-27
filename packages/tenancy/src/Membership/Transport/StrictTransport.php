@@ -8,7 +8,7 @@ use Closure;
 use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Membership\Switcher\AccountListEntry;
 use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\Client\ConnectionException;
@@ -111,7 +111,7 @@ final class StrictTransport implements CentralApiClient
      * no binding field, default URI, or provider registration for this profile
      * extension: the supplied URI must be the already-negotiated read URI.
      */
-    public function accountsFor(AccountsQuery $query, string $accountsUri): AccountsResult
+    public function accountsFor(AccountsQuery $query, string $accountsUri): AvailableAccounts
     {
         if ($this->binding === null || $accountsUri !== $this->binding->readUri) {
             throw new CentralUnavailable('Accepted accounts read URI is absent.');
@@ -194,7 +194,7 @@ final class StrictTransport implements CentralApiClient
     }
 
     /** @param array<string, mixed> $payload */
-    private function accountsResult(array $payload, AccountsQuery $query, string $requestId): AccountsResult
+    private function accountsResult(array $payload, AccountsQuery $query, string $requestId): AvailableAccounts
     {
         $expected = ['accounts', 'identity_id', 'membership_version', 'observed_at', 'product', 'profile_version', 'request_id'];
         $keys = array_keys($payload);
@@ -243,7 +243,7 @@ final class StrictTransport implements CentralApiClient
                 );
             }, $payload['accounts']);
 
-            return new AccountsResult(
+            return new AvailableAccounts(
                 identityId: $query->identityId,
                 product: $query->product,
                 membershipVersion: $payload['membership_version'],

@@ -16,6 +16,9 @@ final readonly class AttributeTables
         public string $eavValues,
         public string $eavRecords,
         public string $schemaOperations,
+        public string $definitions = 'sys_attribute_definitions',
+        public string $keyReservations = 'sys_attribute_key_reservations',
+        public string $backfills = 'sys_attribute_backfills',
     ) {
         foreach (get_object_vars($this) as $property => $table) {
             if (preg_match(self::IDENTIFIER, $table) !== 1) {
@@ -23,7 +26,16 @@ final readonly class AttributeTables
             }
         }
 
-        $tables = [$this->documents, $this->writeTokens, $this->eavValues, $this->eavRecords, $this->schemaOperations];
+        $tables = [
+            $this->documents,
+            $this->writeTokens,
+            $this->eavValues,
+            $this->eavRecords,
+            $this->schemaOperations,
+            $this->definitions,
+            $this->keyReservations,
+            $this->backfills,
+        ];
 
         if (count($tables) !== count(array_unique($tables))) {
             throw InvalidAttributeTables::duplicateNames();

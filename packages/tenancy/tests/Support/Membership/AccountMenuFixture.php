@@ -9,7 +9,7 @@ use CoreX\Tenancy\Membership\Switcher\AccountMenuCache;
 use CoreX\Tenancy\Membership\Switcher\AccountMenuReader;
 use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
 use CoreX\Tenancy\Membership\Switcher\AccountsReadTransport;
-use CoreX\Tenancy\Membership\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
 use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
 use Throwable;
 
@@ -19,10 +19,10 @@ final class AccountMenuFixture implements AccountClickAuthorizer, AccountMenuCac
     /** @var array<string, string> */
     private array $versions = [];
 
-    /** @var array<string, array<string, AccountsResult>> */
+    /** @var array<string, array<string, AvailableAccounts>> */
     private array $results = [];
 
-    /** @var list<AccountsResult|Throwable> */
+    /** @var list<AvailableAccounts|Throwable> */
     private array $responses = [];
 
     public int $transportCalls = 0;
@@ -40,7 +40,7 @@ final class AccountMenuFixture implements AccountClickAuthorizer, AccountMenuCac
         return new AccountMenuReader(transport: $this, cache: $this, clickAuthorizer: $this);
     }
 
-    public function enqueue(AccountsResult|Throwable $response): void
+    public function enqueue(AvailableAccounts|Throwable $response): void
     {
         $this->responses[] = $response;
     }
@@ -50,7 +50,7 @@ final class AccountMenuFixture implements AccountClickAuthorizer, AccountMenuCac
         unset($this->versions[$this->key(query: $query)]);
     }
 
-    public function accountsFor(AccountsQuery $query): AccountsResult
+    public function accountsFor(AccountsQuery $query): AvailableAccounts
     {
         $this->transportCalls++;
         $response = array_shift($this->responses);
@@ -59,7 +59,7 @@ final class AccountMenuFixture implements AccountClickAuthorizer, AccountMenuCac
             throw $response;
         }
 
-        if (! $response instanceof AccountsResult) {
+        if (! $response instanceof AvailableAccounts) {
             throw new CentralUnavailable('No local authoritative response is queued.');
         }
 
@@ -71,14 +71,14 @@ final class AccountMenuFixture implements AccountClickAuthorizer, AccountMenuCac
         return $this->versions[$this->key(query: $query)] ?? null;
     }
 
-    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AccountsResult
+    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AvailableAccounts
     {
         $this->cacheLookups++;
 
         return $this->results[$this->key(query: $query)][$membershipVersion] ?? null;
     }
 
-    public function put(AccountsQuery $query, AccountsResult $result, int $ttlSeconds): void
+    public function put(AccountsQuery $query, AvailableAccounts $result, int $ttlSeconds): void
     {
         $key = $this->key(query: $query);
         $this->versions[$key] = $result->membershipVersion;

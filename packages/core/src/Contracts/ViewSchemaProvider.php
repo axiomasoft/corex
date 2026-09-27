@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use CoreX\Views\Data\ViewContext;
-use CoreX\Views\Data\ViewSchema;
+use CoreX\SavedViews\Data\ViewContext;
+use CoreX\SavedViews\Data\ViewSchema;
 
 interface ViewSchemaProvider
 {

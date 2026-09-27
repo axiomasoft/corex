@@ -46,8 +46,8 @@ final readonly class CompiledRegistry
      * @param  list<Menu>  $menu
      * @param  list<Routes>  $routes
      * @param  list<Workflow>  $workflow
-     * @param  list<CompiledSettingDefault>  $settings  manifest-declared `SettingDefault`s (default cascade level, not an Extender, so collected straight off `Manifest::$settings`)
-     * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `Manifest::$featureFlags`
+     * @param  list<CompiledSettingDefault>  $settings  manifest-declared `DefaultSettingDefinition`s (default cascade level, not an Extender, so collected straight off `ModuleManifest::$settings`)
+     * @param  list<FeatureFlagDefinition>  $featureFlags  manifest-declared flag defaults, collected off `ModuleManifest::$featureFlags`
      * @param  array<string, array<class-string, list<class-string>>>  $listeners  manifest-declared event listeners, keyed by module composer name
      * @param  string  $fingerprint  point-specific registry fingerprint read by operation contracts
      * @param  array<string, mixed>  $compiler

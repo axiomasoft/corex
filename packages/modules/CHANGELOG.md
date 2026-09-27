@@ -7,6 +7,10 @@
 
 ### Added
 
+- Deterministic registry compiler IR: point-specific identity, explicit replacement, canonical
+  `corex-registry/1` fingerprint and detached scalar snapshots (P11.2).
+- Frozen entity collector after boot projection, authority fingerprint introspection, and
+  request/job publication boundaries (P11.3).
 - `RegistryIntrospection` contract with `RegistryMap` / `ModuleExplanation` DTOs, read-only
   `ReadRegistryIntrospection` implementation and `corex:modules:why` operator CLI for bounded
   extension-point and activation diagnostics.

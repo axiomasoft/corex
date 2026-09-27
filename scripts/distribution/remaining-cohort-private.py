@@ -37,7 +37,7 @@ AZGUARD_LOCAL = Path(os.environ.get('COREX_AZGUARD_LOCAL', '/home/vostrikov/proj
 AZGUARD_PACKAGE = 'axioma-studio/azguard-core'
 AZGUARD_GIT_URL = 'https://github.com/axiomasoft/azguard.git'
 AZGUARD_REPO_API = 'axiomasoft/azguard-private'
-AUTH_PACKAGE = 'corex/auth'
+AUTH_PACKAGE = 'corex/access'
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 SECRET_PATTERNS = (
     re.compile(r'ghp_[A-Za-z0-9]{20,}'),
@@ -179,7 +179,7 @@ def auth_version(candidate: dict) -> str:
 
 def auth_archive(destination: Path, version: str) -> str:
     entries: list[tuple[str, bytes]] = []
-    package = ROOT / 'packages/auth'
+    package = ROOT / 'packages/access'
     for path in package.rglob('*'):
         if not path.is_file():
             continue
@@ -232,7 +232,7 @@ def stage_private_repository(inspection: dict, auth_ver: str) -> tuple[Path, dic
             },
         },
     }
-    auth_composer = json.loads((ROOT / 'packages/auth/composer.json').read_text())
+    auth_composer = json.loads((ROOT / 'packages/access/composer.json').read_text())
     auth_composer['version'] = auth_ver
     auth_composer['require']['corex/core'] = candidate_core_version()
     auth_composer['require']['corex/modules'] = candidate_core_version()
@@ -397,8 +397,8 @@ def preflight(packet: dict | None = None) -> dict:
     blockers: list[str] = []
     if not INSTALLED_REPO.is_dir():
         blockers.append('installed-candidate repository missing')
-    if not (ROOT / 'packages/auth').is_dir():
-        blockers.append('packages/auth source missing')
+    if not (ROOT / 'packages/access').is_dir():
+        blockers.append('packages/access source missing')
     if not AZGUARD_LOCAL.is_dir():
         blockers.append(f'local azguard checkout missing: {AZGUARD_LOCAL}')
     ref = None
@@ -446,10 +446,10 @@ def verify_private_02(root: Path, stage: Path, auth_ver: str) -> dict:
 
 
 def verify_private_03() -> dict:
-    proc = run_cmd(['composer', 'test'], ROOT / 'packages/auth', os.environ.copy())
+    proc = run_cmd(['composer', 'test'], ROOT / 'packages/access', os.environ.copy())
     if proc.returncode != 0:
         raise PrivateProofError(proc.stderr or 'auth suite failed')
-    return {'suite': 'packages/auth', 'exit': 0, 'tests': 'sqlite-group'}
+    return {'suite': 'packages/access', 'exit': 0, 'tests': 'sqlite-group'}
 
 
 def verify_private_04(root: Path) -> dict:
@@ -585,7 +585,7 @@ def build_evidence(
 def case_catalog() -> list[tuple[str, str, str]]:
     return [
         ('PRIVATE-01', 'R45 R51', 'Exact accepted G-PRIVATE source/channel/ref/license/checksum and narrow read scope verified before private fetch; no historical blanket D14 authority'),
-        ('PRIVATE-02', 'R45 R51', 'Cold direct corex/auth install plus transitive example consumer install from approved private channel, separate homes/caches, lock+vendor ref verified'),
+        ('PRIVATE-02', 'R45 R51', 'Cold direct corex/access install plus transitive example consumer install from approved private channel, separate homes/caches, lock+vendor ref verified'),
         ('PRIVATE-03', 'R45 R51', 'Real installed auth suite/default-deny missing grant/unknown resource and current tenant/department scope positive and negative evidence; no role engine duplicate'),
         ('PRIVATE-04', 'R45 R51', 'Explicit adapter-missing host public boot denies protected abilities safely; public no-credential graph independently remains usable'),
         ('PRIVATE-05', 'R45 R51', 'Laravel12 approved PHP intersection tested; Laravel13 refused unless independent engine owner source/compatibility+G-API/G-DEPENDENCY approval actually supplied'),

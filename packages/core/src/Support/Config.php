@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Support;
 
-use CoreX\Contracts\AuditLogger;
+use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;

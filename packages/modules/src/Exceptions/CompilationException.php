@@ -112,4 +112,92 @@ final class CompilationException extends RuntimeException
             $secondModule,
         ));
     }
+
+    public static function duplicateIdentity(string $point, string $id, string $firstOwner, string $secondOwner): self
+    {
+        return new self(sprintf(
+            'Duplicate identity [%s:%s] is declared by both [%s] and [%s].',
+            $point,
+            $id,
+            $firstOwner,
+            $secondOwner,
+        ));
+    }
+
+    public static function replacementTargetMissing(string $point, string $targetId, string $owner): self
+    {
+        return new self(sprintf(
+            'Replacement on [%s] from [%s] names missing target [%s].',
+            $point,
+            $owner,
+            $targetId,
+        ));
+    }
+
+    public static function replacementMissing(string $point, string $replacementId, string $owner): self
+    {
+        return new self(sprintf(
+            'Replacement on [%s] from [%s] names missing replacement [%s].',
+            $point,
+            $owner,
+            $replacementId,
+        ));
+    }
+
+    public static function replacementForeignOwner(string $point, string $replacementId, string $owner, string $actualOwner): self
+    {
+        return new self(sprintf(
+            'Replacement on [%s] from [%s] must own replacement [%s], which belongs to [%s].',
+            $point,
+            $owner,
+            $replacementId,
+            $actualOwner,
+        ));
+    }
+
+    public static function replacementDuplicateIncoming(string $point, string $targetId, string $firstOwner, string $secondOwner): self
+    {
+        return new self(sprintf(
+            'Replacement target [%s:%s] already has an incoming edge from [%s]; [%s] cannot add another.',
+            $point,
+            $targetId,
+            $firstOwner,
+            $secondOwner,
+        ));
+    }
+
+    public static function replacementCycle(string $point, string $path): self
+    {
+        return new self(sprintf(
+            'Replacement graph on [%s] is cyclic: %s.',
+            $point,
+            $path,
+        ));
+    }
+
+    public static function menuAfterMissing(string $id, string $after, string $owner): self
+    {
+        return new self(sprintf(
+            'Menu [%s] declared by [%s] names missing afterHandle [%s].',
+            $id,
+            $owner,
+            $after,
+        ));
+    }
+
+    public static function menuCycle(string $path): self
+    {
+        return new self(sprintf(
+            'Menu afterHandle graph is cyclic: %s.',
+            $path,
+        ));
+    }
+
+    public static function corruptArtifact(string $reason): self
+    {
+        return new self(sprintf(
+            'Compiled registry artifact is stale or corrupt (%s). Rerun corex:modules:compile.',
+            $reason,
+        ));
+    }
 }

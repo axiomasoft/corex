@@ -18,10 +18,14 @@ use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
+use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use CoreX\TasksWorkflow\Internal\MaterializationHasher;
+use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\ScopeConnectionGuard;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Wakeup\Data\WakeupDelivery;
+use CoreX\Wakeup\Data\WakeupRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -54,7 +58,7 @@ beforeEach(function (): void {
 
 function matScope(object $test): DataScope
 {
-    return new DataScope(
+    return DataScope::fromTenantContext(
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $test->userId,
@@ -175,7 +179,7 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
     $set = SeriesSeeder::dailySet('series-mat-08', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-mat-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $staleScope = new DataScope(
+    $staleScope = DataScope::fromTenantContext(
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $this->userId,
@@ -219,3 +223,96 @@ it('MAT-09 keeps boxed sqlite materialization off root credentials and queue ass
         ->and(config('queue.default'))->toBe('sync')
         ->and(DB::connection()->getDriverName())->toBe('sqlite');
 });
+
+it('MAT-10 encodes a complete wakeup payload and preserves the materialization window', function (): void {
+    $set = SeriesSeeder::dailySet('series-mat-10', 'rev-1', 1);
+    $series = SeriesSeeder::seed('series-mat-10', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05', aheadDays: 14, pageLimit: 25, maxSeconds: 3);
+
+    $payload = MaterializationHasher::wakeupPayload(series: $series, window: $window);
+    $decoded = MaterializationHasher::decodeWakeupPayload($payload);
+
+    expect($payload)->toMatchArray([
+        'seriesId' => 'series-mat-10',
+        'immutableRevision' => 'rev-1',
+        'definitionHash' => $series->definitionHash,
+        'start' => '2026-09-01',
+        'end' => '2026-09-05',
+        'aheadDays' => 14,
+        'pageLimit' => 25,
+        'maxSeconds' => 3,
+    ])
+        ->and($decoded['series']->definitionHash)->toBe($series->definitionHash)
+        ->and($decoded['window']->start)->toBe('2026-09-01')
+        ->and($decoded['window']->end)->toBe('2026-09-05')
+        ->and($decoded['window']->aheadDays)->toBe(14)
+        ->and($decoded['window']->pageLimit)->toBe(25)
+        ->and($decoded['window']->maxSeconds)->toBe(3);
+});
+
+it('MAT-11 materializes a valid stamped wakeup and stays idempotent on duplicate delivery', function (): void {
+    $set = SeriesSeeder::dailySet('series-mat-11', 'rev-1', 2);
+    $series = SeriesSeeder::seed('series-mat-11', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
+    $handler = app(MaterializationWakeupHandler::class);
+    $delivery = wakeupDelivery(
+        context: app(TenantContextResolver::class)->current(),
+        payload: MaterializationHasher::wakeupPayload(series: $series, window: $window),
+        requestKey: 'wakeup-mat-11',
+    );
+
+    $handler->handle($delivery);
+    $handler->handle($delivery);
+
+    expect(Task::query()->count())->toBe(2)
+        ->and(DB::table('corex_task_occurrences')->count())->toBe(2);
+});
+
+it('MAT-12 fails incomplete or tampered wakeup payloads without writing', function (): void {
+    $set = SeriesSeeder::dailySet('series-mat-12', 'rev-1', 1);
+    $series = SeriesSeeder::seed('series-mat-12', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
+    $handler = app(MaterializationWakeupHandler::class);
+    $context = app(TenantContextResolver::class)->current();
+    $complete = MaterializationHasher::wakeupPayload(series: $series, window: $window);
+
+    expect(fn () => $handler->handle(wakeupDelivery(
+        context: $context,
+        payload: ['seriesId' => $series->id, 'immutableRevision' => 'rev-1'],
+        requestKey: 'wakeup-mat-12-missing',
+    )))->toThrow(StaleMaterialization::class);
+
+    expect(fn () => MaterializationHasher::decodeWakeupPayload([]))
+        ->toThrow(UnsupportedMaterialization::class);
+
+    $tampered = $complete;
+    $tampered['definitionHash'] = str_repeat('f', 64);
+
+    expect(fn () => $handler->handle(wakeupDelivery(
+        context: $context,
+        payload: $tampered,
+        requestKey: 'wakeup-mat-12-tamper',
+    )))->toThrow(StaleMaterialization::class);
+
+    expect(Task::query()->count())->toBe(0)
+        ->and(DB::table('corex_task_occurrences')->count())->toBe(0);
+});
+
+/**
+ * @param  array<array-key, mixed>  $payload
+ */
+function wakeupDelivery(object $context, array $payload, string $requestKey): WakeupDelivery
+{
+    return new WakeupDelivery(
+        request: new WakeupRequest(
+            context: $context,
+            kind: MaterializationHasher::HANDLER_KIND,
+            requestKey: $requestKey,
+            fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
+            window: null,
+            payload: $payload,
+        ),
+        generation: 1,
+        attempt: 1,
+    );
+}

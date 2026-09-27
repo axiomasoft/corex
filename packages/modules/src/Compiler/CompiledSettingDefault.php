@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Compiler;
 
-use CoreX\Modules\SettingDefault;
+use CoreX\Modules\DefaultSettingDefinition;
 use ReflectionClass;
 
 /**
- * A manifest-declared {@see SettingDefault} paired with its owning module's
- * setting-namespace — `SettingDefaultsProvider`/`Manifest::$settings` never
+ * A manifest-declared {@see DefaultSettingDefinition} paired with its owning module's
+ * setting-namespace — `SettingDefaultsProvider`/`ModuleManifest::$settings` never
  * reached the compiled registry before this. The namespace is the module's
  * `tablePrefix`: `sys_settings.namespace` is documented as "id модуля
  * ('crm')", which is exactly the short 2–3 letter code
- * {@see CoreX\Modules\Manifest::$tablePrefix} already carries, not the full
+ * {@see CoreX\Modules\ModuleManifest::$tablePrefix} already carries, not the full
  * composer name.
  *
  * @internal spec: P1.25, A68, B-10 §3.1
@@ -22,11 +22,11 @@ final readonly class CompiledSettingDefault
 {
     public function __construct(
         public string $namespace,
-        public SettingDefault $definition,
+        public DefaultSettingDefinition $definition,
     ) {}
 
     /**
-     * `SettingDefault` has a private constructor (fluent factory, see the
+     * `DefaultSettingDefinition` has a private constructor (fluent factory, see the
      * class) — reconstruction goes through reflection like
      * {@see CompiledRegistry::extenderFromArray()}, just not constrained to
      * the `Extender` interface.
@@ -46,8 +46,8 @@ final readonly class CompiledSettingDefault
      */
     public static function fromArray(array $data): self
     {
-        $reflection = new ReflectionClass(SettingDefault::class);
-        /** @var SettingDefault $definition */
+        $reflection = new ReflectionClass(DefaultSettingDefinition::class);
+        /** @var DefaultSettingDefinition $definition */
         $definition = $reflection->newInstanceWithoutConstructor();
 
         foreach ($data['definition'] as $property => $value) {

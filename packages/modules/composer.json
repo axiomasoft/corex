@@ -28,7 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Modules\\": "src/"
+            "CoreX\\Modules\\": [
+                "src/",
+                "src/Definition/",
+                "src/Gate/",
+                "src/Settings/"
+            ]
         }
     },
     "extra": {
@@ -42,7 +47,8 @@
                 "CoreX\\Modules\\Enums",
                 "CoreX\\Modules\\Events",
                 "CoreX\\Modules\\Exceptions",
-                "CoreX\\Modules\\Extend"
+                "CoreX\\Modules\\Extend",
+                "CoreX\\Modules\\Testing"
             ]
         },
         "laravel": {

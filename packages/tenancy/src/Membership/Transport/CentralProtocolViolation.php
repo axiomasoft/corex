@@ -6,4 +6,5 @@ namespace CoreX\Tenancy\Membership\Transport;
 
 use RuntimeException;
 
+/** @internal */
 final class CentralProtocolViolation extends RuntimeException {}

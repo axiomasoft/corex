@@ -10,9 +10,9 @@ use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Events\ModuleEnabled;
 use CoreX\Modules\Exceptions\ModuleEnableFailedException;
-use CoreX\Modules\GateDecision;
 use CoreX\Modules\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Lifecycle\DatabaseRecordsRegistrar;
+use CoreX\Modules\ModuleActivationDecision;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -56,7 +56,7 @@ beforeEach(function (): void {
 
 it('honors a denying activation gate before migrations and hooks', function (): void {
     $gate = Mockery::mock(ModuleActivationGate::class);
-    $gate->shouldReceive('check')->once()->andReturn(GateDecision::deny('host policy'));
+    $gate->shouldReceive('check')->once()->andReturn(ModuleActivationDecision::deny('host policy'));
     app()->instance(ModuleActivationGate::class, $gate);
     expect(fn () => $this->lifecycle->enable('corex/stub-base'))->toThrow(AuthorizationException::class, 'host policy');
     expect(DB::table('mod_modules')->count())->toBe(0)

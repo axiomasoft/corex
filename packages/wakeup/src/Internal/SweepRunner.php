@@ -6,24 +6,32 @@ namespace CoreX\Wakeup\Internal;
 
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Wakeup\Contracts\DueSource;
-use CoreX\Wakeup\Contracts\WakeupHandler;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
+use CoreX\Wakeup\Contracts\DueWakeupSource;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
-final class SweepRunner implements WakeupSweeper
+final class SweepRunner implements DueWakeupSweeper
 {
-    /** @param array<string, WakeupHandler> $handlers
-     * @param list<DueSource> $dueSources */
-    public function __construct(private readonly Connection $connection, private readonly TenantContextResolver $contexts, private readonly array $handlers, private readonly array $dueSources, private readonly int $leaseSeconds, private readonly int $maxAttempts) {}
+    /** @param list<DueWakeupSource> $dueSources */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly TenantContextResolver $contexts,
+        private readonly WakeupHandlerRegistry $handlers,
+        private readonly array $dueSources,
+        private readonly int $leaseSeconds,
+        private readonly int $maxAttempts,
+        private readonly ClockInterface $clock,
+    ) {}
 
     public function sweep(TenantContext $context, int $limit): SweepResult
     {
@@ -75,7 +83,7 @@ final class SweepRunner implements WakeupSweeper
     private function claimDue(int $limit): array
     {
         return $this->connection->transaction(function () use ($limit): array {
-            $now = now();
+            $now = $this->clock->now();
             $this->connection->table('sys_wakeup_requests')
                 ->where('status', 'running')
                 ->where('lease_until', '<=', $now)
@@ -111,7 +119,7 @@ final class SweepRunner implements WakeupSweeper
                     'status' => 'running',
                     'generation' => $generation,
                     'attempt' => (int) $row->attempt + 1,
-                    'lease_until' => $now->copy()->addSeconds($this->leaseSeconds),
+                    'lease_until' => $now->add(new DateInterval("PT{$this->leaseSeconds}S")),
                     'updated_at' => $now,
                 ]);
                 $claims[] = ['id' => $row->id, 'generation' => $generation];
@@ -125,24 +133,37 @@ final class SweepRunner implements WakeupSweeper
     {
         try {
             return $this->connection->transaction(function () use ($context, $generation, $id): string {
+                $now = $this->clock->now();
                 $row = $this->connection->table('sys_wakeup_requests')->where('id', $id)->lockForUpdate()->first();
 
                 if ($row === null
                     || $row->status !== 'running'
                     || (int) $row->generation !== $generation
                     || $row->lease_until === null
-                    || $this->date($row->lease_until) <= new DateTimeImmutable('now')) {
+                    || $this->date($row->lease_until) <= $now) {
                     return 'skipped';
                 }
-                $handler = $this->handlers[$row->kind] ?? null;
+                $handler = $this->handlers->handler((string) $row->kind);
 
                 if ($handler === null) {
-                    $this->connection->table('sys_wakeup_requests')->where('id', $id)->update(['status' => 'failed', 'attempt' => $this->maxAttempts, 'retry_at' => null, 'failure_code' => 'handler-unavailable', 'updated_at' => now()]);
+                    $this->terminalFailure(id: $id, code: 'handler-unavailable', now: $now);
 
                     return 'failed';
                 }
-                $handler->handle(new WakeupDelivery(request: $this->request($context, $row), generation: $generation, attempt: (int) $row->attempt));
-                $this->connection->table('sys_wakeup_requests')->where('id', $id)->where('status', 'running')->where('generation', $generation)->update(['status' => 'completed', 'completed_at' => now(), 'lease_until' => null, 'updated_at' => now()]);
+                $payload = $this->payload($row);
+
+                if ($payload['status'] !== 'ready' && $payload['status'] !== 'legacy-admitted') {
+                    $this->terminalFailure(id: $id, code: $payload['status'], now: $now);
+
+                    return 'failed';
+                }
+
+                $handler->handle(new WakeupDelivery(
+                    request: $this->request(context: $context, row: $row, payload: $payload['data']),
+                    generation: $generation,
+                    attempt: (int) $row->attempt,
+                ));
+                $this->connection->table('sys_wakeup_requests')->where('id', $id)->where('status', 'running')->where('generation', $generation)->update(['status' => 'completed', 'completed_at' => $now, 'lease_until' => null, 'updated_at' => $now]);
 
                 return 'completed';
             });
@@ -152,8 +173,10 @@ final class SweepRunner implements WakeupSweeper
             if ($row === null) {
                 return 'skipped';
             }
+            $now = $this->clock->now();
             $attempt = (int) $row->attempt;
-            $retry = $attempt >= $this->maxAttempts ? null : now()->addSeconds(min(300, 2 ** $attempt));
+            $backoffSeconds = min(300, 2 ** $attempt);
+            $retry = $attempt >= $this->maxAttempts ? null : $now->add(new DateInterval("PT{$backoffSeconds}S"));
             $this->connection->table('sys_wakeup_requests')
                 ->where('id', $id)
                 ->where('status', 'running')
@@ -164,19 +187,43 @@ final class SweepRunner implements WakeupSweeper
                     'retry_at' => $retry,
                     'lease_until' => null,
                     'failure_code' => 'handler-failed',
-                    'updated_at' => now(),
+                    'updated_at' => $now,
                 ]);
 
             return $retry === null ? 'failed' : 'retried';
         }
     }
 
-    private function request(TenantContext $context, object $row): WakeupRequest
+    /** @return array{status: 'ready'|'legacy-admitted'|'handler-unavailable'|'handler-stamp-missing'|'handler-version-mismatch', data?: array<string, mixed>} */
+    private function payload(object $row): array
+    {
+        try {
+            $payload = json_decode((string) $row->payload, true, flags: JSON_THROW_ON_ERROR);
+        } catch (Throwable) {
+            return ['status' => 'handler-stamp-missing'];
+        }
+
+        return $this->handlers->inspectPayload(kind: (string) $row->kind, payload: $payload);
+    }
+
+    /** @param array<string, mixed> $payload */
+    private function request(TenantContext $context, object $row, array $payload): WakeupRequest
     {
         $window = $row->window_start === null ? null : new WakeupWindow(start: $this->date($row->window_start), end: $this->date($row->window_end), period: $row->period);
-        $payload = json_decode($row->payload, true, flags: JSON_THROW_ON_ERROR);
 
         return new WakeupRequest(context: $context, kind: $row->kind, requestKey: $row->request_key, fireAt: $this->date($row->fire_at), window: $window, payload: $payload);
+    }
+
+    private function terminalFailure(string $id, string $code, DateTimeImmutable $now): void
+    {
+        $this->connection->table('sys_wakeup_requests')->where('id', $id)->update([
+            'status' => 'failed',
+            'attempt' => $this->maxAttempts,
+            'retry_at' => null,
+            'lease_until' => null,
+            'failure_code' => $code,
+            'updated_at' => $now,
+        ]);
     }
 
     private function date(mixed $value): DateTimeImmutable

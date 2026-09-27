@@ -363,7 +363,7 @@ def verify_packet_02(packet: dict) -> dict:
 def verify_packet_03(packet: dict) -> dict:
     candidate = load_json(REPO_DELIVERY / 'candidate.json')
     public = load_json(REPO_DELIVERY / 'public/packages.json')
-    if 'corex/auth' in json.dumps(public):
+    if 'corex/access' in json.dumps(public):
         raise PublicationPacketError('private auth leaked into public metadata')
     if not candidate.get('p2_contract_hashes'):
         raise PublicationPacketError('accepted P2 contract hashes missing from candidate')

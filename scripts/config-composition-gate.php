@@ -6,7 +6,7 @@ declare(strict_types=1);
 /**
  * Blocking config() composition gate (P3.6 scanner, P7.11 blocking bit).
  *
- * Reports config('literal') calls outside allowlisted composition paths.
+ * Reports direct config() calls outside allowlisted composition paths.
  * Exit 1 when blocking=true and any C1 remains.
  */
 const EXIT_OK = 0;
@@ -29,7 +29,7 @@ foreach (glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcRoot) {
             continue;
         }
 
-        foreach (findConfigLiteralCalls($file) as $finding) {
+        foreach (findConfigCalls($file) as $finding) {
             $findings[] = [
                 'file' => $relativeFile,
                 'line' => $finding['line'],
@@ -187,7 +187,7 @@ function globToRegex(string $glob): string
 /**
  * @return list<array{line: int}>
  */
-function findConfigLiteralCalls(string $file): array
+function findConfigCalls(string $file): array
 {
     $code = file_get_contents($file);
 
@@ -202,7 +202,26 @@ function findConfigLiteralCalls(string $file): array
     for ($i = 0; $i < $count; $i++) {
         $token = $tokens[$i];
 
-        if (! is_array($token) || $token[0] !== T_STRING || strtolower($token[1]) !== 'config') {
+        if (! is_array($token)) {
+            continue;
+        }
+
+        $plain = $token[0] === T_STRING && strtolower($token[1]) === 'config';
+        $qualified = $token[0] === T_NAME_FULLY_QUALIFIED && strtolower($token[1]) === '\\config';
+
+        if (! $plain && ! $qualified) {
+            continue;
+        }
+
+        $previous = $i - 1;
+
+        while ($previous >= 0 && is_array($tokens[$previous])
+            && in_array($tokens[$previous][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+            $previous--;
+        }
+
+        if ($plain && $previous >= 0 && is_array($tokens[$previous])
+            && in_array($tokens[$previous][0], [T_FUNCTION, T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
             continue;
         }
 
@@ -216,25 +235,7 @@ function findConfigLiteralCalls(string $file): array
             continue;
         }
 
-        $j++;
-
-        while ($j < $count && is_array($tokens[$j]) && in_array($tokens[$j][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
-            $j++;
-        }
-
-        if ($j >= $count || ! is_array($tokens[$j])) {
-            continue;
-        }
-
-        if (! in_array($tokens[$j][0], [T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE], true)) {
-            continue;
-        }
-
-        if ($tokens[$j][0] === T_CONSTANT_ENCAPSED_STRING) {
-            $line = $token[2];
-
-            $findings[] = ['line' => $line];
-        }
+        $findings[] = ['line' => $token[2]];
     }
 
     return $findings;

@@ -38,7 +38,7 @@ app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
 ## Зависимости
 
 `corex/core`, `corex/modules` и `illuminate/*`. Без AzGuard; Laravel 12/13.
-Авторизация — забота потребителя / `corex/auth`.
+Авторизация — забота потребителя / `corex/access`.
 
 ## Установка и lifecycle
 

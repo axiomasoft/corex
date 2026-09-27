@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- P16.12: path-bearing Composer/PHPStan/graph-gate/CI/docs/CHANGELOG carriers reconciled to post-P16 physical layout; `extra.corex.public-api` namespaces unchanged (D92). Generated graph report and PHPStan contour regenerated via owners. Mutation P1.24 patches retargeted from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.
+- P15.13: реестр переименований помечен исполненным; `scripts/p15-rename-completeness-gate.php` и manifest сверяют 40 old-token исходов P15 с outcome-aware allowlist; корневой `CHANGELOG.md` — единственный release-visible журнал rename (D85).
+- P15.11–P15.12: идентичность пакетов принята владельцем (D134, D135). `corex/api` / `packages/api` стали `corex/operations` / `packages/operations`; `corex/auth` / `packages/auth` стали `corex/access` / `packages/access`. Пространства `CoreX\Api` и `CoreX\Auth`, ключи конфигурации, префиксы маршрутов, идентификаторы операций и префиксы таблиц не менялись. Composer `replace` не добавлялся.
+- P15.10: публичные FQCN зон ядра переехали без alias. `CoreX\PubSub\*` стал `CoreX\Messaging\*`, контракты аудита и `Auditable` — `CoreX\Audit\Contracts\*`, `AuditLog` — `CoreX\Audit\Internal\AuditLog`, `CoreX\Views\*` — `CoreX\SavedViews\*`, `DataScopeAccessDecision` — `CoreX\Support\Data\DataScopeAccessDecision`. Имена таблиц и morph-значения не менялись.
+
 ### Fixed
 
 - P5.16: PostgreSQL-миграции messaging создают outbox/inbox по настроенным именам таблиц; цели raw partial indexes безопасно экранируются грамматикой соединения.
@@ -22,7 +29,9 @@
 ### Added
 
 - P14.21: документация `operation-cost/1`, `bulk-operation/1` и `webhook-delivery/1`: explicit shared/tenant schema setup, global enforcement и lower-scope observe, conservative settlement, partial cancellation, import recovery/export restart, synthetic signing/rotation, pinned HTTPS, bounded retry/replay/retention. Пять снимков `api/v1` используют один generator и compatibility gate; итоговая матрица и текущие команды/хеши — `findings/P14-execution-validation.md`. Remote delivery остаётся выключена; local qualification не является разрешением live rollout, production DDL или rotation.
+- P13.12: локально заморожен `operation-contract/1`; корневые feature/architecture ratchets проверяют HTTP/tool parity, единый compiled registry/invoker, отсутствие GraphQL, field guard и дрейф снимка. Политика API, справочник источников и README пакета обновлены; выпуск и тег остаются за P17.
 - P12.8: root ratchets freeze the P12 public error vocabulary, bounded observability labels and direct-audit impersonation stamp; the phase receipt records package, architecture, PostgreSQL, optional-OpenTelemetry and planted-negative evidence.
+- P11.8: `ExtensionContract` даёт переиспользуемую проверку compiled registry и точной extension stamp; `extension-contract-gate.php` закрепляет классификацию registry/catalogue/manager поверхностей и отвергает новый неклассифицированный тип.
 - P11.1: `corex/modules` adds repeatable `Manifest::replace()`, Composer version/reference discovery (`InstalledPackageVersion`) and dependency-neutral `ExtensionStamp`. Extension policy names the canonical id of every compiled point.
 - P10.8: \`corex/attributes\` groups schema, values, query, storage, integration and Laravel internals in six top-level subsystems with explicit Composer namespace maps. The architecture gate rejects search imports, runtime config reads, foreign DDL and field-level storage drivers; both database lanes and the public API sweep are recorded in \`findings/P10-receipts.md\`.
 - P9.8: tenancy 13-directory structure and compatibility fingerprint ratchet; DATA-003 source-write ownership gate with a foreign-table negative fixture. Cross-package writes now use owner ports for task operation receipts and identity password rehash; core context signature types are explicitly public, while the restorer implementation remains private.
@@ -135,6 +144,15 @@
 
 ### Changed
 
+- **BREAKING** `corex/modules`: `Dep`→`ModuleDependency` (`$kind`/`$package`), `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`. Composer module id и сигнатура `corex:modules:why` сохранены; алиасов нет (P15.1, D85/D86).
+- **BREAKING** `corex/attributes`: `RegistryFieldCatalogue`→`ModuleFieldCatalogue`, `StructuralAttributeFilter`→`SchemaAttributeFilter`, `WriteResult`→`AttributeWriteResult`, `OperationKey`→`SchemaOperationId`; алиасов нет (P15.2, D85).
+- **BREAKING** `corex/search`: `UnsupportedSearchProvider`→`UnavailableSearchProvider` (P15.3, D85).
+- **BREAKING** `corex/search-meilisearch`: `MeilisearchQueryAdapter`→`MeilisearchSearchProvider` (P15.4, D85).
+- **BREAKING** `corex/transfer`: `DatabaseTransferRunner`→`SqlTransferExecutor`, `ImportTarget`→`TransferSink` (P15.5, D85).
+- **BREAKING** `corex/tasks-workflow`: `CompletionCaptureObserver`→`CaptureTaskCompletion`, `TasksWorkflowModule`→`TaskWorkflowIntegration`; Composer module id `corex/tasks-workflow` сохранён (P15.6, D85/D86).
+- **BREAKING** `corex/wakeup`: `DueSource`→`DueWakeupSource`, `WakeupHandler`→`DueWakeupHandler`, `WakeupHint`→`WakeupScheduleHint`, `WakeupSweeper`→`DueWakeupSweeper`; `WakeupScheduler` сохранён; алиасов нет (P15.7, D85/D87).
+- **BREAKING** `corex/api`: `Dispatcher`→`OperationDispatcher`, `ErrorBoundary`→`OperationErrorBoundary`, `RequestMetadata`→`InvocationMetadata`, `OpenApi`→`OpenApiDocumentGenerator`; маршруты, config keys, operation id и OpenAPI/error wire не менялись; алиасов нет (P15.8, D85).
+- **BREAKING** `corex/tenancy`: `AccountsResult`→`AvailableAccounts`; поля конструктора и сериализация Redis/cache без изменений; алиасов нет (P15.9, D85).
 - **BREAKING** `corex/core`: `DataScope` — скалярный versioned конструктор, удалено публичное свойство `TenantContext $context`, тип помечен `DurablePayload`; PHPStan-правило `corex.durablePayload.untypedArrayProperty` отвергает `array` без типа значения и `array<mixed>` (P4.7, D6/D21, G-API).
 - PLAN1 `2026.09.15-№1-COREX-FLEXCRM-REMAINING` перенесён в `plans/archive/` после терминального закрытия; скрипты `remaining-cohort-*` и `plans/ACTIVE.md` указывают на архивный путь.
 - `phases/P9/P9.2.md`: пути `Files` обновлены с `import-export`/`intl-search` на `transfer`/`search-intl` после rename P12.4/P12.6 (P12A.6, A8).

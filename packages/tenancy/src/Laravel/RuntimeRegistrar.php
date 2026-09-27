@@ -11,7 +11,6 @@ use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\ConnectionGuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\Storage\ContextTenantStorage;
 use CoreX\Tenancy\StanclTenancyManager;
@@ -73,10 +72,10 @@ final class RuntimeRegistrar implements PackageRegistrar
             ),
         );
         $app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
-        $app->scoped(
+        $app->extend(
             TenantContextRestorer::class,
-            static fn (Application $app): ConnectionGuardedTenantContextRestorer => new ConnectionGuardedTenantContextRestorer(
-                semantic: new GuardedTenantContextRestorer($app->make(TenantContextResolver::class)),
+            static fn (TenantContextRestorer $semantic, Application $app): ConnectionGuardedTenantContextRestorer => new ConnectionGuardedTenantContextRestorer(
+                semantic: $semantic,
                 database: $app->make(DatabaseManager::class),
             ),
         );

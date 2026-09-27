@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Api\Laravel;
+
+use CoreX\Api\Contracts\OperationBudget;
+use CoreX\Api\Contracts\OperationCostEstimator;
+use CoreX\Api\Data\CostOptions;
+use CoreX\Api\Internal\Cost\BudgetAdmission;
+use CoreX\Api\Internal\Cost\BudgetRetention;
+use CoreX\Api\Internal\Cost\DeclaredCostEstimator;
+use CoreX\Api\Internal\Cost\SqlOperationBudget;
+use Illuminate\Contracts\Foundation\Application;
+use Psr\Clock\ClockInterface;
+
+/** @internal Explicit, lazy composition root for shared operation budgets. */
+final readonly class CostRegistrar
+{
+    public static function register(Application $app): void
+    {
+        $config = $app['config']->get('corex-api.cost');
+        $options = CostOptions::fromArray(is_array($config) ? $config : []);
+        $app->instance(CostOptions::class, $options);
+        $app->singleton(OperationCostEstimator::class, DeclaredCostEstimator::class);
+        $app->singleton(BudgetRetention::class, static fn (Application $app): BudgetRetention => new BudgetRetention(
+            connection: $app->make(ApiSchemaRegistrar::class)->budget(),
+            clock: $app->make(ClockInterface::class),
+            terminalRetentionSeconds: $options->terminalRetentionSeconds,
+        ));
+
+        if (! $options->enabled) {
+            return;
+        }
+
+        $app->singleton(OperationBudget::class, static function (Application $app) use ($options): SqlOperationBudget {
+            return new SqlOperationBudget(
+                connection: $app->make(ApiSchemaRegistrar::class)->budget(),
+                clock: $app->make(ClockInterface::class),
+                scopeHmacSecret: $options->scopeHmacSecret,
+                capacity: $options->capacity,
+                restoreRate: $options->restoreRate,
+                enforcedLevels: $options->enforcedLevels,
+                reservationTtlSeconds: $options->reservationTtlSeconds,
+            );
+        });
+        $app->singleton(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
+            budget: $app->make(OperationBudget::class),
+            estimator: $app->make(OperationCostEstimator::class),
+            installationId: $options->installationId,
+        ));
+    }
+}

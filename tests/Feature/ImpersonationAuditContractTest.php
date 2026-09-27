@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Contracts\AuditEntry;
+use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Audit\RecordAuditEntry;
-use CoreX\Contracts\AuditEntry;
-use CoreX\Contracts\AuditLogger;
 use CoreX\Enums\ActorType;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\ImpersonationService;

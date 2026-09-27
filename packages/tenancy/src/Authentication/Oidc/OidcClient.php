@@ -17,6 +17,8 @@ use SensitiveParameter;
  * from {@see OidcDiscovery}, never hardcoded (D123). `client_secret`/
  * `code_verifier` are marked {@see SensitiveParameter} so neither reaches a
  * stack trace.
+ *
+ * @internal
  */
 final class OidcClient
 {

@@ -8,7 +8,7 @@ use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Testing\TasksTestCase;
+use CoreX\Tasks\Tests\Support\TasksTestCase;
 use Mockery;
 use Override;
 

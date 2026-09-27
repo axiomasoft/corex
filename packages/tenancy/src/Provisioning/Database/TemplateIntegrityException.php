@@ -6,4 +6,5 @@ namespace CoreX\Tenancy\Provisioning\Database;
 
 use RuntimeException;
 
+/** @internal */
 final class TemplateIntegrityException extends RuntimeException {}

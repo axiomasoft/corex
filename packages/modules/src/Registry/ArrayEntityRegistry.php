@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\EntityNotFound;
+use CoreX\Modules\Exceptions\RegistryFrozen;
 use CoreX\Tenancy\TenantContext;
 
 /**
@@ -19,6 +20,8 @@ use CoreX\Tenancy\TenantContext;
  */
 final class ArrayEntityRegistry implements EntityRegistry
 {
+    private bool $frozen = false;
+
     /** @var array<string, EntityDefinition> */
     private array $entities = [];
 
@@ -41,7 +44,20 @@ final class ArrayEntityRegistry implements EntityRegistry
 
     public function register(EntityDefinition $definition): void
     {
+        if ($this->frozen) {
+            throw RegistryFrozen::late('entity', $definition->handle);
+        }
+
+        if (isset($this->entities[$definition->handle])) {
+            throw RegistryFrozen::duplicate('entity', $definition->handle);
+        }
+
         $this->entities[$definition->handle] = $definition;
+    }
+
+    public function freeze(): void
+    {
+        $this->frozen = true;
     }
 
     public function get(string $handle): EntityDefinition

@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Provisioning\Database;
 
 use Illuminate\Database\Connection;
 
+/** @internal */
 final class TemplateIntegrityLock
 {
     public function acquire(Connection $connection, string $templateId): void

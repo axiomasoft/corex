@@ -16,7 +16,7 @@ use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Extend\Routes;
 use CoreX\Modules\Extend\Workflow;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Money\MoneyCast;
@@ -39,7 +39,7 @@ final class RegistryCompiler
     ) {}
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @param  list<string>|null  $installedPackages  composer names known installed beyond
      *                                                $manifests. Defaults to a real read of
      *                                                `vendor/composer/installed.json` ({@see
@@ -50,10 +50,12 @@ final class RegistryCompiler
      *                                                        entry as its stage starts, in the order
      *                                                        actually executed — test seam for
      *                                                        pipeline determinism.
+     * @param  array<string, InstalledPackageVersion>|null  $installedVersions  Explicit
+     *                                                                          metadata for contract fixtures.
      *
      * @internal spec: AC-2, AC-18
      */
-    public function compile(array $manifests, ?array $installedPackages = null, ?callable $onStage = null): CompiledRegistry
+    public function compile(array $manifests, ?array $installedPackages = null, ?callable $onStage = null, ?array $installedVersions = null): CompiledRegistry
     {
         $this->validator->validateRequiredFields($manifests);
         $this->validator->validateExtenderSet($manifests);
@@ -61,6 +63,16 @@ final class RegistryCompiler
         $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover());
         $this->validator->validateComponents($manifests);
         $this->validator->validateDependencyGraph($manifests);
+
+        usort($manifests, static fn (ModuleManifest $left, ModuleManifest $right): int => $left->composerName <=> $right->composerName);
+
+        $versions = $installedVersions ?? InstalledPackages::discoverVersions();
+        $normalized = $this->normalize($manifests, $versions);
+        $this->validator->validateNormalizedIdentities($normalized);
+        $applied = $this->validator->applyReplacements($normalized, $manifests);
+        $this->validator->validateMenuOrder($applied['effective']);
+        $effective = $this->order($applied['effective']);
+        $removed = $this->removedKeys($normalized, $effective);
 
         $entities = [];
         $entityFields = [];
@@ -88,30 +100,48 @@ final class RegistryCompiler
             };
         }
 
+        $compiler = $this->compilerIdentity($versions);
+        $modules = array_map(
+            fn (ModuleManifest $manifest): array => $this->packageVersion($versions, $manifest->composerName)->canonical(),
+            $manifests,
+        );
+        $extensions = array_map(static fn (NormalizedExtension $record): array => $record->canonical(), $effective);
+        $fingerprint = CompiledRegistry::hashCanonical(
+            compiler: $compiler,
+            modules: $modules,
+            extensions: $extensions,
+            replacements: $applied['replacements'],
+        );
+
         return new CompiledRegistry(
-            entities: $entities,
-            entityFields: $entityFields,
-            permissions: $permissions,
-            api: $api,
-            filament: $filament,
-            menu: $menu,
-            routes: $routes,
-            workflow: $workflow,
-            settings: $this->collectSettings($manifests),
-            featureFlags: $this->collectFeatureFlags($manifests),
-            listeners: array_column(array_map(static fn (Manifest $manifest): array => [
+            entities: $this->filterEntities($entities, $removed),
+            entityFields: $this->detachEntityFields($this->filterEntityFields($entityFields, $removed)),
+            permissions: $this->detachExtenders(Permissions::class, $this->filterPermissions($permissions, $removed)),
+            api: $this->detachExtenders(Api::class, $this->filterApi($api, $removed)),
+            filament: $this->detachExtenders(Filament::class, $this->filterFilament($filament, $manifests, $removed)),
+            menu: $this->detachExtenders(Menu::class, $this->orderedMenus($this->filterMenus($menu, $removed), $effective)),
+            routes: $this->detachExtenders(Routes::class, $this->filterRoutes($routes, $manifests, $removed)),
+            workflow: $this->detachExtenders(Workflow::class, $this->filterWorkflow($workflow, $manifests, $removed)),
+            settings: $this->filterSettings($this->collectSettings($manifests), $removed),
+            featureFlags: $this->filterFeatureFlags($this->collectFeatureFlags($manifests), $removed),
+            listeners: $this->filterListeners(array_column(array_map(static fn (ModuleManifest $manifest): array => [
                 'module' => $manifest->composerName, 'listeners' => $manifest->listeners,
-            ], $manifests), 'listeners', 'module'),
+            ], $manifests), 'listeners', 'module'), $removed),
+            compiler: $compiler,
+            modules: $modules,
+            extensions: $extensions,
+            replacements: $applied['replacements'],
+            fingerprint: $fingerprint,
         );
     }
 
     /**
-     * `Manifest::$settings`/`$featureFlags` are plain manifest properties,
+     * `ModuleManifest::$settings`/`$featureFlags` are plain manifest properties,
      * not entries in the closed 8-extender pipeline — they never reached
      * the compiled file before this — collected here directly, outside
      * {@see PipelineStages::ORDER}.
      *
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<CompiledSettingDefault>
      *
      * @internal spec: P1.25, A68
@@ -136,7 +166,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<FeatureFlagDefinition>
      */
     private function collectFeatureFlags(array $manifests): array
@@ -153,7 +183,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return array<string, EntityDefinition>
      */
     private function applyEntityExtenders(array $manifests): array
@@ -183,7 +213,7 @@ final class RegistryCompiler
         return $entities;
     }
 
-    private function compileEntity(Manifest $manifest, Entity $extender): EntityDefinition
+    private function compileEntity(ModuleManifest $manifest, Entity $extender): EntityDefinition
     {
         $modulePrefix = $manifest->tablePrefix;
 
@@ -287,7 +317,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @param  array<string, EntityDefinition>  $entities
      * @return list<CompiledEntityField>
      */
@@ -319,7 +349,7 @@ final class RegistryCompiler
     /**
      * @template T of Extender
      *
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @param  class-string<T>  $extenderClass
      * @return list<T>
      */
@@ -345,7 +375,7 @@ final class RegistryCompiler
      * site sits inside a `match` arm; a named method with its own concrete
      * `@return` gives the match arm a type PHPStan doesn't have to re-derive.
      *
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Permissions>
      */
     private function collectPermissions(array $manifests): array
@@ -354,7 +384,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Api>
      */
     private function collectApi(array $manifests): array
@@ -437,7 +467,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Filament>
      */
     private function collectFilament(array $manifests): array
@@ -446,7 +476,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Menu>
      */
     private function collectMenu(array $manifests): array
@@ -455,7 +485,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Routes>
      */
     private function collectRoutes(array $manifests): array
@@ -464,11 +494,686 @@ final class RegistryCompiler
     }
 
     /**
-     * @param  list<Manifest>  $manifests
+     * @param  list<ModuleManifest>  $manifests
      * @return list<Workflow>
      */
     private function collectWorkflow(array $manifests): array
     {
         return $this->collect($manifests, Workflow::class);
+    }
+
+    /**
+     * @param  list<ModuleManifest>  $manifests
+     * @param  array<string, InstalledPackageVersion>  $versions
+     * @return list<NormalizedExtension>
+     */
+    private function normalize(array $manifests, array $versions): array
+    {
+        $records = [];
+
+        foreach ($manifests as $manifest) {
+            $ownerVersion = $this->packageVersion($versions, $manifest->composerName)->version;
+
+            foreach ($manifest->extenders as $extender) {
+                array_push($records, ...$this->normalizeExtender($manifest, $extender, $ownerVersion));
+            }
+
+            $namespace = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
+
+            foreach ($manifest->settings as $setting) {
+                $records[] = new NormalizedExtension(
+                    point: 'settings',
+                    id: $namespace.':'.$setting->key,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: [
+                        'key' => $setting->key,
+                        'default' => $setting->default,
+                        'workspaceScoped' => $setting->workspaceScoped,
+                        'userScoped' => $setting->userScoped,
+                        'sensitive' => $setting->sensitive,
+                    ],
+                );
+            }
+
+            foreach ($manifest->featureFlags as $flag) {
+                $records[] = new NormalizedExtension(
+                    point: 'feature_flags',
+                    id: $flag->key,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: [
+                        'default' => $flag->default,
+                        'module' => $flag->module,
+                        'payload' => $flag->payload,
+                    ],
+                );
+            }
+
+            foreach ($manifest->listeners as $event => $listeners) {
+                foreach ($listeners as $listener) {
+                    $records[] = new NormalizedExtension(
+                        point: 'listeners',
+                        id: $manifest->composerName.':'.$event.':'.$listener,
+                        owner: $manifest->composerName,
+                        ownerVersion: $ownerVersion,
+                        payload: ['event' => $event, 'listener' => $listener],
+                    );
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    /**
+     * @return list<NormalizedExtension>
+     */
+    private function normalizeExtender(ModuleManifest $manifest, mixed $extender, string $ownerVersion): array
+    {
+        if ($extender instanceof Entity) {
+            $handle = $this->resolvedEntityHandle($manifest, $extender);
+            $fields = $extender->fieldDefinitions ?? $this->introspectCasts($extender->model);
+            $records = [
+                new NormalizedExtension(
+                    point: 'entity',
+                    id: $handle,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['model' => $extender->model, 'table' => $extender->table],
+                ),
+            ];
+
+            foreach ($fields as $field) {
+                $records[] = new NormalizedExtension(
+                    point: 'entity_field',
+                    id: $handle.'.'.$field->handle,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: $field->toArray(),
+                );
+            }
+
+            return $records;
+        }
+
+        if ($extender instanceof EntityField) {
+            return [
+                new NormalizedExtension(
+                    point: 'entity_field',
+                    id: $extender->entityHandle.'.'.$extender->fieldHandle,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: CompiledRegistry::extenderToArray($extender),
+                ),
+            ];
+        }
+
+        if ($extender instanceof Permissions) {
+            return [
+                new NormalizedExtension(
+                    point: 'permissions',
+                    id: $extender->panel.':'.$extender->entity,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['actions' => $extender->actions, 'scopeable' => $extender->isScopeable],
+                ),
+            ];
+        }
+
+        if ($extender instanceof Api) {
+            return $this->normalizeApi($manifest, $extender, $ownerVersion);
+        }
+
+        if ($extender instanceof Filament) {
+            $records = [];
+
+            foreach ($extender->classes as $class) {
+                $subject = $extender->kind === 'tab' ? ($extender->entityHandle ?? $class) : $class;
+                $records[] = new NormalizedExtension(
+                    point: 'filament',
+                    id: $manifest->composerName.':'.$extender->panel.':'.$extender->kind.':'.$subject,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['class' => $class, 'entityHandle' => $extender->entityHandle],
+                );
+            }
+
+            return $records;
+        }
+
+        if ($extender instanceof Menu) {
+            return [
+                new NormalizedExtension(
+                    point: 'menu',
+                    id: $extender->panel.':'.$extender->handle,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['label' => $extender->label, 'route' => $extender->routeName],
+                    after: $extender->afterHandle,
+                ),
+            ];
+        }
+
+        if ($extender instanceof Routes) {
+            $file = basename(str_replace('\\', '/', $extender->file));
+
+            return [
+                new NormalizedExtension(
+                    point: 'routes',
+                    id: $manifest->composerName.':'.$extender->kind.':'.$file.':'.($extender->routePrefix ?? ''),
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['file' => $file, 'middlewares' => $extender->middlewares],
+                ),
+            ];
+        }
+
+        if ($extender instanceof Workflow) {
+            if ($extender->kind === 'stepType') {
+                return [
+                    new NormalizedExtension(
+                        point: 'workflow.step',
+                        id: (string) $extender->stepClass,
+                        owner: $manifest->composerName,
+                        ownerVersion: $ownerVersion,
+                        payload: [],
+                    ),
+                ];
+            }
+
+            $records = [];
+
+            foreach ($extender->eventNames as $event) {
+                $records[] = new NormalizedExtension(
+                    point: 'workflow.trigger',
+                    id: $manifest->composerName.':'.($extender->entityHandle ?? '').':'.$event,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['event' => $event],
+                );
+            }
+
+            return $records;
+        }
+
+        return [];
+    }
+
+    /**
+     * @return list<NormalizedExtension>
+     */
+    private function normalizeApi(ModuleManifest $manifest, Api $api, string $ownerVersion): array
+    {
+        if ($api->mode === 'operation') {
+            return [
+                new NormalizedExtension(
+                    point: 'api.operation',
+                    id: $api->version.':'.$api->operationId,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: [
+                        'method' => $api->method,
+                        'path' => preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', (string) $api->path),
+                    ],
+                ),
+            ];
+        }
+
+        if ($api->mode === 'tool') {
+            $wire = ApiToolValidator::wireName($api);
+
+            return [
+                new NormalizedExtension(
+                    point: 'api.tool',
+                    id: $manifest->composerName.':'.$api->toolCode.':'.$api->toolVersion,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['wire' => $wire],
+                ),
+                new NormalizedExtension(
+                    point: 'api.tool',
+                    id: 'wire:'.$wire,
+                    owner: $manifest->composerName,
+                    ownerVersion: $ownerVersion,
+                    payload: ['tool' => $api->toolCode],
+                ),
+            ];
+        }
+
+        return [
+            new NormalizedExtension(
+                point: 'api.resource',
+                id: $manifest->composerName.':'.$api->mode.':'.$api->entityHandle,
+                owner: $manifest->composerName,
+                ownerVersion: $ownerVersion,
+                payload: ['mode' => $api->mode],
+            ),
+        ];
+    }
+
+    /**
+     * @param  list<NormalizedExtension>  $records
+     * @return list<NormalizedExtension>
+     */
+    private function order(array $records): array
+    {
+        $grouped = [];
+
+        foreach ($records as $record) {
+            $grouped[$record->point][] = $record;
+        }
+
+        ksort($grouped);
+
+        $ordered = [];
+
+        foreach ($grouped as $point => $items) {
+            $ordered = [...$ordered, ...($point === 'menu' ? $this->orderMenus($items) : $this->orderDefault($items))];
+        }
+
+        return $ordered;
+    }
+
+    /**
+     * @param  list<NormalizedExtension>  $items
+     * @return list<NormalizedExtension>
+     */
+    private function orderDefault(array $items): array
+    {
+        usort($items, function (NormalizedExtension $left, NormalizedExtension $right): int {
+            $leftPriority = is_numeric($left->payload['priority'] ?? null) ? (int) $left->payload['priority'] : null;
+            $rightPriority = is_numeric($right->payload['priority'] ?? null) ? (int) $right->payload['priority'] : null;
+
+            if ($leftPriority !== null || $rightPriority !== null) {
+                return ($rightPriority ?? 0) <=> ($leftPriority ?? 0) ?: $left->id <=> $right->id;
+            }
+
+            return $left->id <=> $right->id;
+        });
+
+        return $items;
+    }
+
+    /**
+     * @param  list<NormalizedExtension>  $items
+     * @return list<NormalizedExtension>
+     */
+    private function orderMenus(array $items): array
+    {
+        /** @var array<string, NormalizedExtension> $byId */
+        $byId = [];
+        $incoming = [];
+
+        foreach ($items as $item) {
+            $byId[$item->id] = $item;
+            $incoming[$item->id] = 0;
+        }
+
+        foreach ($items as $item) {
+            if ($item->after === null) {
+                continue;
+            }
+
+            $afterId = explode(':', $item->id, 2)[0].':'.$item->after;
+            $incoming[$item->id]++;
+        }
+
+        $ordered = [];
+
+        while ($byId !== []) {
+            $frontier = array_keys(array_filter($incoming, static fn (int $count, string $id): bool => $count === 0 && isset($byId[$id]), ARRAY_FILTER_USE_BOTH));
+            sort($frontier);
+
+            if ($frontier === []) {
+                throw CompilationException::menuCycle(implode(', ', array_keys($byId)));
+            }
+
+            $id = $frontier[0];
+            $ordered[] = $byId[$id];
+            unset($byId[$id], $incoming[$id]);
+
+            foreach ($items as $item) {
+                if ($item->after === null) {
+                    continue;
+                }
+
+                $afterId = explode(':', $item->id, 2)[0].':'.$item->after;
+
+                if ($afterId === $id && isset($incoming[$item->id])) {
+                    $incoming[$item->id]--;
+                }
+            }
+        }
+
+        return $ordered;
+    }
+
+    /**
+     * @param  list<NormalizedExtension>  $all
+     * @param  list<NormalizedExtension>  $effective
+     * @return array<string, true>
+     */
+    private function removedKeys(array $all, array $effective): array
+    {
+        $kept = [];
+
+        foreach ($effective as $record) {
+            $kept[$record->key()] = true;
+        }
+
+        $removed = [];
+
+        foreach ($all as $record) {
+            if (! isset($kept[$record->key()])) {
+                $removed[$record->key()] = true;
+            }
+        }
+
+        return $removed;
+    }
+
+    /**
+     * @param  array<string, EntityDefinition>  $entities
+     * @param  array<string, true>  $removed
+     * @return array<string, EntityDefinition>
+     */
+    private function filterEntities(array $entities, array $removed): array
+    {
+        $filtered = array_filter(
+            $entities,
+            static fn (EntityDefinition $entity): bool => ! isset($removed['entity'."\0".$entity->handle]),
+        );
+        ksort($filtered);
+
+        return $filtered;
+    }
+
+    /**
+     * @param  list<CompiledEntityField>  $fields
+     * @param  array<string, true>  $removed
+     * @return list<CompiledEntityField>
+     */
+    private function filterEntityFields(array $fields, array $removed): array
+    {
+        return array_values(array_filter(
+            $fields,
+            static fn (CompiledEntityField $field): bool => ! isset($removed['entity_field'."\0".$field->extender->entityHandle.'.'.$field->extender->fieldHandle]),
+        ));
+    }
+
+    /**
+     * @param  list<Permissions>  $permissions
+     * @param  array<string, true>  $removed
+     * @return list<Permissions>
+     */
+    private function filterPermissions(array $permissions, array $removed): array
+    {
+        return array_values(array_filter(
+            $permissions,
+            static fn (Permissions $item): bool => ! isset($removed['permissions'."\0".$item->panel.':'.$item->entity]),
+        ));
+    }
+
+    /**
+     * @param  list<Api>  $api
+     * @param  array<string, true>  $removed
+     * @return list<Api>
+     */
+    private function filterApi(array $api, array $removed): array
+    {
+        return array_values(array_filter($api, function (Api $item) use ($removed): bool {
+            $id = match ($item->mode) {
+                'operation' => 'api.operation'."\0".$item->version.':'.$item->operationId,
+                'tool' => 'api.tool'."\0".$item->declaringModule.':'.$item->toolCode.':'.$item->toolVersion,
+                default => 'api.resource'."\0".$item->declaringModule.':'.$item->mode.':'.$item->entityHandle,
+            };
+
+            return ! isset($removed[$id]);
+        }));
+    }
+
+    /**
+     * @param  list<Filament>  $filament
+     * @param  list<ModuleManifest>  $manifests
+     * @param  array<string, true>  $removed
+     * @return list<Filament>
+     */
+    private function filterFilament(array $filament, array $manifests, array $removed): array
+    {
+        $owners = $this->extenderOwners($manifests, Filament::class);
+
+        return array_values(array_filter($filament, function (Filament $item) use ($removed, $owners): bool {
+            $owner = $owners[spl_object_id($item)] ?? '';
+
+            foreach ($item->classes as $class) {
+                $subject = $item->kind === 'tab' ? ($item->entityHandle ?? $class) : $class;
+
+                if (! isset($removed['filament'."\0".$owner.':'.$item->panel.':'.$item->kind.':'.$subject])) {
+                    return true;
+                }
+            }
+
+            return $item->classes === [];
+        }));
+    }
+
+    /**
+     * @param  list<Menu>  $menu
+     * @param  array<string, true>  $removed
+     * @return list<Menu>
+     */
+    private function filterMenus(array $menu, array $removed): array
+    {
+        return array_values(array_filter(
+            $menu,
+            static fn (Menu $item): bool => ! isset($removed['menu'."\0".$item->panel.':'.$item->handle]),
+        ));
+    }
+
+    /**
+     * @param  list<Menu>  $menu
+     * @param  list<NormalizedExtension>  $effective
+     * @return list<Menu>
+     */
+    private function orderedMenus(array $menu, array $effective): array
+    {
+        $order = [];
+
+        foreach ($effective as $record) {
+            if ($record->point === 'menu') {
+                $order[] = $record->id;
+            }
+        }
+
+        usort($menu, function (Menu $left, Menu $right) use ($order): int {
+            $leftId = $left->panel.':'.$left->handle;
+            $rightId = $right->panel.':'.$right->handle;
+
+            return (array_search($leftId, $order, true) ?: 0) <=> (array_search($rightId, $order, true) ?: 0);
+        });
+
+        return $menu;
+    }
+
+    /**
+     * @param  list<Routes>  $routes
+     * @param  list<ModuleManifest>  $manifests
+     * @param  array<string, true>  $removed
+     * @return list<Routes>
+     */
+    private function filterRoutes(array $routes, array $manifests, array $removed): array
+    {
+        $owners = $this->extenderOwners($manifests, Routes::class);
+
+        return array_values(array_filter($routes, function (Routes $item) use ($removed, $owners): bool {
+            $owner = $owners[spl_object_id($item)] ?? '';
+            $file = basename(str_replace('\\', '/', $item->file));
+
+            return ! isset($removed['routes'."\0".$owner.':'.$item->kind.':'.$file.':'.($item->routePrefix ?? '')]);
+        }));
+    }
+
+    /**
+     * @param  list<Workflow>  $workflow
+     * @param  list<ModuleManifest>  $manifests
+     * @param  array<string, true>  $removed
+     * @return list<Workflow>
+     */
+    private function filterWorkflow(array $workflow, array $manifests, array $removed): array
+    {
+        $owners = $this->extenderOwners($manifests, Workflow::class);
+
+        return array_values(array_filter($workflow, function (Workflow $item) use ($removed, $owners): bool {
+            $owner = $owners[spl_object_id($item)] ?? '';
+
+            if ($item->kind === 'stepType') {
+                return ! isset($removed['workflow.step'."\0".$item->stepClass]);
+            }
+
+            foreach ($item->eventNames as $event) {
+                if (! isset($removed['workflow.trigger'."\0".$owner.':'.$item->entityHandle.':'.$event])) {
+                    return true;
+                }
+            }
+
+            return $item->eventNames === [];
+        }));
+    }
+
+    /**
+     * @param  list<CompiledSettingDefault>  $settings
+     * @param  array<string, true>  $removed
+     * @return list<CompiledSettingDefault>
+     */
+    private function filterSettings(array $settings, array $removed): array
+    {
+        return array_values(array_filter(
+            $settings,
+            static fn (CompiledSettingDefault $setting): bool => ! isset($removed['settings'."\0".$setting->namespace.':'.$setting->definition->key]),
+        ));
+    }
+
+    /**
+     * @param  list<FeatureFlagDefinition>  $flags
+     * @param  array<string, true>  $removed
+     * @return list<FeatureFlagDefinition>
+     */
+    private function filterFeatureFlags(array $flags, array $removed): array
+    {
+        return array_values(array_filter(
+            $flags,
+            static fn (FeatureFlagDefinition $flag): bool => ! isset($removed['feature_flags'."\0".$flag->key]),
+        ));
+    }
+
+    /**
+     * @param  array<string, array<class-string, list<class-string>>>  $listeners
+     * @param  array<string, true>  $removed
+     * @return array<string, array<class-string, list<class-string>>>
+     */
+    private function filterListeners(array $listeners, array $removed): array
+    {
+        $filtered = [];
+
+        foreach ($listeners as $module => $events) {
+            foreach ($events as $event => $handlers) {
+                $kept = array_values(array_filter(
+                    $handlers,
+                    static fn (string $handler): bool => ! isset($removed['listeners'."\0".$module.':'.$event.':'.$handler]),
+                ));
+
+                if ($kept !== []) {
+                    $filtered[$module][$event] = $kept;
+                }
+            }
+        }
+
+        ksort($filtered);
+
+        return $filtered;
+    }
+
+    /**
+     * @param  list<CompiledEntityField>  $fields
+     * @return list<CompiledEntityField>
+     */
+    private function detachEntityFields(array $fields): array
+    {
+        return array_map(
+            static fn (CompiledEntityField $field): CompiledEntityField => new CompiledEntityField(
+                extender: CompiledRegistry::extenderFromArray(EntityField::class, CompiledRegistry::extenderToArray($field->extender)),
+                declaringModule: $field->declaringModule,
+                sleeping: $field->sleeping,
+            ),
+            $fields,
+        );
+    }
+
+    /**
+     * @template T of \CoreX\Modules\Extend\Extender
+     *
+     * @param  class-string<T>  $class
+     * @param  list<T>  $items
+     * @return list<T>
+     */
+    private function detachExtenders(string $class, array $items): array
+    {
+        return array_map(
+            static fn (mixed $item): mixed => CompiledRegistry::extenderFromArray($class, CompiledRegistry::extenderToArray($item)),
+            $items,
+        );
+    }
+
+    /**
+     * @template T of \CoreX\Modules\Extend\Extender
+     *
+     * @param  list<ModuleManifest>  $manifests
+     * @param  class-string<T>  $class
+     * @return array<int, string>
+     */
+    private function extenderOwners(array $manifests, string $class): array
+    {
+        $owners = [];
+
+        foreach ($manifests as $manifest) {
+            foreach ($manifest->extenders as $extender) {
+                if ($extender instanceof $class) {
+                    $owners[spl_object_id($extender)] = $manifest->composerName;
+                }
+            }
+        }
+
+        return $owners;
+    }
+
+    /**
+     * @param  array<string, InstalledPackageVersion>  $versions
+     */
+    private function packageVersion(array $versions, string $name): InstalledPackageVersion
+    {
+        return $versions[$name] ?? new InstalledPackageVersion(name: $name, version: '0.0.0', reference: null);
+    }
+
+    /**
+     * @param  array<string, InstalledPackageVersion>  $versions
+     * @return array{package: string, version: string, reference: ?string}
+     */
+    private function compilerIdentity(array $versions): array
+    {
+        $compiler = $this->packageVersion($versions, 'corex/modules');
+
+        return [
+            'package' => $compiler->name,
+            'version' => $compiler->version,
+            'reference' => $compiler->reference,
+        ];
+    }
+
+    private function resolvedEntityHandle(ModuleManifest $manifest, Entity $extender): string
+    {
+        $prefix = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
+
+        return $extender->handle ?? sprintf('%s.%s', $prefix, Str::snake(class_basename($extender->model)));
     }
 }

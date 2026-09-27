@@ -14,6 +14,8 @@ require $srcRoot.'/GraphBuilder.php';
 require $srcRoot.'/TableExtractor.php';
 require $srcRoot.'/ConfigExtractor.php';
 require $srcRoot.'/DocWriter.php';
+require $srcRoot.'/VerdictRules.php';
+require $srcRoot.'/Scorecard.php';
 
 $command = $argv[1] ?? 'inventory';
 $outDir = $planRoot.'/artifacts/architecture';
@@ -109,6 +111,41 @@ switch ($command) {
             fwrite(STDERR, "  mode={$mode}: {$cnt}\n");
         }
         fwrite(STDERR, "undeclared-read ({$undeclaredCount}): ".implode(', ', $undeclaredKeys)."\n");
+        exit(0);
+    case 'verdicts':
+        $rules = new VerdictRules($repoRoot, $planRoot);
+        $built = $rules->build();
+        $headers = [...InventoryScanner::FILE_HEADERS, ...VerdictRules::VERDICT_EXTRA_HEADERS];
+        CsvEmitter::write($outDir.'/verdicts.csv', $headers, $built['rows']);
+        $summary = $built['summary'];
+        fwrite(STDERR, 'litmus_importer_method: '.$summary['litmus_importer_method']."\n");
+        foreach ($summary['location'] as $loc => $cnt) {
+            fwrite(STDERR, "  location={$loc}: {$cnt}\n");
+        }
+        foreach ($summary['surface'] as $surf => $cnt) {
+            fwrite(STDERR, "  surface={$surf}: {$cnt}\n");
+        }
+        $moveList = $summary['core_move'];
+        fwrite(STDERR, 'corex/core MOVE candidates: '.count($moveList)."\n");
+        foreach ($moveList as $fqcn) {
+            fwrite(STDERR, "  {$fqcn}\n");
+        }
+        fwrite(STDERR, "wrote: {$outDir}/verdicts.csv\n");
+        exit(0);
+    case 'scorecard':
+        $scorecard = new Scorecard($repoRoot, $planRoot);
+        $built = $scorecard->build();
+        CsvEmitter::writeRaw($outDir.'/scorecard.csv', Scorecard::CSV_HEADERS, $built['rows']);
+        $docsRoot = $repoRoot.'/docs/architecture';
+        $md = Scorecard::renderMarkdown(
+            $built['rows'],
+            $built['stats'],
+            $built['packages_four_zeros'],
+        );
+        file_put_contents($docsRoot.'/scorecard.md', $md);
+        fwrite(STDERR, 'scorecard rows: '.count($built['rows'])."\n");
+        fwrite(STDERR, "wrote: {$outDir}/scorecard.csv\n");
+        fwrite(STDERR, "wrote: {$docsRoot}/scorecard.md\n");
         exit(0);
     default:
         fwrite(STDERR, "unknown command: {$command}\n");

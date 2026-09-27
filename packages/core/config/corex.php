@@ -45,6 +45,8 @@ return [
         'pubsub_cursors' => 'sys_pubsub_cursors',
         'saved_views' => 'sys_saved_views',
         'saved_view_scopes' => 'sys_saved_view_scopes',
+        'outbox_messages' => 'sys_outbox_messages',
+        'inbox_messages' => 'sys_inbox_messages',
     ],
 
     /*
@@ -140,6 +142,40 @@ return [
         'poll_interval_microseconds' => 50_000,
         'octane_worker_opt_in' => false,
         'retention' => '30 days',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Messaging (MSG-001 … MSG-008)
+    |--------------------------------------------------------------------------
+    | Transactional outbox и inbox идемпотентного потребителя.
+    |
+    | `lease_seconds` обязан превышать максимальную ожидаемую длительность
+    | публикации: истёкшая аренда означает перезахват, то есть дубль. `batch_size`
+    | ограничивает один ход relay — это же ограничение не даёт одному аккаунту
+    | занять воркер целиком.
+    |
+    | `max_attempts` и `backoff_cap_seconds` задают ограниченный экспоненциальный
+    | backoff min(cap, 2 ** attempt) секунд — та же формула, что у
+    | packages/wakeup (SweepRunner). Jitter не добавляется: детерминизм важнее,
+    | пока на один аккаунт приходится один relay (research/P5-design.md §5.8).
+    |
+    | `outbox_retention` — окно хранения ОПУБЛИКОВАННЫХ строк. Мёртвые строки
+    | хранятся отдельным, более длинным окном `dead_retention`: они нужны
+    | расследованию, а не доставке.
+    |
+    | `inbox_retention` по умолчанию null — inbox НЕ чистится. Удаление отметки
+    | заново открывает окно дублей, поэтому включать чистку можно только там, где
+    | объявлен конечный горизонт повтора (research/P5-design.md §7.3, D29).
+    */
+    'messaging' => [
+        'lease_seconds' => 120,
+        'batch_size' => 100,
+        'max_attempts' => 8,
+        'backoff_cap_seconds' => 300,
+        'outbox_retention' => '14 days',
+        'dead_retention' => '90 days',
+        'inbox_retention' => null,
     ],
 
 ];

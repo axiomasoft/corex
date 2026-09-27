@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Contracts;
 
 /**
- * Manifest-declared feature-flag default. `FeatureFlags::define()` is
+ * ModuleManifest-declared feature-flag default. `FeatureFlags::define()` is
  * idempotent — registering the same key again never overwrites an
  * admin-toggled `is_enabled` (mirrors `SettingDefaultsProvider`'s
  * register-once semantics).

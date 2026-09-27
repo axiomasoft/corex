@@ -1,8 +1,311 @@
 [
     {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "5439ca7c9514891bd77f52ebe64f27760b40d3abb19d3e777e9836e444995f81",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "bulk-operations.cancel",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "async_command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/cancel",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "status": {
+                    "enum": [
+                        "cancelled",
+                        "cancelling",
+                        "completed",
+                        "expired",
+                        "failed",
+                        "pending",
+                        "running"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ],
+            "type": "object"
+        },
+        "success_status": 202,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "e2e76f19383b37067ea6e045c04d99ba81c2bf8178c7cb4497b1b0fb37f4f073",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.failures",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/failures",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "574b760fdc25be8e1810be9bf49918785f1cb90fdf5f326e7f65285ab69cb839",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.result",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/bulk-operations/{id}/result",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "31d795b68599cc599e58d3cdf09cadefece9f8c0337205fa591b1ec89d5ba70d",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "bulk-operations.show",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/bulk-operations/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "status": {
+                    "enum": [
+                        "cancelled",
+                        "cancelling",
+                        "completed",
+                        "expired",
+                        "failed",
+                        "pending",
+                        "running"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ],
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "bulk.manage",
+        "capabilities": [],
+        "contract_hash": "79c0c07e2f548aaea499bd68684a517c62e40e1a1a31ca2f8c13630d1931d362",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "bulk-operations.submit",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "async_command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/bulk-operations",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "bulk.manage"
+        ],
+        "response_schema": {
+            "properties": {
+                "operation_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "cancelled",
+                        "cancelling",
+                        "completed",
+                        "expired",
+                        "failed",
+                        "pending",
+                        "running"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "operation_id",
+                "status"
+            ],
+            "type": "object"
+        },
+        "success_status": 202,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "1cc6c94f921322e8a840915dd7ae883d671e9966f4da273a62bf67ec1b1088f6",
+        "contract_hash": "0550f5d1efa7cbae12308da1351f9729e512b363807e39d1be529306a53ae6e9",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
         "deprecation": null,
         "effect_mode": null,
         "execution_supported": true,
@@ -28,7 +331,25 @@
     {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "808f7d3adfe3d8fe14f527607da7ffdf46e101845c207481d0501ee78e2df40d",
+        "contract_hash": "93f9104954827fb1b76b5c9b019f20356d4eb9cfd3d375b566ecddd4621312f7",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
         "deprecation": null,
         "effect_mode": null,
         "execution_supported": true,
@@ -44,6 +365,420 @@
             "type": "object"
         },
         "required_scopes": [],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "fcbe28e29cc7c9c4f2a6172d2bcfd5542e4cf6744411a91f7a106bd9a4aac5ab",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.attempts",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}/attempts",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "4f1df0981665ea716c17bb500eee13be683405dcf2167bd1f5fb32e7d1044d7a",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.list",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-deliveries",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.replay",
+        "capabilities": [],
+        "contract_hash": "a6009d7db392b54be6875351249cd7a55cd93f8a648f7dbf62bfdfec5be1ab9d",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-deliveries.range-replay",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-deliveries/replay",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.replay"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.replay",
+        "capabilities": [],
+        "contract_hash": "baac13d2633ed0589a035e78f79e15c4ea18affcd91032c50a71dd57ac526b42",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-deliveries.replay",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}/replay",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.replay"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "d2412e78c818d6789041ea332e9d1924e1449091e040695edd637f44cebc1ba0",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-deliveries.show",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-deliveries/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "514ffbcc08d394f0e1479c232b12ecafa3f5eb21769da605bcaca4077713dfd4",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.create",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-subscriptions",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 201,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "deb0c6c528daedb50ff86849d9b7f2d0f57d301e6e356922db7b25e6b670c1c7",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.disable",
+        "idempotency": "required",
+        "method": "POST",
+        "mode": "command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-subscriptions/{id}/disable",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "353883bdfec715b6978ded924f847a2c811c9190e6115aa46077539e124c4c60",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": null,
+        "execution_supported": true,
+        "id": "webhook-subscriptions.list",
+        "idempotency": "forbidden",
+        "method": "GET",
+        "mode": "query",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-subscriptions",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
+        "response_schema": {
+            "type": "object"
+        },
+        "success_status": 200,
+        "version": "v1",
+        "write_fields": null
+    },
+    {
+        "ability": "webhooks.manage",
+        "capabilities": [],
+        "contract_hash": "7cd38f1fcc95a45dff45a8d7feffdbced20160fcfed5f0c1de67d6e9bb418188",
+        "cost": {
+            "enforcement": {
+                "account": "observe",
+                "actor": "observe",
+                "client": "observe",
+                "global": "enforce"
+            },
+            "recipe": {
+                "attribute_filter": 0,
+                "base": 1,
+                "field": 0,
+                "highlight": 0,
+                "max_units": 10000,
+                "relation": 0,
+                "row": 0,
+                "side_effect": 0
+            }
+        },
+        "deprecation": null,
+        "effect_mode": "tenant_transactional",
+        "execution_supported": true,
+        "id": "webhook-subscriptions.update",
+        "idempotency": "required",
+        "method": "PATCH",
+        "mode": "command",
+        "module": "corex/operations",
+        "pagination": null,
+        "path": "/webhook-subscriptions/{id}",
+        "read_fields": null,
+        "request_schema": {
+            "type": "object"
+        },
+        "required_scopes": [
+            "webhooks.manage"
+        ],
         "response_schema": {
             "type": "object"
         },

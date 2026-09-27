@@ -9,7 +9,7 @@ use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Exceptions\InvalidSearchConfiguration;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
-use CoreX\Search\Internal\UnsupportedSearchProvider;
+use CoreX\Search\Internal\UnavailableSearchProvider;
 use Illuminate\Support\Manager;
 use Override;
 
@@ -29,7 +29,7 @@ final class SearchManager extends Manager
 
     protected function createNullDriver(): SearchProvider
     {
-        return new UnsupportedSearchProvider;
+        return new UnavailableSearchProvider;
     }
 
     protected function createPostgresDriver(): SearchProvider

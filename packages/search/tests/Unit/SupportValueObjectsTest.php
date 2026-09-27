@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Internal\UnsupportedSearchProvider;
+use CoreX\Search\Internal\UnavailableSearchProvider;
 use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\CurrentSearchRecord;
@@ -23,11 +23,11 @@ use CoreX\Tenancy\TenantContext;
 
 it('keeps neutral search value objects typed and unsupported providers empty', function (): void {
     $record = new RecordRef(entity: 'equipment', id: 'pump-1');
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('a', 64),
     );
-    $provider = new UnsupportedSearchProvider;
+    $provider = new UnavailableSearchProvider;
     $page = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('b', 64), text: 'pump'));
 
     expect($provider->capabilities())->toEqual(new SearchCapabilities(fullText: false))

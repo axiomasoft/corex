@@ -39,13 +39,8 @@ const ROOT_MIGRATIONS_PATH_LC = __DIR__.'/../../database/migrations/root';
 const LC_TEMPLATE_DB = 'tpl_tenant_v1_lifecycle_test';
 
 beforeEach(function (): void {
-    // corex/core's own CoreServiceProvider (which would normally bind the
-    // boxed NullImpersonationService default) is not registered by THIS
-    // package's own testbench (tests/TestCase.php — mirrors ImpersonationTest's
-    // reasoning: corex/tenancy alone doesn't pull it in). CurrentActor
-    // (called from AccountLifecycle::writeEvent()) still resolves
-    // ImpersonationService::class from the container, so bind the same
-    // boxed default here.
+    // Pin the neutral actor path used by this lifecycle fixture regardless
+    // of other provider bindings in the package Testbench application.
     app()->singleton(ImpersonationService::class, NullImpersonationService::class);
 
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

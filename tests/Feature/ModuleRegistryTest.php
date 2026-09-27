@@ -6,24 +6,26 @@ use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistryCache;
 use CoreX\Modules\Contracts\ModuleStateReader;
-use CoreX\Modules\CorexModule;
 use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Exceptions\ModuleNotFound;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Gate\AllowAllActivationGate;
-use CoreX\Modules\GateDecision;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleActivationDecision;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\ArrayModuleStateReader;
 use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Support\ModulesOptions;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Tests\Stubs\StubCorexModule;
+use CoreX\Tests\Stubs\StubModuleDefinition;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Artisan;
@@ -34,11 +36,11 @@ use Illuminate\Support\Facades\Cache;
  * Menu) — exercises A10's exact gap: a manifest whose declarations must reach
  * the persisted registry and the runtime.
  */
-final class P15CompiledStubModule extends CorexModule
+final class P15CompiledStubModule extends ModuleDefinition
 {
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/p15-stub')
+        return ModuleManifest::make('corex/p15-stub')
             ->title('P15 Stub')
             ->tablePrefix('pft')
             ->extends([
@@ -84,7 +86,10 @@ function newModuleRegistry(
     return new CompiledModuleRegistry(
         cachePath: $path,
         stateReader: $reader,
-        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
+        cache: $cache ?? new RepositoryModuleRegistryCache(
+            Cache::store(),
+            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+        ),
         versionResolver: $versionResolver ?? static fn (TenantContext $ctx): int => 0,
         failIfMissing: $failIfMissing,
     );
@@ -191,7 +196,7 @@ it('does not call the reader again on a warm cache', function (): void {
 it('AllowAllActivationGate::check() always allows', function (): void {
     $decision = (new AllowAllActivationGate)->check(moduleRegistryCtx('acc-1'), 'corex/alpha', 'standard');
 
-    expect($decision)->toBeInstanceOf(GateDecision::class)
+    expect($decision)->toBeInstanceOf(ModuleActivationDecision::class)
         ->and($decision->allowed)->toBeTrue()
         ->and($decision->reason)->toBeNull();
 });
@@ -215,7 +220,7 @@ it('writes the compiled registry atomically, leaving no stray tmp file', functio
 it('corex:modules:compile writes the compiled registry file for the discovered modules', function (): void {
     $this->app->instance(
         ModuleDiscovery::class,
-        new ModuleDiscovery(fallbackModules: [StubCorexModule::class]),
+        new ModuleDiscovery(fallbackModules: [StubModuleDefinition::class]),
     );
 
     $exitCode = Artisan::call('corex:modules:compile');
@@ -350,7 +355,10 @@ it('reads active()/isActive() on a non-taggable file store without BadMethodCall
     $reader = new ArrayModuleStateReader([
         'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
     ]);
-    $fileCache = new RepositoryModuleRegistryCache(Cache::store('file'), 3600, 'corex-modules-a1');
+    $fileCache = new RepositoryModuleRegistryCache(
+        Cache::store('file'),
+        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules-a1']]),
+    );
     $registry = newModuleRegistry($path, $reader, cache: $fileCache);
     $ctx = moduleRegistryCtx('acc-1');
 
@@ -385,7 +393,61 @@ it('reports isActive()=false for a module enabled in the reader but absent from 
     unlink($path);
 });
 
-it('builds the registry cache from config — store, ttl and prefix are read, not hardcoded (A45/A46)', function (): void {
+it('pins compiled() for one job and reloads only after flush', function (): void {
+    $path = moduleRegistryCachePath();
+    $first = (new RegistryCompiler)->compile([
+        ModuleManifest::make('corex/alpha')->title('Alpha')->tablePrefix('alp'),
+    ], []);
+    CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], [])], $first);
+
+    $registry = newModuleRegistry($path, new ArrayModuleStateReader);
+    $pinned = $registry->compiled();
+    $second = (new RegistryCompiler)->compile([
+        ModuleManifest::make('corex/beta')->title('Beta')->tablePrefix('bet'),
+    ], []);
+    CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/beta', 'Beta', 'bet', [], [], [])], $second);
+
+    expect($registry->compiled())->not->toBe($pinned)
+        ->and($registry->compiled()->toArray())->toBe($pinned->toArray())
+        ->and($registry->compiled()->fingerprint)->toBe($first->fingerprint);
+
+    $registry->flush();
+
+    expect($registry->compiled()->fingerprint)->toBe($second->fingerprint)
+        ->and($registry->compiled()->fingerprint)->not->toBe($first->fingerprint);
+
+    unlink($path);
+});
+
+it('rejects a corrupt compiled artifact and keeps activation off the fingerprint', function (): void {
+    $path = moduleRegistryCachePath();
+    $compiled = (new RegistryCompiler)->compile([
+        ModuleManifest::make('corex/alpha')->title('Alpha')->tablePrefix('alp'),
+    ], []);
+    CompiledModuleRegistry::writeAtomic($path, [new CompiledModule('corex/alpha', 'Alpha', 'alp', [], [], [])], $compiled);
+
+    $reader = new ArrayModuleStateReader([
+        'acc-1' => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']],
+    ]);
+    $epoch = 0;
+    $registry = newModuleRegistry($path, $reader, versionResolver: static function () use (&$epoch): int {
+        return $epoch;
+    });
+    $fingerprint = $registry->compiled()->fingerprint;
+
+    expect($registry->isActive('corex/alpha', moduleRegistryCtx('acc-1')))->toBeTrue();
+    $epoch = 4;
+    expect($registry->compiled()->fingerprint)->toBe($fingerprint);
+
+    file_put_contents($path, "<?php\nreturn ['modules' => [], 'registry' => ['entities' => []]];\n");
+    $registry->flush();
+
+    expect(fn () => $registry->compiled())->toThrow(CompilationException::class, 'missing schema');
+
+    unlink($path);
+});
+
+it('builds the registry cache from configured Options — store, ttl and prefix are read, not hardcoded (A45/A46)', function (): void {
     // Point the module cache at a named array store and a custom prefix, then
     // assert the resolved cache writes the epoch-stamped key THERE — proving
     // config('corex-modules.cache.*') drives the binding (no hardcoded 3600).
@@ -393,9 +455,9 @@ it('builds the registry cache from config — store, ttl and prefix are read, no
     config()->set('corex-modules.cache.prefix', 'cfg-driven');
     config()->set('corex-modules.cache.ttl', 3600);
 
-    // The provider's booted() hook already resolved the cache singleton with
-    // the default config; drop it so make() rebuilds against the config set
-    // above (the point of the test — config, not a hardcode, drives it).
+    // Options is a provider-time snapshot. Replace it after changing test
+    // config, then rebuild the already-resolved cache singleton.
+    $this->app->instance(ModulesOptions::class, ModulesOptions::fromArray(config('corex-modules')));
     $this->app->forgetInstance(ModuleRegistryCache::class);
     $cache = $this->app->make(ModuleRegistryCache::class);
     $cache->rememberEnabled('acc-9', 7, static fn (): array => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']]);

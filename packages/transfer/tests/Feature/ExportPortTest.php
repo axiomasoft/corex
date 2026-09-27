@@ -14,5 +14,5 @@ it('publishes the existing seal and emit signatures on ExportRunner', function (
         ->and($port->getMethod('seal')->getParameters()[0]->getName())->toBe('scope')
         ->and($port->getMethod('emit')->getNumberOfParameters())->toBe($runner->getMethod('emit')->getNumberOfParameters())
         ->and($port->getMethod('seal')->getNumberOfParameters())->toBe($runner->getMethod('seal')->getNumberOfParameters())
-        ->and(array_keys($composer['require']))->not->toContain('corex/api');
+        ->and(array_keys($composer['require']))->not->toContain('corex/operations');
 });

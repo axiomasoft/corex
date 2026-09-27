@@ -6,7 +6,7 @@ namespace CoreX\Modules\Laravel;
 
 use CoreX\Modules\Audit\AuditCapabilityWiring;
 use CoreX\Modules\Commands\CompileModulesCommand;
-use CoreX\Modules\Commands\WhyCommand;
+use CoreX\Modules\Commands\ExplainModuleCommand;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -33,7 +33,7 @@ final class ModulesBootRegistrar implements PackageRegistrar
             Console::starting(static function (Console $artisan): void {
                 $artisan->resolveCommands([
                     CompileModulesCommand::class,
-                    WhyCommand::class,
+                    ExplainModuleCommand::class,
                 ]);
             });
 

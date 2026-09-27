@@ -1,11 +1,11 @@
 ---
 id: D37
 date: 2026-09-19
-status: accepted
+status: superseded
 item: P7
 items: [P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17]
 supersedes: [D36]
-superseded_by: null
+superseded_by: D111
 ---
 # D37 — Модель детализации по объёму планирования, не по историческому слоту Opus
 

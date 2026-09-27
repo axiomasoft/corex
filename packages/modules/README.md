@@ -52,7 +52,7 @@ Modules may expose headless tools through the existing `Api` extender: `Api::too
 standalone handlers and `Api::exposeTool()` to project an already-declared operation. Tool
 declarations compile into the same API slice as HTTP operations; they do not create routes or
 implicit CRUD. Canonical tuple, wire name, contract hash and schema validation are enforced at
-compile time; runtime catalogue and guarded invocation live in optional `corex/api`.
+compile time; runtime catalogue and guarded invocation live in optional `corex/operations`.
 
 ## Registry introspection
 

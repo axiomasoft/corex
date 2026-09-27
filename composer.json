@@ -21,7 +21,7 @@
         "corex/notifications": "@dev",
         "corex/wakeup": "@dev",
         "corex/tenancy": "@dev",
-        "corex/api": "@dev",
+        "corex/operations": "@dev",
         "corex/tasks-workflow": "@dev",
         "corex/intl": "@dev",
         "corex/search-intl": "@dev",
@@ -38,25 +38,39 @@
         "phpstan/phpstan": "^2.0",
         "larastan/larastan": "^3.0",
         "laravel/pao": "^1.1",
-        "opis/json-schema": "^2.4.1"
+        "opis/json-schema": "^2.4.1",
+        "roave/backward-compatibility-check": "^8.22",
+        "open-telemetry/api": "^1.4",
+        "open-telemetry/sdk": "^1.4"
     },
     "autoload-dev": {
         "psr-4": {
-            "CoreX\\Tests\\": "tests/",
-            "CoreX\\Api\\Tests\\": "packages/api/tests/",
-            "CoreX\\Modules\\Tests\\": "packages/modules/tests/",
+            "CoreX\\Api\\Tests\\": "packages/operations/tests/",
             "CoreX\\Attributes\\Tests\\": "packages/attributes/tests/",
             "CoreX\\Transfer\\Tests\\": "packages/transfer/tests/",
-            "CoreX\\Notifications\\Tests\\": "packages/notifications/tests/",
-            "CoreX\\Search\\Tests\\": "packages/search/tests/",
-            "CoreX\\Search\\Meilisearch\\Tests\\": "packages/search-meilisearch/tests/",
-            "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/",
             "CoreX\\Workflow\\Tests\\": "packages/workflow/tests/",
             "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/",
-            "CoreX\\TasksWorkflow\\Tests\\": "packages/tasks-workflow/tests/",
             "CoreX\\Intl\\Tests\\": "packages/intl/tests/",
-            "CoreX\\SearchIntl\\Tests\\": "packages/search-intl/tests/"
+            "CoreX\\SearchIntl\\Tests\\": "packages/search-intl/tests/",
+            "CoreX\\Testing\\": "packages/core/tests/Support/"
         },
+        "classmap": [
+            "tests/TestCase.php",
+            "tests/Stubs",
+            "tests/Support",
+            "tests/Feature",
+            "tests/Arch",
+            "tests/Unit",
+            "tests/Distribution",
+            "tests/PHPStan",
+            "packages/core/tests/Fixtures",
+            "packages/modules/tests",
+            "packages/notifications/tests",
+            "packages/search/tests",
+            "packages/search-meilisearch/tests",
+            "packages/wakeup/tests",
+            "packages/tasks-workflow/tests"
+        ],
         "files": [
             "packages/attributes/tests/helpers.php"
         ]
@@ -70,6 +84,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "process-timeout": 1200,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
@@ -77,15 +92,23 @@
     "scripts": {
         "test": "vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage --order-by=default",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in api attributes auth core crm transfer intl search-intl media modules notifications panels recurrence search search-meilisearch tasks tasks-workflow tenancy wakeup workflow; do echo \"==> packages/$p\" && composer --working-dir=packages/$p test || exit 1; done",
+        "test:packages": "for p in operations attributes access core crm transfer intl search-intl media modules notifications panels recurrence search search-meilisearch tasks tasks-workflow tenancy wakeup workflow; do echo \"==> packages/$p\" && composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch",
         "package-graph-gate": "bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php",
         "tenancy-structure-gate": "python3 scripts/tenancy-structure-gate.py check",
+        "table-write-ownership-gate": "php scripts/table-write-ownership-gate.php",
+        "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",
+        "p15-rename-completeness-gate": "bash scripts/ci-deferred-guard.sh php scripts/p15-rename-completeness-gate.php",
+        "config-composition-gate": "bash scripts/ci-deferred-guard.sh php scripts/config-composition-gate.php",
+        "table-ownership-gate": "bash scripts/ci-deferred-guard.sh php scripts/table-ownership-gate.php",
         "contract-guard": "bash scripts/contract-guard.sh",
+        "api-contract": "php scripts/check-api-contract.php",
+        "bc-check": "bash scripts/bc-check.sh",
         "test:coverage": "vendor/bin/pest --coverage --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+        "analyse:packages": "php scripts/phpstan-contour.php --also-analyse-root",
         "analyse:tests-lint": "vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G",
         "refactor": "vendor/bin/rector process",
         "refactor:check": "vendor/bin/rector process --dry-run"

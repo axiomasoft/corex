@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Dep;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleDependency;
+use CoreX\Modules\ModuleManifest;
 
 /** Requires {@see StubBaseModule} — exercises AC-6/AC-8/cascade. */
-final class StubDependentModule extends CorexModule
+final class StubDependentModule extends ModuleDefinition
 {
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/stub-dependent')
+        return ModuleManifest::make('corex/stub-dependent')
             ->title('Stub Dependent')
             ->tablePrefix('sbd')
-            ->requires([Dep::module('corex/stub-base')]);
+            ->requires([ModuleDependency::module('corex/stub-base')]);
     }
 }

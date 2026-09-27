@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Internal\Engine\EavAttributeStore;
+use CoreX\Attributes\Internal\Values\EavAttributeStore;
 use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\RecordSelection;
 use CoreX\Attributes\Support\ValuePatch;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Audit;
 
-use CoreX\Contracts\AuditRetention;
+use CoreX\Audit\Contracts\AuditRetention;
 use DateTimeImmutable;
 
 /**

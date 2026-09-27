@@ -14,17 +14,25 @@ test('api contract gate accepts the committed snapshot and additive fixtures', f
         $repoRoot.'/tests/fixtures/api-contract/allowed-addition',
     );
 
+    $webhookAllowed = runContractGate(
+        $repoRoot,
+        $repoRoot.'/tests/fixtures/api-contract/webhook-baseline',
+        $repoRoot.'/tests/fixtures/api-contract/webhook-allowed-addition',
+    );
+
     expect($committed['exit'])->toBe(0)
         ->and($committed['output'])->toContain('api-contract: OK')
         ->and($allowed['exit'])->toBe(0)
-        ->and($allowed['output'])->toContain('api-contract: OK');
+        ->and($allowed['output'])->toContain('api-contract: OK')
+        ->and($webhookAllowed['exit'])->toBe(0)
+        ->and($webhookAllowed['output'])->toContain('api-contract: OK');
 });
 
-test('api contract gate rejects each forbidden intra-major delta', function (string $candidate, string $rule, string $pointer): void {
+test('api contract gate rejects each forbidden intra-major delta', function (string $candidate, string $rule, string $pointer, string $baseline = 'baseline'): void {
     $repoRoot = dirname(__DIR__, 2);
     $result = runContractGate(
         $repoRoot,
-        $repoRoot.'/tests/fixtures/api-contract/baseline',
+        $repoRoot.'/tests/fixtures/api-contract/'.$baseline,
         $repoRoot.'/tests/fixtures/api-contract/'.$candidate,
     );
 
@@ -40,8 +48,18 @@ test('api contract gate rejects each forbidden intra-major delta', function (str
     'type change' => ['type-change', 'type-change', '/operations/notes.read/response_schema/properties/title/type'],
     'nullability change' => ['nullability-change', 'nullability-change', '/operations/notes.read/response_schema/properties/status/nullable'],
     'enum removal' => ['enum-removal', 'enum-removal', '/operations/notes.read/response_schema/properties/status/enum'],
-    'error contract drift' => ['error-contract-drift', 'error-contract-drift', '/errors/corex~1api/access_denied/retryable'],
+    'error contract drift' => ['error-contract-drift', 'error-contract-drift', '/errors/corex~1operations/access_denied/retryable'],
     'pagination reinterpretation' => ['pagination-reinterpretation', 'pagination-reinterpretation', '/operations/notes.list/pagination/ordering'],
+    'topic removal' => ['topic-removal', 'topic-removal', '/topics/orders.placed.v1', 'webhook-baseline'],
+    'required payload addition' => ['required-payload-addition', 'required-input-addition', '/topics/orders.placed.v1/payload/required', 'webhook-baseline'],
+    'payload response field removal' => ['payload-field-removal', 'response-field-removal', '/topics/orders.placed.v1/payload/properties/id', 'webhook-baseline'],
+    'payload type change' => ['payload-type-change', 'type-change', '/topics/orders.placed.v1/payload/properties/id/type', 'webhook-baseline'],
+    'payload nullability change' => ['payload-nullability-change', 'nullability-change', '/topics/orders.placed.v1/payload/properties/note/nullable', 'webhook-baseline'],
+    'pii widening' => ['pii-widening', 'pii-widening', '/topics/orders.placed.v1/pii_class', 'webhook-baseline'],
+    'signature semantics' => ['signature-semantics', 'signature-semantics', '/rotation/algorithm', 'webhook-baseline'],
+    'id semantics' => ['id-semantics', 'id-semantics', '/rotation/id_semantics', 'webhook-baseline'],
+    'major rebind' => ['major-rebind', 'major-rebind', '/topics/orders.placed.v1/major', 'webhook-baseline'],
+    'cost default enforcement' => ['cost-default-enforcement', 'cost-default-enforcement', '/operations/notes.read/cost/enforcement', 'webhook-baseline'],
 ]);
 
 test('api contract check refuses to update the baseline', function (): void {

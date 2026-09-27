@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Membership\Transport;
 
 use DateTimeImmutable;
 
+/** @internal */
 final readonly class MembershipSnapshot
 {
     public function __construct(

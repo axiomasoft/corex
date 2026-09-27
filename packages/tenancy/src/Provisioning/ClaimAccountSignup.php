@@ -10,6 +10,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
+/** @internal */
 final class ClaimAccountSignup implements ProvisioningClaim
 {
     private const string SignupKeyIndex = 'root_accounts_signup_key_uq';

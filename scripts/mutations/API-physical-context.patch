@@ -1,6 +1,6 @@
-diff --git a/packages/api/src/Internal/TrustedContextResolver.php b/packages/api/src/Internal/TrustedContextResolver.php
---- a/packages/api/src/Internal/TrustedContextResolver.php
-+++ b/packages/api/src/Internal/TrustedContextResolver.php
+diff --git a/packages/operations/src/Invocation/Internal/TrustedContextResolver.php b/packages/operations/src/Invocation/Internal/TrustedContextResolver.php
+--- a/packages/operations/src/Invocation/Internal/TrustedContextResolver.php
++++ b/packages/operations/src/Invocation/Internal/TrustedContextResolver.php
 @@ -33,7 +33,7 @@
              throw new ApiError('context_required', 403, 'An initialized account context is required.');
          }

@@ -9,7 +9,7 @@ namespace CoreX\Tenancy;
  * by corex/tenancy; boxed installs get a constant singleton via
  * {@see SingleAccountResolver}.
  *
- * @internal spec: B-10 §3.1, B-11 §3.1 (owner: B-11)
+ * Contract: B-10 §3.1, B-11 §3.1 (owner: B-11).
  */
 final readonly class TenantContext
 {

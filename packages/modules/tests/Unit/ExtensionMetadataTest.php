@@ -5,7 +5,7 @@ declare(strict_types=1);
 use CoreX\Modules\Compiler\InstalledPackages;
 use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Modules\Exceptions\InvalidManifestException;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleManifest;
 
 it('reads installed version metadata and prefers the source reference', function (): void {
     $path = installedMetadataFixture([
@@ -68,7 +68,7 @@ it('normalizes a missing installed file and a list-shaped manifest', function ()
 });
 
 it('accumulates repeatable replacement directives and rejects empty identity', function (): void {
-    $manifest = Manifest::make('example/alpha')
+    $manifest = ModuleManifest::make('example/alpha')
         ->replace(point: 'menu', targetId: 'crm:old', replacementId: 'crm:new')
         ->replace(point: 'entity', targetId: 'crm.lead', replacementId: 'crm.deal');
 
@@ -78,7 +78,7 @@ it('accumulates repeatable replacement directives and rejects empty identity', f
         ->and($manifest->replacements[0]->replacementId)->toBe('crm:new')
         ->and($manifest->replacements[1]->point)->toBe('entity');
 
-    expect(fn () => Manifest::make('example/alpha')->replace(point: ' ', targetId: 'a', replacementId: 'b'))
+    expect(fn () => ModuleManifest::make('example/alpha')->replace(point: ' ', targetId: 'a', replacementId: 'b'))
         ->toThrow(InvalidManifestException::class, 'point');
 });
 

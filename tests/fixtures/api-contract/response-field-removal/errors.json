@@ -5,7 +5,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/api",
+        "owner": "corex/operations",
         "path": null,
         "retryable": false
     }

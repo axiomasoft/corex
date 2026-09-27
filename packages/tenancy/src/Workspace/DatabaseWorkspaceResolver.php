@@ -16,6 +16,8 @@ use Override;
  * AC-18). Membership is looked up against the EXACT workspace being
  * resolved — a partner-workspace membership never grants implicit access to
  * its parent (B-11 §5.4), because no path-based traversal happens here.
+ *
+ * @internal
  */
 final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
 {

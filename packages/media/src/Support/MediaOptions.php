@@ -6,6 +6,7 @@ namespace CoreX\Media\Support;
 
 use CoreX\Support\ViolationList;
 
+/** @internal Package composition type. */
 final readonly class MediaOptions
 {
     /**

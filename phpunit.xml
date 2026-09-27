@@ -17,8 +17,8 @@
             <directory>tests/Feature</directory>
         </testsuite>
         <testsuite name="ApiPackage">
-            <directory>packages/api/tests/Feature</directory>
-            <directory>packages/api/tests/Unit</directory>
+            <directory>packages/operations/tests/Feature</directory>
+            <directory>packages/operations/tests/Unit</directory>
         </testsuite>
         <testsuite name="CorePackage">
             <directory>packages/core/tests</directory>
@@ -63,7 +63,7 @@
 
     <source>
         <include>
-            <directory>packages/api/src</directory>
+            <directory>packages/operations/src</directory>
             <directory>packages/core/src</directory>
             <directory>packages/modules/src</directory>
             <directory>packages/workflow/src</directory>

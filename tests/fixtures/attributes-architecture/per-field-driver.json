@@ -1,0 +1,7 @@
+{
+    "definitions": {
+        "contact": [
+            {"code": "email", "type": "string", "storage_driver": "eav"}
+        ]
+    }
+}

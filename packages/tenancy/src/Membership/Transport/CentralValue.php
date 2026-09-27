@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Membership\Transport;
 use DateTimeImmutable;
 use Throwable;
 
+/** @internal */
 final class CentralValue
 {
     public static function uuid(string $value, string $field): string

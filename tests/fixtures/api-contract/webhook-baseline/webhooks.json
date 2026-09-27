@@ -1,0 +1,84 @@
+{
+    "bulk": {
+        "failure_page_max": 100,
+        "result_ttl_seconds": 86400,
+        "states": [
+            "cancelled",
+            "cancelling",
+            "completed",
+            "expired",
+            "failed",
+            "pending",
+            "running"
+        ],
+        "tombstone_ttl_seconds": 2592000
+    },
+    "delivery": {
+        "guarantee": "at-least-once",
+        "ordering": "none"
+    },
+    "payload_limit_bytes": 20480,
+    "pii": {
+        "classes": [
+            "none",
+            "pseudonymous",
+            "personal",
+            "restricted",
+            "secret"
+        ],
+        "secret_subscribable": false
+    },
+    "replay": {
+        "body_retention_seconds": 604800,
+        "horizon_seconds": 604800,
+        "max_count": 3,
+        "range_max": 100,
+        "range_window_seconds": 86400
+    },
+    "retry": {
+        "attempts": 12,
+        "horizon_seconds": 259200,
+        "lease_seconds": 30,
+        "maximum_delay_seconds": 3600,
+        "minimum_delay_seconds": 1
+    },
+    "rotation": {
+        "algorithm": "hmac-sha256",
+        "content": "delivery-id.timestamp.raw-body",
+        "headers": [
+            "webhook-id",
+            "webhook-signature",
+            "webhook-timestamp"
+        ],
+        "id_semantics": "delivery-id",
+        "max_active_keys": 2,
+        "prefix": "whsec_",
+        "secret_bytes": 32,
+        "signature": "v1",
+        "timestamp_window_seconds": 300
+    },
+    "schema": "corex-webhook-contract/1",
+    "topics": [
+        {
+            "major": "v1",
+            "name": "orders.placed",
+            "payload": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "type": "object"
+            },
+            "pii_class": "pseudonymous",
+            "version": 1
+        }
+    ]
+}

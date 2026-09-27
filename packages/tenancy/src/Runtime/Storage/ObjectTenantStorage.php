@@ -16,7 +16,8 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 
-/** Explicitly constructed with trusted server configuration; never auto-bound. */
+/** Explicitly constructed with trusted server configuration; never auto-bound.  * @internal
+ */
 final class ObjectTenantStorage implements TenantStorage
 {
     /** @var array<string, mixed> */

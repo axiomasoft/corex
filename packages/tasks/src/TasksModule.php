@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks;
 
-use CoreX\Modules\CorexModule;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Tasks\Models\Project;
 use CoreX\Tasks\Models\Task;
 
-final class TasksModule extends CorexModule
+final class TasksModule extends ModuleDefinition
 {
     public const string NAME = 'corex/tasks';
 
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make(self::NAME)
+        return ModuleManifest::make(self::NAME)
             ->title('CoreX Tasks')
             ->description('Workspace projects and tasks for DB-per-account applications.')
             ->tablePrefix('tsk')

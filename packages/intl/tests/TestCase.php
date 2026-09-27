@@ -6,12 +6,12 @@ namespace CoreX\Intl\Tests;
 
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\IntlServiceProvider;
+use CoreX\Intl\Tests\Support\IntlTestCase;
 use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
-use CoreX\Testing\CoreXTestCase;
 use Illuminate\Foundation\Application;
 use Override;
 
-abstract class TestCase extends CoreXTestCase
+abstract class TestCase extends IntlTestCase
 {
     #[Override]
     protected function setUp(): void

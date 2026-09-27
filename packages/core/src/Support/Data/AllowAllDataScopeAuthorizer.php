@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Support\Data;
 
 use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScopeAccessDecision;
 
 final class AllowAllDataScopeAuthorizer implements DataScopeAuthorizer
 {

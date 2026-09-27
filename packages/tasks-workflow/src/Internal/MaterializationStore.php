@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Recurrence\Data\ExpansionCursor;
+use CoreX\Tasks\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Data\TaskOperationKind;
+use CoreX\Tasks\Data\TaskOperationReceipt;
 use CoreX\Tasks\Data\TaskReference;
 use CoreX\TasksWorkflow\Data\MaterializationReceipt;
 use CoreX\TasksWorkflow\Exceptions\MaterializationConflict;
@@ -16,26 +19,20 @@ use stdClass;
 /** @internal Durable materialization receipts and occurrence rows. */
 final class MaterializationStore
 {
-    public function __construct(private readonly Connection $connection) {}
+    public function __construct(private readonly Connection $connection, private readonly TaskOperationReceipts $receipts) {}
 
-    public function findOperation(string $operationKey): ?stdClass
+    public function findOperation(string $operationKey): ?TaskOperationReceipt
     {
-        return $this->connection
-            ->table('corex_task_operations')
-            ->where('request_key', $operationKey)
-            ->first();
+        return $this->receipts->find($this->connection, $operationKey);
     }
 
-    public function assertReplayable(stdClass $existing, string $payloadHash): MaterializationReceipt
+    public function assertReplayable(TaskOperationReceipt $existing, string $payloadHash): MaterializationReceipt
     {
-        if (! hash_equals((string) $existing->payload_hash, $payloadHash)) {
-            throw MaterializationConflict::forOperationKey((string) $existing->request_key);
+        if (! hash_equals($existing->payloadHash, $payloadHash)) {
+            throw MaterializationConflict::forOperationKey($existing->requestKey);
         }
 
-        /** @var array<string, mixed> $result */
-        $result = json_decode((string) $existing->result_ref, true, flags: JSON_THROW_ON_ERROR);
-
-        $receipt = $this->receiptFromStored($result);
+        $receipt = $this->receiptFromStored($existing->resultRef);
 
         return new MaterializationReceipt(
             version: $receipt->version,
@@ -55,15 +52,14 @@ final class MaterializationStore
     public function persistOperation(string $operationKey, string $payloadHash, string $restoreEpoch, array $resultRef): void
     {
         try {
-            $this->connection->table('corex_task_operations')->insert([
-                'id' => (string) Str::uuid7(),
-                'request_key' => $operationKey,
-                'payload_hash' => $payloadHash,
-                'kind' => 'materialize',
-                'result_ref' => json_encode($resultRef, JSON_THROW_ON_ERROR),
-                'restore_epoch' => $restoreEpoch,
-                'created_at' => now(),
-            ]);
+            $this->receipts->record(
+                connection: $this->connection,
+                kind: TaskOperationKind::Materialize,
+                requestKey: $operationKey,
+                payloadHash: $payloadHash,
+                restoreEpoch: $restoreEpoch,
+                resultRef: $resultRef,
+            );
         } catch (QueryException $exception) {
             $existing = $this->findOperation($operationKey);
 
@@ -71,7 +67,7 @@ final class MaterializationStore
                 throw $exception;
             }
 
-            if (! hash_equals((string) $existing->payload_hash, $payloadHash)) {
+            if (! hash_equals($existing->payloadHash, $payloadHash)) {
                 throw MaterializationConflict::forOperationKey($operationKey);
             }
         }

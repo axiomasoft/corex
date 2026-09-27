@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Support\Time;
+
+use DateTimeImmutable;
+use Illuminate\Support\DateFactory;
+use Override;
+use Psr\Clock\ClockInterface;
+
+/**
+ * Часы приложения Laravel: видят Carbon::setTestNow() и хелперы travelTo()/freezeTime(),
+ * поэтому существующие тесты, управляющие временем через фреймворк, продолжают работать
+ * после замены now() на инъектированные часы.
+ */
+final readonly class LaravelClock implements ClockInterface
+{
+    public function __construct(private DateFactory $dates) {}
+
+    #[Override]
+    public function now(): DateTimeImmutable
+    {
+        return $this->dates->now()->toDateTimeImmutable();
+    }
+}

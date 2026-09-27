@@ -12,5 +12,7 @@
   interfaces, service providers, migrations, or exported behavior.
 - For plan work, start at `plans/ACTIVE.md`; otherwise open only the documents
   needed for the task.
+- Keep mAInd manual: recall only relevant prior decisions/handoffs; store one
+  source-linked `active-handoff`, while progress, test logs and plan prose stay in the repo.
 - Preserve unrelated worktree changes. Validate the affected scope with the
   relevant Composer scripts (`lint:check`, `analyse`, `test`, or package gates).

@@ -1,25 +1,57 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    - packages/core/extension.neon
     - packages/modules/extension.neon
     - packages/tenancy/extension.neon
 
 parameters:
     tmpDir: build/phpstan
 
+    scanDirectories:
+        - packages/access/vendor/axioma-studio/azguard-core/src
     paths:
-        - packages/api/src
+        - packages/access/src
+        - packages/attributes/src
+        - packages/core/database/migrations
         - packages/core/src
         - packages/crm/src
-        - packages/tasks/src
-        - packages/modules/src
-        - packages/tenancy/src
-        - packages/workflow/src
-        - packages/core/database/migrations
+        - packages/intl/src
+        - packages/media/src
         - packages/modules/database/migrations
+        - packages/modules/src
+        - packages/notifications/src
+        - packages/operations/src
+        - packages/panels/src
+        - packages/recurrence/src
+        - packages/search-intl/src
+        - packages/search-meilisearch/src
+        - packages/search/src
+        - packages/tasks-workflow/src
+        - packages/tasks/src
         - packages/tenancy/database/migrations
+        - packages/tenancy/src
+        - packages/transfer/src
+        - packages/wakeup/src
         - packages/workflow/database/migrations
+        - packages/workflow/src
 
     level: 6
 
+    reportUnmatchedIgnoredErrors: false
+
     checkModelProperties: true
     checkPhpDocMissingReturn: true
+
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+          path: packages/intl/src/*
+        - identifier: parameter.unresolvableType
+          path: packages/intl/src/*
+        - identifier: property.unresolvableType
+          path: packages/intl/src/*
+        - identifier: instanceof.alwaysTrue
+          path: packages/search-intl/src/*
+        - identifier: notIdentical.alwaysTrue
+          path: packages/intl/src/*
+        - identifier: identical.alwaysTrue
+          path: packages/intl/src/*

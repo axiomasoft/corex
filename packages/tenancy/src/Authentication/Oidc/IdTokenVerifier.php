@@ -16,6 +16,8 @@ use Throwable;
  * (`acct`/`root_identity_accounts.status`) and the `imp` gate are NOT this
  * class's job (CoreX-specific, not generic OIDC) — the controller does
  * those against the claims this returns.
+ *
+ * @internal
  */
 final class IdTokenVerifier
 {

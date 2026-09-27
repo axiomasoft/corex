@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// P12.3 / P12A.4 — executable package graph gate (R1–R3, D41).
+// P12.3 / P12A.4 / P3.3 — executable package graph gate (R1–R5, D41).
 
 test('package graph gate reports no violations', function (): void {
     $repoRoot = dirname(__DIR__, 2);
@@ -90,6 +90,250 @@ PHP;
         ->and($joined)->toContain('host defines classes under reserved prefix');
 });
 
+test('package graph gate reports R1 for group-use import (tokenizer graph)', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/GroupUseProbe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+use CoreX\Wakeup\Contracts\{WakeupScheduleHint};
+
+final class GroupUseProbe
+{
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toMatch('/\[(R1|R2)\]/')
+            ->and($joined)->toContain('GroupUseProbe.php');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
+test('package graph gate reports R1 for FQCN reference without use (tokenizer graph)', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/FqcnGraphProbe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+final class FqcnGraphProbe
+{
+    public function touch(): void
+    {
+        new \CoreX\Wakeup\Contracts\WakeupScheduleHint();
+    }
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toMatch('/\[(R1|R2)\]/')
+            ->and($joined)->toContain('FqcnGraphProbe.php');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
+test('package graph gate reports R4 for import outside owner public-api', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/PublicApiR4Probe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+use CoreX\Tenancy\Support\DoesNotExist;
+
+final class PublicApiR4Probe
+{
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('[R4]')
+            ->and($joined)->toContain('PublicApiR4Probe.php')
+            ->and($joined)->toContain('непубличного');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
+test('package graph gate reports R2 for foreign Internal without R4 wording', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/InternalR2Probe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+use CoreX\Tenancy\Internal\X;
+
+final class InternalR2Probe
+{
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('foreign Internal')
+            ->and($joined)->toContain('InternalR2Probe.php')
+            ->and($joined)->not->toContain('непубличного');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
+test('package graph gate reports R4b for accidental public top-level type', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/AccidentalPublic.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+final class AccidentalPublic
+{
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('[R4b]')
+            ->and($joined)->toContain('AccidentalPublic.php');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
+test('package graph gate reports R5 for foundation importing product namespace', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/PackageTypeR5Probe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Core\Support;
+
+use Flex\Crm\Contracts\X;
+
+final class PackageTypeR5Probe
+{
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('[R5]')
+            ->and($joined)->toContain('foundation')
+            ->and($joined)->toContain('product')
+            ->and($joined)->toContain('PackageTypeR5Probe.php');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    }
+});
+
 test('package graph gate reports R1 for wakeup import outside Integration/Wakeup', function (): void {
     $repoRoot = dirname(__DIR__, 2);
     $fixture = $repoRoot.'/tests/fixtures/package-graph/tenancy-wakeup-foreign-context.php';
@@ -118,4 +362,20 @@ test('package graph gate reports R1 for wakeup import outside Integration/Wakeup
 
         exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
     }
+});
+
+test('extension contract gate classifies registry-like surfaces and rejects a new authority candidate', function (): void {
+    $root = dirname(__DIR__, 2);
+    $gate = escapeshellarg(PHP_BINARY).' '.escapeshellarg($root.'/scripts/extension-contract-gate.php');
+    $output = [];
+    $status = 0;
+
+    exec($gate.' 2>&1', $output, $status);
+    expect($status)->toBe(0)
+        ->and(implode("\n", $output))->toContain('extension-contract-gate: OK');
+
+    $output = [];
+    exec($gate.' --fixture '.escapeshellarg($root.'/tests/fixtures/extension-contract/unclassified.php').' 2>&1', $output, $status);
+    expect($status)->toBe(1)
+        ->and(implode("\n", $output))->toContain('unclassified CoreX\\Fixture\\SurpriseRegistry');
 });

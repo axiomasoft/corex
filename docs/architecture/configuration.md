@@ -8,8 +8,8 @@
 
 | key | owner | type | default | secret | mode | reloadable | validation | typed_options_field | deprecated_aliases | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
-| auth.* | corex/auth | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-api.require_physical_tenancy | corex/api | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+| auth.* | corex/access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex-api.require_physical_tenancy | corex/operations | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-attributes.drivers.ddl | corex/attributes | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-attributes.drivers.eav | corex/attributes | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-attributes.drivers.jsonb | corex/attributes | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
@@ -19,23 +19,23 @@
 | corex-attributes.tables.eav_values | corex/attributes | string | sys_attribute_eav_values | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-attributes.tables.schema_operations | corex/attributes | string | sys_attribute_schema_operations | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-attributes.tables.write_tokens | corex/attributes | string | *** | yes | secret | unobserved | unobserved | — |  |  |
-| corex-auth.azguard_pins.column_names.morph_type | corex/auth | string | uuid | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.azguard_pins.models.role | corex/auth | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.azguard_pins.table_names.roles | corex/auth | string | az_guard_roles | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.bind_permission_layer | corex/auth | bool | true | no | deployment | no | use-site | — |  |  |
-| corex-auth.cache.store | corex/auth | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity | corex/auth | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-auth.identity.columns | corex/auth | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-auth.identity.columns.active | corex/auth | string | is_active | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.deleted_at | corex/auth | string | deleted_at | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.email | corex/auth | string | email | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.id | corex/auth | string | id | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.password | corex/auth | string | *** | yes | secret | unobserved | unobserved | — |  |  |
-| corex-auth.identity.connection | corex/auth | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity.enabled | corex/auth | bool | true | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity.table | corex/auth | string | users | no | deployment | no | use-site | — |  |  |
-| corex-auth.panel | corex/auth | string | app | no | deployment | no | use-site | — |  |  |
-| corex-auth.workspace_scope_class | corex/auth | string | CoreX\\Tenancy\\Scopes\\WorkspaceScope | no | product-policy | unobserved | use-site | — |  |  |
+| corex-auth.azguard_pins.column_names.morph_type | corex/access | string | uuid | no | product-policy | unobserved | use-site | — |  |  |
+| corex-auth.azguard_pins.models.role | corex/access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  |  |
+| corex-auth.azguard_pins.table_names.roles | corex/access | string | az_guard_roles | no | product-policy | unobserved | use-site | — |  |  |
+| corex-auth.bind_permission_layer | corex/access | bool | true | no | deployment | no | use-site | — |  |  |
+| corex-auth.cache.store | corex/access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex-auth.identity | corex/access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex-auth.identity.columns | corex/access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex-auth.identity.columns.active | corex/access | string | is_active | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-auth.identity.columns.deleted_at | corex/access | string | deleted_at | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-auth.identity.columns.email | corex/access | string | email | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-auth.identity.columns.id | corex/access | string | id | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-auth.identity.columns.password | corex/access | string | *** | yes | secret | unobserved | unobserved | — |  |  |
+| corex-auth.identity.connection | corex/access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex-auth.identity.enabled | corex/access | bool | true | no | deployment | no | use-site | — |  |  |
+| corex-auth.identity.table | corex/access | string | users | no | deployment | no | use-site | — |  |  |
+| corex-auth.panel | corex/access | string | app | no | deployment | no | use-site | — |  |  |
+| corex-auth.workspace_scope_class | corex/access | string | CoreX\\Tenancy\\Scopes\\WorkspaceScope | no | product-policy | unobserved | use-site | — |  |  |
 | corex-intl-search.enabled | corex/search-intl | bool | false | no | deployment | no | unobserved | — |  | CFG-006 exception; tombstone after major of search-intl |
 | corex-intl.formatting.icu_enabled | corex/intl | unobserved | unobserved | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-intl.locale.allow_parent | corex/intl | bool | true | no | product-policy | unobserved | unobserved | — |  |  |

@@ -41,6 +41,8 @@ use RuntimeException;
  * D151 — every mutating method asserts {@see ImpersonationGuard} first
  * (before `activateFromPool`'s pool claim only, per that method's own
  * ordering note).
+ *
+ * @internal
  */
 final class AccountLifecycle
 {

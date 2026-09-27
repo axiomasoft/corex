@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use CoreX\Views\Data\ViewAction;
-use CoreX\Views\Data\ViewContext;
-use CoreX\Views\Data\ViewSubject;
+use CoreX\SavedViews\Data\ViewAction;
+use CoreX\SavedViews\Data\ViewContext;
+use CoreX\SavedViews\Data\ViewSubject;
 
 interface ViewAccessPolicy
 {

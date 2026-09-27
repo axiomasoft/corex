@@ -1,0 +1,91 @@
+{
+  "actor": "plan-exec/codex-gpt-6-sol/xhigh",
+  "changes": [
+    {
+      "after_sha256": "3029f5037585aef05dd009cce677b480e9946795b1587e72997949d4f92a712c",
+      "before_sha256": "9979a107f4f43677ba725be7851eb85a95339587610abe5759df094f3e4d7042",
+      "line": 249,
+      "operations": [
+        {
+          "before": {
+            "batch_id": "E11e",
+            "completed_prefix": [],
+            "handoff_digest": null,
+            "invocation_digest": null,
+            "membership": [
+              "P11.6",
+              "P11.7"
+            ],
+            "routing_digest": null,
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": null,
+            "stop_disposition": "continue"
+          },
+          "op": "replace",
+          "path": "/batch_receipt",
+          "value": {
+            "batch_id": "E11e",
+            "completed_prefix": [],
+            "handoff_digest": null,
+            "invocation_digest": "07aa1bac02a0ce3a8da7011c432107fe2f126cf4e0de9e351a30a5c6e27adb1d",
+            "membership": [
+              "P11.6",
+              "P11.7"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "6f42451bb848cd0cc493a9337cb3b3c97212fa45cc3fa251861fb992187b4771",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    },
+    {
+      "after_sha256": "440689791cec117330cedeb3c35e7725dc10cfbfac3d78bdeee23a870a392970",
+      "before_sha256": "a266e9d3542b1e8e680180e5b2432e070be3f0f152526c3062a0ad8628042d51",
+      "line": 251,
+      "operations": [
+        {
+          "before": {
+            "batch_id": "E11e",
+            "completed_prefix": [
+              "P11.6"
+            ],
+            "membership": [
+              "P11.6",
+              "P11.7"
+            ],
+            "schema_version": "batch-receipt/v1",
+            "stop_disposition": "continue"
+          },
+          "op": "replace",
+          "path": "/batch_receipt",
+          "value": {
+            "batch_id": "E11e",
+            "completed_prefix": [
+              "P11.6"
+            ],
+            "handoff_digest": null,
+            "invocation_digest": "07aa1bac02a0ce3a8da7011c432107fe2f126cf4e0de9e351a30a5c6e27adb1d",
+            "membership": [
+              "P11.6",
+              "P11.7"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "6f42451bb848cd0cc493a9337cb3b3c97212fa45cc3fa251861fb992187b4771",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    }
+  ],
+  "migration_id": "corex-e11e-batch-receipts",
+  "owner_decision": "D120",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "preimage_path": "journal-migrations/corex-e11e-batch-receipts/journal.preimage.jsonl",
+  "reason": "repair only invalid E11e start-event batch receipts before P11.8",
+  "schema_version": "journal-migration/v1",
+  "source_sha256": "0f17303bf7dc033c38a3adf85db8bfcceb50cf06767131411cbe9f432b36295b",
+  "target_sha256": "ba010a823a531b75644ba2eb224c7ca27a4ca36f91f515edc19b17983d8978da"
+}

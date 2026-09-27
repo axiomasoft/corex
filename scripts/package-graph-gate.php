@@ -6,18 +6,47 @@ declare(strict_types=1);
 /**
  * Executable package dependency graph gate (P12.3 · D41).
  *
- * Reads raw `use` import lines — not autoload-resolved classes — and applies:
+ * Reads static references (`use`, group-use, FQCN, extends/implements, traits) — not
+ * autoload-resolved classes — and applies:
  *   R1 undeclared cross-package dependency
  *   R2 foreign Internal namespace import
  *   R3 namespace ownership (with reservations + legacy splits from config)
+ *   R4 import outside owner public-api namespace surface
+ *   R4b undeclared public surface (top-level type)
+ *   R5 package-type dependency direction
  */
 const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
 const EXIT_CONFIG = 2;
 
+const COREX_SCHEMA_VERSION = 1;
+
+/** @var list<string> */
+const VALID_PACKAGE_TYPES = ['foundation', 'capability', 'integration', 'product', 'tooling', 'fixture'];
+
+/** @var list<string> */
+const VALID_STABILITY = ['stable', 'experimental', 'internal', 'deprecated'];
+
+/** @var array<string, int> */
+const PACKAGE_TYPE_RANK = [
+    'foundation' => 0,
+    'capability' => 1,
+    'integration' => 2,
+    'product' => 3,
+];
+
+/** @var list<string> */
+const PACKAGE_TYPES_SKIP_R5 = ['tooling', 'fixture'];
+
 $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/package-graph-gate.json';
+$surfaceSnapshotPath = $repoRoot.'/scripts/package-graph-undeclared-surface.json';
 $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
+
+if (PHP_SAPI === 'cli' && ($argv[1] ?? '') === '--emit-baseline') {
+    emitPackageGraphBaseline($repoRoot, $configPath);
+    exit(EXIT_OK);
+}
 
 $config = loadConfig($configPath, $repoRoot);
 $packages = discoverPackages($repoRoot);
@@ -36,19 +65,9 @@ foreach ($packages as $dirName => $meta) {
 
     foreach (walkPhpFiles($srcDir) as $file) {
         $relativeFile = substr($file, strlen($repoRoot) + 1);
-        $lines = file($file, FILE_IGNORE_NEW_LINES);
 
-        if ($lines === false) {
-            continue;
-        }
-
-        foreach ($lines as $lineNumber => $line) {
-            $import = parseUseImport($line);
-
-            if ($import === null) {
-                continue;
-            }
-
+        foreach (extractReferences($file) as $ref) {
+            $import = $ref['import'];
             $ownerPackage = resolveOwner($import, $packages, $classIndex);
 
             if ($ownerPackage === null) {
@@ -63,7 +82,7 @@ foreach ($packages as $dirName => $meta) {
                 $violations[] = violation(
                     rule: 'R2',
                     file: $relativeFile,
-                    line: $lineNumber + 1,
+                    line: $ref['line'],
                     import: $import,
                     owner: $ownerPackage,
                     message: 'foreign Internal import',
@@ -81,14 +100,68 @@ foreach ($packages as $dirName => $meta) {
                 $violations[] = violation(
                     rule: 'R1',
                     file: $relativeFile,
-                    line: $lineNumber + 1,
+                    line: $ref['line'],
                     import: $import,
                     owner: $ownerPackage,
                     message: 'undeclared cross-package dependency',
                 );
             }
+
+            $r4Message = violatesPublicApi($import, $meta['name'], $ownerPackage, $packages);
+
+            if ($r4Message !== null && ! isPublicApiException(
+                $meta['name'],
+                $ownerPackage,
+                $relativeFile,
+                $config['public_api_exceptions'],
+            )) {
+                $violations[] = violation(
+                    rule: 'R4',
+                    file: $relativeFile,
+                    line: $ref['line'],
+                    import: $import,
+                    owner: $ownerPackage,
+                    message: sprintf('импорт непубличного %s из пакета %s', $import, $ownerPackage),
+                );
+            }
+
+            $r5Message = violatesPackageTypeDirection($meta['name'], $ownerPackage, $packages);
+
+            if ($r5Message !== null) {
+                $violations[] = violation(
+                    rule: 'R5',
+                    file: $relativeFile,
+                    line: $ref['line'],
+                    import: $import,
+                    owner: $ownerPackage,
+                    message: $r5Message,
+                );
+            }
         }
     }
+}
+
+$surfaceSnapshot = loadUndeclaredSurfaceSnapshot($surfaceSnapshotPath);
+
+foreach (collectTopLevelTypes($repoRoot, $packages) as $type) {
+    if (! isUndeclaredSurfaceType($type['fqcn'], $type['docblock'], $packages[$type['dir']])) {
+        continue;
+    }
+
+    $snapshotKey = $type['dir'].'|'.$type['fqcn'];
+
+    if (in_array($snapshotKey, $surfaceSnapshot, true)) {
+        continue;
+    }
+
+    $violations[] = violation(
+        rule: 'R4b',
+        file: $type['file'],
+        line: $type['line'],
+        import: $type['fqcn'],
+        owner: $packages[$type['dir']]['name'],
+        message: 'undeclared public surface',
+    );
 }
 
 foreach (evaluateReservations($classIndex, $packages, $config['reservations']) as $evaluation) {
@@ -162,6 +235,17 @@ $report = [
         ],
         $config['undeclared_dependency_exceptions'],
     ),
+    'public_api_exceptions' => array_map(
+        static fn (array $entry): array => [
+            'from' => $entry['from'],
+            'to' => $entry['to'],
+            'import_file' => $entry['import_file'],
+            'adr' => $entry['adr'],
+            'expires_when' => $entry['expires_when'],
+            'reason' => $entry['reason'],
+        ],
+        $config['public_api_exceptions'],
+    ),
     'violations' => $violations,
     'summary' => [
         'packages_scanned' => count($packages),
@@ -206,6 +290,17 @@ foreach ($config['undeclared_dependency_exceptions'] as $exception) {
     ));
 }
 
+foreach ($config['public_api_exceptions'] as $exception) {
+    fwrite(STDERR, sprintf(
+        "PUBLIC API EXCEPTION: %s -> %s in %s — ADR %s; expires when: %s\n",
+        (string) ($exception['from'] ?? ''),
+        (string) ($exception['to'] ?? ''),
+        (string) ($exception['import_file'] ?? ''),
+        (string) ($exception['adr'] ?? ''),
+        (string) ($exception['expires_when'] ?? ''),
+    ));
+}
+
 foreach ($violations as $violation) {
     fwrite(STDERR, formatViolationLine($violation)."\n");
 }
@@ -222,6 +317,7 @@ exit(EXIT_OK);
  * @return array{
  *     allowlist: list<array<string, mixed>>,
  *     undeclared_dependency_exceptions: list<array<string, string>>,
+ *     public_api_exceptions: list<array<string, string>>,
  *     reservations: list<array<string, string>>,
  *     legacy_namespace_splits: list<array<string, mixed>>
  * }
@@ -243,6 +339,7 @@ function loadConfig(string $path, string $repoRoot): array
     $config = [
         'allowlist' => $decoded['allowlist'] ?? [],
         'undeclared_dependency_exceptions' => $decoded['undeclared_dependency_exceptions'] ?? [],
+        'public_api_exceptions' => $decoded['public_api_exceptions'] ?? [],
         'reservations' => $decoded['reservations'] ?? [],
         'legacy_namespace_splits' => $decoded['legacy_namespace_splits'] ?? [],
     ];
@@ -253,7 +350,15 @@ function loadConfig(string $path, string $repoRoot): array
 }
 
 /**
- * @return array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>
+ * @return array<string, array{
+ *     name: string,
+ *     dir: string,
+ *     require: list<string>,
+ *     psr4: array<string, string>,
+ *     package_type: string,
+ *     stability: string,
+ *     public_api: list<string>
+ * }>
  */
 function discoverPackages(string $repoRoot): array
 {
@@ -272,11 +377,16 @@ function discoverPackages(string $repoRoot): array
             $psr4[rtrim($prefix, '\\').'\\'] = $relativeDir;
         }
 
+        $corex = parseExtraCorex($composer, $composerPath);
+
         $packages[$dirName] = [
             'name' => (string) $composer['name'],
             'dir' => $dirName,
             'require' => array_keys($composer['require'] ?? []),
             'psr4' => $psr4,
+            'package_type' => $corex['package_type'],
+            'stability' => $corex['stability'],
+            'public_api' => $corex['public_api'],
         ];
     }
 
@@ -349,30 +459,474 @@ function walkPhpFiles(string $dir): array
     return $files;
 }
 
-function parseUseImport(string $line): ?string
+/**
+ * @return list<array{import: string, line: int, via: 'use'|'fqcn'|'extends'}>
+ */
+function extractReferences(string $file): array
 {
-    if (preg_match('/^\s*use\s+(?:function|const)\s+([^;{]+);/', $line, $matches) === 1) {
-        return normalizeImport(trim($matches[1]));
+    $code = file_get_contents($file);
+
+    if ($code === false) {
+        return [];
     }
 
-    if (preg_match('/^\s*use\s+([^;{]+);/', $line, $matches) !== 1) {
-        return null;
+    $tokens = token_get_all($code, TOKEN_PARSE);
+    $useTable = [];
+    $namespace = '';
+    $refs = [];
+    $count = count($tokens);
+    $depth = 0;
+
+    for ($i = 0; $i < $count; $i++) {
+        $token = $tokens[$i];
+
+        if (is_string($token)) {
+            if ($token === '{') {
+                $depth++;
+            } elseif ($token === '}') {
+                $depth--;
+            }
+
+            continue;
+        }
+
+        if ($token[0] === T_NAMESPACE && $depth === 0) {
+            $namespace = readName($tokens, $i);
+
+            continue;
+        }
+
+        if ($token[0] === T_USE) {
+            if (isClosureUse($tokens, $i)) {
+                continue;
+            }
+
+            $line = $token[2];
+
+            foreach (readUseClause($tokens, $i, $line) as $clause) {
+                $fqcn = $depth === 0
+                    ? $clause['fqcn']
+                    : resolveName($clause['fqcn'], $namespace, $useTable);
+
+                if ($depth === 0) {
+                    $useTable[$clause['alias']] = $clause['fqcn'];
+                }
+
+                $refs[] = [
+                    'import' => $fqcn,
+                    'line' => $clause['line'],
+                    'via' => 'use',
+                ];
+            }
+
+            continue;
+        }
+
+        if (in_array($token[0], [T_EXTENDS, T_IMPLEMENTS], true)) {
+            foreach (readHierarchyNames($tokens, $i) as $entry) {
+                $refs[] = [
+                    'import' => resolveName($entry['name'], $namespace, $useTable),
+                    'line' => $entry['line'],
+                    'via' => 'extends',
+                ];
+            }
+
+            continue;
+        }
+
+        if ($token[0] === T_NAME_FULLY_QUALIFIED) {
+            $refs[] = [
+                'import' => ltrim($token[1], '\\'),
+                'line' => $token[2],
+                'via' => 'fqcn',
+            ];
+        }
     }
 
-    $statement = trim($matches[1]);
-
-    if (str_contains($statement, '{')) {
-        return null;
-    }
-
-    return normalizeImport($statement);
+    return uniqueRefs($refs);
 }
 
-function normalizeImport(string $statement): string
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ * @return list<array{fqcn: string, alias: string, line: int}>
+ */
+function readUseClause(array $tokens, int &$i, int $line): array
 {
-    $parts = array_map(trim(...), explode(',', $statement));
+    $clauses = [];
+    $i = skipWhitespace($tokens, $i + 1);
 
-    return $parts[0];
+    if (isToken($tokens, $i, T_FUNCTION) || isToken($tokens, $i, T_CONST)) {
+        advanceToSemicolon($tokens, $i);
+
+        return [];
+    }
+
+    while ($i < count($tokens)) {
+        $pairs = parseOneUseClause($tokens, $i);
+
+        foreach ($pairs as $alias => $fqcn) {
+            $clauses[] = [
+                'fqcn' => $fqcn,
+                'alias' => $alias,
+                'line' => $line,
+            ];
+        }
+
+        $i = skipWhitespace($tokens, $i);
+
+        if (tokenText($tokens, $i) === ',') {
+            $i++;
+
+            continue;
+        }
+
+        if (tokenText($tokens, $i) === ';') {
+            $i++;
+
+            break;
+        }
+
+        break;
+    }
+
+    return $clauses;
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ * @return array<string, string>
+ */
+function parseOneUseClause(array $tokens, int &$i): array
+{
+    $i = skipWhitespace($tokens, $i);
+    $prefix = readQualifiedName($tokens, $i);
+    $i = skipWhitespace($tokens, $i);
+    $next = tokenText($tokens, $i);
+
+    if ($next === ';' || $next === ',') {
+        $fqcn = ltrim($prefix, '\\');
+        $short = shortClassName($fqcn);
+
+        return [$short => $fqcn];
+    }
+
+    if (tokenText($tokens, $i) === '{') {
+        $i++;
+        $imports = [];
+
+        while ($i < count($tokens) && tokenText($tokens, $i) !== '}') {
+            $i = skipWhitespace($tokens, $i);
+
+            if (tokenText($tokens, $i) === '}') {
+                break;
+            }
+
+            $imports = array_merge($imports, readUseEntry($tokens, $i, $prefix));
+            $i = skipWhitespace($tokens, $i);
+
+            if (tokenText($tokens, $i) === ',') {
+                $i++;
+            }
+        }
+
+        if (tokenText($tokens, $i) === '}') {
+            $i++;
+        }
+
+        return $imports;
+    }
+
+    return readUseEntry($tokens, $i, $prefix);
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ * @return array<string, string>
+ */
+function readUseEntry(array $tokens, int &$i, string $prefix): array
+{
+    $nameParts = [];
+
+    while ($i < count($tokens)) {
+        if (isToken($tokens, $i, T_WHITESPACE)) {
+            $i++;
+
+            continue;
+        }
+
+        $text = tokenText($tokens, $i);
+
+        if ($text === null) {
+            $i++;
+
+            continue;
+        }
+
+        if ($text === ',' || $text === ';' || $text === '}') {
+            break;
+        }
+
+        if ($text === 'as') {
+            $i++;
+            $i = skipWhitespace($tokens, $i);
+            $alias = tokenText($tokens, $i);
+            $short = implode('', $nameParts);
+            $fqcn = combineFqcn($prefix, $short);
+            $i++;
+
+            return [$alias ?? shortClassName($fqcn) => $fqcn];
+        }
+
+        $nameParts[] = $text;
+        $i++;
+    }
+
+    $short = implode('', $nameParts);
+
+    if ($short === '') {
+        return [];
+    }
+
+    $fqcn = combineFqcn($prefix, $short);
+
+    return [shortClassName($fqcn) => $fqcn];
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ * @return list<array{name: string, line: int}>
+ */
+function readHierarchyNames(array $tokens, int $keywordIndex): array
+{
+    $line = $tokens[$keywordIndex][2];
+    $i = skipWhitespace($tokens, $keywordIndex + 1);
+    $names = [];
+
+    while ($i < count($tokens)) {
+        $i = skipWhitespace($tokens, $i);
+        $text = tokenText($tokens, $i);
+
+        if ($text === '{' || $text === null) {
+            break;
+        }
+
+        $name = readQualifiedName($tokens, $i);
+
+        if ($name === '') {
+            break;
+        }
+
+        $names[] = ['name' => $name, 'line' => $line];
+        $i = skipWhitespace($tokens, $i);
+
+        if (tokenText($tokens, $i) === ',') {
+            $i++;
+
+            continue;
+        }
+
+        break;
+    }
+
+    return $names;
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function readName(array $tokens, int $keywordIndex): string
+{
+    $i = skipWhitespace($tokens, $keywordIndex + 1);
+
+    if (tokenText($tokens, $i) === '{') {
+        $parts = [];
+        $i++;
+
+        while ($i < count($tokens)) {
+            if (tokenText($tokens, $i) === '}') {
+                break;
+            }
+
+            $text = tokenText($tokens, $i);
+
+            if ($text !== null && $text !== ';') {
+                $parts[] = $text;
+            }
+
+            $i++;
+        }
+
+        return rtrim(implode('', $parts), '\\');
+    }
+
+    return rtrim(readQualifiedName($tokens, $i), '\\');
+}
+
+function resolveName(string $name, string $namespace, array $useTable): string
+{
+    if (str_starts_with($name, '\\')) {
+        return ltrim($name, '\\');
+    }
+
+    if (isset($useTable[$name])) {
+        return $useTable[$name];
+    }
+
+    if (str_contains($name, '\\')) {
+        return $name;
+    }
+
+    if ($namespace === '') {
+        return $name;
+    }
+
+    return $namespace.'\\'.$name;
+}
+
+/**
+ * @param  list<array{import: string, line: int, via: string}>  $refs
+ * @return list<array{import: string, line: int, via: 'use'|'fqcn'|'extends'}>
+ */
+function uniqueRefs(array $refs): array
+{
+    $seen = [];
+    $unique = [];
+
+    foreach ($refs as $ref) {
+        $key = $ref['import'];
+
+        if (isset($seen[$key])) {
+            continue;
+        }
+
+        $seen[$key] = true;
+        $unique[] = [
+            'import' => $ref['import'],
+            'line' => $ref['line'],
+            'via' => $ref['via'],
+        ];
+    }
+
+    return $unique;
+}
+
+function combineFqcn(string $prefix, string $short): string
+{
+    $prefix = rtrim($prefix, '\\');
+
+    if ($prefix === '') {
+        return ltrim($short, '\\');
+    }
+
+    if ($short === '') {
+        return ltrim($prefix, '\\');
+    }
+
+    return ltrim($prefix.'\\'.$short, '\\');
+}
+
+function shortClassName(string $fqcn): string
+{
+    $pos = strrpos($fqcn, '\\');
+
+    if ($pos === false) {
+        return $fqcn;
+    }
+
+    return substr($fqcn, $pos + 1);
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function readQualifiedName(array $tokens, int &$i): string
+{
+    $parts = [];
+
+    while ($i < count($tokens)) {
+        if (isToken($tokens, $i, T_WHITESPACE)) {
+            $i++;
+
+            continue;
+        }
+
+        $text = tokenText($tokens, $i);
+
+        if ($text === null) {
+            $i++;
+
+            continue;
+        }
+
+        if (in_array($text, ['{', ',', ';', 'as', '}'], true)) {
+            break;
+        }
+
+        $parts[] = $text;
+        $i++;
+    }
+
+    return implode('', $parts);
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function advanceToSemicolon(array $tokens, int &$i): void
+{
+    while ($i < count($tokens) && tokenText($tokens, $i) !== ';') {
+        $i++;
+    }
+
+    if (tokenText($tokens, $i) === ';') {
+        $i++;
+    }
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function skipWhitespace(array $tokens, int $i): int
+{
+    while ($i < count($tokens) && isToken($tokens, $i, T_WHITESPACE)) {
+        $i++;
+    }
+
+    return $i;
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function tokenText(array $tokens, int $i): ?string
+{
+    if (! isset($tokens[$i])) {
+        return null;
+    }
+
+    if (is_string($tokens[$i])) {
+        return $tokens[$i];
+    }
+
+    return $tokens[$i][1];
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function isToken(array $tokens, int $i, int $type): bool
+{
+    return isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] === $type;
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function isClosureUse(array $tokens, int $useIndex): bool
+{
+    $j = skipWhitespace($tokens, $useIndex + 1);
+
+    return tokenText($tokens, $j) === '(';
 }
 
 /**
@@ -415,6 +969,345 @@ function violatesForeignInternal(string $import, string $fromPackage, string $ow
     }
 
     return preg_match('/\\\\Internal\\\\/', $import) === 1;
+}
+
+/**
+ * @return array{package_type: string, stability: string, public_api: list<string>}
+ */
+function parseExtraCorex(array $composer, string $composerPath): array
+{
+    $relativePath = str_contains($composerPath, '/packages/')
+        ? 'packages/'.basename(dirname($composerPath)).'/composer.json'
+        : $composerPath;
+    $corex = $composer['extra']['corex'] ?? null;
+
+    if (! is_array($corex)) {
+        fwrite(STDERR, "package-graph-gate: missing or invalid extra.corex in {$relativePath}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $schemaVersion = $corex['schema-version'] ?? null;
+
+    if (! is_int($schemaVersion) || $schemaVersion !== COREX_SCHEMA_VERSION) {
+        fwrite(STDERR, "package-graph-gate: invalid extra.corex.schema-version in {$relativePath}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $packageType = $corex['package-type'] ?? null;
+
+    if (! is_string($packageType) || ! in_array($packageType, VALID_PACKAGE_TYPES, true)) {
+        fwrite(STDERR, "package-graph-gate: invalid extra.corex.package-type in {$relativePath}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $stability = $corex['stability'] ?? null;
+
+    if (! is_string($stability) || ! in_array($stability, VALID_STABILITY, true)) {
+        fwrite(STDERR, "package-graph-gate: invalid extra.corex.stability in {$relativePath}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $publicApi = $corex['public-api'] ?? null;
+
+    if (! is_array($publicApi)) {
+        fwrite(STDERR, "package-graph-gate: invalid extra.corex.public-api in {$relativePath}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $normalizedPublicApi = [];
+
+    foreach ($publicApi as $prefix) {
+        if (! is_string($prefix) || $prefix === '') {
+            fwrite(STDERR, "package-graph-gate: invalid extra.corex.public-api entry in {$relativePath}\n");
+            exit(EXIT_CONFIG);
+        }
+
+        $normalizedPublicApi[] = $prefix;
+    }
+
+    return [
+        'package_type' => $packageType,
+        'stability' => $stability,
+        'public_api' => $normalizedPublicApi,
+    ];
+}
+
+/**
+ * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ */
+function violatesPublicApi(string $import, string $fromPackage, string $ownerPackage, array $packages): ?string
+{
+    if ($fromPackage === $ownerPackage) {
+        return null;
+    }
+
+    if (violatesForeignInternal($import, $fromPackage, $ownerPackage)) {
+        return null;
+    }
+
+    $ownerMeta = null;
+
+    foreach ($packages as $meta) {
+        if ($meta['name'] === $ownerPackage) {
+            $ownerMeta = $meta;
+
+            break;
+        }
+    }
+
+    if ($ownerMeta === null) {
+        return null;
+    }
+
+    if (namespaceCoveredByPublicApi($import, $ownerMeta['public_api'])) {
+        return null;
+    }
+
+    return 'non-public namespace';
+}
+
+/**
+ * @param  list<string>  $publicApiPrefixes
+ */
+function namespaceCoveredByPublicApi(string $symbol, array $publicApiPrefixes): bool
+{
+    foreach ($publicApiPrefixes as $prefix) {
+        if ($symbol === $prefix || str_starts_with($symbol, $prefix.'\\')) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @param  list<array<string, string>>  $exceptions
+ */
+function isPublicApiException(string $fromPackage, string $toPackage, string $relativeFile, array $exceptions): bool
+{
+    foreach ($exceptions as $entry) {
+        if (($entry['from'] ?? '') !== $fromPackage) {
+            continue;
+        }
+
+        if (($entry['to'] ?? '') !== $toPackage) {
+            continue;
+        }
+
+        if (($entry['import_file'] ?? '') === $relativeFile) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ */
+function violatesPackageTypeDirection(string $fromPackage, string $toPackage, array $packages): ?string
+{
+    $fromMeta = null;
+    $toMeta = null;
+
+    foreach ($packages as $meta) {
+        if ($meta['name'] === $fromPackage) {
+            $fromMeta = $meta;
+        }
+
+        if ($meta['name'] === $toPackage) {
+            $toMeta = $meta;
+        }
+    }
+
+    if ($fromMeta === null || $toMeta === null) {
+        return null;
+    }
+
+    $fromType = $fromMeta['package_type'];
+    $toType = $toMeta['package_type'];
+
+    if (in_array($fromType, PACKAGE_TYPES_SKIP_R5, true) || in_array($toType, PACKAGE_TYPES_SKIP_R5, true)) {
+        return null;
+    }
+
+    if (! isset(PACKAGE_TYPE_RANK[$fromType]) || ! isset(PACKAGE_TYPE_RANK[$toType])) {
+        return sprintf('%s (missing package-type) не вправе зависеть от %s (%s)', $fromPackage, $toPackage, $toType);
+    }
+
+    if (PACKAGE_TYPE_RANK[$fromType] >= PACKAGE_TYPE_RANK[$toType]) {
+        return null;
+    }
+
+    return sprintf(
+        '%s (%s) не вправе зависеть от %s (%s)',
+        $fromPackage,
+        $fromType,
+        $toPackage,
+        $toType,
+    );
+}
+
+/**
+ * @return list<string>
+ */
+function loadUndeclaredSurfaceSnapshot(string $path): array
+{
+    if (! is_file($path)) {
+        fwrite(STDERR, "package-graph-gate: missing surface snapshot {$path}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $decoded = json_decode((string) file_get_contents($path), true);
+
+    if (! is_array($decoded)) {
+        fwrite(STDERR, "package-graph-gate: invalid JSON in {$path}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $entries = $decoded['entries'] ?? null;
+
+    if (! is_array($entries)) {
+        fwrite(STDERR, "package-graph-gate: invalid surface snapshot schema in {$path}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $normalized = [];
+
+    foreach ($entries as $entry) {
+        if (! is_string($entry) || $entry === '') {
+            fwrite(STDERR, "package-graph-gate: invalid surface snapshot entry in {$path}\n");
+            exit(EXIT_CONFIG);
+        }
+
+        $normalized[] = $entry;
+    }
+
+    sort($normalized);
+
+    return $normalized;
+}
+
+/**
+ * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @return list<array{dir: string, file: string, line: int, fqcn: string, docblock: string}>
+ */
+function collectTopLevelTypes(string $repoRoot, array $packages): array
+{
+    $types = [];
+
+    foreach ($packages as $dirName => $meta) {
+        $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+
+        if (! is_dir($srcDir)) {
+            continue;
+        }
+
+        foreach (walkPhpFiles($srcDir) as $file) {
+            $relativeFile = substr($file, strlen($repoRoot) + 1);
+            $contents = (string) file_get_contents($file);
+            $tokens = token_get_all($contents, TOKEN_PARSE);
+            $namespace = '';
+            $count = count($tokens);
+
+            for ($i = 0; $i < $count; $i++) {
+                $token = $tokens[$i];
+
+                if (! is_array($token)) {
+                    continue;
+                }
+
+                if ($token[0] === T_NAMESPACE) {
+                    $namespace = readName($tokens, $i);
+
+                    continue;
+                }
+
+                if (! in_array($token[0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], true)) {
+                    continue;
+                }
+
+                if ($i > 0 && is_array($tokens[$i - 1]) && $tokens[$i - 1][0] === T_DOUBLE_COLON) {
+                    continue;
+                }
+
+                if ($i > 0 && is_array($tokens[$i - 1]) && $tokens[$i - 1][0] === T_NEW) {
+                    continue;
+                }
+
+                $j = $i + 1;
+
+                while ($j < $count && is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
+                    $j++;
+                }
+
+                if ($j >= $count || ! is_array($tokens[$j]) || $tokens[$j][0] !== T_STRING) {
+                    continue;
+                }
+
+                $shortName = $tokens[$j][1];
+                $docblock = docblockBeforeIndex($tokens, $i);
+
+                $types[] = [
+                    'dir' => $dirName,
+                    'file' => $relativeFile,
+                    'line' => $token[2],
+                    'fqcn' => $namespace.'\\'.$shortName,
+                    'docblock' => $docblock,
+                ];
+            }
+        }
+    }
+
+    usort($types, static fn (array $a, array $b): int => [$a['dir'], $a['fqcn']] <=> [$b['dir'], $b['fqcn']]);
+
+    return $types;
+}
+
+/**
+ * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
+ */
+function docblockBeforeIndex(array $tokens, int $typeIndex): string
+{
+    // Class modifiers sit between a class-level docblock and T_CLASS. Skipping
+    // them keeps @internal on `final`/`abstract`/`readonly` types visible to R4b.
+    $classModifiers = [T_ABSTRACT, T_FINAL, T_READONLY];
+
+    for ($k = $typeIndex - 1; $k >= 0; $k--) {
+        $token = $tokens[$k];
+
+        if (is_array($token) && ($token[0] === T_WHITESPACE || in_array($token[0], $classModifiers, true))) {
+            continue;
+        }
+
+        if (is_array($token) && $token[0] === T_DOC_COMMENT) {
+            return $token[1];
+        }
+
+        break;
+    }
+
+    return '';
+}
+
+/**
+ * @param  array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $ownerMeta
+ */
+function isUndeclaredSurfaceType(string $fqcn, string $docblock, array $ownerMeta): bool
+{
+    if (namespaceCoveredByPublicApi($fqcn, $ownerMeta['public_api'])) {
+        return false;
+    }
+
+    if (preg_match('/\\\\Internal\\\\/', $fqcn) === 1) {
+        return false;
+    }
+
+    if (str_contains($docblock, '@internal')) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -857,4 +1750,75 @@ function writeReport(string $path, array $report): void
         $path,
         json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n",
     );
+}
+
+function emitPackageGraphBaseline(string $repoRoot, string $configPath): void
+{
+    $packages = discoverPackages($repoRoot);
+    $classIndex = buildClassIndex($repoRoot, $packages);
+    $publicApiExceptions = [];
+    $seenPublicApi = [];
+
+    foreach ($packages as $dirName => $meta) {
+        $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+
+        if (! is_dir($srcDir)) {
+            continue;
+        }
+
+        foreach (walkPhpFiles($srcDir) as $file) {
+            $relativeFile = substr($file, strlen($repoRoot) + 1);
+
+            foreach (extractReferences($file) as $ref) {
+                $import = $ref['import'];
+                $ownerPackage = resolveOwner($import, $packages, $classIndex);
+
+                if ($ownerPackage === null || $ownerPackage === $meta['name']) {
+                    continue;
+                }
+
+                if (violatesPublicApi($import, $meta['name'], $ownerPackage, $packages) === null) {
+                    continue;
+                }
+
+                $key = $meta['name'].'|'.$ownerPackage.'|'.$relativeFile;
+
+                if (isset($seenPublicApi[$key])) {
+                    continue;
+                }
+
+                $seenPublicApi[$key] = true;
+                $publicApiExceptions[] = [
+                    'from' => $meta['name'],
+                    'to' => $ownerPackage,
+                    'import_file' => $relativeFile,
+                    'adr' => 'P3.3',
+                    'expires_when' => 'import removed or target symbol promoted to public-api',
+                    'reason' => 'Frozen R4 baseline at P3.3 (API-003 debt).',
+                ];
+            }
+        }
+    }
+
+    usort($publicApiExceptions, static fn (array $a, array $b): int => [$a['from'], $a['to'], $a['import_file']] <=> [$b['from'], $b['to'], $b['import_file']]);
+
+    $surfaceEntries = [];
+
+    foreach (collectTopLevelTypes($repoRoot, $packages) as $type) {
+        if (! isUndeclaredSurfaceType($type['fqcn'], $type['docblock'], $packages[$type['dir']])) {
+            continue;
+        }
+
+        $surfaceEntries[] = $type['dir'].'|'.$type['fqcn'];
+    }
+
+    sort($surfaceEntries);
+
+    fwrite(STDOUT, json_encode([
+        'public_api_exceptions' => $publicApiExceptions,
+        'undeclared_surface' => [
+            'schema' => 'package-graph-undeclared-surface/1',
+            'entries' => $surfaceEntries,
+        ],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
 }

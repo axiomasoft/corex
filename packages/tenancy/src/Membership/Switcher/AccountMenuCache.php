@@ -9,7 +9,7 @@ interface AccountMenuCache
 {
     public function versionFor(AccountsQuery $query): ?string;
 
-    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AccountsResult;
+    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AvailableAccounts;
 
-    public function put(AccountsQuery $query, AccountsResult $result, int $ttlSeconds): void;
+    public function put(AccountsQuery $query, AvailableAccounts $result, int $ttlSeconds): void;
 }

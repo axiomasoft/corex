@@ -14,12 +14,28 @@ const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
 const EXIT_CONFIG = 2;
 
-const SNAPSHOT_FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];
+const SNAPSHOT_FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json', 'webhooks.json'];
+const REQUIRED_SNAPSHOT_FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];
 const OPERATION_KEYS = [
-    'ability', 'capabilities', 'contract_hash', 'deprecation', 'effect_mode',
+    'ability', 'capabilities', 'contract_hash', 'cost', 'deprecation', 'effect_mode',
     'execution_supported', 'id', 'idempotency', 'method', 'mode', 'module',
     'pagination', 'path', 'read_fields', 'request_schema', 'required_scopes',
     'response_schema', 'success_status', 'version', 'write_fields',
+];
+const COST_KEYS = ['enforcement', 'recipe'];
+const ENFORCEMENT_KEYS = ['account', 'actor', 'client', 'global'];
+const RECIPE_KEYS = [
+    'attribute_filter', 'base', 'field', 'highlight', 'max_units', 'relation', 'row', 'side_effect',
+];
+const WEBHOOK_KEYS = [
+    'bulk', 'delivery', 'payload_limit_bytes', 'pii', 'replay', 'retry', 'rotation', 'schema', 'topics',
+];
+const TOPIC_KEYS = ['major', 'name', 'payload', 'pii_class', 'version'];
+const PII_CLASSES = ['none', 'pseudonymous', 'personal', 'restricted', 'secret'];
+const PII_RANK = ['none' => 0, 'pseudonymous' => 1, 'personal' => 2, 'restricted' => 3, 'secret' => 4];
+const ROTATION_KEYS = [
+    'algorithm', 'content', 'headers', 'id_semantics', 'max_active_keys', 'prefix',
+    'secret_bytes', 'signature', 'timestamp_window_seconds',
 ];
 const ERROR_KEYS = ['category', 'code', 'detail_keys', 'owner', 'path', 'retryable'];
 const SCHEMA_KEYS = [
@@ -136,20 +152,15 @@ function loadSnapshot(string $directory): array
 
     $files = [];
 
-    foreach (SNAPSHOT_FILES as $name) {
-        $path = rtrim($directory, '/').'/'.$name;
+    foreach (REQUIRED_SNAPSHOT_FILES as $name) {
+        $files[$name] = decodeSnapshotFile($directory, $name);
+    }
 
-        if (! is_file($path)) {
-            throw new RuntimeException('unknown-schema '.$name.' /'.$name);
-        }
+    $webhookPath = rtrim($directory, '/').'/webhooks.json';
+    $files['webhooks.json'] = is_file($webhookPath) ? decodeSnapshotFile($directory, 'webhooks.json') : null;
 
-        $decoded = json_decode((string) file_get_contents($path), true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RuntimeException('unknown-schema '.$name.' /'.$name);
-        }
-
-        $files[$name] = $decoded;
+    if (is_array($files['webhooks.json'])) {
+        assertWebhook($files['webhooks.json']);
     }
 
     assertKnownDocument($files['operations.json'], 'operations.json', '/');
@@ -231,6 +242,10 @@ function assertOperationShape(array $operation, string $subject, string $pointer
 
         assertKnownKeys($deprecation, DEPRECATION_KEYS, $subject, $pointer.'/deprecation');
     }
+
+    if (array_key_exists('cost', $operation)) {
+        assertCost($operation['cost'], $subject, $pointer.'/cost');
+    }
 }
 
 /**
@@ -296,6 +311,7 @@ function compareSnapshots(array $baseline, array $candidate): array
             compareSchema($id, $operation['request_schema'], $next['request_schema'], $pointer.'/request_schema', true),
             compareSchema($id, $operation['response_schema'], $next['response_schema'], $pointer.'/response_schema', false),
             comparePagination($id, $operation['pagination'] ?? null, $next['pagination'] ?? null, $pointer.'/pagination'),
+            compareCost($id, $operation['cost'] ?? null, $next['cost'] ?? null, $pointer.'/cost/enforcement'),
         );
     }
 
@@ -326,7 +342,10 @@ function compareSnapshots(array $baseline, array $candidate): array
         }
     }
 
-    return $violations;
+    return array_merge($violations, compareWebhooks(
+        $baseline['files']['webhooks.json'] ?? null,
+        $candidate['files']['webhooks.json'] ?? null,
+    ));
 }
 
 /**
@@ -452,4 +471,165 @@ function comparePagination(string $subject, mixed $baseline, mixed $candidate, s
 function escapePointer(string $segment): string
 {
     return str_replace(['~', '/'], ['~0', '~1'], $segment);
+}
+
+function decodeSnapshotFile(string $directory, string $name): mixed
+{
+    $path = rtrim($directory, '/').'/'.$name;
+    $decoded = json_decode((string) file_get_contents($path), true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new RuntimeException('unknown-schema '.$name.' /'.$name);
+    }
+
+    return $decoded;
+}
+
+function assertCost(mixed $cost, string $subject, string $pointer): void
+{
+    if (! is_array($cost)) {
+        throw new RuntimeException('unknown-schema '.$subject.' '.$pointer);
+    }
+
+    assertKnownKeys($cost, COST_KEYS, $subject, $pointer);
+    $enforcement = $cost['enforcement'] ?? null;
+    $recipe = $cost['recipe'] ?? null;
+
+    if (! is_array($enforcement) || ! is_array($recipe)) {
+        throw new RuntimeException('unknown-schema '.$subject.' '.$pointer);
+    }
+
+    assertKnownKeys($enforcement, ENFORCEMENT_KEYS, $subject, $pointer.'/enforcement');
+    assertKnownKeys($recipe, RECIPE_KEYS, $subject, $pointer.'/recipe');
+
+    foreach (ENFORCEMENT_KEYS as $level) {
+        if (! in_array($enforcement[$level] ?? null, ['enforce', 'observe'], true)) {
+            throw new RuntimeException('unknown-schema '.$subject.' '.$pointer.'/enforcement/'.$level);
+        }
+    }
+}
+
+/** @param  array<string, mixed>  $document */
+function assertWebhook(array $document): void
+{
+    assertKnownKeys($document, WEBHOOK_KEYS, 'webhooks.json', '');
+
+    if (($document['schema'] ?? null) !== 'corex-webhook-contract/1' || ! is_array($document['topics'] ?? null) || ! array_is_list($document['topics'])) {
+        throw new RuntimeException('unknown-schema webhooks.json /schema');
+    }
+
+    foreach ($document['topics'] as $index => $topic) {
+        if (! is_array($topic)) {
+            throw new RuntimeException('unknown-schema webhooks.json /topics/'.$index);
+        }
+
+        assertKnownKeys($topic, TOPIC_KEYS, 'webhooks.json', '/topics/'.$index);
+
+        if (! in_array($topic['pii_class'] ?? null, PII_CLASSES, true) || ! is_array($topic['payload'] ?? null)) {
+            throw new RuntimeException('unknown-schema webhooks.json /topics/'.$index);
+        }
+
+        assertSchema($topic['payload'], 'webhooks.json', '/topics/'.$index.'/payload');
+    }
+
+    $rotation = $document['rotation'] ?? null;
+
+    if (! is_array($rotation)) {
+        throw new RuntimeException('unknown-schema webhooks.json /rotation');
+    }
+
+    assertKnownKeys($rotation, ROTATION_KEYS, 'webhooks.json', '/rotation');
+}
+
+/** @return list<string> */
+function compareCost(string $subject, mixed $baseline, mixed $candidate, string $pointer): array
+{
+    if ($baseline === null) {
+        return [];
+    }
+
+    $base = is_array($baseline) ? ($baseline['enforcement'] ?? null) : null;
+    $next = is_array($candidate) ? ($candidate['enforcement'] ?? null) : null;
+
+    if ($base !== $next) {
+        return ['cost-default-enforcement '.$subject.' '.$pointer];
+    }
+
+    return [];
+}
+
+/** @return list<string> */
+function compareWebhooks(mixed $baseline, mixed $candidate): array
+{
+    if ($baseline === null) {
+        return [];
+    }
+
+    if (! is_array($baseline) || ! is_array($candidate)) {
+        return ['signature-semantics webhooks.json /webhooks'];
+    }
+
+    $violations = [];
+    $baseTopics = indexTopics($baseline['topics'] ?? []);
+    $nextTopics = indexTopics($candidate['topics'] ?? []);
+
+    foreach ($baseTopics as $id => $topic) {
+        $pointer = '/topics/'.escapePointer($id);
+
+        if (! isset($nextTopics[$id])) {
+            $violations[] = 'topic-removal '.$id.' '.$pointer;
+
+            continue;
+        }
+
+        $next = $nextTopics[$id];
+
+        if (($topic['major'] ?? null) !== ($next['major'] ?? null)) {
+            $violations[] = 'major-rebind '.$id.' '.$pointer.'/major';
+        }
+
+        $baseRank = PII_RANK[$topic['pii_class']] ?? -1;
+        $nextRank = PII_RANK[$next['pii_class']] ?? -1;
+
+        if ($nextRank > $baseRank) {
+            $violations[] = 'pii-widening '.$id.' '.$pointer.'/pii_class';
+        }
+
+        $violations = array_merge($violations, array_values(array_unique(array_merge(
+            compareSchema($id, $topic['payload'], $next['payload'], $pointer.'/payload', true),
+            compareSchema($id, $topic['payload'], $next['payload'], $pointer.'/payload', false),
+        ))));
+    }
+
+    foreach (ROTATION_KEYS as $key) {
+        if (($baseline['rotation'][$key] ?? null) === ($candidate['rotation'][$key] ?? null)) {
+            continue;
+        }
+
+        $rule = $key === 'id_semantics' ? 'id-semantics' : 'signature-semantics';
+        $violations[] = $rule.' webhooks.json /rotation/'.$key;
+    }
+
+    foreach (['delivery', 'payload_limit_bytes', 'replay', 'retry'] as $key) {
+        if (($baseline[$key] ?? null) !== ($candidate[$key] ?? null)) {
+            $violations[] = 'signature-semantics webhooks.json /'.$key;
+        }
+    }
+
+    return $violations;
+}
+
+/**
+ * @param  list<array<string, mixed>>  $topics
+ * @return array<string, array<string, mixed>>
+ */
+function indexTopics(array $topics): array
+{
+    $indexed = [];
+
+    foreach ($topics as $topic) {
+        $indexed[$topic['name'].'.v'.$topic['version']] = $topic;
+    }
+
+    return $indexed;
 }

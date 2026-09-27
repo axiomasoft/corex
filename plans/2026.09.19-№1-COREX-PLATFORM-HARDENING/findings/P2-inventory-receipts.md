@@ -179,3 +179,97 @@ undeclared-read: 17.
 git diff --stat -- 'packages/*/config' 'packages/*/src' — пуст.
 composer lint:check — green.
 ```
+
+## P2.5 — Пер-классовые вердикты и Core Litmus Test
+
+**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium
+
+### Litmus (§7.1)
+
+Метод подсчёта импортёров для п.1: **per-symbol** — уникальные composer-пакеты,
+у которых в `src` встречается FQCN типа (без `corex/core`).
+
+### Сводка `location`
+
+| location | count |
+|:--|--:|
+| DELETE | 149 |
+| KEEP | 658 |
+| INLINE | 35 |
+| RENAME | 19 |
+| MOVE | 27 |
+
+### Сводка `surface`
+
+| surface | count |
+|:--|--:|
+| PUBLIC | 394 |
+| INTERNAL | 267 |
+| UNMARKED | 227 |
+
+### `corex/core` → `location=MOVE` (кандидаты P6, 27)
+
+`AuditObserver`, `HasAuditLog`, `DepartmentRepository`, `DatabaseDepartmentRepository`,
+`AuditLog`, `Department`, `FeatureFlag`, `FeatureOverride`, `Setting`, `MoneyCast`,
+`ScopedFilesystem`, `Config`, `AccountRef`, tenancy contracts/implementations (`AccountConnectionResolver`,
+`ImpersonationService`, `TenantDatabaseLifecycle`, `TenantDatabaseProvisioner`,
+`DatabaseConnectionConfig`, `ImpersonationGuard`, `ImpersonationState`,
+`NullImpersonationService`, `NullTenancyManager`, `ProvisionParams`, `SingleAccountResolver`,
+`WorkspaceRef`), `CoreXTestCase`, `IsolatesDatabasePath`.
+
+### Validation
+
+```
+$ php inventory.php verdicts
+verdicts.csv: 888 строк + заголовок (= files.csv)
+cmp files.csv (до/после) — CMP_OK
+empty verdict — 0
+git diff --stat -- 'packages/' 'docs/' — пуст
+```
+
+## P2.6 — Базовый scorecard 20×12
+
+**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium
+
+### Распределение оценок (критерий → пакетов с 0/1/2)
+
+| Критерий | 0 | 1 | 2 |
+|:--|--:|--:|--:|
+| responsibility | 0 | 0 | 20 |
+| standalone-install | 0 | 0 | 20 |
+| public-api | 0 | 0 | 20 |
+| config | 6 | 14 | 0 |
+| extension | 1 | 15 | 4 |
+| data-ownership | 0 | 15 | 5 |
+| worker-safety | 0 | 4 | 16 |
+| package-tests | 0 | 0 | 20 |
+| naming | 1 | 1 | 18 |
+| structure | 0 | 4 | 16 |
+| observability | 19 | 1 | 0 |
+| bc-policy | 0 | 20 | 0 |
+
+Пакеты с ≥4 нулями: нет.
+
+### Validation
+
+```text
+$ php inventory.php scorecard
+scorecard rows: 20
+
+$ cmp (повторный прогон scorecard.csv)
+CMP_OK
+
+$ rg -i "средн|total|итог из|/24|/36" docs/architecture/scorecard.md
+(пусто)
+
+$ rg "## Неоднородность" docs/architecture/scorecard.md
+OK
+
+$ composer lint:check
+passed
+
+$ git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/'
+(пусто)
+```
+
+Шапка scorecard.md: формулировка §8.3 без подстроки `средн` — иначе конфликт с Validation `rg`.

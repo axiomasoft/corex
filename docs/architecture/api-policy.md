@@ -92,6 +92,30 @@ Enforcement межпакетной границы — **гейт графа па
 
 ## Совместимость `api/v1`
 
+`operation-contract/1` заморожен для локального checkout решением владельца
+P13.12 (G-API, `owner-session/local-source`). Единственный источник объявлений —
+скомпилированный `ModuleRegistry`; `OperationRegistry`, `ApiProfile` и снимки
+`api/v1` являются его проекциями. Хеш профиля зависит только от установленного
+кода и настроек контракта, а активация для account/workspace вычисляется при
+вызове. Дополнительный изменяемый реестр операций или tenant-поля в хеше
+запрещены.
+
+HTTP и exposed tool вызывают один `OperationInvoker`. Перед обработчиком он
+проверяет активацию модуля, scope, actor и разрешённые поля записи; поля ответа
+отсекаются тем же правилом при новом результате и replay. Идемпотентность
+команды означает одну зафиксированную пару effect/outcome; replay повторно
+проверяет текущую авторизацию. Cursor связан с версией, scope, порядком и
+ключом подписи. Ошибки имеют стабильный descriptor и две HTTP-проекции:
+envelope и RFC 9457 Problem Details; человеческий текст не является частью
+снимка. Async command возвращает 202 и `Location`. GraphQL-путь, зависимость,
+capability и снимок не входят в этот контракт.
+
+Зелёный контракт проверяют `tests/Feature/OperationContractTest.php`,
+`tests/Arch/ApiContractTest.php`, `corex:api-snapshots --check` и
+`composer api-contract`. Изменение публичной поверхности требует нового решения
+о совместимости; эта запись не разрешает релиз или автоматическое обновление
+baseline.
+
 `scripts/check-api-contract.php` сравнивает разобранные `operations.json` и
 `errors.json` с committed baseline. OpenAPI остаётся HTTP-проекцией. Гейт не
 обновляет baseline: запись снимка — отдельная команда генератора. Маркер
@@ -164,7 +188,7 @@ Schema ownership, PII и retention — [table-ownership.md](table-ownership.md).
 Remote webhook delivery выключена по умолчанию и требует key/worker/transport readiness.
 Local grants и synthetic tests не разрешают production migration/rotation или live sends.
 Setup, endpoint semantics и оставшиеся host boundaries —
-[API README](../../packages/api/README.md); текущие commands/hashes/negative fixtures —
+[API README](../../packages/operations/README.md); текущие commands/hashes/negative fixtures —
 [P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).
 
 ## Контракт ошибки

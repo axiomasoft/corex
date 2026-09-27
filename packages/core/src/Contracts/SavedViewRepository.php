@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use CoreX\Views\Data\SavedQuery;
-use CoreX\Views\Data\SavedViewRef;
-use CoreX\Views\Data\SaveViewInput;
-use CoreX\Views\Data\ViewContext;
-use CoreX\Views\Data\ViewScope;
+use CoreX\SavedViews\Data\SavedQuery;
+use CoreX\SavedViews\Data\SavedViewRef;
+use CoreX\SavedViews\Data\SaveViewInput;
+use CoreX\SavedViews\Data\ViewContext;
+use CoreX\SavedViews\Data\ViewScope;
 
 interface SavedViewRepository
 {

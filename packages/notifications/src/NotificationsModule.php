@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use Override;
 
-final class NotificationsModule extends CorexModule
+final class NotificationsModule extends ModuleDefinition
 {
     #[Override]
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/notifications')
+        return ModuleManifest::make('corex/notifications')
             ->title('Notifications')
             ->description('Durable tenant-scoped notification primitives.')
             ->tablePrefix('ntf');

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\IdentityPasswordRehasher;
 use CoreX\Contracts\TenantStorage;
 use CoreX\Support\PackageRegistrar;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
@@ -79,6 +80,10 @@ it('keeps Runtime register bindings on the measured key, concrete and lifetime',
     foreach ($app->make(TenancyOptions::class)->bootstrapperOrder as $bootstrapper) {
         $this->assertSingletonBinding($app, $bootstrapper, $bootstrapper);
     }
+});
+
+it('binds the identity password rehash port to the tenancy table owner', function (): void {
+    $this->assertSingletonBinding($this->app, IdentityPasswordRehasher::class, DatabaseIdentitySyncer::class);
 });
 
 it('keeps Database register bindings on the measured key, concrete and lifetime', function (): void {

@@ -11,7 +11,7 @@ final readonly class StrictAccountsTransport implements AccountsReadTransport
 {
     public function __construct(private StrictTransport $transport, private string $accountsUri) {}
 
-    public function accountsFor(AccountsQuery $query): AccountsResult
+    public function accountsFor(AccountsQuery $query): AvailableAccounts
     {
         return $this->transport->accountsFor(query: $query, accountsUri: $this->accountsUri);
     }

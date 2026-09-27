@@ -1,11 +1,11 @@
 ---
 id: D89
 date: 2026-09-20
-status: proposed
+status: superseded
 item: P15.11
 items: [P15, P15.11]
 supersedes: []
-superseded_by: null
+superseded_by: D134
 ---
 # D89 — Имя пакета API
 

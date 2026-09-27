@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Contracts\IdentityPasswordRehasher;
 use CoreX\Support\PackageRegistrar;
 use CoreX\Support\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\TenancyManager;
@@ -29,5 +30,9 @@ final class IdentityRegistrar implements PackageRegistrar
             ),
         );
         $app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));
+
+        if (! $app->bound(IdentityPasswordRehasher::class)) {
+            $app->singleton(IdentityPasswordRehasher::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));
+        }
     }
 }

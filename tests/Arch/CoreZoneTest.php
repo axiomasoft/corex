@@ -84,12 +84,11 @@ const CORE_ZONE_PREFIX = [
     'Features/' => 'Features',
     'Money/' => 'Money',
     'Observability/' => 'Foundation',
-    'PubSub/' => 'Messaging',
     'Messaging/' => 'Messaging',
     'Settings/' => 'Settings',
     'Storage/' => 'Storage',
     'Tenancy/' => 'TenancyContracts',
-    'Views/' => 'SavedViews',
+    'SavedViews/' => 'SavedViews',
 ];
 
 /**
@@ -98,10 +97,10 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
-    'Contracts/Auditable.php' => 'Audit',
-    'Contracts/AuditEntry.php' => 'Audit',
-    'Contracts/AuditLogger.php' => 'Audit',
-    'Contracts/AuditRetention.php' => 'Audit',
+    'Audit/Contracts/Auditable.php' => 'Audit',
+    'Audit/Contracts/AuditEntry.php' => 'Audit',
+    'Audit/Contracts/AuditLogger.php' => 'Audit',
+    'Audit/Contracts/AuditRetention.php' => 'Audit',
     'Contracts/DataScopeAuthorizer.php' => 'Foundation',
     'Contracts/DataScopeCodec.php' => 'Foundation',
     'Contracts/DescribesError.php' => 'Foundation',
@@ -122,7 +121,7 @@ const CORE_ZONE_DUMP = [
     'Contracts/SettingsScope.php' => 'Settings',
     'Contracts/TenantStorage.php' => 'Storage',
     'Models/BaseModel.php' => 'Foundation',
-    'Models/AuditLog.php' => 'Audit',
+    'Audit/Internal/AuditLog.php' => 'Audit',
     'Models/Department.php' => 'Departments',
     'Models/FeatureFlag.php' => 'Features',
     'Models/FeatureOverride.php' => 'Features',
@@ -156,13 +155,13 @@ const CORE_ZONE_DUMP = [
     'Exceptions/SettingValueTooLargeException.php' => 'Settings',
     'Exceptions/UnknownMessageContract.php' => 'Messaging',
     'Exceptions/UnsupportedScopeException.php' => 'Settings',
-    'Data/DataScopeAccessDecision.php' => 'Foundation',
+    'Support/Data/DataScopeAccessDecision.php' => 'Foundation',
     'Data/ErrorDescriptor.php' => 'Foundation',
 ];
 
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
-        ->and(zoneOf('packages/core/src/PubSub/PubSubManager.php'))->toBe('Messaging')
+        ->and(zoneOf('packages/core/src/Messaging/PubSubManager.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
         ->and(zoneOf('packages/core/src/Support/ViolationList.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Support/InvalidConfiguration.php'))->toBe('Foundation')
@@ -187,7 +186,7 @@ test('foreign files do not import zone Internal (R-Z2)', function (): void {
 test('R-Z1 planting in Foundation RecordRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Support/Data/RecordRef.php',
-        'CoreX\\Views\\Internal\\SqlSavedViewRepository',
+        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz1Offenders(...),
     );
 
@@ -199,7 +198,7 @@ test('R-Z1 planting in Foundation RecordRef names the file and symbol', function
 test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Tenancy/AccountRef.php',
-        'CoreX\\Views\\Internal\\SqlSavedViewRepository',
+        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz1Offenders(...),
     );
 
@@ -211,7 +210,7 @@ test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', f
 test('R-Z2 planting in ActorType names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Enums/ActorType.php',
-        'CoreX\\Views\\Internal\\SqlSavedViewRepository',
+        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz2Offenders(...),
     );
 
@@ -481,8 +480,8 @@ function rz2Offenders(): array
 function coreZoneFileInZoneDirectories(string $relative, string $zone): bool
 {
     $directories = match ($zone) {
-        'Messaging' => ['Messaging', 'PubSub'],
-        'SavedViews' => ['Views'],
+        'Messaging' => ['Messaging'],
+        'SavedViews' => ['SavedViews'],
         'TenancyContracts' => ['Tenancy'],
         'Foundation' => [
             'Support', 'PHPStan', 'Data', 'Concerns', 'Contracts', 'Models', 'Enums', 'Events', 'Exceptions',

@@ -1,0 +1,73 @@
+# P16.12 — Structural metadata and gate reconciliation
+
+**Batch:** E16g · **Decision:** D92 (FQCN / `extra.corex.public-api` byte-stable) ·
+**Actor:** plan-exec / cursor-grok-4.6 / direct (owner waived model check) ·
+**Date:** 2026-09-27
+
+No `src/` moves. Path-bearing SSOTs and generated owners were refreshed against the
+P16.1–P16.11 physical tree.
+
+## Old-path retarget (graph-gate `import_file`)
+
+25 `public_api_exceptions` rows pointed at layer-first files that no longer exist.
+Allowlist `guard_file` / `import_file` were already live (P16.4–P16.10). Count after
+retarget: allowlist 8, public_api_exceptions 175 (Testing drop remains P16.10).
+
+| Old path | New path |
+|:--|:--|
+| `packages/intl/src/Contracts/DatasetImporter.php` | `packages/intl/src/Territory/Contracts/DatasetImporter.php` |
+| `packages/intl/src/Contracts/GeographyProvider.php` | `packages/intl/src/Territory/Contracts/GeographyProvider.php` |
+| `packages/intl/src/Internal/Reference/AbstractFixtureReferenceProvider.php` | `packages/intl/src/Territory/Internal/Reference/AbstractFixtureReferenceProvider.php` |
+| `packages/intl/src/Internal/Reference/SqlDatasetImporter.php` | `packages/intl/src/Territory/Internal/Reference/SqlDatasetImporter.php` |
+| `packages/intl/src/Internal/Reference/SqlGeographyProvider.php` | `packages/intl/src/Territory/Internal/Reference/SqlGeographyProvider.php` |
+| `packages/modules/src/ModuleRuntimeContext.php` | `packages/modules/src/Definition/ModuleRuntimeContext.php` |
+| `packages/notifications/src/Data/NotificationContext.php` | `packages/notifications/src/Inbox/Data/NotificationContext.php` |
+| `packages/notifications/src/Internal/DeliveryCoordinator.php` | `packages/notifications/src/Delivery/Internal/DeliveryCoordinator.php` |
+| `packages/notifications/src/Internal/Digest/DigestTick.php` | `packages/notifications/src/Digest/Internal/DigestTick.php` |
+| `packages/notifications/src/Internal/Digest/NotificationDigestDueSource.php` | `packages/notifications/src/Digest/Internal/NotificationDigestDueSource.php` |
+| `packages/tasks/src/Actions/{Complete,Create,Move,Update}Task.php` | `packages/tasks/src/Task/Actions/…` |
+| `packages/tasks/src/Contracts/Task{Access,MutationAccess,PlanningAccess}.php` | `packages/tasks/src/Access/Contracts/…` |
+| `packages/tasks/src/Internal/Planning/{PlanningCommand,PlanningHasher}.php` | `packages/tasks/src/Planning/Internal/…` |
+| `packages/tasks/src/Support/DenyTask{Access,MutationAccess,PlanningAccess}.php` | `packages/tasks/src/Access/Internal/…` |
+| `packages/tasks/src/Support/{TaskCompletion,TaskModuleGuard}.php` | `packages/tasks/src/Access/Internal/…` |
+| `packages/crm/src/Data/ExecutionContext.php` | `packages/crm/src/Context/Data/ExecutionContext.php` |
+
+Zero remaining missing `import_file` / `guard_file` in `scripts/package-graph-gate.json`.
+
+## Other live carriers
+
+| Carrier | Disposition |
+|:--|:--|
+| `packages/*/composer.json` PSR-4 maps | already live from P16.1–P16.11; schema-valid |
+| `packages/*/phpstan.neon` | `paths: src` (relative); no stale subpaths |
+| `.github/workflows/ci.yml` | no `packages/api` / `packages/auth` paths; jobs already use `packages/operations` and `packages/access` |
+| `docs/architecture/rename-registry.md` | `RecordRules` path → `packages/crm/src/Context/Internal/` |
+| `docs/reference.md` | no package filesystem paths |
+| Mutation P1.24 patches | `packages/core/src/PubSub/` → `packages/core/src/Messaging/`; `git apply --check` exit 0 |
+| `extra.corex.public-api` (20 packages) | digest `c0598c5c39511933176bdb185de8879014c15fecb541673c7f1a29b819867617` — unchanged |
+
+Historical `packages/api` / `packages/auth` / `corex/api` strings remain in CHANGELOG, P15 rename completeness old-tokens, and plan decisions.
+
+## Generated once via owners
+
+| Owner | Output |
+|:--|:--|
+| `php scripts/package-graph-gate.php` | `artifacts/P12-package-graph/report.json` (`violations: []`) |
+| `php scripts/phpstan-contour.php` | `plans/…/artifacts/architecture/phpstan-contour.json` — 20 live packages, `debt: []`; root `phpstan.neon` paths sorted to those packages (`packages/operations/src`, `packages/access/src`; no `packages/api` / `packages/auth`) |
+
+## Validation
+
+| Lane | Result |
+|:--|:--|
+| `php scripts/package-graph-gate.php` | OK |
+| `tests/Arch/PackageGraphTest.php` | 11 passed, 48 assertions |
+| `php scripts/naming-gate.php` | OK (grandfather=3) |
+| PHPStan contour (20 package `composer analyse`) | all pass, debt empty |
+| `git apply --check scripts/mutations/*.patch` | all 34 patches apply |
+| `bash scripts/mutation-check.sh P1.24 bare-runninginconsole-guard` | OK (sabotage exit 1) |
+| Composer validate (intl/notifications/tasks/operations/modules/crm/access) | schema valid; `--strict` still warns on `@dev` path deps |
+| `composer dump-autoload -o --strict-psr` | exit 1 on pre-existing attributes/operations test-double skip list (12200 classes); no P16 stale path in that list |
+| public-api digest | unchanged by P16 moves |
+
+CI/split PHPStan job still analyses `packages/notifications/src` (package root, still valid).
+Roave BC remains experimental report-only (P3.4); not re-run here.

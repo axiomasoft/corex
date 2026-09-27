@@ -7,7 +7,7 @@ use CoreX\Modules\Compiler\CompiledEntityField;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\InstalledPackages;
 use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Dep;
+use CoreX\Modules\DefaultSettingDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
@@ -18,17 +18,17 @@ use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Extend\Routes;
 use CoreX\Modules\Extend\Workflow;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDependency;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Modules\SettingDefault;
 use CoreX\Tests\Stubs\StubEntityAlphaThing;
 use CoreX\Tests\Stubs\StubEntityBetaThing;
 use CoreX\Tests\Stubs\StubRogueExtender;
 use CoreX\Tests\Stubs\Widget;
 
 // Local helpers (not global functions, to avoid cross-file name collisions).
-$registryCompilerAlphaManifest = function (): Manifest {
-    return Manifest::make('corex/stub-alpha')
+$registryCompilerAlphaManifest = function (): ModuleManifest {
+    return ModuleManifest::make('corex/stub-alpha')
         ->title('Stub Alpha')
         ->tablePrefix('alp')
         ->extends([
@@ -40,11 +40,11 @@ $registryCompilerAlphaManifest = function (): Manifest {
         ]);
 };
 
-$registryCompilerBetaManifest = function (array $extenders = []): Manifest {
-    return Manifest::make('corex/stub-beta')
+$registryCompilerBetaManifest = function (array $extenders = []): ModuleManifest {
+    return ModuleManifest::make('corex/stub-beta')
         ->title('Stub Beta')
         ->tablePrefix('bet')
-        ->requires([Dep::module('corex/stub-alpha')])
+        ->requires([ModuleDependency::module('corex/stub-alpha')])
         ->extends([
             Entity::make(StubEntityBetaThing::class)
                 ->handle('bet.thing')
@@ -64,14 +64,14 @@ it('compiles two stub modules with EntityDefinitions in pipeline order', functio
 });
 
 it('rejects a duplicate tablePrefix across manifests', function () use ($registryCompilerAlphaManifest): void {
-    $duplicate = Manifest::make('corex/stub-alpha-clone')->title('Clone')->tablePrefix('alp');
+    $duplicate = ModuleManifest::make('corex/stub-alpha-clone')->title('Clone')->tablePrefix('alp');
 
     expect(fn () => (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $duplicate]))
         ->toThrow(CompilationException::class, 'Table prefix [alp]');
 });
 
 it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', function (): void {
-    $noPrefix = Manifest::make('corex/stub-no-prefix')->title('No Prefix');
+    $noPrefix = ModuleManifest::make('corex/stub-no-prefix')->title('No Prefix');
 
     $thrown = null;
 
@@ -94,14 +94,14 @@ it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', 
 });
 
 it('rejects a manifest with no title() call', function (): void {
-    $noTitle = Manifest::make('corex/stub-no-title')->tablePrefix('ntt');
+    $noTitle = ModuleManifest::make('corex/stub-no-title')->tablePrefix('ntt');
 
     expect(fn () => (new RegistryCompiler)->compile([$noTitle]))
         ->toThrow(CompilationException::class, 'corex/stub-no-title');
 });
 
 it('rejects a duplicate entity handle declared by two modules, naming both', function () use ($registryCompilerAlphaManifest): void {
-    $clone = Manifest::make('corex/stub-alpha-handle-clone')
+    $clone = ModuleManifest::make('corex/stub-alpha-handle-clone')
         ->title('Alpha Handle Clone')
         ->tablePrefix('ahc')
         ->extends([
@@ -109,14 +109,14 @@ it('rejects a duplicate entity handle declared by two modules, naming both', fun
         ]);
 
     expect(fn () => (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $clone]))
-        ->toThrow(CompilationException::class, 'Entity handle [alp.thing] is declared by both [corex/stub-alpha] and [corex/stub-alpha-handle-clone]');
+        ->toThrow(CompilationException::class, 'Duplicate identity [entity:alp.thing] is declared by both [corex/stub-alpha] and [corex/stub-alpha-handle-clone]');
 });
 
 it('rejects requires that do not mirror an installed module', function (): void {
-    $orphan = Manifest::make('corex/stub-orphan')
+    $orphan = ModuleManifest::make('corex/stub-orphan')
         ->title('Orphan')
         ->tablePrefix('orp')
-        ->requires([Dep::module('ghost/does-not-exist')]);
+        ->requires([ModuleDependency::module('ghost/does-not-exist')]);
 
     expect(fn () => (new RegistryCompiler)->compile([$orphan]))
         ->toThrow(CompilationException::class, 'ghost/does-not-exist');
@@ -134,10 +134,10 @@ it('resolves requires against installed.json contents, not a hardcoded package l
 
     expect($installedPackages)->toContain('corex/core');
 
-    $requiresInstalled = Manifest::make('corex/stub-requires-real')
+    $requiresInstalled = ModuleManifest::make('corex/stub-requires-real')
         ->title('Requires Real')
         ->tablePrefix('rrl')
-        ->requires([Dep::module('corex/core')]);
+        ->requires([ModuleDependency::module('corex/core')]);
 
     $registry = (new RegistryCompiler)->compile([$requiresInstalled], $installedPackages);
 
@@ -149,10 +149,10 @@ it('rejects requires against a package absent from installed.json (AC-2)', funct
         __DIR__.'/../Stubs/installed-with-corex-core.json',
     );
 
-    $requiresMissing = Manifest::make('corex/stub-requires-missing')
+    $requiresMissing = ModuleManifest::make('corex/stub-requires-missing')
         ->title('Requires Missing')
         ->tablePrefix('rrm')
-        ->requires([Dep::module('corex/not-installed')]);
+        ->requires([ModuleDependency::module('corex/not-installed')]);
 
     expect(fn () => (new RegistryCompiler)->compile([$requiresMissing], $installedPackages))
         ->toThrow(CompilationException::class);
@@ -164,14 +164,15 @@ it('collects a cross-module EntityField as sleeping, without failing compilation
     $registry = (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $registryCompilerBetaManifest([$crossModuleField])]);
 
     expect($registry->entityFields)->toHaveCount(1)
-        ->and($registry->entityFields[0]->extender)->toBe($crossModuleField)
+        ->and($registry->entityFields[0]->extender->fieldHandle)->toBe($crossModuleField->fieldHandle)
+        ->and($registry->entityFields[0]->extender)->not->toBe($crossModuleField)
         ->and($registry->entityFields[0]->declaringModule)->toBe('corex/stub-beta')
         ->and($registry->entityFields[0]->sleeping)->toBeTrue();
 });
 
 it('does not mark a same-module EntityField as sleeping', function (): void {
     $ownField = EntityField::scalar('alp.thing', 'own_note', 'string');
-    $alpha = Manifest::make('corex/stub-alpha')
+    $alpha = ModuleManifest::make('corex/stub-alpha')
         ->title('Stub Alpha')
         ->tablePrefix('alp')
         ->extends([
@@ -185,7 +186,7 @@ it('does not mark a same-module EntityField as sleeping', function (): void {
 });
 
 it('rejects an EntityField targeting a handle unknown to any compiled manifest', function (): void {
-    $manifest = Manifest::make('corex/stub-ghost-ref')
+    $manifest = ModuleManifest::make('corex/stub-ghost-ref')
         ->title('Ghost Ref')
         ->tablePrefix('ghr')
         ->extends([EntityField::scalar('nowhere.ghost', 'x', 'string')]);
@@ -195,7 +196,7 @@ it('rejects an EntityField targeting a handle unknown to any compiled manifest',
 });
 
 it('rejects a third-party extender outside the closed set with an RFC referral', function (): void {
-    $manifest = Manifest::make('corex/stub-rogue')
+    $manifest = ModuleManifest::make('corex/stub-rogue')
         ->title('Rogue')
         ->tablePrefix('rog')
         ->extends([new StubRogueExtender]);
@@ -204,11 +205,11 @@ it('rejects a third-party extender outside the closed set with an RFC referral',
         ->toThrow(CompilationException::class, 'RFC');
 });
 
-// Manifest exercising every one of the 8 extender slices (B-10 §4.2) plus
+// ModuleManifest exercising every one of the 8 extender slices (B-10 §4.2) plus
 // the two non-extender slices settings/featureFlags (P1.25) so the
 // round-trip covers the whole CompiledRegistry, not just entities.
-$registryCompilerFullManifest = function (): Manifest {
-    return Manifest::make('corex/stub-full')
+$registryCompilerFullManifest = function (): ModuleManifest {
+    return ModuleManifest::make('corex/stub-full')
         ->title('Stub Full')
         ->tablePrefix('sfl')
         ->extends([
@@ -223,12 +224,13 @@ $registryCompilerFullManifest = function (): Manifest {
             Permissions::group('thing', ['view', 'create', 'delete'], 'app')->scopeable(),
             Api::entity('sfl.thing')->readonly()->fields(['name'])->include('extra')->attribute('foo', Widget::class),
             Filament::resources([Widget::class], 'app'),
+            Menu::item('app', 'dashboard')->label('Dashboard'),
             Menu::item('app', 'sfl.things')->label('Things')->icon('cube')->after('dashboard')->permission('app.thing.view'),
             Routes::api('routes/api.php')->middleware(['auth', 'throttle'])->prefix('sfl'),
             Workflow::trigger('sfl.thing', ['created', 'updated']),
         ])
         ->settings([
-            SettingDefault::make('theme', 'default-theme')->sensitive(),
+            DefaultSettingDefinition::make('theme', 'default-theme')->sensitive(),
         ])
         ->featureFlags([
             new FeatureFlagDefinition(key: 'sfl.beta_mode', default: false, module: 'corex/stub-full'),
@@ -241,13 +243,15 @@ it('round-trips the whole CompiledRegistry (all 10 slices) through toArray/fromA
     $array = $compiled->toArray();
 
     // Every slice is present and populated in the plain-array projection.
-    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'settings', 'featureFlags', 'listeners'])
+    expect(array_keys($array))->toBe(['entities', 'entityFields', 'permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'settings', 'featureFlags', 'listeners', 'schema', 'fingerprint', 'compiler', 'modules', 'extensions', 'replacements'])
+        ->and($array['schema'])->toBe(CompiledRegistry::SCHEMA)
+        ->and($array['fingerprint'])->toBe($compiled->fingerprint)
         ->and($array['entities'])->toHaveKey('sfl.thing')
         ->and($array['entityFields'])->toHaveCount(1)
         ->and($array['permissions'])->toHaveCount(1)
         ->and($array['api'])->toHaveCount(1)
         ->and($array['filament'])->toHaveCount(1)
-        ->and($array['menu'])->toHaveCount(1)
+        ->and($array['menu'])->toHaveCount(2)
         ->and($array['routes'])->toHaveCount(1)
         ->and($array['workflow'])->toHaveCount(1)
         ->and($array['settings'])->toHaveCount(1)
@@ -265,10 +269,10 @@ it('round-trips the whole CompiledRegistry (all 10 slices) through toArray/fromA
 });
 
 it('collects settings/featureFlags off plain manifest properties, not an Extender (P1.25, A68)', function (): void {
-    $manifest = Manifest::make('corex/stub-defaults')
+    $manifest = ModuleManifest::make('corex/stub-defaults')
         ->title('Stub Defaults')
         ->tablePrefix('sfd')
-        ->settings([SettingDefault::make('locale', 'en')])
+        ->settings([DefaultSettingDefinition::make('locale', 'en')])
         ->featureFlags([new FeatureFlagDefinition(key: 'sfd.on', default: true)]);
 
     $compiled = (new RegistryCompiler)->compile([$manifest]);

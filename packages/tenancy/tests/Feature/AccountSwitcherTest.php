@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\Membership\Switcher\AccountListEntry;
 use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
 use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
 use CoreX\Tenancy\Tests\Support\Membership\AccountMenuFixture;
 use Illuminate\Support\Str;
@@ -14,9 +14,9 @@ function switcherQuery(string $product = 'product-a'): AccountsQuery
     return new AccountsQuery(identityId: '11111111-1111-4111-8111-111111111111', product: $product);
 }
 
-function switcherResult(AccountsQuery $query, string $version, array $accountIds): AccountsResult
+function switcherResult(AccountsQuery $query, string $version, array $accountIds): AvailableAccounts
 {
-    return new AccountsResult(
+    return new AvailableAccounts(
         identityId: $query->identityId,
         product: $query->product,
         membershipVersion: $version,

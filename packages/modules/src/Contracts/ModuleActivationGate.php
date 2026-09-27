@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Modules\Contracts;
 
 use CoreX\Modules\Gate\AllowAllActivationGate;
-use CoreX\Modules\GateDecision;
+use CoreX\Modules\ModuleActivationDecision;
 use CoreX\Tenancy\TenantContext;
 
 /**
@@ -17,5 +17,5 @@ use CoreX\Tenancy\TenantContext;
  */
 interface ModuleActivationGate
 {
-    public function check(TenantContext $ctx, string $module, string $edition): GateDecision;
+    public function check(TenantContext $ctx, string $module, string $edition): ModuleActivationDecision;
 }

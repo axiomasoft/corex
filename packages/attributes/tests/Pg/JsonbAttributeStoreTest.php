@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
 use CoreX\Attributes\Internal\InvalidAttributeValue;
 use CoreX\Attributes\Internal\KeyConflict;
 use CoreX\Attributes\Internal\ScopeDenied;
+use CoreX\Attributes\Internal\Values\JsonbAttributeStore;
 use CoreX\Attributes\Internal\VersionConflict;
 use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\RecordSelection;

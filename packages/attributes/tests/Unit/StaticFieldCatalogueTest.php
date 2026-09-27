@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
+use CoreX\Attributes\Internal\Schema\StaticFieldCatalogue;
 
 it('returns an empty snapshot for an entity without static definitions', function (): void {
     $catalogue = new StaticFieldCatalogue(definitions: [], drivers: ['jsonb' => true]);

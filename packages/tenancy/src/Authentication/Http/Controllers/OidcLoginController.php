@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\DB;
  * equality — the enum is three-valued, `invited` must NOT pass) →
  * {@see IdentitySyncer::syncToAccount()}. Both lanes converge on
  * `session()->regenerate()` → `Auth::loginUsingId()` (the ONLY seam that
- * constructs the Principal — never a class from `corex/auth`, D125) →
+ * constructs the Principal — never a class from `corex/access`, D125) →
  * `_corex_auth_at` marker (AC-15, read by `EnforceSessionLifetime`). Any
  * failure is an {@see OidcAuthenticationException} — no partial login. The
  * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation

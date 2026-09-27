@@ -1,0 +1,12 @@
+[
+    {
+        "category": "authorization",
+        "code": "access_denied",
+        "detail_keys": [
+            "reason"
+        ],
+        "owner": "corex/operations",
+        "path": null,
+        "retryable": false
+    }
+]

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Tests;
 
-use CoreX\Tasks\Testing\TasksTestCase;
+use CoreX\Tasks\Tests\Support\TasksTestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;

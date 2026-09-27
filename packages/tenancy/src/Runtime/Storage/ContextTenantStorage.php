@@ -21,6 +21,8 @@ use RecursiveIteratorIterator;
  *
  * The fake-s3 driver is deliberately a local test backend with object-prefix
  * semantics; it never represents a configured cloud provider.
+ *
+ * @internal
  */
 final class ContextTenantStorage implements TenantStorage
 {

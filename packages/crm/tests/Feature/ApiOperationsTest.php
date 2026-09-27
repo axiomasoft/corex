@@ -7,10 +7,10 @@ use CoreX\Api\Contracts\OperationAuthorizer;
 use CoreX\Api\Contracts\Principal;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Dispatcher;
 use CoreX\Api\Internal\ResolvedContext;
+use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Operation;
-use CoreX\Api\RequestMetadata;
+use CoreX\Api\OperationDispatcher;
 use CoreX\Enums\IdStrategy;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -52,7 +52,7 @@ it('declares and dispatches company, contact and association operations through 
             private readonly Principal $principal,
         ) {}
 
-        public function resolve(Request $request, Principal $principal, RequestMetadata $metadata): RequestContext
+        public function resolve(Request $request, Principal $principal, InvocationMetadata $metadata): RequestContext
         {
             return new ResolvedContext($this->context->current()->tenant, $this->principal, $metadata);
         }
@@ -74,7 +74,7 @@ it('declares and dispatches company, contact and association operations through 
             content: $method === 'GET' ? null : json_encode($input, JSON_THROW_ON_ERROR),
         );
 
-        return app(Dispatcher::class)->dispatch(request: $request, version: 'v1', path: $path);
+        return app(OperationDispatcher::class)->dispatch(request: $request, version: 'v1', path: $path);
     };
 
     $company = $dispatch('POST', 'companies', ['name' => 'Acme', 'inn' => '7700000000']);

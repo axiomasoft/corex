@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Meilisearch\Exceptions\InvalidMeilisearchConfiguration;
-use CoreX\Search\Meilisearch\Internal\MeilisearchQueryAdapter;
+use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
 use CoreX\Search\Meilisearch\MeilisearchServiceProvider;
 use CoreX\Search\SearchServiceProvider;
 use Orchestra\Testbench\TestCase;
@@ -32,7 +32,7 @@ final class MeilisearchServiceProviderTest extends TestCase
         $this->app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
         $this->app['config']->set('corex-search-meilisearch.key', 'local-test-key');
 
-        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(MeilisearchQueryAdapter::class);
+        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(MeilisearchSearchProvider::class);
     }
 
     public function test_meilisearch_driver_resolves_regardless_of_provider_registration_order(): void
@@ -47,6 +47,6 @@ final class MeilisearchServiceProviderTest extends TestCase
         $app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
         $app['config']->set('corex-search-meilisearch.key', 'local-test-key');
 
-        expect($app->make(SearchProvider::class))->toBeInstanceOf(MeilisearchQueryAdapter::class);
+        expect($app->make(SearchProvider::class))->toBeInstanceOf(MeilisearchSearchProvider::class);
     }
 }

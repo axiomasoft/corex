@@ -3,19 +3,21 @@
 Карта файлов и провенанс-связи. Не носитель статуса (`status.md`) и не носитель «куда
 дальше» (`handoff.md`).
 
-**Обновлён:** 2026-09-20
+**Обновлён:** 2026-09-23
 
 ## Карта директорий
 
 | Путь | Назначение |
 |:--|:--|
 | `plan.md` | Стабильное ядро: Meta, Context, Execution Rules, §3 Routing, §7 Contracts |
+| `execution-batches.md` | Живой маршрут P7–P17: batch → items → model, прямые входы/выходы, контрольные точки D118 |
+| `execution-commands.md` | Проверенный Cursor CLI launch list: 83 исполнения P7–P17 и команда архивирования после P17.12 |
 | `status.md` | Генерируемая проекция статуса фаз и items |
 | `phases/<Pn>/<Pn>.md` | Стабильный Phase Context и индекс items фазы |
 | `phases/<Pn>/<Pn.m>.md` | Стабильная спецификация item'а (11 полей) |
 | `phases/<Pn>/<Pn.m>.state.md` | Генерируемое состояние item'а |
 | `bundles/<Pn.m>.json` | Упорядоченные входы исполнителя с digest'ами |
-| `decisions/` | Append-only решения D1–D97 плюс генерируемые виды |
+| `decisions/` | Решения D1–D118 плюс генерируемые виды; D118 заменяет future pins D112/D114 |
 | `handoff.md` | Указатель «где мы»; перезаписывается после каждого закрытия |
 | `roadmap.md` | Исполнительская карта: граф фаз, гейты владельца, отложенное |
 | `journal.jsonl` | Append-only история запусков `task:plan-*` |
@@ -55,7 +57,10 @@
 | `artifacts/P4-design-rag/` | artifacts | `P4.1`–`P4.12` | Сырые ответы запросов P4 с `manifest.json` и SHA256 |
 | `findings/P4-receipts.md` | findings | `P4.1`–`P4.12` | Создаётся исполнением: вывод Validation, названные пределы D22/D23, текст уведомления потребителей |
 | `findings/P4-binding-audit.md` | findings | `P4.12` | Создаётся исполнением: таблица времён жизни биндингов и allowlist гейта |
-| `research/P5-design.md` | research | `P5.1`–`P5.12` | Готовый код messaging-основы: конверт и канонизованный payload, реестр контрактов, DDL outbox/inbox, `append()` в транзакции, relay с lease и fence-предикатом, порт публикации и команда, inbox, retention, наблюдаемость, arch-гейт зоны, четыре доказательства гарантий |
+| `research/P5-design.md` | research | `P5.1`–`P5.12` | Исходный дизайн messaging-основы; defects корректируются P5.13–P5.18. |
+| `findings/execution-audit-P1-P5-2026-09-22.md` | findings | P5 remediation | Воспроизведённые EA01–EA05, команды, GREEN/RED граница и owning items. |
+| `findings/task-0204-lifecycle-compatibility-2026-09-22.md` | findings | current-plan tooling | Доказанная несовместимость legacy journal с Task 0.20.4; технический долг текущего активного плана. |
+| `research/P4-P5-execution-remediation.md` | research | `P5.13`–`P5.18` | Нормативная форма пяти product repairs, joined qualification и checkpoint discipline. |
 | `research/P5-design-rag.md` | research | `P5.1`–`P5.12` | Внешние подтверждения фазы P5 (7 запросов) и граница того, что подтверждено не было |
 | `artifacts/P5-design-rag/` | artifacts | `P5.1`–`P5.12` | Сырые ответы запросов P5 с `manifest.json` и SHA256; фиксирует дефект транспорта (дублирование запроса) |
 | `findings/P5-receipts.md` | findings | `P5.1`–`P5.12` | Создаётся исполнением: вывод Validation, названные пределы D28/D29/D30, долги плоскости управления (P9) и источника времени prune (P6) |
@@ -65,10 +70,10 @@
 | `artifacts/P6-design-rag/` | artifacts | `P6.1`–`P6.6` | Сырые ответы запросов P6 с `manifest.json` и SHA256 |
 | `findings/P6-receipts.md` | findings | `P6.1`–`P6.6` | Создаётся исполнением: вывод Validation, посадки гейтов, долги Clock/N09/DATA-003/P15 |
 | `findings/P6-departments.md` | findings | `P6.4` | Создаётся исполнением: смысл «отдел» у ядра, auth и tenancy |
-| `research/P7-design.md` | research | `P7.1`–`P7.11` | Готовый код Options, policy, SecretRef, команды validate и блокирующего гейта |
+| `research/P7-design.md` | research | `P7.1`–`P7.12` | Готовый код Options, policy, SecretRef, команды validate и блокирующего гейта; D100 witness отдельно в P7.12 |
 | `research/P7-design-rag.md` | research | `P7.1`–`P7.11` | Внешние подтверждения фазы P7 (5 запросов) и граница того, что подтверждено не было |
 | `artifacts/P7-design-rag/` | artifacts | `P7.1`–`P7.11` | Сырые ответы запросов P7 с `manifest.json` и SHA256 |
-| `findings/P7-receipts.md` | findings | `P7.1`–`P7.11` | Создаётся исполнением: вывод Validation, посадки гейта, redaction |
+| `findings/P7-receipts.md` | findings | `P7.1`–`P7.12` | Создаётся исполнением: вывод Validation, D100 witness, посадки гейта, redaction |
 | `research/P8-design.md` | research | `P8.1`–`P8.6` | Готовый код PackageRegistrar, registrar'ов tenancy/modules, доказательства биндингов и гейта размера |
 | `research/P8-design-rag.md` | research | `P8.1`–`P8.6` | Внешние подтверждения фазы P8 (5 запросов) и граница того, что подтверждено не было |
 | `artifacts/P8-design-rag/` | artifacts | `P8.1`–`P8.6` | Сырые ответы запросов P8 с `manifest.json` и SHA256 |

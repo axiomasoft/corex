@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
-use CoreX\Modules\CorexModule;
+use CoreX\Modules\ModuleDefinition;
 use RuntimeException;
 
 final class InvalidManifestException extends RuntimeException
@@ -40,12 +40,12 @@ final class InvalidManifestException extends RuntimeException
         ));
     }
 
-    public static function notACorexModule(string $class): self
+    public static function notAModuleDefinition(string $class): self
     {
         return new self(sprintf(
             'Discovered module class [%s] does not extend %s.',
             $class,
-            CorexModule::class,
+            ModuleDefinition::class,
         ));
     }
 }

@@ -139,6 +139,8 @@ final class ApiOperationValidator
             self::assertDeprecation($api->deprecation, $api->operationId, $owner);
         }
 
+        self::validateCost($api, $owner);
+
         $idempotentMutation = $mode !== 'query' && in_array($idempotency, ['optional', 'required'], true);
 
         if ($idempotentMutation && $api->idempotencyExplicit && ! in_array($api->effectMode, ['tenant_transactional', 'same_transaction_outbox', 'reconciliation_contract'], true)) {
@@ -148,6 +150,69 @@ final class ApiOperationValidator
         if ($api->effectMode !== null && ! in_array($api->effectMode, ['tenant_transactional', 'same_transaction_outbox', 'reconciliation_contract'], true)) {
             throw new CompilationException("Unsafe idempotent effect mode on [{$api->operationId}] owned by [{$owner}].");
         }
+    }
+
+    /** @var array<string, int> */
+    private const COST_DEFAULTS = [
+        'base' => 1,
+        'row' => 0,
+        'field' => 0,
+        'relation' => 0,
+        'attribute_filter' => 0,
+        'highlight' => 0,
+        'side_effect' => 0,
+        'max_units' => 10000,
+    ];
+
+    private static function validateCost(Api $api, string $owner): void
+    {
+        $bulk = in_array($api->operationMode, ['bulk_query', 'bulk_command'], true);
+
+        if (! $api->costExplicit) {
+            if ($bulk) {
+                throw new CompilationException("Bulk operation [{$api->operationId}] owned by [{$owner}] requires a cost recipe.");
+            }
+
+            $api->cost = null;
+
+            return;
+        }
+
+        $recipe = $api->cost ?? [];
+
+        if ($recipe !== [] && array_is_list($recipe)) {
+            throw new CompilationException("Unknown cost key on [{$api->operationId}] owned by [{$owner}].");
+        }
+
+        $canonical = self::COST_DEFAULTS;
+
+        foreach ($recipe as $key => $value) {
+            if (! is_string($key) || ! array_key_exists($key, $canonical)) {
+                throw new CompilationException("Unknown cost key on [{$api->operationId}] owned by [{$owner}].");
+            }
+
+            if (! is_int($value)) {
+                throw new CompilationException("Cost overflow on [{$api->operationId}] owned by [{$owner}].");
+            }
+
+            if ($value < 0) {
+                throw new CompilationException("Negative cost weight on [{$api->operationId}] owned by [{$owner}].");
+            }
+
+            if ($value > 10000 || (in_array($key, ['base', 'max_units'], true) && $value < 1)) {
+                throw new CompilationException("Cost overflow on [{$api->operationId}] owned by [{$owner}].");
+            }
+
+            $canonical[$key] = $value;
+        }
+
+        $ordered = [];
+
+        foreach (array_keys(self::COST_DEFAULTS) as $key) {
+            $ordered[$key] = $canonical[$key];
+        }
+
+        $api->cost = $ordered;
     }
 
     /** @param  array<mixed>  $values */

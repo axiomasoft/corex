@@ -8,7 +8,7 @@ use CoreX\Modules\Discovery\ModuleDiscovery;
 
 /**
  * The real composer dependency graph {@see RegistryCompiler::compile()}
- * checks `requires(Dep::module(...))` against by default. Reads the
+ * checks `requires(ModuleDependency::module(...))` against by default. Reads the
  * standard `vendor/composer/installed.json` (Composer's own installed-set
  * manifest — no custom format, same file {@see ModuleDiscovery} scans for
  * corex-module packages). A missing/unreadable file resolves to an empty

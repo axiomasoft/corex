@@ -30,6 +30,7 @@ use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Support\ModulesOptions;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
@@ -89,7 +90,8 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
 
 /**
  * Resolve the lifecycle THROUGH the container (not a hand-built constructor):
- * connection comes from config, codeVersions/migrationPaths from the
+ * connection comes from the Options snapshot captured at provider registration,
+ * codeVersions/migrationPaths from the
  * `corex-modules.wiring` binding the ModulesServiceProvider populates from
  * installed.json. Tests override that binding with stub paths to prove the
  * container assembly actually wires migrations (C: empty autowired arrays).
@@ -99,7 +101,6 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
  */
 function lifecycleFromContainer(array $migrationPaths = [], array $codeVersions = []): ModuleLifecycle
 {
-    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
     app()->instance('corex-modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
     app()->forgetInstance(RecordsRegistrar::class);
     app()->forgetInstance(ModuleLifecycle::class);
@@ -124,6 +125,7 @@ beforeEach(function (): void {
     lifecyclePg()->statement('CREATE SCHEMA public');
     DB::purge(LIFECYCLE_TEST_CONNECTION);
 
+    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
     $this->app->register(ModulesServiceProvider::class);
 
     $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [
@@ -144,11 +146,11 @@ beforeEach(function (): void {
     CompiledModuleRegistry::writeAtomic($this->registryPath, [
         new CompiledModule('corex/stub-base', 'Stub Base', 'sba', [], [], []),
         new CompiledModule('corex/stub-dependent', 'Stub Dependent', 'sbd', [
-            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+            ['kind' => 'module', 'package' => 'corex/stub-base', 'constraint' => '*'],
         ], [], []),
         new CompiledModule('corex/stub-failing', 'Stub Failing', 'sbf', [], [], []),
         new CompiledModule('corex/stub-fk', 'Stub FK', 'stf', [
-            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+            ['kind' => 'module', 'package' => 'corex/stub-base', 'constraint' => '*'],
         ], [], []),
     ]);
 
@@ -166,7 +168,10 @@ function lifecycleModuleRegistry(string $path, ?ModuleRegistryCache $cache = nul
     return new CompiledModuleRegistry(
         cachePath: $path,
         stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
-        cache: $cache ?? new RepositoryModuleRegistryCache(Cache::store(), 3600, 'corex-modules'),
+        cache: $cache ?? new RepositoryModuleRegistryCache(
+            Cache::store(),
+            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+        ),
         versionResolver: static fn (TenantContext $ctx): int => (int) lifecyclePg()->table('mod_lifecycle_log')->count(),
     );
 }
@@ -179,7 +184,10 @@ function lifecycleCtx(string $accountId = 'acc-1'): TenantContext
 /** An isolated in-memory cache — models a separate node whose store the disabling process cannot reach. */
 function lifecycleIsolatedCache(): RepositoryModuleRegistryCache
 {
-    return new RepositoryModuleRegistryCache(new CacheRepository(new ArrayStore), 3600, 'corex-modules');
+    return new RepositoryModuleRegistryCache(
+        new CacheRepository(new ArrayStore),
+        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+    );
 }
 
 function lifecycleHasColumn(string $table, string $column): bool
@@ -676,11 +684,11 @@ it('defines a manifest-declared feature flag in sys_feature_flags when its modul
     CompiledModuleRegistry::writeAtomic($this->registryPath, [
         new CompiledModule('corex/stub-base', 'Stub Base', 'sba', [], [], []),
         new CompiledModule('corex/stub-dependent', 'Stub Dependent', 'sbd', [
-            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+            ['kind' => 'module', 'package' => 'corex/stub-base', 'constraint' => '*'],
         ], [], []),
         new CompiledModule('corex/stub-failing', 'Stub Failing', 'sbf', [], [], []),
         new CompiledModule('corex/stub-fk', 'Stub FK', 'stf', [
-            ['type' => 'module', 'target' => 'corex/stub-base', 'constraint' => '*'],
+            ['kind' => 'module', 'package' => 'corex/stub-base', 'constraint' => '*'],
         ], [], []),
         new CompiledModule('corex/stub-feature-flag', 'Stub Feature Flag', 'sff', [], [], []),
     ]);
@@ -702,7 +710,7 @@ it('defines a manifest-declared feature flag in sys_feature_flags when its modul
     expect(lifecyclePg()->table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
 });
 
-it('resolves ModuleStateReader from the container reading config(corex-modules.connection), not the app default (D63/D65 Major)', function (): void {
+it('resolves ModuleStateReader from the registered ModulesOptions connection, not the app default (D63/D65 Major)', function (): void {
     // mod_modules lives on the pg test connection; the app default (sqlite in
     // this suite) has no such table. A container-resolved ModuleStateReader must
     // read the CONFIGURED module connection — the bare class-string binding this
@@ -716,7 +724,7 @@ it('resolves ModuleStateReader from the container reading config(corex-modules.c
         'edition' => 'standard',
     ]);
 
-    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    expect(app(ModulesOptions::class)->connection)->toBe(LIFECYCLE_TEST_CONNECTION);
     app()->forgetInstance(ModuleStateReader::class);
 
     // NO manual `new DatabaseModuleStateReader(connection: ...)` override —

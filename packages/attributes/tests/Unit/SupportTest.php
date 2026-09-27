@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Internal\Engine\StructuralAttributeFilter;
+use CoreX\Attributes\Internal\Query\SchemaAttributeFilter;
 use CoreX\Attributes\Internal\UnavailableAttributes;
 use CoreX\Attributes\Internal\UnsupportedAttributeCapability;
 use CoreX\Attributes\Support\FieldSelection;
@@ -83,7 +83,7 @@ it('compiles only structural allowlisted filters', function (): void {
     $hash = str_repeat('a', 64);
     $schema = new FieldSnapshot('contact', 'v1', $hash, [['code' => 'email', 'type' => 'email']], []);
     $scope = DataScope::fromTenantContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'boxed:account-1', 'user-1', $hash);
-    $filter = new StructuralAttributeFilter(new AllowAllDataScopeAuthorizer);
+    $filter = new SchemaAttributeFilter(new AllowAllDataScopeAuthorizer);
 
     expect($filter->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'email', 'value' => 'a@example.test']))->schemaHash)->toBe($hash);
 

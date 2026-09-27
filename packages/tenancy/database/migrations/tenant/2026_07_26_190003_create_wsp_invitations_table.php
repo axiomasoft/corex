@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 // Tenant-DB migration (B-11 §2.2, D14/D16) — workspace/account invitations.
 // `role_id` is a SOFT-REF with NO FK (D21, audit F16): aut_roles is created
-// later by corex/auth (P2.8), a cross-package ordering constraint of the
+// later by corex/access (P2.8), a cross-package ordering constraint of the
 // same class as C4; acceptance applies the SET NULL semantics in code (role
 // not found → invitation accepted without a role). See DB_SCHEMA.md §3.4
 // wsp_invitations for the column-by-column source.
@@ -39,7 +39,7 @@ return new class extends Migration
 
         DB::statement('CREATE INDEX wsp_invitations_email_ix ON wsp_invitations (lower(email)) WHERE status = \'pending\'');
 
-        DB::statement("COMMENT ON COLUMN wsp_invitations.role_id IS 'Soft-ref, NO FK (D21): aut_roles lands later with corex/auth (P2.8); cleanup on accept is application-level, not ON DELETE SET NULL'");
+        DB::statement("COMMENT ON COLUMN wsp_invitations.role_id IS 'Soft-ref, NO FK (D21): aut_roles lands later with corex/access (P2.8); cleanup on accept is application-level, not ON DELETE SET NULL'");
     }
 
     public function down(): void

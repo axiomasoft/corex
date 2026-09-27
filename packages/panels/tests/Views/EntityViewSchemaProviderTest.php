@@ -6,10 +6,10 @@ use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Panels\Internal\EntityViewSchemaProvider;
+use CoreX\SavedViews\Data\ViewContext;
+use CoreX\SavedViews\Data\ViewSchema;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Views\Data\ViewContext;
-use CoreX\Views\Data\ViewSchema;
 
 function savedViewContext(): ViewContext
 {

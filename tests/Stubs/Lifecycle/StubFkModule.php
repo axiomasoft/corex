@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Dep;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleDependency;
+use CoreX\Modules\ModuleManifest;
 
 /**
  * Purge/D41 fixture. Owns two tables with a REAL foreign key (stf_children →
@@ -17,13 +17,13 @@ use CoreX\Modules\Manifest;
  *     this module does NOT own must be dropped WITHOUT dropping that table
  *     (D41). Requires stub-base so sba_widgets exists to extend.
  */
-final class StubFkModule extends CorexModule
+final class StubFkModule extends ModuleDefinition
 {
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/stub-fk')
+        return ModuleManifest::make('corex/stub-fk')
             ->title('Stub FK')
             ->tablePrefix('stf')
-            ->requires([Dep::module('corex/stub-base')]);
+            ->requires([ModuleDependency::module('corex/stub-base')]);
     }
 }

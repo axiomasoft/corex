@@ -1,6 +1,6 @@
 # Roadmap исполнения — 2026.09.19-№1-COREX-PLATFORM-HARDENING
 
-**Обновлён:** 2026-09-20 · **Соответствует plan.md:** v0.1.0
+**Обновлён:** 2026-09-23 · **Соответствует plan.md:** D118 execution batches; D112/D114 сохраняются как история P1–P6
 
 Живая карта «что запускать дальше». Не второй план: нормативные контракты живут в `plan.md`
 и фазовых файлах, вердикты — в `findings/audit-verdicts.md`.
@@ -13,13 +13,13 @@
 |:--|:--|:--|:--|
 | 1 — детализация | `task:plan-design <ID> Pn`, модель по §3.1a | 17 (по фазе) | P1–P17 готовы; стадия завершена |
 | 2 — общий аудит | `task:plan-audit <ID> design` на frontier/high | 1 | RED 2026-09-20: DA01–DA14; design remediation и corrective pass завершены, independent repeat audit не запускался |
-| 3 — исполнение | `task:plan-exec <ID> Pn.m` | по items | не начата |
+| 3 — исполнение | `task:plan-exec <ID> Pn.m` | по items; связанные items в одной сессии по `execution-batches.md` | P1–P4 и P6 закрыты; P5 содержит P5.6 с отклонениями; следующий P7.1 |
 
 Единица запуска стадии 1 — **детализация одной фазы**. Детализация обязана произвести три
 носителя:
 
-1. `research/Pn-design.md` — готовый нормативный текст и готовый код для каждого item'а
-   (исполнитель класса implementation = Composer 2.5 ничего не домысливает);
+1. `research/Pn-design.md` — нормативный текст, сигнатуры, алгоритмы и конкретные
+   решения для каждого item'а; исполнитель сверяет их с живым деревом;
 2. `research/Pn-design-rag.md` — внешние подтверждения фазы с первичными источниками;
 3. `phases/Pn/Pn.m.md` — item-спеки в пределах бюджета 200K на item.
 
@@ -52,7 +52,7 @@ all → P17
 | P3 | P2 | Гейт фиксирует измеренное состояние, а не гипотезу; baseline нужен для allowlist'ов. |
 | P4 | P3 | Смена формы `DataScope` должна сразу попадать под гейт сериализуемости. |
 | P5 | P4 | Envelope и outbox несут скалярный scope, а не объект контекста. |
-| P6 | P3, P5 | Зона `Messaging` в ядре собирается вокруг уже определённой messaging-основы. |
+| P6 | P3, P5.18 | Зона `Messaging` собирается только после независимой joined qualification root/package gates. |
 | P7 | P3 | Типизированные опции проверяются гейтом «нет `config()` вне composition». |
 | P8 | P7 | Провайдер сначала получает, что регистрировать (Options), потом дробится. |
 | P9 | P6, P8 | Tenancy опирается на сокращённое ядро и на registrar-модель. |
@@ -73,7 +73,7 @@ all → P17
 | P2 | solo | plan-design | Grok 4.6 (high) | — | ✅ детализирована 2026-09-19 |
 | P3 | solo | plan-design | Grok 4.6 (high) | — | ✅ детализирована 2026-09-19 |
 | P4 | solo | plan-design | Claude Opus 5 (high) | ✅ G-API: смена `shared-data-foundation/1` (только P4.7) | ✅ детализирована 2026-09-19 |
-| P5 | solo | plan-design | Claude Opus 5 (high) | ✅ G-DDL: таблицы outbox/inbox (только P5.4) | ✅ детализирована 2026-09-19 |
+| P5 | solo | plan-design | Opus 5 original; D111 remediation | ✅ G-DDL P5.4; P5.16 закрыт по D115 | 🟠 17/18 GREEN; P5.6 закрыт с отклонениями, P5.13–P5.18 закрыты |
 | P6 | solo | plan-design | Grok 4.6 (high) | — (D32: G-API остаётся на P15) | ✅ детализирована 2026-09-19 |
 | P7 | solo | plan-design | Grok 4.6 (high) | — | ✅ детализирована 2026-09-19 |
 | P8 | solo | plan-design | Grok 4.6 (high) | — | ✅ детализирована 2026-09-19 |
@@ -87,9 +87,19 @@ all → P17
 | P16 | B30–B33 + solo | plan-design | GPT-5.6 Sol (high; fallback Grok-слота D37) | — | ✅ детализирована 2026-09-20 · 0/13 исполнено |
 | P17 | solo; items B34–B36 + solo/manual | plan-design | GPT-5.6 Sol (high; fallback Grok-слота D37) | G-RELEASE только P17.12, grant pending | ✅ детализирована 2026-09-20 · 0/12 исполнено |
 
-После последней строки этой таблицы — стадия 2: `task:plan-audit <ID> design` на
-GPT-6 Astra (D37; запас только Sol), свежим независимым корнем. Стадия 3
-начинается вызовом `task:plan-exec <ID> P1.1`.
+Исторический переход: после детализации P17 был закрыт общий design audit;
+исполнение началось с P1.1. Текущий переход — P7.1 по §3.1 и D118.
+
+### 3.1 Живой execution frontier
+
+| Item | Lifecycle route | Cursor | Codex | Context |
+|:--|:--|:--|:--|:--|
+| P7.1 | implementation/high | `grok-4.7-high` | `gpt-5.6-sol` | solo (E07a); следующий P7.12 после checkpoint P7.1 |
+
+Полный batch → item → model маршрут, точные артефакты и межфазные проверки —
+`execution-batches.md`. Проверенные Cursor launch commands —
+`execution-commands.md`. Provider-specific selectors/effort — `plan.md` §3.3.
+Каждый launch печатает только команду активного provider; owner gates не меняются.
 
 ## 4. Соответствие фазам аудита
 
@@ -112,7 +122,7 @@ GPT-6 Astra (D37; запас только Sol), свежим независим�
 
 | Уровень | Лимит | Как обеспечивается |
 |:--|:--|:--|
-| Item (Composer 2.5) | 200K токенов | ≤14 Required Reads, ≤2500 строк чтения, ≤8 файлов в Files, один пакет на item |
+| Item | route-specific; Composer ceiling 200K | ≤14 Required Reads, ≤2500 строк, ≤8 product files; Grok/Sol не расширяют scope только потому, что их context больше |
 | Детализация фазы (frontier/high) | одна сессия | фаза читает только свои нормативные входы + 1–2 пакета; `research/Pn-design.md` — единственный носитель готового кода |
 | Верхний слой | этот файл + `plan.md` | скелеты фаз не содержат кода |
 
@@ -127,6 +137,7 @@ mutation-прогона одновременно.
 | P1 (Q1–Q2) | Имена пакетов `api` и `auth`; proposed D89/D90 требуют явного owner outcome | только P15.11/P15.12 и зависящие от результата P16 paths |
 | P4.7 | Смена контракта `shared-data-foundation/1` (форма `DataScope`); объявлен полем `Authority` item'а | P5, P13 |
 | P5.4 | Новые таблицы outbox/inbox вне FROZEN v1.0; объявлен полем `Authority` единственного DDL-item'а | P12, P14 |
+| P5.16 | G-DDL-P5R: коррекция двух новых messaging migrations до configurable table identity; grant pending | P5.18, P6 |
 | P15.1/P15.7/P15.8/P15.10 | G-API-P15: конечные публичные FQCN sets D85–D88 | соответствующие items и потребители |
 | P10.3 | `sys_attribute_definitions` и `sys_attribute_backfills`; additive migration, без foreign DDL | P10.4 и миграция живых значений |
 | P13.5 | Новая tenant-таблица `sys_api_idempotency` | P13.6 и mutation replay |
@@ -143,7 +154,6 @@ mutation-прогона одновременно.
 | Выделение `corex/money`, `corex/features`, `corex/settings` и др. в отдельные пакеты (A30/D8) | Один-два файла на пакет. Money — отдельная строка P6.4; Features/Settings пакетом не становятся | Отдельный release lifecycle или внешний потребитель без остального ядра |
 | Выделение `corex/money`: условие — внешний или boxed-потребитель, которому нужен `corex/core` без `brick/money`, и оплаченная стоимость split-зеркала. | №3 (`CastsAttributes`); `brick/money` уже в `require` ядра | внешний или boxed-потребитель, которому нужен `corex/core` без `brick/money`, и оплаченная стоимость split-зеркала |
 | Вынесение Departments на уровень 1 (FlexCMS): условие — второй продукт без оргдерева, либо подтверждённое расхождение смысла «отдел» между auth и CRM. До условия зона остаётся в ядре. | №2, №3; оргдерево с path/cycle/workspace; не пакет (2 файла, D8) | второй продукт без оргдерева, либо подтверждённое расхождение смысла «отдел» между auth и CRM; до условия зона остаётся в ядре |
-| Staging выноса `CoreX\Testing` из production-autoload (N09, D33) | `autoload-dev` path-зависимости потребителю не отдаётся; полный вынос сломает `composer test:packages` | P16: `src/Testing` в auth, tasks и crm уедет в `tests/` + `autoload-dev`; пакетные сьюты intl/search-intl/tenancy перестанут импортировать харнесс из production-класса |
 | Каталоги `packages/capabilities|integrations` (A24) | Дороже пользы при 20 path-репозиториях | Радикальный рост числа пакетов |
 | Остаток сравнительного прохода по API (GitHub, Slack, Twilio, HubSpot, Notion, Contentful) | Несущие решения уже подтверждены семью платформами | Research-item внутри P13 |
 | Гарантия порядка доставки сообщений и колонки `ordering_key`/`sequence_no` (D28) | `SKIP LOCKED` выбран ради пропускной способности; per-key порядок — отдельная машинерия с собственными pg-тестами на конкуренцию | Первый контракт, для которого переупорядочивание меняет бизнес-исход |

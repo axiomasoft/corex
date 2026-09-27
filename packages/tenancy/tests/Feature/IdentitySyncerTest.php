@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\IdentityPasswordRehasher;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenancyManager;
 use CoreX\Tenancy\Events\UserSynced;
@@ -123,6 +124,34 @@ function migrateUsersTableIS(AccountRef $ref): void
         ]);
     });
 }
+
+it('rehashes only an active owned users row with its expected hash', function (): void {
+    $account = makeAccountIS(makeClusterIS());
+    $ref = accountRefIS($account);
+    migrateUsersTableIS($ref);
+    $identityId = makeIdentityIS();
+    makeMembershipIS($identityId, $account->id);
+    app(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
+
+    /** @var TenancyManager $manager */
+    $manager = app(TenancyManager::class);
+    $manager->runFor($ref, null, function () use ($identityId): void {
+        $writer = app(IdentityPasswordRehasher::class);
+        $columns = ['id' => 'id', 'email' => 'email', 'password' => 'password_hash', 'active' => 'is_active', 'deleted_at' => 'deleted_at'];
+        DB::table('users')->where('id', $identityId)->update(['password_hash' => 'old']);
+
+        expect(fn () => $writer->rehash($identityId, 'old', 'wrong', 'root_identities', $columns, null))
+            ->toThrow(InvalidArgumentException::class);
+
+        $writer->rehash($identityId, 'old', 'new', 'users', $columns, null);
+        $writer->rehash($identityId, 'old', 'stale', 'users', $columns, null);
+        expect(DB::table('users')->where('id', $identityId)->value('password_hash'))->toBe('new');
+
+        DB::table('users')->where('id', $identityId)->update(['is_active' => false]);
+        $writer->rehash($identityId, 'new', 'deactivated', 'users', $columns, null);
+        expect(DB::table('users')->where('id', $identityId)->value('password_hash'))->toBe('new');
+    });
+});
 
 it('syncToAccount() creates a denormalized users row keyed by the identity id (AC-16 а)', function (): void {
     $account = makeAccountIS(makeClusterIS());

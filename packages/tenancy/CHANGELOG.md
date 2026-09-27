@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- D49 now decorates core's scoped semantic restorer; the identity owner supplies the `users` password rehash writer.
+
 - P9.6 turns `Workspaces` into `Workspace` and keeps DomainTrust/Impersonation/Workspace model and event FQCNs via PSR-4 maps.
 
 - P9.5 moves OIDC into `Authentication/Oidc` as a context-first adapter. Identity user/event/job and OIDC HTTP/exception classes keep FQCNs via PSR-4 maps. Routes and `oidc.enabled` stay the same.

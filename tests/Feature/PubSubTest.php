@@ -5,10 +5,10 @@ declare(strict_types=1);
 use CoreX\Contracts\PubSub;
 use CoreX\Contracts\WorkerRuntime;
 use CoreX\Enums\PubSubDriver;
-use CoreX\PubSub\DatabasePollPubSub;
-use CoreX\PubSub\NullPubSub;
-use CoreX\PubSub\RedisPubSub;
-use CoreX\PubSub\SubscribeGuard;
+use CoreX\Messaging\DatabasePollPubSub;
+use CoreX\Messaging\NullPubSub;
+use CoreX\Messaging\RedisPubSub;
+use CoreX\Messaging\SubscribeGuard;
 
 /**
  * Records every publish() call it receives — swapped into the container in

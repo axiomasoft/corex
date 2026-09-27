@@ -5,7 +5,5 @@
         "*/src/**/Commands/*.php",
         "*/src/Console/*.php"
     ],
-    "allow_paths": {
-        "packages/crm/src/Support/RecordRules.php": "E-FLEX-CRM-SEARCH-LANGUAGE"
-    }
+    "allow_paths": {}
 }

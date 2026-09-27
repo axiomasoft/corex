@@ -32,7 +32,39 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Tasks\\": "src/"
+            "CoreX\\Tasks\\": "src/",
+            "CoreX\\Tasks\\Contracts\\": [
+                "src/Task/Contracts/",
+                "src/Access/Contracts/",
+                "src/Planning/Contracts/"
+            ],
+            "CoreX\\Tasks\\Data\\": [
+                "src/Task/Data/",
+                "src/Planning/Data/",
+                "src/Project/Data/",
+                "src/Sprint/Data/",
+                "src/Time/Data/"
+            ],
+            "CoreX\\Tasks\\Actions\\": "src/Task/Actions/",
+            "CoreX\\Tasks\\Events\\": "src/Task/Events/",
+            "CoreX\\Tasks\\Enums\\": [
+                "src/Task/Enums/",
+                "src/Project/Enums/",
+                "src/Sprint/Enums/",
+                "src/Time/Enums/"
+            ],
+            "CoreX\\Tasks\\Models\\": [
+                "src/Task/Models/",
+                "src/Project/Models/",
+                "src/Sprint/Models/",
+                "src/Time/Models/"
+            ],
+            "CoreX\\Tasks\\Internal\\Planning\\": "src/Planning/Internal/",
+            "CoreX\\Tasks\\Exceptions\\": [
+                "src/Planning/Exceptions/",
+                "src/Access/Exceptions/"
+            ],
+            "CoreX\\Tasks\\Support\\": "src/Access/Internal/"
         }
     },
     "autoload-dev": {

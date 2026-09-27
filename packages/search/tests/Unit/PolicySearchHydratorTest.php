@@ -20,7 +20,7 @@ it('drops deleted, stale and policy-denied candidates before returning schema-ap
     $allowed = new RecordRef(entity: 'equipment', id: 'allowed');
     $denied = new RecordRef(entity: 'equipment', id: 'denied');
     $stale = new RecordRef(entity: 'equipment', id: 'stale');
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
     );

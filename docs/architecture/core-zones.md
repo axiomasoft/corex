@@ -41,30 +41,28 @@ Money             → Foundation, TenancyContracts
 
 | Путь | Файлов | Зона / область |
 |:--|--:|:--|
-| `Audit/` | 6 | Audit |
+| `Audit/` | 11 | Audit |
 | `Departments/` | 2 | Departments |
 | `Features/` | 1 | Features |
-| `Messaging/` | 19 | Messaging |
+| `Messaging/` | 29 | Messaging |
 | `Money/` | 1 | Money |
 | `Observability/` | 9 | Foundation |
 | `PHPStan/` | 1 | Foundation |
-| `PubSub/` | 7 | Messaging |
 | `Settings/` | 2 | Settings |
 | `Storage/` | 6 | Storage |
-| `Support/Data/` | 7 | Foundation |
+| `Support/Data/` | 8 | Foundation |
 | `Support/Schema/` | 1 | Foundation |
 | `Support/Time/` | 3 | Foundation |
 | `Tenancy/` | 18 | TenancyContracts |
 | `Testing/` | 2 | Testing |
-| `Views/` | 13 | SavedViews |
+| `SavedViews/` | 13 | SavedViews |
 
 ### 2.2 Каталоги со смешанной принадлежностью
 
-**`Contracts/` (23):**
+**`Contracts/` (19):**
 
 | Файлы | Зона |
 |:--|:--|
-| `AuditEntry.php`, `AuditLogger.php`, `AuditRetention.php`, `Auditable.php` | Audit |
 | `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `ModuleRegistrar.php`, `OperationObserver.php` | Foundation |
 | `DepartmentRepository.php` | Departments |
 | `FeatureFlagDefinition.php`, `FeatureFlags.php` | Features |
@@ -74,12 +72,11 @@ Money             → Foundation, TenancyContracts
 | `SettingDefaultsProvider.php`, `SettingsRepository.php`, `SettingsScope.php` | Settings |
 | `TenantStorage.php` | Storage |
 
-**`Models/` (6):**
+**`Models/` (5):**
 
 | Файлы | Зона |
 |:--|:--|
 | `BaseModel.php` | Foundation; E-BASEMODEL |
-| `AuditLog.php` | Audit |
 | `Department.php` | Departments |
 | `FeatureFlag.php`, `FeatureOverride.php` | Features |
 | `Setting.php` | Settings |
@@ -123,7 +120,7 @@ Money             → Foundation, TenancyContracts
 
 | Путь | Зона / область |
 |:--|:--|
-| `Data/DataScopeAccessDecision.php`, `Data/ErrorDescriptor.php` | Foundation |
+| `Support/Data/DataScopeAccessDecision.php`, `Data/ErrorDescriptor.php` | Foundation |
 | `Support/Config.php` | Composition |
 | `Support/ServiceProviderModuleRegistrar.php` | Composition |
 | `CoreServiceProvider.php` | Composition |
@@ -145,7 +142,7 @@ Money             → Foundation, TenancyContracts
 - **R-Z1:** файл зоны A импортирует только свою зону или зоны из матрицы. Сообщение
   нарушения обязано назвать правило, файл и запрещённый символ.
 - **R-Z2:** файл вне физического каталога зоны не импортирует её `Internal`. Для
-  Messaging физические каталоги — `Messaging` и `PubSub`; для SavedViews — `Views`.
+  Messaging физический каталог — `Messaging`; для SavedViews — `SavedViews`.
 - **R-L3:** Foundation не импортирует `Illuminate\Database\Eloquent`, `Illuminate\Http`
   или `Illuminate\Foundation\Application`, кроме закрытого списка LITMUS_ELOQUENT.
 - **R-T1:** production-файл вне `*/Testing/` не вводит новый импорт `CoreX\Testing`.
@@ -191,22 +188,16 @@ packages/core/src/Support/Schema/IdColumns.php
 
 Список не расширяется без решения в Decision Log.
 
-**RT1_EXISTING:**
-
-```text
-packages/crm/src/Testing/CrmTestCase.php
-packages/auth/src/Testing/CoreAuthTestCase.php
-packages/tasks/src/Testing/TasksTestCase.php
-```
-
-Это временная совместимость D33 до P16, а не разрешение новых production-импортов.
+**R-T1 (D33 закрыт в P16.10):** `packages/*/src` не импортирует `CoreX\Testing`,
+`CoreX\Auth\Testing`, `CoreX\Tasks\Testing` и `Flex\Crm\Testing`. Харнесс ядра лежит в
+`packages/core/tests/Support` и подключается только через `autoload-dev`.
 
 ## 4. Почему `Support/` и `Data/` остаются
 
 `Data/` и `Support/Data/` выражают Foundation: `DataScope`, `RecordRef`, `WriteToken`,
 кодек, authorizers и решение доступа имеют одинаковую семантику для всех потребителей.
-Перенос `DataScopeAccessDecision` сейчас изменил бы публичный return type
-`DataScopeAuthorizer`, что запрещено D32.
+`DataScopeAccessDecision` с P15.10 лежит в `Support/Data/` и остаётся публичным
+return type `DataScopeAuthorizer`.
 
 `Support/Config` и `Support/ServiceProviderModuleRegistrar` являются boot-адаптерами
 Composition. Первый связывает конфигурацию нескольких зон, второй работает с Laravel
@@ -215,15 +206,15 @@ Application. Остальные Support-типы не получают неяв�
 
 ## 5. Целевые FQCN для P15
 
-Эта таблица — вход P15, а не обещание переноса в P6.
+P15.10 применил D88. Текущие имена:
 
-| Сейчас | Цель | Условие |
-|:--|:--|:--|
-| `CoreX\PubSub\*` | `CoreX\Messaging\*` | G-API P15; до него путь логически относится к Messaging |
-| `CoreX\Contracts\Audit*`, `CoreX\Contracts\Auditable` | `CoreX\Audit\Contracts\*` | G-API P15; API-009 либо явное исключение |
-| `CoreX\Models\AuditLog` | `CoreX\Audit\Internal\AuditLog` | Тип уже внутренний по смыслу |
-| `CoreX\Views\*` | `CoreX\SavedViews\*` | Только если P15 принимает имя зоны |
-| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Support\Data\DataScopeAccessDecision` | После проверки внешних импортов |
+| Было | Стало |
+|:--|:--|
+| `CoreX\PubSub\*` | `CoreX\Messaging\*` |
+| `CoreX\Contracts\Audit*`, `CoreX\Contracts\Auditable` | `CoreX\Audit\Contracts\*` |
+| `CoreX\Models\AuditLog` | `CoreX\Audit\Internal\AuditLog` |
+| `CoreX\Views\*` | `CoreX\SavedViews\*` |
+| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Support\Data\DataScopeAccessDecision` |
 
 Публичные типы `final`, поэтому forwarding subclass неприменим. `class_alias` не вводится:
 он не даёт полного BC-сигнала Roave/PHPStan и запрещён D32.

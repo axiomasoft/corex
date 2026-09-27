@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Support;
 
 use BackedEnum;
+use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\QueuedAuditLogger;
-use CoreX\Contracts\AuditLogger;
-use CoreX\Contracts\AuditRetention;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DepartmentRepository;
 use CoreX\Contracts\FeatureFlags;
@@ -30,6 +30,7 @@ use CoreX\Tenancy\SingleAccountResolver;
 use DateInterval;
 use Throwable;
 
+/** @internal Package composition type. */
 final readonly class CoreOptions
 {
     /**

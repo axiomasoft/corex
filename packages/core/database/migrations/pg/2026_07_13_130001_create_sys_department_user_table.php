@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Schema;
 // batch). Published under `corex-migrations`/`corex-migrations-tenant`
 // (D33/D43). department_id/user_id follow config('corex.ids.strategy') via
 // IdColumns (D3/A58); user_id is a loose reference — the FK lands with
-// corex/auth (P2, DB_SCHEMA C4). timestampTz precision is explicit µs
+// corex/access (P2, DB_SCHEMA C4). timestampTz precision is explicit µs
 // (D32/A66). See DB_SCHEMA.md §3.2 sys_department_user; B-10 §2 DDL.
 return new class extends Migration
 {

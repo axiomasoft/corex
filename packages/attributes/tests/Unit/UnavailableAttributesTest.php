@@ -8,10 +8,12 @@ use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\FieldSnapshot;
 use CoreX\Attributes\Support\FilterNode;
 use CoreX\Attributes\Support\RecordSelection;
-use CoreX\Attributes\Support\Schema\OperationKey;
 use CoreX\Attributes\Support\Schema\OperationRef;
 use CoreX\Attributes\Support\Schema\SchemaChange;
+use CoreX\Attributes\Support\Schema\SchemaOperationId;
 use CoreX\Attributes\Support\ValuePatch;
+use CoreX\Enums\ErrorCategory;
+use CoreX\Enums\UnavailabilityReason;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
@@ -33,7 +35,7 @@ it('fails closed consistently when an application has not enabled attributes', f
         static fn () => $unavailable->write($scope, $record, new ValuePatch(['name' => 'Ada']), new WriteToken('write-1', $hash, 'absent')),
         static fn () => $unavailable->loadMany($scope, new RecordSelection([$record]), new FieldSelection(['name'])),
         static fn () => $unavailable->compile($scope, $schema, new FilterNode(['op' => 'eq', 'field' => 'name', 'value' => 'Ada'])),
-        static fn () => $unavailable->request($scope, new SchemaChange('contact', 'add', $hash, ['field' => 'name'], $hash), new OperationKey('schema-1', $hash)),
+        static fn () => $unavailable->request($scope, new SchemaChange('contact', 'add', $hash, ['field' => 'name'], $hash), new SchemaOperationId('schema-1', $hash)),
         static fn () => $unavailable->inspect($scope, new OperationRef('schema-ref-1')),
         static fn () => $unavailable->verify($scope, 'contact'),
     ];
@@ -41,4 +43,11 @@ it('fails closed consistently when an application has not enabled attributes', f
     foreach ($checks as $check) {
         expect($check)->toThrow(UnsupportedAttributeCapability::class);
     }
+
+    $descriptor = (new UnsupportedAttributeCapability)->errorDescriptor();
+
+    expect($descriptor->code)->toBe('attributes_engine_unavailable')
+        ->and($descriptor->category)->toBe(ErrorCategory::Unavailable)
+        ->and($descriptor->retryable)->toBeFalse()
+        ->and($descriptor->details)->toBe(['reason' => UnavailabilityReason::CapabilityUnavailable->value]);
 });

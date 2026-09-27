@@ -6,10 +6,10 @@ use CoreX\Models\BaseModel;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Dep;
 use CoreX\Modules\Events\ManifestListeners;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDependency;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
@@ -49,15 +49,15 @@ it('resolves module activity once per entity-list operation without caching acro
 });
 
 it('rejects a dependency cycle with its chain before compilation', function (): void {
-    $a = Manifest::make('example/alpha')->title('A')->tablePrefix('aaa')->requires([Dep::module('example/beta')]);
-    $b = Manifest::make('example/beta')->title('B')->tablePrefix('bbb')->requires([Dep::module('example/alpha')]);
+    $a = ModuleManifest::make('example/alpha')->title('A')->tablePrefix('aaa')->requires([ModuleDependency::module('example/beta')]);
+    $b = ModuleManifest::make('example/beta')->title('B')->tablePrefix('bbb')->requires([ModuleDependency::module('example/alpha')]);
     expect(fn () => (new RegistryCompiler)->compile([$a, $b], []))
         ->toThrow(CompilationException::class, 'example/alpha -> example/beta -> example/alpha');
 });
 
 it('dispatches compiled manifest listeners once only while their owning module is active', function (): void {
     RemediationManifestListener::$calls = 0;
-    $manifest = Manifest::make('example/listener')->title('Listener')->tablePrefix('lst')
+    $manifest = ModuleManifest::make('example/listener')->title('Listener')->tablePrefix('lst')
         ->listens([stdClass::class => [RemediationManifestListener::class]]);
     $compiled = CompiledRegistry::fromArray((new RegistryCompiler)->compile([$manifest], [])->toArray());
     $active = false;

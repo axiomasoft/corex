@@ -1,3 +1,70 @@
+# P9.8 receipt — GREEN final ratchet and ownership proof
+
+**Дата:** 2026-09-24 · **Actor:** plan-exec/codex-gpt-6/xhigh
+
+`P9-compatibility-final.json` и `P9-compatibility-diff.json` сверяют
+неизменный baseline P9.1 (`sha256:b632690e924fc527ecb79ef03cef6beb963de755a5b6fb31338cef5de5277d1d`)
+с итоговым деревом. Есть ровно 13 корневых каталогов и 174/174 однозначно
+сопоставленных файлов карты, плюс единственный D49-класс: 175 PHP-файлов.
+Diff фиксирует 125 переносов, 74 разрешённых внутренних FQCN-изменения и одну
+scoped binding-дельту D49. Root autoloader разрешает 175/175 целевых классов
+и 31/31 public symbols. Старых внутренних FQCN в потребителях, `class_alias()`
+в tenancy и незаявленных дельт нет. Bootstrapper order, OIDC routes, middleware
+aliases, семь listeners, команды, таблицы/соединения моделей и package discovery
+совпадают с P9.1. Миграции tenancy остались с
+`sha256:b6ea0e71880ea612c24a6a1b99b198edbd1af911d95f7eb6a049b3743914b90a`;
+`git diff --exit-code -- packages/tenancy/database` возвращает 0.
+
+По явному указанию владельца этот run устранил и обнаруженные при proof
+блокеры в owning packages. Шесть непубличных импортов закрыты точечными
+аддитивными public API объявлениями для контекстных value objects,
+`DataScope` и `TenantContextRestorer`; конкретный guarded restorer остался
+внутренним, а tenancy декорирует scoped semantic binding через `extend`.
+Новых package-graph exceptions нет. Публичные контракты записаны в changelogs;
+`corex/core` продолжает работать без tenancy-продукта.
+
+DATA-003 теперь проверяет исходники всех 20 пакетов PHP AST: 226 статически
+разрешённых write sites, ноль нарушений. Config-backed таблицы разрешаются
+только через типизированные options, а динамическое имя в распознанном write
+site отклоняется. Резолвер покрывает builder helpers и явно привязанные
+AzGuard ORM-модели. Каталог получил фактическую CRM-таблицу, четыре
+test-only tenancy-таблицы и две vendor-managed AzGuard-таблицы; catalog gate
+сверяет 92 локальные migrated tables с 108 строками. Две реальные записи
+`tasks-workflow` в `corex_task_operations` заменены публичным owner-портом
+`TaskOperationReceipts` пакета tasks. Auth передаёт rehash владельцу `users`
+через `IdentityPasswordRehasher`; tenancy принимает только canonical mapping
+и делает compare-and-swap для активной учётной записи. Негативные fixture
+прямой и helper-записи tenancy в `sys_settings` дают exit 1.
+
+Структурный ratchet отклоняет 14-й каталог и `Internal` (оба exit 1). Root
+strict-PSR autoload создаёт 11423 классов без предупреждений. CI вызывает
+structure и DATA-003 gates. D48 multi-account relay остаётся отложенным
+с прежним starvation/SLO/manual fan-out trigger; control plane и DDL не
+создавались.
+
+## Validation
+
+| Команда | Результат |
+|:--|:--|
+| `composer --working-dir=packages/tenancy lint:check` | exit 0 |
+| `composer --working-dir=packages/tenancy analyse` | exit 0, 175/175 |
+| `composer --working-dir=packages/tenancy test` | exit 0, 493 passed, 7 skipped, 1755 assertions (в `test:packages`) |
+| `composer test:pg` | exit 0, 181 passed, 687 assertions; `_test` target preflight verified |
+| `composer test:packages` | exit 0, all 20 package suites |
+| `composer lint:check` / `composer analyse` | exit 0 / exit 0 |
+| `composer test:arch` | exit 0, 54 passed, 175 assertions |
+| `composer test` | exit 0, 445 passed, 1490 assertions |
+| `composer package-graph-gate` | exit 0; no new exceptions |
+| `composer dump-autoload --strict-psr --optimize` | exit 0, 11423 classes |
+| `composer tenancy-structure-gate` | exit 0, 13 roots / 175 files |
+| `composer table-ownership-gate` / `composer table-write-ownership-gate` | exit 0 / exit 0, 226 writes |
+| `php scripts/provider-size-gate.php` | exit 0 |
+| Four negative fixtures / tenancy database diff / forbidden alias sweep | expected exit 1 × 4 / exit 0 / empty |
+
+**Предел доказательства:** статический DATA-003 gate действует на
+`packages/*/src` и известные query-builder, Eloquent и raw-DML sinks;
+динамический код вне этих поверхностей потребует отдельной проверки владельца.
+
 # P9.7 receipt
 
 3 файла карты P9.7 перенесены в `Integration/Wakeup` с namespace

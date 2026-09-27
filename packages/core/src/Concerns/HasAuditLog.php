@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Concerns;
 
 use CoreX\Audit\AuditObserver;
-use CoreX\Contracts\Auditable;
+use CoreX\Audit\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 /**

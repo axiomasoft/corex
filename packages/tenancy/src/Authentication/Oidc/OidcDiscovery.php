@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Http;
  * store/TTL so a real login does not round-trip the AS on every request.
  * Uses {@see Http} (not a raw Guzzle/PSR-18 client) so `Http::fake()` works
  * in tests (D130).
+ *
+ * @internal
  */
 final class OidcDiscovery
 {

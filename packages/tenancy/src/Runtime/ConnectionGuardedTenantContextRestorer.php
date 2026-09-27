@@ -7,15 +7,16 @@ namespace CoreX\Tenancy\Runtime;
 use CoreX\Exceptions\ScopeContextMismatch;
 use CoreX\Support\Data\DataScope;
 use CoreX\Tenancy\Contracts\TenantContextRestorer;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
 use CoreX\Tenancy\TenantContext;
 use Illuminate\Database\DatabaseManager;
 use Override;
 
 /**
- * Semantic restore stays with {@see GuardedTenantContextRestorer}.
+ * Semantic restore stays with the core-owned {@see TenantContextRestorer} binding.
  * This wrapper only checks that the already-open connection matches the scope.
  * It never looks up an account or initializes tenancy from the payload.
+ *
+ * @internal
  */
 final readonly class ConnectionGuardedTenantContextRestorer implements TenantContextRestorer
 {

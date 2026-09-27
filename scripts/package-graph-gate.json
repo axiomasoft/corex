@@ -1,10 +1,10 @@
 {
     "allowlist": [
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/transfer",
-            "import_file": "packages/api/src/Data/BulkTransferSession.php",
-            "guard_file": "packages/api/src/Internal/Bulk/TransferBulkExecutor.php",
+            "import_file": "packages/operations/src/Bulk/Data/BulkTransferSession.php",
+            "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
             "guard_contains": [
                 "interface_exists(TransferRunner::class)",
                 "interface_exists(ExportRunner::class)"
@@ -12,10 +12,10 @@
             "reason": "Public bulk session names optional transfer ports; the executor refuses them until both interfaces exist and a host factory is bound (P14.20)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/transfer",
-            "import_file": "packages/api/src/Internal/Bulk/TransferBulkExecutor.php",
-            "guard_file": "packages/api/src/Internal/Bulk/TransferBulkExecutor.php",
+            "import_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
+            "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
             "guard_contains": [
                 "interface_exists(TransferRunner::class)",
                 "interface_exists(ExportRunner::class)"
@@ -28,8 +28,8 @@
             "import_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_contains": [
-                "interface_exists(WakeupHint::class)",
-                "interface_exists(WakeupSweeper::class)"
+                "interface_exists(WakeupScheduleHint::class)",
+                "interface_exists(DueWakeupSweeper::class)"
             ],
             "reason": "Optional wakeup integration guarded by interface_exists() before registration (P12.1 receipt)."
         },
@@ -49,8 +49,8 @@
             "import_file": "packages/tenancy/src/Integration/Wakeup/RootRegistryWakeupHint.php",
             "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_contains": [
-                "interface_exists(WakeupHint::class)",
-                "interface_exists(WakeupSweeper::class)"
+                "interface_exists(WakeupScheduleHint::class)",
+                "interface_exists(DueWakeupSweeper::class)"
             ],
             "reason": "Integration/Wakeup root-registry hint adapter; registered only when corex/wakeup is present."
         },
@@ -60,8 +60,8 @@
             "import_file": "packages/tenancy/src/Integration/Wakeup/RootWakeupReconciler.php",
             "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
             "guard_contains": [
-                "interface_exists(WakeupHint::class)",
-                "interface_exists(WakeupSweeper::class)"
+                "interface_exists(WakeupScheduleHint::class)",
+                "interface_exists(DueWakeupSweeper::class)"
             ],
             "reason": "Integration/Wakeup root reconciler; registered only when corex/wakeup is present."
         },
@@ -79,13 +79,13 @@
         {
             "from": "corex/attributes",
             "to": "corex/modules",
-            "import_file": "packages/attributes/src/Schema/RegistryFieldCatalogue.php",
+            "import_file": "packages/attributes/src/Schema/ModuleFieldCatalogue.php",
             "guard_file": "packages/attributes/src/AttributesServiceProvider.php",
             "guard_contains": [
                 "bound(EntityRegistry::class)",
                 "bound(ModuleRegistry::class)"
             ],
-            "reason": "RegistryFieldCatalogue is constructed only from the guarded FieldCatalogue binding in AttributesServiceProvider (P12.7 receipt)."
+            "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in AttributesServiceProvider (P12.7 receipt)."
         }
     ],
     "undeclared_dependency_exceptions": [
@@ -95,7 +95,7 @@
             "import_file": "packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php",
             "adr": "P12.1",
             "expires_when": "handler registration guarded in TasksWorkflowServiceProvider or corex/wakeup promoted to require",
-            "reason": "WakeupHandler bridge wired only in tests; no runtime guard in product path (named exception per P12A.4)."
+            "reason": "DueWakeupHandler bridge wired only in tests; no runtime guard in product path (named exception per P12A.4)."
         }
     ],
     "reservations": [
@@ -120,57 +120,57 @@
     ],
     "public_api_exceptions": [
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/modules",
-            "import_file": "packages/api/src/Internal/ApiProfileFactory.php",
+            "import_file": "packages/operations/src/Versioning/Internal/ApiProfileFactory.php",
             "adr": "D65",
             "expires_when": "compiled registry projection moves behind a public modules contract",
             "reason": "P13 code profile reads the CompiledRegistry returned by ModuleRegistry::compiled(); no mutable API registry is introduced."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/core",
-            "import_file": "packages/api/src/ApiServiceProvider.php",
+            "import_file": "packages/operations/src/ApiServiceProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/core",
-            "import_file": "packages/api/src/Contracts/RequestContext.php",
+            "import_file": "packages/operations/src/Invocation/Contracts/RequestContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/core",
-            "import_file": "packages/api/src/Internal/ResolvedContext.php",
+            "import_file": "packages/operations/src/Invocation/Internal/ResolvedContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/core",
-            "import_file": "packages/api/src/Internal/ToolRequestContext.php",
+            "import_file": "packages/operations/src/Tools/Internal/ToolRequestContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/core",
-            "import_file": "packages/api/src/Internal/TrustedContextResolver.php",
+            "import_file": "packages/operations/src/Invocation/Internal/TrustedContextResolver.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/api",
+            "from": "corex/operations",
             "to": "corex/modules",
-            "import_file": "packages/api/src/Operation.php",
+            "import_file": "packages/operations/src/Definition/Operation.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -258,7 +258,7 @@
         {
             "from": "corex/attributes",
             "to": "corex/core",
-            "import_file": "packages/attributes/src/Query/StructuralAttributeFilter.php",
+            "import_file": "packages/attributes/src/Query/SchemaAttributeFilter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -290,7 +290,7 @@
         {
             "from": "corex/attributes",
             "to": "corex/core",
-            "import_file": "packages/attributes/src/Schema/RegistryFieldCatalogue.php",
+            "import_file": "packages/attributes/src/Schema/ModuleFieldCatalogue.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -328,65 +328,49 @@
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Access/AutMatrixGrantSource.php",
+            "import_file": "packages/access/src/Access/AutMatrixGrantSource.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Access/DefaultAccessChecker.php",
+            "import_file": "packages/access/src/Access/DefaultAccessChecker.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Access/ScopePredicate.php",
+            "import_file": "packages/access/src/Access/ScopePredicate.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Access/WorkspacePermissionLayer.php",
+            "import_file": "packages/access/src/Access/WorkspacePermissionLayer.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Matrix/ActiveEntityFilter.php",
+            "import_file": "packages/access/src/Matrix/ActiveEntityFilter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "corex/auth",
+            "from": "corex/access",
             "to": "corex/core",
-            "import_file": "packages/auth/src/Matrix/ScopeMapVersion.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "corex/auth",
-            "to": "corex/core",
-            "import_file": "packages/auth/src/Testing/CoreAuthTestCase.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "corex/auth",
-            "to": "corex/modules",
-            "import_file": "packages/auth/src/Testing/CoreAuthTestCase.php",
+            "import_file": "packages/access/src/Matrix/ScopeMapVersion.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -394,7 +378,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Contracts/DatasetImporter.php",
+            "import_file": "packages/intl/src/Territory/Contracts/DatasetImporter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -402,7 +386,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Contracts/GeographyProvider.php",
+            "import_file": "packages/intl/src/Territory/Contracts/GeographyProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -410,7 +394,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Contracts/RateImporter.php",
+            "import_file": "packages/intl/src/Currency/Contracts/RateImporter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -418,7 +402,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Internal/Money/SqlRateImporter.php",
+            "import_file": "packages/intl/src/Currency/Internal/SqlRateImporter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -426,7 +410,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Internal/Reference/AbstractFixtureReferenceProvider.php",
+            "import_file": "packages/intl/src/Territory/Internal/Reference/AbstractFixtureReferenceProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -434,7 +418,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Internal/Reference/SqlDatasetImporter.php",
+            "import_file": "packages/intl/src/Territory/Internal/Reference/SqlDatasetImporter.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -442,7 +426,7 @@
         {
             "from": "corex/intl",
             "to": "corex/core",
-            "import_file": "packages/intl/src/Internal/Reference/SqlGeographyProvider.php",
+            "import_file": "packages/intl/src/Territory/Internal/Reference/SqlGeographyProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -482,7 +466,7 @@
         {
             "from": "corex/modules",
             "to": "corex/core",
-            "import_file": "packages/modules/src/Commands/WhyCommand.php",
+            "import_file": "packages/modules/src/Commands/ExplainModuleCommand.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -578,7 +562,7 @@
         {
             "from": "corex/modules",
             "to": "corex/core",
-            "import_file": "packages/modules/src/ModuleContext.php",
+            "import_file": "packages/modules/src/Definition/ModuleRuntimeContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -626,7 +610,7 @@
         {
             "from": "corex/notifications",
             "to": "corex/core",
-            "import_file": "packages/notifications/src/Data/NotificationContext.php",
+            "import_file": "packages/notifications/src/Inbox/Data/NotificationContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -634,7 +618,7 @@
         {
             "from": "corex/notifications",
             "to": "corex/core",
-            "import_file": "packages/notifications/src/Internal/DeliveryCoordinator.php",
+            "import_file": "packages/notifications/src/Delivery/Internal/DeliveryCoordinator.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -642,7 +626,7 @@
         {
             "from": "corex/notifications",
             "to": "corex/core",
-            "import_file": "packages/notifications/src/Internal/Digest/DigestTick.php",
+            "import_file": "packages/notifications/src/Digest/Internal/DigestTick.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -650,7 +634,7 @@
         {
             "from": "corex/notifications",
             "to": "corex/core",
-            "import_file": "packages/notifications/src/Internal/Digest/NotificationDigestDueSource.php",
+            "import_file": "packages/notifications/src/Digest/Internal/NotificationDigestDueSource.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -770,7 +754,7 @@
         {
             "from": "corex/search",
             "to": "corex/core",
-            "import_file": "packages/search/src/Internal/UnsupportedSearchProvider.php",
+            "import_file": "packages/search/src/Internal/UnavailableSearchProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -826,7 +810,7 @@
         {
             "from": "corex/search-meilisearch",
             "to": "corex/core",
-            "import_file": "packages/search-meilisearch/src/Internal/MeilisearchQueryAdapter.php",
+            "import_file": "packages/search-meilisearch/src/Internal/MeilisearchSearchProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -842,7 +826,7 @@
         {
             "from": "corex/search-meilisearch",
             "to": "corex/search",
-            "import_file": "packages/search-meilisearch/src/Internal/MeilisearchQueryAdapter.php",
+            "import_file": "packages/search-meilisearch/src/Internal/MeilisearchSearchProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -858,7 +842,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Actions/CompleteTask.php",
+            "import_file": "packages/tasks/src/Task/Actions/CompleteTask.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -866,7 +850,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Actions/CreateTask.php",
+            "import_file": "packages/tasks/src/Task/Actions/CreateTask.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -874,7 +858,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Actions/MoveTaskToStage.php",
+            "import_file": "packages/tasks/src/Task/Actions/MoveTaskToStage.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -882,7 +866,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Actions/UpdateTask.php",
+            "import_file": "packages/tasks/src/Task/Actions/UpdateTask.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -890,7 +874,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Contracts/TaskAccess.php",
+            "import_file": "packages/tasks/src/Access/Contracts/TaskAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -898,7 +882,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Contracts/TaskMutationAccess.php",
+            "import_file": "packages/tasks/src/Access/Contracts/TaskMutationAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -906,7 +890,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Contracts/TaskPlanningAccess.php",
+            "import_file": "packages/tasks/src/Access/Contracts/TaskPlanningAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -914,7 +898,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Internal/Planning/PlanningCommand.php",
+            "import_file": "packages/tasks/src/Planning/Internal/PlanningCommand.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -922,7 +906,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Internal/Planning/PlanningHasher.php",
+            "import_file": "packages/tasks/src/Planning/Internal/PlanningHasher.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -930,7 +914,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Support/DenyTaskAccess.php",
+            "import_file": "packages/tasks/src/Access/Internal/DenyTaskAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -938,7 +922,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Support/DenyTaskMutationAccess.php",
+            "import_file": "packages/tasks/src/Access/Internal/DenyTaskMutationAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -946,7 +930,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Support/DenyTaskPlanningAccess.php",
+            "import_file": "packages/tasks/src/Access/Internal/DenyTaskPlanningAccess.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -954,7 +938,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Support/TaskCompletion.php",
+            "import_file": "packages/tasks/src/Access/Internal/TaskCompletion.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -962,15 +946,7 @@
         {
             "from": "corex/tasks",
             "to": "corex/core",
-            "import_file": "packages/tasks/src/Support/TaskModuleGuard.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "corex/tasks",
-            "to": "corex/core",
-            "import_file": "packages/tasks/src/Testing/TasksTestCase.php",
+            "import_file": "packages/tasks/src/Access/Internal/TaskModuleGuard.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -979,14 +955,6 @@
             "from": "corex/tasks",
             "to": "corex/modules",
             "import_file": "packages/tasks/src/TasksModule.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "corex/tasks",
-            "to": "corex/modules",
-            "import_file": "packages/tasks/src/Testing/TasksTestCase.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1002,7 +970,7 @@
         {
             "from": "corex/tasks-workflow",
             "to": "corex/core",
-            "import_file": "packages/tasks-workflow/src/Internal/CompletionCaptureObserver.php",
+            "import_file": "packages/tasks-workflow/src/Internal/CaptureTaskCompletion.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1042,7 +1010,7 @@
         {
             "from": "corex/tasks-workflow",
             "to": "corex/modules",
-            "import_file": "packages/tasks-workflow/src/TasksWorkflowModule.php",
+            "import_file": "packages/tasks-workflow/src/TaskWorkflowIntegration.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1322,7 +1290,7 @@
         {
             "from": "corex/transfer",
             "to": "corex/core",
-            "import_file": "packages/transfer/src/Contracts/ImportTarget.php",
+            "import_file": "packages/transfer/src/Contracts/TransferSink.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1362,7 +1330,7 @@
         {
             "from": "corex/transfer",
             "to": "corex/core",
-            "import_file": "packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php",
+            "import_file": "packages/transfer/src/Internal/Transfer/SqlTransferExecutor.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1378,7 +1346,7 @@
         {
             "from": "corex/wakeup",
             "to": "corex/core",
-            "import_file": "packages/wakeup/src/Contracts/DueSource.php",
+            "import_file": "packages/wakeup/src/Contracts/DueWakeupSource.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1386,7 +1354,7 @@
         {
             "from": "corex/wakeup",
             "to": "corex/core",
-            "import_file": "packages/wakeup/src/Contracts/WakeupHint.php",
+            "import_file": "packages/wakeup/src/Contracts/WakeupScheduleHint.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1402,7 +1370,7 @@
         {
             "from": "corex/wakeup",
             "to": "corex/core",
-            "import_file": "packages/wakeup/src/Contracts/WakeupSweeper.php",
+            "import_file": "packages/wakeup/src/Contracts/DueWakeupSweeper.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1497,8 +1465,8 @@
         },
         {
             "from": "flex/crm",
-            "to": "corex/api",
-            "import_file": "packages/crm/src/Testing/CrmTestCase.php",
+            "to": "corex/core",
+            "import_file": "packages/crm/src/Lead/Actions/ConvertLead.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1506,7 +1474,7 @@
         {
             "from": "flex/crm",
             "to": "corex/core",
-            "import_file": "packages/crm/src/Actions/ConvertLead.php",
+            "import_file": "packages/crm/src/ApiShared/CrmIdentifier.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1514,7 +1482,7 @@
         {
             "from": "flex/crm",
             "to": "corex/core",
-            "import_file": "packages/crm/src/Api/CrmIdentifier.php",
+            "import_file": "packages/crm/src/Deal/Casts/DealAmount.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1522,7 +1490,7 @@
         {
             "from": "flex/crm",
             "to": "corex/core",
-            "import_file": "packages/crm/src/Casts/DealAmount.php",
+            "import_file": "packages/crm/src/Context/Data/ExecutionContext.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1530,23 +1498,7 @@
         {
             "from": "flex/crm",
             "to": "corex/core",
-            "import_file": "packages/crm/src/Data/ExecutionContext.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "flex/crm",
-            "to": "corex/core",
-            "import_file": "packages/crm/src/Support/ContextGuard.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "flex/crm",
-            "to": "corex/core",
-            "import_file": "packages/crm/src/Testing/CrmTestCase.php",
+            "import_file": "packages/crm/src/Context/ContextGuard.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1563,14 +1515,6 @@
             "from": "flex/crm",
             "to": "corex/modules",
             "import_file": "packages/crm/src/CrmServiceProvider.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "flex/crm",
-            "to": "corex/modules",
-            "import_file": "packages/crm/src/Testing/CrmTestCase.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Views\Data\ViewField;
-use CoreX\Views\Data\ViewSchema;
-use CoreX\Views\Internal\ViewConfigValidator;
+use CoreX\SavedViews\Data\ViewField;
+use CoreX\SavedViews\Data\ViewSchema;
+use CoreX\SavedViews\Internal\ViewConfigValidator;
 
 it('rejects an unsafe saved-view filter before a consumer can map it to SQL', function (): void {
     $validator = new ViewConfigValidator;

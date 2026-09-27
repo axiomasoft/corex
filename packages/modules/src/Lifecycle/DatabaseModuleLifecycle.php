@@ -25,8 +25,8 @@ use CoreX\Modules\Exceptions\MissingDependencyException;
 use CoreX\Modules\Exceptions\ModuleEnableFailedException;
 use CoreX\Modules\Exceptions\ModuleNotFound;
 use CoreX\Modules\Exceptions\ModuleUpgradeFailedException;
-use CoreX\Modules\Manifest;
-use CoreX\Modules\ModuleContext;
+use CoreX\Modules\ModuleManifest;
+use CoreX\Modules\ModuleRuntimeContext;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\ModuleStatus;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
@@ -74,8 +74,6 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     private const RECORDS_TABLE = 'mod_records';
 
     private const LOG_TABLE = 'mod_lifecycle_log';
-
-    private const MIGRATIONS_TABLE = 'migrations';
 
     /**
      * @param  array<string, string>  $codeVersions
@@ -143,13 +141,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             }
 
             foreach ($compiled->requires as $dep) {
-                if ($dep['type'] === 'module') {
-                    $this->ensureDependencyEnabled($module, $dep['target'], $cascade);
+                if ($dep['kind'] === 'module') {
+                    $this->ensureDependencyEnabled($module, $dep['package'], $cascade);
                 }
             }
 
             $fromState = $current === null ? ModuleState::Available->value : $current->state;
-            $context = new ModuleContext($module, $tenant, $this->records);
+            $context = new ModuleRuntimeContext($module, $tenant, $this->records);
 
             $migration = $this->runModuleMigrations($module);
 
@@ -183,7 +181,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     }
 
     /**
-     * `Manifest::$featureFlags` → `FeatureFlags::define()` — the manifest
+     * `ModuleManifest::$featureFlags` → `FeatureFlags::define()` — the manifest
      * definitions participate in the enable transaction and are visible before
      * its after-commit notification. The bound store must use this connection.
      * `define()` is register-once and preserves administrator overrides.
@@ -225,7 +223,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 $this->disable($dependent, DisableReason::Dependency, cascade: true);
             }
 
-            $context = new ModuleContext($module, $tenant, $this->records);
+            $context = new ModuleRuntimeContext($module, $tenant, $this->records);
             $this->invokeHook($this->manifestFor($module)->onDisableHook, $context);
 
             $this->db()->table(self::MODULES_TABLE)->where('name', $module)->update([
@@ -409,7 +407,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
         foreach ($this->discovery->discover() as $manifest) {
             foreach ($manifest->requires as $dep) {
-                if ($dep->type !== 'module' || $dep->target !== $module) {
+                if ($dep->kind !== 'module' || $dep->package !== $module) {
                     continue;
                 }
 
@@ -434,7 +432,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             throw new HasEnabledDependentsException($module, $dependents);
         }
 
-        $context = new ModuleContext($module, $tenant, $this->records);
+        $context = new ModuleRuntimeContext($module, $tenant, $this->records);
         $this->invokeHook($this->manifestFor($module)->onPurgeHook, $context);
 
         // Tear every owned object down in REVERSE creation order (`seq`,
@@ -548,22 +546,29 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         );
 
         if ($names !== []) {
-            $this->db()->table(self::MIGRATIONS_TABLE)->whereIn('migration', $names)->delete();
+            /** @var Migrator $migrator */
+            $migrator = $this->container->make('migrator');
+            $migrator->usingConnection($this->connection, static function () use ($migrator, $names): void {
+                $repository = $migrator->getRepository();
+                foreach ($names as $name) {
+                    $repository->delete((object) ['migration' => $name]);
+                }
+            });
         }
     }
 
-    private function invokeHook(?string $hookClass, ModuleContext $context): void
+    private function invokeHook(?string $hookClass, ModuleRuntimeContext $context): void
     {
         if ($hookClass === null) {
             return;
         }
 
-        /** @var callable(ModuleContext): void $hook */
+        /** @var callable(ModuleRuntimeContext): void $hook */
         $hook = $this->container->make($hookClass);
         $hook($context);
     }
 
-    private function manifestFor(string $module): Manifest
+    private function manifestFor(string $module): ModuleManifest
     {
         foreach ($this->discovery->discover() as $manifest) {
             if ($manifest->composerName === $module) {

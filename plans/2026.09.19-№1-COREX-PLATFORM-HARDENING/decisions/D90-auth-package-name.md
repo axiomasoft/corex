@@ -1,11 +1,11 @@
 ---
 id: D90
 date: 2026-09-20
-status: proposed
+status: superseded
 item: P15.12
 items: [P15, P15.12]
 supersedes: []
-superseded_by: null
+superseded_by: D135
 ---
 # D90 — Имя пакета Auth
 

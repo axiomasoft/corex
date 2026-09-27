@@ -14,9 +14,9 @@ use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\GateDecision;
 use CoreX\Modules\Internal\ReadRegistryIntrospection;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleActivationDecision;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\ArrayModuleStateReader;
 use CoreX\Modules\Registry\CompiledModule;
@@ -86,7 +86,7 @@ function introIntrospection(
 
 function introCompileFixture(string $path): CompiledModuleRegistry
 {
-    $manifest = Manifest::make('example/demo')
+    $manifest = ModuleManifest::make('example/demo')
         ->title('Demo')
         ->tablePrefix('dem')
         ->extends([
@@ -134,7 +134,18 @@ it('projects the eight extenders and ownership from compiled bytes (INTRO-01)', 
         ->and(collect($map->extensionPoints)->contains(
             static fn (array $point): bool => ($point['kind'] ?? null) === 'entity' && ($point['handle'] ?? null) === 'dem.widget',
         ))->toBeTrue()
-        ->and($map->revision)->toBe(ReadRegistryIntrospection::revisionFor($registry->compiled()));
+        ->and($map->revision)->toBe(ReadRegistryIntrospection::revisionFor($registry->compiled()))
+        ->and($map->revision)->toBe($registry->compiled()->fingerprint);
+});
+
+it('returns the compiled authority fingerprint and ignores activation epoch', function (): void {
+    $registry = introCompileFixture($this->cachePath);
+    $fingerprint = $registry->compiled()->fingerprint;
+    $enabled = $registry->isActive('example/demo', introTenant());
+
+    expect(ReadRegistryIntrospection::revisionFor($registry->compiled()))->toBe($fingerprint)
+        ->and($enabled)->toBeTrue()
+        ->and($registry->compiled()->fingerprint)->toBe($fingerprint);
 });
 
 it('explains unknown modules and tenant activation without guessing (INTRO-02)', function (): void {
@@ -229,7 +240,7 @@ it('separates missing input, unknown extenders and stale revisions (INTRO-07)', 
 
     $emptyPath = sys_get_temp_dir().'/corex_intro_empty_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($emptyPath, [CompiledModule::fromManifest(
-        Manifest::make('example/empty')->title('Empty')->tablePrefix('emp'),
+        ModuleManifest::make('example/empty')->title('Empty')->tablePrefix('emp'),
     )]);
     $emptyMap = introIntrospection(
         introRegistry($emptyPath, new ArrayModuleStateReader),
@@ -249,7 +260,7 @@ it('separates missing input, unknown extenders and stale revisions (INTRO-07)', 
 it('reports activation gate denial with tenant verdict (INTRO-02)', function (): void {
     $registry = introCompileFixture($this->cachePath);
     $gate = Mockery::mock(ModuleActivationGate::class);
-    $gate->shouldReceive('check')->once()->andReturn(GateDecision::deny('billing'));
+    $gate->shouldReceive('check')->once()->andReturn(ModuleActivationDecision::deny('billing'));
     $explanation = introIntrospection($registry, $this->cachePath, $gate)->why('example/demo', introTenant());
 
     expect($explanation->status)->toBe('inactive')

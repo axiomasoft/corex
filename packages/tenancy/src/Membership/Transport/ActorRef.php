@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Transport;
 
+/** @internal */
 final readonly class ActorRef
 {
     public function __construct(

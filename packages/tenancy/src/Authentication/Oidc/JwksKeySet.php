@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Http;
  * On an unknown `kid` (AS rotated its signing key), exactly ONE forced
  * refetch runs, gated by a separate cooldown cache key — otherwise an
  * attacker-controlled `kid` becomes a JWKS-endpoint DoS lever.
+ *
+ * @internal
  */
 final class JwksKeySet
 {

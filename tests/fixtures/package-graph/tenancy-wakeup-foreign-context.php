@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account;
 
-use CoreX\Wakeup\Contracts\WakeupHint;
+use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 
 /**
  * Negative fixture for P9.7: a wakeup contract import outside
@@ -12,5 +12,5 @@ use CoreX\Wakeup\Contracts\WakeupHint;
  */
 final class WakeupForeignContextProbe
 {
-    public function touch(WakeupHint $hint): void {}
+    public function touch(WakeupScheduleHint $hint): void {}
 }

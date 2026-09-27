@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests;
 
+use CoreX\CoreServiceProvider;
 use CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
-use CoreX\Testing\IsolatesDatabasePath;
+use CoreX\Tenancy\Tests\Support\IsolatesDatabasePath;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,9 @@ use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
 
 /**
  * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
- * fallback, mirrors packages/auth's self-contained testbench pattern (the
+ * fallback, mirrors packages/access's self-contained testbench pattern (the
  * root monorepo tests/ suite does not run this package, D19 exception
- * already established for corex/auth).
+ * already established for corex/access).
  */
 abstract class TestCase extends Orchestra
 {
@@ -56,6 +57,9 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            CoreServiceProvider::class,
+            // Core's scoped semantic restorer is decorated by tenancy (D49).
+            // Testbench disables package discovery, so register both owners.
             // Orchestra\Testbench\TestCase::$enablesPackageDiscoveries defaults
             // to false (composer package auto-discovery, which a real
             // consumer app gets for free, is off in testbench) — stancl's own
@@ -126,8 +130,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
 
         // Stands in for the app-configured `auth.provider` a real consumer
-        // would wire to corex/auth's `corex-principal` driver (D125) —
-        // corex/tenancy itself does not depend on corex/auth (AC-28). The
+        // would wire to corex/access's `corex-principal` driver (D125) —
+        // corex/tenancy itself does not depend on corex/access (AC-28). The
         // seam `OidcLoginController`/`LogoutController` resolve through via
         // `Auth::guard()->loginUsingId()`/`->id()` (parity, premortem C4).
         $app->singleton(StubIdentityProvider::class);

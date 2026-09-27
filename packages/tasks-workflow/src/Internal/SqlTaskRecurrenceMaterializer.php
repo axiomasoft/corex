@@ -14,6 +14,7 @@ use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\WriteToken;
 use CoreX\Tasks\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Contracts\TaskAccess;
+use CoreX\Tasks\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Data\TaskDraft;
 use CoreX\Tasks\Data\TaskReference;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
@@ -22,6 +23,8 @@ use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
+use CoreX\Tenancy\Contracts\TenantContextRestorer;
+use CoreX\Tenancy\TenantContext;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
 use DateInterval;
@@ -33,7 +36,7 @@ use Override;
 
 final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 {
-    private const string VERSION = 'task-materialization/1';
+    private const string VERSION = MaterializationHasher::HANDLER_VERSION;
 
     public function __construct(
         private readonly Connection $connection,
@@ -43,6 +46,8 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         private readonly Repository $config,
         private readonly Container $container,
         private readonly DataScopeAuthorizer $authorizer,
+        private readonly TenantContextRestorer $contexts,
+        private readonly TaskOperationReceipts $receipts,
     ) {}
 
     #[Override]
@@ -53,6 +58,8 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         WriteToken $token,
     ): MaterializationReceipt {
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+
+        $context = $this->contexts->restore($scope);
 
         if (! $this->authorizer->authorize(scope: $scope, entity: 'task-series', subjectId: $series->id, fields: [], action: 'materialize')->allowed) {
             throw UnsupportedMaterialization::connection('Materialization is not authorized for the current actor.');
@@ -68,7 +75,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             throw StaleMaterialization::definition($series->id);
         }
 
-        $store = new MaterializationStore($this->connection);
+        $store = new MaterializationStore($this->connection, $this->receipts);
         $existing = $store->findOperation($token->operationKey);
 
         if ($existing !== null) {
@@ -85,7 +92,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             throw StaleMaterialization::definition($series->id);
         }
 
-        $receipt = $this->connection->transaction(function () use ($scope, $series, $window, $token, $payloadHash, $store, $seriesRow): MaterializationReceipt {
+        $receipt = $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $seriesRow): MaterializationReceipt {
             $state = $store->lockSeriesState($series->id);
 
             if ($state === null) {
@@ -154,6 +161,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
                 $result = $this->materializeOccurrence(
                     scope: $scope,
+                    context: $context,
                     store: $store,
                     series: $series,
                     template: $decoded['template'],
@@ -240,7 +248,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             return $receipt;
         });
 
-        $this->scheduleWakeup(scope: $scope, series: $series, window: $window);
+        $this->scheduleWakeup(context: $context, series: $series, window: $window);
 
         return $receipt;
     }
@@ -248,6 +256,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
     /** @return array{reference: ?TaskReference, created: bool, conflict: bool, unknown: bool} */
     private function materializeOccurrence(
         DataScope $scope,
+        TenantContext $context,
         MaterializationStore $store,
         SeriesReference $series,
         TaskDraft $template,
@@ -298,7 +307,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
         $this->taskAccess->authorizeCreate(
             draft: $template,
-            context: $scope->context,
+            context: $context,
         );
 
         $draft = $this->draftForOccurrence($template, $occurrence);
@@ -411,25 +420,22 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         return json_encode($value, JSON_THROW_ON_ERROR);
     }
 
-    private function scheduleWakeup(DataScope $scope, SeriesReference $series, MaterializationWindow $window): void
+    private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window): void
     {
         if (! $this->config->get('corex-task-recurrence.wakeup.enabled', false) || ! $this->container->bound(WakeupScheduler::class)) {
             return;
         }
 
-        $kind = (string) $this->config->get('corex-task-recurrence.wakeup.handler_kind', 'task-recurrence.materialize');
+        $kind = (string) $this->config->get('corex-task-recurrence.wakeup.handler_kind', MaterializationHasher::HANDLER_KIND);
         $fireAt = (new DateTimeImmutable($window->end))->sub(new DateInterval('P1D'));
 
         $this->container->make(WakeupScheduler::class)->schedule(new WakeupRequest(
-            context: $scope->context,
+            context: $context,
             kind: $kind,
             requestKey: 'materialize:'.$series->id,
             fireAt: $fireAt,
             window: null,
-            payload: [
-                'seriesId' => $series->id,
-                'immutableRevision' => $series->immutableRevision,
-            ],
+            payload: MaterializationHasher::wakeupPayload(series: $series, window: $window),
         ));
     }
 }

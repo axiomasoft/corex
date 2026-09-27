@@ -5,7 +5,7 @@ declare(strict_types=1);
 use CoreX\Tenancy\Membership\Switcher\AccountListEntry;
 use CoreX\Tenancy\Membership\Switcher\AccountMenuReader;
 use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Switcher\AccountsResult;
+use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
 use CoreX\Tenancy\Membership\Switcher\RedisAccountMenuCache;
 use CoreX\Tenancy\Membership\Switcher\StrictAccountsTransport;
 use CoreX\Tenancy\Membership\Transport\CentralProtocolViolation;
@@ -39,9 +39,9 @@ function p3RedisQuery(string $product = 'product-a'): AccountsQuery
 }
 
 /** @param list<string> $accountIds */
-function p3RedisResult(AccountsQuery $query, string $version, array $accountIds): AccountsResult
+function p3RedisResult(AccountsQuery $query, string $version, array $accountIds): AvailableAccounts
 {
-    return new AccountsResult(
+    return new AvailableAccounts(
         identityId: $query->identityId,
         product: $query->product,
         membershipVersion: $version,
@@ -208,10 +208,10 @@ it('uses the exact accepted accounts read profile and rejects mTLS/token or wire
 
         $invalidClaims = $fixture->accessClaims();
         $invalid = new StrictAccountsTransport(transport: $fixture->client(claims: $invalidClaims), accountsUri: $fixture->binding->readUri);
-        expect(fn (): AccountsResult => $invalid->accountsFor(query: $query))->toThrow(CentralUnauthorized::class);
+        expect(fn (): AvailableAccounts => $invalid->accountsFor(query: $query))->toThrow(CentralUnauthorized::class);
         Http::assertSentCount(1);
 
-        expect(fn (): AccountsResult => $transport->accountsFor(query: $query))->toThrow(CentralProtocolViolation::class);
+        expect(fn (): AvailableAccounts => $transport->accountsFor(query: $query))->toThrow(CentralProtocolViolation::class);
     } finally {
         $fixture->cleanup();
     }

@@ -30,7 +30,7 @@ QUALITY_SCRIPT = Path(__file__).with_name('remaining-cohort-quality.py')
 COHORT_WORKFLOW = ROOT / '.github/workflows/remaining-cohort-proof.yml'
 
 FORBIDDEN_CODE = re.compile(
-    r'^\s*(?!\*|//|#)(?:.*\b(namespace|use)\s+[^;]*(FlexCRM|FlexCMS|AzGuard|CoreX\\Auth)\b|.*["\']flex/|.*["\']corex/auth["\'])',
+    r'^\s*(?!\*|//|#)(?:.*\b(namespace|use)\s+[^;]*(FlexCRM|FlexCMS|AzGuard|CoreX\\Auth)\b|.*["\']flex/|.*["\']corex/access["\'])',
     re.I | re.M,
 )
 

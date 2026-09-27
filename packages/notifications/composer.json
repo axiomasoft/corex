@@ -20,7 +20,31 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Notifications\\": "src/"
+            "CoreX\\Notifications\\": "src/",
+            "CoreX\\Notifications\\Contracts\\": [
+                "src/Inbox/Contracts/",
+                "src/Delivery/Contracts/",
+                "src/Digest/Contracts/",
+                "src/Preferences/Contracts/"
+            ],
+            "CoreX\\Notifications\\Data\\": [
+                "src/Inbox/Data/",
+                "src/Delivery/Data/",
+                "src/Digest/Data/",
+                "src/Preferences/Data/"
+            ],
+            "CoreX\\Notifications\\Internal\\": [
+                "src/Inbox/Internal/",
+                "src/Delivery/Internal/",
+                "src/Digest/Internal/",
+                "src/Preferences/Internal/"
+            ],
+            "CoreX\\Notifications\\Internal\\Digest\\": "src/Digest/Internal/",
+            "CoreX\\Notifications\\Jobs\\": [
+                "src/Delivery/Jobs/",
+                "src/Digest/Jobs/"
+            ],
+            "CoreX\\Notifications\\Commands\\": "src/Delivery/Commands/"
         }
     },
     "autoload-dev": {

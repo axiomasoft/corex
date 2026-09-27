@@ -4,7 +4,7 @@
 
 `scripts/composition-boundary.json` перенесён из §13: `blocking: true`,
 globs composition, `allow_paths` только для
-`packages/crm/src/Support/RecordRules.php` (`E-FLEX-CRM-SEARCH-LANGUAGE`).
+`packages/crm/src/Context/Internal/RecordRules.php` — closed in P16.8 via `CrmOptions` (`flex-crm.search_language` unchanged).
 `Support/Config.php` в allowlist нет. Сканер прежний: `token_get_all`,
 `T_STRING config` и `(`. `**` в glob — ноль или больше сегментов, поэтому
 `*/src/**/Commands/*.php` покрывает `src/Commands`. Класс §12

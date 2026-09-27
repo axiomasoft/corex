@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Contracts;
 
-use CoreX\Audit\CurrentActor;
 use CoreX\Tenancy\ImpersonationState;
 use CoreX\Tenancy\NullImpersonationService;
 
@@ -12,9 +11,8 @@ use CoreX\Tenancy\NullImpersonationService;
  * Support impersonation (B-11 §5.9, AC-31). Boxed installs bind
  * {@see NullImpersonationService} (no grants exist there —
  * B-11 §6.1); cloud installs rebind to `DatabaseImpersonationService`
- * (corex/tenancy, D10). Lives in corex/core (D139) — the sole consumer,
- * {@see CurrentActor}, is ядро and must not import
- * corex/tenancy.
+ * (corex/tenancy, D10). Lives in corex/core (D139). Its only consumer
+ * is in Audit and must not import corex/tenancy.
  *
  * Signature extends B-11 §3.3's snippet (D140): `start()` also takes the
  * AUTHENTICATED staff identity (a leaked `grantId` alone cannot be tied to

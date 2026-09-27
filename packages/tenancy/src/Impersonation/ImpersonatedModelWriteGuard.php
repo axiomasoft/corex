@@ -6,7 +6,6 @@ namespace CoreX\Tenancy\Impersonation;
 
 use Closure;
 use CoreX\Exceptions\ImpersonationRestrictedException;
-use CoreX\Models\AuditLog;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Models\ImpersonationGrant;
 use Illuminate\Database\Eloquent\Model;
@@ -35,7 +34,7 @@ final class ImpersonatedModelWriteGuard
      * @var list<class-string>
      */
     private const EXEMPT = [
-        AuditLog::class,
+        'CoreX\\Audit\\Internal\\AuditLog',
         ImpersonationGrant::class,
     ];
 

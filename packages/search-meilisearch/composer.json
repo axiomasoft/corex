@@ -15,9 +15,7 @@
         }
     },
     "autoload-dev": {
-        "psr-4": {
-            "CoreX\\Search\\Meilisearch\\Tests\\": "tests/"
-        }
+        "classmap": ["tests"]
     },
     "extra": {
         "corex": {

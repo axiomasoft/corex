@@ -152,3 +152,68 @@ OK (`sqlite 546 -> 552`, `pg 508 -> 508`).
 Цитата Inputs у P6.6 свёрнута с фразы «receipt'ы P6.1–P6.5» на
 `findings/P6-receipts.md`, где эти блоки уже лежат. Смысл входа не
 менялся; bundle преемника резолвится.
+
+## P6.6 — Повторная квалификация границ зон и потребителей
+
+`RAG:—` 2026-09-23, текущая независимая сессия `gpt-6-sol/medium` по
+разовому owner-решению D117. P6.1–P6.5 исполнялись в других сессиях.
+
+### Негативные посадки
+
+Заново запущены focused Arch-тесты, которые временно вставляют импорт,
+вызывают живой коллектор и восстанавливают исходные байты в `finally`.
+Команда `vendor/bin/pest tests/Arch/CoreZoneTest.php
+tests/Arch/CoreLitmusTest.php tests/Arch/TestingAutoloadTest.php
+--filter='planting' --order-by=default` завершилась `exit 0`:
+**6 passed, 23 assertions** (пять обязательных посадок и дополнительная R-Z0).
+
+| Правило | Временный файл | Проверенное красное сообщение |
+|:--|:--|:--|
+| R-Z1 Foundation | `Support/Data/RecordRef.php` | `R-Z1`, `RecordRef.php`, `SqlSavedViewRepository` |
+| R-Z1 TenancyContracts | `Tenancy/AccountRef.php` | `R-Z1`, `AccountRef.php`, `SqlSavedViewRepository` |
+| R-Z2 | `Enums/ActorType.php` | `R-Z2`, `ActorType.php`, `SqlSavedViewRepository` |
+| R-L3 | `Support/Data/RecordRef.php` | `R-L3`, `RecordRef.php`, `Eloquent` |
+| R-T1 | `Enums/ActorType.php` | `R-T1`, `ActorType.php`, `CoreXTestCase` |
+
+Полный focused прогон этих трёх файлов: **16 passed, 59 assertions**.
+SHA256 трёх arch-файлов после прогона совпадает с P6.6 bundle:
+`65c4935a…`, `2de57e31…`, `fee2e715…` соответственно. Посадочные
+файлы `RecordRef.php`, `AccountRef.php`, `ActorType.php` отсутствуют в
+`git status --short` после прогона. `LITMUS_ELOQUENT` остался из трёх путей.
+
+### Свод команд
+
+| Проверка | Результат |
+|:--|:--|
+| `composer package-graph-gate` | exit 0; ядро не приобрело зависимость на другой пакет CoreX |
+| `composer --working-dir=packages/core test` | exit 0; 84 passed, 197 assertions |
+| `composer --working-dir=packages/core test:pg` | exit 0; 37 passed, 180 assertions; база `corex_test` подтверждена preflight |
+| `composer test:packages` | exit 0; все 20 пакетных команд прошли; tenancy: 472 passed, 7 skipped (native SDK требует отдельной изолированной конфигурации) |
+| `composer test` | exit 0; 415 passed, 1335 assertions |
+| `composer analyse` | exit 0; PHPStan 0 errors |
+| `composer lint:check` | exit 0; Pint passed |
+| `bash scripts/anti-weakening-gate.sh` | exit 0; sqlite 546 → 555, pg 508 → 508; OK |
+| `git diff --check` | exit 0 |
+
+`git diff --stat -- packages/ tests/` не пуст из-за существовавшего до
+P6.6 чужого рабочего дерева. Item не менял продуктовые файлы: только
+временные посадки с `finally`, и все их пути вернулись к исходному статусу.
+`tests/Arch/CoreZoneTest.php` был untracked на входе и остался untracked;
+его digest совпадает с входным bundle. Буквальное условие «общий diff пуст»
+невыполнимо без уничтожения чужих изменений; item-local delta пуст.
+
+### Именованные долги
+
+- P7: `PrunePubSubMessages` использует `new DateTimeImmutable`; согласовать
+  с Clock/Options. Оставшиеся `now()` вне P4.10 здесь не инъектируются.
+- P9: DATA-003, запись ORM в таблицу другого пакета, остаётся вне P6.
+- P15: целевые FQCN зон и `Views` → `SavedViews` остаются задачей P15;
+  `PubSub/` относится к Messaging по пути, физического переноса нет (D32).
+- P16: снять production-покрытие `src/Testing` только после миграции трёх
+  `RT1_EXISTING` потребителей; N09 пока staged (D33).
+- E-BASEMODEL остаётся одним Foundation → Audit исключением; новые пакеты,
+  DATA-003 и Deptrac/PHPat/Pest Arch этой фазой не обещаны (§13).
+
+Общий `plan-lint` на этом рабочем дереве красный по 53 ранее существовавшим
+ошибкам носителей P1–P6 (в том числе старые `write-site` в state и
+`read-path-v1` P6.2). Эти ошибки не устранялись внутри Files P6.6.

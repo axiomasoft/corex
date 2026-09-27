@@ -1,0 +1,177 @@
+{
+  "schema_version": "journal-migration/v1",
+  "migration_id": "corex-e14a-invocation-digests",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "owner_decision": "D127",
+  "actor": "plan-maintenance/codex-gpt-5.6-sol/high",
+  "reason": "Repair four E14a receipts whose invocation digest was not derived from their unchanged membership.",
+  "source_sha256": "793d09bd3385f911fb6f90376ac91814b91beeec3117864f57dd87baf4799da0",
+  "target_sha256": "e38564e03b2a7f752eda67b6985d0af84aadd391c0ac2d71a7266f5233fbf5ff",
+  "preimage_path": "journal-migrations/corex-e14a-invocation-digests/journal.preimage.jsonl",
+  "changes": [
+    {
+      "line": 308,
+      "before_sha256": "bf6c72fb4704407cb39f09a2807c1872049ddf5f9011cac2d62cbd43a82ff61b",
+      "after_sha256": "4c31461456e0c578cc0cb0337b04ec1267af3647f2a36de9a6275179404e8e9a",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/batch_receipt",
+          "before": {
+            "batch_id": "E14a",
+            "completed_prefix": [],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "56067264247ceca825799e1df5e34df7db75219cd9edecd865fd2633aeeef082",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          },
+          "value": {
+            "batch_id": "E14a",
+            "completed_prefix": [],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "781caafe12b63f54d04dc64ad7679b74af1740b1d86368ed1aa5cf8cf0578f3b",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    },
+    {
+      "line": 309,
+      "before_sha256": "f535a257daa80d4b58cdec762644eb2f2836fcf1ac185cd5fd1ddd73c9cbac00",
+      "after_sha256": "506c547e1560ff79fda1e0d32b8d074e0db35f126453c437fbf43126abd52c43",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/batch_receipt",
+          "before": {
+            "batch_id": "E14a",
+            "completed_prefix": [],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "56067264247ceca825799e1df5e34df7db75219cd9edecd865fd2633aeeef082",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          },
+          "value": {
+            "batch_id": "E14a",
+            "completed_prefix": [],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "781caafe12b63f54d04dc64ad7679b74af1740b1d86368ed1aa5cf8cf0578f3b",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    },
+    {
+      "line": 310,
+      "before_sha256": "96444dde95172a0542a46c19dde7c02829d785510f5924113d92df4900fc9ff4",
+      "after_sha256": "ee9440d9fd96eab8243bf20f7fb65b43a6f2612e27151206948bd1c37e411972",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/batch_receipt",
+          "before": {
+            "batch_id": "E14a",
+            "completed_prefix": [
+              "P14.1"
+            ],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "56067264247ceca825799e1df5e34df7db75219cd9edecd865fd2633aeeef082",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          },
+          "value": {
+            "batch_id": "E14a",
+            "completed_prefix": [
+              "P14.1"
+            ],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "781caafe12b63f54d04dc64ad7679b74af1740b1d86368ed1aa5cf8cf0578f3b",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    },
+    {
+      "line": 311,
+      "before_sha256": "dda38d3d31b570872442966f0c7c8e8aeca99ab50e32b6abd64f821cb2400ae7",
+      "after_sha256": "22b3dcb4c3e1c34906d9fb42774cbee1a233bb3442b6581d07cc0e2210811ec8",
+      "operations": [
+        {
+          "op": "replace",
+          "path": "/batch_receipt",
+          "before": {
+            "batch_id": "E14a",
+            "completed_prefix": [
+              "P14.1"
+            ],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "56067264247ceca825799e1df5e34df7db75219cd9edecd865fd2633aeeef082",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          },
+          "value": {
+            "batch_id": "E14a",
+            "completed_prefix": [
+              "P14.1"
+            ],
+            "handoff_digest": "fffdc144f297653b97d410699a33a0e221a29e2958ab31ebc73955be53e6d281",
+            "invocation_digest": "781caafe12b63f54d04dc64ad7679b74af1740b1d86368ed1aa5cf8cf0578f3b",
+            "membership": [
+              "P14.1",
+              "P14.2"
+            ],
+            "routing_digest": "8761efd2419612c69ef961f32ec7cb100b98d86c193c321d4517b712a6eb04d4",
+            "schema_version": "batch-receipt/v1",
+            "spec_digest": "d1c6934506125e99f71ea7e45ef2262eee26573e662dacd5155f18a25a836398",
+            "stop_disposition": "continue"
+          }
+        }
+      ]
+    }
+  ]
+}

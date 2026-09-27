@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Discovery;
 
-use CoreX\Modules\CorexModule;
 use CoreX\Modules\Exceptions\InvalidManifestException;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 
 /**
  * Finds installed modules and builds their manifests. Default source is
@@ -19,14 +19,14 @@ use CoreX\Modules\Manifest;
 final class ModuleDiscovery
 {
     /**
-     * @param  list<class-string<CorexModule>>  $fallbackModules  injectable seam for tests/testbench.
+     * @param  list<class-string<ModuleDefinition>>  $fallbackModules  injectable seam for tests/testbench.
      */
     public function __construct(
         private readonly array $fallbackModules = [],
         private readonly ?string $installedJsonPath = null,
     ) {}
 
-    /** @return list<Manifest> */
+    /** @return list<ModuleManifest> */
     public function discover(): array
     {
         $classes = $this->fallbackModules !== [] ? $this->fallbackModules : $this->scanInstalledJson();
@@ -35,13 +35,13 @@ final class ModuleDiscovery
     }
 
     /** @param  class-string  $class */
-    private function manifestFor(string $class): Manifest
+    private function manifestFor(string $class): ModuleManifest
     {
-        if (! is_subclass_of($class, CorexModule::class)) {
-            throw InvalidManifestException::notACorexModule($class);
+        if (! is_subclass_of($class, ModuleDefinition::class)) {
+            throw InvalidManifestException::notAModuleDefinition($class);
         }
 
-        /** @var CorexModule $module */
+        /** @var ModuleDefinition $module */
         $module = new $class;
 
         return $module->manifest();

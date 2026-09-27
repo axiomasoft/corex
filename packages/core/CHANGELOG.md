@@ -24,6 +24,10 @@
 
 ### Added
 
+- Exposed durable scope and account/workspace context types as a closed public signature graph; added the `IdentityPasswordRehasher` owner port. The guarded restorer implementation remains private.
+
+- Declared the exact shared configuration support types and tenancy contracts used by package composition as public API; no Support namespace wildcard.
+
 - `TenantStorage` with scoped durable/ephemeral local disks, explicit usage capability and an
   explicit unsupported-export outcome. The boxed adapter derives its root exclusively from the
   current account context and does not require tenancy, auth, Stancl, cloud storage, or archives.

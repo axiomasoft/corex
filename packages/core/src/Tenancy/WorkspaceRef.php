@@ -8,7 +8,7 @@ namespace CoreX\Tenancy;
  * Immutable reference to a workspace: identity, slug, type, and its
  * position (path/parent) in the workspace hierarchy.
  *
- * @internal spec: B-10 §3.1, B-11 §3.1 (owner: B-11)
+ * Contract: B-10 §3.1, B-11 §3.1 (owner: B-11).
  */
 final readonly class WorkspaceRef
 {

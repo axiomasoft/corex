@@ -6,6 +6,7 @@ namespace CoreX\Modules\Support;
 
 use CoreX\Support\ViolationList;
 
+/** @internal Package composition type. */
 final readonly class ModulesOptions
 {
     public function __construct(

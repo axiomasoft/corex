@@ -38,7 +38,7 @@ final class OptionalBridgesTest extends TestCase
 {
     private function scope(): DataScope
     {
-        return new DataScope(
+        return DataScope::fromTenantContext(
             context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
             connectionIdentity: 'sqlite::memory:',
             actorId: 'reader',

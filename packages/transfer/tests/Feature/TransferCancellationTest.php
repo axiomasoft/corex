@@ -9,8 +9,8 @@ use CoreX\Support\Data\WriteToken;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Transfer\Contracts\CancellationSignal;
-use CoreX\Transfer\Contracts\ImportTarget;
 use CoreX\Transfer\Contracts\RecordMapper;
+use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\ConflictRule;
@@ -25,7 +25,7 @@ use CoreX\Transfer\Data\StepToken;
 use CoreX\Transfer\Data\TargetResult;
 use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Data\TransferRef;
-use CoreX\Transfer\Internal\Transfer\DatabaseTransferRunner;
+use CoreX\Transfer\Internal\Transfer\SqlTransferExecutor;
 use CoreX\Transfer\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
 
@@ -101,7 +101,7 @@ function cancelToken(string $hash): StepToken
     return new StepToken('0', '1', $hash, $hash, $hash, $hash);
 }
 
-function cancelRunner(string $hash, object $calls, bool $cancelled): DatabaseTransferRunner
+function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransferExecutor
 {
     $manifest = new SourceManifest('object://imports/cancel', $hash, 42, 'csv', '1', 'UTF-8', ',', '"', '', $hash);
     $source = new class($manifest, $calls) implements TransferSource
@@ -130,7 +130,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): DatabaseTra
             return new MappingResult('mapped', $this->record, null);
         }
     };
-    $target = new class($calls) implements ImportTarget
+    $target = new class($calls) implements TransferSink
     {
         public function __construct(private object $calls) {}
 
@@ -165,7 +165,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): DatabaseTra
         }
     };
 
-    return new DatabaseTransferRunner(
+    return new SqlTransferExecutor(
         DB::connection(),
         $source,
         $mapper,

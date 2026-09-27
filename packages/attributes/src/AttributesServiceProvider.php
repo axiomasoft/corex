@@ -10,23 +10,28 @@ use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
 use CoreX\Attributes\Data\AttributeStoragePolicy;
 use CoreX\Attributes\Data\AttributeTables;
-use CoreX\Attributes\Internal\Engine\EavAttributeStore;
-use CoreX\Attributes\Internal\Engine\JsonbAttributeStore;
-use CoreX\Attributes\Internal\Engine\QueuedSchemaOperations;
-use CoreX\Attributes\Internal\Engine\StructuralAttributeFilter;
+use CoreX\Attributes\Internal\Integration\AttributeMessageTranslator;
 use CoreX\Attributes\Internal\Laravel\AttributeComposition;
-use CoreX\Attributes\Internal\Registry\RegistryFieldCatalogue;
-use CoreX\Attributes\Internal\Registry\StaticFieldCatalogue;
+use CoreX\Attributes\Internal\Laravel\AttributeCompositionRegistrar;
+use CoreX\Attributes\Internal\Laravel\AttributeMessagingRegistrar;
+use CoreX\Attributes\Internal\Query\SchemaAttributeFilter;
+use CoreX\Attributes\Internal\Schema\ModuleFieldCatalogue;
+use CoreX\Attributes\Internal\Schema\QueuedSchemaOperations;
+use CoreX\Attributes\Internal\Schema\StaticFieldCatalogue;
 use CoreX\Attributes\Internal\Storage\ConfiguredAttributeStoreResolver;
 use CoreX\Attributes\Internal\Storage\ResolvingAttributeStore;
 use CoreX\Attributes\Internal\UnavailableAttributes;
+use CoreX\Attributes\Internal\Values\EavAttributeStore;
+use CoreX\Attributes\Internal\Values\JsonbAttributeStore;
 use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Psr\Clock\ClockInterface;
 
 final class AttributesServiceProvider extends ServiceProvider
 {
@@ -34,27 +39,11 @@ final class AttributesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-attributes.php', 'corex-attributes');
-        $this->app->singleton(AttributeTables::class, function (Application $app): AttributeTables {
-            /** @var array<string, mixed> $tables */
-            $tables = (array) $app['config']->get('corex-attributes.tables', []);
-
-            return new AttributeTables(
-                documents: (string) ($tables['documents'] ?? 'sys_attribute_documents'),
-                writeTokens: (string) ($tables['write_tokens'] ?? 'sys_attribute_write_tokens'),
-                eavValues: (string) ($tables['eav_values'] ?? 'sys_attribute_eav_values'),
-                eavRecords: (string) ($tables['eav_records'] ?? 'sys_attribute_eav_records'),
-                schemaOperations: (string) ($tables['schema_operations'] ?? 'sys_attribute_schema_operations'),
-            );
-        });
-        $this->app->singleton(AttributeComposition::class, function (Application $app): AttributeComposition {
-            /** @var array<string, mixed> $config */
-            $config = (array) $app['config']->get('corex-attributes', []);
-
-            return AttributeComposition::fromArray($config);
-        });
+        (new AttributeMessagingRegistrar)->register($this->app);
+        (new AttributeCompositionRegistrar)->register($this->app);
         $this->app->scoped(UnavailableAttributes::class);
 
-        $this->app->scoped(AttributeFilter::class, StructuralAttributeFilter::class);
+        $this->app->scoped(AttributeFilter::class, SchemaAttributeFilter::class);
 
         $this->app->scoped(AttributeStore::class, function (Application $app): AttributeStore {
             $composition = $app->make(AttributeComposition::class);
@@ -67,11 +56,30 @@ final class AttributesServiceProvider extends ServiceProvider
 
             $connection = $app['db']->connection();
             $authorizer = $app->make(DataScopeAuthorizer::class);
+            $outbox = $app->make(Outbox::class);
+            $messageTranslator = $app->make(AttributeMessageTranslator::class);
+            $clock = $app->make(ClockInterface::class);
             $jsonb = ($composition->drivers['jsonb'] ?? false)
-                ? new JsonbAttributeStore(connection: $connection, tables: $tables, catalogue: $catalogue, authorizer: $authorizer)
+                ? new JsonbAttributeStore(
+                    connection: $connection,
+                    tables: $tables,
+                    catalogue: $catalogue,
+                    authorizer: $authorizer,
+                    outbox: $outbox,
+                    messageTranslator: $messageTranslator,
+                    clock: $clock,
+                )
                 : null;
             $eav = ($composition->drivers['eav'] ?? false)
-                ? new EavAttributeStore(connection: $connection, tables: $tables, catalogue: $catalogue, authorizer: $authorizer)
+                ? new EavAttributeStore(
+                    connection: $connection,
+                    tables: $tables,
+                    catalogue: $catalogue,
+                    authorizer: $authorizer,
+                    outbox: $outbox,
+                    messageTranslator: $messageTranslator,
+                    clock: $clock,
+                )
                 : null;
 
             if ($jsonb === null && $eav === null) {
@@ -114,7 +122,7 @@ final class AttributesServiceProvider extends ServiceProvider
             );
 
             if ($modulesBound && in_array('module', $composition->effectiveSources(modulesBound: true), true)) {
-                return $catalogue->appending(new RegistryFieldCatalogue(
+                return $catalogue->appending(new ModuleFieldCatalogue(
                     entities: $app->make(EntityRegistry::class),
                     modules: $app->make(ModuleRegistry::class),
                     contexts: $app->make(TenantContextRestorer::class),

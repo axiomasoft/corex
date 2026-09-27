@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-26
-inputs_sha256: ed3487db745b5f1e8c8a5f604776489262e105e92326519baf752cd132fb8135
+through: 2026-09-27
+inputs_sha256: da1d3efd00977e3424d90ff12e046bd5d807a53c96acc471a7405580f11de227
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-26 |
+| Last Updated | 2026-09-27 |
 
 ## 4. Phase Index & Status Board
 
@@ -29,8 +29,8 @@ generated_by: task plan-views status
 | P12 | Таксономия ошибок и наблюдаемость операций | 8/8 | 🟢 Done |
 | P13 | Внешний API как продукт: ядро контракта операций | 12/12 | 🟢 Done |
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
-| P15 | Раскатка словаря имён по реестру переименований | 0/14 | ⬜ Not started |
-| P16 | Раскатка профилей структуры по остальным пакетам | 0/13 | ⬜ Not started |
+| P15 | Раскатка словаря имён по реестру переименований | 14/14 | 🟢 Done |
+| P16 | Раскатка профилей структуры по остальным пакетам | 13/13 | 🟢 Done |
 | P17 | Доказательства универсальности и Definition of Done 1.0 | 0/12 | ⬜ Not started |
 | P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
@@ -139,38 +139,38 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P15.1 | Modules vocabulary и ModuleDefinition | ⬜ Not started | — |
-| P15.2 | Attributes vocabulary | ⬜ Not started | — |
-| P15.3 | Search unavailable provider | ⬜ Not started | — |
-| P15.4 | Meilisearch provider vocabulary | ⬜ Not started | — |
-| P15.5 | Transfer executor and sink | ⬜ Not started | — |
-| P15.6 | Tasks Workflow integration vocabulary | ⬜ Not started | — |
-| P15.7 | Wakeup public contract vocabulary | ⬜ Not started | — |
-| P15.8 | API operation class vocabulary | ⬜ Not started | — |
-| P15.9 | Tenancy available accounts result | ⬜ Not started | — |
-| P15.10 | Core semantic-zone FQCN moves | ⬜ Not started | — |
-| P15.11 | Conditional API package identity rename | ⬜ Not started | — |
-| P15.12 | Conditional Auth package identity rename | ⬜ Not started | — |
-| P15.13 | Registry and surface reconciliation | ⬜ Not started | — |
-| P15.14 | P15 full qualification and negative completeness proof | ⬜ Not started | — |
+| P15.1 | Modules vocabulary и ModuleDefinition | 🟢 Done | 2026-09-26 |
+| P15.2 | Attributes vocabulary | 🟢 Done | 2026-09-26 |
+| P15.3 | Search unavailable provider | 🟢 Done | 2026-09-26 |
+| P15.4 | Meilisearch provider vocabulary | 🟢 Done | 2026-09-26 |
+| P15.5 | Transfer executor and sink | 🟢 Done | 2026-09-26 |
+| P15.6 | Tasks Workflow integration vocabulary | 🟢 Done | 2026-09-26 |
+| P15.7 | Wakeup public contract vocabulary | 🟢 Done | 2026-09-27 |
+| P15.8 | API operation class vocabulary | 🟢 Done | 2026-09-27 |
+| P15.9 | Tenancy available accounts result | 🟢 Done | 2026-09-27 |
+| P15.10 | Core semantic-zone FQCN moves | 🟢 Done | 2026-09-27 |
+| P15.11 | Conditional API package identity rename | 🟢 Done | 2026-09-27 |
+| P15.12 | Conditional Auth package identity rename | 🟢 Done | 2026-09-27 |
+| P15.13 | Registry and surface reconciliation | 🟢 Done | 2026-09-27 |
+| P15.14 | P15 full qualification and negative completeness proof | 🟢 Done | 2026-09-27 |
 
 ## Phase P16
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P16.1 | Intl subsystem-first physical layout | ⬜ Not started | — |
-| P16.2 | Notifications subsystem-first physical layout | ⬜ Not started | — |
-| P16.3 | Tasks subsystem-first physical layout | ⬜ Not started | — |
-| P16.4 | API profile C operation surface | ⬜ Not started | — |
-| P16.5 | API Cost and Bulk contexts | ⬜ Not started | — |
-| P16.6 | API Webhooks context | ⬜ Not started | — |
-| P16.7 | Modules root consistency | ⬜ Not started | — |
-| P16.8 | CRM feature-first physical layout | ⬜ Not started | — |
-| P16.9 | Panels research verdict and no-move proof | ⬜ Not started | — |
-| P16.10 | Dev-only Testing boundary | ⬜ Not started | — |
-| P16.11 | Producer-adjusted compact/Profile-B matrix and Transfer growth map | ⬜ Not started | — |
-| P16.12 | Structural metadata and gate reconciliation | ⬜ Not started | — |
-| P16.13 | Full structural qualification and negative proofs | ⬜ Not started | — |
+| P16.1 | Intl subsystem-first physical layout | 🟢 Done | 2026-09-27 |
+| P16.2 | Notifications subsystem-first physical layout | 🟢 Done | 2026-09-27 |
+| P16.3 | Tasks subsystem-first physical layout | 🟢 Done | 2026-09-27 |
+| P16.4 | API profile C operation surface | 🟢 Done | 2026-09-27 |
+| P16.5 | API Cost and Bulk contexts | 🟢 Done | 2026-09-27 |
+| P16.6 | API Webhooks context | 🟢 Done | 2026-09-27 |
+| P16.7 | Modules root consistency | 🟢 Done | 2026-09-27 |
+| P16.8 | CRM feature-first physical layout | 🟢 Done | 2026-09-27 |
+| P16.9 | Panels research verdict and no-move proof | 🟢 Done | 2026-09-27 |
+| P16.10 | Dev-only Testing boundary | 🟢 Done | 2026-09-27 |
+| P16.11 | Producer-adjusted compact/Profile-B matrix and Transfer growth map | 🟢 Done | 2026-09-27 |
+| P16.12 | Structural metadata and gate reconciliation | 🟢 Done | 2026-09-27 |
+| P16.13 | Full structural qualification and negative proofs | 🟢 Done | 2026-09-27 |
 
 ## Phase P17
 
@@ -685,9 +685,62 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-close · closed-green · P14 direct-close after all 21 GREEN items. Qualification covers full root/package/isolated PG, 16 threats, snapshots and repaired mutation gates. Live sends, production DDL/rotation and release remain outside authority. |
 | 2026-09-26 | plan-executor/codex-gpt-6-sol/xhigh | plan-exec · no-op · Qualified write-site codes from the persisted contract receipt; closure bookkeeping only.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-26 | grok-4.7/high | plan-run · decision-pending · decision queue: P15.1-G-API-P15 |
+| 2026-09-26 | plan-exec/grok-4.7/high | plan-exec · in-progress · Owner authorized the P15.1 modules rename on grok. D130 records the grant. |
+| 2026-09-26 | plan-exec/grok-4.7/high | plan-exec · closed-green · P15.1 rename applied. Nine modules discover. No aliases, no migration diff. Item commit withheld on a dirty tree. |
+| 2026-09-26 | plan-exec/composer-2.5 | plan-exec · closed-green · E15b batch P15.2-P15.6 closed-green; see findings/P15-receipts.md |
+| 2026-09-26 | plan-exec/composer-2.5 | plan-exec · closed-green · E15b batch; receipt findings/P15-receipts.md |
+| 2026-09-26 | plan-exec/composer-2.5 | plan-exec · closed-green · E15b batch; receipt findings/P15-receipts.md |
+| 2026-09-26 | plan-exec/composer-2.5 | plan-exec · closed-green · E15b batch; receipt findings/P15-receipts.md |
+| 2026-09-26 | plan-exec/composer-2.5 | plan-exec · closed-green · E15b batch; receipt findings/P15-receipts.md |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · P15.7 wakeup vocabulary rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P15.7 wakeup vocabulary rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · P15.8 API class rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P15.8 API class rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/composer-2.5 | plan-exec · in-progress · P15.9 AvailableAccounts rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/composer-2.5 | plan-exec · closed-green · P15.9 AvailableAccounts rename green. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · in-progress · P15.10 D88 FQCN rename green. No alias, no migration diff. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · closed-green · P15.10 D88 FQCN rename green. No alias, no migration diff. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · P15.11 D134 identity rename green. Namespace CoreX\Api unchanged. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P15.11 D134 identity rename green. Namespace CoreX\Api unchanged. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · P15.12 D135 identity rename green. Namespace CoreX\Auth and corex-auth config unchanged. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P15.12 D135 identity rename green. Namespace CoreX\Auth and corex-auth config unchanged. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/composer-2.5 | plan-exec · in-progress · P15.13 registry/surface reconciliation green. Receipt findings/P15-receipts.md §P15.13. |
+| 2026-09-27 | plan-exec/composer-2.5 | plan-exec · closed-green · P15.13 registry/surface reconciliation green. Manifest 40 tokens, diagnostic P15C. Receipt findings/P15-receipts.md §P15.13. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · in-progress · Owner waived model check. P15.14 qualification start: baseline gates, then planted P15C. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · closed-green · P15.14 qualification green. Planted P15C removed. Arch 89, packages green. strict-psr residual exit 1. Receipt findings/P15-receipts.md. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-close · in-progress · Inline phase close owned by final P15.14 invocation. |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-close · closed-green · P15 direct-close after P15.14 GREEN. Planted P15C removed. strict-psr residual exit 1 stays disclosed. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · P16.4 start: API profile C physical move. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P16.4 GREEN: API operation-surface contexts under packages/operations; 99 git mv; FQCN 165 unchanged. lint/analyse pass; pest 257 passed 10 PG skipped. Receipt findings/P16-api-layout-receipt.md. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · P16.5 start: API profile C physical move. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P16.5 GREEN: Cost and Bulk physical contexts; 34 git mv; Internal\Cost and Internal\Bulk longer PSR-4. lint/analyse pass; pest 257 passed 10 PG skipped. DDL untouched. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · in-progress · P16.6 start: API profile C physical move. |
+| 2026-09-27 | plan-run/cursor-grok-4.6/high | plan-run · closed-green · P16.6 GREEN: Webhooks physical context; 30 git mv; empty layer dirs removed; profile C layout complete. lint/analyse pass; pest 257 passed 10 PG skipped. GraphQL src empty. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/direct | plan-exec · in-progress · P16.9 start: panels D93 README, docs/reference provenance, profile-A no-move receipt. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/direct | plan-exec · closed-green · P16.9 GREEN: README boundaries + P16-profile-a-receipts; zero src/ edits; D93 keep corex/panels profile A. panels composer update corex/modules for P16.7 autoload in local vendor. |
+| 2026-09-27 | plan-exec/cursor-grok-4.7/direct | plan-exec · in-progress · P16.10 start: atomic dev-only Testing cutover (D33/D94). |
+| 2026-09-27 | plan-exec/cursor-grok-4.7/direct | plan-exec · closed-green · P16.10 GREEN: dev-only Testing boundary. Local harnesses; production src/Testing carriers removed. test:packages exit 0. |
+| 2026-09-27 | plan-exec/cursor-composer/direct | plan-exec · in-progress · P16.11 start: post-producer census, profile-A/B no-move receipts, transfer growth map. |
+| 2026-09-27 | plan-exec/cursor-composer/direct | plan-exec · closed-green · P16.11 GREEN: findings/P16-profile-a-receipts.md + structure-profiles.md; 11 profile-A no-move; attributes B; transfer conditional map. |
+| 2026-09-27 | plan-exec/cursor-grok-4.6/direct | plan-exec · in-progress · P16.12 start: reconcile path-bearing Composer/PHPStan/graph/CI/docs/CHANGELOG after P16 moves. |
+| 2026-09-27 | plan-exec/cursor-grok-4.6/direct | plan-exec · closed-green · P16.12 GREEN: findings/P16-reconciliation.md; 25 graph-gate import_file retargets; contour 20/20; public-api digest unchanged. |
+| 2026-09-27 | plan-exec/grok-4.7/direct | plan-exec · in-progress · P16.13 start: full structural qualification and two planted negatives. Owner waived model-route check. |
+| 2026-09-27 | plan-exec/grok-4.7/direct | plan-exec · closed-green · P16.13 GREEN: census matches P16.11, attributes stays B, both plants observed and removed, serial packages/PG/analyse/arch/graph/naming/lint/bc green. Receipt findings/P16-receipts.md. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P16.1 journal row opened from existing receipt findings/P16-move-receipts.md. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P16.1 GREEN from findings/P16-move-receipts.md (E16a). The move session left no journal row; P16.13 records it. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P16.2 journal row opened from existing receipt findings/P16-move-receipts.md. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P16.2 GREEN from findings/P16-move-receipts.md (E16a). The move session left no journal row; P16.13 records it. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · in-progress · P16.3 journal row opened from existing receipt findings/P16-move-receipts.md. |
+| 2026-09-27 | plan-exec/cursor-composer-2.5/medium | plan-exec · closed-green · P16.3 GREEN from findings/P16-move-receipts.md (E16a). The move session left no journal row; P16.13 records it. |
+| 2026-09-27 | plan-exec/direct/medium | plan-exec · in-progress · P16.7 journal row opened from existing receipt findings/P16-move-receipts.md. |
+| 2026-09-27 | plan-exec/direct/medium | plan-exec · closed-green · P16.7 GREEN from findings/P16-move-receipts.md (E16c). The move session left no journal row; P16.13 records it. |
+| 2026-09-27 | plan-exec/direct/medium | plan-exec · in-progress · P16.8 journal row opened from existing receipt findings/P16-move-receipts.md. |
+| 2026-09-27 | plan-exec/direct/medium | plan-exec · closed-green · P16.8 GREEN from findings/P16-move-receipts.md (E16c). The move session left no journal row; P16.13 records it. |
 
 ## Owner Gates
 
+- P15.14: known deviation
 - P3.4: known deviation
 - P3.5: known deviation
 - P3.6: known deviation
@@ -705,4 +758,3 @@ write-site: pre_mutation: allow · pre_final: allow |
 - P5.17: known deviation
 - P6.1: known deviation
 - P6.2: known deviation
-- P7.2: known deviation

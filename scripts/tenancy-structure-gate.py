@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""P9.1 tenancy structure map, compatibility baseline, and red fixtures.
+"""P9 tenancy structure and compatibility ratchet.
 
-The live tree is not required to already be the 13-context layout.
-`check` accepts the committed baseline. `fixture` rejects the two negative trees.
+The P9.1 baseline is immutable. The final projection is checked against its
+per-file destination and FQCN decisions, including the single D49 addition.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -17,6 +18,8 @@ PLAN = REPO / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING"
 SRC = REPO / "packages/tenancy/src"
 MAP_PATH = PLAN / "findings/P9-tenancy-map.md"
 BASELINE_PATH = PLAN / "findings/P9-compatibility-baseline.json"
+FINAL_PATH = PLAN / "findings/P9-compatibility-final.json"
+DIFF_PATH = PLAN / "findings/P9-compatibility-diff.json"
 CATALOG_PATH = PLAN / "findings/P8-binding-catalog.md"
 FIXTURE_ROOT = REPO / "tests/fixtures/tenancy-structure"
 
@@ -35,6 +38,8 @@ CANONICAL_ROOTS = (
     "Runtime",
     "Workspace",
 )
+D49_FILE = "Runtime/ConnectionGuardedTenantContextRestorer.php"
+D49_FQCN = "CoreX\\Tenancy\\Runtime\\ConnectionGuardedTenantContextRestorer"
 STATIONARY_TOPS = frozenset({
     "Contracts",
     "DomainTrust",
@@ -519,20 +524,145 @@ def write_outputs(rows: list[dict]) -> None:
     BASELINE_PATH.write_text(baseline_text, encoding="utf-8")
 
 
-def check() -> None:
-    rows = scan()
-    map_text, baseline_text = emit(rows)
-    if MAP_PATH.read_text(encoding="utf-8") != map_text:
-        fail("map drift")
-    if BASELINE_PATH.read_text(encoding="utf-8") != baseline_text:
-        fail("baseline drift")
-    payload = json.loads(baseline_text)
-    if payload["coverage"] != {"files": len(rows), "unique_from": len(rows), "unique_to": len(rows), "duplicates": 0}:
-        fail("coverage is not 100% with zero duplicates")
-    deltas = payload["allowed_deltas"]
-    if len(deltas) != 1 or deltas[0]["id"] != "D49" or deltas[0]["only_permitted_behavior_delta"] is not True:
+def final_projection() -> tuple[dict, dict]:
+    baseline_data = json.loads(read_text(BASELINE_PATH))
+    rows = baseline_data["map"]
+    sources = [item["from"] for item in rows]
+    targets = [item["to"] for item in rows]
+    if len(sources) != len(set(sources)) or len(targets) != len(set(targets)):
+        fail("baseline map has duplicate from/to paths")
+    if len(rows) != baseline_data["coverage"]["files"]:
+        fail("baseline map coverage mismatch")
+    if read_text(MAP_PATH) != render_map(rows):
+        fail("P9.1 map drift")
+    if baseline_data["allowed_deltas"] != [{
+        "id": "D49", "kind": "binding-concrete",
+        "abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+        "lifetime": "scoped",
+        "concrete_before": "CoreX\\Tenancy\\GuardedTenantContextRestorer",
+        "only_permitted_behavior_delta": True,
+    }]:
         fail("D49 is not the only permitted behavior delta")
-    print(f"baseline accepted files={len(rows)} duplicates=0")
+
+    codes = structure_codes(SRC)
+    if codes:
+        fail("structure violations: " + ", ".join(codes))
+    root_files = sorted(path.name for path in SRC.iterdir() if path.is_file())
+    if root_files != ["TenancyServiceProvider.php"]:
+        fail(f"unexpected root files: {root_files}")
+    live_paths = {path.relative_to(SRC).as_posix() for path in SRC.rglob("*.php")}
+    expected_paths = set(targets) | {D49_FILE}
+    if live_paths != expected_paths:
+        fail(f"file coverage missing={sorted(expected_paths - live_paths)} extra={sorted(live_paths - expected_paths)}")
+
+    final_rows = []
+    for item in rows:
+        path = SRC / item["to"]
+        fqcn, kind, _name = declaration(path)
+        if fqcn != item["fqcn_after"] or kind != item["kind"]:
+            fail(f"FQCN/type drift at {item['to']}: {fqcn} ({kind})")
+        final_rows.append({"path": item["to"], "fqcn": fqcn, "kind": kind, "from": item["from"]})
+    fqcn, kind, _name = declaration(SRC / D49_FILE)
+    if (fqcn, kind) != (D49_FQCN, "class"):
+        fail("D49 restorer declaration drift")
+    final_rows.append({"path": D49_FILE, "fqcn": fqcn, "kind": kind, "from": None})
+    if len({item["fqcn"] for item in final_rows}) != len(final_rows):
+        fail("duplicate tenancy FQCN")
+
+    if migration_tree_sha256() != baseline_data["migration_tree_sha256"]:
+        fail("tenancy database tree changed from P9.1 baseline")
+    discovery = composer_discovery()
+    for field in ("provider", "public_api"):
+        if discovery[field] != baseline_data["discovery"][field]:
+            fail(f"Composer discovery {field} drift")
+    registrar = read_text(SRC / "Laravel/RuntimeRegistrar.php")
+    core_provider = read_text(REPO / "packages/core/src/CoreServiceProvider.php")
+    if not re.search(r"\$this->app->scoped\(\s*TenantContextRestorer::class,\s*static fn .*?GuardedTenantContextRestorer", core_provider, re.S):
+        fail("D49 core semantic scoped binding missing")
+    if not re.search(r"\$app->extend\(\s*TenantContextRestorer::class,\s*static fn \(TenantContextRestorer \$semantic, Application \$app\): ConnectionGuardedTenantContextRestorer", registrar, re.S):
+        fail("D49 tenancy semantic decorator missing")
+    if "new GuardedTenantContextRestorer" in registrar:
+        fail("D49 tenancy imports core concrete restorer")
+    if bootstrapper_order() != baseline_data["bootstrapper_order"]:
+        fail("bootstrapper order drift")
+    for field, actual in (("routes", routes()), ("middleware_aliases", middleware_aliases()), ("listeners", listeners())):
+        if actual != baseline_data[field]:
+            fail(f"{field} drift")
+    commands = []
+    models_now = []
+    for item in rows:
+        if item["from"].startswith("Commands/"):
+            source = read_text(SRC / item["to"])
+            match = re.search(r"protected \$signature = '([^']+)'", source)
+            if match is None:
+                fail(f"command signature missing: {item['to']}")
+            commands.append({"fqcn": item["fqcn_after"], "signature": match.group(1), "path": item["from"]})
+        if item["from"].startswith("Models/"):
+            source = read_text(SRC / item["to"])
+            table = re.search(r"protected \$table = '([^']+)'", source)
+            connection = re.search(r"protected \$connection = '([^']+)'", source)
+            models_now.append({"fqcn": item["fqcn_after"], "table": table.group(1) if table else None,
+                               "connection": connection.group(1) if connection else None})
+    if sorted(commands, key=lambda item: item["fqcn"]) != sorted(baseline_data["commands"], key=lambda item: item["fqcn"]):
+        fail("command signatures drift")
+    if sorted(models_now, key=lambda item: item["fqcn"]) != sorted(baseline_data["models"], key=lambda item: item["fqcn"]):
+        fail("model table/connection drift")
+
+    final_data = {
+        "schema": "p9-compatibility-final/v1",
+        "baseline_sha256": hashlib.sha256(BASELINE_PATH.read_bytes()).hexdigest(),
+        "roots": list(CANONICAL_ROOTS),
+        "coverage": {"baseline_files": len(rows), "final_files": len(final_rows), "mapped": len(rows), "added_by_D49": 1},
+        "files": sorted(final_rows, key=lambda item: item["path"]),
+        "public_fqcn": [{"fqcn": item["fqcn"], "kind": item["kind"], "path": next(r["to"] for r in rows if r["from"] == item["path"])} for item in baseline_data["public_fqcn"]],
+        "bindings": baseline_data["bindings"],
+        "restorer_binding": {"abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+                             "concrete": D49_FQCN, "lifetime": "scoped", "decision": "D49"},
+        "bootstrapper_order": bootstrapper_order(),
+        "double_init_revert": {"measured": True, "test": "packages/tenancy/tests/Feature/TenancyManagerTest.php",
+                               "receipt": "findings/P9-receipts.md"},
+        "routes": routes(), "middleware_aliases": middleware_aliases(),
+        "commands": [{**item, "path": next(r["to"] for r in rows if r["from"] == item["path"])} for item in commands],
+        "listeners": listeners(), "models": models_now,
+        "migration_tree_sha256": migration_tree_sha256(), "discovery": discovery,
+        "mutable_internal_fqcn": baseline_data["mutable_internal_fqcn"],
+        "psr4_compatibility": baseline_data["psr4_compatibility"],
+    }
+    diff_data = {
+        "schema": "p9-compatibility-diff/v1",
+        "baseline_sha256": final_data["baseline_sha256"],
+        "path_moves": [{"from": item["from"], "to": item["to"]} for item in rows if item["from"] != item["to"]],
+        "internal_fqcn_changes": [{"from": item["fqcn_before"], "to": item["fqcn_after"]} for item in rows if item["fqcn_before"] != item["fqcn_after"]],
+        "added": [{"path": D49_FILE, "fqcn": D49_FQCN, "decision": "D49"}],
+        "binding_changes": [{"abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer", "from": "CoreX\\Tenancy\\GuardedTenantContextRestorer", "to": D49_FQCN, "lifetime": "scoped", "decision": "D49"}],
+        "other_changes": [],
+    }
+    return final_data, diff_data
+
+
+def check() -> None:
+    final_data, diff_data = final_projection()
+    for path, payload in ((FINAL_PATH, final_data), (DIFF_PATH, diff_data)):
+        if read_text(path) != canonical_baseline(payload):
+            fail(f"{path.name} drift; run emit-final after reviewing the change")
+    php = r'''$payload=json_decode(stream_get_contents(STDIN),true,flags:JSON_THROW_ON_ERROR);
+$loader=require "vendor/autoload.php";
+foreach($payload["files"] as $row){
+    $path=$loader->findFile($row["fqcn"]);
+    if(!$path || realpath($path)!==realpath("packages/tenancy/src/".$row["path"])){
+        fwrite(STDERR,"autoload mismatch: ".$row["fqcn"]."\n");exit(1);
+    }
+}
+foreach($payload["public_fqcn"] as $row){
+    $name=$row["fqcn"];
+    $exists=match($row["kind"]){"interface"=>interface_exists($name),"trait"=>trait_exists($name),"enum"=>enum_exists($name),default=>class_exists($name)};
+    if(!$exists){fwrite(STDERR,"public symbol unavailable: ".$name."\n");exit(1);}
+}'''
+    result = subprocess.run(["php", "-r", php], input=json.dumps(final_data), text=True,
+                            cwd=REPO, capture_output=True, check=False)
+    if result.returncode != 0:
+        fail(result.stderr.strip() or "Composer autoload proof failed")
+    print(f"tenancy structure/compatibility accepted roots=13 mapped={final_data['coverage']['mapped']} final={final_data['coverage']['final_files']} D49=1")
 
 
 def top_directories(src: Path) -> list[str]:
@@ -543,7 +673,7 @@ def structure_codes(src: Path) -> list[str]:
     codes = []
     for path in src.rglob("*"):
         parts = path.relative_to(src).parts
-        if "Membership" in parts and "Internal" in parts:
+        if "Internal" in parts:
             codes.append("membership-internal")
             break
     present = top_directories(src)
@@ -580,13 +710,19 @@ def main(argv: list[str]) -> None:
         print(f"wrote {MAP_PATH}")
         print(f"wrote {BASELINE_PATH}")
         return
+    if command == "emit-final":
+        final_data, diff_data = final_projection()
+        FINAL_PATH.write_text(canonical_baseline(final_data), encoding="utf-8")
+        DIFF_PATH.write_text(canonical_baseline(diff_data), encoding="utf-8")
+        print(f"wrote {FINAL_PATH} and {DIFF_PATH}")
+        return
     if command == "check":
         check()
         return
     if command == "fixture" and len(argv) == 3:
         fixture(argv[2])
         return
-    fail("usage: tenancy-structure-gate.py [check|emit|fixture <name>]")
+    fail("usage: tenancy-structure-gate.py [check|emit-final|emit|fixture <name>]")
 
 
 if __name__ == "__main__":

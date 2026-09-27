@@ -28,6 +28,8 @@ use Throwable;
  * Batch duration budgets / rate-limiting / `CREATE INDEX CONCURRENTLY`
  * guidance are operational concerns for the migration-file author, not
  * something this class enforces — deliberately out of scope.
+ *
+ * @internal
  */
 final class MigrationWaveOrchestrator
 {

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "description": "Frozen singleton constructor violations (P4.12). New entries require owner_phase.",
+  "entries": [
+    {
+      "package": "core",
+      "class": "CoreX\\Support\\ServiceProviderModuleRegistrar",
+      "parameter": "app",
+      "owner_phase": "P6",
+      "note": "Captures Illuminate Application; migrate to scoped or factory (composition root)."
+    },
+    {
+      "package": "core",
+      "class": "CoreX\\Messaging\\PubSubManager",
+      "parameter": "app",
+      "owner_phase": "P6",
+      "note": "Captures Illuminate Application; migrate to scoped or explicit deps."
+    }
+  ]
+}

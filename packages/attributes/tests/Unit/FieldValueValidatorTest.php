@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use CoreX\Attributes\Contracts\FieldCatalogue;
-use CoreX\Attributes\Internal\Engine\FieldValueValidator;
 use CoreX\Attributes\Internal\InvalidAttributeValue;
+use CoreX\Attributes\Internal\Values\FieldValueValidator;
 use CoreX\Attributes\Support\FieldSnapshot;
 use CoreX\Attributes\Support\ValuePatch;
 use CoreX\Support\Data\DataScope;

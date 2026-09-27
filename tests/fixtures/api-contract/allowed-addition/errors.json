@@ -6,7 +6,7 @@
             "reason",
             "actor"
         ],
-        "owner": "corex/api",
+        "owner": "corex/operations",
         "path": null,
         "retryable": false
     },
@@ -14,7 +14,7 @@
         "category": "conflict",
         "code": "note_locked",
         "detail_keys": [],
-        "owner": "corex/api",
+        "owner": "corex/operations",
         "path": null,
         "retryable": false
     }

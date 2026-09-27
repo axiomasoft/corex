@@ -44,9 +44,8 @@
         "psr/log": "Optional PSR-3 projection of operation lifecycle events."
     },
     "autoload-dev": {
-        "_comment": "canonical mapping; production psr-4 still covers src/Testing until P16 (D33)",
         "psr-4": {
-            "CoreX\\Testing\\": "src/Testing/"
+            "CoreX\\Testing\\": "tests/Support/"
         },
         "classmap": ["tests/Fixtures"]
     },
@@ -68,6 +67,7 @@
                 "CoreX\\Exceptions",
                 "CoreX\\Models",
                 "CoreX\\Concerns",
+                "CoreX\\Audit\\Contracts",
                 "CoreX\\Observability",
                 "CoreX\\Messaging\\Contracts",
                 "CoreX\\Messaging\\Data",
@@ -75,6 +75,7 @@
                 "CoreX\\Support\\InvalidConfiguration",
                 "CoreX\\Support\\SecretRef",
                 "CoreX\\Support\\Data\\DataScope",
+                "CoreX\\Support\\Data\\DataScopeAccessDecision",
                 "CoreX\\Support\\PackageRegistrar",
                 "CoreX\\Support\\RegistersNothingOnBoot",
                 "CoreX\\Tenancy\\Contracts\\TenantContextResolver",

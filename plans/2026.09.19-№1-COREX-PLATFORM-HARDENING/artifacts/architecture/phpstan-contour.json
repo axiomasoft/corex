@@ -1,0 +1,147 @@
+{
+    "schema": "phpstan-contour/1",
+    "root_level": 6,
+    "packages": [
+        {
+            "name": "corex/access",
+            "dir": "access",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/attributes",
+            "dir": "attributes",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/core",
+            "dir": "core",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "flex/crm",
+            "dir": "crm",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/intl",
+            "dir": "intl",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/media",
+            "dir": "media",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/modules",
+            "dir": "modules",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/notifications",
+            "dir": "notifications",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/operations",
+            "dir": "operations",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/panels",
+            "dir": "panels",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/recurrence",
+            "dir": "recurrence",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/search",
+            "dir": "search",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/search-intl",
+            "dir": "search-intl",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/search-meilisearch",
+            "dir": "search-meilisearch",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/tasks",
+            "dir": "tasks",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/tasks-workflow",
+            "dir": "tasks-workflow",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/tenancy",
+            "dir": "tenancy",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/transfer",
+            "dir": "transfer",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/wakeup",
+            "dir": "wakeup",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        },
+        {
+            "name": "corex/workflow",
+            "dir": "workflow",
+            "pass": true,
+            "in_root_neon": true,
+            "exit": 0
+        }
+    ],
+    "debt": []
+}

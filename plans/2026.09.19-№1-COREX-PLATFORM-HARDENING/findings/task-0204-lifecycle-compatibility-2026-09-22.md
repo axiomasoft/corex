@@ -1,0 +1,51 @@
+# Task 0.20.4 lifecycle compatibility — 2026-09-22
+
+## Status
+
+Read-only compatibility analysis performed while preparing P5 remediation for execution. This
+finding does not change product code, journal history, generated state or plan activation.
+
+**Verdict:** the current active plan has Task 0.20.4 lifecycle-tooling debt. `PLAN2` below is only
+the plan's declared Short ID, not a second active plan.
+
+## Reproduced incompatibility
+
+The current runtime requires every journal event to contain the sealed 14-field schema. The
+historical PLAN2 journal predates that writer:
+
+- 66 events omit `session_id`, `run_id` and `num_turns`;
+- 64 events omit `cost_usd` and `duration_ms`;
+- 35 events carry the now-unknown `decision` field;
+- 13 events carry non-enum legacy `friction` values;
+- line 79 uses legacy command/result values `owner-decision` / `decision-accepted`.
+
+Adding `null` fields would not resolve the unknown-field and enum contradictions. The supported
+`journal-exceptions.jsonl` mechanism covers an exact invalid `friction` field only; it cannot
+waive missing fields, an unknown `decision` field, or unknown command/result values.
+
+Consequences reproduced with the current provider runtime:
+
+- `plan-views.py state --all` stops on the unknown line-79 result;
+- state files for P5.13–P5.18 therefore cannot be generated legally;
+- `status.md`, bundles and `plan-lint` cannot become fresh projections;
+- appending new execution events would increase divergence without restoring a valid lifecycle.
+
+## Forbidden shortcut
+
+`journal.jsonl` is append-only. Rewriting old lines to the current schema would alter historical
+evidence and is not authorized by the Task 0.20.4 protocol. A compensating event cannot make an
+independently invalid historical line valid.
+
+## Required recovery boundary
+
+Keep execution and remediation in the one active plan
+`2026.09.19-№1-COREX-PLATFORM-HARDENING`. The executor must preserve the historical journal,
+use the current writer for new events, and report the reducer incompatibility separately from
+product-test results. Resolving the provider's legacy-reader gap is tooling work; it must not be
+disguised as a product repair or used to invent a successor plan.
+
+## Rejected recovery
+
+A one-time in-place migration of `journal.jsonl` remains rejected unless the Task protocol itself
+first adds an explicit migration contract that preserves raw bytes and defines every legacy-field
+mapping. An ad hoc backup plus rewrite is not sufficient authority.

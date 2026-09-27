@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Panels;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use Override;
 
-final class PanelsModule extends CorexModule
+final class PanelsModule extends ModuleDefinition
 {
     #[Override]
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/panels')
+        return ModuleManifest::make('corex/panels')
             ->title('Panels')
             ->description('Headless panel descriptors and access catalogue.')
             ->tablePrefix('pnl');

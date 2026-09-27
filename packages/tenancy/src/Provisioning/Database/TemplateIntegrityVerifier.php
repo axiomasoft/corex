@@ -11,6 +11,7 @@ use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 
+/** @internal */
 final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContract
 {
     public function __construct(

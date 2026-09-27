@@ -57,7 +57,7 @@ function migratePublishedInIsolation(array $files): string
     return $dir;
 }
 
-it('publishes exactly the 10 sys_* migrations and they migrate on a clean PG schema', function (): void {
+it('publishes exactly the 12 sys_* migrations and they migrate on a clean PG schema', function (): void {
     $target = publishTarget();
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
@@ -65,7 +65,8 @@ it('publishes exactly the 10 sys_* migrations and they migrate on a clean PG sch
     $published = glob($target.'/*_create_sys_*_table.php') ?: [];
     // P4.7 adds the saved-view scope lock and views tables as two additive,
     // tenant-scoped sys_* migrations after the durable PubSub cursor set.
-    expect($published)->toHaveCount(10);
+    // Outbox and inbox are two further additive sys_* migrations.
+    expect($published)->toHaveCount(12);
 
     $isolated = migratePublishedInIsolation($published);
 
@@ -75,7 +76,9 @@ it('publishes exactly the 10 sys_* migrations and they migrate on a clean PG sch
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_departments'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_pubsub_cursors'))->toBeTrue()
         ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_saved_view_scopes'))->toBeTrue()
-        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_saved_views'))->toBeTrue();
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_saved_views'))->toBeTrue()
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_outbox_messages'))->toBeTrue()
+        ->and(Schema::connection(PUBLISH_TEST_CONNECTION)->hasTable('sys_inbox_messages'))->toBeTrue();
 
 });
 

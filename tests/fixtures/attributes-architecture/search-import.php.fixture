@@ -1,0 +1,5 @@
+<?php
+
+namespace CoreX\Attributes\Internal\Integration;
+
+use CoreX\Search\Contracts\SearchProvider;

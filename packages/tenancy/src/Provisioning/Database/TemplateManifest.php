@@ -11,6 +11,7 @@ use function preg_match;
 use function sodium_crypto_sign_verify_detached;
 use function strtr;
 
+/** @internal */
 final readonly class TemplateManifest
 {
     /** @param array<string, mixed> $payload */

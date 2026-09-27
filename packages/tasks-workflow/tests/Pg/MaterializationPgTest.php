@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Enums\ActorType;
+use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\WriteToken;
@@ -23,9 +24,10 @@ use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
 use CoreX\Wakeup\Data\WakeupRequest;
+use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
 use CoreX\Wakeup\WakeupServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +45,7 @@ beforeEach(function (): void {
 
     $modules = Mockery::mock(ModuleRegistry::class, function (MockInterface $mock): void {
         $mock->shouldReceive('isActive')->byDefault()->andReturnTrue();
+        $mock->shouldReceive('compiled')->byDefault()->andReturn(CompiledRegistry::empty());
     });
     app()->instance(ModuleRegistry::class, $modules);
 
@@ -79,7 +82,7 @@ beforeEach(function (): void {
 
 function pgScope(object $test): DataScope
 {
-    return new DataScope(
+    return DataScope::fromTenantContext(
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:'.DB::connection('pgsql')->getDatabaseName(),
         actorId: $test->userId,
@@ -124,12 +127,9 @@ it('MAT-02 replays durable receipts after a failed outer attempt', function (): 
         ->and(DB::table('corex_task_operations')->where('request_key', 'pg-02-op')->count())->toBe(1);
 });
 
-it('MAT-06 schedules durable wakeup and materializes through the local handler', function (): void {
-    app()->register(WakeupServiceProvider::class);
+it('MAT-06 schedules a stamped complete payload and materializes through the handler', function (): void {
+    registerMaterializationWakeup();
     expect($this->migrateWakeup())->toBe(0);
-    app()['config']->set('corex-wakeup.handlers', [
-        'task-recurrence.materialize' => MaterializationWakeupHandler::class,
-    ]);
     app()['config']->set('corex-task-recurrence.wakeup.enabled', true);
     app()->forgetScopedInstances();
 
@@ -138,26 +138,74 @@ it('MAT-06 schedules durable wakeup and materializes through the local handler',
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
     app(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-06-a'));
 
-    expect(DB::table('sys_wakeup_requests')->where('request_key', 'materialize:series-pg-06')->exists())->toBeTrue();
+    $stored = json_decode(
+        (string) DB::table('sys_wakeup_requests')->where('request_key', 'materialize:series-pg-06')->value('payload'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+
+    expect($stored['_corex']['extension']['id'])->toBe(MaterializationHasher::HANDLER_KIND)
+        ->and($stored['_corex']['extension']['version'])->toBe(MaterializationHasher::HANDLER_VERSION)
+        ->and($stored['data'])->toMatchArray(MaterializationHasher::wakeupPayload(series: $series, window: $window));
 
     $context = app(TenantContextResolver::class)->current();
-    app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    $second = SeriesSeeder::dailySet('series-pg-06b', 'rev-1', 1);
+    $secondSeries = SeriesSeeder::seed('series-pg-06b', $second, $this->template, $this->restoreEpoch);
+    expect(app(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
-        kind: 'task-recurrence.materialize',
-        requestKey: 'manual:series-pg-06',
-        fireAt: new DateTimeImmutable('-1 minute'),
+        kind: MaterializationHasher::HANDLER_KIND,
+        requestKey: 'manual:series-pg-06b',
+        fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
         window: null,
-        payload: [
-            'seriesId' => 'series-pg-06',
-            'immutableRevision' => 'rev-1',
-            'definitionHash' => $set->definitionHash,
-            'start' => '2026-09-01',
-            'end' => '2026-09-05',
-        ],
-    ));
+        payload: MaterializationHasher::wakeupPayload(
+            series: $secondSeries,
+            window: new MaterializationWindow(start: '2026-09-01', end: '2026-09-05'),
+        ),
+    ))->status)->toBe('created');
 
-    app(WakeupSweeper::class)->sweep($context, 10);
-    expect(Task::query()->count())->toBeGreaterThanOrEqual(1);
+    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+
+    expect($result->completed)->toBeGreaterThanOrEqual(1)
+        ->and(Task::query()->where('title', 'Recurring maintenance')->count())->toBeGreaterThanOrEqual(2)
+        ->and(DB::table('sys_wakeup_requests')->where('request_key', 'manual:series-pg-06b')->value('status'))->toBe('completed');
+});
+
+it('MAT-06b quarantines an exact handler version mismatch without invoking materialization', function (): void {
+    registerMaterializationWakeup();
+    expect($this->migrateWakeup())->toBe(0);
+    $set = SeriesSeeder::dailySet('series-pg-06b-mismatch', 'rev-1', 1);
+    $series = SeriesSeeder::seed('series-pg-06b-mismatch', $set, $this->template, $this->restoreEpoch);
+    $registry = app(WakeupHandlerRegistry::class);
+    $definition = $registry->definition(MaterializationHasher::HANDLER_KIND);
+    $envelope = $registry->envelope(
+        definition: $definition,
+        data: MaterializationHasher::wakeupPayload(
+            series: $series,
+            window: new MaterializationWindow(start: '2026-09-01', end: '2026-09-05'),
+        ),
+    );
+    $envelope['_corex']['extension']['version'] = 'task-materialization/0';
+    $now = new DateTimeImmutable('2026-09-16T10:00:00Z');
+    DB::table('sys_wakeup_requests')->insert([
+        'id' => (string) Str::uuid7(),
+        'workspace_scope_key' => 'account',
+        'kind' => MaterializationHasher::HANDLER_KIND,
+        'request_key' => 'mismatch:series-pg-06b',
+        'request_digest' => hash('sha256', 'mismatch'),
+        'fire_at' => $now,
+        'payload' => json_encode($envelope, JSON_THROW_ON_ERROR),
+        'status' => 'pending',
+        'generation' => 0,
+        'attempt' => 0,
+        'created_at' => $now,
+        'updated_at' => $now,
+    ]);
+
+    $result = app(DueWakeupSweeper::class)->sweep(app(TenantContextResolver::class)->current(), 10);
+
+    expect($result->failed)->toBe(1)
+        ->and(Task::query()->count())->toBe(0)
+        ->and(DB::table('sys_wakeup_requests')->where('request_key', 'mismatch:series-pg-06b')->value('failure_code'))->toBe('handler-version-mismatch');
 });
 
 it('MAT-07 captures workflow completion inside the task transaction when enabled', function (): void {
@@ -176,6 +224,8 @@ it('MAT-07 captures workflow completion inside the task transaction when enabled
     app(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $taskId, actor: $this->actor));
 
     expect(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->exists())->toBeTrue()
+        ->and(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->value('version_ref'))->toBe('task-completion/1')
+        ->and(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->value('definition_ref'))->toBe('task-completion/1')
         ->and(DB::table('corex_task_operations')->where('kind', 'completionCapture')->exists())->toBeTrue();
 });
 
@@ -183,7 +233,7 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
     $set = SeriesSeeder::dailySet('series-pg-08', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: app(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:another_account',
         actorId: $this->userId,
@@ -197,3 +247,17 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
         new WriteToken('pg-08', MaterializationHasher::payload($scope, $series, $window), $series->immutableRevision),
     ))->toThrow(UnsupportedMaterialization::class);
 });
+
+function registerMaterializationWakeup(): void
+{
+    app()->register(WakeupServiceProvider::class);
+    app()['config']->set('corex-wakeup.handlers', [
+        MaterializationHasher::HANDLER_KIND => [
+            'handler' => MaterializationWakeupHandler::class,
+            'version' => MaterializationHasher::HANDLER_VERSION,
+            'accept_legacy_unstamped' => false,
+        ],
+    ]);
+    app()->forgetInstance(WakeupHandlerRegistry::class);
+    app()->forgetScopedInstances();
+}

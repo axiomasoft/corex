@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow;
 
-use CoreX\Modules\CorexModule;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
 use Override;
 
-final class WorkflowModule extends CorexModule
+final class WorkflowModule extends ModuleDefinition
 {
     #[Override]
-    public function manifest(): Manifest
+    public function manifest(): ModuleManifest
     {
-        return Manifest::make('corex/workflow')
+        return ModuleManifest::make('corex/workflow')
             ->title('Workflow')
             ->description('Optional durable workflow engine binding.')
             ->tablePrefix('wfl');

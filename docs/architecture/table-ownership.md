@@ -6,15 +6,27 @@
 
 Поле со значением `unobserved` означает: дерево не дало факта. Это долг
 документирования, а не разрешение считать поле пустым.
+`tenant_scope=test` обозначает только disposable-таблицы reference consumer'ов:
+их создают тестовые fixture, а пакеты не публикуют для них миграции.
+
+AzGuard управляет схемой своих таблиц как зависимость `corex/access`; в этой
+установке `corex/access` владеет их конфигурацией и прикладными записями.
+Канонические ORM-модели для DATA-003 привязаны к следующим таблицам:
+
+| ORM model | table | source |
+|:--|:--|:--|
+| `CoreX\Auth\Matrix\AzGuardRoleModel` | `az_guard_roles` | `corex-auth.azguard_pins.table_names.roles` |
+| `AzGuard\Models\RolePermission` | `az_guard_role_permissions` | AzGuard `table_names.role_permissions` default |
+
 ## Разделённый префикс `sys_`
 
 Префикс `sys_` не является владельцем. Сегодня его делят:
 
 | Таблицы | Владелец |
 |:--|:--|
-| `sys_api_idempotency` | `corex/api` |
-| `sys_attribute_documents`, `sys_attribute_eav_records`, `sys_attribute_eav_values`, `sys_attribute_schema_operations`, `sys_attribute_write_tokens` | `corex/attributes` |
-| `sys_audit_log`, `sys_department_user`, `sys_departments`, `sys_feature_flags`, `sys_feature_overrides`, `sys_pubsub_cursors`, `sys_pubsub_messages`, `sys_saved_view_scopes`, `sys_saved_views`, `sys_settings` | `corex/core` |
+| `sys_api_budget_buckets`, `sys_api_budget_reservations`, `sys_api_bulk_operations`, `sys_api_idempotency`, `sys_api_webhook_attempts`, `sys_api_webhook_deliveries`, `sys_api_webhook_subscriptions` | `corex/operations` |
+| `sys_attribute_backfills`, `sys_attribute_definitions`, `sys_attribute_documents`, `sys_attribute_eav_records`, `sys_attribute_eav_values`, `sys_attribute_key_reservations`, `sys_attribute_schema_operations`, `sys_attribute_write_tokens` | `corex/attributes` |
+| `sys_audit_log`, `sys_department_user`, `sys_departments`, `sys_feature_flags`, `sys_feature_overrides`, `sys_inbox_messages`, `sys_outbox_messages`, `sys_pubsub_cursors`, `sys_pubsub_messages`, `sys_saved_view_scopes`, `sys_saved_views`, `sys_settings` | `corex/core` |
 | `sys_wakeup_requests` | `corex/wakeup` |
 | `sys_workflow_intents` | `corex/workflow` |
 
@@ -24,20 +36,33 @@
 
 | table | owning_package | tenant_scope | writers | readers | pii_class | cross_package_access | indexes | restore_policy | retention_policy | upgrade_strategy | object_class | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
-| sys_api_idempotency | corex/api | tenant | corex/api | corex/api | pii-pseudonymous | forbidden | unique(['scope_hash', 'key_hash']); index(['state', 'expires_at']) | tenant-backup | finite terminal retention; started rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D104, G-DDL P13.5); raw idempotency keys are never stored |
+| sys_api_idempotency | corex/operations | tenant | corex/operations | corex/operations | pii-pseudonymous | forbidden | unique(['scope_hash', 'key_hash']); index(['state', 'expires_at']) | tenant-backup | finite terminal retention; started rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D104, G-DDL P13.5); raw idempotency keys are never stored |
+| sys_api_budget_buckets | corex/operations | shared-budget | corex/operations | corex/operations | pii-pseudonymous | forbidden | primary(['key']) | shared-budget-backup | active bucket retained; opaque HMAC key only | expand-migrate-contract (policy-default) | operation-state | isolated shared connection; no tenant payload or raw identity keys (D76) |
+| sys_api_budget_reservations | corex/operations | shared-budget | corex/operations | corex/operations | pii-pseudonymous | forbidden | primary(['id']); index(['state', 'expires_at']) | shared-budget-backup | expired terminal reservations pruned; held rows require reconciliation | expand-migrate-contract (policy-default) | operation-state | exactly four opaque HMAC budget keys; no tenant payload (D76) |
+| sys_api_bulk_operations | corex/operations | tenant | corex/operations | corex/operations | pii-pseudonymous | forbidden | primary(['id']); unique(['major', 'operation_id', 'submission_id']); index(['status', 'next_attempt_at', 'lease_until']) | tenant-backup | terminal metadata and owned result refs retained until expires_at | expand-migrate-contract (policy-default) | operation-state | tenant-local resumable operation state and typed storage refs (D76) |
+| sys_api_webhook_subscriptions | corex/operations | tenant | corex/operations | corex/operations | pii-indirect | forbidden | primary(['id']); index(['status', 'topic', 'major']) | tenant-backup | disabled subscription metadata retained by tenant policy | expand-migrate-contract (policy-default) | operation-state | endpoint snapshot policy and secret references; secret values are never stored (D76) |
+| sys_api_webhook_deliveries | corex/operations | tenant | corex/operations | corex/operations | pii-direct | forbidden | primary(['id']); unique(['subscription_id', 'event_id']); index(['status', 'next_attempt_at', 'lease_until']) | tenant-backup | payload body 7 days; delivery metadata/replay authority 30 days | expand-migrate-contract (policy-default) | operation-state | subscription deletion does not cascade delivery evidence (D76, D84) |
+| sys_api_webhook_attempts | corex/operations | tenant | corex/operations | corex/operations | pii-pseudonymous | forbidden | primary(['id']); unique(['delivery_id', 'attempt']); index(['delivery_id', 'started_at']) | tenant-backup | attempt metadata follows 30-day delivery retention | expand-migrate-contract (policy-default) | operation-state | transport outcome only; no response body or credentials (D76) |
 | sys_attribute_documents | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+| sys_attribute_definitions | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['attribute_id', 'revision']); index(['entity', 'attribute_id', 'revision']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | P10.3 immutable definition revisions |
+| sys_attribute_key_reservations | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'key']); index(['attribute_id', 'current_revision']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | P10.3 key ownership |
+| sys_attribute_backfills | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['id']); index(['attribute_id', 'to_revision']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | P10.4 resumable migration ledger |
 | sys_attribute_eav_records | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_eav_values | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden | primary(['entity', 'record_id', 'field']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_schema_operations | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_write_tokens | corex/attributes | tenant | corex/attributes |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
-| aut_role_assignments | corex/auth | tenant | corex/auth |  | unobserved | exception |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | D102 cross-package FK exception (DATA-004) |
-| aut_role_matrix | corex/auth | tenant | corex/auth |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
-| aut_roles | corex/auth | tenant | corex/auth |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+| aut_role_assignments | corex/access | tenant | corex/access |  | unobserved | exception |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | D102 cross-package FK exception (DATA-004) |
+| aut_role_matrix | corex/access | tenant | corex/access |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+| aut_roles | corex/access | tenant | corex/access |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+| az_guard_roles | corex/access | tenant | corex/access |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; `corex/access` pins the role model/table |
+| az_guard_role_permissions | corex/access | tenant | corex/access |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; `corex/access` compiler writes this table |
 | sys_audit_log | corex/core | tenant | corex/core |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_department_user | corex/core | tenant | corex/core |  | unobserved | forbidden | primary(['department_id', 'user_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_departments | corex/core | tenant | corex/core |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_flags | corex/core | tenant | corex/core |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_feature_overrides | corex/core | tenant | corex/core |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+| sys_inbox_messages | corex/core | tenant | corex/core |  | unobserved | forbidden | primary(['consumer', 'message_id']); index(['processed_at'], 'sys_inbox_messages_processed_idx') | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
+| sys_outbox_messages | corex/core | tenant | corex/core |  | unobserved | forbidden | partial indexes claim/reclaim/published/dead (P5.4) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
 | sys_pubsub_cursors | corex/core | tenant | corex/core |  | unobserved | forbidden | primary(['channel', 'subscriber']) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
 | sys_pubsub_messages | corex/core | tenant | corex/core |  | unobserved | forbidden | index(['channel', 'id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
 | sys_saved_view_scopes | corex/core | tenant | corex/core |  | unobserved | forbidden | primary(['entity_code', 'scope_key']) | unobserved | unobserved | expand-migrate-contract (policy-default) | projection | table-name-via-config-default |
@@ -102,6 +127,10 @@
 | sessions | corex/tenancy | tenant | corex/tenancy |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | tnt_membership_inbox | corex/tenancy | tenant | corex/tenancy |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-from-const:InboxTable |
 | tnt_membership_pairs | corex/tenancy | tenant | corex/tenancy |  | unobserved | forbidden | primary(['account_id', 'identity_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-from-const:PairTable |
+| membership_credential_remembers | corex/tenancy | test | corex/tenancy |  | pii-direct | forbidden | primary(['remember_token']) | disposable | test-only | fixture-only | private | Unregistered credential reference consumer; created by CredentialFixture, not production migration. |
+| membership_credential_sessions | corex/tenancy | test | corex/tenancy |  | pii-direct | forbidden | primary(['session_id']) | disposable | test-only | fixture-only | private | Unregistered credential reference consumer; created by CredentialFixture, not production migration. |
+| membership_pair_references | corex/tenancy | test | corex/tenancy |  | unobserved | forbidden | primary(['account_id', 'identity_id']) | disposable | test-only | fixture-only | private | Unregistered PairStore reference mapping; created by PairStoreFixture. |
+| membership_trigger_inbox | corex/tenancy | test | corex/tenancy |  | unobserved | forbidden | primary(['event_id']) | disposable | test-only | fixture-only | private | Unregistered DurableInbox reference mapping; created by InboxFixture. |
 | users | corex/tenancy | tenant | corex/tenancy |  | pii-direct | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | wsp_invitations | corex/tenancy | tenant | corex/tenancy |  | pii-direct | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | wsp_workspace_members | corex/tenancy | tenant | corex/tenancy |  | unobserved | forbidden | unique(['workspace_id', 'user_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
@@ -117,6 +146,7 @@
 | crm_activities | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index(['subject_type', 'subject_id']); index(['type']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | crm_activity_targets | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index(['entity_type', 'entity_id'], 'crm_at_entity_ix'); primary(['activity_id', 'entity_type', 'entity_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | crm_companies | flex/crm | tenant | flex/crm |  | pii-indirect | forbidden | index(['name']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+| crm_contact_company | flex/crm | tenant | flex/crm |  | pii-indirect | forbidden | unique(['contact_id', 'company_id']); unique(['contact_id']) WHERE is_primary | unobserved | unobserved | expand-migrate-contract (policy-default) | private | packages/crm/database/migrations/2026_09_14_000002_company_contact_parity.php |
 | crm_contacts | flex/crm | tenant | flex/crm |  | pii-direct | forbidden | index(['email']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | crm_deal_contacts | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index('contact_id', 'crm_dc_contact_ix'); unique(['deal_id', 'contact_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | crm_deals | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index(['stage_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |

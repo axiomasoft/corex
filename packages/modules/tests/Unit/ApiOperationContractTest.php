@@ -9,7 +9,7 @@ use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Tests\Support\StubToolHandler;
 
 $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => false];
@@ -20,7 +20,7 @@ $operation = static function (string $method = 'GET', string $id = 'notes.list')
 
 $compile = static function (Api $api): Api {
     $compiled = (new RegistryCompiler)->compile([
-        Manifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
+        ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
     ], installedPackages: []);
 
     return collect($compiled->api)->first(fn (Api $item): bool => $item->mode === 'operation');
@@ -94,7 +94,7 @@ it('projects the same contract hash when declaration order is reversed', functio
 
     $compile = static function (array $extenders): array {
         $compiled = (new RegistryCompiler)->compile([
-            Manifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($extenders),
+            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($extenders),
         ], installedPackages: []);
 
         return [

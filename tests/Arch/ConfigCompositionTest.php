@@ -60,3 +60,47 @@ PHP;
         }
     }
 });
+
+test('config composition gate catches qualified and dynamic calls without counting methods', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probePath = $repoRoot.'/packages/core/src/Support/ConfigCompositionProbe.php';
+    $probeContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Support;
+
+final class ConfigCompositionProbe
+{
+    public function probe(string $key): void
+    {
+        \config('qualified-key');
+        config($key);
+        $this->config('method-key');
+    }
+
+    private function config(string $key): void {}
+}
+PHP;
+
+    file_put_contents($probePath, $probeContents);
+
+    try {
+        $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/config-composition-gate.php').' 2>&1';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        $joined = implode("\n", $output);
+
+        expect($exitCode)->toBe(1)
+            ->and($joined)->toContain('ConfigCompositionProbe.php')
+            ->and($joined)->toContain('C1 count=2');
+    } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
+    }
+});

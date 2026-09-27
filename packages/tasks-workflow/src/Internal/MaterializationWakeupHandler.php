@@ -9,14 +9,13 @@ use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\WriteToken;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
-use CoreX\TasksWorkflow\Data\MaterializationWindow;
-use CoreX\TasksWorkflow\Data\SeriesReference;
+use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Wakeup\Contracts\WakeupHandler;
+use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use Illuminate\Contracts\Container\Container;
 
-final class MaterializationWakeupHandler implements WakeupHandler
+final class MaterializationWakeupHandler implements DueWakeupHandler
 {
     public function __construct(
         private readonly Container $container,
@@ -25,21 +24,23 @@ final class MaterializationWakeupHandler implements WakeupHandler
 
     public function handle(WakeupDelivery $delivery): void
     {
-        $payload = $delivery->request->payload;
-        $seriesId = (string) ($payload['seriesId'] ?? '');
-        $revision = (string) ($payload['immutableRevision'] ?? '');
-        $definitionHash = (string) ($payload['definitionHash'] ?? '');
+        $decoded = MaterializationHasher::decodeWakeupPayload($delivery->request->payload);
+        $series = $decoded['series'];
+        $window = $decoded['window'];
+        $connection = app('db')->connection();
+        $restoreEpoch = $connection->table('corex_task_series_state')
+            ->where('series_key', $series->id)
+            ->value('restore_epoch');
 
-        if ($seriesId === '' || $revision === '' || $definitionHash === '') {
-            return;
+        if (! is_string($restoreEpoch) || $restoreEpoch === '') {
+            throw StaleMaterialization::definition($series->id);
         }
 
-        $connection = app('db')->connection();
-        $scope = new DataScope(
+        $scope = DataScope::fromTenantContext(
             context: $this->contexts->current(),
             connectionIdentity: ScopeConnectionGuard::identity($connection),
             actorId: 'wakeup:'.$delivery->request->requestKey,
-            restoreEpoch: str_repeat('0', 64),
+            restoreEpoch: $restoreEpoch,
         );
 
         $previousAuthorizer = $this->container->bound(DataScopeAuthorizer::class)
@@ -52,15 +53,12 @@ final class MaterializationWakeupHandler implements WakeupHandler
         try {
             $this->container->make(TaskRecurrenceCommand::class)->materialize(
                 scope: $scope,
-                series: new SeriesReference(id: $seriesId, immutableRevision: $revision, definitionHash: $definitionHash),
-                window: new MaterializationWindow(
-                    start: (string) ($payload['start'] ?? date('Y-m-d')),
-                    end: (string) ($payload['end'] ?? date('Y-m-d', strtotime('+30 days'))),
-                ),
+                series: $series,
+                window: $window,
                 token: new WriteToken(
                     operationKey: 'wakeup:'.$delivery->request->requestKey,
-                    payloadHash: hash('sha256', 'wakeup-materialize/1'."\0".$seriesId."\0".$revision),
-                    expectedRecordVersion: $revision,
+                    payloadHash: MaterializationHasher::payload($scope, $series, $window),
+                    expectedRecordVersion: $series->immutableRevision,
                 ),
             );
         } finally {

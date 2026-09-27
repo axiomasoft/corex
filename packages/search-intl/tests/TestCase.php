@@ -10,10 +10,10 @@ use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
 use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
-use CoreX\Testing\CoreXTestCase;
+use CoreX\SearchIntl\Tests\Support\SearchIntlTestCase;
 use Override;
 
-abstract class TestCase extends CoreXTestCase
+abstract class TestCase extends SearchIntlTestCase
 {
     /**
      * @return list<class-string>

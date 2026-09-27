@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Contracts\WorkerRuntime;
-use CoreX\PubSub\DatabasePollPubSub;
+use CoreX\Messaging\DatabasePollPubSub;
 use CoreX\Support\Config;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;

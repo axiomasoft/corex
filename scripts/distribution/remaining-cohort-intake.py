@@ -20,7 +20,7 @@ REPOSITORY = 'axiomasoft/corex'
 PUBLIC_PACKAGES: list[tuple[str, str, list[str]]] = [
     ('corex/core', 'packages/core', ['R45', 'R52']),
     ('corex/modules', 'packages/modules', ['R04', 'R08', 'R36', 'R45', 'R50', 'R52']),
-    ('corex/api', 'packages/api', ['R04', 'R36', 'R45', 'R52']),
+    ('corex/operations', 'packages/operations', ['R04', 'R36', 'R45', 'R52']),
     ('corex/tasks', 'packages/tasks', ['R17', 'R45', 'R52']),
     ('corex/tenancy', 'packages/tenancy', ['R02', 'R33', 'R45', 'R52']),
     ('corex/panels', 'packages/panels', ['R14', 'R45', 'R52']),
@@ -40,8 +40,8 @@ PUBLIC_PACKAGES: list[tuple[str, str, list[str]]] = [
 
 PRIVATE_PROFILE = {
     'profile_id': 'optional-auth-azguard',
-    'package': 'corex/auth',
-    'path': 'packages/auth',
+    'package': 'corex/access',
+    'path': 'packages/access',
     'requires_r': ['R51'],
     'supported': {'php': ['8.3', '8.4', '8.5'], 'laravel': ['12'], 'database': ['sqlite', 'pg16']},
     'unsupported': [{

@@ -47,7 +47,14 @@ abstract class TestCase extends Orchestra
         parent::setUp();
         $this->app->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
         $this->app['config']->set('corex-notifications.digest.enabled', true);
-        $this->app['config']->set('corex-wakeup.handlers', ['notification.digest.v1' => DigestWakeupAdapter::class]);
+        $this->app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
+        $this->app['config']->set('corex-wakeup.handlers', [
+            'notification.digest.v1' => [
+                'handler' => DigestWakeupAdapter::class,
+                'version' => 'notification-digest/1',
+                'accept_legacy_unstamped' => false,
+            ],
+        ]);
         $this->app->tag(NotificationDigestDueSource::class, 'corex.wakeup.due-sources');
         $this->app->forgetScopedInstances();
     }

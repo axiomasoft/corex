@@ -24,6 +24,10 @@
 
 | Дата | Кто (role/model) | Что |
 |:--|:--|:--|
+| 2026-09-25 | owner + plan-maintenance / codex-gpt-5.6-sol/high | D127: sealed migration repairs only four invalid E14a invocation digests derived from unchanged membership; Task owner receives the bounded compatible bugfix. |
+| 2026-09-25 | owner + plan-maintenance / codex-gpt-6/high | D125 supersedes D124 for P14.3: item-specific `G-DDL-P14.3` prevents collision with P13.5 while preserving branch, scope and local-only boundary. |
+| 2026-09-25 | owner + plan-maintenance / codex-gpt-6/high | D124: P14.3 G-DDL limited to owner-session/local-source against `corex_test`; production migration and rollout remain forbidden. |
+| 2026-09-25 | owner + plan-maintenance / codex-gpt-6-sol/xhigh | D122: P13.12 G-API ограничен локальным checkout через owner-session/local-source; исходные branch, scope, Files и Validation сохранены. Grant не выдан. |
 | 2026-09-23 | plan-exec / cursor-composer-2.5/medium | P7.6–P7.7 закрыты: AuthOptions, identity и access/matrix без `config()` — детали см. phases/P7/P7.6.state.md и P7.7.state.md |
 | 2026-09-23 | owner + plan-maintenance / gpt-6-astra | D118: post-P6 execution grouped into bounded batches with artifact inputs, exact model pins and intermediate qualification; P7.1 is the live frontier. |
 | 2026-09-23 | owner + plan-exec / gpt-6-sol/medium | D117: владелец разрешил текущую независимую GPT-6-сессию только для P6.6 вместо pinned `gpt-5.6-sol/high`; остальные условия item сохранены. |
@@ -510,7 +514,7 @@ P16.13 выполняется также межфазная сверка из `e
 
 Решения живут в `decisions/<D-id>.md`; текущее/архивное представление собирается
 `python3 packages/task/scripts/plan-views.py decisions --plan-dir plans/2026.09.19-№1-COREX-PLATFORM-HARDENING`
-и читается в `decisions/_current.md`. Принято D1–D88, D91–D118; D89–D90 proposed;
+и читается в `decisions/_current.md`. Принято D1–D88, D91–D127; D89–D90 proposed;
 D57 supersedes D5.
 
 ## 7. Contracts

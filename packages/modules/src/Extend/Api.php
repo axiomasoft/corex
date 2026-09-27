@@ -110,6 +110,11 @@ final class Api implements Extender
 
     public bool $executionSupported = true;
 
+    /** @var array<mixed, mixed>|null Canonical cost recipe; null keeps legacy defaults out of the hash. */
+    public ?array $cost = null;
+
+    public bool $costExplicit = false;
+
     private function __construct()
     {
         //
@@ -376,6 +381,17 @@ final class Api implements Extender
     {
         $this->title = $title;
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @param  array<mixed, mixed>  $recipe
+     */
+    public function cost(array $recipe): self
+    {
+        $this->cost = $recipe;
+        $this->costExplicit = true;
 
         return $this;
     }

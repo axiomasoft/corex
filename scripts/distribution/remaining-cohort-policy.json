@@ -33,7 +33,7 @@
   "packages": {
     "corex/core": "packages/core",
     "corex/modules": "packages/modules",
-    "corex/api": "packages/api",
+    "corex/operations": "packages/operations",
     "corex/tasks": "packages/tasks",
     "corex/tenancy": "packages/tenancy",
     "corex/panels": "packages/panels",

@@ -8,20 +8,20 @@ use CoreX\Attributes\Contracts\AttributeFilter;
 use CoreX\Attributes\Contracts\AttributeStore;
 use CoreX\Attributes\Contracts\FieldCatalogue;
 use CoreX\Attributes\Contracts\SchemaOperations;
+use CoreX\Attributes\Support\AttributeWriteResult;
 use CoreX\Attributes\Support\FieldSelection;
 use CoreX\Attributes\Support\FieldSnapshot;
 use CoreX\Attributes\Support\FilterNode;
 use CoreX\Attributes\Support\FilterPlan;
 use CoreX\Attributes\Support\RecordSelection;
 use CoreX\Attributes\Support\Schema\DriftReport;
-use CoreX\Attributes\Support\Schema\OperationKey;
 use CoreX\Attributes\Support\Schema\OperationRef;
 use CoreX\Attributes\Support\Schema\SchemaChange;
+use CoreX\Attributes\Support\Schema\SchemaOperationId;
 use CoreX\Attributes\Support\Schema\SchemaReceipt;
 use CoreX\Attributes\Support\ValueBag;
 use CoreX\Attributes\Support\ValueBatch;
 use CoreX\Attributes\Support\ValuePatch;
-use CoreX\Attributes\Support\WriteResult;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Data\RecordRef;
 use CoreX\Support\Data\WriteToken;
@@ -38,7 +38,7 @@ final class UnavailableAttributes implements AttributeFilter, AttributeStore, Fi
         throw new UnsupportedAttributeCapability;
     }
 
-    public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): WriteResult
+    public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): AttributeWriteResult
     {
         throw new UnsupportedAttributeCapability;
     }
@@ -53,7 +53,7 @@ final class UnavailableAttributes implements AttributeFilter, AttributeStore, Fi
         throw new UnsupportedAttributeCapability;
     }
 
-    public function request(DataScope $scope, SchemaChange $change, OperationKey $key): SchemaReceipt
+    public function request(DataScope $scope, SchemaChange $change, SchemaOperationId $key): SchemaReceipt
     {
         throw new UnsupportedAttributeCapability;
     }

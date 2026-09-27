@@ -9,7 +9,7 @@ test('P12 public error declarations match the stable contract fixture', function
 });
 
 test('P12 error gate rejects an unregistered public code', function (): void {
-    $path = SourceScanner::packagePath('api', 'src/Internal/P12UnregisteredErrorProbe.php');
+    $path = SourceScanner::packagePath('operations', 'src/Definition/P12UnregisteredErrorProbe.php');
 
     file_put_contents($path, <<<'PHP'
 <?php
@@ -17,7 +17,7 @@ new ApiError('p12_unregistered_probe', 409, 'probe');
 PHP);
 
     try {
-        expect(p12ErrorContractViolations())->toContain('E-UNREGISTERED-CODE corex/api p12_unregistered_probe');
+        expect(p12ErrorContractViolations())->toContain('E-UNREGISTERED-CODE corex/operations p12_unregistered_probe');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -26,7 +26,7 @@ PHP);
 });
 
 test('P12 error gate rejects category drift for a registered code', function (): void {
-    $path = SourceScanner::packagePath('api', 'src/Internal/P12CategoryDriftProbe.php');
+    $path = SourceScanner::packagePath('operations', 'src/Definition/P12CategoryDriftProbe.php');
 
     file_put_contents($path, <<<'PHP'
 <?php
@@ -34,7 +34,7 @@ new ApiError('validation_failed', 409, 'probe');
 PHP);
 
     try {
-        expect(p12ErrorContractViolations())->toContain('E-CONTRACT-DRIFT corex/api validation_failed');
+        expect(p12ErrorContractViolations())->toContain('E-CONTRACT-DRIFT corex/operations validation_failed');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -111,7 +111,7 @@ function p12DeclaredErrorContracts(array &$violations, array $adapters): array
     $contracts = [];
     $dynamicSources = array_fill_keys(array_column($adapters, 'source'), true);
 
-    foreach (['api' => 'ApiError', 'attributes' => 'ErrorDescriptor'] as $package => $class) {
+    foreach (['operations' => 'ApiError', 'attributes' => 'ErrorDescriptor'] as $package => $class) {
         $owner = 'corex/'.$package;
         $directory = SourceScanner::packagePath($package, 'src');
 
@@ -138,7 +138,9 @@ function p12DeclaredErrorContracts(array &$violations, array $adapters): array
                 }
 
                 if ($category === null) {
-                    $violations[] = 'E-DYNAMIC-ADAPTER '.$relative.':'.$call['line'];
+                    if (! isset($dynamicSources[$relative])) {
+                        $violations[] = 'E-DYNAMIC-ADAPTER '.$relative.':'.$call['line'];
+                    }
 
                     continue;
                 }
@@ -149,7 +151,9 @@ function p12DeclaredErrorContracts(array &$violations, array $adapters): array
                 $detailKeys = p12DetailKeys($details);
 
                 if ($retryable === null || $pathValue === false) {
-                    $violations[] = 'E-DYNAMIC-ADAPTER '.$relative.':'.$call['line'];
+                    if (! isset($dynamicSources[$relative])) {
+                        $violations[] = 'E-DYNAMIC-ADAPTER '.$relative.':'.$call['line'];
+                    }
 
                     continue;
                 }

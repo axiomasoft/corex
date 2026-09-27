@@ -1,0 +1,74 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Api\Internal;
+
+use CoreX\Api\ApiError;
+use CoreX\Api\Enums\OperationMode;
+use CoreX\Api\Operation;
+use DateTimeImmutable;
+use DateTimeZone;
+use Illuminate\Http\JsonResponse;
+
+/** Projects async Location and deprecation headers from the operation descriptor. */
+final class HttpOperationResponder
+{
+    public function project(?Operation $operation, JsonResponse $response): JsonResponse
+    {
+        if (! $operation instanceof Operation || $response->isClientError() || $response->isServerError()) {
+            return $response;
+        }
+
+        if ($operation->mode === OperationMode::AsyncCommand && $response->getStatusCode() === 202) {
+            $response->header('Location', $this->location($response));
+        }
+
+        $deprecation = $operation->deprecation;
+
+        if ($deprecation === null) {
+            return $response;
+        }
+
+        $response->header('Deprecation', $this->httpDate(is_string($deprecation['deprecatedAt'] ?? null) ? $deprecation['deprecatedAt'] : ''));
+
+        if (is_string($deprecation['sunsetAt'] ?? null) && $deprecation['sunsetAt'] !== '') {
+            $response->header('Sunset', $this->httpDate($deprecation['sunsetAt']));
+        }
+
+        if (is_string($deprecation['migrationUri'] ?? null) && $deprecation['migrationUri'] !== '') {
+            $response->header('Link', '<'.$deprecation['migrationUri'].'>; rel="deprecation"');
+        }
+
+        if (is_string($deprecation['successor'] ?? null) && $deprecation['successor'] !== '') {
+            $response->header('successor-version', $deprecation['successor']);
+        }
+
+        return $response;
+    }
+
+    private function location(JsonResponse $response): string
+    {
+        $payload = $response->getData(true);
+        $data = is_array($payload) ? ($payload['data'] ?? null) : null;
+        $operationId = is_array($data) ? ($data['operation_id'] ?? null) : null;
+        $statusUrl = is_array($data) ? ($data['status_url'] ?? null) : null;
+
+        if (! is_string($operationId) || $operationId === '' || ! is_string($statusUrl) || preg_match('#\A(?:https://\S+|/[^\s]*)\z#', $statusUrl) !== 1) {
+            throw new ApiError('invalid_request', 422, 'Async acceptance is incomplete.');
+        }
+
+        return $statusUrl;
+    }
+
+    private function httpDate(string $day): string
+    {
+        $parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $day, new DateTimeZone('UTC'));
+
+        if ($parsed === false || $parsed->format('Y-m-d') !== $day) {
+            throw new ApiError('internal_error', 500, 'Operation could not be completed.');
+        }
+
+        return $parsed->format('D, d M Y H:i:s').' GMT';
+    }
+}

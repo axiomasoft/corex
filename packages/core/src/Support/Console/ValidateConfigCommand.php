@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Support\Console;
 
 use CoreX\Enums\PubSubDriver;
-use CoreX\PubSub\RedisPubSub;
+use CoreX\Messaging\RedisPubSub;
 use CoreX\Support\CoreOptions;
 use CoreX\Support\InvalidConfiguration;
 use CoreX\Support\SecretRef;
@@ -54,6 +54,10 @@ final class ValidateConfigCommand extends Command
 
     public function handle(): int
     {
+        $this->redactions = [];
+        $this->errors = [];
+        $this->intlDefaultWarning = false;
+
         $format = $this->option('format');
 
         if ($format !== 'text') {

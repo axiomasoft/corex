@@ -27,7 +27,7 @@ COHORT_WORKFLOW = ROOT / '.github/workflows/remaining-cohort-proof.yml'
 PACKAGE_PATHS = {
     'corex/core': 'packages/core',
     'corex/modules': 'packages/modules',
-    'corex/api': 'packages/api',
+    'corex/operations': 'packages/operations',
     'corex/tasks': 'packages/tasks',
     'corex/tenancy': 'packages/tenancy',
     'corex/panels': 'packages/panels',
@@ -76,7 +76,7 @@ QUALITY_COMMANDS = [
 ]
 
 CI_PACKAGE_JOBS = {
-    'corex/api': 'api-tests',
+    'corex/operations': 'api-tests',
     'corex/tasks': 'tasks-tests',
     'corex/tenancy': 'tenancy-tests',
     'corex/panels': 'panels-tests',

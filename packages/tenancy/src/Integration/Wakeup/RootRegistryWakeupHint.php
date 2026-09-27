@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Integration\Wakeup;
 
 use CoreX\Tenancy\TenantContext;
-use CoreX\Wakeup\Contracts\WakeupHint;
+use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +17,7 @@ use Throwable;
  * Best-effort root routing hint. The tenant request remains authoritative;
  * losing this table merely makes the root process discover work later.
  */
-final class RootRegistryWakeupHint implements WakeupHint
+final class RootRegistryWakeupHint implements WakeupScheduleHint
 {
     public function __construct(
         private readonly Connection $root,

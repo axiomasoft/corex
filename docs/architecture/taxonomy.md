@@ -81,7 +81,7 @@
 | core | corex/core | library | `foundation` | — |
 | modules | corex/modules | library | `foundation` | — |
 | tenancy | corex/tenancy | library | `capability` | — |
-| auth | corex/auth | library | `capability` | — |
+| auth | corex/access | library | `capability` | — |
 | attributes | corex/attributes | corex-module | `capability` | — |
 | media | corex/media | corex-module | `capability` | `MediaModule` |
 | notifications | corex/notifications | corex-module | `capability` | `NotificationsModule` |
@@ -93,10 +93,10 @@
 | transfer | corex/transfer | corex-module | `capability` | — |
 | recurrence | corex/recurrence | library | `capability` | — |
 | panels | corex/panels | corex-module | `capability` | `PanelsModule` |
-| api | corex/api | library | `capability` | — |
+| api | corex/operations | library | `capability` | — |
 | search-intl | corex/search-intl | corex-module | `integration` | — |
 | search-meilisearch | corex/search-meilisearch | corex-module | `integration` | — |
-| tasks-workflow | corex/tasks-workflow | corex-module | `integration` | `TasksWorkflowModule` |
+| tasks-workflow | corex/tasks-workflow | corex-module | `integration` | `TaskWorkflowIntegration` |
 | crm | flex/crm | corex-module | `product` | `CrmModule` |
 
 **Почему `api` — `capability`, а не отдельный вид.** Вид `gateway` не вводится: ответственность

@@ -47,7 +47,11 @@ final class NotificationsServiceProvider extends ServiceProvider
 
         if ((bool) $this->app['config']->get('corex-notifications.digest.enabled')) {
             $handlers = (array) $this->app['config']->get('corex-wakeup.handlers', []);
-            $handlers['notification.digest.v1'] = DigestWakeupAdapter::class;
+            $handlers['notification.digest.v1'] = [
+                'handler' => DigestWakeupAdapter::class,
+                'version' => 'notification-digest/1',
+                'accept_legacy_unstamped' => (bool) $this->app['config']->get('corex-notifications.digest.accept_legacy_unstamped', false),
+            ];
             $this->app['config']->set('corex-wakeup.handlers', $handlers);
         }
         $this->app->singleton(NotificationPolicy::class, DenyNotificationPolicy::class);

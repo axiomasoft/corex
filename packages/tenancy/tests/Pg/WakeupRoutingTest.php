@@ -10,7 +10,7 @@ use CoreX\Tenancy\Integration\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Tenancy\Tests\TestCase;
 use CoreX\Tenancy\WorkspaceRef;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -61,7 +61,7 @@ final class WakeupRoutingTenancyManager implements TenancyManager
     }
 }
 
-final class WakeupRoutingSweeper implements WakeupSweeper
+final class WakeupRoutingSweeper implements DueWakeupSweeper
 {
     /** @var array<string, DateTimeImmutable|null> */
     public array $due = [];

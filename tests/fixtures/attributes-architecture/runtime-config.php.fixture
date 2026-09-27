@@ -1,0 +1,5 @@
+<?php
+
+namespace CoreX\Attributes\Internal\Values;
+
+$driver = config('corex-attributes.storage_driver');

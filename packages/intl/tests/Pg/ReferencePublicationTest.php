@@ -18,7 +18,7 @@ beforeEach(function (): void {
 });
 
 it('GEO-04 publishes reference dataset with CAS generation on PostgreSQL', function (): void {
-    $scope = new DataScope(
+    $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
         connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
         actorId: 'geo-pg',

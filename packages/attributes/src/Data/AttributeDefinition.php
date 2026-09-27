@@ -38,6 +38,7 @@ final readonly class AttributeDefinition
         }
 
         $legacy = ($this->meta['legacy_identity'] ?? false) === true;
+
         if ($legacy && ! $this->id->isLegacy()) {
             throw new InvalidArgumentException('Legacy attribute identity must be a UUIDv5 bridge.');
         }
@@ -58,12 +59,14 @@ final readonly class AttributeDefinition
         foreach ($definitions as $definition) {
             $id = $definition->id->value;
             $key = $definition->entity."\0".$definition->key;
+
             if (isset($keys[$key])) {
                 throw new InvalidArgumentException("Duplicate attribute key [{$definition->key}].");
             }
 
             $keys[$key] = $id;
             $previous = $byId[$id] ?? null;
+
             if ($previous instanceof self && $previous->revision === $definition->revision) {
                 throw new InvalidArgumentException("Duplicate attribute id [{$id}].");
             }

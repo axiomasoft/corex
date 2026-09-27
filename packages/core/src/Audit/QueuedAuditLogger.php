@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Audit;
 
-use CoreX\Contracts\AuditEntry;
-use CoreX\Contracts\AuditLogger;
+use CoreX\Audit\Contracts\AuditEntry;
+use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Support\Config;
 use CoreX\Tenancy\Contracts\ImpersonationService;
 use CoreX\Tenancy\Contracts\TenantContextResolver;

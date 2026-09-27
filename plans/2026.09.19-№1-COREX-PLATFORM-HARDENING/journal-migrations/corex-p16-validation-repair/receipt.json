@@ -1,0 +1,30 @@
+{
+  "changed_lines": [
+    391,
+    392,
+    393,
+    394,
+    395,
+    396,
+    397,
+    398,
+    399,
+    400,
+    401,
+    402,
+    403,
+    404,
+    405,
+    406
+  ],
+  "manifest_sha256": "141d8f1fab9e99c12d29de8edd789bbc6ee3f563ebfe3a1936cdbe7cc0cbf5ec",
+  "migration_id": "corex-p16-validation-repair",
+  "owner_decision": "D137",
+  "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+  "preimage_path": "journal-migrations/corex-p16-validation-repair/journal.preimage.jsonl",
+  "schema_version": "journal-migration-receipt/v1",
+  "source_bytes": 546751,
+  "source_sha256": "00d58f1f097aefb28159083be791d05225e2d23be697b93f5539bbf20647df90",
+  "target_bytes": 546450,
+  "target_sha256": "3129841b1f2b680c4c8b7e022d13093aa764246feb56797233de375516cda4c0"
+}

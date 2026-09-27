@@ -1,0 +1,9 @@
+services:
+    -
+        class: CoreX\PHPStan\Rules\DurablePayloadRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: CoreX\PHPStan\Rules\DurablePayloadPromotedPropertyRule
+        tags:
+            - phpstan.rules.rule

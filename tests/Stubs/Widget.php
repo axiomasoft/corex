@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tests\Stubs;
 
 use Brick\Money\Money;
-use CoreX\Contracts\Auditable;
+use CoreX\Audit\Contracts\Auditable;
 use CoreX\Models\BaseModel;
 use CoreX\Money\MoneyCast;
 

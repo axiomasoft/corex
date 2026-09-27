@@ -44,7 +44,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
         }
     }
 
-    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AccountsResult
+    public function resultFor(AccountsQuery $query, string $membershipVersion): ?AvailableAccounts
     {
         try {
             $payload = $this->cache->get($this->key(query: $query, membershipVersion: $membershipVersion));
@@ -55,7 +55,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
         }
     }
 
-    public function put(AccountsQuery $query, AccountsResult $result, int $ttlSeconds): void
+    public function put(AccountsQuery $query, AvailableAccounts $result, int $ttlSeconds): void
     {
         if (! $result->isFor(query: $query) || $ttlSeconds < 1 || $ttlSeconds > AccountMenuReader::CACHE_TTL_SECONDS) {
             throw new CentralProtocolViolation('Invalid account-menu cache write.');
@@ -83,7 +83,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
     }
 
     /** @return array<string, mixed> */
-    private function encode(AccountsResult $result): array
+    private function encode(AvailableAccounts $result): array
     {
         return [
             'identity_id' => $result->identityId,
@@ -100,7 +100,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
         ];
     }
 
-    private function decode(string $payload, AccountsQuery $query, string $membershipVersion): ?AccountsResult
+    private function decode(string $payload, AccountsQuery $query, string $membershipVersion): ?AvailableAccounts
     {
         $decoded = StrictJson::object($payload);
         $keys = array_keys($decoded);
@@ -146,7 +146,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
                 );
             }, $decoded['accounts']);
 
-            $result = new AccountsResult(
+            $result = new AvailableAccounts(
                 identityId: $decoded['identity_id'],
                 product: $decoded['product'],
                 membershipVersion: $decoded['membership_version'],

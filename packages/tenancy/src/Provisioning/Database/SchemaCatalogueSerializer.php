@@ -20,6 +20,8 @@ use function ksort;
  *
  * Physical database identity, ACLs, OIDs, table statistics and sequence
  * current values deliberately never enter the projection.
+ *
+ * @internal
  */
 final class SchemaCatalogueSerializer
 {

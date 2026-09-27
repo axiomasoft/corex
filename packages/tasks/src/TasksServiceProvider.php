@@ -17,6 +17,7 @@ use CoreX\Tasks\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Contracts\UpdateTaskCommand;
 use CoreX\Tasks\Internal\Planning\PlanningCommand;
+use CoreX\Tasks\Internal\Planning\PlanningOperationsServiceProvider;
 use CoreX\Tasks\Support\DenyTaskAccess;
 use CoreX\Tasks\Support\DenyTaskMutationAccess;
 use CoreX\Tasks\Support\DenyTaskPlanningAccess;
@@ -34,5 +35,6 @@ final class TasksServiceProvider extends ServiceProvider
         $this->app->bind(TaskMutationAccess::class, DenyTaskMutationAccess::class);
         $this->app->bind(TaskPlanningCommand::class, PlanningCommand::class);
         $this->app->bind(TaskPlanningAccess::class, DenyTaskPlanningAccess::class);
+        $this->app->register(PlanningOperationsServiceProvider::class);
     }
 }

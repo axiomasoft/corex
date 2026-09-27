@@ -6,8 +6,7 @@ namespace CoreX\Wakeup\Internal;
 
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Wakeup\Contracts\WakeupHandler;
-use CoreX\Wakeup\Contracts\WakeupHint;
+use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\CancelResult;
 use CoreX\Wakeup\Data\ScheduleResult;
@@ -16,33 +15,45 @@ use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use JsonException;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 final class SqlWakeupScheduler implements WakeupScheduler
 {
     /**
-     * @param  array<string, WakeupHandler>  $handlers
-     * @param  list<WakeupHint>  $hints
+     * @param  list<WakeupScheduleHint>  $hints
      */
     public function __construct(
         private readonly Connection $connection,
         private readonly TenantContextResolver $contexts,
-        private readonly array $handlers,
+        private readonly WakeupHandlerRegistry $handlers,
         private readonly array $hints,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function schedule(WakeupRequest $request): ScheduleResult
     {
         $this->assertContext($request->context);
 
-        if (! isset($this->handlers[$request->kind])) {
+        $definition = $this->handlers->definition($request->kind);
+
+        if ($definition === null) {
             throw new RuntimeException("Wakeup handler [{$request->kind}] is not registered.");
         }
 
         $scope = $this->scope($request->context);
-        $payload = $this->canonical($request->payload);
+        $data = $this->canonical($request->payload);
+        $payload = $this->handlers->envelope(
+            definition: $definition,
+            data: $data,
+        );
         $encodedPayload = json_encode($payload, JSON_THROW_ON_ERROR);
-        $digest = hash('sha256', 'wakeup/1'."\0".$request->kind."\0".$request->requestKey."\0".$request->fireAt->format('Y-m-d\\TH:i:s.u\\Z')."\0".$encodedPayload);
+        $encodedIdentity = json_encode($this->handlers->replayIdentity($payload), JSON_THROW_ON_ERROR);
+        $digest = hash('sha256', 'wakeup/2'."\0".$request->kind."\0".$request->requestKey."\0".$request->fireAt->format('Y-m-d\\TH:i:s.u\\Z')."\0".$encodedIdentity);
+        $legacyDigest = hash('sha256', 'wakeup/1'."\0".$request->kind."\0".$request->requestKey."\0".$request->fireAt->format('Y-m-d\\TH:i:s.u\\Z')."\0".json_encode($data, JSON_THROW_ON_ERROR));
+
+        $now = $this->clock->now();
 
         try {
             $this->connection->table('sys_wakeup_requests')->insert([
@@ -50,7 +61,7 @@ final class SqlWakeupScheduler implements WakeupScheduler
                 'request_key' => $request->requestKey, 'request_digest' => $digest, 'fire_at' => $request->fireAt,
                 'window_start' => $request->window?->start, 'window_end' => $request->window?->end,
                 'period' => $request->window?->period, 'payload' => $encodedPayload,
-                'status' => 'pending', 'generation' => 0, 'attempt' => 0, 'created_at' => now(), 'updated_at' => now(),
+                'status' => 'pending', 'generation' => 0, 'attempt' => 0, 'created_at' => $now, 'updated_at' => $now,
             ]);
         } catch (QueryException $exception) {
             $existing = $this->connection->table('sys_wakeup_requests')
@@ -62,7 +73,11 @@ final class SqlWakeupScheduler implements WakeupScheduler
                 throw $exception;
             }
 
-            return new ScheduleResult(status: hash_equals($existing->request_digest, $digest) ? 'existing' : 'conflict', requestKey: $request->requestKey);
+            $candidateDigest = $this->usesVersionedIdentity($existing->payload)
+                ? $digest
+                : $legacyDigest;
+
+            return new ScheduleResult(status: hash_equals($existing->request_digest, $candidateDigest) ? 'existing' : 'conflict', requestKey: $request->requestKey);
         }
 
         $this->notifyHints(context: $request->context, fireAt: $request->fireAt);
@@ -88,7 +103,8 @@ final class SqlWakeupScheduler implements WakeupScheduler
             if ($row->status === 'cancelled') {
                 return new CancelResult(status: 'already-cancelled');
             }
-            $this->connection->table('sys_wakeup_requests')->where('id', $row->id)->update(['status' => 'cancelled', 'lease_until' => null, 'updated_at' => now()]);
+            $now = $this->clock->now();
+            $this->connection->table('sys_wakeup_requests')->where('id', $row->id)->update(['status' => 'cancelled', 'lease_until' => null, 'updated_at' => $now]);
 
             return new CancelResult(status: 'cancelled');
         });
@@ -191,5 +207,24 @@ final class SqlWakeupScheduler implements WakeupScheduler
         foreach ($this->hints as $hint) {
             $hint->scheduled(context: $context, fireAt: $fireAt);
         }
+    }
+
+    private function usesVersionedIdentity(mixed $storedPayload): bool
+    {
+        if (! is_string($storedPayload)) {
+            return false;
+        }
+
+        try {
+            $decoded = json_decode($storedPayload, true, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return false;
+        }
+
+        return is_array($decoded)
+            && is_array($decoded['_corex'] ?? null)
+            && ($decoded['_corex']['schema'] ?? null) === WakeupHandlerRegistry::Schema
+            && is_array($decoded['_corex']['extension'] ?? null)
+            && is_array($decoded['data'] ?? null);
     }
 }

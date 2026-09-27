@@ -23,3 +23,81 @@ Planted pairs live in `tests/fixtures/api-contract/`. The Arch test calls that C
 `contract_hash` had drifted from the current fixture profile. `errors.json` and
 `openapi.json` bytes were unchanged. The compatibility gate accepts that hash-only
 delta. The check command still refuses `--update`.
+
+## P13.12 — `operation-contract/1` local-source freeze
+
+**Дата:** 2026-09-25 · **Actor:** plan-run/codex-gpt-6-sol/xhigh · **Run:**
+`e1e7a881401599ae7bb033908689cb4a652460e5a5536f846140e4c08927c526`
+
+**Authority:** D122 ограничивает G-API локальным checkout (`owner-session/local-source`);
+точная команда владельца `$ task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.12`
+материализована как D123 `[OWNER-GRANT:G-API]` для `operation-contract/1`.
+P13.5 G-DDL отдельно выдан D121; P13.12 не менял миграцию и не выполнял
+release, deploy или внешнюю публикацию.
+
+Единственный источник деклараций — compiled `ModuleRegistry`. `OperationRegistry`,
+`ApiProfile`, capabilities, OpenAPI и четыре снимка являются проекциями.
+Маршруты пакета: `GET /api`, `GET /api/{version}/capabilities`,
+`GET /api/{version}/openapi.json`, `ANY /api/{version}/{path?}`; последний
+зарегистрирован ровно один раз. Live activation меняет выдачу capabilities,
+но не fingerprint code profile; handler получает trusted account, а не payload.
+HTTP и exposed tool проходят один `OperationInvoker`. Команда и async tool
+делят semantic idempotency outcome, а replay повторно проверяет authority.
+
+| §11 | Проверенное поведение | Evidence |
+|:--|:--|:--|
+| 1 | Compiler отвергает illegal mode/method/idempotency; legacy GET/POST defaults сохранены | `packages/modules/tests/Unit/ApiOperationContractTest.php`, modules suite 73/301 |
+| 2 | HTTP и exposed tool разделяют invoker/context/policy, один handler call на попытку | `OperationContractTest`, `OperationParityTest` |
+| 3 | Обратный порядок declarations даёт те же bytes/hash; activation меняет только live capability | `ApiProfileTest`, `ApiRoutesTest` |
+| 4 | Route list однократен, opt-out работает, forged tenant/actor input не становится authority | `ApiRoutesTest`, `OperationContractTest` |
+| 5 | Async HTTP — `202` и `Location`; exposed tool возвращает те же acceptance data через replay без второго effect | `OperationContractTest`, `ApiRoutesTest` |
+| 6 | Replay/conflict/validation-no-row/stale-lease/concurrent-owner/atomic effect+outcome | `IdempotentInvocationTest`, `IdempotencyStoreTest`, отдельный PG test 1/13 |
+| 7 | Tamper/scope/filter/order/expiry/key/arity/type и unique tie-breaker | `CursorCodecTest` |
+| 8 | Пять независимых слоёв; write deny до handler, recursive read prune в HTTP/tool и при replay; record/tenant остаются handler-owned | `AuthorizationLayersTest`, field-bypass plant в `ApiContractTest` |
+| 9 | Envelope и RFC 9457 разделяют стабильные поля; human message и raw exception не входят в контракт | `ErrorRepresentationTest`, `ErrorBoundaryTest` |
+| 10 | Двойная генерация байт-в-байт, digest manifest, one-byte drift red, `--check` не пишет | `ContractSnapshotTest` в root и package runners, `OperationContractTest` |
+| 11 | Девять planted forbidden examples для восьми правил красные; additive fixture и committed baseline зелёные | `ApiContractCompatibilityTest`, `composer api-contract` |
+| 12 | P12 error fixture переиспользуется; P11 остаётся authority; P14 fixture компилирует `Api::operation` и потребляет только публичные `ApiProfile`/`CursorPayload` | `ErrorContractTest`, `ApiContractTest`, `OperationContractTest::test_p14_consumer_compiles_against_frozen_public_surface` |
+| 13 | Нет GraphQL source/route/dependency/capability/snapshot; file, string и dependency plants красные и удалены в `finally` | `ApiContractTest`, source scan |
+
+Снимок `api/v1/manifest.json`: registry fingerprint
+`a33b239bda63e2769961ff489bfd3eb2ef4b7c9ae08f4c624169a7cc05d362a3`,
+contract fingerprint `c80be31c96ea233859f209def8c6b933b9eeeac27a97bf63d61dcc602158fe41`;
+SHA-256 `errors.json` `de949cf2a6663be077fb5b9ff2bce2280b9a04d6162d02e4206c28a2b601572c`,
+`openapi.json` `d5b194c8bbd83a1b907ca88eb0310c70ca779fb90e735ba7b081a2171be5dc33`,
+`operations.json` `a99e8728988b5bd925153f60267c86513a3e19a84b673f33694570e078aa41ca`.
+P12 fixture supplies stable error metadata; HTTP accepts both envelope and Problem
+Details. Cursor vectors include previous-key verification until removal from ring.
+Idempotency migration retains `(scope_hash,key_hash)` uniqueness and the
+`contract_hash`, lease and canonical outcome fields tested in `IdempotencyStoreTest`.
+
+**Validation (после последних изменений):** `composer --working-dir=packages/{modules,api,core}
+lint:check`, `analyse`, `test` — green (modules 73/301, API 145/1023, core
+139/387); `composer lint:check`, `composer analyse`, `composer test:arch`
+— green (Arch 79/244); `composer test -- --compact` — 680/2694 green;
+`vendor/bin/pest packages/api/tests --group=pg --compact` — 1/13 green;
+`composer api-contract` — OK; `BC_CHECK_ONLY=api composer bc-check` — exit 0,
+experimental/report-only; root P13.12 tests — 8/41 green. PG preflight:
+Docker `pgsql` healthy, `127.0.0.1:5434` ready, `corex_test` существует и
+соответствует `*_test`. Snapshot `--check` успешно исполнен в
+`ContractSnapshotTest` из root и package; P14 consumer fixture исполняется в
+root Feature.
+
+**Зависимые локальные починки для GREEN (за пределами объявленных Files P13.12):**
+`ContractSnapshotTest` теперь фиксирует версии Composer в fixture; ранее root
+и package runners давали разные registry hashes. Только сгенерированные
+`operations.json`/`manifest.json` обновлены; `errors.json`/`openapi.json` не
+менялись. Четыре P13-файла приведены к root Pint. Root Arch закрыл
+неучтённые P13-проекции: `OrderingRegistry` классифицирован как projection,
+provider ratchet обновлён с измеренных 4 до 7 (ниже cap 20), внутренние
+controller/command/enums помечены `@internal`; узкое исключение для чтения
+`CompiledRegistry` из `ApiProfileFactory` названо D65. Это локальный repair
+предшествующих P13-артефактов, не расширение замороженного wire contract.
+
+**Skips и риск:** один `pg` test штатно помечен skipped в SQLite package suite,
+затем выполнен отдельно и прошёл; обязательной непроверенной локальной lane
+нет. Локально установлен Laravel 13; Laravel 12 остаётся в объявленной CI
+матрице, CI этого checkout здесь не запускался. Roave сообщил девять изменений
+конструкторов в ранее изменённых P13 классах, но `corex/api` имеет stability
+`experimental`, поэтому штатный `bc-check` классифицирует их report-only.
+До P17 release нужно решить внешнюю совместимость этих конструкторов.

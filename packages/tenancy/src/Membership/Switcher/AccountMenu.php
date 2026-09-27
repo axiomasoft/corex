@@ -7,9 +7,9 @@ namespace CoreX\Tenancy\Membership\Switcher;
 /** @internal An unavailable read deliberately exposes an empty menu. */
 final readonly class AccountMenu
 {
-    private function __construct(public bool $available, public ?AccountsResult $result) {}
+    private function __construct(public bool $available, public ?AvailableAccounts $result) {}
 
-    public static function available(AccountsResult $result): self
+    public static function available(AvailableAccounts $result): self
     {
         return new self(available: true, result: $result);
     }

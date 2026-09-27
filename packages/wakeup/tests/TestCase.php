@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Tests;
 
+use CoreX\Support\Time\LaravelClock;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\TenantContext;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\DateFactory;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Psr\Clock\ClockInterface;
 
 final class TestTenantContextResolver implements TenantContextResolver
 {
@@ -48,6 +51,9 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
+        $this->app->singleton(ClockInterface::class, static fn ($app): LaravelClock => new LaravelClock(
+            dates: $app->make(DateFactory::class),
+        ));
         $this->app->instance(TenantContextResolver::class, new TestTenantContextResolver);
     }
 }

@@ -7,9 +7,9 @@ namespace CoreX\Panels\Internal;
 use CoreX\Contracts\ViewSchemaProvider;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Views\Data\ViewContext;
-use CoreX\Views\Data\ViewField;
-use CoreX\Views\Data\ViewSchema;
+use CoreX\SavedViews\Data\ViewContext;
+use CoreX\SavedViews\Data\ViewField;
+use CoreX\SavedViews\Data\ViewSchema;
 use LogicException;
 
 /** @internal */

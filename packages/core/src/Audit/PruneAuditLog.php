@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Audit;
 
-use CoreX\Contracts\AuditRetention;
-use CoreX\Models\AuditLog;
+use CoreX\Audit\Contracts\AuditRetention;
+use CoreX\Audit\Internal\AuditLog;
 use Illuminate\Console\Command;
 
 /**

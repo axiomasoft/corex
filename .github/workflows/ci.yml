@@ -120,16 +120,16 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
           coverage: xdebug
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/api require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+        run: composer --working-dir=packages/operations require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
       - name: Stage sealed stancl provider candidates
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
-        run: composer --working-dir=packages/api update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress
       - name: API tests and coverage
-        run: composer --working-dir=packages/api test:coverage
+        run: composer --working-dir=packages/operations test:coverage
       - name: API static analysis
-        run: composer --working-dir=packages/api analyse
+        run: composer --working-dir=packages/operations analyse
 
   notifications-wakeup-tests:
     runs-on: ubuntu-latest
@@ -465,16 +465,16 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Register public AzGuard GitHub VCS
-        run: composer --working-dir=packages/auth config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
+        run: composer --working-dir=packages/access config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
 
       - name: Install dependencies
-        run: composer --working-dir=packages/auth update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Auth tests
-        run: composer --working-dir=packages/auth test
+        run: composer --working-dir=packages/access test
 
       - name: Auth tests (PG16, aut_* DDL)
-        run: composer --working-dir=packages/auth test:pg
+        run: composer --working-dir=packages/access test:pg
         env:
           PGSQL_HOST: 127.0.0.1
           PGSQL_PORT: 5432
@@ -483,7 +483,7 @@ jobs:
           PGSQL_PASSWORD: corex
 
       - name: PHPStan (auth/src)
-        run: composer --working-dir=packages/auth analyse
+        run: composer --working-dir=packages/access analyse
 
   layer-gate:
     runs-on: ubuntu-latest
@@ -506,6 +506,15 @@ jobs:
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
 
+      - name: API contract compatibility
+        run: composer api-contract
+
+      - name: Tenancy structure and compatibility
+        run: composer tenancy-structure-gate
+
+      - name: DATA-003 table write ownership
+        run: composer table-write-ownership-gate
+
   contract-guard:
     runs-on: ubuntu-latest
     name: Contract-snapshot guard
@@ -516,6 +525,29 @@ jobs:
 
       - name: Guard src/Contracts changes against a CHANGELOG entry
         run: bash scripts/contract-guard.sh "${{ github.event.pull_request.base.sha || github.event.before }}"
+
+  backward-compatibility:
+    runs-on: ubuntu-latest
+    name: Backward compatibility (Roave · PHP 8.4)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Roave BC diff (experimental report-only)
+        run: bash scripts/bc-check.sh
 
   coverage:
     runs-on: ubuntu-latest

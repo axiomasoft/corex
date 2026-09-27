@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Tests;
 
 use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\CoreServiceProvider;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Tasks\Contracts\TaskAccess;
 use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Testing\TasksTestCase as TasksPackageTestCase;
+use CoreX\Tasks\TasksServiceProvider;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
+use CoreX\TasksWorkflow\Tests\Support\IsolatesDatabasePath;
 use Illuminate\Foundation\Application;
 use Mockery;
+use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 
-abstract class TestCase extends TasksPackageTestCase
+abstract class TestCase extends Orchestra
 {
+    use IsolatesDatabasePath;
+
     #[Override]
     protected function setUp(): void
     {
@@ -51,15 +57,43 @@ abstract class TestCase extends TasksPackageTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            ...parent::getPackageProviders($app),
+            CoreServiceProvider::class,
+            ModulesServiceProvider::class,
+            TasksServiceProvider::class,
             TasksWorkflowServiceProvider::class,
         ];
+    }
+
+    /** @param Application $app */
+    #[Override]
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        $app['config']->set('database.connections.pgsql', [
+            'driver' => 'pgsql',
+            'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
+            'port' => getenv('PGSQL_PORT') ?: '5434',
+            'database' => getenv('PGSQL_DATABASE') ?: 'corex_test',
+            'username' => getenv('PGSQL_USERNAME') ?: 'corex',
+            'password' => getenv('PGSQL_PASSWORD') ?: 'corex',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+        ]);
+        $app['config']->set('corex.audit.enabled', false);
     }
 
     #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        parent::defineDatabaseMigrations();
+        $this->loadMigrationsFrom(__DIR__.'/../../tasks/tests/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php');
     }

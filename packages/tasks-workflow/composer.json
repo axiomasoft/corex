@@ -31,14 +31,12 @@
         }
     },
     "autoload-dev": {
-        "psr-4": {
-            "CoreX\\TasksWorkflow\\Tests\\": "tests/"
-        }
+        "classmap": ["tests"]
     },
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "CoreX\\TasksWorkflow\\TasksWorkflowModule",
+            "module": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
             "package-type": "integration",
             "stability": "experimental",
             "public-api": [

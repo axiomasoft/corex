@@ -16,7 +16,15 @@
     "autoload": {
         "psr-4": {
             "CoreX\\Attributes\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/Schema/",
+            "src/Values/",
+            "src/Query/",
+            "src/Storage/",
+            "src/Integration/",
+            "src/Laravel/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -56,6 +64,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "architecture:check": "php ../../scripts/attributes-architecture-gate.php",
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
         "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
         "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",

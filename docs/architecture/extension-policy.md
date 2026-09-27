@@ -19,7 +19,7 @@
 Идентичность принадлежит точке. Владелец входит в идентификатор только там, где точка
 намеренно допускает нескольких авторов одного предмета. Дубликат — ошибка компиляции до
 проекции; диагностика называет точку, канонический id, первого и второго владельца.
-Замена — только явная директива `Manifest::replace(point, targetId, replacementId)` в той же
+Замена — только явная директива `ModuleManifest::replace(point, targetId, replacementId)` в той же
 точке. Путь, время, тенант и эпоха активации в идентичность и version metadata не входят.
 
 | Точка | Канонический id | Правило коллизии |
@@ -49,8 +49,27 @@ version и диагностический отпечаток реестра. О�
 `frozen` — регистрация невозможна, попытка регистрации — ошибка.
 
 Отпечаток покрывает состав и версии включённых модулей, нормализованные декларации, версию
-схемы точки расширения, относящуюся к делу конфигурацию и версию сборки. Без отпечатка
+схемы `corex-registry/1` и версию сборки. Путь хоста, время, tenant id, epoch активации и порядок
+обнаружения не входят в canonical bytes. Без отпечатка
 возникает классический дефект: пакет обновили, а устаревший скомпилированный артефакт выжил.
+
+## Authority и проекции
+
+| Поверхность | Класс | Граница |
+|:--|:--|:--|
+| `RegistryCompiler` → `CompiledRegistry` → `CompiledModuleRegistry` | authority code snapshot | Один canonical compile, fingerprint и публикация. |
+| `ArrayEntityRegistry`, `OperationRegistry`, `CompiledToolCatalogue`, `ModuleFieldCatalogue` | projection | Читают frozen declarations; новой регистрации code extensions не открывают. |
+| `ModulePanelCatalogue` и wakeup handler map | boot-built catalogue | Собирают типизированные вклады один раз, затем запрещают дубликаты и late mutation. |
+| `CompositeFieldCatalogue` и другие field catalogues | data catalogue | Сохраняют собственный `schemaHash` для data schema, не подменяют module fingerprint. |
+| `SearchManager` | driver factory | Выбирает драйвер; ему не требуется фиктивная фаза compile/freeze. |
+
+Гейт `scripts/extension-contract-gate.php` содержит полный поимённый список классов и
+интерфейсов с суффиксом `Registry`, `Catalogue` или `Manager`. Новый кандидат не проходит
+гейт до явной классификации; не-каталожные runtime managers также отмечены поимённо.
+`CoreX\Modules\Testing\ExtensionContract::verify()` принимает manifests и явные
+`InstalledPackageVersion` из scalar fixtures. Он возвращает типизированный результат с
+`passed()`, `summary()` и fingerprint; Pest/PHPUnit и внешние пакеты могут использовать
+одну и ту же проверку без контейнера Laravel.
 
 ## Durable-решение и состав расширений
 
@@ -59,7 +78,17 @@ version и диагностический отпечаток реестра. О�
 повтор задачи после активации или обновления расширения молча выполнит другую реализацию —
 и следа, почему результат изменился, не останется.
 
+Для работы, называющей конкретное расширение, replay сравнивает точные `point + id + version`.
+`registryFingerprint` остаётся диагностической provenance и не входит в request hash или
+wakeup replay digest (D59, D103). Несовпадение версии и отсутствие обязательного stamp
+отказывают в исполнении; legacy unstamped wakeup допускается только явной настройкой
+конкретного handler. Workflow сохраняет legacy identity algorithm для уже записанных refs.
+
 ## Замена снапшота для долгоживущих процессов
 
 Замена атомарна: собрать → проверить → опубликовать с новой версией. Исполнитель берёт новый
 снапшот на границе задачи, никогда посреди неё.
+
+Активация модулей ведётся отдельным tenant epoch и не меняет code fingerprint. Queue worker
+сбрасывает memo до следующей задачи; Octane получает новый code snapshot через deploy reload.
+Одновременный fleet-wide cutover не гарантируется.

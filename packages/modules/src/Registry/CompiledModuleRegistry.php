@@ -38,6 +38,12 @@ use RuntimeException;
  * never a silent empty registry, which would resurrect the same defect class
  * quietly.
  *
+ * Publication is one request/job snapshot. `JobProcessing` may flush the
+ * memo before a job; the first `compiled()` pins that artifact for the job.
+ * Octane and long-lived workers do not hot-reload mid-request: deploy must
+ * run `octane:reload` and restart queue workers. Tenant activation epochs
+ * never rewrite this fingerprint.
+ *
  * @internal spec: B-10 §5.2/§7.1, AC-3/AC-4, D39, D30/A1/A2, P1.15, A10
  */
 final class CompiledModuleRegistry implements ModuleRegistry

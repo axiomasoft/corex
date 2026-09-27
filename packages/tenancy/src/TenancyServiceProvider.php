@@ -16,8 +16,8 @@ use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
-use CoreX\Wakeup\Contracts\WakeupHint;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
+use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -97,8 +97,8 @@ final class TenancyServiceProvider extends ServiceProvider
 
         if (
             $wakeupDriver === 'root_registry'
-            && interface_exists(WakeupHint::class)
-            && interface_exists(WakeupSweeper::class)
+            && interface_exists(WakeupScheduleHint::class)
+            && interface_exists(DueWakeupSweeper::class)
         ) {
             $registrars[] = new WakeupRegistrar;
         }

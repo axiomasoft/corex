@@ -100,3 +100,27 @@ it('reports a selected redis adapter without failing when the driver class exist
         ->and($result['stdout'])->toContain('driver pubsub.driver=redis')
         ->and($result['stdout'])->toContain('adapter pubsub.redis=available');
 });
+
+it('does not carry errors or secret warnings into a later run of the same command', function (): void {
+    $tester = validateConfigTester();
+    $validCorex = config('corex');
+    $invalidCorex = $validCorex;
+    $invalidCorex['settings']['cache_ttl'] = -1;
+
+    config([
+        'corex' => $invalidCorex,
+        'corex-intl.reference.cursor_secret' => INTL_CURSOR_SECRET_DEFAULT,
+    ]);
+
+    expect($tester->execute([], ['capture_stderr_separately' => true]))->toBe(1)
+        ->and($tester->getDisplay())->toContain('WARNING [secret-default]');
+
+    config([
+        'corex' => $validCorex,
+        'corex-intl.reference.cursor_secret' => null,
+    ]);
+
+    expect($tester->execute([], ['capture_stderr_separately' => true]))->toBe(0)
+        ->and($tester->getDisplay())->not->toContain('WARNING [secret-default]')
+        ->and($tester->getErrorOutput())->toBe('');
+});

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Wakeup\Commands;
 
 use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Wakeup\Contracts\WakeupSweeper;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use Illuminate\Console\Command;
 
 final class SweepWakeups extends Command
@@ -14,7 +14,7 @@ final class SweepWakeups extends Command
 
     protected $description = 'Run due CoreX wakeup requests on the current trusted tenant connection.';
 
-    public function handle(WakeupSweeper $sweeper, TenantContextResolver $contexts): int
+    public function handle(DueWakeupSweeper $sweeper, TenantContextResolver $contexts): int
     {
         $limit = (int) $this->option('limit');
 

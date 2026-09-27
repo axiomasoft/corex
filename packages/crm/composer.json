@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.3",
-        "corex/api": "@dev",
+        "corex/operations": "@dev",
         "corex/core": "@dev",
         "corex/modules": "@dev",
         "giggsey/libphonenumber-for-php-lite": "^9.0",
@@ -36,7 +36,52 @@
     },
     "autoload": {
         "psr-4": {
-            "Flex\\Crm\\": "src/"
+            "Flex\\Crm\\": "src/",
+            "Flex\\Crm\\Actions\\": [
+                "src/Company/Actions/",
+                "src/Contact/Actions/",
+                "src/Lead/Actions/",
+                "src/Deal/Actions/",
+                "src/Activity/Actions/"
+            ],
+            "Flex\\Crm\\Api\\": [
+                "src/ApiShared/",
+                "src/Company/Api/",
+                "src/Contact/Api/"
+            ],
+            "Flex\\Crm\\Models\\": [
+                "src/Company/Models/",
+                "src/Contact/Models/",
+                "src/Lead/Models/",
+                "src/Deal/Models/",
+                "src/Activity/Models/",
+                "src/Context/Models/"
+            ],
+            "Flex\\Crm\\Models\\Concerns\\": "src/Context/Models/Concerns/",
+            "Flex\\Crm\\Data\\": [
+                "src/Company/Data/",
+                "src/Contact/Data/",
+                "src/Context/Data/"
+            ],
+            "Flex\\Crm\\Events\\": [
+                "src/Company/Events/",
+                "src/Contact/Events/",
+                "src/Lead/Events/",
+                "src/Deal/Events/",
+                "src/Activity/Events/"
+            ],
+            "Flex\\Crm\\Enums\\": [
+                "src/Lead/Enums/",
+                "src/Deal/Enums/",
+                "src/Activity/Enums/"
+            ],
+            "Flex\\Crm\\Casts\\": "src/Deal/Casts/",
+            "Flex\\Crm\\Contracts\\": "src/Context/Contracts/",
+            "Flex\\Crm\\Support\\": [
+                "src/Support/",
+                "src/Context/",
+                "src/Context/Internal/"
+            ]
         }
     },
     "autoload-dev": {
@@ -75,7 +120,7 @@
         },
         {
             "type": "path",
-            "url": "../api"
+            "url": "../operations"
         }
     ],
     "minimum-stability": "dev",

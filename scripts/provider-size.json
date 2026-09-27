@@ -7,10 +7,10 @@
         "bindIf"
     ],
     "ratchet": {
-        "packages/api/src/ApiServiceProvider.php": 3,
-        "packages/api/src/ToolServiceProvider.php": 0,
+        "packages/operations/src/ApiServiceProvider.php": 7,
+        "packages/operations/src/Tools/ToolServiceProvider.php": 0,
         "packages/attributes/src/AttributesServiceProvider.php": 6,
-        "packages/auth/src/CoreAuthServiceProvider.php": 6,
+        "packages/access/src/CoreAuthServiceProvider.php": 6,
         "packages/core/src/CoreServiceProvider.php": 26,
         "packages/crm/src/CrmServiceProvider.php": 0,
         "packages/intl/src/IntlServiceProvider.php": 14,
@@ -25,7 +25,7 @@
         "packages/tasks/src/TasksServiceProvider.php": 8,
         "packages/tenancy/src/TenancyServiceProvider.php": 0,
         "packages/transfer/src/TransferServiceProvider.php": 0,
-        "packages/wakeup/src/WakeupServiceProvider.php": 3,
+        "packages/wakeup/src/WakeupServiceProvider.php": 4,
         "packages/workflow/src/WorkflowServiceProvider.php": 1
     },
     "note": "Числа ratchet — измерение после P8.5. E-CORE-PROVIDER: CoreServiceProvider не дробится, его факт заморожен."

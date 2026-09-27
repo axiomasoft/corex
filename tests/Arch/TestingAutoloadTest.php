@@ -4,40 +4,38 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
 
-// P6.5 — canonical autoload-dev for CoreX\Testing (D33). Production CoreX\ → src/ stays until P16.
-// RT1_EXISTING is exactly the three staged src/Testing consumers. A fourth importer is a defect.
+// P16.10 — D33/D94 closed. CoreX\Testing is dev-autoload only.
+// Production src must not import the retired harness namespaces.
 
-/** @var list<string> */
-const RT1_EXISTING = [
-    'packages/crm/src/Testing/CrmTestCase.php',
-    'packages/auth/src/Testing/CoreAuthTestCase.php',
-    'packages/tasks/src/Testing/TasksTestCase.php',
-];
-
-test('production autoload still covers src and autoload-dev names CoreX\\Testing', function (): void {
-    $composer = json_decode(
-        (string) file_get_contents(SourceScanner::repoRoot().'/packages/core/composer.json'),
+test('CoreX\\Testing is dev-autoload only and production src has no harness files', function (): void {
+    $root = SourceScanner::repoRoot();
+    $core = json_decode(
+        (string) file_get_contents($root.'/packages/core/composer.json'),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+    $monorepo = json_decode(
+        (string) file_get_contents($root.'/composer.json'),
         true,
         512,
         JSON_THROW_ON_ERROR,
     );
 
-    expect($composer['autoload']['psr-4']['CoreX\\'] ?? null)->toBe('src/')
-        ->and($composer['autoload-dev']['psr-4']['CoreX\\Testing\\'] ?? null)->toBe('src/Testing/')
-        ->and($composer['autoload-dev']['_comment'] ?? null)->toBe(
-            'canonical mapping; production psr-4 still covers src/Testing until P16 (D33)',
-        )
-        ->and(RT1_EXISTING)->toHaveCount(3);
+    expect($core['autoload']['psr-4']['CoreX\\'] ?? null)->toBe('src/')
+        ->and($core['autoload-dev']['psr-4']['CoreX\\Testing\\'] ?? null)->toBe('tests/Support/')
+        ->and($core['autoload-dev']['_comment'] ?? null)->toBeNull()
+        ->and($monorepo['autoload-dev']['psr-4']['CoreX\\Testing\\'] ?? null)->toBe('packages/core/tests/Support/')
+        ->and(is_dir($root.'/packages/core/src/Testing'))->toBeFalse()
+        ->and(is_file($root.'/packages/core/tests/Support/CoreXTestCase.php'))->toBeTrue()
+        ->and(is_file($root.'/packages/core/tests/Support/IsolatesDatabasePath.php'))->toBeTrue();
+
+    expect(testingProductionAutoloadOffenders($root))->toBe([])
+        ->and(testingHarnessSrcOffenders($root))->toBe([]);
 });
 
-test('src files outside the three staged consumers do not import CoreX\\Testing (R-T1)', function (): void {
-    expect(rt1Offenders())->toBe([]);
-
-    $root = SourceScanner::repoRoot();
-
-    foreach (RT1_EXISTING as $relative) {
-        expect(rt1TestingImports($root.'/'.$relative))->not->toBeEmpty();
-    }
+test('package tests do not import another package Testing namespace', function (): void {
+    expect(testingCrossPackageImportOffenders(SourceScanner::repoRoot()))->toBe([]);
 });
 
 test('R-T1 planting in ActorType names the file', function (): void {
@@ -54,10 +52,9 @@ test('R-T1 planting in ActorType names the file', function (): void {
 /**
  * @return list<string>
  */
-function rt1Offenders(): array
+function testingHarnessSrcOffenders(string $root): array
 {
     $offenders = [];
-    $root = SourceScanner::repoRoot();
     $packages = $root.'/packages';
 
     foreach (new DirectoryIterator($packages) as $package) {
@@ -83,12 +80,98 @@ function rt1Offenders(): array
 
             $relative = substr($file->getPathname(), strlen($root) + 1);
 
-            if (in_array($relative, RT1_EXISTING, true)) {
+            foreach (rt1TestingImports($file->getPathname()) as $import) {
+                $offenders[] = 'R-T1 '.$relative.' imports '.$import;
+            }
+        }
+    }
+
+    sort($offenders);
+
+    return $offenders;
+}
+
+/**
+ * Production psr-4 must not point at a Testing directory or a *\Testing\ prefix.
+ *
+ * @return list<string>
+ */
+function testingProductionAutoloadOffenders(string $root): array
+{
+    $offenders = [];
+
+    foreach (glob($root.'/packages/*/composer.json') ?: [] as $composerFile) {
+        $composer = json_decode((string) file_get_contents($composerFile), true, 512, JSON_THROW_ON_ERROR);
+        $relative = substr($composerFile, strlen($root) + 1);
+
+        foreach ($composer['autoload']['psr-4'] ?? [] as $prefix => $paths) {
+            if (str_contains($prefix, '\\Testing\\')) {
+                $offenders[] = $relative.' autoload prefix '.$prefix;
+            }
+
+            foreach ((array) $paths as $path) {
+                if (str_contains((string) $path, 'Testing')) {
+                    $offenders[] = $relative.' autoload path '.$path;
+                }
+            }
+        }
+    }
+
+    sort($offenders);
+
+    return $offenders;
+}
+
+/**
+ * A package test may use CoreX\Testing only from core tests or the monorepo root.
+ *
+ * @return list<string>
+ */
+function testingCrossPackageImportOffenders(string $root): array
+{
+    $offenders = [];
+    $roots = [
+        $root.'/packages',
+        $root.'/tests',
+    ];
+
+    foreach ($roots as $scan) {
+        if (! is_dir($scan)) {
+            continue;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($scan, FilesystemIterator::SKIP_DOTS),
+        );
+
+        /** @var SplFileInfo $file */
+        foreach ($iterator as $file) {
+            if ($file->getExtension() !== 'php') {
                 continue;
             }
 
-            foreach (rt1TestingImports($file->getPathname()) as $import) {
-                $offenders[] = 'R-T1 '.$relative.' imports '.$import;
+            $path = $file->getPathname();
+
+            if (! str_contains($path, '/tests/')) {
+                continue;
+            }
+
+            $relative = substr($path, strlen($root) + 1);
+            $imports = rt1TestingImports($path);
+
+            if ($imports === []) {
+                continue;
+            }
+
+            $allowed = str_starts_with($relative, 'packages/core/tests/')
+                || str_starts_with($relative, 'tests/');
+
+            if ($allowed) {
+                continue;
+            }
+
+            foreach ($imports as $import) {
+                $offenders[] = $relative.' imports '.$import;
             }
         }
     }
@@ -105,7 +188,7 @@ function rt1TestingImports(string $absolute): array
 {
     $contents = (string) file_get_contents($absolute);
     preg_match_all(
-        '/^\s*use\s+(?:function\s+|const\s+)?(CoreX\\\\Testing\\\\[^;]+);/m',
+        '/^\s*(?:use|namespace)\s+(?:function\s+|const\s+)?((?:CoreX\\\\Testing|CoreX\\\\Auth\\\\Testing|CoreX\\\\Tasks\\\\Testing|Flex\\\\Crm\\\\Testing)\\\\[^;{]+)/m',
         $contents,
         $matches,
     );
@@ -136,7 +219,7 @@ function rt1Plant(string $relative, string $import): string
     try {
         $symbol = substr($import, strrpos($import, '\\') + 1);
         $hits = array_values(array_filter(
-            rt1Offenders(),
+            testingHarnessSrcOffenders(SourceScanner::repoRoot()),
             static fn (string $line): bool => str_contains($line, basename($relative))
                 && str_contains($line, $symbol),
         ));

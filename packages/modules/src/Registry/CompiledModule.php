@@ -6,8 +6,8 @@ namespace CoreX\Modules\Registry;
 
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleLifecycle;
-use CoreX\Modules\Dep;
-use CoreX\Modules\Manifest;
+use CoreX\Modules\ModuleDependency;
+use CoreX\Modules\ModuleManifest;
 
 /**
  * One module's compiled-registry entry (`ModuleRegistry::get()`): manifest
@@ -26,7 +26,7 @@ use CoreX\Modules\Manifest;
 final readonly class CompiledModule
 {
     /**
-     * @param  list<array{type: string, target: string, constraint: string}>  $requires
+     * @param  list<array{kind: string, package: string, constraint: string}>  $requires
      * @param  array<string, list<string>>  $editions
      * @param  list<class-string>  $components
      * @param  class-string|null  $onEnableHook
@@ -45,14 +45,14 @@ final readonly class CompiledModule
         public ?string $onPurgeHook = null,
     ) {}
 
-    public static function fromManifest(Manifest $manifest): self
+    public static function fromManifest(ModuleManifest $manifest): self
     {
         return new self(
             composerName: $manifest->composerName,
             title: $manifest->title,
             tablePrefix: $manifest->tablePrefix,
             requires: array_map(
-                static fn (Dep $dep): array => ['type' => $dep->type, 'target' => $dep->target, 'constraint' => $dep->constraint],
+                static fn (ModuleDependency $dep): array => ['kind' => $dep->kind, 'package' => $dep->package, 'constraint' => $dep->constraint],
                 $manifest->requires,
             ),
             editions: $manifest->editions,
@@ -64,7 +64,7 @@ final readonly class CompiledModule
     }
 
     /**
-     * @param  array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, onPurgeHook?: class-string|null}  $data
+     * @param  array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, onPurgeHook?: class-string|null}  $data
      */
     public static function fromArray(array $data): self
     {
@@ -82,7 +82,7 @@ final readonly class CompiledModule
     }
 
     /**
-     * @return array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{type: string, target: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook: class-string|null, onDisableHook: class-string|null, onPurgeHook: class-string|null}
+     * @return array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook: class-string|null, onDisableHook: class-string|null, onPurgeHook: class-string|null}
      */
     public function toArray(): array
     {

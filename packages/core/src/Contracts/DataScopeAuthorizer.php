@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Contracts;
 
-use CoreX\Data\DataScopeAccessDecision;
 use CoreX\Support\Data\DataScope;
+use CoreX\Support\Data\DataScopeAccessDecision;
 
 interface DataScopeAuthorizer
 {

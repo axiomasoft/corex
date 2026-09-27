@@ -8,9 +8,9 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 
 /**
- * Minimal {@see Authenticatable} standing in for `corex/auth`'s
+ * Minimal {@see Authenticatable} standing in for `corex/access`'s
  * `PrincipalIdentity` (D125, OQ-18 variant A) — corex/tenancy does not
- * depend on corex/auth (AC-28), so the OIDC lane's own test harness cannot
+ * depend on corex/access (AC-28), so the OIDC lane's own test harness cannot
  * import the real class either; only the auth identifier matters for
  * these tests (parity/half 2 is proven by {@see StubIdentityProvider}
  * recording which id it was asked to retrieve).

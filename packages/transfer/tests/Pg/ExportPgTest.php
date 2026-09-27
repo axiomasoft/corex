@@ -112,7 +112,7 @@ function exportInsertJob(string $id, string $hash): void
 
 function exportScope(string $hash): DataScope
 {
-    return new DataScope(
+    return DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
         connectionIdentity: 'pgsql:corex_test', actorId: 'user-1',
         restoreEpoch: $hash,

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Contracts\Auditable;
+use CoreX\Audit\Contracts\AuditEntry;
+use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Contracts\AuditRetention;
+use CoreX\Audit\Internal\AuditLog;
 use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Audit\RecordAuditEntry;
 use CoreX\Concerns\HasAuditLog;
 use CoreX\Concerns\HasConfiguredId;
-use CoreX\Contracts\Auditable;
-use CoreX\Contracts\AuditEntry;
-use CoreX\Contracts\AuditLogger;
-use CoreX\Contracts\AuditRetention;
 use CoreX\Enums\ActorType;
-use CoreX\Models\AuditLog;
 use CoreX\Modules\Audit\AuditCapabilityWiring;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
