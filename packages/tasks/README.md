@@ -60,3 +60,7 @@ composer lint:check
 The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
+
+## Installation
+
+Install with `composer require corex/tasks` from the approved CoreX channel and register the module through `corex/modules`. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.

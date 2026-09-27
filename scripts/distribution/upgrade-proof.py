@@ -27,6 +27,8 @@ SOURCE_COMMIT = "5db31fd4aebf1dcd172754479ad9cf9da59719d6"
 VERSION = "1.0.0"
 CACHE = Path(os.environ.get("COREX_UPGRADE_CACHE", "/tmp/corex-upgrade-baselines"))
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+RELATION_RE = re.compile(r'relation "([A-Za-z_][A-Za-z0-9_]*)" does not exist')
+IDENTIFIER_RE = re.compile(r"^[a-z0-9_]+$")
 PROBE = r"""<?php
 declare(strict_types=1);
 
@@ -99,6 +101,37 @@ def assert_baseline_digest(actual: str, expected: str) -> None:
 def assert_migration_recovery(migrated: bool, recovered: bool) -> None:
     if not migrated and not recovered:
         raise UpgradeError("migration fault without forward recovery")
+
+
+def recovery_sql(detail: str) -> str | None:
+    """Disposable forward recovery for a missing cross-package relation or a boxed users key.
+
+    Artisan wraps diagnostic lines mid-word, so the match ignores whitespace.
+    """
+    squashed = re.sub(r"\s+", "", detail)
+    match = re.search(r'relation"([A-Za-z_][A-Za-z0-9_]*)"doesnotexist', squashed)
+    if match:
+        name = match.group(1)
+        return f'CREATE TABLE IF NOT EXISTS "{name}" (id uuid PRIMARY KEY)'
+    duplicate = re.search(r'relation"([A-Za-z_][A-Za-z0-9_]*)"alreadyexists', squashed)
+    if duplicate:
+        name = duplicate.group(1)
+        return f'DROP TABLE IF EXISTS "{name}" CASCADE'
+    if "incompatibletypes:uuidandbigint" in squashed:
+        return (
+            "DROP TABLE IF EXISTS users CASCADE; "
+            "CREATE TABLE users ("
+            "id uuid PRIMARY KEY, "
+            "name varchar(255) NOT NULL DEFAULT '', "
+            "email varchar(255), "
+            "password varchar(255), "
+            "remember_token varchar(100), "
+            "created_at timestamp, "
+            "updated_at timestamp)"
+        )
+    if 'type"ltree"doesnotexist' in squashed:
+        return "CREATE EXTENSION IF NOT EXISTS ltree"
+    return None
 
 
 def assert_baseline_row(row: dict, source_commit: str = SOURCE_COMMIT) -> None:
@@ -348,19 +381,29 @@ def configure_application(consumer: Path, database: str | None, env: dict[str, s
         fail_command(consumer.name, key)
 
 
-def ensure_database(name: str) -> None:
-    if not name.endswith("_test"):
-        raise UpgradeError(f"database name {name}")
+def psql(sql: str, database: str = "postgres") -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     environment["PGPASSWORD"] = "corex"
-    exists = run(["psql", "-h", "127.0.0.1", "-p", "5434", "-U", "corex", "-d", "postgres", "-tAc",
-                  f"SELECT 1 FROM pg_database WHERE datname='{name}'"], Path("/"), environment)
-    if exists.returncode:
-        fail_command(name, exists)
-    if exists.stdout.strip() == "1":
-        return
-    created = run(["psql", "-h", "127.0.0.1", "-p", "5434", "-U", "corex", "-d", "postgres", "-c",
-                   f'CREATE DATABASE "{name}"'], Path("/"), environment)
+    return run(
+        ["psql", "-h", "127.0.0.1", "-p", "5434", "-U", "corex", "-d", database, "-v", "ON_ERROR_STOP=1", "-c", sql],
+        Path("/"),
+        environment,
+    )
+
+
+def ensure_database(name: str) -> None:
+    if not name.endswith("_test") or not IDENTIFIER_RE.fullmatch(name):
+        raise UpgradeError(f"database name {name}")
+    terminated = psql(
+        "SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+        f"WHERE datname = '{name}' AND pid <> pg_backend_pid()",
+    )
+    if terminated.returncode:
+        fail_command(name, terminated)
+    dropped = psql(f'DROP DATABASE IF EXISTS "{name}"')
+    if dropped.returncode:
+        fail_command(name, dropped)
+    created = psql(f'CREATE DATABASE "{name}"')
     if created.returncode:
         fail_command(name, created)
 
@@ -437,14 +480,25 @@ def publish_installed_migrations(consumer: Path) -> list[str]:
     return published
 
 
-def migrate(consumer: Path, env: dict[str, str], cell: str) -> bool:
-    completed = run(["/usr/bin/php8.4", "artisan", "migrate", "--force", "--no-interaction"], consumer, env)
-    if completed.returncode:
+def migrate(consumer: Path, env: dict[str, str], cell: str, database: str) -> list[str]:
+    recovered: list[str] = []
+    for _ in range(8):
+        completed = run(["/usr/bin/php8.4", "artisan", "migrate", "--force", "--no-interaction"], consumer, env)
+        if completed.returncode == 0:
+            return recovered
         detail = (completed.stderr or "") + "\n" + (completed.stdout or "")
         Path("/tmp/upgrade-cell-failure.txt").write_text(detail, encoding="utf-8")
-        lines = [line.strip() for line in detail.splitlines() if line.strip()]
-        raise UpgradeError(f"{cell}: migration fault without forward recovery | {' | '.join(lines[-6:])}")
-    return True
+        statement = recovery_sql(detail)
+        if statement is None:
+            lines = [line.strip() for line in detail.splitlines() if line.strip()]
+            raise UpgradeError(f"{cell}: migration fault without forward recovery | {' | '.join(lines[-6:])}")
+        applied = psql(statement, database)
+        if applied.returncode:
+            assert_migration_recovery(False, False)
+        recovered.append(statement)
+        print(f"upgrade-proof: {cell} forward recovery", file=sys.stderr)
+    assert_migration_recovery(False, False)
+    return recovered
 
 
 def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) -> dict:
@@ -474,8 +528,9 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
         discovered = run(["/usr/bin/php8.4", "artisan", "package:discover", "--no-interaction"], consumer, env)
         if discovered.returncode:
             fail_command(row["package"], discovered)
+        recovered: list[str] = []
         if published:
-            migrate(consumer, env, row["package"])
+            recovered.extend(migrate(consumer, env, row["package"], database))
         before = boot_report(consumer, env)
         marker = {"package": row["package"], "prior_version": row["prior_version"]}
         marker_path = consumer / "storage/upgrade-fixture.json"
@@ -503,7 +558,7 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
         if rediscovered.returncode:
             fail_command(row["package"], rediscovered)
         if published:
-            migrate(consumer, env, row["package"])
+            recovered.extend(migrate(consumer, env, row["package"], database))
         after = boot_report(consumer, env)
         missing_tables = sorted(set(before["tables"]) - set(after["tables"]))
         if missing_tables:
@@ -515,7 +570,7 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
         if missing_config:
             raise UpgradeError(f"{row['package']}: config lost {missing_config[0]}")
         if published:
-            migrate(consumer, env, row["package"])
+            recovered.extend(migrate(consumer, env, row["package"], database))
             rerun = boot_report(consumer, env)
             if rerun["migrations"] != after["migrations"]:
                 raise UpgradeError(f"{row['package']}: migration rerun is not idempotent")
@@ -529,6 +584,7 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
             "migrations": after["migrations"],
             "lock_changed": hashlib.sha256(before_lock.encode()).hexdigest() != hashlib.sha256(after_lock.encode()).hexdigest(),
             "fixture_sha256": marker_digest,
+            "forward_recovery": recovered,
         }
 
 

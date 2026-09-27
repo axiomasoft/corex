@@ -640,6 +640,9 @@ jobs:
       - name: Pint
         run: composer lint:check
 
+      - name: DoD 1.0 static and receipt subset
+        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json
+
   mutation-check:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest

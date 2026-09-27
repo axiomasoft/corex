@@ -23,3 +23,11 @@ Register `CoreX\Intl\IntlServiceProvider` or enable the `intl` module descriptor
 composer --working-dir=packages/intl test
 composer --working-dir=packages/intl test:pg
 ```
+
+## Configuration
+
+Configure `corex-intl.locale.supported_tags`, `app_tag` and `explicit_fallback_tags` for the application. Defaults support en/en-US/ru/ru-RU with en fallback and allow parent tags. Money defaults to the manual rate source with batches of 1000. Applications select a reference provider/dataset and provision their own reference cursor secret.
+
+## Failure semantics
+
+Keep fallback explicit: a missing translation follows the declared locale fallback chain. A currency conversion requires a usable rate snapshot; unavailable data is not a fabricated rate. Reference lookup is bounded and provider-owned; consumer adapters must handle unavailable datasets and invalid cursor/input failures at the application boundary.

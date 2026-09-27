@@ -18,3 +18,11 @@ explicit UTC half-open window. The shared local wakeup runner admits a separate 
 its durable SQL due source recreates residual and late closed-window batches after a restart,
 without mutating a completed wakeup request key. Current cancellation and preference state is
 checked before admission. Once admitted, the delivery is an immutable effect.
+
+## Installation
+
+Install with `composer require corex/notifications` through the approved CoreX channel. Apply the package-owned notification schema on the tenant connection and provide `NotificationPolicy` before exposing inbox or delivery actions. Schedule `corex:notifications:sweep` in an already trusted tenant context.
+
+## Extension contracts
+
+Register consumer channel drivers and recipient resolution through the package public contracts. Keep recipient identities and notification authorization application-owned. Channel delivery must preserve the durable intent/delivery identities and report unknown external outcomes for reconciliation.

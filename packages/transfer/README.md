@@ -16,3 +16,11 @@ The raw NDJSON format is the reversible machine format. `CanonicalExportCodec::d
 is deliberately separate and labels the spreadsheet-formula-prefix profile; it is not a raw
 round-trip or a universal spreadsheet safety promise. Object-store rename is never assumed: an
 existing part is accepted only when its bytes still match its declared SHA-256.
+
+## Installation
+
+Install with `composer require corex/transfer` through the configured CoreX channel. Bind the consumer source, mapper and sink and apply the package-owned transfer schema explicitly before durable runs. The host supplies the current trusted tenant scope; installing the provider does not discover connectors.
+
+## Configuration
+
+`corex-transfer.limits` defaults to 1,048,576 bytes per record, 256 fields and batches of 500 rows. Select bounded limits for the input and retain immutable source/manifest and checkpoint identities across retries. Consumer-owned credentials belong in the application integration, not the transfer payload.

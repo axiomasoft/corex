@@ -200,3 +200,30 @@ jobs:
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Verify remaining cohort export recipe
         run: python3 scripts/distribution/remaining-cohort-export.py
+
+  dod-release:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: DoD 1.0 release gate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+          tools: composer
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: DoD 1.0 static subset
+        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --output ${{ runner.temp }}/dod-ci.json
+      - name: Verify sealed preflight refusal boundaries
+        run: python3 -m unittest scripts/distribution/tests/test_release_preflight.py
+      - name: Run all 27 DoD assertions and reject stale CI evidence
+        run: python3 scripts/dod-1.0.py check --profile release --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --reject-stale-ci ${{ runner.temp }}/dod-ci.json
+      - name: Qualify the committed stable source without publication
+        run: python3 scripts/distribution/release_preflight.py seal --receipt ${{ runner.temp }}/release-preflight.json --packet ${{ runner.temp }}/publication-packet.json

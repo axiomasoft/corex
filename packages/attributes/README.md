@@ -25,3 +25,11 @@ the operation transactionally, executes PostgreSQL concurrent index DDL outside 
 checks the catalog, preserves a 30-day retirement grace period before a managed-index drop, and
 denies stale restore epochs. The application is responsible for dispatching that worker from its
 queue or console boundary; it must never be called from HTTP handling.
+
+## Installation
+
+Install with `composer require corex/attributes` through the configured CoreX channel. Provide a trusted PostgreSQL tenant connection and apply the package-owned `sys_attribute_*` migrations before enabling writes. Bind the module/entity registries when dynamic attribute definitions are required; without them the package reports its unavailable state.
+
+## Extension contracts
+
+Use the exported `FieldCatalogue`, `AttributeStoreResolver`, `AttributeStore`, `AttributeFilter` and `SchemaOperations` ports. The host supplies its trusted scope and authorization callback. Replace the definition source through the catalogue boundary; storage implementations and worker internals are not extension points.

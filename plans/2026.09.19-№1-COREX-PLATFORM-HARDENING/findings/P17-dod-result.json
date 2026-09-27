@@ -1,0 +1,348 @@
+{
+  "schema_version": "corex-dod-result/1",
+  "profile": "release",
+  "source_commit": "091ec90b2047bfef78b600f7adc504cbed68aebb",
+  "candidate_source_commit": "5db31fd4aebf1dcd172754479ad9cf9da59719d6",
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "candidate_file_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "environment": {
+    "python": "3.12.3",
+    "php": "8.4.1",
+    "composer": "2.8.3"
+  },
+  "manifest_sha256": "af7b5a50f1a5130c566dc4cff566fabe3de3dca9228f44586471ef819f3c65a5",
+  "summary": {
+    "green": 24,
+    "red": 3,
+    "unknown": 0,
+    "skipped": 0,
+    "stale": 0,
+    "not-run": 0,
+    "rows": 27
+  },
+  "rows": [
+    {
+      "id": "DOD-01",
+      "status": "green",
+      "diagnostic": "PASS: scorecard responsibility=2 for all 20 live packages",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json"
+    },
+    {
+      "id": "DOD-02",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-03",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-04",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-05",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-06",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/table-ownership-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-07",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/config-composition-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-08",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    },
+    {
+      "id": "DOD-09",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "vendor/bin/pest",
+        "packages/core/tests/Unit/MessagingEnvelopeTest.php",
+        "--exclude-group=pg"
+      ]
+    },
+    {
+      "id": "DOD-10",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/attributes-architecture-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-11",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/attributes-architecture-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-12",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "vendor/bin/pest",
+        "packages/transfer/tests/Unit/CodecTest.php",
+        "--exclude-group=pg"
+      ]
+    },
+    {
+      "id": "DOD-13",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "vendor/bin/pest",
+        "packages/search/tests/Unit/SearchServiceProviderTest.php",
+        "--exclude-group=meilisearch"
+      ]
+    },
+    {
+      "id": "DOD-14",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-15",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-16",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/table-ownership-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-17",
+      "status": "green",
+      "diagnostic": "D107 profile B no-move",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md"
+    },
+    {
+      "id": "DOD-18",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/provider-size-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-19",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    },
+    {
+      "id": "DOD-20",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-extension-receipt.json"
+    },
+    {
+      "id": "DOD-21",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json"
+    },
+    {
+      "id": "DOD-22",
+      "status": "red",
+      "diagnostic": "infrastructure-error",
+      "mode": "live-command",
+      "exit_code": 1,
+      "command": [
+        "bash",
+        "scripts/bc-check.sh"
+      ],
+      "return_to": [
+        "P3",
+        "P17"
+      ]
+    },
+    {
+      "id": "DOD-23",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/check-api-contract.php"
+      ]
+    },
+    {
+      "id": "DOD-24",
+      "status": "red",
+      "diagnostic": "missing API symbol",
+      "mode": "live-command",
+      "exit_code": 1,
+      "command": [
+        "php",
+        "scripts/package-docs-gate.php",
+        "--json"
+      ],
+      "return_to": [
+        "P7",
+        "P10",
+        "P16",
+        "P8",
+        "P5",
+        "P13",
+        "P11",
+        "P4",
+        "P12",
+        "P9"
+      ]
+    },
+    {
+      "id": "DOD-25",
+      "status": "red",
+      "diagnostic": "README contract incomplete",
+      "mode": "live-command",
+      "exit_code": 1,
+      "command": [
+        "php",
+        "scripts/package-docs-gate.php",
+        "--json"
+      ],
+      "return_to": [
+        "P7",
+        "P10",
+        "P16",
+        "P8",
+        "P5",
+        "P13",
+        "P11",
+        "P4",
+        "P12",
+        "P9"
+      ]
+    },
+    {
+      "id": "DOD-26",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-27",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    }
+  ],
+  "return_map": {
+    "DOD-22": [
+      "P3",
+      "P17"
+    ],
+    "DOD-24": [
+      "P7",
+      "P10",
+      "P16",
+      "P8",
+      "P5",
+      "P13",
+      "P11",
+      "P4",
+      "P12",
+      "P9"
+    ],
+    "DOD-25": [
+      "P7",
+      "P10",
+      "P16",
+      "P8",
+      "P5",
+      "P13",
+      "P11",
+      "P4",
+      "P12",
+      "P9"
+    ]
+  }
+}

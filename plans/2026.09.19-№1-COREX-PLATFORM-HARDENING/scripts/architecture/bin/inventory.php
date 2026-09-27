@@ -141,6 +141,7 @@ switch ($command) {
             $built['rows'],
             $built['stats'],
             $built['packages_four_zeros'],
+            $built['explanations'],
         );
         file_put_contents($docsRoot.'/scorecard.md', $md);
         fwrite(STDERR, 'scorecard rows: '.count($built['rows'])."\n");

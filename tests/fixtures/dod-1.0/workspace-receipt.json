@@ -1,0 +1,14 @@
+{
+  "schema_version": "dod-fixture-receipt/1",
+  "result": "PASS",
+  "source_commit": "091ec90b2047bfef78b600f7adc504cbed68aebb",
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "command": {
+    "argv": [
+      "python3",
+      "tests/fixtures/dod-1.0/probe.py"
+    ],
+    "exit_code": 0
+  },
+  "autoload_workspace": false
+}

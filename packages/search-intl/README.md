@@ -26,3 +26,7 @@ Enable explicitly in configuration:
 ```bash
 composer --working-dir=packages/search-intl test
 ```
+
+## Failure semantics
+
+The bridge is opt-in. When disabled, the base search path remains available without localized projection. With the bridge enabled, translation and locale fallback follow the installed intl contracts; missing localized data must not change filter grammar or grant access. Handle host search/provider failures through the base public contracts.

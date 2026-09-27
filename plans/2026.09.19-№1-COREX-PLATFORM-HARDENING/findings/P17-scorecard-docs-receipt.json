@@ -1,0 +1,432 @@
+{
+  "schema_version": "corex-scorecard-docs-receipt/1",
+  "item": "P17.8",
+  "result": "PASS",
+  "generated_at": "2026-09-27T14:36:56Z",
+  "source_commit": "091ec90b2047bfef78b600f7adc504cbed68aebb",
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "scorecard": {
+    "rows": 20,
+    "criteria": 12,
+    "csv": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/scorecard.csv",
+    "csv_sha256": "fac53588d22a951f12fee8169c1580913a7d172b94aa1ebf22fa6b8604c95214",
+    "markdown": "docs/architecture/scorecard.md",
+    "markdown_sha256": "bc5b624640a1dc4f7f8f7c95a220f7fe47e10b3274a8d2fc66a8d8d5eb46173b",
+    "byte_stable_rerun": true,
+    "forbidden_kpi_terms": [],
+    "below_two_cells": 73
+  },
+  "docs_gate": {
+    "command": "php scripts/package-docs-gate.php",
+    "exit_code": 1,
+    "cohort_count": 19,
+    "violation_count": 33,
+    "producer_assignment": {
+      "P10": [
+        "corex/attributes:extension",
+        "corex/attributes:installation"
+      ],
+      "P11": [
+        "corex/panels:configuration",
+        "corex/panels:failure",
+        "corex/panels:installation",
+        "corex/workflow:configuration",
+        "corex/workflow:failure",
+        "corex/workflow:installation"
+      ],
+      "P12": [
+        "corex/search-intl:failure",
+        "corex/search-meilisearch:extension",
+        "corex/search-meilisearch:failure",
+        "corex/search-meilisearch:installation",
+        "corex/transfer:configuration",
+        "corex/transfer:installation"
+      ],
+      "P13": [
+        "corex/operations:example"
+      ],
+      "P16": [
+        "corex/intl:configuration",
+        "corex/intl:failure",
+        "corex/tasks:installation"
+      ],
+      "P4": [
+        "corex/recurrence:installation",
+        "corex/tasks-workflow:failure",
+        "corex/tasks-workflow:installation"
+      ],
+      "P5": [
+        "corex/notifications:extension",
+        "corex/notifications:installation",
+        "corex/wakeup:extension",
+        "corex/wakeup:failure",
+        "corex/wakeup:installation"
+      ],
+      "P7": [
+        "corex/access:installation",
+        "corex/media:installation"
+      ],
+      "P8": [
+        "corex/modules:failure"
+      ],
+      "P9": [
+        "corex/tenancy:extension",
+        "corex/tenancy:failure",
+        "corex/tenancy:installation"
+      ]
+    },
+    "violations": [
+      {
+        "package": "corex/access",
+        "path": "/home/vostrikov/projects/packages/corex/packages/access/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P7"
+      },
+      {
+        "package": "corex/attributes",
+        "path": "/home/vostrikov/projects/packages/corex/packages/attributes/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P10"
+      },
+      {
+        "package": "corex/attributes",
+        "path": "/home/vostrikov/projects/packages/corex/packages/attributes/README.md",
+        "heading": "extension",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no extension heading or declared equivalent",
+        "producer_phase": "P10"
+      },
+      {
+        "package": "corex/intl",
+        "path": "/home/vostrikov/projects/packages/corex/packages/intl/README.md",
+        "heading": "configuration",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no configuration heading or declared equivalent",
+        "producer_phase": "P16"
+      },
+      {
+        "package": "corex/intl",
+        "path": "/home/vostrikov/projects/packages/corex/packages/intl/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P16"
+      },
+      {
+        "package": "corex/media",
+        "path": "/home/vostrikov/projects/packages/corex/packages/media/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P7"
+      },
+      {
+        "package": "corex/modules",
+        "path": "/home/vostrikov/projects/packages/corex/packages/modules/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P8"
+      },
+      {
+        "package": "corex/notifications",
+        "path": "/home/vostrikov/projects/packages/corex/packages/notifications/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P5"
+      },
+      {
+        "package": "corex/notifications",
+        "path": "/home/vostrikov/projects/packages/corex/packages/notifications/README.md",
+        "heading": "extension",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no extension heading or declared equivalent",
+        "producer_phase": "P5"
+      },
+      {
+        "package": "corex/operations",
+        "path": "/home/vostrikov/projects/packages/corex/packages/operations/README.md",
+        "heading": "example",
+        "matched_heading": "",
+        "code_block": "php-block-3",
+        "symbol": "CoreX\\Api\\ApiError",
+        "detail": "example symbol is outside extra.corex.public-api",
+        "producer_phase": "P13"
+      },
+      {
+        "package": "corex/operations",
+        "path": "/home/vostrikov/projects/packages/corex/packages/operations/README.md",
+        "heading": "example",
+        "matched_heading": "",
+        "code_block": "php-block-5",
+        "symbol": "CoreX\\Api\\OpenApiDocumentGenerator",
+        "detail": "example symbol is outside extra.corex.public-api",
+        "producer_phase": "P13"
+      },
+      {
+        "package": "corex/panels",
+        "path": "/home/vostrikov/projects/packages/corex/packages/panels/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P11"
+      },
+      {
+        "package": "corex/panels",
+        "path": "/home/vostrikov/projects/packages/corex/packages/panels/README.md",
+        "heading": "configuration",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no configuration heading or declared equivalent",
+        "producer_phase": "P11"
+      },
+      {
+        "package": "corex/panels",
+        "path": "/home/vostrikov/projects/packages/corex/packages/panels/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P11"
+      },
+      {
+        "package": "corex/recurrence",
+        "path": "/home/vostrikov/projects/packages/corex/packages/recurrence/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P4"
+      },
+      {
+        "package": "corex/search-intl",
+        "path": "/home/vostrikov/projects/packages/corex/packages/search-intl/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/search-meilisearch",
+        "path": "/home/vostrikov/projects/packages/corex/packages/search-meilisearch/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/search-meilisearch",
+        "path": "/home/vostrikov/projects/packages/corex/packages/search-meilisearch/README.md",
+        "heading": "extension",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no extension heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/search-meilisearch",
+        "path": "/home/vostrikov/projects/packages/corex/packages/search-meilisearch/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/tasks",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tasks/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P16"
+      },
+      {
+        "package": "corex/tasks-workflow",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tasks-workflow/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P4"
+      },
+      {
+        "package": "corex/tasks-workflow",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tasks-workflow/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P4"
+      },
+      {
+        "package": "corex/tenancy",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tenancy/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P9"
+      },
+      {
+        "package": "corex/tenancy",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tenancy/README.md",
+        "heading": "extension",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no extension heading or declared equivalent",
+        "producer_phase": "P9"
+      },
+      {
+        "package": "corex/tenancy",
+        "path": "/home/vostrikov/projects/packages/corex/packages/tenancy/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P9"
+      },
+      {
+        "package": "corex/transfer",
+        "path": "/home/vostrikov/projects/packages/corex/packages/transfer/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/transfer",
+        "path": "/home/vostrikov/projects/packages/corex/packages/transfer/README.md",
+        "heading": "configuration",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no configuration heading or declared equivalent",
+        "producer_phase": "P12"
+      },
+      {
+        "package": "corex/wakeup",
+        "path": "/home/vostrikov/projects/packages/corex/packages/wakeup/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P5"
+      },
+      {
+        "package": "corex/wakeup",
+        "path": "/home/vostrikov/projects/packages/corex/packages/wakeup/README.md",
+        "heading": "extension",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no extension heading or declared equivalent",
+        "producer_phase": "P5"
+      },
+      {
+        "package": "corex/wakeup",
+        "path": "/home/vostrikov/projects/packages/corex/packages/wakeup/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P5"
+      },
+      {
+        "package": "corex/workflow",
+        "path": "/home/vostrikov/projects/packages/corex/packages/workflow/README.md",
+        "heading": "installation",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no installation heading or declared equivalent",
+        "producer_phase": "P11"
+      },
+      {
+        "package": "corex/workflow",
+        "path": "/home/vostrikov/projects/packages/corex/packages/workflow/README.md",
+        "heading": "configuration",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no configuration heading or declared equivalent",
+        "producer_phase": "P11"
+      },
+      {
+        "package": "corex/workflow",
+        "path": "/home/vostrikov/projects/packages/corex/packages/workflow/README.md",
+        "heading": "failure",
+        "matched_heading": "",
+        "code_block": "",
+        "symbol": "",
+        "detail": "README has no failure heading or declared equivalent",
+        "producer_phase": "P11"
+      }
+    ]
+  },
+  "planted_negatives": {
+    "missing_heading": "FAIL named packages/search-intl/README.md heading=installation producer=P12",
+    "internal_example": "FAIL named packages/recurrence/README.md CoreX\\Recurrence\\Internal\\HiddenExpander producer=P4",
+    "removed": true
+  },
+  "validation": {
+    "composer_lint_check": "PASS targeted pint --test",
+    "package_docs_arch": "{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3,\"assertions\":145,\"duration_ms\":283}",
+    "pest_exit": 0
+  },
+  "dod": {
+    "DOD-01": "PASS: scorecard responsibility=2 for all 20 live packages",
+    "DOD-04": "PASS: scorecard public-api=2 for all 20 live packages; R4 remains the machine import gate",
+    "DOD-24": "FAIL: corex/operations README examples name CoreX\\Api\\ApiError and CoreX\\Api\\OpenApiDocumentGenerator outside extra.corex.public-api; assigned to P13",
+    "DOD-25": "FAIL: cohort README four-topic contract incomplete; defects assigned to producer phases in docs_gate.producer_assignment; P17.8 did not rewrite package prose"
+  },
+  "inputs": {
+    "scorecard_php_sha256": "2d2b4614acdff84b2e169c9bb6d3273823fc9b3d4b7bea51c1451880afd5ce3b",
+    "docs_gate_sha256": "6e44263883077592f523bb009b5d39ae9eed5e809b7aad0ef32f2350f71dc7ed",
+    "arch_test_sha256": "faf5cc32ac2f44617819231316f88c766d7663f2e3440747583666e176c76ce3"
+  }
+}

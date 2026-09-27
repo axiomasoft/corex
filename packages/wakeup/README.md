@@ -13,3 +13,15 @@ JSON-safe payloads. A request is durable before any optional hint is sent. A hos
 `corex:wakeup:sweep` at its configured cadence (normally every 10 seconds); handlers must perform
 only transactional work on the current tenant connection and persist external delivery through an
 outbox.
+
+## Installation
+
+Install with `composer require corex/wakeup`. Apply the package-owned tenant wakeup schema, register handler kinds, and schedule `corex:wakeup:sweep` for each already trusted tenant connection. The package does not infer an account connection from a request payload.
+
+## Extension contracts
+
+Register exported `DueWakeupHandler` implementations in `corex-wakeup.handlers` with an exact version. Feature packages can tag bounded `DueWakeupSource` implementations for the same sweeper. Keep handler effects transactional; external delivery belongs in an outbox.
+
+## Failure semantics
+
+Unknown kinds, unsupported versions and stale generation/lease claims cannot execute a handler. Attempts are bounded by `corex-wakeup.max_attempts` (default 5); leases default to 60 seconds. Reconcile retained/quarantined durable state and handler version before retry, rather than deleting the request identity.

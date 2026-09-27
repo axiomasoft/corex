@@ -163,15 +163,15 @@ $this->manager->setWorkspace($workspace);
 $resolved = $this->trusted->resolve($request, $principal, $metadata);
 
 if ($resolved->tenant()->workspace?->id !== $workspace->id) {
-    throw new \CoreX\Api\ApiError('context_required', 403, 'Workspace context is required.');
+    throw new \DomainException('Workspace context is required.');
 }
 
 return $resolved;
 ```
 
 Here `$trusted` is the original `ContextResolver` binding captured when decorating the container,
-not a second resolution of the decorator itself. Convert `NoDefaultWorkspaceException` into a safe
-403 context error. Slugs may narrow only after principal authentication and membership verification;
+not a second resolution of the decorator itself. The application maps this `DomainException`
+and `NoDefaultWorkspaceException` to its safe 403 context error at the public error boundary. Slugs may narrow only after principal authentication and membership verification;
 headers/body/query may never select an account, connection or actor. Account and session isolation
 remain the existing tenancy pipeline's responsibility. End tenancy in its established `finally` lifecycle.
 
@@ -203,11 +203,10 @@ resource visibility and Action invariants. There is no automatic policy, members
 
 ## OpenAPI
 
-Build a document from the same installed-code registry:
+Read the published OpenAPI document produced from the installed-code registry:
 
 ```php
-$document = app(\CoreX\Api\OpenApiDocumentGenerator::class)->document('v1', 'https://example.test/api/v1');
-file_put_contents($buildPath, json_encode($document, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
+$document = json_decode(file_get_contents($publishedOpenApiPath), true, 512, JSON_THROW_ON_ERROR);
 ```
 
 This is a build-time catalogue, with deterministic route/method order and module/ability annotations.

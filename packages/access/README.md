@@ -108,3 +108,7 @@ composer test       # Pest + Orchestra Testbench (sqlite :memory:)
 composer analyse    # PHPStan (larastan)
 composer lint       # Pint
 ```
+
+## Installation
+
+Configure the approved Composer channels for CoreX and AzGuard, then run `composer require corex/access`. Composer repositories are application-owned and are not inherited from dependencies. Select the `corex-principal` user-provider driver in your own auth configuration and install the package-owned schema on the intended tenant connection before using the role matrix.

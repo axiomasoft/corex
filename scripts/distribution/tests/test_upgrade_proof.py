@@ -50,6 +50,24 @@ class UpgradeProofTest(unittest.TestCase):
     def test_forward_recovery_allows_the_fault(self) -> None:
         MODULE.assert_migration_recovery(False, True)
 
+    def test_missing_cross_package_relation_is_recoverable(self) -> None:
+        detail = 'ERROR:  relation "wsp_workspaces" does   \n  not exist'
+        self.assertEqual(
+            MODULE.recovery_sql(detail),
+            'CREATE TABLE IF NOT EXISTS "wsp_workspaces" (id uuid PRIMARY KEY)',
+        )
+
+    def test_wrapped_users_key_mismatch_is_recoverable(self) -> None:
+        detail = 'incompatible types: uuid an  \n  d bigint.'
+        self.assertIn("DROP TABLE IF EXISTS users", MODULE.recovery_sql(detail) or "")
+
+    def test_duplicate_users_table_is_recoverable(self) -> None:
+        detail = 'SQLSTATE[42P07]: Duplicate table: 7 ERROR:  relation "users" already exists'
+        self.assertEqual(MODULE.recovery_sql(detail), 'DROP TABLE IF EXISTS "users" CASCADE')
+
+    def test_unrelated_migration_fault_has_no_recovery(self) -> None:
+        self.assertIsNone(MODULE.recovery_sql("SQLSTATE[42601]: syntax error"))
+
     def test_generic_skip_fails_by_name(self) -> None:
         with self.assertRaisesRegex(MODULE.UpgradeError, "generic skip"):
             MODULE.assert_baseline_row({"classification": "skip"})

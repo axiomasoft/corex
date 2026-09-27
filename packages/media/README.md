@@ -7,3 +7,7 @@ Private, tenant-scoped media lifecycle primitives for CoreX. The package stores 
 When PHP's `ext-gd` is available, the package registers its bounded `thumbnail` profile for PNG and JPEG sources. Conversions are keyed by source version and profile digest; callers receive a reference only after durable publication. Without GD, no conversion profile is registered and upload/read lifecycle remains available.
 
 Consumers must bind `MediaPolicy`, provide the existing `TenantStorage` contract, and enforce their own entity availability and authorization in the policy. Retention, legal holds, backup, and physical storage-provider guarantees remain consumer and provider responsibilities.
+
+## Installation
+
+Install with `composer require corex/media` through your configured distribution channel. Supply the existing tenant storage binding and a `MediaPolicy`, then install the package-owned media schema on the tenant connection. Upload/read permissions remain denied until the host policy authorizes them; configure the private storage disk before accepting uploads.

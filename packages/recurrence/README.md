@@ -24,3 +24,7 @@ composer test
 composer analyse
 composer lint:check
 ```
+
+## Installation
+
+Install with `composer require corex/recurrence` through the configured Composer channel. The package needs no Laravel provider, database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.

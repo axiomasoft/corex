@@ -40,3 +40,15 @@ automatic down action.
 The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
+
+## Installation
+
+Install with `composer require corex/tenancy` after configuring the approved immutable provider channels described below. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
+
+## Extension contracts
+
+Applications supply the exported workspace resolution, domain trust/authorization, provisioning and template integrity ports for their deployment. Compose optional wakeup through its declared adapter. Account connection selection must come from authenticated trusted context, never unvalidated request fields.
+
+## Failure semantics
+
+An untrusted or incomplete tenant context must not select an account database. Template provisioning refuses missing/mismatched hashes, manifests and signatures. A failed provisioning claim requires reconciliation of durable state before retry; optional advisory wakeup hints never authorize a connection switch.

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-27
-inputs_sha256: 3e2dffc0cbca6709b8a64871cc7c4b752c6448d4f0d486fbe7f17f349cade6be
+inputs_sha256: 33f8aa110fbdc02424bf118cdc93b475b20c080ec6796251722cec4f6ce8483b
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🔴 Blocked |
 | Last Updated | 2026-09-27 |
 
 ## 4. Phase Index & Status Board
@@ -31,7 +31,7 @@ generated_by: task plan-views status
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
 | P15 | Раскатка словаря имён по реестру переименований | 14/14 | 🟢 Done |
 | P16 | Раскатка профилей структуры по остальным пакетам | 13/13 | 🟢 Done |
-| P17 | Доказательства универсальности и Definition of Done 1.0 | 6/12 | 🟡 In progress |
+| P17 | Доказательства универсальности и Definition of Done 1.0 | 10/12 | 🔴 Blocked |
 | P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
@@ -182,11 +182,11 @@ generated_by: task plan-views status
 | P17.4 | External bulk and webhook consumers | 🟢 Done | 2026-09-27 |
 | P17.5 | Independent equipment-registry consumer | 🟢 Done | 2026-09-27 |
 | P17.6 | Pristine installation and compatibility profiles | 🟢 Done | 2026-09-27 |
-| P17.7 | Supported-version upgrade proof | ⬜ Not started | — |
-| P17.8 | Final scorecard and documentation/public-example contract | ⬜ Not started | — |
-| P17.9 | Normative 27-row DoD manifest and generated document | ⬜ Not started | — |
-| P17.10 | Executable DoD gate and anti-false-green proof | ⬜ Not started | — |
-| P17.11 | Stable metadata and sealed release preflight | ⬜ Not started | — |
+| P17.7 | Supported-version upgrade proof | 🟢 Done | 2026-09-27 |
+| P17.8 | Final scorecard and documentation/public-example contract | 🟢 Done | 2026-09-27 |
+| P17.9 | Normative 27-row DoD manifest and generated document | 🟢 Done | 2026-09-27 |
+| P17.10 | Executable DoD gate and anti-false-green proof | 🟢 Done | 2026-09-27 |
+| P17.11 | Stable metadata and sealed release preflight | 🔴 Blocked | 2026-09-27 |
 | P17.12 | G-RELEASE publication and exact-tag post-publication proof | ⬜ Not started | — |
 
 ## Phase P2
@@ -749,10 +749,22 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.5 GREEN: equipment registry installs from the frozen candidate, boots, and completes attribute, index, partial import and maintenance across a worker restart. Internal import and flex/crm fail; vocabulary scan is clean. |
 | 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
 | 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.6 GREEN: six install profiles and declared PHP/Laravel edges boot from the frozen candidate. Owner waived executor verification; route is grok-4.7/high via cursor-explicit-attestation-v1. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:430 |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · in-progress · — |
+| 2026-09-27 | plan-exec/grok-4.7/high | plan-exec · closed-green · P17.8 GREEN: final 20x12 scorecard recomputed from live evidence; README/example gate records producer-assigned defects without rewriting package prose. Owner waived executor verification; route is grok-4.7/high via cursor-explicit-attestation-v1. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.9 GREEN: 27-row dod-1.0 manifest, generated document, schema negatives and byte-stable render. Owner waived executor verification; route is grok-4.7/high via cursor-explicit-attestation-v1. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.10 GREEN: fixture 27/27 including D107; six plants restored green; CI 21/21. Live release 24/27: DOD-22 infrastructure-error, DOD-24 missing API symbol, DOD-25 README contract. Reds stay with owners. |
+| 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · in-progress · Owner explicitly authorizes Sol and waives execution model verification. Recovery snapshot validated; release acceptance is unchanged. |
+| 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · block-candidate · DOD-24/25 reproduce outside the declared product-repair scope. Closed repair evidence and independent JUSTIFIED confirmation are in findings/P17-release-preflight.json. |
+| 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · blocked · P17.11 NO-GO: live DoD 24/27; DOD-24/25 product repair is excluded and independently JUSTIFIED. Preflight tooling: 40 tests pass. No stable flip or packet. Resume after authorized producer remediation; DOD-22 infrastructure also remains red. |
 
 ## Owner Gates
 
 - P15.14: known deviation
+- P17.11: escalation
 - P3.4: known deviation
 - P3.5: known deviation
 - P3.6: known deviation

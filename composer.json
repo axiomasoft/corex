@@ -95,6 +95,8 @@
         "test:packages": "for p in operations attributes access core crm transfer intl search-intl media modules notifications panels recurrence search search-meilisearch tasks tasks-workflow tenancy wakeup workflow; do echo \"==> packages/$p\" && composer --working-dir=packages/$p test || exit 1; done",
         "test:arch": "bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch",
         "package-graph-gate": "bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php",
+        "package-docs-gate": "php scripts/package-docs-gate.php",
+        "dod-check": "python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json",
         "tenancy-structure-gate": "python3 scripts/tenancy-structure-gate.py check",
         "table-write-ownership-gate": "php scripts/table-write-ownership-gate.php",
         "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",

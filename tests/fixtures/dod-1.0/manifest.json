@@ -1,0 +1,419 @@
+{
+  "schema_version": "corex-dod/1.0",
+  "provenance": {
+    "audit_assertions": 25,
+    "plan_assertions": 2,
+    "decision": "D95",
+    "audit_ids": "DOD-01..DOD-25",
+    "plan_ids": "DOD-26..DOD-27"
+  },
+  "assertions": [
+    {
+      "id": "DOD-01",
+      "statement": "Every live package has a one-sentence purpose.",
+      "owner": [
+        "P1.2",
+        "P17.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "missing-purpose",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-02",
+      "statement": "Package taxonomy is machine-checked.",
+      "owner": [
+        "P3.3"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "taxonomy-drift",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-03",
+      "statement": "`corex/core` is foundation-only, not a capability warehouse.",
+      "owner": [
+        "P6.1"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "foundation-warehouse",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-04",
+      "statement": "Every public symbol is present in the declared API map.",
+      "owner": [
+        "P1.2",
+        "P3.3"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "missing-api-symbol",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "missing-api-symbol",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-05",
+      "statement": "Cross-package imports of implementation internals are forbidden.",
+      "owner": [
+        "P3.2"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "internal-import",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "internal-import",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-06",
+      "statement": "Every owned table has one declared owner.",
+      "owner": [
+        "P2.3",
+        "P3.5"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "table-owner",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-07",
+      "statement": "Configuration is validated and injected as typed options.",
+      "owner": [
+        "P7.11"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "config-injection",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-08",
+      "statement": "Contextual state is safe across Octane/request/queue boundaries.",
+      "owner": [
+        "P4.7",
+        "P11.3"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "context-boundary",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-09",
+      "statement": "Durable messages are scalar-serializable and versioned.",
+      "owner": [
+        "P5.11"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "message-version",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-10",
+      "statement": "Attributes do not depend on model/table identity.",
+      "owner": [
+        "P10.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "attribute-identity",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-11",
+      "statement": "Attribute definition source is replaceable through a public contract.",
+      "owner": [
+        "P10.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "attribute-source",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-12",
+      "statement": "Transfer proves resume, idempotency and partial-failure behavior.",
+      "owner": [
+        "P12.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "transfer-resume",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-13",
+      "statement": "Search has at least two independently tested provider implementations.",
+      "owner": [
+        "P12.5"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "search-providers",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-14",
+      "statement": "Meilisearch is optional.",
+      "owner": [
+        "P17.6"
+      ],
+      "mode": "candidate-receipt",
+      "negative_fixture": "omitted-meilisearch-profile",
+      "receipt": "tests/fixtures/dod-1.0/profile-receipt.json",
+      "freshness_inputs": [
+        "tests/fixtures/dod-1.0/probe.py"
+      ]
+    },
+    {
+      "id": "DOD-15",
+      "statement": "Search Intl is removable.",
+      "owner": [
+        "P17.6"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "omitted-search-intl",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-16",
+      "statement": "Bridge packages own no foreign data.",
+      "owner": [
+        "P2.3",
+        "P3.5"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "bridge-ownership",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-17",
+      "statement": "Large packages match their bounded-context-first structural profile.",
+      "owner": [
+        "P16.11",
+        "P9.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "omitted-profile-b",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-18",
+      "statement": "Service providers remain composition roots.",
+      "owner": [
+        "P8.6"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "provider-composition",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-19",
+      "statement": "FlexCRM and an independent non-CRM/CMS/Store consumer use the same public lower-level contracts.",
+      "owner": [
+        "P17.5"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "shared-contract",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-20",
+      "statement": "Custom external extensions pass the reusable contract suite.",
+      "owner": [
+        "P17.2"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "extension-contract",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-21",
+      "statement": "Upgrade from every applicable previous supported package version is reproduced.",
+      "owner": [
+        "P17.7"
+      ],
+      "mode": "candidate-receipt",
+      "negative_fixture": "stale-receipt",
+      "receipt": "tests/fixtures/dod-1.0/stale-receipt.json",
+      "freshness_inputs": [
+        "tests/fixtures/dod-1.0/probe.py"
+      ]
+    },
+    {
+      "id": "DOD-22",
+      "statement": "PHP/API/schema compatibility diff is part of the release gate.",
+      "owner": [
+        "P3.4",
+        "P17.1"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "bc-unclassified",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-23",
+      "statement": "Accepted architecture decisions and current code do not diverge.",
+      "owner": [
+        "P15.13"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "decision-drift",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-24",
+      "statement": "Examples use only supported public API.",
+      "owner": [
+        "P13.12",
+        "P17.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "public-api-example",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-25",
+      "statement": "Every package README covers minimal install, configuration, extension and failure semantics.",
+      "owner": [
+        "P17.8"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "readme-contract",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    },
+    {
+      "id": "DOD-26",
+      "statement": "Every supported install profile boots from split archives in a pristine consumer.",
+      "owner": [
+        "P17.6"
+      ],
+      "mode": "candidate-receipt",
+      "negative_fixture": "workspace-autoload",
+      "receipt": "tests/fixtures/dod-1.0/workspace-receipt.json",
+      "freshness_inputs": [
+        "tests/fixtures/dod-1.0/probe.py"
+      ]
+    },
+    {
+      "id": "DOD-27",
+      "statement": "A useful application with no Flex/CRM/CMS/Store dependency passes its behavioral smoke suite.",
+      "owner": [
+        "P17.5"
+      ],
+      "mode": "live-command",
+      "negative_fixture": "consumer-smoke",
+      "command": [
+        "python3",
+        "tests/fixtures/dod-1.0/probe.py",
+        "ok",
+        "tests/fixtures/dod-1.0/plants"
+      ]
+    }
+  ]
+}

@@ -74,3 +74,7 @@ Tested installed compatibility passports remain a consumer/P9 obligation.
 The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
+
+## Failure semantics
+
+Invalid or conflicting module declarations fail compilation before publishing a registry. A disabled module is not an implicit grant. Lifecycle and purge require the supported tenant PostgreSQL connection and package-owned schema; connection, dependency or ownership failures must be resolved before retry. Preserve transaction boundaries and do not replace a rejected lifecycle operation with direct table writes.

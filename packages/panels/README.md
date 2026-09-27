@@ -48,3 +48,15 @@ describes and gates access to named surfaces in the active context.
 
 Package identity stays `corex/panels`, namespace `CoreX\Panels`, with public API
 `CoreX\Panels\Contracts` and `CoreX\Panels\Data` only.
+
+## Installation
+
+Install with `composer require corex/panels`. The consuming application registers tagged `PanelProvider` implementations and uses `PanelCatalogue` with its current entity/module context. This package has no database migration or UI deployment step.
+
+## Configuration
+
+The `corex-panels.provider_tag` default is `corex.panels.providers`. Tag providers with that configured value during application composition. Panel descriptors carry application-owned identity and access hints; no routes or rendered pages are configured by this package.
+
+## Failure semantics
+
+Catalogue resolution fails closed when current policy/context is unavailable. Treat a missing or inaccessible descriptor as unavailable to the caller; do not infer permission from a provider tag or reuse a descriptor as a cached access grant.
