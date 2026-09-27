@@ -75,6 +75,7 @@ class DodSchemaTest(unittest.TestCase):
 
     def test_scorecard_keeps_producer_doc_failures_red(self) -> None:
         receipt = load(ROOT / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json")
+        receipt["dod"]["DOD-24"] = "FAIL: planted unsupported example"
         manifest = MODULE.load_manifest(ROOT / "scripts/dod-1.0.json", ROOT)
         binding = {
             "source_commit": receipt["source_commit"],

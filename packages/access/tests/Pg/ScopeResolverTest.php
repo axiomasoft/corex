@@ -525,18 +525,6 @@ it('denies dept/dept_tree on the builder when users/sys_departments tables do no
     $this->migrateAzGuard();
     $this->migrateAutSchema();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
-        handle: 'crm.deal',
-        model: Deal::class,
-        table: 'deals',
-        module: 'corex/access-tests',
-        labelSingular: 'Deal',
-        labelPlural: 'Deals',
-        capabilities: [Capability::Ownable, Capability::WorkspaceScoped],
-        fields: [],
-        titleAttribute: null,
-    ));
-
     Schema::create('deals', function (Blueprint $table): void {
         $table->uuid('id')->primary();
         $table->uuid('owner_id')->nullable();

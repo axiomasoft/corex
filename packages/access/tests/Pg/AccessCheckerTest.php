@@ -23,6 +23,7 @@ use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tests\Stubs\Deal;
 use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Auth\Tests\Stubs\FakeTenancyManager;
+use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
@@ -38,6 +39,8 @@ use Illuminate\Support\Str;
 uses()->group('pg');
 
 it('uses identical fail-closed capability normalization for record and list checks', function (): void {
+    app()->forgetInstance(ArrayEntityRegistry::class);
+    app()->forgetInstance(EntityRegistry::class);
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
         labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [], fields: [], titleAttribute: null,

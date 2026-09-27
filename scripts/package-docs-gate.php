@@ -632,10 +632,12 @@ function classFileExists(string $extractRoot, string $fqcn): bool
             }
             $relative = substr($fqcn, strlen(rtrim($ns, '\\')));
             $relative = ltrim(str_replace('\\', '/', $relative), '/').'.php';
-            $candidate = rtrim($base.'/'.trim((string) $dir, '/'), '/').'/'.$relative;
+            foreach ((array) $dir as $directory) {
+                $candidate = rtrim($base.'/'.trim((string) $directory, '/'), '/').'/'.$relative;
 
-            if (is_file($candidate)) {
-                return true;
+                if (is_file($candidate)) {
+                    return true;
+                }
             }
         }
     }

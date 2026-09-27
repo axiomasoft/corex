@@ -210,6 +210,7 @@ def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path)
         require_command(['composer', script], root, checks)
     require_command(['php', '-d', 'zend.assertions=1', '-d', 'assert.exception=1',
                      'scripts/bc/test-property-default.php'], root, checks)
+    require_command(['php', 'scripts/package-docs-gate.php', '--pristine', '--json'], root, checks)
     require_command(['bash', 'scripts/anti-weakening-gate.sh'], root, checks)
     require_command(['bash', 'scripts/mutation-check.sh', '--all'], root, checks)
     for script in ('verify_extension_fixtures.py', 'verify_api_clients.py', 'verify_async_clients.py',
