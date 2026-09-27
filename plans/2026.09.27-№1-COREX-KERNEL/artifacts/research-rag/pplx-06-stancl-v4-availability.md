@@ -1,0 +1,24 @@
+# pplx-06 — stancl/tenancy v4: доступность, лицензия, альтернативы
+
+- Tool: perplexity-web `search` · Date: 2026-09-27
+- Query: "stancl/tenancy v4 availability 2026: is tenancy v4 only available to GitHub sponsors (early access, private repository)? License of v4, can it be forked and redistributed on Packagist under another vendor? What do Laravel multi-tenancy packages recommend for database-per-tenant in 2026 (stancl v3 vs v4, spatie/laravel-multitenancy v4, tenancy/tenancy)?"
+- Status: provenance. Первичное подтверждение отсутствия v4 на Packagist — http-01.
+
+## Answer (verbatim)
+
+As of September 27, 2026, the practical answer is: v4 is documented as released, but I can’t verify a public, installable stancl/tenancy v4 release. The public Packagist package still lists v3.10.1 as its latest version, and the public GitHub repository shows a v3 release as latest. GitHub Sponsors does advertise early access to new open-source projects and access to private Tenancy-related content—but that does not, by itself, establish that the v4 package source is sponsor-only or what license governs any private v4 code.
+
+Availability and license
+- Public availability: Packagist lists stancl/tenancy v3.10.1, published August 5, 2026, with Laravel 10–13 constraints; the listed versions include no v4 tag. GitHub’s public repository also identifies v3.9.1 as its latest release. The docs site says they cover v4 and calls it released in 2026, so there is a mismatch between the v4 documentation and the public package/release listings.
+- Sponsors and private access: The Sponsors page promises early access to new open-source projects and private Tenancy-related content. It does not say on the page that v4 itself is private, nor does it state the license for a private v4 repository. Treat “v4 is sponsor-only” as unconfirmed unless the sponsor tier or repository access terms explicitly say so.
+- License: The public repository and Packagist v3.10.1 are marked MIT. That supports use, modification, and redistribution of those MIT-licensed versions subject to MIT’s notice/attribution conditions; it does not establish the license of code available only through a private v4 repository.
+- Forking under another vendor on Packagist: If the code you fork is actually covered by MIT, the license generally permits distributing a modified fork under another vendor/package name, provided required copyright and license notices are retained. But do not infer that permission for unreleased or privately accessed v4 code from the public v3 license: check the exact v4 repository’s LICENSE and any access terms first. Packagist publication is a separate packaging/distribution step, not a grant of rights.
+
+Recommendation
+For a new database-per-tenant application, I would shortlist public stancl/tenancy v3.10.1 and Spatie v4, then decide based on which approach best matches your operational model—not on an assumed v4 feature advantage. Stancl’s public package is the safer choice when you want its more integrated tenancy behavior and a readily verifiable Composer release; Spatie’s docs make the responsibilities especially explicit, including that your application owns database creation.
+Given your accepted physical database-per-account design, keep the control-plane database and tenant databases clearly separated, and test connection switching, migrations, queued jobs, and tenant-context cleanup in long-running workers. For stancl v4 specifically, require verifiable source and license access before treating it as a deployable alternative.
+
+## Sources
+1. https://github.com/sponsors/stancl
+2. https://packagist.org/packages/stancl/tenancy
+3. https://packagist.org/packages/tenancy/tenancy

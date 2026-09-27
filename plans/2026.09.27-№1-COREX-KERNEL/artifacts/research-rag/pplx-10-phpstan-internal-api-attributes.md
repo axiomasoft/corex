@@ -1,0 +1,32 @@
+# pplx-10 — PHPStan @internal, классификация API атрибутами, enforcement границ пакетов
+
+- Tool: perplexity-web `search` · Date: 2026-09-27
+- Query: "PHPStan 2.x built-in checks for @internal symbols used from another root namespace/package (how PHPStan decides \"internal\" scope), plus custom rules or PHP attributes to classify public API (#[Api], #[Spi], @api tag) in PHP libraries; examples: phpstan's own @api tag, Psalm @psalm-internal, shipmonk/phpstan-rules, tomasvotruba/unused-public; how to enforce \"no cross-package import of internal namespace\" in a monorepo (deptrac vs phparkitect vs Pest arch presets) in 2026"
+- Status: provenance. Первичный источник — phpstan.org/writing-php-code/phpdocs-basics.
+
+## Answer (verbatim, condensed whitespace)
+
+Bottom line: PHPStan 2.x now has a native cross-namespace @internal check, but it is not a Composer-package-boundary checker. For a monorepo, it works well when each package has a distinct top-level namespace; for explicit package ownership and dependency graphs, use Deptrac or a custom rule. Treat @api, #[Api], and #[Spi] as a separate public-contract vocabulary: PHPStan’s native restriction is driven by @internal, not by a general “only allow symbols marked API” policy.
+
+PHPStan @internal scope
+- Native internal-symbol checking is available from PHPStan 2.1.13 with Bleeding Edge enabled. Add @internal to a declaration, and PHPStan reports use from outside the declaration’s top-level namespace. Applies to classes, interfaces, enums, traits, properties, methods, class constants, and functions.
+- “Top-level namespace” means the first namespace segment, not a Composer package name. Acme\Billing\Internal\Thing is internal to Acme, so code under Acme\Orders is still within the allowed boundary.
+- Errors e.g. method.internal, parameter.internalClass.
+- PHPStan’s own @api convention documents which components its BC promise covers.
+Monorepo implication: if all packages share Acme\, PHPStan’s native boundary is too broad for package isolation.
+
+API markers and custom rules
+- Mark implementation details with @internal; mark documented stable entry points with @api if you want an explicit inventory; use #[Api]/#[Spi] if you need machine-readable distinctions (stable API vs extension SPI) and are prepared to maintain checks. For a strict “only #[Api] symbols may be referenced cross-package” policy, write a custom rule or use an architecture checker; define the package map yourself (paths, PSR-4 mappings) and handle imports, type declarations, inheritance, traits, annotations.
+
+Tools
+- shipmonk/phpstan-rules — extra rules, not package-ownership policy. tomasvotruba/unused-public — detects unused public members (reduces accidental surface). Deptrac — layers via collectors, allowed edges, CI fail; PHP config, PHP ≥ 8.2. PHPArkitect — rules as PHP code. Pest Arch — presets are conventions, not package ownership model.
+
+Recommendation: distinct namespace roots → @internal + PHPStan; shared root → explicit package ownership (Deptrac or custom rule); targeted assertion for "package X must not reference PackageY\Internal\..."; staged rollout report → exceptions → fail. Symbol visibility policy ≠ package dependency policy.
+
+## Sources
+1. https://phpstan.org/writing-php-code/phpdocs-basics
+2. https://phpstan.org/developing-extensions/backward-compatibility-promise
+3. https://phpstan.org/developing-extensions/rules
+4. https://github.com/shipmonk-rnd/phpstan-rules
+5. https://github.com/TomasVotruba/unused-public
+6. https://github.com/phparkitect/arkitect
