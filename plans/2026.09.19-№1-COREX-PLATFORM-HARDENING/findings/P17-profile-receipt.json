@@ -1,5 +1,5 @@
 {
-  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
   "dod": {
     "DOD-14": "PASS",
     "DOD-15": "PASS",
@@ -20,7 +20,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "5a4cc8a303d036c212b5060270bdd5acaaa81687eefc926bba2a55adbb5f7564",
+      "lock_sha256": "52dd77d075e67b5d497097ad2a71d1fceef1e20ec623f29f289db824cbe33b43",
       "locked": [],
       "packages": [
         "corex/core"
@@ -44,7 +44,7 @@
       ],
       "kind": "profile",
       "laravel": 13,
-      "lock_sha256": "c15d85bbb0e1fdb301f27c1c78052064c44d5ea2c5aa4af2b2d62fa4c7ff4a62",
+      "lock_sha256": "09b9234e44227accbdb964111293cb74ea0db1eb928253b4f84d0b41bf01a19e",
       "locked": [],
       "packages": [
         "corex/core"
@@ -73,7 +73,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "4a4d0e00461d2e7c720909d282d4ba4c46371ba94480f6453432acd36f95f117",
+      "lock_sha256": "4093a74b778ad3f45c44799c014a350498084d4b70bb3ab84618bd0e08fa6ada",
       "locked": [],
       "packages": [
         "corex/core",
@@ -107,7 +107,7 @@
       ],
       "kind": "profile",
       "laravel": 13,
-      "lock_sha256": "c1d1d7804f266087aad2d747558f79df4179cb1c91e5b3c4cd3f569eb560c036",
+      "lock_sha256": "3da3553f73231aa43d46a4700e9dd983be021f1d6a29162f024510ab8836e4d4",
       "locked": [],
       "packages": [
         "corex/core",
@@ -141,7 +141,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "390f50e18d434b5edae490fa55c014dab41fd61ba9313a0fc294b9184f3261af",
+      "lock_sha256": "a4dd0ce53080c9587e2c24191b4596a450f7e834b928af665c313877603dc9ae",
       "locked": [],
       "packages": [
         "corex/core",
@@ -174,7 +174,7 @@
       ],
       "kind": "profile",
       "laravel": 13,
-      "lock_sha256": "b05fe6f8b04abff2776f21073e53e034738d87c9eff9b95b04bec2f23a241b90",
+      "lock_sha256": "5538e0396e4940ffe4b9735e9b5284c4ce3f67a8bfe3ee4fb1ebe0bc031541fc",
       "locked": [],
       "packages": [
         "corex/core",
@@ -208,7 +208,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "5ac9f4264bd30435cb7d38f5e8e0770ce3cf73d2d682c8900c3f9725560a8b92",
+      "lock_sha256": "4c2ad9dd93abe35fe28bfd6b126a3843a0720030ea5d728330257973d8a96f23",
       "locked": [],
       "packages": [
         "corex/core",
@@ -242,7 +242,7 @@
       ],
       "kind": "profile",
       "laravel": 13,
-      "lock_sha256": "61a1b008dca0e859530d960917ae9828462ab0d0a52e1afa014d8c2256c1d5bc",
+      "lock_sha256": "20f339398a3c327db673aeebe0d390a1f9b516f6a6deed53fc62fccf91a2dc98",
       "locked": [],
       "packages": [
         "corex/core",
@@ -271,7 +271,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "a4bb4e027712c4073164bae7d8ce50b487b3a1845743d994889db006488efb98",
+      "lock_sha256": "1894ad7dcaa4474f95941c3fad95cfb4b8c1db78ab9296049186af1ea70a5462",
       "locked": [],
       "packages": [
         "corex/core",
@@ -300,7 +300,7 @@
       ],
       "kind": "profile",
       "laravel": 13,
-      "lock_sha256": "ddfe505a5c9a773c2601ac58bab6f5f38a8ec21572db6135e3392ef8cef75874",
+      "lock_sha256": "f2225d637a6939f859302b947d9c00bd309422e32b715cf5af15899d59010353",
       "locked": [],
       "packages": [
         "corex/core",
@@ -346,7 +346,7 @@
       ],
       "kind": "profile",
       "laravel": 12,
-      "lock_sha256": "ff138e633f909c5ca2cabd14667c0170ec0a35fad259495cc69b5995a598a7a5",
+      "lock_sha256": "86330023cfcc5007522fef0ecc715c968e8a2fa1bccc29ff05e81b5ffd3e1e48",
       "locked": [],
       "packages": [
         "corex/access",
@@ -420,7 +420,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "89d51b6b69b39ecb7f92e7807b61e2a76d3f3cb30fd307efd0e5873d93aa36be",
+      "lock_sha256": "a44fd378d54bcfa7dac86956eb74708af708711d87d1533617e3dd4cfe4dc39e",
       "locked": [],
       "packages": [
         "corex/access"
@@ -444,7 +444,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "c43902d144d42cdf9b2f4741148d092f5103c81e7574a1c51c52731cc2166a33",
+      "lock_sha256": "c18b8f7e042863a14d967c5c6c1b0cfe4c52850d54ebde520c1171a649dc8811",
       "locked": [],
       "packages": [
         "corex/access"
@@ -468,7 +468,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "a7e229b83a4e13c19851c9cb68ff21aefeea9cb6ee53149b57ac94a2387988b5",
+      "lock_sha256": "f49a17b6b64053f45218e4627b15490000784bcbefd51729583eedb475d721e6",
       "locked": [],
       "packages": [
         "corex/access"
@@ -516,7 +516,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "6de355b903f79e4dc4540909b11ed1d06afe68b3d5ad34697a4ccf55b7f9ddcf",
+      "lock_sha256": "9862f6af664373f8c3977d1476351ffe65f9873528c08d06c786a1118859e17e",
       "locked": [],
       "packages": [
         "corex/attributes",
@@ -567,7 +567,7 @@
       ],
       "kind": "edge",
       "laravel": 13,
-      "lock_sha256": "a667a9893e5436620d7da84b9d8056253550d0ff26c215c0e8c6502ae46fe157",
+      "lock_sha256": "9b63609d13ec339c96941cfda50e106c404eaa6c39b7067bac42236eaf0569d4",
       "locked": [],
       "packages": [
         "corex/attributes",
@@ -618,7 +618,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "fbc26612a6a737e32c1b9b75b34a2235a5c9887efcbea991ad0e36a417c6d786",
+      "lock_sha256": "2e35f7e344a6d3295ecfc0dc02478d2ad5f2b22071a61f9592a7f50664cf23a1",
       "locked": [],
       "packages": [
         "corex/attributes",
@@ -657,7 +657,7 @@
       ],
       "kind": "edge",
       "laravel": null,
-      "lock_sha256": "8afc0eb3c22f2dfa1f4b2c5b8a521d4cbebe2731ff17e84d67c0b5955a4347eb",
+      "lock_sha256": "4f8cb1c72fabfcdca90d374eccabf6fc2ae83f4e74ec5e277a9edeadfae2f4ce",
       "locked": [],
       "packages": [
         "corex/recurrence",
@@ -683,7 +683,7 @@
       ],
       "kind": "edge",
       "laravel": null,
-      "lock_sha256": "5ceb28a2b98402675ebd5d85856de103951a8e33fcd216e43d5c70e1b8fa13d2",
+      "lock_sha256": "999cfa74c1ee70572907cacd535399bdd494805709a99d018ba17841347dde69",
       "locked": [],
       "packages": [
         "corex/recurrence",
@@ -709,7 +709,7 @@
       ],
       "kind": "edge",
       "laravel": null,
-      "lock_sha256": "50f27c50e1fe5f9102d6c3e44037362b73d6f2678acd8ed2554d021afd095ac3",
+      "lock_sha256": "747a203bcc4eb004d4bc5fd1158e162b4c8365d567995ce35cd3e7551bf85a41",
       "locked": [],
       "packages": [
         "corex/recurrence",
@@ -733,7 +733,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "fd7bd2e5622d8239fa184e7231bcf8914ed8a6cbf59220403e95b318a6783b61",
+      "lock_sha256": "b1ea564ea3ba2a9ea6a43f3c7b3dd85c05c16b3902661d876d919a7af4d9542b",
       "locked": [],
       "packages": [
         "corex/tenancy"
@@ -756,7 +756,7 @@
       ],
       "kind": "edge",
       "laravel": 13,
-      "lock_sha256": "8dd48105d93eab67a52af195430feb177b3a120a2a0dc26e4abfff32990b038d",
+      "lock_sha256": "f76289a506259753acc69d6fb43eb5d801f28d80385e918f99fab8abcb454fcf",
       "locked": [],
       "packages": [
         "corex/tenancy"
@@ -779,7 +779,7 @@
       ],
       "kind": "edge",
       "laravel": 12,
-      "lock_sha256": "167a9ae192df2dcf4fe9ab18b0c614d4584c47df9406ac98731ee9534dffe7f1",
+      "lock_sha256": "b3a164d03d56afb9bc8fe24b3543e133be22d73daa523029a052aa937beaa786",
       "locked": [],
       "packages": [
         "corex/tenancy"
@@ -803,5 +803,6 @@
   ],
   "mode": "all",
   "result": "PASS",
-  "schema_version": "corex-profile-receipt/1"
+  "schema_version": "corex-profile-receipt/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331"
 }

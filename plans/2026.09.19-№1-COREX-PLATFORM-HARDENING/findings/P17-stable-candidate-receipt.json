@@ -1,0 +1,21 @@
+{
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+  "external_writes": [],
+  "item": "P17.11",
+  "package_count": 19,
+  "proof": "owner verify rebuilds twice in separate temporary roots and compares all bytes, strictly validates all 19 Composer manifests and resolves all 19 exact 1.0.0 versions",
+  "repository_sha256": "5e44b0e6e70907000069b473b002b7767ac36a26150d492b4a6aa4038ed773ab",
+  "result": "PASS",
+  "schema_version": "corex-candidate-receipt/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
+  "verify_command": [
+    "python3",
+    "scripts/distribution/release_candidate.py",
+    "verify",
+    "--candidate",
+    "/tmp/corex-p1711-stable-candidate-v3/candidate.json"
+  ],
+  "verify_exit_code": 0,
+  "verify_output_sha256": "274993175b2d6cb6d14e2f0997f64fb3ea13cc415e22cf4f10eb066c8003790f",
+  "version": "1.0.0"
+}

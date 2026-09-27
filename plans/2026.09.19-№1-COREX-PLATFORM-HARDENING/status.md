@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-27
-inputs_sha256: 33f8aa110fbdc02424bf118cdc93b475b20c080ec6796251722cec4f6ce8483b
+inputs_sha256: 73a2129cdcdfabfa11669109e740d6131eb708baac0b4d0a2666bb99dde375b1
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🔴 Blocked |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-27 |
 
 ## 4. Phase Index & Status Board
@@ -31,7 +31,7 @@ generated_by: task plan-views status
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
 | P15 | Раскатка словаря имён по реестру переименований | 14/14 | 🟢 Done |
 | P16 | Раскатка профилей структуры по остальным пакетам | 13/13 | 🟢 Done |
-| P17 | Доказательства универсальности и Definition of Done 1.0 | 10/12 | 🔴 Blocked |
+| P17 | Доказательства универсальности и Definition of Done 1.0 | 10/12 | 🟡 In progress |
 | P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
@@ -186,7 +186,7 @@ generated_by: task plan-views status
 | P17.8 | Final scorecard and documentation/public-example contract | 🟢 Done | 2026-09-27 |
 | P17.9 | Normative 27-row DoD manifest and generated document | 🟢 Done | 2026-09-27 |
 | P17.10 | Executable DoD gate and anti-false-green proof | 🟢 Done | 2026-09-27 |
-| P17.11 | Stable metadata and sealed release preflight | 🔴 Blocked | 2026-09-27 |
+| P17.11 | Stable metadata and sealed release preflight | 🟡 In progress | 2026-09-27 |
 | P17.12 | G-RELEASE publication and exact-tag post-publication proof | ⬜ Not started | — |
 
 ## Phase P2
@@ -760,11 +760,14 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · in-progress · Owner explicitly authorizes Sol and waives execution model verification. Recovery snapshot validated; release acceptance is unchanged. |
 | 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · block-candidate · DOD-24/25 reproduce outside the declared product-repair scope. Closed repair evidence and independent JUSTIFIED confirmation are in findings/P17-release-preflight.json. |
 | 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · blocked · P17.11 NO-GO: live DoD 24/27; DOD-24/25 product repair is excluded and independently JUSTIFIED. Preflight tooling: 40 tests pass. No stable flip or packet. Resume after authorized producer remediation; DOD-22 infrastructure also remains red. |
+| 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · in-progress · Owner follow-up authorizes finishing the disclosed blockers; D128 records bounded producer remediation. Existing Sol/model-verification waiver persists; release writes remain excluded. |
+| 2026-09-27 | plan-exec/sol/effort-unverified | plan-exec · in-progress · Carrier-only correction: journal line 440 means the owner remediation decision now identified as D138-p1711-producer-remediation.md; D128 was already allocated to P14.19. Authority and scope remain identical. |
+| 2026-09-27 | plan-exec/composer-resume/20260927 | plan-exec · in-progress · Resume close after owner pause; no full matrix rerun. |
+| 2026-09-27 | plan-exec/composer-resume/20260927 | plan-exec · blocked · P17.11 NO-GO: corex-access and corex-operations HTTP404 UNKNOWN; DoD not 27/27; upgrade owner-stopped. |
 
 ## Owner Gates
 
 - P15.14: known deviation
-- P17.11: escalation
 - P3.4: known deviation
 - P3.5: known deviation
 - P3.6: known deviation

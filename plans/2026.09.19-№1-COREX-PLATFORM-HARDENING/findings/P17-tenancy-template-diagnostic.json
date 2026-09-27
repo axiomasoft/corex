@@ -1,0 +1,628 @@
+{
+  "checks": [
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "pgsql",
+        "pg_isready",
+        "-d",
+        "corex_test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "6e168fc3b5a0662104b5e5da92e87b870e8b7c65fec827d267115b5123d18614"
+    },
+    {
+      "argv": [
+        "pg_isready",
+        "-h",
+        "127.0.0.1",
+        "-p",
+        "5434",
+        "-d",
+        "corex_test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "b7f336de2f26ceef534674b3e6dc13dd026689a6ff8b24c7ebe5e5b9d7481962"
+    },
+    {
+      "argv": [
+        "php",
+        "-r",
+        "$db=getenv('PGSQL_DATABASE')?:'corex_test';$host=getenv('PGSQL_HOST')?:'127.0.0.1';$port=getenv('PGSQL_PORT')?:'5434';$pdo=new PDO('pgsql:host='.$host.';port='.$port.';dbname='.$db,getenv('PGSQL_USERNAME')?:'corex',getenv('PGSQL_PASSWORD')?:'corex');if($pdo->query('select current_database()')->fetchColumn()!==$db){exit(1);}"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "a46cec28a93ff8734fd3155fe0635d53186efe002fa39ea796aeac7c550cddfd"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "a4a220f842fca603ce48ab2f0eef9f4cad84010e6823400de39388829ab63141"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "81dc599dbac666650985f459b7bb72a88dd2b0d219435a9f5f6de9362e7ab07f"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/attributes",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/attributes",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "cc59a2d0d37e6e99e69c691e09d95f566c1a156647b9f7f2e1db15f922e3f360"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/attributes",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "6a0417f9dcba6920b97ff4f0b4d0fecf34ff39974a81c3a97adab57bae8d3352"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/attributes",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "547fc1bb8929068daf368428c0818b51f82d88128908391a69f3a59aee526ed6"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/core",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/core",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "d8025da1a53ce161a9dabd1f8e7f742e315741277592704cac9b874fb7e4a4fd"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/core",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "7bcc10cef62c247091480f87a06aa49317e2d336ec8232c46bf6527f902af69e"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/core",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "11f62e679443bdbb3b0c78f6671864623570570a11da402fc497c657cd261f46"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/intl",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/intl",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "62bcb4db0e5c57e2438aba7554ef4bd80fed031cc3be175b0536710ea20c8507"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/intl",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "1cd84c981dcd6c6df3242870bf473add78bb4fb5428a24476b354eaaf5f1bad9"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/intl",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "c8bfdcc910dbf49c4a63033e0e824cb8c9919abbf77024be73d234c856d86093"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/media",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/media",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "490f8d767b3d2dc0297ddddc6146287dcf8dbf0bd0c66dedb4de5799decad668"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/media",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "7c266e7b4d77c5fb9fc16c342a453193f0a395f801e0a2b0ae1ba04edae02a9d"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/media",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "15c8ce31412c4879238e78a821bc044a36dc01245e336e53c30d445f974d3790"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/modules",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/modules",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "85166773710131b2bf21a07ad8bce5fd84defc103ef06da63881d329b1a5ab85"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/modules",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "d2885990d611d27a36fcab8be3e2ccbad23c90e318b809bc632e0d1f9086f299"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/notifications",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "a529631d92d4e52b7b83a4166d66dc3082fedf916112247757ed506b39cdc0d6"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/notifications",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "ce6821992197597be72a2fe2ebf602fb4ca1cc5a714d43e3cbb1664c825dd2a5"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/notifications",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "bd65b630cddef524153008fd7b8d51260b77d3c25ad2f8532ef918884b933ec8"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/notifications",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "ff1ff06417f4c183678c336db18dbcaa5b61dc4b6bc43b7860fff5eb5b78571d"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/operations",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/operations",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "752f6f1e02f87ad105278740e4e24f2d462b1ff4e595e1529f3920fec87eb4b2"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/operations",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "b8c1308f2ff309fc59c901d8f5f26e37703e2d8ca0aeacabfd81eb7e54337c40"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/panels",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/panels",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "38b648bb48affa752ec8cf0ea27e21c440e5171e6ceee4d505769ddf85d41484"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/panels",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "58f6e8c154739da339ca9d826db30f32141a7a7f39dd6e981d524317416b303e"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/recurrence",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/recurrence",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "d54d8a92bace1e38b3593afa923f634f615c34ea72500aebf2a8e677336a9863"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/recurrence",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "68632ad5b7e58bce2040c20832cb7f92c45a0f6839ed3aa071e166a66585ade9"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "d9da081413f2c45c39fe0a0a7eedcbae4bfd77ffaddfd929ee6e8a67cf75a1b2"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "2b10759fa5a18ddfa2c9608eaba580f1e36618747d7e8cd3d4662a130554f735"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "c8d603ce8ae1a8ce34908c337b718663b3771631df17faef72b2fb64c05ee348"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-intl",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-intl",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "bfcdf975998393756a2c171e0f45b8872a86d1c09902c339569adb4aaedc2480"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-intl",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "180e7aca69ca31de26b16df23905ed11535136166eff32a947427c0c5b580e4a"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-meilisearch",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-meilisearch",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "129195c33e5eb734ce4bb46e3ed6b929fef4f3af388fad2c340fc4935c7bd400"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/search-meilisearch",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "1a4aa8e20ae82fe1b0adc089a984bed1f3a3fe2ff26351a432756e5b3998e962"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "8010b4168500d92e01810d2760ffd666f8a647f5a9c9d92eb63afccb042ed9e2"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "b009505ccba93c93e69efa4749e5cffd91fb1d97ba9dea31bb6f08365900dd62"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "7d575630bff4b25c56d777bfc1fec24263abd2e87402fe9ad21a7dc081460e59"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks-workflow",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0d49ba28785964c623565aea169f8d6548aa63a742040d502f078466b2bc1257"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks-workflow",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "b87a4c076e48a2b47be1199e59d255c7c96d2c91392a6db0dac372ff369e5e0a"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks-workflow",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "6d1bb6b66403b45c465fc8320d37963b037ac5306a7ee688f791c7080c030229"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tasks-workflow",
+        "test",
+        "--",
+        "--group=pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "679a2091363325c5357a17189dacad0f1561a421483d94ec2cfd356f39ec4cd0"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tenancy",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tenancy",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "cee015c44776ded3aee4c82f4c17cd7ab75ecdc6074e07f61a789dd5925d0260"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/tenancy",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 2,
+      "output_sha256": "a22a32fff140f8daf5c5575aa7d171c8ea98a9240d11bd47efb11212ee5ae332"
+    }
+  ],
+  "diagnostic": "qualification failed: composer --working-dir=packages/tenancy test",
+  "diagnostic_context": "One failed setup found a test template database left by the overlapping interrupted run. afterEach cleared IS_TEMPLATE and removed that exact test database. Other 502 tests passed; failed owner command must rerun in full.",
+  "dirty_source": false,
+  "environment": {
+    "platform": "Linux",
+    "python": "3.12.3"
+  },
+  "external_writes": [],
+  "packet_emitted": false,
+  "red_assertions": [],
+  "result": "NO-GO",
+  "schema_version": "corex-release-preflight/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331"
+}

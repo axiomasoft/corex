@@ -1,6 +1,6 @@
 {
   "autoload_workspace": false,
-  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
   "fingerprint": "cd5bf01172e4a2b57b0fde50786e0139d7ef3d08a623171d52ecb3e6eb47fd7a",
   "flex_dependency": "rejected",
   "internal_import": "equipment/registry imports forbidden CoreX\\Search\\Internal\\UnavailableSearchProvider",
@@ -16,6 +16,7 @@
   "package": "equipment/registry",
   "result": "PASS",
   "schema_version": "corex-equipment-consumer-receipt/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
   "vocabulary": "clean",
   "worker_restart": {
     "attribute": "serial",

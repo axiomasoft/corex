@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "argv": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "pgsql",
+        "pg_isready",
+        "-d",
+        "corex_test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "6e168fc3b5a0662104b5e5da92e87b870e8b7c65fec827d267115b5123d18614"
+    },
+    {
+      "argv": [
+        "pg_isready",
+        "-h",
+        "127.0.0.1",
+        "-p",
+        "5434",
+        "-d",
+        "corex_test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "b7f336de2f26ceef534674b3e6dc13dd026689a6ff8b24c7ebe5e5b9d7481962"
+    },
+    {
+      "argv": [
+        "php",
+        "-r",
+        "$db=getenv('PGSQL_DATABASE')?:'corex_test';$host=getenv('PGSQL_HOST')?:'127.0.0.1';$port=getenv('PGSQL_PORT')?:'5434';$pdo=new PDO('pgsql:host='.$host.';port='.$port.';dbname='.$db,getenv('PGSQL_USERNAME')?:'corex',getenv('PGSQL_PASSWORD')?:'corex');if($pdo->query('select current_database()')->fetchColumn()!==$db){exit(1);}"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "lint:check"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "0da44b1c1b772d0b0e421b5d99063bbc84791eb5955d62d43bc24651f67b2307"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "analyse"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "a46cec28a93ff8734fd3155fe0635d53186efe002fa39ea796aeac7c550cddfd"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "test"
+      ],
+      "disallowed_output": false,
+      "exit_code": 0,
+      "output_sha256": "46980f94084c4552a8470a5920770326c452121a4f209cd8a39fbcad1397f6e3"
+    },
+    {
+      "argv": [
+        "composer",
+        "--working-dir=packages/access",
+        "test:pg"
+      ],
+      "disallowed_output": false,
+      "exit_code": 2,
+      "output_sha256": "0b8db2382b8d0612e3ab9f6846a93e8a13a29528ff11757e967fdc17a0e415fa"
+    }
+  ],
+  "diagnostic": "qualification failed: composer --working-dir=packages/access test:pg",
+  "dirty_source": false,
+  "environment": {
+    "platform": "Linux",
+    "python": "3.12.3"
+  },
+  "external_writes": [],
+  "packet_emitted": false,
+  "red_assertions": [],
+  "result": "NO-GO",
+  "schema_version": "corex-release-preflight/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
+  "diagnostic_context": "Superseded diagnostic: two qualification processes overlapped on corex_test while tenancy rebuilt public schema; repeat the final matrix serially."
+}

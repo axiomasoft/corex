@@ -1,5 +1,5 @@
 ---
-id: D128
+id: D138
 date: 2026-09-27
 status: accepted
 item: P17.11
@@ -7,7 +7,7 @@ items: [P17.11]
 supersedes: []
 superseded_by: null
 ---
-# D128 — Authorized producer remediation for release preflight
+# D138 — Authorized producer remediation for release preflight
 
 **Actor:** owner + plan-exec/sol/effort-unverified
 **Evidence:** Exact owner follow-up `доделай` after the P17.11 NO-GO disclosure. The earlier explicit Sol authorization and model-verification waiver persist.
@@ -25,3 +25,5 @@ The owner explicitly asks to finish after seeing the concrete DOD-22/24/25 block
 ## Consequences
 
 P17.11's first attempt remains blocked in immutable history. A second execution attempt resumes with D128 as its authorization source. No phase re-entry, new design audit or release grant is inferred.
+
+**Carrier correction:** The P17.11 execution initially assigned D128, already used by P14.19. D138 preserves the exact accepted owner authorization; journal history is append-only and is clarified by the next observation.

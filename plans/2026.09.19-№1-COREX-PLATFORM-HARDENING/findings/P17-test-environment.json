@@ -1,0 +1,90 @@
+{
+  "schema_version": "corex-test-environment/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
+  "generated_at": "2026-09-27T17:22:01.266644+00:00",
+  "python": "3.12.3",
+  "versions": {
+    "php": {
+      "argv": [
+        "php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "version": "PHP 8.4.1 (cli) (built: Nov 21 2024 08:58:25) (NTS)",
+      "output_sha256": "283f64b2885a2bfe9838bb20a81b9f8a2311ff5c323a05f7066a0a6591129fd2"
+    },
+    "composer": {
+      "argv": [
+        "composer",
+        "--version"
+      ],
+      "exit_code": 0,
+      "version": "Composer version 2.8.3 2024-11-17 13:13:04",
+      "output_sha256": "67cd46e108af822d1f7d1cb4a3ce8ed55cd1922a6c6023f254392b4fee05696a"
+    },
+    "postgres": {
+      "argv": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "pgsql",
+        "psql",
+        "-U",
+        "corex",
+        "-d",
+        "corex_test",
+        "-Atc",
+        "SELECT version()"
+      ],
+      "exit_code": 0,
+      "version": "PostgreSQL 16.14 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "output_sha256": "ed73277d2db0e44351cec96477235ce19061de7029d709eb25cc3da0c4024639"
+    },
+    "redis": {
+      "argv": [
+        "docker",
+        "exec",
+        "corex_p1711_redis_test",
+        "redis-server",
+        "--version"
+      ],
+      "exit_code": 0,
+      "version": "Redis server v=7.4.9 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=b4acab9aea09546d",
+      "output_sha256": "5abf179170bfd439083891cc1b52df18913ec667f457b734513bd8d47b6ed78d"
+    },
+    "minio": {
+      "argv": [
+        "docker",
+        "exec",
+        "corex_p1711_minio_test",
+        "minio",
+        "--version"
+      ],
+      "exit_code": 0,
+      "version": "minio version RELEASE.2025-04-22T22-12-26Z (commit-id=0d7408fc9969caf07de6a8c3a84f9fbb10a6739e)",
+      "output_sha256": "17090a977bbe3ac584b3ba1e3d418d7d50feda5a422970905a98058d094ac5dc"
+    }
+  },
+  "postgres": {
+    "host": "127.0.0.1",
+    "port": 5434,
+    "database": "corex_test",
+    "mode": "host",
+    "migrations": "owned by serial package fixtures"
+  },
+  "native_services": {
+    "redis": {
+      "port": 16399,
+      "database": 15,
+      "container": "corex_p1711_redis_test"
+    },
+    "s3": {
+      "port": 19011,
+      "bucket": "corex-p1711-test",
+      "container": "corex_p1711_minio_test",
+      "credentials_persisted": false
+    }
+  },
+  "isolation": "PG matrix serial; mutation runs after all baseline tests; SDK absence child process modifies no vendor files"
+}
