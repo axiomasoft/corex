@@ -1,0 +1,39 @@
+# pplx-01 — Symfony BC promise: @api / @internal / @final
+
+- Tool: perplexity-web `search`
+- Date: 2026-09-27
+- Query: "PHP Symfony backward compatibility promise @api @internal @final classification — how does Symfony define public API vs internal for interfaces and classes?"
+- Status: provenance, not authority. Contract-changing claims verified against the primary source (symfony.com/doc/current/contributing/code/bc.html).
+
+## Answer (verbatim)
+
+Symfony’s BC promise is use-based, not visibility-based: a public PHP class or interface is generally covered unless Symfony explicitly marks it @internal (or it is in a *\Tests\ namespace). A symbol being public does not by itself make it supported API if it is marked internal. The current docs are for Symfony 8.1.
+
+## Interfaces
+
+- Interfaces shipped by Symfony can generally be used in type declarations, and their declared methods can be called.
+- Implementing a non-@internal Symfony interface is also covered: Symfony says it will not break code that implements it.
+- @internal interfaces are outside the promise and should neither be used nor implemented.
+So an interface is not “internal” just because it is low-level or in a component namespace: check its annotation.
+
+## Classes
+
+For non-internal classes, Symfony covers instantiating them and using their public methods and properties. It also explicitly covers extending them and overriding public or protected members. Classes, properties, or methods individually marked @internal are exceptions; so are classes in *\Tests\ namespaces.
+One nuance: if you extend a class, Symfony does not promise that it can safely add methods or properties to the parent—those additions could collide with members you added in your subclass.
+
+## What @final means
+
+@final is not the same as @internal. It does not remove a class from the public API or prevent instantiation/use; it signals that extending or overriding the marked symbol is not a supported extension point. Symfony’s contributor rules allow some changes that would otherwise break subclasses when a class or method is final.
+Symfony uses @final since Symfony x.y to announce that a symbol is intended to become final in the next major version. The annotation is transitional; in the next major, Symfony can replace it with native final or plain @final.
+
+## Practical reading
+
+- @internal: treat it as Symfony implementation detail; no minor-release BC guarantee.
+- No @internal: assume the documented class/interface usage is covered by the BC promise.
+- @final: usable API, but not a supported inheritance/override point.
+- @final since Symfony x.y: transitional warning—plan to stop extending/overriding it before the next major.
+Symfony promises BC across minor releases, while major releases may break it; experimental features and @internal code are excluded.
+
+## Sources
+
+1. https://symfony.com/doc/current/contributing/code/bc.html
