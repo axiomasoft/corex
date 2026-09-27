@@ -39,6 +39,147 @@ jobs:
       - name: Verify sealed public candidates
         run: python3 scripts/distribution/pristine-proof.py --laravel ${{ matrix.laravel }} ${{ matrix.arguments }}
 
+  extension-fixtures:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: External extension fixtures
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+          tools: composer
+      - name: Prove five standalone extension fixtures
+        run: python3 scripts/distribution/verify_extension_fixtures.py
+
+  api-clients:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: External REST and MCP clients
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove REST and MCP parity against committed snapshots
+        run: python3 scripts/distribution/verify_api_clients.py
+
+  async-clients:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: External bulk and webhook clients
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove bulk lifecycle and webhook verification
+        run: python3 scripts/distribution/verify_async_clients.py
+
+  equipment-consumer:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: Equipment registry consumer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+          tools: composer
+      - name: Prove the equipment registry against the frozen candidate
+        run: python3 scripts/distribution/verify_equipment_consumer.py
+
+  install-profiles:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: Pristine install profiles (${{ matrix.php }} ${{ matrix.mode }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.4'
+            mode: profiles
+          - php: '8.3'
+            mode: edges
+          - php: '8.5'
+            mode: edges
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+          POSTGRES_DB: corex_test
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+          tools: composer
+      - name: Prove install profiles from the frozen candidate
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5434
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+        run: python3 scripts/distribution/profile-proof.py --mode ${{ matrix.mode }} --php ${{ matrix.php }} --receipt ${{ runner.temp }}/profile-receipt.json --matrix ${{ runner.temp }}/profile-matrix.json
+
+  upgrade-proof:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    name: Supported-version upgrade proof
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+          POSTGRES_DB: corex_test
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          coverage: none
+          tools: composer
+      - name: Prove named upgrade failures
+        run: python3 -m unittest scripts.distribution.tests.test_upgrade_proof -q
+      - name: Prove upgrade from pinned baselines
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5434
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/distribution/upgrade-proof.py prove --receipt ${{ runner.temp }}/upgrade-receipt.json
+
   remaining-cohort-structural:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest

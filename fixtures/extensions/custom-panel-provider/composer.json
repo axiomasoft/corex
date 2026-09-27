@@ -1,0 +1,19 @@
+{
+    "name": "thirdparty/custom-panel-provider",
+    "description": "Standalone panel provider with a deterministic descriptor and freeze.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "corex/core": "^1.0",
+        "corex/modules": "^1.0",
+        "corex/panels": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThirdParty\\Panels\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

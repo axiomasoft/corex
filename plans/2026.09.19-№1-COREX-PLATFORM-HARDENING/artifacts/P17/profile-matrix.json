@@ -1,0 +1,428 @@
+{
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "cells": [
+    {
+      "id": "bare-single-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/core"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "bare-single",
+      "status": "passed"
+    },
+    {
+      "id": "bare-single-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/core"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "bare-single",
+      "status": "passed"
+    },
+    {
+      "id": "modular-single-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/attributes",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-single",
+      "status": "passed"
+    },
+    {
+      "id": "modular-single-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/attributes",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-single",
+      "status": "passed"
+    },
+    {
+      "id": "modular-multi-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/attributes",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-multi",
+      "status": "passed"
+    },
+    {
+      "id": "modular-multi-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/attributes",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-multi",
+      "status": "passed"
+    },
+    {
+      "id": "worker-only-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/core",
+        "corex/wakeup",
+        "corex/workflow",
+        "corex/tasks",
+        "corex/tasks-workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "worker-only",
+      "status": "passed"
+    },
+    {
+      "id": "worker-only-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/core",
+        "corex/wakeup",
+        "corex/workflow",
+        "corex/tasks",
+        "corex/tasks-workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "worker-only",
+      "status": "passed"
+    },
+    {
+      "id": "search-portable-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/core",
+        "corex/search",
+        "corex/search-intl"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "search-portable",
+      "status": "passed"
+    },
+    {
+      "id": "search-portable-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/core",
+        "corex/search",
+        "corex/search-intl"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "search-portable",
+      "status": "passed"
+    },
+    {
+      "id": "full-corex-php8.4-l12",
+      "kind": "profile",
+      "laravel": 12,
+      "packages": [
+        "corex/access",
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "full-corex",
+      "status": "passed"
+    },
+    {
+      "id": "full-corex-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/access",
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "full-corex",
+      "reason": "corex/access constraint ^12.0",
+      "status": "excluded"
+    },
+    {
+      "edge": "min",
+      "id": "edge-min-php8.3-l12-corex/access",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "max",
+      "id": "edge-max-php8.5-l12-corex/access",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-l12-corex/access",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "status": "passed"
+    },
+    {
+      "id": "edge-excluded-l13-corex/access",
+      "kind": "edge",
+      "laravel": 13,
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "reason": "corex/access constraint ^12.0",
+      "status": "excluded"
+    },
+    {
+      "edge": "min",
+      "id": "edge-min-php8.3-l12-corex/attributes",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "max",
+      "id": "edge-max-php8.5-l13-corex/attributes",
+      "kind": "edge",
+      "laravel": 13,
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-l12-corex/attributes",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "status": "passed"
+    },
+    {
+      "edge": "min",
+      "id": "edge-min-php8.3-lnone-corex/recurrence",
+      "kind": "edge",
+      "laravel": null,
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "max",
+      "id": "edge-max-php8.5-lnone-corex/recurrence",
+      "kind": "edge",
+      "laravel": null,
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-lnone-corex/recurrence",
+      "kind": "edge",
+      "laravel": null,
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "status": "passed"
+    },
+    {
+      "edge": "min",
+      "id": "edge-min-php8.4-l12-corex/tenancy",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "max",
+      "id": "edge-max-php8.5-l13-corex/tenancy",
+      "kind": "edge",
+      "laravel": 13,
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "status": "passed"
+    },
+    {
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.4-l12-corex/tenancy",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.4",
+      "prefer_lowest": true,
+      "status": "passed"
+    },
+    {
+      "id": "edge-excluded-php8.3-corex/tenancy",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.3",
+      "reason": "corex/tenancy php constraint ^8.4",
+      "status": "excluded"
+    }
+  ],
+  "schema_version": "corex-profile-matrix/1"
+}

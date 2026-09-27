@@ -16,3 +16,24 @@
   source-linked `active-handoff`, while progress, test logs and plan prose stay in the repo.
 - Preserve unrelated worktree changes. Validate the affected scope with the
   relevant Composer scripts (`lint:check`, `analyse`, `test`, or package gates).
+
+<!-- swissknifeman:hub:start -->
+<!-- swissknifeman hub: stub — скиллы и task-команды подключаются нативно; индекс и правила приоритета здесь не дублируются. -->
+<!-- swissknifeman:registry sha=5b8274432dfe skills=232 -->
+<!-- Полный индекс: `skiller status` или generate-hub.sh --target <dir> --full-index. -->
+<!-- swissknifeman:hub:end -->
+<!-- maind:healthcheck hash=2bb4346a5dd4 (managed by maind — не редактировать вручную) -->
+## ⚠ ПРИОРИТЕТ №1 — связь с mAInd (общая память + граф)
+
+Перед началом работы убедись, что проект подключён к хабу **mAInd**. Это критично:
+без связи изменения этой сессии **не попадут** в общую память и граф — в истории
+разработки появятся невосстановимые пробелы, и дальнейшие связи будет не вывести.
+
+1. Проверь связь: `maind health --cwd`
+2. Если статус `partial` / `standalone` — почини: `maind health --cwd --fix`
+   (поднимет демон памяти и допишет MCP-серверы хаба в этот проект).
+3. Приступай к задаче только при статусе `connected`.
+
+Память **общая** (демон mAInd), scope этого проекта — `project:corex`; факты всей экосистемы — в
+scope `global`. Связи проекта с остальными: `maind graph --project corex`.
+<!-- /maind:healthcheck -->

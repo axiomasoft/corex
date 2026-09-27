@@ -1,0 +1,74 @@
+{
+  "schema_version": "corex-install-profiles/1",
+  "profiles": [
+    {
+      "id": "bare-single",
+      "packages": ["corex/core"],
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "corex/modules", "name": "modules"},
+        {"package": "corex/tenancy", "name": "tenancy"},
+        {"package": "corex/search-meilisearch", "name": "Meilisearch"},
+        {"package": "corex/search-intl", "name": "Search Intl"}
+      ]
+    },
+    {
+      "id": "modular-single",
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/attributes",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "database": "sqlite-single",
+      "http": true,
+      "forbid": []
+    },
+    {
+      "id": "modular-multi",
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/attributes",
+        "corex/workflow"
+      ],
+      "database": "postgres-two",
+      "http": true,
+      "forbid": []
+    },
+    {
+      "id": "worker-only",
+      "packages": [
+        "corex/core",
+        "corex/wakeup",
+        "corex/workflow",
+        "corex/tasks",
+        "corex/tasks-workflow"
+      ],
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": []
+    },
+    {
+      "id": "search-portable",
+      "packages": ["corex/core", "corex/search", "corex/search-intl"],
+      "database": "sqlite-single",
+      "http": false,
+      "remove": ["corex/search-intl"],
+      "forbid": [
+        {"package": "corex/search-meilisearch", "name": "Meilisearch"}
+      ]
+    },
+    {
+      "id": "full-corex",
+      "packages": ["*"],
+      "database": "sqlite-single",
+      "http": true,
+      "forbid": []
+    }
+  ]
+}

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-27
-inputs_sha256: 99c115956e14bfce54712d2783d93f380791ae5e26c62fd3136492c2b7e7b0f8
+inputs_sha256: 3e2dffc0cbca6709b8a64871cc7c4b752c6448d4f0d486fbe7f17f349cade6be
 generated_by: task plan-views status
 -->
 
@@ -31,7 +31,7 @@ generated_by: task plan-views status
 | P14 | Нагрузочный контур API: стоимость, bulk, webhooks | 21/21 | 🟢 Done |
 | P15 | Раскатка словаря имён по реестру переименований | 14/14 | 🟢 Done |
 | P16 | Раскатка профилей структуры по остальным пакетам | 13/13 | 🟢 Done |
-| P17 | Доказательства универсальности и Definition of Done 1.0 | 1/12 | 🟡 In progress |
+| P17 | Доказательства универсальности и Definition of Done 1.0 | 6/12 | 🟡 In progress |
 | P2 | Машинная инвентаризация: файлы, символы, графы, таблицы, конфигурация | 6/6 | 🟢 Done |
 | P3 | Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура | 7/7 | 🟢 Done |
 | P4 | Durable-граница и контекст исполнения | 12/12 | 🟢 Done |
@@ -177,11 +177,11 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P17.1 | Frozen release cohort and deterministic candidate repository | 🟢 Done | 2026-09-27 |
-| P17.2 | External extension fixture matrix | ⬜ Not started | — |
-| P17.3 | External REST and MCP consumers | ⬜ Not started | — |
-| P17.4 | External bulk and webhook consumers | ⬜ Not started | — |
-| P17.5 | Independent equipment-registry consumer | ⬜ Not started | — |
-| P17.6 | Pristine installation and compatibility profiles | ⬜ Not started | — |
+| P17.2 | External extension fixture matrix | 🟢 Done | 2026-09-27 |
+| P17.3 | External REST and MCP consumers | 🟢 Done | 2026-09-27 |
+| P17.4 | External bulk and webhook consumers | 🟢 Done | 2026-09-27 |
+| P17.5 | Independent equipment-registry consumer | 🟢 Done | 2026-09-27 |
+| P17.6 | Pristine installation and compatibility profiles | 🟢 Done | 2026-09-27 |
 | P17.7 | Supported-version upgrade proof | ⬜ Not started | — |
 | P17.8 | Final scorecard and documentation/public-example contract | ⬜ Not started | — |
 | P17.9 | Normative 27-row DoD manifest and generated document | ⬜ Not started | — |
@@ -739,6 +739,16 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-27 | plan-exec/direct/medium | plan-exec · closed-green · P16.8 GREEN from findings/P16-move-receipts.md (E16c). The move session left no journal row; P16.13 records it. |
 | 2026-09-27 | executor/gpt-5.6-sol/high | plan-exec · in-progress · — |
 | 2026-09-27 | executor/gpt-5.6-sol/high | plan-exec · closed-green · P17.1 GREEN: 19-package post-P15 cohort frozen from committed source; deterministic dist-only repository rebuilt twice; strict Composer validation and exact 1.0.0 lookup pass; negative matrix pass; no external writes. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.2 GREEN: five dist-only fixtures pass P11 and behavior in both orders; missing dependency and Internal import are red; autoload has no workspace path. write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.3 GREEN: REST query, command, replay, cursor and both error media match MCP notes.create; four ResourceIds round-trip; revocation keeps one effect; stale digest, unexpected field and GraphQL fail. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.4 GREEN: bulk import completes with one row failure and cancel keeps that effect. Webhook signature, tamper, duplicate and retention hold; snapshot mismatch and the empty committed topic list fail before an effect. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.5 GREEN: equipment registry installs from the frozen candidate, boots, and completes attribute, index, partial import and maintenance across a worker restart. Internal import and flex/crm fail; vocabulary scan is clean. |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · in-progress · — |
+| 2026-09-27 | plan-run/grok-4.7/high | plan-run · closed-green · P17.6 GREEN: six install profiles and declared PHP/Laravel edges boot from the frozen candidate. Owner waived executor verification; route is grok-4.7/high via cursor-explicit-attestation-v1. |
 
 ## Owner Gates
 

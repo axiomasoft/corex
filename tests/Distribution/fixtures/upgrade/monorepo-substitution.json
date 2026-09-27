@@ -1,0 +1,8 @@
+{
+  "classification": "upgraded",
+  "channel": "monorepo-tag",
+  "immutable_ref": "5db31fd4aebf1dcd172754479ad9cf9da59719d6",
+  "archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "prior_version": "1.0.0",
+  "reason": "monorepo tag used in place of a package release"
+}

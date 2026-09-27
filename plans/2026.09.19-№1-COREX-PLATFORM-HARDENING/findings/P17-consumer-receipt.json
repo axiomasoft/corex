@@ -1,0 +1,28 @@
+{
+  "autoload_workspace": false,
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "fingerprint": "cd5bf01172e4a2b57b0fde50786e0139d7ef3d08a623171d52ecb3e6eb47fd7a",
+  "flex_dependency": "rejected",
+  "internal_import": "equipment/registry imports forbidden CoreX\\Search\\Internal\\UnavailableSearchProvider",
+  "item": "P17.5",
+  "lower_level_packages": [
+    "corex/attributes",
+    "corex/core",
+    "corex/modules",
+    "corex/search",
+    "corex/transfer",
+    "corex/workflow"
+  ],
+  "package": "equipment/registry",
+  "result": "PASS",
+  "schema_version": "corex-equipment-consumer-receipt/1",
+  "vocabulary": "clean",
+  "worker_restart": {
+    "attribute": "serial",
+    "failed": "missing-serial",
+    "found": "eq-1",
+    "imported": 1,
+    "maintenance": "completed",
+    "serial": "pump-1"
+  }
+}

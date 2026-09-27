@@ -1,0 +1,19 @@
+{
+    "name": "thirdparty/custom-transfer-codec",
+    "description": "Standalone transfer source, sink and codec with a checkpointed partial failure.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "corex/core": "^1.0",
+        "corex/modules": "^1.0",
+        "corex/transfer": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThirdParty\\Transfer\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

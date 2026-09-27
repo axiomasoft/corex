@@ -1,0 +1,58 @@
+{
+  "schema_version": "corex-extension-fixture-receipt/1",
+  "item": "P17.2",
+  "result": "PASS",
+  "candidate_sha256": "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10",
+  "fixtures": [
+    {
+      "package": "thirdparty/custom-search-provider",
+      "contract": "pass",
+      "fingerprint": "4e88e76f5f00993e2caaaaa59963ee10e98c7da9193a90e24a4bf58453319ec0",
+      "behavior_orders": ["original", "reversed"],
+      "internal_import": "thirdparty/custom-search-provider imports forbidden CoreX\\Search\\Internal\\UnavailableSearchProvider",
+      "autoload_workspace": false,
+      "missing_dependency": "probe-rejected",
+      "id": "custom-search-provider"
+    },
+    {
+      "package": "thirdparty/custom-attribute-source",
+      "contract": "pass",
+      "fingerprint": "ba808bd3bcedad71ba4fb9660198eb44b1ba9a3d88ae48d55c1d56e643bbd49b",
+      "behavior_orders": ["original", "reversed"],
+      "internal_import": "thirdparty/custom-attribute-source imports forbidden CoreX\\Attributes\\Internal\\UnavailableAttributes",
+      "autoload_workspace": false,
+      "missing_dependency": "probe-rejected",
+      "id": "custom-attribute-source"
+    },
+    {
+      "package": "thirdparty/custom-transfer-codec",
+      "contract": "pass",
+      "fingerprint": "c5f2b4d54c5b5b481064bb7301b7529fb1de5dd36420e2fcb1c46845fee42a89",
+      "behavior_orders": ["original", "reversed"],
+      "internal_import": "thirdparty/custom-transfer-codec imports forbidden CoreX\\Transfer\\Internal\\Codecs\\NdjsonCodec",
+      "autoload_workspace": false,
+      "missing_dependency": "probe-rejected",
+      "id": "custom-transfer-codec"
+    },
+    {
+      "package": "thirdparty/custom-panel-provider",
+      "contract": "pass",
+      "fingerprint": "ecf5ae088e6c55a8bab31fc9ab8e8e31de664a65a21f2d1f61445a7a75d4135c",
+      "behavior_orders": ["original", "reversed"],
+      "internal_import": "thirdparty/custom-panel-provider imports forbidden CoreX\\Panels\\Internal\\ModulePanelCatalogue",
+      "autoload_workspace": false,
+      "missing_dependency": "probe-rejected",
+      "id": "custom-panel-provider"
+    },
+    {
+      "package": "thirdparty/custom-workflow-activity",
+      "contract": "pass",
+      "fingerprint": "ec1a05c05ac2b30784698a548963d8ce2770511247aa60c1f6c257c79d49b4d5",
+      "behavior_orders": ["original", "reversed"],
+      "internal_import": "thirdparty/custom-workflow-activity imports forbidden CoreX\\Workflow\\Internal\\WorkflowDefinitionStamp",
+      "autoload_workspace": false,
+      "missing_dependency": "probe-rejected",
+      "id": "custom-workflow-activity"
+    }
+  ]
+}
