@@ -130,7 +130,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Api\\Contracts",
                 "CoreX\\Api\\Data"

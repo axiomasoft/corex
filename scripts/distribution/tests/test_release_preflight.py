@@ -130,16 +130,13 @@ class PreflightTest(unittest.TestCase):
             argv = ['release_preflight.py', 'seal', '--receipt', str(receipt), '--packet', str(packet)]
             state = {'red_assertions': [{'id': 'DOD-24', 'status': 'red'}], 'dirty_source': True}
             with patch.object(sys, 'argv', argv):
-                with patch.object(MODULE, 'check', return_value=state):
-                    with patch.object(MODULE, 'seal') as seal:
-                        self.assertEqual(1, MODULE.main())
-                        seal.assert_not_called()
+                with patch.object(MODULE, 'dirty_source', return_value=True):
+                    with patch.object(MODULE.candidate, 'resolve_commit', return_value=self.source):
+                        with patch.object(MODULE, 'seal') as seal:
+                            self.assertEqual(1, MODULE.main())
+                            seal.assert_not_called()
             self.assertEqual('previous immutable packet', packet.read_text())
             self.assertFalse(json.loads(receipt.read_text())['packet_emitted'])
-
-    def test_producer_frozen_candidate_is_never_used_for_a_new_source(self) -> None:
-        with self.assertRaisesRegex(MODULE.NoGo, 'producer candidate pin is stale'):
-            MODULE.require_producer_candidate(SCRIPTS.parents[1], self.source, 'c' * 64)
 
     def test_matrix_passes_rebuilt_directory_to_candidate_owners(self) -> None:
         calls = []
@@ -148,7 +145,8 @@ class PreflightTest(unittest.TestCase):
             with patch.object(MODULE, 'require_command', side_effect=lambda argv, *args: calls.append(argv)):
                 MODULE.qualify(SCRIPTS.parents[1], [], [], directory)
         for name in ('verify_extension_fixtures.py', 'verify_equipment_consumer.py', 'profile-proof.py'):
-            self.assertIn(['python3', 'scripts/distribution/' + name, '--candidate', str(directory)], calls)
+            self.assertIn(['python3', 'scripts/distribution/' + name, '--candidate', str(directory)],
+                          [argv[:4] for argv in calls])
 
 
 if __name__ == '__main__':

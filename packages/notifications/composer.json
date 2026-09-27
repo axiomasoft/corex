@@ -57,7 +57,7 @@
             "schema-version": 1,
             "module": "CoreX\\Notifications\\NotificationsModule",
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Notifications\\Contracts",
                 "CoreX\\Notifications\\Data"

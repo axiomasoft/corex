@@ -31,7 +31,7 @@
             "schema-version": 1,
             "module": "CoreX\\Panels\\PanelsModule",
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Panels\\Contracts",
                 "CoreX\\Panels\\Data"

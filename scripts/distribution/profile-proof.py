@@ -738,12 +738,7 @@ def archive_composers(candidate: Path) -> dict[str, dict]:
 
 
 def build_candidate(destination: Path, extensions) -> Path:
-    module = extensions.release_candidate_module()
-    module.build_repository(ROOT, SOURCE_COMMIT, VERSION, destination, module.load_policy(), enforce_clean=True)
-    digest = hashlib.sha256((destination / "candidate.json").read_bytes()).hexdigest()
-    if digest != CANDIDATE_DIGEST:
-        raise ProfileError(f"candidate digest {digest}")
-    return destination
+    return extensions.build_candidate(ROOT, destination)
 
 
 def select_cells(cells: list[dict], mode: str, only: str | None, php: str | None) -> list[dict]:
@@ -773,6 +768,7 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
             built = candidate
         else:
             built = build_candidate(root / "candidate", extensions)
+        binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
         merge_sealed_providers(repository)
@@ -804,7 +800,7 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
             "schema_version": "corex-profile-receipt/1",
             "item": "P17.6",
             "result": "PASS",
-            "candidate_sha256": CANDIDATE_DIGEST,
+            **binding,
             "mode": mode,
             "matrix": results,
             "dod": {

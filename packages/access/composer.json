@@ -45,7 +45,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Auth\\Contracts",
                 "CoreX\\Auth\\Enums",

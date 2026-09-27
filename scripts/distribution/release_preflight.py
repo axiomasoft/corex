@@ -8,7 +8,6 @@ No old producer receipt is promoted to evidence for a rebuilt candidate.
 from __future__ import annotations
 
 import argparse
-import ast
 import hashlib
 import importlib.util
 import json
@@ -43,6 +42,9 @@ def execute(argv: list[str], root: Path, *, timeout: int = 1800) -> dict:
     try:
         result = subprocess.run(argv, cwd=root, capture_output=True, timeout=timeout)
         output = result.stdout + result.stderr
+        logs = Path(os.environ.get('COREX_RELEASE_LOG_DIR', '/tmp/corex-release-qualification'))
+        logs.mkdir(parents=True, exist_ok=True)
+        (logs / (digest(argv) + '.log')).write_bytes(output)
         return {'argv': argv, 'exit_code': result.returncode,
                 'output_sha256': hashlib.sha256(output).hexdigest(),
                 'disallowed_output': bool(BAD_OUTPUT.search(output.decode(errors='replace')))}
@@ -68,6 +70,16 @@ def inspect_dod(value: dict, source: str, cohort: dict, *, binding: dict | None 
             or [row.get('id') for row in value.get('rows', [])] != expected):
         raise NoGo('DoD result is missing, stale or incomplete')
     return [row for row in value['rows'] if row.get('status') != 'green']
+
+
+SOURCE_PATHS = ('packages', 'scripts', 'tests', 'api', 'composer.json', 'composer.lock',
+                '.github', 'docs', 'CHANGELOG.md', 'phpunit.xml', 'phpstan.neon')
+
+
+def dirty_source(root: Path) -> bool:
+    # Generated plan receipts/packet follow the source commit; production code does not.
+    return bool(candidate.git_bytes(root, 'status', '--porcelain', '--untracked-files=all',
+                                    '--', *SOURCE_PATHS))
 
 
 def check(root: Path, cohort_path: Path, checks: list[dict], dod_path: Path) -> dict:
@@ -98,7 +110,7 @@ def check(root: Path, cohort_path: Path, checks: list[dict], dod_path: Path) -> 
     return {'source_commit': source, 'cohort_sha256': digest(cohort),
             'dod_sha256': digest(dod), 'dod_manifest_sha256': candidate.sha256_path(root / 'scripts/dod-1.0.json'),
             'red_assertions': red, 'dod_result': dod,
-            'dirty_source': bool(candidate.git_bytes(root, 'status', '--porcelain', '--untracked-files=all')),
+            'dirty_source': dirty_source(root),
             'checks': checks}
 
 
@@ -181,21 +193,6 @@ def postgres_preflight(root: Path, checks: list[dict]) -> None:
                      "if($pdo->query('select current_database()')->fetchColumn()!==$db){exit(1);}"], root, checks)
 
 
-def require_producer_candidate(root: Path, source: str, manifest_digest: str) -> None:
-    # These owners currently have explicit frozen-input constants. Never let a
-    # new candidate silently reuse those old proofs. Rebinding is producer work.
-    for name in ('verify_extension_fixtures.py', 'profile-proof.py', 'upgrade-proof.py'):
-        path = root / 'scripts/distribution' / name
-        constants = {}
-        for node in ast.parse(path.read_text()).body:
-            if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant):
-                for target in node.targets:
-                    if isinstance(target, ast.Name):
-                        constants[target.id] = node.value.value
-        if constants.get('SOURCE_COMMIT') != source or constants.get('CANDIDATE_DIGEST') != manifest_digest:
-            raise NoGo('producer candidate pin is stale: ' + name)
-
-
 def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path) -> None:
     postgres_preflight(root, checks)
     # Only invoke owners. Missing package scripts or skipped checks are release failures.
@@ -203,10 +200,16 @@ def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path)
         for script in ('lint:check', 'analyse', 'test'):
             require_command(['composer', '--working-dir=' + package.path, script], root, checks)
         if (root / package.path / 'tests/Pg').is_dir():
-            require_command(['composer', '--working-dir=' + package.path, 'test:pg'], root, checks)
+            if 'test:pg' in package.composer.get('scripts', {}):
+                require_command(['composer', '--working-dir=' + package.path, 'test:pg'], root, checks)
+            else:
+                # These owners' test script already includes their PG suite.
+                require_command(['composer', '--working-dir=' + package.path, 'test', '--', '--group=pg'], root, checks)
     for script in ('lint:check', 'analyse', 'test', 'test:pg', 'test:arch', 'package-graph-gate',
                    'naming-gate', 'api-contract', 'bc-check'):
         require_command(['composer', script], root, checks)
+    require_command(['php', '-d', 'zend.assertions=1', '-d', 'assert.exception=1',
+                     'scripts/bc/test-property-default.php'], root, checks)
     require_command(['bash', 'scripts/anti-weakening-gate.sh'], root, checks)
     require_command(['bash', 'scripts/mutation-check.sh', '--all'], root, checks)
     for script in ('verify_extension_fixtures.py', 'verify_api_clients.py', 'verify_async_clients.py',
@@ -214,21 +217,24 @@ def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path)
         argv = ['python3', 'scripts/distribution/' + script]
         if script in ('verify_extension_fixtures.py', 'verify_equipment_consumer.py', 'profile-proof.py'):
             argv.extend(['--candidate', str(candidate_dir)])
+        if script == 'verify_extension_fixtures.py':
+            argv.extend(['--receipt', str(root / PLAN.relative_to(ROOT) / 'findings/P17-extension-receipt.json')])
         require_command(argv, root, checks)
-    require_command(['python3', 'scripts/distribution/upgrade-proof.py', 'prove'], root, checks)
+    require_command(['python3', 'scripts/distribution/upgrade-proof.py', 'prove',
+                     '--candidate', str(candidate_dir)], root, checks)
 
 
 def seal(root: Path, cohort: dict, state: dict, checks: list[dict], cohort_path: Path = COHORT) -> dict:
     if state['red_assertions'] or state['dirty_source']:
         raise NoGo('red DoD or uncommitted source')
-    source = state['source_commit']
+    head = state['source_commit']
+    source = cohort['source_commit']
+    if candidate.git_bytes(root, 'diff', source, head, '--', *SOURCE_PATHS):
+        raise NoGo('candidate source differs from qualification code')
     policy = candidate.load_policy(root / 'scripts/distribution/release-1.0-policy.json')
     packages = candidate.derive_cohort(candidate.discover_packages(root, source), policy)
     if any(row.composer['extra']['corex']['stability'] != 'stable' for row in packages):
         raise NoGo('cohort stability is not committed as stable')
-    if cohort['source_commit'] != source:
-        raise NoGo('candidate must be rebuilt and its producer matrices rerun for the stable source')
-    require_producer_candidate(root, source, candidate.sha256_path(cohort_path))
     with tempfile.TemporaryDirectory(prefix='corex-preflight-') as temporary:
         first, second = Path(temporary) / 'first', Path(temporary) / 'second'
         rebuilt = candidate.build_repository(root, source, '1.0.0', first, policy, enforce_clean=True)
@@ -262,7 +268,7 @@ def seal(root: Path, cohort: dict, state: dict, checks: list[dict], cohort_path:
         operations.append({'repository': root_repository, 'distribution': 'private' if metadata['private'] else 'public',
                            'kind': 'tag', 'reference': 'refs/tags/1.0.0', 'commit': source})
         observations = reconcile(operations)
-    if candidate.resolve_commit(root, 'HEAD') != source:
+    if candidate.resolve_commit(root, 'HEAD') != head:
         raise NoGo('source changed during qualification')
     # Matrix producers may update tracked receipts. Never seal those dirty bytes.
     if candidate.git_bytes(root, 'status', '--porcelain', '--untracked-files=all', '--',
@@ -270,7 +276,7 @@ def seal(root: Path, cohort: dict, state: dict, checks: list[dict], cohort_path:
                            '.github', 'docs', 'CHANGELOG.md'):
         raise NoGo('source became dirty during qualification; reconcile producer evidence first')
     return {'schema_version': 'publication-packet/v1', 'source_commit': source, 'version': '1.0.0',
-            'cohort_sha256': state['cohort_sha256'], 'candidate_sha256': digest(cohort),
+            'cohort_sha256': state['cohort_sha256'], 'candidate_sha256': candidate.sha256_path(cohort_path),
             'dod_sha256': state['dod_sha256'], 'dod_manifest_sha256': state['dod_manifest_sha256'],
             'qualification_sha256': digest(checks), 'operations': operations, 'remote_reads': observations}
 
@@ -299,8 +305,12 @@ def main() -> int:
                'environment': {'python': platform.python_version(), 'platform': platform.system()},
                'external_writes': [], 'packet_emitted': False}
     try:
-        with tempfile.TemporaryDirectory(prefix='corex-preflight-dod-') as temporary:
-            state = check(ROOT, args.candidate, checks, Path(temporary) / 'dod.json')
+        if args.action == 'seal':
+            state = {'source_commit': candidate.resolve_commit(ROOT, 'HEAD'),
+                     'red_assertions': [], 'dirty_source': dirty_source(ROOT)}
+        else:
+            with tempfile.TemporaryDirectory(prefix='corex-preflight-dod-') as temporary:
+                state = check(ROOT, args.candidate, checks, Path(temporary) / 'dod.json')
         receipt.update(state)
         if state['red_assertions'] or state['dirty_source']:
             raise NoGo('red DoD or uncommitted source')

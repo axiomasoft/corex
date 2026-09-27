@@ -6,7 +6,7 @@
   "require": {"php": "^8.3", "corex/core": "@dev", "corex/modules": "@dev", "illuminate/contracts": "^12.0|^13.0", "illuminate/database": "^12.0|^13.0", "illuminate/support": "^12.0|^13.0", "psr/clock": "^1.0"},
   "autoload": {"psr-4": {"CoreX\\Wakeup\\": "src/"}},
   "autoload-dev": {"classmap": ["tests"]},
-  "extra": {"corex": {"schema-version": 1, "module": "CoreX\\Wakeup\\WakeupModule", "package-type": "capability", "stability": "experimental", "public-api": ["CoreX\\Wakeup\\Contracts", "CoreX\\Wakeup\\Data"]}, "laravel": {"providers": ["CoreX\\Wakeup\\WakeupServiceProvider"]}},
+  "extra": {"corex": {"schema-version": 1, "module": "CoreX\\Wakeup\\WakeupModule", "package-type": "capability", "stability": "stable", "public-api": ["CoreX\\Wakeup\\Contracts", "CoreX\\Wakeup\\Data"]}, "laravel": {"providers": ["CoreX\\Wakeup\\WakeupServiceProvider"]}},
   "repositories": [{"type": "path", "url": "../core"}, {"type": "path", "url": "../modules"}],
   "minimum-stability": "dev",
   "prefer-stable": true,

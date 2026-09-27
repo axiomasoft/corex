@@ -274,11 +274,7 @@ def candidate_binding(path: Path, root: Path) -> dict[str, str]:
         raise DodError("candidate JSON is missing source_commit")
     digest = document.get("candidate_sha256")
     if not isinstance(digest, str):
-        pointer = root / CANDIDATE_RECEIPT
-        if pointer.is_file() and pointer.resolve() != path.resolve():
-            sibling = load_json(pointer)
-            if isinstance(sibling, dict) and isinstance(sibling.get("candidate_sha256"), str):
-                digest = sibling["candidate_sha256"]
+        digest = sha256_file(path)
     if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
         digest = sha256_file(path)
     return {

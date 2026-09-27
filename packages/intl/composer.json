@@ -64,7 +64,7 @@
             "schema-version": 1,
             "module": "CoreX\\Intl\\IntlModule",
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Intl\\Contracts",
                 "CoreX\\Intl\\Data",

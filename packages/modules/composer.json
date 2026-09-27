@@ -40,7 +40,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "foundation",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Modules\\Contracts",
                 "CoreX\\Modules\\Data",

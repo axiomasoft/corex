@@ -181,6 +181,7 @@ def selected_fixtures(only: str | None) -> tuple[dict, ...]:
 
 
 def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> dict:
+    binding = candidate_binding(candidate)
     rows = []
     with tempfile.TemporaryDirectory(prefix="corex-extension-fixtures-") as temporary:
         root = Path(temporary)
@@ -204,7 +205,7 @@ def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> 
         "schema_version": "corex-extension-fixture-receipt/1",
         "item": "P17.2",
         "result": "PASS",
-        "candidate_sha256": CANDIDATE_DIGEST,
+        **binding,
         "fixtures": rows,
     }
     if any(row["contract"] != "pass" or row["internal_import"] != forbidden_diagnostic(row["package"], next(spec["forbidden"] for spec in FIXTURES if spec["package"] == row["package"])) for row in rows):
@@ -223,12 +224,23 @@ def release_candidate_module():
     return module
 
 
+def candidate_binding(directory: Path) -> dict:
+    """Validate dist bytes before binding a proof to its actual candidate."""
+    module = release_candidate_module()
+    path = directory / "candidate.json"
+    document = module.verify_candidate(path, ROOT, composer_checks=False)
+    return {"source_commit": document["source_commit"],
+            "candidate_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+
+
 def build_candidate(root: Path, output: Path) -> Path:
     module = release_candidate_module()
-    module.build_repository(root, SOURCE_COMMIT, "1.0.0", output, module.load_policy(), enforce_clean=True)
+    frozen = root / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json"
+    manifest = module.load_json(frozen)
+    module.build_repository(root, manifest["source_commit"], "1.0.0", output, module.load_policy(), enforce_clean=True)
     digest = hashlib.sha256((output / "candidate.json").read_bytes()).hexdigest()
-    if digest != CANDIDATE_DIGEST:
-        raise SystemExit(f"candidate digest {digest} does not match the frozen P17.1 digest")
+    if digest != hashlib.sha256(frozen.read_bytes()).hexdigest():
+        raise SystemExit(f"candidate digest {digest} does not match the frozen candidate digest")
     return output
 
 
@@ -236,6 +248,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--only")
+    parser.add_argument("--receipt", type=Path)
     args = parser.parse_args()
     if args.candidate:
         receipt = verify(args.candidate, only=args.only)
@@ -243,6 +256,9 @@ def main() -> int:
         with tempfile.TemporaryDirectory(prefix="corex-extension-candidate-") as temporary:
             candidate = build_candidate(ROOT, Path(temporary) / "candidate")
             receipt = verify(candidate, only=args.only)
+    if args.receipt:
+        args.receipt.parent.mkdir(parents=True, exist_ok=True)
+        args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
     print(json.dumps(receipt, indent=2))
     return 0 if receipt["result"] == "PASS" else 1
 

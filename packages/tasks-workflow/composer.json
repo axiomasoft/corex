@@ -38,7 +38,7 @@
             "schema-version": 1,
             "module": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
             "package-type": "integration",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\TasksWorkflow\\Contracts",
                 "CoreX\\TasksWorkflow\\Data",

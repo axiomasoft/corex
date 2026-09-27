@@ -77,6 +77,7 @@ def prove(candidate: Path) -> dict:
             built = candidate
         else:
             built = extensions.build_candidate(ROOT, output)
+        binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
         home = root / "composer-home"
@@ -122,7 +123,7 @@ def prove(candidate: Path) -> dict:
         "schema_version": "corex-equipment-consumer-receipt/1",
         "item": "P17.5",
         "result": "PASS",
-        "candidate_sha256": extensions.CANDIDATE_DIGEST,
+        **binding,
         "package": PACKAGE,
         "fingerprint": contract["fingerprint"],
         "internal_import": contract["internal_import"],

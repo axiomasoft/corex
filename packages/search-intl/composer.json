@@ -31,7 +31,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "integration",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\SearchIntl\\Contracts",
                 "CoreX\\SearchIntl\\Data"

@@ -116,7 +116,7 @@ $walk=function(string $d) use (&$walk,&$seen,&$q,$r,$map){
   $path="$r/packages/$d/composer.json";
   if(!is_file($path)) return;
   $j=json_decode(file_get_contents($path),true);
-  foreach(array_keys($j["require"]??[]) as $req){
+  foreach(array_keys(array_merge($j["require"]??[],$j["require-dev"]??[])) as $req){
     if(!str_starts_with($req,"corex/")&&!str_starts_with($req,"flex/")) continue;
     if(!isset($map[$req])) continue;
     $dep=$map[$req];
@@ -161,6 +161,9 @@ $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $archived=getenv("BC_WORK")."/packages/$d/composer.json";
 $pkg=json_decode(file_get_contents(is_file($archived)?$archived:"$r/packages/$d/composer.json"),true);
 $requireDev=[];
+foreach($pkg["require-dev"]??[] as $name=>$constraint){
+  if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+}
 $src="$r/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
@@ -214,6 +217,11 @@ foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   $mapped=[];
   foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
   $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
+}
+foreach(["classmap","files","exclude-from-classmap"] as $kind){
+  foreach($pkg["autoload"][$kind]??[] as $rel){
+    $root["autoload"][$kind][]="packages/$d/".ltrim((string)$rel,"./");
+  }
 }
 echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
 ' > "${work}/composer.json"
@@ -239,6 +247,9 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
 $requireDev=[];
+foreach($pkg["require-dev"]??[] as $name=>$constraint){
+  if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+}
 $src="$r/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
@@ -293,6 +304,11 @@ foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
   $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
 }
+foreach(["classmap","files","exclude-from-classmap"] as $kind){
+  foreach($pkg["autoload"][$kind]??[] as $rel){
+    $root["autoload"][$kind][]="packages/$d/".ltrim((string)$rel,"./");
+  }
+}
 echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
 ' > "${work}/composer.json"
 
@@ -310,7 +326,7 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   fi
 
   set +e
-  roave_out="$(cd "$work" && "$ROAVE_BIN" "${roave_flags[@]}" 2>&1)"
+  roave_out="$(cd "$work" && php "$REPO_ROOT/scripts/bc/roave.php" "${roave_flags[@]}" 2>&1)"
   roave_exit=$?
   set -e
 

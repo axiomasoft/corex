@@ -36,7 +36,7 @@
             "schema-version": 1,
             "module": "CoreX\\Media\\MediaModule",
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Media\\Contracts",
                 "CoreX\\Media\\Data"

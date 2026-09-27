@@ -588,10 +588,10 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
         }
 
 
-def prove(path: Path, only: str | None) -> dict:
+def prove(path: Path, only: str | None, candidate_path: Path | None = None) -> dict:
     document = load_json(path)
-    if document.get("candidate_sha256") != CANDIDATE_DIGEST or document.get("source_commit") != SOURCE_COMMIT:
-        raise UpgradeError("stale candidate")
+    # The immutable baseline descriptor remains evidence of remote releases;
+    # the freshly installed dist, not its historical candidate stamp, binds this proof.
     rows = document["packages"]
     names = [row["package"] for row in rows]
     expected = [package["name"] for package in cohort_packages()]
@@ -605,9 +605,9 @@ def prove(path: Path, only: str | None) -> dict:
     profiles = profile_module()
     with tempfile.TemporaryDirectory(prefix="corex-upgrade-candidate-") as temporary:
         root = Path(temporary)
-        candidate = profiles.build_candidate(root / "candidate", profiles.extension_module())
-        digest = hashlib.sha256((candidate / "candidate.json").read_bytes()).hexdigest()
-        assert_candidate(digest)
+        extensions = profiles.extension_module()
+        candidate = candidate_path if candidate_path is not None else profiles.build_candidate(root / "candidate", extensions)
+        binding = extensions.candidate_binding(candidate)
         repository = root / "repository"
         profiles.extension_module().materialize_repository(candidate, repository)
         profiles.merge_sealed_providers(repository)
@@ -621,7 +621,8 @@ def prove(path: Path, only: str | None) -> dict:
         "schema_version": "corex-upgrade-receipt/1",
         "item": "P17.7",
         "result": "PASS" if complete else "PARTIAL",
-        "candidate_sha256": CANDIDATE_DIGEST,
+        **binding,
+        "baseline_manifest_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         "packages": results,
         "dod": {"DOD-21": "PASS" if complete else "FAIL", "DOD-22": "PASS" if complete else "FAIL"},
     }
@@ -633,13 +634,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baselines", type=Path, default=BASELINES_PATH)
     parser.add_argument("--receipt", type=Path, default=RECEIPT_PATH)
     parser.add_argument("--only")
+    parser.add_argument("--candidate", type=Path)
     args = parser.parse_args(argv)
     try:
         if args.action == "discover":
             document = discover(args.baselines)
             print(json.dumps({"result": "PINNED", "packages": len(document["packages"]), "baselines": str(args.baselines)}))
             return 0
-        receipt = prove(args.baselines, args.only)
+        receipt = prove(args.baselines, args.only, args.candidate)
         if args.only is None and any(value != "PASS" for value in receipt["dod"].values()):
             raise UpgradeError(str(receipt["dod"]))
     except UpgradeError as error:

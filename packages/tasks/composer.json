@@ -77,7 +77,7 @@
             "schema-version": 1,
             "module": "CoreX\\Tasks\\TasksModule",
             "package-type": "capability",
-            "stability": "experimental",
+            "stability": "stable",
             "public-api": [
                 "CoreX\\Tasks\\Contracts",
                 "CoreX\\Tasks\\Data",
