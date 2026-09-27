@@ -109,6 +109,18 @@ class PreflightTest(unittest.TestCase):
                     MODULE.seal(Path('/unused'), {}, state, [])
                 remote.assert_not_called()
 
+    def test_empty_git_repository_is_ref_absence_only(self) -> None:
+        with patch.object(MODULE.subprocess, 'run') as run:
+            run.return_value.returncode = 1
+            run.return_value.stderr = b'gh: Git Repository is empty. (HTTP 409)'
+            run.return_value.stdout = b'{"message":"Git Repository is empty."}'
+            self.assertIsNone(MODULE.remote_read('repos/example/core/git/ref/tags/1.0.0', absent=True))
+            with self.assertRaises(MODULE.NoGo):
+                MODULE.remote_read('repos/example/core', absent=True)
+            run.return_value.stdout = b'{"message":"Conflict"}'
+            with self.assertRaises(MODULE.NoGo):
+                MODULE.remote_read('repos/example/core/git/ref/tags/1.0.0', absent=True)
+
     def test_remote_transport_is_explicitly_get(self) -> None:
         with patch.object(MODULE.subprocess, 'run') as run:
             run.return_value.returncode = 0

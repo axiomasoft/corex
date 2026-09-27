@@ -74,6 +74,18 @@ stage_package_vendors() {
     done
   done
 
+  if rg -q 'PHPStan\\' "$work/packages/$dir/src"; then
+    BC_WORK="$work" bc_php '
+$r=getenv("BC_REPO_ROOT"); $work=getenv("BC_WORK");
+require "$r/vendor/autoload.php";
+$destination="$work/packages/_vendor/phpstan";
+@mkdir($destination,0777,true);
+(new Phar("$r/vendor/phpstan/phpstan/phpstan.phar"))->extractTo($destination,null,true);
+$manifest=["name"=>"phpstan/phpstan","version"=>Composer\InstalledVersions::getPrettyVersion("phpstan/phpstan"),"require"=>["nikic/php-parser"=>"^5.0"],"autoload"=>["psr-4"=>["PHPStan\\"=>"src/"]]];
+file_put_contents("$destination/composer.json",json_encode($manifest,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
+'
+  fi
+
   BC_WORK="$work" bc_php '
 $work=getenv("BC_WORK");
 $versions=["stancl-tenancy"=>"4.0.0-alpha1","stancl-jobpipeline"=>"2.0.0-alpha1","azguard-core"=>"0.2.0"];
@@ -164,7 +176,7 @@ $requireDev=[];
 foreach($pkg["require-dev"]??[] as $name=>$constraint){
   if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
 }
-$src="$r/packages/$d/src";
+$src=getenv("BC_WORK")."/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
   foreach($it as $file){
@@ -187,7 +199,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
   $vc=json_decode((string)file_get_contents($composerPath),true);
   $vName=is_array($vc)?($vc["name"]??""):"";
   if($vName===""){continue;}
-  if(!isset($require[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
   $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
   if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
 }
@@ -199,8 +211,7 @@ if(is_dir($src)){
     $blob.=(string)file_get_contents($file->getPathname());
   }
   $illum=[
-    "Illuminate\\Foundation\\Events\\"=>"illuminate/events",
-    "Illuminate\\Foundation\\Bus\\"=>"illuminate/bus",
+    "Illuminate\\Foundation\\"=>"laravel/framework",
     "Illuminate\\Console\\"=>"illuminate/console",
     "Illuminate\\Queue\\"=>"illuminate/queue",
   ];
@@ -210,6 +221,7 @@ if(is_dir($src)){
     }
   }
 }
+if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
@@ -217,6 +229,7 @@ foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   $mapped=[];
   foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
   $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
+  foreach($mapped as $path){$root["autoload"]["classmap"][]=$path;}
 }
 foreach(["classmap","files","exclude-from-classmap"] as $kind){
   foreach($pkg["autoload"][$kind]??[] as $rel){
@@ -250,7 +263,7 @@ $requireDev=[];
 foreach($pkg["require-dev"]??[] as $name=>$constraint){
   if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
 }
-$src="$r/packages/$d/src";
+$src=getenv("BC_WORK")."/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
   foreach($it as $file){
@@ -273,7 +286,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
   $vc=json_decode((string)file_get_contents($composerPath),true);
   $vName=is_array($vc)?($vc["name"]??""):"";
   if($vName===""){continue;}
-  if(!isset($require[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
   $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
   if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
 }
@@ -285,8 +298,7 @@ if(is_dir($src)){
     $blob.=(string)file_get_contents($file->getPathname());
   }
   $illum=[
-    "Illuminate\\Foundation\\Events\\"=>"illuminate/events",
-    "Illuminate\\Foundation\\Bus\\"=>"illuminate/bus",
+    "Illuminate\\Foundation\\"=>"laravel/framework",
     "Illuminate\\Console\\"=>"illuminate/console",
     "Illuminate\\Queue\\"=>"illuminate/queue",
   ];
@@ -296,6 +308,7 @@ if(is_dir($src)){
     }
   }
 }
+if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
@@ -303,6 +316,7 @@ foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   $mapped=[];
   foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
   $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
+  foreach($mapped as $path){$root["autoload"]["classmap"][]=$path;}
 }
 foreach(["classmap","files","exclude-from-classmap"] as $kind){
   foreach($pkg["autoload"][$kind]??[] as $rel){

@@ -119,6 +119,15 @@ def remote_read(path: str, *, absent: bool = False) -> dict | None:
     if result.returncode:
         if absent and b'HTTP 404' in result.stderr:
             return None
+        # GitHub returns 409 for any ref in a confirmed empty Git repository.
+        # A generic conflict is never accepted as absence.
+        if absent and '/git/ref/' in path and b'HTTP 409' in result.stderr:
+            try:
+                response = json.loads(result.stdout)
+            except ValueError:
+                response = {}
+            if isinstance(response, dict) and response.get('message') == 'Git Repository is empty.':
+                return None
         raise NoGo('remote state/permission unknown: ' + path)
     return json.loads(result.stdout)
 
@@ -244,10 +253,10 @@ def seal(root: Path, cohort: dict, state: dict, checks: list[dict], cohort_path:
             raise NoGo('candidate rebuild is not byte-identical')
         candidate.verify_candidate(first / 'candidate.json', root, policy, composer_checks=True)
         qualify(root, packages, checks, first)
-        final = check(root, cohort_path, checks, Path(temporary) / 'dod.json')
+        final = check(root, cohort_path, checks, root / PLAN.relative_to(ROOT) / 'findings/P17-dod-result.json')
         if final['red_assertions']:
             raise NoGo('DoD is red after qualification')
-        state = final
+        state.update(final)
         operations = []
         for row in cohort['packages']:
             archive_name = row['name'].replace('/', '-') + '-1.0.0.zip'
@@ -302,6 +311,7 @@ def main() -> int:
         verify_packet(args.packet, args.digest or '')
         return 0
     checks: list[dict] = []
+    state: dict | None = None
     receipt = {'schema_version': 'corex-release-preflight/1', 'result': 'NO-GO', 'checks': checks,
                'environment': {'python': platform.python_version(), 'platform': platform.system()},
                'external_writes': [], 'packet_emitted': False}
@@ -324,6 +334,8 @@ def main() -> int:
             receipt['result'] = 'READY-FOR-QUALIFICATION'
     except (NoGo, candidate.CandidateError, OSError, ValueError, subprocess.SubprocessError) as error:
         receipt['diagnostic'] = str(error) if isinstance(error, (NoGo, candidate.CandidateError)) else type(error).__name__
+    if state is not None:
+        receipt.update(state)
     args.receipt.parent.mkdir(parents=True, exist_ok=True)
     args.receipt.write_bytes(candidate.pretty_json(receipt))
     print(json.dumps({'result': receipt['result'], 'packet_sha256': receipt.get('packet_sha256'),

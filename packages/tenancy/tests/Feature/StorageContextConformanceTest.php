@@ -15,6 +15,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Facades\File;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use Symfony\Component\Process\Process;
 
 if (($sdkAutoload = getenv('COREX_P3_SDK_AUTOLOAD')) !== false) {
     require_once $sdkAutoload;
@@ -228,7 +229,11 @@ it('validates batch and destination paths before any part of the operation mutat
 
 it('refuses the optional object branch explicitly when its native SDK is absent', function (): void {
     if (class_exists(AwsS3V3Adapter::class)) {
-        $this->markTestSkipped('SDK absence is qualified in the separate process without the optional autoloader.');
+        $process = new Process([PHP_BINARY, __DIR__.'/../Support/StorageSdkAbsenceProbe.php']);
+        $process->mustRun();
+        expect(trim($process->getOutput()))->toBe('sdk-absent: denied before context or storage access');
+
+        return;
     }
     expect(fn () => new ObjectTenantStorage(
         contexts: $this->contexts,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\SearchManager;
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 
 $arguments = parseArguments(array_slice($argv, 1));
@@ -38,7 +39,7 @@ if (! $report->passed() || ! is_string($report->fingerprint) || preg_match('/\A[
 if (method_exists($class, 'driver')) {
     $driver = $class::driver();
     $container = new Container;
-    $container->instance('config', new Illuminate\Config\Repository([
+    $container->instance('config', new Repository([
         'corex-search' => ['driver' => 'thirdparty'],
     ]));
     $manager = new SearchManager($container);

@@ -6,10 +6,11 @@ namespace CoreX\Attributes\Tests\Pg;
 
 use CoreX\Attributes\Tests\PgTestCase;
 use Illuminate\Support\Facades\Schema;
+use Override;
 
 class DatabaseFieldCataloguePgTestCase extends PgTestCase
 {
-    #[\Override]
+    #[Override]
     protected function defineDatabaseMigrations(): void
     {
         Schema::dropIfExists('sys_attribute_backfills');

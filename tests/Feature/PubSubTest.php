@@ -9,6 +9,7 @@ use CoreX\Messaging\DatabasePollPubSub;
 use CoreX\Messaging\NullPubSub;
 use CoreX\Messaging\RedisPubSub;
 use CoreX\Messaging\SubscribeGuard;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Records every publish() call it receives — swapped into the container in
@@ -112,6 +113,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selec
 });
 
 it('(a) P1.24/A29: subscribe() refuses a faked Octane runtime without explicit opt-in (negative guard test)', function (): void {
+    Redis::shouldReceive('connection')->never();
     $pubsub = new RedisPubSub(runtime: new FakeWorkerRuntime(octane: true, console: true));
 
     expect(fn () => $pubsub->subscribe('module.enabled', function (): void {}))

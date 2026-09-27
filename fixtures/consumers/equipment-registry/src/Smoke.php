@@ -239,6 +239,7 @@ final class Smoke
 
                 $record = $mapped->record ?? throw new RuntimeException('Mapped row has no canonical record.');
                 $token = new WriteToken('import-'.$row->ordinal, $record->payloadHash, '0');
+
                 if ($sink->apply($scope, $record, new ConflictRule('create-only'), $token)->status === 'applied') {
                     $applied++;
                 }
