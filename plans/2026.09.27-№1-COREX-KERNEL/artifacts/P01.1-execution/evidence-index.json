@@ -1,0 +1,201 @@
+{
+  "schema": "p01-execution-evidence-index/1",
+  "implementation_commit": "a4a2cc6",
+  "entries": [
+    {
+      "path": "access-pg-final.log",
+      "sha256": "19a38ea5ed44352d386ea409c974205c54d768770428ad28a88be62678b2decb",
+      "bytes": 12193
+    },
+    {
+      "path": "after-pg.log",
+      "sha256": "bd4549086db5dddf3dcde09bb0edb3a3e75f72f74f0e602b10c55b7424caae35",
+      "bytes": 97
+    },
+    {
+      "path": "analyse-final.log",
+      "sha256": "53b21167f0d10d8a75f0dbb67f46f1d6aef06fadce33d4489871c015097a4a00",
+      "bytes": 95
+    },
+    {
+      "path": "anti-weakening.log",
+      "sha256": "3916ed58cbc5148e39492350fc449187d504448dfa9ff280b686c2e60e1c13d5",
+      "bytes": 317
+    },
+    {
+      "path": "azguard-staging-repair-complete.json",
+      "sha256": "ec2667b5f333d7fb5c1c1acf1d8fcdc0bdb8b35eaf942ecef3b9512d12509365",
+      "bytes": 2417
+    },
+    {
+      "path": "azguard-staging-repair.json",
+      "sha256": "19a60725e493b0cb7219189fd83ae7898c07796a9a2c5e3a0d1c00e73da6f029",
+      "bytes": 2084
+    },
+    {
+      "path": "baseline-install.log",
+      "sha256": "3fa7ce6070cd0c80e57875654c8c101ebecad8141ffac19f4fa5024ef293d981",
+      "bytes": 816
+    },
+    {
+      "path": "baseline-pg.log",
+      "sha256": "af8f76d7ae8869c14192adc70f1bbfcb2304a7a90fcc2a321085903eaf027ba3",
+      "bytes": 2469
+    },
+    {
+      "path": "baseline-phpstan-l6.json",
+      "sha256": "c10f74fb840de989bba7e9c2dfee7f8419b5d2ac0cc0daf18a4a187f6530aa43",
+      "bytes": 48
+    },
+    {
+      "path": "baseline-phpstan.log",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    {
+      "path": "baseline-sqlite.log",
+      "sha256": "5405d5352143e2d79a90667514560252cf6e66bfc290648c9408c77f79bab131",
+      "bytes": 97
+    },
+    {
+      "path": "baseline-tasks-workflow.log",
+      "sha256": "15e833b5c95df0b2d41a856b177604ba8436b03e7c86bc6b4e97ba07dce5b093",
+      "bytes": 92
+    },
+    {
+      "path": "composer-update-final.log",
+      "sha256": "37061f44944ced40539e6c19f30c76a8c355bdba34f05181b0f672c84db511ec",
+      "bytes": 1481
+    },
+    {
+      "path": "composer-update-original.log",
+      "sha256": "fc4a8f1aa49da1da33e964b5f1d49d587999d243ae4edf423cceac99acc347b8",
+      "bytes": 1579
+    },
+    {
+      "path": "continuity.json",
+      "sha256": "a53fef5699824a1717c2cb83cd4b9c4d8c019fb6500da455853ef216435d990c",
+      "bytes": 1498
+    },
+    {
+      "path": "docs-gate.log",
+      "sha256": "d30efe7f9780263a64e7be1c1e6547805dd8143593082a06413f13502cdd09e3",
+      "bytes": 68
+    },
+    {
+      "path": "docs-platform-clean.log",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    {
+      "path": "junit-comparison.json",
+      "sha256": "ea562c9f819ba4edbca5782a5ff8de93ce70e7979fbab15774c782e242b0c2fe",
+      "bytes": 332
+    },
+    {
+      "path": "l12-design-required.json",
+      "sha256": "04724c718875646953a1282acb5c37ad5c0f1839d8a46014d2fb8784532c88df",
+      "bytes": 2979
+    },
+    {
+      "path": "l12-proposal-test.log",
+      "sha256": "9285d249e41dd1c2294f39b8a2b817b59ebc60cd6dc170b0e029ac438927aca4",
+      "bytes": 428
+    },
+    {
+      "path": "l12-proposal-update.log",
+      "sha256": "55b6771dc9e0210131d66196b29daac601d73fb95168d4825a020f563a98f684",
+      "bytes": 20120
+    },
+    {
+      "path": "l12-proposal.json",
+      "sha256": "005930f8f35968957aaceda0d7a988f1b5aaef7953d6f4c83ff51d79fb77b719",
+      "bytes": 512
+    },
+    {
+      "path": "l12-update-with-dependencies.log",
+      "sha256": "80dfd360f1e068c4c4e44e7a3fb9b1abee974a2e29140eb1530804a483b07fc9",
+      "bytes": 1380
+    },
+    {
+      "path": "l12-update.log",
+      "sha256": "210d8821530916b5d9bb99f8fad5d46cb0d38d7b3aa2916bc8787895a12f04f5",
+      "bytes": 1822
+    },
+    {
+      "path": "lint-final.log",
+      "sha256": "a10165f3b7a5a2388a37c4406a43bd7a991d9a5fdd28fd7d5f17ce444d145e2a",
+      "bytes": 59
+    },
+    {
+      "path": "manifest-negative.log",
+      "sha256": "e121feadf138ed7c1ce9bc30c0a432cc7c881fc556f3d24859314498184a5cdb",
+      "bytes": 92
+    },
+    {
+      "path": "manifest-validation-results.json",
+      "sha256": "62531ab81b765c4ded1796fa58b73bf2e2c2c7014c40e88f4f223988840c57d6",
+      "bytes": 10175
+    },
+    {
+      "path": "mutation-all.log",
+      "sha256": "e7c49a4782169c51f7e7e53c4229fca48d117cbc06112a748b20891684762861",
+      "bytes": 38814
+    },
+    {
+      "path": "php84-check.txt",
+      "sha256": "336d8443295dfed2793095eae8bceac6a25f23eda7b651ef9ee6c33a9849eafa",
+      "bytes": 83
+    },
+    {
+      "path": "pin-equivalence.txt",
+      "sha256": "1038a0df74d75c03bc507ef0c41e5deeeb465c9eb9a7f191be92c262f2e588b9",
+      "bytes": 65
+    },
+    {
+      "path": "pin-negative.log",
+      "sha256": "e5243cb5c1141e718fbb7818fb2ff0a2070b159b932af3387ffaaf2ca959785b",
+      "bytes": 252
+    },
+    {
+      "path": "post-install-preflight.txt",
+      "sha256": "a196f15af9543ed8520f7c596ece928b9229bf0bad63e16d552d54941fa0ead6",
+      "bytes": 462
+    },
+    {
+      "path": "repair-decision.json",
+      "sha256": "7e009777f29fd283c45937644777aac1ab414ab7dcf47af04a2c8259bde53c61",
+      "bytes": 2019
+    },
+    {
+      "path": "test-final.log",
+      "sha256": "e627c006ff2ce47bf4b32d5168f05f72d89702d7227fb47de3f419d86f57edd2",
+      "bytes": 428
+    },
+    {
+      "path": "test-packages-final.log",
+      "sha256": "12720e3af403a51f41184f3c28b3b068464f406e6a2b68bcaccb3d1be7e897f9",
+      "bytes": 87448
+    },
+    {
+      "path": "test-pg.log",
+      "sha256": "9d6085ca7235c85a9ba0c7f5b5f2dc5edac2062dbfd309a415a65344aadfeec4",
+      "bytes": 126
+    },
+    {
+      "path": "upstream-process-constraints.json",
+      "sha256": "1b9b7193637467b3b4fc30d645b30ea1cdfe508eec59e33b15a58b29fbc1a7b2",
+      "bytes": 480
+    },
+    {
+      "path": "validate-clean-manifests.log",
+      "sha256": "377dfd43c92430911a529aa0b9de62bece09751712eba9596ee37f6e0b458d74",
+      "bytes": 1281
+    },
+    {
+      "path": "validate-clean-worktree.log",
+      "sha256": "3a203850ef215b1be4a9092af5e58560b728f4fca704d2adaf4c67c2398507ca",
+      "bytes": 376
+    }
+  ]
+}

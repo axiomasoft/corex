@@ -7,7 +7,7 @@
         "php": "^8.4",
         "corex/core": "^1.0@dev",
         "corex/search": "^1.0@dev",
-        "meilisearch/meilisearch-php": ">=1.16.1 <=1.16.1"
+        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable"
     },
     "autoload": {
         "psr-4": {

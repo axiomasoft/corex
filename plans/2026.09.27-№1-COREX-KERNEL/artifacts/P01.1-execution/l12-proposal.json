@@ -1,0 +1,18 @@
+{
+  "status": "verified-proposal-not-accepted",
+  "versions": {
+    "laravel/framework": "v12.69.2",
+    "symfony/process": "v7.4.19",
+    "orchestra/testbench": "v10.12.0",
+    "pestphp/pest": "v4.7.8",
+    "phpunit/phpunit": "12.5.33"
+  },
+  "command": "scripts/php84 composer test",
+  "exit_code": 0,
+  "tests": {
+    "sqlite": 808,
+    "tasks-workflow": 10
+  },
+  "main_manifests_changed": false,
+  "required_D37_change": "Pest ^4.7 only in Laravel 12 validation/CI lane, Pest ^5.2 retained in Laravel 13"
+}

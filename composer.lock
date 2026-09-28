@@ -16,7 +16,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "file:///home/vostrikov/projects/packages/corex/.composer-provider-staging/artifacts/jobpipeline-candidate.zip",
+                "url": ".composer-provider-staging/artifacts/jobpipeline-candidate.zip",
                 "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
                 "shasum": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7"
             },
@@ -61,7 +61,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "file:///home/vostrikov/projects/packages/corex/.composer-provider-staging/artifacts/tenancy-candidate.zip",
+                "url": ".composer-provider-staging/artifacts/tenancy-candidate.zip",
                 "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
                 "shasum": "ef69374969eef0a39a7df24538b07b4805ba0156"
             },
@@ -1405,12 +1405,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "e92b5a7a7755d33527a92dc327fcdfcc78c6e85f"
+                "reference": "b852fd51f44fe1d20af2ae5551bd567aa0996acb"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/search": "^1.0@dev",
-                "meilisearch/meilisearch-php": ">=1.16.1 <=1.16.1",
+                "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
                 "php": "^8.4"
             },
             "type": "corex-module",
@@ -8629,7 +8629,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "file:///home/vostrikov/projects/packages/corex/.composer-provider-staging/artifacts/azguard-core-private.zip",
+                "url": ".composer-provider-staging/artifacts/azguard-core-private.zip",
                 "reference": "8c83864f02017134b325224c6c8be590a3971485"
             },
             "require": {

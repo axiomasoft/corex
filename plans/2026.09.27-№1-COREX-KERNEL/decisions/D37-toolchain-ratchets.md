@@ -14,7 +14,7 @@ superseded_by: null
 
 ## Решение
 
-1. **Тест-стек:** `pestphp/pest ^5.2` (PHPUnit `^13.3` транзитивно), `orchestra/testbench ^10.12|^11.3`, `laravel/pint ^1.32`, `phpstan/phpstan ^2.2.16`, `larastan/larastan ^3.12`, `phpstan/phpstan-strict-rules ^2.0.12`, `phpstan/extension-installer ^1.4.3`, `rector/rector ^2.6` + `driftingly/rector-laravel ^2.6`, `shipmonk/composer-dependency-analyser ^1.8.4`, `roave/backward-compatibility-check ^8.22`. `brick/money` не трогается (переезд — P02/D27).
+1. **Тест-стек:** `pestphp/pest ^5.2` (PHPUnit `^13.3` транзитивно) для основного дерева и Laravel 13; Laravel 12 test/CI-лейн переопределяет dev requirement на Pest `^4.7` / PHPUnit 12 по D42, `orchestra/testbench ^10.12|^11.3`, `laravel/pint ^1.32`, `phpstan/phpstan ^2.2.16`, `larastan/larastan ^3.12`, `phpstan/phpstan-strict-rules ^2.0.12`, `phpstan/extension-installer ^1.4.3`, `rector/rector ^2.6` + `driftingly/rector-laravel ^2.6`, `shipmonk/composer-dependency-analyser ^1.8.4`, `roave/backward-compatibility-check ^8.22`. `brick/money` не трогается (переезд — P02/D27).
 2. **PHPStan per package:** `packages/<p>/phpstan.neon` — level `max`, strict-rules и bleedingEdge, baseline `packages/<p>/phpstan-baseline.neon`; расширения — через `phpstan/extension-installer` и `extra.phpstan.includes` в `composer.json` core/modules/tenancy (без относительных путей к vendor — переживает split). Запуск из корня: `vendor/bin/phpstan analyse -c packages/<p>/phpstan.neon`.
 3. **Ratchet (только сужается):** `scripts/quality-ceilings.json` хранит потолок на пакет: `phpstan.<dir>` (сумма `count` в baseline) и `dependencies.<dir>` (число ignore-записей с маркером `ratchet:`). `scripts/quality-ceiling-guard.php`: факт > потолка → exit 1; `--tighten` понижает потолок до факта; повышение потолка в диффе ловит anti-weakening gate. Запрет baseline в anti-weakening заменяется этим правилом.
 4. **Dependency analyser:** на каждый пакет в его standalone-установке (`composer --working-dir=packages/<p> update`), конфиг `packages/<p>/composer-dependency-analyser.php`; shadow-зависимость исправляется объявлением в P01, архитектурные нарушения (напр. notifications→wakeup, P07) — ignore с `// ratchet: <фаза> <причина>`.
@@ -23,7 +23,7 @@ superseded_by: null
 
 ## Почему
 
-- Pest 5 требует PHP 8.4 и PHPUnit 13; Testbench 10.12 и 11.3 принимают PHPUnit 13 — Pest 5 работает на L12 и L13; удалённых API PHPUnit 13 в тестах 0 (F4).
+- Pest 5 требует PHP 8.4 и PHPUnit 13. Проверка исполнения выявила конфликт Symfony Process 8.1 с Laravel 12 (Process 7.x); принят owner-approved D42: Pest 4.7 только для L12, Pest 5.2 для L13. Testbench acceptance PHPUnit 13 не доказывает совместимость всего Pest dependency graph.
 - Ratchet по счётчику имени-независим: P02 переносит файлы и перегенерирует baseline, потолок не может вырасти.
 - PG 14 теряет поддержку 2026-11-12; 16 — установлен локально и в CI сейчас; 18 — актуальный мажор (http-02).
 - Анализатор в standalone-установке — единственный способ проверить манифест, который получит split-репозиторий (pplx-01).

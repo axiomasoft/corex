@@ -1,0 +1,85 @@
+{
+  "record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P01.1",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "scripts/php84 composer require \"illuminate/contracts:12.*\" --no-update && scripts/php84 composer update",
+      "digest": "5bf9cdd31b8aacf7ea94c82b1b72e0c3983625953df0c9de70c8467849f7059f",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": true,
+      "carrier": {
+        "command": "scripts/php84 composer require \"illuminate/contracts:12.*\" --no-update && scripts/php84 composer update",
+        "digest": "5bf9cdd31b8aacf7ea94c82b1b72e0c3983625953df0c9de70c8467849f7059f",
+        "result": "red"
+      }
+    },
+    "candidate": {
+      "delta_proved": true,
+      "evidence_ids": [
+        "artifacts/P01.1-execution/l12-proposal-test.log"
+      ]
+    },
+    "affected_paths": [
+      {
+        "path": "decisions/D37-toolchain-ratchets.md",
+        "owner_item": "P01.1",
+        "declared_file": false
+      },
+      {
+        "path": "research/P01-design.md",
+        "owner_item": "P01.1",
+        "declared_file": false
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 0,
+      "max_files": 2,
+      "reversible": true
+    },
+    "material_surface": {
+      "public": false,
+      "frozen": false,
+      "security": false,
+      "schema": false,
+      "dependency": true,
+      "authority": false,
+      "irreversible": false,
+      "product": false,
+      "test_topology": true
+    },
+    "pre_validation": [
+      {
+        "command": "scripts/php84 composer require \"illuminate/contracts:12.*\" --no-update && scripts/php84 composer update",
+        "digest": "5bf9cdd31b8aacf7ea94c82b1b72e0c3983625953df0c9de70c8467849f7059f",
+        "result": "red"
+      }
+    ],
+    "post_validation": [],
+    "evidence_ids": [
+      "artifacts/P01.1-execution/l12-update.log",
+      "artifacts/P01.1-execution/l12-update-with-dependencies.log",
+      "artifacts/P01.1-execution/upstream-process-constraints.json",
+      "artifacts/P01.1-execution/l12-proposal-test.log"
+    ],
+    "design": {
+      "decision_question": "Should the Laravel 12 test/CI lane use Pest ^4.7 while Laravel 13 retains Pest ^5.2?",
+      "evidence_gap": "Accepted D37 specifies Pest ^5.2 across L12/L13, but the upstream Process constraints have no intersection. The proposed L12 exception passes the unchanged 818 tests.",
+      "alternatives": [
+        "Pest ^4.7 for L12 only; Pest ^5.2 for L13",
+        "Retain the accepted policy and wait for a compatible Pest 5 release"
+      ],
+      "expected_artifact": "Qualified D37 amendment and matching P01.1/P01.4 runbook instructions"
+    }
+  },
+  "evaluation": {
+    "action": "design-required",
+    "terminal_allowed": false,
+    "reason_code": "NEW_MATERIAL_DECISION_SURFACE",
+    "repair_digest": "e903a2242be0ac876d9fbfa5290a606d6aee7cc4bb02d92921aa675d1a7251c9",
+    "post_validation_required": false
+  }
+}

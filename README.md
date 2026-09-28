@@ -30,11 +30,12 @@ scripts/php84 composer install
 scripts/php84 composer config --unset repositories.stancl-providers
 scripts/php84 composer --working-dir=packages/tenancy config --unset repositories.stancl-providers
 scripts/php84 composer --working-dir=packages/access config --unset repositories.stancl-providers
+scripts/php84 python3 scripts/distribution/stage-stancl-providers.py --portable-locks
 scripts/php84 composer test        # Pest + Orchestra Testbench (sqlite :memory:)
 scripts/php84 composer analyse     # PHPStan (larastan)
 scripts/php84 composer lint        # Pint
 ```
 
-Обёртка `scripts/php84` выбирает PHP 8.4 для Composer и дочерних команд. Для локального PostgreSQL используйте `PGSQL_PORT=5432 scripts/php84 composer test:pg`; staging извлекает AzGuard из закреплённого upstream-коммита, потому что VCS-репозиторий содержит монорепо. Временный `repositories.stancl-providers` снимайте после каждого install/update, включая неуспешный.
+Обёртка `scripts/php84` выбирает PHP 8.4 для Composer и дочерних команд. Для локального PostgreSQL используйте `PGSQL_PORT=5432 scripts/php84 composer test:pg`; staging извлекает AzGuard из закреплённого upstream-коммита, потому что VCS-репозиторий содержит монорепо. Временный `repositories.stancl-providers` снимайте после каждого install/update, включая неуспешный. После update выполняйте `--portable-locks`, чтобы ZIP-пути в lock оставались относительными к checkout.
 
 Пакеты — чистые библиотеки; тест-харнес и инструменты качества живут в корне монорепо.

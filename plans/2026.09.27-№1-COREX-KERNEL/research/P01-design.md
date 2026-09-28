@@ -105,15 +105,18 @@
    `"manifests:check": "python3 scripts/manifest-check.py"`.
 6. `python3 scripts/distribution/stage-stancl-providers.py && scripts/php84 composer update --no-interaction` → exit 0;
    затем снять `repositories.stancl-providers` (шаг 4). `composer.lock` коммитится (content-hash может не совпасть из-за
-   снятого ключа — это ожидаемо, D36 п.4). При конфликте разрешения → §5 K2.
+   снятого ключа — это ожидаемо, D36 п.4). Затем `stage-stancl-providers.py --portable-locks` сохраняет
+   локальные ZIP-пути относительно checkout. При конфликте разрешения → §5 K2.
 7. Прогоны: `scripts/php84 composer test` → exit 0; `PGSQL_PORT=5432 scripts/php84 composer test:pg` → exit 0;
    `scripts/php84 composer test:packages` → exit 0 (standalone-пакеты ставят свой vendor; staging stancl нужен для
    tenancy — повторить `stage-stancl-providers.py` и затем убрать ключ); `scripts/php84 composer lint:check` → exit 0;
    `scripts/php84 composer analyse` → ошибок не больше, чем `phpstan_level6_errors` baseline. Сверка:
    `junit-summary.py … --compare $P/artifacts/P01/baseline-metrics.json` → exit 0.
 8. Laravel 12-лейн в scratch-worktree: `git worktree add ../corex-p01-l12 HEAD` (после коммита шагов 5–7),
-   в нём `scripts/php84 composer require "illuminate/contracts:12.*" --no-update && scripts/php84 composer update` →
-   `scripts/php84 composer test` → exit 0; затем `git worktree remove ../corex-p01-l12`.
+   в нём `scripts/php84 composer require "illuminate/contracts:12.*" --no-update`, затем
+   `scripts/php84 composer require --dev "pestphp/pest:^4.7" --no-update` (D42), staging и
+   `scripts/php84 composer update --with-all-dependencies`; снять временные repositories, выполнить
+   `stage-stancl-providers.py --portable-locks`; `scripts/php84 composer test` → exit 0; затем удалить worktree.
 9. Docs: `grep -rn "8\.3" README.md docs docs-public packages/*/README.md packages/*/PACKAGE.md` → каждое требование
    PHP 8.3 → 8.4; команда разработки — `scripts/php84`. `composer package-docs-gate` → exit 0.
 

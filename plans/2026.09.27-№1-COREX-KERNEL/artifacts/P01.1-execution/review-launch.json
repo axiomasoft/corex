@@ -1,0 +1,16 @@
+{
+  "provider": "cursor",
+  "model": "grok-4.7",
+  "effort": "high",
+  "selector": "grok-4.7-high",
+  "fresh": true,
+  "executor": "codex/gpt-6-sol/high",
+  "diff_base": "d07f84db2cdb65a12c7a3ee30e9e06d793266f96",
+  "diff_head": "a4a2cc685eedf16bc628d2dceffbcc3f1df95390",
+  "mode": "ask",
+  "context_inputs": [
+    "item-spec",
+    "diff",
+    "Validation output"
+  ]
+}

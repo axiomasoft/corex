@@ -1,0 +1,18 @@
+{
+  "verified_at": "2026-09-28",
+  "sources": [
+    {
+      "name": "pest-5.2.0",
+      "source": "https://raw.githubusercontent.com/pestphp/pest/v5.2.0/composer.json",
+      "php": "^8.4",
+      "symfony/process": "^8.1.6"
+    },
+    {
+      "name": "laravel-12.69.2",
+      "source": "https://raw.githubusercontent.com/laravel/framework/v12.69.2/composer.json",
+      "php": "^8.2",
+      "symfony/process": "^7.2.0"
+    }
+  ],
+  "intersection": "empty: ^8.1.6 versus ^7.2.0"
+}
