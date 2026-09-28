@@ -1,0 +1,1102 @@
+{
+  "fingerprint": "22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb",
+  "snapshot": {
+    "phase_id": "P01",
+    "scope": [],
+    "terminal_item_heads": [
+      {
+        "item_id": "P01.1",
+        "status": "🟢 Done",
+        "spec_sha256": "456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f",
+        "terminal_evidence_sha256": "e70733bf837ff9e9de088c566d7d688e5338061ca7239f073593b25bb43e4530"
+      },
+      {
+        "item_id": "P01.2",
+        "status": "🟢 Done",
+        "spec_sha256": "f696fecfab456b00e02e3d3fd0cd8a3073bab7ecb00193586547115c31967975",
+        "terminal_evidence_sha256": "1d5af74b2f23e95d0004fa211507af8c5f52251bfd8b907945009b8c14cfa352"
+      },
+      {
+        "item_id": "P01.3",
+        "status": "🟢 Done",
+        "spec_sha256": "399200a914096337f59c5781a6cdf2413d3780fb7ff2b6f87f96869134f7dbfb",
+        "terminal_evidence_sha256": "8aded35a8369b5ce09d94d6240c4385a1a349458aac265a8aebbf493dd4c099f"
+      },
+      {
+        "item_id": "P01.4",
+        "status": "🟢 Done",
+        "spec_sha256": "d700015b793c1c19c46161b88538377bcdca8799df68143cec4b0d59111f7b76",
+        "terminal_evidence_sha256": "f1686ececff55a64ceb5df1af5cf6e8b1d73034c4e2c228e73cd1c59758a7cdd"
+      }
+    ],
+    "material_risks": [],
+    "declared_files": [
+      ".github/CODEOWNERS",
+      ".github/dependabot.yml",
+      ".github/workflows/*.yml",
+      ".github/zizmor.yml",
+      "README.md",
+      "autoload-dev",
+      "composer.json",
+      "composer.lock",
+      "docs-public/**",
+      "docs/**",
+      "packages/*/composer.json",
+      "packages/*/{README.md,PACKAGE.md}",
+      "packages/*/{phpstan.neon,phpstan-baseline.neon,composer-dependency-analyser.php,composer.json}",
+      "phpstan-baseline.neon",
+      "phpstan.neon",
+      "phpunit.xml",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01/baseline-metrics.json",
+      "scripts.golden",
+      "scripts.test",
+      "scripts/anti-weakening-gate.sh",
+      "scripts/manifest-check.py",
+      "scripts/php84",
+      "scripts/phpstan-contour.php",
+      "scripts/{ownership-gate.php,ownership-map.json,ownership-gate-baseline.json,quality-ceilings.json,quality-ceiling-guard.php,phpstan-packages.sh,dependency-analyser.sh,anti-weakening-gate.sh}",
+      "tests/Golden/**"
+    ],
+    "product_tree_sha256": "b7aaf6d3b229c51e1a6d067946c9b30410b9e1930318da1f51de3aea6a9373e8",
+    "product_files": [
+      {
+        "declared": ".github/CODEOWNERS",
+        "path": ".github/CODEOWNERS",
+        "state": "file",
+        "sha256": "6437bfaeecf21064e8b321993576a06642092f2f1359870cabf64bec1d8a396d"
+      },
+      {
+        "declared": ".github/dependabot.yml",
+        "path": ".github/dependabot.yml",
+        "state": "file",
+        "sha256": "729e1574bba6ca3b5da6738c25f85021fcec78a3ad5645335145406cee706626"
+      },
+      {
+        "declared": ".github/workflows/*.yml",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "state": "file",
+            "sha256": "d734b4231dc04c4f55edd74dea19aba0d5c1989d3fd5ec9650429c406a6bc1a0"
+          },
+          {
+            "path": ".github/workflows/distribution-proof.yml",
+            "state": "file",
+            "sha256": "5b2bee9d42f2712dcce6d61115231d549fd0dd32d2e0ca51a73828e9903a595a"
+          },
+          {
+            "path": ".github/workflows/remaining-cohort-proof.yml",
+            "state": "file",
+            "sha256": "86907585d1b9065e229995e5219860419991ee5ec189fb967f489cfdea5eb3a1"
+          }
+        ]
+      },
+      {
+        "declared": ".github/zizmor.yml",
+        "path": ".github/zizmor.yml",
+        "state": "file",
+        "sha256": "a6ab1e2c529510bb9319fe801286959beed7fda862e25d80b951075188b25f7a"
+      },
+      {
+        "declared": "README.md",
+        "path": "README.md",
+        "state": "file",
+        "sha256": "85edfdf63c002c3b560a0081620df2b62bcf231640662ca36b254971f5c47025"
+      },
+      {
+        "declared": "autoload-dev",
+        "state": "missing"
+      },
+      {
+        "declared": "composer.json",
+        "path": "composer.json",
+        "state": "file",
+        "sha256": "1b257c33b92c44e47585086034794db0044dfe81ae9d8e045c682e0a681fe712"
+      },
+      {
+        "declared": "composer.lock",
+        "path": "composer.lock",
+        "state": "file",
+        "sha256": "81fbf3b65efa14bd68fdc85774771a57f7b504047cc5aaae6087d5fda35d26ac"
+      },
+      {
+        "declared": "docs-public/**",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "docs-public/README.md",
+            "state": "file",
+            "sha256": "c1ffaa96faf1865e94b7ee0b068d1cc76581861754b416015eef83c56bc05255"
+          }
+        ]
+      },
+      {
+        "declared": "docs/**",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "docs/architecture/README.md",
+            "state": "file",
+            "sha256": "4fa34fcda99c3daffa025608bf5364f0f518cdb7d33dbbf5e81ccf790c4cb0a0"
+          },
+          {
+            "path": "docs/architecture/api-policy.md",
+            "state": "file",
+            "sha256": "94e4441dd744a866bffe323c9dc0a58692dbff7f752a5ed86e8ce11478a0dda4"
+          },
+          {
+            "path": "docs/architecture/config-policy.md",
+            "state": "file",
+            "sha256": "b6092f4066b45b84fc207103a70a99f1301435060d382f9fa7cc420d61602670"
+          },
+          {
+            "path": "docs/architecture/configuration.md",
+            "state": "file",
+            "sha256": "6719837fb6b855b823e05eef79c780cd7e608403b713c8a783a86bb42466a993"
+          },
+          {
+            "path": "docs/architecture/constitution.md",
+            "state": "file",
+            "sha256": "f36261ede792fa99fa37194c41e16e1fa90b43d83efcddec1ea91cfbc13aa270"
+          },
+          {
+            "path": "docs/architecture/core-zones.md",
+            "state": "file",
+            "sha256": "429e372c6d0af5aa302258ab04b783f6afd6fc01ed23648004a418274d635f6b"
+          },
+          {
+            "path": "docs/architecture/data-ownership-policy.md",
+            "state": "file",
+            "sha256": "c107325b7e1cf6d8724c17a780f930470909eb2aee96cabe1bbbe446e51eb7aa"
+          },
+          {
+            "path": "docs/architecture/dod-1.0.md",
+            "state": "file",
+            "sha256": "1cea5d0cd602c0e146f4e432398fd07d8d1ee90e683970a5c8df996275b8c23c"
+          },
+          {
+            "path": "docs/architecture/exceptions/CFG-006/corex-intl-search-key.md",
+            "state": "file",
+            "sha256": "161ff64f06794e320d9682d48772548f2ba8b8663ae8b310476bccb0cf1cccb4"
+          },
+          {
+            "path": "docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md",
+            "state": "file",
+            "sha256": "15a846b457e98d07c0ba67524f9c78c0631366a94a6596ffbcbbb6f0dd135448"
+          },
+          {
+            "path": "docs/architecture/exceptions/STR-003/tenancy-src-children.md",
+            "state": "file",
+            "sha256": "f40934319245529a02344ef7b6bdb68b063416c93f93739ca4b3f16204820850"
+          },
+          {
+            "path": "docs/architecture/exceptions/STR-005/tenancy-membership-internal.md",
+            "state": "file",
+            "sha256": "5c63c99b679496172c26638da86eb633cfd44e472f220ebeaba8fe25856fdda6"
+          },
+          {
+            "path": "docs/architecture/extension-policy.md",
+            "state": "file",
+            "sha256": "ee8671db54c14e7f7657e0e3b0f5e67d7dad1920658d3856f0747728fe51ab7a"
+          },
+          {
+            "path": "docs/architecture/message-policy.md",
+            "state": "file",
+            "sha256": "2480d384b45896a8824a82877c697d21238870039df90358ea9b356e32a36328"
+          },
+          {
+            "path": "docs/architecture/naming.md",
+            "state": "file",
+            "sha256": "f10b618a7cf238920b43ed1dc7e94f33f207c5188fea389ccf4744f04f0c7027"
+          },
+          {
+            "path": "docs/architecture/references.md",
+            "state": "file",
+            "sha256": "b6f56104ba5a70a31ad3bbde3477909c91802cc7f4969aeded60488657eef115"
+          },
+          {
+            "path": "docs/architecture/rename-registry.md",
+            "state": "file",
+            "sha256": "a5627a815c2b990f3f5a714180e37bab73537262a3b2888ae68c31c0af8c1464"
+          },
+          {
+            "path": "docs/architecture/scorecard.md",
+            "state": "file",
+            "sha256": "bc5b624640a1dc4f7f8f7c95a220f7fe47e10b3274a8d2fc66a8d8d5eb46173b"
+          },
+          {
+            "path": "docs/architecture/structure-profiles.md",
+            "state": "file",
+            "sha256": "21f34bdc9bbc3800020ad56e0bb901f1e3ab609ff7a8d8416adcc9b88ed30eba"
+          },
+          {
+            "path": "docs/architecture/table-ownership.md",
+            "state": "file",
+            "sha256": "1fb0f4439323b1eda155dd71a3e99a860c5097acc2f32bbaf520fd0ec8224b67"
+          },
+          {
+            "path": "docs/architecture/taxonomy.md",
+            "state": "file",
+            "sha256": "b2742ecf4d01bd1840cca6b1c9d18e00f259d55b7ca119284170b9ddeecfa1ea"
+          },
+          {
+            "path": "docs/audit-2026-09-14-proposals.md",
+            "state": "file",
+            "sha256": "246ef3ed59d170acd59089d5b60c6536d8787abfd84d78b914230658813b526e"
+          },
+          {
+            "path": "docs/audit-2026-09-14-remediation.md",
+            "state": "file",
+            "sha256": "932390e7462de17cb91d9fd5a347d3ccea1c3b6ee7efbdfff51d85c7b9e3989c"
+          },
+          {
+            "path": "docs/audit-2026-09-14.md",
+            "state": "file",
+            "sha256": "bd6743bfa639733ccb60c16da24d1b9166b4c1507e51ffaf7697863b5c81c950"
+          },
+          {
+            "path": "docs/audit-2026-09-17-deferred.md",
+            "state": "file",
+            "sha256": "a2dd5654dba59028da289b1500f4166b25582695d3c9143374996b0d8aa40b73"
+          },
+          {
+            "path": "docs/audit-2026-09-17-remediation.md",
+            "state": "file",
+            "sha256": "4ebb7867c4d54befa792cc887713ca3a8def641bb0a35cedeaa3beab5c8ae284"
+          },
+          {
+            "path": "docs/audit-2026-09-17.md",
+            "state": "file",
+            "sha256": "e986795ee89b866ace1fd5a1440160bd4cc7a996f9346f1f3943a040cfda3e9a"
+          },
+          {
+            "path": "docs/dev-doctrine.md",
+            "state": "file",
+            "sha256": "882bf94a07b927374bc8b62da59d011af120406e228fe5a3761b2a28b1ad068c"
+          },
+          {
+            "path": "docs/distribution-dry-run.md",
+            "state": "file",
+            "sha256": "a4e2be3c80b919d8fd7135459e78d46f58f60e85a6c9e69aae0ee513462d53ab"
+          },
+          {
+            "path": "docs/reference.md",
+            "state": "file",
+            "sha256": "9fcb60ea387575ca927a65c36ad0d6036d6ea3988d5b2271ceb82221feba51de"
+          },
+          {
+            "path": "docs/rejected-optimizations.md",
+            "state": "file",
+            "sha256": "9ddb7185d35e5cbe666d5d4e4e6a9d67ef1879fc4288280e4a4fff769c29cd9a"
+          }
+        ]
+      },
+      {
+        "declared": "packages/*/composer.json",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "packages/access/composer.json",
+            "state": "file",
+            "sha256": "5f3fd4e74c59d2971a11785a6dd44dbc9cc5e2093cdce78d57321730a8d1d376"
+          },
+          {
+            "path": "packages/attributes/composer.json",
+            "state": "file",
+            "sha256": "05ea5be60d5314c294d73cac744ba73dc0e5c44fc3a34e7df9c784146ab739c9"
+          },
+          {
+            "path": "packages/core/composer.json",
+            "state": "file",
+            "sha256": "cee3bf0e9497cdbffb0bc96cd8930001039ec8e93384f4c13f592f4024d135e8"
+          },
+          {
+            "path": "packages/crm/composer.json",
+            "state": "file",
+            "sha256": "34a58a3d3e1469545b8de6eba0c6510f2b372b089e422a5da7afa1e6069c4368"
+          },
+          {
+            "path": "packages/intl/composer.json",
+            "state": "file",
+            "sha256": "62038ac29fea94e02a03e5fbc1f84b1fed724c8cc6008fe782116f6e1c52b316"
+          },
+          {
+            "path": "packages/media/composer.json",
+            "state": "file",
+            "sha256": "786728a876e27aa4f36609481e7ca0e3ab1590631736b7ad692824edc555f22c"
+          },
+          {
+            "path": "packages/modules/composer.json",
+            "state": "file",
+            "sha256": "e31b4f7459950bea47b67db86b5c379156286c015776d55debf858183a64f0e5"
+          },
+          {
+            "path": "packages/notifications/composer.json",
+            "state": "file",
+            "sha256": "4ae86f6695c9e6273c4b3a69c9c376136654f8b9cfe437bda6c7166bd2f9ee21"
+          },
+          {
+            "path": "packages/operations/composer.json",
+            "state": "file",
+            "sha256": "30a0cde8603e3aff294bcca96a9ede06657a86b1be5e2f6b91fa3aeadb4f5e46"
+          },
+          {
+            "path": "packages/panels/composer.json",
+            "state": "file",
+            "sha256": "d667c2a41bd9dac0aab7af8d33f53ceefe16d5c6a2f714db173b101f40d88542"
+          },
+          {
+            "path": "packages/recurrence/composer.json",
+            "state": "file",
+            "sha256": "f12827a5fdab8fd60e9cd817873a47f20970bfa8a882cea7f4d01a31793db055"
+          },
+          {
+            "path": "packages/search-intl/composer.json",
+            "state": "file",
+            "sha256": "6a7d89447269c0d43a565430cb92906b99ddf100a6cf2ecbe9332d7573647305"
+          },
+          {
+            "path": "packages/search-meilisearch/composer.json",
+            "state": "file",
+            "sha256": "221d24021d1c9b244f4903279a117e469b9badbe71cd539a864d9795ac697ddd"
+          },
+          {
+            "path": "packages/search/composer.json",
+            "state": "file",
+            "sha256": "feb621f19263a125d03645b974befe6a9600b4e1af498131285887a3b997c627"
+          },
+          {
+            "path": "packages/tasks-workflow/composer.json",
+            "state": "file",
+            "sha256": "43f5d54c5fd760be3b438ce52af9d801dd70e22ecfa567eacf2b84cbf503e17c"
+          },
+          {
+            "path": "packages/tasks/composer.json",
+            "state": "file",
+            "sha256": "2b3d95f7c1eaf35256141342c56efc451991ebc7cafe0ff4cf3e672e66781822"
+          },
+          {
+            "path": "packages/tenancy/composer.json",
+            "state": "file",
+            "sha256": "6cb1c69436fdd182cfc70d9ddf4c032755062b7ac681a2ace99c8ebc1bc317a6"
+          },
+          {
+            "path": "packages/transfer/composer.json",
+            "state": "file",
+            "sha256": "2708fcd97706fa0a94eef90f487db5759b7c8c40a3f4703107e5dffde81cbfe6"
+          },
+          {
+            "path": "packages/wakeup/composer.json",
+            "state": "file",
+            "sha256": "f9a67dae801bdd2861d514e45d8b51aa9cec3d9244cb7a65146d2ec6fb69a314"
+          },
+          {
+            "path": "packages/workflow/composer.json",
+            "state": "file",
+            "sha256": "6ac4e415c08d3a0a4d7d902dae85eb9f61b8cbc4d04a929928570a9d69284631"
+          }
+        ]
+      },
+      {
+        "declared": "packages/*/{README.md,PACKAGE.md}",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "packages/access/PACKAGE.md",
+            "state": "file",
+            "sha256": "0081948af13796c8caf673b44e32d5e1761a3805bfc6981b88cfdf459cdf6a56"
+          },
+          {
+            "path": "packages/access/README.md",
+            "state": "file",
+            "sha256": "cc90fb12df0198a55fa5a73eacb4b7858376ca468f677e6e3126ae4d72a6e410"
+          },
+          {
+            "path": "packages/attributes/README.md",
+            "state": "file",
+            "sha256": "1a9ef6531675bd9e6cf373c582751993bd3ae2f00cd8e2d1d3bed4d3da2447ee"
+          },
+          {
+            "path": "packages/core/PACKAGE.md",
+            "state": "file",
+            "sha256": "88ce1c27be30b7ec3e3c12453458ec6f112323b58426d74474589f0ac00f2b96"
+          },
+          {
+            "path": "packages/core/README.md",
+            "state": "file",
+            "sha256": "652181fbf3e4ae9575b147b0088c3a04dc0aa9fb664de73dc3fa4d68d723e5c8"
+          },
+          {
+            "path": "packages/crm/README.md",
+            "state": "file",
+            "sha256": "357a0ac84a808aa42dbb55d02c1a7a35b3579c6f17fa0e4e4e8d73a2004ee7b9"
+          },
+          {
+            "path": "packages/intl/README.md",
+            "state": "file",
+            "sha256": "1633f898916528264e2aded5b7ada0abc412f0569a7ef8e518bd401846e6696b"
+          },
+          {
+            "path": "packages/media/README.md",
+            "state": "file",
+            "sha256": "9a7d578c1607bbd80cd8aecb9e52dda25830b214bb2ce20ca677db8ccd349bf9"
+          },
+          {
+            "path": "packages/modules/PACKAGE.md",
+            "state": "file",
+            "sha256": "192a6325b78b528b6972f3af83677053f708cbebd11c7012bd71a4ed1a5b601d"
+          },
+          {
+            "path": "packages/modules/README.md",
+            "state": "file",
+            "sha256": "efc182da040e7bb0a37c1d51a909d6eddebb946ed009082600d96ae03ac0c89e"
+          },
+          {
+            "path": "packages/notifications/README.md",
+            "state": "file",
+            "sha256": "b32b30728320174e4577a6dce8efb267b482958bdc4b49686c403d0cd777d46b"
+          },
+          {
+            "path": "packages/operations/README.md",
+            "state": "file",
+            "sha256": "864514390e16235e69475294e77aa97580ac474e9167113f750ea99acb09f8aa"
+          },
+          {
+            "path": "packages/panels/README.md",
+            "state": "file",
+            "sha256": "9fca932e47c889802694a2794c8aee85b89077c86ee79fb95a8dcf7e03ed5822"
+          },
+          {
+            "path": "packages/recurrence/README.md",
+            "state": "file",
+            "sha256": "8c002c8e64876c773f01e137d7669c86b27b7f0ddf77548f6ba2b6c8a19bfe51"
+          },
+          {
+            "path": "packages/search-intl/README.md",
+            "state": "file",
+            "sha256": "d269a72da045bc289eeb2e68803d9ae62cd2ae2d81a29b24e535440d6f8d68fc"
+          },
+          {
+            "path": "packages/search-meilisearch/README.md",
+            "state": "file",
+            "sha256": "334a742fbae995015eb514ec1279936f9186f05852d44f99ddd06b4bf301657c"
+          },
+          {
+            "path": "packages/search/README.md",
+            "state": "file",
+            "sha256": "91c89770e669a1148c6662732653f602c77a7504a396a600111a4b27a8911df6"
+          },
+          {
+            "path": "packages/tasks-workflow/README.md",
+            "state": "file",
+            "sha256": "7549c0485ce34992d8c6733859436be46fc698dcb4310a6267eae7fd7eb6b695"
+          },
+          {
+            "path": "packages/tasks/PACKAGE.md",
+            "state": "file",
+            "sha256": "b10eeaeb0bdffed96a4aad89d32e12a01f5f55b623cba354d55b0f231ba5c5c6"
+          },
+          {
+            "path": "packages/tasks/README.md",
+            "state": "file",
+            "sha256": "4f0546bdde03ef50e4ed81633b9a1ed5572dde657576796c3797c8d9d6d218c6"
+          },
+          {
+            "path": "packages/tenancy/PACKAGE.md",
+            "state": "file",
+            "sha256": "d6532d7f941f55b6c9837ca4294ae14a52fcc01bb30779263ddf0dfab9e146e7"
+          },
+          {
+            "path": "packages/tenancy/README.md",
+            "state": "file",
+            "sha256": "fb33b4349b22eb59ac77db6bf6abfff285311753161b305fa89947eea925a7a1"
+          },
+          {
+            "path": "packages/transfer/README.md",
+            "state": "file",
+            "sha256": "2b428bb2e6c86f5b8419592721aae925155c67de1859656fe761cbe4699aa16c"
+          },
+          {
+            "path": "packages/wakeup/README.md",
+            "state": "file",
+            "sha256": "dea16d31bfe5e835f526aa827e031cccea20d39ef306bac02c7ba85b83a871e7"
+          },
+          {
+            "path": "packages/workflow/README.md",
+            "state": "file",
+            "sha256": "622a7dee0884f18cf8f8904243ea998629fe899cb3afb961b0bcefe4389b867c"
+          }
+        ]
+      },
+      {
+        "declared": "packages/*/{phpstan.neon,phpstan-baseline.neon,composer-dependency-analyser.php,composer.json}",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "packages/access/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "020f3e5913b8580b95a1789cb2fdf61933b906799f8c3a63a97ac0711259b17b"
+          },
+          {
+            "path": "packages/access/composer.json",
+            "state": "file",
+            "sha256": "5f3fd4e74c59d2971a11785a6dd44dbc9cc5e2093cdce78d57321730a8d1d376"
+          },
+          {
+            "path": "packages/access/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "f1ca3a3aae7183247703a705e49b6f31fe5c818b74732729180dc5de57c54d29"
+          },
+          {
+            "path": "packages/access/phpstan.neon",
+            "state": "file",
+            "sha256": "7df46d2fec7542f0fa9761b95cbd21f10eb3a2246a7a7e1b40b14f61a8e99378"
+          },
+          {
+            "path": "packages/attributes/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "2c32e0667872a524108533a83c245237c63d364c99dcab59a595cd8db166b2f2"
+          },
+          {
+            "path": "packages/attributes/composer.json",
+            "state": "file",
+            "sha256": "05ea5be60d5314c294d73cac744ba73dc0e5c44fc3a34e7df9c784146ab739c9"
+          },
+          {
+            "path": "packages/attributes/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "8df69e80c6bd9986d403b1a3a27f6bd0bd06999cdd85b33372ae0597cf7f3474"
+          },
+          {
+            "path": "packages/attributes/phpstan.neon",
+            "state": "file",
+            "sha256": "172d2556978c59f8dc99054415456ddf6b5b4798de178146d6b7de237c50e2a6"
+          },
+          {
+            "path": "packages/core/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "5bfe3b9cf4d57848dbc64aa6e392c42355368cf443b4a9bb98702b384a1e69e8"
+          },
+          {
+            "path": "packages/core/composer.json",
+            "state": "file",
+            "sha256": "cee3bf0e9497cdbffb0bc96cd8930001039ec8e93384f4c13f592f4024d135e8"
+          },
+          {
+            "path": "packages/core/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "d26c77fd4fbbe21ee1e15c6b2e28b9553f80d3c478996ba96817143029457f47"
+          },
+          {
+            "path": "packages/core/phpstan.neon",
+            "state": "file",
+            "sha256": "4b5145e014fce52169daa0ec2a4c54c53bdd34ffb0cd95ba9055c24c39a81133"
+          },
+          {
+            "path": "packages/crm/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "e8b7224a7e9955d147d06f4ac861f06b40eaac348957a394975d6c1073d7b314"
+          },
+          {
+            "path": "packages/crm/composer.json",
+            "state": "file",
+            "sha256": "34a58a3d3e1469545b8de6eba0c6510f2b372b089e422a5da7afa1e6069c4368"
+          },
+          {
+            "path": "packages/crm/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "03d19c48cd4499e376a15f435c00890d5cc77520165754844ffaf28448914bdc"
+          },
+          {
+            "path": "packages/crm/phpstan.neon",
+            "state": "file",
+            "sha256": "c70d07688cc22c2318e23b4f3afe685acbe0a8f73580a6c43fe074982aa06553"
+          },
+          {
+            "path": "packages/intl/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "194d6fa0429a5cbe2e849a7d45fb07e99eb43d944e942fbd495e78e00d956e62"
+          },
+          {
+            "path": "packages/intl/composer.json",
+            "state": "file",
+            "sha256": "62038ac29fea94e02a03e5fbc1f84b1fed724c8cc6008fe782116f6e1c52b316"
+          },
+          {
+            "path": "packages/intl/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "058f3515e1001d53f959452edea57952d5985dfea0222457aa62308c58ddb8f5"
+          },
+          {
+            "path": "packages/intl/phpstan.neon",
+            "state": "file",
+            "sha256": "4a4e3ffa0aa99a2355dd84d73280b5f7270d85069eb8a160a9912f0983701c31"
+          },
+          {
+            "path": "packages/media/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "803dd3a8803290a796755902c2d0899119950a03ce8ebe14e8468fd1763f140e"
+          },
+          {
+            "path": "packages/media/composer.json",
+            "state": "file",
+            "sha256": "786728a876e27aa4f36609481e7ca0e3ab1590631736b7ad692824edc555f22c"
+          },
+          {
+            "path": "packages/media/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "e7251e4417872027d737fbc789d887b8ea5ce6caef7e1e59a3ef2051fa32f47f"
+          },
+          {
+            "path": "packages/media/phpstan.neon",
+            "state": "file",
+            "sha256": "54fc7d72b3d5445a8057726b84aef97618e9a07d32501938e2674af39a8c031e"
+          },
+          {
+            "path": "packages/modules/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "87d49e95272a30fed269f05bceb73dd12c6d7e736c47c62af4f4b312e4233ae2"
+          },
+          {
+            "path": "packages/modules/composer.json",
+            "state": "file",
+            "sha256": "e31b4f7459950bea47b67db86b5c379156286c015776d55debf858183a64f0e5"
+          },
+          {
+            "path": "packages/modules/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "584eb42ec77971a101723ad13650bf64fde8238da727b72e7ed1eb25a7339e93"
+          },
+          {
+            "path": "packages/modules/phpstan.neon",
+            "state": "file",
+            "sha256": "39d2857006c320a37f91edb7bbcec64d087e03d940eaeb62a37c91dd56eb010d"
+          },
+          {
+            "path": "packages/notifications/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "e8b7224a7e9955d147d06f4ac861f06b40eaac348957a394975d6c1073d7b314"
+          },
+          {
+            "path": "packages/notifications/composer.json",
+            "state": "file",
+            "sha256": "4ae86f6695c9e6273c4b3a69c9c376136654f8b9cfe437bda6c7166bd2f9ee21"
+          },
+          {
+            "path": "packages/notifications/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "41f3f46db9341a36b5de35e7681200b8ad6844ac23b8f2b1a25af7b28eec53e8"
+          },
+          {
+            "path": "packages/notifications/phpstan.neon",
+            "state": "file",
+            "sha256": "bbe02948b7064b361cb01363c68658d1d798f028f40b942f5e3ce36ad563ba40"
+          },
+          {
+            "path": "packages/operations/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "abacf81c261a44c59e5921f7c212154950b2f95613eab1bbe7c53dc484806544"
+          },
+          {
+            "path": "packages/operations/composer.json",
+            "state": "file",
+            "sha256": "30a0cde8603e3aff294bcca96a9ede06657a86b1be5e2f6b91fa3aeadb4f5e46"
+          },
+          {
+            "path": "packages/operations/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "3fdfef86b5c7e04042812c159594831e5bb0734f14e34e2482c35cbe6f24e797"
+          },
+          {
+            "path": "packages/operations/phpstan.neon",
+            "state": "file",
+            "sha256": "9753e7bf89a8f47368bb3cb62be25579200b5c8785d3de3efb3efc5ec3134bf1"
+          },
+          {
+            "path": "packages/panels/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "5472f0e371b3ab821c4c6762538b84431e57851b581623816f41719e7571b8f3"
+          },
+          {
+            "path": "packages/panels/composer.json",
+            "state": "file",
+            "sha256": "d667c2a41bd9dac0aab7af8d33f53ceefe16d5c6a2f714db173b101f40d88542"
+          },
+          {
+            "path": "packages/panels/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "3c2161b9d181cf72c6881056705f408ce3e99315fce5711f9f074b80060051ab"
+          },
+          {
+            "path": "packages/panels/phpstan.neon",
+            "state": "file",
+            "sha256": "857e2b6d0339b0b856268daf36ccfb83df010b495fc153164d853a0cbf6f5349"
+          },
+          {
+            "path": "packages/recurrence/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "d3ba17e46ac6e211dc676f0e04728336d7ff3b40ea7dcb8b5d5ca3fa873b7337"
+          },
+          {
+            "path": "packages/recurrence/composer.json",
+            "state": "file",
+            "sha256": "f12827a5fdab8fd60e9cd817873a47f20970bfa8a882cea7f4d01a31793db055"
+          },
+          {
+            "path": "packages/recurrence/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "948b36c02948f3bc06797def853ddffd50d26e91bb0d08e9bf13f3421a997ca2"
+          },
+          {
+            "path": "packages/recurrence/phpstan.neon",
+            "state": "file",
+            "sha256": "402836632751161ef392042a87f34d970d529b277f3386f20ef41c584408cbfe"
+          },
+          {
+            "path": "packages/search-intl/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "344e3b76ebf9c219250e78e8f6efe16f26121f738df7cde3d559a7702c1ef27d"
+          },
+          {
+            "path": "packages/search-intl/composer.json",
+            "state": "file",
+            "sha256": "6a7d89447269c0d43a565430cb92906b99ddf100a6cf2ecbe9332d7573647305"
+          },
+          {
+            "path": "packages/search-intl/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "fb2d7d07f21ea9dc81b4b35a0b18cd3fa56a44cd66f9259d23e8d3e4778aab17"
+          },
+          {
+            "path": "packages/search-intl/phpstan.neon",
+            "state": "file",
+            "sha256": "3cdc7c7710ca3924344c1f7b55165c7353efb6724f4f6ee6dff36d04e617564c"
+          },
+          {
+            "path": "packages/search-meilisearch/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "9bebfea7d93fa6477cf095abd0305bedd58e38832b733db4f007a68ea617124b"
+          },
+          {
+            "path": "packages/search-meilisearch/composer.json",
+            "state": "file",
+            "sha256": "221d24021d1c9b244f4903279a117e469b9badbe71cd539a864d9795ac697ddd"
+          },
+          {
+            "path": "packages/search-meilisearch/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "4abf1fe9b5094403202ea37b5c3d404980a2cf0eef45332a6ec62ae57caf4201"
+          },
+          {
+            "path": "packages/search-meilisearch/phpstan.neon",
+            "state": "file",
+            "sha256": "8fd8a2610967ee350ea8f88975415e5a2b821e46983acc38005e38e1e77b322a"
+          },
+          {
+            "path": "packages/search/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "818c8150d00edad4453c20e8076a4fbcd172d2224e2d5306b487ef398105dd52"
+          },
+          {
+            "path": "packages/search/composer.json",
+            "state": "file",
+            "sha256": "feb621f19263a125d03645b974befe6a9600b4e1af498131285887a3b997c627"
+          },
+          {
+            "path": "packages/search/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "99e7e7a6d5e9beee285178c223aaad3f162a5d840d5f4b4c4ae21eb7cbc88c21"
+          },
+          {
+            "path": "packages/search/phpstan.neon",
+            "state": "file",
+            "sha256": "a4275d2b190cbca50ae272a03ac7387d459f93be407af4da86a96e5f4b3992bb"
+          },
+          {
+            "path": "packages/tasks-workflow/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "a8a1bb9334446492b9293e959350ec6d96169d7a6a5390d8e9e7d5536c1a4ef0"
+          },
+          {
+            "path": "packages/tasks-workflow/composer.json",
+            "state": "file",
+            "sha256": "43f5d54c5fd760be3b438ce52af9d801dd70e22ecfa567eacf2b84cbf503e17c"
+          },
+          {
+            "path": "packages/tasks-workflow/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "820a30388f84e257b48e66de09095b3014c4b2f7d9349003e7b505e163676b9c"
+          },
+          {
+            "path": "packages/tasks-workflow/phpstan.neon",
+            "state": "file",
+            "sha256": "4baa78ba3c73744df4ec4b66fe74dad59ecca639441445dbe6cfd6b8611cdea0"
+          },
+          {
+            "path": "packages/tasks/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "e8b7224a7e9955d147d06f4ac861f06b40eaac348957a394975d6c1073d7b314"
+          },
+          {
+            "path": "packages/tasks/composer.json",
+            "state": "file",
+            "sha256": "2b3d95f7c1eaf35256141342c56efc451991ebc7cafe0ff4cf3e672e66781822"
+          },
+          {
+            "path": "packages/tasks/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "8c75904d0d5a5d10677771ad06bfd62a93582d50df7f9dcac5ad1e69211e9adf"
+          },
+          {
+            "path": "packages/tasks/phpstan.neon",
+            "state": "file",
+            "sha256": "f52786a32ee6bf2d836045011203ace9de761174968219a31f3acebfc1ece2ff"
+          },
+          {
+            "path": "packages/tenancy/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "8b9e44feb450c7dfe56fffd8930f8bc19998fe803a371aea792452955ddee682"
+          },
+          {
+            "path": "packages/tenancy/composer.json",
+            "state": "file",
+            "sha256": "6cb1c69436fdd182cfc70d9ddf4c032755062b7ac681a2ace99c8ebc1bc317a6"
+          },
+          {
+            "path": "packages/tenancy/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "778b1d664f07fc2d28dac43dbc5a57fb06c71b39d0be904bb8b70242fecbec37"
+          },
+          {
+            "path": "packages/tenancy/phpstan.neon",
+            "state": "file",
+            "sha256": "4d0b937870e1284feda95fbd3d15fd99ab73ed0d71d047285eb8aa8dae5ff8dd"
+          },
+          {
+            "path": "packages/transfer/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "104d28a4be64efd4ab0ece73b34ac1ab1c10baa51ac4a38f26fcab2a2c6b6208"
+          },
+          {
+            "path": "packages/transfer/composer.json",
+            "state": "file",
+            "sha256": "2708fcd97706fa0a94eef90f487db5759b7c8c40a3f4703107e5dffde81cbfe6"
+          },
+          {
+            "path": "packages/transfer/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "959923fdd5073445e0d1d88212173e631be97952dd14f2be70a895299087ee18"
+          },
+          {
+            "path": "packages/transfer/phpstan.neon",
+            "state": "file",
+            "sha256": "4fa78cfa00a8b8b6e249b45da85221117a95760284ae67cc8900831d2ac05db8"
+          },
+          {
+            "path": "packages/wakeup/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "2c5ba940759a3e21d16864fe60c06a3aec085ed01bb1eb49d4108185c4823ad4"
+          },
+          {
+            "path": "packages/wakeup/composer.json",
+            "state": "file",
+            "sha256": "f9a67dae801bdd2861d514e45d8b51aa9cec3d9244cb7a65146d2ec6fb69a314"
+          },
+          {
+            "path": "packages/wakeup/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "1fcdec5090553ed55d3caee5fbd41a5504f4413c98de6debb4c5e0f8e209d8f6"
+          },
+          {
+            "path": "packages/wakeup/phpstan.neon",
+            "state": "file",
+            "sha256": "03a6c7790972f0f65c61d965ee791fed8f0cc19b45a51f4459df598726c5742f"
+          },
+          {
+            "path": "packages/workflow/composer-dependency-analyser.php",
+            "state": "file",
+            "sha256": "818c8150d00edad4453c20e8076a4fbcd172d2224e2d5306b487ef398105dd52"
+          },
+          {
+            "path": "packages/workflow/composer.json",
+            "state": "file",
+            "sha256": "6ac4e415c08d3a0a4d7d902dae85eb9f61b8cbc4d04a929928570a9d69284631"
+          },
+          {
+            "path": "packages/workflow/phpstan-baseline.neon",
+            "state": "file",
+            "sha256": "17903012fc327eacb13e827b90956862a0cb98d10904e854b7073e8ed65c92f2"
+          },
+          {
+            "path": "packages/workflow/phpstan.neon",
+            "state": "file",
+            "sha256": "87ab44c6b95991c0d4a7c1e7b04f18bba80e60f71b914946abc174eb9f677b1e"
+          }
+        ]
+      },
+      {
+        "declared": "phpstan-baseline.neon",
+        "path": "phpstan-baseline.neon",
+        "state": "file",
+        "sha256": "caf87945b65385206ce319b02d7b07b8b6dd4cfc123933343828cb617a7e551c"
+      },
+      {
+        "declared": "phpstan.neon",
+        "path": "phpstan.neon",
+        "state": "file",
+        "sha256": "351fbd5fec4d5fd15a6584805cf131d793713bd3f54d3f02295cc3da0d4c010a"
+      },
+      {
+        "declared": "phpunit.xml",
+        "path": "phpunit.xml",
+        "state": "file",
+        "sha256": "ddd5941ff68847e6cb1a594089e3c88fc07158736a11fedefee8bd3a18bfcc99"
+      },
+      {
+        "declared": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01/baseline-metrics.json",
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01/baseline-metrics.json",
+        "state": "file",
+        "sha256": "0aab31a9052b28786219db27d80e6c193c7af19522b3e6d4aa9b6680c8685ece"
+      },
+      {
+        "declared": "scripts.golden",
+        "state": "missing"
+      },
+      {
+        "declared": "scripts.test",
+        "state": "missing"
+      },
+      {
+        "declared": "scripts/anti-weakening-gate.sh",
+        "path": "scripts/anti-weakening-gate.sh",
+        "state": "file",
+        "sha256": "e37c1118eba6ace8e72c38f3e72e950f51133282737a1679d43cf6b44c0e5ac4"
+      },
+      {
+        "declared": "scripts/manifest-check.py",
+        "path": "scripts/manifest-check.py",
+        "state": "file",
+        "sha256": "995ceb2b7d473e90791d1cdcbc3655fbc7c10b6d0429b28d655df0d88ba66bd1"
+      },
+      {
+        "declared": "scripts/php84",
+        "path": "scripts/php84",
+        "state": "file",
+        "sha256": "b9a7c4d1a1ca3dc2fdc088712d70965a8aa9992c794563ebc7763a6fd10110a1"
+      },
+      {
+        "declared": "scripts/phpstan-contour.php",
+        "state": "missing"
+      },
+      {
+        "declared": "scripts/{ownership-gate.php,ownership-map.json,ownership-gate-baseline.json,quality-ceilings.json,quality-ceiling-guard.php,phpstan-packages.sh,dependency-analyser.sh,anti-weakening-gate.sh}",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "scripts/anti-weakening-gate.sh",
+            "state": "file",
+            "sha256": "e37c1118eba6ace8e72c38f3e72e950f51133282737a1679d43cf6b44c0e5ac4"
+          },
+          {
+            "path": "scripts/dependency-analyser.sh",
+            "state": "file",
+            "sha256": "2f224b35a37db22e29f0c531ce136ac886cc0ae537de95685a1575230496e3d8"
+          },
+          {
+            "path": "scripts/ownership-gate-baseline.json",
+            "state": "file",
+            "sha256": "6d4bf18d1897691979b73a26091aa4f29676f1665ace1cd25a01c2353aa10277"
+          },
+          {
+            "path": "scripts/ownership-gate.php",
+            "state": "file",
+            "sha256": "fcaf52f4d353ca71a82e7ff535d3bcd87a11deec0ca7d71913a1e6af79c99533"
+          },
+          {
+            "path": "scripts/ownership-map.json",
+            "state": "file",
+            "sha256": "c11bf3c0696f6c90c06ac7d49c984a6285e7fb3fa8c56eedb710e7ea89e0297e"
+          },
+          {
+            "path": "scripts/phpstan-packages.sh",
+            "state": "file",
+            "sha256": "e3b99a8ad2e10478f2b863fa1e37690390640c403268112e1681c72f3aa3a3bf"
+          },
+          {
+            "path": "scripts/quality-ceiling-guard.php",
+            "state": "file",
+            "sha256": "6dbb17ae4a164d7cb40be1eb999919ccddbf46f4c938482581ecbaf1962a8960"
+          },
+          {
+            "path": "scripts/quality-ceilings.json",
+            "state": "file",
+            "sha256": "1014bbdba51915c4226223fe2c0cdc04aca287f4d32a3734ddcaea1a905164ee"
+          }
+        ]
+      },
+      {
+        "declared": "tests/Golden/**",
+        "state": "tracked-set",
+        "members": [
+          {
+            "path": "tests/Golden/GoldenTest.php",
+            "state": "file",
+            "sha256": "da25ab9ad312571e12346e8a9e547bcc27de29e1556e838b53121f80334a8888"
+          },
+          {
+            "path": "tests/Golden/GoldenTestCase.php",
+            "state": "file",
+            "sha256": "045dae01aea3dd61d15344407de465efa128c600e23f7ee8cff767e6cf81e161"
+          },
+          {
+            "path": "tests/Golden/REBASELINE.md",
+            "state": "file",
+            "sha256": "1b80bea97e9e68f4ccd90a6248b02388cd68bc43ea61c95726319db07e1b5a22"
+          },
+          {
+            "path": "tests/Golden/Support/GoldenSnapshot.php",
+            "state": "file",
+            "sha256": "73cd843befa5df7b4110d56405b5a82fecd69222f58c28604191f89fd3858b14"
+          },
+          {
+            "path": "tests/Golden/Support/Normalizer.php",
+            "state": "file",
+            "sha256": "ded45b5b56ad1f3320a19842d958b194fa51288e45019b318c25bc77edf6529a"
+          },
+          {
+            "path": "tests/Golden/Support/RenameMap.php",
+            "state": "file",
+            "sha256": "896ba6c53fce72b73c2cef1529a1799925b55f9611a1e21087b2f9a957f30167"
+          },
+          {
+            "path": "tests/Golden/baseline/events.json",
+            "state": "file",
+            "sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d"
+          },
+          {
+            "path": "tests/Golden/baseline/php-surface.json",
+            "state": "file",
+            "sha256": "994eb6ab6065c61a97c229680f25d39a5cfc43161fd5c51bf480753a58a67ab3"
+          },
+          {
+            "path": "tests/Golden/baseline/routes.json",
+            "state": "file",
+            "sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7"
+          },
+          {
+            "path": "tests/Golden/baseline/wire.json",
+            "state": "file",
+            "sha256": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2"
+          },
+          {
+            "path": "tests/Golden/rename-map.json",
+            "state": "file",
+            "sha256": "e947b7710c756f5f38b1162580d5587d70e9ba2b48fb20f28947a1d878561c93"
+          }
+        ]
+      }
+    ],
+    "observed_repository_head": "4db2b99497cf66a340186f54b6933345ca73d543"
+  }
+}
