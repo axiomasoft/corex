@@ -1,0 +1,87 @@
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid
+./composer.json is valid
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-codex/instruction-layers-f9" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/modules" is not present in the lock file.
+- Required (in require-dev) package "orchestra/testbench" is in the lock file as "v11.2.0" but that does not satisfy your constraint "^10.12|^11.3".
+- Required (in require-dev) package "pestphp/pest" is in the lock file as "v4.7.8" but that does not satisfy your constraint "^5.2".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid
+./composer.json is valid
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/modules" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/wakeup" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required (in require-dev) package "orchestra/testbench" is in the lock file as "v11.2.0" but that does not satisfy your constraint "^10.12|^11.3".
+- Required (in require-dev) package "pestphp/pest" is in the lock file as "v4.7.8" but that does not satisfy your constraint "^5.2".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid
+./composer.json is valid
+./composer.json is valid
+./composer.json is valid
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/search" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+./composer.json is valid
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/modules" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r
+./composer.json is valid but your composer.lock has some warnings
+# Lock file warnings
+- The lock file is not up to date with the latest changes in composer.json, it is recommended that you run `composer update` or `composer update <package name>`.
+- Required package "corex/core" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+- Required package "corex/modules" is in the lock file as "dev-main" but that does not satisfy your constraint "^1.0@dev".
+This usually happens when composer files are incorrectly merged or the composer.json file is manually edited.
+Read more about correctly resolving merge conflicts https://getcomposer.org/doc/articles/resolving-merge-conflicts.md
+and prefer using the "require" command over editing the composer.json file directly https://getcomposer.org/doc/03-cli.md#require-r

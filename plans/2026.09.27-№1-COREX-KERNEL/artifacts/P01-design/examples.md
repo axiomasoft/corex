@@ -927,6 +927,9 @@ run "${1:?usage: dependency-analyser.sh <package-dir>|--all}"
 -        if: matrix.php == '8.3'
 -        run: composer remove corex/tenancy --no-update --no-interaction
 @@
++      - name: Laravel 12 test stack (D42)
++        if: matrix.laravel == '12.*'
++        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
        - name: Install dependencies
          run: composer update --prefer-dist --no-interaction --no-progress
 +      - name: Composer audit
@@ -951,7 +954,7 @@ SHA проставляет `pinact run`, не вручную.
           php-version: '8.4'
           coverage: none
       - run: python3 scripts/manifest-check.py
-      - run: for d in . packages/*/; do composer validate --strict --no-check-lock --working-dir="$d" || exit 1; done
+      - run: for f in composer.json packages/*/composer.json; do composer validate --strict --no-check-lock --working-dir="$(dirname "$f")" || exit 1; done
 
   zizmor:
     name: Workflow security (zizmor)

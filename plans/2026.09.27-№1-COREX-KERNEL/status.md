@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 3cf87b284a0eb6d7ad6e39607cf92d483e0d18e11d81f53ffa2309e9d1e14107
+inputs_sha256: 478eece7c9bd05bd90f3d0dc959167328e10157dc63e61fa5de5fca396906371
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🔴 Blocked |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-28 |
 
 ## 4. Phase Index & Status Board
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 0/4 | 🔴 Blocked |
+| P01 | Окружение, платформа и страховочная сетка | 0/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🔴 Blocked | 2026-09-28 |
+| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟡 In progress | 2026-09-28 |
 | P01.2 | Golden-снимки с нормализатором переименований | ⬜ Not started | — |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
 | P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
@@ -88,7 +88,13 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · blocked · O-1: sudo apt install php8.4-gmp. Возобновление: php84 --check GREEN, затем §4.1 шаг 3. Evidence: findings/P01.1-environment-preflight.md.
 write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · decision-pending · O-1 выполнен: php84 --check GREEN. O-2: corex_test auth failed; sudo требует пароль владельца. Возобновление: PG select 1 GREEN. Evidence: findings/P01.1-post-install-preflight.md. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · local-repair · Composer AzGuard VCS is a monorepo root. Reuse the existing pinned private exporter for packages/core; no upstream/API change. Evidence: artifacts/P01.1-execution/azguard-staging-repair.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · local-repair · AzGuard staging repair revalidated with the exact original Composer update carrier: GREEN. Evidence: artifacts/P01.1-execution/azguard-staging-repair-complete.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · block-candidate · D37 Pest ^5.2 cannot resolve Laravel 12 (Process 8 vs 7). Tested Pest ^4.7 L12-only proposal passes 818 unchanged tests. Missing stack decision; independent review pending. Evidence: artifacts/P01.1-execution/l12-design-required.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 
-- P01.1: escalation
+- —

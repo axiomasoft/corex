@@ -240,6 +240,8 @@
    `with: { persist-credentials: false }`.
 4. Матрица `tests`: php `['8.4','8.5']` × laravel `['12.*','13.*']`; удалить шаг «Boxed profile». `tests-pg`: матрица
    `postgres: ['16','18']` × laravel; image `postgres:${{ matrix.postgres }}`; остальные PG-службы `postgres:18`.
+   Только Laravel 12 ветка test/PG-матрицы перед update переопределяет Pest на `^4.7`
+   через `composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction` (D42).
 5. После каждого шага `composer update|install` — шаг `composer audit --locked` (тот же `--working-dir`).
 6. Новые jobs (examples §8.2): `manifests` (`composer manifests:check` из P01.1 + цикл `composer validate --strict
    --no-check-lock` по 21 корню); `golden` (`composer golden`); `ownership` (`php scripts/ownership-gate.php`);
