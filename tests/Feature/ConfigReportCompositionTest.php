@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tests\Feature;
+
+use CoreX\Tests\Golden\GoldenTestCase;
+use Illuminate\Support\Facades\Artisan;
+
+final class ConfigReportCompositionTest extends GoldenTestCase
+{
+    public function test_package_sections_preserve_the_complete_report(): void
+    {
+        config([
+            'corex.pubsub.driver' => 'redis',
+            'corex-tenancy.wakeup.driver' => 'root_registry',
+            'tenancy.oidc.enabled' => false,
+            'tenancy.oidc.client_secret' => null,
+            'corex-intl.reference.cursor_secret' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+            'corex-search.cursor_secret' => null,
+            'corex-search-meilisearch.key' => 'test-only-meilisearch-key',
+        ]);
+
+        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(<<<'REPORT'
+driver pubsub.driver=redis
+driver tenancy.wakeup.driver=root_registry
+driver tenancy.oidc.enabled=false
+adapter pubsub.redis=available
+adapter wakeup.root_registry=available
+secret tenancy.oidc.client_secret=absent
+secret corex-intl.reference.cursor_secret=present
+WARNING [secret-default] corex-intl.reference.cursor_secret
+secret corex-search.cursor_secret=absent
+secret corex-search-meilisearch.key=present
+
+REPORT, Artisan::output());
+    }
+}
