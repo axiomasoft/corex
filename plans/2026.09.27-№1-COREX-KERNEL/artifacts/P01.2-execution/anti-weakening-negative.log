@@ -1,0 +1,5 @@
+ANTI-WEAKENING GATE: база сравнения = c1cc4f74e63ab052b2aefd917bfdd20e408d8495
+ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -4, D79, sha=97fdc77) — база сравнения не совпадает
+ANTI-WEAKENING GATE: тесты sqlite 984 -> 985, pg 604 -> 604
+ANTI-WEAKENING GATE: golden baseline changed without a REBASELINE.md entry (HEAD worktree)
+ANTI-WEAKENING GATE: FAILED

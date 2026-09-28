@@ -76,11 +76,21 @@ if git diff --name-status "$DIFF_RANGE" 2>/dev/null | awk '$1 == "A" {print $2}'
     log_fail "новый файл *baseline.neon добавлен диффом (скрытый долг запрещён)"
 fi
 
-# Frozen Golden snapshots require an explicit rebaseline decision entry.
-if git diff --name-only "$DIFF_RANGE" -- tests/Golden/baseline | command grep -q . \
-   && ! git diff "$DIFF_RANGE" -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-'; then
-    log_fail "golden baseline changed without a REBASELINE.md entry"
+# Bind each baseline change to its own rebaseline entry. A historical initial
+# entry in the remote-base diff must not authorize unrelated future changes.
+check_golden_rebaseline() {
+    local before="$1" after="${2:-}"
+    if git diff --name-only "$before" ${after:+"$after"} -- tests/Golden/baseline | command grep -q . \
+       && ! git diff "$before" ${after:+"$after"} -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-'; then
+        log_fail "golden baseline changed without a REBASELINE.md entry ($before ${after:-worktree})"
+    fi
+}
+if [ -n "$BASE_REF" ]; then
+    while read -r golden_commit; do
+        check_golden_rebaseline "$golden_commit^" "$golden_commit"
+    done < <(git rev-list "$DIFF_RANGE" -- tests/Golden/baseline)
 fi
+check_golden_rebaseline HEAD
 
 # --- 2. --min= в composer.json не понижен ---
 extract_min() {

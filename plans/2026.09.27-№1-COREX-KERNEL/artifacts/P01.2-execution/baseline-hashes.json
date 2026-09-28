@@ -1,0 +1,6 @@
+{
+  "tests/Golden/baseline/events.json": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+  "tests/Golden/baseline/php-surface.json": "994eb6ab6065c61a97c229680f25d39a5cfc43161fd5c51bf480753a58a67ab3",
+  "tests/Golden/baseline/routes.json": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+  "tests/Golden/baseline/wire.json": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2"
+}

@@ -27,7 +27,7 @@ final readonly class RenameMap
         }
 
         foreach ($data['manual'] as $rule) {
-            if ($rule['kind'] === 'class') {
+            if ($rule['kind'] === 'identifier' && str_contains($rule['from'], '\\')) {
                 $classes[$rule['from']] = $rule['to'];
             }
         }

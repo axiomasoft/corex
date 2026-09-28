@@ -34,5 +34,9 @@ it('matches the frozen golden baseline modulo planned renames', function (string
     $baseline = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
     $expected = Normalizer::normalize($map->apply($baseline));
 
-    expect($actual)->toBe($expected);
+    // Compare records separately so one API change produces a bounded, useful diff.
+    expect(array_keys($actual))->toBe(array_keys($expected));
+    foreach ($expected as $key => $record) {
+        expect($actual[$key])->toBe($record);
+    }
 })->with('layers');
