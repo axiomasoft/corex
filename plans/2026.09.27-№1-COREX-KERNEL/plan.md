@@ -123,7 +123,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00. Фазы P01–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01. Фазы P02–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
@@ -131,6 +131,10 @@ operations, независимые модули, детерминированн�
 | B00-A | P00.1 | frontier/high | manual | full | recommended: glossary и карта пакетов/namespace задают имена всего ядра; решения с фактами. |
 | B00-A | P00.2 | frontier/high | manual | full | recommended: финальная архитектура `research/04-architecture.md` + delta доктрины по glossary P00.1; вторым в B00-A. |
 | B00-A | P00.3 | frontier/high | manual | light | recommended: перевод PLAN2 в superseded и `plans/ACTIVE.md` — bookkeeping решения D23; третьим в B00-A. |
+| solo | P01.1 | implementation/high | manual | full | recommended: окружение PHP 8.4 и манифесты — предусловие всех остальных items; owner gates O-1/O-2 проверяются первыми шагами. |
+| B01-B | P01.2 | implementation/high | manual | full | recommended: golden на зелёном стеке P01.1; общий контекст сетки с P01.3. |
+| B01-B | P01.3 | implementation/high | manual | full | recommended: ratchet-гейты после golden (анализ `tests/Golden`, anti-weakening правится последовательно); вторым в B01-B. |
+| solo | P01.4 | implementation/high | manual | full | recommended: CI подключает команды, созданные P01.1–P01.3; отдельная сессия — workflow-hardening и zizmor. |
 
 ## 4. Update Log
 
@@ -140,6 +144,7 @@ operations, независимые модули, детерминированн�
 | 2026-09-27 | `task:plan-design P00`: D24 (skeleton P01–P09 → `backlog/`, цикл finish + design audit на фазу); досье P00 дополнено (`research/P00-design-rag.md`, `examples.md`, no-search record); Code Guidance P00.2/P00.3 | claude-opus-5-5/high |
 
 | 2026-09-27 | P00 audit remediation A1–A5: graph prerequisites before split, deterministic map/doctrine checks, fresh supersede baseline, portable chatom read; B00-A same-session Codex + Cursor reviewer, semantic route unchanged; scope remains design only | codex/gpt-6-astra/high |
+| 2026-09-28 | `task:plan-design P01`: `backlog/P01.md` → `phases/P01/`, items P01.1–P01.4, D36–D39, досье `research/P01-design.md`, `research/P01-design-rag.md`, примеры/факты/скрипты `artifacts/P01-design/`, captures `artifacts/P01-design-rag/`; Routing solo P01.1, B01-B, solo P01.4 | claude-opus-5-5/high |
 
 ## 5. Decision Log
 

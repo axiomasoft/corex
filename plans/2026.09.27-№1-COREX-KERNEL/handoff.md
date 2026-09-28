@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-28 — after P00.3
+# HANDOFF — 2026-09-28 — after P00
 
-**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P01
+**Next:** design-finish: task:plan-design 2026.09.27-№1-COREX-KERNEL finish
 
 | Параметр | Значение |
 |:--|:--|
@@ -9,20 +9,26 @@
 | Effort | high |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | Дизайн P01 по фактическим результатам P00 (D21/D24). |
+| Суть | Whole-plan finish по детализированным фазам P00–P01: execution-sheet строки P01, fingerprint; затем design audit. |
 
 ```text
-$ task:plan-design 2026.09.27-№1-COREX-KERNEL P01
+$ task:plan-design 2026.09.27-№1-COREX-KERNEL finish
 ```
 
-**Done:** P00.1 closed-green: glossary v1 (`research/03-glossary.md`), карты `artifacts/P00/*.tsv` (558 строк, 21 пакет; 1756 целевых рёбер ацикличны и kernel-independent), `check-maps.py` (default/`--dependencies`/`--doctrine`), D25–D35; ревью cursor/grok-4.7-high 2 раунда, R1–R5 исправлены (`findings/P00.1-evidence.json`). P00.2 closed-green: `research/04-architecture.md`, `artifacts/P00/doctrine-delta.md` (58 статей + политики, NEW/NON), ревью grok 2 раунда, S1–S9 исправлены (`findings/P00.2-evidence.json`). P00.3 closed-green: `plans/ACTIVE.md` → PLAN3, PLAN2 paused (PLAN3.D23), supersede OK. Фаза P00 закрыта (direct-close).
+**Done:** P01 детализирована: `phases/P01/P01.md` + P01.1 (окружение PHP 8.4, манифесты D36/D37), P01.2 (golden D38),
+P01.3 (ownership v2, PHPStan max, dependency-analyser — D37/D39), P01.4 (CI supply chain D18/D39). Решения D36–D39.
+Досье `research/P01-design.md` (§1 карта кода, §4 runbooks, §5 playbook, §6 self-check, §7 owner gates),
+`research/P01-design-rag.md` (E1–E7), captures `artifacts/P01-design-rag/` (2 http + 2 perplexity), факты и примеры
+`artifacts/P01-design/`, проверенные скрипты `manifest-check.py` (сейчас 154 нарушения = рабочий список P01.1),
+`junit-summary.py`, `golden-rename-map.py` (666 class / 16 package / 3 ambiguous). Routing: solo P01.1; B01-B P01.2+P01.3;
+solo P01.4 — все implementation/high, full.
 
-**Remaining:** дизайн P01 по фактическим результатам P00 (D21/D24).
+**Remaining:** finish (execution-sheet), `task:plan-audit 2026.09.27-№1-COREX-KERNEL design`, затем исполнение P01.1 (solo).
 
-**Sources of truth:** `plan.md`, `roadmap.md` execution-sheet, `phases/P00/`, `journal.jsonl`, `findings/design-remediation.md`, `findings/design-remediation-independent-review.json`.
+**Sources of truth:** `plan.md` §3, `phases/P01/`, `research/P01-design.md`, `decisions/D36–D39`, `roadmap.md`.
 
-**Open risks:** Блокирующих замечаний к текущему дизайну P00 нет. Окружение PHP 8.4 для P01+ устанавливается/проверяется в P01; готовность runtime будущих фаз здесь не заявляется.
+**Open risks:** Owner gates до исполнения P01.1: O-1 `sudo apt install php8.4-xml php8.4-intl php8.4-sqlite3 php8.4-bcmath php8.4-zip php8.4-gmp php8.4-gd php8.4-pcov`;
+O-2 роль/БД `corex` в системном PostgreSQL 16 (команды — `research/P01-design.md` §7). O-3 push + live CI — граница фазы.
 
-**Workarounds/Deferred/Open questions:** Claude CLI OAuth истёк; B00-A назначен текущему Codex, независимый reviewer Cursor. Семантический класс/effort сохранён. PLAN2 и его чужие изменения сохранены.
-
-Continuity: `findings/design-ready-continuity.json`, lifecycle `scope-complete`, reason `authorized-scope-complete`. Поручение подготовить план выполнено; новый root не требуется.
+**Workarounds/Deferred/Open questions:** Stancl alpha-пины и AzGuard `@dev` — временные исключения D36 п.3 (снятие P07).
+Roave report-only и SBOM — P09. Входы `zizmor-action` v0.6.4 — VERIFY-AT-EXEC при pin.

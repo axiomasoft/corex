@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: b0cbcc09d7a08ca0dc705e3207e026717797ff9bb3dac0210f4651005df91166
+inputs_sha256: 9c43b67fc92382975dcfd30f912db90c6652c4ec62e7eaf058f55a0a00d81c2c
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟢 Done |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-28 |
 
 ## 4. Phase Index & Status Board
@@ -24,6 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
+| P01 | Окружение, платформа и страховочная сетка | 0/4 | ⬜ Not started |
 
 ## Phase P00
 
@@ -32,6 +33,15 @@ generated_by: task plan-views status
 | P00.1 | Glossary v1 и карты переносов | 🟢 Done | 2026-09-28 |
 | P00.2 | Финальная архитектура и delta доктрины | 🟢 Done | 2026-09-28 |
 | P00.3 | Supersede PLAN2 | 🟢 Done | 2026-09-28 |
+
+## Phase P01
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P01.1 | Окружение PHP 8.4 и платформа манифестов | ⬜ Not started | — |
+| P01.2 | Golden-снимки с нормализатором переименований | ⬜ Not started | — |
+| P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
+| P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
 
 ## 6. Update Log
 
@@ -62,6 +72,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | claude-code/claude-opus-5-5/high | plan-run · no-op · Post-close write-site evaluation (task_contract.evaluate, validation receipts exit 0).
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-28 | claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 

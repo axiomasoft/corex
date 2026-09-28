@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-27 · **Соответствует plan.md:** P00 детализирована; P01–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
+**Обновлён:** 2026-09-28 · **Соответствует plan.md:** P00 закрыта; P01 детализирована; P02–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -14,7 +14,7 @@ execution-sheet → закрытие фазы → дизайн следующе�
 | Фаза | Суть | Маршрут (детали — execution-sheet) | Зависимости | Owner gate |
 |:--|:--|:--|:--|:--|
 | P00 | glossary, карты, архитектура, supersede PLAN2 | frontier/high | — | — |
-| P01 | окружение PHP 8.4, платформа, CI supply chain, страховочная сетка | impl/high (план) | P00 | окружение PHP 8.4 (Q1) |
+| P01 | окружение PHP 8.4, платформа, golden, ratchet-гейты, CI supply chain | impl/high | P00 | O-1 расширения php8.4, O-2 роль PG, O-3 push + live CI |
 | P02 | vendor, состав пакетов, namespace = путь | impl/medium–high | P01 | — |
 | P03 | feature modules + Internal | impl/medium–high | P02 | — |
 | P04 | #[Api]/#[Spi], DTO, ошибки | impl/high, fr/high | P03 | — |
@@ -28,7 +28,7 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 | Риск | Где | Митигация |
 |:--|:--|:--|
-| Нет PHP 8.4 у исполнителя (хост 8.3, Docker недоступен) | P01+ | P01.1 окружение; без PHP 8.4 — стоп/эскалация |
+| PHP 8.4 без расширений, PG без роли (хост, 2026-09-28) | P01+ | `scripts/php84 --check`, owner gates O-1/O-2 (`research/P01-design.md` §7); иначе стоп |
 | Массовые переносы ломают поведение | P02, P03 | golden P01, per-package тесты, карта + инструмент, сухой прогон |
 | Замена движка tenancy | P07 | frontier-решение с замером, адаптер, PG-матрица |
 | Расхождение принципов с chatom | все | D22, `research/02` §12, сверка при дизайне каждой фазы |
