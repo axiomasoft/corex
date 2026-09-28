@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (initial); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27) |
+| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -145,6 +145,10 @@ operations, независимые модули, детерминированн�
 
 | 2026-09-27 | P00 audit remediation A1–A5: graph prerequisites before split, deterministic map/doctrine checks, fresh supersede baseline, portable chatom read; B00-A same-session Codex + Cursor reviewer, semantic route unchanged; scope remains design only | codex/gpt-6-astra/high |
 | 2026-09-28 | `task:plan-design P01`: `backlog/P01.md` → `phases/P01/`, items P01.1–P01.4, D36–D39, досье `research/P01-design.md`, `research/P01-design-rag.md`, примеры/факты/скрипты `artifacts/P01-design/`, captures `artifacts/P01-design-rag/`; Routing solo P01.1, B01-B, solo P01.4 | claude-opus-5-5/high |
+| 2026-09-28 | `task:plan-design finish`: согласованы зависимости и три запуска P01 в execution-sheet; явная ссылка на индекс captures; handoff на независимый design audit текущего fingerprint. Граница — дизайн P00–P01 по D24. | designer/codex/gpt-6-astra/high |
+| 2026-09-28 | Manual B1–B3 autofix + `task:plan-design finish`: D40 supersedes D38 (симметричная golden-проекция), обязательные поля php-surface, Validation с exit 0 на корректном дереве; доказательства — `findings/design-remediation-2026-09-28.md`. Продукт и plan-run не затронуты. Фактический маршрут implementation/high вместо рекомендованного frontier/high записан в provenance. | designer/codex/gpt-6-sol/high |
+
+| 2026-09-28 | Owner-authorized audit autofix: D41, actual-declaration golden collector, access dev closure, wire fixture/exit/cleanup, scoped derived normalization, float-preserving JSON, successful baseline mode, initial ownership-baseline allowance and fail-closed analyser. Independent review within current audit; product unchanged. | auditor/fixer/codex/gpt-6-sol/high |
 
 ## 5. Decision Log
 

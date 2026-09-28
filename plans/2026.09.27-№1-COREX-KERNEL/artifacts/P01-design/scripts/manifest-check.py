@@ -66,6 +66,8 @@ def main() -> int:
             violations.append(f'{label}: {code}: {detail}')
 
         requires = {**data.get('require', {}), **data.get('require-dev', {})}
+        if is_root and 'corex/access' not in requires:
+            bad('golden-closure', 'root must install corex/access and its upstreams for the all-package golden surface')
         if data.get('require', {}).get('php') != PHP:
             bad('php', f"require.php={data.get('require', {}).get('php')!r}, expected {PHP!r}")
         if data.get('minimum-stability') != 'stable':

@@ -35,8 +35,16 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 <!-- execution-sheet/v1 -->
 
-Эта таблица — **единственное конкретное per-admission execution-расписание**. Строки фаз P01+ добавляются при их дизайне.
+Эта таблица — **единственное конкретное per-admission execution-расписание**. Finish 2026-09-28 согласовал все
+детализированные фазы P00–P01; P00 уже закрыта. P01 допускается только после GREEN design audit текущего fingerprint.
+P01.1 выполняется отдельно: создаёт окружение и зелёный стек для остальных items. B01-B объединяет P01.2 → P01.3
+с общими golden/anti-weakening входами; внутри батча порядок последовательный. P01.4 потребляет готовые команды
+P01.1–P01.3 и отдельно подключает их в CI. Каждый запуск P01 — implementation/high и full; auto-fix остаётся у executor.
+Фазы P02–P09 в backlog не входят в этот finish (D24).
 
 | Admission | Command | Route | Review | Executor (provider/model + effort) | Independent Reviewer + effort or self-check | Auto-fix executor + effort/limit | Checkpoint | Order / short risk reason |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | 1 · B00-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | — | P00.1 → P00.2 → P00.3; имена и карты ядра |
+| 2 · solo P01.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | O-1/O-2 preflight | После P00; окружение, манифесты, совместимость тестового стека |
+| 3 · B01-B | `task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P01.1 GREEN | P01.2 → P01.3; golden до изменения analysis/anti-weakening |
+| 4 · solo P01.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P01.3 GREEN; O-3 после item | CI потребляет гейты P01.1–P01.3; live CI до P02 |

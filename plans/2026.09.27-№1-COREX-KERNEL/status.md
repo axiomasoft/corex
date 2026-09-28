@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 9c43b67fc92382975dcfd30f912db90c6652c4ec62e7eaf058f55a0a00d81c2c
+inputs_sha256: 38abdc72c27e8adaa3fce5ec3d1d750042ad65272b71e744030506832a282cc2
 generated_by: task plan-views status
 -->
 
@@ -73,6 +73,16 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | claude-code/claude-opus-5-5/high | plan-run · no-op · Post-close write-site evaluation (task_contract.evaluate, validation receipts exit 0).
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | designer/codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | cursor/grok-4.7/high | plan-audit · in-progress · Independent P00-P01 design audit, cursor/grok-4.7/high; repository evidence and bounded static reproductions. |
+| 2026-09-28 | cursor/grok-4.7/high | plan-audit · audit-attention · ATTENTION: 1 Blocker + 2 Major. B1 golden apply fails P01 acceptance; B2 php-surface skeleton; B3 grep exit 1. findings/design-audit-2026-09-28.md. Product unchanged. |
+| 2026-09-28 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-audit · in-progress · Owner-authorized inline fixes; independent reviewer gpt-6-astra/xhigh evaluating sealed candidate. Product unchanged. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-audit · audit-green · GREEN: owner-authorized inline fixes; independent gpt-6-astra/xhigh review on final fingerprint. findings/design-audit-autofix-2026-09-28.md. Product unchanged. |
 
 ## Owner Gates
 

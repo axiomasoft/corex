@@ -1,34 +1,32 @@
-# HANDOFF — 2026-09-28 — after P00
+# HANDOFF — 2026-09-28 — after P01
 
-**Next:** design-finish: task:plan-design 2026.09.27-№1-COREX-KERNEL finish
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
-| Model class | frontier |
+| Batch | solo |
+| Model class | implementation |
 | Effort | high |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | Whole-plan finish по детализированным фазам P00–P01: execution-sheet строки P01, fingerprint; затем design audit. |
+| Суть | Исполнить P01.1: PHP 8.4/PG preflight, манифесты и зелёный тестовый стек. |
 
-```text
-$ task:plan-design 2026.09.27-№1-COREX-KERNEL finish
+<!-- Task continuity, reducer-owned.
+```session-continuity-decision/v1
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:findings/design-audit-autofix-2026-09-28-checkpoint.json"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```
+-->
+
+```bash
+$ task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1
 ```
 
-**Done:** P01 детализирована: `phases/P01/P01.md` + P01.1 (окружение PHP 8.4, манифесты D36/D37), P01.2 (golden D38),
-P01.3 (ownership v2, PHPStan max, dependency-analyser — D37/D39), P01.4 (CI supply chain D18/D39). Решения D36–D39.
-Досье `research/P01-design.md` (§1 карта кода, §4 runbooks, §5 playbook, §6 self-check, §7 owner gates),
-`research/P01-design-rag.md` (E1–E7), captures `artifacts/P01-design-rag/` (2 http + 2 perplexity), факты и примеры
-`artifacts/P01-design/`, проверенные скрипты `manifest-check.py` (сейчас 154 нарушения = рабочий список P01.1),
-`junit-summary.py`, `golden-rename-map.py` (666 class / 16 package / 3 ambiguous). Routing: solo P01.1; B01-B P01.2+P01.3;
-solo P01.4 — все implementation/high, full.
+**Done:** Design audit GREEN текущего fingerprint `3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350`; C1–C7/IR1 исправлены и перепроверены, независимый reviewer codex/gpt-6-astra/xhigh. Продукт не исполнялся.
 
-**Remaining:** finish (execution-sheet), `task:plan-audit 2026.09.27-№1-COREX-KERNEL design`, затем исполнение P01.1 (solo).
+**Remaining:** P01.1 → P01.2 → P01.3 → P01.4 по execution-sheet; единственный готовый item P01.1.
 
-**Sources of truth:** `plan.md` §3, `phases/P01/`, `research/P01-design.md`, `decisions/D36–D39`, `roadmap.md`.
+**Sources of truth:** `findings/design-audit-autofix-2026-09-28.md`, `findings/design-audit-autofix-2026-09-28-checkpoint.json`, `findings/design-audit-autofix-2026-09-28-independent.json`, `phases/P01/`, `research/P01-design.md`, `artifacts/P01-design/examples.md`, `roadmap.md`.
 
-**Open risks:** Owner gates до исполнения P01.1: O-1 `sudo apt install php8.4-xml php8.4-intl php8.4-sqlite3 php8.4-bcmath php8.4-zip php8.4-gmp php8.4-gd php8.4-pcov`;
-O-2 роль/БД `corex` в системном PostgreSQL 16 (команды — `research/P01-design.md` §7). O-3 push + live CI — граница фазы.
+**Open risks:** O-1/O-2 проверяются до продуктовой работы P01.1; O-3 после P01.4. Полные product/DB/Composer/live CI проверки принадлежат исполнению.
 
-**Workarounds/Deferred/Open questions:** Stancl alpha-пины и AzGuard `@dev` — временные исключения D36 п.3 (снятие P07).
-Roave report-only и SBOM — P09. Входы `zizmor-action` v0.6.4 — VERIFY-AT-EXEC при pin.
+**Design lifecycle:** scope-complete; continue-root сохраняет сессию. Следующая команда — рекомендация, исполнение не начато.

@@ -2,7 +2,9 @@
 
 Норма для исполнителей P01.1–P01.4. Факты — `artifacts/P01-design/facts/README.md` (F1–F6, RAG:—); внешние факты —
 `research/P01-design-rag.md` (E1–E7, RAG:✅); готовый код и эталонные выходы — `artifacts/P01-design/examples.md`.
-Решения — D36 (манифесты), D37 (стек и ratchet), D38 (golden), D39 (ownership и CI). `$P` = `plans/2026.09.27-№1-COREX-KERNEL`.
+Дополнение D41 — inline audit corrections; доказательства `findings/design-audit-autofix-2026-09-28-evidence.json`.
+
+Решения — D36 (манифесты), D37 (стек и ratchet), D40 (golden, заменяет D38), D39 (ownership и CI). `$P` = `plans/2026.09.27-№1-COREX-KERNEL`.
 
 ## 1 Карта кода
 
@@ -36,7 +38,7 @@
 
 1. Окружение: F1 — PHP 8.4.26 есть без 10 расширений; PG 16 на 5432 без роли `corex`; Docker недоступен.
 2. Манифесты: F2; полный перечень нарушений контракта D36/D37 — `python3 $P/artifacts/P01-design/scripts/manifest-check.py`
-   (сейчас exit 1, **154** строки: branch-alias 20, closure 4, illuminate 2, mono-constraint 57, path-repo 2, php 20,
+   (сейчас exit 1, **155** строк; исторический F2 = 154, новый golden-closure = 1: branch-alias 20, closure 4, illuminate 2, mono-constraint 57, path-repo 2, php 20,
    prerelease-root 2, stability 21, stack 26). Это рабочий список P01.1; цель — `manifests OK: 21 roots`.
 3. Замыкание и прототип Composer: F2/F3 (root без `corex/recurrence`, `corex/search`; `modules`/`search-intl` без
    path-repo; `search-intl`/`tenancy` без `corex/modules`).
@@ -53,7 +55,7 @@
 | F3 | PG локально | системный PG 16, `PGSQL_PORT=5432`, роль/БД создаёт владелец (O-2) | D37 п.5 |
 | F4 | Форма межпакетных ограничений | `branch-alias 1.0.x-dev` + `^1.0@dev`, stable везде, замыкание в корне | D36 |
 | F5 | Стек | Pest 5.2 / PHPUnit 13 / Testbench 10.12\|11.3 / PHPStan 2.2 / Larastan 3.12 / Pint 1.32 | D37 п.1 |
-| F6 | Golden vs переименования P02 | замороженный baseline + `rename-map.json` | D38 |
+| F6 | Golden vs переименования P02 | замороженный спроецированный baseline + симметричный `rename-map.json` | D40 (заменяет D38) |
 | F7 | Ownership v2: гейт сразу блокирующий? | ratchet по baseline; `--strict` к закрытию P02 | D39 |
 | F8 | PHPStan level max сразу | да, per package, baseline + потолок только вниз | D37 п.2–3 |
 | F9 | Где запускать analyser | standalone-установка пакета, бинарь из root | D37 п.4 |
@@ -95,7 +97,9 @@
    (b) межпакетные `@dev` → `^1.0@dev`, добавить недостающее замыкание и path-repos (§2 п.3); (c) access `illuminate/*`
    → `^12.0|^13.0`, `orchestra/testbench` → `^10.12|^11.3`; (d) стек D37 п.1 во всех `require-dev`, где пакет уже есть
    (не добавлять инструменты туда, где их нет, кроме root); (e) root: `corex/recurrence`, `corex/search`,
-   `axiomasoft/stancl-tenancy: 4.0.0-alpha1`, `axiomasoft/stancl-jobpipeline: 2.0.0-alpha1`; tenancy — те же пины уже
+   `axiomasoft/stancl-tenancy: 4.0.0-alpha1`, `axiomasoft/stancl-jobpipeline: 2.0.0-alpha1`; root require-dev также
+   `corex/access: ^1.0@dev`, `axioma-studio/azguard-core: ^0.2@dev` + VCS из access (golden всех пакетов требует
+   upstream интерфейсы access; D36 уже разрешает это исключение в installable-корне). tenancy — те же пины уже
    есть. Каждый `composer.json` — `composer validate --strict --no-check-lock --working-dir=<dir>` → `is valid`.
    Скопировать скрипт в `scripts/manifest-check.py` (docstring без путей плана) и добавить composer-скрипт
    `"manifests:check": "python3 scripts/manifest-check.py"`.
@@ -117,36 +121,49 @@
 
 1. `python3 $P/artifacts/P01-design/scripts/golden-rename-map.py` → `rename-map written: 666 class, 16 package,
    3 ambiguous, 0 manual`; `… --check` → `rename-map OK: …`. Правила — точные токены (examples §3.1): применяются к
-   каждой строке JSON baseline токенизацией по `[A-Za-z_]\w*(?:\\[A-Za-z_]\w*)+` (FQCN) и точным сравнением
+   каждой строке и строковому ключу JSON baseline **и current** токенизацией по `[A-Za-z_]\w*(?:\\[A-Za-z_]\w*)+` (FQCN) и точным сравнением
    composer-имён в полях `owner`/`module`/`package`; префиксная замена запрещена (psr-4 folding делает её неверной).
    P02/P03 добавляют правила в `manual` (генератор их сохраняет).
 2. Коллектор `tests/Golden/Support/GoldenSnapshot.php` (examples §3.2): четыре слоя, каждый — список записей с ключом
-   сортировки; JSON — `JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE`, ключи отсортированы рекурсивно.
-   - `php-surface`: все классы/интерфейсы/трейты/enum из PSR-4 `src/` пакетов (composer `autoload.psr-4` каждого
-     `packages/*/composer.json`), включая `Internal` с флагом `internal: true`; для каждого: `kind`, `final`, `abstract`,
-     `readonly`, `parent`, `interfaces` (sorted), `constants` (public: name→value-type), `properties` (public:
-     name, type, static, readonly), `methods` (public, declared in class: name, static, params [name, type, default?,
+   сортировки; JSON — `JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRESERVE_ZERO_FRACTION|JSON_THROW_ON_ERROR`, ключи отсортированы рекурсивно.
+   - `php-surface`: все объявленные классы/интерфейсы/трейты/enum из `packages/*/src/**/*.php`: FQCN извлекается
+     через `token_get_all(TOKEN_PARSE)`, включая classmap и несколько namespace в файле; из пути имя не выводится; процессный classmap коллектор строит по файлам деклараций, включая `Internal` с флагом `internal: true`; для каждого: `kind`, `final`, `abstract`,
+     `readonly`, `parent`, `interfaces` (sorted), `constants` (public, declared in class: name→{value, type}; type =
+     `get_debug_type(value)`, значение обязательно), `properties` (public, declared in class:
+     name→{name, type, static, readonly}), `methods` (public, declared in class: name, static, params [name, type, default?,
      variadic, byRef], return type). Типы — `ReflectionType::__toString()` с FQCN.
+     `default` записывается при `isDefaultValueAvailable()`, включая `null`; иначе ключ отсутствует (`optional` не замена
+     default). Значения constants/default — scalar/array рекурсивно; enum → `{enum: FQCN, case: name}` + `value` для backed enum; object-default →
+     `{class: FQCN, properties: public-values}` без object-id. Все перечисленные поля обязательны, не `ADAPT`.
    - `routes`: `Route::getRoutes()` → `{methods, uri, name, action (Class@method|Closure)}` без middleware-замыканий.
    - `events`: классы `extends CoreX\Events\DomainEvent` (из php-surface) → `{class, name: Class::name()}`; плюс
      `MessageContractRegistry` из контейнера, если привязан → все контракты (`type`, `version`, поля схемы).
-   - `wire`: `$this->artisan('corex:api-snapshots', ['directory' => $tmp])` → содержимое `errors.json`,
+   - `wire`: `$this->artisan('corex:api-snapshots', ['directory' => $tmp, '--fixture' => $root.'/tests/fixtures/public-error-contract.php'])` → содержимое `errors.json`,
      `operations.json`, `openapi.json`, `webhooks.json`; поля `contract_fingerprint`, `registry_fingerprint`,
-     `files.*` (хэши) и `manifest.json` целиком исключаются нормализатором.
+     `files.*` (хэши) остаются в `manifest.json`, который вообще не читается. Производный `operations[*].contract_hash`
+     исключён только у записей операций: hash зависит от module/registry identities, его semantic inputs остаются в записи.
+     Command exit проверяется; отсутствие любого из четырёх файлов — ошибка; tmp удаляется в finally.
+   Normalizer сортирует interface names после rename и вычисляет `internal` по projected class key (производные от имени).
+   Порядок params/default arrays сохраняется; поля API/schema с именами files/generated_at/contract_hash не исключаются.
 3. `tests/Golden/GoldenTest.php`: TestCase — корневой `CoreX\Tests\TestCase` + все service providers пакетов корня
    (список — `extra.laravel.providers` каждого пакета, собрать при создании; tools-провайдер как в
-   `tests/Feature/OperationContractTest.php:49–52`). Тест на слой: `expect(normalize(current))->toBe(normalize(apply(map,
-   baseline)))`; при `GOLDEN_UPDATE=1` — пишет baseline и помечает тест skipped с сообщением «baseline written».
+   `tests/Feature/OperationContractTest.php:49–52`; `AzGuard\AzGuardServiceProvider` перед CoreAuth provider как в
+   `packages/access/tests/Support/CoreAuthTestCase.php`). Тест на слой: `expect(normalize(apply(map, current)))->toBe(normalize(apply(map,
+   baseline)))` (D40); при `GOLDEN_UPDATE=1` — пишет `normalize(apply(map, current))` в baseline и успешно завершает тест
+   с сообщением «baseline written». Неизменная карта идемпотентна; оба снимка имеют конечные имена до и после переноса.
 4. Создание baseline: `GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden` → 4 файла
    `tests/Golden/baseline/{php-surface,routes,events,wire}.json`; повтор без флага → 4 passed; двойной прогон даёт
    идентичные байты (`sha256sum` до/после) — иначе недетерминизм → §5 K5.
-5. `tests/Golden/REBASELINE.md` — таблица `| Дата | D# | Слои | Причина |` с первой строкой `2026-… | PLAN3.D38 | all |
-   initial P01 baseline`.
+5. `tests/Golden/REBASELINE.md` — таблица `| Дата | D# | Слои | Причина |` с первой строкой `2026-… | PLAN3.D40 | all |
+   initial P01 baseline` (действующее решение — PLAN3.D40).
 6. Anti-weakening (examples §6.3): дифф `tests/Golden/baseline/**` без новой строки в `REBASELINE.md` → fail.
 7. Негативный контроль (все — в scratch, откатить `git checkout`): (a) поменять URI одного маршрута в
    `packages/operations/routes/*` → `Golden` routes fail; (b) переименовать публичный метод класса пакета → php-surface
    fail; (c) переименовать namespace одного класса **и** добавить правило в `manual` rename-map → pass; без правила →
-   fail; (d) поменять код ошибки в descriptor → wire fail. Результат — Completion Notes.
+   fail; (d) поменять код ошибки в descriptor → wire fail; (e) сменить тип публичного свойства, значение или тип
+   публичной константы, default параметра (отдельные прогоны; также отсутствие default ↔ `null`) → php-surface fail.
+   Позитивный контроль: старый и конечный FQCN из `generated` сравниваются зелёным с неизменным baseline и картой;
+   `apply(apply(snapshot)) == apply(snapshot)` на всех слоях. Результат — Completion Notes.
 8. `composer.json` script `"golden": "vendor/bin/pest --testsuite=Golden"`; корневой `test` исключает `Golden`
    (`--exclude-testsuite=…,Golden`), CI гоняет его отдельным job (P01.4).
 
@@ -188,7 +205,8 @@
    packages/<p>/phpstan-baseline.neon --memory-limit=2G` → exit 0; повтор без флага → `[OK] No errors`.
    Root `phpstan.neon` → шаблон с paths `tests/Support`, `tests/Golden`, `scripts` (только `*.php`), baseline
    `phpstan-baseline.neon`.
-9. `scripts/quality-ceiling-guard.php --tighten` пишет `scripts/quality-ceilings.json` (факт); повтор без флага →
+9. Создать `scripts/quality-ceilings.json` из examples §6.1 (пустые словари `phpstan`/`dependencies` при инициализации).
+   `scripts/quality-ceiling-guard.php --tighten` пишет `scripts/quality-ceilings.json` (факт); повтор без флага →
    `ceilings OK`. Негатив: удалить одну запись из baseline любого пакета (ошибка вернётся) → phpstan exit 1; вручную
    +1 к `count` baseline → guard exit 1 (`phpstan.<p>: 124 > ceiling 123`).
 10. `scripts/phpstan-packages.sh` (examples §5.2): цикл по `packages/*/phpstan.neon` + root, затем guard;
@@ -198,7 +216,7 @@
 **Dependency analyser.**
 11. Root dev `shipmonk/composer-dependency-analyser ^1.8.4`. На пакет — `composer-dependency-analyser.php` (examples §7):
     `src` (prod), `tests`, `database` (dev, если есть). `scripts/dependency-analyser.sh <dir>|--all`: `composer
-    --working-dir=packages/<dir> update --no-interaction --no-progress` (stage stancl для tenancy), затем
+    --working-dir=packages/<dir> update --no-interaction --no-progress` (stage stancl для tenancy), затем снять временный repository в root **и** tenancy даже при провале update; при провале update не запускать analyser.
     `vendor/bin/composer-dependency-analyser --composer-json=packages/<dir>/composer.json
     --config=packages/<dir>/composer-dependency-analyser.php`.
 12. Для каждого пакета: shadow-зависимость → объявить в `require`/`require-dev` (ограничение — текущая заблокированная
@@ -214,8 +232,7 @@
    pinact: скачать `pinact_linux_amd64.tar.gz` v5.0.0 из GitHub release + `pinact_*_checksums.txt`, `sha256sum -c` →
    OK, распаковать в `build/tools/bin/`.
 2. `build/tools/bin/pinact run` → все `uses:` получают `@<40-hex> # vX.Y.Z`. Обновить до актуальных мажоров (E6):
-   `actions/checkout` v7, `shivammathur/setup-php` 2.37.x. Проверка: `grep -hE "uses: " .github/workflows/*.yml | grep -vcE
-   "@[0-9a-f]{40} # v?[0-9]"` → `0`.
+   `actions/checkout` v7, `shivammathur/setup-php` 2.37.x. Проверка: `bash -c 'uses=$(grep -hE "^\s*-?\s*uses: " .github/workflows/*.yml) || exit 1; bad=$(printf "%s\n" "$uses" | grep -vcE "@[0-9a-f]{40} # v?[0-9]"); rc=$?; printf "%s\n" "$bad"; test "$rc" -le 1 && test "$bad" -eq 0'` → `0`, exit 0; неполный pin или ошибка чтения → exit 1.
 3. `permissions: {}` в начале каждого workflow; каждой job — `permissions: { contents: read }`; `actions/checkout` —
    `with: { persist-credentials: false }`.
 4. Матрица `tests`: php `['8.4','8.5']` × laravel `['12.*','13.*']`; удалить шаг «Boxed profile». `tests-pg`: матрица
@@ -256,7 +273,7 @@
 | Item | Факты, которые исполнитель ищет сам | Решения, оставленные исполнителю | Доказательство готовности |
 |:--|:--|:--|:--|
 | P01.1 | нет (F1–F5, manifest-check даёт полный список правок) | нет; исправление падений K3 — по факту прогона | `manifest-check.py` OK, validate ×21, test/test:pg/test:packages/lint, L12-worktree, `junit-summary --compare` |
-| P01.2 | список провайдеров пакетов (`extra.laravel.providers` — механический сбор) | нет; поля нормализатора — по K5 | 4 passed, байтовая воспроизводимость, 4 негативных контроля |
+| P01.2 | список провайдеров пакетов (`extra.laravel.providers` — механический сбор) | нет; поля нормализатора — по K5 | 4 passed до/после class-rename, идемпотентность, байтовая воспроизводимость, негативы a–e |
 | P01.3 | нет (регэкспы examples §4.2, шаблоны §5–§7) | классификация analyser-ошибок по правилу §4.3 п.12 | ownership OK + 4 негатива; phpstan ×21 OK; ceilings OK + 2 негатива; analyser ×20 OK |
 | P01.4 | SHA текущих версий actions — делает pinact | нет | pinact-grep `0`, zizmor exit 0, YAML OK, anti-weakening OK; live CI — O-3 |
 

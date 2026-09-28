@@ -1,0 +1,54 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "9a1b2a8286a705e746822e2ac270cd499433e083",
+  "continuity": {
+    "evidence": [
+      "batch:3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:findings/design-audit-autofix-2026-09-28-checkpoint.json"
+    ],
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:4639dfd70885fd70e9600a59b515c315bb71504a1fa934f884b031c67ab5e1bd",
+    "plan": "sha256:fe9e4d24dfbb198db15c6fa58c2b7052b5e4645f9242b83c45ca9adc49991a3e",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "O-1/O-2 проверяются до продуктовой работы P01.1; O-3 после P01.4. Полные product/DB/Composer/live CI проверки принадлежат исполнению.",
+    "remaining": "P01.1 → P01.2 → P01.3 → P01.4 по execution-sheet; единственный готовый item P01.1."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model class | implementation |\n| Effort | high |\n| Capabilities | — |\n| Context | continue-root |\n| Суть | Исполнить P01.1: PHP 8.4/PG preflight, манифесты и зелёный тестовый стек. |\n\n<!-- Task continuity, reducer-owned.\n```session-continuity-decision/v1\n{\"outcome\": \"continue-root\", \"reason\": \"authorized-scope-complete\", \"evidence\": [\"batch:3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350\", \"loaded-inputs:reusable\", \"cold-start-cost:0\", \"lifecycle:scope-complete\", \"checkpoint:findings/design-audit-autofix-2026-09-28-checkpoint.json\"], \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n-->\n\n```bash\n$ task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "continue-root",
+    "continuity": {
+      "evidence": [
+        "batch:3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "lifecycle:scope-complete",
+        "checkpoint:findings/design-audit-autofix-2026-09-28-checkpoint.json"
+      ],
+      "outcome": "continue-root",
+      "reason": "authorized-scope-complete",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

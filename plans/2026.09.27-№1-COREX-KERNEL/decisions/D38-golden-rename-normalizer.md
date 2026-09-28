@@ -1,11 +1,11 @@
 ---
 id: D38
 date: 2026-09-28
-status: accepted
+status: superseded
 item: P01.2
 items: [P01.2, P02, P03, P04, P05, P06, P07, P08]
 supersedes: []
-superseded_by: null
+superseded_by: D40
 ---
 # D38 — golden-rename-normalizer (accepted)
 

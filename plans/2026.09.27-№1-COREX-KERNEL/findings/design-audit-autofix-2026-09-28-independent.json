@@ -1,0 +1,441 @@
+{
+  "schema": "independent-design-delta-review/v1",
+  "reviewer": {
+    "agent": "/root/independent_design_review",
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "route_evidence_source": "parent collaboration.spawn_agent selection recorded in audit conversation",
+    "provider_thread_route_attestation": null,
+    "limitations": "No independently captured provider-thread-state or CLI route attestation; collaboration-selected reviewer route only."
+  },
+  "independence": {
+    "fixer": "codex/gpt-6-sol/high",
+    "fresh_context": true,
+    "executor_reasoning_received": false,
+    "inputs": "Parent review brief, plan/specs/artifacts, deterministic evidence, source inspection; no private executor reasoning.",
+    "product_writes": false,
+    "normative_design_writes": false,
+    "journal_or_gate_writes": false
+  },
+  "fingerprint": "3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+  "candidate_freshness": {
+    "before": "3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+    "after": "3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+    "same_candidate": true,
+    "design_gate_at_review": {
+      "allowed": false,
+      "code": "PLAN_DESIGN_AUDIT_MISSING",
+      "fingerprint": "3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+      "phases": [
+        "P00",
+        "P01"
+      ],
+      "items": 7
+    }
+  },
+  "scope": {
+    "phases": [
+      "P00",
+      "P01"
+    ],
+    "detailed_items": 7,
+    "reviewed_delta": "P01 executable examples, D41 corrections, dossier/runbooks, Inputs dependencies and execution-sheet readiness.",
+    "unchanged_reused": "P00 closure and existing P00.1/P00.2 evidence; P02-P09 remain backlog skeletons.",
+    "p00_tracked_diff": []
+  },
+  "verdict": "GREEN",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "IR1",
+      "severity": "Major",
+      "item": "P01.2",
+      "original_fingerprint": "b4bf51518fb8ebb5f1c50550584f177608b165fb3a9cd0bafbb2e975187b97e0",
+      "location": "artifacts/P01-design/examples.md §3.2 Normalizer recursive ksort (original lines 529–531); research/P01-design.md §4.2 array order contract",
+      "scenario": "Changing a public default or constant associative array from ['b'=>2,'a'=>1] to ['a'=>1,'b'=>2] changes observable PHP iteration order, but generic ksort made both snapshots identical.",
+      "impact": "Golden could accept an unplanned semantic change during P02/P03, contrary to retained default/constant values and preserved array order.",
+      "before_evidence": {
+        "raw_different": true,
+        "normalized_equal": true
+      },
+      "repair": "Root fixer preserves recursive array order within exact php-surface constant value and parameter default subtrees; other structural maps remain sorted.",
+      "recheck": {
+        "raw_different": true,
+        "normalized_different": true,
+        "constant_order_detected": true,
+        "nested_default_order_detected": true
+      },
+      "status": "resolved"
+    }
+  ],
+  "verification": {
+    "autofix_check_script": {
+      "path": "findings/design-audit-autofix-2026-09-28-check.py",
+      "sha256": "5d9963a79b7286be78577f0896dc0b52204379c2d8f4e7d7056867883d491d51",
+      "exit": 0,
+      "checks": {
+        "B1-B3": {
+          "scope": "design snippets only; no product/PHP/DB suite or independent audit",
+          "checks": {
+            "B1-B2": {
+              "exit": 0,
+              "stdout": "B1: all generated renames pass before/after; idempotent; drift fails\nB2: constants/properties/defaults recorded; value/type/default drift differs\n",
+              "stderr": ""
+            },
+            "B3-P01.1-0": {
+              "command": "bash -c 'if grep -c stancl-providers composer.json packages/tenancy/composer.json; then exit 1; else test \"$?\" -eq 1; fi'",
+              "clean": {
+                "exit": 0,
+                "stdout": "composer.json:0\npackages/tenancy/composer.json:0\n",
+                "stderr": ""
+              },
+              "violation": {
+                "exit": 1,
+                "stdout": "composer.json:1\npackages/tenancy/composer.json:0\n",
+                "stderr": ""
+              },
+              "missing": {
+                "exit": 1,
+                "stdout": "packages/tenancy/composer.json:0\n",
+                "stderr": "grep: composer.json: No such file or directory\n"
+              }
+            },
+            "B3-P01.1-1": {
+              "command": "bash -c 'if grep -rnE \"PHP 8\\.3|php: \\^8\\.3|\\\"\\^8\\.3\\\"\" README.md docs docs-public packages/*/README.md packages/*/PACKAGE.md packages/*/composer.json composer.json; then exit 1; else test \"$?\" -eq 1; fi'",
+              "clean": {
+                "exit": 0,
+                "stdout": "",
+                "stderr": ""
+              },
+              "violation": {
+                "exit": 1,
+                "stdout": "README.md:1:PHP 8.3\n",
+                "stderr": ""
+              },
+              "missing": {
+                "exit": 1,
+                "stdout": "",
+                "stderr": "grep: README.md: No such file or directory\n"
+              }
+            },
+            "B3-P01.3-0": {
+              "command": "bash -c 'if grep -rn \"phpstan-contour\\|analyse:packages\" scripts tests docs .github composer.json; then exit 1; else test \"$?\" -eq 1; fi'",
+              "clean": {
+                "exit": 0,
+                "stdout": "",
+                "stderr": ""
+              },
+              "violation": {
+                "exit": 1,
+                "stdout": "scripts/check.php:1:phpstan-contour\nscripts/check.php:2:analyse:packages\n",
+                "stderr": ""
+              },
+              "missing": {
+                "exit": 1,
+                "stdout": "",
+                "stderr": "grep: scripts: No such file or directory\n"
+              }
+            },
+            "B3-P01.4-0": {
+              "command": "bash -c 'uses=$(grep -hE \"^\\s*-?\\s*uses: \" .github/workflows/*.yml) || exit 1; bad=$(printf \"%s\\n\" \"$uses\" | grep -vcE \"@[0-9a-f]{40} # v?[0-9]\"); rc=$?; printf \"%s\\n\" \"$bad\"; test \"$rc\" -le 1 && test \"$bad\" -eq 0'",
+              "clean": {
+                "exit": 0,
+                "stdout": "0\n",
+                "stderr": ""
+              },
+              "violation": {
+                "exit": 1,
+                "stdout": "1\n",
+                "stderr": ""
+              },
+              "missing": {
+                "exit": 1,
+                "stdout": "",
+                "stderr": "grep: .github/workflows/*.yml: No such file or directory\n"
+              }
+            },
+            "B3-P01.4-1": {
+              "command": "bash -c 'if grep -nE \"[[:punct:]]8\\.3[[:punct:]]|Boxed profile\" .github/workflows/*.yml; then exit 1; else test \"$?\" -eq 1; fi'",
+              "clean": {
+                "exit": 0,
+                "stdout": "",
+                "stderr": ""
+              },
+              "violation": {
+                "exit": 1,
+                "stdout": "1:php: ['8.3']\n2:Boxed profile\n",
+                "stderr": ""
+              },
+              "missing": {
+                "exit": 1,
+                "stdout": "",
+                "stderr": "grep: .github/workflows/*.yml: No such file or directory\n"
+              }
+            }
+          }
+        },
+        "real-source": {
+          "exit": 0,
+          "stdout": "{\"classes\":1136,\"derived_internal_changes\":14,\"before_after\":true,\"roundtrip\":true,\"float_controls\":true,\"semantic_controls\":true}",
+          "stderr": ""
+        },
+        "wire": {
+          "exit": 0,
+          "stdout": "wire fixture/exit/missing-document/cleanup controls GREEN\n",
+          "stderr": ""
+        },
+        "ownership-initial": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "ownership-growth": {
+          "exit": 1
+        },
+        "ownership-growth-precreation-base": {
+          "exit": 1
+        },
+        "ownership-tighten": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "ceilings-initial": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "ceilings-growth-precreation-base": {
+          "exit": 1
+        },
+        "ceilings-new-key-growth": {
+          "exit": 1
+        },
+        "ceilings-tighten": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "analyser-failed-install": {
+          "exit": 1,
+          "calls": "composer --working-dir=packages/access update --no-interaction --no-progress --quiet\nanalyser --composer-json=packages/access/composer.json --config=packages/access/composer-dependency-analyser.php\nstage\ncomposer --working-dir=packages/tenancy update --no-interaction --no-progress --quiet\ncomposer config --unset repositories.stancl-providers\ncomposer --working-dir=packages/tenancy config --unset repositories.stancl-providers\n"
+        },
+        "analyser-clean": {
+          "exit": 0,
+          "stdout": "==> access\n==> tenancy\n",
+          "stderr": ""
+        }
+      }
+    },
+    "independent_order_recheck": {
+      "raw_different": true,
+      "normalized_different": true,
+      "constant_order_detected": true,
+      "nested_default_order_detected": true
+    },
+    "routing": {
+      "items": {
+        "P00.1": {
+          "item_id": "P00.1",
+          "batch": "B00-A",
+          "batch_key": "B00-A",
+          "route": {
+            "model_class": "frontier",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 131,
+          "recommended": true
+        },
+        "P00.2": {
+          "item_id": "P00.2",
+          "batch": "B00-A",
+          "batch_key": "B00-A",
+          "route": {
+            "model_class": "frontier",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 132,
+          "recommended": true
+        },
+        "P00.3": {
+          "item_id": "P00.3",
+          "batch": "B00-A",
+          "batch_key": "B00-A",
+          "route": {
+            "model_class": "frontier",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "light",
+          "line": 133,
+          "recommended": true
+        },
+        "P01.1": {
+          "item_id": "P01.1",
+          "batch": "solo",
+          "batch_key": "solo:P01.1",
+          "route": {
+            "model_class": "implementation",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 134,
+          "recommended": true
+        },
+        "P01.2": {
+          "item_id": "P01.2",
+          "batch": "B01-B",
+          "batch_key": "B01-B",
+          "route": {
+            "model_class": "implementation",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 135,
+          "recommended": true
+        },
+        "P01.3": {
+          "item_id": "P01.3",
+          "batch": "B01-B",
+          "batch_key": "B01-B",
+          "route": {
+            "model_class": "implementation",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 136,
+          "recommended": true
+        },
+        "P01.4": {
+          "item_id": "P01.4",
+          "batch": "solo",
+          "batch_key": "solo:P01.4",
+          "route": {
+            "model_class": "implementation",
+            "effort": "high"
+          },
+          "exec": "manual",
+          "declared_exec": "manual",
+          "review": "full",
+          "line": 137,
+          "recommended": true
+        }
+      },
+      "routing_digest": "4b932129d2635e5d7e584f08768785e9475bd7b2bad53c56d752a72d39593808"
+    },
+    "product_tracked_diff": [],
+    "direct_source_reads": [
+      "packages/core/src/Events/DomainEvent.php",
+      "packages/operations/src/OpenApi/Commands/WriteApiSnapshots.php",
+      "tests/fixtures/public-error-contract.php",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "independent_ratchet_delta": {
+      "initial-precreation-base": {
+        "exit": 0,
+        "expected": 0,
+        "stderr": ""
+      },
+      "ceiling-growth-precreation-base": {
+        "exit": 1,
+        "expected": 1,
+        "stderr": "quality ceiling raised (scripts/quality-ceilings.json)\n"
+      },
+      "ceiling-new-key-total-growth": {
+        "exit": 1,
+        "expected": 1,
+        "stderr": "quality ceiling raised (scripts/quality-ceilings.json)\n"
+      },
+      "tightening-precreation-base": {
+        "exit": 0,
+        "expected": 0,
+        "stderr": ""
+      },
+      "ownership-growth-precreation-base": {
+        "exit": 1,
+        "expected": 1,
+        "stderr": "ownership baseline gained entries (only removals allowed)\n"
+      },
+      "tightening-existing-baseline-base": {
+        "exit": 0,
+        "expected": 0,
+        "stderr": ""
+      },
+      "invalid-base-fails-closed": {
+        "exit": 1,
+        "expected": 1,
+        "stderr": "fatal: Invalid revision range deadbeefdeadbeefdeadbeefdeadbeefdeadbeef..HEAD\nownership baseline gained entries (only removals allowed)\nfatal: Invalid revision range deadbeefdeadbeefdeadbeefdeadbeefdeadbeef..HEAD\n"
+      }
+    }
+  },
+  "limits": [
+    "This is design acceptance, not completed P01 implementation or whole-system correctness.",
+    "No product suite, real combined GoldenTestCase boot, DB tests, Composer update or live CI ran. Wire command error/cleanup controls use a facade stub; required fixture and emitted-file behavior were also inspected in source.",
+    "PHP 8.4 extensions and PG role/database O-1/O-2 remain explicit P01.1 preflight boundaries; live CI O-3 remains phase boundary.",
+    "External version facts reuse existing primary-source captures and VERIFY-AT-EXEC declarations; no external claims were newly researched.",
+    "No new full P00 audit; retained artifacts and closed phase evidence were reused.",
+    "Parent owns reseal/audit terminal journal and execution admission; this artifact does not mutate those gates."
+  ],
+  "bounded_rebinds": [
+    {
+      "previous_fingerprint": "24cc11091a0271e1099747fca113f2a400c25d9326ff234732d0387fb4978e89",
+      "previous_verdict": "GREEN",
+      "fingerprint": "3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350",
+      "scope": "Only artifacts/P01-design/examples.md §6.3 initial ownership/ceiling anchoring and new-key total debt growth; previous review reused outside this delta.",
+      "method": "Independent execution of full extracted shell block in temporary committed Git history, then existing expanded autofix checks.",
+      "verification": {
+        "initial-precreation-base": {
+          "exit": 0,
+          "expected": 0,
+          "stderr": ""
+        },
+        "ceiling-growth-precreation-base": {
+          "exit": 1,
+          "expected": 1,
+          "stderr": "quality ceiling raised (scripts/quality-ceilings.json)\n"
+        },
+        "ceiling-new-key-total-growth": {
+          "exit": 1,
+          "expected": 1,
+          "stderr": "quality ceiling raised (scripts/quality-ceilings.json)\n"
+        },
+        "tightening-precreation-base": {
+          "exit": 0,
+          "expected": 0,
+          "stderr": ""
+        },
+        "ownership-growth-precreation-base": {
+          "exit": 1,
+          "expected": 1,
+          "stderr": "ownership baseline gained entries (only removals allowed)\n"
+        },
+        "tightening-existing-baseline-base": {
+          "exit": 0,
+          "expected": 0,
+          "stderr": ""
+        },
+        "invalid-base-fails-closed": {
+          "exit": 1,
+          "expected": 1,
+          "stderr": "fatal: Invalid revision range deadbeefdeadbeefdeadbeefdeadbeefdeadbeef..HEAD\nownership baseline gained entries (only removals allowed)\nfatal: Invalid revision range deadbeefdeadbeefdeadbeefdeadbeefdeadbeef..HEAD\n"
+        }
+      },
+      "verdict": "GREEN",
+      "findings": []
+    }
+  ]
+}

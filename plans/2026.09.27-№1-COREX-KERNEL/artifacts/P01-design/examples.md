@@ -2,7 +2,8 @@
 
 Нормативный порядок и команды — `research/P01-design.md` §4. `$P` = `plans/2026.09.27-№1-COREX-KERNEL`.
 Комментарии в bash-блоках начинаются с пробела (` # …`), чтобы селекторы секций Task не принимали их за заголовки; для bash это эквивалентно.
-Код ниже — готовая основа; исполнитель адаптирует только помеченное `ADAPT:`.
+Код ниже — готовая основа; исполнитель адаптирует только помеченное `ADAPT:`. Поля `phpSurface()` в §3.2 обязательны
+по досье §4.2: properties, значения/типы constants и defaults параметров не являются местами адаптации.
 
 ## 1 `scripts/php84` (проверено 2026-09-28 на хосте)
 
@@ -122,12 +123,12 @@ standalone-анализа).
 ### 2.3 `manifest-check.py` — эталон
 
 ```text
-до правок:   manifests FAIL: 154 violations   (exit 1; по кодам — research/P01-design.md §2 п.2)
+до правок:   manifests FAIL: 155 violations   (exit 1; по кодам — research/P01-design.md §2 п.2)
 после P01.1: manifests OK: 21 roots          (exit 0)
 ```
 Негатив: вернуть в любой пакет `"corex/core": "@dev"` → строка `<dir>: mono-constraint: corex/core='@dev', expected '^1.0@dev'`, exit 1.
 
-## 3 Golden (D38)
+## 3 Golden (D40, заменяет D38)
 
 ### 3.1 `tests/Golden/rename-map.json` — форма и применение
 
@@ -157,7 +158,7 @@ declare(strict_types=1);
 namespace CoreX\Tests\Golden\Support;
 
 /**
- * Applies planned renames to the frozen golden baseline as exact tokens.
+ * Projects both the frozen baseline and the current snapshot using exact tokens.
  * Prefix replacement would be wrong: psr-4 folding maps one old prefix to many new ones.
  */
 final readonly class RenameMap
@@ -224,6 +225,11 @@ Worked example: baseline `"type": "?CoreX\\Api\\ApiError"` + правило `Cor
 → `"?CoreX\\Operations\\Errors\\ApiError"`; строка `"corex/access"` → `"axiomasoft/corex-access"`; `"corex/operations"`
 остаётся как есть (ambiguous) — P02 обязан добавить `manual`-правило, иначе golden wire упадёт на `owner`.
 
+Одна проекция для обеих сторон: P01 raw baseline/current с ключом `CoreX\Api\ApiController` после `apply` имеют ключ
+`CoreX\Operations\Http\ApiController`; после переноса current уже имеет конечный ключ, и `apply` сохраняет его.
+При `GOLDEN_UPDATE=1` записывается `normalize(apply(map, current))`; при сравнении `apply` выполняется над baseline и
+current. Повторное применение неизменной карты идемпотентно; новые manual-правила P02/P03 проецируют и frozen baseline.
+
 ### 3.2 Коллектор (скелет)
 
 ```php
@@ -238,35 +244,90 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionNamedType;
+use ReflectionProperty;
 
 final class GoldenSnapshot
 {
     /** @return list<class-string> */
     public static function sourceClasses(string $repoRoot): array
     {
+        // P01 includes historical classmap roots whose namespaces differ from their paths.
+        // Read declarations, then let Composer load their actual names exactly once.
         $classes = [];
-        foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $manifest) {
-            $data = json_decode((string) file_get_contents($manifest), true, flags: JSON_THROW_ON_ERROR);
-            foreach ($data['autoload']['psr-4'] ?? [] as $prefix => $dirs) {
-                foreach ((array) $dirs as $dir) {
-                    $base = dirname($manifest).'/'.rtrim($dir, '/');
-                    if (! str_ends_with(rtrim($dir, '/'), 'src') && ! str_contains($dir, 'src/')) {
-                        continue; // database/, tests/ are not surface
+        $files = [];
+        foreach (glob($repoRoot.'/packages/*/src') ?: [] as $base) {
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($base, \FilesystemIterator::SKIP_DOTS));
+            foreach ($iterator as $file) {
+                if ($file->getExtension() === 'php') {
+                    $files[] = $file->getPathname();
+                }
+            }
+        }
+        sort($files);
+        foreach ($files as $file) {
+            $source = file_get_contents($file);
+            if ($source === false) {
+                throw new \RuntimeException("Cannot read source: {$file}");
+            }
+            $tokens = token_get_all($source, TOKEN_PARSE);
+            $namespace = '';
+            $depth = 0;
+            $namespaceDepth = null;
+            for ($i = 0, $count = count($tokens); $i < $count; $i++) {
+                $token = $tokens[$i];
+                if ($token === '{' || (is_array($token) && in_array($token[0], [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true))) {
+                    $depth++;
+                } elseif ($token === '}') {
+                    if ($namespaceDepth === $depth) {
+                        $namespace = '';
+                        $namespaceDepth = null;
                     }
-                    $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($base, \FilesystemIterator::SKIP_DOTS));
-                    foreach ($iterator as $file) {
-                        if ($file->getExtension() !== 'php') {
-                            continue;
+                    $depth--;
+                } elseif (is_array($token) && $token[0] === T_NAMESPACE) {
+                    $namespace = '';
+                    while (++$i < $count) {
+                        $part = $tokens[$i];
+                        if ($part === ';' || $part === '{') {
+                            if ($part === '{') {
+                                $namespaceDepth = ++$depth;
+                            }
+                            break;
                         }
-                        $relative = substr($file->getPathname(), strlen($base) + 1, -4);
-                        $classes[] = $prefix.str_replace('/', '\\', $relative);
+                        if (is_array($part) && in_array($part[0], [T_STRING, T_NAME_QUALIFIED, T_NS_SEPARATOR], true)) {
+                            $namespace .= $part[1];
+                        }
+                    }
+                } elseif (is_array($token) && in_array($token[0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], true)) {
+                    $j = $i + 1;
+                    while ($j < $count && is_array($tokens[$j]) && in_array($tokens[$j][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+                        $j++;
+                    }
+                    // Anonymous classes and Foo::class have no following declaration name.
+                    if ($j < $count && is_array($tokens[$j]) && $tokens[$j][0] === T_STRING) {
+                        $class = ltrim($namespace.'\\'.$tokens[$j][1], '\\');
+                        if (isset($classes[$class]) && $classes[$class] !== $file) {
+                            throw new \RuntimeException("Duplicate source type: {$class}");
+                        }
+                        $classes[$class] = $file;
                     }
                 }
             }
         }
-        $classes = array_values(array_unique(array_filter($classes, static fn (string $c): bool => class_exists($c) || interface_exists($c) || trait_exists($c) || enum_exists($c))));
+        // Secondary declarations in historical multi-class files need their declaring file.
+        // This class map is process-local to Golden; production autoload remains tested separately.
+        $loaders = \Composer\Autoload\ClassLoader::getRegisteredLoaders();
+        $loader = reset($loaders);
+        if ($loader === false) {
+            throw new \RuntimeException('Composer autoloader required');
+        }
+        $loader->addClassMap($classes);
+        $classes = array_keys($classes);
         sort($classes);
+        foreach ($classes as $class) {
+            if (! class_exists($class) && ! interface_exists($class) && ! trait_exists($class) && ! enum_exists($class)) {
+                throw new \RuntimeException("Declared source type cannot autoload: {$class}");
+            }
+        }
 
         return $classes;
     }
@@ -277,6 +338,31 @@ final class GoldenSnapshot
         $out = [];
         foreach ($classes as $class) {
             $r = new ReflectionClass($class);
+            $constants = [];
+            foreach ($r->getReflectionConstants() as $constant) {
+                if (! $constant->isPublic() || $constant->getDeclaringClass()->getName() !== $class) {
+                    continue;
+                }
+                $value = $constant->getValue();
+                $constants[$constant->getName()] = [
+                    'value' => self::surfaceValue($value),
+                    'type' => get_debug_type($value),
+                ];
+            }
+            ksort($constants);
+            $properties = [];
+            foreach ($r->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                if ($property->getDeclaringClass()->getName() !== $class) {
+                    continue;
+                }
+                $properties[$property->getName()] = [
+                    'name' => $property->getName(),
+                    'type' => (string) $property->getType(),
+                    'static' => $property->isStatic(),
+                    'readonly' => $property->isReadOnly(),
+                ];
+            }
+            ksort($properties);
             $methods = [];
             foreach ($r->getMethods(ReflectionMethod::IS_PUBLIC) as $m) {
                 if ($m->getDeclaringClass()->getName() !== $class) {
@@ -285,13 +371,19 @@ final class GoldenSnapshot
                 $methods[$m->getName()] = [
                     'static' => $m->isStatic(),
                     'return' => (string) $m->getReturnType(),
-                    'params' => array_map(static fn (\ReflectionParameter $p): array => [
-                        'name' => $p->getName(),
-                        'type' => (string) $p->getType(),
-                        'optional' => $p->isOptional(),
-                        'variadic' => $p->isVariadic(),
-                        'byRef' => $p->isPassedByReference(),
-                    ], $m->getParameters()),
+                    'params' => array_map(static function (\ReflectionParameter $p): array {
+                        $parameter = [
+                            'name' => $p->getName(),
+                            'type' => (string) $p->getType(),
+                            'variadic' => $p->isVariadic(),
+                            'byRef' => $p->isPassedByReference(),
+                        ];
+                        if ($p->isDefaultValueAvailable()) {
+                            $parameter['default'] = self::surfaceValue($p->getDefaultValue());
+                        }
+
+                        return $parameter;
+                    }, $m->getParameters()),
                 ];
             }
             ksort($methods);
@@ -303,12 +395,29 @@ final class GoldenSnapshot
                 'internal' => str_contains($class, '\\Internal\\'),
                 'parent' => $r->getParentClass() ? $r->getParentClass()->getName() : null,
                 'interfaces' => self::sorted($r->getInterfaceNames()),
-                'constants' => self::sorted(array_keys(array_filter($r->getReflectionConstants(), static fn ($c) => $c->isPublic() && $c->getDeclaringClass()->getName() === $class))),
+                'constants' => $constants,
+                'properties' => $properties,
                 'methods' => $methods,
             ];
         }
 
         return $out;
+    }
+
+    private static function surfaceValue(mixed $value): mixed
+    {
+        if ($value instanceof \UnitEnum) {
+            return ['enum' => $value::class, 'case' => $value->name]
+                + ($value instanceof \BackedEnum ? ['value' => $value->value] : []);
+        }
+        if (is_object($value)) {
+            return ['class' => $value::class, 'properties' => self::surfaceValue(get_object_vars($value))];
+        }
+        if (is_array($value)) {
+            return array_map(self::surfaceValue(...), $value);
+        }
+
+        return $value;
     }
 
     /** @return list<array<string, mixed>> */
@@ -344,16 +453,35 @@ final class GoldenSnapshot
     }
 
     /** @return array<string, mixed> */
-    public static function wire(string $tmp): array
+    public static function wire(string $tmp, string $fixture): array
     {
-        Artisan::call('corex:api-snapshots', ['directory' => $tmp]);
-        $out = [];
-        foreach (['errors', 'operations', 'openapi', 'webhooks'] as $file) {
-            $path = $tmp.'/'.$file.'.json';
-            $out[$file] = is_file($path) ? json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR) : null;
+        if (file_exists($tmp)) {
+            throw new \RuntimeException("Snapshot directory already exists: {$tmp}");
         }
+        try {
+            if (Artisan::call('corex:api-snapshots', ['directory' => $tmp, '--fixture' => $fixture]) !== 0) {
+                throw new \RuntimeException('Snapshot command failed: '.Artisan::output());
+            }
+            $out = [];
+            foreach (['errors', 'operations', 'openapi', 'webhooks'] as $file) {
+                $path = $tmp.'/'.$file.'.json';
+                if (! is_file($path)) {
+                    throw new \RuntimeException("Missing snapshot: {$path}");
+                }
+                $out[$file] = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
+            }
 
-        return $out;
+            return $out;
+        } finally {
+            foreach (glob($tmp.'/*') ?: [] as $path) {
+                if (is_file($path)) {
+                    unlink($path);
+                }
+            }
+            if (is_dir($tmp)) {
+                rmdir($tmp);
+            }
+        }
     }
 
     /** @param list<string> $values @return list<string> */
@@ -366,9 +494,56 @@ final class GoldenSnapshot
 }
 ```
 
-`Normalizer::normalize(mixed)`: рекурсивный `ksort` ассоциативных массивов; удаление ключей `contract_fingerprint`,
-`registry_fingerprint`, `files` (в wire manifest), `generated_at`; остальное — как есть. Каждое новое исключение — с
-комментарием «почему» (K5).
+Worked example php-surface: `public const LIMIT = 3` → `constants.LIMIT = {"value":3,"type":"int"}`;
+`public readonly string $label` → `properties.label = {"name":"label","type":"string","static":false,"readonly":true}`;
+`public function run(?string $mode = null)` → параметр с `default: null`, а `run(?string $mode)` → без ключа default.
+LIMIT `3 → 4` или `3 → "3"`, property `string → int`, default `null → "fast"` дают разные снимки.
+Private/protected и унаследованные members не повторяются в записи потомка; объявляющий тип имеет свою запись.
+
+`tests/Golden/Support/Normalizer.php` — проекция только производных полей известных слоёв:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tests\Golden\Support;
+
+final class Normalizer
+{
+    public static function normalize(mixed $value, array $path = []): mixed
+    {
+        if (! is_array($value)) {
+            return $value;
+        }
+        // Internal status and interface ordering derive from projected class names.
+        if (count($path) === 1 && isset($value['kind'], $value['methods'], $value['interfaces'])) {
+            $value['internal'] = str_contains((string) $path[0], '\\Internal\\');
+            sort($value['interfaces']);
+        }
+        // These hashes depend on renamed module/registry identities; their semantic
+        // inputs remain in the same record. Never exclude a same-named schema/member.
+        if (count($path) === 2 && $path[0] === 'operations' && isset($value['id'], $value['request_schema'], $value['response_schema'])) {
+            unset($value['contract_hash']);
+        }
+        foreach ($value as $key => $item) {
+            $value[$key] = self::normalize($item, [...$path, $key]);
+        }
+        // PHP array insertion order in constants/defaults is observable. Preserve
+        // it at every nested depth; sorting the surrounding record is still safe.
+        $orderedValue = (count($path) >= 4 && $path[1] === 'constants' && $path[3] === 'value')
+            || (count($path) >= 6 && $path[1] === 'methods' && $path[3] === 'params' && $path[5] === 'default');
+        if (! $orderedValue && ! array_is_list($value)) {
+            ksort($value);
+        }
+
+        return $value;
+    }
+}
+```
+`manifest.json` не входит в wire, поэтому его fingerprints/file-hashes не попадают в снимок. Нормализатор не удаляет
+ключи `files`, `generated_at`, `contract_fingerprint` произвольно: одноимённые методы, константы и schema-properties —
+семантические данные. Порядок params, defaults и schema arrays сохраняется.
 
 ### 3.3 Тест
 
@@ -391,37 +566,43 @@ it('matches the frozen golden baseline modulo planned renames', function (string
         'php-surface' => GoldenSnapshot::phpSurface($classes),
         'routes' => GoldenSnapshot::routes(),
         'events' => GoldenSnapshot::events($classes),
-        'wire' => GoldenSnapshot::wire(sys_get_temp_dir().'/corex-golden-'.getmypid()),
+        'wire' => GoldenSnapshot::wire(sys_get_temp_dir().'/corex-golden-'.getmypid(), $root.'/tests/fixtures/public-error-contract.php'),
     };
     $path = __DIR__."/baseline/{$layer}.json";
+    $map = RenameMap::load(__DIR__.'/rename-map.json');
+    $actual = Normalizer::normalize($map->apply($current));
 
     if (getenv('GOLDEN_UPDATE') === '1') {
-        file_put_contents($path, json_encode(Normalizer::normalize($current), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
-        $this->markTestSkipped("baseline written: {$layer}");
+        file_put_contents($path, json_encode($actual, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR)."\n");
+        expect(is_file($path))->toBeTrue();
+
+        return; // Baseline generation is an explicit successful mode, never a skipped test.
     }
 
     $baseline = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
-    $expected = Normalizer::normalize(RenameMap::load(__DIR__.'/rename-map.json')->apply($baseline));
+    $expected = Normalizer::normalize($map->apply($baseline));
 
-    expect(Normalizer::normalize($current))->toBe($expected);
+    expect($actual)->toBe($expected);
 })->with('layers');
 ```
 `GoldenTestCase extends CoreX\Tests\TestCase`, `getPackageProviders()` = провайдеры `extra.laravel.providers` всех пакетов
-корня + `ToolServiceProvider` (как `tests/Feature/OperationContractTest.php:49–52`). ADAPT: точный список собрать
+корня + `ToolServiceProvider` (как `tests/Feature/OperationContractTest.php:49–52`). Дополнительно `AzGuard\AzGuardServiceProvider` перед `CoreX\Auth\CoreAuthServiceProvider`
+(как `packages/access/tests/Support/CoreAuthTestCase.php`); root dev install P01.1 включает access и AzGuard.
+ADAPT: точный список собрать
 механически (`jq -r '.extra.laravel.providers[]?' packages/*/composer.json`).
 
-Эталон: первый `GOLDEN_UPDATE=1` → `4 skipped`; затем `Tests: 4 passed`. Негативы — досье §4.2 п.7.
+Эталон: первый `GOLDEN_UPDATE=1` → `4 passed`; затем `Tests: 4 passed`. Негативы — досье §4.2 п.7.
 
 ### 3.4 `tests/Golden/REBASELINE.md`
 
 ```markdown
 (заголовок файла: «Golden rebaseline log», уровень 1)
 
-Baseline под `tests/Golden/baseline/` меняется только намеренным изменением поверхности (PLAN3.D38).
+Baseline под `tests/Golden/baseline/` меняется только намеренным изменением поверхности (PLAN3.D40).
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
-| 2026-MM-DD | PLAN3.D38 | all | initial baseline P01.2 |
+| 2026-MM-DD | PLAN3.D40 | all | initial baseline P01.2 |
 ```
 
 ## 4 Ownership gate v2 (D39)
@@ -527,8 +708,8 @@ exit "$status"
 ```json
 {
   "schema": "corex-quality-ceilings/1",
-  "phpstan": {"access": 0, "core": 0, "root": 0},
-  "dependencies": {"notifications": 1}
+  "phpstan": {},
+  "dependencies": {}
 }
 ```
 (значения — факт после `--tighten`; ключи — каталоги пакетов + `root`.)
@@ -597,21 +778,58 @@ echo "ceilings OK\n";
 ### 6.3 `scripts/anti-weakening-gate.sh` — замена строк 71–76
 
 ```bash
- # Quality ratchet (PLAN3.D37/D38/D39): ceilings may only fall, ownership baseline may only
+ # Quality ratchet (PLAN3.D37/D40/D39): ceilings may only fall, ownership baseline may only
  # lose entries, golden baseline changes need a REBASELINE.md entry.
 if git diff "$DIFF_RANGE" -- scripts/quality-ceilings.json | command grep -qE '^\+\s+"[a-z-]+": [0-9]+'; then
     python3 - "$DIFF_RANGE" <<'PY' || log_fail "quality ceiling raised (scripts/quality-ceilings.json)"
 import json, subprocess, sys
 rng = sys.argv[1].split('...')[0].split('..')[0]
-old = json.loads(subprocess.run(['git', 'show', f'{rng}:scripts/quality-ceilings.json'], capture_output=True, text=True).stdout or '{}')
+path = 'scripts/quality-ceilings.json'
+original = subprocess.run(['git', 'show', f'{rng}:{path}'], capture_output=True, text=True)
+if original.returncode:
+    exists = subprocess.run(['git', 'ls-tree', '--name-only', rng, '--', path], capture_output=True, text=True)
+    if exists.returncode or exists.stdout.strip():
+        sys.exit(1)
+    introduced = subprocess.run(['git', 'log', '--reverse', '--diff-filter=A', '--format=%H', f'{rng}..HEAD', '--', path], capture_output=True, text=True)
+    if introduced.returncode:
+        sys.exit(1)
+    commits = introduced.stdout.splitlines()
+    if commits:
+        original = subprocess.run(['git', 'show', f'{commits[0]}:{path}'], capture_output=True, text=True)
+        if original.returncode:
+            sys.exit(1)
+old = json.loads(original.stdout or '{}')
 new = json.load(open('scripts/quality-ceilings.json'))
 raised = [f'{k}.{p}' for k in new if isinstance(new[k], dict) for p, v in new[k].items() if v > old.get(k, {}).get(p, v)]
+raised += [f'{k}.total' for k in new if isinstance(new[k], dict) and old and sum(new[k].values()) > sum(old.get(k, {}).values())]
 sys.exit(1 if raised else 0)
 PY
 fi
-if git diff "$DIFF_RANGE" -- scripts/ownership-gate-baseline.json | command grep -qE '^\+\s+"O[0-9]'; then
-    log_fail "ownership baseline gained entries (only removals allowed)"
-fi
+python3 - "$DIFF_RANGE" <<'PYGUARD' || log_fail "ownership baseline gained entries (only removals allowed)"
+import json, subprocess, sys
+base = sys.argv[1].split('...')[0].split('..')[0]
+path = 'scripts/ownership-gate-baseline.json'
+old = subprocess.run(['git', 'show', f'{base}:{path}'], capture_output=True, text=True)
+if old.returncode:
+    # If the remote comparison base predates creation, bind the first introduced
+    # baseline. Absence in that remote base must never excuse later debt growth.
+    exists = subprocess.run(['git', 'ls-tree', '--name-only', base, '--', path], capture_output=True, text=True)
+    if exists.returncode or exists.stdout.strip():
+        sys.exit(1)
+    introduced = subprocess.run(['git', 'log', '--reverse', '--diff-filter=A', '--format=%H', f'{base}..HEAD', '--', path], capture_output=True, text=True)
+    if introduced.returncode:
+        sys.exit(1)
+    commits = introduced.stdout.splitlines()
+    if not commits:
+        sys.exit(0)
+    old = subprocess.run(['git', 'show', f'{commits[0]}:{path}'], capture_output=True, text=True)
+    if old.returncode:
+        sys.exit(1)
+new = subprocess.run(['git', 'show', f'HEAD:{path}'], capture_output=True, text=True)
+if new.returncode:
+    sys.exit(1)
+sys.exit(1 if set(json.loads(new.stdout)['violations']) - set(json.loads(old.stdout)['violations']) else 0)
+PYGUARD
 if git diff --name-only "$DIFF_RANGE" -- tests/Golden/baseline | command grep -q . \
    && ! git diff "$DIFF_RANGE" -- tests/Golden/REBASELINE.md | command grep -qE '^\+\| [0-9]{4}-'; then
     log_fail "golden baseline changed without a REBASELINE.md entry"
@@ -650,9 +868,19 @@ cd "$(git rev-parse --show-toplevel)"
 
 run() {
     local dir="$1"
-    [[ "$dir" == tenancy ]] && python3 scripts/distribution/stage-stancl-providers.py >/dev/null
-    composer --working-dir="packages/$dir" update --no-interaction --no-progress --quiet
-    [[ "$dir" == tenancy ]] && composer --working-dir="packages/$dir" config --unset repositories.stancl-providers
+    local result=0
+    if [[ "$dir" == tenancy ]]; then
+        python3 scripts/distribution/stage-stancl-providers.py >/dev/null || result=$?
+    fi
+    if (( result == 0 )); then
+        composer --working-dir="packages/$dir" update --no-interaction --no-progress --quiet || result=$?
+    fi
+    if [[ "$dir" == tenancy ]]; then
+        # Staging registers both installing roots; reconcile both even after update fails.
+        composer config --unset repositories.stancl-providers || result=$?
+        composer --working-dir="packages/$dir" config --unset repositories.stancl-providers || result=$?
+    fi
+    (( result == 0 )) || return "$result"
     vendor/bin/composer-dependency-analyser \
         --composer-json="packages/$dir/composer.json" \
         --config="packages/$dir/composer-dependency-analyser.php"
