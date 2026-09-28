@@ -1,0 +1,80 @@
+{
+  "schema_version": "terminal-delivery-receipt/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "subject": "P01.1",
+  "status": "🟢 Done",
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3",
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B01-B |\n| Model class | implementation |\n| Effort | high |\n| Capabilities | — |\n| Context | continue-root |\n| Суть | P01.2: golden package graph; P01.3: статический анализ и quality gates. |\n\n<!-- Task continuity, reducer-owned.\n```session-continuity-decision/v1\n{\"outcome\": \"continue-root\", \"reason\": \"authorized-scope-complete\", \"evidence\": [\"batch:7e2e3d2d70780d52a1836ece3fce7b539c1bcf938785bcfe9b58403282f7b491\", \"loaded-inputs:reusable\", \"cold-start-cost:0\", \"lifecycle:scope-complete\", \"checkpoint:findings/P01.1-execution.md\"], \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n-->",
+  "route": {
+    "batch": "B01-B",
+    "model": null,
+    "thinking": null,
+    "context": "continue-root",
+    "command": null,
+    "continuity": {
+      "outcome": "continue-root",
+      "reason": "authorized-scope-complete",
+      "evidence": [
+        "batch:7e2e3d2d70780d52a1836ece3fce7b539c1bcf938785bcfe9b58403282f7b491",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "lifecycle:scope-complete",
+        "checkpoint:findings/P01.1-execution.md"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    }
+  },
+  "continuity": {
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "evidence": [
+      "batch:7e2e3d2d70780d52a1836ece3fce7b539c1bcf938785bcfe9b58403282f7b491",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:findings/P01.1-execution.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "rationale": {
+    "remaining": "P01.2 и P01.3, затем P01.4 с Laravel 12-исключением D42. Текущий owner scope P01.1 завершён; следующий batch — рекомендация, его исполнение ещё не запрошено.",
+    "open_risks": "Дополнительный access PG-лейн: 110/112; две ошибки прямых grant сохраняются для P07 (FQN upstream против enum в неизменённом lookup). Обязательный root PG GREEN. Шесть существующих optional skip в standalone tenancy; новых skip нет. O-3 остаётся внешним gate после P01.4."
+  },
+  "commit_sha": "74af4cbd053ca0284749cd0fbb5d473c9cd86ff5",
+  "journal": {
+    "line": 46,
+    "sha256": "sha256:4f62e01e527a256cb75453a711713df7cb2f2e14c458d90e0db248db0a275d1a",
+    "run_id": "59468b5b9cb57e77fc04d97cef29a53282d27b69ef9a93421a9bbae1d371bf8c",
+    "result": "closed-green",
+    "command": "plan-run",
+    "batch_receipt": {
+      "batch_id": "solo",
+      "completed_prefix": [
+        "P01.1"
+      ],
+      "handoff_digest": "38319d953adcc8b0896ac621d6c9b9d35089697b5da293827b7723a3e16c3f84",
+      "invocation_digest": "3bd60706a6454e4b7bf9af2bfe507082e6d671e63847556b03be425b06d82272",
+      "membership": [
+        "P01.1"
+      ],
+      "routing_digest": "fe9e4d24dfbb198db15c6fa58c2b7052b5e4645f9242b83c45ca9adc49991a3e",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f",
+      "stop_disposition": "continue"
+    }
+  },
+  "adapter_attestation": {
+    "package": "task",
+    "version": "0.24.11",
+    "command_id": "task:plan-run",
+    "canonical_command_sha256": "sha256:578abe97a51a07d6cc7f7f75488478458db09104f2b9ffca77539fe6b40cd595"
+  },
+  "digests": {
+    "plan": "sha256:fe9e4d24dfbb198db15c6fa58c2b7052b5e4645f9242b83c45ca9adc49991a3e",
+    "handoff": "sha256:38319d953adcc8b0896ac621d6c9b9d35089697b5da293827b7723a3e16c3f84",
+    "state": "sha256:87a4cce51ef99d13a27cc27863a1ad97dbccd506232460ec0dbf3d62330991e4",
+    "closure": null
+  }
+}

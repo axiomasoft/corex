@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 478eece7c9bd05bd90f3d0dc959167328e10157dc63e61fa5de5fca396906371
+inputs_sha256: 687a6d7f8dd4e353857adfe12d413e4e1b7f9aea208e357fac19cff56ccc73f6
 generated_by: task plan-views status
 -->
 
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 0/4 | 🟡 In progress |
+| P01 | Окружение, платформа и страховочная сетка | 1/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟡 In progress | 2026-09-28 |
+| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | 2026-09-28 |
 | P01.2 | Golden-снимки с нормализатором переименований | ⬜ Not started | — |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
 | P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
@@ -94,6 +94,11 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · block-candidate · D37 Pest ^5.2 cannot resolve Laravel 12 (Process 8 vs 7). Tested Pest ^4.7 L12-only proposal passes 818 unchanged tests. Missing stack decision; independent review pending. Evidence: artifacts/P01.1-execution/l12-design-required.json. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · local-repair · Owner approved D42: Pest ^4.7 only for L12. Original require/update carrier now GREEN; unchanged L12 test carrier passes 808+10. Evidence: artifacts/P01.1-execution/l12-repair-complete.json. |
+| 2026-09-28 | reviewer/cursor/grok-4.7/high | plan-audit · audit-green · D42 bounded inline correction independently GREEN; unchanged P00 closure reused. Evidence: artifacts/P01.1-execution/review-round2.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 21 roots; sqlite 808+10; PG 239 (7→0); PHPStan 0; L12 Pest 4.7 per D42; cold install and cursor/grok-4.7 GREEN. write-site: pre_mutation: allow · pre_final: allow. Evidence: findings/P01.1-execution.md. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
+Final typed evaluation: artifacts/P01.1-execution/write-site-final.json; receipts and validation context retained. |
 
 ## Owner Gates
 

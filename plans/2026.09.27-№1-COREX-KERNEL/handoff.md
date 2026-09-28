@@ -1,26 +1,26 @@
 # HANDOFF — 2026-09-28 — after P01.1
 
-**Next:** waiting: O-2 — подготовить роль `corex` и тестовые БД по `findings/P01.1-post-install-preflight.md`; после успешного подключения продолжить P01.1 с baseline.
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
+| Batch | B01-B |
 | Model class | implementation |
 | Effort | high |
 | Capabilities | — |
-| Context | waiting-owner |
-| Суть | O-2: подготовить PostgreSQL для тестов и возобновить P01.1. |
+| Context | continue-root |
+| Суть | P01.2: golden package graph; P01.3: статический анализ и quality gates. |
 
 <!-- Task continuity, reducer-owned.
 ```session-continuity-decision/v1
-{"outcome": "waiting-owner", "reason": "owner-wait", "evidence": ["batch:456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f", "loaded-inputs:reusable", "cold-start-cost:0"], "runnable": false, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:7e2e3d2d70780d52a1836ece3fce7b539c1bcf938785bcfe9b58403282f7b491", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:findings/P01.1-execution.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 -->
 
-**Done:** O-1 выполнен: scripts/php84 --check GREEN. P01.1 остаётся 🔴 Blocked: PostgreSQL auth fail на O-2, sudo требует пароль владельца.
+**Done:** P01.1 GREEN: PHP 8.4, 21 installable манифест, stable lockstep, полный lock; sqlite 808 + workflow 10; root PG 239 (baseline: семь падений → ноль); 20 пакетных suites; PHPStan 0; lint/docs/JUnit/mutation GREEN; холодная установка; Laravel 12 818 тестов; независимый cursor/grok-4.7/high GREEN. D42 закрепляет Pest 4.7 только для Laravel 12; основная ветка Laravel 13 остаётся на Pest 5.2. O-1/O-2 выполнены.
 
-**Remaining:** После O-2: baseline на исходном lock → манифесты/стек → Validation → independent review. P01.2–P01.4 ожидают GREEN P01.1.
+**Remaining:** P01.2 и P01.3, затем P01.4 с Laravel 12-исключением D42. Текущий owner scope P01.1 завершён; следующий batch — рекомендация, его исполнение ещё не запрошено.
 
-**Sources of truth:** phases/P01/P01.1.md; findings/P01.1-environment-preflight.md; findings/P01.1-post-install-preflight.md; artifacts/P01.1-execution/; journal.jsonl.
+**Sources of truth:** phases/P01/P01.1.md; decisions/D42-laravel12-test-stack.md; findings/P01.1-execution.md; artifacts/P01.1-execution/; artifacts/P01/baseline-metrics.json; journal.jsonl.
 
-**Open risks:** PG принимает соединения, но аутентификация corex/corex не проходит; наличие роли и БД не доказано. O-3 сохраняется. Манифесты, lock и продуктовый код не менялись.
+**Open risks:** Дополнительный access PG-лейн: 110/112; две ошибки прямых grant сохраняются для P07 (FQN upstream против enum в неизменённом lookup). Обязательный root PG GREEN. Шесть существующих optional skip в standalone tenancy; новых skip нет. O-3 остаётся внешним gate после P01.4.

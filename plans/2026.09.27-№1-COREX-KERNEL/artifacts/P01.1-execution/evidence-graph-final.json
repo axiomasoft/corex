@@ -1,0 +1,173 @@
+{
+  "schema_version": "evidence-graph/v1",
+  "item_id": "P01.1",
+  "product_paths": [
+    "README.md",
+    "composer.json",
+    "composer.lock",
+    "docs-public/**",
+    "docs/**",
+    "packages/*/composer.json",
+    "packages/*/{README.md,PACKAGE.md}",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01/baseline-metrics.json",
+    "scripts/manifest-check.py",
+    "scripts/php84"
+  ],
+  "digest_inputs": [
+    "composer.json",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/examples.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/facts/README.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/decisions/D36-manifest-lockstep.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/decisions/D37-toolchain-ratchets.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/decisions/D41-audit-inline-corrections.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/phases/P00/P00.closed.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/research/P01-design-rag.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/research/P01-design.md",
+    "scripts/distribution/stage-stancl-providers.py"
+  ],
+  "collisions": [
+    "composer.json"
+  ],
+  "nodes": [
+    {
+      "id": "spec",
+      "kind": "item-spec",
+      "path": "phases/P01/P01.1.md",
+      "sha256": "456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f"
+    },
+    {
+      "id": "bundle",
+      "kind": "bundle",
+      "sha256": "1a39bcadb8b2122118a133976403eb151534b3dcd6e75cebb39a2b79063a0544",
+      "declaration_sha256": "17c8fec5beaf948a42c98a12173732cb84e3f91b3f5fbef3d4306fbf576cf9a7"
+    },
+    {
+      "id": "product",
+      "kind": "declared-files",
+      "anchor": {
+        "paths": [
+          {
+            "path": "README.md",
+            "state": "file",
+            "sha256": "85edfdf63c002c3b560a0081620df2b62bcf231640662ca36b254971f5c47025"
+          },
+          {
+            "path": "composer.json",
+            "state": "file",
+            "sha256": "b07cba69a6cb10531766f99c5734e2b89aa71d132779f189dc45a02282934f35"
+          },
+          {
+            "path": "composer.lock",
+            "state": "file",
+            "sha256": "2c8092dc5415d1734d189037b5f21098354c6ba4ee613d03e09e89e4ed3023e0"
+          },
+          {
+            "path": "docs-public/**",
+            "state": "missing"
+          },
+          {
+            "path": "docs/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/*/composer.json",
+            "state": "missing"
+          },
+          {
+            "path": "packages/*/{README.md,PACKAGE.md}",
+            "state": "missing"
+          },
+          {
+            "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01/baseline-metrics.json",
+            "state": "file",
+            "sha256": "0aab31a9052b28786219db27d80e6c193c7af19522b3e6d4aa9b6680c8685ece"
+          },
+          {
+            "path": "scripts/manifest-check.py",
+            "state": "file",
+            "sha256": "3bf90182e258b8304ef36237bfa9d6d02b2c7938342df8e7faa6069b356b94c9"
+          },
+          {
+            "path": "scripts/php84",
+            "state": "file",
+            "sha256": "b9a7c4d1a1ca3dc2fdc088712d70965a8aa9992c794563ebc7763a6fd10110a1"
+          }
+        ],
+        "sha256": "e98b748ec634456fe749f88d01b33be01796e9d884797a5e968c5aca7b02c320"
+      }
+    },
+    {
+      "id": "closure",
+      "kind": "closure-projections",
+      "paths": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "spec",
+      "to": "product",
+      "kind": "precedes"
+    },
+    {
+      "from": "bundle",
+      "to": "product",
+      "kind": "digest-input"
+    },
+    {
+      "from": "product",
+      "to": "closure",
+      "kind": "byte-identity"
+    }
+  ],
+  "input_ancestors": [
+    {
+      "path": "composer.json",
+      "commit": "a4a2cc685eedf16bc628d2dceffbcc3f1df95390"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/examples.md",
+      "commit": "74af4cbd053ca0284749cd0fbb5d473c9cd86ff5"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/facts/README.md",
+      "commit": "9a1b2a8286a705e746822e2ac270cd499433e083"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/bundles/P01.1.json",
+      "commit": "74af4cbd053ca0284749cd0fbb5d473c9cd86ff5"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D36-manifest-lockstep.md",
+      "commit": "9a1b2a8286a705e746822e2ac270cd499433e083"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D37-toolchain-ratchets.md",
+      "commit": "939146dedd0e0578e9e96270a1c66a50999e6aff"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D41-audit-inline-corrections.md",
+      "commit": "c1cc4f74e63ab052b2aefd917bfdd20e408d8495"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/phases/P00/P00.closed.md",
+      "commit": "2b77ba4513eb4eabbdfc7629741f708955d2c98e"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/phases/P01/P01.1.md",
+      "commit": "c1cc4f74e63ab052b2aefd917bfdd20e408d8495"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P01-design-rag.md",
+      "commit": "9a1b2a8286a705e746822e2ac270cd499433e083"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P01-design.md",
+      "commit": "74af4cbd053ca0284749cd0fbb5d473c9cd86ff5"
+    },
+    {
+      "path": "scripts/distribution/stage-stancl-providers.py",
+      "commit": "939146dedd0e0578e9e96270a1c66a50999e6aff"
+    }
+  ],
+  "sha256": "5d2a2b78170a26b365a8243b2352367767c52d5aa5aaecafb854948e7306c380"
+}
