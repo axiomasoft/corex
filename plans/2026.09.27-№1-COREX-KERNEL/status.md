@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 8cd8089c0cc6699bb40fb998f3130bcb11ef2c23899dba40688c98d1c05435cc
+inputs_sha256: 3cf87b284a0eb6d7ad6e39607cf92d483e0d18e11d81f53ffa2309e9d1e14107
 generated_by: task plan-views status
 -->
 
@@ -87,6 +87,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · decision-pending · O-1: php8.4-gmp отсутствует; требуется owner action. Evidence: findings/P01.1-environment-preflight.md. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · blocked · O-1: sudo apt install php8.4-gmp. Возобновление: php84 --check GREEN, затем §4.1 шаг 3. Evidence: findings/P01.1-environment-preflight.md.
 write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · decision-pending · O-1 выполнен: php84 --check GREEN. O-2: corex_test auth failed; sudo требует пароль владельца. Возобновление: PG select 1 GREEN. Evidence: findings/P01.1-post-install-preflight.md. |
 
 ## Owner Gates
 

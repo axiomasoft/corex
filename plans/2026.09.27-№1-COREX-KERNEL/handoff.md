@@ -1,6 +1,6 @@
 # HANDOFF — 2026-09-28 — after P01.1
 
-**Next:** waiting: O-1 — установить `sudo apt install php8.4-gmp`; затем возобновить P01.1 с проверки `scripts/php84 --check` и шага 3 runbook.
+**Next:** waiting: O-2 — подготовить роль `corex` и тестовые БД по `findings/P01.1-post-install-preflight.md`; после успешного подключения продолжить P01.1 с baseline.
 
 | Параметр | Значение |
 |:--|:--|
@@ -9,7 +9,7 @@
 | Effort | high |
 | Capabilities | — |
 | Context | waiting-owner |
-| Суть | O-1: установить php8.4-gmp и возобновить P01.1. |
+| Суть | O-2: подготовить PostgreSQL для тестов и возобновить P01.1. |
 
 <!-- Task continuity, reducer-owned.
 ```session-continuity-decision/v1
@@ -17,10 +17,10 @@
 ```
 -->
 
-**Done:** Создан scripts/php84; синтаксис и PHP 8.4.26 проверены. P01.1 — 🔴 Blocked на воспроизведённой owner boundary O-1.
+**Done:** O-1 выполнен: scripts/php84 --check GREEN. P01.1 остаётся 🔴 Blocked: PostgreSQL auth fail на O-2, sudo требует пароль владельца.
 
-**Remaining:** После O-1: O-2 preflight → baseline на исходном lock → манифесты/стек → Validation → independent review. P01.2–P01.4 ожидают GREEN P01.1.
+**Remaining:** После O-2: baseline на исходном lock → манифесты/стек → Validation → independent review. P01.2–P01.4 ожидают GREEN P01.1.
 
-**Sources of truth:** phases/P01/P01.1.md; findings/P01.1-environment-preflight.md; artifacts/P01.1-execution/; journal.jsonl.
+**Sources of truth:** phases/P01/P01.1.md; findings/P01.1-environment-preflight.md; findings/P01.1-post-install-preflight.md; artifacts/P01.1-execution/; journal.jsonl.
 
-**Open risks:** Проверка PG ещё не выполнена; O-2 и O-3 сохраняются. Манифесты, lock и продуктовый код не менялись.
+**Open risks:** PG принимает соединения, но аутентификация corex/corex не проходит; наличие роли и БД не доказано. O-3 сохраняется. Манифесты, lock и продуктовый код не менялись.
