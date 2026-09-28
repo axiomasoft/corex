@@ -1,0 +1,29 @@
+{
+  "schema_version": "audit-finalization/v1",
+  "before_fingerprint": "22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb",
+  "after_fingerprint": "22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb",
+  "lifecycle_selection": {
+    "validation": [
+      "focused",
+      "affected-package",
+      "integration"
+    ],
+    "review": "independent",
+    "audit_action": "read-only",
+    "route_evidence": "reuse",
+    "projections": [],
+    "commits": 1,
+    "context": "continue-root",
+    "semantic_next": "waiting",
+    "foreign_baseline": "visible-non-gating"
+  },
+  "close_admission": "allow",
+  "rebind": {
+    "phase_id": "P01",
+    "before": "22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb",
+    "after": "22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb",
+    "rebound": false,
+    "reason": "audit-bookkeeping-only"
+  },
+  "close_gate_code": "allow"
+}

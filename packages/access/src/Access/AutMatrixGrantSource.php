@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Auth\Access;
 
+use AzGuard\Configuration\Config as AzGuardConfig;
 use AzGuard\Registry\Contracts\GrantSource;
 use AzGuard\Registry\Values\PermissionSet;
-use AzGuard\Support\Config as AzGuardConfig;
 use CoreX\Auth\Contracts\Principal;
 use CoreX\Auth\Enums\PrincipalType;
 use CoreX\Tenancy\Contracts\TenancyManager;

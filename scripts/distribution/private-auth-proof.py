@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the D14-authorized private AzGuard proof in disposable storage only."""
+"""Install AzGuard from the public GitHub tag in disposable storage only."""
 
 from __future__ import annotations
 
@@ -16,11 +16,13 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPORTER = ROOT / "scripts/distribution/export.py"
-REF = "8c83864f02017134b325224c6c8be590a3971485"
+POLICY = ROOT / "scripts/distribution/export-policy.json"
+REF = "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
+PUBLIC_TARBALL = "https://codeload.github.com/axiomasoft/azguard-private/tar.gz/253cbf4cce0226545cd96ca8c6bcbefe329b1403"
 AZGUARD = "axioma-studio/azguard-core"
 AUTH = "corex/access"
 VERSION = "0.1.0-p4.3"
-AZGUARD_VERSION = "0.2.0-p4.5"
+AZGUARD_VERSION = "0.3.0"
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -46,9 +48,9 @@ def write_zip(destination: Path, entries: list[tuple[str, bytes]]) -> None:
 
 
 def azguard_archive(destination: Path) -> tuple[str, str, dict[str, str]]:
-    response = subprocess.run(("gh", "api", f"repos/axiomasoft/azguard/tarball/{REF}"), capture_output=True)
+    response = subprocess.run(("curl", "-fsSL", PUBLIC_TARBALL), capture_output=True)
     if response.returncode:
-        raise ProofError("canonical private source is unavailable")
+        raise ProofError("public AzGuard source is unavailable")
     entries: list[tuple[str, bytes]] = []
     composer_sha = ""
     requires: dict[str, str] = {}
@@ -63,7 +65,7 @@ def azguard_archive(destination: Path) -> tuple[str, str, dict[str, str]]:
                 continue
             body = archive.extractfile(member)
             if body is None:
-                raise ProofError("private archive member is unreadable")
+                raise ProofError("AzGuard archive member is unreadable")
             content = body.read()
             if relative.as_posix() == "composer.json":
                 composer = json.loads(content)
@@ -73,7 +75,7 @@ def azguard_archive(destination: Path) -> tuple[str, str, dict[str, str]]:
                 composer_sha = hashlib.sha256(content).hexdigest()
             entries.append((relative.as_posix(), content))
     if not composer_sha:
-        raise ProofError("private package composer metadata is missing")
+        raise ProofError("AzGuard package composer metadata is missing")
     write_zip(destination, entries)
     return digest(destination), composer_sha, requires
 
@@ -91,9 +93,11 @@ def auth_archive(destination: Path) -> str:
 
 def repository(root: Path) -> tuple[Path, dict]:
     stage = root / "repository"
-    export = run("python3", str(EXPORTER), "--source-sha", "ea7d0dbdf36b122904abba91e124018c11b939ed", "--staging", str(stage), cwd=ROOT, environment=os.environ.copy())
+    source_ref = json.loads(POLICY.read_text())["source_ref"]
+    export = run("python3", str(EXPORTER), "--source-sha", source_ref, "--staging", str(stage), cwd=ROOT, environment=os.environ.copy())
     if export.returncode:
-        raise ProofError("public lower-provider staging failed")
+        detail = (export.stderr or export.stdout).strip()
+        raise ProofError(detail or "public lower-provider staging failed")
     metadata_path = stage / "packages.json"
     metadata = json.loads(metadata_path.read_text())
     for versions in metadata["packages"].values():
@@ -104,7 +108,7 @@ def repository(root: Path) -> tuple[Path, dict]:
     auth_zip = artifacts / "corex-auth.zip"
     private_sha, composer_sha, private_requires = azguard_archive(private_zip)
     auth_sha = auth_archive(auth_zip)
-    metadata["packages"][AZGUARD] = {AZGUARD_VERSION: {"name": AZGUARD, "version": AZGUARD_VERSION, "require": private_requires, "dist": {"type": "zip", "url": private_zip.as_uri(), "reference": REF}, "source": {"type": "git", "url": "https://github.com/axiomasoft/azguard.git", "reference": REF}}}
+    metadata["packages"][AZGUARD] = {AZGUARD_VERSION: {"name": AZGUARD, "version": AZGUARD_VERSION, "require": private_requires, "dist": {"type": "zip", "url": private_zip.as_uri(), "reference": REF}, "source": {"type": "git", "url": "https://github.com/axiomasoft/azguard-private.git", "reference": REF}}}
     auth_composer = json.loads((ROOT / "packages/access/composer.json").read_text())
     auth_composer["version"] = VERSION
     auth_composer["require"]["corex/core"] = VERSION

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 7856a4b93c54ffeca3e296e823851958f70d31297b9f5dc7faddbde863a6b568
+inputs_sha256: a74cd17dec9137619905b98f501ef5f6e68f726853d743fd86ceb7ea1fc6a774
 generated_by: task plan-views status
 -->
 
@@ -111,11 +111,13 @@ Canonical standalone boundary line; typed evaluation retained in artifacts/P01.2
 write-site: pre_mutation: allow · pre_final: allow
 Evidence: findings/P01.3-execution.md. |
 | 2026-09-28 | codex/gpt-6-sol/high | plan-run · in-progress · — |
-| 2026-09-28 | codex/gpt-6-sol/high | plan-run · decision-pending · Local Validation green; hosted private AzGuard staging lacks credentials. Owner O-3 access choice requested. Review pending. Evidence: findings/P01.4-execution.md. |
-| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · 70 SHA pins; manifests/golden/ownership/dependencies/zizmor; zizmor 123→0; Validation GREEN; review: cursor/grok-4.7 GREEN. O-3: read-only provider secret + push/live run.
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · decision-pending · Local Validation green. Review pending. Evidence: findings/P01.4-execution.md. |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · 70 SHA pins; manifests/golden/ownership/dependencies/zizmor; zizmor 123→0; Validation GREEN; review: cursor/grok-4.7 GREEN. O-3: push/live run.
 write-site: pre_mutation: allow · pre_final: allow
 Evidence: findings/P01.4-execution.md. |
-| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · Local P01 closure: four GREEN items, direct-close allow. O-3: provider token/push/live CI before P02. Evidence: artifacts/P01.4-execution/phase-close-admission.json. |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · Local P01 closure: four GREEN items, direct-close allow. O-3: push/live CI before P02. Evidence: artifacts/P01.4-execution/phase-close-admission.json. |
+| 2026-09-28 | cursor/grok-4.7/xhigh | plan-audit · in-progress · P01 phase audit reserved. Candidate 22f49c2c matches grant. Product read-only. O-3 not certified. |
+| 2026-09-28 | cursor/grok-4.7/xhigh | plan-audit · audit-green · GREEN local P01 safety net. O-3 retained: push, live CI, DOD-21 stale. findings/P01-phase-audit.md. |
 
 ## Owner Gates
 

@@ -6,6 +6,6 @@
 - Status: RAG:✅
 - Verified fact (paraphrase): Dependabot-triggered workflows use Dependabot secrets in the same
   `secrets` context syntax. A workflow also triggered by other actors can use identically named
-  Actions and Dependabot secrets. This is the reason O-3 names both stores for AZGUARD_READ_TOKEN.
+  Actions and Dependabot secrets.
 
 This capture confirms configuration semantics; it does not authorize a credential or claim it exists.

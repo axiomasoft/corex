@@ -4,7 +4,7 @@ root=Path.cwd(); evidence=root/'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01
 workflow=yaml.safe_load((root/'.github/workflows/ci.yml').read_text())
 run=next(x['run'] for x in workflow['jobs']['tests']['steps'] if x.get('name')=='Stage sealed stancl provider candidates')
 filter_run=run.split('python3 scripts/distribution/stage-stancl-providers.py\n',1)[1]
-results={'scope':'Isolated checkout; actual staged provider dist; root and access updates with empty COMPOSER_HOME and no COMPOSER_AUTH/GH_TOKEN/GITHUB_TOKEN. This is not hosted secret provisioning or live CI.','commands':[]}
+results={'scope':'Isolated checkout; actual staged provider dist; root and access updates with empty COMPOSER_HOME and no auth.json. This is not live CI.','commands':[]}
 scratch=Path(tempfile.mkdtemp(prefix='corex-p014-composer-')); checkout=scratch/'checkout'; auth=scratch/'composer-home';auth.mkdir()
 env=dict(os.environ);env['COMPOSER_HOME']=str(auth);env['COMPOSER_CACHE_DIR']=str(Path.home()/'.cache/composer')
 for key in ('COMPOSER_AUTH','GH_TOKEN','GITHUB_TOKEN'):env.pop(key,None)

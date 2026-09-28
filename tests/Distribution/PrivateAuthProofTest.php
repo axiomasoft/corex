@@ -19,7 +19,7 @@ it('installs the immutable private auth dependency in both consumer roles', func
 
     $result = json_decode($stdout, true, flags: JSON_THROW_ON_ERROR);
 
-    expect($result['ref'])->toBe('8c83864f02017134b325224c6c8be590a3971485')
+    expect($result['ref'])->toBe('253cbf4cce0226545cd96ca8c6bcbefe329b1403')
         ->and($result['auth_root_lock_sha256'])->toHaveLength(64)
         ->and($result['auth_dependency_lock_sha256'])->toHaveLength(64);
 });

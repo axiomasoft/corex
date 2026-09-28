@@ -159,7 +159,7 @@ def export(ref: str, staging: Path) -> dict:
     if ref != value["source_ref"]:
         raise ExportError("source SHA is not the approved committed candidate")
 
-    return export_candidate(ref, staging, value)
+    return export_candidate(ref, staging, {**value, "cohort": list(value["packages"])})
 
 
 def main() -> int:

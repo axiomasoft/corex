@@ -33,9 +33,17 @@ EVIDENCE = PLAN_DELIVERY / 'evidence'
 PRIVATE_SCRIPT = Path(__file__).resolve()
 INSTALLED_REPO = REPO_DELIVERY / 'installed-candidate/repository'
 FIXTURES = REPO_DELIVERY / 'fixtures'
-AZGUARD_LOCAL = Path(os.environ.get('COREX_AZGUARD_LOCAL', '/home/vostrikov/projects/packages/azguard'))
+
+
+def azguard_local() -> Path | None:
+    raw = os.environ.get('COREX_AZGUARD_LOCAL', '').strip()
+    if not raw:
+        return None
+    path = Path(raw)
+    return path if path.is_dir() else None
 AZGUARD_PACKAGE = 'axioma-studio/azguard-core'
-AZGUARD_GIT_URL = 'https://github.com/axiomasoft/azguard.git'
+AZGUARD_GIT_URL = 'https://github.com/axiomasoft/azguard-private.git'
+AZGUARD_PUBLIC_REF = '253cbf4cce0226545cd96ca8c6bcbefe329b1403'
 AZGUARD_REPO_API = 'axiomasoft/azguard-private'
 AUTH_PACKAGE = 'corex/access'
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -92,26 +100,31 @@ def resolve_azguard_ref() -> str:
     override = os.environ.get('COREX_AZGUARD_REF', '').strip()
     if override:
         return override
-    if AZGUARD_LOCAL.is_dir():
-        proc = subprocess.run(['git', '-C', str(AZGUARD_LOCAL), 'rev-parse', 'HEAD'], capture_output=True, text=True)
+    local = azguard_local()
+    if local is not None:
+        proc = subprocess.run(['git', '-C', str(local), 'rev-parse', 'HEAD'], capture_output=True, text=True)
         if proc.returncode == 0 and proc.stdout.strip():
             return proc.stdout.strip()
-    raise PrivateProofError('azguard source ref unavailable; set COREX_AZGUARD_REF or COREX_AZGUARD_LOCAL')
+    return AZGUARD_PUBLIC_REF
 
 
 def fetch_azguard_tarball(ref: str) -> bytes:
-    if AZGUARD_LOCAL.is_dir():
+    local = azguard_local()
+    if local is not None:
         proc = subprocess.run(
-            ['git', '-C', str(AZGUARD_LOCAL), 'archive', '--format=tar.gz', ref, 'packages/core'],
+            ['git', '-C', str(local), 'archive', '--format=tar.gz', ref, 'packages/core'],
             capture_output=True,
         )
         if proc.returncode == 0 and proc.stdout:
             return proc.stdout
     refuse_remote(
-        'remaining-cohort-private.py azguard gh fetch',
+        'remaining-cohort-private.py azguard github fetch',
         resume='COREX_AZGUARD_LOCAL or --finalize on cached private/receipt.json',
     )
-    proc = subprocess.run(['gh', 'api', f'repos/{AZGUARD_REPO_API}/tarball/{ref}'], capture_output=True)
+    proc = subprocess.run(
+        ['curl', '-fsSL', f'https://codeload.github.com/{AZGUARD_REPO_API}/tar.gz/{ref}'],
+        capture_output=True,
+    )
     if proc.returncode == 0 and proc.stdout:
         return proc.stdout
     raise PrivateProofError(f'canonical azguard source unavailable at ref {ref}')
@@ -399,8 +412,6 @@ def preflight(packet: dict | None = None) -> dict:
         blockers.append('installed-candidate repository missing')
     if not (ROOT / 'packages/access').is_dir():
         blockers.append('packages/access source missing')
-    if not AZGUARD_LOCAL.is_dir():
-        blockers.append(f'local azguard checkout missing: {AZGUARD_LOCAL}')
     ref = None
     try:
         ref = resolve_azguard_ref()
@@ -417,7 +428,7 @@ def preflight(packet: dict | None = None) -> dict:
         'grant_sha256': sha256_path(packet['_packet_path']),
         'private_read_packet_sha256': sha256_path(packet['_packet_path']),
         'azguard_ref': ref,
-        'azguard_local': str(AZGUARD_LOCAL),
+        'azguard_local': str(azguard_local() or ''),
         'blockers': blockers,
         'ready': not blockers,
     }
@@ -642,7 +653,7 @@ def assert_local_reconcile_allowed() -> None:
     """D44/D45: gh reconcile deferred; local azguard checkout is owner-granted product proof."""
     if not deferral_active():
         return
-    if AZGUARD_LOCAL.is_dir():
+    if azguard_local() is not None:
         return
     refuse_remote(
         'remaining-cohort-private.py --reconcile',

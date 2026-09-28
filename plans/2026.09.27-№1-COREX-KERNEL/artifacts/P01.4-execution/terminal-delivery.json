@@ -45,13 +45,13 @@
     "run_id": "59bd35b29cf6647e953adaeb2691e0df2a68a05fe0765a0c1211f36eb4d4e48d",
     "sha256": "sha256:242b66f19364991a0f062b2ce2f6db39271635789a2189a24e4a78b656940a19"
   },
-  "next_exact": "waiting: O-3 — AZGUARD_READ_TOKEN, push P01 и GREEN CI со ссылкой на run → design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL",
+  "next_exact": "waiting: push P01 и GREEN CI со ссылкой на run → design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL",
   "plan_id": "2026.09.27-№1-COREX-KERNEL",
   "rationale": {
-    "open_risks": "Fork PRs without the provider credential fail closed. Hosted PHP8.5/PG18 execution remains unverified until O-3. Existing DoD CI job has a pre-item stale DOD-21 PLAN2/P17 upgrade receipt (20 GREEN, one stale): original owner must reconcile that receipt before all-jobs GREEN; see artifacts/P01.4-execution/dod-pre-existing.json. Ownership/analysis debt is assigned to P02/P09; prior access PG residual stays assigned to P07.",
-    "remaining": "Owner O-3: provision read-only contents access to private axiomasoft/azguard as AZGUARD_READ_TOKEN in Actions and Dependabot secrets; push P01 candidate and attach the GREEN CI run URL for that commit. P02 stays gated until that evidence exists. No secrets/settings/push were performed."
+    "open_risks": "Hosted PHP8.5/PG18 execution remains unverified until O-3. Existing DoD CI job has a pre-item stale DOD-21 PLAN2/P17 upgrade receipt (20 GREEN, one stale): original owner must reconcile that receipt before all-jobs GREEN; see artifacts/P01.4-execution/dod-pre-existing.json. Ownership/analysis debt is assigned to P02/P09; prior access PG residual stays assigned to P07.",
+    "remaining": "Owner O-3: push P01 candidate and attach the GREEN CI run URL for that commit. P02 stays gated until that evidence exists. No secrets/settings/push were performed."
   },
-  "recommendation": "**Next:** waiting: O-3 — AZGUARD_READ_TOKEN, push P01 и GREEN CI со ссылкой на run → design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Effort | high |\n| Capabilities | — |\n| Context | waiting-owner |\n| Суть | После O-3 — дизайн P02 из backlog/P02.md по фактическому коду. |\n\n<!-- Task continuity, reducer-owned.\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:c1b81586bb8d11dc8ce2c083cbf8bc96983eaf2e5f0c71e7d0d19dd85fc38d68\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n-->",
+  "recommendation": "**Next:** waiting: push P01 и GREEN CI со ссылкой на run → design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Effort | high |\n| Capabilities | — |\n| Context | waiting-owner |\n| Суть | После O-3 — дизайн P02 из backlog/P02.md по фактическому коду. |\n\n<!-- Task continuity, reducer-owned.\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:c1b81586bb8d11dc8ce2c083cbf8bc96983eaf2e5f0c71e7d0d19dd85fc38d68\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n-->",
   "route": {
     "batch": "n/a",
     "command": null,

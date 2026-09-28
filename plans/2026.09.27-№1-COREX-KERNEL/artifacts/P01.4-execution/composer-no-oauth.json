@@ -1,5 +1,5 @@
 {
-  "scope": "Isolated checkout; actual staged provider dist; root and access updates with empty COMPOSER_HOME and no COMPOSER_AUTH/GH_TOKEN/GITHUB_TOKEN. This is not hosted secret provisioning or live CI.",
+  "scope": "Isolated checkout; actual staged provider dist; root and access updates with empty COMPOSER_HOME and no auth.json. This is not live CI.",
   "commands": [
     {
       "label": "provider-probe-checkout",

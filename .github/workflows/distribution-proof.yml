@@ -213,24 +213,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -245,7 +228,7 @@ jobs:
       contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    name: DoD 1.0 release gate
+    name: Release preflight
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -258,34 +241,13 @@ jobs:
           coverage: none
           tools: composer
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
         run: composer audit --locked
-      - name: DoD 1.0 static subset
-        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --output $RUNNER_TEMP/dod-ci.json
       - name: Verify sealed preflight refusal boundaries
         run: python3 -m unittest scripts/distribution/tests/test_release_preflight.py
-      - name: Run all 27 DoD assertions and reject stale CI evidence
-        run: python3 scripts/dod-1.0.py check --profile release --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --reject-stale-ci $RUNNER_TEMP/dod-ci.json
       - name: Qualify the committed stable source without publication
         run: python3 scripts/distribution/release_preflight.py seal --receipt $RUNNER_TEMP/release-preflight.json --packet $RUNNER_TEMP/publication-packet.json

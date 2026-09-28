@@ -21,7 +21,6 @@ ILLUMINATE = '^12.0|^13.0'
 ALLOWED_PRERELEASE = {
     'axiomasoft/stancl-tenancy': '4.0.0-alpha1',
     'axiomasoft/stancl-jobpipeline': '2.0.0-alpha1',
-    'axioma-studio/azguard-core': '^0.2@dev',
 }
 STACK = {
     'pestphp/pest': '^5.2',
@@ -115,8 +114,6 @@ def main() -> int:
         needed = {}
         if 'corex/tenancy' in installs:
             needed.update({k: ALLOWED_PRERELEASE[k] for k in ('axiomasoft/stancl-tenancy', 'axiomasoft/stancl-jobpipeline')})
-        if 'corex/access' in installs:
-            needed['axioma-studio/azguard-core'] = ALLOWED_PRERELEASE['axioma-studio/azguard-core']
         for name, constraint in sorted(needed.items()):
             if not pinned(requires.get(name), constraint):
                 bad('prerelease-root', f'root installing this closure must require {name}={constraint!r}')

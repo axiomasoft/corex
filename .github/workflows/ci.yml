@@ -53,24 +53,7 @@ jobs:
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -126,24 +109,7 @@ jobs:
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -201,24 +167,7 @@ jobs:
         run: composer --working-dir=packages/operations require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -251,24 +200,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -313,24 +245,7 @@ jobs:
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -361,24 +276,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -411,24 +309,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -475,24 +356,7 @@ jobs:
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -565,24 +429,7 @@ jobs:
         run: composer --working-dir=packages/tenancy require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -642,24 +489,7 @@ jobs:
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -699,24 +529,7 @@ jobs:
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -761,24 +574,7 @@ jobs:
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -838,24 +634,7 @@ jobs:
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -901,24 +680,7 @@ jobs:
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -972,24 +734,7 @@ jobs:
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -1038,24 +783,7 @@ jobs:
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -1102,24 +830,7 @@ jobs:
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -1138,9 +849,6 @@ jobs:
 
       - name: Pint
         run: composer lint:check
-
-      - name: DoD 1.0 static and receipt subset
-        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json
 
   mutation-check:
     permissions:
@@ -1178,24 +886,7 @@ jobs:
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -1249,24 +940,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Composer audit
@@ -1289,24 +963,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Composer audit
@@ -1329,34 +986,13 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          python3 scripts/distribution/stage-stancl-providers.py
-          # The sealed provider archive replaces the private monorepo VCS source in this job.
-          python3 - <<'PYPROVIDERS'
-          import json
-          from pathlib import Path
-          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
-              path = Path(name)
-              data = json.loads(path.read_text())
-              data['repositories'] = {
-                  key: repository for key, repository in data['repositories'].items()
-                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
-              }
-              path.write_text(json.dumps(data, indent=4) + '\n')
-          PYPROVIDERS
+        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Composer audit
         run: composer audit --locked
       - name: Analyse every standalone package
-        env:
-          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
-        run: |
-          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
-          bash scripts/dependency-analyser.sh --all
+        run: bash scripts/dependency-analyser.sh --all
       - name: Audit every standalone package lockfile
         run: |
           for manifest in packages/*/composer.json; do

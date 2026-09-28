@@ -92,13 +92,12 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
 
 ## Зависимости
 
-`axioma-studio/azguard-core` — внешняя зависимость из публичного GitHub-репозитория
-`https://github.com/axiomasoft/azguard.git`. Для standalone `composer install` в
-`packages/access` тот же VCS задаётся в `repositories` (и дублируется в CI job
-`auth-tests` перед `composer update`). Released manifest для `corex/access` не
-содержит path-репозиториев sibling-пакетов ядра; потребитель добавляет свои
-каналы для `corex/*` и AzGuard. Репозитории Composer не транзитивны:
-`corex/access` не прокидывает VCS AzGuard своим потребителям.
+`axioma-studio/azguard-core` ^0.3 — публичный пакет из монорепозитория
+`https://github.com/axiomasoft/azguard-private` (снимок `main` `253cbf4`, каталог `packages/core`).
+Composer ставит его через `type: package` в `repositories`, без токена и без локального
+checkout. Репозитории Composer не транзитивны: потребитель `corex/access` добавляет
+тот же публичный источник у себя. Path-репозитории sibling-пакетов ядра остаются
+только в monorepo-манифесте.
 
 ## Разработка
 

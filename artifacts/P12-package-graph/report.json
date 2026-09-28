@@ -1,6 +1,6 @@
 {
     "schema": "package-graph-report/1",
-    "generated_at": "2026-09-27T18:29:58+00:00",
+    "generated_at": "2026-09-28T16:25:13+00:00",
     "legacy_namespace_splits": [
         {
             "prefix": "CoreX\\Tenancy\\",

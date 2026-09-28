@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Contracts\PermissionLayer;
-use AzGuard\Support\Panel;
+use AzGuard\Panels\Panel;
 use CoreX\Auth\Access\PrincipalIdentity;
 use CoreX\Auth\Contracts\AccessChecker;
 use CoreX\Auth\Contracts\ScopeResolver;
