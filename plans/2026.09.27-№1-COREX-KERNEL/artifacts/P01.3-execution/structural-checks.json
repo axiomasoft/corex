@@ -1,0 +1,19 @@
+{
+  "package_configs": 20,
+  "max_configs": 21,
+  "composer_lock_version_changes": {
+    "phpstan/extension-installer": [
+      null,
+      "1.4.3"
+    ],
+    "phpstan/phpstan-strict-rules": [
+      null,
+      "2.0.12"
+    ],
+    "shipmonk/composer-dependency-analyser": [
+      null,
+      "1.8.4"
+    ]
+  },
+  "root_runtime_versions_preserved": true
+}

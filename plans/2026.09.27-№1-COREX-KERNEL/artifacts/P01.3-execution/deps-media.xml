@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="shadow dependencies" failures="5">
+    <testcase name="ext-gd">
+      <failure message="imagealphablending">packages/media/src/Internal/GdThumbnailDriver.php:53</failure>
+    </testcase>
+    <testcase name="ext-pdo">
+      <failure message="PDO">packages/media/tests/Pg/ConversionConcurrencyTest.php:44</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Bus\Queueable">packages/media/src/Jobs/ConvertMedia.php:18</failure>
+    </testcase>
+    <testcase name="mockery/mockery">
+      <failure message="Mockery">packages/media/tests/TestCase.php:41</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/media/tests/TestCase.php:15</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="4">
+    <testcase name="illuminate/contracts"></testcase>
+    <testcase name="illuminate/database"></testcase>
+    <testcase name="illuminate/http"></testcase>
+    <testcase name="illuminate/support"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

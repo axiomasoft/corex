@@ -1,0 +1,44 @@
+{
+  "ownership": {
+    "identifiers": 420,
+    "baseline": 122,
+    "by_rule": {
+      "O1": 2,
+      "O2": 103,
+      "O3": 17,
+      "O4": 0
+    }
+  },
+  "phpstan": {
+    "configs": 21,
+    "sum": 2732,
+    "per_package": {
+      "access": 57,
+      "attributes": 184,
+      "core": 207,
+      "crm": 220,
+      "intl": 159,
+      "media": 113,
+      "modules": 106,
+      "notifications": 100,
+      "operations": 419,
+      "panels": 8,
+      "recurrence": 9,
+      "root": 512,
+      "search": 26,
+      "search-intl": 3,
+      "search-meilisearch": 11,
+      "tasks": 43,
+      "tasks-workflow": 88,
+      "tenancy": 322,
+      "transfer": 77,
+      "wakeup": 50,
+      "workflow": 18
+    }
+  },
+  "dependencies": {
+    "configs": 20,
+    "discovery": 74,
+    "ratchet": 4
+  }
+}

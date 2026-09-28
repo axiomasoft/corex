@@ -1,0 +1,22 @@
+[
+  {
+    "control": "anti-initial-committed",
+    "exit": 0,
+    "contains": "ANTI-WEAKENING GATE: OK"
+  },
+  {
+    "control": "anti-ceiling-growth",
+    "exit": 1,
+    "contains": "ratchet FAIL: scripts/quality-ceilings.json"
+  },
+  {
+    "control": "anti-ownership-growth",
+    "exit": 1,
+    "contains": "ratchet FAIL: scripts/ownership-gate-baseline.json"
+  },
+  {
+    "control": "anti-restored",
+    "exit": 0,
+    "contains": "ANTI-WEAKENING GATE: OK"
+  }
+]

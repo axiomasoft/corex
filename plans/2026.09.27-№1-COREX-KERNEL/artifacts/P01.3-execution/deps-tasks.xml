@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="shadow dependencies" failures="4">
+    <testcase name="ext-mbstring">
+      <failure message="mb_strlen">packages/tasks/src/Planning/Internal/PlanningCommand.php:292</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Auth\Access\AuthorizationException">packages/tasks/src/Access/Internal/DenyTaskMutationAccess.php:18</failure>
+    </testcase>
+    <testcase name="mockery/mockery">
+      <failure message="Mockery">packages/tasks/tests/TestCase.php:22</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/tasks/tests/Support/TasksTestCase.php:16</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="3">
+    <testcase name="illuminate/contracts"></testcase>
+    <testcase name="illuminate/database"></testcase>
+    <testcase name="illuminate/support"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

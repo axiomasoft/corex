@@ -1,0 +1,17 @@
+Рекомендация следующего шага:
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4
+
+| Параметр | Значение |
+|:--|:--|
+| Batch | solo |
+| Model class | implementation |
+| Effort | high |
+| Capabilities | — |
+| Context | continue-root |
+| Суть | P01.4: CI подключает готовые golden/ownership/analysis/dependency гейты. |
+
+<!-- Task continuity, reducer-owned.
+```session-continuity-decision/v1
+{"evidence": ["batch:d700015b793c1c19c46161b88538377bcdca8799df68143cec4b0d59111f7b76", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:findings/P01.3-execution.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```
+-->

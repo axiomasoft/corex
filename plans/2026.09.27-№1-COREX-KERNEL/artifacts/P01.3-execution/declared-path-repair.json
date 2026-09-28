@@ -1,0 +1,67 @@
+{
+  "schema_version": "repair-decision/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "item_id": "P01.3",
+  "origin": "checkpoint",
+  "original_carrier": {
+    "command": "task_contract.build(PLAN3, P01.3)",
+    "digest": "4ee027820ce0a8bc0dc0b34356242e9eb5de8ae66702fb2e13d8a3cb32df833e",
+    "result": "red"
+  },
+  "baseline": {
+    "reproduced": true,
+    "carrier": {
+      "command": "task_contract.build(PLAN3, P01.3)",
+      "digest": "4ee027820ce0a8bc0dc0b34356242e9eb5de8ae66702fb2e13d8a3cb32df833e",
+      "result": "red"
+    }
+  },
+  "candidate": {
+    "delta_proved": true,
+    "evidence_ids": [
+      "artifacts/P01.3-execution/declared-path-repair.diff"
+    ]
+  },
+  "affected_paths": [
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/phases/P01/P01.3.md",
+      "owner_item": "P01.3",
+      "declared_file": false
+    }
+  ],
+  "bounded_diff": {
+    "files_changed": 1,
+    "max_files": 1,
+    "reversible": true
+  },
+  "material_surface": {
+    "public": false,
+    "frozen": false,
+    "security": false,
+    "schema": false,
+    "dependency": false,
+    "authority": false,
+    "irreversible": false,
+    "product": false,
+    "test_topology": false
+  },
+  "pre_validation": [
+    {
+      "command": "task_contract.build(PLAN3, P01.3)",
+      "digest": "4ee027820ce0a8bc0dc0b34356242e9eb5de8ae66702fb2e13d8a3cb32df833e",
+      "result": "red"
+    }
+  ],
+  "post_validation": [
+    {
+      "command": "task_contract.build(PLAN3, P01.3)",
+      "digest": "4ee027820ce0a8bc0dc0b34356242e9eb5de8ae66702fb2e13d8a3cb32df833e",
+      "result": "green"
+    }
+  ],
+  "evidence_ids": [
+    "artifacts/P01.3-execution/declared-path-before.md",
+    "artifacts/P01.3-execution/declared-path-repair.diff"
+  ],
+  "design": null
+}

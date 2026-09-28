@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="unknown classes" failures="1">
+    <testcase name="Orchestra\Testbench\TestCase">
+      <failure>packages/transfer/tests/PgTestCase.php:12</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="shadow dependencies" failures="1">
+    <testcase name="illuminate/database">
+      <failure message="Illuminate\Database\ConnectionInterface">packages/transfer/src/Internal/Transfer/SqlTransferExecutor.php:33</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="prod dependencies used only in dev paths" failures="1">
+    <testcase name="illuminate/contracts"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="unknown classes" failures="1">
+    <testcase name="Orchestra\Testbench\TestCase">
+      <failure>packages/search/tests/Unit/SearchServiceProviderTest.php:15</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="shadow dependencies" failures="1">
+    <testcase name="ext-openssl">
+      <failure message="OPENSSL_RAW_DATA">packages/search/src/Internal/Query/SearchCursorCodec.php:48</failure>
+    </testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

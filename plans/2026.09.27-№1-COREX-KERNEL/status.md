@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 7c6614d84ee7f3b1cd9881cdace7f44a93d153490628314e06370565fe25a25d
+inputs_sha256: cb78c562f368c61d0ce5b4b1ef5403e959de250d9d625ee9d6e9c9a82312adef
 generated_by: task plan-views status
 -->
 
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 2/4 | 🟡 In progress |
+| P01 | Окружение, платформа и страховочная сетка | 3/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -40,7 +40,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | 2026-09-28 |
 | P01.2 | Golden-снимки с нормализатором переименований | 🟢 Done | 2026-09-28 |
-| P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
+| P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | 🟢 Done | 2026-09-28 |
 | P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -101,6 +101,15 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 Final typed evaluation: artifacts/P01.1-execution/write-site-final.json; receipts and validation context retained. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:49 |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
+Canonical standalone boundary line; typed evaluation retained in artifacts/P01.2-execution/write-site-final.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · local-repair · Nonmaterial Files formatting repair: the grep command was incorrectly read as a path. Exact build now GREEN; scope and validation unchanged. |
+| 2026-09-28 | auditor/cursor/grok-4.7/high | plan-audit · audit-green · Bounded P01.3 Files-format correction independently GREEN; prior unchanged P00/P01 design audit reused. Finish successfully rebuilt by Task after transient empty metadata during review. Evidence: artifacts/P01.3-execution/inline-review.json and inline-finish.json. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · Ownership 420/122; PHPStan 21/2732; deps 20; sqlite 808+10; PG 239; Golden 4; review: cursor/grok-4.7 GREEN.
+write-site: pre_mutation: allow · pre_final: allow
+Evidence: findings/P01.3-execution.md. |
 
 ## Owner Gates
 

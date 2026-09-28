@@ -1,0 +1,2 @@
+ceilings FAIL:
+  phpstan.recurrence: 10 > ceiling 9

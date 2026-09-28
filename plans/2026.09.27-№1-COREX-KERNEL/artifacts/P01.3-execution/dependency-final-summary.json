@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "standalone_updates": 20,
+  "analyses_green": 20,
+  "root_access_tenancy_staging_keys_absent": true
+}

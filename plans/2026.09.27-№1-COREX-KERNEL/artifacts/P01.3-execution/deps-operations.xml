@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="unknown classes" failures="3">
+    <testcase name="CoreX\Api\Internal\Cost\BudgetRateLimited">
+      <failure>packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php:109</failure>
+    </testcase>
+    <testcase name="CoreX\Api\Internal\Cost\BudgetStoreUnavailable">
+      <failure>packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php:107</failure>
+    </testcase>
+    <testcase name="CoreX\Api\Internal\Webhook\CurlRuntimeFixture">
+      <failure>packages/operations/tests/Feature/WebhookTransportTest.php:136</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="shadow dependencies" failures="11">
+    <testcase name="ext-curl">
+      <failure message="CURLE_COULDNT_CONNECT">packages/operations/src/Webhooks/Internal/CurlWebhookTransport.php:154</failure>
+    </testcase>
+    <testcase name="ext-filter">
+      <failure message="FILTER_VALIDATE_INT">packages/operations/src/Definition/Data/ResourceId.php:97</failure>
+    </testcase>
+    <testcase name="ext-mbstring">
+      <failure message="mb_convert_encoding">packages/operations/src/Validation/Internal/JsonCanonical.php:226</failure>
+    </testcase>
+    <testcase name="ext-openssl">
+      <failure message="OPENSSL_KEYTYPE_RSA">packages/operations/tests/Feature/WebhookTransportTest.php:208</failure>
+    </testcase>
+    <testcase name="ext-pcntl">
+      <failure message="pcntl_fork">packages/operations/tests/Feature/OperationBudgetTest.php:280</failure>
+    </testcase>
+    <testcase name="ext-pdo">
+      <failure message="PDO">packages/operations/tests/Feature/IdempotentInvocationTest.php:290</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Auth\Access\AuthorizationException">packages/operations/src/Errors/Internal/ErrorMapper.php:62</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/operations/tests/TestCase.php:11</failure>
+    </testcase>
+    <testcase name="phpunit/phpunit">
+      <failure message="PHPUnit\Framework\Attributes\DataProvider">packages/operations/tests/Feature/PlatformTest.php:180</failure>
+    </testcase>
+    <testcase name="psr/clock">
+      <failure message="Psr\Clock\ClockInterface">packages/operations/src/Cost/Laravel/CostRegistrar.php:28</failure>
+    </testcase>
+    <testcase name="symfony/http-kernel">
+      <failure message="Symfony\Component\HttpKernel\Exception\HttpException">packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php:43</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="dev dependencies in production code" failures="2">
+    <testcase name="corex/transfer">
+      <failure message="CoreX\Transfer\Contracts\CancellationSignal">packages/operations/src/Bulk/Data/BulkTransferSession.php:23</failure>
+    </testcase>
+    <testcase name="opis/json-schema">
+      <failure message="Opis\JsonSchema\Errors\ValidationError">packages/operations/src/Tools/Internal/OpisToolSchemaValidator.php:82</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="3">
+    <testcase name="illuminate/http"></testcase>
+    <testcase name="illuminate/support"></testcase>
+    <testcase name="illuminate/validation"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

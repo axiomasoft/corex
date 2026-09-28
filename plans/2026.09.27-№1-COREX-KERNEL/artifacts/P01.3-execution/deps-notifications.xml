@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="shadow dependencies" failures="4">
+    <testcase name="ext-pdo">
+      <failure message="PDO">packages/notifications/tests/Pg/DigestConcurrencyTest.php:47</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Bus\Queueable">packages/notifications/src/Delivery/Jobs/DeliverNotification.php:18</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/notifications/tests/TestCase.php:18</failure>
+    </testcase>
+    <testcase name="psr/clock">
+      <failure message="Psr\Clock\ClockInterface">packages/notifications/tests/Feature/DigestWakeupAdapterTest.php:43</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="3">
+    <testcase name="illuminate/contracts"></testcase>
+    <testcase name="illuminate/database"></testcase>
+    <testcase name="illuminate/support"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

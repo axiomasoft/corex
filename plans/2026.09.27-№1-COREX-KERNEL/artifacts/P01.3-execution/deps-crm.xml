@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="shadow dependencies" failures="6">
+    <testcase name="brick/money">
+      <failure message="Brick\Money\Money">packages/crm/src/Deal/Actions/CreateDeal.php:25</failure>
+    </testcase>
+    <testcase name="ext-filter">
+      <failure message="FILTER_VALIDATE_EMAIL">packages/crm/src/Context/Channels.php:56</failure>
+    </testcase>
+    <testcase name="ext-mbstring">
+      <failure message="mb_check_encoding">packages/crm/src/Context/Internal/RecordRules.php:117</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Auth\Access\AuthorizationException">packages/crm/src/Deal/Actions/CreateDeal.php:30</failure>
+    </testcase>
+    <testcase name="mockery/mockery">
+      <failure message="Mockery">packages/crm/tests/Pg/ParityContractTest.php:185</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/crm/tests/Support/CrmTestCase.php:17</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="5">
+    <testcase name="illuminate/auth"></testcase>
+    <testcase name="illuminate/contracts"></testcase>
+    <testcase name="illuminate/database"></testcase>
+    <testcase name="illuminate/support"></testcase>
+    <testcase name="illuminate/validation"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

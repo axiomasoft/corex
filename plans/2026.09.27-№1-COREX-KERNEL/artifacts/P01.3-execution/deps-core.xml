@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="unknown classes" failures="9">
+    <testcase name="PHPStan\Analyser\Scope">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:44</failure>
+    </testcase>
+    <testcase name="PHPStan\Reflection\ClassReflection">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:167</failure>
+    </testcase>
+    <testcase name="PHPStan\Rules\IdentifierRuleError">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:223</failure>
+    </testcase>
+    <testcase name="PHPStan\Rules\Rule">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:29</failure>
+    </testcase>
+    <testcase name="PHPStan\Rules\RuleErrorBuilder">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:205</failure>
+    </testcase>
+    <testcase name="PHPStan\Type\MixedType">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:201</failure>
+    </testcase>
+    <testcase name="PHPStan\Type\ObjectType">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:181</failure>
+    </testcase>
+    <testcase name="PHPStan\Type\Type">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:172</failure>
+    </testcase>
+    <testcase name="PHPStan\Type\TypeTraverser">
+      <failure>packages/core/src/PHPStan/Rules/DurablePayloadRule.php:176</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="shadow dependencies" failures="9">
+    <testcase name="ext-ctype">
+      <failure message="ctype_digit">packages/core/src/Messaging/Commands/ShowDeliveryHealth.php:30</failure>
+    </testcase>
+    <testcase name="ext-mbstring">
+      <failure message="mb_strlen">packages/core/tests/Pg/OutboxRelayTest.php:300</failure>
+    </testcase>
+    <testcase name="ext-pcntl">
+      <failure message="SIGINT">packages/core/src/Messaging/Commands/RelayOutbox.php:92</failure>
+    </testcase>
+    <testcase name="ext-pdo">
+      <failure message="PDO">packages/core/tests/Pg/OutboxRelayTest.php:308</failure>
+    </testcase>
+    <testcase name="laravel/framework">
+      <failure message="Illuminate\Bus\Queueable">packages/core/src/Audit/RecordAuditEntry.php:36</failure>
+    </testcase>
+    <testcase name="nikic/php-parser">
+      <failure message="PhpParser\Node">packages/core/src/PHPStan/Rules/DurablePayloadRule.php:44</failure>
+    </testcase>
+    <testcase name="orchestra/testbench-core">
+      <failure message="Orchestra\Testbench\TestCase">packages/core/tests/Support/CoreXTestCase.php:15</failure>
+    </testcase>
+    <testcase name="symfony/console">
+      <failure message="Symfony\Component\Console\Tester\CommandTester">packages/core/tests/Feature/ValidateConfigCommandTest.php:11</failure>
+    </testcase>
+    <testcase name="symfony/process">
+      <failure message="Symfony\Component\Process\Process">packages/core/tests/Feature/PublishIsolationTest.php:9</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="dev dependencies in production code" failures="2">
+    <testcase name="open-telemetry/api">
+      <failure message="OpenTelemetry\API\Trace\Propagation\TraceContextPropagator">packages/core/src/Observability/OpenTelemetryBridge.php:36</failure>
+    </testcase>
+    <testcase name="psr/log">
+      <failure message="Psr\Log\LogLevel">packages/core/src/Observability/PsrLogOperationObserver.php:28</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="unused dependencies" failures="7">
+    <testcase name="illuminate/config"></testcase>
+    <testcase name="illuminate/container"></testcase>
+    <testcase name="illuminate/contracts"></testcase>
+    <testcase name="illuminate/database"></testcase>
+    <testcase name="illuminate/filesystem"></testcase>
+    <testcase name="illuminate/http"></testcase>
+    <testcase name="illuminate/support"></testcase>
+  </testsuite>
+  <!-- showing only first example failure usage -->
+</testsuites>

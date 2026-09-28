@@ -1,0 +1,14 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E17",
+    "command": "- `scripts/php84 php scripts/ownership-gate.php` → `ownership OK: <N> identifiers, <B> baselined`, exit 0; `--strict` → exit 1,\n  число нарушений = `B`; негативы (a) дубль config-ключа → exit 1 (O1+O2), (b) удалённая живая строка baseline → exit 1,\n  (c) лишняя строка baseline → exit 1 `stale`; после отката → exit 0.\n- `scripts/php84 composer analyse` (= `scripts/phpstan-packages.sh`) → каждый конфиг `[OK] No errors`, затем `ceilings OK`, exit 0;\n  `ls packages/*/phpstan.neon | wc -l` → `20`; `grep -l \"level: max\" packages/*/phpstan.neon phpstan.neon | wc -l` → `21`.\n- Негатив ceilings: +1 к любому `count:` в baseline → guard exit 1 `phpstan.<p>: … > ceiling …`; откат → OK.\n- `scripts/php84 bash scripts/dependency-analyser.sh --all` → exit 0 (20 пакетов); после — `python3 scripts/manifest-check.py` → `manifests OK: 21 roots`.\n- `bash -c 'if grep -rn \"phpstan-contour\\|analyse:packages\" scripts tests docs .github composer.json; then exit 1; else test \"$?\" -eq 1; fi'` → пусто, exit 0; найдена ссылка или ошибка чтения → exit 1.\n- `bash scripts/anti-weakening-gate.sh` → exit 0; первое создание ownership-baseline допустимо только при отсутствии файла в base tree; негатив: +1 в `scripts/quality-ceilings.json` → exit 1; новая строка в\n  `ownership-gate-baseline.json` → exit 1.\n- `scripts/php84 composer test` → exit 0; `scripts/php84 composer golden` → 4 passed (P01.2 не сломан).\n- Analyser fail-closed: при ошибке install analyser не запускается; staging key снят в root и tenancy при любом результате.\n- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model !=\n  executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+    "contract_sha256": "7e37cf04e1607843ab08a90f989d946cb07ab1812e7066a8e1eeb0a22cfe8057",
+    "spec_sha256": "399200a914096337f59c5781a6cdf2413d3780fb7ff2b6f87f96869134f7dbfb",
+    "head": "be64ff8c5054ed7725d6bd7684ea0f7ddcea8dff",
+    "tree": "cbd16f7dc9902209dedd9f860da5cbdbad2cf480245f8efb57b9d885dd436c77",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T13:34:49Z"
+  }
+]
