@@ -1092,11 +1092,6 @@ parameters:
 			count: 1
 			path: scripts/package-graph-gate.php
 
-		-
-			rawMessage: 'Function loadConfig() should return array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, public_api_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>} but returns array{allowlist: mixed, undeclared_dependency_exceptions: mixed, public_api_exceptions: mixed, reservations: mixed, legacy_namespace_splits: mixed}.'
-			identifier: return.type
-			count: 1
-			path: scripts/package-graph-gate.php
 
 		-
 			rawMessage: 'Function parseExtraCorex() has parameter $composer with no value type specified in iterable type array.'
@@ -1146,11 +1141,6 @@ parameters:
 			count: 1
 			path: scripts/package-graph-gate.php
 
-		-
-			rawMessage: 'Parameter #1 $allowlist of function validateAllowlistEntries expects list<array<string, mixed>>, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
 
 		-
 			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
@@ -1230,11 +1220,6 @@ parameters:
 			count: 3
 			path: scripts/package-graph-gate.php
 
-		-
-			rawMessage: 'Parameter #3 $config of function detectNamespaceOwnershipConflicts expects array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>}, array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, public_api_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>} given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
 
 		-
 			rawMessage: 'Parameter #3 $prefix of function readUseEntry expects string, string|null given.'

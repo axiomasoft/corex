@@ -39,7 +39,8 @@
         "phpstan/phpstan": "^2.2.16",
         "psr/log": "^3.0",
         "symfony/console": "^7.2|^8.0",
-        "symfony/process": "^7.2|^8.0"
+        "symfony/process": "^7.2|^8.0",
+        "corex/modules": "^1.0@dev"
     },
     "suggest": {
         "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
@@ -90,7 +91,8 @@
                 "CoreX\\Tenancy\\ImpersonationGuard",
                 "CoreX\\Tenancy\\AccountRef",
                 "CoreX\\Tenancy\\TenantContext",
-                "CoreX\\Tenancy\\WorkspaceRef"
+                "CoreX\\Tenancy\\WorkspaceRef",
+                "CoreX\\Messaging\\Testing"
             ]
         },
         "laravel": {
@@ -116,5 +118,10 @@
         "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
     },
-    "repositories": []
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../modules"
+        }
+    ]
 }

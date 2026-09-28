@@ -37,7 +37,7 @@ final readonly class ExtensionContract
     {
         try {
             [$names, $versions] = self::installedInput($installedPackages);
-            $compiler = new RegistryCompiler;
+            $compiler = app(RegistryCompiler::class);
             $first = $compiler->compile(
                 manifests: $manifests,
                 installedPackages: $names,

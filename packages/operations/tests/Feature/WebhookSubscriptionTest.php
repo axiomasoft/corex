@@ -20,7 +20,7 @@ use CoreX\Exceptions\ScopeContextMismatch;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Tenancy\AccountRef;
@@ -242,7 +242,7 @@ final class WebhookSubscriptionTest extends TestCase
             $topics[] = $this->topic('vault.opened', 'secret', 'vault.opened');
         }
 
-        return new WebhookTopicCatalogue(new ArrayMessageContractRegistry($contracts), $topics, [
+        return new WebhookTopicCatalogue(MessagingFixtures::contracts($contracts), $topics, [
             'orders.placed' => new AllowListProjector,
             'billing.issued' => new AllowListProjector,
             'vault.opened' => new AllowListProjector,

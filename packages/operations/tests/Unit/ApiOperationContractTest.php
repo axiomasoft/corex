@@ -2,24 +2,29 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Api\Tests\Unit;
+
 use CoreX\Api\Enums\IdempotencyRequirement;
 use CoreX\Api\Enums\OperationMode;
 use CoreX\Api\Operation;
+use CoreX\Api\Tests\Support\StubOperationHandler;
+use CoreX\Api\Tests\TestCase;
 use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
 use CoreX\Modules\ModuleManifest;
-use CoreX\Modules\Tests\Support\StubToolHandler;
+
+uses(TestCase::class);
 
 $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => false];
 
 $operation = static function (string $method = 'GET', string $id = 'notes.list') use ($schema): Api {
-    return Api::operation($id, $method, '/notes', StubToolHandler::class, 'notes.read', $schema(), $schema());
+    return Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema());
 };
 
 $compile = static function (Api $api): Api {
-    $compiled = (new RegistryCompiler)->compile([
+    $compiled = app(RegistryCompiler::class)->compile([
         ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
     ], installedPackages: []);
 
@@ -86,14 +91,14 @@ it('projects the same contract hash when declaration order is reversed', functio
         $id,
         $method,
         '/notes',
-        StubToolHandler::class,
+        StubOperationHandler::class,
         'notes.read',
         $schema(),
         $schema(),
     )->fields(read: ['id', 'name'], write: ['name']);
 
     $compile = static function (array $extenders): array {
-        $compiled = (new RegistryCompiler)->compile([
+        $compiled = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($extenders),
         ], installedPackages: []);
 
@@ -119,4 +124,14 @@ it('projects the same contract hash when declaration order is reversed', functio
         ->and($forwardCreate->mode)->toBe(OperationMode::Command)
         ->and($forwardList->readFields)->toBe(['id', 'name'])
         ->and($forwardList->executionSupported)->toBeTrue();
+});
+
+it('reuses tagged compiler contributions across repeated compilations', function (): void {
+    $compiler = app(RegistryCompiler::class);
+    $manifest = ModuleManifest::make('example/repeat')->title('Repeat')->tablePrefix('rpt')->extends([
+        Api::operation('repeat.read', 'GET', '/repeat', StubOperationHandler::class, 'repeat.read', ['type' => 'object'], ['type' => 'object']),
+    ]);
+
+    expect($compiler->compile([$manifest], installedPackages: [])->fingerprint)
+        ->toBe($compiler->compile([$manifest], installedPackages: [])->fingerprint);
 });

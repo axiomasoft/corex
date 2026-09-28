@@ -1,6 +1,6 @@
 {
     "name": "corex/modules",
-    "description": "CoreX module system — EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
+    "description": "CoreX module system \u2014 EntityRegistry, module manifests, discovery and the compiled registry hot-path.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -31,7 +31,8 @@
         "mockery/mockery": "^1.6",
         "nikic/php-parser": "^5.4",
         "orchestra/testbench": "^10.12|^11.3",
-        "phpstan/phpstan": "^2.2.16"
+        "phpstan/phpstan": "^2.2.16",
+        "orchestra/testbench-core": "^10.12|^11.3"
     },
     "autoload": {
         "psr-4": {

@@ -25,8 +25,7 @@ use CoreX\Enums\PiiClass;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
-use CoreX\Messaging\Internal\SqlInbox;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Config;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\SecretRef;
@@ -173,7 +172,7 @@ final class WebhookDeliveryTest extends TestCase
                 new WebhookHttpResult(204, null, null, 1),
                 new WebhookHttpResult(204, null, null, 1),
             ],
-            inbox: new SqlInbox($this->connection, $this->clock),
+            inbox: MessagingFixtures::inbox($this->connection, $this->clock),
         );
         $keyRefs = $store->signingKeyRefs($this->scope, $first);
         self::assertSame(['current'], $keyRefs);
@@ -245,7 +244,7 @@ final class WebhookDeliveryTest extends TestCase
         $projector = new DeliveryProjector;
 
         return new WebhookTopicCatalogue(
-            new ArrayMessageContractRegistry([
+            MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
             [new WebhookTopic(

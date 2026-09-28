@@ -22,8 +22,7 @@ use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
-use CoreX\Messaging\Internal\SqlInbox;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Config;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Tenancy\AccountRef;
@@ -184,11 +183,11 @@ final class WebhookFanoutTest extends TestCase
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $schema = ['id' => 'string'];
         $topic = new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
-        $catalogue = new WebhookTopicCatalogue(new ArrayMessageContractRegistry([
+        $catalogue = new WebhookTopicCatalogue(MessagingFixtures::contracts([
             new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
         ]), [$topic], ['orders.placed' => $projector]);
 
-        return new WebhookFanout($db, new SqlInbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock);
+        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock);
     }
 
     private function subscribe(string $id, string $connection = 'api_tenant'): void

@@ -10,6 +10,7 @@ use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Panels\Contracts\PanelCatalogue;
 use CoreX\Panels\Internal\EntityViewSchemaProvider;
 use CoreX\Panels\Internal\ModulePanelCatalogue;
+use CoreX\Panels\Internal\SavedViewsRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -19,6 +20,7 @@ final class PanelsServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        SavedViewsRegistrar::register($this->app);
         $this->mergeConfigFrom(__DIR__.'/../config/corex-panels.php', 'corex-panels');
         $this->app->singleton(PanelCatalogue::class, static fn (Application $app): ModulePanelCatalogue => new ModulePanelCatalogue(
             providers: $app->tagged((string) $app['config']->get('corex-panels.provider_tag')),

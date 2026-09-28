@@ -65,7 +65,7 @@ final class ToolGuardConcurrencyTest extends TestCase
 
     public function test_equal_key_requests_replay_under_row_lock_without_duplicate_effects(): void
     {
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::tool(
                     code: 'notes.create',

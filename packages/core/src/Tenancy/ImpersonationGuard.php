@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Audit\Internal\AuditLog;
 use CoreX\Enums\ImpersonationRestrictedAction;
 use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * L3 — semantic layer of the read-only invariant (D141): the assert point
@@ -23,6 +25,12 @@ final class ImpersonationGuard
     public function __construct(
         private readonly ImpersonationService $impersonation,
     ) {}
+
+    /** @return list<class-string<Model>> */
+    public static function writeExemptModels(): array
+    {
+        return [AuditLog::class];
+    }
 
     public function assertAllowed(ImpersonationRestrictedAction $action): void
     {

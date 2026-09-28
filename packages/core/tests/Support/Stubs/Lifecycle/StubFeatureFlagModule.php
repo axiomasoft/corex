@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Testing\Stubs\Lifecycle;
+
+use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\ModuleDefinition;
+use CoreX\Modules\ModuleManifest;
+
+/**
+ * No migrations/hooks — exists solely to exercise `ModuleManifest::$featureFlags`
+ * → `FeatureFlags::define()` on `enable()` (P1.25, A68).
+ */
+final class StubFeatureFlagModule extends ModuleDefinition
+{
+    public function manifest(): ModuleManifest
+    {
+        return ModuleManifest::make('corex/stub-feature-flag')
+            ->title('Stub Feature Flag')
+            ->tablePrefix('sff')
+            ->featureFlags([
+                new FeatureFlagDefinition(key: 'sff.beta_mode', default: false, module: 'corex/stub-feature-flag'),
+            ]);
+    }
+}

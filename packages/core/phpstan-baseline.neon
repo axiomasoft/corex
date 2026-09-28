@@ -141,7 +141,7 @@ parameters:
 		-
 			rawMessage: 'Cannot call method make() on mixed.'
 			identifier: method.nonObject
-			count: 17
+			count: 13
 			path: src/CoreServiceProvider.php
 
 		-
@@ -222,11 +222,6 @@ parameters:
 			count: 1
 			path: src/CoreServiceProvider.php
 
-		-
-			rawMessage: 'Parameter $policy of class CoreX\SavedViews\Internal\SqlSavedViewRepository constructor expects CoreX\Contracts\ViewAccessPolicy, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
 
 		-
 			rawMessage: 'Parameter $resolver of class CoreX\Tenancy\GuardedTenantContextRestorer constructor expects CoreX\Tenancy\Contracts\TenantContextResolver, mixed given.'
@@ -234,11 +229,6 @@ parameters:
 			count: 1
 			path: src/CoreServiceProvider.php
 
-		-
-			rawMessage: 'Parameter $schemas of class CoreX\SavedViews\Internal\SqlSavedViewRepository constructor expects CoreX\Contracts\ViewSchemaProvider, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
 
 		-
 			rawMessage: 'Parameter $traces of class CoreX\Messaging\Internal\SqlOutbox constructor expects CoreX\Messaging\Contracts\TraceContextBridge, mixed given.'
@@ -246,11 +236,6 @@ parameters:
 			count: 1
 			path: src/CoreServiceProvider.php
 
-		-
-			rawMessage: 'Parameter $validator of class CoreX\SavedViews\Internal\SqlSavedViewRepository constructor expects CoreX\SavedViews\Internal\ViewConfigValidator, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::orderBy().'

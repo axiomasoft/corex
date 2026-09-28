@@ -7,7 +7,7 @@ use CoreX\Attributes\Internal\Integration\AttributeMessageContracts;
 use CoreX\Attributes\Internal\Integration\AttributeMessageTranslator;
 use CoreX\Attributes\Internal\Integration\AttributeValuesChanged;
 use CoreX\Enums\PiiClass;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 
 function attributeValuesChanged(): AttributeValuesChanged
@@ -57,7 +57,7 @@ it('translates a mutation into the declared metadata-only contract', function ()
 });
 
 it('declares one additive v1 integration contract', function (): void {
-    $existing = new ArrayMessageContractRegistry(contracts: []);
+    $existing = MessagingFixtures::contracts(contracts: []);
     $resolved = new AttributeMessageContractRegistry($existing);
 
     expect($resolved->get(AttributeMessageContracts::VALUES_CHANGED, 1)->id())
@@ -65,7 +65,7 @@ it('declares one additive v1 integration contract', function (): void {
 });
 
 it('rejects a registry collision', function (): void {
-    new AttributeMessageContractRegistry(new ArrayMessageContractRegistry(
+    new AttributeMessageContractRegistry(MessagingFixtures::contracts(
         contracts: AttributeMessageContracts::all(),
     ));
 })->throws(InvalidArgumentException::class, 'Duplicate message contract');

@@ -78,3 +78,15 @@ constitute a publication promise.
 ## Failure semantics
 
 Invalid or conflicting module declarations fail compilation before publishing a registry. A disabled module is not an implicit grant. Lifecycle and purge require the supported tenant PostgreSQL connection and package-owned schema; connection, dependency or ownership failures must be resolved before retry. Preserve transaction boundaries and do not replace a rejected lifecycle operation with direct table writes.
+
+### Optional compiler contributions
+
+Resolve `RegistryCompiler` through the container so installed contributors are included.
+A package may register its Eloquent cast with `FieldCastRegistry::register($castClass, $type)`;
+cast arguments such as `:USD` are ignored during lookup. The built-in scalar mappings still work
+without optional packages.
+
+Packages tag their `ManifestSectionCompiler` implementation with the interface name. Each
+compiler owns one API declaration mode, its validation phase and normalized records. Operations
+runs before tools, allowing exposed tools to resolve declared operations. An unsupported mode
+fails compilation instead of silently omitting declarations.

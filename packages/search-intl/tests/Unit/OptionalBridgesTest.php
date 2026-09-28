@@ -13,11 +13,11 @@ use CoreX\Intl\Data\LocaleResolution;
 use CoreX\Intl\Data\LocalizedText;
 use CoreX\Intl\Data\TranslationResult;
 use CoreX\Search\Contracts\SearchSchema;
-use CoreX\Search\Internal\Query\PolicySearchHydrator;
 use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\CurrentSearchRecord;
 use CoreX\Search\Support\SearchSnapshot;
+use CoreX\Search\Testing\SearchFixtures;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
 use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
@@ -124,7 +124,7 @@ final class OptionalBridgesTest extends TestCase
             searchableColumns: ['title'],
             resultColumns: ['id', 'title'],
         );
-        $hydrator = new PolicySearchHydrator(
+        $hydrator = SearchFixtures::policyHydrator(
             static function () use ($schema): CurrentSearchRecord {
                 return new CurrentSearchRecord(
                     record: new RecordRef(entity: 'equipment', id: 'eq1'),
@@ -195,7 +195,7 @@ final class OptionalBridgesTest extends TestCase
             searchableColumns: ['code', 'title__ru'],
             resultColumns: ['id', 'title__ru'],
         );
-        $base = new PolicySearchHydrator(
+        $base = SearchFixtures::policyHydrator(
             static fn (): CurrentSearchRecord => new CurrentSearchRecord(
                 record: new RecordRef(entity: 'equipment', id: 'eq1'),
                 schemaHash: str_repeat('3', 64),

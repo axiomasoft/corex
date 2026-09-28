@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
+use CoreX\Modules\Compiler\FieldCastMap;
+use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\EntityRegistry;
+use CoreX\Modules\Contracts\FieldCastRegistry;
+use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Contracts\ModuleActivationGate;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistryCache;
@@ -33,6 +37,9 @@ final class RegistryRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->singleton(FieldCastRegistry::class, FieldCastMap::class);
+        $app->when(RegistryCompiler::class)->needs('$sections')->giveTagged(ManifestSectionCompiler::class);
+
         // Bind the concrete singleton first so module providers can resolve
         // it directly to call register() (not part of the read-only contract),
         // then alias the contract to the same instance. The active-module

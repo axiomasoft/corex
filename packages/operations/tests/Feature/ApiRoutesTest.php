@@ -56,7 +56,7 @@ final class ApiRoutesTest extends TestCase
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $old = Api::operation('notes.legacy', 'GET', '/notes/legacy', RouteNoteHandler::class, 'notes.read', $schema, $schema)
             ->deprecated('notes.legacy', '2026-09-01', '2026-12-01', 'notes.create', 'https://example.test/migrate');
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$sync, $async, $old]),
         ], installedPackages: []);
         $this->modules = new ModuleFixture($registry);

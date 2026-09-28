@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Contracts\CurrencyConverter;
 use CoreX\Intl\Contracts\CurrencyMetadata;
@@ -29,6 +30,8 @@ use CoreX\Intl\Internal\Reference\FixtureReferenceNormalizer;
 use CoreX\Intl\Internal\Reference\ReferenceCursorCodec;
 use CoreX\Intl\Internal\Reference\SqlDatasetImporter;
 use CoreX\Intl\Internal\Reference\SqlGeographyProvider;
+use CoreX\Modules\Contracts\FieldCastRegistry;
+use CoreX\Money\MoneyCast;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -38,6 +41,12 @@ final class IntlServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([IntlConfigSection::class], ConfigReportSection::class);
+
+        $this->callAfterResolving(FieldCastRegistry::class, static function (FieldCastRegistry $casts): void {
+            $casts->register(MoneyCast::class, 'money');
+        });
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-intl.php', 'corex-intl');
 
         $this->app->scoped(LocalePolicy::class, function (Application $app): LocalePolicy {

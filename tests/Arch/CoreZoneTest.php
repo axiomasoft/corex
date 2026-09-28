@@ -25,6 +25,7 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
+    'packages/core/src/Support/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
     'packages/core/src/Support/Config.php',
     'packages/core/src/Support/CoreOptions.php',
@@ -42,6 +43,7 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Models/BaseModel.php';
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
+    'packages/core/src/Tenancy/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
     'packages/core/src/Support/Data/DataScope.php' => [
         'CoreX\\Tenancy\\TenantContext',
     ],
@@ -97,6 +99,7 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
+    'Contracts/ConfigReportSection.php' => 'Foundation',
     'Audit/Contracts/Auditable.php' => 'Audit',
     'Audit/Contracts/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',
@@ -466,7 +469,7 @@ function rz2Offenders(): array
             $target = coreZoneImportTarget($import);
             $zone = $target === null ? 'unclassified' : coreZoneKind($target);
 
-            if ($zone === 'unclassified' || ! coreZoneFileInZoneDirectories($relative, $zone)) {
+            if (! coreZoneExactImport($relative, $import) && ($zone === 'unclassified' || ! coreZoneFileInZoneDirectories($relative, $zone))) {
                 $offenders[] = 'R-Z2 '.$relative.' imports '.$import;
             }
         }

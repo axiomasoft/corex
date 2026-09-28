@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\Internal\AuditLog;
 use CoreX\Enums\ImpersonationRestrictedAction;
 use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\Contracts\ImpersonationService;
@@ -163,14 +162,14 @@ it('ъ: L2 exempts AuditLog — the compliance record can write while queue=sync
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
     Event::listen('eloquent.saving: *', [$guard, 'handle']);
 
-    AuditLog::on('pgsql')->create([
+    (ImpersonationGuard::writeExemptModels()[0])::on('pgsql')->create([
         'occurred_at' => now(),
         'actor_type' => 'support',
         'action' => 'created',
         'context' => [],
     ]);
 
-    expect(AuditLog::on('pgsql')->count())->toBe(1);
+    expect((ImpersonationGuard::writeExemptModels()[0])::on('pgsql')->count())->toBe(1);
 });
 
 it('ъ: L2 exempts ImpersonationGrant — the grant row itself is not blocked', function (): void {

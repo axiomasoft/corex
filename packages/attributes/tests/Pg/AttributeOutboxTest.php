@@ -11,8 +11,7 @@ use CoreX\Attributes\Support\ValuePatch;
 use CoreX\Attributes\Tests\PgTestCase;
 use CoreX\Attributes\Tests\Support\PgTestSupport;
 use CoreX\Exceptions\UnknownMessageContract;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
-use CoreX\Messaging\Internal\SqlOutbox;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Config;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\Data\RecordRef;
@@ -41,9 +40,9 @@ function p107Store(string $engine, bool $declareContract = true): AttributeStore
             ['code' => 'email', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10b', 'type' => 'email'],
         ]),
         'authorizer' => jsonbAuthorizer(),
-        'outbox' => new SqlOutbox(
+        'outbox' => MessagingFixtures::outbox(
             connection: DB::connection(),
-            contracts: new ArrayMessageContractRegistry(contracts: $contracts),
+            contracts: MessagingFixtures::contracts(contracts: $contracts),
             clock: $clock,
         ),
         'messageTranslator' => new AttributeMessageTranslator(new ArrayDataScopeCodec),

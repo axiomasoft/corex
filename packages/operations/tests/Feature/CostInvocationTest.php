@@ -197,7 +197,7 @@ final class CostInvocationTest extends TestCase
     public function test_http_and_exposed_tool_share_cost_metadata_without_scope_keys(): void
     {
         $schema = $this->schema();
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema)
                     ->cost(['base' => 2]),
@@ -258,7 +258,7 @@ final class CostInvocationTest extends TestCase
     public function test_http_rate_limit_keeps_retry_after_and_store_failure_has_no_retry_header(): void
     {
         $schema = $this->schema();
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema),
             ]),
@@ -395,7 +395,7 @@ final class CostInvocationTest extends TestCase
 
     private function modules(): ModuleFixture
     {
-        return new ModuleFixture((new RegistryCompiler)->compile([], installedPackages: []));
+        return new ModuleFixture(app(RegistryCompiler::class)->compile([], installedPackages: []));
     }
 
     private function operationAuthorizer(): OperationAuthorizer

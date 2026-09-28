@@ -80,7 +80,7 @@ final class PlatformTest extends TestCase
     /** @param list<Api> $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return (new RegistryCompiler)->compile([
+        return app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }

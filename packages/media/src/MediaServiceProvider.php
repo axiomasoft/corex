@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media;
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Commands\SweepMediaOperations;
 use CoreX\Media\Contracts\MediaLibrary;
@@ -17,6 +18,7 @@ use CoreX\Media\Internal\GdThumbnailDriver;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\SqlRelationLookup;
+use CoreX\Media\Support\MediaConfigSection;
 use CoreX\Media\Support\MediaOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +29,8 @@ final class MediaServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([MediaConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-media.php', 'corex-media');
 
         $raw = $this->app['config']->get('corex-media', []);

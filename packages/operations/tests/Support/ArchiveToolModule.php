@@ -31,7 +31,7 @@ final class ArchiveToolModule implements ModuleRegistry
         $input = self::inputSchema();
         $output = self::outputSchema();
 
-        return (new RegistryCompiler)->compile([
+        return app(RegistryCompiler::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Archive tools')
                 ->tablePrefix('arc')

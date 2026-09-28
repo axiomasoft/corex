@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added package-contributed configuration reports through `ConfigReportSection` and public messaging test fixtures. Saved Views default bindings now register with panels.
+
 - Added immutable `DataScope`, `RecordRef`, and `WriteToken` boundary DTOs for optional data services.
 
 Все заметные изменения `corex/core` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).

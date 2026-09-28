@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+- Added `FieldCastRegistry` and `ManifestSectionCompiler` so optional packages supply casts and API declaration compilation through container bindings.
+
 ### Added
 
 - Deterministic registry compiler IR: point-specific identity, explicit replacement, canonical

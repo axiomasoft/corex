@@ -80,7 +80,7 @@ final class OperationContractTest extends TestCase
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $tool = Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $input, $output, ['title' => 'title']);
         $asyncTool = Api::exposeTool('notes.export', 'v1', 'notes.export', 'v1', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
-        $this->modules = new ModuleFixture((new RegistryCompiler)->compile([
+        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$query, $command, $async, $tool, $asyncTool]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;

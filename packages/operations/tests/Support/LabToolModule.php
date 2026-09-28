@@ -31,7 +31,7 @@ final class LabToolModule implements ModuleRegistry
         $input = ArchiveToolModule::inputSchema();
         $output = ArchiveToolModule::outputSchema();
 
-        return (new RegistryCompiler)->compile([
+        return app(RegistryCompiler::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Lab tools')
                 ->tablePrefix('lab')

@@ -20,8 +20,10 @@ use CoreX\Auth\Extend\PermissionsMerger;
 use CoreX\Auth\Identity\PrincipalUserProvider;
 use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
 use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
+use CoreX\Auth\Support\AccessConfigSection;
 use CoreX\Auth\Support\AuthOptions;
 use CoreX\Auth\Tenancy\TenantContextGuard;
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
@@ -36,6 +38,8 @@ final class CoreAuthServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([AccessConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');
 
         $raw = $this->app['config']->get('corex-auth', []);

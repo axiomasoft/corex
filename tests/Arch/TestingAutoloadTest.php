@@ -163,6 +163,8 @@ function testingCrossPackageImportOffenders(string $root): array
                 continue;
             }
 
+            $imports = array_values(array_filter($imports, static fn (string $import): bool => ! str_starts_with($import, 'CoreX\\Testing\\Stubs\\')));
+
             $allowed = str_starts_with($relative, 'packages/core/tests/')
                 || str_starts_with($relative, 'tests/');
 

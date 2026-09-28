@@ -54,7 +54,7 @@ $registryCompilerBetaManifest = function (array $extenders = []): ModuleManifest
 };
 
 it('compiles two stub modules with EntityDefinitions in pipeline order', function () use ($registryCompilerAlphaManifest, $registryCompilerBetaManifest): void {
-    $registry = (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $registryCompilerBetaManifest()]);
+    $registry = app(RegistryCompiler::class)->compile([$registryCompilerAlphaManifest(), $registryCompilerBetaManifest()]);
 
     expect(array_keys($registry->entities))->toBe(['alp.thing', 'bet.thing'])
         ->and($registry->entities['alp.thing']->model)->toBe(StubEntityAlphaThing::class)
@@ -66,7 +66,7 @@ it('compiles two stub modules with EntityDefinitions in pipeline order', functio
 it('rejects a duplicate tablePrefix across manifests', function () use ($registryCompilerAlphaManifest): void {
     $duplicate = ModuleManifest::make('corex/stub-alpha-clone')->title('Clone')->tablePrefix('alp');
 
-    expect(fn () => (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $duplicate]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$registryCompilerAlphaManifest(), $duplicate]))
         ->toThrow(CompilationException::class, 'Table prefix [alp]');
 });
 
@@ -76,7 +76,7 @@ it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', 
     $thrown = null;
 
     try {
-        (new RegistryCompiler)->compile([$noPrefix]);
+        app(RegistryCompiler::class)->compile([$noPrefix]);
     } catch (CompilationException $e) {
         $thrown = $e;
     }
@@ -96,7 +96,7 @@ it('rejects a manifest with no tablePrefix() call — D37, no auto-derivation', 
 it('rejects a manifest with no title() call', function (): void {
     $noTitle = ModuleManifest::make('corex/stub-no-title')->tablePrefix('ntt');
 
-    expect(fn () => (new RegistryCompiler)->compile([$noTitle]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$noTitle]))
         ->toThrow(CompilationException::class, 'corex/stub-no-title');
 });
 
@@ -108,7 +108,7 @@ it('rejects a duplicate entity handle declared by two modules, naming both', fun
             Entity::make(StubEntityAlphaThing::class)->handle('alp.thing')->table('ahc_things'),
         ]);
 
-    expect(fn () => (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $clone]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$registryCompilerAlphaManifest(), $clone]))
         ->toThrow(CompilationException::class, 'Duplicate identity [entity:alp.thing] is declared by both [corex/stub-alpha] and [corex/stub-alpha-handle-clone]');
 });
 
@@ -118,7 +118,7 @@ it('rejects requires that do not mirror an installed module', function (): void 
         ->tablePrefix('orp')
         ->requires([ModuleDependency::module('ghost/does-not-exist')]);
 
-    expect(fn () => (new RegistryCompiler)->compile([$orphan]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$orphan]))
         ->toThrow(CompilationException::class, 'ghost/does-not-exist');
 });
 
@@ -139,7 +139,7 @@ it('resolves requires against installed.json contents, not a hardcoded package l
         ->tablePrefix('rrl')
         ->requires([ModuleDependency::module('corex/core')]);
 
-    $registry = (new RegistryCompiler)->compile([$requiresInstalled], $installedPackages);
+    $registry = app(RegistryCompiler::class)->compile([$requiresInstalled], $installedPackages);
 
     expect($registry->entities)->toBe([]);
 });
@@ -154,14 +154,14 @@ it('rejects requires against a package absent from installed.json (AC-2)', funct
         ->tablePrefix('rrm')
         ->requires([ModuleDependency::module('corex/not-installed')]);
 
-    expect(fn () => (new RegistryCompiler)->compile([$requiresMissing], $installedPackages))
+    expect(fn () => app(RegistryCompiler::class)->compile([$requiresMissing], $installedPackages))
         ->toThrow(CompilationException::class);
 });
 
 it('collects a cross-module EntityField as sleeping, without failing compilation', function () use ($registryCompilerAlphaManifest, $registryCompilerBetaManifest): void {
     $crossModuleField = EntityField::scalar('alp.thing', 'beta_note', 'string');
 
-    $registry = (new RegistryCompiler)->compile([$registryCompilerAlphaManifest(), $registryCompilerBetaManifest([$crossModuleField])]);
+    $registry = app(RegistryCompiler::class)->compile([$registryCompilerAlphaManifest(), $registryCompilerBetaManifest([$crossModuleField])]);
 
     expect($registry->entityFields)->toHaveCount(1)
         ->and($registry->entityFields[0]->extender->fieldHandle)->toBe($crossModuleField->fieldHandle)
@@ -180,7 +180,7 @@ it('does not mark a same-module EntityField as sleeping', function (): void {
             $ownField,
         ]);
 
-    $registry = (new RegistryCompiler)->compile([$alpha]);
+    $registry = app(RegistryCompiler::class)->compile([$alpha]);
 
     expect($registry->entityFields[0]->sleeping)->toBeFalse();
 });
@@ -191,7 +191,7 @@ it('rejects an EntityField targeting a handle unknown to any compiled manifest',
         ->tablePrefix('ghr')
         ->extends([EntityField::scalar('nowhere.ghost', 'x', 'string')]);
 
-    expect(fn () => (new RegistryCompiler)->compile([$manifest]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$manifest]))
         ->toThrow(CompilationException::class, 'nowhere.ghost');
 });
 
@@ -201,7 +201,7 @@ it('rejects a third-party extender outside the closed set with an RFC referral',
         ->tablePrefix('rog')
         ->extends([new StubRogueExtender]);
 
-    expect(fn () => (new RegistryCompiler)->compile([$manifest]))
+    expect(fn () => app(RegistryCompiler::class)->compile([$manifest]))
         ->toThrow(CompilationException::class, 'RFC');
 });
 
@@ -238,7 +238,7 @@ $registryCompilerFullManifest = function (): ModuleManifest {
 };
 
 it('round-trips the whole CompiledRegistry (all 10 slices) through toArray/fromArray (P1.15/P1.25)', function () use ($registryCompilerFullManifest): void {
-    $compiled = (new RegistryCompiler)->compile([$registryCompilerFullManifest()]);
+    $compiled = app(RegistryCompiler::class)->compile([$registryCompilerFullManifest()]);
 
     $array = $compiled->toArray();
 
@@ -275,7 +275,7 @@ it('collects settings/featureFlags off plain manifest properties, not an Extende
         ->settings([DefaultSettingDefinition::make('locale', 'en')])
         ->featureFlags([new FeatureFlagDefinition(key: 'sfd.on', default: true)]);
 
-    $compiled = (new RegistryCompiler)->compile([$manifest]);
+    $compiled = app(RegistryCompiler::class)->compile([$manifest]);
 
     expect($compiled->settings)->toHaveCount(1)
         ->and($compiled->settings[0]->namespace)->toBe('sfd')
@@ -289,7 +289,7 @@ it('collects settings/featureFlags off plain manifest properties, not an Extende
 it('runs the closed-set pipeline stages in the declared PipelineStages::ORDER, observably (AC-18)', function () use ($registryCompilerFullManifest): void {
     $observed = [];
 
-    (new RegistryCompiler)->compile(
+    app(RegistryCompiler::class)->compile(
         [$registryCompilerFullManifest()],
         onStage: function (string $stage) use (&$observed): void {
             $observed[] = $stage;

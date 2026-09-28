@@ -43,6 +43,7 @@ use CoreX\Api\Laravel\BulkRegistrar;
 use CoreX\Api\Laravel\CostRegistrar;
 use CoreX\Api\Laravel\WebhookRegistrar;
 use CoreX\Api\Support\ApiOptions;
+use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Support\SecretRef;
 use CoreX\Support\Time\SystemClock;
@@ -62,6 +63,8 @@ final class ApiServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-api.php', 'corex-api');
         $this->app->bind(ApiOptions::class, static function (Application $app): ApiOptions {
             $config = $app['config']->get('corex-api');

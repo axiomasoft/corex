@@ -102,7 +102,7 @@ final class IdempotentInvocationTest extends TestCase
         $this->inner = new EffectInvokerFixture($this->connection);
         $this->authorizer = new ReplayAuthorizerFixture;
         $this->operationAuthorizer = new OperationAuthorizerFixture;
-        $this->modules = new ModuleFixture((new RegistryCompiler)->compile([], installedPackages: []));
+        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void
@@ -143,7 +143,7 @@ final class IdempotentInvocationTest extends TestCase
     public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
     {
         $schema = ['type' => 'object'];
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', IdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string']])
                     ->asCommand()->idempotency('required')->effect('tenant_transactional'),

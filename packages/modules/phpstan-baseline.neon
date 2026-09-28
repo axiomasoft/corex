@@ -85,26 +85,8 @@ parameters:
 			path: src/Compiler/InstalledPackages.php
 
 		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 1
-			path: src/Compiler/RegistryCompiler.php
-
-		-
 			rawMessage: 'Parameter #1 $model of method CoreX\Modules\Compiler\RegistryCompiler::introspectCasts() expects class-string<Illuminate\Database\Eloquent\Model>, class-string given.'
 			identifier: argument.type
-			count: 2
-			path: src/Compiler/RegistryCompiler.php
-
-		-
-			rawMessage: 'Parameter #3 $declaringModule of static method CoreX\Modules\Compiler\ApiToolValidator::validateExposedOperationReference() expects string, string|null given.'
-			identifier: argument.type
-			count: 1
-			path: src/Compiler/RegistryCompiler.php
-
-		-
-			rawMessage: Possibly invalid array key type string|null.
-			identifier: offsetAccess.invalidOffset
 			count: 2
 			path: src/Compiler/RegistryCompiler.php
 

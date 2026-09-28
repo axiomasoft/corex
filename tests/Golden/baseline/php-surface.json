@@ -2046,6 +2046,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Access\\Support\\AccessConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Access\\Support\\AuthOptions": {
         "abstract": false,
         "constants": [],
@@ -3655,6 +3700,49 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Config\\Contracts\\ConfigReportSection": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Config\\CoreOptions": {
         "abstract": false,
         "constants": [],
@@ -4212,6 +4300,51 @@
                 "type": "array"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Config\\KernelConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Config\\SecretRef": {
@@ -5225,6 +5358,11 @@
                 ],
                 "return": "bool",
                 "static": false
+            },
+            "writeExemptModels": {
+                "params": [],
+                "return": "array",
+                "static": true
             }
         },
         "parent": null,
@@ -13854,6 +13992,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Intl\\IntlConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Intl\\IntlModule": {
         "abstract": false,
         "constants": [],
@@ -19825,6 +20008,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Media\\Support\\MediaConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Media\\Support\\MediaOptions": {
         "abstract": false,
         "constants": [],
@@ -22403,6 +22631,80 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Messaging\\Testing\\MessagingFixtures": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "contracts": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "contracts",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Messaging\\Contracts\\MessageContractRegistry",
+                "static": true
+            },
+            "inbox": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Messaging\\Contracts\\Inbox",
+                "static": true
+            },
+            "outbox": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contracts",
+                        "type": "CoreX\\Messaging\\Contracts\\MessageContractRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "traces",
+                        "type": "?CoreX\\Messaging\\Contracts\\TraceContextBridge",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Messaging\\Contracts\\Outbox",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Modules\\Audit\\AuditCapabilityWiring": {
         "abstract": false,
         "constants": [],
@@ -23148,6 +23450,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Modules\\Compiler\\FieldCastMap": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\FieldCastRegistry"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "castClass",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "typeFor": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "cast",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Modules\\Compiler\\InstalledPackageVersion": {
         "abstract": false,
         "constants": [],
@@ -23396,6 +23743,23 @@
                         "name": "validator",
                         "type": "CoreX\\Modules\\Compiler\\CompilationValidator",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": {
+                            "class": "CoreX\\Modules\\Compiler\\FieldCastMap",
+                            "properties": []
+                        },
+                        "name": "casts",
+                        "type": "CoreX\\Modules\\Contracts\\FieldCastRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "sections",
+                        "type": "iterable",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -23563,6 +23927,114 @@
                     }
                 ],
                 "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Modules\\Contracts\\FieldCastRegistry": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "castClass",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "typeFor": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "cast",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Modules\\Contracts\\ManifestSectionCompiler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "compile": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "declarations",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "all",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "mode": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manifest",
+                        "type": "CoreX\\Modules\\Definition\\ModuleManifest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "api",
+                        "type": "CoreX\\Modules\\Extend\\Api",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ownerVersion",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "phase": {
+                "params": [],
+                "return": "int",
                 "static": false
             }
         },
@@ -29967,6 +30439,51 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Modules\\Support\\ModulesConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Modules\\Support\\ModulesOptions": {
         "abstract": false,
@@ -38441,6 +38958,73 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Definition\\OperationSectionCompiler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\ManifestSectionCompiler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "compile": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "declarations",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "all",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "mode": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manifest",
+                        "type": "CoreX\\Modules\\Definition\\ModuleManifest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "api",
+                        "type": "CoreX\\Modules\\Extend\\Api",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ownerVersion",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "phase": {
+                "params": [],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Errors\\ApiError": {
         "abstract": false,
         "constants": [],
@@ -43338,6 +43922,31 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Panels\\Internal\\SavedViewsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Panels\\PanelsModule": {
         "abstract": false,
         "constants": [],
@@ -46175,6 +46784,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\SearchMeilisearch\\MeilisearchConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider": {
         "abstract": false,
         "constants": [],
@@ -47529,6 +48183,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Search\\Support\\SearchConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Search\\Support\\SearchFilter": {
         "abstract": false,
         "constants": [],
@@ -47842,6 +48541,37 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Search\\Testing\\SearchFixtures": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "policyHydrator": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "loadCurrent",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "authorizer",
+                        "type": "CoreX\\Data\\Contracts\\DataScopeAuthorizer",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Contracts\\SearchHydrator",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Settings\\Contracts\\SettingDefaultsProvider": {
         "abstract": false,
@@ -59485,6 +60215,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Tenancy\\Laravel\\Support\\TenancyConfigSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\ConfigReportSection"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "adapters": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "drivers": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "options": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "order": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "secretDefaults": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "secretKeys": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions": {
         "abstract": false,
         "constants": [],
@@ -68299,6 +69074,73 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tools\\ToolSectionCompiler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\ManifestSectionCompiler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "compile": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "declarations",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "all",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "mode": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manifest",
+                        "type": "CoreX\\Modules\\Definition\\ModuleManifest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "api",
+                        "type": "CoreX\\Modules\\Extend\\Api",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ownerVersion",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "phase": {
+                "params": [],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tools\\ToolServiceProvider": {
         "abstract": false,
         "constants": [],
@@ -71840,6 +72682,38 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Wakeup\\Testing\\WakeupFixtures": {
+        "abstract": false,
+        "constants": {
+            "POINT": {
+                "type": "string",
+                "value": "wakeup.handler"
+            },
+            "SCHEMA": {
+                "type": "string",
+                "value": "wakeup-payload/2"
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "registryClass": {
+                "params": [],
+                "return": "string",
+                "static": true
+            },
+            "systemClockClass": {
+                "params": [],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Wakeup\\WakeupModule": {
         "abstract": false,

@@ -30,7 +30,7 @@ use CoreX\Enums\PiiClass;
 use CoreX\Exceptions\ScopeContextMismatch;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\SecretRef;
@@ -549,7 +549,7 @@ final class ApiRetentionTest extends TestCase
         $replay = new WebhookReplay(
             connection: $this->tenant,
             contexts: $this->restorer,
-            topics: new WebhookTopicCatalogue(new ArrayMessageContractRegistry([
+            topics: new WebhookTopicCatalogue(MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]), [$topic], ['orders.placed' => new RetentionProjector]),
             clock: $this->clock,

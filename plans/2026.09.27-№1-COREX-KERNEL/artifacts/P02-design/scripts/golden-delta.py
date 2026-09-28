@@ -22,9 +22,9 @@ def show(ref, path):
 
 
 def changed_sources(base):
-    out = subprocess.run(['git', 'diff', '--name-only', base, '--', 'packages/*/src'], capture_output=True,
+    out = subprocess.run(['git', 'diff', '--name-only', base, '--', ':(glob)packages/*/src/**/*.php'], capture_output=True,
                          text=True, check=True).stdout.split()
-    out += subprocess.run(['git', 'ls-files', '--others', '--exclude-standard', 'packages/*/src'],
+    out += subprocess.run(['git', 'ls-files', '--others', '--exclude-standard', ':(glob)packages/*/src/**/*.php'],
                           capture_output=True, text=True, check=True).stdout.split()
     return sorted(set(f for f in out if f.endswith('.php')))
 

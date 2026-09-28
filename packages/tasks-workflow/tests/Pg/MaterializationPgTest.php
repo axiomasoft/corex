@@ -27,7 +27,7 @@ use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
-use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
+use CoreX\Wakeup\Testing\WakeupFixtures;
 use CoreX\Wakeup\WakeupServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -175,7 +175,7 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
     expect($this->migrateWakeup())->toBe(0);
     $set = SeriesSeeder::dailySet('series-pg-06b-mismatch', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-06b-mismatch', $set, $this->template, $this->restoreEpoch);
-    $registry = app(WakeupHandlerRegistry::class);
+    $registry = app(WakeupFixtures::registryClass());
     $definition = $registry->definition(MaterializationHasher::HANDLER_KIND);
     $envelope = $registry->envelope(
         definition: $definition,
@@ -258,6 +258,6 @@ function registerMaterializationWakeup(): void
             'accept_legacy_unstamped' => false,
         ],
     ]);
-    app()->forgetInstance(WakeupHandlerRegistry::class);
+    app()->forgetInstance(WakeupFixtures::registryClass());
     app()->forgetScopedInstances();
 }

@@ -4,12 +4,17 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 run() {
-    local dir="$1" result=0
+    local dir="$1" result=0 task_snapshot=""
     if [[ ! -f "packages/$dir/composer.json" ]]; then
         echo "Unknown package: $dir" >&2
         return 2
     fi
     if [[ "$dir" == tenancy || "$dir" == access ]]; then
+        task_snapshot=$(mktemp -d)
+        for manifest in composer.json packages/tenancy/composer.json packages/access/composer.json; do
+            mkdir -p "$task_snapshot/$(dirname "$manifest")"
+            cp -p "$manifest" "$task_snapshot/$manifest"
+        done
         python3 scripts/distribution/stage-stancl-providers.py >/dev/null || result=$?
     fi
     if (( result == 0 )); then
@@ -22,6 +27,11 @@ run() {
         composer --working-dir=packages/tenancy config --unset repositories.stancl-providers || result=$?
         composer --working-dir=packages/access config --unset repositories.stancl-providers || result=$?
         python3 scripts/distribution/stage-stancl-providers.py --portable-locks >/dev/null || result=$?
+        # Staging may normalize repositories into a list; named unsets cannot
+        # restore that representation. Preserve the caller's exact manifest bytes.
+        for manifest in composer.json packages/tenancy/composer.json packages/access/composer.json; do
+            cp -p "$task_snapshot/$manifest" "$manifest" || result=$?
+        done
     fi
     (( result == 0 )) || return "$result"
     vendor/bin/composer-dependency-analyser \

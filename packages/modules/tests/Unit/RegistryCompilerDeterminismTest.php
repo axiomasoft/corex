@@ -6,13 +6,11 @@ use CoreX\Models\BaseModel;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Modules\Tests\Support\StubToolHandler;
 
 function determinismEntity(string $name, string $prefix, string $handle): Entity
 {
@@ -43,8 +41,8 @@ it('publishes one fingerprint for shuffled module, declaration and associative o
         Permissions::group('widget', ['view'], 'app'),
     ]);
 
-    $first = (new RegistryCompiler)->compile([$alpha, $beta], []);
-    $second = (new RegistryCompiler)->compile([$beta, $alpha], []);
+    $first = app(RegistryCompiler::class)->compile([$alpha, $beta], []);
+    $second = app(RegistryCompiler::class)->compile([$beta, $alpha], []);
 
     expect($second->fingerprint)->toBe($first->fingerprint)
         ->and($second->toArray()['extensions'])->toBe($first->toArray()['extensions'])
@@ -58,7 +56,7 @@ it('keeps semantic menu order while hashing key-sorted payloads', function (): v
         Menu::item('app', 'things')->label('Things')->after('home'),
     ]);
 
-    $compiled = (new RegistryCompiler)->compile([$manifest], []);
+    $compiled = app(RegistryCompiler::class)->compile([$manifest], []);
     $menuIds = array_column(array_filter(
         $compiled->extensions,
         static fn (array $row): bool => $row['point'] === 'menu',
@@ -73,7 +71,7 @@ it('rejects every replacement error with distinct diagnostics', function (
     callable $manifests,
     string $needle,
 ): void {
-    expect(fn () => (new RegistryCompiler)->compile($manifests(), []))
+    expect(fn () => app(RegistryCompiler::class)->compile($manifests(), []))
         ->toThrow(CompilationException::class, $needle);
 })->with([
     'missing target' => [
@@ -124,7 +122,7 @@ it('removes a replaced target from the effective slice and keeps it in provenanc
     $beta = determinismManifest('example/beta', 'bbb', 'bbb.thing')
         ->replace('entity', 'aaa.thing', 'bbb.thing');
 
-    $compiled = (new RegistryCompiler)->compile([$alpha, $beta], []);
+    $compiled = app(RegistryCompiler::class)->compile([$alpha, $beta], []);
 
     expect($compiled->entities)->toHaveKey('bbb.thing')
         ->and($compiled->entities)->not->toHaveKey('aaa.thing')
@@ -133,28 +131,10 @@ it('removes a replaced target from the effective slice and keeps it in provenanc
         ]);
 });
 
-it('rejects duplicate normalized route identity and names both owners', function (): void {
-    $operation = static fn (): Api => Api::operation(
-        id: 'notes.show',
-        method: 'GET',
-        path: '/notes/{id}',
-        handler: StubToolHandler::class,
-        ability: 'notes.view',
-        requestSchema: ['type' => 'object', 'additionalProperties' => false],
-        responseSchema: ['type' => 'object', 'additionalProperties' => false],
-    );
-
-    $alpha = ModuleManifest::make('example/alpha')->title('A')->tablePrefix('aaa')->extends([$operation()]);
-    $beta = ModuleManifest::make('example/beta')->title('B')->tablePrefix('bbb')->extends([$operation()]);
-
-    expect(fn () => (new RegistryCompiler)->compile([$alpha, $beta], []))
-        ->toThrow(CompilationException::class, 'Duplicate identity [api.operation:v1:notes.show]');
-});
-
 it('rejects a menu missing afterHandle target and a menu cycle', function (array $extenders, string $needle): void {
     $manifest = determinismManifest('example/alpha', 'aaa', 'aaa.thing', $extenders);
 
-    expect(fn () => (new RegistryCompiler)->compile([$manifest], []))
+    expect(fn () => app(RegistryCompiler::class)->compile([$manifest], []))
         ->toThrow(CompilationException::class, $needle);
 })->with([
     'missing after' => [
@@ -171,7 +151,7 @@ it('rejects a menu missing afterHandle target and a menu cycle', function (array
 ]);
 
 it('rejects unknown schema, missing fingerprint and hash mismatch', function (array $mutate, string $needle): void {
-    $compiled = (new RegistryCompiler)->compile([
+    $compiled = app(RegistryCompiler::class)->compile([
         determinismManifest('example/alpha', 'aaa', 'aaa.thing'),
     ], []);
     $array = $compiled->toArray();
@@ -197,7 +177,7 @@ it('does not let a hydrated mutation change authority bytes or fingerprint', fun
     $manifest = determinismManifest('example/alpha', 'aaa', 'aaa.thing', [
         Menu::item('app', 'home')->label('Home'),
     ]);
-    $compiled = (new RegistryCompiler)->compile([$manifest], []);
+    $compiled = app(RegistryCompiler::class)->compile([$manifest], []);
     $before = $compiled->toArray();
     $fingerprint = $compiled->fingerprint;
 
@@ -210,7 +190,7 @@ it('does not let a hydrated mutation change authority bytes or fingerprint', fun
         ->and($compiled->toArray())->toBe($before)
         ->and($compiled->toArray()['menu'][0]['handle'])->toBe('home');
 
-    $again = (new RegistryCompiler)->compile([$manifest], []);
+    $again = app(RegistryCompiler::class)->compile([$manifest], []);
 
     expect($again->fingerprint)->toBe($fingerprint)
         ->and($again->menu[0]->handle)->toBe('home');

@@ -2,24 +2,29 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Api\Tests\Unit;
+
 use CoreX\Api\Enums\IdempotencyRequirement;
 use CoreX\Api\Enums\OperationMode;
 use CoreX\Api\Operation;
+use CoreX\Api\Tests\Support\StubOperationHandler;
+use CoreX\Api\Tests\TestCase;
 use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
 use CoreX\Modules\ModuleManifest;
-use CoreX\Modules\Tests\Support\StubToolHandler;
+
+uses(TestCase::class);
 
 $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => false];
 
 $operation = static function (string $method = 'GET', string $id = 'notes.list') use ($schema): Api {
-    return Api::operation($id, $method, '/notes', StubToolHandler::class, 'notes.read', $schema(), $schema());
+    return Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema());
 };
 
 $compile = static function (Api $api): Api {
-    $compiled = (new RegistryCompiler)->compile([
+    $compiled = app(RegistryCompiler::class)->compile([
         ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
     ], installedPackages: []);
 

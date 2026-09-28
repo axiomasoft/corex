@@ -7,6 +7,7 @@ namespace CoreX;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\PruneAuditLog;
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\Contracts\DataScopeCodec;
 use CoreX\Contracts\DepartmentRepository;
@@ -14,12 +15,9 @@ use CoreX\Contracts\FeatureFlags;
 use CoreX\Contracts\ModuleRegistrar;
 use CoreX\Contracts\OperationObserver;
 use CoreX\Contracts\PubSub;
-use CoreX\Contracts\SavedViewRepository;
 use CoreX\Contracts\SettingDefaultsProvider;
 use CoreX\Contracts\SettingsRepository;
 use CoreX\Contracts\TenantStorage;
-use CoreX\Contracts\ViewAccessPolicy;
-use CoreX\Contracts\ViewSchemaProvider;
 use CoreX\Contracts\WorkerRuntime;
 use CoreX\Messaging\Commands\PruneOutboxMessages;
 use CoreX\Messaging\Commands\RelayOutbox;
@@ -39,15 +37,12 @@ use CoreX\Messaging\Internal\SqlOutboxRelay;
 use CoreX\Messaging\PrunePubSubMessages;
 use CoreX\Messaging\PubSubManager;
 use CoreX\Observability\NullOperationObserver;
-use CoreX\SavedViews\Internal\DenyViewAccessPolicy;
-use CoreX\SavedViews\Internal\SqlSavedViewRepository;
-use CoreX\SavedViews\Internal\UnavailableViewSchemaProvider;
-use CoreX\SavedViews\Internal\ViewConfigValidator;
 use CoreX\Storage\LocalTenantStorage;
 use CoreX\Support\Config;
 use CoreX\Support\Console\ValidateConfigCommand;
 use CoreX\Support\CoreOptions;
 use CoreX\Support\Data\ArrayDataScopeCodec;
+use CoreX\Support\KernelConfigSection;
 use CoreX\Support\ServiceProviderModuleRegistrar;
 use CoreX\Support\Time\LaravelClock;
 use CoreX\Tenancy\Contracts\ImpersonationService;
@@ -57,11 +52,9 @@ use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use CoreX\Tenancy\GuardedTenantContextRestorer;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\DateFactory;
 use Illuminate\Support\ServiceProvider;
-use LogicException;
 use Override;
 use Psr\Clock\ClockInterface;
 
@@ -81,6 +74,8 @@ final class CoreServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([KernelConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
         $raw = $this->app['config']->get('corex', []);
@@ -151,24 +146,6 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(DepartmentRepository::class, $options->departmentRepository);
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
-        $this->app->singleton(ViewSchemaProvider::class, UnavailableViewSchemaProvider::class);
-        $this->app->singleton(ViewAccessPolicy::class, DenyViewAccessPolicy::class);
-        $this->app->singleton(ViewConfigValidator::class);
-        $this->app->singleton(SavedViewRepository::class, function ($app) use ($options): SqlSavedViewRepository {
-            $database = $app->make('db');
-
-            if (! $database instanceof DatabaseManager) {
-                throw new LogicException('Database manager is not bound.');
-            }
-
-            return new SqlSavedViewRepository(
-                schemas: $app->make(ViewSchemaProvider::class),
-                policy: $app->make(ViewAccessPolicy::class),
-                validator: $app->make(ViewConfigValidator::class),
-                options: $options,
-                database: $database,
-            );
-        });
         $this->app->scoped(TenantStorage::class, function ($app): LocalTenantStorage {
             return new LocalTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),

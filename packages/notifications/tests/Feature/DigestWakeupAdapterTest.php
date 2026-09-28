@@ -9,6 +9,7 @@ use CoreX\Notifications\Tests\TestCase;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
+use CoreX\Wakeup\Testing\WakeupFixtures;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Psr\Clock\ClockInterface;
 
@@ -42,7 +43,7 @@ it('resolves wakeup from the isolated notifications composition without CoreServ
 
     $clock = app(ClockInterface::class);
 
-    expect($clock::class)->toBe('CoreX\\Wakeup\\Internal\\SystemClock')
+    expect($clock::class)->toBe(WakeupFixtures::systemClockClass())
         ->and($clock->now())->toBeInstanceOf(DateTimeImmutable::class)
         ->and($clock->now()->getTimezone()->getName())->toBe('UTC');
 

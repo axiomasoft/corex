@@ -256,9 +256,9 @@ corex/modules	packages/modules/src/Testing/	CoreX\Modules\	axiomasoft/corex	Core
 corex/modules	packages/modules/tests/Feature/	—	axiomasoft/corex	—	P02	F1/D25 merge; dest=packages/core/tests/Modules/Feature/
 corex/modules	packages/modules/tests/Support/StubToolHandler.php	CoreX\Modules\Tests\	axiomasoft/corex-operations	CoreX\Operations\Testing\	P02	F1/D32/D35 stub handler (OperationHandler) — общая тестовая поддержка operations; dest=packages/operations/src/Testing/
 corex/modules	packages/modules/tests/Unit/	—	axiomasoft/corex	—	P02	F1/D25 merge; dest=packages/core/tests/Modules/Unit/
-corex/modules	packages/modules/tests/Unit/ApiOperationContractTest.php	—	axiomasoft/corex-operations	—	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
-corex/modules	packages/modules/tests/Unit/ApiOperationCostTest.php	—	axiomasoft/corex-operations	—	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
-corex/modules	packages/modules/tests/Unit/ToolDeclarationTest.php	—	axiomasoft/corex-tools	—	P02	F1/D32 тест секции уходит с валидатором; dest=packages/tools/tests/Unit/
+corex/operations	packages/operations/tests/Unit/ApiOperationContractTest.php	CoreX\Api\Tests\	axiomasoft/corex-operations	CoreX\Operations\Tests\Unit\	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
+corex/operations	packages/operations/tests/Unit/ApiOperationCostTest.php	CoreX\Api\Tests\	axiomasoft/corex-operations	CoreX\Operations\Tests\Unit\	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
+corex/operations	packages/operations/tests/Unit/ToolDeclarationTest.php	CoreX\Api\Tests\	axiomasoft/corex-tools	CoreX\Tools\Tests\Unit\	P02	F1/D32 тест секции уходит с валидатором; dest=packages/tools/tests/Unit/
 corex/notifications	packages/notifications/database/migrations/	—	axiomasoft/corex-notifications	—	P02	D04 путь сохраняется
 corex/notifications	packages/notifications/src/Delivery/Commands/	CoreX\Notifications\Commands\	axiomasoft/corex-notifications	CoreX\Notifications\Delivery\Commands\	P02	D04 namespace = путь
 corex/notifications	packages/notifications/src/Delivery/Contracts/	CoreX\Notifications\Contracts\	axiomasoft/corex-notifications	CoreX\Notifications\Delivery\Contracts\	P02	D04 namespace = путь
@@ -557,3 +557,20 @@ corex/workflow	packages/workflow/tests/Feature/	—	axiomasoft/corex-workflow	�
 corex/workflow	packages/workflow/tests/Pest.php	—	axiomasoft/corex-workflow	—	P02	D04 путь сохраняется
 corex/workflow	packages/workflow/tests/TestCase.php	CoreX\Workflow\Tests\	axiomasoft/corex-workflow	CoreX\Workflow\Tests\	P02	D04 namespace = путь
 corex/workflow	packages/workflow/tests/Unit/	—	axiomasoft/corex-workflow	—	P02	D04 путь сохраняется
+corex/core	packages/core/src/Contracts/ConfigReportSection.php	CoreX\	axiomasoft/corex	CoreX\Config\Contracts\	P02	D32/D45 SPI ConfigReportSection
+corex/core	packages/core/src/Support/KernelConfigSection.php	CoreX\	axiomasoft/corex	CoreX\Config\	P02	D45 kernel config report section
+corex/intl	packages/intl/src/IntlConfigSection.php	CoreX\Intl\	axiomasoft/corex-intl	CoreX\Intl\	P02	D45 intl config report section
+corex/search-meilisearch	packages/search-meilisearch/src/MeilisearchConfigSection.php	CoreX\Search\Meilisearch\	axiomasoft/corex-search-meilisearch	CoreX\SearchMeilisearch\	P02	D45 section
+corex/wakeup	packages/wakeup/src/Testing/	CoreX\Wakeup\	axiomasoft/corex-wakeup	CoreX\Wakeup\Testing\	P02	D35 Wakeup testing harness
+corex/search	packages/search/src/Testing/	CoreX\Search\	axiomasoft/corex-search	CoreX\Search\Testing\	P02	D35 Search testing harness
+corex/operations	packages/operations/tests/Unit/OperationRegistryDeterminismTest.php	CoreX\Api\Tests\	axiomasoft/corex-operations	CoreX\Operations\Tests\Unit\	P02	D48 section-owned regression test
+corex/operations	packages/operations/tests/Unit/ToolRegistryIntrospectionTest.php	CoreX\Api\Tests\	axiomasoft/corex-tools	CoreX\Tools\Tests\Unit\	P02	D48 section-owned regression test
+corex/operations	packages/operations/tests/Support/StubOperationHandler.php	CoreX\Api\Tests\	axiomasoft/corex-operations	CoreX\Operations\Testing\	P02	D48 shared standalone handler; dest=packages/operations/src/Testing/
+flex/crm	packages/crm/tests/Fixtures/	Flex\Crm\Tests\	flex/crm	Flex\Crm\Tests\	P02	D48 PSR-4 CRM money regression fixture
+corex/access	packages/access/tests/Unit/ConfigReportSectionTest.php	CoreX\Auth\Tests\	axiomasoft/corex-access	CoreX\Access\Tests\	P02	D48 standalone typed section regression
+corex/media	packages/media/tests/Unit/ConfigReportSectionTest.php	CoreX\Media\Tests\	axiomasoft/corex-media	CoreX\Media\Tests\	P02	D48 standalone typed section regression
+corex/modules	packages/modules/tests/Unit/ConfigReportSectionTest.php	CoreX\Modules\Tests\	axiomasoft/corex	CoreX\Testing\Modules\	P02	D48 standalone typed section regression
+corex/intl	packages/intl/tests/Unit/ConfigReportSectionTest.php	CoreX\Intl\Tests\	axiomasoft/corex-intl	CoreX\Intl\Tests\	P02	D48 standalone typed section regression
+corex/tenancy	packages/tenancy/tests/Unit/ConfigReportSectionTest.php	CoreX\Tenancy\Tests\	axiomasoft/corex-tenancy	CoreX\Tenancy\Tests\	P02	D48 standalone typed section regression
+corex/search	packages/search/tests/Unit/ConfigReportSectionTest.php	CoreX\Search\Tests\Unit\	axiomasoft/corex-search	CoreX\Search\Tests\Unit\	P02	D48 standalone typed section regression
+corex/search-meilisearch	packages/search-meilisearch/tests/Unit/ConfigReportSectionTest.php	CoreX\Search\Meilisearch\Tests\Unit\	axiomasoft/corex-search-meilisearch	CoreX\SearchMeilisearch\Tests\Unit\	P02	D48 standalone typed section regression

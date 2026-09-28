@@ -1518,6 +1518,80 @@
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
+        },
+        {
+            "from": "corex/intl",
+            "to": "corex/core",
+            "import_file": "packages/intl/src/IntlServiceProvider.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "corex/operations",
+            "to": "corex/modules",
+            "import_file": "packages/operations/src/Definition/OperationSectionCompiler.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "corex/operations",
+            "to": "corex/modules",
+            "import_file": "packages/operations/src/Tools/ToolSectionCompiler.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "corex/search",
+            "to": "corex/core",
+            "import_file": "packages/search/src/Testing/SearchFixtures.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        }
+    ],
+    "internal_composition_edges": [
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "symbol": "CoreX\\SavedViews\\Internal\\DenyViewAccessPolicy",
+            "target_file": "packages/core/src/SavedViews/Internal/DenyViewAccessPolicy.php",
+            "reason": "PLAN3.D28/D49: SavedViews belongs to panels; physical transfer in P02.3 expires this exact edge"
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "symbol": "CoreX\\SavedViews\\Internal\\SqlSavedViewRepository",
+            "target_file": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+            "reason": "PLAN3.D28/D49: SavedViews belongs to panels; physical transfer in P02.3 expires this exact edge"
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "symbol": "CoreX\\SavedViews\\Internal\\UnavailableViewSchemaProvider",
+            "target_file": "packages/core/src/SavedViews/Internal/UnavailableViewSchemaProvider.php",
+            "reason": "PLAN3.D28/D49: SavedViews belongs to panels; physical transfer in P02.3 expires this exact edge"
+        },
+        {
+            "from": "corex/panels",
+            "to": "corex/core",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "symbol": "CoreX\\SavedViews\\Internal\\ViewConfigValidator",
+            "target_file": "packages/core/src/SavedViews/Internal/ViewConfigValidator.php",
+            "reason": "PLAN3.D28/D49: SavedViews belongs to panels; physical transfer in P02.3 expires this exact edge"
         }
     ]
 }

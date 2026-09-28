@@ -24,10 +24,9 @@ use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Support\ModulesOptions;
-use CoreX\Modules\Tests\Support\StubToolHandler;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\TenantContext;
-use CoreX\Tests\Stubs\Widget;
+use CoreX\Testing\Stubs\Widget;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
@@ -98,10 +97,10 @@ function introCompileFixture(string $path): CompiledModuleRegistry
                 ->fields([new FieldDefinition('name', 'string')]),
             Permissions::group('widget', ['view'], 'app'),
             Menu::item('app', 'dem.widgets')->label('Widgets'),
-            Api::tool('demo.read', StubToolHandler::class, 'demo.read', ['type' => 'object'], ['type' => 'object'], 'read', 'read-only'),
+            Api::entity('dem.widget'),
         ]);
 
-    $compiled = (new RegistryCompiler)->compile([$manifest], installedPackages: ['example/demo']);
+    $compiled = app(RegistryCompiler::class)->compile([$manifest], installedPackages: ['example/demo']);
     $module = CompiledModule::fromManifest($manifest);
     CompiledModuleRegistry::writeAtomic($path, [$module], $compiled);
 
@@ -194,8 +193,7 @@ it('redacts internal class references and sensitive topology (INTRO-04)', functi
     $registry = introCompileFixture($this->cachePath);
     $encoded = json_encode(introIntrospection($registry, $this->cachePath)->extensionPoints()->extensionPoints, JSON_THROW_ON_ERROR);
 
-    expect($encoded)->not->toContain(StubToolHandler::class)
-        ->and($encoded)->not->toContain(Widget::class)
+    expect($encoded)->not->toContain(Widget::class)
         ->and($encoded)->not->toContain('database/migrations')
         ->and($encoded)->not->toContain('connection');
 });

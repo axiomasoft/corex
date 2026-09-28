@@ -135,7 +135,7 @@ final class AuthorizationLayersTest extends TestCase
                 'secret' => 'secret',
             ],
         );
-        $registry = (new RegistryCompiler)->compile([
+        $registry = app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation, $tool]),
         ], installedPackages: []);
 

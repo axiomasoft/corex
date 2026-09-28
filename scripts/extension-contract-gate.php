@@ -21,6 +21,7 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
+    'CoreX\\Modules\\Contracts\\FieldCastRegistry' => 'boot-built catalogue',
     'CoreX\\Api\\Internal\\Webhook\\WebhookTopicCatalogue' => 'projection',
     'CoreX\\Api\\Contracts\\ToolCatalogue' => 'projection',
     'CoreX\\Api\\Internal\\CompiledToolCatalogue' => 'projection',

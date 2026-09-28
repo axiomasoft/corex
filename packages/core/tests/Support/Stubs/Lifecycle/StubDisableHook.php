@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Testing\Stubs\Lifecycle;
+
+use CoreX\Modules\Contracts\DisableHook;
+use CoreX\Modules\ModuleRuntimeContext;
+
+/** No data side effects (B-10 §7.4 п.1) — nothing to tear down here. */
+final class StubDisableHook implements DisableHook
+{
+    public function __invoke(ModuleRuntimeContext $ctx): void {}
+}

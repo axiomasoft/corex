@@ -14,6 +14,7 @@ use CoreX\Api\Internal\DenyToolPolicy;
 use CoreX\Api\Internal\GuardedToolInvoker;
 use CoreX\Api\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Api\Internal\ToolSchemaSupervisor;
+use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -23,6 +24,8 @@ final class ToolServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([ToolSectionCompiler::class], ManifestSectionCompiler::class);
+
         $this->app->bindIf(ToolPolicy::class, DenyToolPolicy::class);
         $this->app->bindIf(ToolCatalogue::class, CompiledToolCatalogue::class);
         $this->app->bindIf(ToolSchemaValidator::class, ToolSchemaSupervisor::class);

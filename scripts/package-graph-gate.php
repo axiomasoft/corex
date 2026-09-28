@@ -78,7 +78,8 @@ foreach ($packages as $dirName => $meta) {
                 continue;
             }
 
-            if (violatesForeignInternal($import, $meta['name'], $ownerPackage)) {
+            if (violatesForeignInternal($import, $meta['name'], $ownerPackage)
+                && ! isInternalCompositionEdge($repoRoot, $relativeFile, $import, $meta['name'], $ownerPackage, $config['internal_composition_edges'])) {
                 $violations[] = violation(
                     rule: 'R2',
                     file: $relativeFile,
@@ -318,6 +319,7 @@ exit(EXIT_OK);
  *     allowlist: list<array<string, mixed>>,
  *     undeclared_dependency_exceptions: list<array<string, string>>,
  *     public_api_exceptions: list<array<string, string>>,
+ *     internal_composition_edges: list<array<string, string>>,
  *     reservations: list<array<string, string>>,
  *     legacy_namespace_splits: list<array<string, mixed>>
  * }
@@ -337,11 +339,12 @@ function loadConfig(string $path, string $repoRoot): array
     }
 
     $config = [
-        'allowlist' => $decoded['allowlist'] ?? [],
-        'undeclared_dependency_exceptions' => $decoded['undeclared_dependency_exceptions'] ?? [],
-        'public_api_exceptions' => $decoded['public_api_exceptions'] ?? [],
-        'reservations' => $decoded['reservations'] ?? [],
-        'legacy_namespace_splits' => $decoded['legacy_namespace_splits'] ?? [],
+        'allowlist' => configRecords($decoded['allowlist'] ?? []),
+        'undeclared_dependency_exceptions' => stringConfigRecords($decoded['undeclared_dependency_exceptions'] ?? []),
+        'public_api_exceptions' => stringConfigRecords($decoded['public_api_exceptions'] ?? []),
+        'internal_composition_edges' => stringConfigRecords($decoded['internal_composition_edges'] ?? []),
+        'reservations' => stringConfigRecords($decoded['reservations'] ?? []),
+        'legacy_namespace_splits' => configRecords($decoded['legacy_namespace_splits'] ?? []),
     ];
 
     validateAllowlistEntries($config['allowlist'], $repoRoot);
@@ -1509,6 +1512,8 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
  * @param  array{
  *     allowlist: list<array<string, mixed>>,
  *     undeclared_dependency_exceptions: list<array<string, string>>,
+ *     public_api_exceptions: list<array<string, string>>,
+ *     internal_composition_edges: list<array<string, string>>,
  *     reservations: list<array<string, string>>,
  *     legacy_namespace_splits: list<array<string, mixed>>
  * }  $config
@@ -1821,4 +1826,75 @@ function emitPackageGraphBaseline(string $repoRoot, string $configPath): void
             'entries' => $surfaceEntries,
         ],
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
+}
+
+/**
+ * Exact provider-composition edges during an accepted ownership transfer.
+ * The old target must still physically exist; moving it expires the allowance.
+ *
+ * @param  list<array<string, string>>  $edges
+ */
+function isInternalCompositionEdge(string $root, string $file, string $symbol, string $from, string $to, array $edges): bool
+{
+    foreach ($edges as $edge) {
+        if (($edge['from'] ?? null) !== $from || ($edge['to'] ?? null) !== $to
+            || ($edge['import_file'] ?? null) !== $file || ($edge['symbol'] ?? null) !== $symbol) {
+            continue;
+        }
+
+        $target = $edge['target_file'] ?? '';
+
+        if ($target !== '' && str_starts_with($target, 'packages/') && ! str_contains($target, '..') && is_file($root.'/'.$target)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/** @return list<array<string, mixed>> */
+function configRecords(mixed $value): array
+{
+    if (! is_array($value) || ! array_is_list($value)) {
+        fwrite(STDERR, "package-graph-gate: config records must be a list\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $records = [];
+    foreach ($value as $record) {
+        if (! is_array($record)) {
+            fwrite(STDERR, "package-graph-gate: config record must be an object\n");
+            exit(EXIT_CONFIG);
+        }
+        $fields = [];
+        foreach ($record as $key => $field) {
+            if (! is_string($key)) {
+                fwrite(STDERR, "package-graph-gate: config field must have a string key\n");
+                exit(EXIT_CONFIG);
+            }
+            $fields[$key] = $field;
+        }
+        $records[] = $fields;
+    }
+
+    return $records;
+}
+
+/** @return list<array<string, string>> */
+function stringConfigRecords(mixed $value): array
+{
+    $records = [];
+    foreach (configRecords($value) as $record) {
+        $fields = [];
+        foreach ($record as $key => $field) {
+            if (! is_string($field)) {
+                fwrite(STDERR, "package-graph-gate: config field must be a string\n");
+                exit(EXIT_CONFIG);
+            }
+            $fields[$key] = $field;
+        }
+        $records[] = $fields;
+    }
+
+    return $records;
 }

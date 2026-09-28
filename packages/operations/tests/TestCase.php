@@ -5,11 +5,20 @@ declare(strict_types=1);
 namespace CoreX\Api\Tests;
 
 use CoreX\Api\ApiServiceProvider;
+use CoreX\CoreServiceProvider;
+use CoreX\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->register(CoreServiceProvider::class);
+        $this->app->register(ModulesServiceProvider::class);
+    }
+
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {

@@ -6,6 +6,7 @@ use CoreX\Models\BaseModel;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Events\ManifestListeners;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\ModuleDependency;
@@ -87,6 +88,7 @@ it('can compile a missing production registry while ordinary console boot still 
     try {
         $_SERVER['argv'] = ['artisan', 'corex:modules:compile'];
         $this->app->register(ModulesServiceProvider::class);
+        $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(installedJsonPath: '/nonexistent-test-installed.json'));
         $this->artisan('corex:modules:compile')->assertSuccessful();
         $path = CompiledModuleRegistry::defaultCachePath();
         expect(is_file($path))->toBeTrue();

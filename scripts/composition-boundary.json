@@ -5,5 +5,8 @@
         "*/src/**/Commands/*.php",
         "*/src/Console/*.php"
     ],
-    "allow_paths": {}
+    "allow_paths": {
+        "packages/core/src/Support/KernelConfigSection.php": "Effective configuration report composition",
+        "packages/tenancy/src/Laravel/Support/TenancyConfigSection.php": "Effective configuration report composition"
+    }
 }

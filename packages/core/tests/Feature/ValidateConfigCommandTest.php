@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Support\Console\ValidateConfigCommand;
 use CoreX\Support\SecretRef;
+use CoreX\Testing\ConfigReportTestSection;
 use Symfony\Component\Console\Tester\CommandTester;
 
-const INTL_CURSOR_SECRET_DEFAULT = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+const CORE_TEST_SECRET_DEFAULT = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
 
 function validateConfigTester(): CommandTester
 {
+    app()->tag([ConfigReportTestSection::class], ConfigReportSection::class);
     $command = new ValidateConfigCommand;
     $command->setLaravel(app());
 
@@ -45,7 +48,7 @@ it('exits zero on the default test configuration', function (): void {
     expect($result['exit'])->toBe(0)
         ->and($result['stdout'])->toContain('driver pubsub.driver=null')
         ->and($result['stdout'])->toContain('adapter pubsub.redis=not-selected')
-        ->and($result['stdout'])->toContain('secret tenancy.oidc.client_secret=absent')
+        ->and($result['stdout'])->toContain('secret corex.test_secret=absent')
         ->and($result['stderr'])->not->toContain('WARNING')
         ->and($result['exception'])->toBe('');
 });
@@ -59,8 +62,8 @@ it('prints two option violations in one pass and redacts a planted secret', func
 
     config([
         'corex' => $corex,
-        'tenancy.oidc.client_secret' => new SecretRef($secret),
-        'corex-search.cursor_secret' => $secret,
+        'corex.test_secret' => new SecretRef($secret),
+        'corex.test_cursor_secret' => $secret,
     ]);
 
     $result = validateConfigRun();
@@ -69,24 +72,24 @@ it('prints two option violations in one pass and redacts a planted secret', func
     expect($result['exit'])->toBe(1)
         ->and($result['stderr'])->toContain('settings.cache_store: must be a non-empty string')
         ->and($result['stderr'])->toContain('settings.cache_ttl: must be null or a non-negative integer')
-        ->and($result['stdout'])->toContain('secret tenancy.oidc.client_secret=present')
-        ->and($result['stdout'])->toContain('secret corex-search.cursor_secret=present')
+        ->and($result['stdout'])->toContain('secret corex.test_secret=present')
+        ->and($result['stdout'])->toContain('secret corex.test_cursor_secret=present')
         ->and($result['stdout'])->toContain('driver pubsub.driver=present')
         ->and($combined)->not->toContain($secret);
 });
 
 it('warns on the default intl cursor secret without printing it', function (): void {
     config([
-        'corex-intl.reference.cursor_secret' => INTL_CURSOR_SECRET_DEFAULT,
+        'corex.test_default_secret' => CORE_TEST_SECRET_DEFAULT,
     ]);
 
     $result = validateConfigRun();
     $combined = $result['stdout'].$result['stderr'].$result['exception'];
 
     expect($result['exit'])->toBe(0)
-        ->and($result['stdout'])->toContain('WARNING [secret-default] corex-intl.reference.cursor_secret')
-        ->and($result['stdout'])->toContain('secret corex-intl.reference.cursor_secret=present')
-        ->and($combined)->not->toContain(INTL_CURSOR_SECRET_DEFAULT);
+        ->and($result['stdout'])->toContain('WARNING [secret-default] corex.test_default_secret')
+        ->and($result['stdout'])->toContain('secret corex.test_default_secret=present')
+        ->and($combined)->not->toContain(CORE_TEST_SECRET_DEFAULT);
 });
 
 it('reports a selected redis adapter without failing when the driver class exists', function (): void {
@@ -109,7 +112,7 @@ it('does not carry errors or secret warnings into a later run of the same comman
 
     config([
         'corex' => $invalidCorex,
-        'corex-intl.reference.cursor_secret' => INTL_CURSOR_SECRET_DEFAULT,
+        'corex.test_default_secret' => CORE_TEST_SECRET_DEFAULT,
     ]);
 
     expect($tester->execute([], ['capture_stderr_separately' => true]))->toBe(1)
@@ -117,7 +120,7 @@ it('does not carry errors or secret warnings into a later run of the same comman
 
     config([
         'corex' => $validCorex,
-        'corex-intl.reference.cursor_secret' => null,
+        'corex.test_default_secret' => null,
     ]);
 
     expect($tester->execute([], ['capture_stderr_separately' => true]))->toBe(0)

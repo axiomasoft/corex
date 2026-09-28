@@ -21,7 +21,7 @@ use CoreX\Enums\MessageClass;
 use CoreX\Enums\PiiClass;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Tenancy\AccountRef;
@@ -142,7 +142,7 @@ final class WebhookReplayTest extends TestCase
         $withoutTopic = new WebhookReplay(
             $this->connection,
             $this->restorer,
-            new WebhookTopicCatalogue(new ArrayMessageContractRegistry([]), [], []),
+            new WebhookTopicCatalogue(MessagingFixtures::contracts([]), [], []),
             $this->clock,
             new SignedCursorCodec($this->clock, $this->keyring()),
             $this->audit,
@@ -306,7 +306,7 @@ final class WebhookReplayTest extends TestCase
         $schema = ['id' => 'string'];
 
         return new WebhookTopicCatalogue(
-            new ArrayMessageContractRegistry([
+            MessagingFixtures::contracts([
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
             [new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],

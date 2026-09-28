@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Support\PackageRegistrar;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\ConsoleRegistrar;
@@ -16,6 +17,7 @@ use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
+use CoreX\Tenancy\Support\TenancyConfigSection;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +28,8 @@ final class TenancyServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([TenancyConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tenancy.php', 'corex-tenancy');
 

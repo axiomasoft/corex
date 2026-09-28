@@ -28,7 +28,8 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Search\\Contracts",
-                "CoreX\\Search\\Exceptions"
+                "CoreX\\Search\\Exceptions",
+                "CoreX\\Search\\Testing"
             ]
         },
         "laravel": {

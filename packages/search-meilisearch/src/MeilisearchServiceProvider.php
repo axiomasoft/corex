@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Meilisearch;
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Meilisearch\Exceptions\InvalidMeilisearchConfiguration;
 use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
@@ -18,6 +19,8 @@ final class MeilisearchServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([MeilisearchConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-search-meilisearch.php', 'corex-search-meilisearch');
     }
 

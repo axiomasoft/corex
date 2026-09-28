@@ -868,9 +868,19 @@
       "to": "CoreX\\Operations\\Definition\\OperationRegistry"
     },
     {
+      "from": "CoreX\\Api\\OperationSectionCompiler",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\OperationSectionCompiler"
+    },
+    {
       "from": "CoreX\\Api\\Support\\ApiOptions",
       "kind": "class",
       "to": "CoreX\\Operations\\Laravel\\Support\\ApiOptions"
+    },
+    {
+      "from": "CoreX\\Api\\ToolSectionCompiler",
+      "kind": "class",
+      "to": "CoreX\\Tools\\ToolSectionCompiler"
     },
     {
       "from": "CoreX\\Api\\ToolServiceProvider",
@@ -1358,6 +1368,11 @@
       "to": "CoreX\\Access\\Roles\\SystemRoleImmutable"
     },
     {
+      "from": "CoreX\\Auth\\Support\\AccessConfigSection",
+      "kind": "class",
+      "to": "CoreX\\Access\\Support\\AccessConfigSection"
+    },
+    {
       "from": "CoreX\\Auth\\Support\\AuthOptions",
       "kind": "class",
       "to": "CoreX\\Access\\Support\\AuthOptions"
@@ -1376,6 +1391,11 @@
       "from": "CoreX\\Concerns\\HasConfiguredId",
       "kind": "class",
       "to": "CoreX\\Database\\HasConfiguredId"
+    },
+    {
+      "from": "CoreX\\Contracts\\ConfigReportSection",
+      "kind": "class",
+      "to": "CoreX\\Config\\Contracts\\ConfigReportSection"
     },
     {
       "from": "CoreX\\Contracts\\DataScopeAuthorizer",
@@ -2323,6 +2343,11 @@
       "to": "CoreX\\SearchMeilisearch\\Internal\\MeilisearchSearchProvider"
     },
     {
+      "from": "CoreX\\Search\\Meilisearch\\MeilisearchConfigSection",
+      "kind": "class",
+      "to": "CoreX\\SearchMeilisearch\\MeilisearchConfigSection"
+    },
+    {
       "from": "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider",
       "kind": "class",
       "to": "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
@@ -2386,6 +2411,11 @@
       "from": "CoreX\\Support\\InvalidConfiguration",
       "kind": "class",
       "to": "CoreX\\Config\\InvalidConfiguration"
+    },
+    {
+      "from": "CoreX\\Support\\KernelConfigSection",
+      "kind": "class",
+      "to": "CoreX\\Config\\KernelConfigSection"
     },
     {
       "from": "CoreX\\Support\\PackageRegistrar",
@@ -3061,6 +3091,11 @@
       "from": "CoreX\\Tenancy\\Support\\StatusGatePolicy",
       "kind": "class",
       "to": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Support\\TenancyConfigSection",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Support\\TenancyConfigSection"
     },
     {
       "from": "CoreX\\Tenancy\\Support\\TenancyOptions",

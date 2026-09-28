@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Support\Console;
 
-use CoreX\Enums\PubSubDriver;
-use CoreX\Messaging\RedisPubSub;
-use CoreX\Support\CoreOptions;
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Support\InvalidConfiguration;
 use CoreX\Support\SecretRef;
 use Illuminate\Console\Command;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Prints effective drivers and adapter availability without secret values.
@@ -19,26 +18,8 @@ use Throwable;
  */
 final class ValidateConfigCommand extends Command
 {
-    private const INTL_CURSOR_SECRET_DEFAULT = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
-
-    private const WAKEUP_PACKAGE = 'CoreX\\Wakeup\\WakeupServiceProvider';
-
-    /** @var array<class-string, list<string>> */
-    private const OPTION_SOURCES = [
-        CoreOptions::class => ['corex'],
-        'CoreX\\Tenancy\\Support\\TenancyOptions' => ['tenancy', 'corex-tenancy'],
-        'CoreX\\Auth\\Support\\AuthOptions' => ['corex-auth'],
-        'CoreX\\Modules\\Support\\ModulesOptions' => ['corex-modules'],
-        'CoreX\\Media\\Support\\MediaOptions' => ['corex-media'],
-    ];
-
-    /** @var list<string> */
-    private const SECRET_KEYS = [
-        'tenancy.oidc.client_secret',
-        'corex-intl.reference.cursor_secret',
-        'corex-search.cursor_secret',
-        'corex-search-meilisearch.key',
-    ];
+    /** @var list<ConfigReportSection> */
+    private array $sections = [];
 
     protected $signature = 'corex:config:validate {--format=text}';
 
@@ -50,13 +31,23 @@ final class ValidateConfigCommand extends Command
     /** @var list<string> */
     private array $errors = [];
 
-    private bool $intlDefaultWarning = false;
+    /** @var array<string, true> */
+    private array $defaultWarnings = [];
 
     public function handle(): int
     {
         $this->redactions = [];
         $this->errors = [];
-        $this->intlDefaultWarning = false;
+        $this->defaultWarnings = [];
+        $sections = [];
+        foreach ($this->laravel->tagged(ConfigReportSection::class) as $section) {
+            if (! $section instanceof ConfigReportSection) {
+                throw new UnexpectedValueException('Configuration report contributor must implement ConfigReportSection.');
+            }
+            $sections[] = $section;
+        }
+        $this->sections = $sections;
+        usort($this->sections, static fn (ConfigReportSection $a, ConfigReportSection $b): int => $a->order() <=> $b->order());
 
         $format = $this->option('format');
 
@@ -81,7 +72,7 @@ final class ValidateConfigCommand extends Command
 
     private function collectSecrets(): void
     {
-        foreach (self::SECRET_KEYS as $key) {
+        foreach ($this->secretKeys() as $key) {
             $plain = $this->plaintext(config($key));
 
             if ($plain === null) {
@@ -90,15 +81,15 @@ final class ValidateConfigCommand extends Command
 
             $this->redactions[] = $plain;
 
-            if ($key === 'corex-intl.reference.cursor_secret' && $plain === self::INTL_CURSOR_SECRET_DEFAULT) {
-                $this->intlDefaultWarning = true;
+            if ($plain === ($this->secretDefaults()[$key] ?? null)) {
+                $this->defaultWarnings[$key] = true;
             }
         }
     }
 
     private function validateBoundOptions(): void
     {
-        foreach (self::OPTION_SOURCES as $class => $keys) {
+        foreach ($this->optionSources() as $class => $keys) {
             if (! class_exists($class) || ! $this->laravel->bound($class) || ! method_exists($class, 'fromArray')) {
                 continue;
             }
@@ -119,48 +110,51 @@ final class ValidateConfigCommand extends Command
 
     private function writeDrivers(): void
     {
-        $this->writeLine('driver pubsub.driver='.$this->scalar(config('corex.pubsub.driver')));
-        $this->writeLine('driver tenancy.wakeup.driver='.$this->scalar(config('corex-tenancy.wakeup.driver')));
-        $this->writeLine('driver tenancy.oidc.enabled='.$this->scalar(config('tenancy.oidc.enabled')));
+        foreach ($this->sections as $section) {
+            foreach ($section->drivers() as $line) {
+                $this->writeLine($line);
+            }
+        }
     }
 
     private function writeAdapters(): void
     {
-        $pubsub = config('corex.pubsub.driver');
-        $redisSelected = $pubsub === PubSubDriver::Redis || $pubsub === PubSubDriver::Redis->value;
+        foreach ($this->sections as $section) {
+            foreach ($section->adapters() as $adapter) {
+                $this->writeLine($adapter['line']);
 
-        if ($redisSelected) {
-            $available = class_exists(RedisPubSub::class);
-            $this->writeLine('adapter pubsub.redis='.($available ? 'available' : 'missing'));
-
-            if (! $available) {
-                $this->errors[] = 'adapter pubsub.redis missing';
+                if ($adapter['error'] !== null) {
+                    $this->errors[] = $adapter['error'];
+                }
             }
-        } else {
-            $this->writeLine('adapter pubsub.redis=not-selected');
         }
+    }
 
-        $wakeup = config('corex-tenancy.wakeup.driver');
+    /** @return list<string> */
+    private function secretKeys(): array
+    {
+        return array_merge([], ...array_map(static fn (ConfigReportSection $section): array => $section->secretKeys(), $this->sections));
+    }
 
-        if ($wakeup === 'root_registry') {
-            $available = class_exists(self::WAKEUP_PACKAGE);
-            $this->writeLine('adapter wakeup.root_registry='.($available ? 'available' : 'missing'));
+    /** @return array<string, string> */
+    private function secretDefaults(): array
+    {
+        return array_merge([], ...array_map(static fn (ConfigReportSection $section): array => $section->secretDefaults(), $this->sections));
+    }
 
-            if (! $available) {
-                $this->errors[] = 'adapter wakeup.root_registry missing';
-            }
-        } else {
-            $this->writeLine('adapter wakeup.root_registry=not-selected');
-        }
+    /** @return array<class-string, list<string>> */
+    private function optionSources(): array
+    {
+        return array_merge([], ...array_map(static fn (ConfigReportSection $section): array => $section->options(), $this->sections));
     }
 
     private function writeSecrets(): void
     {
-        foreach (self::SECRET_KEYS as $key) {
+        foreach ($this->secretKeys() as $key) {
             $present = $this->plaintext(config($key)) !== null;
             $this->writeLine('secret '.$key.'='.($present ? 'present' : 'absent'));
 
-            if ($key === 'corex-intl.reference.cursor_secret' && $this->intlDefaultWarning) {
+            if (isset($this->defaultWarnings[$key])) {
                 $this->writeWarning('WARNING [secret-default] '.$key);
             }
         }
@@ -185,23 +179,6 @@ final class ValidateConfigCommand extends Command
         $value = config($key, []);
 
         return is_array($value) ? $value : [];
-    }
-
-    private function scalar(mixed $value): string
-    {
-        if ($value instanceof PubSubDriver) {
-            return $value->value;
-        }
-
-        if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-
-        if (is_string($value) || is_int($value)) {
-            return $this->redact((string) $value);
-        }
-
-        return 'absent';
     }
 
     private function redact(string $text): string

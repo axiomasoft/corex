@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Modules\Compiler;
 
 use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Contracts\FieldCastRegistry;
+use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
@@ -19,7 +21,6 @@ use CoreX\Modules\Extend\Workflow;
 use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Money\MoneyCast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -34,9 +35,21 @@ use Illuminate\Support\Str;
  */
 final class RegistryCompiler
 {
+    /** @var list<ManifestSectionCompiler> */
+    private readonly array $sections;
+
+    /** @param iterable<ManifestSectionCompiler> $sections */
     public function __construct(
         private readonly CompilationValidator $validator = new CompilationValidator,
-    ) {}
+        private readonly FieldCastRegistry $casts = new FieldCastMap,
+        iterable $sections = [],
+    ) {
+        $collected = [];
+        foreach ($sections as $section) {
+            $collected[] = $section;
+        }
+        $this->sections = $collected;
+    }
 
     /**
      * @param  list<ModuleManifest>  $manifests
@@ -304,8 +317,13 @@ final class RegistryCompiler
     /** @return 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum' */
     private function mapCastType(string $cast): string
     {
+        $registered = $this->casts->typeFor($cast);
+
+        if ($registered !== null) {
+            return $registered;
+        }
+
         return match (true) {
-            $cast === MoneyCast::class || str_starts_with($cast, MoneyCast::class.':') => 'money',
             in_array($cast, ['int', 'integer'], true) => 'int',
             str_starts_with($cast, 'decimal:') => 'decimal',
             in_array($cast, ['bool', 'boolean'], true) => 'bool',
@@ -390,12 +408,6 @@ final class RegistryCompiler
     private function collectApi(array $manifests): array
     {
         $result = [];
-        $ids = [];
-        $paths = [];
-        $operations = [];
-        $operationsByModule = [];
-        $toolTuples = [];
-        $wireNames = [];
 
         foreach ($manifests as $manifest) {
             foreach ($manifest->extenders as $extender) {
@@ -404,66 +416,36 @@ final class RegistryCompiler
                 }
 
                 $api = clone $extender;
-                // Provenance comes from the owning manifest, never a caller-supplied property.
                 $api->declaringModule = $manifest->composerName;
-
-                if ($api->mode === 'operation') {
-                    ApiOperationValidator::validate($api);
-                    $id = $api->version.':'.$api->operationId;
-                    $path = $api->version.':'.$api->method.':'.preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', $api->path);
-
-                    if (isset($ids[$id]) || isset($paths[$path])) {
-                        throw new CompilationException('Duplicate API operation identifier or route: '.$id);
-                    }
-
-                    foreach ($operations as $other) {
-                        ApiOperationValidator::validateRoutePair($api, $other);
-                    }
-
-                    $ids[$id] = true;
-                    $paths[$path] = true;
-                    $operations[] = $api;
-                    $operationsByModule[$manifest->composerName][$id] = $api;
-                }
-
                 $result[] = $api;
             }
         }
 
         foreach ($result as $api) {
-            if ($api->mode !== 'tool') {
-                continue;
+            if (! in_array($api->mode, ['entity', 'extendResource'], true)) {
+                $this->sectionFor($api->mode);
             }
+        }
 
-            ApiToolValidator::validate($api);
+        $sections = $this->sections;
+        usort($sections, static fn (ManifestSectionCompiler $a, ManifestSectionCompiler $b): int => $a->phase() <=> $b->phase());
 
-            if ($api->toolKind === 'exposed') {
-                $operation = $operationsByModule[$api->declaringModule][$api->operationRef] ?? null;
-
-                if (! $operation instanceof Api) {
-                    throw new CompilationException('Unresolved operation reference for tool: '.$api->toolCode);
-                }
-
-                ApiToolValidator::validateExposedOperationReference($api, $operation, $api->declaringModule);
-            }
-
-            $tuple = $api->declaringModule.':'.$api->toolCode.':'.$api->toolVersion;
-
-            if (isset($toolTuples[$tuple])) {
-                throw new CompilationException('Duplicate tool tuple: '.$tuple);
-            }
-
-            $wire = ApiToolValidator::wireName($api);
-
-            if (isset($wireNames[$wire])) {
-                throw new CompilationException('Duplicate tool wire name: '.$wire);
-            }
-
-            $toolTuples[$tuple] = true;
-            $wireNames[$wire] = true;
+        foreach ($sections as $section) {
+            $section->compile(array_values(array_filter($result, static fn (Api $api): bool => $api->mode === $section->mode())), $result);
         }
 
         return $result;
+    }
+
+    private function sectionFor(string $mode): ManifestSectionCompiler
+    {
+        foreach ($this->sections as $section) {
+            if ($section->mode() === $mode) {
+                return $section;
+            }
+        }
+
+        throw new CompilationException('No compiler for API declaration mode: '.$mode);
     }
 
     /**
@@ -705,40 +687,8 @@ final class RegistryCompiler
      */
     private function normalizeApi(ModuleManifest $manifest, Api $api, string $ownerVersion): array
     {
-        if ($api->mode === 'operation') {
-            return [
-                new NormalizedExtension(
-                    point: 'api.operation',
-                    id: $api->version.':'.$api->operationId,
-                    owner: $manifest->composerName,
-                    ownerVersion: $ownerVersion,
-                    payload: [
-                        'method' => $api->method,
-                        'path' => preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', (string) $api->path),
-                    ],
-                ),
-            ];
-        }
-
-        if ($api->mode === 'tool') {
-            $wire = ApiToolValidator::wireName($api);
-
-            return [
-                new NormalizedExtension(
-                    point: 'api.tool',
-                    id: $manifest->composerName.':'.$api->toolCode.':'.$api->toolVersion,
-                    owner: $manifest->composerName,
-                    ownerVersion: $ownerVersion,
-                    payload: ['wire' => $wire],
-                ),
-                new NormalizedExtension(
-                    point: 'api.tool',
-                    id: 'wire:'.$wire,
-                    owner: $manifest->composerName,
-                    ownerVersion: $ownerVersion,
-                    payload: ['tool' => $api->toolCode],
-                ),
-            ];
+        if (! in_array($api->mode, ['entity', 'extendResource'], true)) {
+            return $this->sectionFor($api->mode)->normalize($manifest, $api, $ownerVersion);
         }
 
         return [

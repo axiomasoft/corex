@@ -72,3 +72,13 @@ keyset-пагинация и tie-break сортировки идут **толь�
 The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
+
+### Configuration report contributions
+
+`corex:config:validate` collects services tagged with `CoreX\Contracts\ConfigReportSection`.
+Each package owns its options types, secret keys and defaults, drivers and adapters. Sections
+supply an integer order; the command retains its stable report format and redacts secret values.
+Kernel installations require no optional package to build the report.
+
+Consumer tests can create messaging adapters through
+`CoreX\Messaging\Testing\MessagingFixtures`; the factory returns the public messaging contracts.

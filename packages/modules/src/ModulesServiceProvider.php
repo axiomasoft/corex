@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Modules;
 
+use CoreX\Contracts\ConfigReportSection;
 use CoreX\Modules\Laravel\LifecycleRegistrar;
 use CoreX\Modules\Laravel\ModulesBootRegistrar;
 use CoreX\Modules\Laravel\RegistryRegistrar;
 use CoreX\Modules\Laravel\SettingsRegistrar;
+use CoreX\Modules\Support\ModulesConfigSection;
 use CoreX\Modules\Support\ModulesOptions;
 use CoreX\Support\PackageRegistrar;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +30,8 @@ final class ModulesServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([ModulesConfigSection::class], ConfigReportSection::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-modules.php', 'corex-modules');
 
         $raw = $this->app['config']->get('corex-modules', []);

@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Impersonation;
 use Closure;
 use CoreX\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\Contracts\ImpersonationService;
+use CoreX\Tenancy\ImpersonationGuard;
 use CoreX\Tenancy\Models\ImpersonationGrant;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,7 +35,6 @@ final class ImpersonatedModelWriteGuard
      * @var list<class-string>
      */
     private const EXEMPT = [
-        'CoreX\\Audit\\Internal\\AuditLog',
         ImpersonationGrant::class,
     ];
 
@@ -53,7 +53,7 @@ final class ImpersonatedModelWriteGuard
 
         $model = $payload[0] ?? null;
 
-        if (! $model instanceof Model || in_array($model::class, self::EXEMPT, true)) {
+        if (! $model instanceof Model || in_array($model::class, [...self::EXEMPT, ...ImpersonationGuard::writeExemptModels()], true)) {
             return;
         }
 
