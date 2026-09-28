@@ -1,0 +1,210 @@
+.github/workflows/ci.yml:19
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:40
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:44
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:96
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:100
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:150
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:153
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:196
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:199
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:241
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:244
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:272
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:275
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:305
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:308
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:352
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:355
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:409
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:413
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:483
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:487
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:523
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:527
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:568
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:572
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:628
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:632
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:677
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:681
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:714
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:730
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:735
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:780
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:784
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:827
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:831
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:885
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:890
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:920
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:923
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:942
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:945
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:965
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:968
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:988
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:991
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/ci.yml:1016
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/ci.yml:1019
+-       - uses: zizmorcore/zizmor-action@v0.6.4
++       - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+.github/workflows/distribution-proof.yml:27
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:30
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:47
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:51
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:67
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:81
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:95
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:99
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:137
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:141
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:178
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:182
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:206
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:210
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/distribution-proof.yml:233
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/distribution-proof.yml:237
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/remaining-cohort-proof.yml:30
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/remaining-cohort-proof.yml:34
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/remaining-cohort-proof.yml:97
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/remaining-cohort-proof.yml:101
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+.github/workflows/remaining-cohort-proof.yml:149
+-       - uses: actions/checkout@v7.0.1
++       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+.github/workflows/remaining-cohort-proof.yml:153
+-       - uses: shivammathur/setup-php@2.37.2
++       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2

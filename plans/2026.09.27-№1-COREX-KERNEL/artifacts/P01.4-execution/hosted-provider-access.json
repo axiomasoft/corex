@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-09-28",
+  "secrets": [],
+  "provider": {
+    "private": true,
+    "visibility": "private"
+  },
+  "staging_consumer": "scripts/distribution/stage-stancl-providers.py:48",
+  "gh_call": "scripts/distribution/private-auth-proof.py:49",
+  "boundary": "O-3 repository credentials; no secrets or settings modified"
+}

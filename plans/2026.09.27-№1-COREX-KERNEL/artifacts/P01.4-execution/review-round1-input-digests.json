@@ -1,0 +1,8 @@
+{
+  ".github/CODEOWNERS": "6437bfaeecf21064e8b321993576a06642092f2f1359870cabf64bec1d8a396d",
+  ".github/dependabot.yml": "729e1574bba6ca3b5da6738c25f85021fcec78a3ad5645335145406cee706626",
+  ".github/workflows/ci.yml": "4515421c5c048e46f80c177276f0fbcfccebc585012f3b0135560509fd8d1fb4",
+  ".github/workflows/distribution-proof.yml": "818524f70df97c06daae44926433d96f587cab68df2eedd6d0522f7564747b06",
+  ".github/workflows/remaining-cohort-proof.yml": "ae07282797957f9c31f826d7dba7ac93ae2e216ffaafa5f97ff000aa2602058d",
+  ".github/zizmor.yml": "a6ab1e2c529510bb9319fe801286959beed7fda862e25d80b951075188b25f7a"
+}

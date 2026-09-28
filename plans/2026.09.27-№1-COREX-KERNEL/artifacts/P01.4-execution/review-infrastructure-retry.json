@@ -1,0 +1,11 @@
+{
+  "first_process_pid": 312071,
+  "elapsed_seconds": 570,
+  "result_file_bytes": 0,
+  "observed_children": [
+    "project perplexity MCP",
+    "project Serena PHP language server"
+  ],
+  "disposition": "terminated read-only reviewer with no result; retry in clean review workspace; no verdict inferred",
+  "assessment": "No failure was proven: CLI buffers JSON until completion. A retained P01.3 review took 719924 ms. First interruption was premature; retry remains read-only with the same pinned reviewer model."
+}

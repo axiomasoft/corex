@@ -1,0 +1,224 @@
+{
+  "schema_version": "corex-dod-result/1",
+  "profile": "ci",
+  "source_commit": "72ad98e521581ecbde02eb73a33bf39305928fe3",
+  "candidate_source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+  "candidate_file_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+  "environment": {
+    "python": "3.12.3",
+    "php": "8.4.26",
+    "composer": "2.8.3"
+  },
+  "manifest_sha256": "af7b5a50f1a5130c566dc4cff566fabe3de3dca9228f44586471ef819f3c65a5",
+  "summary": {
+    "green": 20,
+    "red": 0,
+    "unknown": 0,
+    "skipped": 0,
+    "stale": 1,
+    "not-run": 0,
+    "rows": 21
+  },
+  "rows": [
+    {
+      "id": "DOD-01",
+      "status": "green",
+      "diagnostic": "PASS: scorecard responsibility=2 for all 20 live packages",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json"
+    },
+    {
+      "id": "DOD-02",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-03",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-04",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-05",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/package-graph-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-06",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/table-ownership-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-07",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/config-composition-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-08",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    },
+    {
+      "id": "DOD-10",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/attributes-architecture-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-11",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/attributes-architecture-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-14",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-15",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-16",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/table-ownership-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-17",
+      "status": "green",
+      "diagnostic": "D107 profile B no-move",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md"
+    },
+    {
+      "id": "DOD-18",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/provider-size-gate.php"
+      ]
+    },
+    {
+      "id": "DOD-19",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    },
+    {
+      "id": "DOD-20",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-extension-receipt.json"
+    },
+    {
+      "id": "DOD-21",
+      "status": "stale",
+      "diagnostic": "stale candidate digest",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json",
+      "return_to": [
+        "P17"
+      ]
+    },
+    {
+      "id": "DOD-23",
+      "status": "green",
+      "diagnostic": "exit 0",
+      "mode": "live-command",
+      "exit_code": 0,
+      "command": [
+        "php",
+        "scripts/check-api-contract.php"
+      ]
+    },
+    {
+      "id": "DOD-26",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json"
+    },
+    {
+      "id": "DOD-27",
+      "status": "green",
+      "diagnostic": "PASS",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json"
+    }
+  ],
+  "return_map": {
+    "DOD-21": [
+      "P17"
+    ]
+  }
+}

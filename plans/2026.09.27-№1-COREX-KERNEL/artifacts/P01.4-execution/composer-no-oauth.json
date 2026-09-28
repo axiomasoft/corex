@@ -1,0 +1,82 @@
+{
+  "scope": "Isolated checkout; actual staged provider dist; root and access updates with empty COMPOSER_HOME and no COMPOSER_AUTH/GH_TOKEN/GITHUB_TOKEN. This is not hosted secret provisioning or live CI.",
+  "commands": [
+    {
+      "label": "provider-probe-checkout",
+      "command": [
+        "git",
+        "worktree",
+        "add",
+        "--detach",
+        "/tmp/corex-p014-composer-4r9rux4t/checkout",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "log": "provider-probe-checkout.log"
+    },
+    {
+      "label": "provider-probe-stage",
+      "command": [
+        "/home/vostrikov/projects/packages/corex/scripts/php84",
+        "python3",
+        "scripts/distribution/stage-stancl-providers.py"
+      ],
+      "exit_code": 0,
+      "log": "provider-probe-stage.log"
+    },
+    {
+      "label": "provider-probe-filter",
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        "# The sealed provider archive replaces the private monorepo VCS source in this job.\npython3 - <<'PYPROVIDERS'\nimport json\nfrom pathlib import Path\nfor name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):\n    path = Path(name)\n    data = json.loads(path.read_text())\n    data['repositories'] = {\n        key: repository for key, repository in data['repositories'].items()\n        if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'\n    }\n    path.write_text(json.dumps(data, indent=4) + '\\n')\nPYPROVIDERS\n"
+      ],
+      "exit_code": 0,
+      "log": "provider-probe-filter.log"
+    },
+    {
+      "label": "provider-probe-root-update",
+      "command": [
+        "/home/vostrikov/projects/packages/corex/scripts/php84",
+        "composer",
+        "update",
+        "--prefer-dist",
+        "--no-interaction",
+        "--no-progress"
+      ],
+      "exit_code": 0,
+      "log": "provider-probe-root-update.log"
+    },
+    {
+      "label": "provider-probe-access-update",
+      "command": [
+        "/home/vostrikov/projects/packages/corex/scripts/php84",
+        "composer",
+        "--working-dir=packages/access",
+        "update",
+        "--prefer-dist",
+        "--no-interaction",
+        "--no-progress"
+      ],
+      "exit_code": 0,
+      "log": "provider-probe-access-update.log"
+    }
+  ],
+  "manifests": {
+    "composer.json": {
+      "private_vcs_urls": 0,
+      "sealed_provider_repository": true
+    },
+    "packages/access/composer.json": {
+      "private_vcs_urls": 0,
+      "sealed_provider_repository": true
+    },
+    "packages/tenancy/composer.json": {
+      "private_vcs_urls": 0,
+      "sealed_provider_repository": true
+    }
+  },
+  "composer_auth_files": [],
+  "result": "PASS"
+}

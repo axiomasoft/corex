@@ -1,0 +1,11 @@
+{
+  "schema_version": "execution-topology/v1",
+  "anchor_mode": "split",
+  "reason": "Expanded Files glob .github/workflows/*.yml overlaps the three Required Reads; retain original committed bundle through product commit, then regenerate closure carriers.",
+  "collisions": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/distribution-proof.yml",
+    ".github/workflows/remaining-cohort-proof.yml"
+  ],
+  "execution_inputs_ref": "72ad98e521581ecbde02eb73a33bf39305928fe3"
+}

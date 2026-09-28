@@ -1,0 +1,35 @@
+[
+  {
+    "violation": "unpinned-uses",
+    "exit_code": 14,
+    "detected": [
+      "unpinned-uses"
+    ]
+  },
+  {
+    "violation": "artipacked",
+    "exit_code": 14,
+    "detected": [
+      "artipacked",
+      "unpinned-uses"
+    ]
+  },
+  {
+    "violation": "excessive-permissions",
+    "exit_code": 13,
+    "detected": [
+      "excessive-permissions"
+    ]
+  },
+  {
+    "violation": "template-injection",
+    "exit_code": 14,
+    "detected": [
+      "template-injection"
+    ]
+  },
+  {
+    "violation": "restored",
+    "exit_code": 0
+  }
+]

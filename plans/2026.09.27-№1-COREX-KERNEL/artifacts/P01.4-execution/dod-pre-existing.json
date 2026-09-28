@@ -1,0 +1,49 @@
+{
+  "classification": "unrelated-pre-existing",
+  "contract": "P01.4 excludes old DoD script work except a new-matrix break; this failure is unchanged candidate/receipt metadata, not the new matrix.",
+  "baseline": "72ad98e521581ecbde02eb73a33bf39305928fe3",
+  "inputs": [
+    {
+      "path": "scripts/dod-1.0.py",
+      "sha256": "d768d185eb40d74a2d9fdfcfca71638e103e39adca40cb2205d990480c6f74cd",
+      "same_as_before_item_HEAD": true
+    },
+    {
+      "path": "scripts/dod-1.0.json",
+      "sha256": "af7b5a50f1a5130c566dc4cff566fabe3de3dca9228f44586471ef819f3c65a5",
+      "same_as_before_item_HEAD": true
+    },
+    {
+      "path": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json",
+      "sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+      "same_as_before_item_HEAD": true
+    },
+    {
+      "path": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json",
+      "sha256": "0141203b73ab93c51f4a87ed1215c3ec085524989af3df8e10450b8f88ff8720",
+      "same_as_before_item_HEAD": true
+    }
+  ],
+  "result": {
+    "green": 20,
+    "red": 0,
+    "unknown": 0,
+    "skipped": 0,
+    "stale": 1,
+    "not-run": 0,
+    "rows": 21
+  },
+  "failing_rows": [
+    {
+      "id": "DOD-21",
+      "status": "stale",
+      "diagnostic": "stale candidate digest",
+      "mode": "candidate-receipt",
+      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json",
+      "return_to": [
+        "P17"
+      ]
+    }
+  ],
+  "owner_scope": "Superseded PLAN2 P17 qualification evidence; O-3 cannot claim all jobs GREEN until this original receipt issue is reconciled by its owner. No receipt or gate was weakened."
+}

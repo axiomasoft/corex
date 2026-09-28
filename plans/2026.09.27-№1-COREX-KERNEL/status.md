@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: cb78c562f368c61d0ce5b4b1ef5403e959de250d9d625ee9d6e9c9a82312adef
+inputs_sha256: 7856a4b93c54ffeca3e296e823851958f70d31297b9f5dc7faddbde863a6b568
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟢 Done |
 | Last Updated | 2026-09-28 |
 
 ## 4. Phase Index & Status Board
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 3/4 | 🟡 In progress |
+| P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 
 ## Phase P00
 
@@ -41,7 +41,7 @@ generated_by: task plan-views status
 | P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | 2026-09-28 |
 | P01.2 | Golden-снимки с нормализатором переименований | 🟢 Done | 2026-09-28 |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | 🟢 Done | 2026-09-28 |
-| P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
+| P01.4 | CI supply chain и подключение страховочной сетки | 🟢 Done | 2026-09-28 |
 
 ## 6. Update Log
 
@@ -110,6 +110,12 @@ Canonical standalone boundary line; typed evaluation retained in artifacts/P01.2
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · Ownership 420/122; PHPStan 21/2732; deps 20; sqlite 808+10; PG 239; Golden 4; review: cursor/grok-4.7 GREEN.
 write-site: pre_mutation: allow · pre_final: allow
 Evidence: findings/P01.3-execution.md. |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · decision-pending · Local Validation green; hosted private AzGuard staging lacks credentials. Owner O-3 access choice requested. Review pending. Evidence: findings/P01.4-execution.md. |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · 70 SHA pins; manifests/golden/ownership/dependencies/zizmor; zizmor 123→0; Validation GREEN; review: cursor/grok-4.7 GREEN. O-3: read-only provider secret + push/live run.
+write-site: pre_mutation: allow · pre_final: allow
+Evidence: findings/P01.4-execution.md. |
+| 2026-09-28 | codex/gpt-6-sol/high | plan-run · closed-green · Local P01 closure: four GREEN items, direct-close allow. O-3: provider token/push/live CI before P02. Evidence: artifacts/P01.4-execution/phase-close-admission.json. |
 
 ## Owner Gates
 
