@@ -1,32 +1,26 @@
-# HANDOFF — 2026-09-28 — after P01
+# HANDOFF — 2026-09-28 — after P01.1
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1
+**Next:** waiting: O-1 — установить `sudo apt install php8.4-gmp`; затем возобновить P01.1 с проверки `scripts/php84 --check` и шага 3 runbook.
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | solo |
+| Batch | n/a |
 | Model class | implementation |
 | Effort | high |
 | Capabilities | — |
-| Context | continue-root |
-| Суть | Исполнить P01.1: PHP 8.4/PG preflight, манифесты и зелёный тестовый стек. |
+| Context | waiting-owner |
+| Суть | O-1: установить php8.4-gmp и возобновить P01.1. |
 
 <!-- Task continuity, reducer-owned.
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:findings/design-audit-autofix-2026-09-28-checkpoint.json"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "waiting-owner", "reason": "owner-wait", "evidence": ["batch:456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f", "loaded-inputs:reusable", "cold-start-cost:0"], "runnable": false, "schema_version": "session-continuity-decision/v1"}
 ```
 -->
 
-```bash
-$ task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1
-```
+**Done:** Создан scripts/php84; синтаксис и PHP 8.4.26 проверены. P01.1 — 🔴 Blocked на воспроизведённой owner boundary O-1.
 
-**Done:** Design audit GREEN текущего fingerprint `3f2dfeedd6e5594b76e3fe739f381723c56f542e7dd0e17de420afd29435a350`; C1–C7/IR1 исправлены и перепроверены, независимый reviewer codex/gpt-6-astra/xhigh. Продукт не исполнялся.
+**Remaining:** После O-1: O-2 preflight → baseline на исходном lock → манифесты/стек → Validation → independent review. P01.2–P01.4 ожидают GREEN P01.1.
 
-**Remaining:** P01.1 → P01.2 → P01.3 → P01.4 по execution-sheet; единственный готовый item P01.1.
+**Sources of truth:** phases/P01/P01.1.md; findings/P01.1-environment-preflight.md; artifacts/P01.1-execution/; journal.jsonl.
 
-**Sources of truth:** `findings/design-audit-autofix-2026-09-28.md`, `findings/design-audit-autofix-2026-09-28-checkpoint.json`, `findings/design-audit-autofix-2026-09-28-independent.json`, `phases/P01/`, `research/P01-design.md`, `artifacts/P01-design/examples.md`, `roadmap.md`.
-
-**Open risks:** O-1/O-2 проверяются до продуктовой работы P01.1; O-3 после P01.4. Полные product/DB/Composer/live CI проверки принадлежат исполнению.
-
-**Design lifecycle:** scope-complete; continue-root сохраняет сессию. Следующая команда — рекомендация, исполнение не начато.
+**Open risks:** Проверка PG ещё не выполнена; O-2 и O-3 сохраняются. Манифесты, lock и продуктовый код не менялись.

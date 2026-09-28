@@ -1,0 +1,75 @@
+{
+  "record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P01.1",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "scripts/php84 --check",
+      "digest": "336d8443295dfed2793095eae8bceac6a25f23eda7b651ef9ee6c33a9849eafa",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": true,
+      "carrier": {
+        "command": "scripts/php84 --check",
+        "digest": "336d8443295dfed2793095eae8bceac6a25f23eda7b651ef9ee6c33a9849eafa",
+        "result": "red"
+      }
+    },
+    "candidate": {
+      "delta_proved": false,
+      "evidence_ids": []
+    },
+    "affected_paths": [
+      {
+        "path": "scripts/php84",
+        "owner_item": "P01.1",
+        "declared_file": true
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 1,
+      "max_files": 1,
+      "reversible": true
+    },
+    "material_surface": {
+      "public": false,
+      "frozen": false,
+      "security": false,
+      "schema": false,
+      "dependency": false,
+      "authority": true,
+      "irreversible": false,
+      "product": false,
+      "test_topology": false
+    },
+    "pre_validation": [
+      {
+        "command": "scripts/php84 --check",
+        "digest": "336d8443295dfed2793095eae8bceac6a25f23eda7b651ef9ee6c33a9849eafa",
+        "result": "red"
+      }
+    ],
+    "post_validation": [
+      {
+        "command": "scripts/php84 --check",
+        "digest": "336d8443295dfed2793095eae8bceac6a25f23eda7b651ef9ee6c33a9849eafa",
+        "result": "red"
+      }
+    ],
+    "evidence_ids": [
+      "artifacts/P01.1-execution/php84-check.txt",
+      "findings/P01.1-environment-preflight.md",
+      "research/P01-design.md#7-owner-gates"
+    ],
+    "design": null
+  },
+  "evaluation": {
+    "action": "gather-evidence",
+    "terminal_allowed": false,
+    "reason_code": "DESIGN_EVIDENCE_REQUIRED",
+    "repair_digest": "cc234f787352af6e9f086896e7e70e246de9c472f19eae7724c84e13a33ffddb",
+    "post_validation_required": false
+  }
+}

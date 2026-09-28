@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 38abdc72c27e8adaa3fce5ec3d1d750042ad65272b71e744030506832a282cc2
+inputs_sha256: 8cd8089c0cc6699bb40fb998f3130bcb11ef2c23899dba40688c98d1c05435cc
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🔴 Blocked |
 | Last Updated | 2026-09-28 |
 
 ## 4. Phase Index & Status Board
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 0/4 | ⬜ Not started |
+| P01 | Окружение, платформа и страховочная сетка | 0/4 | 🔴 Blocked |
 
 ## Phase P00
 
@@ -38,7 +38,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P01.1 | Окружение PHP 8.4 и платформа манифестов | ⬜ Not started | — |
+| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🔴 Blocked | 2026-09-28 |
 | P01.2 | Golden-снимки с нормализатором переименований | ⬜ Not started | — |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
 | P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
@@ -83,7 +83,11 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-28 | auditor/fixer/codex/gpt-6-sol/high | plan-audit · audit-green · GREEN: owner-authorized inline fixes; independent gpt-6-astra/xhigh review on final fingerprint. findings/design-audit-autofix-2026-09-28.md. Product unchanged. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · decision-pending · O-1: php8.4-gmp отсутствует; требуется owner action. Evidence: findings/P01.1-environment-preflight.md. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · blocked · O-1: sudo apt install php8.4-gmp. Возобновление: php84 --check GREEN, затем §4.1 шаг 3. Evidence: findings/P01.1-environment-preflight.md.
+write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 
 ## Owner Gates
 
-- —
+- P01.1: escalation
