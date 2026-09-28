@@ -1,6 +1,6 @@
 # HANDOFF — 2026-09-27 — after P17.11
 
-**Next:** waiting: подтвердить доступ и состояние `axiomasoft/corex-access` (ожидается private) и `axiomasoft/corex-operations` (ожидается public), затем завершить прерванный `upgrade-proof`, обновить `P17-upgrade-receipt.json` и повторить read-only reconciliation; P17.12 не готов.
+**Next:** waiting: PLAN2 superseded by PLAN3 (`plans/2026.09.27-№1-COREX-KERNEL`, PLAN3.D23); condition=решение владельца о возобновлении или архивировании после релиза PLAN3; target=manual: согласовать состояние PLAN2 по этому решению.
 
 | Field | Value |
 |:--|:--|

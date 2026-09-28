@@ -18,7 +18,7 @@
 | Home | repo:corex (локальный план; Brain sync не выполнялся) |
 | visibility | private |
 | supersedes | — |
-| Paused By | — |
+| Paused By | PLAN3 `2026.09.27-№1-COREX-KERNEL` (PLAN3.D23, 2026-09-27) |
 
 ### Update Log
 

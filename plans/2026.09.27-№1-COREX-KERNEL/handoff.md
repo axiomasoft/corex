@@ -1,23 +1,23 @@
-# HANDOFF — 2026-09-27 — after P00
+# HANDOFF — 2026-09-28 — after P00.3
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3
+**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P01
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | B00-A |
+| Batch | n/a |
 | Model class | frontier |
 | Effort | high |
 | Capabilities | — |
 | Context | continue-root |
-| Суть | Исполнение готовой P00. |
+| Суть | Дизайн P01 по фактическим результатам P00 (D21/D24). |
 
 ```text
-$ task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3
+$ task:plan-design 2026.09.27-№1-COREX-KERNEL P01
 ```
 
-**Done:** A1–A5 исправлены; finish и независимый delta audit GREEN (cursor/grok-4.7/high), fingerprint `e8524b9f64353b897decff9a8246fa85c39ae888a7a244fefe4369c3979b40c2`. Локальные проверки и dry bundle render зелёные. Дизайн готов к исполнению, items ещё не исполнялись.
+**Done:** P00.1 closed-green: glossary v1 (`research/03-glossary.md`), карты `artifacts/P00/*.tsv` (558 строк, 21 пакет; 1756 целевых рёбер ацикличны и kernel-independent), `check-maps.py` (default/`--dependencies`/`--doctrine`), D25–D35; ревью cursor/grok-4.7-high 2 раунда, R1–R5 исправлены (`findings/P00.1-evidence.json`). P00.2 closed-green: `research/04-architecture.md`, `artifacts/P00/doctrine-delta.md` (58 статей + политики, NEW/NON), ревью grok 2 раунда, S1–S9 исправлены (`findings/P00.2-evidence.json`). P00.3 closed-green: `plans/ACTIVE.md` → PLAN3, PLAN2 paused (PLAN3.D23), supersede OK. Фаза P00 закрыта (direct-close).
 
-**Remaining:** B00-A (P00.1 → P00.2 → P00.3), затем дизайн P01 по фактическим результатам P00 (D21/D24).
+**Remaining:** дизайн P01 по фактическим результатам P00 (D21/D24).
 
 **Sources of truth:** `plan.md`, `roadmap.md` execution-sheet, `phases/P00/`, `journal.jsonl`, `findings/design-remediation.md`, `findings/design-remediation-independent-review.json`.
 

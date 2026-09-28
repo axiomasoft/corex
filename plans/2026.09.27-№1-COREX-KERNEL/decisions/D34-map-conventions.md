@@ -1,0 +1,26 @@
+---
+id: D34
+date: 2026-09-28
+status: accepted
+item: P00.1
+items: [P00.1, P02, P03]
+supersedes: []
+superseded_by: null
+---
+# D34 — map-conventions (accepted)
+
+**Actor:** author-choice (claude-opus-5-5/high, Claude Code, 2026-09-28) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6); frontier-вердикт P00.1 в пределах `research/P00-design.md` §2.
+**Evidence:** RAG:— `artifacts/P00-design/facts/{import-matrix.txt,zone-consumers.tsv}`, `packages/*/composer.json`, `artifacts/P00/*.tsv`; `check-maps.py` (default/`--dependencies`) exit 0 на `b624936`+P00.1.
+
+## Решение
+
+`namespace-map.tsv`: ключ — каталог (с `/`) или файл, longest match; `packages/<pkg>/src/` запрещён (`root-fallback`), `tests/`, `database/` — по непосредственным подкаталогам/файлам; `old_prefix` — PSR-4 префикс-источник (classmap/нестандартный файл — фактический namespace; без namespace — `—`); целевой путь — корень пакета по §Dev roots или `dest=<каталог/>` в `note`. Все строки — фаза P02: unfold PSR-4, переносы между пакетами и растворение корзин ядра выполняются вместе, потому что закрытый список ядра (D04/D29) иначе не выполним. Внутренние feature-modules остальных пакетов (корзины уровня пакета, D05) дизайн P03 добавляет новыми строками, не меняя ключей P02. Файл с несколькими namespace — токен `ns:<Old>=<New>` в `note` для каждого вторичного блока (иначе `multi-namespace`). Граф `--dependencies` строится по `src/`, `tests/`, `config/`, `routes/` всех пакетов (use, FQCN, PHPDoc, same-namespace, строковые FQCN и config-ключи `<root>.<key>` с объявленным top-level `<key>` файла `config/<root>.php`; имена маршрутов не считаются); символы монорепо `tests/` (`CoreX\Tests\*`) — вне карт, ребро пакета к ним нельзя оставить `keep`; монорепо `tests/` переписывает ссылки в P02 по D01. `dependency-edges.tsv` регенерируется `check-maps.py --write-edges` с сохранением решений существующих строк.
+
+## Почему
+
+- Досье §5: PSR-4 folding (F00 A6.3) — префикс не ключ; ключ-каталог исключает молчаливый захват потерянных каталогов.
+- Дизайн фаз вперёд не делается (D21/D24): P03 детализирует свои модули по фактическому коду.
+
+## Consequences
+
+P02 исполняет карту инструментом; P03 расширяет её; P01 ownership-гейт использует те же правила.
