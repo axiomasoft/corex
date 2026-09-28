@@ -4,26 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
-use Closure;
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\ToolExecutionGuard;
-use CoreX\Api\Contracts\ToolInvoker;
-use CoreX\Api\Contracts\ToolPolicy;
+use CoreX\Api\ApiServiceProvider;
 use CoreX\Api\Contracts\WebhookPayloadProjector;
-use CoreX\Api\Data\CostInput;
-use CoreX\Api\Data\JsonObject;
-use CoreX\Api\Data\ToolCall;
-use CoreX\Api\Data\ToolDescriptor;
-use CoreX\Api\Data\ToolResult;
 use CoreX\Api\Data\ValidatedWebhookRequest;
 use CoreX\Api\Data\WebhookSubscription;
 use CoreX\Api\Data\WebhookTopic;
-use CoreX\Api\Internal\Cost\DeclaredCostEstimator;
 use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\Internal\Webhook\HmacWebhookSigner;
 use CoreX\Api\Internal\Webhook\SqlWebhookDeliveryStore;
 use CoreX\Api\Internal\Webhook\SqlWebhookSubscriptionStore;
@@ -33,18 +19,13 @@ use CoreX\Api\Internal\Webhook\WebhookKeyRing;
 use CoreX\Api\Internal\Webhook\WebhookRetryPolicy;
 use CoreX\Api\Internal\Webhook\WebhookTopicCatalogue;
 use CoreX\Api\Internal\Webhook\WebhookUrlPolicy;
-use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Operation;
-use CoreX\Api\OperationDispatcher;
-use CoreX\Api\OperationRegistry;
 use CoreX\Api\Tests\Fixtures\LoadContourModule;
 use CoreX\Api\Tests\Fixtures\LocalWebhookReceiver;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
 use CoreX\Api\Tests\Support\ModuleFixture;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Api\ToolServiceProvider;
+use CoreX\Api\Webhooks\WebhooksServiceProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\Enums\MessageClass;
 use CoreX\Enums\PiiClass;
@@ -54,7 +35,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Support\Config;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\SecretRef;
@@ -66,12 +47,21 @@ use CoreX\Tenancy\GuardedTenantContextRestorer;
 use CoreX\Tenancy\TenantContext;
 use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 
-final class LoadContourIntegrationTest extends TestCase
+final class WebhookLoadContourIntegrationTest extends TestCase
 {
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections.sqlite.database', ':memory:');
+        $app['config']->set('cache.default', 'array');
+        $app['config']->set('session.driver', 'array');
+        $app['config']->set('queue.default', 'sync');
+    }
+
     private const string Secret = 'whsec_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=';
 
     private ModuleFixture $modules;
@@ -82,7 +72,7 @@ final class LoadContourIntegrationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -95,117 +85,7 @@ final class LoadContourIntegrationTest extends TestCase
         $this->app->instance(ModuleRegistry::class, $this->modules);
         $this->app->instance(TenantContextResolver::class, $this->tenants);
         $this->app->instance(TenancyManager::class, $this->tenants);
-        $this->app->instance(ToolPolicy::class, new class implements ToolPolicy
-        {
-            public function discover(ToolDescriptor $tool, RequestContext $context): bool
-            {
-                return true;
-            }
-
-            public function invoke(ToolDescriptor $tool, RequestContext $context, JsonObject $arguments): bool
-            {
-                return true;
-            }
-        });
-        $this->app->instance(ToolExecutionGuard::class, new class implements ToolExecutionGuard
-        {
-            public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-            {
-                return $effect();
-            }
-        });
         LoadContourModule::$calls = 0;
-    }
-
-    public function test_http_and_tool_share_one_handler_and_declared_cost_clamps(): void
-    {
-        $this->app->instance(PrincipalResolver::class, $this->identity);
-        $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
-        {
-            public function allows(Operation $operation, RequestContext $context): bool
-            {
-                return $operation->ability === 'notes.read';
-            }
-        });
-        $request = Request::create('/chosen/v1/notes', 'POST', server: [
-            'CONTENT_TYPE' => 'application/json',
-            'HTTP_X_REQUEST_ID' => 'request-123',
-        ], content: '{"title":"Hello"}');
-        $http = $this->app->make(OperationDispatcher::class)->dispatch($request, 'v1', 'notes');
-        $declaration = collect($this->modules->registry->api)->first(
-            static fn (Api $api): bool => $api->toolCode === 'notes.create',
-        );
-        $descriptor = ToolDescriptor::fromDeclaration($declaration);
-        $tool = $this->app->make(ToolInvoker::class)->invoke(
-            new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v1', 'notes.create', 'POST')),
-            new ToolCall('notes.create', 'v1', $descriptor->contractHash, new JsonObject(JsonCanonical::encode(['title' => 'Hello'])), 'request-123'),
-        );
-        $operation = array_values(array_filter(
-            (new OperationRegistry($this->modules))->all('v1'),
-            static fn (Operation $candidate): bool => $candidate->id === 'notes.create',
-        ))[0];
-        $estimator = new DeclaredCostEstimator;
-
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame('committed', $tool->outcome);
-        self::assertSame(2, LoadContourModule::$calls);
-        self::assertSame('Hello', $http->getData(true)['data']['title']);
-        self::assertSame(2, $estimator->estimate($operation, new CostInput(1, 0, 0, 0, false, 0, 0))->units);
-
-        try {
-            $estimator->estimate($operation, new CostInput(100, 0, 0, 0, false, 0, 0));
-            self::fail('Declared cost accepted an overflow.');
-        } catch (ApiError $exception) {
-            self::assertSame('validation_failed', $exception->errorCode);
-        }
-    }
-
-    public function test_boxed_and_cloud_scopes_stay_on_the_configured_connection(): void
-    {
-        $this->configureSqlite('api_budget_stub');
-        $this->configureSqlite('api_tenant');
-        $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
-        $migration = require dirname(__DIR__, 2).'/database/migrations/tenant/create_sys_api_webhook_tables.php';
-        $migration->up();
-        $connection = DB::connection('api_tenant');
-        $account = new AccountRef('account-1', 'account', 'active', [], []);
-        $contexts = new ContextFixture;
-        $contexts->value = new TenantContext($account, null, true);
-        $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
-        $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue(), $clock);
-        $boxed = new DataScope('account-1', null, 'boxed:account-1', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true);
-        $created = $store->create($boxed, $this->subscription('boxed-sub', $clock->now()), true, true);
-
-        self::assertSame('boxed-sub', $created->id);
-        self::assertSame('api_tenant', $connection->getName());
-        self::assertSame(':memory:', $connection->getDatabaseName());
-        self::assertSame(1, $connection->table('sys_api_webhook_subscriptions')->count());
-
-        try {
-            $store->create(
-                new DataScope('account-1', null, 'pgsql:production', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true),
-                $this->subscription('foreign-sub', $clock->now()),
-                true,
-                true,
-            );
-            self::fail('A foreign connection identity opened a subscription.');
-        } catch (ScopeContextMismatch) {
-            self::assertSame(1, $connection->table('sys_api_webhook_subscriptions')->count());
-            self::assertSame(':memory:', $connection->getDatabaseName());
-        }
-
-        $contexts->value = new TenantContext($account, null, false);
-        $cloud = new DataScope(
-            'account-1',
-            null,
-            $connection->getDriverName().':'.$connection->getDatabaseName(),
-            'actor-1',
-            hash('sha256', 'cloud-restore'),
-        );
-        $store->create($cloud, $this->subscription('cloud-sub', $clock->now()), true, true);
-
-        self::assertSame(2, $connection->table('sys_api_webhook_subscriptions')->count());
-        self::assertSame(':memory:', $connection->getDatabaseName());
     }
 
     #[Group('pg')]
@@ -251,7 +131,7 @@ final class LoadContourIntegrationTest extends TestCase
             });
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $catalogue = $this->catalogue();
-            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new LoadContourProjector], $clock);
+            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock);
             $now = $clock->now();
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
@@ -346,13 +226,8 @@ final class LoadContourIntegrationTest extends TestCase
                 new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
             ]),
             [new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed')],
-            ['orders.placed' => new LoadContourProjector],
+            ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector],
         );
-    }
-
-    private function subscription(string $id, DateTimeImmutable $now): WebhookSubscription
-    {
-        return new WebhookSubscription($id, 0, 'v1', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
     }
 
     private function configureSqlite(string $name): void
@@ -380,9 +255,62 @@ final class LoadContourIntegrationTest extends TestCase
             'tenant' => ['connection' => $tenant, 'driver' => $tenantDriver, 'database' => $tenantDatabase],
         ]);
     }
+
+    public function test_boxed_and_cloud_scopes_stay_on_the_configured_connection(): void
+    {
+        $this->configureSqlite('api_budget_stub');
+        $this->configureSqlite('api_tenant');
+        $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
+        $migration = require dirname(__DIR__, 2).'/database/migrations/tenant/create_sys_api_webhook_tables.php';
+        $migration->up();
+        $connection = DB::connection('api_tenant');
+        $account = new AccountRef('account-1', 'account', 'active', [], []);
+        $contexts = new ContextFixture;
+        $contexts->value = new TenantContext($account, null, true);
+        $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
+        $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue(), $clock);
+        $boxed = new DataScope('account-1', null, 'boxed:account-1', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true);
+        $created = $store->create($boxed, $this->subscription('boxed-sub', $clock->now()), true, true);
+
+        self::assertSame('boxed-sub', $created->id);
+        self::assertSame('api_tenant', $connection->getName());
+        self::assertSame(':memory:', $connection->getDatabaseName());
+        self::assertSame(1, $connection->table('sys_api_webhook_subscriptions')->count());
+
+        try {
+            $store->create(
+                new DataScope('account-1', null, 'pgsql:production', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true),
+                $this->subscription('foreign-sub', $clock->now()),
+                true,
+                true,
+            );
+            self::fail('A foreign connection identity opened a subscription.');
+        } catch (ScopeContextMismatch) {
+            self::assertSame(1, $connection->table('sys_api_webhook_subscriptions')->count());
+            self::assertSame(':memory:', $connection->getDatabaseName());
+        }
+
+        $contexts->value = new TenantContext($account, null, false);
+        $cloud = new DataScope(
+            'account-1',
+            null,
+            $connection->getDriverName().':'.$connection->getDatabaseName(),
+            'actor-1',
+            hash('sha256', 'cloud-restore'),
+        );
+        $store->create($cloud, $this->subscription('cloud-sub', $clock->now()), true, true);
+
+        self::assertSame(2, $connection->table('sys_api_webhook_subscriptions')->count());
+        self::assertSame(':memory:', $connection->getDatabaseName());
+    }
+
+    private function subscription(string $id, DateTimeImmutable $now): WebhookSubscription
+    {
+        return new WebhookSubscription($id, 0, 'v1', 'orders.placed', 1, 'https://hooks.example/receiver', 'active', 'personal', ['current'], $now, $now);
+    }
 }
 
-final class LoadContourProjector implements WebhookPayloadProjector
+final class WebhookLoadContourIntegrationLoadContourProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {

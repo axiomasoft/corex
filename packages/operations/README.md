@@ -405,8 +405,13 @@ new domain event; replay deliberately keeps the original identity.
 Terminal webhook bodies remain seven days and metadata/attempts 30 days. Shorter PII body
 retention must shorten replay horizon with it. Active rows are never pruned. Dedup tombstones
 and the P5 webhook inbox must survive every possible replay of the original event; the inbox
-default is indefinite. `corex:api:prune --max=100` uses Clock-based bounded tenant cleanup,
-checks bulk ref ownership/hash, never refunds unknown reservations or removes held bucket keys.
+default is indefinite. `corex:webhooks:prune --max=100` cleans webhook bodies, attempts and inbox history
+only in an already restored trusted tenant scope. `corex:api:prune --max=100` cleans bulk results
+and shared budgets, checks bulk ref ownership/hash, and never refunds unknown reservations or removes held bucket keys.
+
+`WebhooksServiceProvider` is discovered from the package manifest. Its `corex-webhooks` config
+contains the existing webhook options; the engine config no longer owns them. Contract snapshots
+include webhook documents through tagged `ContractSnapshotSection` contributors.
 
 ## Verification
 

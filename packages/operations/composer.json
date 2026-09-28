@@ -21,7 +21,7 @@
     },
     "suggest": {
         "corex/transfer": "Optional bounded import/export adapter for durable bulk operations",
-        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
+        "opis/json-schema": "2.4.1 \u2014 bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
@@ -59,7 +59,8 @@
                 "src/Tools/Contracts/",
                 "src/Cost/Contracts/",
                 "src/Bulk/Contracts/",
-                "src/Webhooks/Contracts/"
+                "src/Webhooks/Contracts/",
+                "src/OpenApi/Contracts/"
             ],
             "CoreX\\Api\\Data\\": [
                 "src/Definition/Data/",
@@ -151,11 +152,18 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Api\\Contracts",
-                "CoreX\\Api\\Data"
+                "CoreX\\Api\\Data",
+                "CoreX\\Api\\Testing",
+                "CoreX\\Api\\Webhooks"
             ]
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Api\\Webhooks\\WebhooksServiceProvider"
+            ]
         }
     }
 }

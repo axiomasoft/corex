@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Api;
 
-use CoreX\Api\Commands\DeliverWebhooks;
 use CoreX\Api\Commands\PruneApiOperations;
 use CoreX\Api\Commands\WorkBulkOperations;
 use CoreX\Api\Commands\WriteApiSnapshots;
@@ -23,7 +22,6 @@ use CoreX\Api\Contracts\SchemaContributor;
 use CoreX\Api\Data\BulkOptions;
 use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Data\StoredOperationOutcome;
-use CoreX\Api\Data\WebhookOptions;
 use CoreX\Api\Internal\CurrentRequestContext;
 use CoreX\Api\Internal\DeclaredFieldAuthorizer;
 use CoreX\Api\Internal\DeclaredSchemaContributor;
@@ -41,7 +39,6 @@ use CoreX\Api\Internal\TrustedContextResolver;
 use CoreX\Api\Laravel\ApiSchemaRegistrar;
 use CoreX\Api\Laravel\BulkRegistrar;
 use CoreX\Api\Laravel\CostRegistrar;
-use CoreX\Api\Laravel\WebhookRegistrar;
 use CoreX\Api\Support\ApiOptions;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -206,7 +203,6 @@ final class ApiServiceProvider extends ServiceProvider
         ApiSchemaRegistrar::register($this->app);
         CostRegistrar::register($this->app);
         BulkRegistrar::register($this->app);
-        WebhookRegistrar::register($this->app);
     }
 
     public function boot(): void
@@ -218,10 +214,6 @@ final class ApiServiceProvider extends ServiceProvider
                 $commands[] = WorkBulkOperations::class;
             }
 
-            if ($this->app->make(WebhookOptions::class)->deliveryEnabled) {
-                $commands[] = DeliverWebhooks::class;
-            }
-
             $this->commands($commands);
         }
 
@@ -229,7 +221,6 @@ final class ApiServiceProvider extends ServiceProvider
 
         if ($options->routesEnabled && ! $this->app['router']->has('corex.api.discovery')) {
             BulkRegistrar::boot($this->app);
-            WebhookRegistrar::boot($this->app);
             Route::prefix($options->routePrefix)
                 ->middleware($options->routeMiddleware)
                 ->group(__DIR__.'/../routes/api.php');

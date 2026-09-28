@@ -643,24 +643,6 @@ parameters:
 			path: scripts/ownership-gate.php
 
 		-
-			rawMessage: 'Cannot call method getExtension() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: scripts/ownership-gate.php
-
-		-
-			rawMessage: 'Cannot call method getPathname() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: scripts/ownership-gate.php
-
-		-
-			rawMessage: 'Cannot call method isFile() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: scripts/ownership-gate.php
-
-		-
 			rawMessage: 'Only booleans are allowed in an if condition, int|false given.'
 			identifier: if.condNotBoolean
 			count: 1
@@ -686,12 +668,6 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/ownership-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/ownership-gate.php

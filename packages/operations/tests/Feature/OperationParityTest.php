@@ -4,20 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
-use Closure;
 use CoreX\Api\Contracts\OperationAuthorizer;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\ToolExecutionGuard;
-use CoreX\Api\Contracts\ToolInvoker;
-use CoreX\Api\Contracts\ToolPolicy;
-use CoreX\Api\Data\JsonObject;
-use CoreX\Api\Data\ToolCall;
-use CoreX\Api\Data\ToolDescriptor;
-use CoreX\Api\Data\ToolResult;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\ResolvedContext;
-use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationDispatcher;
 use CoreX\Api\Tests\Support\ContextFixture;
@@ -25,7 +14,6 @@ use CoreX\Api\Tests\Support\IdentityFixture;
 use CoreX\Api\Tests\Support\ModuleFixture;
 use CoreX\Api\Tests\Support\NoteHandler;
 use CoreX\Api\Tests\TestCase;
-use CoreX\Api\ToolServiceProvider;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Extend\Api;
@@ -45,7 +33,7 @@ final class OperationParityTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [...parent::getPackageProviders($app)];
     }
 
     protected function setUp(): void
@@ -55,7 +43,6 @@ final class OperationParityTest extends TestCase
         $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']]),
-                Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'read', 'read-only', $schema, $schema, ['title' => 'title']),
             ]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;
@@ -64,42 +51,7 @@ final class OperationParityTest extends TestCase
         $this->app->instance(ModuleRegistry::class, $this->modules);
         $this->app->instance(TenantContextResolver::class, $this->tenants);
         $this->app->instance(TenancyManager::class, $this->tenants);
-        $this->app->instance(ToolPolicy::class, new class implements ToolPolicy
-        {
-            public function discover(ToolDescriptor $tool, RequestContext $context): bool
-            {
-                return true;
-            }
-
-            public function invoke(ToolDescriptor $tool, RequestContext $context, JsonObject $arguments): bool
-            {
-                return true;
-            }
-        });
-        $this->app->instance(ToolExecutionGuard::class, new class implements ToolExecutionGuard
-        {
-            public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-            {
-                return $effect();
-            }
-        });
         NoteHandler::$calls = 0;
-    }
-
-    public function test_http_and_exposed_tool_share_one_handler_call(): void
-    {
-        $this->allow();
-        $request = Request::create('/chosen/v1/notes', 'POST', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_REQUEST_ID' => 'request-123'], content: '{"title":"Hello"}');
-        $http = $this->app->make(OperationDispatcher::class)->dispatch($request, 'v1', 'notes');
-        $tool = $this->app->make(ToolInvoker::class)->invoke($this->context(), $this->toolCall());
-
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame('committed', $tool->outcome);
-        self::assertSame(2, NoteHandler::$calls);
-        self::assertSame($http->getData(true)['data']['actor'], json_decode((string) $tool->structuredData?->canonicalJson, true)['actor']);
-        self::assertSame($http->getData(true)['data']['account'], json_decode((string) $tool->structuredData?->canonicalJson, true)['account']);
-        self::assertSame('Hello', $http->getData(true)['data']['title']);
-        self::assertNull($request->attributes->get(RequestContext::class));
     }
 
     public function test_denied_activation_and_authorization_skip_the_handler(): void
@@ -149,19 +101,6 @@ final class OperationParityTest extends TestCase
                 return $operation->ability === 'notes.read';
             }
         });
-    }
-
-    private function context(): ResolvedContext
-    {
-        return new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v1', 'notes.create', 'POST'));
-    }
-
-    private function toolCall(): ToolCall
-    {
-        $declaration = collect($this->modules->registry->api)->first(fn (Api $api): bool => $api->toolCode === 'notes.create');
-        $descriptor = ToolDescriptor::fromDeclaration($declaration);
-
-        return new ToolCall('notes.create', 'v1', $descriptor->contractHash, new JsonObject(JsonCanonical::encode(['title' => 'Hello'])), 'request-123');
     }
 
     /** @param  array<string, mixed>  $properties */

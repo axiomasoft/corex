@@ -220,5 +220,62 @@
       "CoreX\\Testing\\Fixtures\\",
       "CoreX\\Access\\Database\\Seeders\\"
     ]
-  }
+  },
+  "planned_identifier_sources": [
+    {
+      "package": "corex/operations",
+      "kind": "command",
+      "id": "corex:webhooks:prune",
+      "source_files": [
+        "packages/operations/src/Webhooks/Commands/PruneWebhooks.php"
+      ],
+      "decision": "PLAN3.D50"
+    },
+    {
+      "package": "corex/operations",
+      "kind": "config",
+      "id": "corex-webhooks",
+      "source_files": [
+        "packages/operations/src/Webhooks/WebhooksServiceProvider.php"
+      ],
+      "decision": "PLAN3.D50"
+    },
+    {
+      "package": "corex/operations",
+      "kind": "namespace",
+      "id": "CoreX\\Api\\Testing",
+      "source_files": [
+        "packages/operations/src/Testing/ResolvedContexts.php",
+        "packages/operations/src/Testing/InvocationFixtures.php"
+      ],
+      "decision": "PLAN3.D50"
+    },
+    {
+      "package": "corex/operations",
+      "kind": "namespace",
+      "id": "CoreX\\Api\\Webhooks",
+      "source_files": [
+        "packages/operations/src/Webhooks/WebhooksServiceProvider.php"
+      ],
+      "decision": "PLAN3.D50"
+    },
+    {
+      "package": "corex/operations",
+      "kind": "tag",
+      "id": "corex-webhooks-config",
+      "source_files": [
+        "packages/operations/src/Webhooks/WebhooksServiceProvider.php"
+      ],
+      "decision": "PLAN3.D50"
+    },
+    {
+      "package": "corex/operations",
+      "kind": "tag",
+      "id": "corex-webhooks-migrations-tenant",
+      "source_files": [
+        "packages/operations/src/Webhooks/WebhooksServiceProvider.php"
+      ],
+      "decision": "PLAN3.D50"
+    }
+  ]
 }

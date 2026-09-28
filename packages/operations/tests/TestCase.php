@@ -22,7 +22,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class];
+        return [ApiServiceProvider::class, ...json_decode((string) file_get_contents(__DIR__.'/../composer.json'), true)['extra']['laravel']['providers']];
     }
 
     /** @param Application $app */

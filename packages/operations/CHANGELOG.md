@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Extract webhook provider/config, snapshot section and bounded `corex:webhooks:prune`; the engine uses the snapshot SPI and owns only bulk/budget retention.
+- Add public request-context and invocation testing factories; preserve transport assertions in separately owned test cases.
+
+
 ### Added
 
 - Initial opt-in `corex/api` package: explicit compiled module operations, immutable runtime declarations, per-request active-module gate and versioned dispatch.

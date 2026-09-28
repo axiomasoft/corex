@@ -43,6 +43,11 @@
       "to": "CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations"
     },
     {
+      "from": "CoreX\\Api\\Commands\\PruneWebhooks",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Commands\\PruneWebhooks"
+    },
+    {
       "from": "CoreX\\Api\\Commands\\WorkBulkOperations",
       "kind": "class",
       "to": "CoreX\\Operations\\Bulk\\Commands\\WorkBulkOperations"
@@ -76,6 +81,11 @@
       "from": "CoreX\\Api\\Contracts\\ContextResolver",
       "kind": "class",
       "to": "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ContractSnapshotSection",
+      "kind": "class",
+      "to": "CoreX\\Operations\\OpenApi\\Contracts\\ContractSnapshotSection"
     },
     {
       "from": "CoreX\\Api\\Contracts\\CursorKeyring",
@@ -793,6 +803,11 @@
       "to": "CoreX\\Webhooks\\Internal\\WebhookRetryPolicy"
     },
     {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookSnapshotSection",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookSnapshotSection"
+    },
+    {
       "from": "CoreX\\Api\\Internal\\Webhook\\WebhookTopicCatalogue",
       "kind": "class",
       "to": "CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue"
@@ -878,6 +893,16 @@
       "to": "CoreX\\Operations\\Laravel\\Support\\ApiOptions"
     },
     {
+      "from": "CoreX\\Api\\Testing\\InvocationFixtures",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Testing\\InvocationFixtures"
+    },
+    {
+      "from": "CoreX\\Api\\Testing\\ResolvedContexts",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Testing\\ResolvedContexts"
+    },
+    {
       "from": "CoreX\\Api\\ToolSectionCompiler",
       "kind": "class",
       "to": "CoreX\\Tools\\ToolSectionCompiler"
@@ -886,6 +911,11 @@
       "from": "CoreX\\Api\\ToolServiceProvider",
       "kind": "class",
       "to": "CoreX\\Tools\\ToolServiceProvider"
+    },
+    {
+      "from": "CoreX\\Api\\Webhooks\\WebhooksServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\WebhooksServiceProvider"
     },
     {
       "from": "CoreX\\Attributes\\AttributesServiceProvider",

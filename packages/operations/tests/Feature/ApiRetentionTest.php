@@ -4,33 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
-use CoreX\Api\ApiError;
 use CoreX\Api\Commands\PruneApiOperations;
 use CoreX\Api\Contracts\BudgetReservation;
-use CoreX\Api\Contracts\CursorKeyring;
-use CoreX\Api\Contracts\WebhookPayloadProjector;
 use CoreX\Api\Data\BudgetScope;
 use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Data\WebhookTopic;
 use CoreX\Api\Internal\Bulk\BulkRetention;
 use CoreX\Api\Internal\Cost\BudgetRetention;
 use CoreX\Api\Internal\Cost\SqlOperationBudget;
 use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\SignedCursorCodec;
-use CoreX\Api\Internal\Webhook\WebhookReplay;
-use CoreX\Api\Internal\Webhook\WebhookRetention;
-use CoreX\Api\Internal\Webhook\WebhookTopicCatalogue;
 use CoreX\Api\Laravel\ApiSchemaRegistrar;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\TestCase;
-use CoreX\Audit\Contracts\AuditEntry;
-use CoreX\Audit\Contracts\AuditLogger;
-use CoreX\Enums\MessageClass;
-use CoreX\Enums\PiiClass;
 use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Messaging\Data\MessageContract;
-use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\Data\DataScope;
 use CoreX\Support\SecretRef;
@@ -42,7 +27,6 @@ use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -76,8 +60,6 @@ final class ApiRetentionTest extends TestCase
         $this->tenant = DB::connection('api_tenant');
         $this->migrate('budget', 'create_sys_api_budget_tables.php');
         $this->migrate('tenant', 'create_sys_api_bulk_operations_table.php');
-        $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
-        $this->inbox($this->tenant);
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -104,11 +86,7 @@ final class ApiRetentionTest extends TestCase
     {
         $this->expectUnsafe(fn () => $this->bulk(result: 86_401, metadata: 86_400, idempotency: 3_600));
         $this->expectUnsafe(fn () => $this->bulk(result: 3_600, metadata: 3_599, idempotency: 3_600));
-        $this->expectUnsafe(fn () => $this->webhooks(body: 604_801, history: 604_800, replay: 604_801));
-        $this->expectUnsafe(fn () => $this->webhooks(body: 3_600, history: 86_400, replay: 7_200));
-        $shorter = $this->webhooks(body: 3_600, history: 86_400, replay: 3_600);
 
-        self::assertInstanceOf(WebhookRetention::class, $shorter);
         self::assertSame(100, BulkRetention::BatchLimit);
     }
 
@@ -179,64 +157,6 @@ final class ApiRetentionTest extends TestCase
         self::assertNull($this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-000')->value('result_ref'));
     }
 
-    public function test_expired_webhook_body_cannot_replay_and_tombstone_preserves_dedup(): void
-    {
-        $retention = $this->webhooks();
-        $now = $this->clock->now();
-        $this->delivery('delivery-old', self::OldEvent, 'dead', $now->sub(new DateInterval('P31D')), $now->sub(new DateInterval('P24D')), 'old-body');
-        $this->delivery('delivery-pending', '44444444-4444-4444-8444-444444444444', 'pending', $now->sub(new DateInterval('P31D')), $now->sub(new DateInterval('P24D')), 'active-body');
-        $this->delivery('delivery-leased', '55555555-5555-4555-8555-555555555555', 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'leased-body', $now->add(new DateInterval('PT30S')));
-        $this->delivery('delivery-fresh', self::FreshEvent, 'dead', $now, $now->add(new DateInterval('P7D')), 'fresh-body');
-        $this->insertWebhookAttempt('attempt-old', 'delivery-old');
-        $this->inboxRow(self::OldEvent);
-        $this->inboxRow(self::OrphanEvent);
-        $oldHash = (string) $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-old')->value('body_hash');
-
-        $first = $retention->prune($this->scope);
-        $old = $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-old')->first();
-
-        self::assertSame(1, $first['bodies']);
-        self::assertSame(1, $first['attempts']);
-        self::assertSame(1, $first['inbox']);
-        self::assertNotNull($old);
-        self::assertSame('', $old->body);
-        self::assertSame($oldHash, $old->body_hash);
-        self::assertSame('dead', $old->status);
-        self::assertNull($this->tenant->table('sys_api_webhook_attempts')->where('id', 'attempt-old')->first());
-        self::assertSame('active-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-pending')->value('body'));
-        self::assertSame('leased-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-leased')->value('body'));
-        self::assertSame('fresh-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-fresh')->value('body'));
-        self::assertNotNull($this->tenant->table('sys_inbox_messages')->where('message_id', self::OldEvent)->first());
-        self::assertNull($this->tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
-        self::assertSame(0, $this->tenant->table('sys_api_webhook_deliveries')->insertOrIgnore($this->deliveryInsert('delivery-duplicate', self::OldEvent, 'pending', $now, $now->add(new DateInterval('P7D')), 'new-body')));
-        self::assertSame(1, $this->tenant->table('sys_api_webhook_deliveries')->where('event_id', self::OldEvent)->count());
-        $this->assertReplayExpired('delivery-old');
-
-        $this->clock->advance(new DateInterval('P8D'));
-        $second = $retention->prune($this->scope);
-
-        self::assertSame(2, $second['bodies']);
-        self::assertSame('', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-fresh')->value('body'));
-        self::assertSame('', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-leased')->value('body'));
-        self::assertNotNull($this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-fresh')->first());
-        $this->assertReplayExpired('delivery-fresh');
-        self::assertSame('active-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-pending')->value('body'));
-    }
-
-    public function test_shorter_body_window_expires_replay_with_the_body(): void
-    {
-        $retention = $this->webhooks(body: 3_600, history: 86_400, replay: 3_600);
-        $now = $this->clock->now();
-        $this->delivery('delivery-short', self::FreshEvent, 'dead', $now, $now->add(new DateInterval('P7D')), 'short-body');
-
-        $this->clock->advance(new DateInterval('PT2H'));
-        $result = $retention->prune($this->scope);
-
-        self::assertSame(1, $result['bodies']);
-        self::assertSame('', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-short')->value('body'));
-        $this->assertReplayExpired('delivery-short');
-    }
-
     public function test_reservation_expiry_never_refunds_and_held_reservation_keeps_buckets(): void
     {
         $operation = new SqlOperationBudget(
@@ -283,7 +203,6 @@ final class ApiRetentionTest extends TestCase
         $now = $this->clock->now();
         $this->bulkRow('bulk-command', 'completed', $now->sub(new DateInterval('PT2H')), $now->sub(new DateInterval('PT1H')), 'command-input', 'command-bytes');
         $this->app->instance(BulkRetention::class, $this->bulk());
-        $this->app->instance(WebhookRetention::class, $this->webhooks());
         $this->app->instance(BudgetRetention::class, new BudgetRetention($this->budget, $this->clock));
         $this->app->instance(DataScope::class, $this->scope);
         $kernel = $this->app->make(Kernel::class);
@@ -317,10 +236,8 @@ final class ApiRetentionTest extends TestCase
             $this->selectSchema('api_p1417_budget', 'pgsql', $database, 'api_p1417_tenant', 'pgsql', $database);
             $this->migrate('budget', 'create_sys_api_budget_tables.php');
             $this->migrate('tenant', 'create_sys_api_bulk_operations_table.php');
-            $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
             $tenant = DB::connection('api_p1417_tenant');
             $budget = DB::connection('api_p1417_budget');
-            $this->inbox($tenant);
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
             $restorer = new GuardedTenantContextRestorer($contexts);
@@ -333,11 +250,7 @@ final class ApiRetentionTest extends TestCase
             $this->scope = $scope;
             $now = $this->clock->now();
             $this->bulkRow('bulk-pg', 'completed', $now->sub(new DateInterval('PT2H')), $now->sub(new DateInterval('PT1H')), 'pg-input', 'pg-bytes');
-            $this->delivery('delivery-pg', self::OldEvent, 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'pg-body');
-            $this->inboxRow(self::OldEvent);
-            $this->inboxRow(self::OrphanEvent);
             $bulk = new BulkRetention($tenant, new ArrayDataScopeCodec, $restorer, $this->clock);
-            $webhooks = new WebhookRetention($tenant, $restorer, $this->clock);
             $operation = new SqlOperationBudget($budget, $this->clock, new SecretRef('budget-test-hmac-secret'), reservationTtlSeconds: 60);
             $operation->reserve(new BudgetScope('installation-1', 'account-a', 'client-a', 'actor-a'), new EstimatedCost(1, hash('sha256', 'recipe')));
             $available = $this->available();
@@ -354,11 +267,6 @@ final class ApiRetentionTest extends TestCase
             self::assertFalse($budgets->release('missing-reservation'));
             self::assertSame(['cleared' => 1, 'removed' => 0], $bulk->prune($scope));
             self::assertSame('{}', (string) $tenant->table('sys_api_bulk_operations')->where('id', 'bulk-pg')->value('input_ref'));
-            self::assertSame(['bodies' => 1, 'attempts' => 0, 'inbox' => 1], $webhooks->prune($scope));
-            self::assertSame('', $tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-pg')->value('body'));
-            self::assertNotNull($tenant->table('sys_inbox_messages')->where('message_id', self::OldEvent)->first());
-            self::assertNull($tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
-            self::assertSame(0, $tenant->table('sys_api_webhook_deliveries')->insertOrIgnore($this->deliveryInsert('delivery-pg-dup', self::OldEvent, 'pending', $now, $now->add(new DateInterval('P7D')), 'again')));
             $this->tenant = $previous;
             $this->budget = $previousBudget;
             $this->scope = $previousScope;
@@ -391,18 +299,6 @@ final class ApiRetentionTest extends TestCase
             resultRetentionSeconds: $result,
             metadataRetentionSeconds: $metadata,
             idempotencyRetentionSeconds: $idempotency,
-        );
-    }
-
-    private function webhooks(int $body = 604_800, int $history = 2_592_000, int $replay = 604_800): WebhookRetention
-    {
-        return new WebhookRetention(
-            connection: $this->tenant,
-            contexts: $this->restorer,
-            clock: $this->clock,
-            bodyRetentionSeconds: $body,
-            historyRetentionSeconds: $history,
-            replayHorizonSeconds: $replay,
         );
     }
 
@@ -461,110 +357,6 @@ final class ApiRetentionTest extends TestCase
         ]);
     }
 
-    private function delivery(
-        string $id,
-        string $eventId,
-        string $status,
-        DateTimeImmutable $createdAt,
-        DateTimeImmutable $expiresAt,
-        string $body,
-        ?DateTimeImmutable $leaseUntil = null,
-    ): void {
-        $this->tenant->table('sys_api_webhook_deliveries')->insert($this->deliveryInsert(
-            $id,
-            $eventId,
-            $status,
-            $createdAt,
-            $expiresAt,
-            $body,
-            $leaseUntil,
-        ));
-    }
-
-    /** @return array<string, mixed> */
-    private function deliveryInsert(
-        string $id,
-        string $eventId,
-        string $status,
-        DateTimeImmutable $createdAt,
-        DateTimeImmutable $expiresAt,
-        string $body,
-        ?DateTimeImmutable $leaseUntil = null,
-    ): array {
-        return [
-            'id' => $id,
-            'subscription_id' => 'subscription-a',
-            'subscription_revision' => 0,
-            'event_id' => $eventId,
-            'topic' => 'orders.placed',
-            'topic_version' => 1,
-            'major' => 'v1',
-            'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account_id' => 'account-a', 'workspace_id' => null]),
-            'body' => $body,
-            'body_hash' => hash('sha256', $body),
-            'status' => $status,
-            'attempt' => 1,
-            'replay_count' => 0,
-            'lease_owner' => $leaseUntil === null ? null : 'worker-a',
-            'lease_until' => $leaseUntil,
-            'next_attempt_at' => $createdAt,
-            'created_at' => $createdAt,
-            'finished_at' => in_array($status, ['dead', 'succeeded'], true) ? $createdAt : null,
-            'expires_at' => $expiresAt,
-            'last_error' => $status === 'dead' ? 'http_permanent' : null,
-        ];
-    }
-
-    private function insertWebhookAttempt(string $id, string $deliveryId): void
-    {
-        $this->tenant->table('sys_api_webhook_attempts')->insert([
-            'id' => $id,
-            'delivery_id' => $deliveryId,
-            'attempt' => 1,
-            'lease_owner' => 'worker-a',
-            'started_at' => $this->clock->now()->sub(new DateInterval('P31D')),
-            'finished_at' => $this->clock->now()->sub(new DateInterval('P31D')),
-            'outcome' => 'dead',
-            'http_status' => 500,
-            'duration_ms' => 10,
-            'error_code' => 'http_permanent',
-        ]);
-    }
-
-    private function inboxRow(string $eventId): void
-    {
-        $this->tenant->table('sys_inbox_messages')->insert([
-            'consumer' => WebhookRetention::Consumer,
-            'message_id' => $eventId,
-            'name' => 'orders.placed',
-            'processed_at' => $this->clock->now(),
-        ]);
-    }
-
-    private function assertReplayExpired(string $deliveryId): void
-    {
-        $schema = ['id' => 'string'];
-        $topic = new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
-        $replay = new WebhookReplay(
-            connection: $this->tenant,
-            contexts: $this->restorer,
-            topics: new WebhookTopicCatalogue(MessagingFixtures::contracts([
-                new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
-            ]), [$topic], ['orders.placed' => new RetentionProjector]),
-            clock: $this->clock,
-            cursors: new SignedCursorCodec($this->clock, new RetentionKeyring),
-            audit: new RetentionAudit,
-        );
-
-        try {
-            $replay->one($this->scope, $deliveryId, true, 'retention check');
-            self::fail("Replay [{$deliveryId}] succeeded after body expiry.");
-        } catch (ApiError $error) {
-            self::assertSame('webhook_replay_expired', $error->errorCode);
-        }
-    }
-
     /** @return array<string, int> */
     private function available(): array
     {
@@ -573,17 +365,6 @@ final class ApiRetentionTest extends TestCase
             ->pluck('available', 'key')
             ->map(static fn (mixed $value): int => (int) $value)
             ->all();
-    }
-
-    private function inbox(Connection $connection): void
-    {
-        $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
-            $table->string('consumer', 120);
-            $table->string('message_id', 64);
-            $table->string('name', 160);
-            $table->timestampTz('processed_at', precision: 6);
-            $table->primary(['consumer', 'message_id']);
-        });
     }
 
     private function migrate(string $directory, string $file): void
@@ -640,35 +421,4 @@ final class ApiRetentionTest extends TestCase
 
         return DB::connection('api_p1417_root');
     }
-}
-
-final class RetentionProjector implements WebhookPayloadProjector
-{
-    public function project(MessageEnvelope $message, WebhookTopic $topic): array
-    {
-        return ['event_id' => $message->messageId];
-    }
-}
-
-final class RetentionKeyring implements CursorKeyring
-{
-    public function currentKeyId(): string
-    {
-        return 'current';
-    }
-
-    public function ttlSeconds(): int
-    {
-        return 900;
-    }
-
-    public function verifyingSecret(string $keyId): ?string
-    {
-        return $keyId === 'current' ? str_repeat('r', 32) : null;
-    }
-}
-
-final class RetentionAudit implements AuditLogger
-{
-    public function record(AuditEntry $entry): void {}
 }

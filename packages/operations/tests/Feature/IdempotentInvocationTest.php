@@ -8,53 +8,36 @@ use Closure;
 use CoreX\Api\ApiError;
 use CoreX\Api\Contracts\IdempotencyStore;
 use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\OperationHandler;
 use CoreX\Api\Contracts\OperationInvoker;
-use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\ReplayAuthorizer;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\ToolExecutionGuard;
-use CoreX\Api\Contracts\ToolInvoker;
-use CoreX\Api\Contracts\ToolPolicy;
 use CoreX\Api\Data\IdempotencyAttempt;
 use CoreX\Api\Data\IdempotencyScope;
-use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Data\OperationResult;
 use CoreX\Api\Data\StoredOperationOutcome;
-use CoreX\Api\Data\ToolCall;
-use CoreX\Api\Data\ToolDescriptor;
-use CoreX\Api\Data\ToolResult;
 use CoreX\Api\Enums\IdempotencyRequirement;
 use CoreX\Api\Enums\OperationMode;
 use CoreX\Api\Internal\ErrorMapper;
 use CoreX\Api\Internal\IdempotentOperationInvoker;
 use CoreX\Api\Internal\OperationFingerprint;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\Internal\SqlIdempotencyStore;
 use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Operation;
-use CoreX\Api\OperationDispatcher;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
 use CoreX\Api\Tests\Support\ModuleFixture;
 use CoreX\Api\Tests\Support\NoteHandler;
 use CoreX\Api\Tests\TestCase;
-use CoreX\Api\ToolServiceProvider;
 use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Support\SecretRef;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\SQLiteConnection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PDO;
@@ -80,7 +63,7 @@ final class IdempotentInvocationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [...parent::getPackageProviders($app)];
     }
 
     protected function setUp(): void
@@ -138,90 +121,6 @@ final class IdempotentInvocationTest extends TestCase
         }
 
         self::assertSame(1, $this->inner->calls);
-    }
-
-    public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
-    {
-        $schema = ['type' => 'object'];
-        $registry = app(RegistryCompiler::class)->compile([
-            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.create', 'POST', '/notes', IdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string']])
-                    ->asCommand()->idempotency('required')->effect('tenant_transactional'),
-                Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $schema, $schema, ['name' => 'name']),
-            ]),
-        ], installedPackages: []);
-        $modules = new ModuleFixture($registry);
-        $this->app['config']->set('app.key', 'provider-idempotency-secret');
-        $this->app->instance(ModuleRegistry::class, $modules);
-        $this->app->instance(TenantContextResolver::class, $this->tenants);
-        $this->app->instance(TenancyManager::class, $this->tenants);
-        $this->app->instance(PrincipalResolver::class, $this->principal);
-        $this->app->instance(ReplayAuthorizer::class, $this->authorizer);
-        $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
-        {
-            public function allows(Operation $operation, RequestContext $context): bool
-            {
-                return true;
-            }
-        });
-        $this->app->instance(ToolPolicy::class, new class implements ToolPolicy
-        {
-            public function discover(ToolDescriptor $tool, RequestContext $context): bool
-            {
-                return true;
-            }
-
-            public function invoke(ToolDescriptor $tool, RequestContext $context, JsonObject $arguments): bool
-            {
-                return true;
-            }
-        });
-        $this->app->instance(ToolExecutionGuard::class, new class implements ToolExecutionGuard
-        {
-            public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-            {
-                return $effect();
-            }
-        });
-        IdempotentHttpHandler::$calls = 0;
-        $request = static fn (?string $key): Request => Request::create(
-            '/api/v1/notes',
-            'POST',
-            server: array_filter(['CONTENT_TYPE' => 'application/json', 'HTTP_IDEMPOTENCY_KEY' => $key]),
-            content: '{"name":"alpha"}',
-        );
-        $dispatcher = $this->app->make(OperationDispatcher::class);
-        $missing = $dispatcher->dispatch($request(null), 'v1', 'notes');
-        self::assertSame(422, $missing->getStatusCode());
-        self::assertSame(0, IdempotentHttpHandler::$calls);
-        self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
-
-        $http = $dispatcher->dispatch($request('shared-key'), 'v1', 'notes');
-        $httpReplay = $dispatcher->dispatch($request('shared-key'), 'v1', 'notes');
-        $this->authorizer->removeSecret = true;
-        $toolDeclaration = collect($registry->api)->first(
-            static fn (Api $api): bool => $api->mode === 'tool' && $api->toolCode === 'notes.create',
-        );
-        self::assertInstanceOf(Api::class, $toolDeclaration);
-        $tool = $this->app->make(ToolInvoker::class)->invoke(
-            $this->invocation()->context,
-            new ToolCall(
-                code: 'notes.create',
-                toolVersion: 'v1',
-                expectedContractHash: ToolDescriptor::fromDeclaration($toolDeclaration)->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'alpha']),
-                requestId: 'tool-request',
-                operationKey: 'shared-key',
-            ),
-        );
-
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame(200, $httpReplay->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
-        self::assertTrue($tool->replayed);
-        self::assertSame(['name' => 'alpha'], json_decode((string) $tool->structuredData?->canonicalJson, true, flags: JSON_THROW_ON_ERROR));
-        self::assertSame(1, IdempotentHttpHandler::$calls);
-        self::assertSame(1, $this->connection->table('idempotent_effects')->count());
     }
 
     public function test_required_forbidden_conflict_in_progress_and_contract_mismatch_skip_effect(): void
@@ -329,7 +228,7 @@ final class IdempotentInvocationTest extends TestCase
     ): OperationInvocation {
         return new OperationInvocation(
             operation: $operation ?? $this->operation(),
-            context: new ResolvedContext(
+            context: ResolvedContexts::make(
                 tenantContext: $this->tenants->current(),
                 authenticatedPrincipal: $this->principal,
                 requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
@@ -416,19 +315,6 @@ final class EffectInvokerFixture implements OperationInvoker
         $this->connection->table('idempotent_effects')->insert(['value' => (string) $invocation->input['name']]);
 
         return new OperationResult(data: ['name' => $invocation->input['name'], 'secret' => 'protected']);
-    }
-}
-
-final class IdempotentHttpHandler implements OperationHandler
-{
-    public static int $calls = 0;
-
-    public function handle(RequestContext $context, array $input, array $parameters): array
-    {
-        self::$calls++;
-        DB::table('idempotent_effects')->insert(['value' => (string) $input['name']]);
-
-        return ['name' => $input['name'], 'secret' => 'protected'];
     }
 }
 

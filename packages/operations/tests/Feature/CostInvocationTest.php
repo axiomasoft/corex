@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
-use Closure;
 use CoreX\Api\ApiError;
 use CoreX\Api\Contracts\BudgetReservation;
 use CoreX\Api\Contracts\ClientScopeAuthorizer;
@@ -17,41 +16,30 @@ use CoreX\Api\Contracts\OperationInvoker;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\ReplayAuthorizer;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\ToolExecutionGuard;
-use CoreX\Api\Contracts\ToolInvoker;
-use CoreX\Api\Contracts\ToolPolicy;
 use CoreX\Api\Data\ActualCost;
 use CoreX\Api\Data\BudgetScope;
 use CoreX\Api\Data\CostInput;
 use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Data\OperationResult;
 use CoreX\Api\Data\StoredOperationOutcome;
-use CoreX\Api\Data\ToolCall;
-use CoreX\Api\Data\ToolDescriptor;
-use CoreX\Api\Data\ToolResult;
 use CoreX\Api\Enums\IdempotencyRequirement;
 use CoreX\Api\Enums\OperationMode;
 use CoreX\Api\Internal\Cost\BudgetAdmission;
 use CoreX\Api\Internal\Cost\BudgetStoreUnavailable;
 use CoreX\Api\Internal\Cost\DeclaredCostEstimator;
-use CoreX\Api\Internal\Cost\SqlOperationBudget;
 use CoreX\Api\Internal\DefaultOperationInvoker;
 use CoreX\Api\Internal\ErrorMapper;
 use CoreX\Api\Internal\IdempotentOperationInvoker;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\Internal\SqlIdempotencyStore;
 use CoreX\Api\InvocationMetadata;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationDispatcher;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
 use CoreX\Api\Tests\Support\ModuleFixture;
 use CoreX\Api\Tests\TestCase;
-use CoreX\Api\ToolServiceProvider;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Extend\Api;
@@ -77,7 +65,7 @@ final class CostInvocationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [...parent::getPackageProviders($app)];
     }
 
     protected function setUp(): void
@@ -194,67 +182,6 @@ final class CostInvocationTest extends TestCase
         self::assertSame([], $preHandlerBudget->settled);
     }
 
-    public function test_http_and_exposed_tool_share_cost_metadata_without_scope_keys(): void
-    {
-        $schema = $this->schema();
-        $registry = app(RegistryCompiler::class)->compile([
-            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
-                Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema)
-                    ->cost(['base' => 2]),
-                Api::exposeTool('notes.read', 'v1', 'notes.read', 'v1', 'read', 'read-only', $schema, $schema, ['name' => 'name']),
-            ]),
-        ], installedPackages: []);
-        $modules = new ModuleFixture($registry);
-        $budget = $this->sqlBudget();
-        $invoker = $this->defaultInvoker($modules, $this->admission($budget));
-        $this->app->instance(ModuleRegistry::class, $modules);
-        $this->app->instance(TenantContextResolver::class, $this->tenants);
-        $this->app->instance(TenancyManager::class, $this->tenants);
-        $this->app->instance(PrincipalResolver::class, $this->principal);
-        $this->app->instance(OperationAuthorizer::class, $this->operationAuthorizer());
-        $this->app->instance(OperationInvoker::class, $invoker);
-        $this->app->instance(ToolPolicy::class, new AllowToolPolicy);
-        $this->app->instance(ToolExecutionGuard::class, new PassThroughToolGuard);
-        CostInvocationHandler::$calls = 0;
-
-        $http = $this->app->make(OperationDispatcher::class)->dispatch(
-            Request::create('/api/v1/notes', 'GET', server: ['HTTP_X_REQUEST_ID' => 'http-cost']),
-            'v1',
-            'notes',
-        );
-        $toolDeclaration = collect($registry->api)->first(
-            static fn (Api $api): bool => $api->mode === 'tool',
-        );
-        self::assertInstanceOf(Api::class, $toolDeclaration);
-        $tool = $this->app->make(ToolInvoker::class)->invoke(
-            $this->context(),
-            new ToolCall(
-                code: 'notes.read',
-                toolVersion: 'v1',
-                expectedContractHash: ToolDescriptor::fromDeclaration($toolDeclaration)->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'read']),
-                requestId: 'tool-cost',
-                operationKey: null,
-            ),
-        );
-
-        $httpCost = $http->getData(true)['meta']['cost'];
-        $toolCost = $tool->metadata['cost'];
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
-        self::assertSame(2, CostInvocationHandler::$calls);
-        self::assertSame(['requested', 'actual', 'mode', 'throttle'], array_keys($httpCost));
-        self::assertSame(array_keys($httpCost), array_keys($toolCost));
-        self::assertSame([2, 2, 'enforce'], [$httpCost['requested'], $httpCost['actual'], $httpCost['mode']]);
-        self::assertSame([2, 2, 'enforce'], [$toolCost['requested'], $toolCost['actual'], $toolCost['mode']]);
-        self::assertSame(['capacity', 'available', 'restore_rate', 'observed_at'], array_keys($toolCost['throttle']));
-
-        $wire = JsonCanonical::encode(['http' => $httpCost, 'tool' => $toolCost]);
-        self::assertStringNotContainsString('account-a', $wire);
-        self::assertStringNotContainsString('trusted-user', $wire);
-        self::assertStringNotContainsString('client-a', $wire);
-    }
-
     public function test_http_rate_limit_keeps_retry_after_and_store_failure_has_no_retry_header(): void
     {
         $schema = $this->schema();
@@ -312,40 +239,6 @@ final class CostInvocationTest extends TestCase
         );
     }
 
-    private function sqlBudget(): SqlOperationBudget
-    {
-        $this->app['config']->set('database.connections.api_budget_admission', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-            'foreign_key_constraints' => true,
-        ]);
-        DB::purge('api_budget_admission');
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
-            'budget' => [
-                'connection' => 'api_budget_admission',
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-            ],
-            'tenant' => [
-                'connection' => 'sqlite',
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-            ],
-        ]);
-        $connection = DB::connection('api_budget_admission');
-        (require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php')->up();
-
-        return new SqlOperationBudget(
-            connection: $connection,
-            clock: new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00+00:00')),
-            scopeHmacSecret: new SecretRef('budget-test-secret'),
-            capacity: 100,
-            restoreRate: 10,
-        );
-    }
-
     /** @param class-string $handler */
     private function operation(
         IdempotencyRequirement $idempotency = IdempotencyRequirement::Forbidden,
@@ -384,9 +277,9 @@ final class CostInvocationTest extends TestCase
         );
     }
 
-    private function context(): ResolvedContext
+    private function context(): RequestContext
     {
-        return new ResolvedContext(
+        return ResolvedContexts::make(
             $this->tenants->current(),
             $this->principal,
             new InvocationMetadata('request-1', 'v1', 'notes.create', 'POST'),
@@ -515,27 +408,6 @@ final class AllowReplayAuthorizer implements ReplayAuthorizer
         bool $replayed,
     ): StoredOperationOutcome {
         return $outcome;
-    }
-}
-
-final class AllowToolPolicy implements ToolPolicy
-{
-    public function discover(ToolDescriptor $tool, RequestContext $context): bool
-    {
-        return true;
-    }
-
-    public function invoke(ToolDescriptor $tool, RequestContext $context, JsonObject $arguments): bool
-    {
-        return true;
-    }
-}
-
-final class PassThroughToolGuard implements ToolExecutionGuard
-{
-    public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-    {
-        return $effect();
     }
 }
 

@@ -41420,12 +41420,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "webhooks",
-                        "type": "CoreX\\Webhooks\\Internal\\WebhookRetention",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "budget",
                         "type": "CoreX\\Operations\\Cost\\Internal\\BudgetRetention",
                         "variadic": false
@@ -41724,6 +41718,36 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\OpenApi\\Contracts\\ContractSnapshotSection": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "document": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "major",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "file": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\OpenApi\\Internal\\ContractSnapshotBuilder": {
         "abstract": false,
         "constants": {
@@ -41733,8 +41757,7 @@
                     "errors.json",
                     "openapi.json",
                     "operations.json",
-                    "manifest.json",
-                    "webhooks.json"
+                    "manifest.json"
                 ]
             }
         },
@@ -41766,8 +41789,8 @@
                     {
                         "byRef": false,
                         "default": [],
-                        "name": "topics",
-                        "type": "array",
+                        "name": "sections",
+                        "type": "iterable",
                         "variadic": false
                     }
                 ],
@@ -41790,6 +41813,11 @@
                         "variadic": false
                     }
                 ],
+                "return": "array",
+                "static": false
+            },
+            "files": {
+                "params": [],
                 "return": "array",
                 "static": false
             }
@@ -42436,6 +42464,159 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Operations\\Testing\\InvocationFixtures": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "costInvoker": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "modules",
+                        "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clientScopes",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "authorizer",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fields",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationFieldAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "budget",
+                        "type": "CoreX\\Operations\\Cost\\Contracts\\OperationBudget",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "installationId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "costInput",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clientId",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker",
+                "static": true
+            },
+            "declaredCosts": {
+                "params": [],
+                "return": "CoreX\\Operations\\Cost\\Contracts\\OperationCostEstimator",
+                "static": true
+            },
+            "sqlBudget": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopeHmacSecret",
+                        "type": "CoreX\\Config\\SecretRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": 100,
+                        "name": "capacity",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": 10,
+                        "name": "restoreRate",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Cost\\Contracts\\OperationBudget",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\ResolvedContexts": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "tenantContext",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "authenticatedPrincipal",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestMetadata",
+                        "type": "CoreX\\Operations\\Invocation\\InvocationMetadata",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Operations\\Validation\\Data\\JsonObject": {
         "abstract": false,
@@ -72778,6 +72959,33 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Webhooks\\Commands\\PruneWebhooks": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Symfony\\Component\\Console\\Command\\SignalableCommandInterface"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "webhooks",
+                        "type": "CoreX\\Webhooks\\Internal\\WebhookRetention",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Console\\Command",
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore": {
         "abstract": false,
         "constants": [],
@@ -75299,6 +75507,51 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Webhooks\\Internal\\WebhookSnapshotSection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\OpenApi\\Contracts\\ContractSnapshotSection"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "topics",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "document": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "major",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "file": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue": {
         "abstract": false,
         "constants": [],
@@ -75575,6 +75828,29 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Webhooks\\WebhooksServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Workflow\\Contracts\\EngineAdapter": {
         "abstract": false,

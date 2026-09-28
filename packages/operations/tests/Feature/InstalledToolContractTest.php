@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Api\Tests\Feature;
 
 use CoreX\Api\ApiServiceProvider;
+use CoreX\Api\Contracts\RequestContext;
 use CoreX\Api\Contracts\ToolCatalogue;
 use CoreX\Api\Contracts\ToolExecutionGuard;
 use CoreX\Api\Contracts\ToolInvoker;
@@ -17,8 +18,8 @@ use CoreX\Api\Internal\DenyToolPolicy;
 use CoreX\Api\Internal\JsonCanonical;
 use CoreX\Api\Internal\McpToolsProjection;
 use CoreX\Api\Internal\ReadOnlyToolExecutionGuard;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\InvocationMetadata;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\ArchiveToolModule;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\CountingHandler;
@@ -97,9 +98,9 @@ final class InstalledToolContractTest extends TestCase
         return new AccountRef($id, strtolower($id), 'active', [], []);
     }
 
-    private function context(string $account = 'A'): ResolvedContext
+    private function context(string $account = 'A'): RequestContext
     {
-        return new ResolvedContext(
+        return ResolvedContexts::make(
             tenantContext: $this->tenants->current(),
             authenticatedPrincipal: $this->identity,
             requestMetadata: new InvocationMetadata('request-1', 'v1', 'tools.discover', 'GET'),

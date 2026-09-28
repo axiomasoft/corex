@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
-use CoreX\Api\ApiServiceProvider;
 use CoreX\Api\Contracts\BulkTransferFactory;
-use CoreX\Api\Contracts\WebhookSigner;
 use CoreX\Api\Data\BulkOperationDefinition;
 use CoreX\Api\Data\CostOptions;
-use CoreX\Api\Data\WebhookOptions;
 use CoreX\Api\Internal\Bulk\SqlBulkOperationStore;
 use CoreX\Api\Internal\Bulk\TransferBulkExecutor;
 use CoreX\Api\Internal\Bulk\TransferCapabilityUnavailable;
@@ -19,7 +16,6 @@ use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\TestCase;
 use CoreX\Support\Data\ArrayDataScopeCodec;
 use CoreX\Support\Data\DataScope;
-use CoreX\Support\InvalidConfiguration;
 use CoreX\Support\Time\FrozenClock;
 use CoreX\Tenancy\AccountRef;
 use CoreX\Tenancy\GuardedTenantContextRestorer;
@@ -39,7 +35,7 @@ final class LoadContourBootTest extends TestCase
         $composer = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/composer.json'), true);
         $require = $composer['require'];
 
-        self::assertSame(['CoreX\\Api\\Contracts', 'CoreX\\Api\\Data'], $composer['extra']['corex']['public-api']);
+        self::assertSame(['CoreX\\Api\\Contracts', 'CoreX\\Api\\Data', 'CoreX\\Api\\Testing', 'CoreX\\Api\\Webhooks'], $composer['extra']['corex']['public-api']);
         self::assertSame([
             'corex/core',
             'corex/modules',
@@ -76,27 +72,10 @@ final class LoadContourBootTest extends TestCase
         ], array_column($edges, 'import_file'));
     }
 
-    public function test_boot_disables_remote_delivery_and_reports_missing_signing(): void
+    public function test_boot_keeps_cost_and_bulk_transfer_disabled(): void
     {
-        self::assertFalse($this->app->make(WebhookOptions::class)->deliveryEnabled);
-        self::assertFalse($this->app->make(WebhookOptions::class)->workerReady);
         self::assertFalse($this->app->make(CostOptions::class)->enabled);
-        self::assertFalse($this->app->bound(WebhookSigner::class));
         self::assertFalse($this->app->bound(BulkTransferFactory::class));
-
-        $this->app['config']->set('corex-api.webhooks.delivery_enabled', true);
-        $this->app['config']->set('corex-api.webhooks.worker_ready', false);
-
-        try {
-            $provider = $this->app->getProvider(ApiServiceProvider::class);
-            self::assertInstanceOf(ApiServiceProvider::class, $provider);
-            $provider->register();
-            self::fail('Remote delivery booted without a ready worker.');
-        } catch (InvalidConfiguration $exception) {
-            self::assertStringContainsString('worker_ready', $exception->getMessage());
-        }
-
-        self::assertFalse($this->app->make(WebhookOptions::class)->deliveryEnabled);
     }
 
     public function test_missing_transfer_package_fails_before_submit_and_installed_ports_are_guarded(): void

@@ -23,6 +23,29 @@ try {
     if ($map['schema'] !== 'corex-ownership-map/1') {
         throw new RuntimeException('invalid ownership map schema');
     }
+    $plannedSources = [];
+    $plannedDeclarations = is_array($map) ? ($map['planned_identifier_sources'] ?? []) : [];
+
+    if (! is_array($plannedDeclarations)) {
+        throw new RuntimeException('invalid planned identifier declarations');
+    }
+    foreach ($plannedDeclarations as $entry) {
+        if (! is_array($entry) || ! is_string($entry['package'] ?? null) || $entry['package'] === ''
+            || ! in_array($entry['kind'] ?? '', ['namespace', 'config', 'tag', 'command'], true)
+            || ! is_string($entry['id'] ?? null) || $entry['id'] === ''
+            || ! is_array($entry['source_files'] ?? null) || $entry['source_files'] === []) {
+            throw new RuntimeException('invalid planned identifier source');
+        }
+        $sourceFiles = [];
+        foreach ($entry['source_files'] as $sourceFile) {
+            if (! is_string($sourceFile) || ! str_starts_with($sourceFile, 'packages/')
+                || str_contains($sourceFile, '..') || ! str_ends_with($sourceFile, '.php')) {
+                throw new RuntimeException('invalid planned identifier source file');
+            }
+            $sourceFiles[] = $sourceFile;
+        }
+        $plannedSources[$entry['package']][$entry['kind']][$entry['id']] = $sourceFiles;
+    }
     $catalog = [];
     foreach (file($root.'/docs/architecture/table-ownership.md') as $line) {
         if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \|/', $line, $m)) {
@@ -41,6 +64,7 @@ try {
         }
         $identifiers = [];
         $sourceNamespaces = [];
+        $identifierSources = [];
         foreach (['autoload', 'autoload-dev'] as $section) {
             foreach (array_keys($composer[$section]['psr-4'] ?? []) as $ns) {
                 $identifiers['namespace'][rtrim($ns, '\\')] = true;
@@ -53,7 +77,7 @@ try {
                 continue;
             }
             foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)) as $file) {
-                if (! $file->isFile() || $file->getExtension() !== 'php') {
+                if (! $file instanceof SplFileInfo || ! $file->isFile() || $file->getExtension() !== 'php') {
                     continue;
                 }
                 // Preserve literals while excluding commented examples from the inventory.
@@ -108,6 +132,7 @@ try {
                             $sourceNamespaces[$id] = true;
                         }
                         $identifiers[$kind][$id] = true;
+                        $identifierSources[$kind][$id][] = substr($file->getPathname(), strlen($root) + 1);
                     }
                 }
             }
@@ -115,6 +140,13 @@ try {
         foreach ($identifiers as $kind => $ids) {
             foreach (array_keys($ids) as $id) {
                 $inventory[] = ['kind' => $kind, 'package' => $package, 'id' => $id];
+
+                // A pre-transfer identifier expires when its exact source declarations disappear.
+                $declaredSources = $identifierSources[$kind][$id] ?? [];
+                $packageKey = is_string($package) ? $package : '';
+                $allowedSources = $plannedSources[$packageKey][$kind][$id] ?? [];
+                $planned = ! in_array('--strict', $argv, true) && $declaredSources !== []
+                    && array_diff($declaredSources, $allowedSources) === [];
 
                 if ($kind === 'table') {
                     if (($catalog[$id] ?? null) !== $package) {
@@ -130,7 +162,7 @@ try {
                     $devRoots = array_filter($map['kernel']['dev_roots'], static fn (string $ns): bool => $kernel ? str_starts_with($ns, 'CoreX\\Testing\\') : str_starts_with($ns, $expected.'\\'));
                     $dev = ! isset($sourceNamespaces[$id]) && (str_starts_with($id, $expected.'\\Tests') || in_array($id.'\\', $devRoots, true));
 
-                    if ($id !== $expected && ! str_starts_with($id, $expected.'\\') && ! $dev) {
+                    if ($id !== $expected && ! str_starts_with($id, $expected.'\\') && ! $dev && ! $planned) {
                         $violations[] = "O2 namespace {$package} {$id} expected {$expected}";
                     }
 
@@ -147,7 +179,7 @@ try {
                 $field = ['config' => 'config', 'tag' => 'tag_prefix', 'env' => 'env_prefix', 'command' => 'command_prefix'][$kind];
                 $expected = $rule[$field];
 
-                if ($expected === null || ($kind === 'config' ? $id !== $expected : ! str_starts_with($id, $expected))) {
+                if (! $planned && ($expected === null || ($kind === 'config' ? $id !== $expected : ! str_starts_with($id, $expected)))) {
                     $violations[] = "O2 {$kind} {$package} {$id} expected".($kind === 'config' ? '' : '-prefix').' '.($expected ?? 'none');
                 }
             }

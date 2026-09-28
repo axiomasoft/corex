@@ -9,6 +9,7 @@ use CoreX\Api\Enums\IdempotencyRequirement;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationDispatcher;
 use CoreX\Api\OperationRegistry;
+use CoreX\Api\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,15 +20,17 @@ final readonly class WebhookRouteRegistrar
 {
     public static function register(Application $app): void
     {
-        if ($app['router']->has('corex.api.webhooks.subscription.list')) {
+        if (! $app->bound(ApiOptions::class)) {
             return;
         }
 
-        $prefix = (string) $app['config']->get('corex-api.routes.prefix', 'api');
-        $middleware = $app['config']->get('corex-api.routes.middleware', []);
-        $middleware = is_array($middleware) ? $middleware : [];
+        $options = $app->make(ApiOptions::class);
 
-        Route::prefix($prefix)->middleware($middleware)->group(static function (): void {
+        if (! $options->routesEnabled || Route::has('corex.api.webhooks.subscription.list')) {
+            return;
+        }
+
+        Route::prefix($options->routePrefix)->middleware($options->routeMiddleware)->group(static function (): void {
             Route::get('v1/webhook-subscriptions', [self::class, 'forward'])->name('corex.api.webhooks.subscription.list');
             Route::post('v1/webhook-subscriptions', [self::class, 'forward'])->name('corex.api.webhooks.subscription.create');
             Route::patch('v1/webhook-subscriptions/{id}', [self::class, 'forward'])->name('corex.api.webhooks.subscription.update');

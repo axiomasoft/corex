@@ -6,12 +6,11 @@ namespace CoreX\Api\Commands;
 
 use CoreX\Api\Internal\Bulk\BulkRetention;
 use CoreX\Api\Internal\Cost\BudgetRetention;
-use CoreX\Api\Internal\Webhook\WebhookRetention;
 use CoreX\Support\Data\DataScope;
 use Illuminate\Console\Command;
 
 /**
- * Bounded retention pass for bulk results, webhook history and shared budgets.
+ * Bounded retention pass for bulk results and shared budgets.
  *
  * Tenant rows are pruned only for an already restored scope. The scope payload
  * is not used to open another database.
@@ -23,9 +22,9 @@ final class PruneApiOperations extends Command
     protected $signature = 'corex:api:prune
         {--max=100 : Maximum rows in this pass}';
 
-    protected $description = 'Prune expired CoreX API bulk results, webhook history and budget reservations.';
+    protected $description = 'Prune expired CoreX API bulk results and budget reservations.';
 
-    public function handle(BulkRetention $bulk, WebhookRetention $webhooks, BudgetRetention $budget): int
+    public function handle(BulkRetention $bulk, BudgetRetention $budget): int
     {
         $max = (int) $this->option('max');
 
@@ -48,14 +47,10 @@ final class PruneApiOperations extends Command
 
         $scope = $this->laravel->make(DataScope::class);
         $bulkResult = $bulk->prune($scope, $max);
-        $webhookResult = $webhooks->prune($scope, $max);
         $this->components->info(sprintf(
-            'API retention: bulk cleared %d removed %d; webhook bodies %d attempts %d inbox %d; budget abandoned %d pruned %d idle buckets %d.',
+            'API retention: bulk cleared %d removed %d; budget abandoned %d pruned %d idle buckets %d.',
             $bulkResult['cleared'],
             $bulkResult['removed'],
-            $webhookResult['bodies'],
-            $webhookResult['attempts'],
-            $webhookResult['inbox'],
             $abandoned,
             $reservations,
             $buckets,

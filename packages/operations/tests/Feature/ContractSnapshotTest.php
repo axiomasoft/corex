@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Tests\Feature;
 
+use CoreX\Api\Contracts\ContractSnapshotSection;
 use CoreX\Api\Internal\ContractSnapshotBuilder;
 use CoreX\Api\Tests\Support\ModuleFixture;
 use CoreX\Api\Tests\Support\NoteHandler;
@@ -83,7 +84,7 @@ final class ContractSnapshotTest extends TestCase
     {
         $files = [];
 
-        foreach (ContractSnapshotBuilder::FILES as $name) {
+        foreach ([...ContractSnapshotBuilder::FILES, ...array_map(static fn ($section): string => $section->file(), [...$this->app->tagged(ContractSnapshotSection::class)])] as $name) {
             $files[$name] = (string) file_get_contents($directory.'/'.$name);
         }
 

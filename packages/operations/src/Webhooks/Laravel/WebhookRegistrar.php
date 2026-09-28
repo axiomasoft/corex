@@ -37,7 +37,7 @@ final readonly class WebhookRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-api.webhooks');
+        $config = $app['config']->get('corex-webhooks');
         $options = WebhookOptions::fromArray(is_array($config) ? $config : []);
         $urlPolicy = new WebhookUrlPolicy(organizationDeniedCidrs: $options->organizationDeniedCidrs);
         $app->instance(WebhookOptions::class, $options);

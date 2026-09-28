@@ -7,10 +7,10 @@ use CoreX\Api\Contracts\OperationAuthorizer;
 use CoreX\Api\Contracts\Principal;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationDispatcher;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Enums\IdStrategy;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -54,7 +54,7 @@ it('declares and dispatches company, contact and association operations through 
 
         public function resolve(Request $request, Principal $principal, InvocationMetadata $metadata): RequestContext
         {
-            return new ResolvedContext($this->context->current()->tenant, $this->principal, $metadata);
+            return ResolvedContexts::make($this->context->current()->tenant, $this->principal, $metadata);
         }
     });
     app()->instance(OperationAuthorizer::class, new class implements OperationAuthorizer

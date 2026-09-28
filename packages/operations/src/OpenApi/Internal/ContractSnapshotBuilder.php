@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Internal;
 
+use CoreX\Api\Contracts\ContractSnapshotSection;
 use CoreX\Api\Data\ApiProfile;
-use CoreX\Api\Data\WebhookTopic;
 use CoreX\Api\OpenApiDocumentGenerator;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationRegistry;
@@ -14,7 +14,7 @@ use InvalidArgumentException;
 /** @internal Installed-code v1 snapshot. It does not record tenant activation. */
 final class ContractSnapshotBuilder
 {
-    public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json', 'webhooks.json'];
+    public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];
 
     /** @var array<string, string> */
     private const array ENFORCEMENT = [
@@ -41,15 +41,30 @@ final class ContractSnapshotBuilder
         'cancelled', 'cancelling', 'completed', 'expired', 'failed', 'pending', 'running',
     ];
 
-    /**
-     * @param  list<WebhookTopic>  $topics
-     */
+    /** @var list<ContractSnapshotSection> */
+    private readonly array $sections;
+
+    /** @param iterable<ContractSnapshotSection> $sections */
     public function __construct(
         private readonly OperationRegistry $operations,
         private readonly OpenApiDocumentGenerator $openApi,
         private readonly ApiProfile $profile,
-        private readonly array $topics = [],
-    ) {}
+        iterable $sections = [],
+    ) {
+        $items = [];
+
+        foreach ($sections as $section) {
+            $items[] = $section;
+        }
+
+        $this->sections = $items;
+    }
+
+    /** @return list<string> */
+    public function files(): array
+    {
+        return [...self::FILES, ...array_map(static fn (ContractSnapshotSection $section): string => $section->file(), $this->sections)];
+    }
 
     /**
      * @param  list<array<string, mixed>>  $errorContracts
@@ -85,16 +100,14 @@ final class ContractSnapshotBuilder
             'errors.json' => SnapshotJson::pretty($this->errors($errorContracts)),
             'openapi.json' => SnapshotJson::pretty($openapi),
             'operations.json' => SnapshotJson::pretty($operations),
-            'webhooks.json' => SnapshotJson::pretty($this->webhooks($major)),
         ];
+        foreach ($this->sections as $section) {
+            $bodies[$section->file()] = SnapshotJson::pretty($section->document($major));
+        }
+
         $bodies['manifest.json'] = SnapshotJson::pretty([
             'contract_fingerprint' => $this->profile->contractFingerprint,
-            'files' => [
-                'errors.json' => hash('sha256', $bodies['errors.json']),
-                'openapi.json' => hash('sha256', $bodies['openapi.json']),
-                'operations.json' => hash('sha256', $bodies['operations.json']),
-                'webhooks.json' => hash('sha256', $bodies['webhooks.json']),
-            ],
+            'files' => array_map(static fn (string $body): string => hash('sha256', $body), $bodies),
             'major' => $major,
             'registry_fingerprint' => $this->profile->registryFingerprint,
             'schema' => 'corex-api-snapshot/1',
@@ -204,84 +217,6 @@ final class ContractSnapshotBuilder
             'owner' => 'corex/operations',
             'path' => null,
             'retryable' => $retryable,
-        ];
-    }
-
-    /** @return array<string, mixed> */
-    private function webhooks(string $major): array
-    {
-        $topics = [];
-
-        foreach ($this->topics as $topic) {
-            if ($topic->major === $major) {
-                $topics[] = $this->topic($topic);
-            }
-        }
-
-        usort($topics, static fn (array $left, array $right): int => [$left['name'], $left['version']] <=> [$right['name'], $right['version']]);
-
-        return [
-            'bulk' => [
-                'failure_page_max' => 100,
-                'result_ttl_seconds' => 86400,
-                'states' => self::BULK_STATES,
-                'tombstone_ttl_seconds' => 2592000,
-            ],
-            'delivery' => ['guarantee' => 'at-least-once', 'ordering' => 'none'],
-            'payload_limit_bytes' => 20 * 1024,
-            'pii' => [
-                'classes' => WebhookTopic::CLASSES,
-                'secret_subscribable' => false,
-            ],
-            'replay' => [
-                'body_retention_seconds' => 604800,
-                'horizon_seconds' => 604800,
-                'max_count' => 3,
-                'range_max' => 100,
-                'range_window_seconds' => 86400,
-            ],
-            'retry' => [
-                'attempts' => 12,
-                'horizon_seconds' => 259200,
-                'lease_seconds' => 30,
-                'maximum_delay_seconds' => 3600,
-                'minimum_delay_seconds' => 1,
-            ],
-            'rotation' => [
-                'algorithm' => 'hmac-sha256',
-                'content' => 'delivery-id.timestamp.raw-body',
-                'headers' => ['webhook-id', 'webhook-timestamp', 'webhook-signature'],
-                'id_semantics' => 'delivery-id',
-                'max_active_keys' => 2,
-                'prefix' => 'whsec_',
-                'secret_bytes' => 32,
-                'signature' => 'v1',
-                'timestamp_window_seconds' => 300,
-            ],
-            'schema' => 'corex-webhook-contract/1',
-            'topics' => $topics,
-        ];
-    }
-
-    /** @return array<string, mixed> */
-    private function topic(WebhookTopic $topic): array
-    {
-        $properties = [];
-        $required = [];
-
-        foreach ($topic->schema as $field => $type) {
-            $properties[(string) $field] = ['type' => $type];
-            $required[] = (string) $field;
-        }
-
-        sort($required);
-
-        return [
-            'major' => $topic->major,
-            'name' => $topic->name,
-            'payload' => ['properties' => $properties, 'required' => $required, 'type' => 'object'],
-            'pii_class' => $topic->piiClass,
-            'version' => $topic->version,
         ];
     }
 

@@ -6,14 +6,15 @@ namespace CoreX\Api\Tests\Feature;
 
 use CoreX\Api\ApiError;
 use CoreX\Api\ApiServiceProvider;
+use CoreX\Api\Contracts\RequestContext;
 use CoreX\Api\Contracts\ToolCatalogue;
 use CoreX\Api\Contracts\ToolPolicy;
 use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\ToolDescriptor;
 use CoreX\Api\Internal\CompiledToolCatalogue;
 use CoreX\Api\Internal\DenyToolPolicy;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\InvocationMetadata;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\CatalogueModuleFixture;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
@@ -90,9 +91,9 @@ final class ToolCatalogueTest extends TestCase
         ]);
     }
 
-    private function context(string $account = 'A', string $principal = 'trusted-user'): ResolvedContext
+    private function context(string $account = 'A', string $principal = 'trusted-user'): RequestContext
     {
-        return new ResolvedContext(
+        return ResolvedContexts::make(
             tenantContext: $this->tenants->current(),
             authenticatedPrincipal: $this->identity,
             requestMetadata: new InvocationMetadata('request-1', 'v1', 'tools.discover', 'GET'),

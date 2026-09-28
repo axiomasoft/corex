@@ -26,6 +26,8 @@ use CoreX\Transfer\TransferServiceProvider;
 use CoreX\Wakeup\WakeupServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Flex\Crm\CrmServiceProvider;
+use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 
 abstract class GoldenTestCase extends TestCase
 {
@@ -53,6 +55,32 @@ abstract class GoldenTestCase extends TestCase
             WorkflowServiceProvider::class,
             ApiServiceProvider::class,
             ToolServiceProvider::class,
+            ...$this->manifestProviders(),
         ];
+    }
+
+    /** @return list<class-string> */
+    private function manifestProviders(): array
+    {
+        $manifest = json_decode((string) file_get_contents(__DIR__.'/../../packages/operations/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+        $extra = is_array($manifest) ? ($manifest['extra'] ?? []) : [];
+        $laravel = is_array($extra) ? ($extra['laravel'] ?? []) : [];
+        $declared = is_array($laravel) ? ($laravel['providers'] ?? []) : [];
+
+        if (! is_array($declared)) {
+            throw new RuntimeException('Package providers must be an array.');
+        }
+
+        $providers = [];
+
+        foreach ($declared as $provider) {
+            if (! is_string($provider) || ! is_subclass_of($provider, ServiceProvider::class)) {
+                throw new RuntimeException('Package provider must extend ServiceProvider.');
+            }
+
+            $providers[] = $provider;
+        }
+
+        return $providers;
     }
 }

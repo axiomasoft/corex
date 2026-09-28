@@ -6,3 +6,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 |:--|:--|:--|:--|
 | 2026-09-28 | PLAN3.D40 | all | initial baseline P01.2 |
 | 2026-09-28 | PLAN3.D44 | php-surface | P02.1: package-owned compiler/config sections and public Testing factories; routes/events/wire preserved |
+| 2026-09-29 | PLAN3.D44 | php-surface | P02.2: +6 types, ~2 changed (golden-delta OK); api/v1, routes/events/wire preserved |

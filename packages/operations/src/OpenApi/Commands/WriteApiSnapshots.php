@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Api\Commands;
 
+use CoreX\Api\Contracts\ContractSnapshotSection;
 use CoreX\Api\Internal\ApiProfileFactory;
 use CoreX\Api\Internal\ContractSnapshotBuilder;
 use CoreX\Api\OpenApiDocumentGenerator;
@@ -27,7 +28,17 @@ final class WriteApiSnapshots extends Command
         ApiOptions $options,
         ModuleRegistry $modules,
     ): int {
-        $builder = new ContractSnapshotBuilder($operations, $openApi, $profiles->make($modules->compiled(), $options));
+        $sections = [];
+
+        foreach ($this->laravel->tagged(ContractSnapshotSection::class) as $section) {
+            if (! $section instanceof ContractSnapshotSection) {
+                throw new RuntimeException('Snapshot section must implement ContractSnapshotSection.');
+            }
+
+            $sections[] = $section;
+        }
+
+        $builder = new ContractSnapshotBuilder($operations, $openApi, $profiles->make($modules->compiled(), $options), $sections);
 
         $directory = $this->argument('directory');
         $major = $this->option('major');
@@ -39,7 +50,7 @@ final class WriteApiSnapshots extends Command
         $fixture = $this->option('fixture');
         $contracts = $this->contracts(is_string($fixture) ? $fixture : null);
         $documents = $builder->documents($contracts, $major);
-        $paths = $this->paths($directory);
+        $paths = $this->paths($directory, $builder->files());
 
         if ($this->option('check')) {
             foreach ($documents as $name => $bytes) {
@@ -59,7 +70,7 @@ final class WriteApiSnapshots extends Command
             throw new RuntimeException('Snapshot directory cannot be created.');
         }
 
-        $this->assertClean($directory);
+        $this->assertClean($directory, $builder->files());
         $temporary = [];
 
         try {
@@ -105,21 +116,23 @@ final class WriteApiSnapshots extends Command
         return $loaded['contracts'];
     }
 
-    /** @return array<string, string> */
-    private function paths(string $directory): array
+    /** @param list<string> $files
+     * @return array<string, string> */
+    private function paths(string $directory, array $files): array
     {
         $paths = [];
 
-        foreach (ContractSnapshotBuilder::FILES as $name) {
+        foreach ($files as $name) {
             $paths[$name] = rtrim($directory, '/').'/'.$name;
         }
 
         return $paths;
     }
 
-    private function assertClean(string $directory): void
+    /** @param list<string> $files */
+    private function assertClean(string $directory, array $files): void
     {
-        $allowed = array_flip(ContractSnapshotBuilder::FILES);
+        $allowed = array_flip($files);
 
         foreach (scandir($directory) ?: [] as $entry) {
             if ($entry === '.' || $entry === '..') {

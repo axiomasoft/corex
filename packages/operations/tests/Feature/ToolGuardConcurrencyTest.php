@@ -12,8 +12,8 @@ use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\ToolCall;
 use CoreX\Api\Data\ToolDescriptor;
 use CoreX\Api\Data\ToolResult;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\InvocationMetadata;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\CatalogueModuleFixture;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
@@ -111,7 +111,7 @@ final class ToolGuardConcurrencyTest extends TestCase
         $policy = new ToolPolicyFixture;
         $policy->allowInvoke = true;
         $guard = new ToolGuardFixture;
-        $context = new ResolvedContext(
+        $context = ResolvedContexts::make(
             tenantContext: $tenants->current(),
             authenticatedPrincipal: new IdentityFixture,
             requestMetadata: new InvocationMetadata('request-1', 'v1', 'tools.invoke', 'POST'),

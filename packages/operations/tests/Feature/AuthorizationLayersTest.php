@@ -13,27 +13,19 @@ use CoreX\Api\Contracts\OperationHandler;
 use CoreX\Api\Contracts\PrincipalResolver;
 use CoreX\Api\Contracts\ReplayAuthorizer;
 use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\ToolExecutionGuard;
-use CoreX\Api\Contracts\ToolInvoker;
-use CoreX\Api\Contracts\ToolPolicy;
-use CoreX\Api\Data\JsonObject;
 use CoreX\Api\Data\OperationInvocation;
 use CoreX\Api\Data\ResourceId;
 use CoreX\Api\Data\StoredOperationOutcome;
-use CoreX\Api\Data\ToolCall;
-use CoreX\Api\Data\ToolDescriptor;
-use CoreX\Api\Data\ToolResult;
 use CoreX\Api\Internal\DenyClientScopeAuthorizer;
 use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\ResolvedContext;
 use CoreX\Api\InvocationMetadata;
 use CoreX\Api\Operation;
 use CoreX\Api\OperationDispatcher;
+use CoreX\Api\Testing\ResolvedContexts;
 use CoreX\Api\Tests\Support\ContextFixture;
 use CoreX\Api\Tests\Support\IdentityFixture;
 use CoreX\Api\Tests\Support\ModuleFixture;
 use CoreX\Api\Tests\TestCase;
-use CoreX\Api\ToolServiceProvider;
 use CoreX\Enums\IdStrategy;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -68,7 +60,7 @@ final class AuthorizationLayersTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [...parent::getPackageProviders($app)];
     }
 
     protected function setUp(): void
@@ -118,25 +110,8 @@ final class AuthorizationLayersTest extends TestCase
                 read: ['/id', '/title', '/owner', '/account', '/items'],
                 write: ['/title', '/owner', '/resource_id', '/claimed_account'],
             );
-        $tool = Api::exposeTool(
-            'notes.update',
-            'v1',
-            'notes.update',
-            'v1',
-            'write',
-            'domain-key',
-            $input,
-            $output,
-            [
-                'title' => 'title',
-                'owner' => 'owner',
-                'resource_id' => 'resource_id',
-                'claimed_account' => 'claimed_account',
-                'secret' => 'secret',
-            ],
-        );
         $registry = app(RegistryCompiler::class)->compile([
-            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation, $tool]),
+            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation]),
         ], installedPackages: []);
 
         $this->modules = new ModuleFixture($registry);
@@ -153,25 +128,6 @@ final class AuthorizationLayersTest extends TestCase
         $this->app->instance(ClientScopeAuthorizer::class, $this->clientScopes);
         $this->app->instance(OperationAuthorizer::class, $this->actors);
         $this->app->instance(OperationFieldAuthorizer::class, $this->fields);
-        $this->app->instance(ToolPolicy::class, new class implements ToolPolicy
-        {
-            public function discover(ToolDescriptor $tool, RequestContext $context): bool
-            {
-                return true;
-            }
-
-            public function invoke(ToolDescriptor $tool, RequestContext $context, JsonObject $arguments): bool
-            {
-                return true;
-            }
-        });
-        $this->app->instance(ToolExecutionGuard::class, new class implements ToolExecutionGuard
-        {
-            public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
-            {
-                return $effect();
-            }
-        });
         $this->app->instance(PrincipalResolver::class, $this->identity);
         AuthorizationHandler::$calls = 0;
     }
@@ -225,61 +181,6 @@ final class AuthorizationLayersTest extends TestCase
 
         self::assertFalse($authorizer->allows($this->operation(), $this->context()));
         self::assertTrue($authorizer->allows($this->operation(requiredScopes: []), $this->context()));
-    }
-
-    public function test_client_actor_record_field_and_tenant_layers_deny_independently(): void
-    {
-        $this->clientScopes->allow = false;
-        $this->assertHttpError('scope_required', $this->validInput());
-        self::assertSame(0, AuthorizationHandler::$calls);
-
-        $this->clientScopes->allow = true;
-        $this->actors->allow = false;
-        $this->assertHttpError('access_denied', $this->validInput());
-        self::assertSame(0, AuthorizationHandler::$calls);
-
-        $this->actors->allow = true;
-        $forbiddenInput = [...$this->validInput(), 'secret' => 'must-not-reach-handler'];
-        $this->assertHttpError('access_denied', $forbiddenInput);
-        $toolDenied = $this->app->make(ToolInvoker::class)->invoke(
-            $this->context(),
-            $this->toolCall($forbiddenInput),
-        );
-        self::assertSame('access_denied', $toolDenied->errorCode);
-        self::assertSame(0, AuthorizationHandler::$calls);
-
-        $this->assertHttpError('resource_not_found', $this->validInput(owner: 'foreign-user'));
-        self::assertSame(1, AuthorizationHandler::$calls);
-
-        $this->assertHttpError('resource_not_found', $this->validInput(resourceId: self::ForeignTenantResource));
-        self::assertSame(2, AuthorizationHandler::$calls);
-    }
-
-    public function test_http_and_tool_apply_the_same_recursive_read_policy_without_trusting_payload_scope(): void
-    {
-        $this->fields->deniedRead = ['/owner', '/items/0/secret', '/items/1/secret'];
-        $input = $this->validInput(claimedAccount: 'forged-account');
-
-        $http = $this->dispatch($input);
-        $tool = $this->app->make(ToolInvoker::class)->invoke($this->context(), $this->toolCall($input));
-        $httpData = $http->getData(true)['data'];
-        $toolData = JsonCanonical::decodeObject((string) $tool->structuredData?->canonicalJson);
-
-        self::assertSame(200, $http->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
-        self::assertSame('account-a', $httpData['account']);
-        self::assertSame('account-a', $toolData['account']);
-        self::assertArrayNotHasKey('owner', $httpData);
-        self::assertArrayNotHasKey('owner', $toolData);
-        self::assertArrayNotHasKey('secret', $httpData);
-        self::assertArrayNotHasKey('secret', $toolData);
-        self::assertSame([0, 1], array_keys($httpData['items']));
-        self::assertSame([0, 1], array_keys($toolData['items']));
-        self::assertArrayNotHasKey('secret', $httpData['items'][0]);
-        self::assertArrayNotHasKey('secret', $httpData['items'][1]);
-        self::assertArrayNotHasKey('secret', $toolData['items'][0]);
-        self::assertArrayNotHasKey('secret', $toolData['items'][1]);
-        self::assertSame(2, AuthorizationHandler::$calls);
     }
 
     public function test_replay_rechecks_scope_actor_and_read_fields_without_invoking_handler(): void
@@ -344,12 +245,6 @@ final class AuthorizationLayersTest extends TestCase
         ), 'v1', 'notes');
     }
 
-    /** @param array<string, mixed> $input */
-    private function assertHttpError(string $code, array $input): void
-    {
-        self::assertSame($code, $this->dispatch($input)->getData(true)['error']['code']);
-    }
-
     private function assertApiError(string $code, Closure $callback): void
     {
         try {
@@ -374,25 +269,9 @@ final class AuthorizationLayersTest extends TestCase
         ];
     }
 
-    /** @param array<string, mixed> $input */
-    private function toolCall(array $input): ToolCall
+    private function context(): RequestContext
     {
-        $declaration = collect($this->modules->registry->api)->first(
-            static fn (Api $api): bool => $api->mode === 'tool' && $api->toolCode === 'notes.update',
-        );
-
-        return new ToolCall(
-            code: 'notes.update',
-            toolVersion: 'v1',
-            expectedContractHash: ToolDescriptor::fromDeclaration($declaration)->contractHash,
-            arguments: JsonObject::fromArray($input),
-            requestId: 'tool-request',
-        );
-    }
-
-    private function context(): ResolvedContext
-    {
-        return new ResolvedContext(
+        return ResolvedContexts::make(
             $this->tenants->current(),
             $this->identity,
             new InvocationMetadata('request-1', 'v1', 'notes.update', 'POST'),
