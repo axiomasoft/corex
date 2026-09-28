@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Auth\Matrix;
 
-use AzGuard\Configuration\Config;
 use AzGuard\Models\Role as AzGuardRole;
 use AzGuard\Models\RolePermission;
+use AzGuard\Support\Config;
 use Override;
 
 /**

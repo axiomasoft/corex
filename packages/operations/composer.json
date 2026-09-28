@@ -4,9 +4,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
-        "corex/modules": "@dev",
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
+        "corex/modules": "^1.0@dev",
         "illuminate/http": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
         "illuminate/validation": "^12.0|^13.0"
@@ -16,11 +16,11 @@
         "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
     },
     "require-dev": {
-        "corex/transfer": "@dev",
-        "orchestra/testbench": "^10.0|^11.0",
-        "pestphp/pest": "^4.0",
-        "laravel/pint": "^1.13",
-        "larastan/larastan": "^3.0",
+        "corex/transfer": "^1.0@dev",
+        "orchestra/testbench": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "laravel/pint": "^1.32",
+        "larastan/larastan": "^3.12",
         "opis/json-schema": "^2.4.1"
     },
     "autoload": {
@@ -113,7 +113,7 @@
             "url": "../transfer"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
@@ -135,6 +135,9 @@
                 "CoreX\\Api\\Contracts",
                 "CoreX\\Api\\Data"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     }
 }

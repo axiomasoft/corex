@@ -50,5 +50,7 @@
         <env name="PGSQL_DATABASE" value="corex_test"/>
         <env name="PGSQL_USERNAME" value="corex"/>
         <env name="PGSQL_PASSWORD" value="corex"/>
+        <!-- Generated tenant connections and native archive tools share the UTC test clock. -->
+        <env name="PGOPTIONS" value="-c timezone=UTC" force="true"/>
     </php>
 </phpunit>

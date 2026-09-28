@@ -1,0 +1,17 @@
+{"result": "PASS", "repository": "file:///home/vostrikov/projects/packages/corex/.composer-provider-staging", "staging": "/home/vostrikov/projects/packages/corex/.composer-provider-staging", "registered": ["/home/vostrikov/projects/packages/corex", "/home/vostrikov/projects/packages/corex/packages/tenancy", "/home/vostrikov/projects/packages/corex/packages/access"]}
+Loading composer repositories with package information
+                                                      Updating dependencies
+Lock file operations: 0 installs, 3 updates, 0 removals
+  - Upgrading corex/search-meilisearch (dev-main 3496460 => dev-main e92b5a7)
+  - Upgrading corex/tasks-workflow (dev-main cb4c20b => dev-main d918e71)
+  - Upgrading corex/tenancy (dev-main 1c6b67f => dev-main 44992fe)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 0 installs, 3 updates, 0 removals
+  - Upgrading corex/search-meilisearch (dev-main 3496460 => dev-main e92b5a7): Source already present
+  - Upgrading corex/tasks-workflow (dev-main cb4c20b => dev-main d918e71): Source already present
+  - Upgrading corex/tenancy (dev-main 1c6b67f => dev-main 44992fe): Source already present
+Generating autoload files
+109 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+No security vulnerability advisories found.

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use AzGuard\Contracts\AzGuardManagerInterface;
-use AzGuard\Panels\Panel;
+use AzGuard\Support\Panel;
 use CoreX\Auth\Access\PrincipalIdentity;
 use CoreX\Auth\Access\ScopePredicate;
 use CoreX\Auth\Contracts\AccessChecker;

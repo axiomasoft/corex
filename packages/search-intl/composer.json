@@ -4,18 +4,19 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
-        "corex/intl": "@dev",
-        "corex/search": "@dev",
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
+        "corex/intl": "^1.0@dev",
+        "corex/search": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0"
+        "illuminate/support": "^12.0|^13.0",
+        "corex/modules": "^1.0@dev"
     },
     "require-dev": {
-        "larastan/larastan": "^3.0",
-        "laravel/pint": "^1.13",
-        "orchestra/testbench": "^10.0|^11.0",
-        "pestphp/pest": "^4.0"
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^10.12|^11.3",
+        "pestphp/pest": "^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -41,6 +42,9 @@
             "providers": [
                 "CoreX\\SearchIntl\\SearchIntlServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -55,9 +59,13 @@
         {
             "type": "path",
             "url": "../search"
+        },
+        {
+            "type": "path",
+            "url": "../modules"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {

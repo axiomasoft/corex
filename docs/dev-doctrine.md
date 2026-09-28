@@ -147,9 +147,9 @@ API, политиками или задачами между проектами.
 - Coverage: исполняемый root floor — 80 (`scripts/coverage-min-floor.txt`), target — 85;
   старый floor 55 больше не описывает текущий гейт. Пакетные пороги проверяются отдельно.
 - ADR-003 already establishes UUIDv7; ADR-004 carries the DB-per-account decision. Only the bounded adjacent-ADR reference is corrected; no ID/runtime rewrite follows.
-- Stack policy (D12): core/modules/tasks — PHP 8.3–8.5 × Laravel 12–13; tenancy — PHP 8.4–8.5 × Laravel 12–13; auth — declared PHP ^8.3 и Laravel 12 only. Product target PHP 8.5 / Laravel 13 отделён; declared, local, historical и current-runner proof не смешиваются.
+- Current stack policy (PLAN3.D03, PLAN3.D36): все пакеты — PHP 8.4–8.5 × Laravel 12–13, включая access. Для разработки в монорепо команды запускаются через `scripts/php84`; declared, local, historical и current-runner proof не смешиваются.
 
-Источник: `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.
+Источник: `plans/2026.09.27-№1-COREX-KERNEL/decisions/D03-platform.md`, `plans/2026.09.27-№1-COREX-KERNEL/decisions/D36-manifest-lockstep.md`; `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3/§6/«Статусы источников»; `plans/archive/COREX-CORE/research/04-p3-outcomes-2026-07-26.md` §11.
 
 ## 8. Как этим пользоваться будущему плану
 

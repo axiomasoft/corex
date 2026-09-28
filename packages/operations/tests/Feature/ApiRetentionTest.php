@@ -187,7 +187,7 @@ final class ApiRetentionTest extends TestCase
         $this->delivery('delivery-pending', '44444444-4444-4444-8444-444444444444', 'pending', $now->sub(new DateInterval('P31D')), $now->sub(new DateInterval('P24D')), 'active-body');
         $this->delivery('delivery-leased', '55555555-5555-4555-8555-555555555555', 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'leased-body', $now->add(new DateInterval('PT30S')));
         $this->delivery('delivery-fresh', self::FreshEvent, 'dead', $now, $now->add(new DateInterval('P7D')), 'fresh-body');
-        $this->attempt('attempt-old', 'delivery-old');
+        $this->insertWebhookAttempt('attempt-old', 'delivery-old');
         $this->inboxRow(self::OldEvent);
         $this->inboxRow(self::OrphanEvent);
         $oldHash = (string) $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-old')->value('body_hash');
@@ -516,7 +516,7 @@ final class ApiRetentionTest extends TestCase
         ];
     }
 
-    private function attempt(string $id, string $deliveryId): void
+    private function insertWebhookAttempt(string $id, string $deliveryId): void
     {
         $this->tenant->table('sys_api_webhook_attempts')->insert([
             'id' => $id,

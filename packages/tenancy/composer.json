@@ -17,22 +17,23 @@
     ],
     "require": {
         "php": "^8.4",
-        "corex/core": "@dev",
+        "corex/core": "^1.0@dev",
         "firebase/php-jwt": "^7.1",
-        "axiomasoft/stancl-tenancy": "4.0.0-alpha1",
-        "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1",
+        "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
+        "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/http": "^12.0|^13.0",
         "illuminate/routing": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0"
+        "illuminate/support": "^12.0|^13.0",
+        "corex/modules": "^1.0@dev"
     },
     "require-dev": {
         "league/flysystem-aws-s3-v3": "3.35.3",
-        "larastan/larastan": "^3.0",
-        "laravel/pint": "^1.13",
-        "orchestra/testbench": "^10.0|^11.0",
-        "pestphp/pest": "^4.0",
-        "corex/wakeup": "@dev"
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "corex/wakeup": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -102,6 +103,9 @@
             "providers": [
                 "CoreX\\Tenancy\\TenancyServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -118,7 +122,7 @@
             "url": "../modules"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "process-timeout": 900,

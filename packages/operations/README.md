@@ -11,7 +11,7 @@ single declaration authority. `ApiProfile` and the five `api/v1` snapshot files
 are deterministic code projections; account activation and actor authorization
 remain live per invocation. GraphQL is outside this contract.
 
-Requires PHP 8.3+ and Laravel 12 or 13, `corex/core` and `corex/modules`. Physical tenancy is
+Requires PHP 8.4+ and Laravel 12 or 13, `corex/core` and `corex/modules`. Physical tenancy is
 provided separately by the application; this package has no dependency on an identity product,
 role engine, application user class or a particular tenancy implementation.
 

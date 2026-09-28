@@ -49,6 +49,8 @@ abstract class CoreXTestCase extends Orchestra
         // config/database.php for these to live in).
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',
+            // Naive test timestamps represent UTC regardless of the host server timezone.
+            'timezone' => 'UTC',
             'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
             'port' => getenv('PGSQL_PORT') ?: '5434',
             'database' => getenv('PGSQL_DATABASE') ?: 'corex_test',

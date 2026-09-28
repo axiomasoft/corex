@@ -1,0 +1,65 @@
+{
+  "commit": "d07f84db2cdb65a12c7a3ee30e9e06d793266f96",
+  "php": "8.4.26",
+  "lanes": {
+    "sqlite": {
+      "tests": 808,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 808
+    },
+    "tasks-workflow": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 10
+    },
+    "pg": {
+      "tests": 239,
+      "failures": 7,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 232
+    }
+  },
+  "phpstan_level6_errors": 0,
+  "failing_tests": [
+    {
+      "lane": "pg",
+      "class": "Packages\\core\\tests\\Pg\\DeliveryHealthTest",
+      "name": "it reports per-contract ages and the maximum as oldest pending"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\core\\tests\\Pg\\DeliveryHealthTest",
+      "name": "it fails the health probe when oldest pending exceeds max-age"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\core\\tests\\Pg\\OutboxRelayCommandTest",
+      "name": "it defers the second message when the publisher throws"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\core\\tests\\Pg\\OutboxRelayTest",
+      "name": "it applies deterministic exponential backoff on the first four publish failures"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\attributes\\tests\\Pg\\QueuedSchemaOperationsTest",
+      "name": "it keeps a not-ready schema operation distinct from access denial"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\tasksworkflow\\tests\\Pg\\MaterializationPgTest",
+      "name": "it MAT-06 schedules a stamped complete payload and materializes through the handler"
+    },
+    {
+      "lane": "pg",
+      "class": "Packages\\tasksworkflow\\tests\\Pg\\MaterializationPgTest",
+      "name": "it MAT-06b quarantines an exact handler version mismatch without invoking materialization"
+    }
+  ]
+}

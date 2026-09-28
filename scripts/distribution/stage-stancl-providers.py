@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Stage sealed P4.1 stancl provider candidates for root Composer resolution on CI."""
+"""Stage pinned upstream provider artifacts for local Composer resolution."""
 from __future__ import annotations
 
+import importlib.util
 import json
 import shutil
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +21,34 @@ ARCHIVE_NAMES = {
 
 class StageError(RuntimeError):
     """Sealed provider staging violated the distribution contract."""
+
+
+def stage_azguard(artifacts: Path, metadata: dict) -> bool:
+    root_manifest = json.loads((ROOT / 'composer.json').read_text(encoding='utf-8'))
+    if 'corex/access' not in {**root_manifest.get('require', {}), **root_manifest.get('require-dev', {})}:
+        return False
+
+    # Composer cannot install a package from a VCS monorepo subdirectory. Reuse
+    # the existing immutable private-source exporter instead of a sibling checkout.
+    spec = importlib.util.spec_from_file_location('private_auth_proof', ROOT / 'scripts/distribution/private-auth-proof.py')
+    exporter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(exporter)
+    exporter.AZGUARD_VERSION = '0.2.0-dev'
+    archive = artifacts / 'azguard-core-private.zip'
+    try:
+        exporter.azguard_archive(archive)
+    except exporter.ProofError as exc:
+        raise StageError(str(exc)) from exc
+    with zipfile.ZipFile(archive) as package:
+        composer = json.loads(package.read('composer.json'))
+    name = composer['name']
+    if name != 'axioma-studio/azguard-core':
+        raise StageError(f'unexpected private package name: {name}')
+    payload = {key: composer[key] for key in ('name', 'version', 'require', 'autoload', 'extra')}
+    payload['dist'] = {'type': 'zip', 'url': archive.resolve().as_uri(), 'reference': exporter.REF}
+    payload['source'] = {'type': 'git', 'url': 'https://github.com/axiomasoft/azguard.git', 'reference': exporter.REF}
+    metadata['packages'][name] = {composer['version']: payload}
+    return True
 
 
 def stage() -> Path:
@@ -40,6 +70,8 @@ def stage() -> Path:
         shutil.copyfile(source, destination)
         payload = next(iter(metadata['packages'][package].values()))
         payload['dist']['url'] = destination.resolve().as_uri()
+
+    stage_azguard(artifacts, metadata)
 
     (STAGING / 'packages.json').write_text(
         json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + '\n',
@@ -66,6 +98,9 @@ def register() -> None:
     tenancy = ROOT / 'packages' / 'tenancy'
     if (tenancy / 'composer.json').is_file():
         targets.append(tenancy)
+    root_manifest = json.loads((ROOT / 'composer.json').read_text(encoding='utf-8'))
+    if 'corex/access' in {**root_manifest.get('require', {}), **root_manifest.get('require-dev', {})}:
+        targets.append(ROOT / 'packages/access')
     for cwd in targets:
         register_composer(cwd, repository)
     print(json.dumps({'result': 'PASS', 'repository': repository, 'staging': str(staging), 'registered': [str(p) for p in targets]}))

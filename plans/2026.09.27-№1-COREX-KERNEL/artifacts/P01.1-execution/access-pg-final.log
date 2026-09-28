@@ -1,0 +1,168 @@
+> pest --group=pg
+
+   PASS  Tests\Pg\ScopeResolverTest
+  ✓ it own scope on the builder narrows to only the rows the principal…  0.42s  
+  ✓ it workspace scope on the builder shows only the context workspace'… 0.41s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.39s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.40s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.46s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.39s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.43s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.39s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.46s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.44s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.54s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.43s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.42s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.46s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.44s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.44s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.43s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.40s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.54s  
+  ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.52s  
+  ✓ it own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where…  0.43s  
+  ✓ it denies dept/dept_tree on the builder when the principal has no d… 0.37s  
+  ✓ it denies dept/dept_tree on the builder when the principal has no d… 0.36s  
+  ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.59s  
+  ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.43s  
+  ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.40s  
+  ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.44s  
+  ✓ it resolves the max weight across multiple roles held by the same p… 0.53s  
+  ✓ it account scope lifts exactly the pinned workspace scope class, ne… 0.35s  
+  ✓ it matches real department records to the same IDs through ScopeRes… 0.54s  
+  ✓ it matches real department records to the same IDs through ScopeRes… 0.48s  
+  ✓ it workspace scope shows only account-wide rows when no workspace i… 0.34s  
+  ✓ it a context row narrows the builder scope for its own context only  0.38s  
+  ✓ it denies dept/dept_tree on the builder when users/sys_departments…  0.38s  
+  ✓ it denies dept/dept_tree on the builder when users/sys_departments…  0.37s  
+  ✓ it MatrixValidator warns when a matrix row names a scope the entity… 0.31s  
+  ✓ it dept scope on the builder narrows to rows owned by users in the…  0.37s  
+  ✓ it is NOT monotone in general — dept_tree can include a record outs… 0.30s  
+  ✓ it dept_tree scope on the builder narrows via the department subtre… 0.37s  
+  ✓ it cascade_view off hides child-workspace rows; on shows them        0.36s  
+
+   PASS  Tests\Pg\SystemRolesTest
+  ✓ it seeds exactly the 3 system roles with an empty matrix             0.20s  
+  ✓ it throws when saving an existing system role through the normal pa… 0.15s  
+  ✓ it cannot clear system status to bypass role and related matrix gua… 0.17s  
+  ✓ it is idempotent — running the seeder twice does not duplicate role… 0.17s  
+  ✓ it allows editing a system role through the flagged path             0.17s  
+  ✓ it throws when saving a matrix row that belongs to a system role, u… 0.17s  
+  ✓ it throws when deleting a system role                                0.15s  
+  ✓ it does not grant owner-wildcard capability to a clone of owner      0.19s  
+  ✓ it clones a system role into an editable copy with cloned_from_id a… 0.22s  
+
+   PASS  Tests\Pg\AutSchemaTest
+  ✓ it matches DB_SCHEMA §3.5 aut_role_matrix column-by-column           0.09s  
+  ✓ it adds both cross-package FKs only via the tenant-cloud migration   0.10s  
+  ✓ it matches DB_SCHEMA §3.5 aut_role_assignments column-by-column      0.08s  
+  ✓ it matches DB_SCHEMA §3.5 aut_roles column-by-column                 0.08s  
+  ✓ it applies the tenant/ aut_* migrations on a clean schema without u… 0.06s  
+
+   PASS  Tests\Pg\PrincipalTypesTest
+  ✓ it resolves allowed() for an api_key principal with no users row     0.24s  
+  ✓ it excludes an expired assignment from allowed() and scopeFor()      0.30s  
+  ✓ it honours a not-yet-expired assignment in allowed() and scopeFor()  0.30s  
+  ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.24s  
+  ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.24s  
+  ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.24s  
+  ✓ it leaves workspace and account scope untouched for an agent princi… 0.24s  
+  ✓ it leaves workspace and account scope untouched for an agent princi… 0.24s  
+  ✓ it resolves allowed()/scopeFor() for an agent principal with no use… 0.28s  
+
+   PASS  Tests\Pg\RoleMatrixCompilerTest
+  ✓ it compiles matrix rows with scope != none into panel-prefixed AzGu… 0.23s  
+  ✓ it returns no warning for a user-only role using own/dept scope      0.16s  
+  ✓ it recompileAll is idempotent across repeated runs                   0.25s  
+  ✓ it excludes catalog keys whose owning module is inactive             0.14s  
+  ✓ it leaves no new keys and no version bump when compilation fails mi… 0.22s  
+  ✓ it invalidates matrix scope only after the outer commit and never a… 0.19s  
+  ✓ it deduplicates identical keys produced by a base row and its conte… 0.24s  
+  ✓ it exposes compiled keys through MatrixPermissionCatalogBuilder for… 0.22s  
+  ✓ it recompiles the key once the owning module becomes active again (… 0.21s  
+  ✓ it warns (does not throw) when a role assignable to agent uses own/… 0.22s  
+  ✓ it does not compile a key for an entity_key unknown to EntityRegist… 0.25s  
+  ✓ it excludes a matrix row whose owning module is inactive, keeping t… 0.24s  
+
+   PASS  Tests\Pg\PermissionsMergerTest
+  ✓ it gives out no key while the owning module has never been reported… 0.20s  
+  ✓ it recompiles keys through the full enable -> disable -> re-enable…  0.22s  
+  ✓ it returns no warning for a declaration whose entity is known to En… 0.15s  
+  ✓ it recompiles on ModuleDisabled too — both lifecycle events are wir… 0.19s  
+  ✓ it returns a warning and creates no matrix row for a declaration wi… 0.17s  
+
+   FAIL  Tests\Pg\AccessCheckerTest
+  ✓ it does not reuse scope memo when a connection switch exposes ident… 0.48s  
+  ✓ it grants canOnRecord for account scope regardless of ownership      0.48s  
+  ✓ it lets a principal with the active system owner role pass any allo… 0.50s  
+  ✓ it grants allowed() inside the workspace the role was assigned to    0.39s  
+  ✓ it grants department scopes only for real same-department and desce… 0.57s  
+  ✓ it grants department scopes only for real same-department and desce… 0.51s  
+  ✓ it resolves allowed() through the real AzGuard round-trip for a sco… 0.50s  
+  ✓ it resolves the max weight across multiple roles held by the same p… 0.46s  
+  ✓ it without WorkspacePermissionLayer, a cached grant leaks across a…  0.38s  
+  ✓ it does not extend owner-wildcard capability to a non-system clone…  0.45s  
+  ⨯ it uses identical fail-closed capability normalization for record a… 0.48s  
+  ✓ it denies canOnRecord for a record whose model is not registered in… 0.33s  
+  ✓ it denies every department scope to non-user principals through Acc… 0.50s  
+  ✓ it denies every department scope to non-user principals through Acc… 0.41s  
+  ✓ it denies every department scope to non-user principals through Acc… 0.54s  
+  ✓ it denies every department scope to non-user principals through Acc… 0.50s  
+  ✓ it excludes deleted broad roles when a live narrow role still grant… 0.59s  
+  ✓ it matches workspace scope against the active tenancy context, and…  0.47s  
+  ✓ it denies allowed() outside the workspace the role was assigned to   0.43s  
+  ✓ it recomputes scope after replacing an assignment with an equally v… 0.43s  
+  ✓ it with WorkspacePermissionLayer, a workspace switch gets a fresh,…  0.53s  
+  ✓ it denies department scopes through AccessChecker when department t… 0.45s  
+  ✓ it denies department scopes through AccessChecker when department t… 0.51s  
+  ✓ it grants canOnRecord for own scope only when the record belongs to… 0.46s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.36s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.47s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.37s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.45s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.35s  
+  ✓ it resolves each of the six scope values from a single matching mat… 0.40s  
+  ⨯ it grants canOnRecord via an active AzGuard direct grant with no ma… 0.32s  
+  ✓ it lets a context row override, and narrow, the base scope for its…  0.47s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Pg\AccessCheckerTest > it uses ide…  ScopeCapabilityMismatch   
+  Entity [crm.deal] has a matrix row with scope [own], which requires capability [ownable] because column [owner_id] exists on its table — but the entity does not declare that capability. Declare it on the EntityDefinition rather than letting the scope silently widen to account.
+
+  at src/Exceptions/ScopeCapabilityMismatch.php:25
+     21▕ final class ScopeCapabilityMismatch extends RuntimeException
+     22▕ {
+     23▕     public static function forScope(string $entityKey, string $scope, string $missingCapability, string $column): self
+     24▕     {
+  ➜  25▕         return new self(sprintf(
+     26▕             'Entity [%s] has a matrix row with scope [%s], which requires capability [%s] because column [%s] exists on its table — but the entity does not declare that capability. Declare it on the EntityDefinition rather than letting the scope silently widen to account.',
+     27▕             $entityKey,
+     28▕             $scope,
+     29▕             $missingCapability,
+
+  1   src/Exceptions/ScopeCapabilityMismatch.php:25
+  2   src/Access/ScopeAvailability.php:86
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Pg\AccessCheckerTest > it grants canOnRecord via an active…    
+  Failed asserting that false is true.
+
+  at tests/Pg/AccessCheckerTest.php:399
+    395▕     app(AzGuardManagerInterface::class)->forUser($identity)->on('app')->grant('app.crm.deal.read');
+    396▕ 
+    397▕     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
+    398▕ 
+  ➜ 399▕     expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
+    400▕ });
+    401▕ 
+    402▕ // Implementation Rules — an unresolvable entity_key is fail-closed false, never "the whole scope".
+    403▕ it('denies canOnRecord for a record whose model is not registered in EntityRegistry', function (): void {
+
+  1   tests/Pg/AccessCheckerTest.php:399
+
+
+  Tests:    2 failed, 110 passed (291 assertions)
+  Duration: 39.41s
+  Random Order Seed: 1790595238
+
+Script pest --group=pg handling the test:pg event returned with error code 2

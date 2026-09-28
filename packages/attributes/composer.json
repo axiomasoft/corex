@@ -4,8 +4,8 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
@@ -49,6 +49,9 @@
             "providers": [
                 "CoreX\\Attributes\\AttributesServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -61,7 +64,7 @@
             "url": "../modules"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "architecture:check": "php ../../scripts/attributes-architecture-gate.php",

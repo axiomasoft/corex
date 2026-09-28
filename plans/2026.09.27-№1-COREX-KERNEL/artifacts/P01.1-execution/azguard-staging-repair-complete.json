@@ -1,0 +1,78 @@
+{
+  "record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P01.1",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "scripts/php84 composer update --no-interaction --no-progress",
+      "digest": "0817d760377c675b543d48e7c90d773f3a2407eb9d6263ca7438b7db17f3dddf",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": true,
+      "carrier": {
+        "command": "scripts/php84 composer update --no-interaction --no-progress",
+        "digest": "0817d760377c675b543d48e7c90d773f3a2407eb9d6263ca7438b7db17f3dddf",
+        "result": "red"
+      }
+    },
+    "candidate": {
+      "delta_proved": true,
+      "evidence_ids": [
+        "artifacts/P01.1-execution/composer-update-final.log"
+      ]
+    },
+    "affected_paths": [
+      {
+        "path": "scripts/distribution/stage-stancl-providers.py",
+        "owner_item": "P01.1",
+        "declared_file": false
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 1,
+      "max_files": 1,
+      "reversible": true
+    },
+    "material_surface": {
+      "public": false,
+      "frozen": false,
+      "security": false,
+      "schema": false,
+      "dependency": true,
+      "authority": false,
+      "irreversible": false,
+      "product": false,
+      "test_topology": false
+    },
+    "pre_validation": [
+      {
+        "command": "scripts/php84 composer update --no-interaction --no-progress",
+        "digest": "0817d760377c675b543d48e7c90d773f3a2407eb9d6263ca7438b7db17f3dddf",
+        "result": "red"
+      }
+    ],
+    "post_validation": [
+      {
+        "command": "scripts/php84 composer update --no-interaction --no-progress",
+        "digest": "0817d760377c675b543d48e7c90d773f3a2407eb9d6263ca7438b7db17f3dddf",
+        "result": "green"
+      }
+    ],
+    "evidence_ids": [
+      "artifacts/P01.1-execution/composer-update-original.log",
+      "scripts/distribution/private-auth-proof.py",
+      "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.5-private-auth-proof.md",
+      "artifacts/P01.1-execution/composer-update-final.log"
+    ],
+    "design": null
+  },
+  "evaluation": {
+    "action": "repair-in-current-attempt",
+    "terminal_allowed": false,
+    "reason_code": "BOUNDED_NONMATERIAL_REPAIR",
+    "repair_digest": "57fde1cf09eb3e1f7e319c5e098ad19f8c55204f001fea0b6ea5aa827b4c125a",
+    "post_validation_required": true
+  }
+}

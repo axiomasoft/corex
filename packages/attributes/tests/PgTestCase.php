@@ -23,6 +23,8 @@ abstract class PgTestCase extends Orchestra
         $app['config']->set('database.default', 'pgsql');
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',
+            // Match the UTC timestamps used by the test clock on every server.
+            'timezone' => 'UTC',
             'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
             'port' => getenv('PGSQL_PORT') ?: '5434',
             'database' => $database,

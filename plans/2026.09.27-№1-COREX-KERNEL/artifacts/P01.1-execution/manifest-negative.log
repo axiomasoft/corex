@@ -1,0 +1,2 @@
+tasks: mono-constraint: corex/core='@dev', expected '^1.0@dev'
+manifests FAIL: 1 violations

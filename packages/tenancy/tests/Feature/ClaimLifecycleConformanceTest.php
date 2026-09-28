@@ -40,7 +40,28 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
 {
     $errors = tempnam(sys_get_temp_dir(), 'p32-command-');
     $descriptors = [0 => $input ? ['file', $path, 'r'] : ['file', '/dev/null', 'r'], 1 => $input ? ['file', '/dev/null', 'w'] : ['file', $path, 'w'], 2 => ['file', $errors, 'w']];
-    $process = proc_open($command, $descriptors, $pipes);
+    $configuration = DB::connection('pgsql')->getConfig();
+    $databaseArgument = array_search('-d', $command, true);
+    expect($databaseArgument)->not->toBeFalse();
+    expect(app()->environment())->toBe('testing')
+        ->and($command[$databaseArgument + 1])->toEndWith('_test');
+    // Debian's pg_wrapper chooses its newest client for remote hosts, whose
+    // archive setup statements can be unsupported by an older test server.
+    $major = explode('.', (string) DB::connection('pgsql')->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION))[0];
+    $matchingClient = '/usr/lib/postgresql/'.$major.'/bin/'.$command[0];
+
+    if (is_executable($matchingClient)) {
+        $command[0] = $matchingClient;
+    }
+
+    // Native archive tools must reach the same server as the PDO test connection.
+    $environment = array_replace(getenv(), [
+        'PGHOST' => $configuration['host'],
+        'PGPORT' => (string) $configuration['port'],
+        'PGUSER' => $configuration['username'],
+        'PGPASSWORD' => $configuration['password'],
+    ]);
+    $process = proc_open($command, $descriptors, $pipes, env_vars: $environment);
     $status = proc_close($process);
     $message = file_get_contents($errors);
     unlink($errors);
@@ -81,7 +102,7 @@ final class P32ArchiveFixture
         }
         $path = $directory.'/'.$exportId.'.dump';
         $database = DB::table('root_accounts')->where('id', $account->id)->value('db_name');
-        p32ArchiveCommand(['docker', 'exec', 'corex_pgsql_test', 'pg_dump', '-U', 'corex', '-d', $database, '-Fc'], $path);
+        p32ArchiveCommand(['pg_dump', '-d', $database, '-Fc'], $path);
         $size = filesize($path);
         $manifest = ['account_id' => $account->id, 'size' => $size, 'sha256' => hash_file('sha256', $path)];
         file_put_contents($path.'.manifest', json_encode($manifest, JSON_THROW_ON_ERROR));
@@ -214,7 +235,7 @@ it('retries interrupted export then restores actual data and reconciles a crash 
     $export = $lifecycle->requestExport($account);
     $row = DB::table('root_account_exports')->where('id', $export)->first();
     expect($row->status)->toBe('ready');
-    p32ArchiveCommand(['docker', 'exec', '-i', 'corex_pgsql_test', 'pg_restore', '--exit-on-error', '--no-owner', '--no-privileges', '-U', 'corex', '-d', $this->p32Databases[3]], $row->storage_path, input: true);
+    p32ArchiveCommand(['pg_restore', '--exit-on-error', '--no-owner', '--no-privileges', '-d', $this->p32Databases[3]], $row->storage_path, input: true);
     $restored = p32Probe($this->p32Databases[3]);
     expect($restored->table('records')->get()->map(fn ($r): array => (array) $r)->all())->toBe([['id' => 1, 'content' => 'archive-sentinel']]);
     $restored->disconnect();

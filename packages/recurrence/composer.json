@@ -4,7 +4,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "rlanvin/php-rrule": "^3.0"
     },
     "autoload": {
@@ -17,7 +17,7 @@
             "CoreX\\Recurrence\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=vendor/autoload.php",
@@ -34,6 +34,10 @@
                 "CoreX\\Recurrence\\Data",
                 "CoreX\\Recurrence\\Exceptions"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
-    }
+    },
+    "repositories": []
 }

@@ -4,8 +4,8 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
     },
@@ -33,6 +33,9 @@
             "providers": [
                 "CoreX\\Transfer\\TransferServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -41,7 +44,7 @@
             "url": "../core"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",

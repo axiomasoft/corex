@@ -4,10 +4,10 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
-        "corex/search": "@dev",
-        "meilisearch/meilisearch-php": "1.16.1"
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
+        "corex/search": "^1.0@dev",
+        "meilisearch/meilisearch-php": ">=1.16.1 <=1.16.1"
     },
     "autoload": {
         "psr-4": {
@@ -15,7 +15,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["tests"]
+        "classmap": [
+            "tests"
+        ]
     },
     "extra": {
         "corex": {
@@ -30,6 +32,9 @@
             "providers": [
                 "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -42,7 +47,7 @@
             "url": "../search"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=meilisearch",

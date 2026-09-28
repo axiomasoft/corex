@@ -4,12 +4,12 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "corex/core": "@dev",
-        "corex/modules": "@dev",
-        "corex/tasks": "@dev",
-        "corex/recurrence": "@dev",
-        "corex/workflow": "@dev",
+        "php": "^8.4",
+        "corex/core": "^1.0@dev",
+        "corex/modules": "^1.0@dev",
+        "corex/tasks": "^1.0@dev",
+        "corex/recurrence": "^1.0@dev",
+        "corex/workflow": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
@@ -18,12 +18,11 @@
         "corex/wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06)."
     },
     "require-dev": {
-        "corex/wakeup": "@dev",
-        "corex/workflow": "@dev",
-        "larastan/larastan": "^3.0",
-        "laravel/pint": "^1.13",
-        "orchestra/testbench": "^10.0|^11.0",
-        "pestphp/pest": "^4.0"
+        "corex/wakeup": "^1.0@dev",
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^10.12|^11.3",
+        "pestphp/pest": "^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -31,7 +30,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["tests"]
+        "classmap": [
+            "tests"
+        ]
     },
     "extra": {
         "corex": {
@@ -49,6 +50,9 @@
             "providers": [
                 "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
         }
     },
     "repositories": [
@@ -77,7 +81,7 @@
             "url": "../workflow"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
