@@ -1,0 +1,14 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E17",
+    "command": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/scripts/golden-rename-map.py --check` → `rename-map OK: 666 class, 16 package, 3 ambiguous, 0 manual`, exit 0.\n- `GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden` → 4 passed (baseline written); `sha256sum tests/Golden/baseline/*.json` сохранить;\n  повтор генерации → те же хэши.\n- `scripts/php84 composer golden` → `Tests: 4 passed`, exit 0.\n- Позитивный контроль в scratch: class-rename по одному правилу `generated` → 4 passed с теми же baseline/map;\n  до переноса → 4 passed; `apply(apply(snapshot)) == apply(snapshot)` для всех слоёв.\n- Негативный контроль (досье §4.2 п.7): (a) URI маршрута → routes fail; (b) имя публичного метода → php-surface fail;\n  (c) namespace класса без правила карты → fail, с `manual`-правилом → pass; (d) код ошибки → wire fail;\n  (e) по отдельности public property type, constant value/type, parameter default (включая отсутствие ↔ null) →\n  php-surface fail; после каждого отката → 4 passed.\n- Дополнительные контроли D41: полный source inventory (classmap + secondary declarations); float JSON round-trip;\n  wire missing/failed → fail и tmp удалён; производные Internal/interface-order/hash не краснят rename, schema drift → fail.\n  `GOLDEN_UPDATE=1` → 4 passed без skip; исходный anti-weakening не ловит отключение теста.\n- `scripts/php84 composer test` → exit 0 (Golden не входит); `bash scripts/anti-weakening-gate.sh` → exit 0; негатив: изменить\n  байт в `tests/Golden/baseline/routes.json` без строки `REBASELINE.md` → gate exit 1.\n- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model !=\n  executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+    "contract_sha256": "500d63d643d13b9c939a2661ecb951a0ef697ba6ecaf7c99414e9f345d5afe58",
+    "spec_sha256": "f696fecfab456b00e02e3d3fd0cd8a3073bab7ecb00193586547115c31967975",
+    "head": "93b56aab26fe888cebd0011491ed1a5ea1f1dae3",
+    "tree": "317cd0e84bc211685589ef98fa2025786e1199c8688b03829ac112fdadd40463",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T12:45:02Z"
+  }
+]

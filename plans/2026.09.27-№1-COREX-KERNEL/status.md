@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-28
-inputs_sha256: 687a6d7f8dd4e353857adfe12d413e4e1b7f9aea208e357fac19cff56ccc73f6
+inputs_sha256: 7c6614d84ee7f3b1cd9881cdace7f44a93d153490628314e06370565fe25a25d
 generated_by: task plan-views status
 -->
 
@@ -24,7 +24,7 @@ generated_by: task plan-views status
 | Phase | Title | Items 🟢/всего | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
-| P01 | Окружение, платформа и страховочная сетка | 1/4 | 🟡 In progress |
+| P01 | Окружение, платформа и страховочная сетка | 2/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -39,7 +39,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | 2026-09-28 |
-| P01.2 | Golden-снимки с нормализатором переименований | ⬜ Not started | — |
+| P01.2 | Golden-снимки с нормализатором переименований | 🟢 Done | 2026-09-28 |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | ⬜ Not started | — |
 | P01.4 | CI supply chain и подключение страховочной сетки | ⬜ Not started | — |
 
@@ -99,6 +99,8 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 21 roots; sqlite 808+10; PG 239 (7→0); PHPStan 0; L12 Pest 4.7 per D42; cold install and cursor/grok-4.7 GREEN. write-site: pre_mutation: allow · pre_final: allow. Evidence: findings/P01.1-execution.md. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
 Final typed evaluation: artifacts/P01.1-execution/write-site-final.json; receipts and validation context retained. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:49 |
 
 ## Owner Gates
 
