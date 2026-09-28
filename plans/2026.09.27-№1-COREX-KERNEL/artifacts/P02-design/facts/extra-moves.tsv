@@ -1,0 +1,18 @@
+action	source	destination	why
+move	packages/modules/config/corex-modules.php	packages/core/config/corex-modules.php	D25 merge; P02.4 folds it into corex.php section modules (D45)
+move	packages/modules/CHANGELOG.md	packages/core/docs/history/corex-modules-CHANGELOG.md	D25 merge; history kept verbatim (outside completeness scan)
+move	packages/modules/README.md	packages/core/docs/modules/README.md	D25 merge; linked from core README (runbook 4.3 step 7)
+move	packages/modules/PACKAGE.md	packages/core/docs/modules/PACKAGE.md	D25 merge; linked from core PACKAGE.md
+merge-neon	packages/modules/extension.neon	packages/core/extension.neon	D25 merge; one kernel PHPStan extension (examples 5.4)
+merge-composer	packages/modules/composer.json	packages/core/composer.json	D25 merge; third-party requires and providers unioned
+delete	packages/modules/phpstan.neon	—	D25 merge; kernel config analyses src incl. Modules
+delete	packages/modules/phpstan-baseline.neon	—	D25/D44 kernel baseline regenerated; ratchet group sum
+delete	packages/modules/composer-dependency-analyser.php	—	D25/D44 kernel analyser config covers Modules
+move	packages/operations/tests/fixtures/tool-contribution/archive-lab-policy.json	packages/tools/tests/fixtures/tool-contribution/archive-lab-policy.json	D31 tool fixtures -> corex-tools
+move	packages/operations/tests/fixtures/tool-contribution/external-control-plane-map.json	packages/tools/tests/fixtures/tool-contribution/external-control-plane-map.json	D31 tool fixtures -> corex-tools
+move	packages/operations/tests/fixtures/tool-contribution/selected-contributions.json	packages/tools/tests/fixtures/tool-contribution/selected-contributions.json	D31 tool fixtures -> corex-tools
+move	packages/operations/tests/fixtures/tool-install/archive-lab-policy.json	packages/tools/tests/fixtures/tool-install/archive-lab-policy.json	D31 tool fixtures -> corex-tools
+move	packages/operations/tests/fixtures/tool-install/install-cohort.json	packages/tools/tests/fixtures/tool-install/install-cohort.json	D31 tool fixtures -> corex-tools
+move	packages/operations/tests/fixtures/tool-install/mcp-golden-profile.json	packages/tools/tests/fixtures/tool-install/mcp-golden-profile.json	D31 tool fixtures -> corex-tools
+move	packages/operations/docs/tool-integration.md	packages/tools/docs/tool-integration.md	D31 tool docs -> corex-tools
+move	packages/operations/config/corex-webhooks.php	packages/webhooks/config/corex-webhooks.php	D31 seam 5; created-by:P02.2

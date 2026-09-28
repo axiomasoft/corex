@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-28 — after P01.4
+# HANDOFF — 2026-09-28 — after P02
 
-**Next:** waiting: push the public-AzGuard candidate and attach the GREEN CI run URL → design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL
+**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
 
 | Параметр | Значение |
 |:--|:--|
@@ -8,21 +8,21 @@
 | Model class | frontier |
 | Effort | high |
 | Capabilities | — |
-| Context | waiting-owner |
-| Суть | AzGuard берётся с публичного GitHub без токена. После push и GREEN CI — дизайн P02 из backlog/P02.md. |
+| Context | cold-start-root: whole-plan-independent-audit |
+| Суть | Независимый аудит дизайна P00–P02 (текущий fingerprint) моделью, не автором дизайна P02. После GREEN — исполнение строки 5 execution-sheet, но только при O-3 (hosted CI P01 GREEN). |
 
-<!-- Task continuity, reducer-owned.
-```session-continuity-decision/v1
-{"evidence": ["batch:c1b81586bb8d11dc8ce2c083cbf8bc96983eaf2e5f0c71e7d0d19dd85fc38d68", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "waiting-owner", "reason": "owner-wait", "runnable": false, "schema_version": "session-continuity-decision/v1"}
+**Provider-native command:**
+
+```bash
+codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
 ```
--->
 
-**Done:** P01 phase audit GREEN (run ae07142bb8f88cb1398ac78c3235ce110f358747d300f633b2a075c04b45719d, fingerprint 22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb) certifies the pre-repair candidate only. Follow-up repair: `axioma-studio/azguard-core` ^0.3 resolves from public `https://github.com/axiomasoft/azguard-private` commit `253cbf4` on `main` (`packages/core`; tag `v0.3.0` is older). Access imports follow `AzGuard\Configuration\Config` and `AzGuard\Panels\Panel`. Main CI and the dispatch distribution proof no longer run the superseded PLAN2/P17 DOD-21 receipt. `scripts/manifest-check.py` treats AzGuard `^0.3` as a stable constraint (stancl alpha pins stay). Golden `php-surface` records `PrincipalIdentity` `panelId` as `BackedEnum|string|null` from that AzGuard trait. Local recheck: manifests OK 21 roots; golden 4 passed; ownership OK; PHPStan 0 errors, ceilings OK; anti-weakening OK; plan-lint OK; Pest sqlite 808+10 passed; Pest `pg` 239 passed; access Pest 38 and access Pest `pg` 112 passed earlier on the same pin. No hosted GREEN claimed.
+**Done:** `backlog/P02.md` → `phases/P02/P02.md` + `P02.1.md`…`P02.4.md`. Decisions D44 (порядок швы → перенос → идентификаторы; инструмент `p02-transfer.py` + Rector; сухой прогон; golden-delta; ratchet-проекция групп преемников; ремонт строки карты `StubToolHandler`) и D45 (идентификаторы по `identifier-map.tsv`, `corex.modules`, `tenancy` до P07, порядок разделов `corex:config:validate`, SPI компилятора, гейт полноты, удаление P15-гейта). Проверено на `d2e84a1`: карты OK (1756 рёбер), швы 136 (P02.1 47, P02.2 71, 18 — scaffold P02.3), план переноса 795 классов / 510 файлов / 0 problems, сухой прогон без Rector `verify: 0 problems`, гейт полноты «до» 8509 вхождений, golden-delta негатив FAIL. Внешний факт E1 (Rector) — capture perplexity; context7 без совпадений (записано).
 
-**Remaining:** Push this candidate and attach the GREEN CI run URL. No secret is required for AzGuard. Execution-sheet stops at P01.4; P02 stays `backlog/P02.md` until that hosted proof, then `task:plan-design` P02 and `finish`. The design audit is a separate later command. No push was performed.
+**Remaining:** `task:plan-audit … design` другой моделью (не claude-opus; рекомендуется codex/gpt-6-sol или cursor/grok-4.7). Finish выполнен: execution-sheet строки 5–7 (P02). Владелец: восстановить billing GitHub Actions, перезапустить `CI` на `d2e84a1`, приложить GREEN run к Phase Handoff P01 (O-3) — без этого P02.1 не стартует. Push не выполнялся.
 
-**Sources of truth:** findings/P01.4-execution.md; artifacts/P01.4-execution/; journal.jsonl; phases/P01/P01.4.state.md; phases/P01/P01.closed.md; backlog/P02.md.
+**Sources of truth:** phases/P02/P02.md; phases/P02/P02.1.md–P02.4.md; research/P02-design.md; research/P02-design-rag.md; artifacts/P02-design/{examples.md,facts/README.md,scripts/}; artifacts/P02-design-rag/README.md; decisions/D44-p02-transfer-mechanics.md; decisions/D45-p02-identifiers-and-gates.md.
 
-**Open risks:** Hosted PHP 8.5 / PostgreSQL 18 and a GitHub Actions run are still unverified until the candidate is pushed. Ownership/analysis debt stays assigned to P02/P09. The earlier access PostgreSQL direct-grant mismatch did not reproduce on AzGuard `253cbf4` (112 passed).
+**Open risks:** Rector-шаг переноса не прогнан при дизайне (нет vendor в рабочем дереве) — VERIFY-AT-EXEC в обязательном сухом прогоне P02.3. Hosted CI (PHP 8.5 / PG 18) не проверен с P01. Разбиение 7 смешанных тестов operations — по правилу, не по готовому списку кейсов.
 
-**Workarounds/Deferred/Open questions:** Stancl provider zips stay sealed local archives. Package test aggregation still has the pre-existing standalone-tooling debt. No live CI proof is claimed.
+**Workarounds/Deferred/Open questions:** `tenancy` config-ключ остаётся до P07 (`upstream_config`). Безопасные коды `webhook_*` в `errors.json` остаются в engine до P06. `corex-tools` без config до P05.

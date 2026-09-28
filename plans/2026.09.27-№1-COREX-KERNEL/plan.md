@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28) |
+| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -123,7 +123,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00, P01. Фазы P02–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01, P02. Фазы P03–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
@@ -135,6 +135,10 @@ operations, независимые модули, детерминированн�
 | B01-B | P01.2 | implementation/high | manual | full | recommended: golden на зелёном стеке P01.1; общий контекст сетки с P01.3. |
 | B01-B | P01.3 | implementation/high | manual | full | recommended: ratchet-гейты после golden (анализ `tests/Golden`, anti-weakening правится последовательно); вторым в B01-B. |
 | solo | P01.4 | implementation/high | manual | full | recommended: CI подключает команды, созданные P01.1–P01.3; отдельная сессия — workflow-hardening и zizmor. |
+| B02-A | P02.1 | implementation/high | manual | full | recommended: швы ядра на общем инструментарии швов (`check-maps`, `seams`, `golden-delta`); первым в B02-A; старт только после O-3. |
+| B02-A | P02.2 | implementation/high | manual | full | recommended: швы operations тем же инструментарием и runbook; вторым в B02-A, после зелёного P02.1. |
+| solo | P02.3 | implementation/xhigh | manual | full | recommended: механический перенос ≥500 файлов с сухим прогоном и полным стеком — отдельная сессия и максимальный effort класса. |
+| solo | P02.4 | implementation/high | manual | full | recommended: идентификаторы и гейты на перенесённом дереве; отдельная сессия после P02.3. |
 
 ## 4. Update Log
 
@@ -149,6 +153,8 @@ operations, независимые модули, детерминированн�
 | 2026-09-28 | Manual B1–B3 autofix + `task:plan-design finish`: D40 supersedes D38 (симметричная golden-проекция), обязательные поля php-surface, Validation с exit 0 на корректном дереве; доказательства — `findings/design-remediation-2026-09-28.md`. Продукт и plan-run не затронуты. Фактический маршрут implementation/high вместо рекомендованного frontier/high записан в provenance. | designer/codex/gpt-6-sol/high |
 
 | 2026-09-28 | Owner-authorized audit autofix: D41, actual-declaration golden collector, access dev closure, wire fixture/exit/cleanup, scoped derived normalization, float-preserving JSON, successful baseline mode, initial ownership-baseline allowance and fail-closed analyser. Independent review within current audit; product unchanged. | auditor/fixer/codex/gpt-6-sol/high |
+| 2026-09-28 | `task:plan-design P02`: `backlog/P02.md` → `phases/P02/`, items P02.1–P02.4, D44–D45, досье `research/P02-design.md`, `research/P02-design-rag.md`, примеры/факты/скрипты `artifacts/P02-design/` (перенос `p02-transfer.py` с сухим прогоном без Rector), captures `artifacts/P02-design-rag/`; ремонт строки карты `StubToolHandler` (D44 п.7); Routing B02-A, solo P02.3, solo P02.4; исполнение P02 ждёт O-3. | claude-opus-5-5/high |
+| 2026-09-28 | `task:plan-design finish`: согласованы P00–P02; execution-sheet строки 5 (B02-A), 6 (solo P02.3, implementation/xhigh), 7 (solo P02.4); P02 допускается после GREEN design audit и O-3. Граница — дизайн P00–P02 по D24. | designer/claude-opus-5-5/high |
 
 ## 5. Decision Log
 

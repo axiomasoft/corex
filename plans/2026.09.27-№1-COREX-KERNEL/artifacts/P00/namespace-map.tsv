@@ -254,7 +254,7 @@ corex/modules	packages/modules/src/Settings/	CoreX\Modules\	axiomasoft/corex	Cor
 corex/modules	packages/modules/src/Support/	CoreX\Modules\	axiomasoft/corex	CoreX\Modules\Support\	P02	F1/D25 merge в ядро
 corex/modules	packages/modules/src/Testing/	CoreX\Modules\	axiomasoft/corex	CoreX\Modules\Testing\	P02	F1/D25 merge в ядро
 corex/modules	packages/modules/tests/Feature/	—	axiomasoft/corex	—	P02	F1/D25 merge; dest=packages/core/tests/Modules/Feature/
-corex/modules	packages/modules/tests/Support/StubToolHandler.php	CoreX\Modules\Tests\Support\	axiomasoft/corex-operations	CoreX\Operations\Testing\	P02	F1/D32/D35 stub handler (OperationHandler) — общая тестовая поддержка operations; dest=packages/operations/src/Testing/
+corex/modules	packages/modules/tests/Support/StubToolHandler.php	CoreX\Modules\Tests\	axiomasoft/corex-operations	CoreX\Operations\Testing\	P02	F1/D32/D35 stub handler (OperationHandler) — общая тестовая поддержка operations; dest=packages/operations/src/Testing/
 corex/modules	packages/modules/tests/Unit/	—	axiomasoft/corex	—	P02	F1/D25 merge; dest=packages/core/tests/Modules/Unit/
 corex/modules	packages/modules/tests/Unit/ApiOperationContractTest.php	—	axiomasoft/corex-operations	—	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
 corex/modules	packages/modules/tests/Unit/ApiOperationCostTest.php	—	axiomasoft/corex-operations	—	P02	F1/D32 тест секции уходит с валидатором; dest=packages/operations/tests/Unit/
