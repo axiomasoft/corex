@@ -57,7 +57,8 @@
             "CoreX\\Recurrence\\Tests\\": "packages/recurrence/tests/",
             "CoreX\\Intl\\Tests\\": "packages/intl/tests/",
             "CoreX\\SearchIntl\\Tests\\": "packages/search-intl/tests/",
-            "CoreX\\Testing\\": "packages/core/tests/Support/"
+            "CoreX\\Testing\\": "packages/core/tests/Support/",
+            "CoreX\\Tests\\Golden\\": "tests/Golden/"
         },
         "classmap": [
             "tests/TestCase.php",
@@ -100,7 +101,7 @@
     },
     "scripts": {
         "test": [
-            "vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage,TasksWorkflowPackage --order-by=default",
+            "vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage,TasksWorkflowPackage,Golden --order-by=default",
             "vendor/bin/pest --testsuite=TasksWorkflowPackage --exclude-group=pg --order-by=default"
         ],
         "test:pg": "vendor/bin/pest --group=pg",
@@ -126,6 +127,7 @@
         "analyse:tests-lint": "vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G",
         "refactor": "vendor/bin/rector process",
         "refactor:check": "vendor/bin/rector process --dry-run",
-        "manifests:check": "python3 scripts/manifest-check.py"
+        "manifests:check": "python3 scripts/manifest-check.py",
+        "golden": "vendor/bin/pest --testsuite=Golden"
     }
 }

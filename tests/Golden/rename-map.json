@@ -1,0 +1,3433 @@
+{
+  "ambiguous_packages": {
+    "corex/core": [
+      "axiomasoft/corex",
+      "axiomasoft/corex-intl",
+      "axiomasoft/corex-panels"
+    ],
+    "corex/modules": [
+      "axiomasoft/corex",
+      "axiomasoft/corex-operations",
+      "axiomasoft/corex-tools"
+    ],
+    "corex/operations": [
+      "axiomasoft/corex-operations",
+      "axiomasoft/corex-tools",
+      "axiomasoft/corex-webhooks"
+    ]
+  },
+  "generated": [
+    {
+      "from": "CoreX\\Api\\ApiController",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Http\\ApiController"
+    },
+    {
+      "from": "CoreX\\Api\\ApiError",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\ApiError"
+    },
+    {
+      "from": "CoreX\\Api\\ApiServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\Operations\\ApiServiceProvider"
+    },
+    {
+      "from": "CoreX\\Api\\Commands\\DeliverWebhooks",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Commands\\DeliverWebhooks"
+    },
+    {
+      "from": "CoreX\\Api\\Commands\\PruneApiOperations",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations"
+    },
+    {
+      "from": "CoreX\\Api\\Commands\\WorkBulkOperations",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Commands\\WorkBulkOperations"
+    },
+    {
+      "from": "CoreX\\Api\\Commands\\WriteApiSnapshots",
+      "kind": "class",
+      "to": "CoreX\\Operations\\OpenApi\\Commands\\WriteApiSnapshots"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\BudgetReservation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Contracts\\BudgetReservation"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\BulkOperationStore",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Contracts\\BulkOperationStore"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\BulkTransferFactory",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Contracts\\BulkTransferFactory"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ClientScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ContextResolver",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\CursorKeyring",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\Contracts\\CursorKeyring"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\IdempotencyStore",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Contracts\\IdempotencyStore"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationBudget",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Contracts\\OperationBudget"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationCostEstimator",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Contracts\\OperationCostEstimator"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationFieldAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\OperationFieldAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationHandler",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\OperationInvoker",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\Principal",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\Principal"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\PrincipalResolver",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ReplayAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Contracts\\ReplayAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\RequestContext",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\RequestContextProvider",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ResponseSerializer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\SchemaContributor",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Contracts\\SchemaContributor"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolCatalogue",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolCatalogue"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolExecutionGuard",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolExecutionGuard"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolInvoker",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolInvoker"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolPolicy",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolPolicy"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolRequestContext",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolRequestContext"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\ToolSchemaValidator",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Contracts\\ToolSchemaValidator"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\WebhookDeliveryStore",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\WebhookHttpTransport",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Contracts\\WebhookHttpTransport"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\WebhookPayloadProjector",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Contracts\\WebhookPayloadProjector"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\WebhookSigner",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Contracts\\WebhookSigner"
+    },
+    {
+      "from": "CoreX\\Api\\Contracts\\WebhookSubscriptionStore",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Contracts\\WebhookSubscriptionStore"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ActualCost",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\ActualCost"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ApiProfile",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\ApiProfile"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ApiVersion",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\ApiVersion"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ApiVersionStatus",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\ApiVersionStatus"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\BudgetScope",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\BudgetScope"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\BulkOperation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Data\\BulkOperation"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\BulkOperationDefinition",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\BulkOptions",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Data\\BulkOptions"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\BulkTransferSession",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Data\\BulkTransferSession"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CapabilityDescriptor",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\CapabilityDescriptor"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CostInput",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\CostInput"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CostOptions",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\CostOptions"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CursorPage",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\Data\\CursorPage"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CursorPayload",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\Data\\CursorPayload"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\CursorPosition",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\Data\\CursorPosition"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\DeprecationDescriptor",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\DeprecationDescriptor"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\EffectiveCapability",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Data\\EffectiveCapability"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\EstimatedCost",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\EstimatedCost"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\IdempotencyAttempt",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Data\\IdempotencyAttempt"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\IdempotencyScope",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Data\\IdempotencyScope"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\JsonObject",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\Data\\JsonObject"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\JsonValue",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\Data\\JsonValue"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\OperationInvocation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\OperationResult",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Data\\OperationResult"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ResourceId",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Data\\ResourceId"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\SchemaHandle",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\Data\\SchemaHandle"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\SchemaValidation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\Data\\SchemaValidation"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\StoredOperationOutcome",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ThrottleStatus",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Data\\ThrottleStatus"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ToolCall",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Data\\ToolCall"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ToolCatalogueView",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Data\\ToolCatalogueView"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ToolDescriptor",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Data\\ToolDescriptor"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ToolResult",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Data\\ToolResult"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\ValidatedWebhookRequest",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\ValidatedWebhookRequest"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookDelivery",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookDelivery"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookHttpResult",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookHttpResult"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookOptions",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookOptions"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookSignedHeaders",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookSignedHeaders"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookSubscription",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookSubscription"
+    },
+    {
+      "from": "CoreX\\Api\\Data\\WebhookTopic",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Data\\WebhookTopic"
+    },
+    {
+      "from": "CoreX\\Api\\DiscoveryController",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Http\\DiscoveryController"
+    },
+    {
+      "from": "CoreX\\Api\\Enums\\BulkOperationStatus",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Enums\\BulkOperationStatus"
+    },
+    {
+      "from": "CoreX\\Api\\Enums\\IdempotencyRequirement",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement"
+    },
+    {
+      "from": "CoreX\\Api\\Enums\\OperationMode",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Enums\\OperationMode"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\AcceptNegotiation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Http\\Internal\\AcceptNegotiation"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ApiProfileFactory",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Versioning\\Internal\\ApiProfileFactory"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\BulkFailureReader",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\BulkFailureReader"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\BulkOperations",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\BulkOperations"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\BulkResultReader",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\BulkResultReader"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\BulkRetention",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\BulkRetention"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\BulkWorker",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\BulkWorker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\SqlBulkOperationStore",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\SqlBulkOperationStore"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\TransferBulkExecutor",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\TransferBulkExecutor"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\TransferCapabilityUnavailable",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\TransferCapabilityUnavailable"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Bulk\\TransferStampDrift",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Internal\\TransferStampDrift"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\CapabilityResolver",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Internal\\CapabilityResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\CompiledToolCatalogue",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\CompiledToolCatalogue"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ContractSnapshotBuilder",
+      "kind": "class",
+      "to": "CoreX\\Operations\\OpenApi\\Internal\\ContractSnapshotBuilder"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\BudgetAdmission",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\BudgetAdmission"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\BudgetRateLimited",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\BudgetRateLimited"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\BudgetRetention",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\BudgetRetention"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\BudgetStoreUnavailable",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\BudgetStoreUnavailable"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\DeclaredCostEstimator",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\DeclaredCostEstimator"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\SqlBudgetReservation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\SqlBudgetReservation"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Cost\\SqlOperationBudget",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Internal\\SqlOperationBudget"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\CurrentRequestContext",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Internal\\CurrentRequestContext"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DeclaredFieldAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Internal\\DeclaredFieldAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DeclaredSchemaContributor",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Internal\\DeclaredSchemaContributor"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DefaultOperationInvoker",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Internal\\DefaultOperationInvoker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DenyClientScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Internal\\DenyClientScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DenyOperationAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Internal\\DenyOperationAuthorizer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DenyPrincipalResolver",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Authorization\\Internal\\DenyPrincipalResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\DenyToolPolicy",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\DenyToolPolicy"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\EnvelopeSerializer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\EnvelopeSerializer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ErrorMapper",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ErrorWire",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\ErrorWire"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\GuardedToolInvoker",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\GuardedToolInvoker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\HttpOperationResponder",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Http\\Internal\\HttpOperationResponder"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\IdempotentOperationInvoker",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Internal\\IdempotentOperationInvoker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\JsonCanonical",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\McpToolsProjection",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\McpToolsProjection"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\NegotiatingResponseSerializer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\NegotiatingResponseSerializer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\OperationContractHasher",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Internal\\OperationContractHasher"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\OperationFingerprint",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Internal\\OperationFingerprint"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\OpisToolSchemaValidator",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\OpisToolSchemaValidator"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\OrderingRegistry",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\OrderingRegistry"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ProblemDetailsSerializer",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\ProblemDetailsSerializer"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ReadOnlyToolExecutionGuard",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ReadOnlyToolExecutionGuard"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ResolvedContext",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Internal\\ResolvedContext"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\RetryAfterPolicy",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\Internal\\RetryAfterPolicy"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\SchemaBudget",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\SchemaBudget"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\SchemaProfile",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Validation\\SchemaProfile"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\SignedCursorCodec",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Pagination\\SignedCursorCodec"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\SnapshotJson",
+      "kind": "class",
+      "to": "CoreX\\Operations\\OpenApi\\Internal\\SnapshotJson"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\SqlIdempotencyStore",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Idempotency\\Internal\\SqlIdempotencyStore"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ToolContractHasher",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ToolContractHasher"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ToolName",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ToolName"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ToolRequestContext",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ToolRequestContext"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ToolSchemaSupervisor",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ToolSchemaSupervisor"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\ToolSchemaWorker",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ToolSchemaWorker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\TrustedContextResolver",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\Internal\\TrustedContextResolver"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\CurlRuntimeFixture",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\CurlRuntimeFixture"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\CurlWebhookTransport",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\CurlWebhookTransport"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\FakeCurlHandle",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\FakeCurlHandle"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\HmacWebhookSigner",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\HmacWebhookSigner"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\SqlWebhookDeliveryStore",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\SqlWebhookDeliveryStore"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\SqlWebhookSubscriptionStore",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\SqlWebhookSubscriptionStore"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookCursorOperationHandler",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookCursorOperationHandler"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookDeliveryWorker",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookDeliveryWorker"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookFanout",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookFanout"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookKeyRing",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookKeyRing"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookManagement",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookManagement"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookMessagePublisher",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookMessagePublisher"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookReplay",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookReplay"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookReplayCursorOperationHandler",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookReplayCursorOperationHandler"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookRetention",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookRetention"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookRetryPolicy",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookRetryPolicy"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookTopicCatalogue",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue"
+    },
+    {
+      "from": "CoreX\\Api\\Internal\\Webhook\\WebhookUrlPolicy",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Internal\\WebhookUrlPolicy"
+    },
+    {
+      "from": "CoreX\\Api\\InvocationMetadata",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\InvocationMetadata"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\ApiSchemaRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\BulkFailureLimit",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Laravel\\BulkFailureLimit"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\BulkRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Laravel\\BulkRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\BulkRouteRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\CostRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Cost\\Laravel\\CostRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\WebhookRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Laravel\\WebhookRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\Laravel\\WebhookRouteRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
+    },
+    {
+      "from": "CoreX\\Api\\OpenApiDocumentGenerator",
+      "kind": "class",
+      "to": "CoreX\\Operations\\OpenApi\\OpenApiDocumentGenerator"
+    },
+    {
+      "from": "CoreX\\Api\\Operation",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\Operation"
+    },
+    {
+      "from": "CoreX\\Api\\OperationDispatcher",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Invocation\\OperationDispatcher"
+    },
+    {
+      "from": "CoreX\\Api\\OperationErrorBoundary",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Errors\\OperationErrorBoundary"
+    },
+    {
+      "from": "CoreX\\Api\\OperationRegistry",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\OperationRegistry"
+    },
+    {
+      "from": "CoreX\\Api\\Support\\ApiOptions",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Laravel\\Support\\ApiOptions"
+    },
+    {
+      "from": "CoreX\\Api\\ToolServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\Tools\\ToolServiceProvider"
+    },
+    {
+      "from": "CoreX\\Attributes\\AttributesServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\AttributesServiceProvider"
+    },
+    {
+      "from": "CoreX\\Attributes\\Contracts\\AttributeFilter",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Contracts\\AttributeFilter"
+    },
+    {
+      "from": "CoreX\\Attributes\\Contracts\\AttributeStore",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Contracts\\AttributeStore"
+    },
+    {
+      "from": "CoreX\\Attributes\\Contracts\\AttributeStoreResolver",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Contracts\\AttributeStoreResolver"
+    },
+    {
+      "from": "CoreX\\Attributes\\Contracts\\FieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Contracts\\FieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Contracts\\SchemaOperations",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Contracts\\SchemaOperations"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\AttributeDefinition",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\AttributeDefinition"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\AttributeId",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\AttributeId"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\AttributeLifecycle",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\AttributeLifecycle"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\AttributeStoragePolicy",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\AttributeStoragePolicy"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\AttributeTables",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\AttributeTables"
+    },
+    {
+      "from": "CoreX\\Attributes\\Data\\IndexPolicy",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Data\\IndexPolicy"
+    },
+    {
+      "from": "CoreX\\Attributes\\Exceptions\\InvalidAttributeTables",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageContractRegistry",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContractRegistry"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageContracts",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContracts"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageTranslator",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageTranslator"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Integration\\AttributeValuesChanged",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Integration\\AttributeValuesChanged"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\InvalidAttributeValue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\InvalidAttributeValue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\KeyConflict",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\KeyConflict"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Laravel\\AttributeComposition",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Laravel\\AttributeCompositionRegistrar",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeCompositionRegistrar"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Laravel\\AttributeMessagingRegistrar",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeMessagingRegistrar"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Query\\AttributeIndexPlanner",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Query\\AttributeIndexPlanner"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Query\\AttributeIndexReceipt",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Query\\AttributeIndexReceipt"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Query\\SchemaAttributeFilter",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Query\\SchemaAttributeFilter"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\SchemaOperationConflict",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\SchemaOperationConflict"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\CachedFieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\CachedFieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\CatalogueConflictPolicy",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\CatalogueConflictPolicy"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\CompositeFieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\CompositeFieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\DatabaseFieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\DatabaseFieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\DefinitionEvolution",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\DefinitionEvolution"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\ModuleFieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\ModuleFieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\QueuedSchemaOperations",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\QueuedSchemaOperations"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\SchemaOperationWorker",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\SchemaOperationWorker"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Schema\\StaticFieldCatalogue",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Schema\\StaticFieldCatalogue"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\ScopeDenied",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\ScopeDenied"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Storage\\ConfiguredAttributeStoreResolver",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Storage\\ConfiguredAttributeStoreResolver"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Storage\\ResolvingAttributeStore",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Storage\\ResolvingAttributeStore"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Storage\\ScopeConnectionGuard",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Storage\\ScopeConnectionGuard"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\UnavailableAttributes",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\UnavailableAttributes"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\UnsupportedAttributeCapability",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\UnsupportedAttributeCapability"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\AttributeBackfill",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\AttributeBackfill"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\AttributeValueTransformerRegistry",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\AttributeValueTransformerRegistry"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\AttributeWriteGuard",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\AttributeWriteGuard"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\EavAttributeStore",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\EavAttributeStore"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\FieldValueValidator",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\FieldValueValidator"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\Values\\JsonbAttributeStore",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\Values\\JsonbAttributeStore"
+    },
+    {
+      "from": "CoreX\\Attributes\\Internal\\VersionConflict",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Internal\\VersionConflict"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\AttributeWriteResult",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\AttributeWriteResult"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\FieldSelection",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\FieldSelection"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\FieldSnapshot",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\FieldSnapshot"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\FilterNode",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\FilterNode"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\FilterPlan",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\FilterPlan"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\RecordSelection",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\RecordSelection"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Schema\\DriftReport",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Schema\\DriftReport"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Schema\\OperationRef",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Schema\\OperationRef"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Schema\\SchemaChange",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Schema\\SchemaChange"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Schema\\SchemaOperationId",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Schema\\SchemaOperationId"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Schema\\SchemaReceipt",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Schema\\SchemaReceipt"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\Validation",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\Validation"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\ValueBag",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\ValueBag"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\ValueBatch",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\ValueBatch"
+    },
+    {
+      "from": "CoreX\\Attributes\\Support\\ValuePatch",
+      "kind": "class",
+      "to": "CoreX\\CustomFields\\Support\\ValuePatch"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\AutMatrixGrantSource",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\AutMatrixGrantSource"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\DefaultAccessChecker",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\DefaultAccessChecker"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\DefaultScopeResolver",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\DefaultScopeResolver"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\DirectGrantLookup",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\DirectGrantLookup"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\PermissionSurface",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\PermissionSurface"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\PrincipalIdentity",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\PrincipalIdentity"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\ScopeAvailability",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\ScopeAvailability"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\ScopePredicate",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\ScopePredicate"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\WorkspacePermissionLayer",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\WorkspacePermissionLayer"
+    },
+    {
+      "from": "CoreX\\Auth\\Access\\WorkspaceScopeWiring",
+      "kind": "class",
+      "to": "CoreX\\Access\\Access\\WorkspaceScopeWiring"
+    },
+    {
+      "from": "CoreX\\Auth\\Contracts\\AccessChecker",
+      "kind": "class",
+      "to": "CoreX\\Access\\Contracts\\AccessChecker"
+    },
+    {
+      "from": "CoreX\\Auth\\Contracts\\Principal",
+      "kind": "class",
+      "to": "CoreX\\Access\\Contracts\\Principal"
+    },
+    {
+      "from": "CoreX\\Auth\\Contracts\\RoleMatrixCompiler",
+      "kind": "class",
+      "to": "CoreX\\Access\\Contracts\\RoleMatrixCompiler"
+    },
+    {
+      "from": "CoreX\\Auth\\Contracts\\ScopeResolver",
+      "kind": "class",
+      "to": "CoreX\\Access\\Contracts\\ScopeResolver"
+    },
+    {
+      "from": "CoreX\\Auth\\CoreAuthServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\Access\\CoreAuthServiceProvider"
+    },
+    {
+      "from": "CoreX\\Auth\\Database\\Seeders\\SystemRolesSeeder",
+      "kind": "class",
+      "to": "CoreX\\Access\\Database\\Seeders\\SystemRolesSeeder"
+    },
+    {
+      "from": "CoreX\\Auth\\Enums\\PrincipalType",
+      "kind": "class",
+      "to": "CoreX\\Access\\Enums\\PrincipalType"
+    },
+    {
+      "from": "CoreX\\Auth\\Enums\\Scope",
+      "kind": "class",
+      "to": "CoreX\\Access\\Enums\\Scope"
+    },
+    {
+      "from": "CoreX\\Auth\\Exceptions\\ScopeCapabilityMismatch",
+      "kind": "class",
+      "to": "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch"
+    },
+    {
+      "from": "CoreX\\Auth\\Extend\\PermissionsMerger",
+      "kind": "class",
+      "to": "CoreX\\Access\\Extend\\PermissionsMerger"
+    },
+    {
+      "from": "CoreX\\Auth\\Identity\\PrincipalUserProvider",
+      "kind": "class",
+      "to": "CoreX\\Access\\Identity\\PrincipalUserProvider"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\ActiveEntityFilter",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\ActiveEntityFilter"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\AzGuardRoleModel",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\AzGuardRoleModel"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\DatabaseRoleMatrixCompiler",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\DatabaseRoleMatrixCompiler"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\MatrixPermissionCatalogBuilder",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\MatrixPermissionCatalogBuilder"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\MatrixValidator",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\MatrixValidator"
+    },
+    {
+      "from": "CoreX\\Auth\\Matrix\\ScopeMapVersion",
+      "kind": "class",
+      "to": "CoreX\\Access\\Matrix\\ScopeMapVersion"
+    },
+    {
+      "from": "CoreX\\Auth\\Models\\Role",
+      "kind": "class",
+      "to": "CoreX\\Access\\Models\\Role"
+    },
+    {
+      "from": "CoreX\\Auth\\Models\\RoleAssignment",
+      "kind": "class",
+      "to": "CoreX\\Access\\Models\\RoleAssignment"
+    },
+    {
+      "from": "CoreX\\Auth\\Models\\RoleMatrixRow",
+      "kind": "class",
+      "to": "CoreX\\Access\\Models\\RoleMatrixRow"
+    },
+    {
+      "from": "CoreX\\Auth\\RecordContext",
+      "kind": "class",
+      "to": "CoreX\\Access\\RecordContext"
+    },
+    {
+      "from": "CoreX\\Auth\\Roles\\RoleCloner",
+      "kind": "class",
+      "to": "CoreX\\Access\\Roles\\RoleCloner"
+    },
+    {
+      "from": "CoreX\\Auth\\Roles\\SystemRoleImmutable",
+      "kind": "class",
+      "to": "CoreX\\Access\\Roles\\SystemRoleImmutable"
+    },
+    {
+      "from": "CoreX\\Auth\\Support\\AuthOptions",
+      "kind": "class",
+      "to": "CoreX\\Access\\Support\\AuthOptions"
+    },
+    {
+      "from": "CoreX\\Auth\\Tenancy\\TenantContextGuard",
+      "kind": "class",
+      "to": "CoreX\\Access\\Tenancy\\TenantContextGuard"
+    },
+    {
+      "from": "CoreX\\Concerns\\HasAuditLog",
+      "kind": "class",
+      "to": "CoreX\\Audit\\HasAuditLog"
+    },
+    {
+      "from": "CoreX\\Concerns\\HasConfiguredId",
+      "kind": "class",
+      "to": "CoreX\\Database\\HasConfiguredId"
+    },
+    {
+      "from": "CoreX\\Contracts\\DataScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Data\\Contracts\\DataScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Contracts\\DataScopeCodec",
+      "kind": "class",
+      "to": "CoreX\\Data\\Contracts\\DataScopeCodec"
+    },
+    {
+      "from": "CoreX\\Contracts\\DepartmentRepository",
+      "kind": "class",
+      "to": "CoreX\\Departments\\Contracts\\DepartmentRepository"
+    },
+    {
+      "from": "CoreX\\Contracts\\DescribesError",
+      "kind": "class",
+      "to": "CoreX\\Errors\\Contracts\\DescribesError"
+    },
+    {
+      "from": "CoreX\\Contracts\\DurablePayload",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Contracts\\DurablePayload"
+    },
+    {
+      "from": "CoreX\\Contracts\\FeatureFlagDefinition",
+      "kind": "class",
+      "to": "CoreX\\Features\\Contracts\\FeatureFlagDefinition"
+    },
+    {
+      "from": "CoreX\\Contracts\\FeatureFlags",
+      "kind": "class",
+      "to": "CoreX\\Features\\Contracts\\FeatureFlags"
+    },
+    {
+      "from": "CoreX\\Contracts\\IdentityPasswordRehasher",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\IdentityPasswordRehasher"
+    },
+    {
+      "from": "CoreX\\Contracts\\ModuleRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Contracts\\ModuleRegistrar"
+    },
+    {
+      "from": "CoreX\\Contracts\\OperationObserver",
+      "kind": "class",
+      "to": "CoreX\\Observability\\Contracts\\OperationObserver"
+    },
+    {
+      "from": "CoreX\\Contracts\\PubSub",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Contracts\\PubSub"
+    },
+    {
+      "from": "CoreX\\Contracts\\SavedViewRepository",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Contracts\\SavedViewRepository"
+    },
+    {
+      "from": "CoreX\\Contracts\\SettingDefaultsProvider",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Contracts\\SettingDefaultsProvider"
+    },
+    {
+      "from": "CoreX\\Contracts\\SettingsRepository",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Contracts\\SettingsRepository"
+    },
+    {
+      "from": "CoreX\\Contracts\\SettingsScope",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Contracts\\SettingsScope"
+    },
+    {
+      "from": "CoreX\\Contracts\\TenantStorage",
+      "kind": "class",
+      "to": "CoreX\\Storage\\Contracts\\TenantStorage"
+    },
+    {
+      "from": "CoreX\\Contracts\\ViewAccessPolicy",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Contracts\\ViewAccessPolicy"
+    },
+    {
+      "from": "CoreX\\Contracts\\ViewSchemaProvider",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Contracts\\ViewSchemaProvider"
+    },
+    {
+      "from": "CoreX\\Contracts\\WorkerRuntime",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Contracts\\WorkerRuntime"
+    },
+    {
+      "from": "CoreX\\Data\\ErrorDescriptor",
+      "kind": "class",
+      "to": "CoreX\\Errors\\Data\\ErrorDescriptor"
+    },
+    {
+      "from": "CoreX\\Enums\\ActorType",
+      "kind": "class",
+      "to": "CoreX\\Audit\\Enums\\ActorType"
+    },
+    {
+      "from": "CoreX\\Enums\\ErrorCategory",
+      "kind": "class",
+      "to": "CoreX\\Errors\\Enums\\ErrorCategory"
+    },
+    {
+      "from": "CoreX\\Enums\\IdStrategy",
+      "kind": "class",
+      "to": "CoreX\\Database\\Enums\\IdStrategy"
+    },
+    {
+      "from": "CoreX\\Enums\\ImpersonationRestrictedAction",
+      "kind": "class",
+      "to": "CoreX\\Context\\Enums\\ImpersonationRestrictedAction"
+    },
+    {
+      "from": "CoreX\\Enums\\MessageClass",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Enums\\MessageClass"
+    },
+    {
+      "from": "CoreX\\Enums\\PiiClass",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Enums\\PiiClass"
+    },
+    {
+      "from": "CoreX\\Enums\\PubSubDriver",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Enums\\PubSubDriver"
+    },
+    {
+      "from": "CoreX\\Enums\\SettingScope",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Enums\\SettingScope"
+    },
+    {
+      "from": "CoreX\\Enums\\UnavailabilityReason",
+      "kind": "class",
+      "to": "CoreX\\Errors\\Enums\\UnavailabilityReason"
+    },
+    {
+      "from": "CoreX\\Events\\Cancellable",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Contracts\\Cancellable"
+    },
+    {
+      "from": "CoreX\\Events\\DepartmentMoved",
+      "kind": "class",
+      "to": "CoreX\\Departments\\Events\\DepartmentMoved"
+    },
+    {
+      "from": "CoreX\\Events\\DomainEvent",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Events\\DomainEvent"
+    },
+    {
+      "from": "CoreX\\Events\\FeatureFlagToggled",
+      "kind": "class",
+      "to": "CoreX\\Features\\Events\\FeatureFlagToggled"
+    },
+    {
+      "from": "CoreX\\Events\\SettingChanged",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Events\\SettingChanged"
+    },
+    {
+      "from": "CoreX\\Exceptions\\CentralContextException",
+      "kind": "class",
+      "to": "CoreX\\Context\\Exceptions\\CentralContextException"
+    },
+    {
+      "from": "CoreX\\Exceptions\\CrossWorkspaceMoveException",
+      "kind": "class",
+      "to": "CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException"
+    },
+    {
+      "from": "CoreX\\Exceptions\\DepartmentCycleException",
+      "kind": "class",
+      "to": "CoreX\\Departments\\Exceptions\\DepartmentCycleException"
+    },
+    {
+      "from": "CoreX\\Exceptions\\ImpersonationRestrictedException",
+      "kind": "class",
+      "to": "CoreX\\Context\\Exceptions\\ImpersonationRestrictedException"
+    },
+    {
+      "from": "CoreX\\Exceptions\\InboxRefused",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Exceptions\\InboxRefused"
+    },
+    {
+      "from": "CoreX\\Exceptions\\InvalidMessage",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Exceptions\\InvalidMessage"
+    },
+    {
+      "from": "CoreX\\Exceptions\\InvalidScopePayload",
+      "kind": "class",
+      "to": "CoreX\\Data\\Exceptions\\InvalidScopePayload"
+    },
+    {
+      "from": "CoreX\\Exceptions\\OutboxLeaseLost",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Exceptions\\OutboxLeaseLost"
+    },
+    {
+      "from": "CoreX\\Exceptions\\OutboxRefused",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Exceptions\\OutboxRefused"
+    },
+    {
+      "from": "CoreX\\Exceptions\\ScopeContextMismatch",
+      "kind": "class",
+      "to": "CoreX\\Context\\Exceptions\\ScopeContextMismatch"
+    },
+    {
+      "from": "CoreX\\Exceptions\\SettingValueTooLargeException",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Exceptions\\SettingValueTooLargeException"
+    },
+    {
+      "from": "CoreX\\Exceptions\\UnknownMessageContract",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\Exceptions\\UnknownMessageContract"
+    },
+    {
+      "from": "CoreX\\Exceptions\\UnsupportedScopeException",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Exceptions\\UnsupportedScopeException"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\AddressSuggestProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Contracts\\AddressSuggestProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\CurrencyConverter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Contracts\\CurrencyConverter"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\CurrencyMetadata",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Contracts\\CurrencyMetadata"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\DatasetImporter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Contracts\\DatasetImporter"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\GeographyProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Contracts\\GeographyProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\LocaleResolver",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Contracts\\LocaleResolver"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\MoneyFormatter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Formatting\\Contracts\\MoneyFormatter"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\RateImporter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Contracts\\RateImporter"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\RateProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Contracts\\RateProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Contracts\\TranslationReader",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Translation\\Contracts\\TranslationReader"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\AddressQuery",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\AddressQuery"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\ConversionPolicy",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\ConversionPolicy"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\ConversionReceipt",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\ConversionReceipt"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\CurrencyInfo",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\CurrencyInfo"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\DatasetCandidate",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\DatasetCandidate"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\DatasetGeneration",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\DatasetGeneration"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\DatasetManifest",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\DatasetManifest"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\DatasetReceipt",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\DatasetReceipt"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\FormatPolicy",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Formatting\\Data\\FormatPolicy"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\FormattedMoney",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Formatting\\Data\\FormattedMoney"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\GeographyQuery",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\GeographyQuery"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\LocaleInputs",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Data\\LocaleInputs"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\LocalePolicy",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Data\\LocalePolicy"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\LocaleResolution",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Data\\LocaleResolution"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\LocalizedText",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Translation\\Data\\LocalizedText"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\RateBatch",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\RateBatch"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\RateImportReceipt",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\RateImportReceipt"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\RateLookup",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\RateLookup"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\RateQuery",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\RateQuery"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\RateSnapshot",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Data\\RateSnapshot"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\ReferenceCursor",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\ReferenceCursor"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\ReferenceIdentity",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\ReferenceIdentity"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\ReferencePage",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\ReferencePage"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\SuggestionLimits",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\SuggestionLimits"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\SuggestionResult",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Data\\SuggestionResult"
+    },
+    {
+      "from": "CoreX\\Intl\\Data\\TranslationResult",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Translation\\Data\\TranslationResult"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\AccessDeniedException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\InvalidLocaleException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\InvalidRateException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\OperationConflictException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\SchemaMismatchException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\SnapshotExpiredException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException"
+    },
+    {
+      "from": "CoreX\\Intl\\Exceptions\\UnsupportedFormattingException",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Address\\AddressSuggestGuard",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Address\\AddressSuggestGuard"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Address\\FixtureAddressSuggestProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Address\\FixtureAddressSuggestProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Address\\MapAddressSuggestProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Address\\MapAddressSuggestProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Address\\UnsupportedAddressSuggestProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Address\\UnsupportedAddressSuggestProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Locale\\Bcp47Validator",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Internal\\Bcp47Validator"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Locale\\DefaultLocaleResolver",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Internal\\DefaultLocaleResolver"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Locale\\LaravelTranslationReader",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Translation\\Internal\\LaravelTranslationReader"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Locale\\LocalePolicyBuilder",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Internal\\LocalePolicyBuilder"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Locale\\RequestLocaleScope",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Locale\\Internal\\RequestLocaleScope"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\BrickCurrencyConverter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Internal\\BrickCurrencyConverter"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\BrickCurrencyMetadata",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Internal\\BrickCurrencyMetadata"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\PlainMoneyFormatter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Formatting\\Internal\\PlainMoneyFormatter"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\RateSnapshotMapper",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Internal\\RateSnapshotMapper"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\SqlRateImporter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Internal\\SqlRateImporter"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Money\\SqlRateProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Currency\\Internal\\SqlRateProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\AbstractFixtureReferenceProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\AbstractFixtureReferenceProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\BoxesReferenceProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\BoxesReferenceProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\CompactReferenceProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\CompactReferenceProvider"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\FixtureReferenceNormalizer",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\FixtureReferenceNormalizer"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\ReferenceCursorCodec",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\ReferenceCursorCodec"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\SqlDatasetImporter",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\SqlDatasetImporter"
+    },
+    {
+      "from": "CoreX\\Intl\\Internal\\Reference\\SqlGeographyProvider",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Territory\\Internal\\Reference\\SqlGeographyProvider"
+    },
+    {
+      "from": "CoreX\\Models\\BaseModel",
+      "kind": "class",
+      "to": "CoreX\\Database\\BaseModel"
+    },
+    {
+      "from": "CoreX\\Models\\Department",
+      "kind": "class",
+      "to": "CoreX\\Departments\\Models\\Department"
+    },
+    {
+      "from": "CoreX\\Models\\FeatureFlag",
+      "kind": "class",
+      "to": "CoreX\\Features\\Models\\FeatureFlag"
+    },
+    {
+      "from": "CoreX\\Models\\FeatureOverride",
+      "kind": "class",
+      "to": "CoreX\\Features\\Models\\FeatureOverride"
+    },
+    {
+      "from": "CoreX\\Models\\Setting",
+      "kind": "class",
+      "to": "CoreX\\Settings\\Models\\Setting"
+    },
+    {
+      "from": "CoreX\\Modules\\Compiler\\ApiOperationValidator",
+      "kind": "class",
+      "to": "CoreX\\Operations\\Definition\\ApiOperationValidator"
+    },
+    {
+      "from": "CoreX\\Modules\\Compiler\\ApiToolValidator",
+      "kind": "class",
+      "to": "CoreX\\Tools\\Internal\\ApiToolValidator"
+    },
+    {
+      "from": "CoreX\\Modules\\DefaultSettingDefinition",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Settings\\DefaultSettingDefinition"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleActivationDecision",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Gate\\ModuleActivationDecision"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleDefinition",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Definition\\ModuleDefinition"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleDependency",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Definition\\ModuleDependency"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleManifest",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Definition\\ModuleManifest"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleRuntimeContext",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Definition\\ModuleRuntimeContext"
+    },
+    {
+      "from": "CoreX\\Modules\\ModuleStatus",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Definition\\ModuleStatus"
+    },
+    {
+      "from": "CoreX\\Money\\MoneyCast",
+      "kind": "class",
+      "to": "CoreX\\Intl\\Money\\MoneyCast"
+    },
+    {
+      "from": "CoreX\\Notifications\\Commands\\SweepNotificationDeliveries",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Commands\\SweepNotificationDeliveries"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\DigestBuilder",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Contracts\\DigestBuilder"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\NotificationCenter",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Contracts\\NotificationCenter"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\NotificationChannelDriver",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\NotificationPolicy",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Contracts\\NotificationPolicy"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\PreferenceRepository",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Preferences\\Contracts\\PreferenceRepository"
+    },
+    {
+      "from": "CoreX\\Notifications\\Contracts\\RecipientResolver",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Contracts\\RecipientResolver"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\CancelResult",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\CancelResult"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\ChannelDescriptor",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\ChannelDescriptor"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DeliveryClaim",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\DeliveryClaim"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DeliveryInput",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\DeliveryInput"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DeliveryOutcome",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\DeliveryOutcome"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DeliveryTarget",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\DeliveryTarget"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DigestRef",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Data\\DigestRef"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\DigestWindow",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Data\\DigestWindow"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\EntityReference",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\EntityReference"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\InboxQuery",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\InboxQuery"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationAction",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\NotificationAction"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationContext",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\NotificationContext"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationInput",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\NotificationInput"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationPreference",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Preferences\\Data\\NotificationPreference"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationRef",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\NotificationRef"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\NotificationSubject",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Data\\NotificationSubject"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\PreferenceInput",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Preferences\\Data\\PreferenceInput"
+    },
+    {
+      "from": "CoreX\\Notifications\\Data\\RecipientReference",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\ChannelDrivers",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Internal\\ChannelDrivers"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\DeliveryCoordinator",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Internal\\DeliveryCoordinator"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\DeliveryStore",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Internal\\DeliveryStore"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\DenyNotificationPolicy",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Internal\\DenyNotificationPolicy"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\Digest\\DigestTick",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Internal\\DigestTick"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\Digest\\DigestWakeupAdapter",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupAdapter"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\Digest\\DigestWakeupHandler",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupHandler"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\Digest\\NotificationDigestDueSource",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Internal\\NotificationDigestDueSource"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\InAppChannelDriver",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\NotificationAccessDenied",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\NotificationOperationConflict",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\NullRecipientResolver",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Internal\\NullRecipientResolver"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\SettingsPreferenceRepository",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Preferences\\Internal\\SettingsPreferenceRepository"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\SqlDigestBuilder",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder"
+    },
+    {
+      "from": "CoreX\\Notifications\\Internal\\SqlNotificationCenter",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Inbox\\Internal\\SqlNotificationCenter"
+    },
+    {
+      "from": "CoreX\\Notifications\\Jobs\\DeliverDigest",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Digest\\Jobs\\DeliverDigest"
+    },
+    {
+      "from": "CoreX\\Notifications\\Jobs\\DeliverNotification",
+      "kind": "class",
+      "to": "CoreX\\Notifications\\Delivery\\Jobs\\DeliverNotification"
+    },
+    {
+      "from": "CoreX\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule"
+    },
+    {
+      "from": "CoreX\\PHPStan\\Rules\\DurablePayloadRule",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule"
+    },
+    {
+      "from": "CoreX\\PHPStan\\Rules\\DurablePayloadTypeChecker",
+      "kind": "class",
+      "to": "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadTypeChecker"
+    },
+    {
+      "from": "CoreX\\Recurrence\\Internal\\RRuleRecurrenceExpander",
+      "kind": "class",
+      "to": "CoreX\\Recurrence\\RRuleRecurrenceExpander"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\SaveViewInput",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\SaveViewInput"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\SavedQuery",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\SavedQuery"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\SavedViewRef",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\SavedViewRef"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewAction",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewAction"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewContext",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewContext"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewField",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewField"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewSchema",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewSchema"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewScope",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewScope"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Data\\ViewSubject",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Data\\ViewSubject"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Internal\\DenyViewAccessPolicy",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Internal\\DenyViewAccessPolicy"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Internal\\SqlSavedViewRepository",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Internal\\UnavailableViewSchemaProvider",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Internal\\UnavailableViewSchemaProvider"
+    },
+    {
+      "from": "CoreX\\SavedViews\\Internal\\ViewConfigValidator",
+      "kind": "class",
+      "to": "CoreX\\Panels\\SavedViews\\Internal\\ViewConfigValidator"
+    },
+    {
+      "from": "CoreX\\Search\\Meilisearch\\Exceptions\\InvalidMeilisearchConfiguration",
+      "kind": "class",
+      "to": "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration"
+    },
+    {
+      "from": "CoreX\\Search\\Meilisearch\\Internal\\MeilisearchIndexAdapter",
+      "kind": "class",
+      "to": "CoreX\\SearchMeilisearch\\Internal\\MeilisearchIndexAdapter"
+    },
+    {
+      "from": "CoreX\\Search\\Meilisearch\\Internal\\MeilisearchSearchProvider",
+      "kind": "class",
+      "to": "CoreX\\SearchMeilisearch\\Internal\\MeilisearchSearchProvider"
+    },
+    {
+      "from": "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+    },
+    {
+      "from": "CoreX\\Support\\Config",
+      "kind": "class",
+      "to": "CoreX\\Config\\Config"
+    },
+    {
+      "from": "CoreX\\Support\\Console\\ValidateConfigCommand",
+      "kind": "class",
+      "to": "CoreX\\Config\\Commands\\ValidateConfigCommand"
+    },
+    {
+      "from": "CoreX\\Support\\CoreOptions",
+      "kind": "class",
+      "to": "CoreX\\Config\\CoreOptions"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\AllowAllDataScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Data\\AllowAllDataScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\ArrayDataScopeCodec",
+      "kind": "class",
+      "to": "CoreX\\Data\\ArrayDataScopeCodec"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\CallableDataScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Data\\CallableDataScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\DataScope",
+      "kind": "class",
+      "to": "CoreX\\Data\\DataScope"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\DataScopeAccessDecision",
+      "kind": "class",
+      "to": "CoreX\\Data\\DataScopeAccessDecision"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\DenyDataScopeAuthorizer",
+      "kind": "class",
+      "to": "CoreX\\Data\\DenyDataScopeAuthorizer"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\RecordRef",
+      "kind": "class",
+      "to": "CoreX\\Data\\RecordRef"
+    },
+    {
+      "from": "CoreX\\Support\\Data\\WriteToken",
+      "kind": "class",
+      "to": "CoreX\\Data\\WriteToken"
+    },
+    {
+      "from": "CoreX\\Support\\InvalidConfiguration",
+      "kind": "class",
+      "to": "CoreX\\Config\\InvalidConfiguration"
+    },
+    {
+      "from": "CoreX\\Support\\PackageRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Contracts\\PackageRegistrar"
+    },
+    {
+      "from": "CoreX\\Support\\RegistersNothingOnBoot",
+      "kind": "class",
+      "to": "CoreX\\Modules\\RegistersNothingOnBoot"
+    },
+    {
+      "from": "CoreX\\Support\\Schema\\IdColumns",
+      "kind": "class",
+      "to": "CoreX\\Database\\Schema\\IdColumns"
+    },
+    {
+      "from": "CoreX\\Support\\SecretRef",
+      "kind": "class",
+      "to": "CoreX\\Config\\SecretRef"
+    },
+    {
+      "from": "CoreX\\Support\\ServiceProviderModuleRegistrar",
+      "kind": "class",
+      "to": "CoreX\\Modules\\Internal\\ServiceProviderModuleRegistrar"
+    },
+    {
+      "from": "CoreX\\Support\\Time\\FrozenClock",
+      "kind": "class",
+      "to": "CoreX\\Time\\FrozenClock"
+    },
+    {
+      "from": "CoreX\\Support\\Time\\LaravelClock",
+      "kind": "class",
+      "to": "CoreX\\Time\\LaravelClock"
+    },
+    {
+      "from": "CoreX\\Support\\Time\\SystemClock",
+      "kind": "class",
+      "to": "CoreX\\Time\\SystemClock"
+    },
+    {
+      "from": "CoreX\\Support\\ViolationList",
+      "kind": "class",
+      "to": "CoreX\\Config\\ViolationList"
+    },
+    {
+      "from": "CoreX\\Tasks\\Actions\\CompleteTask",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Actions\\CompleteTask"
+    },
+    {
+      "from": "CoreX\\Tasks\\Actions\\CreateTask",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Actions\\CreateTask"
+    },
+    {
+      "from": "CoreX\\Tasks\\Actions\\MoveTaskToStage",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Actions\\MoveTaskToStage"
+    },
+    {
+      "from": "CoreX\\Tasks\\Actions\\UpdateTask",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Actions\\UpdateTask"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\CompleteTaskCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Contracts\\CompleteTaskCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\CreateTaskCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Contracts\\CreateTaskCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\MoveTaskToStageCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Contracts\\MoveTaskToStageCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\TaskAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Contracts\\TaskAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\TaskMutationAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\TaskOperationReceipts",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\TaskPlanningAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\TaskPlanningCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Contracts\\UpdateTaskCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Contracts\\UpdateTaskCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\ActorData",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\ActorData"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\CompleteTaskData",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\CompleteTaskData"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\EntityReference",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\EntityReference"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\MoveTaskToStageData",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\MoveTaskToStageData"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\PlanningOperation",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Data\\PlanningOperation"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\PlanningSubject",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Data\\PlanningSubject"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\PlanningToken",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Data\\PlanningToken"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\ProjectDraft",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Project\\Data\\ProjectDraft"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\ProjectReference",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Project\\Data\\ProjectReference"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\SprintDraft",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Sprint\\Data\\SprintDraft"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\SprintReference",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Sprint\\Data\\SprintReference"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TaskDraft",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\TaskDraft"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TaskOperationKind",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TaskOperationReceipt",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TaskReference",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\TaskReference"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TimeLogDraft",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Time\\Data\\TimeLogDraft"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\TimeLogReference",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Time\\Data\\TimeLogReference"
+    },
+    {
+      "from": "CoreX\\Tasks\\Data\\UpdateTaskData",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Data\\UpdateTaskData"
+    },
+    {
+      "from": "CoreX\\Tasks\\Enums\\ProjectStatus",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Project\\Enums\\ProjectStatus"
+    },
+    {
+      "from": "CoreX\\Tasks\\Enums\\SprintStatus",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Sprint\\Enums\\SprintStatus"
+    },
+    {
+      "from": "CoreX\\Tasks\\Enums\\TaskPriority",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Enums\\TaskPriority"
+    },
+    {
+      "from": "CoreX\\Tasks\\Enums\\TaskStatus",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Enums\\TaskStatus"
+    },
+    {
+      "from": "CoreX\\Tasks\\Enums\\TimeLogSource",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Time\\Enums\\TimeLogSource"
+    },
+    {
+      "from": "CoreX\\Tasks\\Events\\TaskCompleted",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Events\\TaskCompleted"
+    },
+    {
+      "from": "CoreX\\Tasks\\Events\\TaskCreated",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Events\\TaskCreated"
+    },
+    {
+      "from": "CoreX\\Tasks\\Events\\TaskMovedToStage",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Events\\TaskMovedToStage"
+    },
+    {
+      "from": "CoreX\\Tasks\\Events\\TaskUpdated",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Events\\TaskUpdated"
+    },
+    {
+      "from": "CoreX\\Tasks\\Exceptions\\InvalidPlanningDraft",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft"
+    },
+    {
+      "from": "CoreX\\Tasks\\Exceptions\\PlanningConflict",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict"
+    },
+    {
+      "from": "CoreX\\Tasks\\Exceptions\\TasksModuleDisabled",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled"
+    },
+    {
+      "from": "CoreX\\Tasks\\Internal\\Planning\\DatabaseTaskOperationReceipts",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Internal\\DatabaseTaskOperationReceipts"
+    },
+    {
+      "from": "CoreX\\Tasks\\Internal\\Planning\\OperationStore",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Internal\\OperationStore"
+    },
+    {
+      "from": "CoreX\\Tasks\\Internal\\Planning\\PlanningCommand",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Internal\\PlanningCommand"
+    },
+    {
+      "from": "CoreX\\Tasks\\Internal\\Planning\\PlanningHasher",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Internal\\PlanningHasher"
+    },
+    {
+      "from": "CoreX\\Tasks\\Internal\\Planning\\PlanningOperationsServiceProvider",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Planning\\Internal\\PlanningOperationsServiceProvider"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\Project",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Project\\Models\\Project"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\Sprint",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Sprint\\Models\\Sprint"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\Stage",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Models\\Stage"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\Task",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\TaskTarget",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Models\\TaskTarget"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\TaskWatcher",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Task\\Models\\TaskWatcher"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\TimeLog",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Time\\Models\\TimeLog"
+    },
+    {
+      "from": "CoreX\\Tasks\\Models\\Timer",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Time\\Models\\Timer"
+    },
+    {
+      "from": "CoreX\\Tasks\\Support\\DenyTaskAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Internal\\DenyTaskAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Support\\DenyTaskMutationAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Internal\\DenyTaskMutationAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Support\\DenyTaskPlanningAccess",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Internal\\DenyTaskPlanningAccess"
+    },
+    {
+      "from": "CoreX\\Tasks\\Support\\TaskCompletion",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Internal\\TaskCompletion"
+    },
+    {
+      "from": "CoreX\\Tasks\\Support\\TaskModuleGuard",
+      "kind": "class",
+      "to": "CoreX\\Tasks\\Access\\Internal\\TaskModuleGuard"
+    },
+    {
+      "from": "CoreX\\Tenancy\\AccountRef",
+      "kind": "class",
+      "to": "CoreX\\Context\\Data\\AccountRef"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Bootstrappers\\WorkspaceContextBootstrapper",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Commands\\IdentitiesReconcileCommand",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Commands\\PendingClearCommand",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Commands\\PendingClearCommand"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Commands\\PendingCreateCommand",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Commands\\PendingCreateCommand"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Commands\\TenantsMigrateCommand",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\AccountConnectionResolver",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\AccountConnectionResolver"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\ImpersonationService",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\ImpersonationService"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\TenancyManager",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\TenancyManager"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\TenantContextResolver",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\TenantContextResolver"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\TenantContextRestorer"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\TenantDatabaseLifecycle",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Contracts\\TenantDatabaseProvisioner",
+      "kind": "class",
+      "to": "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner"
+    },
+    {
+      "from": "CoreX\\Tenancy\\DatabaseConnectionConfig",
+      "kind": "class",
+      "to": "CoreX\\Context\\DatabaseConnectionConfig"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Database\\TemplateClonePostgreSQLManager",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Provisioning\\Database\\TemplateClonePostgreSQLManager"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\AccountPurged",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Events\\AccountPurged"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\AccountSuspended",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Events\\AccountSuspended"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\DomainTrustChanged",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\DomainTrust\\Events\\DomainTrustChanged"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\ExportReady",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Events\\ExportReady"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\GraceStarted",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Events\\GraceStarted"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\Identity\\MembershipGranted",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Membership\\Events\\MembershipGranted"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\Identity\\MembershipRevoked",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Membership\\Events\\MembershipRevoked"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\ImpersonationEnded",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\ImpersonationStarted",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationStarted"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\TrialStarted",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Events\\TrialStarted"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Events\\UserSynced",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Identity\\Events\\UserSynced"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Exceptions\\OidcAuthenticationException",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Exceptions\\TenantCouldNotBeIdentifiedByHostException",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException"
+    },
+    {
+      "from": "CoreX\\Tenancy\\GuardedTenantContextRestorer",
+      "kind": "class",
+      "to": "CoreX\\Context\\GuardedTenantContextRestorer"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Controllers\\LogoutController",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Authentication\\Http\\Controllers\\LogoutController"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Controllers\\OidcLoginController",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Authentication\\Http\\Controllers\\OidcLoginController"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\AccountStatusGate",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\AllowImpersonatedWrites",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\DenyImpersonatedWrites",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\EnforceSessionLifetime",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\ImpersonationSessionGuard",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\RequireActiveMembership",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\ResolveTenantFromHost",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Http\\Middleware\\ResolveWorkspace",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace"
+    },
+    {
+      "from": "CoreX\\Tenancy\\ImpersonationGuard",
+      "kind": "class",
+      "to": "CoreX\\Context\\ImpersonationGuard"
+    },
+    {
+      "from": "CoreX\\Tenancy\\ImpersonationState",
+      "kind": "class",
+      "to": "CoreX\\Context\\ImpersonationState"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Jobs\\CreateDatabaseFromTemplate",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Provisioning\\Jobs\\CreateDatabaseFromTemplate"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Jobs\\RefreshAccountMembership",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Membership\\Jobs\\RefreshAccountMembership"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Jobs\\SyncIdentityToAccount",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Identity\\Jobs\\SyncIdentityToAccount"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Listeners\\RevertTenancyOnJobException",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\Account",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Models\\Account"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\AccountExport",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Models\\AccountExport"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\AccountSchemaState",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Account\\Models\\AccountSchemaState"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\Domain",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\DomainTrust\\Models\\Domain"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\ImpersonationGrant",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Impersonation\\Models\\ImpersonationGrant"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\Invitation",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Workspace\\Models\\Invitation"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\MigrationBatch",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Provisioning\\Models\\MigrationBatch"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\User",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Identity\\Models\\User"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\Workspace",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Workspace\\Models\\Workspace"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Models\\WorkspaceMember",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Workspace\\Models\\WorkspaceMember"
+    },
+    {
+      "from": "CoreX\\Tenancy\\NullImpersonationService",
+      "kind": "class",
+      "to": "CoreX\\Context\\NullImpersonationService"
+    },
+    {
+      "from": "CoreX\\Tenancy\\NullTenancyManager",
+      "kind": "class",
+      "to": "CoreX\\Context\\NullTenancyManager"
+    },
+    {
+      "from": "CoreX\\Tenancy\\ProvisionParams",
+      "kind": "class",
+      "to": "CoreX\\Context\\ProvisionParams"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Resolvers\\HostTenantResolver",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Scopes\\WorkspaceScope",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope"
+    },
+    {
+      "from": "CoreX\\Tenancy\\SingleAccountResolver",
+      "kind": "class",
+      "to": "CoreX\\Context\\SingleAccountResolver"
+    },
+    {
+      "from": "CoreX\\Tenancy\\StanclTenancyManager",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Runtime\\StanclTenancyManager"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Support\\AccountLifecyclePolicy",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Support\\ImpersonationPolicy",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Support\\StatusGatePolicy",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy"
+    },
+    {
+      "from": "CoreX\\Tenancy\\Support\\TenancyOptions",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions"
+    },
+    {
+      "from": "CoreX\\Tenancy\\TenancyManagerContextResolver",
+      "kind": "class",
+      "to": "CoreX\\Tenancy\\Runtime\\TenancyManagerContextResolver"
+    },
+    {
+      "from": "CoreX\\Tenancy\\TenantContext",
+      "kind": "class",
+      "to": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+      "from": "CoreX\\Tenancy\\WorkspaceRef",
+      "kind": "class",
+      "to": "CoreX\\Context\\Data\\WorkspaceRef"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\AssociateContactCompany",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Actions\\AssociateContactCompany"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\ConvertLead",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Actions\\ConvertLead"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\CreateCompany",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Actions\\CreateCompany"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\CreateContact",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Actions\\CreateContact"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\CreateDeal",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Actions\\CreateDeal"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\CreateLead",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Actions\\CreateLead"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\LogActivity",
+      "kind": "class",
+      "to": "Flex\\Crm\\Activity\\Actions\\LogActivity"
+    },
+    {
+      "from": "Flex\\Crm\\Actions\\MoveDealToStage",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Actions\\MoveDealToStage"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CompanyPayload",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Api\\CompanyPayload"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\ContactPayload",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Api\\ContactPayload"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CreateCompanyOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Api\\CreateCompanyOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CreateContactCompanyOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Api\\CreateContactCompanyOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CreateContactOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Api\\CreateContactOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CrmIdentifier",
+      "kind": "class",
+      "to": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\CrmSchemas",
+      "kind": "class",
+      "to": "Flex\\Crm\\ApiShared\\CrmSchemas"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\ListCompaniesOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Api\\ListCompaniesOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\ListContactsOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Api\\ListContactsOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\ShowCompanyOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Api\\ShowCompanyOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Api\\ShowContactOperation",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Api\\ShowContactOperation"
+    },
+    {
+      "from": "Flex\\Crm\\Casts\\DealAmount",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Casts\\DealAmount"
+    },
+    {
+      "from": "Flex\\Crm\\Contracts\\CrmExecutionContext",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Contracts\\CrmExecutionContext"
+    },
+    {
+      "from": "Flex\\Crm\\Data\\Actor",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Data\\Actor"
+    },
+    {
+      "from": "Flex\\Crm\\Data\\CompanyData",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Data\\CompanyData"
+    },
+    {
+      "from": "Flex\\Crm\\Data\\ContactData",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Data\\ContactData"
+    },
+    {
+      "from": "Flex\\Crm\\Data\\ExecutionContext",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Data\\ExecutionContext"
+    },
+    {
+      "from": "Flex\\Crm\\Enums\\ActivityType",
+      "kind": "class",
+      "to": "Flex\\Crm\\Activity\\Enums\\ActivityType"
+    },
+    {
+      "from": "Flex\\Crm\\Enums\\DealStatus",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Enums\\DealStatus"
+    },
+    {
+      "from": "Flex\\Crm\\Enums\\LeadSource",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Enums\\LeadSource"
+    },
+    {
+      "from": "Flex\\Crm\\Enums\\LeadStatus",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Enums\\LeadStatus"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\ActivityLogged",
+      "kind": "class",
+      "to": "Flex\\Crm\\Activity\\Events\\ActivityLogged"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\CompanyCreated",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Events\\CompanyCreated"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\ContactCompanyAssociated",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Events\\ContactCompanyAssociated"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\ContactCreated",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Events\\ContactCreated"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\DealCreated",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Events\\DealCreated"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\DealMovedToStage",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Events\\DealMovedToStage"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\LeadConverted",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Events\\LeadConverted"
+    },
+    {
+      "from": "Flex\\Crm\\Events\\LeadCreated",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Events\\LeadCreated"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Activity",
+      "kind": "class",
+      "to": "Flex\\Crm\\Activity\\Models\\Activity"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\ActivityTarget",
+      "kind": "class",
+      "to": "Flex\\Crm\\Activity\\Models\\ActivityTarget"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Company",
+      "kind": "class",
+      "to": "Flex\\Crm\\Company\\Models\\Company"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Concerns\\HasActivities",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Models\\Concerns\\HasActivities"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Concerns\\HasCrmContext",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Models\\Concerns\\HasCrmContext"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Contact",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Models\\Contact"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\ContactCompany",
+      "kind": "class",
+      "to": "Flex\\Crm\\Contact\\Models\\ContactCompany"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Deal",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Models\\Deal"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Lead",
+      "kind": "class",
+      "to": "Flex\\Crm\\Lead\\Models\\Lead"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Pipeline",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Models\\Pipeline"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Source",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Models\\Source"
+    },
+    {
+      "from": "Flex\\Crm\\Models\\Stage",
+      "kind": "class",
+      "to": "Flex\\Crm\\Deal\\Models\\Stage"
+    },
+    {
+      "from": "Flex\\Crm\\Support\\Channels",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Channels"
+    },
+    {
+      "from": "Flex\\Crm\\Support\\ContextGuard",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\ContextGuard"
+    },
+    {
+      "from": "Flex\\Crm\\Support\\CrmScope",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\CrmScope"
+    },
+    {
+      "from": "Flex\\Crm\\Support\\RecordRules",
+      "kind": "class",
+      "to": "Flex\\Crm\\Context\\Internal\\RecordRules"
+    },
+    {
+      "from": "corex/access",
+      "kind": "package",
+      "to": "axiomasoft/corex-access"
+    },
+    {
+      "from": "corex/attributes",
+      "kind": "package",
+      "to": "axiomasoft/corex-custom-fields"
+    },
+    {
+      "from": "corex/intl",
+      "kind": "package",
+      "to": "axiomasoft/corex-intl"
+    },
+    {
+      "from": "corex/media",
+      "kind": "package",
+      "to": "axiomasoft/corex-media"
+    },
+    {
+      "from": "corex/notifications",
+      "kind": "package",
+      "to": "axiomasoft/corex-notifications"
+    },
+    {
+      "from": "corex/panels",
+      "kind": "package",
+      "to": "axiomasoft/corex-panels"
+    },
+    {
+      "from": "corex/recurrence",
+      "kind": "package",
+      "to": "axiomasoft/corex-recurrence"
+    },
+    {
+      "from": "corex/search",
+      "kind": "package",
+      "to": "axiomasoft/corex-search"
+    },
+    {
+      "from": "corex/search-intl",
+      "kind": "package",
+      "to": "axiomasoft/corex-search-intl"
+    },
+    {
+      "from": "corex/search-meilisearch",
+      "kind": "package",
+      "to": "axiomasoft/corex-search-meilisearch"
+    },
+    {
+      "from": "corex/tasks",
+      "kind": "package",
+      "to": "axiomasoft/corex-tasks"
+    },
+    {
+      "from": "corex/tasks-workflow",
+      "kind": "package",
+      "to": "axiomasoft/corex-tasks-workflow"
+    },
+    {
+      "from": "corex/tenancy",
+      "kind": "package",
+      "to": "axiomasoft/corex-tenancy"
+    },
+    {
+      "from": "corex/transfer",
+      "kind": "package",
+      "to": "axiomasoft/corex-transfer"
+    },
+    {
+      "from": "corex/wakeup",
+      "kind": "package",
+      "to": "axiomasoft/corex-wakeup"
+    },
+    {
+      "from": "corex/workflow",
+      "kind": "package",
+      "to": "axiomasoft/corex-workflow"
+    }
+  ],
+  "manual": [],
+  "schema": "corex-golden-rename-map/1"
+}
