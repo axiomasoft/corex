@@ -1,0 +1,4 @@
+> bash scripts/contract-guard.sh
+contract-guard: packages/core/src/Contracts changed WITH CHANGELOG — OK
+contract-guard: packages/modules/src/Contracts changed WITH CHANGELOG — OK
+contract-guard: all Contracts changes accompanied by a CHANGELOG — OK

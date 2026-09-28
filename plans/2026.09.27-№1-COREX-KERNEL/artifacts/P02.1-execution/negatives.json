@@ -1,0 +1,164 @@
+[
+  {
+    "name": "a-money-registration-red",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/crm",
+      "test",
+      "--",
+      "tests/Feature/RegistryFieldCastsTest.php"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "matched": "money",
+    "ok": true
+  },
+  {
+    "name": "a-money-registration-restored",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/crm",
+      "test",
+      "--",
+      "tests/Feature/RegistryFieldCastsTest.php"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "b-tool-section-tag-red",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "packages/operations/tests/Unit/ToolDeclarationTest.php"
+    ],
+    "exit": 2,
+    "expected": 1,
+    "matched": "No compiler for API declaration mode: tool",
+    "ok": true
+  },
+  {
+    "name": "b-tool-section-tag-restored",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "packages/operations/tests/Unit/ToolDeclarationTest.php"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "c-section-order-red",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "tests/Feature/ConfigReportCompositionTest.php"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "matched": "ConfigReportCompositionTest",
+    "ok": true
+  },
+  {
+    "name": "c-section-order-restored",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "tests/Feature/ConfigReportCompositionTest.php"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "d-foreign-audit-literal-edges",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py",
+      "--write-edges"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "d-foreign-audit-literal-red",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py",
+      "--dependencies"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "matched": "internal-edge: packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php -> CoreX\\Audit\\Internal\\AuditLog",
+    "ok": true
+  },
+  {
+    "name": "d-foreign-audit-literal-restored",
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py",
+      "--dependencies"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "e-expiring-internal-edge-red",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/package-graph-gate.php"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "matched": "R2",
+    "ok": true
+  },
+  {
+    "name": "e-expiring-internal-edge-restored",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/package-graph-gate.php"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  },
+  {
+    "name": "f-foreign-internal-still-denied-red",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/package-graph-gate.php"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "matched": "R2",
+    "ok": true
+  },
+  {
+    "name": "f-foreign-internal-still-denied-restored",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/package-graph-gate.php"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "matched": null,
+    "ok": true
+  }
+]

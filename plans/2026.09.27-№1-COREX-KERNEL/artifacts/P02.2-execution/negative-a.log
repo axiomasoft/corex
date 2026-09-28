@@ -1,0 +1,1 @@
+dependency-cycle: axiomasoft/corex-operations -> axiomasoft/corex-webhooks -> axiomasoft/corex-operations

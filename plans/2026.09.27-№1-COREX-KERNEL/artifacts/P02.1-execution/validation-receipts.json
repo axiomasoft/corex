@@ -1,0 +1,98 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E17",
+    "command": "- Предусловие: O-3 выполнено (ссылка на GREEN hosted run P01 в `phases/P01/P01.md` Phase Handoff) — иначе item не стартует.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E18",
+    "command": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py seams | tail -1` до начала → `seams: 136 unresolved (18 scaffold-owned, 118 blocking)`; после → `seams: 89 unresolved (18 scaffold-owned, 71 blocking)`.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E19",
+    "command": "- `scripts/php84 vendor/bin/pest tests/Feature/ConfigReportCompositionTest.php` → 1 passed до и после шва (литерал неизменен, `git diff` теста после первого коммита пуст).",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E20",
+    "command": "- Негативы: (a) убрать регистрацию `MoneyCast` в intl → тест money-поля реестра CRM падает; (b) снять tag `ToolSectionCompiler` → `No compiler for API declaration mode: tool`; (c) поменять `order()` intl и search местами → `ConfigReportCompositionTest` падает; (d) вернуть строку `'CoreX\\\\Audit\\\\Internal\\\\AuditLog'` в tenancy → `check-maps.py --write-edges` + `--dependencies` → `internal-edge: packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php -> CoreX\\Audit\\Internal\\AuditLog`, exit 1 (затем `git checkout` карты рёбер). После каждого отката — зелёно.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E21",
+    "command": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py` → `maps OK: <558 + новые> prefixes, 21 packages`; `… --write-edges` → `edges written`; `… --dependencies` → `dependencies OK: acyclic, kernel-independent`.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E22",
+    "command": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/scripts/golden-rename-map.py` → затем `--check` → `rename-map OK: <N> class, 16 package, 3 ambiguous, 0 manual`; `GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden` → 4 passed; `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/golden-delta.py --base <коммит до item>` → `golden-delta OK`; строка `REBASELINE.md` (PLAN3.D44, php-surface).",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E23",
+    "command": "- Полный стек досье §4.5 (manifests 21 roots, test, test:pg, test:packages, golden 4 passed, ownership OK, analyse + ceilings OK, deps:analyse, package-graph/api-contract/contract-guard/naming/package-docs, anti-weakening) → все exit 0.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E24",
+    "command": "- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+    "contract_sha256": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+    "head": "173af94b77dfceee4f087cde6cb79091bae5a883",
+    "tree": "a373c7fe19689f869f53a728381fd496bcbcc48813a7bcd8e93ed599ba654be3",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-28T20:36:21Z"
+  }
+]

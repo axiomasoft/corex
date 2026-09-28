@@ -1,0 +1,530 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p02-1",
+  "version": {
+    "revision": 1,
+    "content_hash": "112783987f6b0cc300ed1cb22bea797b138b6503f1b16ed13076373c2c72ac23",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Разорвать в текущей раскладке все рёбра ядро→пакет и тест→чужой `Internal` вне operations (47 строк\n`facts/seams.tsv` item P02.1): SPI `FieldCastRegistry` (D27), `ManifestSectionCompiler` (D32 п.1), `ConfigReportSection`\n(D32 п.2, D45 п.4), `ImpersonationGuard::writeExemptModels()` (D32 п.3), SavedViews-wiring в `PanelsServiceProvider` (D28),\n`Testing`-харнессы Messaging/Wakeup/Search и стабы ядра (D35) — без изменения наблюдаемого поведения.",
+    "non_goals": [
+      "швы operations (D31) и `ResolvedContexts` (P02.2)",
+      "любые переносы файлов между пакетами и смена\nnamespace существующих классов (P02.3)",
+      "`#[Api]/#[Spi]` на новых SPI (P04)",
+      "изменение текстов вывода/исключений."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "новые файлы и правки по `examples.md` §1.1–§1.6: `packages/modules/src/Contracts/{FieldCastRegistry,ManifestSectionCompiler}.php`,\n`packages/modules/src/Compiler/{FieldCastMap,RegistryCompiler}.php`, `ModulesServiceProvider`, `IntlServiceProvider`,\n`packages/operations/src/Definition/OperationSectionCompiler.php`, `packages/operations/src/Tools/ToolSectionCompiler.php` и их\ntag-регистрации",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M2",
+      "requirement": "`packages/core/src/Contracts/ConfigReportSection.php`, 8 классов разделов, `ValidateConfigCommand`,\nрегистрации в 8 провайдерах",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M3",
+      "requirement": "`ImpersonationGuard`, `ImpersonatedModelWriteGuard`",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M4",
+      "requirement": "bindings SavedViews\n`CoreServiceProvider` → `PanelsServiceProvider`",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M5",
+      "requirement": "`CoreX\\Messaging\\Testing\\MessagingFixtures`, `CoreX\\Wakeup\\Testing\\WakeupFixtures`,\n`CoreX\\Search\\Testing\\SearchFixtures`",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M6",
+      "requirement": "копии стабов в `packages/core/tests/Support/Stubs/`",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M7",
+      "requirement": "переписанные тесты строк P02.1\n(`move`/`remove`), перенос тестов секций api/tools в operations",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M8",
+      "requirement": "регрессионный `tests/Feature/ConfigReportCompositionTest.php`",
+      "source_ref": "phases/P02.md:11"
+    },
+    {
+      "id": "M9",
+      "requirement": "строки `namespace-map.tsv` из `new-map-rows.tsv` (item P02.1), регенерированные `dependency-edges.tsv` и `tests/Golden/rename-map.json`,\ngolden baseline `php-surface` + строка `REBASELINE.md`.",
+      "source_ref": "phases/P02.md:11"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "швы operations (D31) и `ResolvedContexts` (P02.2)",
+      "source_ref": "phases/P02.md:22"
+    },
+    {
+      "id": "N2",
+      "prohibition": "любые переносы файлов между пакетами и смена\nnamespace существующих классов (P02.3)",
+      "source_ref": "phases/P02.md:22"
+    },
+    {
+      "id": "N3",
+      "prohibition": "`#[Api]/#[Spi]` на новых SPI (P04)",
+      "source_ref": "phases/P02.md:22"
+    },
+    {
+      "id": "N4",
+      "prohibition": "изменение текстов вывода/исключений.",
+      "source_ref": "phases/P02.md:22"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- Предусловие: O-3 выполнено (ссылка на GREEN hosted run P01 в `phases/P01/P01.md` Phase Handoff) — иначе item не стартует.",
+        "evidence_ref": "E17"
+      },
+      {
+        "id": "A2",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py seams | tail -1` до начала → `seams: 136 unresolved (18 scaffold-owned, 118 blocking)`; после → `seams: 89 unresolved (18 scaffold-owned, 71 blocking)`.",
+        "evidence_ref": "E18"
+      },
+      {
+        "id": "A3",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest tests/Feature/ConfigReportCompositionTest.php` → 1 passed до и после шва (литерал неизменен, `git diff` теста после первого коммита пуст).",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A4",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- Негативы: (a) убрать регистрацию `MoneyCast` в intl → тест money-поля реестра CRM падает; (b) снять tag `ToolSectionCompiler` → `No compiler for API declaration mode: tool`; (c) поменять `order()` intl и search местами → `ConfigReportCompositionTest` падает; (d) вернуть строку `'CoreX\\\\Audit\\\\Internal\\\\AuditLog'` в tenancy → `check-maps.py --write-edges` + `--dependencies` → `internal-edge: packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php -> CoreX\\Audit\\Internal\\AuditLog`, exit 1 (затем `git checkout` карты рёбер). После каждого отката — зелёно.",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A5",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py` → `maps OK: <558 + новые> prefixes, 21 packages`; `… --write-edges` → `edges written`; `… --dependencies` → `dependencies OK: acyclic, kernel-independent`.",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A6",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/scripts/golden-rename-map.py` → затем `--check` → `rename-map OK: <N> class, 16 package, 3 ambiguous, 0 manual`; `GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden` → 4 passed; `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/golden-delta.py --base <коммит до item>` → `golden-delta OK`; строка `REBASELINE.md` (PLAN3.D44, php-surface).",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A7",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- Полный стек досье §4.5 (manifests 21 roots, test, test:pg, test:packages, golden 4 passed, ownership OK, analyse + ceilings OK, deps:analyse, package-graph/api-contract/contract-guard/naming/package-docs, anti-weakening) → все exit 0.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A8",
+        "predicate": "4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\nи стабы ядра; обновлённые карты/рёбра/rename-map/golden; Completion Notes: счётчик seams до/после, вывод `golden-delta`\n(+A/~C), результаты негативов a–d, числа тестов sqlite/pg до/после, review.",
+        "scope": "public",
+        "check": "- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+        "evidence_ref": "E24"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P02/P02.1.md:P02.1",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "exec-items",
+    "carrier": "task:plan-exec 2026.09.27-№1-COREX-KERNEL P02.1",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/new-map-rows.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D44-p02-transfer-mechanics.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D32-kernel-independence-seams.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "packages/core/src/Support/Console/ValidateConfigCommand.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E17",
+      "path": "- Предусловие: O-3 выполнено (ссылка на GREEN hosted run P01 в `phases/P01/P01.md` Phase Handoff) — иначе item не стартует.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E18",
+      "path": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py seams | tail -1` до начала → `seams: 136 unresolved (18 scaffold-owned, 118 blocking)`; после → `seams: 89 unresolved (18 scaffold-owned, 71 blocking)`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E19",
+      "path": "- `scripts/php84 vendor/bin/pest tests/Feature/ConfigReportCompositionTest.php` → 1 passed до и после шва (литерал неизменен, `git diff` теста после первого коммита пуст).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- Негативы: (a) убрать регистрацию `MoneyCast` в intl → тест money-поля реестра CRM падает; (b) снять tag `ToolSectionCompiler` → `No compiler for API declaration mode: tool`; (c) поменять `order()` intl и search местами → `ConfigReportCompositionTest` падает; (d) вернуть строку `'CoreX\\\\Audit\\\\Internal\\\\AuditLog'` в tenancy → `check-maps.py --write-edges` + `--dependencies` → `internal-edge: packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php -> CoreX\\Audit\\Internal\\AuditLog`, exit 1 (затем `git checkout` карты рёбер). После каждого отката — зелёно.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py` → `maps OK: <558 + новые> prefixes, 21 packages`; `… --write-edges` → `edges written`; `… --dependencies` → `dependencies OK: acyclic, kernel-independent`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/scripts/golden-rename-map.py` → затем `--check` → `rename-map OK: <N> class, 16 package, 3 ambiguous, 0 manual`; `GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden` → 4 passed; `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/golden-delta.py --base <коммит до item>` → `golden-delta OK`; строка `REBASELINE.md` (PLAN3.D44, php-surface).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- Полный стек досье §4.5 (manifests 21 roots, test, test:pg, test:packages, golden 4 passed, ownership OK, analyse + ceilings OK, deps:analyse, package-graph/api-contract/contract-guard/naming/package-docs, anti-weakening) → все exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/new-map-rows.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/new-map-rows.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/new-map-rows.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D44-p02-transfer-mechanics.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D44-p02-transfer-mechanics.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D44-p02-transfer-mechanics.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D32-kernel-independence-seams.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D32-kernel-independence-seams.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D32-kernel-independence-seams.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/modules/src/Compiler/RegistryCompiler.php",
+        "normalized": "packages/modules/src/Compiler/RegistryCompiler.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/Support/Console/ValidateConfigCommand.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/Support/Console/ValidateConfigCommand.php",
+        "normalized": "packages/core/src/Support/Console/ValidateConfigCommand.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/CoreServiceProvider.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/CoreServiceProvider.php",
+        "normalized": "packages/core/src/CoreServiceProvider.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php",
+        "normalized": "packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-exec",
+    "provider_renderers": {
+      "claude": "/task:plan-exec 2026.09.27-№1-COREX-KERNEL P02.1",
+      "codex": "$ task:plan-exec 2026.09.27-№1-COREX-KERNEL P02.1"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P02.1",
+    "reads": [
+      "E9",
+      "E10",
+      "E11",
+      "E12",
+      "E13",
+      "E14",
+      "E15",
+      "E16"
+    ],
+    "carrier": "task:plan-exec 2026.09.27-№1-COREX-KERNEL P02.1"
+  }
+}

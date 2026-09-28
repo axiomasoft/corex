@@ -1,0 +1,110 @@
+[
+  {
+    "check": "manifests",
+    "command": [
+      "python3",
+      "scripts/manifest-check.py"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "ownership",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "ownership-gate"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "ceilings",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "quality:ceilings"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "package-graph",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-graph-gate"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "api-contract",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "api-contract"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "contract-guard",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "contract-guard"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "naming",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "naming-gate"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "package-docs",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-docs-gate"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "lint",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "lint:check"
+    ],
+    "exit": 0,
+    "log": "lint-final.log",
+    "supersedes": "earlier lint result after immutable preimage exclusion"
+  },
+  {
+    "check": "golden",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "golden"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "maps",
+    "command": [
+      "python3",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00-design/scripts/check-maps.py"
+    ],
+    "exit": 0
+  },
+  {
+    "check": "rename-map",
+    "command": [
+      "python3",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-design/scripts/golden-rename-map.py",
+      "--check"
+    ],
+    "exit": 0
+  }
+]

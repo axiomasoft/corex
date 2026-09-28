@@ -1,0 +1,1 @@
+internal-edge: packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php -> CoreX\Audit\Internal\AuditLog (axiomasoft/corex)

@@ -1,0 +1,28 @@
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\RegistryFieldCastsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit compiles a consumer money field using the intl cast registration[39m[90m [39m [90m0.25s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\RegistryFieldCastsTest[22m [90m>[39m it compiles a consumer mon…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'money'[39m[39;1m
+  [39;22m[32m+'string'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/RegistryFieldCastsTest.php[39m:[32m19[39m
+     15▕ 
+     16▕     $registry = app(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+     17▕     $field = collect($registry->entities['mon.money']->fields)->firstWhere('handle', 'amount');
+     18▕ 
+  ➜  19▕     expect($field->type)->toBe('money');
+     20▕ });
+     21▕
+
+  [33m1   [39m[39;1mtests/Feature/RegistryFieldCastsTest.php[39;22m:[39;1m19[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m0.29s[39m
+  [90mRandom Order Seed:[39m [39m1790627019[39m
+
+> pest --exclude-group=pg 'tests/Feature/RegistryFieldCastsTest.php'
+Script pest --exclude-group=pg handling the test event returned with error code 1

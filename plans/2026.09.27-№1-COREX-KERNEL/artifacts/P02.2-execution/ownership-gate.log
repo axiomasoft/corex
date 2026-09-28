@@ -1,0 +1,8 @@
+> php scripts/ownership-gate.php
+ownership FAIL: new: O2 command corex/operations corex:webhooks:prune expected-prefix corex:operations:
+ownership FAIL: new: O2 config corex/operations corex-webhooks expected corex-operations
+ownership FAIL: new: O2 namespace corex/operations CoreX\Api\Testing expected CoreX\Operations
+ownership FAIL: new: O2 namespace corex/operations CoreX\Api\Webhooks expected CoreX\Operations
+ownership FAIL: new: O2 tag corex/operations corex-webhooks-config expected-prefix corex-operations-
+ownership FAIL: new: O2 tag corex/operations corex-webhooks-migrations-tenant expected-prefix corex-operations-
+Script php scripts/ownership-gate.php handling the ownership-gate event returned with error code 1
