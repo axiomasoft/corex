@@ -5,61 +5,95 @@ on:
     branches: [main, p1r-remediation]
   pull_request:
 
+permissions: {}
+
 jobs:
   anti-weakening-gate:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Anti-weakening gate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Guard against gate-weakening diffs
         run: bash scripts/anti-weakening-gate.sh
 
   tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.3', '8.4', '8.5']
+        php: ['8.4', '8.5']
         laravel: ['12.*', '13.*']
     name: PHP ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:${{ matrix.laravel }}" --no-update --no-interaction
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
 
-      - name: Boxed profile (drop 8.4-only tenancy)
-        if: matrix.php == '8.3'
-        run: composer remove corex/tenancy --no-update --no-interaction
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Tests
         run: composer test
 
   tests-pg:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         laravel: ['12.*', '13.*']
-    name: PG lane (postgres:16) · Laravel ${{ matrix.laravel }}
+        postgres: ['16', '18']
+    name: PG lane (postgres:${{ matrix.postgres }}) · Laravel ${{ matrix.laravel }}
     services:
       postgres:
-        image: postgres:16
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -71,23 +105,51 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:${{ matrix.laravel }}" --no-update --no-interaction
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Prepare PostgreSQL test databases
         run: |
@@ -106,59 +168,130 @@ jobs:
           PGSQL_PASSWORD: corex
 
   api-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         laravel: ['12.*', '13.*']
     name: API package · Laravel ${{ matrix.laravel }}
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/operations require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+        run: composer --working-dir=packages/operations require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+      - name: Constrain root Laravel version
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Root Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer --working-dir=packages/operations require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/operations
       - name: API tests and coverage
         run: composer --working-dir=packages/operations test:coverage
       - name: API static analysis
         run: composer --working-dir=packages/operations analyse
 
   notifications-wakeup-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Notifications and wakeup packages
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
       - name: Wakeup tests
         run: composer --working-dir=packages/wakeup test
       - name: Notification tests
         run: composer --working-dir=packages/notifications test
       - name: Notification and wakeup static analysis
-        run: vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src packages/wakeup/src --memory-limit=1G
+        run: |
+          composer --working-dir=packages/notifications analyse
+          composer --working-dir=packages/wakeup analyse
 
   notifications-pg-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
-    name: Notifications package (PG16)
+    name: Notifications package (PG18)
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -171,17 +304,39 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
       - name: PostgreSQL delivery admission test
         run: composer --working-dir=packages/notifications test:pg
         env:
@@ -192,51 +347,113 @@ jobs:
           PGSQL_PASSWORD: corex
 
   panels-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Panels package
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/panels
       - name: Panels tests and coverage
         run: composer --working-dir=packages/panels test:coverage
       - name: Panels static analysis
         run: composer --working-dir=packages/panels analyse
 
   media-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Media package
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, gd, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/media
       - name: Media tests and coverage
         run: composer --working-dir=packages/media test:coverage
       - name: Media static analysis
         run: composer --working-dir=packages/media analyse
 
   media-pg-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
-    name: Media package (PG16)
+    name: Media package (PG18)
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -249,17 +466,45 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/media
       - name: Media PostgreSQL concurrency test
         run: composer --working-dir=packages/media test:pg
         env:
@@ -270,15 +515,17 @@ jobs:
           PGSQL_PASSWORD: corex
 
   tenancy-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         laravel: ['12.*', '13.*']
-    name: Tenancy package (PG16) · Laravel ${{ matrix.laravel }}
+    name: Tenancy package (PG18) · Laravel ${{ matrix.laravel }}
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -290,23 +537,64 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/tenancy require "laravel/framework:${{ matrix.laravel }}" --no-update --no-interaction
+        run: composer --working-dir=packages/tenancy require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Constrain root Laravel version
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Root Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer --working-dir=packages/tenancy require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/tenancy
 
       - name: Tenancy tests
         run: composer --working-dir=packages/tenancy test
@@ -322,11 +610,13 @@ jobs:
         run: composer --working-dir=packages/tenancy analyse
 
   crm-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Crm package
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -341,19 +631,47 @@ jobs:
     env:
       PGSQL_PORT: 5432
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/crm update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/crm
 
       - name: Crm tests
         run: composer --working-dir=packages/crm test
@@ -365,22 +683,46 @@ jobs:
         run: composer --working-dir=packages/crm test:coverage
 
   packages-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Remaining cohort package aggregator
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Per-package test aggregator
         run: composer test:packages
@@ -389,11 +731,13 @@ jobs:
         run: vendor/bin/pest packages/core/tests packages/modules/tests
 
   tasks-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Tasks package
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -406,24 +750,52 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
 
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/tasks
+
       - name: Tasks tests
         run: composer --working-dir=packages/tasks test
 
-      - name: Tasks tests (PG16)
+      - name: Tasks tests (PG18)
         run: composer --working-dir=packages/tasks test:pg
         env:
           PGSQL_HOST: 127.0.0.1
@@ -436,11 +808,13 @@ jobs:
         run: composer --working-dir=packages/tasks test:coverage
 
   auth-tests:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Auth package (AzGuard)
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -453,27 +827,52 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
-      - name: Register public AzGuard GitHub VCS
-        run: composer --working-dir=packages/access config repositories.azguard vcs https://github.com/axiomasoft/azguard.git
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/access
+
       - name: Auth tests
         run: composer --working-dir=packages/access test
 
-      - name: Auth tests (PG16, aut_* DDL)
+      - name: Auth tests (PG18, aut_* DDL)
         run: composer --working-dir=packages/access test:pg
         env:
           PGSQL_HOST: 127.0.0.1
@@ -486,22 +885,46 @@ jobs:
         run: composer --working-dir=packages/access analyse
 
   layer-gate:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Layer & core-isolation gate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
@@ -516,45 +939,75 @@ jobs:
         run: composer table-write-ownership-gate
 
   contract-guard:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Contract-snapshot guard
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Guard src/Contracts changes against a CHANGELOG entry
-        run: bash scripts/contract-guard.sh "${{ github.event.pull_request.base.sha || github.event.before }}"
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: bash scripts/contract-guard.sh "$BASE_SHA"
 
   backward-compatibility:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Backward compatibility (Roave · PHP 8.4)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Roave BC diff (experimental report-only)
         run: bash scripts/bc-check.sh
 
   coverage:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Coverage (floor from scripts/coverage-min-floor.txt)
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -574,19 +1027,41 @@ jobs:
         ports:
           - 7700:7700
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Prepare PostgreSQL test databases
         run: |
@@ -611,22 +1086,46 @@ jobs:
           PGSQL_PASSWORD: corex
 
   quality:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     name: Static analysis & code style
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: PHPStan
         run: composer analyse
@@ -644,12 +1143,14 @@ jobs:
         run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json
 
   mutation-check:
+    permissions:
+      contents: read
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     name: Mutation registry (scripts/mutation-check.sh --all)
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -665,21 +1166,42 @@ jobs:
       # fetch-depth: 0 (D97): the 3-way fallback in mutation-check.sh needs the
       # pre-image blob of each patch's `index` line reachable in the object
       # database — the default shallow (depth-1) checkout doesn't carry it.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Mutation registry — every case must red under sabotage
         run: bash scripts/mutation-check.sh --all
@@ -689,3 +1211,171 @@ jobs:
           PGSQL_DATABASE: corex_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
+
+  manifests:
+    name: Manifest policy and strict Composer validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Manifest policy
+        run: python3 scripts/manifest-check.py
+      - name: Strict validation of every installing root
+        run: |
+          for manifest in composer.json packages/*/composer.json; do
+            composer validate --strict --no-check-lock --working-dir="$(dirname "$manifest")"
+          done
+
+  golden:
+    name: Golden surface and wire contracts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Stage sealed stancl provider candidates
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Composer audit
+        run: composer audit --locked
+      - name: Golden snapshots
+        run: composer golden
+
+  ownership:
+    name: Package identifier ownership
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Stage sealed stancl provider candidates
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Composer audit
+        run: composer audit --locked
+      - name: Ownership ratchet
+        run: php scripts/ownership-gate.php
+
+  dependencies:
+    name: Standalone dependencies and lockfile audits
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Stage sealed stancl provider candidates
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+      - name: Composer audit
+        run: composer audit --locked
+      - name: Analyse every standalone package
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          bash scripts/dependency-analyser.sh --all
+      - name: Audit every standalone package lockfile
+        run: |
+          for manifest in packages/*/composer.json; do
+            composer audit --locked --working-dir="$(dirname "$manifest")"
+          done
+
+  zizmor:
+    name: Workflow supply chain security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+        with:
+          advanced-security: false
+          persona: regular
+          version: v1.30.1
+          online-audits: false
+          inputs: .github

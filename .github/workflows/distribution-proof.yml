@@ -3,99 +3,111 @@ name: Distribution proof
 on:
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   public-candidates:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - php: '8.3'
-            laravel: '12'
-            arguments: '--package corex/core --package corex/modules --package corex/tasks'
-          - php: '8.3'
-            laravel: '13'
-            arguments: '--package corex/core --package corex/modules --package corex/tasks'
           - php: '8.4'
             laravel: '12'
-            arguments: ''
           - php: '8.4'
             laravel: '13'
-            arguments: ''
           - php: '8.5'
             laravel: '12'
-            arguments: ''
           - php: '8.5'
             laravel: '13'
-            arguments: ''
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Verify sealed public candidates
-        run: python3 scripts/distribution/pristine-proof.py --laravel ${{ matrix.laravel }} ${{ matrix.arguments }}
+        env:
+          LARAVEL_VERSION: ${{ matrix.laravel }}
+        run: python3 scripts/distribution/pristine-proof.py --laravel "$LARAVEL_VERSION"
 
   extension-fixtures:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: External extension fixtures
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
       - name: Prove five standalone extension fixtures
         run: python3 scripts/distribution/verify_extension_fixtures.py
 
   api-clients:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: External REST and MCP clients
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
       - name: Prove REST and MCP parity against committed snapshots
         run: python3 scripts/distribution/verify_api_clients.py
 
   async-clients:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: External bulk and webhook clients
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
       - name: Prove bulk lifecycle and webhook verification
         run: python3 scripts/distribution/verify_async_clients.py
 
   equipment-consumer:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Equipment registry consumer
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
       - name: Prove the equipment registry against the frozen candidate
         run: python3 scripts/distribution/verify_equipment_consumer.py
 
   install-profiles:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Pristine install profiles (${{ matrix.php }} ${{ matrix.mode }})
@@ -105,13 +117,11 @@ jobs:
         include:
           - php: '8.4'
             mode: profiles
-          - php: '8.3'
-            mode: edges
           - php: '8.5'
             mode: edges
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgres:18-alpine
         env:
           POSTGRES_USER: corex
           POSTGRES_PASSWORD: corex
@@ -124,30 +134,35 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
       - name: Prove install profiles from the frozen candidate
         env:
           PGSQL_HOST: 127.0.0.1
           PGSQL_PORT: 5434
+          PROFILE_MODE: ${{ matrix.mode }}
+          PHP_VERSION: ${{ matrix.php }}
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
-        run: python3 scripts/distribution/profile-proof.py --mode ${{ matrix.mode }} --php ${{ matrix.php }} --receipt ${{ runner.temp }}/profile-receipt.json --matrix ${{ runner.temp }}/profile-matrix.json
+        run: python3 scripts/distribution/profile-proof.py --mode "$PROFILE_MODE" --php "$PHP_VERSION" --receipt "$RUNNER_TEMP/profile-receipt.json" --matrix "$RUNNER_TEMP/profile-matrix.json"
 
   upgrade-proof:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Supported-version upgrade proof
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgres:18-alpine
         env:
           POSTGRES_USER: corex
           POSTGRES_PASSWORD: corex
@@ -160,13 +175,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
       - name: Prove named upgrade failures
@@ -178,52 +194,98 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/distribution/upgrade-proof.py prove --receipt ${{ runner.temp }}/upgrade-receipt.json
+        run: python3 scripts/distribution/upgrade-proof.py prove --receipt $RUNNER_TEMP/upgrade-receipt.json
 
   remaining-cohort-structural:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Remaining cohort structural proof
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
       - name: Verify remaining cohort export recipe
         run: python3 scripts/distribution/remaining-cohort-export.py
 
   dod-release:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: DoD 1.0 release gate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
       - name: DoD 1.0 static subset
-        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --output ${{ runner.temp }}/dod-ci.json
+        run: python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --output $RUNNER_TEMP/dod-ci.json
       - name: Verify sealed preflight refusal boundaries
         run: python3 -m unittest scripts/distribution/tests/test_release_preflight.py
       - name: Run all 27 DoD assertions and reject stale CI evidence
-        run: python3 scripts/dod-1.0.py check --profile release --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --reject-stale-ci ${{ runner.temp }}/dod-ci.json
+        run: python3 scripts/dod-1.0.py check --profile release --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json --reject-stale-ci $RUNNER_TEMP/dod-ci.json
       - name: Qualify the committed stable source without publication
-        run: python3 scripts/distribution/release_preflight.py seal --receipt ${{ runner.temp }}/release-preflight.json --packet ${{ runner.temp }}/publication-packet.json
+        run: python3 scripts/distribution/release_preflight.py seal --receipt $RUNNER_TEMP/release-preflight.json --packet $RUNNER_TEMP/publication-packet.json

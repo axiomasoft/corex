@@ -1,0 +1,2 @@
+# The regular persona runs without repository-specific audit suppressions.
+rules: {}

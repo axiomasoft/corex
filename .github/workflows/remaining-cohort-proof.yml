@@ -3,21 +3,18 @@ name: Remaining cohort proof
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   matrix-quality-sqlite:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - php: '8.3'
-            laravel: '12'
-          - php: '8.3'
-            laravel: '13'
           - php: '8.4'
             laravel: '12'
           - php: '8.4'
@@ -27,27 +24,51 @@ jobs:
           - php: '8.5'
             laravel: '13'
     name: Cohort sqlite php ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:${{ matrix.laravel }}.*" --no-update --no-interaction
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION.*" --no-update --no-interaction
 
-      - name: Boxed profile (drop 8.4-only tenancy)
-        if: matrix.php == '8.3'
-        run: composer remove corex/tenancy --no-update --no-interaction
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Platform requirements
         run: composer check-platform-reqs
@@ -56,6 +77,8 @@ jobs:
         run: composer test
 
   matrix-quality-pg:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     strategy:
@@ -70,10 +93,10 @@ jobs:
             laravel: '12'
           - php: '8.5'
             laravel: '13'
-    name: Cohort pg16 php ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    name: Cohort pg18 php ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_DB: corex_test
           POSTGRES_USER: corex
@@ -85,23 +108,51 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:${{ matrix.laravel }}.*" --no-update --no-interaction
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION.*" --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
 
       - name: Platform requirements
         run: composer check-platform-reqs
@@ -123,22 +174,45 @@ jobs:
           PGSQL_PASSWORD: corex
 
   local-matrix-receipt:
+    permissions:
+      contents: read
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     name: Local matrix receipt (structural)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, xdebug
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
+        env:
+          GH_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          : "${GH_TOKEN:?O-3 requires the read-only AZGUARD_READ_TOKEN secret}"
+          python3 scripts/distribution/stage-stancl-providers.py
+          # The sealed provider archive replaces the private monorepo VCS source in this job.
+          python3 - <<'PYPROVIDERS'
+          import json
+          from pathlib import Path
+          for name in ('composer.json', 'packages/access/composer.json', 'packages/tenancy/composer.json'):
+              path = Path(name)
+              data = json.loads(path.read_text())
+              data['repositories'] = {
+                  key: repository for key, repository in data['repositories'].items()
+                  if repository.get('url') != 'https://github.com/axiomasoft/azguard.git'
+              }
+              path.write_text(json.dumps(data, indent=4) + '\n')
+          PYPROVIDERS
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
       - name: Build local matrix and runner plan
         run: |
           if [ -f delivery/remaining-cohort-20260915/candidate.json ]; then
