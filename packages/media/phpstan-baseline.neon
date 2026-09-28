@@ -1,0 +1,433 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: Access to an undefined property object::$file_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$height.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$mime_type.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$profile_key.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$size_bytes.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Access to an undefined property object::$width.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 5
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: 'Casting to int something that''s already int<0, max>.'
+			identifier: cast.useless
+			count: 2
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: 'Parameter #2 $fileId of class CoreX\Media\Data\MediaConversionRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: 'Parameter #3 $profile of class CoreX\Media\Data\MediaConversionRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: 'Parameter #4 $mimeType of class CoreX\Media\Data\MediaConversionRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ConversionCoordinator.php
+
+		-
+			rawMessage: 'Casting to int something that''s already int<0, max>.'
+			identifier: cast.useless
+			count: 2
+			path: src/Internal/GdThumbnailDriver.php
+
+		-
+			rawMessage: 'Parameter #1 $width of function imagecreatetruecolor expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/GdThumbnailDriver.php
+
+		-
+			rawMessage: 'Parameter #2 $height of function imagecreatetruecolor expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/GdThumbnailDriver.php
+
+		-
+			rawMessage: 'Parameter #4 $color of function imagefill expects int, int<0, max>|false given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/GdThumbnailDriver.php
+
+		-
+			rawMessage: 'Cannot call method orWhere() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Cannot call method whereNull() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 13
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Method CoreX\Media\Internal\MediaOperationStore::dueConversionRequests() should return list<CoreX\Media\Data\ConversionOperationRequest> but returns array<int, CoreX\Media\Data\ConversionOperationRequest>.'
+			identifier: return.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Method CoreX\Media\Internal\MediaOperationStore::duePurgeFileIds() should return list<string> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #1 $fileId of class CoreX\Media\Data\ConversionOperationRequest constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #2 $fileId of class CoreX\Media\Data\PurgeClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #3 $fileId of class CoreX\Media\Data\ConversionClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #5 $objectKeys of class CoreX\Media\Data\PurgeClaim constructor expects list<string>, non-empty-list given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #6 $sourceKey of class CoreX\Media\Data\ConversionClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #7 $sourceMimeType of class CoreX\Media\Data\ConversionClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Parameter #9 $profileDigest of class CoreX\Media\Data\ConversionClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Part $conversion->profile_digest (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: 'Part $file->version (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Internal/MediaOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Access to an undefined property object::$kind.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Access to an undefined property object::$mime_type.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Access to an undefined property object::$sha256.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Access to an undefined property object::$size_bytes.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Access to an undefined property object::$state.
+			identifier: property.notFound
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #1 $fileId of class CoreX\Media\Data\MediaReadRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #1 $id of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #1 $path of method Illuminate\Contracts\Filesystem\Filesystem::readStream() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #2 $kind of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #2 $mimeType of class CoreX\Media\Data\MediaReadRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #3 $mimeType of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #4 $sha256 of class CoreX\Media\Data\MediaReadRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #5 $openStream of class CoreX\Media\Data\MediaReadRef constructor expects Closure(): resource, Closure(): (resource|null) given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #5 $sha256 of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: 'Parameter #6 $state of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlMediaLibrary.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 3
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Method CoreX\Media\Internal\SqlRelationLookup::usages() should return list<CoreX\Media\Data\AttachmentRef> but returns array<int, CoreX\Media\Data\AttachmentRef>.'
+			identifier: return.type
+			count: 1
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #1 $fileId of class CoreX\Media\Data\AttachmentRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #1 $id of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #2 $entityHandle of class CoreX\Media\Data\AttachmentRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #2 $kind of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #3 $entityId of class CoreX\Media\Data\AttachmentRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #3 $mimeType of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #4 $slot of class CoreX\Media\Data\AttachmentRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #5 $sha256 of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: 'Parameter #6 $state of class CoreX\Media\Data\MediaFileRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Internal/SqlRelationLookup.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method connection() on mixed.'
+			identifier: method.nonObject
+			count: 4
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 4
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Media\Support\MediaOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\ConversionCoordinator constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\MediaOperationStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\SqlMediaLibrary constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\SqlRelationLookup constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $drivers of class CoreX\Media\Internal\ConversionProfiles constructor expects iterable<CoreX\Media\Contracts\ConversionDriver>, iterable given.'
+			identifier: argument.type
+			count: 1
+			path: src/MediaServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $conversion of class CoreX\Media\Support\MediaOptions constructor expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Support/MediaOptions.php

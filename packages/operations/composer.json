@@ -4,24 +4,39 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.4",
         "corex/core": "^1.0@dev",
         "corex/modules": "^1.0@dev",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
         "illuminate/http": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
-        "illuminate/validation": "^12.0|^13.0"
+        "illuminate/validation": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0",
+        "symfony/http-kernel": "^7.2|^8.0"
     },
     "suggest": {
         "corex/transfer": "Optional bounded import/export adapter for durable bulk operations",
-        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
+        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
+        "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
         "corex/transfer": "^1.0@dev",
-        "orchestra/testbench": "^10.12|^11.3",
-        "pestphp/pest": "^5.2",
-        "laravel/pint": "^1.32",
+        "ext-openssl": "*",
+        "ext-pcntl": "*",
+        "ext-pdo": "*",
         "larastan/larastan": "^3.12",
-        "opis/json-schema": "^2.4.1"
+        "laravel/pint": "^1.32",
+        "opis/json-schema": "^2.4.1",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "phpunit/phpunit": "^12.0|^13.0",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
@@ -92,7 +107,10 @@
                 "src/Webhooks/Laravel/"
             ],
             "CoreX\\Api\\Internal\\Webhook\\": "src/Webhooks/Internal/"
-        }
+        },
+        "classmap": [
+            "src/Cost/Internal/BudgetAdmission.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -123,7 +141,7 @@
     "scripts": {
         "test": "pest",
         "test:coverage": "pest --coverage --min=80",
-        "analyse": "phpstan analyse --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "pint --test"
     },
     "extra": {

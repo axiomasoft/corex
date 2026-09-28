@@ -1,0 +1,721 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000100_create_crm_pipelines_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000110_create_crm_stages_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000110_create_crm_stages_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 2
+			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 3
+			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000130_create_crm_companies_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000130_create_crm_companies_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000140_create_crm_contacts_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 3
+			path: database/migrations/2026_06_14_000140_create_crm_contacts_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000150_create_crm_leads_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 4
+			path: database/migrations/2026_06_14_000150_create_crm_leads_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000160_create_crm_activities_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 2
+			path: database/migrations/2026_06_14_000160_create_crm_activities_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 7
+			path: database/migrations/2026_09_14_000002_company_contact_parity.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 4
+			path: database/migrations/2026_09_14_000002_company_contact_parity.php
+
+		-
+			rawMessage: Cannot access property $server_version_num on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: database/migrations/2026_09_14_000002_company_contact_parity.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: database/migrations/2026_09_14_000002_company_contact_parity.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 19
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 7
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: Cannot access offset 'name' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: Cannot access offset 'type_name' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: Cannot access property $server_version_num on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: 'Part $column[''name''] (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: database/migrations/2026_09_15_000001_full_storage_parity.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Company>::sharedLock().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Activity/Actions/LogActivity.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\Activity::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Activity/Models/Activity.php
+
+		-
+			rawMessage: 'Parameter #1 $record of method Flex\Crm\Support\RecordRules::saving() expects Flex\Crm\Models\Activity|Flex\Crm\Models\Company|Flex\Crm\Models\Contact|Flex\Crm\Models\Deal|Flex\Crm\Models\Lead, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Activity/Models/Activity.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Company/Api/CompanyPayload.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Company/Api/CompanyPayload.php
+
+		-
+			rawMessage: 'Parameter $accountLevel of class Flex\Crm\Data\CompanyData constructor expects bool, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $address of class Flex\Crm\Data\CompanyData constructor expects array<string, mixed>|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $bankDetails of class Flex\Crm\Data\CompanyData constructor expects array<string, mixed>|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $domain of class Flex\Crm\Data\CompanyData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $emails of class Flex\Crm\Data\CompanyData constructor expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $inn of class Flex\Crm\Data\CompanyData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $kpp of class Flex\Crm\Data\CompanyData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $legalName of class Flex\Crm\Data\CompanyData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $name of class Flex\Crm\Data\CompanyData constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $ogrn of class Flex\Crm\Data\CompanyData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $phones of class Flex\Crm\Data\CompanyData constructor expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/CreateCompanyOperation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Company>::limit().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Company/Api/ListCompaniesOperation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Company>::orderBy().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Company/Api/ListCompaniesOperation.php
+
+		-
+			rawMessage: 'Parameter #1 $value of method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Company>::limit() expects int, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Api/ListCompaniesOperation.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\Company::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Company/Models/Company.php
+
+		-
+			rawMessage: 'Parameter #1 $record of method Flex\Crm\Support\RecordRules::saving() expects Flex\Crm\Models\Activity|Flex\Crm\Models\Company|Flex\Crm\Models\Contact|Flex\Crm\Models\Deal|Flex\Crm\Models\Lead, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Company/Models/Company.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Company>::sharedLock().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Contact/Actions/AssociateContactCompany.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Contact>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Contact/Actions/AssociateContactCompany.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\ContactCompany>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/Contact/Actions/AssociateContactCompany.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Contact/Api/ContactPayload.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Contact/Api/ContactPayload.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Contact/Api/CreateContactCompanyOperation.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 2
+			path: src/Contact/Api/CreateContactCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $isPrimary of method Flex\Crm\Actions\AssociateContactCompany::handle() expects bool, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $label of method Flex\Crm\Actions\AssociateContactCompany::handle() expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactCompanyOperation.php
+
+		-
+			rawMessage: 'Parameter $accountLevel of class Flex\Crm\Data\ContactData constructor expects bool, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $birthday of class Flex\Crm\Data\ContactData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $emails of class Flex\Crm\Data\ContactData constructor expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $jobTitle of class Flex\Crm\Data\ContactData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $nameFirst of class Flex\Crm\Data\ContactData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $nameLast of class Flex\Crm\Data\ContactData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $nameMiddle of class Flex\Crm\Data\ContactData constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Parameter $phones of class Flex\Crm\Data\ContactData constructor expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/CreateContactOperation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Contact>::limit().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Contact/Api/ListContactsOperation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Contact>::orderBy().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Contact/Api/ListContactsOperation.php
+
+		-
+			rawMessage: 'Parameter #1 $value of method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Contact>::limit() expects int, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Api/ListContactsOperation.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\Contact::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Contact/Models/Contact.php
+
+		-
+			rawMessage: 'Parameter #1 $record of method Flex\Crm\Support\RecordRules::saving() expects Flex\Crm\Models\Activity|Flex\Crm\Models\Company|Flex\Crm\Models\Contact|Flex\Crm\Models\Deal|Flex\Crm\Models\Lead, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Contact/Models/Contact.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\ContactCompany::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Contact/Models/ContactCompany.php
+
+		-
+			rawMessage: Usage of internal trait CoreX\Concerns\HasConfiguredId in class Flex\Crm\Models\ContactCompany.
+			identifier: traitUse.internalTrait
+			count: 1
+			path: src/Contact/Models/ContactCompany.php
+
+		-
+			rawMessage: Access to property $database of internal class CoreX\Tenancy\DatabaseConnectionConfig from outside its root namespace CoreX.
+			identifier: property.internalClass
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: 'Call to method isActive() of internal interface CoreX\Modules\Contracts\ModuleRegistry from outside its root namespace CoreX.'
+			identifier: method.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: 'Call to method resolve() of internal interface CoreX\Tenancy\Contracts\AccountConnectionResolver from outside its root namespace CoreX.'
+			identifier: method.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: Cannot access property $name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: 'Parameter $connections of method Flex\Crm\Support\ContextGuard::__construct() has typehint with internal interface CoreX\Tenancy\Contracts\AccountConnectionResolver.'
+			identifier: parameter.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: 'Parameter $modules of method Flex\Crm\Support\ContextGuard::__construct() has typehint with internal interface CoreX\Modules\Contracts\ModuleRegistry.'
+			identifier: parameter.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: Property $connections references internal interface CoreX\Tenancy\Contracts\AccountConnectionResolver in its type.
+			identifier: property.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: Property $modules references internal interface CoreX\Modules\Contracts\ModuleRegistry in its type.
+			identifier: property.internalInterface
+			count: 1
+			path: src/Context/ContextGuard.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<covariant Illuminate\Database\Eloquent\Model>::orWhereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Context/CrmScope.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<covariant Illuminate\Database\Eloquent\Model>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Context/CrmScope.php
+
+		-
+			rawMessage: 'Call to function array_filter() requires parameter #2 to be passed to avoid loose comparison semantics.'
+			identifier: arrayFilter.strict
+			count: 1
+			path: src/Context/Internal/RecordRules.php
+
+		-
+			rawMessage: Cannot access property $value on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Context/Internal/RecordRules.php
+
+		-
+			rawMessage: 'Parameter #1 $id of method Flex\Crm\Support\ContextGuard::id() expects int|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Context/Internal/RecordRules.php
+
+		-
+			rawMessage: 'Parameter $id of method Flex\Crm\Support\ContextGuard::user() expects int|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Context/Internal/RecordRules.php
+
+		-
+			rawMessage: Usage of internal trait CoreX\Concerns\HasConfiguredId in class Flex\Crm\Models\Source.
+			identifier: traitUse.internalTrait
+			count: 1
+			path: src/Context/Models/Source.php
+
+		-
+			rawMessage: 'Call to method auditable() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 2
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method extends() of internal class CoreX\Modules\ModuleManifest from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method handle() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method label() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method table() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method tablePrefix() of internal class CoreX\Modules\ModuleManifest from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method title() of internal class CoreX\Modules\ModuleManifest from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to method titleAttribute() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to static method make() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to static method make() of internal class CoreX\Modules\ModuleManifest from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Call to static method operation() of internal class CoreX\Modules\Extend\Api from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 7
+			path: src/CrmModule.php
+
+		-
+			rawMessage: Class Flex\Crm\CrmModule extends internal class CoreX\Modules\ModuleDefinition.
+			identifier: class.extendsInternalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: 'Return type of method Flex\Crm\CrmModule::manifest() has typehint with internal class CoreX\Modules\ModuleManifest.'
+			identifier: return.internalClass
+			count: 1
+			path: src/CrmModule.php
+
+		-
+			rawMessage: Access to constant Auditable of internal enum CoreX\Modules\Enums\Capability from outside its root namespace CoreX.
+			identifier: classConstant.internalEnum
+			count: 2
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: Access to constant on internal class CoreX\Modules\Registry\ArrayEntityRegistry.
+			identifier: classConstant.internalClass
+			count: 1
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: 'Call to method __construct() of internal class CoreX\Modules\Registry\EntityDefinition from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: 'Call to method register() of internal class CoreX\Modules\Registry\ArrayEntityRegistry from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 7
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: Instantiation of internal class CoreX\Modules\Registry\EntityDefinition.
+			identifier: new.internalClass
+			count: 7
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method Flex\Crm\Support\CrmOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/CrmServiceProvider.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Pipeline>::sharedLock().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Deal/Actions/CreateDeal.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Stage>::first().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Deal/Actions/CreateDeal.php
+
+		-
+			rawMessage: 'Parameter #1 $attributes of method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Deal>::create() expects array<model property of Flex\Crm\Models\Deal, mixed>, array<string, Brick\Money\Money|Flex\Crm\Enums\DealStatus|Illuminate\Support\Carbon|int|string|null> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Deal/Actions/CreateDeal.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Deal>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Deal/Actions/MoveDealToStage.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Stage>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Deal/Actions/MoveDealToStage.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Casts\DealAmount::set() should return array<string, int|string|null> but returns array<string, mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Deal/Casts/DealAmount.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\Deal::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Deal/Models/Deal.php
+
+		-
+			rawMessage: 'Parameter #1 $record of method Flex\Crm\Support\RecordRules::saving() expects Flex\Crm\Models\Activity|Flex\Crm\Models\Company|Flex\Crm\Models\Contact|Flex\Crm\Models\Deal|Flex\Crm\Models\Lead, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Deal/Models/Deal.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Stage>::orderBy().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Deal/Models/Pipeline.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Models\Lead>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Lead/Actions/ConvertLead.php
+
+		-
+			rawMessage: 'Parameter #1 $name of static method Illuminate\Database\DatabaseManager::usingConnection() expects string|UnitEnum, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Lead/Actions/ConvertLead.php
+
+		-
+			rawMessage: 'Method Flex\Crm\Models\Lead::getAttributesForInsert() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Lead/Models/Lead.php
+
+		-
+			rawMessage: 'Parameter #1 $record of method Flex\Crm\Support\RecordRules::saving() expects Flex\Crm\Models\Activity|Flex\Crm\Models\Company|Flex\Crm\Models\Contact|Flex\Crm\Models\Deal|Flex\Crm\Models\Lead, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Lead/Models/Lead.php

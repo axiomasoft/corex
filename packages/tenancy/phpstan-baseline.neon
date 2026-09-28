@@ -1,0 +1,1255 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: Binary operation "." between mixed and '.' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: Cannot access property $id on stdClass|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: Cannot access property $slug on stdClass|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: Cannot access property $status on stdClass|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 5
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: 'Parameter #1 $config of method Illuminate\Database\Connectors\ConnectionFactory::make() expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Account/Lifecycle/AccountLifecycle.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Authentication\Oidc\IdTokenVerifier::decodeHeader() should return array<string, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Authentication/Oidc/IdTokenVerifier.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/DomainTrust/DomainTrustStateWriter.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/DomainTrust/DomainTrustStateWriter.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereRaw().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/DomainTrust/DomainTrustStateWriter.php
+
+		-
+			rawMessage: 'Cannot call method from() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: 'Cannot call method selectRaw() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: 'Cannot call method where() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 3
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\User>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Identity/DatabaseIdentitySyncer.php
+
+		-
+			rawMessage: Cannot access property $expires_at on stdClass|null.
+			identifier: property.nonObject
+			count: 2
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: Cannot access property $reason on stdClass|null.
+			identifier: property.nonObject
+			count: 2
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Cannot call method from() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Cannot call method selectRaw() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Cannot call method where() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Session\Store::forget().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Session\Store::invalidate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Session\Store::regenerate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Session\Store::regenerateToken().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Impersonation/DatabaseImpersonationService.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Integration/Wakeup/RootRegistryWakeupHint.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Integration/Wakeup/RootRegistryWakeupHint.php
+
+		-
+			rawMessage: 'Cannot call method orWhere() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Integration/Wakeup/RootWakeupReconciler.php
+
+		-
+			rawMessage: 'Cannot call method whereNull() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Integration/Wakeup/RootWakeupReconciler.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 3
+			path: src/Integration/Wakeup/RootWakeupReconciler.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 7
+			path: src/Integration/Wakeup/RootWakeupReconciler.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler::reconcile() should return array{processed: int, next_cursor: string|null} but returns array{processed: 0, next_cursor: mixed}.'
+			identifier: return.type
+			count: 1
+			path: src/Integration/Wakeup/RootWakeupReconciler.php
+
+		-
+			rawMessage: 'Parameter $afterAccountId of method CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler::reconcile() expects string|null, array|bool|float|int|string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Integration/Wakeup/SweepRootWakeups.php
+
+		-
+			rawMessage: Cannot access offset 'workspace_id' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: Cannot access property $job on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: 'Cannot call method payload() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: PHPDoc tag @var with type CoreX\Tenancy\Contracts\TenancyManager is not subtype of type CoreX\Tenancy\StanclTenancyManager.
+			identifier: varTag.type
+			count: 1
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: PHPDoc tag @var with type Illuminate\Contracts\Events\Dispatcher is not subtype of type Illuminate\Events\Dispatcher.
+			identifier: varTag.type
+			count: 1
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: 'Parameter #2 $workspaceId of static method CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper::restore() expects string|null, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
+
+		-
+			rawMessage: 'Cannot call method orWhereColumn() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/Commands/IdentitiesReconcileCommand.php
+
+		-
+			rawMessage: 'Cannot call method whereIn() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/Commands/IdentitiesReconcileCommand.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 3
+			path: src/Laravel/Commands/IdentitiesReconcileCommand.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Laravel/Commands/PendingCreateCommand.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 3
+			path: src/Laravel/Commands/PendingCreateCommand.php
+
+		-
+			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/Commands/PendingCreateCommand.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::id().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Http/Middleware/AccountStatusGate.php
+
+		-
+			rawMessage: Cannot access property $headers on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Laravel/Http/Middleware/ImpersonationSessionGuard.php
+
+		-
+			rawMessage: 'Cannot call method set() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/Http/Middleware/ImpersonationSessionGuard.php
+
+		-
+			rawMessage: Binary operation "+" between int|string and 1 results in an error.
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::id().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Http\Middleware\ResolveWorkspace::extractSlug() should return string|null but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
+
+		-
+			rawMessage: 'Parameter #1 $key of function array_key_exists expects int|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method set() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Foundation\CachesRoutes::routesAreCached().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Foundation\Http\Kernel::addToMiddlewarePriorityBefore().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: 'Only iterables can be unpacked, mixed given.'
+			identifier: arrayUnpacking.nonIterable
+			count: 4
+			path: src/Laravel/HttpRegistrar.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNotNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNotNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereRaw().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Resolvers\HostTenantResolver::getPossibleCacheKeys() should return list<string> but returns array<int, string>.'
+			identifier: return.type
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Models\Account|null.'
+			identifier: varTag.type
+			count: 1
+			path: src/Laravel/Resolvers/HostTenantResolver.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: src/Laravel/RuntimeRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 3
+			path: src/Laravel/RuntimeRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method set() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/RuntimeRegistrar.php
+
+		-
+			rawMessage: 'Parameter $corexTenancy of static method CoreX\Tenancy\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/RuntimeRegistrar.php
+
+		-
+			rawMessage: 'Parameter $tenancy of static method CoreX\Tenancy\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/RuntimeRegistrar.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<covariant Illuminate\Database\Eloquent\Model>::orWhereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Laravel/Scopes/WorkspaceScope.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Support\TenancyOptions::arrayMap() should return array<string, array<string, mixed>> but returns array<string, array<mixed, mixed>>.'
+			identifier: return.type
+			count: 1
+			path: src/Laravel/Support/TenancyOptions.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Support\TenancyOptions::classString() should return class-string but returns string.'
+			identifier: return.type
+			count: 2
+			path: src/Laravel/Support/TenancyOptions.php
+
+		-
+			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Laravel/WakeupRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method connection() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Laravel/WakeupRegistrar.php
+
+		-
+			rawMessage: 'Parameter $root of class CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint constructor expects Illuminate\Database\Connection, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/WakeupRegistrar.php
+
+		-
+			rawMessage: 'Parameter $root of class CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler constructor expects Illuminate\Database\Connection, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/WakeupRegistrar.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: src/Membership/Identity/ManagementIdentityHydrator.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\User>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Membership/Identity/ManagementIdentityHydrator.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, bool|null given.'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/Membership/Identity/ManagementIdentityHydrator.php
+
+		-
+			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Membership/Identity/ManagementIdentityHydrator.php
+
+		-
+			rawMessage: Cannot access property $logical_digest on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Membership/Inbox/DurableInbox.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Membership/Inbox/DurableInbox.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 9
+			path: src/Membership/Persistence/PairStore.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/Membership/Persistence/PairStore.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 3
+			path: src/Membership/Projection/ApplyMembershipProjection.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Tenancy\Membership\Switcher\AccountListEntry): array{account_id: string, name: string, slug: string, primary_host: string, status: string} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Membership/Switcher/RedisAccountMenuCache.php
+
+		-
+			rawMessage: 'Parameter $accounts of class CoreX\Tenancy\Membership\Switcher\AvailableAccounts constructor expects list<mixed>, array<CoreX\Tenancy\Membership\Switcher\AccountListEntry> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Membership/Switcher/RedisAccountMenuCache.php
+
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Membership/Transport/ChannelBinding.php
+
+		-
+			rawMessage: 'Only booleans are allowed in ||, int|false given on the right side.'
+			identifier: booleanOr.rightNotBoolean
+			count: 1
+			path: src/Membership/Transport/MembershipQuery.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Membership\Transport\StrictJson::object() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Membership/Transport/StrictJson.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Membership\Transport\StrictJson::string() should return string but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: src/Membership/Transport/StrictJson.php
+
+		-
+			rawMessage: 'Offset 0 might not exist on array{}|array{non-empty-string}.'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: src/Membership/Transport/StrictJson.php
+
+		-
+			rawMessage: Cannot access property $deduplicationQualified on CoreX\Tenancy\Membership\Transport\ChannelBinding|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Membership/Transport/StrictTransport.php
+
+		-
+			rawMessage: Cannot access property $readUri on CoreX\Tenancy\Membership\Transport\ChannelBinding|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Membership/Transport/StrictTransport.php
+
+		-
+			rawMessage: Cannot access property $revokeUri on CoreX\Tenancy\Membership\Transport\ChannelBinding|null.
+			identifier: property.nonObject
+			count: 1
+			path: src/Membership/Transport/StrictTransport.php
+
+		-
+			rawMessage: 'Parameter $accounts of class CoreX\Tenancy\Membership\Switcher\AvailableAccounts constructor expects list<mixed>, array<CoreX\Tenancy\Membership\Switcher\AccountListEntry> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Membership/Transport/StrictTransport.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/Membership/Transport/StrictTransport.php
+
+		-
+			rawMessage: Access to an undefined property object::$data.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Access to an undefined property object::$deleted_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Cannot access offset 1 on array|false.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Provisioning\ClaimAccountSignup::sqlState() should return string|null but returns int<min, -1>|int<1, max>|string|null.'
+			identifier: return.type
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: 'Parameter #1 $binding of method CoreX\Tenancy\Provisioning\ClaimAccountSignup::replayResult() expects object, stdClass|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: 'Parameter #1 $json of function json_decode expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: 'Parameter $accountId of class CoreX\Tenancy\Provisioning\ClaimResult constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/Provisioning/ClaimAccountSignup.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Provisioning/ClusterAccountConnectionResolver.php
+
+		-
+			rawMessage: 'Parameter $database of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/ClusterAccountConnectionResolver.php
+
+		-
+			rawMessage: 'Parameter $host of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/ClusterAccountConnectionResolver.php
+
+		-
+			rawMessage: 'Parameter $username of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/ClusterAccountConnectionResolver.php
+
+		-
+			rawMessage: 'Part $row->cluster_id (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Provisioning/ClusterAccountConnectionResolver.php
+
+		-
+			rawMessage: Access to an undefined property object::$collation_name.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$default_expression.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$deferrable.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$definition.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$generated_kind.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$identity_kind.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$initially_deferred.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$name.
+			identifier: property.notFound
+			count: 4
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$nullable.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$ordinal.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$ready.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$schema_name.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$type.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$type_name.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$valid.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$validated.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$version.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Cannot access property $persistence on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Cannot access property $replica_identity on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Cannot access property $schema_name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Cannot access property $table_name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 17
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer::columns() should return list<array<string, mixed>> but returns array<array{name: string, ordinal: string, type: string, nullable: bool, default: mixed, identity: string, generated: string, collation: mixed}>.'
+			identifier: return.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer::constraints() should return list<array<string, mixed>> but returns array<array{name: string, type: string, definition: string, validated: bool, deferrable: bool, initially_deferred: bool}>.'
+			identifier: return.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer::indexes() should return list<array<string, mixed>> but returns array<array{name: string, definition: string, valid: bool, ready: bool}>.'
+			identifier: return.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(object): array{name: string, definition: string, valid: bool, ready: bool} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(object): array{name: string, ordinal: string, type: string, nullable: bool, default: mixed, identity: string, generated: string, collation: mixed} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(object): array{name: string, schema: string, version: string} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(object): array{name: string, type: string, definition: string, validated: bool, deferrable: bool, initially_deferred: bool} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/SchemaCatalogueSerializer.php
+
+		-
+			rawMessage: Access to an undefined property object::$app_db_user.
+			identifier: property.notFound
+			count: 3
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: Access to an undefined property object::$db_name.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: Casting to int something that's already int.
+			identifier: cast.useless
+			count: 2
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 2
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: 'Part $cluster->app_db_user (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+
+		-
+			rawMessage: Access to an undefined property object::$cluster_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$db_name.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$schema_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$template_version.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$version.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Cannot access offset 'database' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 7
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: 'Parameter #1 $config of method Illuminate\Database\Connectors\ConnectionFactory::make() expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/TemplateIntegrityVerifier.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: Access to an undefined property object::$schema_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: Access to an undefined property object::$version.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: 'Parameter #1 $signature of function sodium_crypto_sign_verify_detached expects non-empty-string, string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: 'Parameter #3 $public_key of function sodium_crypto_sign_verify_detached expects non-empty-string, string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: 'Parameter $payload of class CoreX\Tenancy\Provisioning\Database\TemplateManifest constructor expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/Database/TemplateManifest.php
+
+		-
+			rawMessage: Casting to int something that's already int.
+			identifier: cast.useless
+			count: 1
+			path: src/Provisioning/Jobs/CreateDatabaseFromTemplate.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Provisioning/Jobs/CreateDatabaseFromTemplate.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\AccountSchemaState>::orderBy().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\AccountSchemaState>::select().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
+
+		-
+			rawMessage: Access to an undefined property object::$embedding_dim.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Access to an undefined property object::$embedding_model.
+			identifier: property.notFound
+			count: 2
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 4
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Access to an undefined property object::$template_version.
+			identifier: property.notFound
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Access to an undefined property object::$version.
+			identifier: property.notFound
+			count: 3
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Anonymous function should return string|null but returns mixed.
+			identifier: return.type
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Binary operation "." between 'DROP DATABASE IF…' and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: 'Cannot call method orWhere() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: 'Cannot call method where() on mixed.'
+			identifier: method.nonObject
+			count: 6
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 4
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: 'Parameter $clusterId of class CoreX\Tenancy\ProvisionParams constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: 'Parameter $embeddingModel of class CoreX\Tenancy\ProvisionParams constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Provisioning/PendingPool.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Provisioning/StanclTenantDatabaseLifecycle.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Provisioning/StanclTenantDatabaseLifecycle.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Provisioning/StanclTenantDatabaseLifecycle.php
+
+		-
+			rawMessage: 'CoreX\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByHostException::__construct() does not call parent constructor from Exception.'
+			identifier: constructor.missingParentCall
+			count: 1
+			path: src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Runtime/StanclTenancyManager.php
+
+		-
+			rawMessage: 'Method CoreX\Tenancy\StanclTenancyManager::runFor() should return T but returns (T of mixed)|null.'
+			identifier: return.type
+			count: 1
+			path: src/Runtime/StanclTenancyManager.php
+
+		-
+			rawMessage: 'Binary operation "+=" between (float|int) and mixed results in an error.'
+			identifier: assignOp.invalid
+			count: 1
+			path: src/Runtime/Storage/ContextTenantStorage.php
+
+		-
+			rawMessage: 'Cannot call method getSize() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Runtime/Storage/ContextTenantStorage.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Runtime/Storage/ContextTenantStorage.php
+
+		-
+			rawMessage: 'Cannot call method isLink() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Runtime/Storage/ContextTenantStorage.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/TenancyServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'driver' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/TenancyServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'enabled' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/TenancyServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/TenancyServiceProvider.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::id().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Workspace/DatabaseWorkspaceResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Workspace/DatabaseWorkspaceResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::where().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/Workspace/DatabaseWorkspaceResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Invitation>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Workspace/Models/Invitation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Workspace>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Workspace/Models/Invitation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::count().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Workspace/Models/Invitation.php

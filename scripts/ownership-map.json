@@ -1,0 +1,224 @@
+{
+  "schema": "corex-ownership-map/1",
+  "packages": {
+    "corex/access": {
+      "dir": "access",
+      "target": "axiomasoft/corex-access",
+      "root": "CoreX\\Access",
+      "config": "corex-access",
+      "tag_prefix": "corex-access-",
+      "env_prefix": "COREX_ACCESS_",
+      "command_prefix": "corex:access:"
+    },
+    "corex/attributes": {
+      "dir": "attributes",
+      "target": "axiomasoft/corex-custom-fields",
+      "root": "CoreX\\CustomFields",
+      "config": "corex-custom-fields",
+      "tag_prefix": "corex-custom-fields-",
+      "env_prefix": "COREX_CUSTOM_FIELDS_",
+      "command_prefix": "corex:custom-fields:"
+    },
+    "corex/core": {
+      "dir": "core",
+      "target": "axiomasoft/corex",
+      "root": "CoreX",
+      "config": "corex",
+      "tag_prefix": "corex-",
+      "env_prefix": "COREX_",
+      "command_prefix": "corex:"
+    },
+    "flex/crm": {
+      "dir": "crm",
+      "target": "flex/crm",
+      "root": "Flex\\Crm",
+      "config": "flex-crm",
+      "tag_prefix": "flex-crm-",
+      "env_prefix": "FLEX_CRM_",
+      "command_prefix": "flex:crm:"
+    },
+    "corex/intl": {
+      "dir": "intl",
+      "target": "axiomasoft/corex-intl",
+      "root": "CoreX\\Intl",
+      "config": "corex-intl",
+      "tag_prefix": "corex-intl-",
+      "env_prefix": "COREX_INTL_",
+      "command_prefix": "corex:intl:"
+    },
+    "corex/media": {
+      "dir": "media",
+      "target": "axiomasoft/corex-media",
+      "root": "CoreX\\Media",
+      "config": "corex-media",
+      "tag_prefix": "corex-media-",
+      "env_prefix": "COREX_MEDIA_",
+      "command_prefix": "corex:media:"
+    },
+    "corex/modules": {
+      "dir": "modules",
+      "target": "axiomasoft/corex",
+      "root": "CoreX",
+      "config": "corex",
+      "tag_prefix": "corex-",
+      "env_prefix": "COREX_",
+      "command_prefix": "corex:"
+    },
+    "corex/notifications": {
+      "dir": "notifications",
+      "target": "axiomasoft/corex-notifications",
+      "root": "CoreX\\Notifications",
+      "config": "corex-notifications",
+      "tag_prefix": "corex-notifications-",
+      "env_prefix": "COREX_NOTIFICATIONS_",
+      "command_prefix": "corex:notifications:"
+    },
+    "corex/operations": {
+      "dir": "operations",
+      "target": "axiomasoft/corex-operations",
+      "root": "CoreX\\Operations",
+      "config": "corex-operations",
+      "tag_prefix": "corex-operations-",
+      "env_prefix": "COREX_OPERATIONS_",
+      "command_prefix": "corex:operations:"
+    },
+    "corex/panels": {
+      "dir": "panels",
+      "target": "axiomasoft/corex-panels",
+      "root": "CoreX\\Panels",
+      "config": "corex-panels",
+      "tag_prefix": "corex-panels-",
+      "env_prefix": "COREX_PANELS_",
+      "command_prefix": "corex:panels:"
+    },
+    "corex/recurrence": {
+      "dir": "recurrence",
+      "target": "axiomasoft/corex-recurrence",
+      "root": "CoreX\\Recurrence",
+      "config": null,
+      "tag_prefix": null,
+      "env_prefix": null,
+      "command_prefix": null
+    },
+    "corex/search": {
+      "dir": "search",
+      "target": "axiomasoft/corex-search",
+      "root": "CoreX\\Search",
+      "config": "corex-search",
+      "tag_prefix": "corex-search-",
+      "env_prefix": "COREX_SEARCH_",
+      "command_prefix": "corex:search:"
+    },
+    "corex/search-intl": {
+      "dir": "search-intl",
+      "target": "axiomasoft/corex-search-intl",
+      "root": "CoreX\\SearchIntl",
+      "config": "corex-search-intl",
+      "tag_prefix": "corex-search-intl-",
+      "env_prefix": "COREX_SEARCH_INTL_",
+      "command_prefix": null
+    },
+    "corex/search-meilisearch": {
+      "dir": "search-meilisearch",
+      "target": "axiomasoft/corex-search-meilisearch",
+      "root": "CoreX\\SearchMeilisearch",
+      "config": "corex-search-meilisearch",
+      "tag_prefix": "corex-search-meilisearch-",
+      "env_prefix": "COREX_SEARCH_MEILISEARCH_",
+      "command_prefix": null
+    },
+    "corex/tasks": {
+      "dir": "tasks",
+      "target": "axiomasoft/corex-tasks",
+      "root": "CoreX\\Tasks",
+      "config": "corex-tasks",
+      "tag_prefix": "corex-tasks-",
+      "env_prefix": "COREX_TASKS_",
+      "command_prefix": "corex:tasks:"
+    },
+    "corex/tasks-workflow": {
+      "dir": "tasks-workflow",
+      "target": "axiomasoft/corex-tasks-workflow",
+      "root": "CoreX\\TasksWorkflow",
+      "config": "corex-tasks-workflow",
+      "tag_prefix": "corex-tasks-workflow-",
+      "env_prefix": "COREX_TASKS_WORKFLOW_",
+      "command_prefix": "corex:tasks-workflow:"
+    },
+    "corex/tenancy": {
+      "dir": "tenancy",
+      "target": "axiomasoft/corex-tenancy",
+      "root": "CoreX\\Tenancy",
+      "config": "corex-tenancy",
+      "tag_prefix": "corex-tenancy-",
+      "env_prefix": "COREX_TENANCY_",
+      "command_prefix": "corex:tenancy:"
+    },
+    "corex/transfer": {
+      "dir": "transfer",
+      "target": "axiomasoft/corex-transfer",
+      "root": "CoreX\\Transfer",
+      "config": "corex-transfer",
+      "tag_prefix": "corex-transfer-",
+      "env_prefix": "COREX_TRANSFER_",
+      "command_prefix": "corex:transfer:"
+    },
+    "corex/wakeup": {
+      "dir": "wakeup",
+      "target": "axiomasoft/corex-wakeup",
+      "root": "CoreX\\Wakeup",
+      "config": "corex-wakeup",
+      "tag_prefix": "corex-wakeup-",
+      "env_prefix": "COREX_WAKEUP_",
+      "command_prefix": "corex:wakeup:"
+    },
+    "corex/workflow": {
+      "dir": "workflow",
+      "target": "axiomasoft/corex-workflow",
+      "root": "CoreX\\Workflow",
+      "config": "corex-workflow",
+      "tag_prefix": "corex-workflow-",
+      "env_prefix": "COREX_WORKFLOW_",
+      "command_prefix": "corex:workflow:"
+    }
+  },
+  "kernel": {
+    "packages": [
+      "corex/core",
+      "corex/modules"
+    ],
+    "target": "axiomasoft/corex",
+    "config": "corex",
+    "tag_prefix": "corex-",
+    "env_prefix": "COREX_",
+    "command_prefix": "corex:",
+    "modules": [
+      "Attributes",
+      "Audit",
+      "Config",
+      "Context",
+      "Data",
+      "Database",
+      "Departments",
+      "Errors",
+      "Features",
+      "Messaging",
+      "Modules",
+      "Observability",
+      "Settings",
+      "Storage",
+      "Time"
+    ],
+    "root_symbols": [
+      "CoreX\\CoreServiceProvider"
+    ],
+    "reserved": [
+      "CoreX\\Testing"
+    ],
+    "dev_roots": [
+      "CoreX\\Testing\\",
+      "CoreX\\Testing\\Fixtures\\",
+      "CoreX\\Access\\Database\\Seeders\\"
+    ]
+  }
+}

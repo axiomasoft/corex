@@ -1,6 +1,11 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
 parameters:
-    level: 6
+    level: max
+    tmpDir: ../../build/phpstan/recurrence
     paths:
         - src
-    bootstrapFiles:
-        - vendor/autoload.php
+    checkModelProperties: true
+    checkPhpDocMissingReturn: true

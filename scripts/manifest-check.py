@@ -57,7 +57,7 @@ def main() -> int:
         stack = list(direct(data, dev=True))
         while stack:
             name = stack.pop()
-            if name in seen:
+            if name in seen or name == data.get('name'):
                 continue
             seen.add(name)
             stack.extend(direct(packages[name][1], dev=False))

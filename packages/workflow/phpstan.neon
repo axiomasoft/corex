@@ -1,6 +1,12 @@
 includes:
-    - ../../phpstan.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
 
 parameters:
+    level: max
+    tmpDir: ../../build/phpstan/workflow
     paths:
         - src
+        - database/migrations
+    checkModelProperties: true
+    checkPhpDocMissingReturn: true

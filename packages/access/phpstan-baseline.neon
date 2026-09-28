@@ -1,0 +1,265 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Cannot call method on() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Access/AutMatrixGrantSource.php
+
+		-
+			rawMessage: 'Cannot call method where() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Access/AutMatrixGrantSource.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Access/AutMatrixGrantSource.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Access/AutMatrixGrantSource.php
+
+		-
+			rawMessage: 'Parameter #1 $keys of static method AzGuard\Registry\Values\PermissionSet::fromRawKeys() expects list<string>, list<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Access/AutMatrixGrantSource.php
+
+		-
+			rawMessage: 'Method CoreX\Auth\Access\DefaultAccessChecker::activeRoleIds() should return list<string> but returns array<int, mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Access/DefaultAccessChecker.php
+
+		-
+			rawMessage: 'Parameter #1 $values of method CoreX\Auth\Access\DefaultAccessChecker::maxOf() expects Illuminate\Support\Collection<int, string>, Illuminate\Support\Collection<(int|string), mixed> given.'
+			identifier: argument.type
+			count: 2
+			path: src/Access/DefaultAccessChecker.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereRaw().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/DefaultScopeResolver.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<AzGuard\Models\DirectGrant>::active().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/DirectGrantLookup.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<AzGuard\Models\DirectGrant>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/DirectGrantLookup.php
+
+		-
+			rawMessage: 'Return type (string|null) of method CoreX\Auth\Access\PrincipalIdentity::getAuthPassword() should be covariant with return type (string) of method Illuminate\Contracts\Auth\Authenticatable::getAuthPassword()'
+			identifier: method.childReturnType
+			count: 1
+			path: src/Access/PrincipalIdentity.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::select().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::whereRaw().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::orWhereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereIn().'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereRaw().'
+			identifier: staticMethod.dynamicCall
+			count: 5
+			path: src/Access/ScopePredicate.php
+
+		-
+			rawMessage: 'Parameter #1 $scope of static method Illuminate\Database\Eloquent\Model::addGlobalScope() expects (Closure(Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>): mixed)|Illuminate\Database\Eloquent\Scope|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Access/WorkspaceScopeWiring.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/CoreAuthServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/CoreAuthServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method set() on mixed.'
+			identifier: method.nonObject
+			count: 3
+			path: src/CoreAuthServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Auth\Support\AuthOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/CoreAuthServiceProvider.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $credentials (array<string, mixed>) of method CoreX\Auth\Identity\PrincipalUserProvider::retrieveByCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::retrieveByCredentials()'
+			identifier: method.childParameterType
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Query\Builder::whereRaw() expects Illuminate\Contracts\Database\Query\Expression|literal-string, non-falsy-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Auth\Identity\PrincipalUserProvider::rehashPasswordIfRequired() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::rehashPasswordIfRequired()'
+			identifier: method.childParameterType
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Auth\Identity\PrincipalUserProvider::validateCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::validateCredentials()'
+			identifier: method.childParameterType
+			count: 1
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: Variable property access on object.
+			identifier: property.dynamicName
+			count: 2
+			path: src/Identity/PrincipalUserProvider.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Auth\Models\Role>::whereNull().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Matrix/DatabaseRoleMatrixCompiler.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of method Illuminate\Support\Collection<(int|string),mixed>::each() expects callable(mixed, int|string): mixed, Closure(string): void given.'
+			identifier: argument.type
+			count: 1
+			path: src/Matrix/DatabaseRoleMatrixCompiler.php
+
+		-
+			rawMessage: 'Method CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder::build() should return list<AzGuard\Registry\Contracts\PermissionDefinition> but returns array<int, AzGuard\Registry\Definitions\SimplePermissionDefinition>.'
+			identifier: return.type
+			count: 1
+			path: src/Matrix/MatrixPermissionCatalogBuilder.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Auth\Models\RoleMatrixRow>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Matrix/MatrixValidator.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Auth\Models\RoleMatrixRow>::whereIn().'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: src/Matrix/MatrixValidator.php
+
+		-
+			rawMessage: Anonymous function should return int but returns mixed.
+			identifier: return.type
+			count: 1
+			path: src/Matrix/ScopeMapVersion.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Matrix/ScopeMapVersion.php
+
+		-
+			rawMessage: 'Method CoreX\Auth\Matrix\ScopeMapVersion::bump() should return int but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: src/Matrix/ScopeMapVersion.php
+
+		-
+			rawMessage: Casting to bool something that's already bool.
+			identifier: cast.useless
+			count: 1
+			path: src/Models/Role.php
+
+		-
+			rawMessage: 'Call to function array_filter() requires parameter #2 to be passed to avoid loose comparison semantics.'
+			identifier: arrayFilter.strict
+			count: 1
+			path: src/Models/RoleMatrixRow.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Auth\Models\Role>::exists().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Models/RoleMatrixRow.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Auth\Models\Role>::whereIn().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Models/RoleMatrixRow.php
+
+		-
+			rawMessage: 'Parameter $azguardPins of class CoreX\Auth\Support\AuthOptions constructor expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Support/AuthOptions.php

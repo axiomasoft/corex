@@ -1,0 +1,1963 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Call to static method fromArray() of internal class CoreX\Attributes\Internal\Laravel\AttributeComposition from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: Cannot access offset 'extra' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: Cannot access offset 'public-api' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Function phpFiles() should return list<string> but returns list.'
+			identifier: return.type
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Attributes\Internal\Laravel\AttributeComposition::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/attributes-architecture-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $fromProperty of callable Roave\BackwardCompatibility\DetectChanges\BCBreak\PropertyBased\PropertyDefaultValueChanged expects Roave\BetterReflection\Reflection\ReflectionProperty, Roave\BetterReflection\Reflection\ReflectionProperty|null given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/bc/test-property-default.php
+
+		-
+			rawMessage: 'Parameter #2 $toProperty of callable Roave\BackwardCompatibility\DetectChanges\BCBreak\PropertyBased\PropertyDefaultValueChanged expects Roave\BetterReflection\Reflection\ReflectionProperty, Roave\BetterReflection\Reflection\ReflectionProperty|null given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/bc/test-property-default.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Binary operation "." between 'error-contract…' and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 3
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Binary operation "." between mixed and "\000" results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Binary operation "." between mixed and "\n" results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '.v' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Cannot access offset 'algorithm'|'content'|'headers'|'id_semantics'|'max_active_keys'|'prefix'|'secret_bytes'|'signature'|'timestamp_window_seconds' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Cannot access offset 'major' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Cannot access offset mixed on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Coalesce operator ?? is unnecessary because the left side is always set and the right side is null.
+			identifier: nullCoalesce.unnecessary
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Function parseArguments invoked with 2 parameters, 1 required.'
+			identifier: arguments.count
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Offset ''error'' does not exist on array{vendor: string, fixture: string, class: string, package: string, forbidden: string, workspace: string}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_diff expects array, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $baseline of function compareSnapshots expects array{files: array<string, mixed>}, array{files: array<string, mixed>, directory: string} given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $directory of function loadSnapshot expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $document of function assertWebhook expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $errors of function indexErrors expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $operations of function indexOperations expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #1 $topics of function indexTopics expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #2 $baseline of function compareSchema expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #2 $baseline of function compareSchema expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 5
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #2 $candidate of function compareSnapshots expects array{files: array<string, mixed>}, array{files: array<string, mixed>, directory: string} given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #2 ...$arrays of function array_diff expects array, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #3 $candidate of function compareSchema expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: 'Parameter #3 $candidate of function compareSchema expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 5
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/check-api-contract.php
+
+		-
+			rawMessage: Casting to bool something that's already bool.
+			identifier: cast.useless
+			count: 1
+			path: scripts/config-composition-gate.php
+
+		-
+			rawMessage: 'Function loadBoundaryConfig() should return array{blocking: bool, allow_globs: list<string>, allow_paths: array<string, string>} but returns array{blocking: bool, allow_globs: array<non-empty-string>, allow_paths: array<non-empty-string, non-empty-string>}.'
+			identifier: return.type
+			count: 1
+			path: scripts/config-composition-gate.php
+
+		-
+			rawMessage: 'Offset ''blocking'' on array{blocking: bool, allow_globs: list<string>, allow_paths: array<string, string>} on left side of ?? always exists and is not nullable.'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: scripts/config-composition-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/config-composition-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access offset 'extra' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access offset 'install-path' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access offset 'packages' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access offset 'public-api' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Cannot access property $name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Function parseArguments() should return array{vendor: string, fixture: string, class: string, package: string, forbidden: string, workspace: string} but returns non-empty-array<string, string>.'
+			identifier: return.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Function phpFiles() should return list<string> but returns list.'
+			identifier: return.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Function reflectionTypes() has parameter $reflection with generic class ReflectionClass but does not specify its types: T'
+			identifier: missingType.generics
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Function reflectionTypes() return type has no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Offset 0|int<2, max> on non-empty-list<string> on left side of ?? always exists and is not nullable.'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Parameter #1 $token of function resolveSymbol expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Parameter #2 $callback of method Illuminate\Support\Manager::extend() expects bindable closure, static closure given.'
+			identifier: argument.staticClosure
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Parameter #2 $prefixes of function covered expects list<string>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Compiler\InstalledPackageVersion|string>, non-empty-array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\ModuleManifest>, array{mixed} given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: array.invalidKey
+			count: 1
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: scripts/distribution/extension_fixture_probe.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Cannot access offset 'contains' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Cannot access offset 'expect' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Cannot use array destructuring on mixed.
+			identifier: offsetAccess.nonArray
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Function extensionContractFixture not found.
+			identifier: function.notFound
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $needle of function str_contains expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Compiler\InstalledPackageVersion|string>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\ModuleManifest>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Part $file->getPathname() (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: 'Part $needle (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: scripts/extension-contract-gate.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: 'Casting to int something that''s already int<-1, max>.'
+			identifier: cast.useless
+			count: 1
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int<0, max>|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/naming-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type list<string>|false supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Binary operation "." between 'missing ownership…' and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '\\' results in an error.
+			identifier: binaryOp.invalid
+			count: 2
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '\\Tests' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'autoload'|'autoload-dev' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'command_prefix'|'config'|'env_prefix'|'tag_prefix' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'dev_roots' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'dir' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'kernel' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'modules' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'name' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'packages' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'psr-4' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'root' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'root_symbols' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'schema' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'target' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'violations' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset mixed on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, int|false given.'
+			identifier: if.condNotBoolean
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_diff expects an array of values castable to string, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_filter expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $string of function rtrim expects string, int|string given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $arrays of function array_diff expects an array of values castable to string, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $arrays of function array_diff expects an array of values castable to string, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $callback of function array_filter expects (callable(mixed): bool)|null, Closure(string): bool given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $haystack of function in_array expects array, mixed given.'
+			identifier: argument.type
+			count: 4
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $needle of function str_starts_with expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Part $expected (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Part $line (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Part $package (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 5
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 2
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Offset ''line_exemptions'' on array{old: string, new: string, item: string, allowlist_globs: list<string>, match: string} on left side of ?? does not exist.'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Offset ''match'' on array{old: string, new: string, item: string, allowlist_globs: list<string>} on left side of ?? does not exist.'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $tokens of function dedupeTokens expects list<array{old: string, new: string, item: string, allowlist_globs: list<string>}>, list<array{old: string, new: string, item: string, match: string, allowlist_globs: list<string>, line_exemptions: list<string>}> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #1 ...$arrays of function array_merge expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $globs of function pathMatchesAnyGlob expects list<string>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $roots of function listTrackedFiles expects list<string>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $entry of function lineNumberOfToken expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $entry of function tokenMatches expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Parameter #4 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/p15-rename-completeness-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 5
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Binary operation "." between 'package-docs-gate:…' and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'archive_sha256' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'detail' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'heading' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'name' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'package' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'package-type' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'packages' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'path' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'producer_phase' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'psr-4' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'public-api' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot access offset 'symbol' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Cannot call method getFilename() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 6
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Function cohortPublicApiMaps() should return array<string, list<string>> but returns array<mixed, mixed>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Function loadCohort() should return list<array{name: string, path: string, dir: string, composer: array<string, mixed>}> but returns list<array{name: non-empty-string, path: non-empty-string, dir: string, composer: array<mixed, mixed>}>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Function violation invoked with 7 parameters, 6 required.'
+			identifier: arguments.count
+			count: 4
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a ternary operator condition, mixed given.'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, ''strval'' given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $path of function dirname expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $rule of function violation expects string, array<string, array<string, mixed>|string> given.'
+			identifier: argument.type
+			count: 6
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $line of function violation expects int, string given.'
+			identifier: argument.type
+			count: 6
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #3 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #4 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #5 $violations of function packageResult expects list<array<string, mixed>>, list<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #5 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #6 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Parameter #7 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 3
+			path: scripts/package-docs-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Cannot access offset 'psr-4' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 14
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 14
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function discoverPackages() should return array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> but returns array<string, array{name: string, dir: string, require: list<int|string>, psr4: array<non-falsy-string, mixed>, package_type: string, stability: string, public_api: list<string>}>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function formatViolationLine() has parameter $violation with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function loadConfig() should return array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, public_api_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>} but returns array{allowlist: mixed, undeclared_dependency_exceptions: mixed, public_api_exceptions: mixed, reservations: mixed, legacy_namespace_splits: mixed}.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function parseExtraCorex() has parameter $composer with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function readHierarchyNames() should return list<array{name: string, line: int}> but returns list<array{name: non-empty-string|null, line: int|non-empty-string}>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function resolveName() has parameter $useTable with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function resolveName() should return string but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function uniqueRefs() should return list<array{import: string, line: int, via: ''extends''|''fqcn''|''use''}> but returns list<array{import: string, line: int, via: string}>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function writeReport() has parameter $report with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int<0, max>|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $allowlist of function validateAllowlistEntries expects list<array<string, mixed>>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_values expects array<T>, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $fromMeta of function violatesUndeclaredDependency expects array{name: string, dir: string, require: list<string>, psr4: array<string, string>}, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>} given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $string of function ltrim expects string, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $string of function rtrim expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $string of function rtrim expects string, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $tokens of function readQualifiedName expects list<mixed>, array<int, array{int, string, int}|string> given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $packages of function buildClassIndex expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $packages of function detectNamespaceOwnershipConflicts expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $packages of function evaluateReservations expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $packages of function resolveOwner expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $config of function detectNamespaceOwnershipConflicts expects array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>}, array{allowlist: list<array<string, mixed>>, undeclared_dependency_exceptions: list<array<string, string>>, public_api_exceptions: list<array<string, string>>, reservations: list<array<string, string>>, legacy_namespace_splits: list<array<string, mixed>>} given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $prefix of function readUseEntry expects string, string|null given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #3 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #4 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #5 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 3
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #6 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #6 of function sprintf is expected to be string by placeholder #5 ("%%s"), string|false given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter #7 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter $file of function violation expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter $import of function violation expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter $line of function violation expects int, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter $message of function violation expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Parameter $owner of function violation expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Function aliasAfter() should return string|null but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Function countBindingCalls() should return array{singleton: int, scoped: int, bind: int, bindIf: int, total: int}|null but returns non-empty-array<string, int<0, max>>.'
+			identifier: return.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Function readQualifiedName() should return string|null but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Function resolveType() has parameter $uses with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Function resolveType() should return string but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $string of function strtolower expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, list<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/provider-size-gate.php
+
+		-
+			rawMessage: Cannot access offset 'dependencies'|'phpstan' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: scripts/quality-ceiling-guard.php
+
+		-
+			rawMessage: Cannot access offset string on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: scripts/quality-ceiling-guard.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function ksort expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/quality-ceiling-guard.php
+
+		-
+			rawMessage: 'Part $ceiling (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: scripts/quality-ceiling-guard.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: scripts/quality-ceiling-guard.php
+
+		-
+			rawMessage: 'Argument of an invalid type list<string>|false supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 7
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Function loadPackageComposerNames() should return array<string, string> but returns array<string, mixed>.'
+			identifier: return.type
+			count: 1
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int<0, max>|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, int<0, max>|false given.'
+			identifier: if.condNotBoolean
+			count: 5
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $haystack of function str_contains expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $haystack of function str_ends_with expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #3 $subject of function str_replace expects array<string>|string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 3
+			path: scripts/table-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node::$args.
+			identifier: property.notFound
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node::$class.
+			identifier: property.notFound
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node::$expr.
+			identifier: property.notFound
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node::$name.
+			identifier: property.notFound
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node\Expr\Error|PhpParser\Node\Expr\Variable::$name.
+			identifier: property.notFound
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node\FunctionLike::$params.
+			identifier: property.notFound
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Access to an undefined property PhpParser\Node\FunctionLike::$stmts.
+			identifier: property.notFound
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type list<string>|false supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Call to function array_filter() requires parameter #2 to be passed to avoid loose comparison semantics.'
+			identifier: arrayFilter.strict
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'name' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 0 on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access property $name on mixed.
+			identifier: property.nonObject
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access property $type on mixed.
+			identifier: property.nonObject
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access property $value on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Cannot access property $var on mixed.
+			identifier: property.nonObject
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method isFile() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Cannot call method toString() on PhpParser\Node\Identifier|null.'
+			identifier: method.nonObject
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, int|false given.'
+			identifier: if.condNotBoolean
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in ||, int|false given on the left side.'
+			identifier: booleanOr.leftNotBoolean
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $expr of function tableExpression expects PhpParser\Node\Expr|null, mixed given.'
+			identifier: argument.type
+			count: 4
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $nodes of method PhpParser\NodeFinder::find() expects array<PhpParser\Node>|PhpParser\Node, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $receiver of function tableFromReceiver expects PhpParser\Node\Expr, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Parameter #1 $sql of function sqlWriteTable expects PhpParser\Node\Expr|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: scripts/table-write-ownership-gate.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Call to method toBe() of internal class Pest\Mixins\Expectation<TValue> from outside its root namespace Pest.'
+			identifier: method.internalClass
+			count: 2
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Call to method toBeTrue() of internal class Pest\Mixins\Expectation<TValue> from outside its root namespace Pest.'
+			identifier: method.internalClass
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Call to method with() of internal class Pest\PendingCalls\TestCall from outside its root namespace Pest.'
+			identifier: method.internalClass
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: Cannot access offset mixed on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Match expression does not handle remaining value: string'
+			identifier: match.unhandled
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: tests/Golden/GoldenTest.php
+
+		-
+			rawMessage: 'Argument of an invalid type Illuminate\Routing\RouteCollectionInterface supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method getActionName() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method getExtension() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method getName() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method getPathname() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method methods() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Cannot call method uri() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\GoldenSnapshot::events() return type has no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\GoldenSnapshot::phpSurface() has parameter $classes with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\GoldenSnapshot::phpSurface() should return array<string, mixed> but returns array<array<string, array|bool|string|null>>.'
+			identifier: return.type
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\GoldenSnapshot::sorted() return type has no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a ternary operator condition, ReflectionClass|false given.'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Parameter #1 $array (list<string>) of array_values is already a list, call has no effect.'
+			identifier: arrayValues.list
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_diff expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Parameter #1 $haystack of function str_contains expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Parameter #1 $objectOrClass of class ReflectionClass constructor expects class-string<T of object>|T of object, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: 'Part $file (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: tests/Golden/Support/GoldenSnapshot.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: tests/Golden/Support/Normalizer.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\Normalizer::normalize() has parameter $path with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/Normalizer.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function sort expects TArray of array<T>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/Normalizer.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 2
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'from' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'generated' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'kind' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'manual' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'to' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Match expression does not handle remaining value: mixed'
+			identifier: match.unhandled
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\RenameMap::__construct() has parameter $manual with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\RenameMap::__construct() has parameter $packages with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\RenameMap::string() should return string but returns mixed.'
+			identifier: return.type
+			count: 2
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Golden\Support\RenameMap::string() should return string but returns string|null.'
+			identifier: return.type
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Parameter #1 $classes of class CoreX\Tests\Golden\Support\RenameMap constructor expects array<string, string>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Parameter #1 $haystack of function str_contains expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Parameter #3 $manual of class CoreX\Tests\Golden\Support\RenameMap constructor expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 3
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 5
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Support\SingletonInjectionGate::loadAllowlist() should return array<string, array{owner_phase: string, note?: string}> but returns array<string, array{owner_phase: non-empty-string, note: string|null}>.'
+			identifier: return.type
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Support\SingletonInjectionGate::resolveClassName() has parameter $useMap with no value type specified in iterable type array.'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: 'Method CoreX\Tests\Support\SingletonInjectionGate::resolveClassName() should return string|null but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, int<0, max>|false given.'
+			identifier: if.condNotBoolean
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: Right side of && is always true.
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: tests/Support/SingletonInjectionGate.php

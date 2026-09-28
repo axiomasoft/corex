@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef79c1a20f3f2d32612aefb584afe579",
+    "content-hash": "39258330750468e35cffb13cd2d2aa25",
     "packages": [
         {
             "name": "axiomasoft/stancl-jobpipeline",
@@ -388,14 +388,23 @@
             "dist": {
                 "type": "path",
                 "url": "packages/attributes",
-                "reference": "45b8cc509e3aa02df6a76dd6ed4de4ccddf66c46"
+                "reference": "c95143bc3a6ffa3bb9a35bca1e41713c80316f3b"
             },
             "require": {
                 "corex/core": "^1.0@dev",
+                "ext-filter": "*",
+                "ext-mbstring": "*",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
-                "php": "^8.4"
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "corex/modules": "^1.0@dev",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "suggest": {
                 "corex/modules": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
@@ -456,7 +465,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/attributes/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/attributes/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -476,17 +485,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "66aaf73485667ac51e7478cf3417e4a2ba4748c7"
+                "reference": "20fedfd4736c590b63578fb3da95052e9eb8610b"
             },
             "require": {
                 "brick/money": "^0.9 || ^0.10",
-                "illuminate/config": "^12.0|^13.0",
-                "illuminate/container": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/filesystem": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "ext-ctype": "*",
+                "ext-mbstring": "*",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -494,10 +499,16 @@
                 "psr/clock-implementation": "1.0"
             },
             "require-dev": {
+                "ext-pdo": "*",
+                "nikic/php-parser": "^5.4",
                 "open-telemetry/api": "^1.4",
                 "open-telemetry/sdk": "^1.4",
                 "orchestra/testbench": "^10.12|^11.3",
-                "psr/log": "^3.0"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "phpstan/phpstan": "^2.2.16",
+                "psr/log": "^3.0",
+                "symfony/console": "^7.2|^8.0",
+                "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
                 "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
@@ -546,6 +557,11 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
                 }
             },
             "autoload": {
@@ -572,7 +588,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/core/src packages/core/database/migrations packages/core/tests/Unit/PackageRegistrarTest.php --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -607,22 +623,25 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "ef0ad2b470f4bae2a2d296780471bdf53d58a943"
+                "reference": "a8351e7cac5daab12bd58e235181767be6ae7684"
             },
             "require": {
+                "brick/math": "^0.14|^0.15",
                 "brick/money": "^0.9 || ^0.10",
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
-                "illuminate/translation": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -698,7 +717,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/intl/phpstan.neon --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/intl/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -718,21 +737,21 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "8f3f5a82604a1438f90ebfd60ad1c9935bcb23ca"
+                "reference": "17f98128a977ef67139a3b7f20cc98ef759cf916"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
+                "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "suggest": {
@@ -780,7 +799,7 @@
                     "pest --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/media/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "pint --test"
@@ -800,17 +819,24 @@
             "dist": {
                 "type": "path",
                 "url": "packages/modules",
-                "reference": "1a1d815f1362d583521ef96ce9efb8b51818735d"
+                "reference": "897b047b2e70b022a3b8965070b1099ab8eccde0"
             },
             "require": {
                 "corex/core": "^1.0@dev",
+                "illuminate/auth": "^12.0|^13.0",
+                "illuminate/console": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
+                "illuminate/events": "^12.0|^13.0",
+                "illuminate/queue": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
+                "corex/operations": "^1.0@dev",
                 "larastan/larastan": "^3.12",
+                "mockery/mockery": "^1.6",
+                "nikic/php-parser": "^5.4",
                 "orchestra/testbench": "^10.12|^11.3",
                 "phpstan/phpstan": "^2.2.16"
             },
@@ -837,6 +863,11 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
                 }
             },
             "autoload": {
@@ -849,6 +880,11 @@
                     ]
                 }
             },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Modules\\Tests\\": "tests/"
+                }
+            },
             "scripts": {
                 "test": [
                     "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage"
@@ -857,7 +893,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=ModulesPackage --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/modules/src packages/modules/database/migrations --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/modules/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -888,22 +924,23 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "bfb04ca720f21099c49ae7253bdd85ce40b1dfc4"
+                "reference": "8f3ec42b78c03bf935cfa530f0cf89892fa4bded"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
                 "corex/wakeup": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
+                "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "orchestra/testbench": "^10.12|^11.3",
-                "pestphp/pest": "^5.2"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "pestphp/pest": "^5.2",
+                "psr/clock": "^1.0"
             },
             "type": "corex-module",
             "extra": {
@@ -971,7 +1008,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/notifications/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/notifications/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --config=pint.json --test"
@@ -991,26 +1028,41 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "2990f26dd38982d2fae3a74b658f30fed9ece749"
+                "reference": "ddfe7ed5e76eb18fbaffc63c4d2bf63b56e595e0"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
+                "ext-filter": "*",
+                "ext-mbstring": "*",
+                "illuminate/auth": "^12.0|^13.0",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
                 "illuminate/http": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "illuminate/validation": "^12.0|^13.0",
-                "php": "^8.4"
+                "php": "^8.4",
+                "psr/clock": "^1.0",
+                "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
                 "corex/transfer": "^1.0@dev",
+                "ext-curl": "*",
+                "ext-openssl": "*",
+                "ext-pcntl": "*",
+                "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "opis/json-schema": "^2.4.1",
                 "orchestra/testbench": "^10.12|^11.3",
-                "pestphp/pest": "^5.2"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "pestphp/pest": "^5.2",
+                "phpunit/phpunit": "^12.0|^13.0"
             },
             "suggest": {
                 "corex/transfer": "Optional bounded import/export adapter for durable bulk operations",
+                "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable.",
                 "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
             },
             "type": "library",
@@ -1097,7 +1149,10 @@
                         "src/Webhooks/Laravel/"
                     ],
                     "CoreX\\Api\\Internal\\Webhook\\": "src/Webhooks/Internal/"
-                }
+                },
+                "classmap": [
+                    "src/Cost/Internal/BudgetAdmission.php"
+                ]
             },
             "autoload-dev": {
                 "psr-4": {
@@ -1112,7 +1167,7 @@
                     "pest --coverage --min=80"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "pint --test"
@@ -1132,7 +1187,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "2c55bcabb8e8f4aa37c852f96b6a5769bee6efd2"
+                "reference": "2caee1b319e25063660879686092c8fae115b004"
             },
             "require": {
                 "corex/core": "^1.0@dev",
@@ -1144,7 +1199,9 @@
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -1186,7 +1243,7 @@
                     "pest --coverage --min=80"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/panels/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "pint --test"
@@ -1206,7 +1263,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "9f3a01fd9f77d4f21339eb014a440fea00197224"
+                "reference": "f16f7050b039c6401cd70122bd1691263d4603a1"
             },
             "require": {
                 "php": "^8.4",
@@ -1243,7 +1300,7 @@
                     "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=vendor/autoload.php"
                 ],
                 "analyse": [
-                    "../../vendor/bin/phpstan analyse -c phpstan.neon src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/recurrence/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1263,14 +1320,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "6aff3c79f631970e3d5c99bdf3e5c9c2cb1c5cae"
+                "reference": "6e3dbfb1c0883a8e7d0d035d95bbeb2608526ef0"
             },
             "require": {
                 "corex/core": "^1.0@dev",
+                "ext-openssl": "*",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "type": "corex-module",
             "extra": {
@@ -1313,7 +1375,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1333,21 +1395,21 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "89d1b15d1f5475df05c8f7f5ba2cdf1079f04fbf"
+                "reference": "9c13bec92ee7d74c4c82ca93e22f3983d250db15"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/intl": "^1.0@dev",
-                "corex/modules": "^1.0@dev",
                 "corex/search": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
+                "corex/modules": "^1.0@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -1385,7 +1447,7 @@
                     "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search-intl/phpstan.neon --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search-intl/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1405,13 +1467,20 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "b852fd51f44fe1d20af2ae5551bd567aa0996acb"
+                "reference": "618a9a1a6be34db168ca8ee234845e2ef4460b8e"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/search": "^1.0@dev",
+                "ext-filter": "*",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
                 "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
                 "php": "^8.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "type": "corex-module",
             "extra": {
@@ -1453,7 +1522,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search-meilisearch/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search-meilisearch/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1473,20 +1542,21 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "ec94944d40ed99da9d5c29d559640818348a2fb0"
+                "reference": "5527a9c9e7e5ab00b8ea5771387c216ec0db819c"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "ext-mbstring": "*",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -1567,7 +1637,7 @@
                     "pest --exclude-group=pg --coverage --min=92"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint": [
                     "pint"
@@ -1603,7 +1673,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "d918e71c5cefdf6a2caddd5b0aa85252bf347746"
+                "reference": "1b83d755b026d5f0d88a24a67de08146ed71dc3a"
             },
             "require": {
                 "corex/core": "^1.0@dev",
@@ -1611,6 +1681,7 @@
                 "corex/recurrence": "^1.0@dev",
                 "corex/tasks": "^1.0@dev",
                 "corex/workflow": "^1.0@dev",
+                "ext-bcmath": "*",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
@@ -1620,7 +1691,9 @@
                 "corex/wakeup": "^1.0@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "suggest": {
@@ -1666,7 +1739,7 @@
                     "XDEBUG_MODE=coverage pest --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1686,27 +1759,38 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "44992fe2919c8422d67b9b8e39de562f0afbfa2d"
+                "reference": "c71abc5e10b86822cd708399c435c76b02834106"
             },
             "require": {
                 "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
                 "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
                 "corex/core": "^1.0@dev",
-                "corex/modules": "^1.0@dev",
+                "ext-filter": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-sodium": "*",
                 "firebase/php-jwt": "^7.1",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/routing": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "laravel/framework": "^12.0|^13.0",
+                "nesbot/carbon": "^3.0",
                 "php": "^8.4"
             },
             "require-dev": {
+                "corex/modules": "^1.0@dev",
                 "corex/wakeup": "^1.0@dev",
+                "ext-pdo": "*",
+                "ext-tokenizer": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "league/flysystem-aws-s3-v3": "3.35.3",
+                "mockery/mockery": "^1.6",
+                "nikic/php-parser": "^5.4",
                 "orchestra/testbench": "^10.12|^11.3",
-                "pestphp/pest": "^5.2"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "pestphp/pest": "^5.2",
+                "phpstan/phpstan": "^2.2.16",
+                "symfony/console": "^7.2|^8.0",
+                "symfony/http-kernel": "^7.2|^8.0",
+                "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
                 "corex/wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
@@ -1732,6 +1816,11 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
                 }
             },
             "autoload": {
@@ -1787,7 +1876,7 @@
                     "pest"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tenancy/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint": [
                     "pint"
@@ -1822,13 +1911,18 @@
             "dist": {
                 "type": "path",
                 "url": "packages/transfer",
-                "reference": "b8b44e6fd083cb919076db048c889776df8f8f5a"
+                "reference": "bc586508889d7e4077a9bf64134d342c263a5745"
             },
             "require": {
                 "corex/core": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
+            },
+            "require-dev": {
+                "illuminate/contracts": "^12.0|^13.0",
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "type": "corex-module",
             "extra": {
@@ -1871,7 +1965,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/transfer/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/transfer/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1891,16 +1985,22 @@
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
-                "reference": "78b6fbf0ad484332e2e9dac812f0660de33bb062"
+                "reference": "b6e61ca9075442abd70e64ca1e6050f4b3634e87"
             },
             "require": {
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
+                "illuminate/console": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "ext-pdo": "*",
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "type": "corex-module",
             "extra": {
@@ -1944,7 +2044,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/wakeup/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/wakeup/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -1964,7 +2064,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "80897857f3e98056be8eff09de297749262f006d"
+                "reference": "2154841be97930359763ea841ee25527fc0d0130"
             },
             "require": {
                 "corex/core": "^1.0@dev",
@@ -1973,6 +2073,10 @@
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3"
             },
             "type": "corex-module",
             "extra": {
@@ -2013,7 +2117,7 @@
                     "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
                 ],
                 "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/workflow/src --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/workflow/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint:check": [
                     "../../vendor/bin/pint --test"
@@ -2478,24 +2582,25 @@
             "dist": {
                 "type": "path",
                 "url": "packages/crm",
-                "reference": "b2c8e95d327baf875588d1bcf4cdc43b787b2fa3"
+                "reference": "f770f8a7f59cbabe6cecfab672e7f80c40d76725"
             },
             "require": {
+                "brick/money": "^0.9 || ^0.10",
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
                 "corex/operations": "^1.0@dev",
+                "ext-filter": "*",
+                "ext-mbstring": "*",
                 "giggsey/libphonenumber-for-php-lite": "^9.0",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "illuminate/validation": "^12.0|^13.0",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -2588,7 +2693,7 @@
                     "pest --coverage --min=95"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/crm/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint": [
                     "pint"
@@ -9442,21 +9547,27 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "5d7df6bf83cd8ac0a23caf570ec88372c21136b6"
+                "reference": "7ac8dcab5876556e5522af8aae7ff607310ff519"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.2@dev",
                 "corex/core": "^1.0@dev",
                 "corex/modules": "^1.0@dev",
+                "ext-mbstring": "*",
+                "illuminate/auth": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
-                "pestphp/pest": "^5.2"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "pestphp/pest": "^5.2",
+                "symfony/process": "^7.2|^8.0"
             },
             "type": "library",
             "extra": {
@@ -9499,7 +9610,7 @@
                     "pest --group=pg"
                 ],
                 "analyse": [
-                    "phpstan analyse --memory-limit=1G"
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress"
                 ],
                 "lint": [
                     "pint"
@@ -14328,6 +14439,54 @@
             "time": "2026-01-06T21:53:42+00:00"
         },
         {
+            "name": "phpstan/extension-installer",
+            "version": "1.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/extension-installer.git",
+                "reference": "85e90b3942d06b2326fba0403ec24fe912372936"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/85e90b3942d06b2326fba0403ec24fe912372936",
+                "reference": "85e90b3942d06b2326fba0403ec24fe912372936",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0",
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.9.0 || ^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
+                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12 || ^1.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\ExtensionInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/phpstan/extension-installer/issues",
+                "source": "https://github.com/phpstan/extension-installer/tree/1.4.3"
+            },
+            "time": "2024-09-04T20:21:43+00:00"
+        },
+        {
             "name": "phpstan/phpdoc-parser",
             "version": "2.3.6",
             "source": {
@@ -14437,6 +14596,58 @@
                 }
             ],
             "time": "2026-09-25T09:31:51+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-strict-rules",
+            "version": "2.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-strict-rules.git",
+                "reference": "2bc5ae19ae965663b62ac907ee6342c3903ec93b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/2bc5ae19ae965663b62ac907ee6342c3903ec93b",
+                "reference": "2bc5ae19ae965663b62ac907ee6342c3903ec93b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0",
+                "phpstan/phpstan": "^2.1.52"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.6",
+                "shipmonk/name-collision-detector": "^2.1"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "rules.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Extra strict and opinionated rules for PHPStan",
+            "keywords": [
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-strict-rules/issues",
+                "source": "https://github.com/phpstan/phpstan-strict-rules/tree/2.0.12"
+            },
+            "time": "2026-07-19T07:24:06+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -16550,6 +16761,72 @@
                 "source": "https://github.com/Seldaek/signal-handler/tree/2.0.2"
             },
             "time": "2023-09-03T09:24:00+00:00"
+        },
+        {
+            "name": "shipmonk/composer-dependency-analyser",
+            "version": "1.8.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipmonk-rnd/composer-dependency-analyser.git",
+                "reference": "975e5873b519d5180b1017a5dfb43d80781abd45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipmonk-rnd/composer-dependency-analyser/zipball/975e5873b519d5180b1017a5dfb43d80781abd45",
+                "reference": "975e5873b519d5180b1017a5dfb43d80781abd45",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "editorconfig-checker/editorconfig-checker": "^10.7.0",
+                "ergebnis/composer-normalize": "^2.19.0",
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "phpcompatibility/php-compatibility": "^9.3.5",
+                "phpstan/phpstan": "^1.12.26",
+                "phpstan/phpstan-phpunit": "^1.4.2",
+                "phpstan/phpstan-strict-rules": "^1.6.2",
+                "phpunit/phpunit": "^8.5.42 || ^9.6.23",
+                "shipmonk/name-collision-detector": "^2.1.1",
+                "slevomat/coding-standard": "^8.15.0"
+            },
+            "bin": [
+                "bin/composer-dependency-analyser"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ShipMonk\\ComposerDependencyAnalyser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Fast detection of composer dependency issues (dead dependencies, shadow dependencies, misplaced dependencies)",
+            "keywords": [
+                "analyser",
+                "composer",
+                "composer dependency",
+                "dead code",
+                "dead dependency",
+                "detector",
+                "dev",
+                "misplaced dependency",
+                "shadow dependency",
+                "static analysis",
+                "unused code",
+                "unused dependency"
+            ],
+            "support": {
+                "issues": "https://github.com/shipmonk-rnd/composer-dependency-analyser/issues",
+                "source": "https://github.com/shipmonk-rnd/composer-dependency-analyser/tree/1.8.4"
+            },
+            "time": "2025-11-25T14:38:16+00:00"
         },
         {
             "name": "staabm/side-effects-detector",

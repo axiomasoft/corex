@@ -4,7 +4,7 @@
 # Ловит диффы, которые "чинят" красный гейт понижением планки вместо фикса:
 #   - ->skip(/markTestSkipped в тестовых файлах (tests/) — тест выключен, а не исправлен;
 #   - continue-on-error в workflow'ах — job формально зелёный при красном шаге;
-#   - phpstan-baseline (или сам файл baseline.neon) — скрытый долг вместо фикса ошибки;
+#   - рост измеренного потолка PHPStan/dependencies или ownership baseline;
 #   - понижение --min= в composer test:coverage;
 #   - уменьшение числа тестов в любом из двух лейнов (sqlite/pg) относительно базы —
 #     число считается ПО ОБЪЕДИНЕНИЮ корневого `tests/` и всех `packages/*/tests`
@@ -68,13 +68,54 @@ check_added_pattern '->skip(' "->skip(" 'tests/*.php tests/**/*.php'
 check_added_pattern 'markTestSkipped' 'markTestSkipped' 'tests/*.php tests/**/*.php'
 check_added_pattern 'continue-on-error' 'continue-on-error' '.github/workflows/*.yml'
 
-# phpstan-baseline: запрет как ключа includes в phpstan.neon, так и появления файла.
-if git diff "$DIFF_RANGE" -- phpstan.neon | command grep -E '^\+' | command grep -qi 'baseline'; then
-    log_fail "phpstan-baseline добавлен в phpstan.neon (скрытый долг запрещён, D34/Code Guidance P1.14)"
-fi
-if git diff --name-status "$DIFF_RANGE" 2>/dev/null | awk '$1 == "A" {print $2}' | command grep -qi 'baseline\.neon$'; then
-    log_fail "новый файл *baseline.neon добавлен диффом (скрытый долг запрещён)"
-fi
+# PLAN3.D37/D39: bind every change to its preceding committed debt ceiling.
+# Initial introduction is permitted once; later additions are rejected even when
+# the remote comparison base predates creation. Include uncommitted changes.
+python3 - "$BASE_REF" <<'PYRATCHET' || log_fail "quality ceilings or ownership baseline grew"
+import json, pathlib, subprocess, sys
+base = sys.argv[1]
+paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership'}
+def read(ref, path):
+    if ref is None:
+        p = pathlib.Path(path)
+        return json.loads(p.read_text()) if p.exists() else None
+    result = subprocess.run(['git', 'show', f'{ref}:{path}'], capture_output=True, text=True)
+    if result.returncode:
+        check = subprocess.run(['git', 'ls-tree', '--name-only', ref, '--', path], capture_output=True, text=True)
+        if check.returncode or check.stdout.strip():
+            raise RuntimeError('cannot read ' + path)
+        return None
+    return json.loads(result.stdout)
+def check(old, new, kind):
+    if new is None:
+        return old is None
+    if old is None:
+        return True
+    if kind == 'ownership':
+        return not (set(new['violations']) - set(old['violations']))
+    for category in ['phpstan', 'dependencies']:
+        before, after = old[category], new[category]
+        if any(value > before.get(package, 0) for package, value in after.items()):
+            return False
+        if sum(after.values()) > sum(before.values()):
+            return False
+    return True
+failed = False
+for path, kind in paths.items():
+    commits = subprocess.check_output(['git', 'rev-list', '--reverse', (base + '..HEAD') if base else 'HEAD', '--', path], text=True).splitlines()
+    previous = read(base, path) if base else None
+    for commit in commits:
+        current = read(commit, path)
+        if not check(previous, current, kind):
+            print(f'ratchet FAIL: {path} at {commit}', file=sys.stderr)
+            failed = True
+        previous = current
+    current = read(None, path)
+    if not check(read('HEAD', path), current, kind):
+        print(f'ratchet FAIL: {path} in worktree', file=sys.stderr)
+        failed = True
+sys.exit(1 if failed else 0)
+PYRATCHET
 
 # Bind each baseline change to its own rebaseline entry. A historical initial
 # entry in the remote-base diff must not authorize unrelated future changes.

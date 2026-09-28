@@ -21,7 +21,7 @@
     "prefer-stable": true,
     "scripts": {
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=vendor/autoload.php",
-        "analyse": "../../vendor/bin/phpstan analyse -c phpstan.neon src --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/recurrence/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
     },
     "extra": {

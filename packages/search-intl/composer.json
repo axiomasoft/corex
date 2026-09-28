@@ -4,19 +4,19 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.4",
         "corex/core": "^1.0@dev",
         "corex/intl": "^1.0@dev",
         "corex/search": "^1.0@dev",
-        "illuminate/contracts": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
-        "corex/modules": "^1.0@dev"
+        "php": "^8.4"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "orchestra/testbench": "^10.12|^11.3",
-        "pestphp/pest": "^5.2"
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "corex/modules": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -74,7 +74,7 @@
     },
     "scripts": {
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php",
-        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/search-intl/phpstan.neon --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/search-intl/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
     }
 }

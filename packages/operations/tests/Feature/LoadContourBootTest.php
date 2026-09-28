@@ -41,12 +41,20 @@ final class LoadContourBootTest extends TestCase
 
         self::assertSame(['CoreX\\Api\\Contracts', 'CoreX\\Api\\Data'], $composer['extra']['corex']['public-api']);
         self::assertSame([
-            'php',
             'corex/core',
             'corex/modules',
+            'ext-filter',
+            'ext-mbstring',
+            'illuminate/auth',
+            'illuminate/console',
+            'illuminate/contracts',
+            'illuminate/database',
             'illuminate/http',
             'illuminate/support',
             'illuminate/validation',
+            'php',
+            'psr/clock',
+            'symfony/http-kernel',
         ], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
         self::assertSame('^12.0|^13.0', $require['illuminate/support']);

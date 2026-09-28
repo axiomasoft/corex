@@ -1,0 +1,367 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Cannot call method orWhere() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Cannot call method whereNull() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 5
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Method CoreX\Notifications\Internal\DeliveryStore::dueIds() should return list<string> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Method CoreX\Notifications\Internal\DeliveryStore::message() should return array<string, mixed> but returns array<mixed, mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter #1 $message of method CoreX\Notifications\Internal\DeliveryStore::message() expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $channel of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $deliveryKey of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $digestRunId of class CoreX\Notifications\Data\DeliveryClaim constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $driverVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $messageHash of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Data\DeliveryClaim constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $policyVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter $templateVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Delivery/Internal/DeliveryStore.php
+
+		-
+			rawMessage: 'Parameter #2 $eventType of method CoreX\Notifications\Contracts\PreferenceRepository::get() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/DigestWakeupHandler.php
+
+		-
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/DigestWakeupHandler.php
+
+		-
+			rawMessage: 'Parameter $kind of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/DigestWakeupHandler.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Digest/Internal/NotificationDigestDueSource.php
+
+		-
+			rawMessage: 'Parameter $actorId of class CoreX\Notifications\Data\NotificationContext constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/NotificationDigestDueSource.php
+
+		-
+			rawMessage: 'Parameter $actorKind of class CoreX\Notifications\Data\NotificationContext constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/NotificationDigestDueSource.php
+
+		-
+			rawMessage: 'Parameter $period of class CoreX\Notifications\Data\DigestWindow constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/NotificationDigestDueSource.php
+
+		-
+			rawMessage: 'Cannot call method from() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: 'Cannot call method selectRaw() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: 'Cannot call method where() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: 'Cannot call method whereColumn() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\DigestRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Digest/Internal/SqlDigestBuilder.php
+
+		-
+			rawMessage: Access to an undefined property object::$cancelled_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$event_type.
+			identifier: property.notFound
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$read_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$recipient_id.
+			identifier: property.notFound
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$recipient_kind.
+			identifier: property.notFound
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$related.
+			identifier: property.notFound
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Access to an undefined property object::$revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Anonymous function should return array|bool|int|string|null but returns mixed.
+			identifier: return.type
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Method CoreX\Notifications\Internal\SqlNotificationCenter::dispatchedChannels() should return list<string> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter #1 $known_string of function hash_equals expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter $eventType of class CoreX\Notifications\Data\NotificationRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\NotificationRef constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter $kind of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 2
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Data\NotificationSubject constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Inbox/Internal/SqlNotificationCenter.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 8
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 6
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method connection() on mixed.'
+			identifier: method.nonObject
+			count: 6
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 7
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method set() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $drivers of class CoreX\Notifications\Internal\ChannelDrivers constructor expects iterable<CoreX\Notifications\Contracts\NotificationChannelDriver>, iterable given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\DeliveryStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\Digest\DigestWakeupHandler constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\Digest\NotificationDigestDueSource constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SettingsPreferenceRepository constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SqlDigestBuilder constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SqlNotificationCenter constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/NotificationsServiceProvider.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/Preferences/Internal/SettingsPreferenceRepository.php

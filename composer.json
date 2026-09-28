@@ -46,7 +46,10 @@
         "open-telemetry/api": "^1.4",
         "open-telemetry/sdk": "^1.4",
         "corex/access": "^1.0@dev",
-        "axioma-studio/azguard-core": "^0.2@dev"
+        "axioma-studio/azguard-core": "^0.2@dev",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-strict-rules": "^2.0.12",
+        "shipmonk/composer-dependency-analyser": "^1.8.4"
     },
     "autoload-dev": {
         "psr-4": {
@@ -81,22 +84,23 @@
             "packages/attributes/tests/helpers.php"
         ]
     },
-    "repositories": [
-        {
+    "repositories": {
+        "0": {
             "type": "path",
             "url": "packages/*"
         },
-        {
+        "1": {
             "type": "vcs",
             "url": "https://github.com/axiomasoft/azguard.git"
         }
-    ],
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "process-timeout": 1200,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
         }
     },
     "scripts": {
@@ -122,12 +126,14 @@
         "test:coverage": "vendor/bin/pest --coverage --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
-        "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
-        "analyse:packages": "php scripts/phpstan-contour.php --also-analyse-root",
+        "analyse": "bash scripts/phpstan-packages.sh",
         "analyse:tests-lint": "vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G",
         "refactor": "vendor/bin/rector process",
         "refactor:check": "vendor/bin/rector process --dry-run",
         "manifests:check": "python3 scripts/manifest-check.py",
-        "golden": "vendor/bin/pest --testsuite=Golden"
+        "golden": "vendor/bin/pest --testsuite=Golden",
+        "ownership-gate": "php scripts/ownership-gate.php",
+        "quality:ceilings": "php scripts/quality-ceiling-guard.php",
+        "deps:analyse": "bash scripts/dependency-analyser.sh --all"
     }
 }

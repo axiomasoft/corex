@@ -1,0 +1,211 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000200_create_tsk_processes_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000200_create_tsk_processes_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000210_create_tsk_stages_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000210_create_tsk_stages_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000220_create_tsk_projects_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 2
+			path: database/migrations/2026_06_14_000220_create_tsk_projects_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 2
+			path: database/migrations/2026_06_14_000230_create_tsk_tasks_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000230_create_tsk_tasks_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 4
+			path: database/migrations/2026_06_14_000230_create_tsk_tasks_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000240_create_tsk_task_participants_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000240_create_tsk_task_participants_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000240_create_tsk_task_participants_table.php
+
+		-
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000250_create_tsk_project_participants_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000250_create_tsk_project_participants_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_06_14_000250_create_tsk_project_participants_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_09_15_000071_create_task_operation_receipts.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 3
+			path: src/Planning/Internal/DatabaseTaskOperationReceipts.php
+
+		-
+			rawMessage: 'Parameter $resultRef of class CoreX\Tasks\Data\TaskOperationReceipt constructor expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Planning/Internal/DatabaseTaskOperationReceipts.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Project>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Sprint>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Task>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Planning/Internal/PlanningCommand.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Project/Data/ProjectReference.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Sprint/Data/SprintReference.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Task>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Task/Actions/CompleteTask.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Task>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Task/Actions/MoveTaskToStage.php
+
+		-
+			rawMessage: 'Parameter $taskId of class CoreX\Tasks\Data\CompleteTaskData constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Task/Actions/MoveTaskToStage.php
+
+		-
+			rawMessage: 'Property CoreX\Tasks\Models\Task::$stage_id (string|null) does not accept mixed.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Task/Actions/MoveTaskToStage.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Models\Task>::lockForUpdate().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Task/Actions/UpdateTask.php
+
+		-
+			rawMessage: 'Parameter #1 $object of static method DateTimeImmutable::createFromInterface() expects DateTimeInterface, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Task/Actions/UpdateTask.php
+
+		-
+			rawMessage: 'Property CoreX\Tasks\Models\Task::$project_id (string|null) does not accept mixed.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Task/Actions/UpdateTask.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Task/Data/TaskReference.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Time/Data/TimeLogReference.php

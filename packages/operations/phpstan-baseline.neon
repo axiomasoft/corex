@@ -1,0 +1,1405 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: Access to constant on internal class CoreX\Api\Laravel\ApiSchemaRegistrar.
+			identifier: classConstant.internalClass
+			count: 2
+			path: database/migrations/budget/create_sys_api_budget_tables.php
+
+		-
+			rawMessage: 'Call to method budget() of internal class CoreX\Api\Laravel\ApiSchemaRegistrar from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 2
+			path: database/migrations/budget/create_sys_api_budget_tables.php
+
+		-
+			rawMessage: Access to constant on internal class CoreX\Api\Laravel\ApiSchemaRegistrar.
+			identifier: classConstant.internalClass
+			count: 2
+			path: database/migrations/tenant/create_sys_api_bulk_operations_table.php
+
+		-
+			rawMessage: 'Call to method tenant() of internal class CoreX\Api\Laravel\ApiSchemaRegistrar from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 2
+			path: database/migrations/tenant/create_sys_api_bulk_operations_table.php
+
+		-
+			rawMessage: Access to constant on internal class CoreX\Api\Laravel\ApiSchemaRegistrar.
+			identifier: classConstant.internalClass
+			count: 2
+			path: database/migrations/tenant/create_sys_api_webhook_tables.php
+
+		-
+			rawMessage: 'Call to method tenant() of internal class CoreX\Api\Laravel\ApiSchemaRegistrar from outside its root namespace CoreX.'
+			identifier: method.internalClass
+			count: 2
+			path: database/migrations/tenant/create_sys_api_webhook_tables.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: Cannot access offset 'router' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 4
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method has() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Api\Support\ApiOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/ApiServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CoreX\Api\Internal\DeclaredFieldAuthorizer::leafPaths() expects array<int<0, max>|string, mixed>, non-empty-array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Authorization/Internal/DeclaredFieldAuthorizer.php
+
+		-
+			rawMessage: 'Parameter #4 $value of static method CoreX\Api\Internal\DeclaredFieldAuthorizer::pruneArray() expects array<int<0, max>|string, mixed>, non-empty-array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Authorization/Internal/DeclaredFieldAuthorizer.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/BulkRetention.php
+
+		-
+			rawMessage: Access to an undefined property object::$result_ref.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/BulkRetention.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: src/Bulk/Internal/BulkRetention.php
+
+		-
+			rawMessage: Access to an undefined property object::$actor_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$attempt.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$cancel_requested_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$checkpoint.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$client_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$contract_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$created_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$error.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$expires_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$extension_stamp.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$finished_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$input_ref.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_owner.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_until.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$major.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$next_attempt_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$operation_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$progress.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$result_ref.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$scope.
+			identifier: property.notFound
+			count: 2
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$submission_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$terminal_status.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$transfer_ref.
+			identifier: property.notFound
+			count: 1
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 5
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 14
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: 'Parameter #2 $attempts of method Illuminate\Database\Connection::transaction() expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 4
+			path: src/Bulk/Internal/SqlBulkOperationStore.php
+
+		-
+			rawMessage: 'Cannot call method create() on CoreX\Api\Contracts\BulkTransferFactory|null.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Bulk/Internal/TransferBulkExecutor.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bulk/Laravel/BulkRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Bulk/Laravel/BulkRegistrar.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Api\Data\BulkOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Bulk/Laravel/BulkRegistrar.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Bulk/Laravel/BulkRouteRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Bulk/Laravel/BulkRouteRegistrar.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Bulk/Laravel/BulkRouteRegistrar.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: src/Cost/Internal/BudgetRetention.php
+
+		-
+			rawMessage: 'Parameter #2 $attempts of method Illuminate\Database\Connection::transaction() expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 2
+			path: src/Cost/Internal/BudgetRetention.php
+
+		-
+			rawMessage: Access to an undefined property object::$available.
+			identifier: property.notFound
+			count: 1
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Access to an undefined property object::$capacity.
+			identifier: property.notFound
+			count: 2
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Access to an undefined property object::$last_refill_at.
+			identifier: property.notFound
+			count: 2
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Access to an undefined property object::$refill_rate.
+			identifier: property.notFound
+			count: 1
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 6
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 4
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array<int, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: 'Parameter #1 $array of function sort expects an array of values castable to string, array<int, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: 'Parameter #1 $keys of method CoreX\Api\Internal\Cost\SqlOperationBudget::lockedBuckets() expects list<string>, non-empty-list given.'
+			identifier: argument.type
+			count: 1
+			path: src/Cost/Internal/SqlOperationBudget.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Cost/Laravel/CostRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Cost/Laravel/CostRegistrar.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Api\Data\CostOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Cost/Laravel/CostRegistrar.php
+
+		-
+			rawMessage: 'Parameter #1 $object_or_class of function is_a expects object|string, class-string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Definition/Operation.php
+
+		-
+			rawMessage: 'Parameter $cost of class CoreX\Api\Operation constructor expects array<string, int>|null, array<mixed>|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Definition/Operation.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: src/Definition/OperationRegistry.php
+
+		-
+			rawMessage: 'Parameter $details of class CoreX\Api\ApiError constructor expects array<string, mixed>, array given.'
+			identifier: argument.type
+			count: 1
+			path: src/Errors/Internal/ErrorMapper.php
+
+		-
+			rawMessage: 'Parameter #1 $data of static method CoreX\Api\Data\StoredOperationOutcome::success() expects array<int<0, max>|string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Idempotency/Data/StoredOperationOutcome.php
+
+		-
+			rawMessage: 'Parameter $errorDetails of class CoreX\Api\Data\StoredOperationOutcome constructor expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Idempotency/Data/StoredOperationOutcome.php
+
+		-
+			rawMessage: Access to an undefined property object::$attempt.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$contract_hash.
+			identifier: property.notFound
+			count: 2
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$key_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_token.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_until.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$outcome_json.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$request_fingerprint.
+			identifier: property.notFound
+			count: 2
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$scope_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$state.
+			identifier: property.notFound
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 10
+			path: src/Idempotency/Internal/SqlIdempotencyStore.php
+
+		-
+			rawMessage: 'Loose comparison via "!=" between CoreX\Tenancy\TenantContext|null and CoreX\Tenancy\TenantContext is not allowed.'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: src/Invocation/Internal/TrustedContextResolver.php
+
+		-
+			rawMessage: 'Property CoreX\Api\InvocationMetadata::$correlationId (string) does not accept string|null.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Invocation/InvocationMetadata.php
+
+		-
+			rawMessage: Cannot access offset 'meta' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Invocation/OperationDispatcher.php
+
+		-
+			rawMessage: 'Method CoreX\Api\OperationDispatcher::input() should return array<string, mixed> but returns array.'
+			identifier: return.type
+			count: 1
+			path: src/Invocation/OperationDispatcher.php
+
+		-
+			rawMessage: 'Only iterables can be unpacked, mixed given.'
+			identifier: arrayUnpacking.nonIterable
+			count: 1
+			path: src/Invocation/OperationDispatcher.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method connection() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: 'Parameter $budget of class CoreX\Api\Laravel\ApiSchemaRegistrar constructor expects Illuminate\Database\Connection, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: 'Parameter $tenant of class CoreX\Api\Laravel\ApiSchemaRegistrar constructor expects Illuminate\Database\Connection, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Laravel/ApiSchemaRegistrar.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Support\ApiOptions::array() should return array<string, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Laravel/Support/ApiOptions.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Commands\WriteApiSnapshots::contracts() should return list<array<string, mixed>> but returns array<mixed, mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/OpenApi/Commands/WriteApiSnapshots.php
+
+		-
+			rawMessage: 'Only booleans are allowed in an if condition, array|bool|float|int|string|null given.'
+			identifier: if.condNotBoolean
+			count: 1
+			path: src/OpenApi/Commands/WriteApiSnapshots.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/OpenApi/Commands/WriteApiSnapshots.php
+
+		-
+			rawMessage: Binary operation "." between mixed and "\000" results in an error.
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/OpenApi/Internal/ContractSnapshotBuilder.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/OpenApi/Internal/ContractSnapshotBuilder.php
+
+		-
+			rawMessage: Cannot access offset string on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/OpenApi/Internal/ContractSnapshotBuilder.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/OpenApi/Internal/ContractSnapshotBuilder.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/OpenApi/Internal/ContractSnapshotBuilder.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/OpenApi/OpenApiDocumentGenerator.php
+
+		-
+			rawMessage: 'Parameter #2 $haystack of function in_array expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/OpenApi/OpenApiDocumentGenerator.php
+
+		-
+			rawMessage: Binary operation "." between 'Ordering version [' and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Pagination/Internal/OrderingRegistry.php
+
+		-
+			rawMessage: 'Parameter #1 $orderings of class CoreX\Api\Internal\OrderingRegistry constructor expects array<string, array{direction: string, fields: list<string>, types: list<string>}>, array<array{direction: string, fields: list<string>, types: list<string>}> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Pagination/Internal/OrderingRegistry.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/Pagination/Internal/OrderingRegistry.php
+
+		-
+			rawMessage: 'Parameter #1 $decoded of method CoreX\Api\Internal\SignedCursorCodec::payloadFromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Pagination/Internal/SignedCursorCodec.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Tools/Internal/GuardedToolInvoker.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CoreX\Api\Data\JsonObject::fromArray() expects array<string, mixed>, array<int<0, max>|string, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/GuardedToolInvoker.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Cannot call method data() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Cannot call method fullPath() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Cannot call method keyword() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Cannot call method subErrors() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\OpisToolSchemaValidator::collectErrors() should return list<array{code: string, pointer: string}> but returns non-empty-list<array{code: mixed, pointer: string}>.'
+			identifier: return.type
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Parameter #1 $schema of static method CoreX\Api\Internal\SchemaBudget::admit() expects array<string, mixed>, array<int|string, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Parameter #1 $segments of static method CoreX\Api\Internal\OpisToolSchemaValidator::pointer() expects list<int|string>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: 'Parameter #2 $schema of method Opis\JsonSchema\Validator::validate() expects bool|object|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/OpisToolSchemaValidator.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: Casting to int something that's already int.
+			identifier: cast.useless
+			count: 1
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $digest of class CoreX\Api\Data\SchemaHandle constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $errors of class CoreX\Api\Data\SchemaValidation constructor expects list<array{code: string, pointer: string}>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $localResources of class CoreX\Api\Data\SchemaHandle constructor expects array<string, string>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $profile of class CoreX\Api\Data\SchemaHandle constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: src/Tools/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 3
+			path: src/Tools/Internal/ToolSchemaWorker.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 2
+			path: src/Tools/Internal/ToolSchemaWorker.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\JsonCanonical::decode() should return array<int<0, max>|string, mixed>|bool|float|int|string|null but returns mixed.'
+			identifier: return.type
+			count: 1
+			path: src/Validation/Internal/JsonCanonical.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\JsonCanonical::decodeObject() should return array<string, mixed>|null but returns array<int|string, mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Validation/Internal/JsonCanonical.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Validation/Internal/JsonCanonical.php
+
+		-
+			rawMessage: 'Parameter #1 $schema of static method CoreX\Api\Internal\SchemaBudget::collectResources() expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 2
+			path: src/Validation/Internal/SchemaBudget.php
+
+		-
+			rawMessage: 'Parameter #1 $schema of static method CoreX\Api\Internal\SchemaBudget::rejectForbiddenKeywords() expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Validation/Internal/SchemaBudget.php
+
+		-
+			rawMessage: Cannot cast array|bool|float|int|string|null to string.
+			identifier: cast.string
+			count: 1
+			path: src/Webhooks/Commands/DeliverWebhooks.php
+
+		-
+			rawMessage: 'Parameter #2 $worker of method CoreX\Api\Internal\Webhook\WebhookDeliveryWorker::workOnce() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Commands/DeliverWebhooks.php
+
+		-
+			rawMessage: 'Property CoreX\Api\Data\ValidatedWebhookRequest::$signatureHeaders (array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}) does not accept array{webhook-id: mixed, webhook-timestamp: mixed, webhook-signature: mixed}.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Webhooks/Data/ValidatedWebhookRequest.php
+
+		-
+			rawMessage: 'Parameter #2 $options of function curl_setopt_array expects array{10002: non-empty-string, 47: bool, 10015: array|string, 10023: array<int, string>, 10203: array, 52: bool, 68: int, 181: int, ...}, array{10002: string, 47: true, 10015: string, 10023: list<string>, 10203: array{non-falsy-string}, 52: false, 68: 0, 181: 2, ...} given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Internal/CurlWebhookTransport.php
+
+		-
+			rawMessage: Access to an undefined property object::$attempt.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$body.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$body_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$created_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$endpoint_snapshot.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$event_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$expires_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$finished_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$last_error.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_owner.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_until.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$major.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$next_attempt_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$replay_count.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$scope.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$subscription_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$subscription_revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic_version.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '|' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 8
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 20
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: 'Parameter #2 $attempts of method Illuminate\Database\Connection::transaction() expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 3
+			path: src/Webhooks/Internal/SqlWebhookDeliveryStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$created_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$endpoint_url.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$key_refs.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$major.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$max_pii_class.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic_version.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Access to an undefined property object::$updated_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 2
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 8
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: 'Casting to int something that''s already int<0, max>.'
+			identifier: cast.useless
+			count: 1
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: 'Parameter #2 $attempts of method Illuminate\Database\Connection::transaction() expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 3
+			path: src/Webhooks/Internal/SqlWebhookSubscriptionStore.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '|' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Webhooks/Internal/WebhookFanout.php
+
+		-
+			rawMessage: Access to an undefined property object::$attempt.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$body_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$created_at.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$endpoint_url.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$event_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$finished_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$key_refs.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$last_error.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$major.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$max_pii_class.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$replay_count.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$subscription_id.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic_version.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$updated_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 8
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 19
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\Webhook\WebhookManagement::attempts() should return list<array<string, mixed>> but returns array<int, array{attempt: int, duration_ms: int|null, error_code: string|null, finished_at: string|null, http_status: int|null, outcome: string, started_at: string}>.'
+			identifier: return.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\Webhook\WebhookManagement::deliveries() should return array{items: list<array<string, mixed>>, next: string|null} but returns array{items: list<mixed>, next: string|null}.'
+			identifier: return.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: 'Method CoreX\Api\Internal\Webhook\WebhookManagement::subscriptions() should return list<array<string, mixed>> but returns array<int, array<string, mixed>>.'
+			identifier: return.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: 'Parameter $items of static method CoreX\Api\Data\CursorPage::assemble() expects list<mixed>, array<int, array<string, mixed>> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookManagement.php
+
+		-
+			rawMessage: Access to an undefined property object::$attempt.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$body_hash.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$created_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$endpoint_snapshot.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$expires_at.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$id.
+			identifier: property.notFound
+			count: 3
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$lease_until.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$major.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$replay_count.
+			identifier: property.notFound
+			count: 5
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$status.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$subscription_id.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$subscription_revision.
+			identifier: property.notFound
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Access to an undefined property object::$topic_version.
+			identifier: property.notFound
+			count: 2
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 11
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 19
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: 'Parameter #2 $attempts of method Illuminate\Database\Connection::transaction() expects int<1, max>, int given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookReplay.php
+
+		-
+			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Query\Builder::whereRaw() expects Illuminate\Contracts\Database\Query\Expression|literal-string, non-falsy-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookRetention.php
+
+		-
+			rawMessage: Binary operation "+" between mixed and 1 results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Webhooks/Internal/WebhookUrlPolicy.php
+
+		-
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 1
+			path: src/Webhooks/Internal/WebhookUrlPolicy.php
+
+		-
+			rawMessage: 'Parameter #1 $hostname of function dns_get_record expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Internal/WebhookUrlPolicy.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 2
+			path: src/Webhooks/Internal/WebhookUrlPolicy.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRegistrar.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Api\Data\WebhookOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRegistrar.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Webhooks/Laravel/WebhookRouteRegistrar.php
+
+		-
+			rawMessage: Cannot access offset 'router' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRouteRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 2
+			path: src/Webhooks/Laravel/WebhookRouteRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method has() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRouteRegistrar.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Webhooks/Laravel/WebhookRouteRegistrar.php

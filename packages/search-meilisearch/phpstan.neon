@@ -1,2 +1,11 @@
 includes:
-    - ../../phpstan.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: max
+    tmpDir: ../../build/phpstan/search-meilisearch
+    paths:
+        - src
+    checkModelProperties: true
+    checkPhpDocMissingReturn: true

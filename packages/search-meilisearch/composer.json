@@ -4,10 +4,13 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.4",
         "corex/core": "^1.0@dev",
         "corex/search": "^1.0@dev",
-        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable"
+        "ext-filter": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
+        "php": "^8.4"
     },
     "autoload": {
         "psr-4": {
@@ -53,7 +56,11 @@
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=meilisearch",
         "test:meilisearch": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=meilisearch",
         "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
-        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/search-meilisearch/src --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/search-meilisearch/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3"
     }
 }

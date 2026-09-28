@@ -17,18 +17,24 @@
         }
     ],
     "require": {
-        "php": "^8.4",
         "axioma-studio/azguard-core": "^0.2@dev",
         "corex/core": "^1.0@dev",
         "corex/modules": "^1.0@dev",
+        "ext-mbstring": "*",
+        "illuminate/auth": "^12.0|^13.0",
         "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0"
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^10.12|^11.3",
-        "pestphp/pest": "^5.2"
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "symfony/process": "^7.2|^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -62,20 +68,20 @@
             "dev-main": "1.0.x-dev"
         }
     },
-    "repositories": [
-        {
+    "repositories": {
+        "0": {
             "type": "path",
             "url": "../core"
         },
-        {
+        "1": {
             "type": "path",
             "url": "../modules"
         },
-        {
+        "2": {
             "type": "vcs",
             "url": "https://github.com/axiomasoft/azguard.git"
         }
-    ],
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
@@ -86,7 +92,7 @@
     "scripts": {
         "test": "pest --exclude-group=pg",
         "test:pg": "pest --group=pg",
-        "analyse": "phpstan analyse --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress",
         "lint": "pint",
         "lint:check": "pint --test"
     }

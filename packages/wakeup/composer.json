@@ -4,12 +4,13 @@
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "php": "^8.4",
         "corex/core": "^1.0@dev",
         "corex/modules": "^1.0@dev",
+        "illuminate/console": "^12.0|^13.0",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
         "psr/clock": "^1.0"
     },
     "autoload": {
@@ -58,7 +59,12 @@
         "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
         "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
         "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80",
-        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/wakeup/src --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/wakeup/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
+    },
+    "require-dev": {
+        "ext-pdo": "*",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3"
     }
 }

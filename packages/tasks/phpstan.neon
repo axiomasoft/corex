@@ -1,11 +1,12 @@
 includes:
-    - vendor/larastan/larastan/extension.neon
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
 
 parameters:
+    level: max
+    tmpDir: ../../build/phpstan/tasks
     paths:
         - src
-
-    level: 6
-
+        - database/migrations
     checkModelProperties: true
     checkPhpDocMissingReturn: true

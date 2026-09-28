@@ -19,25 +19,27 @@
         }
     ],
     "require": {
-        "php": "^8.4",
         "brick/money": "^0.9 || ^0.10",
-        "illuminate/config": "^12.0|^13.0",
-        "illuminate/container": "^12.0|^13.0",
-        "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/database": "^12.0|^13.0",
-        "illuminate/filesystem": "^12.0|^13.0",
-        "illuminate/http": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "psr/clock": "^1.0"
+        "ext-ctype": "*",
+        "php": "^8.4",
+        "psr/clock": "^1.0",
+        "laravel/framework": "^12.0|^13.0",
+        "ext-mbstring": "*"
     },
     "provide": {
         "psr/clock-implementation": "1.0"
     },
     "require-dev": {
+        "ext-pdo": "*",
+        "nikic/php-parser": "^5.4",
         "open-telemetry/api": "^1.4",
         "open-telemetry/sdk": "^1.4",
         "orchestra/testbench": "^10.12|^11.3",
-        "psr/log": "^3.0"
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "phpstan/phpstan": "^2.2.16",
+        "psr/log": "^3.0",
+        "symfony/console": "^7.2|^8.0",
+        "symfony/process": "^7.2|^8.0"
     },
     "suggest": {
         "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
@@ -98,6 +100,11 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
         }
     },
     "minimum-stability": "stable",
@@ -106,7 +113,7 @@
         "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg",
         "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --group=pg",
         "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg --coverage --min=80",
-        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c phpstan.neon packages/core/src packages/core/database/migrations packages/core/tests/Unit/PackageRegistrarTest.php --memory-limit=1G",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
     },
     "repositories": []
