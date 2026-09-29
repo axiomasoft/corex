@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Observability\Contracts;
 
-use CoreX\Observability\OperationCompleted;
-use CoreX\Observability\OperationFailed;
-use CoreX\Observability\OperationStarted;
+use CoreX\Observability\Data\OperationCompleted;
+use CoreX\Observability\Data\OperationFailed;
+use CoreX\Observability\Data\OperationStarted;
 
 interface OperationObserver
 {

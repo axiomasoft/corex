@@ -13,7 +13,7 @@
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
 | NEW-1 | `IntlModule` наследует `ModuleDefinition`, `manifest()` вместо несуществующего `ModuleDescriptor` | `ModuleDiscovery` обрабатывает `axiomasoft/corex-intl` без `InvalidManifestException` |
-| A2b | Удалён `use CoreX\Tenancy\Runtime\StanclTenancyManager` из контракта `TenancyManager` в ядре | `rg StanclTenancyManager packages/core/src/Tenancy/Contracts/` — пусто |
+| A2b | Удалён `use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager` из контракта `TenancyManager` в ядре | `rg StanclTenancyManager packages/core/src/Tenancy/Contracts/` — пусто |
 | A3 | В `require` добавлены `axiomasoft/corex` (intl), `axiomasoft/corex-workflow` (tasks-workflow); wakeup — `suggest` с guarded binding | `composer.json` пакетов; allowlist P12.3 |
 
 ## P12.2 — контур тестов 8 → 20

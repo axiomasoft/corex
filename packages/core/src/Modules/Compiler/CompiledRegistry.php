@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace CoreX\Modules\Compiler;
 
 use CoreX\Features\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Contracts\Extender;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Extender;
-use CoreX\Modules\Extend\Filament;
-use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\Extend\Routes;
-use CoreX\Modules\Extend\Workflow;
+use CoreX\Modules\Internal\Compiler\CompiledSettingDefault;
+use CoreX\Modules\Internal\Extend\Filament;
+use CoreX\Modules\Internal\Extend\Menu;
+use CoreX\Modules\Internal\Extend\Routes;
+use CoreX\Modules\Internal\Extend\Workflow;
 use CoreX\Modules\Registry\EntityDefinition;
 use ReflectionClass;
 
@@ -255,7 +256,7 @@ final readonly class CompiledRegistry
      * has no data to feed) — the inverse of {@see extenderToArray()}, and the
      * only reason `__set_state` is not needed in the persisted file.
      *
-     * @template T of Extender
+     * @template T of \CoreX\Modules\Contracts\Extender
      *
      * @param  class-string<T>  $class
      * @param  array<string, mixed>  $data

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Internal\Schema\CachedFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\CatalogueConflictPolicy;
 use CoreX\CustomFields\Internal\Schema\CompositeFieldCatalogue;
-use CoreX\CustomFields\Support\FieldSnapshot;
 use CoreX\Data\DataScope;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository;

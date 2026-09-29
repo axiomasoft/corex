@@ -6,10 +6,12 @@ namespace CoreX\Tasks\Task\Models;
 
 use CoreX\Database\BaseModel;
 use CoreX\Tasks\Project\Models\Project;
-use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 use CoreX\Tasks\Task\Enums\TaskPriority;
 use CoreX\Tasks\Task\Enums\TaskStatus;
-use CoreX\Tasks\Time\Models\TimeLog;
+use CoreX\Tasks\Task\Internal\Models\TaskTarget;
+use CoreX\Tasks\Task\Internal\Models\TaskWatcher;
+use CoreX\Tasks\Time\Internal\Models\TimeLog;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

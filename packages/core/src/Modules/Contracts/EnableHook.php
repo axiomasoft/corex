@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
-use CoreX\Modules\Definition\ModuleRuntimeContext;
+use CoreX\Modules\Data\ModuleRuntimeContext;
 
 /**
  * Module-authored seed step run on enable. MUST be idempotent — a retry

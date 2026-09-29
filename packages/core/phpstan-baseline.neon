@@ -94,13 +94,13 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Audit/AuditObserver.php
+			path: src/Audit/Internal/AuditObserver.php
 
 		-
 			rawMessage: Casting to string something that's already string.
 			identifier: cast.useless
 			count: 2
-			path: src/Audit/AuditObserver.php
+			path: src/Audit/Internal/AuditObserver.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
@@ -142,13 +142,13 @@ parameters:
 			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Audit/PruneAuditLog.php
+			path: src/Audit/Internal/PruneAuditLog.php
 
 		-
-			rawMessage: 'Method CoreX\Config\Commands\ValidateConfigCommand::configArray() should return array<string, mixed> but returns array<mixed>.'
+			rawMessage: 'Method CoreX\Config\Internal\Commands\ValidateConfigCommand::configArray() should return array<string, mixed> but returns array<mixed>.'
 			identifier: return.type
 			count: 1
-			path: src/Config/Commands/ValidateConfigCommand.php
+			path: src/Config/Internal/Commands/ValidateConfigCommand.php
 
 		-
 			rawMessage: 'Parameter #1 $config of static method CoreX\Config\CoreOptions::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
@@ -295,7 +295,7 @@ parameters:
 			path: src/CoreServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $contexts of class CoreX\Storage\LocalTenantStorage constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
+			rawMessage: 'Parameter $contexts of class CoreX\Storage\Internal\LocalTenantStorage constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreServiceProvider.php
@@ -382,49 +382,49 @@ parameters:
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
-			path: src/Features/Models/FeatureFlag.php
+			path: src/Features/Internal/Models/FeatureFlag.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Features/Models/FeatureFlag.php
+			path: src/Features/Internal/Models/FeatureFlag.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Features/Models/FeatureFlag.php
+			path: src/Features/Internal/Models/FeatureFlag.php
 
 		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
-			path: src/Features/Models/FeatureOverride.php
+			path: src/Features/Internal/Models/FeatureOverride.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Features/Models/FeatureOverride.php
+			path: src/Features/Internal/Models/FeatureOverride.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Features/Models/FeatureOverride.php
+			path: src/Features/Internal/Models/FeatureOverride.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 3
-			path: src/Messaging/DatabasePollPubSub.php
+			path: src/Messaging/Internal/DatabasePollPubSub.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Messaging/DatabasePollPubSub.php
+			path: src/Messaging/Internal/DatabasePollPubSub.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
@@ -580,25 +580,25 @@ parameters:
 			rawMessage: 'Dynamic call to static method Redis::publish().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Messaging/RedisPubSub.php
+			path: src/Messaging/Internal/RedisPubSub.php
 
 		-
 			rawMessage: Casting to bool something that's already bool.
 			identifier: cast.useless
 			count: 1
-			path: src/Modules/Commands/ExplainModuleCommand.php
+			path: src/Modules/Internal/Commands/ExplainModuleCommand.php
 
 		-
 			rawMessage: Casting to string something that's already string.
 			identifier: cast.useless
 			count: 2
-			path: src/Modules/Commands/ExplainModuleCommand.php
+			path: src/Modules/Internal/Commands/ExplainModuleCommand.php
 
 		-
 			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array given.'
 			identifier: argument.type
 			count: 2
-			path: src/Modules/Compiler/CompilationValidator.php
+			path: src/Modules/Internal/Compiler/CompilationValidator.php
 
 		-
 			rawMessage: 'Method CoreX\Modules\Compiler\CompiledRegistry::extenderToArray() should return array<string, mixed> but returns array<mixed>.'
@@ -619,7 +619,7 @@ parameters:
 			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledSettingDefault::fromArray() expects array{namespace: string, definition: array<string, mixed>}, array<string, mixed> given.'
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Internal\Compiler\CompiledSettingDefault::fromArray() expects array{namespace: string, definition: array<string, mixed>}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Modules/Compiler/CompiledRegistry.php
@@ -631,16 +631,16 @@ parameters:
 			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Method CoreX\Modules\Compiler\CompiledSettingDefault::toArray() should return array{namespace: string, definition: array<string, mixed>} but returns array{namespace: string, definition: array<mixed>}.'
+			rawMessage: 'Method CoreX\Modules\Internal\Compiler\CompiledSettingDefault::toArray() should return array{namespace: string, definition: array<string, mixed>} but returns array{namespace: string, definition: array<mixed>}.'
 			identifier: return.type
 			count: 1
-			path: src/Modules/Compiler/CompiledSettingDefault.php
+			path: src/Modules/Internal/Compiler/CompiledSettingDefault.php
 
 		-
-			rawMessage: 'Parameter #1 $package of static method CoreX\Modules\Compiler\InstalledPackages::reference() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter #1 $package of static method CoreX\Modules\Internal\Compiler\InstalledPackages::reference() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Compiler/InstalledPackages.php
+			path: src/Modules/Internal/Compiler/InstalledPackages.php
 
 		-
 			rawMessage: 'Parameter #1 $model of method CoreX\Modules\Compiler\RegistryCompiler::introspectCasts() expects class-string<Illuminate\Database\Eloquent\Model>, class-string given.'
@@ -685,16 +685,16 @@ parameters:
 			path: src/Modules/Extend/EntityField.php
 
 		-
-			rawMessage: 'Property CoreX\Modules\Extend\Routes::$kind (''api''|''web'') does not accept string.'
+			rawMessage: 'Property CoreX\Modules\Internal\Extend\Routes::$kind (''api''|''web'') does not accept string.'
 			identifier: assign.propertyType
 			count: 1
-			path: src/Modules/Extend/Routes.php
+			path: src/Modules/Internal/Extend/Routes.php
 
 		-
-			rawMessage: 'Property CoreX\Modules\Extend\Workflow::$kind (''stepType''|''trigger'') does not accept string.'
+			rawMessage: 'Property CoreX\Modules\Internal\Extend\Workflow::$kind (''stepType''|''trigger'') does not accept string.'
 			identifier: assign.propertyType
 			count: 1
-			path: src/Modules/Extend/Workflow.php
+			path: src/Modules/Internal/Extend/Workflow.php
 
 		-
 			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
@@ -727,7 +727,7 @@ parameters:
 			path: src/Modules/Laravel/ModulesBootRegistrar.php
 
 		-
-			rawMessage: PHPDoc tag @var with type CoreX\Modules\Contracts\ModuleRegistry is not subtype of type CoreX\Modules\Registry\CompiledModuleRegistry.
+			rawMessage: PHPDoc tag @var with type CoreX\Modules\Contracts\ModuleRegistry is not subtype of type CoreX\Modules\Internal\Registry\CompiledModuleRegistry.
 			identifier: varTag.type
 			count: 1
 			path: src/Modules/Laravel/ModulesBootRegistrar.php
@@ -748,175 +748,175 @@ parameters:
 			rawMessage: Access to an undefined property object::$edition.
 			identifier: property.notFound
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Access to an undefined property object::$schema_version.
 			identifier: property.notFound
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Access to an undefined property object::$state.
 			identifier: property.notFound
 			count: 8
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Access to an undefined property object::$version.
 			identifier: property.notFound
 			count: 3
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Argument of an invalid type array|(callable)|class-string supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Binary operation "." between mixed and '.' results in an error.
 			identifier: binaryOp.invalid
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
 			identifier: binaryOp.invalid
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot access property $column_name on mixed.
 			identifier: property.nonObject
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot access property $name on mixed.
 			identifier: property.nonObject
 			count: 2
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot access property $oid on mixed.
 			identifier: property.nonObject
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot access property $table_name on mixed.
 			identifier: property.nonObject
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot access property $tbl on mixed.
 			identifier: property.nonObject
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 7
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: PHPDoc tag @var with type CoreX\Features\Contracts\FeatureFlags is not subtype of type CoreX\Features\DatabaseFeatureFlags.
 			identifier: varTag.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter #1 $identifier of method CoreX\Modules\Lifecycle\DatabaseModuleLifecycle::quoteIdentifier() expects string, string|null given.'
+			rawMessage: 'Parameter #1 $identifier of method CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle::quoteIdentifier() expects string, string|null given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #1 $name of method Illuminate\Database\Migrations\Migrator::usingConnection() expects string, string|null given.'
 			identifier: argument.type
 			count: 2
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #1 $value of static method CoreX\Modules\Enums\ModuleState::from() expects int|string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #2 $fromVersion of class CoreX\Modules\Events\ModuleUpgraded constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #2 $listener of method Illuminate\Events\Dispatcher::listen() expects array|(callable(): mixed)|class-string|Illuminate\Events\QueuedClosure|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #2 $state of static method CoreX\Modules\Exceptions\InvalidStateTransitionException::upgradeRequiresEnabled() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #2 $version2 of function version_compare expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter #3 $from of method CoreX\Modules\Lifecycle\DatabaseModuleLifecycle::log() expects string, mixed given.'
+			rawMessage: 'Parameter #3 $from of method CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle::log() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: 'Parameter #3 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter $dbVersion of class CoreX\Modules\Definition\ModuleStatus constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $dbVersion of class CoreX\Modules\Data\ModuleStatus constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter $edition of class CoreX\Modules\Definition\ModuleStatus constructor expects string, mixed given.'
+			rawMessage: 'Parameter $edition of class CoreX\Modules\Data\ModuleStatus constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Method CoreX\Modules\Lifecycle\DatabaseModuleStateReader::enabledFor() should return array<string, array{state: string, edition: string}> but returns array<array{state: mixed, edition: mixed}>.'
+			rawMessage: 'Method CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader::enabledFor() should return array<string, array{state: string, edition: string}> but returns array<array{state: mixed, edition: mixed}>.'
 			identifier: return.type
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleStateReader.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleStateReader.php
 
 		-
 			rawMessage: Possibly invalid array key type mixed.
 			identifier: array.invalidKey
 			count: 1
-			path: src/Modules/Lifecycle/DatabaseModuleStateReader.php
+			path: src/Modules/Internal/Lifecycle/DatabaseModuleStateReader.php
 
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
@@ -931,7 +931,7 @@ parameters:
 			path: src/Modules/ModulesServiceProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Modules\Support\ModulesOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter #1 $config of static method CoreX\Modules\Internal\Support\ModulesOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Modules/ModulesServiceProvider.php
@@ -955,22 +955,22 @@ parameters:
 			path: src/Modules/Registry/CompiledModule.php
 
 		-
-			rawMessage: 'Method CoreX\Modules\Registry\CompiledModuleRegistry::readCache() should return array<string, mixed> but returns array<mixed>.'
+			rawMessage: 'Method CoreX\Modules\Internal\Registry\CompiledModuleRegistry::readCache() should return array<string, mixed> but returns array<mixed>.'
 			identifier: return.type
 			count: 1
-			path: src/Modules/Registry/CompiledModuleRegistry.php
+			path: src/Modules/Internal/Registry/CompiledModuleRegistry.php
 
 		-
 			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledRegistry::fromArray() expects array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, ...}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 2
-			path: src/Modules/Registry/CompiledModuleRegistry.php
+			path: src/Modules/Internal/Registry/CompiledModuleRegistry.php
 
 		-
 			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Registry\CompiledModule::fromArray() expects array{composerName: string, title: string|null, tablePrefix: string|null, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, ...}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Modules/Registry/CompiledModuleRegistry.php
+			path: src/Modules/Internal/Registry/CompiledModuleRegistry.php
 
 		-
 			rawMessage: Binary operation "." between mixed and "\000" results in an error.
@@ -1012,13 +1012,13 @@ parameters:
 			rawMessage: Cannot access offset 'traceparent'|'tracestate' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
-			path: src/Observability/OpenTelemetryBridge.php
+			path: src/Observability/Internal/OpenTelemetryBridge.php
 
 		-
 			rawMessage: Variable method call on object.
 			identifier: method.dynamicName
 			count: 1
-			path: src/Observability/OpenTelemetryBridge.php
+			path: src/Observability/Internal/OpenTelemetryBridge.php
 
 		-
 			rawMessage: 'Parameter #1 $payload of static method Illuminate\Support\Facades\Crypt::decryptString() expects string, mixed given.'
@@ -1030,43 +1030,43 @@ parameters:
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
-			path: src/Settings/Models/Setting.php
+			path: src/Settings/Internal/Models/Setting.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Settings/Models/Setting.php
+			path: src/Settings/Internal/Models/Setting.php
 
 		-
 			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Settings/Models/Setting.php
+			path: src/Settings/Internal/Models/Setting.php
 
 		-
 			rawMessage: 'Binary operation "+=" between (float|int) and mixed results in an error.'
 			identifier: assignOp.invalid
 			count: 1
-			path: src/Storage/LocalTenantStorage.php
+			path: src/Storage/Internal/LocalTenantStorage.php
 
 		-
 			rawMessage: 'Cannot call method getSize() on mixed.'
 			identifier: method.nonObject
 			count: 1
-			path: src/Storage/LocalTenantStorage.php
+			path: src/Storage/Internal/LocalTenantStorage.php
 
 		-
 			rawMessage: 'Cannot call method isFile() on mixed.'
 			identifier: method.nonObject
 			count: 1
-			path: src/Storage/LocalTenantStorage.php
+			path: src/Storage/Internal/LocalTenantStorage.php
 
 		-
 			rawMessage: 'Cannot call method isLink() on mixed.'
 			identifier: method.nonObject
 			count: 1
-			path: src/Storage/LocalTenantStorage.php
+			path: src/Storage/Internal/LocalTenantStorage.php
 
 		-
 			rawMessage: 'Method CoreX\Storage\ScopedFilesystem::allDirectories() should return array<string> but returns mixed.'

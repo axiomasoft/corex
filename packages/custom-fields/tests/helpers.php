@@ -6,7 +6,7 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
-use CoreX\CustomFields\Support\FieldSnapshot;
+use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\CallableDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;

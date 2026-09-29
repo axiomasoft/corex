@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
-use CoreX\Modules\Compiler\FieldCastMap;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\FieldCastRegistry;
@@ -16,13 +15,14 @@ use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Contracts\RegistryIntrospection;
 use CoreX\Modules\Discovery\ModuleDiscovery;
-use CoreX\Modules\Gate\AllowAllActivationGate;
+use CoreX\Modules\Internal\Compiler\FieldCastMap;
+use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
 use CoreX\Modules\Internal\ReadRegistryIntrospection;
+use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
+use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\CompiledModuleRegistry;
-use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
-use CoreX\Modules\Support\ModulesOptions;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\DB;

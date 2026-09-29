@@ -23,7 +23,7 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/Contracts/DataScopeCodec.php',
     'packages/core/src/Messaging/Contracts/DurablePayload.php',
     'packages/core/src/Modules/Contracts/ModuleRegistrar.php',
-    'packages/core/src/Data/DataScopeAccessDecision.php',
+    'packages/core/src/Data/Data/DataScopeAccessDecision.php',
     'packages/core/src/Audit/Enums/ActorType.php',
     'packages/core/src/Database/Enums/IdStrategy.php',
     'packages/core/src/Messaging/Contracts/Cancellable.php',
@@ -36,7 +36,7 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/CallableDataScopeAuthorizer.php',
     'packages/core/src/Data/DataScope.php',
     'packages/core/src/Data/DenyDataScopeAuthorizer.php',
-    'packages/core/src/Data/RecordRef.php',
+    'packages/core/src/Data/Data/RecordRef.php',
     'packages/core/src/Data/WriteToken.php',
     'packages/core/src/Database/Schema/IdColumns.php',
     'packages/core/src/Time/FrozenClock.php',
@@ -92,7 +92,7 @@ test('foundation litmus hard conditions are green on the clean tree', function (
 });
 
 test('condition 1 below the grep bar warns and does not fail the gate', function (): void {
-    expect(litmusTypeAdoption('packages/core/src/Data/RecordRef.php', 'RecordRef'))->toBe('pass')
+    expect(litmusTypeAdoption('packages/core/src/Data/Data/RecordRef.php', 'RecordRef'))->toBe('pass')
         ->and(litmusTypeAdoption('packages/core/src/Modules/Contracts/ModuleRegistrar.php', 'ModuleRegistrar'))->toBe('warning')
         ->and(litmusRl3Offenders())->toBe([]);
 });
@@ -107,7 +107,7 @@ test('condition 5 above 200 lines outside Contracts Enums and Data is unresolved
 });
 
 test('R-L3 planting in Foundation RecordRef names the file and Eloquent', function (): void {
-    $relative = 'packages/core/src/Data/RecordRef.php';
+    $relative = 'packages/core/src/Data/Data/RecordRef.php';
     $absolute = SourceScanner::repoRoot().'/'.$relative;
     $original = (string) file_get_contents($absolute);
     $needle = "declare(strict_types=1);\n";

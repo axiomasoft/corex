@@ -6,8 +6,8 @@ namespace CoreX\Media\Tests;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
+use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\MediaServiceProvider;
-use CoreX\Media\Support\MediaConfigSection;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 

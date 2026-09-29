@@ -6,13 +6,13 @@ namespace CoreX\Wakeup;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Wakeup\Commands\SweepWakeups;
-use CoreX\Wakeup\Commands\ValidateWakeupStamps;
 use CoreX\Wakeup\Contracts\DueWakeupSource;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupHandlerDefinition;
+use CoreX\Wakeup\Internal\Commands\SweepWakeups;
+use CoreX\Wakeup\Internal\Commands\ValidateWakeupStamps;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
 use CoreX\Wakeup\Internal\SweepRunner;
 use CoreX\Wakeup\Internal\SystemClock;

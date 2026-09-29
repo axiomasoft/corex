@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\RecordSelection;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
-use CoreX\CustomFields\Support\FieldSelection;
-use CoreX\CustomFields\Support\RecordSelection;
-use CoreX\CustomFields\Support\ValuePatch;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
-use CoreX\Data\RecordRef;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 

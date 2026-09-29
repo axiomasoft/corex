@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Modules\Contracts;
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Gate\AllowAllActivationGate;
-use CoreX\Modules\Gate\ModuleActivationDecision;
+use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
+use CoreX\Modules\Internal\Gate\ModuleActivationDecision;
 
 /**
  * Cloud billing/edition gate. Boxed installs bind

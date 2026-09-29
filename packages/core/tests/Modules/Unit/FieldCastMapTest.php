@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Compiler\FieldCastMap;
+use CoreX\Modules\Internal\Compiler\FieldCastMap;
 
 it('maps package casts with arguments and leaves unknown casts to the compiler', function (): void {
     $casts = new FieldCastMap;

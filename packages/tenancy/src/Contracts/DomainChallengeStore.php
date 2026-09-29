@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Contracts;
 
-use CoreX\Tenancy\DomainTrust\ChallengeConsumption;
-use CoreX\Tenancy\DomainTrust\DomainChallengeBinding;
-use CoreX\Tenancy\DomainTrust\DomainChallengeDraft;
-use CoreX\Tenancy\DomainTrust\IssuedDomainChallenge;
-use CoreX\Tenancy\DomainTrust\ObservedDomainProof;
+use CoreX\Tenancy\DomainTrust\Data\ChallengeConsumption;
+use CoreX\Tenancy\DomainTrust\Data\DomainChallengeBinding;
+use CoreX\Tenancy\DomainTrust\Data\DomainChallengeDraft;
+use CoreX\Tenancy\DomainTrust\Data\IssuedDomainChallenge;
+use CoreX\Tenancy\DomainTrust\Data\ObservedDomainProof;
 
 interface DomainChallengeStore
 {

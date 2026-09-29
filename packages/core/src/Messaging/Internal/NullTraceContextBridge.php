@@ -6,7 +6,7 @@ namespace CoreX\Messaging\Internal;
 
 use Closure;
 use CoreX\Messaging\Contracts\TraceContextBridge;
-use CoreX\Observability\OperationContext;
+use CoreX\Observability\Internal\OperationContext;
 
 final class NullTraceContextBridge implements TraceContextBridge
 {

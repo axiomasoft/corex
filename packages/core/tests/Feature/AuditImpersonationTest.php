@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\AuditObserver;
 use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Enums\ActorType;
+use CoreX\Audit\Internal\AuditObserver;
+use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Audit\QueuedAuditLogger;
-use CoreX\Audit\RecordAuditEntry;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Context\ImpersonationState;
 use CoreX\Context\NullImpersonationService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;

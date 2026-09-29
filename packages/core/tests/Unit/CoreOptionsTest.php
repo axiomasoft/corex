@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Config\CoreOptions;
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\SecretRef;
 
 it('resolves settings cache ttl by key existence', function (array $config, ?int $expected): void {

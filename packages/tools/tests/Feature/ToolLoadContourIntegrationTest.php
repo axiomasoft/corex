@@ -18,7 +18,7 @@ use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Definition\OperationRegistry;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use CoreX\Operations\Invocation\OperationDispatcher;

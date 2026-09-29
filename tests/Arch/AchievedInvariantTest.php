@@ -8,15 +8,15 @@ use CoreX\Tests\Support\SourceScanner;
 
 test('attributes package does not depend on search or meilisearch (A57)', function (): void {
     $offenders = [
-        ...SourceScanner::filesMatching(SourceScanner::packagePath('attributes', 'src'), '/\buse\s+CoreX\\\\Search\\\\/'),
-        ...SourceScanner::filesMatching(SourceScanner::packagePath('attributes', 'src'), '/\bMeilisearch\b/'),
+        ...SourceScanner::filesMatching(SourceScanner::packagePath('custom-fields', 'src'), '/\buse\s+CoreX\\\\Search\\\\/'),
+        ...SourceScanner::filesMatching(SourceScanner::packagePath('custom-fields', 'src'), '/\bMeilisearch\b/'),
     ];
 
     expect($offenders)->toBe([]);
 });
 
 test('attributes search import probe fails A57 with file path', function (): void {
-    $probePath = SourceScanner::packagePath('attributes', 'src/Internal/A57Probe.php');
+    $probePath = SourceScanner::packagePath('custom-fields', 'src/Internal/A57Probe.php');
     $probeContents = <<<'PHP'
 <?php
 
@@ -33,7 +33,7 @@ PHP;
 
     file_put_contents($probePath, $probeContents);
 
-    $offenders = SourceScanner::filesMatching(SourceScanner::packagePath('attributes', 'src'), '/\buse\s+CoreX\\\\Search\\\\/');
+    $offenders = SourceScanner::filesMatching(SourceScanner::packagePath('custom-fields', 'src'), '/\buse\s+CoreX\\\\Search\\\\/');
 
     unlink($probePath);
 
@@ -87,12 +87,12 @@ use Illuminate\Database\Eloquent\Model;
 
 final class A61ProbeSearchProvider implements SearchProvider
 {
-    public function capabilities(): \CoreX\Search\Support\SearchCapabilities
+    public function capabilities(): \CoreX\Search\Data\SearchCapabilities
     {
         throw new \LogicException('probe');
     }
 
-    public function query(\CoreX\Data\DataScope $scope, \CoreX\Search\Support\SearchQuery $query): \CoreX\Search\Support\CandidatePage
+    public function query(\CoreX\Data\DataScope $scope, \CoreX\Search\Data\SearchQuery $query): \CoreX\Search\Data\CandidatePage
     {
         throw new \LogicException('probe');
     }

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
 use CoreX\Context\ImpersonationGuard;
-use CoreX\Context\ImpersonationState;
-use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
-use CoreX\Tenancy\Impersonation\Models\ImpersonationGrant;
+use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
+use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites;
 use CoreX\Tenancy\Laravel\Http\Middleware\DenyImpersonatedWrites;
 use CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard;

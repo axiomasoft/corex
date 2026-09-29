@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager;

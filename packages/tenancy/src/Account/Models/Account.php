@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Account\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\DomainTrust\Models\Domain;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;

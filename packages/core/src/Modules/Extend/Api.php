@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Extend;
 
+use CoreX\Modules\Contracts\Extender;
+
 /**
  * 3. API declaration: resource metadata, explicit operations, or an added
  * attribute on ANOTHER module's resource (narrow analogue of Flarum

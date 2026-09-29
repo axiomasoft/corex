@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Idempotency\Data;
 
 use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Validation\JsonCanonical;
 use InvalidArgumentException;

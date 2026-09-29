@@ -13,14 +13,14 @@ use CoreX\Tasks\Access\Internal\DenyTaskPlanningAccess;
 use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Planning\Internal\PlanningCommand;
 use CoreX\Tasks\Planning\Internal\PlanningOperationsServiceProvider;
-use CoreX\Tasks\Task\Actions\CompleteTask;
-use CoreX\Tasks\Task\Actions\CreateTask;
-use CoreX\Tasks\Task\Actions\MoveTaskToStage;
-use CoreX\Tasks\Task\Actions\UpdateTask;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
 use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
+use CoreX\Tasks\Task\Internal\Actions\CompleteTask;
+use CoreX\Tasks\Task\Internal\Actions\CreateTask;
+use CoreX\Tasks\Task\Internal\Actions\MoveTaskToStage;
+use CoreX\Tasks\Task\Internal\Actions\UpdateTask;
 use Illuminate\Support\ServiceProvider;
 
 final class TasksServiceProvider extends ServiceProvider

@@ -7,14 +7,14 @@ use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleDependency;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Events\ManifestListeners;
 use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Internal\Definition\ModuleDependency;
+use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 
 final class RemediationManifestListener

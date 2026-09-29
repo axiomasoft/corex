@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Contracts;
 
 use Closure;
-use CoreX\Observability\OperationContext;
+use CoreX\Observability\Internal\OperationContext;
 
 interface TraceContextBridge
 {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Tenancy\Account\Models\AccountSchemaState;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Provisioning\PendingPool;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Internal\PendingPool;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;

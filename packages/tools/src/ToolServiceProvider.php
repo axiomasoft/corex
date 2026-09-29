@@ -15,6 +15,7 @@ use CoreX\Tools\Internal\DenyToolPolicy;
 use CoreX\Tools\Internal\GuardedToolInvoker;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Tools\Internal\ToolSchemaSupervisor;
+use CoreX\Tools\Internal\ToolSectionCompiler;
 use Illuminate\Support\ServiceProvider;
 use Override;
 

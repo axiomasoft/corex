@@ -25,7 +25,7 @@ final class ImpersonationRestrictedException extends RuntimeException
         parent::__construct($message);
     }
 
-    /** L2 — `CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard` (axiomasoft/corex-tenancy; named, not `{@see}`-linked — core must not import it, D91). */
+    /** L2 — `CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard` (axiomasoft/corex-tenancy; named, not `{@see}`-linked — core must not import it, D91). */
     public static function forModelWrite(string $modelClass): self
     {
         return new self(

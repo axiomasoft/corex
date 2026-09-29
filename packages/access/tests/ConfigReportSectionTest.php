@@ -6,7 +6,7 @@ namespace CoreX\Access\Tests;
 
 use AzGuard\AzGuardServiceProvider;
 use CoreX\Access\CoreAuthServiceProvider;
-use CoreX\Access\Support\AccessConfigSection;
+use CoreX\Access\Internal\Support\AccessConfigSection;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;

@@ -2,8 +2,7 @@
 <?php
 
 declare(strict_types=1);
-
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 
 $root = dirname(__DIR__);

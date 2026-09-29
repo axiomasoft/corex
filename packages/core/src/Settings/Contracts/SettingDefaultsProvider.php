@@ -8,7 +8,7 @@ use CoreX\Settings\NullSettingDefaultsProvider;
 
 /**
  * ModuleManifest-declared setting defaults, injected so axiomasoft/corex never imports
- * `CoreX\Modules\Settings\DefaultSettingDefinition` (direction core←modules). The boxed default
+ * `CoreX\Modules\Internal\Settings\DefaultSettingDefinition` (direction core←modules). The boxed default
  * is a null object ({@see NullSettingDefaultsProvider});
  * ModulesServiceProvider (axiomasoft/corex) wires the real implementation over
  * the compiled manifest registry.

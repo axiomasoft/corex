@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use CoreX\CustomFields\Data\SchemaChange;
+use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Internal\Schema\QueuedSchemaOperations;
 use CoreX\CustomFields\Internal\Schema\SchemaOperationWorker;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Support\Schema\SchemaChange;
-use CoreX\CustomFields\Support\Schema\SchemaOperationId;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\CallableDataScopeAuthorizer;

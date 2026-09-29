@@ -6,8 +6,8 @@ namespace CoreX\Search\Tests\Unit;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
+use CoreX\Search\Internal\Support\SearchConfigSection;
 use CoreX\Search\SearchServiceProvider;
-use CoreX\Search\Support\SearchConfigSection;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 

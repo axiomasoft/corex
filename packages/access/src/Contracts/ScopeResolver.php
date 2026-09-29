@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Contracts;
 
-use CoreX\Access\RecordContext;
+use CoreX\Access\Data\RecordContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

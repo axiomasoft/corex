@@ -8,9 +8,8 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityLock;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
@@ -25,8 +24,8 @@ final class DatabaseRegistrar implements PackageRegistrar
         $app->singleton(SchemaCatalogueSerializer::class);
         $app->singleton(TemplateIntegrityLock::class);
         $app->singleton(
-            DatabaseTemplateIntegrityVerifier::class,
-            static fn (Application $app): DatabaseTemplateIntegrityVerifier => new DatabaseTemplateIntegrityVerifier(
+            \CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
+            static fn (Application $app): \CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier => new \CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 serializer: $app->make(SchemaCatalogueSerializer::class),
                 lock: $app->make(TemplateIntegrityLock::class),
@@ -34,8 +33,8 @@ final class DatabaseRegistrar implements PackageRegistrar
         );
         $app->singleton(
             TemplateIntegrityVerifier::class,
-            static fn (Application $app): DatabaseTemplateIntegrityVerifier => $app->make(
-                DatabaseTemplateIntegrityVerifier::class,
+            static fn (Application $app): \CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier => $app->make(
+                \CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
             ),
         );
     }

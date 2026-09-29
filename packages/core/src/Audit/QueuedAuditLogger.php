@@ -6,6 +6,7 @@ namespace CoreX\Audit;
 
 use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Config\Config;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;

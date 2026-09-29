@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Events;
 
-use CoreX\Tenancy\Membership\Transport\ActorRef;
-use CoreX\Tenancy\Membership\Transport\CentralValue;
-use CoreX\Tenancy\Membership\Transport\MembershipReason;
+use CoreX\Tenancy\Membership\Data\ActorRef;
+use CoreX\Tenancy\Membership\Enums\MembershipReason;
+use CoreX\Tenancy\Membership\Internal\Transport\CentralValue;
 use DateTimeImmutable;
 
 final readonly class MembershipRevoked

@@ -15,7 +15,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\SignedCursorCodec;

@@ -127,7 +127,7 @@ parameters:
 			path: src/Planning/Internal/PlanningCommand.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Sprint\Models\Sprint>::lockForUpdate().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Sprint\Internal\Models\Sprint>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Planning/Internal/PlanningCommand.php
@@ -160,43 +160,43 @@ parameters:
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Task\Models\Task>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Task/Actions/CompleteTask.php
+			path: src/Task/Internal/Actions/CompleteTask.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Task\Models\Task>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Task/Actions/MoveTaskToStage.php
+			path: src/Task/Internal/Actions/MoveTaskToStage.php
 
 		-
 			rawMessage: 'Parameter $taskId of class CoreX\Tasks\Task\Data\CompleteTaskData constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Task/Actions/MoveTaskToStage.php
+			path: src/Task/Internal/Actions/MoveTaskToStage.php
 
 		-
 			rawMessage: 'Property CoreX\Tasks\Task\Models\Task::$stage_id (string|null) does not accept mixed.'
 			identifier: assign.propertyType
 			count: 1
-			path: src/Task/Actions/MoveTaskToStage.php
+			path: src/Task/Internal/Actions/MoveTaskToStage.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tasks\Task\Models\Task>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Task/Actions/UpdateTask.php
+			path: src/Task/Internal/Actions/UpdateTask.php
 
 		-
 			rawMessage: 'Parameter #1 $object of static method DateTimeImmutable::createFromInterface() expects DateTimeInterface, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Task/Actions/UpdateTask.php
+			path: src/Task/Internal/Actions/UpdateTask.php
 
 		-
 			rawMessage: 'Property CoreX\Tasks\Task\Models\Task::$project_id (string|null) does not accept mixed.'
 			identifier: assign.propertyType
 			count: 1
-			path: src/Task/Actions/UpdateTask.php
+			path: src/Task/Internal/Actions/UpdateTask.php
 
 		-
 			rawMessage: Cannot cast mixed to string.

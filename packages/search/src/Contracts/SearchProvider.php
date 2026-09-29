@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Search\Contracts;
 
 use CoreX\Data\DataScope;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\SearchCapabilities;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\SearchCapabilities;
+use CoreX\Search\Data\SearchQuery;
 
 interface SearchProvider
 {

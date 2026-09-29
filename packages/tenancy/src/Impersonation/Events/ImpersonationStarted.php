@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Impersonation\Events;
 
 use CoreX\Messaging\Events\DomainEvent;
-use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
+use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use Override;
 
 /**

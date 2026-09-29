@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Credentials\CredentialIssuanceDenied;
-use CoreX\Tenancy\Membership\Credentials\FinalWriteAdmission;
-use CoreX\Tenancy\Membership\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Timing\ClockReading;
+use CoreX\Tenancy\Membership\Data\ClockReading;
+use CoreX\Tenancy\Membership\Data\PairKey;
+use CoreX\Tenancy\Membership\Exceptions\CredentialIssuanceDenied;
+use CoreX\Tenancy\Membership\Internal\Credentials\FinalWriteAdmission;
+use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\CredentialFixture;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;
 use CoreX\Tenancy\Tests\TestCase;

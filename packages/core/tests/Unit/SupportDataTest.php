@@ -7,8 +7,8 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Data\CallableDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Data\WriteToken;
 
 function dataScope(): DataScope

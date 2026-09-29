@@ -16,13 +16,13 @@ parameters:
 			rawMessage: Cannot cast array|bool|float|int|string|null to string.
 			identifier: cast.string
 			count: 1
-			path: src/Commands/DeliverWebhooks.php
+			path: src/Internal/Commands/DeliverWebhooks.php
 
 		-
 			rawMessage: 'Parameter #2 $worker of method CoreX\Webhooks\Internal\WebhookDeliveryWorker::workOnce() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Commands/DeliverWebhooks.php
+			path: src/Internal/Commands/DeliverWebhooks.php
 
 		-
 			rawMessage: 'Property CoreX\Webhooks\Data\ValidatedWebhookRequest::$signatureHeaders (array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}) does not accept array{webhook-id: mixed, webhook-timestamp: mixed, webhook-signature: mixed}.'

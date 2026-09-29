@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\SearchMeilisearch\Internal;
 
 use CoreX\Search\Contracts\IndexDriver;
-use CoreX\Search\Support\IndexBatch;
-use CoreX\Search\Support\IndexOutcome;
-use CoreX\Search\Support\IndexSubmission;
-use CoreX\Search\Support\IndexSwap;
+use CoreX\Search\Data\IndexBatch;
+use CoreX\Search\Data\IndexOutcome;
+use CoreX\Search\Data\IndexSubmission;
+use CoreX\Search\Data\IndexSwap;
 use InvalidArgumentException;
 use Meilisearch\Client;
 

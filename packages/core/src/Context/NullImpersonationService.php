@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Context;
 
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Data\ImpersonationState;
 use LogicException;
 use Override;
 

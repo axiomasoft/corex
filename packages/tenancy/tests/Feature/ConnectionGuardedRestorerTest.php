@@ -9,7 +9,7 @@ use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\GuardedTenantContextRestorer;
 use CoreX\Data\DataScope;
-use CoreX\Tenancy\Runtime\ConnectionGuardedTenantContextRestorer;
+use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\DB;

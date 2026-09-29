@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Contracts;
 
-use CoreX\CustomFields\Support\FieldSnapshot;
+use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\DataScope;
 
 interface FieldCatalogue

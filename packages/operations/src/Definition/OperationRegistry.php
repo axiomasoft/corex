@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Definition;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use LogicException;
 
 final class OperationRegistry

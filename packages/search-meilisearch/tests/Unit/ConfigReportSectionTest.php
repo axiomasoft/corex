@@ -6,7 +6,7 @@ namespace CoreX\SearchMeilisearch\Tests\Unit;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
-use CoreX\SearchMeilisearch\MeilisearchConfigSection;
+use CoreX\SearchMeilisearch\Internal\MeilisearchConfigSection;
 use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Contracts;
 
-use CoreX\Tenancy\Membership\Transport\MembershipQuery;
-use CoreX\Tenancy\Membership\Transport\MembershipSnapshot;
-use CoreX\Tenancy\Membership\Transport\RevokeMembershipReceipt;
-use CoreX\Tenancy\Membership\Transport\RevokeMembershipRequest;
+use CoreX\Tenancy\Membership\Internal\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Internal\Transport\MembershipSnapshot;
+use CoreX\Tenancy\Membership\Internal\Transport\RevokeMembershipReceipt;
+use CoreX\Tenancy\Membership\Internal\Transport\RevokeMembershipRequest;
 
 interface CentralApiClient
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Expiration\ExpiryScheduler;
-use CoreX\Tenancy\Membership\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Timing\ClockReading;
-use CoreX\Tenancy\Membership\Timing\Elapsed;
-use CoreX\Tenancy\Membership\Timing\Lease;
+use CoreX\Tenancy\Membership\Data\ClockReading;
+use CoreX\Tenancy\Membership\Data\PairKey;
+use CoreX\Tenancy\Membership\Internal\Expiration\ExpiryScheduler;
+use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
+use CoreX\Tenancy\Membership\Internal\Timing\Elapsed;
+use CoreX\Tenancy\Membership\Internal\Timing\Lease;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;
 use Illuminate\Support\Facades\DB;
 

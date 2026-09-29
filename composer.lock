@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "14d7ea14f1c601cef39eaf78e056203e50bcb5bb"
+                "reference": "21d414bb6091d9fe81d123ed1663bd2dd7212a9f"
             },
             "require": {
                 "ext-ctype": "*",
@@ -60,7 +60,7 @@
                         "CoreX\\Config\\Config",
                         "CoreX\\Config\\Contracts",
                         "CoreX\\Config\\CoreOptions",
-                        "CoreX\\Config\\InvalidConfiguration",
+                        "CoreX\\Config\\Exceptions\\InvalidConfiguration",
                         "CoreX\\Config\\SecretRef",
                         "CoreX\\Config\\ViolationList",
                         "CoreX\\Context\\Contracts",
@@ -72,7 +72,7 @@
                         "CoreX\\Context\\ImpersonationGuard",
                         "CoreX\\Data\\Contracts",
                         "CoreX\\Data\\DataScope",
-                        "CoreX\\Data\\DataScopeAccessDecision",
+                        "CoreX\\Data\\Data\\DataScopeAccessDecision",
                         "CoreX\\Data\\Exceptions",
                         "CoreX\\Database",
                         "CoreX\\Departments\\Contracts",
@@ -84,7 +84,7 @@
                         "CoreX\\Errors\\Enums",
                         "CoreX\\Features\\Contracts",
                         "CoreX\\Features\\Events",
-                        "CoreX\\Features\\Models",
+                        "CoreX\\Features\\Internal\\Models",
                         "CoreX\\Messaging\\Contracts",
                         "CoreX\\Messaging\\Data",
                         "CoreX\\Messaging\\Enums",
@@ -107,7 +107,7 @@
                         "CoreX\\Settings\\Enums",
                         "CoreX\\Settings\\Events",
                         "CoreX\\Settings\\Exceptions",
-                        "CoreX\\Settings\\Models",
+                        "CoreX\\Settings\\Internal\\Models",
                         "CoreX\\Storage\\Contracts"
                     ]
                 },
@@ -533,7 +533,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "ae6fc27baf24020df573720fb37fef8531e8e5e6"
+                "reference": "4456d0ce49d1e40b6273d3e48f55d525aad79685"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -588,7 +588,7 @@
                         "CoreX\\Operations\\Definition\\Enums\\OperationMode",
                         "CoreX\\Operations\\Definition\\Operation",
                         "CoreX\\Operations\\Definition\\OperationRegistry",
-                        "CoreX\\Operations\\Errors\\ApiError",
+                        "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
                         "CoreX\\Operations\\Errors\\Contracts",
                         "CoreX\\Operations\\Idempotency\\Contracts",
                         "CoreX\\Operations\\Idempotency\\Data",
@@ -1015,7 +1015,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "93c3f66d5c269704d515da723cfdb561f648d832"
+                "reference": "e251b35bf598a68ea233c2522202eded9af83bcf"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1049,7 +1049,7 @@
                         "CoreX\\Tasks\\Project\\Models",
                         "CoreX\\Tasks\\Sprint\\Data",
                         "CoreX\\Tasks\\Sprint\\Enums",
-                        "CoreX\\Tasks\\Sprint\\Models",
+                        "CoreX\\Tasks\\Sprint\\Internal\\Models",
                         "CoreX\\Tasks\\Task\\Contracts",
                         "CoreX\\Tasks\\Task\\Data",
                         "CoreX\\Tasks\\Task\\Enums",
@@ -1057,7 +1057,7 @@
                         "CoreX\\Tasks\\Task\\Models",
                         "CoreX\\Tasks\\Time\\Data",
                         "CoreX\\Tasks\\Time\\Enums",
-                        "CoreX\\Tasks\\Time\\Models"
+                        "CoreX\\Tasks\\Time\\Internal\\Models"
                     ]
                 },
                 "laravel": {
@@ -1126,7 +1126,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "bee69d6f4374f81826d922f8625a655db60967ac"
+                "reference": "049e7c769e14ee812d026e128d8fe95c2daa3737"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1155,7 +1155,7 @@
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
+                    "module": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration",
                     "package-type": "integration",
                     "stability": "stable",
                     "public-api": [
@@ -1211,7 +1211,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "1ef359c5c0b83d80c7761a552effbdcd0b001664"
+                "reference": "a5ea44964430552a227fe47a62451f4237ca15bf"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1259,15 +1259,15 @@
                         "CoreX\\Tenancy\\Authentication\\Exceptions",
                         "CoreX\\Tenancy\\Contracts",
                         "CoreX\\Tenancy\\DomainTrust\\Events",
-                        "CoreX\\Tenancy\\DomainTrust\\Models",
+                        "CoreX\\Tenancy\\DomainTrust\\Internal\\Models",
                         "CoreX\\Tenancy\\Identity\\Events",
-                        "CoreX\\Tenancy\\Identity\\Models",
+                        "CoreX\\Tenancy\\Identity\\Internal\\Models",
                         "CoreX\\Tenancy\\Impersonation\\Events",
-                        "CoreX\\Tenancy\\Impersonation\\Models",
+                        "CoreX\\Tenancy\\Impersonation\\Internal\\Models",
                         "CoreX\\Tenancy\\Membership\\Events",
-                        "CoreX\\Tenancy\\Provisioning\\Models",
+                        "CoreX\\Tenancy\\Provisioning\\Internal\\Models",
                         "CoreX\\Tenancy\\Runtime\\Exceptions",
-                        "CoreX\\Tenancy\\Workspace\\Models"
+                        "CoreX\\Tenancy\\Workspace\\Internal\\Models"
                     ]
                 },
                 "laravel": {
@@ -8529,7 +8529,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "25af727585d76e166e97bc63224ffd22290b21ad"
+                "reference": "633919bf6ce0dbad4fa4ddebfbc74506f454aba8"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.3",
@@ -8563,7 +8563,7 @@
                         "CoreX\\Access\\Contracts",
                         "CoreX\\Access\\Enums",
                         "CoreX\\Access\\Exceptions",
-                        "CoreX\\Access\\Extend"
+                        "CoreX\\Access\\Extend\\Internal"
                     ]
                 },
                 "laravel": {

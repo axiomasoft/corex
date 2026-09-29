@@ -11,11 +11,11 @@ use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Contracts\RecordsRegistrar;
 use CoreX\Modules\Discovery\ModuleDiscovery;
-use CoreX\Modules\Lifecycle\DatabaseModuleLifecycle;
-use CoreX\Modules\Lifecycle\DatabaseModuleStateReader;
-use CoreX\Modules\Lifecycle\DatabaseRecordsRegistrar;
+use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
+use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
+use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 use CoreX\Modules\RegistersNothingOnBoot;
-use CoreX\Modules\Support\ModulesOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Access\Database\Seeders\SystemRolesSeeder;
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Models\Role;
-use CoreX\Access\Models\RoleMatrixRow;
-use CoreX\Access\Roles\RoleCloner;
+use CoreX\Access\Internal\Models\Role;
+use CoreX\Access\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\Internal\RoleCloner;
 use Illuminate\Auth\Access\AuthorizationException;
 
 uses()->group('pg');

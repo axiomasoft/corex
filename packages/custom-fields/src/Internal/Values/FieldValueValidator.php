@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Values;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
-use CoreX\CustomFields\Support\FieldSelection;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\ValuePatch;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use DateTimeImmutable;
 use Exception;
 

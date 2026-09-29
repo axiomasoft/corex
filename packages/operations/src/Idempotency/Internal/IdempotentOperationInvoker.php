@@ -12,7 +12,7 @@ use CoreX\Operations\Cost\Internal\BudgetAdmission;
 use CoreX\Operations\Cost\Internal\BudgetRateLimited;
 use CoreX\Operations\Cost\Internal\BudgetStoreUnavailable;
 use CoreX\Operations\Definition\Internal\OperationFingerprint;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;

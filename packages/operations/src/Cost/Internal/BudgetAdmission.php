@@ -13,7 +13,7 @@ use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;

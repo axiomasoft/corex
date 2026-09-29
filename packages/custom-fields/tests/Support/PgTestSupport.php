@@ -6,7 +6,7 @@ namespace CoreX\CustomFields\Tests\Support;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\AttributeTables;
-use CoreX\CustomFields\Support\FieldSnapshot;
+use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\DataScope;
 
 final class PgTestSupport

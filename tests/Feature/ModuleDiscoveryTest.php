@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Definition\ModuleDependency;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Internal\Definition\ModuleDependency;
+use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Settings\DefaultSettingDefinition;
 use CoreX\Tests\Stubs\StubModuleDefinition;
 use Illuminate\Support\Facades\Artisan;
 

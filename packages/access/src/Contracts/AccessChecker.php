@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Contracts;
 
+use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\RecordContext;
 
 /**
  * Two-phase permission check (B-11 §5.5): allowed() is the capability gate

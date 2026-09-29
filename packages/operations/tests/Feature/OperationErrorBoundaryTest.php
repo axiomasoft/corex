@@ -6,10 +6,10 @@ namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
-use CoreX\Operations\Errors\OperationErrorBoundary;
+use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use CoreX\Operations\Tests\Support\ErrorBoundaryCountingHandler;
 use CoreX\Operations\Tests\Support\SyntheticPackageFailure;

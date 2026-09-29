@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
-use CoreX\Tenancy\Identity\Models\User;
-use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
-use CoreX\Tenancy\Workspace\Models\Workspace;
-use CoreX\Tenancy\Workspace\Models\WorkspaceMember;
-use CoreX\Tenancy\Workspace\NoDefaultWorkspaceException;
+use CoreX\Tenancy\Identity\Internal\Models\User;
+use CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException;
+use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
+use CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;

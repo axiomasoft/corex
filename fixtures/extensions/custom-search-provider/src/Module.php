@@ -13,8 +13,8 @@ use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Support\IndexBatch;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\IndexBatch;
+use CoreX\Search\Data\SearchQuery;
 use RuntimeException;
 
 final class Module

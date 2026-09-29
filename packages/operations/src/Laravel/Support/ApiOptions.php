@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel\Support;
 
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\SecretRef;
 use CoreX\Config\ViolationList;
 use CoreX\Operations\Versioning\Data\ApiVersion;

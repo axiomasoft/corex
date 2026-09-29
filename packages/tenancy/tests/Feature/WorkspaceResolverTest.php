@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Identity\Models\User;
-use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
-use CoreX\Tenancy\Workspace\InvitationNotAcceptableException;
-use CoreX\Tenancy\Workspace\Models\Invitation;
-use CoreX\Tenancy\Workspace\Models\Workspace;
-use CoreX\Tenancy\Workspace\Models\WorkspaceMember;
+use CoreX\Tenancy\Identity\Internal\Models\User;
+use CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException;
+use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspace\Internal\Models\Invitation;
+use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
+use CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;

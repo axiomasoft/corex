@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Messaging/SubscribeGuard.php b/packages/core/src/Messaging/SubscribeGuard.php
+diff --git a/packages/core/src/Messaging/Internal/SubscribeGuard.php b/packages/core/src/Messaging/Internal/SubscribeGuard.php
 index 9a8777e..2946edc 100644
---- a/packages/core/src/Messaging/SubscribeGuard.php
-+++ b/packages/core/src/Messaging/SubscribeGuard.php
+--- a/packages/core/src/Messaging/Internal/SubscribeGuard.php
++++ b/packages/core/src/Messaging/Internal/SubscribeGuard.php
 @@ -22,21 +22,6 @@ final class SubscribeGuard
  {
      public static function assert(WorkerRuntime $runtime, bool $octaneWorkerOptIn, string $driverClass): void

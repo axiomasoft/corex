@@ -7,7 +7,7 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Features\Contracts\FeatureFlagDefinition;
 use CoreX\Features\DatabaseFeatureFlags;
-use CoreX\Messaging\DatabasePollPubSub;
+use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 

@@ -11,7 +11,7 @@ use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Api;
 use CoreX\Operations\ApiServiceProvider;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use CoreX\Operations\Testing\CatalogueModuleFixture;

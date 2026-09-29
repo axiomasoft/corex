@@ -6,6 +6,7 @@ namespace CoreX\Departments;
 
 use CoreX\Config\Config;
 use CoreX\Departments\Contracts\DepartmentRepository;
+use CoreX\Departments\Data\Department;
 use CoreX\Departments\Events\DepartmentMoved;
 use CoreX\Departments\Exceptions\CrossWorkspaceMoveException;
 use CoreX\Departments\Exceptions\DepartmentCycleException;

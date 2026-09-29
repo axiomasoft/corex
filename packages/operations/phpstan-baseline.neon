@@ -409,7 +409,7 @@ parameters:
 			path: src/Definition/OperationRegistry.php
 
 		-
-			rawMessage: 'Parameter $details of class CoreX\Operations\Errors\ApiError constructor expects array<string, mixed>, array given.'
+			rawMessage: 'Parameter $details of class CoreX\Operations\Errors\Exceptions\ApiError constructor expects array<string, mixed>, array given.'
 			identifier: argument.type
 			count: 1
 			path: src/Errors/Internal/ErrorMapper.php
@@ -565,22 +565,22 @@ parameters:
 			path: src/Laravel/Support/ApiOptions.php
 
 		-
-			rawMessage: 'Method CoreX\Operations\OpenApi\Commands\WriteApiSnapshots::contracts() should return list<array<string, mixed>> but returns array<mixed, mixed>.'
+			rawMessage: 'Method CoreX\Operations\OpenApi\Internal\Commands\WriteApiSnapshots::contracts() should return list<array<string, mixed>> but returns array<mixed, mixed>.'
 			identifier: return.type
 			count: 1
-			path: src/OpenApi/Commands/WriteApiSnapshots.php
+			path: src/OpenApi/Internal/Commands/WriteApiSnapshots.php
 
 		-
 			rawMessage: 'Only booleans are allowed in an if condition, array|bool|float|int|string|null given.'
 			identifier: if.condNotBoolean
 			count: 1
-			path: src/OpenApi/Commands/WriteApiSnapshots.php
+			path: src/OpenApi/Internal/Commands/WriteApiSnapshots.php
 
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
 			count: 1
-			path: src/OpenApi/Commands/WriteApiSnapshots.php
+			path: src/OpenApi/Internal/Commands/WriteApiSnapshots.php
 
 		-
 			rawMessage: Binary operation "." between mixed and "\000" results in an error.
@@ -616,13 +616,13 @@ parameters:
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
 			count: 1
-			path: src/OpenApi/OpenApiDocumentGenerator.php
+			path: src/OpenApi/Internal/OpenApiDocumentGenerator.php
 
 		-
 			rawMessage: 'Parameter #2 $haystack of function in_array expects array, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/OpenApi/OpenApiDocumentGenerator.php
+			path: src/OpenApi/Internal/OpenApiDocumentGenerator.php
 
 		-
 			rawMessage: Binary operation "." between 'Ordering version [' and mixed results in an error.

@@ -1,0 +1,31 @@
+{
+  "source": "/home/vostrikov/projects/packages/corex",
+  "tree": "/home/vostrikov/projects/packages/corex/build/p03-exec-dry",
+  "base": "0b68df2cd1899c1790f4c8e3df7f9d862737b9bd",
+  "roots": [
+    "packages/access",
+    "packages/core",
+    "packages/custom-fields",
+    "packages/intl",
+    "packages/media",
+    "packages/notifications",
+    "packages/operations",
+    "packages/panels",
+    "packages/recurrence",
+    "packages/search",
+    "packages/search-intl",
+    "packages/search-meilisearch",
+    "packages/tasks",
+    "packages/tasks-workflow",
+    "packages/tenancy",
+    "packages/tools",
+    "packages/transfer",
+    "packages/wakeup",
+    "packages/webhooks",
+    "packages/workflow",
+    "products/flex-crm"
+  ],
+  "independent_vendor_copies": true,
+  "symlinks_inside_scratch": 95,
+  "scope": "local installed dependency set; no fresh-install or hosted-CI claim"
+}

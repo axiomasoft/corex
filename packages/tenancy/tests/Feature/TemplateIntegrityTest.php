@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityException;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;

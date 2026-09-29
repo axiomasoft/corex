@@ -52,6 +52,13 @@ elif a.mode=='transfer':
   p=tree/root/'CHANGELOG.md';s=p.read_text();m=re.search(r'^## (?:\[)?Unreleased[^\n]*\n',s,re.M);assert m,p
   p.write_text(s[:m.end()]+'\n'+note+s[m.end():].lstrip('\n'))
  (out/'changelog-packages.json').write_text(json.dumps(package_roots,indent=2)+'\n')
+ fixture=tree/'scripts/tests/test_module_layout_gate.py'
+ before=fixture.read_text()
+ old="'R1': ('core/src/Support/Helper.php', 'namespace CoreX\\\\Support; final class Helper {}')"
+ new="'R1': ('core/src/Unlisted/Helper.php', 'namespace CoreX\\\\Unlisted; final class Helper {}')"
+ assert before.count(old)==1
+ fixture.write_text(before.replace(old,new))
+ run('layout-python-negatives',['python3','-m','unittest','discover','-s','scripts/tests','-p','test_module_layout_gate.py'])
  run('projection-after',['python3',plan+'/artifacts/P03.2-execution/project-map.py'])
  run('golden-map',['python3',tool,'golden-check'])
  run('frozen-golden',['git','diff','--exit-code','52446de','--','tests/Golden/baseline/'])

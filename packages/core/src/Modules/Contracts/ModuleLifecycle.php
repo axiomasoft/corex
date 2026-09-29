@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
-use CoreX\Modules\Definition\ModuleStatus;
+use CoreX\Modules\Data\ModuleStatus;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Exceptions\HasEnabledDependentsException;
 use CoreX\Modules\Exceptions\InvalidStateTransitionException;

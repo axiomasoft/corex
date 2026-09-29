@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Tests\Unit;
 
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CoreServiceProvider;
 use CoreX\CustomFields\AttributesServiceProvider;
 use CoreX\CustomFields\Contracts\AttributeFilter;

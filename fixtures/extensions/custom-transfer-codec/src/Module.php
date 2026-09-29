@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ThirdParty\Transfer;
 
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Data\WriteToken;
 use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;

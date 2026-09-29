@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Notifications;
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Notifications\Delivery\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Internal\ChannelDrivers;
+use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
 use CoreX\Notifications\Delivery\Internal\DeliveryStore;
 use CoreX\Notifications\Delivery\Internal\InAppChannelDriver;

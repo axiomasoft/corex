@@ -6,8 +6,8 @@ namespace CoreX\Messaging\Internal;
 
 use Closure;
 use CoreX\Messaging\Contracts\TraceContextBridge;
-use CoreX\Observability\OpenTelemetryBridge;
-use CoreX\Observability\OperationContext;
+use CoreX\Observability\Internal\OpenTelemetryBridge;
+use CoreX\Observability\Internal\OperationContext;
 
 /**
  * Messaging binding for the Foundation OpenTelemetry adapter.

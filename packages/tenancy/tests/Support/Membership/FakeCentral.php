@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests\Support\Membership;
 
-use CoreX\Tenancy\Membership\Transport\MembershipQuery;
-use CoreX\Tenancy\Membership\Transport\StrictJson;
+use CoreX\Tenancy\Membership\Internal\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Internal\Transport\StrictJson;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 

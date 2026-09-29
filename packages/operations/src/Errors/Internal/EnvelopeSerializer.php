@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Operations\Errors\ApiError;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 use Override;

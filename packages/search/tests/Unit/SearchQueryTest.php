@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Support\SearchFilter;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\SearchFilter;
+use CoreX\Search\Data\SearchQuery;
 
 it('bounds untrusted query shape before a provider is selected', function (): void {
     $query = new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump', filters: [new SearchFilter(field: 'status', values: ['active'])]);

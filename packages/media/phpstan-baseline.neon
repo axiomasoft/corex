@@ -391,7 +391,7 @@ parameters:
 			path: src/MediaServiceProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Media\Support\MediaOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter #1 $config of static method CoreX\Media\Internal\Support\MediaOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/MediaServiceProvider.php
@@ -427,7 +427,7 @@ parameters:
 			path: src/MediaServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $conversion of class CoreX\Media\Support\MediaOptions constructor expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter $conversion of class CoreX\Media\Internal\Support\MediaOptions constructor expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Support/MediaOptions.php
+			path: src/Internal/Support/MediaOptions.php

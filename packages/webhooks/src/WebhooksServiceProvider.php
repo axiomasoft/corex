@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Webhooks;
 
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
-use CoreX\Webhooks\Commands\DeliverWebhooks;
-use CoreX\Webhooks\Commands\PruneWebhooks;
 use CoreX\Webhooks\Data\WebhookOptions;
+use CoreX\Webhooks\Internal\Commands\DeliverWebhooks;
+use CoreX\Webhooks\Internal\Commands\PruneWebhooks;
 use CoreX\Webhooks\Internal\WebhookSnapshotSection;
 use CoreX\Webhooks\Laravel\WebhookRegistrar;
 use Illuminate\Support\ServiceProvider;

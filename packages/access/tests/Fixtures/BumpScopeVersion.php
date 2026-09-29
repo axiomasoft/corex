@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Matrix\ScopeMapVersion;
-use CoreX\Access\Support\AuthOptions;
+use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Context\SingleAccountResolver;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;

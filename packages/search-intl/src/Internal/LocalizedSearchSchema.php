@@ -6,7 +6,7 @@ namespace CoreX\SearchIntl\Internal;
 
 use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
-use CoreX\Search\Support\SearchSnapshot;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
 use InvalidArgumentException;
 use Override;

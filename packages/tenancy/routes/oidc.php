@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Authentication\Http\Controllers\LogoutController;
-use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
+use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
 use Illuminate\Support\Facades\Route;
 
 // AC-14/AC-15 — loaded only when `tenancy.oidc.enabled` (TenancyServiceProvider::boot()).

@@ -44,10 +44,10 @@ return [
         ['owner' => 'axiomasoft/corex-custom-fields', 'code' => 'attributes_engine_unavailable', 'category' => 'unavailable', 'retryable' => false, 'path' => null, 'detail_keys' => ['reason'], 'declaration' => 'literal'],
     ],
     'dynamic_adapters' => [
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/webhooks/src/Internal/WebhookTopicCatalogue.php', 'adapter' => 'declared-webhook-topic-admission', 'sha256' => 'f044f4fda8b76cee70b61cf8af5aaa1f9748ef35f821e8e9cacdc14fd6e7cf09'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/ApiError.php', 'adapter' => 'api-error-instance-descriptor', 'sha256' => '089907404b4ea0454645768a67338aad0615cc0892f11de6bc364db420168fa8'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php', 'adapter' => 'stored-api-error-outcome', 'sha256' => '26901a887693dea130dc19a07740845235f4e67a5a44387676805301adeac5d0'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php', 'adapter' => 'field-path-api-error', 'sha256' => 'ca45c06970d6b8646350423d73065e61ce717ab33ed7f93f25b7a4c47c348b6d'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php', 'adapter' => 'descriptor-and-framework-status-map', 'sha256' => '33e273498eda5cb58d2f49d8a99cb2b56c46a178b094ecda7b8248fe0012f956'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/webhooks/src/Internal/WebhookTopicCatalogue.php', 'adapter' => 'declared-webhook-topic-admission', 'sha256' => 'ed63147b2a68eaed01ae8bc6a2af337b8b93a54d7a1c3f4e9fe225992d7b5e43'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Exceptions/ApiError.php', 'adapter' => 'api-error-instance-descriptor', 'sha256' => 'ee59caeac9eb6c02575a9deb0ec041f3c7910bb603b75b0ea99f466fd761290e'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php', 'adapter' => 'stored-api-error-outcome', 'sha256' => '850cc7832066d5b50d9475a858d20ddb235cd716713a2ae7b9d72fab8201aaeb'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php', 'adapter' => 'field-path-api-error', 'sha256' => 'b17ba7eb8e4dcc5dc65534b6a1d5445f2c31f36644adf16a4c8cacc8711dcc72'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php', 'adapter' => 'descriptor-and-framework-status-map', 'sha256' => '738384b0209e19eb524f07bb85aa3aa5dacf28c6bb43e119f1d6507176422208'],
     ],
 ];

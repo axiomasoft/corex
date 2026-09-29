@@ -92,7 +92,7 @@
                 "CoreX\\Operations\\Definition\\Enums\\OperationMode",
                 "CoreX\\Operations\\Definition\\Operation",
                 "CoreX\\Operations\\Definition\\OperationRegistry",
-                "CoreX\\Operations\\Errors\\ApiError",
+                "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
                 "CoreX\\Operations\\Errors\\Contracts",
                 "CoreX\\Operations\\Idempotency\\Contracts",
                 "CoreX\\Operations\\Idempotency\\Data",

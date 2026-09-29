@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Extend;
 
+use CoreX\Modules\Contracts\Extender;
+
 /**
  * 6. AzGuard permission group `{panel}.{entity}.{action}`, claimed into
  * mod_records on enable. `scopeable()` opts into the aut_role_matrix scope

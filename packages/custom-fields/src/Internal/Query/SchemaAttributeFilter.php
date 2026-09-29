@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Query;
 
 use CoreX\CustomFields\Contracts\AttributeFilter;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\FilterNode;
+use CoreX\CustomFields\Data\FilterPlan;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\FilterNode;
-use CoreX\CustomFields\Support\FilterPlan;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\DataScope;
 use InvalidArgumentException;

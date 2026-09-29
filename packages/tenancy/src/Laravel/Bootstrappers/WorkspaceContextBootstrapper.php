@@ -6,7 +6,7 @@ namespace CoreX\Tenancy\Laravel\Bootstrappers;
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Tenancy\Workspace\Models\Workspace;
+use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobProcessing;

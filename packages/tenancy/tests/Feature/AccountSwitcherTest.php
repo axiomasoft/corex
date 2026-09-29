@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Switcher\AccountListEntry;
-use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
-use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
+use CoreX\Tenancy\Membership\Data\AccountListEntry;
+use CoreX\Tenancy\Membership\Data\AccountsQuery;
+use CoreX\Tenancy\Membership\Data\AvailableAccounts;
+use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
 use CoreX\Tenancy\Tests\Support\Membership\AccountMenuFixture;
 use Illuminate\Support\Str;
 

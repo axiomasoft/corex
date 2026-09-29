@@ -7,7 +7,7 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
 use InvalidArgumentException;

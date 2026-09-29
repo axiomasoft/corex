@@ -6,12 +6,12 @@ namespace CoreX\Search\Testing;
 
 use Closure;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchHydrator;
+use CoreX\Search\Data\CurrentSearchRecord;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Query\PolicySearchHydrator;
-use CoreX\Search\Support\CurrentSearchRecord;
-use CoreX\Search\Support\SearchSnapshot;
 
 final class SearchFixtures
 {

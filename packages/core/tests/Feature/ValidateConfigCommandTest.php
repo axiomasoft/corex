@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Commands\ValidateConfigCommand;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Config\Internal\Commands\ValidateConfigCommand;
 use CoreX\Config\SecretRef;
 use CoreX\Testing\ConfigReportTestSection;
 use Symfony\Component\Console\Tester\CommandTester;

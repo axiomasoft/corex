@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
-use CoreX\CustomFields\Support\FieldSnapshot;
+use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\DataScope;
 use RuntimeException;
 

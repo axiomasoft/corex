@@ -208,7 +208,7 @@ test('the FK-target detector reads both Laravel forms and flags dynamic targets'
 test('literal model table resolution retains root detection and rejects unknown expressions', function () use ($foreignKeyTargets): void {
     $sample = <<<'PHP'
     use CoreX\Tenancy\Account\Models\Account;
-    use CoreX\Tenancy\Workspace\Models\Workspace as Scope;
+    use CoreX\Tenancy\Workspace\Internal\Models\Workspace as Scope;
     $table->foreign('account_id')->references('id')->on((new Account)->getTable());
     $table->foreign('workspace_id')->constrained((new Scope)->getTable());
     $table->foreign('unknown_id')->constrained((new Unknown)->getTable());
@@ -323,7 +323,7 @@ test('root-directory migrations create only root_ tables and tenant-directory mi
 
 test('the central and tenant runners load disjoint migration paths', function () use ($packageRoot): void {
     $provider = (string) file_get_contents($packageRoot.'/src/TenancyServiceProvider.php');
-    $orchestrator = (string) file_get_contents($packageRoot.'/src/Provisioning/Migrations/MigrationWaveOrchestrator.php');
+    $orchestrator = (string) file_get_contents($packageRoot.'/src/Provisioning/Internal/Migrations/MigrationWaveOrchestrator.php');
 
     // Публикация разведена по тегам: root-директория — только под
     // `corex-tenancy-migrations` (central-коннект), tenant-директория — только под

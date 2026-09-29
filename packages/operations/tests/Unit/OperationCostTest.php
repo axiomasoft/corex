@@ -6,7 +6,7 @@ use CoreX\Modules\Extend\Api;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Tests\Support\CostOperationHandler;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;

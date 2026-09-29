@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Compiler\InstalledPackages;
 use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Internal\Compiler\InstalledPackages;
 
 it('reads installed version metadata and prefers the source reference', function (): void {
     $path = installedMetadataFixture([

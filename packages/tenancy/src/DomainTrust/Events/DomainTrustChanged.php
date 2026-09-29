@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\DomainTrust\Events;
 
-use CoreX\Tenancy\DomainTrust\DomainTrustTransition;
+use CoreX\Tenancy\DomainTrust\Data\DomainTrustTransition;
 
 final class DomainTrustChanged
 {

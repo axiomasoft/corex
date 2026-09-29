@@ -5,12 +5,12 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\Values\FieldValueValidator;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\ValuePatch;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 
 it('accepts all supported typed values from the active registry snapshot', function (): void {
     $hash = str_repeat('a', 64);

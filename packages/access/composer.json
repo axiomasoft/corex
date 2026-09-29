@@ -55,7 +55,7 @@
                 "CoreX\\Access\\Contracts",
                 "CoreX\\Access\\Enums",
                 "CoreX\\Access\\Exceptions",
-                "CoreX\\Access\\Extend"
+                "CoreX\\Access\\Extend\\Internal"
             ]
         },
         "laravel": {

@@ -35,7 +35,6 @@
         <testsuite name="CorePackage">
             <directory>packages/core/tests/Unit</directory>
             <directory>packages/core/tests/Storage</directory>
-            <directory>packages/core/tests/Views</directory>
             <directory>packages/core/tests/Feature</directory>
             <directory>packages/core/tests/Pg</directory>
             <directory>packages/core/tests/Support</directory>

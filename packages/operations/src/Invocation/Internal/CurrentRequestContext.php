@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Internal;
 
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use Illuminate\Contracts\Container\Container;

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
-use CoreX\Tenancy\Provisioning\ClaimConflict;
-use CoreX\Tenancy\Provisioning\ClaimRequest;
-use CoreX\Tenancy\Provisioning\QualifiedTemplate;
+use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
+use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
+use CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict;
+use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -116,10 +116,10 @@ use Illuminate\Database\Capsule\Manager;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
-use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
+use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\ClaimRequest;
-use CoreX\Tenancy\Provisioning\QualifiedTemplate;
+use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
+use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
 $p = json_decode(fgets(STDIN), true, flags: JSON_THROW_ON_ERROR);
 if (! str_ends_with($p['config']['database'], '_test')) { throw new RuntimeException('Unsafe worker database.'); }
 $capsule = new Manager;

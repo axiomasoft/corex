@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolPolicy;

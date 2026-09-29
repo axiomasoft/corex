@@ -16,6 +16,7 @@ use CoreX\Intl\Currency\Internal\SqlRateImporter;
 use CoreX\Intl\Currency\Internal\SqlRateProvider;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Internal\PlainMoneyFormatter;
+use CoreX\Intl\Internal\IntlConfigSection;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
 use CoreX\Intl\Locale\Data\LocalePolicy;
 use CoreX\Intl\Locale\Internal\Bcp47Validator;

@@ -6,7 +6,7 @@ namespace CoreX\Tasks\Project\Models;
 
 use CoreX\Database\BaseModel;
 use CoreX\Tasks\Project\Enums\ProjectStatus;
-use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 use CoreX\Tasks\Task\Models\Stage;
 use CoreX\Tasks\Task\Models\Task;
 use DateTimeInterface;

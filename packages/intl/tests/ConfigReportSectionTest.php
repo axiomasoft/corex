@@ -6,7 +6,7 @@ namespace CoreX\Intl\Tests;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
-use CoreX\Intl\IntlConfigSection;
+use CoreX\Intl\Internal\IntlConfigSection;
 use CoreX\Intl\IntlServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;

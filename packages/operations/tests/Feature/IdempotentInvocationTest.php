@@ -13,7 +13,7 @@ use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Definition\Internal\OperationFingerprint;
 use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;

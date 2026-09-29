@@ -57,7 +57,7 @@
                 "CoreX\\Tasks\\Project\\Models",
                 "CoreX\\Tasks\\Sprint\\Data",
                 "CoreX\\Tasks\\Sprint\\Enums",
-                "CoreX\\Tasks\\Sprint\\Models",
+                "CoreX\\Tasks\\Sprint\\Internal\\Models",
                 "CoreX\\Tasks\\Task\\Contracts",
                 "CoreX\\Tasks\\Task\\Data",
                 "CoreX\\Tasks\\Task\\Enums",
@@ -65,7 +65,7 @@
                 "CoreX\\Tasks\\Task\\Models",
                 "CoreX\\Tasks\\Time\\Data",
                 "CoreX\\Tasks\\Time\\Enums",
-                "CoreX\\Tasks\\Time\\Models"
+                "CoreX\\Tasks\\Time\\Internal\\Models"
             ]
         },
         "laravel": {

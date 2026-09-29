@@ -1,0 +1,17 @@
+[
+  "packages/access",
+  "packages/core",
+  "packages/custom-fields",
+  "packages/intl",
+  "packages/media",
+  "packages/notifications",
+  "packages/operations",
+  "packages/search",
+  "packages/search-meilisearch",
+  "packages/tasks",
+  "packages/tasks-workflow",
+  "packages/tenancy",
+  "packages/tools",
+  "packages/wakeup",
+  "packages/webhooks"
+]

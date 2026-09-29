@@ -7,7 +7,7 @@ namespace CoreX\Operations\Invocation\Internal;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\InvocationMetadata;

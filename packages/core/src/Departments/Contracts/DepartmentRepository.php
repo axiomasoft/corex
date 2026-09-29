@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Contracts;
 
-use CoreX\Departments\Department;
+use CoreX\Departments\Data\Department;
 use CoreX\Departments\Events\DepartmentMoved;
 use CoreX\Departments\Exceptions\DepartmentCycleException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

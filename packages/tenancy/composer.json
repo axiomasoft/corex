@@ -70,15 +70,15 @@
                 "CoreX\\Tenancy\\Authentication\\Exceptions",
                 "CoreX\\Tenancy\\Contracts",
                 "CoreX\\Tenancy\\DomainTrust\\Events",
-                "CoreX\\Tenancy\\DomainTrust\\Models",
+                "CoreX\\Tenancy\\DomainTrust\\Internal\\Models",
                 "CoreX\\Tenancy\\Identity\\Events",
-                "CoreX\\Tenancy\\Identity\\Models",
+                "CoreX\\Tenancy\\Identity\\Internal\\Models",
                 "CoreX\\Tenancy\\Impersonation\\Events",
-                "CoreX\\Tenancy\\Impersonation\\Models",
+                "CoreX\\Tenancy\\Impersonation\\Internal\\Models",
                 "CoreX\\Tenancy\\Membership\\Events",
-                "CoreX\\Tenancy\\Provisioning\\Models",
+                "CoreX\\Tenancy\\Provisioning\\Internal\\Models",
                 "CoreX\\Tenancy\\Runtime\\Exceptions",
-                "CoreX\\Tenancy\\Workspace\\Models"
+                "CoreX\\Tenancy\\Workspace\\Internal\\Models"
             ]
         },
         "laravel": {

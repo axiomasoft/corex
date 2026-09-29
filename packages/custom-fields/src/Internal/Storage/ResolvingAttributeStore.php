@@ -6,14 +6,14 @@ namespace CoreX\CustomFields\Internal\Storage;
 
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\AttributeStoreResolver;
-use CoreX\CustomFields\Support\AttributeWriteResult;
-use CoreX\CustomFields\Support\FieldSelection;
-use CoreX\CustomFields\Support\RecordSelection;
-use CoreX\CustomFields\Support\ValueBag;
-use CoreX\CustomFields\Support\ValueBatch;
-use CoreX\CustomFields\Support\ValuePatch;
+use CoreX\CustomFields\Data\AttributeWriteResult;
+use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\RecordSelection;
+use CoreX\CustomFields\Data\ValueBag;
+use CoreX\CustomFields\Data\ValueBatch;
+use CoreX\CustomFields\Data\ValuePatch;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Data\WriteToken;
 
 final readonly class ResolvingAttributeStore implements AttributeStore

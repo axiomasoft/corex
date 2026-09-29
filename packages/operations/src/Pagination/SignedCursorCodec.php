@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination;
 
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Data\CursorPayload;
 use CoreX\Operations\Pagination\Data\CursorPosition;

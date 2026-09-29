@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests\Support\Membership;
 
-use CoreX\Tenancy\Membership\Transport\AccessTokenValidator;
-use CoreX\Tenancy\Membership\Transport\ChannelBinding;
-use CoreX\Tenancy\Membership\Transport\JwsVerifier;
-use CoreX\Tenancy\Membership\Transport\MembershipQuery;
-use CoreX\Tenancy\Membership\Transport\StrictTransport;
-use CoreX\Tenancy\Membership\Transport\TriggerParser;
+use CoreX\Tenancy\Membership\Internal\Transport\AccessTokenValidator;
+use CoreX\Tenancy\Membership\Internal\Transport\ChannelBinding;
+use CoreX\Tenancy\Membership\Internal\Transport\JwsVerifier;
+use CoreX\Tenancy\Membership\Internal\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Internal\Transport\StrictTransport;
+use CoreX\Tenancy\Membership\Internal\Transport\TriggerParser;
 use OpenSSLAsymmetricKey;
 
 /** Fixed isolated reference consumer: real signatures, fake HTTP, no deployment. */

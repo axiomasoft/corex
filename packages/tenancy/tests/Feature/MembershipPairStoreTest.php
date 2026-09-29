@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Persistence\PairStoreViolation;
-use CoreX\Tenancy\Membership\Persistence\PairWitness;
-use CoreX\Tenancy\Membership\Transport\CentralProtocolViolation;
+use CoreX\Tenancy\Membership\Data\PairKey;
+use CoreX\Tenancy\Membership\Data\PairWitness;
+use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
+use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
+use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;
 use Illuminate\Support\Facades\DB;
 

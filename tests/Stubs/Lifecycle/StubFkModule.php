@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tests\Stubs\Lifecycle;
 
 use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleDependency;
 use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Internal\Definition\ModuleDependency;
 
 /**
  * Purge/D41 fixture. Owns two tables with a REAL foreign key (stf_children →

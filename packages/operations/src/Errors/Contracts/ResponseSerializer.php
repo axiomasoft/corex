@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Contracts;
 
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 

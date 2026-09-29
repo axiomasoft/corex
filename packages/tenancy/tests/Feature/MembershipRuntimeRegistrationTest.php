@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Laravel\Http\Middleware\RequireActiveMembership;
-use CoreX\Tenancy\Membership\Projection\ApplyMembershipProjection;
-use CoreX\Tenancy\Membership\Projection\ReferenceMembershipProjection;
+use CoreX\Tenancy\Membership\Internal\Projection\ApplyMembershipProjection;
+use CoreX\Tenancy\Membership\Internal\Projection\ReferenceMembershipProjection;
 use Illuminate\Routing\Router;
 
 it('does not register unfinished membership runtime consumers', function (): void {

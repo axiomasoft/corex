@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Data\AttributeTables;
+use CoreX\CustomFields\Data\OperationRef;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
-use CoreX\CustomFields\Support\Schema\OperationRef;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\DataScope;
 use DateInterval;

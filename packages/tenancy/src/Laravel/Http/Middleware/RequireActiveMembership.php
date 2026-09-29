@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Tenancy\Identity\Models\User;
+use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

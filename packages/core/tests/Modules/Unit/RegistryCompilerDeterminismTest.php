@@ -8,8 +8,8 @@ use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Registry\FieldDefinition;
 
 function determinismEntity(string $name, string $prefix, string $handle): Entity

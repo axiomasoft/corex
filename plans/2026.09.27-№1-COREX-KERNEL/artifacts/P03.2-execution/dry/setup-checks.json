@@ -1,0 +1,606 @@
+[
+  {
+    "check": "sealed-staging",
+    "command": [
+      "python3",
+      "scripts/distribution/stage-stancl-providers.py"
+    ],
+    "exit": 0,
+    "seconds": 0.29,
+    "log": "sealed-staging.log"
+  },
+  {
+    "check": "restore-staging-manifests",
+    "command": [
+      "git",
+      "restore",
+      "--",
+      "composer.json",
+      "packages/tenancy/composer.json",
+      "packages/access/composer.json"
+    ],
+    "exit": 0,
+    "seconds": 0.32,
+    "log": "restore-staging-manifests.log"
+  },
+  {
+    "check": "root-install",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "install",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 5.26,
+    "log": "root-install.log"
+  },
+  {
+    "check": "copy-vendor-access",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/access/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/access/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.98,
+    "log": "copy-vendor-access.log"
+  },
+  {
+    "check": "copy-vendor-core",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/core/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/core/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.83,
+    "log": "copy-vendor-core.log"
+  },
+  {
+    "check": "copy-vendor-custom-fields",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/custom-fields/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/custom-fields/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.84,
+    "log": "copy-vendor-custom-fields.log"
+  },
+  {
+    "check": "copy-vendor-intl",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/intl/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/intl/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.86,
+    "log": "copy-vendor-intl.log"
+  },
+  {
+    "check": "copy-vendor-media",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/media/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/media/vendor"
+    ],
+    "exit": 0,
+    "seconds": 1.01,
+    "log": "copy-vendor-media.log"
+  },
+  {
+    "check": "copy-vendor-notifications",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/notifications/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/notifications/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.99,
+    "log": "copy-vendor-notifications.log"
+  },
+  {
+    "check": "copy-vendor-operations",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/operations/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/operations/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.96,
+    "log": "copy-vendor-operations.log"
+  },
+  {
+    "check": "copy-vendor-panels",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/panels/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/panels/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.96,
+    "log": "copy-vendor-panels.log"
+  },
+  {
+    "check": "copy-vendor-recurrence",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/recurrence/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/recurrence/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.01,
+    "log": "copy-vendor-recurrence.log"
+  },
+  {
+    "check": "copy-vendor-search",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/search/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/search/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.73,
+    "log": "copy-vendor-search.log"
+  },
+  {
+    "check": "copy-vendor-search-intl",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/search-intl/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/search-intl/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.79,
+    "log": "copy-vendor-search-intl.log"
+  },
+  {
+    "check": "copy-vendor-search-meilisearch",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/search-meilisearch/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/search-meilisearch/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.83,
+    "log": "copy-vendor-search-meilisearch.log"
+  },
+  {
+    "check": "copy-vendor-tasks",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/tasks/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/tasks/vendor"
+    ],
+    "exit": 0,
+    "seconds": 1.38,
+    "log": "copy-vendor-tasks.log"
+  },
+  {
+    "check": "copy-vendor-tasks-workflow",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/tasks-workflow/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/tasks-workflow/vendor"
+    ],
+    "exit": 0,
+    "seconds": 1.33,
+    "log": "copy-vendor-tasks-workflow.log"
+  },
+  {
+    "check": "copy-vendor-tenancy",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/tenancy/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/tenancy/vendor"
+    ],
+    "exit": 0,
+    "seconds": 1.45,
+    "log": "copy-vendor-tenancy.log"
+  },
+  {
+    "check": "copy-vendor-tools",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/tools/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/tools/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.92,
+    "log": "copy-vendor-tools.log"
+  },
+  {
+    "check": "copy-vendor-transfer",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/transfer/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/transfer/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.74,
+    "log": "copy-vendor-transfer.log"
+  },
+  {
+    "check": "copy-vendor-wakeup",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/wakeup/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/wakeup/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.61,
+    "log": "copy-vendor-wakeup.log"
+  },
+  {
+    "check": "copy-vendor-webhooks",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/webhooks/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/webhooks/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.93,
+    "log": "copy-vendor-webhooks.log"
+  },
+  {
+    "check": "copy-vendor-workflow",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/packages/workflow/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/packages/workflow/vendor"
+    ],
+    "exit": 0,
+    "seconds": 0.82,
+    "log": "copy-vendor-workflow.log"
+  },
+  {
+    "check": "copy-vendor-flex-crm",
+    "command": [
+      "cp",
+      "-a",
+      "--reflink=auto",
+      "/home/vostrikov/projects/packages/corex/products/flex-crm/vendor",
+      "/home/vostrikov/projects/packages/corex/build/p03-exec-dry/products/flex-crm/vendor"
+    ],
+    "exit": 0,
+    "seconds": 1.0,
+    "log": "copy-vendor-flex-crm.log"
+  },
+  {
+    "check": "autoload-access",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/access",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-access.log"
+  },
+  {
+    "check": "autoload-core",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/core",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-core.log"
+  },
+  {
+    "check": "autoload-custom-fields",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/custom-fields",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-custom-fields.log"
+  },
+  {
+    "check": "autoload-intl",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/intl",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-intl.log"
+  },
+  {
+    "check": "autoload-media",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/media",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-media.log"
+  },
+  {
+    "check": "autoload-notifications",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/notifications",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-notifications.log"
+  },
+  {
+    "check": "autoload-operations",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/operations",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.38,
+    "log": "autoload-operations.log"
+  },
+  {
+    "check": "autoload-panels",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/panels",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-panels.log"
+  },
+  {
+    "check": "autoload-recurrence",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/recurrence",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.09,
+    "log": "autoload-recurrence.log"
+  },
+  {
+    "check": "autoload-search",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/search",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.35,
+    "log": "autoload-search.log"
+  },
+  {
+    "check": "autoload-search-intl",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/search-intl",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-search-intl.log"
+  },
+  {
+    "check": "autoload-search-meilisearch",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/search-meilisearch",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-search-meilisearch.log"
+  },
+  {
+    "check": "autoload-tasks",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/tasks",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-tasks.log"
+  },
+  {
+    "check": "autoload-tasks-workflow",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/tasks-workflow",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.38,
+    "log": "autoload-tasks-workflow.log"
+  },
+  {
+    "check": "autoload-tenancy",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/tenancy",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-tenancy.log"
+  },
+  {
+    "check": "autoload-tools",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/tools",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-tools.log"
+  },
+  {
+    "check": "autoload-transfer",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/transfer",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-transfer.log"
+  },
+  {
+    "check": "autoload-wakeup",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/wakeup",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.35,
+    "log": "autoload-wakeup.log"
+  },
+  {
+    "check": "autoload-webhooks",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/webhooks",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-webhooks.log"
+  },
+  {
+    "check": "autoload-workflow",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/workflow",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.36,
+    "log": "autoload-workflow.log"
+  },
+  {
+    "check": "autoload-flex-crm",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "--working-dir=products/flex-crm",
+      "dump-autoload",
+      "--no-scripts",
+      "--no-interaction"
+    ],
+    "exit": 0,
+    "seconds": 0.37,
+    "log": "autoload-flex-crm.log"
+  }
+]

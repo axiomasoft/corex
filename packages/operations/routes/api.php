@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Operations\Errors\OperationErrorBoundary;
-use CoreX\Operations\Http\ApiController;
-use CoreX\Operations\Http\DiscoveryController;
+use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
+use CoreX\Operations\Internal\Http\ApiController;
+use CoreX\Operations\Internal\Http\DiscoveryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DiscoveryController::class, 'root'])->name('corex.api.discovery');

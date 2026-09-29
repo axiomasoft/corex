@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Modules/Compiler/PipelineStages.php b/packages/core/src/Modules/Compiler/PipelineStages.php
+diff --git a/packages/core/src/Modules/Internal/Compiler/PipelineStages.php b/packages/core/src/Modules/Internal/Compiler/PipelineStages.php
 index 448d11d..c87b2e6 100644
---- a/packages/core/src/Modules/Compiler/PipelineStages.php
-+++ b/packages/core/src/Modules/Compiler/PipelineStages.php
+--- a/packages/core/src/Modules/Internal/Compiler/PipelineStages.php
++++ b/packages/core/src/Modules/Internal/Compiler/PipelineStages.php
 @@ -33,8 +33,8 @@ final class PipelineStages
          Permissions::class,
          Api::class,

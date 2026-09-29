@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch\Internal;
 
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Support\Candidate;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\SearchCapabilities;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\Candidate;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\SearchCapabilities;
+use CoreX\Search\Data\SearchQuery;
 use InvalidArgumentException;
 use Meilisearch\Client;
 

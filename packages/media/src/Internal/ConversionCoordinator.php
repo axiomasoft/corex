@@ -8,7 +8,7 @@ use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 use CoreX\Media\Data\MediaConversionRef;
-use CoreX\Media\Support\MediaOptions;
+use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Throwable;

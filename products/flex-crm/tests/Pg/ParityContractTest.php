@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\AccountConnectionResolver;
+use CoreX\Context\Data\DatabaseConnectionConfig;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Context\DatabaseConnectionConfig;
 use Flex\Crm\Company\Actions\CreateCompany;
 use Flex\Crm\Company\Data\CompanyData;
 use Flex\Crm\Company\Events\CompanyCreated;

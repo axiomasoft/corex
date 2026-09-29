@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Storage;
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Storage\Exceptions\StorageOperationFailed;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;

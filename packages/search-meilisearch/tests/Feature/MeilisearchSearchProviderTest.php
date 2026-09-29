@@ -5,8 +5,8 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\DataScope;
-use CoreX\Search\Support\SearchFilter;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\SearchFilter;
+use CoreX\Search\Data\SearchQuery;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use Meilisearch\Client;
 

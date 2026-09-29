@@ -6,8 +6,8 @@ namespace CoreX\Features;
 
 use CoreX\Features\Contracts\FeatureFlagDefinition;
 use CoreX\Features\Contracts\FeatureFlags;
-use CoreX\Features\Models\FeatureFlag;
-use CoreX\Features\Models\FeatureOverride;
+use CoreX\Features\Internal\Models\FeatureFlag;
+use CoreX\Features\Internal\Models\FeatureOverride;
 use CoreX\Settings\Contracts\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use Override;

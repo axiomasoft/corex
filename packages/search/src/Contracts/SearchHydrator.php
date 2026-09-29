@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Search\Contracts;
 
 use CoreX\Data\DataScope;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\SearchPage;
-use CoreX\Search\Support\SearchSnapshot;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\SearchPage;
+use CoreX\Search\Data\SearchSnapshot;
 
 interface SearchHydrator
 {

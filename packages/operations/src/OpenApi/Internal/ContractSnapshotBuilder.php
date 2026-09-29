@@ -7,7 +7,6 @@ namespace CoreX\Operations\OpenApi\Internal;
 use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Definition\OperationRegistry;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
-use CoreX\Operations\OpenApi\OpenApiDocumentGenerator;
 use CoreX\Operations\Validation\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;

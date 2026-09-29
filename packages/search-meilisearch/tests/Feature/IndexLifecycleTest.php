@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Support\IndexBatch;
-use CoreX\Search\Support\IndexSwap;
+use CoreX\Search\Data\IndexBatch;
+use CoreX\Search\Data\IndexSwap;
 use CoreX\SearchMeilisearch\Internal\MeilisearchIndexAdapter;
 use Meilisearch\Client;
 

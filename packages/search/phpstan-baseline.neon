@@ -43,7 +43,7 @@ parameters:
 			path: src/Internal/Index/DurableIndexLane.php
 
 		-
-			rawMessage: 'Parameter $records of class CoreX\Search\Support\IndexClaim constructor expects list<array<string, bool|float|int|string|null>>, array<int, array> given.'
+			rawMessage: 'Parameter $records of class CoreX\Search\Data\IndexClaim constructor expects list<array<string, bool|float|int|string|null>>, array<int, array> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Index/DurableIndexLane.php
@@ -73,13 +73,13 @@ parameters:
 			path: src/Internal/Postgres/PostgresSearchProvider.php
 
 		-
-			rawMessage: 'Parameter $candidates of class CoreX\Search\Support\CandidatePage constructor expects list<CoreX\Search\Support\Candidate>, array<int, CoreX\Search\Support\Candidate> given.'
+			rawMessage: 'Parameter $candidates of class CoreX\Search\Data\CandidatePage constructor expects list<CoreX\Search\Data\Candidate>, array<int, CoreX\Search\Data\Candidate> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Postgres/PostgresSearchProvider.php
 
 		-
-			rawMessage: 'Parameter $filter of method CoreX\Search\Internal\Postgres\PostgresSearchProvider::applyFilter() expects CoreX\Search\Support\SearchFilter, mixed given.'
+			rawMessage: 'Parameter $filter of method CoreX\Search\Internal\Postgres\PostgresSearchProvider::applyFilter() expects CoreX\Search\Data\SearchFilter, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Postgres/PostgresSearchProvider.php
@@ -91,13 +91,13 @@ parameters:
 			path: src/Internal/Postgres/PostgresSearchProvider.php
 
 		-
-			rawMessage: 'Parameter $records of class CoreX\Search\Support\SearchPage constructor expects list<array<string, bool|float|int|string|null>>, list<array<string, mixed>> given.'
+			rawMessage: 'Parameter $records of class CoreX\Search\Data\SearchPage constructor expects list<array<string, bool|float|int|string|null>>, list<array<string, mixed>> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Query/PolicySearchHydrator.php
 
 		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Search\Support\SearchFilter): array{field: string, values: list<mixed>} given.'
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Search\Data\SearchFilter): array{field: string, values: list<mixed>} given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Query/SearchCursorCodec.php

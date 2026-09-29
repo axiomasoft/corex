@@ -14,7 +14,7 @@ use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaReadRef;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
-use CoreX\Media\Support\MediaOptions;
+use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;

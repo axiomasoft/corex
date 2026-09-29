@@ -13,12 +13,16 @@ use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Extender;
-use CoreX\Modules\Extend\Filament;
-use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\Extend\Routes;
-use CoreX\Modules\Extend\Workflow;
+use CoreX\Modules\Internal\Compiler\CompilationValidator;
+use CoreX\Modules\Internal\Compiler\CompiledSettingDefault;
+use CoreX\Modules\Internal\Compiler\FieldCastMap;
+use CoreX\Modules\Internal\Compiler\InstalledPackages;
+use CoreX\Modules\Internal\Compiler\PipelineStages;
+use CoreX\Modules\Internal\Extend\Filament;
+use CoreX\Modules\Internal\Extend\Menu;
+use CoreX\Modules\Internal\Extend\Routes;
+use CoreX\Modules\Internal\Extend\Workflow;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
 use Illuminate\Database\Eloquent\Model;
@@ -365,7 +369,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @template T of Extender
+     * @template T of \CoreX\Modules\Contracts\Extender
      *
      * @param  list<ModuleManifest>  $manifests
      * @param  class-string<T>  $extenderClass
@@ -1061,7 +1065,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @template T of \CoreX\Modules\Extend\Extender
+     * @template T of \CoreX\Modules\Contracts\Extender
      *
      * @param  class-string<T>  $class
      * @param  list<T>  $items
@@ -1076,7 +1080,7 @@ final class RegistryCompiler
     }
 
     /**
-     * @template T of \CoreX\Modules\Extend\Extender
+     * @template T of \CoreX\Modules\Contracts\Extender
      *
      * @param  list<ModuleManifest>  $manifests
      * @param  class-string<T>  $class

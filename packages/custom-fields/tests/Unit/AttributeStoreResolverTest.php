@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
+use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\RecordSelection;
+use CoreX\CustomFields\Data\ValueBag;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use CoreX\CustomFields\Internal\Storage\ConfiguredAttributeStoreResolver;
 use CoreX\CustomFields\Internal\Storage\ResolvingAttributeStore;
-use CoreX\CustomFields\Support\FieldSelection;
-use CoreX\CustomFields\Support\RecordSelection;
-use CoreX\CustomFields\Support\ValueBag;
 use CoreX\CustomFields\Tests\Support\AttributeCompositionProbe;
 use CoreX\CustomFields\Tests\Support\RecordingAttributeStore;
-use CoreX\Data\RecordRef;
+use CoreX\Data\Data\RecordRef;
 
 it('rejects an entity map that is not jsonb or eav', function (): void {
     expect(fn () => new AttributeStoragePolicy(default: 'jsonb', entities: ['contact' => 'gin']))

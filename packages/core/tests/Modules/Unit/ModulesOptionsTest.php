@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\InvalidConfiguration;
-use CoreX\Modules\Support\ModulesOptions;
+use CoreX\Config\Exceptions\InvalidConfiguration;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 
 it('allows a null module connection', function (): void {
     $options = ModulesOptions::fromArray(['connection' => null]);

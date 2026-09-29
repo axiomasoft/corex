@@ -12,7 +12,7 @@ use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Internal\DeclaredFieldAuthorizer;
 use CoreX\Operations\Cost\Internal\BudgetAdmission;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Data\OperationInvocation;

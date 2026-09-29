@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Scopes;
 
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Tenancy\Runtime\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

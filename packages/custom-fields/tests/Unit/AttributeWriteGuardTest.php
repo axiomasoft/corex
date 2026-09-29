@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Values\AttributeWriteGuard;
 use CoreX\CustomFields\Internal\Values\FieldValueValidator;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\ValuePatch;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScopeAccessDecision;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\DataScopeAccessDecision;
-use CoreX\Data\RecordRef;
 
 /** @param list<array<string, mixed>> $fields */
 function p106Catalogue(array $fields, ?string $hash = null): FieldCatalogue

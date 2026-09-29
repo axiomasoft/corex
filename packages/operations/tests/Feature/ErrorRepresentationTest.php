@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
 use CoreX\Operations\Errors\Internal\ErrorWire;
 use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
+use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
-use CoreX\Operations\Errors\OperationErrorBoundary;
 use CoreX\Operations\Invocation\InvocationMetadata;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;

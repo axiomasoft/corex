@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Index;
 
-use CoreX\Search\Support\IndexClaim;
+use CoreX\Search\Data\IndexClaim;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 

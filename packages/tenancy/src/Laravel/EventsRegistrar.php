@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
+use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Laravel\Listeners\RevertTenancyOnJobException;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Events\Dispatcher;

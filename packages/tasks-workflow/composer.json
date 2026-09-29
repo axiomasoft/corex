@@ -39,7 +39,7 @@
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
+            "module": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration",
             "package-type": "integration",
             "stability": "stable",
             "public-api": [

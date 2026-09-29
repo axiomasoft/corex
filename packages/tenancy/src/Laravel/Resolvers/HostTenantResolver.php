@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Resolvers;
 
 use CoreX\Tenancy\Account\Models\Account;
-use CoreX\Tenancy\DomainTrust\Models\Domain;
-use CoreX\Tenancy\DomainTrust\NormalizedHost;
+use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
+use CoreX\Tenancy\DomainTrust\Internal\NormalizedHost;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use Illuminate\Contracts\Foundation\Application;

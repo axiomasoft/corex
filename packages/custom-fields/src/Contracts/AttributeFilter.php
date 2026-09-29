@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Contracts;
 
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\FilterNode;
-use CoreX\CustomFields\Support\FilterPlan;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\FilterNode;
+use CoreX\CustomFields\Data\FilterPlan;
 use CoreX\Data\DataScope;
 
 interface AttributeFilter

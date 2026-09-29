@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Extend\PermissionsMerger;
+use CoreX\Access\Extend\Internal\PermissionsMerger;
+use CoreX\Access\Internal\Models\Role;
+use CoreX\Access\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Matrix\AzGuardRoleModel;
-use CoreX\Access\Models\Role;
-use CoreX\Access\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;

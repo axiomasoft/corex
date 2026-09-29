@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Equipment\Registry;
 
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Support\Candidate;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\IndexBatch;
-use CoreX\Search\Support\IndexOutcome;
-use CoreX\Search\Support\IndexSubmission;
-use CoreX\Search\Support\IndexSwap;
-use CoreX\Search\Support\SearchCapabilities;
-use CoreX\Search\Support\SearchQuery;
+use CoreX\Search\Data\Candidate;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\IndexBatch;
+use CoreX\Search\Data\IndexOutcome;
+use CoreX\Search\Data\IndexSubmission;
+use CoreX\Search\Data\IndexSwap;
+use CoreX\Search\Data\SearchCapabilities;
+use CoreX\Search\Data\SearchQuery;
 
 final class MemoryDriver implements IndexDriver, SearchProvider
 {

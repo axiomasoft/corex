@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Tenancy\Provisioning\PendingPool;
+use CoreX\Tenancy\Provisioning\Internal\PendingPool;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;

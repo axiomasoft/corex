@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Account\Models\Account;
-use CoreX\Tenancy\DomainTrust\Models\Domain;
+use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;

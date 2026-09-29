@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\PrincipalIdentity;
+use CoreX\Access\Access\Internal\PrincipalIdentity;
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Identity\PrincipalUserProvider;
-use CoreX\Access\Support\AuthOptions;
+use CoreX\Access\Identity\Internal\PrincipalUserProvider;
+use CoreX\Access\Internal\Support\AuthOptions;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;

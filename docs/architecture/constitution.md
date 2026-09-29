@@ -453,7 +453,7 @@
 **Правило.** Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся только
   через RFC/ADR
 **Владелец.** ../dev-doctrine.md §4 (ADR-011, ADR-014)
-**Enforcement.** `packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора) + ревью
+**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 

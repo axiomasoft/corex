@@ -9,7 +9,7 @@ use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
-use CoreX\Tenancy\Runtime\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

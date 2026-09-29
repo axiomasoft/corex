@@ -79,7 +79,7 @@ API, политиками или задачами между проектами.
   alias-override (October), инфоблоки. Monkey-patching запрещён.
 
 Источник: `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3–§4 (ADR-011/ADR-014);
-`packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора).
+`packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора).
 
 ## 5. Контракт-дисциплина
 

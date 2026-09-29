@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Extend\Api;

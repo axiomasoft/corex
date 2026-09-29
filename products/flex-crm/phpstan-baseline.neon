@@ -421,7 +421,7 @@ parameters:
 			path: src/Contact/Models/ContactCompany.php
 
 		-
-			rawMessage: Access to property $database of internal class CoreX\Context\DatabaseConnectionConfig from outside its root namespace CoreX.
+			rawMessage: Access to property $database of internal class CoreX\Context\Data\DatabaseConnectionConfig from outside its root namespace CoreX.
 			identifier: property.internalClass
 			count: 1
 			path: src/Context/ContextGuard.php

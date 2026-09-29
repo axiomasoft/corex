@@ -9,15 +9,15 @@ use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\ImpersonationGuard;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\RegistersNothingOnBoot;
-use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
+use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Provisioning\PendingPool;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Internal\PendingPool;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
@@ -33,7 +33,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             StanclTenantDatabaseProvisioner::class,
             static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
-                templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
             ),
         );
 
@@ -42,7 +42,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             static fn (Application $app): PendingPool => new PendingPool(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
-                templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
             ),
         );
 
@@ -67,7 +67,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 fsm: $app->make(AccountLifecycleFsm::class),
                 tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
                 impersonationGuard: $app->make(ImpersonationGuard::class),
-                templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
                 lifecycle: $app->make(AccountLifecyclePolicy::class),
             ),
         );
@@ -77,7 +77,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 tenancy: $app->make(TenancyManager::class),
-                templateIntegrityVerifier: $app->make(DatabaseTemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
             ),
         );
     }

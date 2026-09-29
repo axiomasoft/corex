@@ -31,7 +31,7 @@ VALID = {
 }
 PLANTED = {
     'R0': ('search/src/Data/Wrong.php', 'namespace CoreX\\Search; final class Wrong {}'),
-    'R1': ('core/src/Support/Helper.php', 'namespace CoreX\\Support; final class Helper {}'),
+    'R1': ('core/src/Unlisted/Helper.php', 'namespace CoreX\\Unlisted; final class Helper {}'),
     'R2': ('search/src/Index/Deep/Data/X.php', 'namespace CoreX\\Search\\Index\\Deep\\Data; final class X {}'),
     'R3': ('search/src/Index/Compiler/Plan.php', 'namespace CoreX\\Search\\Index\\Compiler; final class Plan {}'),
     'R4': ('search/src/Index/Laravel/Internal/Y.php', 'namespace CoreX\\Search\\Index\\Laravel\\Internal; final class Y {}'),

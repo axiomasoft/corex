@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Postgres;
 
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Data\Candidate;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\SearchCapabilities;
+use CoreX\Search\Data\SearchFilter;
+use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
-use CoreX\Search\Support\Candidate;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\SearchCapabilities;
-use CoreX\Search\Support\SearchFilter;
-use CoreX\Search\Support\SearchQuery;
-use CoreX\Search\Support\SearchSnapshot;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 

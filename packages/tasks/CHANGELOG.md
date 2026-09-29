@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed
+
+- PLAN3.D57: implementation classes moved to `<Module>\Internal\…`, public types to module categories
+  (`Contracts|Data|Enums|Events|Exceptions`); see `docs/architecture/constitution.md` STR-003. Drain queues before
+  upgrading; stored `*_type` values holding an old model FQCN no longer resolve (no aliases, PLAN3.D01).
+
 - Added the public `TaskOperationReceipts` owner port and typed operation receipt/kind for transactional integrations; the SQL implementation stays internal.
 - Добавили `TaskPlanningCommand`/`TaskPlanningAccess` и typed planning DTO для
   project/sprint/time-log с дедупликацией `corex_task_operations`.

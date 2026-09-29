@@ -1,0 +1,202 @@
+[
+  {
+    "package": "axiomasoft/corex-access",
+    "path": "packages/access/src/Access/AutMatrixGrantSource.php",
+    "namespace": "CoreX\\Access\\Access",
+    "symbol": "AutMatrixGrantSource",
+    "role": "other",
+    "target_path": "packages/access/src/Access/Internal/AutMatrixGrantSource.php",
+    "target_namespace": "CoreX\\Access\\Access\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex",
+    "path": "packages/core/src/Audit/AuditObserver.php",
+    "namespace": "CoreX\\Audit",
+    "symbol": "AuditObserver",
+    "role": "other",
+    "target_path": "packages/core/src/Audit/Internal/AuditObserver.php",
+    "target_namespace": "CoreX\\Audit\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-custom-fields",
+    "path": "packages/custom-fields/src/Support/AttributeWriteResult.php",
+    "namespace": "CoreX\\CustomFields\\Support",
+    "symbol": "AttributeWriteResult",
+    "role": "data",
+    "target_path": "packages/custom-fields/src/Data/AttributeWriteResult.php",
+    "target_namespace": "CoreX\\CustomFields\\Data",
+    "rule": "category:Data"
+  },
+  {
+    "package": "axiomasoft/corex-intl",
+    "path": "packages/intl/src/IntlConfigSection.php",
+    "namespace": "CoreX\\Intl",
+    "symbol": "IntlConfigSection",
+    "role": "other",
+    "target_path": "packages/intl/src/Internal/IntlConfigSection.php",
+    "target_namespace": "CoreX\\Intl\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-media",
+    "path": "packages/media/src/Commands/SweepMediaOperations.php",
+    "namespace": "CoreX\\Media\\Commands",
+    "symbol": "SweepMediaOperations",
+    "role": "command",
+    "target_path": "packages/media/src/Internal/Commands/SweepMediaOperations.php",
+    "target_namespace": "CoreX\\Media\\Internal\\Commands",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-notifications",
+    "path": "packages/notifications/src/Delivery/Commands/SweepNotificationDeliveries.php",
+    "namespace": "CoreX\\Notifications\\Delivery\\Commands",
+    "symbol": "SweepNotificationDeliveries",
+    "role": "command",
+    "target_path": "packages/notifications/src/Delivery/Internal/Commands/SweepNotificationDeliveries.php",
+    "target_namespace": "CoreX\\Notifications\\Delivery\\Internal\\Commands",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-operations",
+    "path": "packages/operations/src/Bulk/Commands/WorkBulkOperations.php",
+    "namespace": "CoreX\\Operations\\Bulk\\Commands",
+    "symbol": "WorkBulkOperations",
+    "role": "command",
+    "target_path": "packages/operations/src/Bulk/Internal/Commands/WorkBulkOperations.php",
+    "target_namespace": "CoreX\\Operations\\Bulk\\Internal\\Commands",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-search-meilisearch",
+    "path": "packages/search-meilisearch/src/MeilisearchConfigSection.php",
+    "namespace": "CoreX\\SearchMeilisearch",
+    "symbol": "MeilisearchConfigSection",
+    "role": "other",
+    "target_path": "packages/search-meilisearch/src/Internal/MeilisearchConfigSection.php",
+    "target_namespace": "CoreX\\SearchMeilisearch\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-search",
+    "path": "packages/search/src/Support/Candidate.php",
+    "namespace": "CoreX\\Search\\Support",
+    "symbol": "Candidate",
+    "role": "data",
+    "target_path": "packages/search/src/Data/Candidate.php",
+    "target_namespace": "CoreX\\Search\\Data",
+    "rule": "category:Data"
+  },
+  {
+    "package": "axiomasoft/corex-tasks-workflow",
+    "path": "packages/tasks-workflow/src/TaskWorkflowIntegration.php",
+    "namespace": "CoreX\\TasksWorkflow",
+    "symbol": "TaskWorkflowIntegration",
+    "role": "other",
+    "target_path": "packages/tasks-workflow/src/Internal/TaskWorkflowIntegration.php",
+    "target_namespace": "CoreX\\TasksWorkflow\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-tasks",
+    "path": "packages/tasks/src/Sprint/Models/Sprint.php",
+    "namespace": "CoreX\\Tasks\\Sprint\\Models",
+    "symbol": "Sprint",
+    "role": "model",
+    "target_path": "packages/tasks/src/Sprint/Internal/Models/Sprint.php",
+    "target_namespace": "CoreX\\Tasks\\Sprint\\Internal\\Models",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-tenancy",
+    "path": "packages/tenancy/src/Account/Lifecycle/AccountLifecycle.php",
+    "namespace": "CoreX\\Tenancy\\Account\\Lifecycle",
+    "symbol": "AccountLifecycle",
+    "role": "other",
+    "target_path": "packages/tenancy/src/Account/Internal/Lifecycle/AccountLifecycle.php",
+    "target_namespace": "CoreX\\Tenancy\\Account\\Internal\\Lifecycle",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-tools",
+    "path": "packages/tools/src/ToolSectionCompiler.php",
+    "namespace": "CoreX\\Tools",
+    "symbol": "ToolSectionCompiler",
+    "role": "other",
+    "target_path": "packages/tools/src/Internal/ToolSectionCompiler.php",
+    "target_namespace": "CoreX\\Tools\\Internal",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-wakeup",
+    "path": "packages/wakeup/src/Commands/SweepWakeups.php",
+    "namespace": "CoreX\\Wakeup\\Commands",
+    "symbol": "SweepWakeups",
+    "role": "command",
+    "target_path": "packages/wakeup/src/Internal/Commands/SweepWakeups.php",
+    "target_namespace": "CoreX\\Wakeup\\Internal\\Commands",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-webhooks",
+    "path": "packages/webhooks/src/Commands/DeliverWebhooks.php",
+    "namespace": "CoreX\\Webhooks\\Commands",
+    "symbol": "DeliverWebhooks",
+    "role": "command",
+    "target_path": "packages/webhooks/src/Internal/Commands/DeliverWebhooks.php",
+    "target_namespace": "CoreX\\Webhooks\\Internal\\Commands",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex",
+    "path": "packages/core/src/Modules/Registry/CompiledModuleRegistry.php",
+    "namespace": "CoreX\\Modules\\Registry",
+    "symbol": "CompiledModuleRegistry",
+    "role": "other",
+    "target_path": "packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php",
+    "target_namespace": "CoreX\\Modules\\Internal\\Registry",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-operations",
+    "path": "packages/operations/src/Http/ApiController.php",
+    "namespace": "CoreX\\Operations\\Http",
+    "symbol": "ApiController",
+    "role": "other",
+    "target_path": "packages/operations/src/Internal/Http/ApiController.php",
+    "target_namespace": "CoreX\\Operations\\Internal\\Http",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-tenancy",
+    "path": "packages/tenancy/src/Workspace/Models/Workspace.php",
+    "namespace": "CoreX\\Tenancy\\Workspace\\Models",
+    "symbol": "Workspace",
+    "role": "model",
+    "target_path": "packages/tenancy/src/Workspace/Internal/Models/Workspace.php",
+    "target_namespace": "CoreX\\Tenancy\\Workspace\\Internal\\Models",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-media",
+    "path": "packages/media/src/Jobs/ConvertMedia.php",
+    "namespace": "CoreX\\Media\\Jobs",
+    "symbol": "ConvertMedia",
+    "role": "job",
+    "target_path": "packages/media/src/Internal/Jobs/ConvertMedia.php",
+    "target_namespace": "CoreX\\Media\\Internal\\Jobs",
+    "rule": "internal"
+  },
+  {
+    "package": "axiomasoft/corex-access",
+    "path": "packages/access/src/Access/DefaultAccessChecker.php",
+    "namespace": "CoreX\\Access\\Access",
+    "symbol": "DefaultAccessChecker",
+    "role": "other",
+    "target_path": "packages/access/src/Access/Internal/DefaultAccessChecker.php",
+    "target_namespace": "CoreX\\Access\\Access\\Internal",
+    "rule": "internal"
+  }
+]

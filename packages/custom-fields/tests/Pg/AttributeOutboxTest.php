@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 use CoreX\Config\Config;
 use CoreX\CustomFields\Contracts\AttributeStore;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContracts;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
-use CoreX\CustomFields\Support\ValuePatch;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\RecordRef;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\WriteToken;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Testing\MessagingFixtures;

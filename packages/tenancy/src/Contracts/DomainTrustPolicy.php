@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Contracts;
 
-use CoreX\Tenancy\DomainTrust\NormalizedHost;
-use CoreX\Tenancy\DomainTrust\ObservedDomainProof;
+use CoreX\Tenancy\DomainTrust\Data\ObservedDomainProof;
+use CoreX\Tenancy\DomainTrust\Internal\NormalizedHost;
 
 interface DomainTrustPolicy
 {

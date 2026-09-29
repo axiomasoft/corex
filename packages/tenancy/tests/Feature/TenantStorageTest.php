@@ -7,7 +7,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Storage\Contracts\TenantStorage;
-use CoreX\Storage\StorageOperationFailed;
+use CoreX\Storage\Exceptions\StorageOperationFailed;
 use Illuminate\Support\Facades\File;
 
 final class TenantStorageContextResolverForP22 implements TenantContextResolver

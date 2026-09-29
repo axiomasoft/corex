@@ -11,22 +11,22 @@ use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\NullImpersonationService;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
-use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\Authentication\Http\Controllers\LogoutController;
-use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
-use CoreX\Tenancy\Authentication\Oidc\IdTokenVerifier;
-use CoreX\Tenancy\Authentication\Oidc\JwksKeySet;
-use CoreX\Tenancy\Authentication\Oidc\OidcClient;
-use CoreX\Tenancy\Authentication\Oidc\OidcDiscovery;
+use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
+use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
+use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Authentication\Internal\Oidc\IdTokenVerifier;
+use CoreX\Tenancy\Authentication\Internal\Oidc\JwksKeySet;
+use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
+use CoreX\Tenancy\Authentication\Internal\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
-use CoreX\Tenancy\DomainTrust\DomainTrustCoordinator;
-use CoreX\Tenancy\DomainTrust\DomainTrustStateWriter;
-use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
-use CoreX\Tenancy\Identity\IdentitySyncer;
-use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
-use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
-use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
+use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
+use CoreX\Tenancy\DomainTrust\Internal\DomainTrustStateWriter;
+use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
+use CoreX\Tenancy\Identity\Internal\DatabaseIdentitySyncer;
+use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
+use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
+use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\DatabaseRegistrar;
 use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
@@ -36,21 +36,20 @@ use CoreX\Tenancy\Laravel\RuntimeRegistrar;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
-use CoreX\Tenancy\Provisioning\Database\SchemaCatalogueSerializer;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityLock;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Provisioning\PendingPool;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
-use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Runtime\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\StanclTenancyManager;
-use CoreX\Tenancy\Runtime\Storage\ContextTenantStorage;
-use CoreX\Tenancy\Runtime\TenancyManagerContextResolver;
+use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
+use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Internal\PendingPool;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
+use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
+use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use CoreX\Tenancy\Tests\Concerns\AssertsContainerBindings;
 use CoreX\Tenancy\Tests\TestCase;
-use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
-use CoreX\Tenancy\Workspace\WorkspaceResolver;
+use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
+use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
 
 uses(AssertsContainerBindings::class);
 uses()->group('pg');
@@ -92,13 +91,13 @@ it('keeps Database register bindings on the measured key, concrete and lifetime'
     $this->assertSingletonBinding($app, TemplateIntegrityLock::class, TemplateIntegrityLock::class);
     $this->assertSingletonBinding(
         $app,
-        DatabaseTemplateIntegrityVerifier::class,
-        DatabaseTemplateIntegrityVerifier::class,
+        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
+        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
     );
     $this->assertSingletonBinding(
         $app,
         TemplateIntegrityVerifier::class,
-        DatabaseTemplateIntegrityVerifier::class,
+        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
     );
 });
 

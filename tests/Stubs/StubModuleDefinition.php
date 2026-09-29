@@ -6,7 +6,7 @@ namespace CoreX\Tests\Stubs;
 
 use CoreX\Modules\Definition\ModuleDefinition;
 use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Settings\DefaultSettingDefinition;
+use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 
 /**
  * Minimal module used across P1.3–P1.6 tests: a title, a valid tablePrefix

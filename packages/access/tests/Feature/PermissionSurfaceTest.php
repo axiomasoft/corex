@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\PermissionSurface;
-use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Access\Internal\PermissionSurface;
+use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Matrix\ActiveEntityFilter;
+use CoreX\Access\Matrix\Data\ActiveEntityFilter;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Access\Tests\Stubs\Project;
 use CoreX\Context\SingleAccountResolver;

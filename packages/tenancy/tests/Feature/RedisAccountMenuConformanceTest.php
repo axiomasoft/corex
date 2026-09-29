@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Switcher\AccountListEntry;
-use CoreX\Tenancy\Membership\Switcher\AccountMenuReader;
-use CoreX\Tenancy\Membership\Switcher\AccountsQuery;
-use CoreX\Tenancy\Membership\Switcher\AvailableAccounts;
-use CoreX\Tenancy\Membership\Switcher\RedisAccountMenuCache;
-use CoreX\Tenancy\Membership\Switcher\StrictAccountsTransport;
-use CoreX\Tenancy\Membership\Transport\CentralProtocolViolation;
-use CoreX\Tenancy\Membership\Transport\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Data\AccountListEntry;
+use CoreX\Tenancy\Membership\Data\AccountsQuery;
+use CoreX\Tenancy\Membership\Data\AvailableAccounts;
+use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
+use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Internal\Switcher\AccountMenuReader;
+use CoreX\Tenancy\Membership\Internal\Switcher\RedisAccountMenuCache;
+use CoreX\Tenancy\Membership\Internal\Switcher\StrictAccountsTransport;
 use CoreX\Tenancy\Tests\Support\Membership\AccountMenuFixture;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use Illuminate\Cache\RedisStore;

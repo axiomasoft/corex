@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\WorkerRuntime;
-use CoreX\Messaging\DatabasePollPubSub;
+use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 

@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Provisioning\Database;
 
 use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;

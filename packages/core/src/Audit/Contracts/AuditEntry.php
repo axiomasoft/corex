@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Audit\Contracts;
 
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Context\ImpersonationState;
+use CoreX\Context\Data\ImpersonationState;
 use DateTimeImmutable;
 
 /**
  * One append-only audit record. Built by the caller (HasAuditLog trait or
- * CoreX\Audit\AuditObserver) and handed to AuditLogger::record().
+ * CoreX\Audit\Internal\AuditObserver) and handed to AuditLogger::record().
  *
  * `occurredAt`/`workspaceId` are the event-time snapshot: the synchronous
  * path (QueuedAuditLogger::record) stamps them via withSnapshot() while the

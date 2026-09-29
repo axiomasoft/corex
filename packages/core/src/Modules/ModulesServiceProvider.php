@@ -6,12 +6,12 @@ namespace CoreX\Modules;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\Internal\Support\ModulesConfigSection;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 use CoreX\Modules\Laravel\LifecycleRegistrar;
 use CoreX\Modules\Laravel\ModulesBootRegistrar;
 use CoreX\Modules\Laravel\RegistryRegistrar;
 use CoreX\Modules\Laravel\SettingsRegistrar;
-use CoreX\Modules\Support\ModulesConfigSection;
-use CoreX\Modules\Support\ModulesOptions;
 use Illuminate\Support\ServiceProvider;
 use Override;
 

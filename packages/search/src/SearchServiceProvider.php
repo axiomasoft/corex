@@ -6,7 +6,7 @@ namespace CoreX\Search;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Support\SearchConfigSection;
+use CoreX\Search\Internal\Support\SearchConfigSection;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;

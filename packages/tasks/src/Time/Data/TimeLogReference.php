@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Time\Data;
 
-use CoreX\Tasks\Time\Models\TimeLog;
+use CoreX\Tasks\Time\Internal\Models\TimeLog;
 
 final readonly class TimeLogReference
 {

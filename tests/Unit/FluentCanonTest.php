@@ -6,12 +6,12 @@ use CoreX\Features\Contracts\FeatureFlagDefinition;
 use CoreX\Modules\Extend\Api;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Filament;
-use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\Extend\Routes;
-use CoreX\Modules\Extend\Workflow;
-use CoreX\Modules\Settings\DefaultSettingDefinition;
+use CoreX\Modules\Internal\Extend\Filament;
+use CoreX\Modules\Internal\Extend\Menu;
+use CoreX\Modules\Internal\Extend\Routes;
+use CoreX\Modules\Internal\Extend\Workflow;
+use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 use CoreX\Settings\Contracts\SettingsScope;
 
 // Fluent-canon pin (P3.6, A13): a manifest-authoring DTO in Contracts/Extend

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Tenancy\Identity\IdentitySyncer;
+use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 

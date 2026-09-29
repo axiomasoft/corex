@@ -2,6 +2,12 @@
 
 ## Unreleased — package identifier alignment
 
+### Changed
+
+- PLAN3.D57: implementation classes moved to `<Module>\Internal\…`, public types to module categories
+  (`Contracts|Data|Enums|Events|Exceptions`); see `docs/architecture/constitution.md` STR-003. Drain queues before
+  upgrading; stored `*_type` values holding an old model FQCN no longer resolve (no aliases, PLAN3.D01).
+
 - Breaking before 1.0: Rename config and publish identifiers to `corex-access` and environment variables to `COREX_ACCESS_*`.
 
 Все заметные изменения `corex/auth` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
-use CoreX\Modules\Audit\AuditCapabilityWiring;
-use CoreX\Modules\Commands\CompileModulesCommand;
-use CoreX\Modules\Commands\ExplainModuleCommand;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\Internal\Audit\AuditCapabilityWiring;
+use CoreX\Modules\Internal\Commands\CompileModulesCommand;
+use CoreX\Modules\Internal\Commands\ExplainModuleCommand;
+use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\CompiledModuleRegistry;
 use Illuminate\Console\Application as Console;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;

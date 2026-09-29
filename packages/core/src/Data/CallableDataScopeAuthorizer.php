@@ -6,6 +6,7 @@ namespace CoreX\Data;
 
 use Closure;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScopeAccessDecision;
 
 final readonly class CallableDataScopeAuthorizer implements DataScopeAuthorizer
 {

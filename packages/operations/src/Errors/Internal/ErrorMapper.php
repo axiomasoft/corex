@@ -7,7 +7,7 @@ namespace CoreX\Operations\Errors\Internal;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

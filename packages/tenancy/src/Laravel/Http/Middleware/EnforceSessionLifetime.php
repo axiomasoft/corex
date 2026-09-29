@@ -6,7 +6,7 @@ namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

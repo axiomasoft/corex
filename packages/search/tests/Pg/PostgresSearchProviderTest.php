@@ -6,10 +6,10 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
-use CoreX\Search\Support\SearchQuery;
-use CoreX\Search\Support\SearchSnapshot;
 use CoreX\Search\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
 

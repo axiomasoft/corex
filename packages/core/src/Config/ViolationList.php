@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Config;
 
+use CoreX\Config\Exceptions\InvalidConfiguration;
+
 final class ViolationList
 {
     /** @var list<string> */

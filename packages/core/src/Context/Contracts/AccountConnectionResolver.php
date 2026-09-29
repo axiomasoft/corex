@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Context\Contracts;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\DatabaseConnectionConfig;
+use CoreX\Context\Data\DatabaseConnectionConfig;
 
 /**
  * Full Laravel connection config for an account's tenant database (host/port

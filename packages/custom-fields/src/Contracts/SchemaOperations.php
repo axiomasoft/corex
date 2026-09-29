@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Contracts;
 
-use CoreX\CustomFields\Support\Schema\DriftReport;
-use CoreX\CustomFields\Support\Schema\OperationRef;
-use CoreX\CustomFields\Support\Schema\SchemaChange;
-use CoreX\CustomFields\Support\Schema\SchemaOperationId;
-use CoreX\CustomFields\Support\Schema\SchemaReceipt;
+use CoreX\CustomFields\Data\DriftReport;
+use CoreX\CustomFields\Data\OperationRef;
+use CoreX\CustomFields\Data\SchemaChange;
+use CoreX\CustomFields\Data\SchemaOperationId;
+use CoreX\CustomFields\Data\SchemaReceipt;
 use CoreX\Data\DataScope;
 
 interface SchemaOperations

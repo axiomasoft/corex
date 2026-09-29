@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\WorkspaceScopeWiring;
+use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;

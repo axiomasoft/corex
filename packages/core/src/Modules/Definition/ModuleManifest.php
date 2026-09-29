@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Definition;
 
 use CoreX\Features\Contracts\FeatureFlagDefinition;
-use CoreX\Modules\Compiler\ExtensionReplacement;
+use CoreX\Modules\Contracts\Extender;
+use CoreX\Modules\Data\ExtensionReplacement;
 use CoreX\Modules\Exceptions\InvalidManifestException;
-use CoreX\Modules\Extend\Extender;
-use CoreX\Modules\Settings\DefaultSettingDefinition;
+use CoreX\Modules\Internal\Definition\ModuleDependency;
+use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 
 /**
  * Fluent module manifest. A module's `manifest()` method builds one of
@@ -164,7 +165,7 @@ final class ModuleManifest
         return $this;
     }
 
-    /** @param  list<Extender>  $extenders */
+    /** @param list<Extender> $extenders */
     public function extends(array $extenders): self
     {
         $this->extenders = $extenders;

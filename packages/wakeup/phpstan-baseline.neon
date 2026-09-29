@@ -4,7 +4,7 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 5
-			path: src/Commands/ValidateWakeupStamps.php
+			path: src/Internal/Commands/ValidateWakeupStamps.php
 
 		-
 			rawMessage: 'Parameter #1 $known_string of function hash_equals expects string, mixed given.'

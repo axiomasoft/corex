@@ -89,7 +89,7 @@
 | MSG-006 | MSG | нет — P5 | объявлено, фаза P5 |
 | MSG-007 | MSG | нет — P5 | объявлено, фаза P5 |
 | MSG-008 | MSG | нет — P5 (outbox) | объявлено, фаза P5 |
-| EXT-001 | EXT | `packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора) + ревью | объявлено, фаза P1 |
+| EXT-001 | EXT | `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью | объявлено, фаза P1 |
 | EXT-002 | EXT | ревью | объявлено, фаза P1 |
 | EXT-003 | EXT | нет — P11 | объявлено, фаза P11 |
 | EXT-004 | EXT | нет — P11 | объявлено, фаза P11 |

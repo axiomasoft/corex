@@ -6,7 +6,7 @@ namespace CoreX\Audit;
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\ImpersonationService;
-use CoreX\Context\ImpersonationState;
+use CoreX\Context\Data\ImpersonationState;
 
 /**
  * Actor/request snapshot for an audit entry built outside a queue worker

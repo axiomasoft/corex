@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Tests\Stubs\Project;

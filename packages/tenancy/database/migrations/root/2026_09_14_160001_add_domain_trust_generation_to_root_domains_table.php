@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\DomainTrust\Models\Domain;
+use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

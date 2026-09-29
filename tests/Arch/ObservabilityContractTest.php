@@ -11,7 +11,7 @@ test('P12 observability gate keeps labels bounded and failure payloads redacted'
 });
 
 test('P12 observability gate rejects an identifier metric label', function (): void {
-    $path = SourceScanner::packagePath('core', 'src/Observability/MetricAttributes.php');
+    $path = SourceScanner::packagePath('core', 'src/Observability/Internal/MetricAttributes.php');
     $original = (string) file_get_contents($path);
     $changed = str_replace("        'retry_bucket',", "        'retry_bucket',\n        'account_id',", $original);
     file_put_contents($path, $changed);
@@ -73,7 +73,7 @@ PHP);
 function p12ObservabilityViolations(): array
 {
     $violations = [];
-    $metricPath = SourceScanner::packagePath('core', 'src/Observability/MetricAttributes.php');
+    $metricPath = SourceScanner::packagePath('core', 'src/Observability/Internal/MetricAttributes.php');
     $labels = p12StringConstant($metricPath, 'ALLOWED');
 
     foreach (array_values(array_diff($labels, P12_METRIC_LABELS)) as $label) {

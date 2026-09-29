@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Messaging/DatabasePollPubSub.php b/packages/core/src/Messaging/DatabasePollPubSub.php
+diff --git a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
 index d1278d8..b4e7a65 100644
---- a/packages/core/src/Messaging/DatabasePollPubSub.php
-+++ b/packages/core/src/Messaging/DatabasePollPubSub.php
+--- a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
++++ b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
 @@ -115,22 +115,7 @@ final class DatabasePollPubSub implements PubSub
          string $subscriber,
          bool $replayBacklog,

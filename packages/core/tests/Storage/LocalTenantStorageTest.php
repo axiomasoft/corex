@@ -6,8 +6,8 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Storage\Contracts\TenantStorage;
-use CoreX\Storage\StorageCapabilityUnavailable;
-use CoreX\Storage\StorageOperationFailed;
+use CoreX\Storage\Exceptions\StorageCapabilityUnavailable;
+use CoreX\Storage\Exceptions\StorageOperationFailed;
 use Illuminate\Support\Facades\File;
 
 final class MutableStorageContextResolver implements TenantContextResolver

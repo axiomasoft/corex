@@ -6,7 +6,7 @@ namespace CoreX\Webhooks\Laravel;
 
 use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Definition\OperationRegistry;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\OperationDispatcher;
 use CoreX\Operations\Laravel\Support\ApiOptions;

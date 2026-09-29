@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Inbox\DurableInbox;
-use CoreX\Tenancy\Membership\Inbox\InboxConflict;
-use CoreX\Tenancy\Membership\Persistence\PairKey;
-use CoreX\Tenancy\Membership\Persistence\PairStore;
-use CoreX\Tenancy\Membership\Persistence\PairStoreViolation;
+use CoreX\Tenancy\Membership\Data\PairKey;
+use CoreX\Tenancy\Membership\Exceptions\InboxConflict;
+use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
+use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
+use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Migrations\Migration;

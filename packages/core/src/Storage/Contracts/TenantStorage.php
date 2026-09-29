@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Storage\Contracts;
 
-use CoreX\Storage\ExportArchiveRef;
-use CoreX\Storage\StorageCapabilities;
+use CoreX\Storage\Data\ExportArchiveRef;
+use CoreX\Storage\Data\StorageCapabilities;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 interface TenantStorage

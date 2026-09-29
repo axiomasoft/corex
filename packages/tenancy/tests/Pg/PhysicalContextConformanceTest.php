@@ -7,7 +7,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Storage\Contracts\TenantStorage;
-use CoreX\Storage\StorageOperationFailed;
+use CoreX\Storage\Exceptions\StorageOperationFailed;
 use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Queue\Job;

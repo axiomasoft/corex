@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Context\ImpersonationState;
+use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\NullImpersonationService;
 
 /**

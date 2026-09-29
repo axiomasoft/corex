@@ -6,7 +6,7 @@ use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
 use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\Menu;
+use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Registry\FieldDefinition;
 
 /**

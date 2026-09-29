@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
 use Illuminate\Console\Command;
 
 /**

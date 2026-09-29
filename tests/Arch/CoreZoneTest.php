@@ -26,11 +26,11 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
-    'packages/core/src/Config/KernelConfigSection.php',
+    'packages/core/src/Config/Internal/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
     'packages/core/src/Config/Config.php',
     'packages/core/src/Config/CoreOptions.php',
-    'packages/core/src/Config/Commands/ValidateConfigCommand.php',
+    'packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php',
     'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
     'packages/core/src/Modules/Contracts/PackageRegistrar.php',
     'packages/core/src/Modules/RegistersNothingOnBoot.php',
@@ -82,6 +82,19 @@ const CORE_ZONE_EXACT_IMPORTS = [
     'packages/core/src/Settings/Events/SettingChanged.php' => [
         'CoreX\\Messaging\\Events\\DomainEvent',
     ],
+    'packages/core/src/Messaging/Contracts/TraceContextBridge.php' => [
+        'CoreX\\Observability\\Internal\\OperationContext',
+    ],
+    'packages/core/src/Messaging/Internal/NullTraceContextBridge.php' => [
+        'CoreX\\Observability\\Internal\\OperationContext',
+    ],
+    'packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php' => [
+        'CoreX\\Observability\\Internal\\OpenTelemetryBridge',
+        'CoreX\\Observability\\Internal\\OperationContext',
+    ],
+    'packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php' => [
+        'CoreX\\Audit\\Internal\\AuditObserver',
+    ],
 ];
 
 /**
@@ -91,7 +104,7 @@ const CORE_ZONE_EXACT_IMPORTS = [
  */
 const CORE_ZONE_FOUNDATION_SUPPORT = [
     'Config/ViolationList.php',
-    'Config/InvalidConfiguration.php',
+    'Config/Exceptions/InvalidConfiguration.php',
     'Config/SecretRef.php',
 ];
 
@@ -120,7 +133,7 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
-    'Audit/AuditObserver.php' => 'Audit',
+    'Audit/Internal/AuditObserver.php' => 'Audit',
     'Audit/Contracts/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',
     'Audit/Contracts/AuditRetention.php' => 'Audit',
@@ -130,11 +143,11 @@ const CORE_ZONE_DUMP = [
     'Audit/HasAuditLog.php' => 'Audit',
     'Audit/Internal/AuditLog.php' => 'Audit',
     'Audit/NullAuditRetention.php' => 'Audit',
-    'Audit/PruneAuditLog.php' => 'Audit',
+    'Audit/Internal/PruneAuditLog.php' => 'Audit',
     'Audit/QueuedAuditLogger.php' => 'Audit',
-    'Audit/RecordAuditEntry.php' => 'Audit',
+    'Audit/Internal/RecordAuditEntry.php' => 'Audit',
     'Config/Contracts/ConfigReportSection.php' => 'Foundation',
-    'Config/InvalidConfiguration.php' => 'Foundation',
+    'Config/Exceptions/InvalidConfiguration.php' => 'Foundation',
     'Config/SecretRef.php' => 'Foundation',
     'Config/ViolationList.php' => 'Foundation',
     'Context/Contracts/AccountConnectionResolver.php' => 'TenancyContracts',
@@ -148,17 +161,17 @@ const CORE_ZONE_DUMP = [
     'Context/Data/AccountRef.php' => 'TenancyContracts',
     'Context/Data/TenantContext.php' => 'TenancyContracts',
     'Context/Data/WorkspaceRef.php' => 'TenancyContracts',
-    'Context/DatabaseConnectionConfig.php' => 'TenancyContracts',
+    'Context/Data/DatabaseConnectionConfig.php' => 'TenancyContracts',
     'Context/Enums/ImpersonationRestrictedAction.php' => 'TenancyContracts',
     'Context/Exceptions/CentralContextException.php' => 'TenancyContracts',
     'Context/Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
     'Context/Exceptions/ScopeContextMismatch.php' => 'TenancyContracts',
     'Context/GuardedTenantContextRestorer.php' => 'TenancyContracts',
     'Context/ImpersonationGuard.php' => 'TenancyContracts',
-    'Context/ImpersonationState.php' => 'TenancyContracts',
+    'Context/Data/ImpersonationState.php' => 'TenancyContracts',
     'Context/NullImpersonationService.php' => 'TenancyContracts',
     'Context/NullTenancyManager.php' => 'TenancyContracts',
-    'Context/ProvisionParams.php' => 'TenancyContracts',
+    'Context/Data/ProvisionParams.php' => 'TenancyContracts',
     'Context/SingleAccountResolver.php' => 'TenancyContracts',
     'Data/AllowAllDataScopeAuthorizer.php' => 'Foundation',
     'Data/ArrayDataScopeCodec.php' => 'Foundation',
@@ -166,10 +179,10 @@ const CORE_ZONE_DUMP = [
     'Data/Contracts/DataScopeAuthorizer.php' => 'Foundation',
     'Data/Contracts/DataScopeCodec.php' => 'Foundation',
     'Data/DataScope.php' => 'Foundation',
-    'Data/DataScopeAccessDecision.php' => 'Foundation',
+    'Data/Data/DataScopeAccessDecision.php' => 'Foundation',
     'Data/DenyDataScopeAuthorizer.php' => 'Foundation',
     'Data/Exceptions/InvalidScopePayload.php' => 'Foundation',
-    'Data/RecordRef.php' => 'Foundation',
+    'Data/Data/RecordRef.php' => 'Foundation',
     'Data/WriteToken.php' => 'Foundation',
     'Database/BaseModel.php' => 'Foundation',
     'Database/Enums/IdStrategy.php' => 'Foundation',
@@ -177,7 +190,7 @@ const CORE_ZONE_DUMP = [
     'Database/Schema/IdColumns.php' => 'Foundation',
     'Departments/Contracts/DepartmentRepository.php' => 'Departments',
     'Departments/DatabaseDepartmentRepository.php' => 'Departments',
-    'Departments/Department.php' => 'Departments',
+    'Departments/Data/Department.php' => 'Departments',
     'Departments/Events/DepartmentMoved.php' => 'Departments',
     'Departments/Exceptions/CrossWorkspaceMoveException.php' => 'Departments',
     'Departments/Exceptions/DepartmentCycleException.php' => 'Departments',
@@ -190,11 +203,11 @@ const CORE_ZONE_DUMP = [
     'Features/Contracts/FeatureFlags.php' => 'Features',
     'Features/DatabaseFeatureFlags.php' => 'Features',
     'Features/Events/FeatureFlagToggled.php' => 'Features',
-    'Features/Models/FeatureFlag.php' => 'Features',
-    'Features/Models/FeatureOverride.php' => 'Features',
-    'Messaging/Commands/PruneOutboxMessages.php' => 'Messaging',
-    'Messaging/Commands/RelayOutbox.php' => 'Messaging',
-    'Messaging/Commands/ShowDeliveryHealth.php' => 'Messaging',
+    'Features/Internal/Models/FeatureFlag.php' => 'Features',
+    'Features/Internal/Models/FeatureOverride.php' => 'Features',
+    'Messaging/Internal/Commands/PruneOutboxMessages.php' => 'Messaging',
+    'Messaging/Internal/Commands/RelayOutbox.php' => 'Messaging',
+    'Messaging/Internal/Commands/ShowDeliveryHealth.php' => 'Messaging',
     'Messaging/Contracts/Cancellable.php' => 'Foundation',
     'Messaging/Contracts/DurableMessagePublisher.php' => 'Messaging',
     'Messaging/Contracts/DurablePayload.php' => 'Foundation',
@@ -211,8 +224,8 @@ const CORE_ZONE_DUMP = [
     'Messaging/Data/MessageContract.php' => 'Messaging',
     'Messaging/Data/MessageEnvelope.php' => 'Messaging',
     'Messaging/Data/MessagePayload.php' => 'Messaging',
-    'Messaging/DatabasePollPubSub.php' => 'Messaging',
-    'Messaging/DefaultWorkerRuntime.php' => 'Messaging',
+    'Messaging/Internal/DatabasePollPubSub.php' => 'Messaging',
+    'Messaging/Internal/DefaultWorkerRuntime.php' => 'Messaging',
     'Messaging/Enums/MessageClass.php' => 'Messaging',
     'Messaging/Enums/PiiClass.php' => 'Messaging',
     'Messaging/Enums/PubSubDriver.php' => 'Messaging',
@@ -229,24 +242,24 @@ const CORE_ZONE_DUMP = [
     'Messaging/Internal/SqlInbox.php' => 'Messaging',
     'Messaging/Internal/SqlOutbox.php' => 'Messaging',
     'Messaging/Internal/SqlOutboxRelay.php' => 'Messaging',
-    'Messaging/NullPubSub.php' => 'Messaging',
+    'Messaging/Internal/NullPubSub.php' => 'Messaging',
     'Messaging/PHPStan/Rules/DurablePayloadRule.php' => 'Foundation',
-    'Messaging/PrunePubSubMessages.php' => 'Messaging',
-    'Messaging/PubSubManager.php' => 'Messaging',
-    'Messaging/RedisPubSub.php' => 'Messaging',
-    'Messaging/SubscribeGuard.php' => 'Messaging',
+    'Messaging/Internal/PrunePubSubMessages.php' => 'Messaging',
+    'Messaging/Internal/PubSubManager.php' => 'Messaging',
+    'Messaging/Internal/RedisPubSub.php' => 'Messaging',
+    'Messaging/Internal/SubscribeGuard.php' => 'Messaging',
     'Messaging/Testing/MessagingFixtures.php' => 'Messaging',
     'Modules/Contracts/ModuleRegistrar.php' => 'Foundation',
     'Observability/Contracts/OperationObserver.php' => 'Foundation',
-    'Observability/MetricAttributes.php' => 'Foundation',
-    'Observability/NullOperationObserver.php' => 'Foundation',
-    'Observability/OpenTelemetryBridge.php' => 'Foundation',
-    'Observability/OperationCompleted.php' => 'Foundation',
-    'Observability/OperationContext.php' => 'Foundation',
-    'Observability/OperationFailed.php' => 'Foundation',
-    'Observability/OperationOutcome.php' => 'Foundation',
-    'Observability/OperationStarted.php' => 'Foundation',
-    'Observability/PsrLogOperationObserver.php' => 'Foundation',
+    'Observability/Internal/MetricAttributes.php' => 'Foundation',
+    'Observability/Internal/NullOperationObserver.php' => 'Foundation',
+    'Observability/Internal/OpenTelemetryBridge.php' => 'Foundation',
+    'Observability/Data/OperationCompleted.php' => 'Foundation',
+    'Observability/Internal/OperationContext.php' => 'Foundation',
+    'Observability/Data/OperationFailed.php' => 'Foundation',
+    'Observability/Enums/OperationOutcome.php' => 'Foundation',
+    'Observability/Data/OperationStarted.php' => 'Foundation',
+    'Observability/Internal/PsrLogOperationObserver.php' => 'Foundation',
     'Settings/Contracts/SettingDefaultsProvider.php' => 'Settings',
     'Settings/Contracts/SettingsRepository.php' => 'Settings',
     'Settings/Contracts/SettingsScope.php' => 'Settings',
@@ -255,15 +268,15 @@ const CORE_ZONE_DUMP = [
     'Settings/Events/SettingChanged.php' => 'Settings',
     'Settings/Exceptions/SettingValueTooLargeException.php' => 'Settings',
     'Settings/Exceptions/UnsupportedScopeException.php' => 'Settings',
-    'Settings/Models/Setting.php' => 'Settings',
+    'Settings/Internal/Models/Setting.php' => 'Settings',
     'Settings/NullSettingDefaultsProvider.php' => 'Settings',
     'Storage/Contracts/TenantStorage.php' => 'Storage',
-    'Storage/ExportArchiveRef.php' => 'Storage',
-    'Storage/LocalTenantStorage.php' => 'Storage',
+    'Storage/Data/ExportArchiveRef.php' => 'Storage',
+    'Storage/Internal/LocalTenantStorage.php' => 'Storage',
     'Storage/ScopedFilesystem.php' => 'Storage',
-    'Storage/StorageCapabilities.php' => 'Storage',
-    'Storage/StorageCapabilityUnavailable.php' => 'Storage',
-    'Storage/StorageOperationFailed.php' => 'Storage',
+    'Storage/Data/StorageCapabilities.php' => 'Storage',
+    'Storage/Exceptions/StorageCapabilityUnavailable.php' => 'Storage',
+    'Storage/Exceptions/StorageOperationFailed.php' => 'Storage',
     'Time/FrozenClock.php' => 'Foundation',
     'Time/LaravelClock.php' => 'Foundation',
     'Time/SystemClock.php' => 'Foundation',
@@ -288,10 +301,10 @@ const CORE_ZONE_DUMP = [
 
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
-        ->and(zoneOf('packages/core/src/Messaging/PubSubManager.php'))->toBe('Messaging')
+        ->and(zoneOf('packages/core/src/Messaging/Internal/PubSubManager.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
         ->and(zoneOf('packages/core/src/Config/ViolationList.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Config/InvalidConfiguration.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Config/Exceptions/InvalidConfiguration.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Config/SecretRef.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Contracts/DescribesError.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Data/ErrorDescriptor.php'))->toBe('Foundation')
@@ -312,7 +325,7 @@ test('foreign files do not import zone Internal (R-Z2)', function (): void {
 
 test('R-Z1 planting in Foundation RecordRef names the file and symbol', function (): void {
     $line = coreZonePlant(
-        'packages/core/src/Data/RecordRef.php',
+        'packages/core/src/Data/Data/RecordRef.php',
         'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz1Offenders(...),
     );

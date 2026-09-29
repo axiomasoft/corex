@@ -13,7 +13,7 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\OutboxRefused;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
-use CoreX\Observability\OperationContext;
+use CoreX\Observability\Internal\OperationContext;
 use CoreX\Time\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;

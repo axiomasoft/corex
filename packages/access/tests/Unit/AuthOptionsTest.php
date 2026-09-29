@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Support\AuthOptions;
-use CoreX\Config\InvalidConfiguration;
+use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 
 it('normalizes an empty workspace scope class to null', function (): void {
     $options = AuthOptions::fromArray([

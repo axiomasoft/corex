@@ -5,11 +5,11 @@ declare(strict_types=1);
 use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Exceptions\InvalidSearchConfiguration;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\UnavailableSearchProvider;
 use CoreX\Search\SearchServiceProvider;
-use CoreX\Search\Support\SearchSnapshot;
 use Orchestra\Testbench\TestCase;
 
 final class SearchServiceProviderTest extends TestCase

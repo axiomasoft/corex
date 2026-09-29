@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\ValuePatch;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 use CoreX\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 

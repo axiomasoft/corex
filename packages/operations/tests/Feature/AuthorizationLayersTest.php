@@ -22,7 +22,7 @@ use CoreX\Operations\Authorization\Internal\DenyClientScopeAuthorizer;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\ResourceId;
 use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Data\OperationInvocation;

@@ -6,8 +6,8 @@ namespace CoreX\Modules\Registry;
 
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleLifecycle;
-use CoreX\Modules\Definition\ModuleDependency;
 use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Internal\Definition\ModuleDependency;
 
 /**
  * One module's compiled-registry entry (`ModuleRegistry::get()`): manifest

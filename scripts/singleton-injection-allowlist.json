@@ -11,7 +11,7 @@
     },
     {
       "package": "core",
-      "class": "CoreX\\Messaging\\PubSubManager",
+      "class": "CoreX\\Messaging\\Internal\\PubSubManager",
       "parameter": "app",
       "owner_phase": "P6",
       "note": "Captures Illuminate Application; migrate to scoped or explicit deps."

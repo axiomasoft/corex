@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+diff --git a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 index e585185..0f60c39 100644
---- a/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
-+++ b/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+--- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
++++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 @@ -393,7 +393,8 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
          // before parents and no schema object (table/column/index) is orphaned.
          $claims = $this->db()->table(self::RECORDS_TABLE)

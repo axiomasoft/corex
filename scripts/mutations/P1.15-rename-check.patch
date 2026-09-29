@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Modules/Registry/CompiledModuleRegistry.php b/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
+diff --git a/packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php b/packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php
 index 5a0a813..ab03c2f 100644
---- a/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
-+++ b/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
+--- a/packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php
++++ b/packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php
 @@ -176,10 +176,6 @@ final class CompiledModuleRegistry implements ModuleRegistry
              throw new RuntimeException(sprintf('Unable to write temporary compiled registry [%s].', $tmpPath));
          }

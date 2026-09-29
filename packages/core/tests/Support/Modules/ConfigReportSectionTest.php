@@ -6,8 +6,8 @@ namespace CoreX\Testing\Modules;
 
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
+use CoreX\Modules\Internal\Support\ModulesConfigSection;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Support\ModulesConfigSection;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\FieldSnapshot;
+use CoreX\CustomFields\Data\FilterNode;
+use CoreX\CustomFields\Data\RecordSelection;
+use CoreX\CustomFields\Data\SchemaChange;
+use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Query\SchemaAttributeFilter;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
-use CoreX\CustomFields\Support\FieldSelection;
-use CoreX\CustomFields\Support\FieldSnapshot;
-use CoreX\CustomFields\Support\FilterNode;
-use CoreX\CustomFields\Support\RecordSelection;
-use CoreX\CustomFields\Support\Schema\SchemaChange;
-use CoreX\CustomFields\Support\ValuePatch;
 use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
 
 it('keeps field selections bounded and unique', function (): void {
     expect((new FieldSelection(fields: ['email', 'status']))->fields)->toBe(['email', 'status']);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Extend;
 
+use CoreX\Modules\Contracts\Extender;
 use CoreX\Modules\Registry\FieldDefinition;
 
 /**

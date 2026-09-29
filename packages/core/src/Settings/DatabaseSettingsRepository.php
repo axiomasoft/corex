@@ -11,7 +11,7 @@ use CoreX\Settings\Enums\SettingScope;
 use CoreX\Settings\Events\SettingChanged;
 use CoreX\Settings\Exceptions\SettingValueTooLargeException;
 use CoreX\Settings\Exceptions\UnsupportedScopeException;
-use CoreX\Settings\Models\Setting;
+use CoreX\Settings\Internal\Models\Setting;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;

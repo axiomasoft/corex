@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\DataScope;
-use CoreX\Data\RecordRef;
+use CoreX\Search\Data\Candidate;
+use CoreX\Search\Data\CandidatePage;
+use CoreX\Search\Data\CurrentSearchRecord;
+use CoreX\Search\Data\DocumentBatch;
+use CoreX\Search\Data\DocumentCursor;
+use CoreX\Search\Data\IndexBatch;
+use CoreX\Search\Data\IndexOutcome;
+use CoreX\Search\Data\IndexSubmission;
+use CoreX\Search\Data\IndexSwap;
+use CoreX\Search\Data\SearchCapabilities;
+use CoreX\Search\Data\SearchPage;
+use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\UnavailableSearchProvider;
-use CoreX\Search\Support\Candidate;
-use CoreX\Search\Support\CandidatePage;
-use CoreX\Search\Support\CurrentSearchRecord;
-use CoreX\Search\Support\DocumentBatch;
-use CoreX\Search\Support\DocumentCursor;
-use CoreX\Search\Support\IndexBatch;
-use CoreX\Search\Support\IndexOutcome;
-use CoreX\Search\Support\IndexSubmission;
-use CoreX\Search\Support\IndexSwap;
-use CoreX\Search\Support\SearchCapabilities;
-use CoreX\Search\Support\SearchPage;
-use CoreX\Search\Support\SearchQuery;
-use CoreX\Search\Support\SearchSnapshot;
 
 it('keeps neutral search value objects typed and unsupported providers empty', function (): void {
     $record = new RecordRef(entity: 'equipment', id: 'pump-1');

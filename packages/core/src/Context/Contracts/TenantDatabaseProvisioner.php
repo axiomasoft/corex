@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Context\ProvisionParams;
+use CoreX\Context\Data\ProvisionParams;
 
 /**
  * Creates an account's tenant database (golden-template clone + post-steps).

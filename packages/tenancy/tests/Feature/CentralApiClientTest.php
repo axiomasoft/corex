@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Membership\Data\ActorRef;
+use CoreX\Tenancy\Membership\Enums\ActorType;
+use CoreX\Tenancy\Membership\Enums\MembershipReason;
 use CoreX\Tenancy\Membership\Events\MembershipRevoked;
-use CoreX\Tenancy\Membership\Transport\AccessTokenValidator;
-use CoreX\Tenancy\Membership\Transport\ActorRef;
-use CoreX\Tenancy\Membership\Transport\ActorType;
-use CoreX\Tenancy\Membership\Transport\CentralProtocolViolation;
-use CoreX\Tenancy\Membership\Transport\CentralUnauthorized;
-use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
-use CoreX\Tenancy\Membership\Transport\MembershipQuery;
-use CoreX\Tenancy\Membership\Transport\MembershipReason;
-use CoreX\Tenancy\Membership\Transport\RevokeMembershipRequest;
-use CoreX\Tenancy\Membership\Transport\RevokeUncertain;
-use CoreX\Tenancy\Membership\Transport\StrictTransport;
+use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
+use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
+use CoreX\Tenancy\Membership\Exceptions\RevokeUncertain;
+use CoreX\Tenancy\Membership\Internal\Transport\AccessTokenValidator;
+use CoreX\Tenancy\Membership\Internal\Transport\MembershipQuery;
+use CoreX\Tenancy\Membership\Internal\Transport\RevokeMembershipRequest;
+use CoreX\Tenancy\Membership\Internal\Transport\StrictTransport;
 use CoreX\Tenancy\Tests\Support\Membership\FakeCentral;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use Illuminate\Http\Client\Request;

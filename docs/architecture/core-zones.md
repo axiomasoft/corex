@@ -210,11 +210,11 @@ P15.10 применил D88. Текущие имена:
 
 | Было | Стало |
 |:--|:--|
-| `CoreX\PubSub\*` | `CoreX\Messaging\*` |
+| `CoreX\PubSub\*` | `CoreX\Messaging\Internal\*` |
 | `CoreX\Audit\Contracts*`, `CoreX\Audit\Contracts\Auditable` | `CoreX\Audit\Contracts\*` |
 | `CoreX\Audit\Internal\AuditLog` | `CoreX\Audit\Internal\AuditLog` |
 | `CoreX\Views\*` | `CoreX\Panels\SavedViews\*` |
-| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Data\DataScopeAccessDecision` |
+| `CoreX\Data\Data\DataScopeAccessDecision` | `CoreX\Data\Data\DataScopeAccessDecision` |
 
 Публичные типы `final`, поэтому forwarding subclass неприменим. `class_alias` не вводится:
 он не даёт полного BC-сигнала Roave/PHPStan и запрещён D32.

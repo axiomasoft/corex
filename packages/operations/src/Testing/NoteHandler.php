@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Testing;
 
 use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;

@@ -2,6 +2,12 @@
 
 ## Unreleased — package identifier alignment
 
+### Changed
+
+- PLAN3.D57: implementation classes moved to `<Module>\Internal\…`, public types to module categories
+  (`Contracts|Data|Enums|Events|Exceptions`); see `docs/architecture/constitution.md` STR-003. Drain queues before
+  upgrading; stored `*_type` values holding an old model FQCN no longer resolve (no aliases, PLAN3.D01).
+
 - Breaking before 1.0: Move module configuration into `corex.modules` within `config/corex.php`; publish it through `corex-config`, combine kernel migration tags, and rename the PubSub prune command to `corex:messaging:prune-pubsub`. Module cache identifiers use `corex.modules`.
 
 ## Unreleased

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Sprint\Data;
 
-use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 
 final readonly class SprintReference
 {

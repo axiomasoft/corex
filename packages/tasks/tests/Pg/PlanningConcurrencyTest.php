@@ -13,7 +13,7 @@ use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Models\Task;
 use CoreX\Tasks\Time\Data\TimeLogDraft;
 use CoreX\Tasks\Time\Enums\TimeLogSource;
-use CoreX\Tasks\Time\Models\TimeLog;
+use CoreX\Tasks\Time\Internal\Models\TimeLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;

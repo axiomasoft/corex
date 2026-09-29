@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Extend;
 
+use CoreX\Modules\Contracts\Extender;
+
 /**
  * 2. A field/relation attached to ANOTHER module's entity. Storage goes
  * through an external attributes package — this only declares the shape;

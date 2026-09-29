@@ -11,7 +11,7 @@ use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Pagination\Data\CursorPage;

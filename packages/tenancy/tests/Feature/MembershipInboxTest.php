@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Membership\Inbox\DurableInbox;
-use CoreX\Tenancy\Membership\Refresh\RefreshCoordinator;
-use CoreX\Tenancy\Membership\Transport\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
+use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
+use CoreX\Tenancy\Membership\Internal\Refresh\RefreshCoordinator;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\InboxFixture;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use Illuminate\Support\Facades\DB;

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Matrix\ScopeMapVersion;
-use CoreX\Access\Support\AuthOptions;
+use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
