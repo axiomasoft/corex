@@ -99,16 +99,17 @@
             "packages/custom-fields/tests/helpers.php"
         ]
     },
-    "repositories": {
-        "0": {
+    "repositories": [
+        {
             "type": "path",
             "url": "packages/*"
         },
-        "products": {
+        {
             "type": "path",
             "url": "products/*"
         },
-        "azguard": {
+        {
+            "name": "azguard",
             "type": "package",
             "package": {
                 "name": "axioma-studio/azguard-core",
@@ -143,7 +144,7 @@
                 }
             }
         }
-    },
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {

@@ -1,0 +1,5 @@
+{
+  "error": "PLAN_RECONCILIATION_INCOMPLETE",
+  "stage": "delivery",
+  "detail": "FINAL_BEFORE_TERMINAL_FORBIDDEN: handoff title не коррелирует с terminal subject P02.3"
+}

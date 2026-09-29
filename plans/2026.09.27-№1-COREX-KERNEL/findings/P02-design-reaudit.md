@@ -1,0 +1,36 @@
+# PLAN3 — повторный аудит дизайна P02 после D46
+
+Дата: 2026-09-28. Аудитор: `codex/gpt-6-astra/xhigh`, отдельная сессия от автора исправлений
+`codex/gpt-6-sol/high`; фактический маршрут подтверждён [route.json](../artifacts/P02-design-reaudit/route.json).
+
+**Вердикт: GREEN** — A1–A4 устранены; новых замечаний в проверенной дельте нет.
+Fingerprint: `6805482aa5286fa292a2a8154ac7fff084ef811e3dacd8c555f5751c87376af8`.
+Аудит принимает дизайн P00–P02; исполнение и закрытие P02 этим результатом не подтверждаются.
+
+| Замечание | Независимая проверка | Результат |
+|:--|:--|:--|
+| A1: ссылки на config-файлы | Повтор изолированной проверки пяти `mergeConfigFrom` настоящим Laravel; оба гейта отвергают возврат старого пути. Дополнительно преобразованы в памяти полные реальные providers, включая publish-источники и назначения. | Исправлено |
+| A2: root classmap | Composer dev-autoload проходит с новым путём и падает со старым. Дополнительно проверены все 16 реальных root classmap/files после literal pass и проекции манифеста: цели существуют в рассчитанном дереве, повтор проекции ничего не меняет. | Исправлено |
+| A3: исчезающий Required Read | Проверены перенос config в fixture и реальные Task bundle models P02.3/P02.4. Required Reads связывает существующую карту, Implementation Rules требует destination после P02.3; старого пути в bundle нет. | Исправлено |
+| A4: blanket diff Golden | Изменение кода сьюта проходит; изменение baseline или rename-map отклоняется. D46, item Validation, dossier и examples согласованы. В текущем frozen baseline отсутствуют старые identifier-токены, которые мог бы затронуть P02.4. | Исправлено |
+
+Доказательства: [check-results.json](../artifacts/P02-design-reaudit/check-results.json),
+[check-boundaries.py](../artifacts/P02-design-reaudit/check-boundaries.py),
+[boundary-results.json](../artifacts/P02-design-reaudit/boundary-results.json).
+Все изменения fixture изолированы временными git-каталогами; продуктовые файлы проверялись только чтением.
+
+Покрытие всего finished-дизайна: 3 фазы, 11 items, 7 строк execution-sheet; строгие проверки Task Routing,
+supporting artifacts и execution-sheet успешны. Девять неизменённых item-spec совпадают по SHA-256
+с [предыдущим аудитом](P02-design-audit.md), включая семь GREEN items P00–P01.
+Изменены только P02.3/P02.4 и связанный дизайн; порядок P02.1 → P02.2 → P02.3 → P02.4 и маршруты сохранены.
+Повторное исполнение неизменённых проверок P00/P01 не требовалось.
+См. [coverage.json](../artifacts/P02-design-reaudit/coverage.json) и
+[validation.json](../artifacts/P02-design-reaudit/validation.json).
+
+Новых внешних предпосылок D46 не добавляет: использованы локальные исходники и сохранённые E1/captures.
+Полный перенос с Rector, package suite и PostgreSQL остаются обязательными при исполнении по runbook;
+пять fixture-configs не являются проверкой полного boot всех пакетов.
+
+**Следующий шаг:** закрыть O-3 (hosted CI P01 GREEN либо отдельное решение владельца), затем B02-A:
+`task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2`, `implementation/high`, full review по execution-sheet.
+Прежний ATTENTION и доказательства ремонта сохранены. Продукт и исходный дизайн в этом аудите не изменялись.

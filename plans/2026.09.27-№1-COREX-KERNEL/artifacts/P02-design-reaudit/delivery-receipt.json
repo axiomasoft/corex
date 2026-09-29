@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "dfcd5b8456de0ba5881fcc087c79a4e34e37e501",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:3b841c8ebb7d2734919da4b094e943ff09e09c9c4efddba12e5d648d2cd19222",
+    "plan": "sha256:98b847e13f763ef8b325ede254e6498fd3e7faf1be0e684f587bd8ce1722c756",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "waiting: O-3; condition=hosted CI P01 GREEN либо отдельное решение владельца; target=run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "O-3: hosted CI P01 GREEN или отдельное решение владельца до старта P02.1. Текущая сессия не исполняет P02 и не подтверждает hosted CI. Полный transfer dry-run и product/package gates остаются в execution runbook.",
+    "remaining": "Закрыть O-3, затем выполнить B02-A (P02.1 → P02.2) по execution-sheet: executor codex/gpt-6-sol/high, reviewer cursor/grok-4.7/high. P02.3 и P02.4 следуют по зависимостям; полный dry-run и product/package gates выполняются при исполнении."
+  },
+  "recommendation": "**Next:** waiting: O-3; condition=hosted CI P01 GREEN либо отдельное решение владельца; target=run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B02-A |\n| Model | implementation |\n| Thinking | high |\n| Context | continue-root |\n\nПосле закрытия O-3, по отдельному запуску владельца в Codex:\n\n```text\n$ task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2\n```",
+  "route": {
+    "batch": "B02-A",
+    "command": null,
+    "context": "continue-root",
+    "model": "implementation",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

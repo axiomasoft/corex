@@ -1,0 +1,27 @@
+{
+  "schema_version": "p02-phase-audit-checks/v1",
+  "run_id": "c3e1a9b74d0f6e82a15c4b9078d3f6a1e0c9b27d54a8f1e6c3b0d9a7f4e2c815",
+  "candidate_fingerprint": "8a70cb68e2473960610ffc474d5e1498f966d86a214ac806a5691f35d6e159f5",
+  "product_commit": "b335462447ce8201988694e1b36ace4318cab59f",
+  "observed_head": "74aaf55ccf469a65f31785bd8c3088b06286bd11",
+  "product_delta_vs_product_commit": ["composer.json", "composer.lock"],
+  "rerun": {
+    "p02_transfer_verify": "verify: 0 problems",
+    "p02_transfer_seams": "seams: 0 unresolved (0 scaffold-owned, 0 blocking)",
+    "p02_identifiers_check": "identifiers check: 0 remaining",
+    "rename_completeness": "rename-completeness OK: 528 tokens, 7267 files, sections classes,namespaces,packages,paths,identifiers",
+    "ownership_strict": "ownership OK: 524 identifiers, 0 baselined",
+    "ownership_baseline_violations": 0,
+    "manifests": "manifests OK: 22 roots",
+    "corex_api_php": "absent",
+    "p15_rename_completeness": "absent",
+    "old_config_basenames": "absent",
+    "tracked_files_under_packages_modules": 0
+  },
+  "reused": {
+    "validation_summary": "artifacts/P02.4-execution/validation-summary.json",
+    "golden_passed": 4,
+    "golden_rebaseline": false,
+    "hosted_ci": "deferred-by-D47"
+  }
+}

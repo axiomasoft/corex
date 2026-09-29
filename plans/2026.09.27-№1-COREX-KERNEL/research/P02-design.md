@@ -4,6 +4,8 @@
 разделы config, гейт полноты); входные нормы — D01, D02, D04, D12, D15, D25–D35, glossary `research/03-glossary.md`.
 Примеры — `artifacts/P02-design/examples.md`; факты — `artifacts/P02-design/facts/README.md` (F1–F12); скрипты —
 `artifacts/P02-design/scripts/`; внешние факты — `research/P02-design-rag.md` (E1).
+Ремонт дизайна A1–A4 принят по запросу владельца «исправляй в этой сессии»: D46;
+доказательства — `artifacts/P02-design-remediation/{check.py,results.json}`. Продуктовая фаза не исполнялась.
 
 Обозначения: `PLAN=plans/2026.09.27-№1-COREX-KERNEL`, `D=$PLAN/artifacts/P02-design`, `CM=$PLAN/artifacts/P00-design/scripts/check-maps.py`.
 Все PHP-команды — через `scripts/php84`; PG — `PGSQL_PORT=5432`.
@@ -36,7 +38,8 @@
 `artifacts/P02-design/facts/README.md` F1–F12 (команда воспроизведения + результат). Главное:
 - F2/F3: 136 швов — P02.1 47, P02.2 71 блокирующих + 18 `TestCase` (снимает P02.3); `p02-transfer.py seams` считает остаток.
 - F4/F5: план переноса без конфликтов (795 классов, 510 PHP-переносов, 744 namespace, 0 цепочек); сухой прогон без Rector — 15 с, `verify: 0 problems`.
-- F6/F7: 8509 вхождений старых имён (identifiers 341) — эталон «до» для гейта полноты.
+- F6/F7: 8509 вхождений старых имён (identifiers 341) — исторический замер до A1;
+  после распознавания basename config-файлов `p02-identifiers.py check` на том же продуктовом дереве показывает 353 (ещё 12 путей).
 - F8: ownership 122 baselined → цель `--strict` 0.
 - F12: hosted CI на `d2e84a1` не стартует из-за billing (O-3 открыт).
 
@@ -94,17 +97,25 @@
 3. **Сухой прогон:** `git worktree add --detach ../corex-p02-dry HEAD`; в нём `scripts/php84 composer install` (P01 runbook: staging провайдеров stancl) → `mkdir -p build/p02 && python3 $D/scripts/p02-transfer.py apply` → `apply: done`; затем шаги 4–7 там же. Ожидание: все проверки §4.5 зелёные, `golden` 4 passed без rebaseline. Расхождение → исправить **инструмент или карту** в основном дереве (не результат), повторить сухой прогон. Rector-проверка E1: `grep -rn "CoreX\\\\Api\\\\" packages products --include=*.php | head` пусто; `find packages products -name '*.php' -print0 | xargs -0 -n200 -P8 scripts/php84 php -l | grep -v "^No syntax"` пусто.
 4. `python3 $D/scripts/p02-transfer.py verify` → `verify: 0 problems`.
 5. Scaffold tools/webhooks (examples §4.1), корневой composer (§4.2), merge-neon проверить (§4.3), `find packages -type d -empty -delete`.
-6. `scripts/php84 composer update 'axiomasoft/*' flex/crm --no-scripts` (+ cleanup stancl staging) → lock без `corex/`; `scripts/php84 composer dump-autoload` без `Ambiguous class resolution`; `scripts/php84 vendor/bin/pint` (только изменённые файлы).
+   `manifests()` проецирует root `classmap/files`: `packages/modules/tests` → `packages/core/tests/Modules`,
+   paths attributes → custom-fields, crm → products/flex-crm; `verify` проверяет существование всех root autoload-путей.
+6. `scripts/php84 composer update 'axiomasoft/*' flex/crm --no-scripts` (+ cleanup stancl staging) → lock без `corex/`; `scripts/php84 composer dump-autoload --dev` без `Ambiguous class resolution`, exit 0; `scripts/php84 vendor/bin/pint` (только изменённые файлы).
 7. Инструменты, итерирующие корни: `manifest-check.py` (22 корня, `products/*`), `phpstan-packages.sh`, `dependency-analyser.sh`, `quality-ceiling-guard.php` (glob products), `ownership-map.json` rekey (§4.5 examples), baseline-проекция, `scripts/ratchet-successors.json` + anti-weakening (§4.4); PHPStan baseline: `scripts/phpstan-packages.sh --generate-baseline <dir>` для core, operations, tools, webhooks, custom-fields, flex-crm → `php scripts/quality-ceiling-guard.php --tighten` → `ceilings OK`; группы D44 п.6 не растут.
 8. CI: job «API package» → «Operations package»; копии для tools, webhooks; job crm → `products/flex-crm`; modules-шаги — в core; dependabot `composer` directories — `/packages/*` + `/products/*`.
 9. Сравнить `git diff --stat` сухого прогона и основного дерева (одинаковый набор файлов) → полный стек (§4.5) + `php scripts/rename-completeness-gate.php --sections=classes,namespaces,packages,paths` OK.
+   `git diff --exit-code -- tests/Golden/baseline/ tests/Golden/rename-map.json` → exit 0.
+   Необходимые FQCN-правки `GoldenTestCase`/`Support` разрешены; изменённый frozen JSON или rename-map → exit 1 (после отката → 0).
 
 ### 4.4 P02.4 — идентификаторы и гейты
 
-1. `python3 $D/scripts/p02-identifiers.py apply` → `identifiers: 60 rules, <N> files` + 2 строки `manual:` (`corex-modules`, `corex-modules-config`).
+1. Прочитать `packages/core/config/corex-modules.php` — результат P02.3 (старого `packages/modules/` уже нет).
+   `python3 $D/scripts/p02-identifiers.py apply` → `identifiers: 60 rules, <N> files` + 2 строки `manual:` (`corex-modules`, `corex-modules-config`).
+   Пять config-ренеймов также заменяют basename `.php` в provider/publish/doc путях; похожие имена вне карты не меняются (examples §5.4).
 2. Manual: раздел `corex.modules` (examples §5.1); удалить `corex-modules-config` publish; объединить теги (`corex-migrations[-tenant]`, `corex-operations-migrations-tenant`); проверить, что `TENANCY_*` переименованы только в значениях `env()` `tenancy.php`, `.env.example`, `phpunit.xml`, workflows, docs.
 3. `upstream_config` (examples §5.2) + негатив.
-4. `python3 $D/scripts/p02-identifiers.py check` → `0 remaining`; `php scripts/rename-completeness-gate.php` → OK (все секции); негатив examples §5.3.
+4. `python3 $D/scripts/p02-identifiers.py check` → `0 remaining`; `php scripts/rename-completeness-gate.php` → OK (все секции); негатив examples §5.3/§5.4.
+   У всех пяти providers источники `mergeConfigFrom`/`publishes` существуют, affected boot-тесты зелёные;
+   возврат только старого `/config/corex-auth.php` → оба гейта exit 1, откат → 0.
 5. `php scripts/ownership-gate.php --write-baseline` → baseline `[]`; `php scripts/ownership-gate.php --strict` → `0 baselined`, exit 0; composer-скрипт `ownership-gate` → `--strict`.
 6. Удалить P15-гейт (D45 п.6): `git rm scripts/p15-rename-completeness-gate.php scripts/p15-rename-completeness-manifest.json`, composer-скрипт `p15-…` → `rename-completeness`; CI шаг гейта.
 7. Docs: `packages/*/README.md` (установка `composer require axiomasoft/corex-<name>`, config/env/tags/команды), `docs-public/` страницы установки, `docs/architecture/` (конституция PKG/CFG — имена), корневой README (таблица пакетов из glossary); `composer package-docs-gate` exit 0.

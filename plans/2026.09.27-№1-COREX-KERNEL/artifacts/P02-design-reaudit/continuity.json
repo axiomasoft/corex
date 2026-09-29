@@ -1,0 +1,33 @@
+{
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "6805482aa5286fa292a2a8154ac7fff084ef811e3dacd8c555f5751c87376af8",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "scope-complete",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "plans/2026.09.27-№1-COREX-KERNEL/findings/P02-design-reaudit.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "evidence": [
+      "batch:6805482aa5286fa292a2a8154ac7fff084ef811e3dacd8c555f5751c87376af8",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:plans/2026.09.27-№1-COREX-KERNEL/findings/P02-design-reaudit.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "next_exact": "waiting: O-3; condition=hosted CI P01 GREEN либо отдельное решение владельца; target=run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2"
+}

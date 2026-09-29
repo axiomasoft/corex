@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: b6f5136f3fd8f82ab44ad4ec5f666ef656fa609848b7d1ef9a94e2c24de820e7
+inputs_sha256: a669df84222f8b6df43b5745ab00205bc043c6818b34a77710be7403b8bac864
 generated_by: task plan-views status
 -->
 
@@ -148,6 +148,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · b335462; 60 rules/93 files; ownership524/0, rename528; SQLite832/PG240/pkg852/Golden4; literal lines:none; mutation34; review: cursor/grok-4.6 GREEN. Proof: artifacts/P02.4-execution/completion.md. D47 CI deferred.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · P02 local closure: all four items GREEN, direct-close allow; no phase audit admitted. Proof: artifacts/P02.4-execution/phase-close-admission.json. Hosted CI owner-deferred under D47. |
+| 2026-09-29 | cursor/grok-4.7 | plan-audit · in-progress · P02 phase audit reserved. Candidate 8a70cb68 matches grant. Product read-only. D47 hosted CI not certified. Pinned route frontier/xhigh. |
+| 2026-09-29 | cursor/grok-4.7 | plan-audit · audit-green · GREEN: P02.1–P02.4 contracts hold after moves and renames. Hosted CI stays deferred under D47. findings/P02-phase-audit.md. Product unchanged. |
 
 ## Owner Gates
 

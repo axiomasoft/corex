@@ -1,0 +1,510 @@
+{
+  "items": [
+    {
+      "item": "P00.1",
+      "spec_sha256": "a59aa70e13c7ee489cc306baddecd0a97ddefd97cb2925edfc4032dc50cfbbfd",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P00.2",
+      "spec_sha256": "4d534027de8a1f7255b2d5dd67c861358375a475da3eae40ae409f252c29a27c",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P00.3",
+      "spec_sha256": "6dfa795c4f362976a9ee2aac3a724074a03d78d1802d19782d332364003d3a02",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P01.1",
+      "spec_sha256": "456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P01.2",
+      "spec_sha256": "f696fecfab456b00e02e3d3fd0cd8a3073bab7ecb00193586547115c31967975",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P01.3",
+      "spec_sha256": "399200a914096337f59c5781a6cdf2413d3780fb7ff2b6f87f96869134f7dbfb",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P01.4",
+      "spec_sha256": "d700015b793c1c19c46161b88538377bcdca8799df68143cec4b0d59111f7b76",
+      "closed_green": true,
+      "terminal_spec_matches": true,
+      "result": "closed-green"
+    },
+    {
+      "item": "P02.1",
+      "spec_sha256": "eba04f64c20f98f5a086d05130aa9f865d957d7da420dafbdd9bff8d92ee0e60",
+      "closed_green": false,
+      "terminal_spec_matches": null,
+      "result": "not-started"
+    },
+    {
+      "item": "P02.2",
+      "spec_sha256": "ca61c9647b91974a44cc7521a48626d1b0a0c2d9b4ca16ae1348f0659cbfe700",
+      "closed_green": false,
+      "terminal_spec_matches": null,
+      "result": "not-started"
+    },
+    {
+      "item": "P02.3",
+      "spec_sha256": "708f7a6d6a422731b8db51dce48b2d893aa5a76fa30b3e62a249f54d2c0b0a07",
+      "closed_green": false,
+      "terminal_spec_matches": null,
+      "result": "not-started"
+    },
+    {
+      "item": "P02.4",
+      "spec_sha256": "948845b56e6ea9aa1ddab9a14e0dcacb97e4a097d8854a7c61594d2ce7517d43",
+      "closed_green": false,
+      "terminal_spec_matches": null,
+      "result": "not-started"
+    }
+  ],
+  "routing": {
+    "items": {
+      "P00.1": {
+        "item_id": "P00.1",
+        "batch": "B00-A",
+        "batch_key": "B00-A",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 131,
+        "recommended": true
+      },
+      "P00.2": {
+        "item_id": "P00.2",
+        "batch": "B00-A",
+        "batch_key": "B00-A",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 132,
+        "recommended": true
+      },
+      "P00.3": {
+        "item_id": "P00.3",
+        "batch": "B00-A",
+        "batch_key": "B00-A",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "light",
+        "line": 133,
+        "recommended": true
+      },
+      "P01.1": {
+        "item_id": "P01.1",
+        "batch": "solo",
+        "batch_key": "solo:P01.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 134,
+        "recommended": true
+      },
+      "P01.2": {
+        "item_id": "P01.2",
+        "batch": "B01-B",
+        "batch_key": "B01-B",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 135,
+        "recommended": true
+      },
+      "P01.3": {
+        "item_id": "P01.3",
+        "batch": "B01-B",
+        "batch_key": "B01-B",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 136,
+        "recommended": true
+      },
+      "P01.4": {
+        "item_id": "P01.4",
+        "batch": "solo",
+        "batch_key": "solo:P01.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 137,
+        "recommended": true
+      },
+      "P02.1": {
+        "item_id": "P02.1",
+        "batch": "B02-A",
+        "batch_key": "B02-A",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 138,
+        "recommended": true
+      },
+      "P02.2": {
+        "item_id": "P02.2",
+        "batch": "B02-A",
+        "batch_key": "B02-A",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 139,
+        "recommended": true
+      },
+      "P02.3": {
+        "item_id": "P02.3",
+        "batch": "solo",
+        "batch_key": "solo:P02.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 140,
+        "recommended": true
+      },
+      "P02.4": {
+        "item_id": "P02.4",
+        "batch": "solo",
+        "batch_key": "solo:P02.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "declared_exec": "manual",
+        "review": "full",
+        "line": 141,
+        "recommended": true
+      }
+    },
+    "batches": {
+      "B00-A": {
+        "batch_id": "B00-A",
+        "items": [
+          "P00.1",
+          "P00.2",
+          "P00.3"
+        ],
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "45fadeba6cae2896c0c81b56dfedcd8f2f14babc43f8a476dacc8f13bcc68dce",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "solo:P01.1": {
+        "batch_id": "solo",
+        "items": [
+          "P01.1"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "456b94f513730657c9e8336d6880664b0b872cff9809bf710b1bf3e5c61faf6f",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "B01-B": {
+        "batch_id": "B01-B",
+        "items": [
+          "P01.2",
+          "P01.3"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "6fb50840ffe36ff6ef18bbd959da0adbdde1a25ec13fc060cd01e905585dfca1",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "solo:P01.4": {
+        "batch_id": "solo",
+        "items": [
+          "P01.4"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "d700015b793c1c19c46161b88538377bcdca8799df68143cec4b0d59111f7b76",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "B02-A": {
+        "batch_id": "B02-A",
+        "items": [
+          "P02.1",
+          "P02.2"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "1110a3b333007b399f08f2de13ccf493e996f2ff16b332648b9822601d274b27",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "solo:P02.3": {
+        "batch_id": "solo",
+        "items": [
+          "P02.3"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "708f7a6d6a422731b8db51dce48b2d893aa5a76fa30b3e62a249f54d2c0b0a07",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      },
+      "solo:P02.4": {
+        "batch_id": "solo",
+        "items": [
+          "P02.4"
+        ],
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "exec": "manual",
+        "review": "full",
+        "routing_digest": "40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+        "spec_digest": "948845b56e6ea9aa1ddab9a14e0dcacb97e4a097d8854a7c61594d2ce7517d43",
+        "handoff_digest": "7b9a05e791fbe615aa94c26e9bf7ffee61f35880fd2a83573599b7051daa854b",
+        "recommended": true
+      }
+    },
+    "routing_digest": "8e070484a1accf39d8ea97454a9cc964ddc174bebfc6bb9720b3dcc18f6895e0"
+  },
+  "execution_sheet": {
+    "contract": "execution-sheet/v1",
+    "path": "roadmap.md",
+    "rows": [
+      {
+        "batch_id": "B00-A",
+        "items": [
+          "P00.1",
+          "P00.2",
+          "P00.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B01-B",
+        "items": [
+          "P01.2",
+          "P01.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B02-A",
+        "items": [
+          "P02.1",
+          "P02.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      }
+    ],
+    "errors": [],
+    "complete": true
+  },
+  "supporting_artifacts": {
+    "contract": "self-contained-design/v1",
+    "phases": {
+      "P00": {
+        "normative": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md"
+        ],
+        "capture": "artifacts/P00-design-rag/README.md",
+        "present": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md",
+          "artifacts/P00-design-rag/README.md"
+        ]
+      },
+      "P01": {
+        "normative": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md"
+        ],
+        "capture": "artifacts/P01-design-rag/README.md",
+        "present": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md",
+          "artifacts/P01-design-rag/README.md"
+        ]
+      },
+      "P02": {
+        "normative": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md"
+        ],
+        "capture": "artifacts/P02-design-rag/README.md",
+        "present": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md",
+          "artifacts/P02-design-rag/README.md"
+        ]
+      }
+    },
+    "errors": [],
+    "complete": true
+  }
+}

@@ -328,6 +328,27 @@ Third-party `require` — объединение требований operations
 `scripts/php84 composer update 'axiomasoft/*' flex/crm --no-scripts` (+ staging провайдеров stancl по P01 runbook) →
 `composer.lock` без `corex/*`.
 
+`p02-transfer.py manifests()` проецирует root `autoload-dev.classmap/files` до Composer:
+
+```json
+{"before": {"classmap": ["packages/modules/tests"], "files": ["packages/attributes/tests/helpers.php"]},
+ "after": {"classmap": ["packages/core/tests/Modules"], "files": ["packages/custom-fields/tests/helpers.php"]}}
+```
+
+Остальные classmap-пути сохраняются; точные file-moves и directory-renames применяются один раз.
+`verify` проверяет существование root `autoload`/`autoload-dev` путей. Негатив: вернуть `packages/modules/tests`
+в root classmap → `verify` печатает `composer.json: missing autoload-dev path packages/modules/tests`, exit 1;
+`scripts/php84 composer dump-autoload --dev` exit 1. После возврата пути результата P02.3 → оба exit 0.
+
+Код `tests/Golden/` получает новые FQCN. Frozen-артефакты проверяются точной командой:
+
+```bash
+git diff --exit-code -- tests/Golden/baseline/ tests/Golden/rename-map.json
+```
+
+Правка `GoldenSnapshot.php`/`GoldenTestCase.php` по карте → exit 0; изменение одного frozen JSON или rename-map → exit 1;
+откат → exit 0. `composer golden` по-прежнему обязан показать 4 passed.
+
 ### 4.3 Kernel PHPStan extension (merge-neon)
 
 Итог `packages/core/extension.neon` = содержимое `packages/modules/extension.neon` + в `services:` добавлены два
@@ -407,3 +428,34 @@ php scripts/ownership-gate.php --strict           → ownership OK: <I> identifi
 
 CI (`.github/workflows/ci.yml`, job рядом с ownership): шаг `php scripts/rename-completeness-gate.php`; composer-скрипт
 `rename-completeness` вместо `p15-rename-completeness-gate`; `ownership` → `--strict`.
+
+### 5.4 Config-пути: точный basename, включая после `/`
+
+`p02-identifiers.py apply` переименовывает пять config-файлов и все точные ссылки на их basename:
+
+```php
+// before
+$this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');
+$this->publishes([__DIR__.'/../config/corex-auth.php' => config_path('corex-auth.php')], 'corex-auth-config');
+// after
+$this->mergeConfigFrom(__DIR__.'/../config/corex-access.php', 'corex-access');
+$this->publishes([__DIR__.'/../config/corex-access.php' => config_path('corex-access.php')], 'corex-access-config');
+```
+
+То же правило для attributes → custom-fields, api → operations, intl-search → search-intl,
+task-recurrence → tasks-workflow. Базовые config-имена читаются из `identifier-map.tsv`; каталог `/config/` не меняется.
+`prefix-corex-auth.php` и `corex-auth.php.bak` вне точного basename-правила. Ключ `tenancy` не затрагивается.
+
+После `git mv` источник каждого `mergeConfigFrom`/`publishes` существует, provider boot зелёный.
+Негатив: вернуть только `/config/corex-auth.php` в access provider при ключе `corex-access` →
+`p02-identifiers.py check`: `corex-auth.php`, exit 1; PHP-гейт `--sections=identifiers`:
+`identifiers corex-auth.php`, `FAIL: 1 occurrence(s)`, exit 1. После отката оба exit 0.
+
+Дизайн-проверка A1–A4 с временными git-репозиториями, настоящим Laravel `mergeConfigFrom`, Composer и негативами:
+
+```bash
+python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design-remediation/check.py
+```
+
+Ожидание: JSON `result: passed`, exit 0; доказательство — `artifacts/P02-design-remediation/results.json`.
+Она проверяет исправленные инструменты; полный dry-run P02.3 и affected suite при исполнении сохраняются.

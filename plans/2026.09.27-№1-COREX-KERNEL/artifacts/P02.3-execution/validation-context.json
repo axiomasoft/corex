@@ -1,0 +1,7 @@
+{
+  "schema_version": "validation-context/v1",
+  "spec_sha256": "7206572b05b7bfd8622e0f8983fdeeca15c8c9dc32bbe09cdae8166502c29bfb",
+  "head": "90c3deea36cdd7d4b4e799904f5c53366cbe8950",
+  "tree": "a3d562bf201264b2561684f7aba3155450cae5f9a8dfb5b2e7e3041da75be738",
+  "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8"
+}

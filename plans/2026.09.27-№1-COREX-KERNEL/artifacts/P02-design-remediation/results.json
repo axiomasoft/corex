@@ -1,0 +1,85 @@
+{
+  "fixture_isolation": "temporary git directories; product files read-only",
+  "result": "passed",
+  "findings": {
+    "A1": {
+      "apply": {
+        "exit": 0,
+        "stdout": "manual: config corex-modules -> corex.modules (section: file merged into config/corex.php key modules; mergeConfigFrom removed (D25/D45))\nmanual: tag corex-modules-config -> - (removed: published by corex-config (section corex.modules))\nidentifiers: 60 rules, 5 files\n",
+        "stderr": ""
+      },
+      "check": {
+        "exit": 0,
+        "stdout": "identifiers check: 0 remaining\n",
+        "stderr": ""
+      },
+      "gate": {
+        "exit": 0,
+        "stdout": "rename-completeness OK: 68 tokens, 19 files, sections identifiers\n",
+        "stderr": ""
+      },
+      "boot": {
+        "exit": 0,
+        "stdout": "providers boot OK: 5 configs\n",
+        "stderr": ""
+      },
+      "negative_check": {
+        "exit": 1,
+        "stdout": "packages/access/src/Provider.php:4 corex-auth.php\nidentifiers check: 1 remaining\n",
+        "stderr": ""
+      },
+      "negative_gate": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "packages/access/src/Provider.php:4 identifiers corex-auth.php\nrename-completeness FAIL: 1 occurrence(s)\n"
+      },
+      "exact_filename_boundaries": "passed"
+    },
+    "A2": {
+      "autoload_dev": {
+        "classmap": [
+          "packages/core/tests/Modules",
+          "tests/Support"
+        ],
+        "files": [
+          "packages/custom-fields/tests/helpers.php"
+        ]
+      },
+      "negative_paths": [
+        "composer.json: missing autoload-dev path packages/modules/tests"
+      ],
+      "negative_composer": {
+        "exit": 1,
+        "stdout": "Generating autoload files\n",
+        "stderr": "Composer could not detect the root package (audit/classmap-fixture) version, defaulting to '1.0.0'. See https://getcomposer.org/root-version\n\nIn ClassMapGenerator.php line 131:\n                                                                               \n  Could not scan for classes inside \"packages/modules/tests\" which does not a  \n  ppear to be a file nor a folder                                              \n                                                                               \n\ndump-autoload [-o|--optimize] [-a|--classmap-authoritative] [--apcu] [--apcu-prefix APCU-PREFIX] [--dry-run] [--dev] [--no-dev] [--ignore-platform-req IGNORE-PLATFORM-REQ] [--ignore-platform-reqs] [--strict-psr] [--strict-ambiguous]\n\n"
+      },
+      "composer": {
+        "exit": 0,
+        "stdout": "Generating autoload files\nGenerated autoload files\n",
+        "stderr": "Composer could not detect the root package (audit/classmap-fixture) version, defaulting to '1.0.0'. See https://getcomposer.org/root-version\n"
+      }
+    },
+    "A3": {
+      "required_read": "packages/core/config/corex-modules.php",
+      "producer": "P02.3",
+      "post_move_read": "passed"
+    },
+    "A4": {
+      "projected_code_allowed": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "negative_baseline": {
+        "exit": 1,
+        "stdout": "diff --git a/tests/Golden/baseline/probe.json b/tests/Golden/baseline/probe.json\nindex 0967ef4..d6b481c 100644\n--- a/tests/Golden/baseline/probe.json\n+++ b/tests/Golden/baseline/probe.json\n@@ -1 +1 @@\n-{}\n+{\"drift\": true}\n",
+        "stderr": ""
+      },
+      "negative_rename_map": {
+        "exit": 1,
+        "stdout": "diff --git a/tests/Golden/rename-map.json b/tests/Golden/rename-map.json\nindex 0967ef4..d6b481c 100644\n--- a/tests/Golden/rename-map.json\n+++ b/tests/Golden/rename-map.json\n@@ -1 +1 @@\n-{}\n+{\"drift\": true}\n",
+        "stderr": ""
+      }
+    }
+  }
+}

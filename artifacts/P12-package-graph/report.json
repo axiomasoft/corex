@@ -1,22 +1,7 @@
 {
     "schema": "package-graph-report/1",
-    "generated_at": "2026-09-28T16:25:13+00:00",
-    "legacy_namespace_splits": [
-        {
-            "prefix": "CoreX\\Tenancy\\",
-            "packages": [
-                "axiomasoft/corex",
-                "axiomasoft/corex-tenancy"
-            ],
-            "adr": "ADR-CORE-REDUCTION",
-            "expires_when": "axiomasoft/corex reduction lands; core defines zero classes under CoreX\\Tenancy\\",
-            "reason": "Host defines 16 classes under CoreX\\Tenancy\\; split is a named overdue exception, not silent pass (design §2.3).",
-            "class_counts": {
-                "axiomasoft/corex": 18,
-                "axiomasoft/corex-tenancy": 189
-            }
-        }
-    ],
+    "generated_at": "2026-09-29T06:56:37+00:00",
+    "legacy_namespace_splits": [],
     "reservations": [
         {
             "prefix": "CoreX\\SearchMeilisearch\\",
@@ -25,7 +10,7 @@
             "reason": "host-reserved adapter namespace; host defines zero classes under the prefix",
             "class_counts": {
                 "axiomasoft/corex-search": 0,
-                "axiomasoft/corex-search-meilisearch": 4
+                "axiomasoft/corex-search-meilisearch": 5
             }
         }
     ],
@@ -73,7 +58,7 @@
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "axiomasoft/corex-operations",
+            "from": "axiomasoft/corex-tools",
             "to": "axiomasoft/corex",
             "import_file": "packages/tools/src/Internal/ToolRequestContext.php",
             "adr": "P3.3",
@@ -204,9 +189,9 @@
             "from": "axiomasoft/corex-tasks-workflow",
             "to": "axiomasoft/corex",
             "import_file": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
-            "adr": "P4.2",
-            "expires_when": "TenantContextRestorer promoted to core public-api",
-            "reason": "Materializer restores tenant context via TenantContextRestorer (P4.4)."
+            "adr": "P3.3",
+            "expires_when": "import removed or target symbol promoted to public-api",
+            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
             "from": "axiomasoft/corex-custom-fields",
@@ -377,158 +362,6 @@
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
         },
         {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Audit/AuditCapabilityWiring.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Commands/ExplainModuleCommand.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Compiler/RegistryCompiler.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Contracts/EntityRegistry.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Contracts/ModuleActivationGate.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Contracts/ModuleRegistry.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Contracts/ModuleStateReader.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Contracts/RegistryIntrospection.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Events/ManifestListeners.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Gate/AllowAllActivationGate.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Internal/ReadRegistryIntrospection.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Lifecycle/DatabaseModuleStateReader.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Definition/ModuleRuntimeContext.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/ModulesServiceProvider.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Registry/ArrayEntityRegistry.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Registry/ArrayModuleStateReader.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Registry/CompiledModuleRegistry.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/core/src/Modules/Settings/CompiledSettingDefaultsProvider.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
             "from": "axiomasoft/corex-notifications",
             "to": "axiomasoft/corex",
             "import_file": "packages/notifications/src/Inbox/Data/NotificationContext.php",
@@ -580,14 +413,6 @@
             "from": "axiomasoft/corex-panels",
             "to": "axiomasoft/corex",
             "import_file": "packages/panels/src/Data/PanelContext.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex-panels",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/panels/src/Internal/EntityViewSchemaProvider.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -916,14 +741,6 @@
             "from": "axiomasoft/corex-tasks-workflow",
             "to": "axiomasoft/corex",
             "import_file": "packages/tasks-workflow/src/Internal/ScopeConnectionGuard.php",
-            "adr": "P3.3",
-            "expires_when": "import removed or target symbol promoted to public-api",
-            "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
-        },
-        {
-            "from": "axiomasoft/corex-tasks-workflow",
-            "to": "axiomasoft/corex",
-            "import_file": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
@@ -1402,7 +1219,7 @@
         },
         {
             "from": "flex/crm",
-            "to": "axiomasoft/corex",
+            "to": "axiomasoft/corex-intl",
             "import_file": "products/flex-crm/src/Deal/Casts/DealAmount.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
@@ -1439,14 +1256,54 @@
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."
+        },
+        {
+            "from": "axiomasoft/corex-intl",
+            "to": "axiomasoft/corex",
+            "import_file": "packages/intl/src/IntlServiceProvider.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "axiomasoft/corex-operations",
+            "to": "axiomasoft/corex",
+            "import_file": "packages/operations/src/Definition/OperationSectionCompiler.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "axiomasoft/corex-tools",
+            "to": "axiomasoft/corex",
+            "import_file": "packages/tools/src/ToolSectionCompiler.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "axiomasoft/corex-panels",
+            "to": "axiomasoft/corex",
+            "import_file": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
+        },
+        {
+            "from": "axiomasoft/corex-search",
+            "to": "axiomasoft/corex",
+            "import_file": "packages/search/src/Testing/SearchFixtures.php",
+            "adr": "PLAN3.D49",
+            "expires_when": "P02.3 ownership transfer or P04 symbol API classification",
+            "reason": "Existing types used by the accepted P02 seam; exact composition file only"
         }
     ],
     "violations": [],
     "summary": {
-        "packages_scanned": 20,
-        "classes_indexed": 1182,
+        "packages_scanned": 21,
+        "classes_indexed": 1219,
         "violation_count": 0,
-        "legacy_split_count": 1,
+        "legacy_split_count": 0,
         "reservation_count": 1
     }
 }

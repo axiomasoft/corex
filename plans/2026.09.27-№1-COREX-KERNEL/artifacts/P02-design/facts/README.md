@@ -18,3 +18,8 @@ All commands run from the repository root. `PLAN=plans/2026.09.27-№1-COREX-KER
 | F12 | Hosted CI on `d2e84a1` | `gh run view 36445217833` | all jobs `failure` in 6 s: «recent account payments have failed or your spending limit needs to be increased» — billing, not code (O-3 open) |
 
 Files here: `seams.tsv` (F2), `extra-moves.tsv` (non-class files of merged/split packages), `identifier-map.tsv` (D45 п.1, 62 rows), `new-map-rows.tsv` (rows seam items add), `rename-completeness.preview.json` (F6 manifest; P02.3 regenerates the real one before `apply`).
+
+F6/F7 are the historical pre-A1 measurements. After D46, the same product tree yields
+`identifiers check: 353 remaining` (12 additional config-file paths); raw output is
+`artifacts/P02-design-remediation/identifier-baseline.log`. The old candidate and its RED reproductions
+remain under `artifacts/P02-design-audit/preimage/` and `reproduce.py`.

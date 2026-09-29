@@ -1,0 +1,59 @@
+{
+  "fixture_isolation": "temporary directories only; no product mutation",
+  "findings": {
+    "A1": {
+      "before": "$this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');",
+      "after": "$this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-access');",
+      "old_config_path_survives": true,
+      "identifier_apply": {
+        "exit": 0,
+        "stdout": "manual: config corex-modules -> corex.modules (section: file merged into config/corex.php key modules; mergeConfigFrom removed (D25/D45))\nmanual: tag corex-modules-config -> - (removed: published by corex-config (section corex.modules))\nidentifiers: 60 rules, 1 files\n",
+        "stderr": ""
+      },
+      "identifier_check": {
+        "exit": 0,
+        "stdout": "identifiers check: 0 remaining\n",
+        "stderr": ""
+      },
+      "completeness_gate": {
+        "exit": 0,
+        "stdout": "rename-completeness OK: 62 tokens, 14 files, sections identifiers\n",
+        "stderr": ""
+      }
+    },
+    "A2": {
+      "projected_classmap": [
+        "packages/modules/tests"
+      ],
+      "dump_autoload": {
+        "exit": 1,
+        "stdout": "Generating autoload files\n",
+        "stderr": "Composer could not detect the root package (audit/classmap-fixture) version, defaulting to '1.0.0'. See https://getcomposer.org/root-version\n\nIn ClassMapGenerator.php line 131:\n                                                                               \n  Could not scan for classes inside \"packages/modules/tests\" which does not a  \n  ppear to be a file nor a folder                                              \n                                                                               \n\ndump-autoload [-o|--optimize] [-a|--classmap-authoritative] [--apcu] [--apcu-prefix APCU-PREFIX] [--dry-run] [--dev] [--no-dev] [--ignore-platform-req IGNORE-PLATFORM-REQ] [--ignore-platform-reqs] [--strict-psr] [--strict-ambiguous]\n\n"
+      },
+      "root_manifests_writer_updates": "autoload-dev.psr-4 only; classmap remains unchanged"
+    },
+    "A3": {
+      "P02.3_move": [
+        "move",
+        "packages/modules/config/corex-modules.php",
+        "packages/core/config/corex-modules.php"
+      ],
+      "P02.4_required_read": "packages/modules/config/corex-modules.php",
+      "old_path_absent_after_git_mv": true
+    },
+    "A4": {
+      "changed_by_required_rector_rule": "tests/Golden/Support/GoldenSnapshot.php",
+      "rector": {
+        "exit": 0,
+        "stdout": "{\"tool\":\"rector\",\"result\":\"passed\",\"totals\":{\"changed_files\":1,\"errors\":0},\"changed_files\":[\"tests/Golden/Support/GoldenSnapshot.php\"]}\n",
+        "stderr": ""
+      },
+      "frozen_baseline_changed": false,
+      "required_validation": {
+        "exit": 1,
+        "stdout": "diff --git a/tests/Golden/Support/GoldenSnapshot.php b/tests/Golden/Support/GoldenSnapshot.php\nindex 1381f71..930af63 100644\n--- a/tests/Golden/Support/GoldenSnapshot.php\n+++ b/tests/Golden/Support/GoldenSnapshot.php\n@@ -228,7 +228,7 @@ final class GoldenSnapshot\n     {\n         $names = [];\n         foreach ($classes as $class) {\n-            if (is_subclass_of($class, DomainEvent::class) && ! (new ReflectionClass($class))->isAbstract()) {\n+            if (is_subclass_of($class, \\CoreX\\Messaging\\Events\\DomainEvent::class) && ! (new ReflectionClass($class))->isAbstract()) {\n                 $names[$class] = $class::name();\n             }\n         }\n",
+        "stderr": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,409 @@
+# P02 — примеры: скелеты, before/after, эталонные выходы
+
+Код ниже — в **текущей** раскладке (старые namespace, P02.1/P02.2); перенос P02.3 переименует его сам.
+Комментарии в продуктовом коде объясняют «почему», без ссылок на план (plan §2).
+
+## 1 P02.1 — швы ядра
+
+### 1.1 FieldCastRegistry (D27)
+
+`packages/modules/src/Contracts/FieldCastRegistry.php` (→ `CoreX\Modules\Contracts\FieldCastRegistry`):
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Modules\Contracts;
+
+/**
+ * Maps an Eloquent cast class to a registry field type, so packages teach the compiler
+ * about their casts without the kernel naming them.
+ */
+interface FieldCastRegistry
+{
+    /** @param class-string $castClass @param 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum' $type */
+    public function register(string $castClass, string $type): void;
+
+    /** Type for a cast declaration (`Class` or `Class:arguments`), null when unregistered. */
+    public function typeFor(string $cast): ?string;
+}
+```
+
+`packages/modules/src/Compiler/FieldCastMap.php` — `final class FieldCastMap implements FieldCastRegistry` (массив
+`class => type`; `typeFor()` отрезает `:arguments` через `strstr($cast, ':', true) ?: $cast`). Binding
+`$this->app->singleton(FieldCastRegistry::class, FieldCastMap::class)` в `ModulesServiceProvider::register()`.
+
+`RegistryCompiler` (before → after):
+
+```php
+// before
+use CoreX\Money\MoneyCast;
+public function __construct(private readonly CompilationValidator $validator = new CompilationValidator) {}
+    $cast === MoneyCast::class || str_starts_with($cast, MoneyCast::class.':') => 'money',
+
+// after
+public function __construct(
+    private readonly CompilationValidator $validator = new CompilationValidator,
+    private readonly FieldCastRegistry $casts = new FieldCastMap,
+    /** @var iterable<ManifestSectionCompiler> */
+    private readonly iterable $sections = [],
+) {}
+    private function mapCastType(string $cast): string
+    {
+        $registered = $this->casts->typeFor($cast);
+        if ($registered !== null) {
+            return $registered;   // package-registered casts win, as `money` did before
+        }
+        return match (true) { /* built-in arms unchanged, MoneyCast arm removed */ };
+    }
+```
+
+`ModulesServiceProvider::register()`: `$this->app->when(RegistryCompiler::class)->needs('$sections')->giveTagged(ManifestSectionCompiler::class);`
+`CoreX\Modules\Testing\ExtensionContract` и все производственные места берут компилятор из контейнера
+(`app(RegistryCompiler::class)`), не `new`.
+
+`IntlServiceProvider::register()`:
+
+```php
+$this->callAfterResolving(FieldCastRegistry::class, static function (FieldCastRegistry $casts): void {
+    $casts->register(MoneyCast::class, 'money');
+});
+```
+
+Проверка: существующий тест реестра CRM с money-полем зелёный без правок; новый unit-тест `FieldCastMap`
+(`Class:args` → type, неизвестный → null); негатив — закомментировать регистрацию в intl → money-поле CRM
+компилируется как `string`, тест падает.
+
+### 1.2 ManifestSectionCompiler (D32 п.1, D45 п.5)
+
+```php
+namespace CoreX\Modules\Contracts;
+
+/** Compiles one API declaration mode of module manifests; packages own their section semantics. */
+interface ManifestSectionCompiler
+{
+    /** Declaration mode handled, e.g. `operation`, `tool`. */
+    public function mode(): string;
+
+    /** Lower runs first; tools reference operations compiled earlier. */
+    public function phase(): int;
+
+    /**
+     * @param list<Api> $declarations this mode, manifest order, provenance already set
+     * @param list<Api> $all every API declaration, manifest order
+     * @throws CompilationException with the messages the kernel threw before
+     */
+    public function compile(array $declarations, array $all): void;
+
+    /** @return list<NormalizedExtension> */
+    public function normalize(ModuleManifest $manifest, Api $api, string $ownerVersion): array;
+}
+```
+
+Реализации: `packages/operations/src/Definition/OperationSectionCompiler.php` (`mode()='operation'`, `phase()=0`,
+тело — первый цикл `collectApi()` строки 410–427: `ApiOperationValidator::validate`, дубликаты id/route с
+тем же текстом исключения, `validateRoutePair`; `normalize()` — ветка `api.operation` из `normalizeApi()`);
+`packages/operations/src/Tools/ToolSectionCompiler.php` (`mode()='tool'`, `phase()=10`, тело — цикл 433–464,
+`normalize()` — ветка `api.tool`). Регистрация: `$this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class)` в
+`ApiServiceProvider::register()`, `ToolSectionCompiler` — в `ToolServiceProvider::register()`.
+
+Ядро после шва: `collectApi()` только собирает `$result` (clone + `declaringModule`), затем
+`foreach (sections sorted by phase) $section->compile(filter by mode, $result)`; режим без компилятора →
+`throw new CompilationException('No compiler for API declaration mode: '.$api->mode)`. `normalizeApi()`
+делегирует `normalize()` компилятора режима. Тесты секций (`ApiOperationContractTest`, `ApiOperationCostTest`,
+`ToolDeclarationTest`, кейсы tools из `RegistryIntrospectionTest`/`RegistryCompilerDeterminismTest`) переезжают в
+`packages/operations/tests/Unit/` и `packages/operations/tests/Unit/Tool*` (строки tools уже в карте) —
+модульные тесты ядра компилируют без api/tools.
+
+### 1.3 ConfigReportSection (D32 п.2, D45 п.4)
+
+```php
+namespace CoreX\Contracts;   // → CoreX\Config\Contracts (new-map-rows.tsv)
+
+/** One package's contribution to `corex:config:validate`; output order follows order(). */
+interface ConfigReportSection
+{
+    public function order(): int;
+
+    /** @return array<class-string, list<string>> options class => config roots passed to fromArray() */
+    public function options(): array;
+
+    /** @return list<string> config keys whose values are secrets (redacted, reported present/absent) */
+    public function secretKeys(): array;
+
+    /** @return array<string, string> secret key => shipped default that triggers `WARNING [secret-default]` */
+    public function secretDefaults(): array;
+
+    /** @return list<string> `driver <name>=<value>` lines */
+    public function drivers(): array;
+
+    /** @return list<array{line: string, error: ?string}> adapter lines; error is reported after all lines */
+    public function adapters(): array;
+}
+```
+
+Разделы и их содержимое (перенос текущих констант/строк без изменения текста):
+
+| Раздел (файл) | order | options | secrets | drivers / adapters |
+|:--|:--|:--|:--|:--|
+| `KernelConfigSection` (`core/src/Support/`) | 0 | `CoreOptions => ['corex']` | — | `driver pubsub.driver=…`; adapter `pubsub.redis` |
+| `TenancyConfigSection` (`tenancy/src/Laravel/Support/`) | 10 | `TenancyOptions => ['tenancy','corex-tenancy']` | `tenancy.oidc.client_secret` | `driver tenancy.wakeup.driver`, `driver tenancy.oidc.enabled`; adapter `wakeup.root_registry` (строка-класс `CoreX\Wakeup\WakeupServiceProvider`) |
+| `AccessConfigSection` (`access/src/Support/`) | 20 | `AuthOptions => ['corex-auth']` | — | — |
+| `ModulesConfigSection` (`modules/src/Support/`) | 25 | `ModulesOptions => ['corex-modules']` | — | — |
+| `MediaConfigSection` (`media/src/Support/`) | 30 | `MediaOptions => ['corex-media']` | — | — |
+| `IntlConfigSection` (`intl/src/`) | 40 | — | `corex-intl.reference.cursor_secret` | default `0123…cdef` (64 hex, текущая константа) |
+| `SearchConfigSection` (`search/src/Support/`) | 50 | — | `corex-search.cursor_secret` | — |
+| `MeilisearchConfigSection` (`search-meilisearch/src/`) | 60 | — | `corex-search-meilisearch.key` | — |
+
+Каждый провайдер: `$this->app->tag([XConfigSection::class], ConfigReportSection::class);`. Команда получает
+`iterable<ConfigReportSection>` (`$this->laravel->tagged(ConfigReportSection::class)`), сортирует по `order()` и
+выполняет прежние фазы (secrets → options → drivers → adapters → secrets → errors) по разделам. Константы
+`INTL_CURSOR_SECRET_DEFAULT`, `WAKEUP_PACKAGE`, `OPTION_SOURCES`, `SECRET_KEYS` из команды удаляются.
+
+Регрессия (создать **до** правки, зелёный до и после): корневой `tests/Feature/ConfigReportCompositionTest.php` —
+все провайдеры монорепо, фиксированный config (redis pubsub, `corex-tenancy.wakeup.driver=root_registry`, intl secret
+по умолчанию, meilisearch key задан), `expect(Artisan::output())->toBe(<полный текст, снятый до правки>)`.
+
+### 1.4 ImpersonationGuard (D32 п.3)
+
+```php
+// core/src/Tenancy/ImpersonationGuard.php
+/** Models an impersonating actor may still write: the audit trail must record the impersonation itself. */
+public static function writeExemptModels(): array
+{
+    return [AuditLog::class];
+}
+```
+
+`tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php`: строковый литерал `'CoreX\\Audit\\Internal\\AuditLog'`
+заменяется на `...ImpersonationGuard::writeExemptModels()`; `ImpersonationWriteGuardTest` проверяет через тот же метод.
+
+### 1.5 SavedViews wiring (D28)
+
+Семь bindings SavedViews из `CoreServiceProvider::register()` (строки с `SavedViewRepository`, `ViewAccessPolicy`,
+`ViewSchemaProvider`, `SqlSavedViewRepository`, `DenyViewAccessPolicy`, `UnavailableViewSchemaProvider`,
+`ViewConfigValidator`) переносятся дословно в `PanelsServiceProvider::register()`; `bindIf` остаётся `bindIf`.
+Пока файлы лежат в ядре, panels импортирует их по текущим FQCN (цель карты — panels, ребра нет). Тесты
+`core/tests/Views` уезжают в panels переносом (строка карты с `dest=`), их провайдер — `PanelsServiceProvider`.
+
+### 1.6 Testing-харнессы (D35)
+
+Правило: класс `Testing` отдаёт **ту же** реализацию через публичный тип; тест не меняет проверяемое поведение.
+
+```php
+namespace CoreX\Messaging\Testing;   // core/src/Messaging/Testing/MessagingFixtures.php
+
+/** Builders for cross-package tests; returns kernel implementations behind their public contracts. */
+final class MessagingFixtures
+{
+    /** @param array<string, MessageContract> $contracts */
+    public static function contracts(array $contracts): MessageContractRegistry
+    {
+        return new ArrayMessageContractRegistry(contracts: $contracts);
+    }
+
+    public static function inbox(ConnectionInterface $connection, ClockInterface $clock): Inbox
+    {
+        return new SqlInbox($connection, $clock);
+    }
+
+    public static function outbox(/* те же параметры, что SqlOutbox::__construct */): Outbox { /* new SqlOutbox(...) */ }
+}
+```
+
+Аналогично: `CoreX\Wakeup\Testing\WakeupFixtures` (`registryClass(): string` для `app(...)`/`forgetInstance`,
+константы `SCHEMA`/`POINT` = значения `WakeupHandlerRegistry::Schema/Point`, `systemClockClass(): string`),
+`CoreX\Search\Testing\SearchFixtures::policyHydrator(...)`. Типы параметров/возврата — публичные контракты
+пакета; если публичного контракта нет, возврат — тип интерфейса, который реализация уже реализует (узнать
+`grep -n "implements" <Internal-файл>`). Стабы `tests/Stubs/Lifecycle/Stub{Base,Failing,FeatureFlag}Module.php` и
+`tests/Stubs/Widget.php` **копируются** в `packages/core/tests/Support/Stubs/` с namespace `CoreX\Testing\Stubs[\Lifecycle]`;
+`tests/Stubs` монорепо не меняется.
+
+## 2 P02.2 — швы operations
+
+### 2.1 ContractSnapshotSection (D31 шов 1)
+
+```php
+namespace CoreX\Api\Contracts;   // operations/src/OpenApi/Contracts/ → CoreX\Operations\OpenApi\Contracts
+
+/** A package's document in the contract snapshot (`corex:api-snapshots`). */
+interface ContractSnapshotSection
+{
+    /** File name inside the snapshot directory, e.g. `webhooks.json`. */
+    public function file(): string;
+
+    /** @return array<string, mixed> document body before SnapshotJson::pretty() */
+    public function document(string $major): array;
+}
+```
+
+`ContractSnapshotBuilder` принимает `iterable<ContractSnapshotSection>` (tagged) вместо `list<WebhookTopic>`;
+`FILES` становится `['errors.json','openapi.json','operations.json','manifest.json']` + `file()` разделов в порядке
+тегов; `manifest.json` хэширует все файлы как прежде. `WebhookSnapshotSection` (`src/Webhooks/Internal/`) переносит
+`webhooks()`/`topic()` и `WebhookTopic::CLASSES` дословно. Безопасные коды `webhook_*` в `errors.json` остаются в
+engine (строки, не типы; решение wire — P06). Эталон: golden `wire` не меняется; `api/v1` снимок не меняется
+(`composer contract-guard`/`check-api-contract.php` exit 0).
+
+### 2.2 WebhooksServiceProvider (швы 2, 3, 5)
+
+`packages/operations/src/Webhooks/WebhooksServiceProvider.php` (`namespace CoreX\Api\Webhooks;` → `CoreX\Webhooks`):
+`register()` — `mergeConfigFrom(__DIR__.'/../../config/corex-webhooks.php', 'corex-webhooks')`, `WebhookOptions` из
+`corex-webhooks`, `WebhookRegistrar::register($this->app)`, tag `WebhookSnapshotSection` как `ContractSnapshotSection`;
+`boot()` — `WebhookRegistrar::boot($this->app)`, команды `DeliverWebhooks` (если `deliveryEnabled`) и новая
+`PruneWebhooks` (`corex:webhooks:prune`, тело — ветка `WebhookRetention` из `PruneApiOperations`), publish
+`corex-webhooks-config`, `corex-webhooks-migrations-tenant` (файл `create_sys_api_webhook_tables.php`). Маршруты
+webhooks берут prefix/middleware из `ApiOptions` engine. `ApiServiceProvider` теряет строки 206, 218–219, 229 и
+импорты webhooks; `PruneApiOperations` теряет `WebhookRetention`. Если engine планирует `corex:api:prune`
+через scheduler, webhooks планирует `corex:webhooks:prune` с тем же расписанием. Провайдер добавляется в
+`packages/operations/composer.json` `extra.laravel.providers` (golden/Testbench видят его).
+
+`packages/operations/config/corex-webhooks.php` = раздел `webhooks` из `corex-api.php` (ключи без префикса
+`webhooks.`); `corex-api.php` теряет раздел; все `config('corex-api.webhooks…')` → `config('corex-webhooks…')`.
+
+### 2.3 Разделение смешанных тестов (D31)
+
+Для `M ∈ {ApiRetentionTest, LoadContourIntegrationTest, AuthorizationLayersTest, CostInvocationTest,
+IdempotentInvocationTest, OperationParityTest, LoadContourBootTest}`: кейсы, импортирующие символы из строк
+`seams.tsv` c `target_symbol` `CoreX\Api\…Tool…`/`…\Tools\…` → `packages/operations/tests/Feature/Tool<M>.php`,
+`…Webhook…` → `Webhook<M>.php`; кейс с обоими — в файл, чьи символы он **проверяет** (assert), второй
+используется через `Testing`. Строки карты — `new-map-rows.tsv`. Число тестов (sqlite/pg) не уменьшается
+(anti-weakening).
+
+## 3 Golden в швах
+
+```bash
+python3 $PLAN/artifacts/P01-design/scripts/golden-rename-map.py            # регенерация (новые классы)
+python3 $PLAN/artifacts/P01-design/scripts/golden-rename-map.py --check    # → rename-map OK: <N> class, 16 package, 3 ambiguous, 0 manual
+GOLDEN_UPDATE=1 scripts/php84 vendor/bin/pest --testsuite=Golden           # 4 passed
+python3 $D/scripts/golden-delta.py --base <commit до item>                  # golden-delta OK: +A -0 ~C (allowed N)
+```
+
+Строка `tests/Golden/REBASELINE.md`: `| 2026-MM-DD | PLAN3.D44 | php-surface | P02.1 seams: +A types, ~C changed (golden-delta OK) |`.
+
+## 4 P02.3 — перенос
+
+### 4.1 Scaffold новых пакетов
+
+`packages/tools/composer.json` (webhooks — то же с `webhooks`/`Webhooks`):
+
+```json
+{
+    "name": "axiomasoft/corex-tools",
+    "description": "Guarded tool runtime for CoreX operations: schemas, contract hash and MCP projection.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.12|^11.3",
+        "pestphp/pest": "^5.2"
+    },
+    "autoload": {"psr-4": {"CoreX\\Tools\\": "src/"}},
+    "autoload-dev": {"psr-4": {"CoreX\\Tools\\Tests\\": "tests/"}},
+    "extra": {
+        "branch-alias": {"dev-main": "1.0.x-dev"},
+        "laravel": {"providers": ["CoreX\\Tools\\ToolServiceProvider"]}
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
+```
+
+Third-party `require` — объединение требований operations, которые реально импортирует `src/` пакета (итог
+проверяет `scripts/dependency-analyser.sh`, 0 shadow/unused вне ratchet). `tests/TestCase.php` — копия
+`packages/operations/tests/TestCase.php` с namespace `CoreX\Tools\Tests` и провайдерами
+`[ApiServiceProvider::class, ToolServiceProvider::class]` (webhooks: `[ApiServiceProvider::class, WebhooksServiceProvider::class]`);
+тесты, унаследовавшие `CoreX\Operations\Tests\TestCase`, переключаются на свой (18 строк seams). Также копируются
+по образцу operations: `phpunit.xml`, `phpstan.neon` (`tmpDir: ../../build/phpstan/<dir>`), `README.md`,
+`CHANGELOG.md` (`## Unreleased — extracted from corex/operations (PLAN3 P02)`), `composer-dependency-analyser.php`.
+
+### 4.2 Корневой composer.json
+
+`repositories[0]` остаётся `packages/*`; добавить `{"type": "path", "url": "products/*"}`. `require-dev`: имена
+уже переписаны; добавить `axiomasoft/corex-tools`, `axiomasoft/corex-webhooks` (`^1.0@dev`). Затем
+`scripts/php84 composer update 'axiomasoft/*' flex/crm --no-scripts` (+ staging провайдеров stancl по P01 runbook) →
+`composer.lock` без `corex/*`.
+
+### 4.3 Kernel PHPStan extension (merge-neon)
+
+Итог `packages/core/extension.neon` = содержимое `packages/modules/extension.neon` + в `services:` добавлены два
+сервиса ядра (`DurablePayloadRule`, `DurablePayloadPromotedPropertyRule`); FQCN уже переписаны переносом.
+
+### 4.4 Ratchet-проекция (D44 п.6)
+
+`scripts/ratchet-successors.json`:
+
+```json
+{"schema": "corex-ratchet-successors/1",
+ "groups": [{"before": ["core", "modules"], "after": ["core"]},
+            {"before": ["operations"], "after": ["operations", "tools", "webhooks"]},
+            {"before": ["attributes"], "after": ["custom-fields"]},
+            {"before": ["crm"], "after": ["flex-crm"]}],
+ "packages": {"corex/core": "axiomasoft/corex", "corex/modules": "axiomasoft/corex", "corex/operations": "axiomasoft/corex-operations"}}
+```
+
+`scripts/anti-weakening-gate.sh`, `check()` для ceilings:
+
+```python
+succ = json.load(open('scripts/ratchet-successors.json'))
+for category in ['phpstan', 'dependencies']:
+    before, after = old[category], new[category]
+    grouped_before, grouped_after = set(), set()
+    for g in succ['groups']:
+        if not any(k in before for k in g['before']) or any(k in before for k in g['after'] if k not in g['before']):
+            continue  # group not in effect for this base
+        if sum(after.get(k, 0) for k in g['after']) > sum(before.get(k, 0) for k in g['before']):
+            return False
+        grouped_before |= set(g['before']); grouped_after |= set(g['after'])
+    if any(v > before.get(k, 0) for k, v in after.items() if k not in grouped_after):
+        return False
+    if sum(after.values()) > sum(before.values()):
+        return False
+```
+
+Для ownership: `old_set = {project(v) for v in old['violations']}`, где `project` заменяет точные composer-имена
+по `succ['packages']` и остальным старым→новым (из `tests/Golden/rename-map.json` package-правил); `new ⊆ old_set`.
+`scripts/quality-ceiling-guard.php`: glob `packages/*/composer.json` + `products/*/composer.json`, ключ — basename
+каталога. Негатив: поднять `phpstan.tools` так, чтобы сумма группы operations выросла на 1 → gate exit 1.
+
+### 4.5 ownership-map.json после переноса
+
+Ключи — новые composer-имена, `dir` — новый каталог, поле `target` удаляется; `kernel.packages = ["axiomasoft/corex"]`;
+добавить `axiomasoft/corex-tools` (`root CoreX\Tools`, config `corex-tools`, prefixes `corex-tools-`, `COREX_TOOLS_`,
+`corex:tools:`) и `axiomasoft/corex-webhooks` аналогично; `flex/crm` в карте нет (продукт в `products/`, N8).
+`scripts/ownership-gate-baseline.json` — проекция composer-имён; O1/O2 namespace/O3 исчезают, остаются только
+config/tag/env/command (их снимает P02.4).
+
+## 5 P02.4 — идентификаторы и гейты
+
+### 5.1 Раздел `corex.modules`
+
+`packages/core/config/corex.php` получает ключ `'modules' => [ …содержимое corex-modules.php… ]`; файл
+`corex-modules.php` удаляется; `mergeConfigFrom(…corex-modules…)` удаляется; `config('corex-modules.x')` →
+`config('corex.modules.x')`; `ModulesConfigSection::options()` → `ModulesOptions => ['corex.modules']` (путь в
+`configArray()` читает вложенный ключ). Env `COREX_MODULES_*` не меняются (N7 ядро: `COREX_<MODULE>_*`).
+
+### 5.2 upstream_config (D45 п.2)
+
+`scripts/ownership-map.json`: `"axiomasoft/corex-tenancy": {…, "upstream_config": ["tenancy"]}`; в
+`ownership-gate.php` перед O2 config: `if ($kind === 'config' && in_array($id, $rule['upstream_config'] ?? [], true)) { continue; }`.
+Негатив: добавить `upstream_config: ["corex-foo"]` не помогает для `tenancy` другого пакета; временный
+`mergeConfigFrom(..., 'tenancy2')` в tenancy → `O2 config … tenancy2 expected corex-tenancy`, exit 1.
+
+### 5.3 Эталонные выходы
+
+```
+python3 $D/scripts/p02-identifiers.py check       → identifiers check: 0 remaining
+php scripts/rename-completeness-gate.php          → rename-completeness OK: <N> tokens, <F> files, sections classes,namespaces,packages,paths,identifiers
+php scripts/ownership-gate.php --strict           → ownership OK: <I> identifiers, 0 baselined
+```
+
+Негатив гейта полноты: `echo 'corex/operations' >> packages/tools/README.md` → `packages/tools/README.md:<n> packages corex/operations`,
+`rename-completeness FAIL: 1 occurrence(s)`, exit 1; откат → OK.
+
+CI (`.github/workflows/ci.yml`, job рядом с ownership): шаг `php scripts/rename-completeness-gate.php`; composer-скрипт
+`rename-completeness` вместо `p15-rename-completeness-gate`; `ownership` → `--strict`.

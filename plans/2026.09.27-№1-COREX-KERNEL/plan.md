@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28) |
+| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -155,6 +155,8 @@ operations, независимые модули, детерминированн�
 | 2026-09-28 | Owner-authorized audit autofix: D41, actual-declaration golden collector, access dev closure, wire fixture/exit/cleanup, scoped derived normalization, float-preserving JSON, successful baseline mode, initial ownership-baseline allowance and fail-closed analyser. Independent review within current audit; product unchanged. | auditor/fixer/codex/gpt-6-sol/high |
 | 2026-09-28 | `task:plan-design P02`: `backlog/P02.md` → `phases/P02/`, items P02.1–P02.4, D44–D45, досье `research/P02-design.md`, `research/P02-design-rag.md`, примеры/факты/скрипты `artifacts/P02-design/` (перенос `p02-transfer.py` с сухим прогоном без Rector), captures `artifacts/P02-design-rag/`; ремонт строки карты `StubToolHandler` (D44 п.7); Routing B02-A, solo P02.3, solo P02.4; исполнение P02 ждёт O-3. | claude-opus-5-5/high |
 | 2026-09-28 | `task:plan-design finish`: согласованы P00–P02; execution-sheet строки 5 (B02-A), 6 (solo P02.3, implementation/xhigh), 7 (solo P02.4); P02 допускается после GREEN design audit и O-3. Граница — дизайн P00–P02 по D24. | designer/claude-opus-5-5/high |
+
+| 2026-09-28 | Owner-authorized same-session P02 A1–A4 remediation: D46, config-filename references and negative gates, root classmap/files projection and existence checks, predecessor-produced Required Read, protected Golden diff scope; dossier/examples aligned. Product unchanged; actual implementation/high, recommended frontier/high recorded. | fixer/codex/gpt-6-sol/high |
 
 ## 5. Decision Log
 

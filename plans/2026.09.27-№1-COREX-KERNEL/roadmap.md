@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-28 · **Соответствует plan.md:** P00, P01 закрыты; P02 детализирована (ждёт finish, design audit и O-3); P03–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
+**Обновлён:** 2026-09-28 · **Соответствует plan.md:** P00, P01 закрыты; P02 детализирована (A1–A4 исправлены, повторный finish; ждёт независимого design audit нового fingerprint и O-3); P03–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -42,6 +42,8 @@ P02.1 → P02.2: общий инструментарий швов (`check-maps.p
 последовательный. P02.3 — отдельный запуск implementation/xhigh: перенос ≥500 файлов с обязательным сухим прогоном;
 стартует только при `seams … 0 blocking`. P02.4 — отдельный запуск на перенесённом дереве. Каждый запуск P02 — full.
 Фазы P03–P09 в backlog не входят в этот finish (D24).
+После ремонта A1–A4 (D46) группы и семантические маршруты сохраняются; предыдущий ATTENTION fingerprint
+не открывает исполнение. Нужен GREEN независимого design audit после повторного finish.
 
 | Admission | Command | Route | Review | Executor (provider/model + effort) | Independent Reviewer + effort or self-check | Auto-fix executor + effort/limit | Checkpoint | Order / short risk reason |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|

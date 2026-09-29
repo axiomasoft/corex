@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan-lint.py",
+        "plans/2026.09.27-№1-COREX-KERNEL"
+      ],
+      "exit": 0,
+      "output": "plan-lint: OK (1 план(ов), 0 ошибок, 0 предупреждений)\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "output": ""
+    }
+  ],
+  "delivery_receipt_verified": true,
+  "fingerprint_unchanged": "83f9a46c53c7e2b70d55bddf263bf3d179e66f728cbe93a1201ec9f9d9ffed4d",
+  "product_files_unchanged": 2244,
+  "design_gate": {
+    "allowed": false,
+    "code": "PLAN_DESIGN_AUDIT_NOT_GREEN",
+    "fingerprint": "83f9a46c53c7e2b70d55bddf263bf3d179e66f728cbe93a1201ec9f9d9ffed4d",
+    "phases": [
+      "P00",
+      "P01",
+      "P02"
+    ],
+    "items": 11
+  }
+}

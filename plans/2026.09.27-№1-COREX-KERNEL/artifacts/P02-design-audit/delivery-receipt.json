@@ -1,0 +1,37 @@
+{
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "subject": "design",
+  "status": "handoff-persisted",
+  "next_exact": "manual: frontier/high",
+  "recommendation": "**Next:** manual: frontier/high\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Context | continue-root |\n\n```text\nИсправить дизайн PLAN3 P02 по findings/P02-design-audit.md (A1–A4), затем task:plan-design 2026.09.27-№1-COREX-KERNEL finish. Граница работы: дизайн.\n```",
+  "route": {
+    "batch": "n/a",
+    "model": null,
+    "thinking": null,
+    "context": "continue-root",
+    "command": null
+  },
+  "continuity": {
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "rationale": {
+    "remaining": "Дизайн P02.4: A1 — ссылки на переименованные config-файлы и негативы гейтов; A3 — Required Reads по пути результата P02.3. Дизайн P02.3: A2 — проекция корневого classmap; A4 — проверка неизменности baseline/rename-map без запрета необходимых правок кода Golden. После исправления — finish и независимый design audit нового fingerprint. Автоматический plan-design Next для детализированной фазы не допускается `validate_design_handoff_target`; точное задание передано как manual.",
+    "open_risks": "Текущий дизайн не GREEN. O-3 остаётся условием старта P02.1: hosted CI P01 GREEN или отдельное решение владельца. Push/billing/live CI этим аудитом не выполнялись и не проверялись. Фактический аудитор implementation/high; отклонение от рекомендованного audit-маршрута записано, frontier assurance не заявлена."
+  },
+  "commit_sha": "dfcd5b8456de0ba5881fcc087c79a4e34e37e501",
+  "journal": null,
+  "adapter_attestation": null,
+  "digests": {
+    "plan": "sha256:40412c3c31b9172d81ad47850f7eceaed8f07381904b611584bc003f4c6435c9",
+    "handoff": "sha256:fc2d082adfa1d84ede40b71badf6ad06e5424ef299ae05b49b629ef0185fa189",
+    "state": null,
+    "closure": null
+  }
+}
