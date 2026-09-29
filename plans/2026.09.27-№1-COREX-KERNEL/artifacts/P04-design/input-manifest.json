@@ -1,0 +1,12 @@
+{
+  "schema": "p04-design-inputs/1",
+  "files": {
+    "classification.tsv": "4ee9f732ae30a5e25c12b1bd8c06b2c8fa1c4e3ac89af246426510bac891e86c",
+    "public-by-usage-verdicts.tsv": "67a88ca6bd71efb924b82c42b0dff1deadf3f090e0e243f61a6762b79c313bda",
+    "error-code-map.tsv": "010a0520fe629f8284a9a04b6f8b896e845de82d59efd75e1aa893e3d6bce0dd",
+    "facts/source-inventory.json": "98bc7515a3068fae96abbfc97fa6a479252317e90d12663f33a868d4af230852",
+    "facts/summary.json": "2b17ee620706019f63cd54030bf53141a4b7bb45bef675f8cbee0cc2456a2f81",
+    "facts/module-layout-residual.json": "9930546a4f831236f98f7abd4084a8d7aa4de2fe188c0be36b7f6899da0ebee5",
+    "scripts/inventory.php": "e77792ca7b4fc76e33b713224dc0facf613020b835992d9b641f381c5d16dd85"
+  }
+}

@@ -1,0 +1,85 @@
+---
+id: D64
+date: 2026-09-29
+status: accepted
+item: P04
+items: [P04, P04.1, P04.2, P04.3, P04.4]
+supersedes: []
+superseded_by: null
+---
+# D64 — P04: типизированные ошибки и контролируемая смена Golden
+
+**Actor:** author-choice (designer/codex/gpt-6-sol/high), B6/D01/D10.
+**Evidence:** `error-code-map.tsv`, `facts/source-inventory.json`,
+`tests/fixtures/public-error-contract.php`, `vendor/roave/backward-compatibility-check/src/CompareClasses.php`,
+`research/P04-design-rag.md`. RAG:— / RAG:✅.
+
+## Решение
+
+1. `CoreX\Errors\Contracts\ErrorCode` — Spi Implement с `value(): string`.
+Package backed enums реализуют метод `return $this->value`; значение regex
+`^(core|[a-z][a-z0-9]*(?:-[a-z0-9]+)*)\.[a-z][a-z0-9]*(?:_[a-z0-9]+)*$`,
+не более существующего MAX_CODE_BYTES=120. Owner = `core` для ядра, composer slug
+без `corex-` для пакетов. Не один закрытый enum для экосистемы.
+
+2. Api `final readonly ProblemDefinition(ErrorCode $code, string $type,
+int $defaultStatus, string $title, bool $retryable, ErrorCategory $category,
+array $detailKeys = [])`; type — абсолютный URI `urn:corex:problem:<code>`, title —
+безопасный default текст, статус 400–599. Api read port ProblemRegistry возвращает
+definition по ErrorCode/валидированному wire code; lookup неизвестного значения
+бросает typed configuration error. Registration Spi Implement `ProblemDefinitionProvider`
+отдаёт iterable definitions; compiled registry проверяет duplicate code, чужой prefix,
+duplicate type и invalid definition на boot и freeze. Registry в ядре не знает
+список feature-пакетов и не зависит от операций/Flex. Providers contributions приходят
+через явную DI/tag collection; не новый extender и не глобальный mutable facade.
+
+3. ErrorDescriptor constructor получает ErrorCode (public `code` сохраняется string
+wire); остальные поля/category/RFC6901/path/details bounds сохранены. CodedException
+abstract RuntimeException + DescribesError, код и safe descriptor; concrete package
+exceptions продолжают свои предметные типы. ApiError принимает ErrorCode вместо string,
+прочие данные сигнатуры сохраняются на P04, status/category сверяются registry mapper.
+Ожидаемый business denial остаётся typed result; nullable query absence не exception.
+Vendor/programmer unexpected Throwable отображается в зарегистрированный `core.internal_error`,
+не получает произвольный строковый code и не раскрывает сообщение инфраструктуры.
+
+4. Error map содержит все 85 конструкций ApiError/ErrorDescriptor. Литералы → owner
+enum, динамические/persisted строки → registry lookup; trusted persisted enum identity
+не восстанавливается `new ApiError($rawString)`. Webhook-prefixed codes принадлежат
+webhooks, общие operation invocation ошибки — operations; custom-fields имеет свой prefix.
+Tools не зависит от webhooks. Публичные исключения иных пакетов получают собственные
+enum/definitions по существующей семантике; добавление кода имеет type/category/retryable,
+path/detail-key тест. Dynamic adapters fixture hashes обновляются по проверенному диффу.
+String-literal error constructors запрещены AST gate, даже alias/group-use/FQCN.
+
+5. HTTP serializer policy/envelope negotiation остаются для P06. Но string code
+в уже существующих projections/operation snapshots обновляется сейчас согласованно,
+без legacy alias и без изменения status/category/path/retryability. Зависимый snapshot
+и docs меняются в том же item; URI создаётся сейчас, новая transport policy — P06.
+
+6. P03 Golden был доказательством механического переноса. P04 меняет контракты по D01,
+поэтому старые php-surface/events/wire снимки не могут оставаться normative expectations.
+Разрешена ровно ограниченная approved-delta процедура, описанная в dossier §4:
+сохранить preimage/hash, candidate в scratch, semantic diff поимённо к classification
+или error map, green behavioral tests и full review; затем обновить только реально
+изменённые layers и promoted fixtures/rename map, проверить fresh golden без update.
+Routes layer должен остаться byte-identical. Дельта вне разрешённой поверхности — defect.
+P04.1 допускает только php-surface дельту новых трёх атрибутных типов и named scanner/tooling records; routes/events/wire неизменны. Это новое разрешение для P04.1/P04.2/P04.3, не blanket rebaseline и не нормализация изменений
+до фиктивно неизменного результата. Negative controls остаются RED на реальном дефекте.
+
+7. Roave фильтрует исходный список по `@internal`, не по namespace автоматически
+(установленный CompareClasses). Все declarations в Internal получают doc marker;
+готовая per-package comparison source selection ограничена Api/Spi membership, но
+Internal зависимости остаются разрешимыми reflector. При отборе base/candidate используется
+своя membership каждого revision; удалённый public symbol не исчезает из base selection.
+Не вырезать файлы зависимостей из staging. Негатив: private internal signature change
+не BC break, удаление старого Api/Spi и Spi Implement member addition — BC break.
+
+## Почему
+
+Scoped stable codes и typed registry требуют обновления реальных wire expectations. Старый механический Golden нельзя ни безусловно сохранить, ни автоматически заменить; нужен reviewed semantic delta.
+
+## Consequences
+
+Обновление error values — осознанный pre-1.0 SemVer delta с changelog (D01).
+P04.3 выполняется после классификации; P04.4 фиксирует final generated snapshots.
+Ни fixtures, ни baseline не обновляются только для получения exit 0.

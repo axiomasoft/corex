@@ -1,0 +1,89 @@
+---
+id: D63
+date: 2026-09-29
+status: accepted
+item: P04
+items: [P04, P04.1, P04.2, P04.4]
+supersedes: []
+superseded_by: null
+---
+# D63 — P04: символная поверхность и закрытие швов
+
+**Actor:** author-choice (designer/codex/gpt-6-sol/high), B6/D01/D06/D07.
+**Evidence:** `artifacts/P04-design/facts/source-inventory.json`,
+`classification.tsv`, `public-by-usage-verdicts.tsv`, `research/P04-design-rag.md`. RAG:— / RAG:✅.
+
+## Решение
+
+1. Единственный source owner публичности — атрибут на объявлении типа. Api/Spi —
+`final readonly`, `Attribute::TARGET_CLASS`, без повторения и наследования метки;
+`Api(since: '1.0')`, `Spi(kind: SpiKind::Implement|Call, since: '1.0')`.
+`CoreX\Attributes\SpiKind` — backed enum `implement|call`, все три типа сами Api.
+Ровно одна метка, в Internal меток нет; `@internal` на маркированном типе удаляется.
+`#[Api]` на интерфейсе разрешает вызов, внешняя реализация/наследование запрещена;
+Spi Implement разрешает реализацию, Spi Call — вызов/подписку/документированную интеграцию.
+
+2. `php-api/1` — per-package детерминированный снимок класса/интерфейса/trait/enum,
+слоя и since, наследования, public/protected членов (protected — только Implement),
+native и PHPDoc типов, имён/порядка параметров, defaults, flags, enum cases/values,
+публичных констант. Полные classlike-объявления и inherited public surface разрешаются
+AST + name resolver; PHPDoc parser нужен для generic/list/shape/class-string/@throws/
+@method/@property/alias. Не выполняются исходники пакетов. Неизвестная форма типа —
+диагностика, не исчезающий символ. Отдельный package owner index: composer path/name.
+Снимок не содержит timestamp, абсолютный путь, git SHA или hash всего файла.
+
+3. Гейт `php-api` проверяет unclassified non-Internal, Internal/Eloquent/Collection
+утечку рекурсивно в Api сигнатурах, false immutable DTO, conflicting metadata,
+внешнюю реализацию Api и межпакетные ссылки неклассифицированных типов. Api DTO только
+final readonly, scalar/list/shape/value objects; `mixed`/`object` и незаданные элементы
+array в data payload не являются обходом. Callable invocation control ports допускают
+обобщённый T через PHPDoc с bound; нормальная payload-неопределённость исправляется
+типом, не blanket allowlist. Spi сигнатура не может ссылаться на чужой Internal;
+concrete model types/`class-string<Model>` допускаются только в документированном
+Laravel/model extension SPI. Проверяются package production sources/config/module metadata;
+product проверяется как consumer, его declarations не обязаны быть Api/Spi (D15).
+
+4. `classification.tsv` — поимённые вердикты для всех 1117 package types + 56 product
+consumer types; отдельные 68 verdicts снимают долг P03. Поимённые targets для replace
+обозначают port/DTO; старый concrete type переносится Internal, потребители переводятся
+на target. Имена new ports совпадающие с basename старого concrete — разные FQCN,
+не aliases. Замыкание типов Api и R5=91 чинится через same-module фасады/порты,
+immutable DTO и composition roots: не переносом всего ядра в Spi Call.
+Frontier P04.2 проверяет поимённую таблицу against real consumers; уточнение individual
+вердикта требует evidence и full review в итоговой `classification-result.tsv`,
+не молчаливой массовой разметки. Область и нормы D06/D07 не меняются.
+
+5. Concrete models Department/Task/Stage/Project/Account уходят Internal. Для
+Department переиспользуется существующий DTO. Task/Stage/Project получают read ports,
+View records с id + только реально прочитанными скалярными полями и enum.
+`tasks-workflow` получает синхронный `TaskCompletionCapture` SPI с immutable
+`TaskCompletionCandidate`: вызов внутри прежней транзакции и до save, при переходе
+в Done; exception/rollback сохраняет атомарность receipt и task.
+Это не after-commit domain event. Project/Stage FQCN в metadata заменяются public
+entity handles/DTO refs. BaseModel — реальная модельная SPI Implement в Database/Laravel;
+HasConfiguredId/IdColumns — Laravel Spi Call. Stancl Account остаётся final internal;
+own package config reference не создаёт host substitution contract и не меняет engine P07.
+
+6. R0–R5 module-layout сохраняются; generic attribute annotations сами по себе не
+ослабляют R3/R5. Attributes Api/Spi/SpiKind получают одно exact exception для прямого
+namespace, заданного glossary; остальные публичные helper types уходят categories
+или direct Laravel/Testing bridge согласно таблице. `module-layout-baseline.json`
+уменьшается до пустого списка при P04.2, не rebaseline на новые исключения.
+Изменение rule для Attributes должно иметь позитивный и негативный контроль чужого
+четвёртого файла. Root package contracts/Enums/categories по D57 сохранены.
+
+7. `package-graph` сохраняет R1/R2/R3/R5 и finite composition edges; R4/R4b читают
+атрибуты/owner index и проверяют generated snapshot свежесть. Старый namespace carrier
+удаляется только в P04.4 после зелёной classified surface. До этого report сканер
+не является strict admission. Новый scanner/index — один reusable owner для graph,
+manifest и reference docs. Нельзя считать arbitrary generated JSON источником доверия.
+
+## Почему
+
+Namespace allowlists не классифицируют символы и не видят вложенные payload types. Полная поимённая таблица и source scanner закрывают долг P03, сохраняя package/module boundary и транзакции.
+
+## Consequences
+
+P04.1 — атрибуты/report scanner; P04.2 — минимальная поверхность и DTO, R3/R5=0;
+P04.4 — strict и retire namespace metadata, semver policy, docs.
+Новый classifier не заменяет dependency/ownership/module gates.

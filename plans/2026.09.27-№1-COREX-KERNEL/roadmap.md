@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P02 закрыты; P03 детализирована (D57/D58, items P03.1–P03.2), remediation finish; ждёт независимый design audit; P04–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
+**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P03 закрыты GREEN; P04 детализирована (D62–D64), finish и независимый design audit ожидаются; P05–P09 — skeleton в `backlog/` (D21/D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -35,15 +35,15 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 <!-- execution-sheet/v1 -->
 
-Эта таблица — **единственное конкретное per-admission execution-расписание**. Finish 2026-09-28 (повторный, после
-дизайна P02) согласовал P00–P02; P00 и P01 закрыты. P02 допускается только после GREEN design audit текущего fingerprint
-**и** O-3 (GREEN hosted CI на коммите P01 `d2e84a1`; сейчас не стартует из-за billing GitHub Actions). B02-A объединяет
-P02.1 → P02.2: общий инструментарий швов (`check-maps.py`, `p02-transfer.py seams`, `golden-delta.py`), порядок
-последовательный. P02.3 — отдельный запуск implementation/xhigh: перенос ≥500 файлов с обязательным сухим прогоном;
-стартует только при `seams … 0 blocking`. P02.4 — отдельный запуск на перенесённом дереве. Каждый запуск P02 — full.
-Фазы P04–P09 в backlog не входят в finish (D24). Finish 2026-09-29 (после дизайна P03) добавил строки 8–9: P03.1 — гейт раскладки, ретайр гейта tenancy и STR-доктрина; P03.2 — перенос 278 классов implementation/xhigh с сухим прогоном, стартует только после GREEN P03.1. Оба запуска — full. P03 допускается после GREEN design audit текущего fingerprint; hosted CI отложен (D47) и не блокирует.
-После ремонта A1–A4 (D46) группы и семантические маршруты сохраняются; предыдущий ATTENTION fingerprint
-не открывает исполнение. Нужен GREEN независимого design audit после повторного finish.
+Эта таблица — **единственное конкретное per-admission execution-расписание**.
+P00–P03 закрыты GREEN. Строки 1–9 сохраняют историю принятых запусков;
+D47 откладывает push/hosted CI. P04 локальные строки 10–13 предложены дизайном
+2026-09-29 (D62–D64); их итоговую группировку подтверждает следующий finish.
+Пока finish и независимый GREEN design audit текущего fingerprint не записаны,
+строки P04 не являются execution admission. P05–P09 backlog не входят в finish (D24).
+P04.1 → P04.2 → P04.3 → P04.4: first report tooling, then classified/DTO surface,
+then typed registry, then fixed strict cutover. Public semantics требуют frontier/high
+для первых трёх, последняя строка implementation/high. Все reviews full и другой моделью.
 
 | Admission | Command | Route | Review | Executor (provider/model + effort) | Independent Reviewer + effort or self-check | Auto-fix executor + effort/limit | Checkpoint | Order / short risk reason |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|
@@ -56,6 +56,10 @@ P02.1 → P02.2: общий инструментарий швов (`check-maps.p
 | 7 · solo P02.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.6/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P02.3 GREEN; O-3 для P02 после item | Идентификаторы, гейт полноты, ownership strict; push + hosted CI — владелец |
 | 8 · solo P03.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | design audit GREEN; P02 closed | Гейт раскладки R0–R5 с baseline 436, ретайр tenancy-structure, STR-доктрина |
 | 9 · solo P03.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2` | `implementation/xhigh` | `full` | `codex/gpt-6-sol/xhigh` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/xhigh`, ≤2 rounds | P03.1 GREEN; `p03-transfer.py plan … 0 problems` | Перенос 278 классов по карте; manifest/lock sync (D58); сухой прогон; golden без rebaseline; baseline = прогноз 159 |
+| 10 · solo P04.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | finish + GREEN current design audit; P03 closed | Api/Spi/source scanner, report + negatives before mass classification |
+| 11 · solo P04.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | P04.1 GREEN | Type verdicts/DTO/transaction capture/R5=0, reviewed Golden delta and mechanical replay |
+| 12 · solo P04.3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.3` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | P04.2 GREEN | Error ownership/boot compilation and safe persisted replay; 85 constructor sites |
+| 13 · solo P04.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P04.2 + P04.3 artifacts GREEN | Strict graph/manifests/Roave/semver/docs, no new product design |
 
 D58: remediation и повторный finish выполнены codex/gpt-6-astra/high по прямому мандату владельца; исходный аудит ATTENTION сохранён. Следующий design audit читает delta A1–A5 в новом независимом контексте.
 
@@ -76,3 +80,19 @@ sheet). Носители плана пишет один автор за раз (
 | 7 | Дизайн следующей фазы | `task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | `claude-code/claude-opus-5-5/high` | `/task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | P03 закрыта |
 
 D59: P03 full replay исправляется текущим owner-authorized root; после GREEN design audit следующий шаг — P03.1 (sheet 8), без ещё одного круга дизайна. Полный audit вместо owning close не назначается автоматически.
+
+
+## P04 — последовательность команд
+
+| Шаг | Команда | Условие |
+|:--|:--|:--|
+| Дизайн P04 (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | P03 GREEN; current author Sol/high по D62 |
+| Finish (следующий) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | phase finalize + plan-lint GREEN; confirm rows 10–13 |
+| Независимый design audit | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | новый finish fingerprint; модель != Sol author, fresh context |
+| Исполнение | exact commands rows 10–13 | GREEN audit; each predecessor terminal GREEN |
+| Закрытие | final GREEN P04.4 owning continuation | item Validation/full reviews + phase close gate GREEN |
+| Дизайн P05 | `task:plan-design 2026.09.27-№1-COREX-KERNEL P05` | P04 closed; actual code input |
+
+D62 authoring override applies current P04 design. Future executor routes stay pinned to
+semantic class/effort in Routing; permission to design with Sol is not silently extended
+to independent reviews or future frontier execution. Phase audit is never automatic.

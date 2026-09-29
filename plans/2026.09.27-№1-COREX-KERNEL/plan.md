@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
+| Authoring Model | codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -123,7 +123,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00, P01, P02, P03. Фазы P04–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01, P02, P03, P04. Фазы P05–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
@@ -141,11 +141,16 @@ operations, независимые модули, детерминированн�
 | solo | P02.4 | implementation/high | manual | full | recommended: идентификаторы и гейты на перенесённом дереве; отдельная сессия после P02.3. |
 | solo | P03.1 | implementation/high | manual | full | recommended: гейт раскладки, ретайр гейта tenancy и STR-доктрина — CI/docs-контекст, отдельный от массового переноса; первым в P03. |
 | solo | P03.2 | implementation/xhigh | manual | full | recommended: механический перенос 278 классов с сухим прогоном, Rector и полным стеком — отдельная сессия и максимальный effort класса, как P02.3; после зелёного P03.1. |
+| solo | P04.1 | frontier/high | manual | full | recommended: scanner/name-resolution/PHPDoc fixture setup is an independent tooling boundary; validate report semantics before rewriting all consumers. |
+| solo | P04.2 | frontier/high | manual | full | recommended: 1117 type verdicts, model/transaction DTO seams and R5=91 need a bounded public-contract replay/review context separate from registry boot. |
+| solo | P04.3 | frontier/high | manual | full | recommended: package error ownership and persisted idempotency reconstruction form a separate boot/failure boundary after the classified surface. |
+| solo | P04.4 | implementation/high | manual | full | recommended: fixed strict graph/manifest/BC/docs rollout consumes both producer results; route differs from frontier items and cannot share their batch. |
 
 ## 4. Update Log
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-09-29 | `task:plan-design P04`: D62 owner-authorized Sol/high authoring; D63 symbol surface/DTO/transaction seam; D64 typed error registry and reviewed semantic Golden delta. P04.1–P04.4, all-type/source/85-site maps, dossier/retrieval/examples, proposed solo routes; runtime not executed. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | P03.2 owning admission repair D61: lossless full-map reading projection and inherited adapter formatting; product scope and gates preserved | executor/codex/gpt-6-sol/xhigh |
 | 2026-09-27 | План создан: верификация аудита, ресерч, D01–D23, целевая архитектура, P00 детализирована, P01–P09 skeleton (карта фаз — `roadmap.md`) | claude-opus-5-5/high |
 | 2026-09-27 | `task:plan-design P00`: D24 (skeleton P01–P09 → `backlog/`, цикл finish + design audit на фазу); досье P00 дополнено (`research/P00-design-rag.md`, `examples.md`, no-search record); Code Guidance P00.2/P00.3 | claude-opus-5-5/high |

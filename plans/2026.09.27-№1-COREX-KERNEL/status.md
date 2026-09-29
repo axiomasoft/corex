@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: b9b648717f19a0a1a67cda8139f5961ae46bc628d1d394148778fccdb294e12a
+inputs_sha256: 89c097625dd3d3519c1d83f1388c0db89df46214662b8603071b2476fba902b5
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟢 Done |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-29 |
 
 ## 4. Phase Index & Status Board
@@ -27,6 +27,7 @@ generated_by: task plan-views status
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
+| P04 | Application API, Extension SPI и типизированные ошибки | 0/4 | ⬜ Not started |
 
 ## Phase P00
 
@@ -60,6 +61,15 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P03.1 | Гейт раскладки модулей и доктрина STR | 🟢 Done | 2026-09-29 |
 | P03.2 | Перенос по карте модулей | 🟢 Done | 2026-09-29 |
+
+## Phase P04
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P04.1 | Атрибуты и report-сканер символной поверхности | ⬜ Not started | — |
+| P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | ⬜ Not started | — |
+| P04.3 | Типизированные package errors и compiled ProblemRegistry | ⬜ Not started | — |
+| P04.4 | Strict поверхность, manifests, SemVer и документация | ⬜ Not started | — |
 
 ## 6. Update Log
 
@@ -192,6 +202,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-close · in-progress · Bind phase closure lifecycle to the owning P03.2 durable invocation; candidate/gate rechecked below. |
 | 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-close · closed-green · P03 closure bound to owning P03.2 invocation; current candidate/gate GREEN. Proof: artifacts/P03.2-execution/phase-close-gate.json
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 
