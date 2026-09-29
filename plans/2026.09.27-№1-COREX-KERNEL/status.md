@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: b5f3721c2f9ac5e9fd5b71e11b3608b531bd3d94d893ddf040b860f1cca9079c
+inputs_sha256: b9b648717f19a0a1a67cda8139f5961ae46bc628d1d394148778fccdb294e12a
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟢 Done |
 | Last Updated | 2026-09-29 |
 
 ## 4. Phase Index & Status Board
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
-| P03 | Feature modules и `Internal` | 1/2 | 🟡 In progress |
+| P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 
 ## Phase P00
 
@@ -59,7 +59,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P03.1 | Гейт раскладки модулей и доктрина STR | 🟢 Done | 2026-09-29 |
-| P03.2 | Перенос по карте модулей | 🟡 In progress | 2026-09-29 |
+| P03.2 | Перенос по карте модулей | 🟢 Done | 2026-09-29 |
 
 ## 6. Update Log
 
@@ -183,6 +183,15 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-run · local-repair · D61: lossless read projection; exact plan-lint GREEN. No product scope or threshold change. |
 | 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-design · no-op · D61 bounded input repair finished; current product run remains in progress; independent review pending. |
 | 2026-09-29 | reviewer/cursor/grok-4.7/high | plan-audit · audit-green · D61 exact input projection/formatting independently GREEN; prior design reused. Proof: artifacts/P03.2-execution/admission-review.json. |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-run · local-repair · One inherited R1 fixture namespace residual repaired; 8 negatives retained; exact rename carrier GREEN. Proof: artifacts/P03.2-execution/residual-repair.json. |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-run · local-repair · Correct D61 provenance to six authored paths; product delta unchanged, same exact original read-budget carrier GREEN. |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-run · closed-green · 278 moves; dry/main identical; full gates GREEN; review: cursor/grok-4.7/high GREEN. Proof: artifacts/P03.2-execution/completion.md
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-close · closed-green · P03 all item/phase gates GREEN; Phase Handoff complete. Proof: artifacts/P03.2-execution/phase-close-gate.json
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-close · in-progress · Bind phase closure lifecycle to the owning P03.2 durable invocation; candidate/gate rechecked below. |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-close · closed-green · P03 closure bound to owning P03.2 invocation; current candidate/gate GREEN. Proof: artifacts/P03.2-execution/phase-close-gate.json
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

@@ -1,0 +1,74 @@
+{
+  "product_commit": "e21796a78a363987b06a7b21474dacd813a5de5a",
+  "receipts_bound_after_commit": true,
+  "reuse_basis": "Unchanged reviewed/tested product bytes; all 702 main/dry hashes agree. Commit adds no product-byte changes.",
+  "timestamp_basis": "Latest retained evidence file mtime; execution exits and durations are in command manifests.",
+  "proofs": {
+    "E26": [
+      "projection-negative.log",
+      "helper-ast.log",
+      "admission-review.json"
+    ],
+    "E27": [
+      "transfer-unit.log"
+    ],
+    "E28": [
+      "module-map-before.log",
+      "layout-before.log",
+      "dry/plan.log"
+    ],
+    "E29": [
+      "dry/transfer-checks.json",
+      "dry/stack/checks.json",
+      "dry/rename-all-after.log",
+      "dry/diff-stat.txt"
+    ],
+    "E30": [
+      "main/transfer-checks.json",
+      "main/candidate-equality.json"
+    ],
+    "E31": [
+      "main/predicted-baseline.log",
+      "main/module-layout.log"
+    ],
+    "E32": [
+      "main/stack/golden.log",
+      "main/frozen-golden.log",
+      "main/golden-map.log"
+    ],
+    "E33": [
+      "main/rename-all.log",
+      "main/rename-negative.log"
+    ],
+    "E34": [
+      "main/stack/package-graph-gate.log",
+      "main/ownership-strict.log",
+      "main/stack/analyse.log",
+      "main/stack/ceilings.log",
+      "main/stack/anti-weakening.log"
+    ],
+    "E35": [
+      "main/stack/root-test.log",
+      "main/stack/pg-test.log",
+      "main/stack/packages-test.log",
+      "main/arch.log",
+      "package-counts.json"
+    ],
+    "E36": [
+      "main/stack/lint.log",
+      "main/stack/api-contract.log",
+      "main/stack/contract-guard.log",
+      "main/stack/naming-gate.log",
+      "main/stack/package-docs-gate.log",
+      "main/stack/deps-analyse.log"
+    ],
+    "E37": [
+      "dry/stack/mutation.log",
+      "main/stack/mutation.log"
+    ],
+    "E38": [
+      "review.json",
+      "review-prompt.txt"
+    ]
+  }
+}

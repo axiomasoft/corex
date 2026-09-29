@@ -1,0 +1,8 @@
+{
+  "schema_version": "p032-candidate-closure-identity/v1",
+  "product_commit": "e21796a78a363987b06a7b21474dacd813a5de5a",
+  "paths": 702,
+  "all_bytes_identical": true,
+  "source": "dry/product-hashes.json",
+  "recomputed_after_phase_closure": true
+}
