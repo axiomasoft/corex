@@ -1,0 +1,40 @@
+{
+  "design_fingerprint": "0a6daddb7dd2a45c3dd22ad814b26bfca8139b602cbd192194606cfff54a0e98",
+  "ready_items": [
+    "P04.1"
+  ],
+  "admissions": 13,
+  "supporting_phases": [
+    "P00",
+    "P01",
+    "P02",
+    "P03",
+    "P04"
+  ],
+  "plan_lint": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "input_manifest": "7 digests verified",
+  "source_inventory": "PHP8.4 AST reproduced byte-for-byte; 1168 source file hashes current",
+  "bundle_dry_render": "schema-valid; not persisted",
+  "continuity": "reducer-consistent",
+  "P03_closure": "unchanged",
+  "P04_runtime": "not started",
+  "product_diff": "none",
+  "delivery_receipt": "verified",
+  "git_diff_check": "passed",
+  "design_gate": {
+    "allowed": false,
+    "code": "PLAN_DESIGN_AUDIT_MISSING",
+    "fingerprint": "0a6daddb7dd2a45c3dd22ad814b26bfca8139b602cbd192194606cfff54a0e98",
+    "phases": [
+      "P00",
+      "P01",
+      "P02",
+      "P03",
+      "P04"
+    ],
+    "items": 17
+  }
+}

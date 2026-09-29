@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P03 закрыты GREEN; P04 детализирована (D62–D64), finish и независимый design audit ожидаются; P05–P09 — skeleton в `backlog/` (D21/D24)
+**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P03 закрыты GREEN; P04 детализирована (D62–D64); finish P00–P04 выполнен (D65), независимый design audit нового fingerprint ожидается; P05–P09 — skeleton в `backlog/` (D21/D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -37,9 +37,9 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 Эта таблица — **единственное конкретное per-admission execution-расписание**.
 P00–P03 закрыты GREEN. Строки 1–9 сохраняют историю принятых запусков;
-D47 откладывает push/hosted CI. P04 локальные строки 10–13 предложены дизайном
-2026-09-29 (D62–D64); их итоговую группировку подтверждает следующий finish.
-Пока finish и независимый GREEN design audit текущего fingerprint не записаны,
+D47 откладывает push/hosted CI. P04 строки 10–13 подтверждены finish
+2026-09-29 (D65): четыре последовательных solo, без изменения маршрутов/review.
+Пока независимый GREEN design audit текущего finish fingerprint не записан,
 строки P04 не являются execution admission. P05–P09 backlog не входят в finish (D24).
 P04.1 → P04.2 → P04.3 → P04.4: first report tooling, then classified/DTO surface,
 then typed registry, then fixed strict cutover. Public semantics требуют frontier/high
@@ -87,12 +87,12 @@ D59: P03 full replay исправляется текущим owner-authorized ro
 | Шаг | Команда | Условие |
 |:--|:--|:--|
 | Дизайн P04 (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | P03 GREEN; current author Sol/high по D62 |
-| Finish (следующий) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | phase finalize + plan-lint GREEN; confirm rows 10–13 |
+| Finish (выполнен, D65) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | phase finalize + plan-lint GREEN; confirm rows 10–13 |
 | Независимый design audit | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | новый finish fingerprint; модель != Sol author, fresh context |
 | Исполнение | exact commands rows 10–13 | GREEN audit; each predecessor terminal GREEN |
 | Закрытие | final GREEN P04.4 owning continuation | item Validation/full reviews + phase close gate GREEN |
 | Дизайн P05 | `task:plan-design 2026.09.27-№1-COREX-KERNEL P05` | P04 closed; actual code input |
 
-D62 authoring override applies current P04 design. Future executor routes stay pinned to
+D62 authoring override applies P04 design; D65 отдельно разрешает текущий finish на Sol/high. Future executor routes stay pinned to
 semantic class/effort in Routing; permission to design with Sol is not silently extended
 to independent reviews or future frontier execution. Phase audit is never automatic.

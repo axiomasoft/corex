@@ -1,46 +1,47 @@
 # HANDOFF — 2026-09-29 — after P04
 
-**Next:** design-finish: task:plan-design 2026.09.27-№1-COREX-KERNEL finish
+**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | solo |
+| Batch | n/a |
 | Model | frontier |
-| Thinking | high |
-| Context | continue-root |
-| Суть | Подтвердить общие execution-sheet группы P00–P04 и новый authored fingerprint, затем независимый design audit. |
+| Thinking | xhigh |
+| Capabilities | repository read · Task Python runtime · independent reviewer |
+| Context | cold-start-root: whole-plan-independent-audit |
+| Суть | Независимо проверить новый finish fingerprint P00–P04; модель != Sol, свежий контекст. |
 
-```session-continuity-decision/v1
-{
-  "schema_version": "session-continuity-decision/v1",
-  "outcome": "continue-root",
-  "reason": "authorized-scope-complete",
-  "evidence": ["lifecycle:scope-complete", "checkpoint:artifacts/P04-design/completion.md", "loaded-inputs:reusable"],
-  "runnable": true
-}
+**Native Codex command:**
+
+```bash
+codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
 ```
 
-**Done:** P04 детализирована: четыре outcome items; D62 Sol/high authoring override;
-D63 Api/Spi/source scanner + минимальная DTO/extension поверхность; D64 package errors
-и reviewed Golden semantic delta. Перемерены 1173 types (1117 package + 56 product),
-171 unique cross symbols, 85 error construction sites; 68 public-by-usage verdicts,
-159 residual module records captured. Dossier, verified retrieval/captures, examples,
-raw maps и их digest manifest сохранены. Runtime execution P04 не начиналось.
+```session-continuity-decision/v1
+{"evidence": ["batch:0a6daddb7dd2a45c3dd22ad814b26bfca8139b602cbd192194606cfff54a0e98", "loaded-inputs:reusable", "cold-start-cost:0", "checkpoint:artifacts/P04-design-finish/completion.md"], "outcome": "cold-start-root", "reason": "whole-plan-independent-audit", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```
 
-**Remaining:** Finish текущего authored design P00–P04, независимый GREEN design audit
-нового fingerprint, затем P04.1–P04.4 по execution-sheet. После P04 close — дизайн P05
-по фактическому результату. P05–P09 остаются backlog skeleton (D24).
+**Done:** Finish P00–P04 выполнен на Sol/high по явному разрешению D65.
+Подтверждены 13 execution-sheet admissions; P04 — четыре последовательных solo,
+frontier/high для P04.1–P04.3, implementation/high для P04.4, full independent review.
+Досье/verified retrieval/examples/captures пяти детализированных фаз согласованы;
+семь sealed P04 inputs проверены. P00–P03 GREEN evidence переиспользуется.
 
-**Sources of truth:** plan.md §3 Routing; phases/P04/P04.md и P04.1–P04.4.md;
-research/P04-design.md; research/P04-design-rag.md; artifacts/P04-design/examples.md;
-artifacts/P04-design/input-manifest.json; decisions/D62–D64; roadmap.md execution-sheet.
+**Remaining:** Независимый GREEN design audit нового fingerprint; затем P04.1–P04.4
+по строкам 10–13 execution-sheet. Только P04.1 готова по dependencies; future producer
+artifacts не созданы. После P04 close — дизайн P05 по фактическому результату.
+P05–P09 остаются backlog (D24).
 
-**Open risks:** Task CLI exact invocation parser не распознал `$ & task:…` + steering;
-compact schema получена через публичный design-only facade, не execution proof (D62).
-API/SPI DTO classification и error transport values — SemVer delta по D01, independent
-full review обязателен. Report не strict; прежний P03 design audit не открывает P04.
+**Sources of truth:** plan.md §2/§3; roadmap.md execution-sheet;
+phases/P04/P04.md и P04.1–P04.4.md; research/P04-design.md;
+research/P04-design-rag.md; artifacts/P04-design/examples.md и input-manifest.json;
+decisions/D63–D65; artifacts/P04-design-finish/{completion.md,finalize.json,continuity.json,validation.json}.
 
-**Workarounds/Deferred/Open questions:** Task package не изменялся. Context7 отсутствует,
-первичные PHP/RFC документы и installed Roave code сохранены. Push/hosted CI отложены
-D47. Current design scope complete; Next — рекомендация для текущего root, не автоматический
-запуск finish/исполнения. HTTP policy P06, typed config compilation P05, engine P07.
+**Open risks:** Finish не открывает execution без GREEN audit текущего fingerprint.
+API/SPI/DTO и error transport — SemVer delta D01/D63/D64; audit проверяет текущий
+P04 design и переход report → strict. Прежний P03 audit не допускает P04.
+
+**Workarounds/Deferred/Open questions:** Authoring route override D65 не распространяется
+на аудит или исполнение. Captures P04 переиспользованы без новых внешних решений.
+Push/hosted CI отложены D47; HTTP policy P06, typed config P05, engine P07.
+Текущий design scope complete; независимый аудит — рекомендация, отдельный вызов владельца.
