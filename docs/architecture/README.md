@@ -11,7 +11,7 @@
 | `taxonomy.md` | Схема `extra.corex`, закрытые наборы `package-type`/`stability` | При смене метаданных пакета |
 | `naming.md` | Словарь суффиксов и правила имён | При именовании классов и полей |
 | `rename-registry.md` | Реестр «сейчас → целевое → фаза → условие» | Перед любым переименованием |
-| `structure-profiles.md` | Профили A/B/C и назначение по пакетам | При росте или реорганизации `src/` |
+| `structure-profiles.md` | Раскладка корневых и feature modules, процедуры STR-002…STR-006 | При реорганизации `src/` |
 | `api-policy.md` | Публичная поверхность, BC, депрекация | Рядом со статьями API-* |
 | `config-policy.md` | Классификация конфигурации и ввод ключей | Рядом со статьями CFG-* |
 | `data-ownership-policy.md` | Владение таблицами и исключения FK | Рядом со статьями DATA-* |
@@ -31,9 +31,11 @@
 
 ## Сводный реестр правил
 
-На закрытие P1 машинно исполняются **13** из **58** статей (гейты `composer test:arch`,
+Исторически на закрытие P1 машинно исполнялись **13** из **58** статей (гейты `composer test:arch`,
 `composer package-graph-gate`, `composer test:packages`, `scripts/contract-guard.sh`, проверка
-диффа миграций в validation code-item'ов). Остальные несут честное «объявлено, фаза P<n>».
+диффа миграций в validation code-item'ов). Текущая структурная норма — PLAN3.D57/D58; гейт раскладки включён в CI,
+остаточные нарушения ограничены `scripts/module-layout-baseline.json`. Остальные статьи
+несут состояние enforcement в таблице ниже.
 
 ### Статьи конституции
 
@@ -48,12 +50,11 @@
 | PKG-007 | PKG | `composer test:arch` → «foundation packages carry no flex product literals» | исполняется |
 | PKG-008 | PKG | `composer test:packages` (цикл по 20 живым пакетам) | исполняется |
 | PKG-009 | PKG | нет — свойство проверяется отсутствием пути в `composer.json` и `phpstan.neon` | объявлено, фаза P1 |
-| STR-001 | STR | нет — P3 (наблюдательный), раскатка P16 | объявлено, фаза P3 |
-| STR-002 | STR | нет — ревью | объявлено, фаза P1 |
-| STR-003 | STR | нет — P3 (наблюдательный) | объявлено, фаза P3 |
+| STR-002 | STR | `composer module-layout-gate`; ревью принадлежности use case | исполняется (структурная часть) |
+| STR-003 | STR | `composer module-layout-gate` → R0–R3 | исполняется, ratchet-baseline |
 | STR-004 | STR | нет — ревью | объявлено, фаза P1 |
-| STR-005 | STR | `composer package-graph-gate` → R2 | исполняется |
-| STR-006 | STR | нет — P16 | объявлено, фаза P16 |
+| STR-005 | STR | `composer package-graph-gate` → R2; `composer module-layout-gate` → R4/R5 | исполняется, ratchet-baseline |
+| STR-006 | STR | `composer module-layout-gate` → R1–R3 | исполняется, ratchet-baseline |
 | API-001 | API | нет — P3 (правило R4 гейта графа) | объявлено, фаза P3 |
 | API-002 | API | `composer package-graph-gate` → R2/R4 (не PHPStan, см. D12) | исполняется |
 | API-003 | API | нет — P3 (R4) | объявлено, фаза P3 |

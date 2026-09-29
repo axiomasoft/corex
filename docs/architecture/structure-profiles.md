@@ -1,106 +1,57 @@
-# Профили структуры пакетов CoreX
+# Раскладка модулей пакетов CoreX
 
-**Версия:** 1.0.0 · **Статус:** нормативный · **Уровень:** 0 (`corex/*`)
+**Версия:** 2.0.0 · **Статус:** нормативный · **Уровень:** 0 (`axiomasoft/corex*`)
 
-Три профиля группировки `src/` по **измеренному** объёму пакета. Нормативные статьи —
-`STR-001`…`STR-006` в `constitution.md`; здесь — как их выполнять, без переписывания текста
-статей.
+Статьи [STR-002…STR-006](constitution.md#группа-str--структура) задают единую раскладку
+модулей для всех пакетов независимо от числа файлов. Решения — PLAN3.D57 и PLAN3.D58;
+термины и закрытый список модулей ядра —
+[glossary](../../plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md), N5.
+Продукт `products/flex-crm` сохраняет собственную раскладку (N8).
 
-## Пороги профилей
+## Корневой и feature modules
 
-Пороги выведены из распределения 20 пакетов (`research/00-baseline-metrics.md` §1,
-поправка P1-design §12). Внешний обзор стратегий (layer/feature/context-first) **не дал
-числовых порогов** — эта часть `[UNVERIFIED]`.
+Корень `src/` пакета — его корневой модуль. Он содержит публичные категории
+`Contracts/`, `Data/`, `Enums/`, `Events/`, `Exceptions/`; мосты `Internal/`, `Laravel/`,
+`Testing/`, `PHPStan/`; provider(ы), `<Pkg>Module.php` и каталоги feature modules.
+Каждый feature module использует те же категории и мосты непосредственно под своим корнем.
+Provider feature module живёт прямо в модуле; `<Pkg>Module.php` — только в корне пакета.
 
-| Профиль | Порог (файлов `.php` в `src`) | Стратегия группировки | Пакеты сегодня |
-|:--|:--|:--|:--|
-| A — компактный | < 40 | Слой-первая (`Contracts`, `Data`, `Internal`) допустима | access 34, media 36, transfer 39, search 29, recurrence 16, tasks-workflow 16, wakeup 20, workflow 15, panels 11, search-intl 8, search-meilisearch 4 |
-| B — подсистемы | 40–100 | Верхний уровень — подсистемы; слои внутри подсистемы | attributes 63, notifications 44, crm 56, tasks 63, intl 67, modules 99 |
-| C — bounded context | > 100 | Верхний уровень — bounded contexts; слой-первая не применяется | operations 165, core 169, tenancy 175 |
-
-Порог — **основание пересмотреть структуру, а не приказ немедленно её менять**: переход
-профиля выполняет названный item фазы (P9, P16), а не попутная правка (NON-001).
-
-Профиль — **функция измеренного объёма**; отдельного решения владельца не требует.
-
-`axiomasoft/corex-custom-fields` классифицируется как B по producer-adjusted census (D107): пол ≥ 44 файлов
-до физической раскладки P16; компактный профиль A для него запрещён.
-
-Каталог `packages/transfer` — **тумбстоун** (D13, PKG-009): не входит в перечень живых
-пакетов и не получает профиль.
+Ядро `axiomasoft/corex` не имеет корневого модуля: в `src/` разрешены только
+`CoreServiceProvider.php` и модули закрытого списка glossary. Путь каждого PHP-файла
+соответствует его namespace относительно PSR-4 корня пакета.
 
 ## Процедуры по статьям STR-002…STR-006
 
-- **STR-002 — один use case ≤ 2 верхних папок.** Назвать use case и перечислить папки с его
-  кодом. Три и больше — группировка по технологии, а не по задаче.
-- **STR-003 — >20 прямых детей корня `src`.** Сегодня нарушает только `tenancy` (26).
-  Группировать по bounded context. Исключение: `exceptions/STR-003/tenancy-src-children.md`.
-- **STR-004 — каталог из одного класса.** Допустим, если каталог выражает границу, которую
-  заполнит названный item; иначе класс живёт уровнем выше.
-- **STR-005 — `Internal/`.** Единица enforcement R2 графа пакетов. Новый `Internal/` внутри
-  bounded context пакета не создаётся. `tenancy/src/Membership/Internal` (39 файлов) —
-  исключение с условием снятия P9: `exceptions/STR-005/tenancy-membership-internal.md`.
-- **STR-006 — `Data/`.** В профиле A остаётся. В B и C значения группируются по домену:
-  под правило сегодня подпадает только `intl` (профиль B); `transfer` и `notifications`
-  остаются как есть.
+- **STR-002 — один use case, один модуль.** Назвать use case и его корневой или feature module.
+  Разместить публичные типы в категориях этого модуля, реализацию — в его `Internal/`.
+  Принадлежность задаче проверяется ревью; структурная часть — гейтом раскладки.
+- **STR-003 — корень пакета и модули ядра.** Проверить PSR-4 путь, разрешённые категории,
+  мосты и точки композиции. У ядра сверить имя модуля с закрытым списком glossary.
+  Enforcement: `composer module-layout-gate`, R0–R3.
+- **STR-004 — каталог из одного класса.** Допустим, если каталог выражает границу,
+  которую заполнит названный item; иначе класс живёт уровнем выше в разрешённой категории
+  или мосте своего модуля. Проверяется ревью.
+- **STR-005 — Internal модуля.** Размещать `Internal/` непосредственно под модулем.
+  Из других пакетов ссылки запрещены (`package-graph-gate` R2); из других модулей того же
+  пакета — запрещены (`module-layout-gate` R5), кроме composition roots: provider(ы),
+  корневой `<Pkg>Module.php` и `Laravel/` непосредственно под модулем. Вложенные
+  `Internal/Laravel/` и `Data/Laravel/` исключения не получают. R4 запрещает вложенный Internal.
+- **STR-006 — публичные категории.** Выбрать `Contracts`, `Data`, `Enums`, `Events`
+  или `Exceptions` по роли типа и разместить категорию ровно под модулем. Слоевые
+  каталоги `Support`, `Models`, `Commands` и другие корзины из `scripts/module-layout.json`
+  запрещены на уровне модулей. Реализация может сохранять группировку корзиной внутри
+  `Internal/`. Enforcement: `composer module-layout-gate`, R1–R3.
 
-## Структурный долг `tenancy`
+## Проверка и остаточный долг
 
-- 26 прямых детей корня `src` (STR-003) — см. исключение STR-003.
-- `Membership/Internal` — 39 файлов, весь Membership (STR-005) — см. исключение STR-005.
-- Целевая раскладка bounded contexts — P9; раскатка профилей по пакетам — P16.
+`composer module-layout-gate` сканирует `packages/*/src/` и проверяет правила R0–R5.
+Конфигурация — `scripts/module-layout.json`; полный отчёт:
+`python3 scripts/module-layout-gate.py --report`.
+CI выполняет гейт и восемь тестов его правил и baseline.
 
-## Назначение профиля по пакетам
-
-Census пересчитан после producer-фаз и P16.1–P16.10 (2026-09-27). Итого **1129** файлов `.php`
-в `src/` по **20** живым пакетам. Доказательства no-move для профиля A и attributes (B) —
-`plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md`; физические
-перемещения B/C — `findings/P16-move-receipts.md` и `findings/P16-api-layout-receipt.md`.
-
-| Пакет | Файлов в `src` | Профиль | P16 исход |
-|:--|--:|:--|:--|
-| search-meilisearch | 4 | A | no-move (P16.11) |
-| search-intl | 8 | A | no-move (P16.11) |
-| panels | 11 | A | no-move (P16.9, P16.11) |
-| workflow | 15 | A | no-move (P16.11) |
-| recurrence | 16 | A | no-move (P16.11) |
-| tasks-workflow | 16 | A | no-move (P16.11) |
-| wakeup | 20 | A | no-move (P16.11) |
-| search | 29 | A | no-move (P16.11) |
-| access | 34 | A | no-move (P16.11) |
-| media | 36 | A | no-move (P16.11) |
-| transfer | 39 | A | no-move (P16.11); карта роста ниже |
-| notifications | 44 | B | P16.2 |
-| crm | 56 | B | P16.8 |
-| attributes | 63 | B | P10.8 layout; B no-move (P16.11, D107) |
-| tasks | 63 | B | P16.3 |
-| intl | 67 | B | P16.1 |
-| modules | 99 | B | P16.7 |
-| operations | 165 | C | P16.4–P16.6 (`CoreX\Operations`) |
-| core | 169 | C | P9 bounded contexts |
-| tenancy | 175 | C | P9 bounded contexts |
-
-## Карта роста `axiomasoft/corex-transfer` (условная)
-
-Сегодня **39** файлов — профиль **A**. Текущая раскладка: `Contracts/`, `Data/` (включая
-`Data/Export/`), `Internal/{Codecs,Export,Transfer}` и корневой `TransferServiceProvider`.
-Новые пустые каталоги **не создаются** до измеренного роста и до того, как именованный use case
-пересечёт **две** верхние папки (D91, audit A58).
-
-Продвижение в подсистемы Profile B допустимо только после пересечения порога 40 файлов **и**
-доказанной пользы для named use-case span:
-
-| Целевая подсистема (будущая) | Текущий владелец | Named use case |
-|:--|:--|:--|
-| `Definition/` | `Contracts/` (runner, source, sink, mapper ports) + часть `Data/` (limits, manifest) | Объявить перенос и лимиты до запуска |
-| `Source/` | `Contracts/TransferSource`, `Contracts/ExportSource`, `Data/Source*` | Читать строки/курсор из источника |
-| `Sink/` | `Contracts/TransferSink`, import decision types в `Data/` | Принять строку в целевую модель |
-| `Mapping/` | `Contracts/RecordMapper`, `Data/Mapping*` | Сопоставить каноническую запись с целевым рядом |
-| `Validation/` | `Data/Validation`, conflict rules | Отклонить или классифицировать конфликт до записи |
-| `Execution/` | `Internal/Transfer/*`, `Contracts/TransferRunner` | Выполнить шаг переноса с отменой и лимитами |
-| `Checkpoint/` | `Data/StepToken`, cursors, `TransferRef` | Возобновить перенос после сбоя |
-| `Format/` | `Internal/Codecs/*`, `Internal/Export/CanonicalExportCodec` | Сериализовать страницу экспорта (CSV/NDJSON) |
-| `Reporting/` | `Data/TransferReceipt`, `TargetResult`, export manifest types | Выдать итог и метрики прогона |
-| `Laravel/` | `TransferServiceProvider` | Зарегистрировать контейнерные биндинги |
-
-До выполнения условий выше пакет остаётся на layer-first профиле A без физических `git mv`.
+`scripts/module-layout-baseline.json` — единственный ratchet остаточных нарушений раскладки.
+Новая запись или исправленная, но оставленная запись даёт exit 1; baseline только сокращается.
+P03.1 фиксирует текущее дерево: 436 записей (R1 49, R3 344, R5 43).
+P03.2 выполняет утверждённый перенос и сокращает baseline до 159;
+P04 классифицирует публичные типы и сокращает межмодульные ссылки в Internal.
+Прогноз будущего дерева не подменяет baseline текущего дерева.

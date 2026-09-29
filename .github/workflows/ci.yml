@@ -798,8 +798,10 @@ jobs:
       - name: API contract compatibility
         run: composer api-contract
 
-      - name: Tenancy structure and compatibility
-        run: composer tenancy-structure-gate
+      - name: Feature-module layout (PLAN3.D57)
+        run: |
+          composer module-layout-gate
+          python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
 
       - name: DATA-003 table write ownership
         run: composer table-write-ownership-gate

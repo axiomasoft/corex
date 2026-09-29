@@ -1,0 +1,26 @@
+{
+  "tests/Golden/rename-map.json": {
+    "head_sha256": "9f77199170ccce82fdde5032ecf1348d7e8b47f133a02e725f88edf792e5420d",
+    "candidate_sha256": "9f77199170ccce82fdde5032ecf1348d7e8b47f133a02e725f88edf792e5420d"
+  },
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-adapters.php": {
+    "head_sha256": "ed96c4ae5b42bf285076b8f44903eed77eea1889394b1457a19342a10d0f13b3",
+    "candidate_sha256": "ed96c4ae5b42bf285076b8f44903eed77eea1889394b1457a19342a10d0f13b3"
+  },
+  "tests/Golden/baseline/events.json": {
+    "head_sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+    "candidate_sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d"
+  },
+  "tests/Golden/baseline/php-surface.json": {
+    "head_sha256": "84da6f3d7e50ea96c2bbf3addae9946c17c6fdc284a83e51aa64fc795f8a8d5d",
+    "candidate_sha256": "84da6f3d7e50ea96c2bbf3addae9946c17c6fdc284a83e51aa64fc795f8a8d5d"
+  },
+  "tests/Golden/baseline/routes.json": {
+    "head_sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+    "candidate_sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7"
+  },
+  "tests/Golden/baseline/wire.json": {
+    "head_sha256": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2",
+    "candidate_sha256": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2"
+  }
+}

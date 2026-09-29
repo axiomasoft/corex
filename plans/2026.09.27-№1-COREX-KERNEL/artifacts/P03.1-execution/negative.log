@@ -1,0 +1,5 @@
+> python3 scripts/module-layout-gate.py
+new R1 packages/search/src/Support/Planted.php
+new R3 packages/search/src/Support/Planted.php
+module-layout FAIL: 1113 files, 438 violations, 436 baselined, 2 new, 0 stale; R0 0, R1 50, R2 0, R3 345, R4 0, R5 43
+Script python3 scripts/module-layout-gate.py handling the module-layout-gate event returned with error code 1

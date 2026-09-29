@@ -1,0 +1,26 @@
+{
+  "packages": {
+    "packages/access": 38,
+    "packages/core": 187,
+    "packages/custom-fields": 70,
+    "packages/intl": 34,
+    "packages/media": 20,
+    "packages/notifications": 19,
+    "packages/operations": 153,
+    "packages/panels": 17,
+    "packages/recurrence": 13,
+    "packages/search": 11,
+    "packages/search-intl": 6,
+    "packages/search-meilisearch": 4,
+    "packages/tasks": 33,
+    "packages/tasks-workflow": 17,
+    "packages/tenancy": 497,
+    "packages/tools": 60,
+    "packages/transfer": 8,
+    "packages/wakeup": 21,
+    "packages/webhooks": 80,
+    "packages/workflow": 15,
+    "products/flex-crm": 35
+  },
+  "total": 1338
+}

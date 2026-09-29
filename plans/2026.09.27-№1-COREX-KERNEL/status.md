@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: 29fbf7b1fda70426b3419f095d999cc2206850371edb08c668d1422727f508d3
+inputs_sha256: 31e6806419376490b58adf146428e44e7841c1d1b8f27aeebb89d7a63a48d0d8
 generated_by: task plan-views status
 -->
 
@@ -26,7 +26,7 @@ generated_by: task plan-views status
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
-| P03 | Feature modules и `Internal` | 0/2 | ⬜ Not started |
+| P03 | Feature modules и `Internal` | 1/2 | 🟡 In progress |
 
 ## Phase P00
 
@@ -58,7 +58,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P03.1 | Гейт раскладки модулей и доктрина STR | ⬜ Not started | — |
+| P03.1 | Гейт раскладки модулей и доктрина STR | 🟢 Done | 2026-09-29 |
 | P03.2 | Перенос по карте модулей | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -173,6 +173,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | gpt-6-astra/xhigh | plan-audit · audit-green · D59 fixes independently reviewed by Cursor/grok-4.7/high GREEN. Full Rector replay: Golden4, root822+10, PG240, package21, mutation34 and all gates GREEN. Report: audits/2026-09-29-p03-design-recheck.md. Next P03.1. |
+| 2026-09-29 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-29 | executor/designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | executor/designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | reviewer/cursor/grok-4.7/high | plan-audit · audit-green · D60 amendment independently reviewed with P03.1 candidate; unchanged P03.2 design retains prior audit evidence. Review: artifacts/P03.1-execution/review.json. All P03.1 declared Validation green; inherited P03.2 helper Pint findings explicit in D60. |
+| 2026-09-29 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 436/0 new/stale; Python8; SQLite832/PG240/pkg1338/Golden4; mutation34. D60. review: cursor/grok-4.7/high GREEN. Proof: artifacts/P03.1-execution/completion.md.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

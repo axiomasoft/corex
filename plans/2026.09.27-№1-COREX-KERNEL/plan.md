@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29) |
+| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | 2026-09-29 | `task:plan-design P03`: `backlog/P03.md` → `phases/P03/`, items P03.1–P03.2, D57 (заменяет D05: корень пакета = модуль, 278 переносов, 68 остаются, продукт вне N5, гейт `module-layout` R0–R5, ретайр `tenancy-structure-gate`), glossary N5; досье `research/P03-design.md`, примеры/скрипты/эталоны `artifacts/P03-design/`, `artifacts/P03/`; черновые выводы проверены (поправки: 23 внешних FQCN меняются, продукт не переносится, config/glossary-классы остаются); Routing solo P03.1, solo P03.2. | claude-opus-5-5/high |
 | 2026-09-29 | P03 audit A1–A5 remediation: D58; manifest/lock sync, Golden-before-verify, R5 namespace resolution и прямой Laravel bridge, точный kernel provider. Проверки — artifacts/P03-design-remediation/. Продукт и статусы исполнения не изменены; новый finish, независимый audit ожидается. | designer/codex/gpt-6-astra/high |
 | 2026-09-29 | P03 full Rector replay: implicit imports, baseline paths, architecture fixtures, AST-verified hashes, portable harness setup; D59; design-only scope | auditor/designer codex/gpt-6-astra/xhigh |
-
+| 2026-09-29 | P03.1 execution: D60 clarifies the active-source retirement scan while preserving immutable audits; current baseline and module gate copied unchanged, STR doctrine/CI updated. The unchanged P03.2 helper lint findings remain with their owner. | executor/designer/codex/gpt-6-sol/high |
 
 ## 5. Decision Log
 

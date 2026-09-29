@@ -1,0 +1,41 @@
+{
+ "schema": "module-layout/1",
+ "decision": "PLAN3.D57",
+ "kernel_modules": [
+  "Attributes",
+  "Audit",
+  "Config",
+  "Context",
+  "Data",
+  "Database",
+  "Departments",
+  "Errors",
+  "Features",
+  "Messaging",
+  "Modules",
+  "Observability",
+  "Settings",
+  "Storage",
+  "Time"
+ ],
+ "layer_buckets": [
+  "Actions",
+  "Casts",
+  "Commands",
+  "Concerns",
+  "Console",
+  "Helpers",
+  "Http",
+  "Jobs",
+  "Listeners",
+  "Middleware",
+  "Models",
+  "Observers",
+  "Policies",
+  "Repositories",
+  "Rules",
+  "Services",
+  "Support",
+  "Traits"
+ ]
+}
