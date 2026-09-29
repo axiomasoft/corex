@@ -1,0 +1,39 @@
+# PLAN3.P02.4 — execution evidence
+
+Route: codex/gpt-6-sol/high, provider-thread-state; run f2d35dfa91e6a3ab6cde59c4da2c3571b28ee4f711f784dffcca7b7cd96f5c82. Work ran in the main checkout after a byte snapshot of the input worktree; owner composer repositories/lock and prior design/audit work were preserved.
+
+## Implementation
+
+`p02-identifiers.py apply`: 60 automatic rules, 93 files and two manual rows. Five config files were renamed with git mv. Module config is nested in corex.php as corex.modules; its separate merge/publish was removed. Core and module migration tags are combined. Operations tenant tags publish the union of both previous sets; its two exact-array tests now assert that union. D53 finishes D52: Panels owns corex-panels-migrations[-tenant], and module binding/optimize/cache identifiers follow corex.modules. TTL, store, connection, env values and all other config entries/order are preserved.
+
+Ownership is strict in Composer and CI: 524 identifiers, 0 baselined. The map's temporary planned/shared declarations are removed; only tenancy's upstream_config exemption remains. The old P15 gate/script/manifest are deleted; PHPStan loses exactly its 11 baseline entries (12 counted errors). Full rename-completeness passes: 528 tokens, all five sections. D54 excludes only the historical ratchet-successors mapping; the negative in live documentation remains RED.
+
+README/package docs, architecture keys and public installation instructions use the renamed identifiers. Eight package changelogs announce the pre-1.0 breaking rename. Root .env.example was absent, so no pre-existing root environment file needed migration. The automatic tool also updates identifier references in migration PHP and two distribution Python fixtures; SQL/table/schema and release behavior are unchanged.
+
+## Validation
+
+- Root SQLite: 822 + 10 passed; PostgreSQL: 240 passed.
+- Package aggregator: exit 0; per-root counts in package-test-counts.json (852 passed).
+- Golden: 4 passed without rebaseline. All four baselines, rename-map and ConfigReportCompositionTest are byte-identical to the input (frozen-proof.json). **Changed regression literal lines: none** — the current literal contains no renamed access/config key.
+- All five providers' merge/publish config source paths exist (8 references); boot is covered by the package/root suites.
+- Full composer analyse, dependency analyser, Pint, ceilings, manifest policy (22 roots), package docs/graph, API contract, naming and anti-weakening: exit 0. Mutation registry: all 34 cases RED under sabotage and restored.
+- Negative controls: stale config basename makes both Python and PHP gates fail; a live old package token fails completeness; tenancy2 fails ownership; another package using tenancy fails both O1/O2. Every changed file was restored byte-for-byte.
+- Initial root-suite failures were two expected-array assertions for the required union tag; corrected with no assertion removal. Initial analyse failure was stale ignores for the deleted gate plus types in its new upstream exception; baseline only shrank and full original composer analyse was rerun GREEN.
+- Initial default contract-guard examined predecessor P02.3 and failed on that prior move. The current item changes no src/Contracts files; its explicit parent comparison is green. After product commit b335462, the exact default command also passes on 90c3dee..b335462.
+- Initial plan-lint found the mutable required-read bundle stale after edits. Tool regeneration restored zero errors/warnings without changing item-spec.
+
+Detailed outputs: validation-summary.json, fast-checks.json, negative-checks.json and referenced logs.
+
+## Independent review
+
+Round 1: fresh cursor/grok-4.6/high reviewed the P02.4 candidate and found one obsolete CFG-006 waiver. The record was removed; constitution and configuration registry now treat corex-search-intl as canonical. Docs gate and rename completeness reran GREEN. Product commit amended to b335462; only documentation changed. Round 2 independently verified the correction and returned GREEN.
+
+review: cursor/grok-4.6 GREEN (2 rounds).
+
+## Residual
+
+Only local proof is claimed. Hosted CI remains owner-deferred under D47 and must be revisited before publication. The authorized P02.4 scope ends here; next is P03 design.
+
+## Task tooling repair
+
+Task 0.25.2 attempted to resolve backlog-only P03 as an executable phase during delivery and lint. A bounded local repair in the sibling Task runtime recognizes only an existing skeleton, keeps unknown targets rejected, and leaves phase re-entry guards intact. Regression readiness14, delivery34 and lint316 tests passed; the exact finalize and plan-lint commands reran GREEN. The four runtime/test files remain a local diff in swissknifeman; tooling-repair.patch preserves the change. CoreX product bytes did not change.

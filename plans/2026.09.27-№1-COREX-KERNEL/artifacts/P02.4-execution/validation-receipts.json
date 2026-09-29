@@ -1,0 +1,98 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E17",
+    "command": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-identifiers.py apply` → `identifiers: 60 rules, <N> files` + 2 строки `manual:`; `… check` после manual → `identifiers check: 0 remaining`, exit 0.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E18",
+    "command": "- После пяти `git mv`: пути `mergeConfigFrom` и publish-источников у providers access/custom-fields/operations/search-intl/tasks-workflow существуют; affected package boot-тесты зелёные. Негатив examples §5.4: вернуть старое имя config-файла corex-auth.php в пути провайдера → `p02-identifiers.py check` и PHP-гейт `--sections=identifiers` exit 1; откат → exit 0.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E19",
+    "command": "- `php scripts/rename-completeness-gate.php` → `rename-completeness OK: <N> tokens, <F> files, sections classes,namespaces,packages,paths,identifiers`; негатив (examples §5.3) → `FAIL: 1 occurrence(s)`, exit 1; откат → OK.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E20",
+    "command": "- `php scripts/ownership-gate.php --strict` → `ownership OK: <I> identifiers, 0 baselined`, exit 0; `jq '.violations|length' scripts/ownership-gate-baseline.json` → 0; негатив `upstream_config` (examples §5.2) → exit 1.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E21",
+    "command": "- `ConfigReportCompositionTest` (P02.1) обновлён только в строках, где выводятся переименованные config-ключи (`corex-auth…` → `corex-access…`), и зелёный; каждая изменённая строка литерала названа в Completion Notes.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E22",
+    "command": "- `scripts/php84 composer test`, `PGSQL_PORT=5432 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages` exit 0; `scripts/php84 composer golden` → 4 passed (без rebaseline); `composer package-docs-gate` exit 0; `bash scripts/anti-weakening-gate.sh` exit 0; `python3 scripts/manifest-check.py` → `22 roots`.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E23",
+    "command": "- `grep -rn \"p15-rename-completeness\" composer.json .github scripts` пусто.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E24",
+    "command": "- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+    "contract_sha256": "7d46d244f3f69e81069c73007cbfc13f838b7cc2bf092a7b1ff627a70b15776c",
+    "spec_sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6",
+    "head": "b335462447ce8201988694e1b36ace4318cab59f",
+    "tree": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e",
+    "environment_sha256": "761ea62733b20a81ebf0bfc591a5462012517aaebc79fff6eaa434330ea16af8",
+    "exit_code": 0,
+    "executed_at": "2026-09-29T07:46:33Z"
+  }
+]

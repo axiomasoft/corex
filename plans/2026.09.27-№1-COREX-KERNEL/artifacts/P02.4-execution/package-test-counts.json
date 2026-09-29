@@ -1,0 +1,93 @@
+{
+  "packages": [
+    {
+      "package": "$p\" && composer --working-dir=\"$p\" test || exit 1; done",
+      "passed": 0
+    },
+    {
+      "package": "packages/access",
+      "passed": 38
+    },
+    {
+      "package": "packages/core",
+      "passed": 187
+    },
+    {
+      "package": "packages/custom-fields",
+      "passed": 70
+    },
+    {
+      "package": "packages/intl",
+      "passed": 34
+    },
+    {
+      "package": "packages/media",
+      "passed": 20
+    },
+    {
+      "package": "packages/notifications",
+      "passed": 19
+    },
+    {
+      "package": "packages/operations",
+      "passed": 158
+    },
+    {
+      "package": "packages/panels",
+      "passed": 17
+    },
+    {
+      "package": "packages/recurrence",
+      "passed": 13
+    },
+    {
+      "package": "packages/search",
+      "passed": 11
+    },
+    {
+      "package": "packages/search-intl",
+      "passed": 6
+    },
+    {
+      "package": "packages/search-meilisearch",
+      "passed": 4
+    },
+    {
+      "package": "packages/tasks",
+      "passed": 33
+    },
+    {
+      "package": "packages/tasks-workflow",
+      "passed": 17
+    },
+    {
+      "package": "packages/tenancy",
+      "passed": 0
+    },
+    {
+      "package": "packages/tools",
+      "passed": 60
+    },
+    {
+      "package": "packages/transfer",
+      "passed": 8
+    },
+    {
+      "package": "packages/wakeup",
+      "passed": 21
+    },
+    {
+      "package": "packages/webhooks",
+      "passed": 86
+    },
+    {
+      "package": "packages/workflow",
+      "passed": 15
+    },
+    {
+      "package": "products/flex-crm",
+      "passed": 35
+    }
+  ],
+  "total_passed": 852
+}

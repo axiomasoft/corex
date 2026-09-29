@@ -1,0 +1,127 @@
+> bash scripts/dependency-analyser.sh --all
+==> packages/access
+Using config /home/vostrikov/projects/packages/corex/packages/access/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 72 files in 0.022 s)
+
+==> packages/core
+Using config /home/vostrikov/projects/packages/corex/packages/core/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 325 files in 0.121 s)
+
+==> packages/custom-fields
+Using config /home/vostrikov/projects/packages/corex/packages/custom-fields/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 99 files in 0.03 s)
+
+==> packages/intl
+Using config /home/vostrikov/projects/packages/corex/packages/intl/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 83 files in 0.016 s)
+
+==> packages/media
+Using config /home/vostrikov/projects/packages/corex/packages/media/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 51 files in 0.011 s)
+
+==> packages/notifications
+Using config /home/vostrikov/projects/packages/corex/packages/notifications/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 60 files in 0.012 s)
+
+==> packages/operations
+Using config /home/vostrikov/projects/packages/corex/packages/operations/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 170 files in 0.057 s)
+
+==> packages/panels
+Using config /home/vostrikov/projects/packages/corex/packages/panels/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 37 files in 0.007 s)
+
+==> packages/recurrence
+Using config /home/vostrikov/projects/packages/corex/packages/recurrence/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 20 files in 0.005 s)
+
+==> packages/search-intl
+Using config /home/vostrikov/projects/packages/corex/packages/search-intl/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 12 files in 0.003 s)
+
+==> packages/search-meilisearch
+Using config /home/vostrikov/projects/packages/corex/packages/search-meilisearch/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 9 files in 0.003 s)
+
+==> packages/search
+Using config /home/vostrikov/projects/packages/corex/packages/search/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 41 files in 0.008 s)
+
+==> packages/tasks-workflow
+Using config /home/vostrikov/projects/packages/corex/packages/tasks-workflow/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 25 files in 0.01 s)
+
+==> packages/tasks
+Using config /home/vostrikov/projects/packages/corex/packages/tasks/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 82 files in 0.016 s)
+
+==> packages/tenancy
+Using config /home/vostrikov/projects/packages/corex/packages/tenancy/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 279 files in 0.14 s)
+
+==> packages/tools
+Using config /home/vostrikov/projects/packages/corex/packages/tools/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 45 files in 0.02 s)
+
+==> packages/transfer
+Using config /home/vostrikov/projects/packages/corex/packages/transfer/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 53 files in 0.013 s)
+
+==> packages/wakeup
+Using config /home/vostrikov/projects/packages/corex/packages/wakeup/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 28 files in 0.008 s)
+
+==> packages/webhooks
+Using config /home/vostrikov/projects/packages/corex/packages/webhooks/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 52 files in 0.028 s)
+
+==> packages/workflow
+Using config /home/vostrikov/projects/packages/corex/packages/workflow/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 20 files in 0.004 s)
+
+==> products/flex-crm
+Using config /home/vostrikov/projects/packages/corex/products/flex-crm/composer-dependency-analyser.php
+
+No composer issues found
+(scanned 90 files in 0.022 s)
+

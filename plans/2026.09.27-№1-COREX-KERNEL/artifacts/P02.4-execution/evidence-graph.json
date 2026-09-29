@@ -1,0 +1,153 @@
+{
+  "schema_version": "evidence-graph/v1",
+  "item_id": "P02.4",
+  "product_paths": [
+    ".env.example",
+    ".github/workflows/*.yml",
+    "README.md",
+    "api/**",
+    "composer.json",
+    "docs-public/**",
+    "docs/**",
+    "packages/*/config/**",
+    "packages/*/src/**",
+    "packages/*/{README,PACKAGE}.md",
+    "packages/core/config/corex.php",
+    "phpunit.xml",
+    "products/flex-crm/**",
+    "scripts/p15-*",
+    "scripts/{ownership-map.json,ownership-gate.php,ownership-gate-baseline.json}",
+    "tests/**"
+  ],
+  "digest_inputs": [
+    ".github/workflows/ci.yml",
+    "packages/core/config/corex.php",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/examples.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/extra-moves.tsv",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/identifier-map.tsv",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-identifiers.py",
+    "plans/2026.09.27-№1-COREX-KERNEL/decisions/D45-p02-identifiers-and-gates.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/decisions/D46-p02-design-audit-remediation.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design-rag.md",
+    "plans/2026.09.27-№1-COREX-KERNEL/research/P02-design.md",
+    "scripts/ownership-gate.php"
+  ],
+  "collisions": [
+    "packages/core/config/corex.php"
+  ],
+  "nodes": [
+    {
+      "id": "spec",
+      "kind": "item-spec",
+      "path": "phases/P02/P02.4.md",
+      "sha256": "e12dc78efce379387b8ba69ac41be61dfc46e4e0fbab93775a017321f5a044f6"
+    },
+    {
+      "id": "bundle",
+      "kind": "bundle",
+      "sha256": "681e4930355354f0f39ce0b513f1b3e0387787cc494d8ca85c72fc4a8d3bd88c",
+      "declaration_sha256": "85ea13c4c3c3ff2b18f693fc9fa32b1627c1bcddcd9f48aa1f89459e6c2c476d"
+    },
+    {
+      "id": "product",
+      "kind": "declared-files",
+      "anchor": {
+        "paths": [
+          {
+            "path": ".env.example",
+            "state": "missing"
+          },
+          {
+            "path": ".github/workflows/*.yml",
+            "state": "missing"
+          },
+          {
+            "path": "README.md",
+            "state": "file",
+            "sha256": "5e768ff65cb3dd4184c1fb6c42051f107a436e19e4f849edd83fcfd88e5433da"
+          },
+          {
+            "path": "api/**",
+            "state": "missing"
+          },
+          {
+            "path": "composer.json",
+            "state": "file",
+            "sha256": "d9b8e3432ecbc7f75dde65a5bdf725248cfa81de60328c587cc9f2b4b0f4775d"
+          },
+          {
+            "path": "docs-public/**",
+            "state": "missing"
+          },
+          {
+            "path": "docs/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/*/config/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/*/src/**",
+            "state": "missing"
+          },
+          {
+            "path": "packages/*/{README,PACKAGE}.md",
+            "state": "missing"
+          },
+          {
+            "path": "packages/core/config/corex.php",
+            "state": "file",
+            "sha256": "e8b3b3b4ab7321ffea465dfa3653db22af24630736a498ec407d263200773ee8"
+          },
+          {
+            "path": "phpunit.xml",
+            "state": "file",
+            "sha256": "7224539c9571777b28213599a428e30634ef8a144b9bcffa6a815a79c04d6a0b"
+          },
+          {
+            "path": "products/flex-crm/**",
+            "state": "missing"
+          },
+          {
+            "path": "scripts/p15-*",
+            "state": "missing"
+          },
+          {
+            "path": "scripts/{ownership-map.json,ownership-gate.php,ownership-gate-baseline.json}",
+            "state": "missing"
+          },
+          {
+            "path": "tests/**",
+            "state": "missing"
+          }
+        ],
+        "sha256": "ce4c8c6a2bf6e36c41bbdb609b25ecd565087795cdbf7476ceef61b4de1ee76e"
+      }
+    },
+    {
+      "id": "closure",
+      "kind": "closure-projections",
+      "paths": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "spec",
+      "to": "product",
+      "kind": "precedes"
+    },
+    {
+      "from": "bundle",
+      "to": "product",
+      "kind": "digest-input"
+    },
+    {
+      "from": "product",
+      "to": "closure",
+      "kind": "byte-identity"
+    }
+  ],
+  "sha256": "b4639d0c583643a88799967aa701b41b2a39dd2569ab03c19cfc3aa5ba071b4f"
+}

@@ -1,0 +1,111 @@
+diff --git a/packages/task/lib/task/plan_lint_checks/engine.py b/packages/task/lib/task/plan_lint_checks/engine.py
+index 8fd11984..f5c2e6c4 100644
+--- a/packages/task/lib/task/plan_lint_checks/engine.py
++++ b/packages/task/lib/task/plan_lint_checks/engine.py
+@@ -809,7 +809,8 @@ def lint_plan(plan_dir, diag):
+         elif kind == "design-phase":
+             ref_plan_id, ref_phase = m.group(1), m.group(2)
+             _check_plan_id(ref_plan_id)
+-            _check_phase(ref_phase)
++            if not plan_readiness.backlog_design_skeleton(plan_dir, ref_phase):
++                _check_phase(ref_phase)
+             _lint_design_continuation(
+                 plan_dir, handoff_path, plan_id, ref_phase, None, next_lineno, diag)
+         elif kind in ("design-finish", "design-roadmap"):
+diff --git a/packages/task/lib/task/plan_readiness.py b/packages/task/lib/task/plan_readiness.py
+index 7c1a2474..d13389d1 100644
+--- a/packages/task/lib/task/plan_readiness.py
++++ b/packages/task/lib/task/plan_readiness.py
+@@ -348,11 +348,26 @@ def validate_execution_target(plan_dir, item_ids) -> None:
+             f"PRIORITY_FIX_TARGET_MISMATCH: expected {expected[0]}, got {list(requested)}")
+ 
+ 
++def backlog_design_skeleton(plan_dir: Path, phase_id: str) -> bool:
++    """Recognize an undetailed design target without materializing an executable phase."""
++    from task import plan_layout
++
++    if not _PHASE.fullmatch(phase_id) or phase_id in plan_layout.phase_paths(plan_dir):
++        return False
++    try:
++        return bool(_SKELETON.search(
++            (plan_dir / "backlog" / f"{phase_id}.md").read_text(encoding="utf-8")))
++    except (OSError, UnicodeDecodeError):
++        return False
++
++
+ def validate_design_target(plan_dir, phase_id: str) -> None:
+     """Require an exact re-entry decision before design targets a terminal phase."""
+     from task import plan_layout
+ 
+     plan_dir = Path(plan_dir)
++    if backlog_design_skeleton(plan_dir, phase_id):
++        return
+     statuses = []
+     for spec in plan_layout.item_spec_paths(plan_dir, phase_id):
+         state_path = spec.with_name(spec.stem + ".state.md")
+@@ -385,6 +400,8 @@ def validate_design_handoff_target(plan_dir, phase_id: str) -> None:
+     from task import plan_layout
+ 
+     plan_dir = Path(plan_dir)
++    if backlog_design_skeleton(plan_dir, phase_id):
++        return
+     phase_path = plan_layout.phase_paths(plan_dir).get(phase_id)
+     try:
+         if phase_path is not None and _SKELETON.search(phase_path.read_text(encoding="utf-8")):
+diff --git a/packages/task/tests/test_plan_lint_structure.py b/packages/task/tests/test_plan_lint_structure.py
+index 9e320ce9..b0f79712 100644
+--- a/packages/task/tests/test_plan_lint_structure.py
++++ b/packages/task/tests/test_plan_lint_structure.py
+@@ -744,6 +744,21 @@ class TestHandoffMd(TmpPlanTestCase):
+         _, diag = _lint(plan_dir)
+         self.assertTrue(diag.ok)
+ 
++    def test_handoff_next_plan_design_backlog_only_skeleton_allowed(self):
++        plan_dir = write_valid_plan(self.root)
++        handoff = plan_dir / "handoff.md"
++        handoff.write_text(handoff.read_text(encoding="utf-8").replace(
++            "/task:plan-exec DEMO-1 P1.1", "/task:plan-design DEMO-1 P2"), encoding="utf-8")
++        backlog = plan_dir / "backlog"
++        backlog.mkdir()
++        target = backlog / "P2.md"
++        target.write_text("# P2\n\n> СКЕЛЕТ — не детализирован\n", encoding="utf-8")
++        _, diag = _lint(plan_dir)
++        self.assertTrue(diag.ok, diag.errors)
++        target.write_text("# P2\n", encoding="utf-8")
++        _, diag = _lint(plan_dir)
++        self.assertTrue(_errors_containing(diag, "фаза «P2» не существует в плане"))
++
+     def test_handoff_next_plan_design_wrong_plan_id(self):
+         plan_dir = write_valid_plan(self.root)
+         text = (plan_dir / "handoff.md").read_text(encoding="utf-8")
+diff --git a/packages/task/tests/test_plan_readiness.py b/packages/task/tests/test_plan_readiness.py
+index fdc5c07d..6f12995b 100644
+--- a/packages/task/tests/test_plan_readiness.py
++++ b/packages/task/tests/test_plan_readiness.py
+@@ -158,6 +158,26 @@ class PlanReadinessTest(unittest.TestCase):
+                              + "\n> СКЕЛЕТ — не детализирован\n", encoding="utf-8")
+             plan_readiness.validate_design_handoff_target(plan, "P1")
+ 
++    def test_design_accepts_backlog_only_skeleton_but_rejects_missing_target(self):
++        from task import plan_layout
++
++        with tempfile.TemporaryDirectory() as tmp:
++            plan = write_valid_plan(Path(tmp), "BACKLOG-PHASE", layout="v2")
++            backlog = plan / "backlog"
++            backlog.mkdir()
++            target = backlog / "P2.md"
++            target.write_text("# P2\n\n> СКЕЛЕТ — не детализирован\n", encoding="utf-8")
++            for validator in (plan_readiness.validate_design_target,
++                              plan_readiness.validate_design_handoff_target):
++                with self.subTest(validator=validator.__name__):
++                    validator(plan, "P2")
++                    with self.assertRaises(plan_layout.PlanLayoutError):
++                        validator(plan, "P3")
++                    target.write_text("# P2\n", encoding="utf-8")
++                    with self.assertRaises(plan_layout.PlanLayoutError):
++                        validator(plan, "P2")
++                    target.write_text("# P2\n\n> СКЕЛЕТ — не детализирован\n", encoding="utf-8")
++
+     def test_all_three_reentry_triggers_reduce_to_reopen(self):
+         for trigger in ("owner-decision-change", "terminal-evidence-invalid",
+                         "safety-or-authority-boundary"):

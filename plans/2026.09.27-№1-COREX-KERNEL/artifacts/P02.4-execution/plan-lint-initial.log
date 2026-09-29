@@ -1,0 +1,2 @@
+ERROR: plans/2026.09.27-№1-COREX-KERNEL/plan.md: read-budget-v1: пункт P02.4: обязательный вход 'plans/2026.09.27-№1-COREX-KERNEL/bundles/P02.4.json' не проходит D2(b): generated bundle не byte-fresh: вид устарел: plans/2026.09.27-№1-COREX-KERNEL/bundles/P02.4.json
+plan-lint: ПРОВАЛ (1 план(ов), 1 ошибок, 0 предупреждений)

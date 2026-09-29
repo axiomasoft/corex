@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-28
-inputs_sha256: 3a136ded1420f65b3fc52ed39ac8674ecf45aa1c2b4a1257eaa7d02ba4ad2401
+through: 2026-09-29
+inputs_sha256: b6f5136f3fd8f82ab44ad4ec5f666ef656fa609848b7d1ef9a94e2c24de820e7
 generated_by: task plan-views status
 -->
 
@@ -16,8 +16,8 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
-| Last Updated | 2026-09-28 |
+| Status | 🟢 Done |
+| Last Updated | 2026-09-29 |
 
 ## 4. Phase Index & Status Board
 
@@ -25,7 +25,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
-| P02 | Vendor, состав пакетов, namespace = путь | 0/4 | ⬜ Not started |
+| P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 
 ## Phase P00
 
@@ -48,10 +48,10 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P02.1 | Ядро не знает пакетов: SPI швов и тестовые харнессы | ⬜ Not started | — |
-| P02.2 | Operations отдаёт webhooks и tools через SPI | ⬜ Not started | — |
-| P02.3 | Механический перенос по картам P00 | ⬜ Not started | — |
-| P02.4 | Идентификаторы пакетов и гейт полноты переименований | ⬜ Not started | — |
+| P02.1 | Ядро не знает пакетов: SPI швов и тестовые харнессы | 🟢 Done | 2026-09-28 |
+| P02.2 | Operations отдаёт webhooks и tools через SPI | 🟢 Done | 2026-09-28 |
+| P02.3 | Механический перенос по картам P00 | 🟢 Done | 2026-09-29 |
+| P02.4 | Идентификаторы пакетов и гейт полноты переименований | 🟢 Done | 2026-09-29 |
 
 ## 6. Update Log
 
@@ -130,6 +130,24 @@ Evidence: findings/P01.4-execution.md. |
 | 2026-09-28 | cursor/grok-4.7/xhigh | plan-audit · audit-green · GREEN local P01 safety net. O-3 retained: push, live CI, DOD-21 stale. findings/P01-phase-audit.md. |
 | 2026-09-28 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-28 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/codex/gpt-6-sol/high | plan-audit · in-progress · P00–P02 design audit; changed risk P02. Actual route implementation/high, adapter recommends frontier/xhigh. Product read-only; artifacts/P02-design-audit/route.json. |
+| 2026-09-28 | auditor/codex/gpt-6-sol/high | plan-audit · audit-attention · ATTENTION: 4 Major A1–A4 in P02.3/P02.4. findings/P02-design-audit.md; isolated reproductions. Product unchanged; O-3 retained. Return bounded design correction; no execution. |
+| 2026-09-28 | fixer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-28 | auditor/codex/gpt-6-astra/xhigh | plan-audit · in-progress · Independent bounded re-audit of D46 A1–A4; unchanged P00–P02 evidence reused after input comparison. Product read-only. artifacts/P02-design-reaudit/route.json. |
+| 2026-09-28 | auditor/codex/gpt-6-astra/xhigh | plan-audit · audit-green · GREEN: independent D46 A1–A4 delta review; real provider/autoload inputs, positive/negative fixtures and Task bundles pass. Unchanged 9 item specs reused. findings/P02-design-reaudit.md. Product unchanged; O-3 remains before P02.1. |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | gpt-6-sol/high | plan-run · closed-green · 173af94; seams136→89; golden+18/-0/~2; negatives a–d GREEN; sqlite815+10/PG239/package20 GREEN. review: cursor/grok-4.7 GREEN. D47: CI deferred. Proof: artifacts/P02.1-execution/completion.md. write-site: pre_mutation=allow; pre_final=allow |
+| 2026-09-28 | gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · Repair write-site spelling from recorded validation receipts.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 9cabf10; seams89→18; sqlite821+10/PG240/package20 GREEN. review: cursor/grok-4.7 GREEN. Proof: artifacts/P02.2-execution/completion.md. D47: CI deferred.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · in-progress · — |
+| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:75 |
+| 2026-09-29 | codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · b335462; 60 rules/93 files; ownership524/0, rename528; SQLite832/PG240/pkg852/Golden4; literal lines:none; mutation34; review: cursor/grok-4.6 GREEN. Proof: artifacts/P02.4-execution/completion.md. D47 CI deferred.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · P02 local closure: all four items GREEN, direct-close allow; no phase audit admitted. Proof: artifacts/P02.4-execution/phase-close-admission.json. Hosted CI owner-deferred under D47. |
 
 ## Owner Gates
 

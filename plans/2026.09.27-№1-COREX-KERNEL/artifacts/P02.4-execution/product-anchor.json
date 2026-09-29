@@ -1,0 +1,656 @@
+{
+  "paths": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "state": "file",
+      "sha256": "f3bf171dd347a519234ddf688dd3cd7a065413bb31d99e10887d86d08dfbd94e"
+    },
+    {
+      "path": "README.md",
+      "state": "file",
+      "sha256": "5e768ff65cb3dd4184c1fb6c42051f107a436e19e4f849edd83fcfd88e5433da"
+    },
+    {
+      "path": "composer.json",
+      "state": "file",
+      "sha256": "d9b8e3432ecbc7f75dde65a5bdf725248cfa81de60328c587cc9f2b4b0f4775d"
+    },
+    {
+      "path": "docs-public/README.md",
+      "state": "file",
+      "sha256": "60f8948ace3e4b388f47d7d25d3bbc54ce9a7970a4ac0df1c39c638941ed4434"
+    },
+    {
+      "path": "docs/architecture/api-policy.md",
+      "state": "file",
+      "sha256": "e971fd6a929dc9144c6a1818e551eb790331f05acfbf76ede3eb05fcb75d137b"
+    },
+    {
+      "path": "docs/architecture/configuration.md",
+      "state": "file",
+      "sha256": "3624e4dcbf3a5d481a62e036408d8ada2deaff262505271558454c8f6be58675"
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "state": "file",
+      "sha256": "a93a2e03e6d6dfd77fd5c0ed6677d6bc857703103b52a4c49ef88e2196ed9341"
+    },
+    {
+      "path": "docs/architecture/exceptions/CFG-006/corex-intl-search-key.md",
+      "state": "missing"
+    },
+    {
+      "path": "docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md",
+      "state": "file",
+      "sha256": "b2cac6a124f8e153163c587b07e346edb8504e90d4d0b17ba6675a2b8a9e651e"
+    },
+    {
+      "path": "docs/architecture/scorecard.md",
+      "state": "file",
+      "sha256": "2c0615d49d702a83ba78a3289c1322bf4580680997c566a953db27b760f56cef"
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "state": "file",
+      "sha256": "f0d296c589dbb0cba4617b98e69bffb6d2cfaabdb05b8643950c5a0ca0f58653"
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "state": "file",
+      "sha256": "712088306a8e71ce99329ad725a64b800357707ae51db5d76f8bc39c10553195"
+    },
+    {
+      "path": "packages/access/CHANGELOG.md",
+      "state": "file",
+      "sha256": "3e323626ae4ea4a5f6b5267272bb6d85e15389bab8082b4621acef410219fcc6"
+    },
+    {
+      "path": "packages/access/README.md",
+      "state": "file",
+      "sha256": "1ebe114f0b16e05b5678b79aa55da28095a90c2caef11ce958925dbc2cdd8909"
+    },
+    {
+      "path": "packages/access/config/corex-access.php",
+      "state": "file",
+      "sha256": "5de2aee69a47c8d6c8c04d88bbb92ce6e978c38fe9b721228890703ac759d588"
+    },
+    {
+      "path": "packages/access/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php",
+      "state": "file",
+      "sha256": "738e908547bc52f6326467b117f0856bb5e70f75158e920f705a4c2a44dcb66c"
+    },
+    {
+      "path": "packages/access/src/CoreAuthServiceProvider.php",
+      "state": "file",
+      "sha256": "f1aa7597c3ff273910b86278eebf0fdeff58e7ec299660bef599dfb94820e73f"
+    },
+    {
+      "path": "packages/access/src/Matrix/ScopeMapVersion.php",
+      "state": "file",
+      "sha256": "4e1515d02361f516a368e22e09ceda34a65d6f2c089dc9057df49238903ce2dc"
+    },
+    {
+      "path": "packages/access/src/Support/AccessConfigSection.php",
+      "state": "file",
+      "sha256": "678186454536ff9d99669fe44428de10f76a849f69f9b4b49ca86b58dd3b6a11"
+    },
+    {
+      "path": "packages/access/tests/Feature/PrincipalUserProviderTest.php",
+      "state": "file",
+      "sha256": "312454cae1c0546ca5deac8372053ced75bd8cc8ef98532f5ac77e26d5381484"
+    },
+    {
+      "path": "packages/access/tests/Feature/ScopeVersionConcurrencyTest.php",
+      "state": "file",
+      "sha256": "c633dbef1bbc2c95f33528f30fbcfa717abc7064b7744abc9d9b8d0c5752c9e0"
+    },
+    {
+      "path": "packages/access/tests/Pg/ScopeResolverTest.php",
+      "state": "file",
+      "sha256": "18cdf5abe6b4fd59da78889f6707c5250ffd20d721119e5bab13c8e98ab94bc2"
+    },
+    {
+      "path": "packages/core/CHANGELOG.md",
+      "state": "file",
+      "sha256": "b364547ed6ba5490d618d5cb2cb2d2296ddc118741b8c3323641fe0c7861369a"
+    },
+    {
+      "path": "packages/core/README.md",
+      "state": "file",
+      "sha256": "f78e1ccd07bbe9fa70d712db3c170d32cc4d10b0a5475e46dab1141549a87e6d"
+    },
+    {
+      "path": "packages/core/config/corex-modules.php",
+      "state": "missing"
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "state": "file",
+      "sha256": "e8b3b3b4ab7321ffea465dfa3653db22af24630736a498ec407d263200773ee8"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php",
+      "state": "file",
+      "sha256": "b558d811bad6759f717a056622ee68557abf9522b85165d06fa2b8cf34accbf5"
+    },
+    {
+      "path": "packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php",
+      "state": "file",
+      "sha256": "6a7b3bde08bd607b09aafa44ddb5e5a0bbc200918b0232d29d0be925547d4bb0"
+    },
+    {
+      "path": "packages/core/docs/modules/README.md",
+      "state": "file",
+      "sha256": "219e71099327d80fcdff822bb992610bbc41580695e997a3f521bdcf9abb1174"
+    },
+    {
+      "path": "packages/core/src/Config/Config.php",
+      "state": "file",
+      "sha256": "9aafed0756ec2b384e35da947188df3dbb94185d904f57f09c25cf0e505b2dde"
+    },
+    {
+      "path": "packages/core/src/Messaging/PrunePubSubMessages.php",
+      "state": "file",
+      "sha256": "d3063280fdd9e0e7304c427e7921ed380fe2bc0e3821ffea11acef7beb780191"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/LifecycleRegistrar.php",
+      "state": "file",
+      "sha256": "6b68fb5a8e709d8e67c771054c1148d595de3e7b0ce3464e343d8173ecfbbba6"
+    },
+    {
+      "path": "packages/core/src/Modules/ModulesServiceProvider.php",
+      "state": "file",
+      "sha256": "18ecce318fec6255f75195d51c447ed514ad9983cc09e3994f9516ef37f181a9"
+    },
+    {
+      "path": "packages/core/src/Modules/Support/ModulesConfigSection.php",
+      "state": "file",
+      "sha256": "e172ea5b9036666805b42f7f00008234f8bee2b3187d735a151acc3bc7c53509"
+    },
+    {
+      "path": "packages/core/src/Modules/Support/ModulesOptions.php",
+      "state": "file",
+      "sha256": "5e302af221ede810f4f1b3b9bf80858671f488b6833a14f8f862b16dd323ba50"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/CompositionBindingsTest.php",
+      "state": "file",
+      "sha256": "93d3532b6dba8483deaa31dc26090fc804ab1f1f68a2ba5b8494f7aa31793127"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/LifecycleRemediationTest.php",
+      "state": "file",
+      "sha256": "b9a9af9b16f242fd993133d000df3a442839ac81e607cb76b68867a20ba3fcfd"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/RegistryIntrospectionTest.php",
+      "state": "file",
+      "sha256": "4006f1f0211c06c245928eeffada2fe6e6de041576f54a5abdf7cdbeb80c5429"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/ModulesOptionsTest.php",
+      "state": "file",
+      "sha256": "c6a12ccbcd7e59263282971cf78aeb138bc332e5a976a834022e0a88777ba9a5"
+    },
+    {
+      "path": "packages/custom-fields/CHANGELOG.md",
+      "state": "file",
+      "sha256": "6a6e8e940c7d28fdb39db66d590cdd906faca7419fe07ffc93e6d7afc311ecd0"
+    },
+    {
+      "path": "packages/custom-fields/README.md",
+      "state": "file",
+      "sha256": "dee6b45ecfc7632836f4649e9c4b5e11e369cc1f01b8e2ca29c93fc697fa8518"
+    },
+    {
+      "path": "packages/custom-fields/config/corex-custom-fields.php",
+      "state": "file",
+      "sha256": "cfbfbf983abcab03e43afde8589dd1ead75def0a1abd2db65bc2c905586063c2"
+    },
+    {
+      "path": "packages/custom-fields/src/AttributesServiceProvider.php",
+      "state": "file",
+      "sha256": "f2875f5eae70335a6760bed86f94ac0f3db0fa7116ee7a185bfb2c0aa6e6b68f"
+    },
+    {
+      "path": "packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php",
+      "state": "file",
+      "sha256": "cc6e49a7f4c8a0bb7c1057a94c788f1f34f1768f3ee35fb21c37608dcf2fe60e"
+    },
+    {
+      "path": "packages/custom-fields/tests/Unit/AttributeTablesTest.php",
+      "state": "file",
+      "sha256": "ad1a49d9e66fc7ce5c82dbcc4d51fc4365c7812b4f259373b332536d2a5df606"
+    },
+    {
+      "path": "packages/operations/CHANGELOG.md",
+      "state": "file",
+      "sha256": "39ee7b712ed2a00c21520b652866e7fd16030f006dcd34a1f1fbd833988596c9"
+    },
+    {
+      "path": "packages/operations/README.md",
+      "state": "file",
+      "sha256": "118dbd3469176a3af24c69f4f3eca382fe3264f89ef3fd61c4f688338428e2d7"
+    },
+    {
+      "path": "packages/operations/config/corex-operations.php",
+      "state": "file",
+      "sha256": "17e6fc378ba475a245a29ea07d5856f1643b50a73b6e3ecae3168e3fe4f9a9be"
+    },
+    {
+      "path": "packages/operations/src/ApiServiceProvider.php",
+      "state": "file",
+      "sha256": "74883bf0458398c07972f50557ec66f2180918f3daf9e4d1a2ee6ae0f0a5c75d"
+    },
+    {
+      "path": "packages/operations/src/Bulk/Commands/WorkBulkOperations.php",
+      "state": "file",
+      "sha256": "a218ba15f63c479deec94a6e3accc5ecdaa145691bcc4bd1e5b434ba7fe07499"
+    },
+    {
+      "path": "packages/operations/src/Bulk/Laravel/BulkRegistrar.php",
+      "state": "file",
+      "sha256": "93ed626d24d8efd94ea15654c8a84cb420ac178afc6ff49312152b3f32aca207"
+    },
+    {
+      "path": "packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php",
+      "state": "file",
+      "sha256": "32abf39f22d240978871420f56f7e6a72d3db7676e8c5e94ebd98d44160f8fdc"
+    },
+    {
+      "path": "packages/operations/src/Cost/Laravel/CostRegistrar.php",
+      "state": "file",
+      "sha256": "cc8c4e3fdbbccaa8476b9070aea98750a6d74a15d8408d55b522f9190a60121e"
+    },
+    {
+      "path": "packages/operations/src/Laravel/ApiSchemaRegistrar.php",
+      "state": "file",
+      "sha256": "972faa863300ce4183367d61704ce299959393c5676e3f0b79da477328e238aa"
+    },
+    {
+      "path": "packages/operations/src/Laravel/Commands/PruneApiOperations.php",
+      "state": "file",
+      "sha256": "070104980a0c25c6ef25bc76a16fff044168b7f77ea9359b5834d3c91e83cdbb"
+    },
+    {
+      "path": "packages/operations/src/OpenApi/Commands/WriteApiSnapshots.php",
+      "state": "file",
+      "sha256": "1c90baa087bf9c98794e3a05ff3a60bf08e63a655e510218acf02f8591bdeccc"
+    },
+    {
+      "path": "packages/operations/tests/Feature/ApiRetentionTest.php",
+      "state": "file",
+      "sha256": "c480cc0e5fc836ff0d778f00112e432a684b29dbabe6c1f0087305ec75c54714"
+    },
+    {
+      "path": "packages/operations/tests/Feature/ApiRoutesTest.php",
+      "state": "file",
+      "sha256": "21c3c4748e6c3f1871bef6cc47a5c166dbe9440f875c20bece437c933ac603d4"
+    },
+    {
+      "path": "packages/operations/tests/Feature/BulkApiTest.php",
+      "state": "file",
+      "sha256": "0c1a6a03185037114853aa903d141299d4e2bdbd29dd05bab48fe9b0b295d32e"
+    },
+    {
+      "path": "packages/operations/tests/Feature/BulkResultAccessTest.php",
+      "state": "file",
+      "sha256": "de009a2962aeb5e5224639e0da3550157a7cdcff26936b18acafd0b12dcac754"
+    },
+    {
+      "path": "packages/operations/tests/Feature/BulkStoreTest.php",
+      "state": "file",
+      "sha256": "c7c3a25ee352fce6135487da21dc70aa70f718bb81aa2443012431e2d61b3275"
+    },
+    {
+      "path": "packages/operations/tests/Feature/BulkTransferTest.php",
+      "state": "file",
+      "sha256": "c5090d720a09995fc97121e23537f65ad98fccee062904ddea2e334e64f734ee"
+    },
+    {
+      "path": "packages/operations/tests/Feature/ContractSnapshotTest.php",
+      "state": "file",
+      "sha256": "31ceb7a4d973d26c3d8bf9d2ebd56095a4ff6a3620095bb28eeee6795cd1d84e"
+    },
+    {
+      "path": "packages/operations/tests/Feature/IdempotencyStoreTest.php",
+      "state": "file",
+      "sha256": "909bfdca43dbb753466cd27c57a9dc2776ca5668f2aebd1ab1e4401ca9567864"
+    },
+    {
+      "path": "packages/operations/tests/Feature/LoadContourBootTest.php",
+      "state": "file",
+      "sha256": "d67783418c32ba74a79d802533ec7999395ae2e811445ed1efc7bf1a9222b77b"
+    },
+    {
+      "path": "packages/operations/tests/Feature/LoadSchemaTest.php",
+      "state": "file",
+      "sha256": "9a6bd3391cb048e44e46cfd6e5319c12f832010b5f1d23883a29d7520b3c6f45"
+    },
+    {
+      "path": "packages/operations/tests/Feature/OperationBudgetTest.php",
+      "state": "file",
+      "sha256": "caf8aec9d6c70b7faa838c042c6ded335729628f01e29ccf2b60f915a3ce5702"
+    },
+    {
+      "path": "packages/operations/tests/Feature/PlatformTest.php",
+      "state": "file",
+      "sha256": "4b28ea16104375acafbd916ce023df6b138d7130472d27ed6b2633c6f8d12dd6"
+    },
+    {
+      "path": "packages/panels/CHANGELOG.md",
+      "state": "file",
+      "sha256": "ed4dc1af18994a650aeab7441559731c69d81a2324d47a88cb94249e6d147cb1"
+    },
+    {
+      "path": "packages/panels/README.md",
+      "state": "file",
+      "sha256": "313c9c9c0292ccb3fcbbc1e0d1c77db740d87f5419229c8c33a704cbb15734ac"
+    },
+    {
+      "path": "packages/panels/src/PanelsServiceProvider.php",
+      "state": "file",
+      "sha256": "2ee422a1f37a7515b77f09f292a731a91d913265a693338b593e9658a9135520"
+    },
+    {
+      "path": "packages/search-intl/CHANGELOG.md",
+      "state": "file",
+      "sha256": "30fbceeacb4a5c337edcc638194a14b8d3ea99b1d1aa58142f1c9311c0f59db0"
+    },
+    {
+      "path": "packages/search-intl/README.md",
+      "state": "file",
+      "sha256": "5b27eded56603814cad50e6f35e2f8acc70abb99a9097b422771852344f74f76"
+    },
+    {
+      "path": "packages/search-intl/config/corex-intl-search.php",
+      "state": "missing"
+    },
+    {
+      "path": "packages/search-intl/config/corex-search-intl.php",
+      "state": "file",
+      "sha256": "1eea364ffb48c6ea38f3e0730bfb958aa585c0b45367c1979ec17e50d7842faa"
+    },
+    {
+      "path": "packages/search-intl/src/SearchIntlServiceProvider.php",
+      "state": "file",
+      "sha256": "24b681bdf0a56b5eb6849538365d009338ac4257aa042479914f1fe3ad8efaea"
+    },
+    {
+      "path": "packages/search-intl/tests/TestCase.php",
+      "state": "file",
+      "sha256": "6d0ffc3a674f3e670bc6d52fa7a91b9a53a93e68b6a88a4134084ed4298af95c"
+    },
+    {
+      "path": "packages/search-intl/tests/Unit/OptionalBridgesTest.php",
+      "state": "file",
+      "sha256": "74d3d6a9a7d52e6975372ac30c0f6fbef060eaf33d4c6f3b21a76abed017a386"
+    },
+    {
+      "path": "packages/tasks-workflow/CHANGELOG.md",
+      "state": "file",
+      "sha256": "c5f8a88ea07f8ee581abd168d3d21da0a70c31873ae4aeda5e0d23fb93ea402e"
+    },
+    {
+      "path": "packages/tasks-workflow/README.md",
+      "state": "file",
+      "sha256": "45212e692747b028e315c1eedde12e480d5c173ed74e63dcc9668fe36625027b"
+    },
+    {
+      "path": "packages/tasks-workflow/config/corex-tasks-workflow.php",
+      "state": "file",
+      "sha256": "17da38521f8207f93c1bb936ac18b11598ca7f98d3d6c2f528541e8e94de9fb5"
+    },
+    {
+      "path": "packages/tasks-workflow/src/Internal/CaptureTaskCompletion.php",
+      "state": "file",
+      "sha256": "0e89b6f08b3e9010427fe4f3dbdadff3dc08a857bb00805eeb392b0048ce7e2f"
+    },
+    {
+      "path": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
+      "state": "file",
+      "sha256": "f34503b145335d922764d82be14cd889579c5c08d262f8bd1de7ab033c8b1012"
+    },
+    {
+      "path": "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php",
+      "state": "file",
+      "sha256": "d2504f1771407af2c549b3280c75c2da98773b8c43aae21f6287c47d1a2ef562"
+    },
+    {
+      "path": "packages/tasks-workflow/tests/Pg/MaterializationPgTest.php",
+      "state": "file",
+      "sha256": "0bcf1de03a1cade6bcee34a139754a0c00c119ea74ee295cf4db574beea3e760"
+    },
+    {
+      "path": "packages/tenancy/CHANGELOG.md",
+      "state": "file",
+      "sha256": "6981ef45e75d6b71f459fd982d9516c2374e165b996d2f3dec6df5acbb591c42"
+    },
+    {
+      "path": "packages/tenancy/README.md",
+      "state": "file",
+      "sha256": "46cb91c4a76e4056dabe81f3e5ccb11269310c60884fc041f48bde24f15a356b"
+    },
+    {
+      "path": "packages/tenancy/config/tenancy.php",
+      "state": "file",
+      "sha256": "d158d2ce5508851c7147e024781ec31ef761b261658708871a5db5ce8fb24b5e"
+    },
+    {
+      "path": "packages/tenancy/src/Identity/DatabaseIdentitySyncer.php",
+      "state": "file",
+      "sha256": "f596246fc1698bfd9363309ac08e862bfd054386513f3a9d3f44a77b59e461be"
+    },
+    {
+      "path": "packages/tenancy/src/Integration/Wakeup/SweepRootWakeups.php",
+      "state": "file",
+      "sha256": "4e361ca00dc6f0b604d511730d59649e7409236e5a3136da01c8078fbcebba7d"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php",
+      "state": "file",
+      "sha256": "11f477745030373e7779713db214ade14b51e7367fb89d1b701a6cef9445d031"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/PendingClearCommand.php",
+      "state": "file",
+      "sha256": "43aeb34f42fe2ce35395c6f123a87e9fecd35c708f408fa6c979090350f09c9e"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php",
+      "state": "file",
+      "sha256": "3543342ad28d6ed177d32ace6cc8e1c04249df92cf1d4bd5014ad3084ab053ff"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php",
+      "state": "file",
+      "sha256": "2f64b958c8952ab2f23f144f4a1b08b5e192a017a8b7f1f09c8e24e54d66fc02"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "state": "file",
+      "sha256": "33ff4257536e73284858633bdc4a63f880ab245ced1e0cc8f099ad5948751dc9"
+    },
+    {
+      "path": "packages/tenancy/tests/Arch/NoCrossDbFkTest.php",
+      "state": "file",
+      "sha256": "f0a65d8bcef8642933594de3bedd8904a747147391548dae21eb29d85e28115a"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/IdentitySyncerTest.php",
+      "state": "file",
+      "sha256": "e464c50bbb4b48700670e13ec6d7158a23744e2b9e10f7152f1f2d557ca8c1a6"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ImpersonationTest.php",
+      "state": "file",
+      "sha256": "d71ed05e4b6019d1e905bbf8e0896d39a2c88acc06abe01d3c2a91584d817c04"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/MigrationWaveTest.php",
+      "state": "file",
+      "sha256": "9e65c832a595147a3af0145871c0cd6ee3c4ee4df20bf1a547f32cdf1affdf64"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/PendingPoolTest.php",
+      "state": "file",
+      "sha256": "d2655b50608a2f75bae66de9d572d863061bb92e5c14d269510a0ab0d6a15ab1"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ProviderRemediationTest.php",
+      "state": "file",
+      "sha256": "06f2e823a4c7cb7afceb74dd0b5b6000cde08b8a802e7ffe121defa5bd8f9903"
+    },
+    {
+      "path": "packages/tenancy/tests/TestCase.php",
+      "state": "file",
+      "sha256": "069cce38896e76722e245f9e65e371397890e5f818357830bcc3fd752ba987d8"
+    },
+    {
+      "path": "packages/tools/tests/Feature/ToolCostInvocationTest.php",
+      "state": "file",
+      "sha256": "daaefb17851034316a1abdc09ee17c475dc01c1efa86b39bc04a6b9b437f85f4"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookApiRetentionTest.php",
+      "state": "file",
+      "sha256": "dc94574c4c8efe7bb8f0f9493527584f55d98f847716a6776ae8553fc2ebc852"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookConcurrencyTest.php",
+      "state": "file",
+      "sha256": "bee92c0fd88ee932071520860f83e2d0c905d03a0e63f0ddd77af0a13abbf739"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookDeliveryTest.php",
+      "state": "file",
+      "sha256": "9116f3fdd3a7760672747535194bb4111c5d03c40adbde52aaae87084f2c7c4c"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookFanoutTest.php",
+      "state": "file",
+      "sha256": "ae448d95df7244026df7cc6a1654282273098a9869d043ba6a49f74445a41209"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php",
+      "state": "file",
+      "sha256": "2fb6f3201ed26efba833441da2898410cc174bd6f72af6e9553502562e5c274d"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookManagementTest.php",
+      "state": "file",
+      "sha256": "f4ed2f508e6e983d99d57e1e31339a249769e07a1a1db28f9dd23b4ff0b9a281"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookRedactionTest.php",
+      "state": "file",
+      "sha256": "22e154965ef119736c34385a6e8ff559e9948dad1e51ff53ff54f29694f2790e"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookReplayTest.php",
+      "state": "file",
+      "sha256": "acc1646cc582a60bce6d98fa5e89771d9fca15294e6bb1a9a2b635726fca0108"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookSubscriptionTest.php",
+      "state": "file",
+      "sha256": "ecef1f291a7fa8c3ae2998baf5833f20f03267d6384a78c29ab881a2b02cdaf2"
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhooksProviderTest.php",
+      "state": "file",
+      "sha256": "16960c82d522808de6e700a12e180f826841fe6f375a2a091e62bcf9541ad24f"
+    },
+    {
+      "path": "phpstan-baseline.neon",
+      "state": "file",
+      "sha256": "df530f241deb395f2331310179c96470a6fcf2d52c7c2ebe5d569485f5bcd6c9"
+    },
+    {
+      "path": "products/flex-crm/tests/Pg/ModuleLifecycleTest.php",
+      "state": "file",
+      "sha256": "5d1f740c25adbd436bc7849fb231fade05d2ed012ef903a6ae857e95ac749a11"
+    },
+    {
+      "path": "scripts/distribution/private-auth-proof.py",
+      "state": "file",
+      "sha256": "2e2cf0727e86be3db9852305a0cd54174222675e62f2115ddb5a5c443b4ea894"
+    },
+    {
+      "path": "scripts/distribution/remaining-cohort-private.py",
+      "state": "file",
+      "sha256": "f33e585b2eb61e078b442764202cee70d6fd1d7eb6d0975e7699a1dc61a9d14c"
+    },
+    {
+      "path": "scripts/ownership-gate-baseline.json",
+      "state": "file",
+      "sha256": "c4052dd773a6ae580c1f9bae5d64759f4489c476f7e0da319f61df3a488bb652"
+    },
+    {
+      "path": "scripts/ownership-gate.php",
+      "state": "file",
+      "sha256": "c7a174123cd42dabc8913b9a8a097e0bc84ed5bc6920ddefa9e307cc95a56a45"
+    },
+    {
+      "path": "scripts/ownership-map.json",
+      "state": "file",
+      "sha256": "02f5af03fd0571c6a1c1a4b7a89e04b42664f9f4239a259b8678dff541beba19"
+    },
+    {
+      "path": "scripts/p15-rename-completeness-gate.php",
+      "state": "missing"
+    },
+    {
+      "path": "scripts/p15-rename-completeness-manifest.json",
+      "state": "missing"
+    },
+    {
+      "path": "scripts/rename-completeness.json",
+      "state": "file",
+      "sha256": "21f274ee4789dd25b82362554d3c33c328397e4932a10b4bda9701958cd30986"
+    },
+    {
+      "path": "tests/Feature/MigrationPublishTest.php",
+      "state": "file",
+      "sha256": "e35e84249e14eb39537c6c0914affb4f902b82f7fea4babef78205e609c1294d"
+    },
+    {
+      "path": "tests/Feature/ModuleLifecycleTest.php",
+      "state": "file",
+      "sha256": "ead220307cb76e1c99b9aafbc306fcbcb076e2e46e13953dda9831ff3a0f58dc"
+    },
+    {
+      "path": "tests/Feature/ModuleRegistryTest.php",
+      "state": "file",
+      "sha256": "c85ee4477aefc766c0c19e7dccebed1e257d4348203dbe4ed1e769a0bebb6cfe"
+    },
+    {
+      "path": "tests/Feature/OperationContractTest.php",
+      "state": "file",
+      "sha256": "182fa1d676a8b9ea1f4d11546cc97185fc5a27834fb925fdcf22ef653b8f0d89"
+    },
+    {
+      "path": "tests/Feature/PubSubDatabasePollTest.php",
+      "state": "file",
+      "sha256": "41c37e26e0ffba7aeb2fbda66b20c8c48a6d9816bc97d38fbf9f4ce972849269"
+    },
+    {
+      "path": "tests/Feature/SettingsTest.php",
+      "state": "file",
+      "sha256": "cbb079f8384e0f091f062b3bc13fcaa8f327c9199667f996c7b522f317c26109"
+    },
+    {
+      "path": "tests/Golden/Support/GoldenSnapshot.php",
+      "state": "file",
+      "sha256": "add56000a6685ff7430599be0bec2121fb10272e7fbb3356ac03be9f1f6a74ca"
+    },
+    {
+      "path": "tests/fixtures/attributes-architecture/runtime-config.php.fixture",
+      "state": "file",
+      "sha256": "9595356cb84be8e4858a4f61a1ed0dfd0203d2516fe8045151bb3fa36cdac748"
+    }
+  ],
+  "sha256": "ce3b08ea51ad590eb6fbae67f249f41969d0eb2b2dc3fe1f026815e0ab27ac7b",
+  "product_commit": "b335462447ce8201988694e1b36ace4318cab59f"
+}

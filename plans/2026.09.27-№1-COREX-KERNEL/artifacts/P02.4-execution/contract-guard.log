@@ -1,0 +1,20 @@
+> bash scripts/contract-guard.sh
+contract-guard: ✗ packages/access/src/Contracts changed WITHOUT packages/access/CHANGELOG.md
+contract-guard: ✗ packages/attributes/src/Contracts changed WITHOUT packages/attributes/CHANGELOG.md
+contract-guard: ✗ packages/core/src/Contracts changed WITHOUT packages/core/CHANGELOG.md
+scripts/contract-guard.sh: line 39: printf: write error: Broken pipe
+contract-guard: ✗ packages/custom-fields/src/Contracts changed WITHOUT packages/custom-fields/CHANGELOG.md
+contract-guard: ✗ packages/search/src/Contracts changed WITHOUT packages/search/CHANGELOG.md
+contract-guard: ✗ packages/search-intl/src/Contracts changed WITHOUT packages/search-intl/CHANGELOG.md
+contract-guard: ✗ packages/tasks-workflow/src/Contracts changed WITHOUT packages/tasks-workflow/CHANGELOG.md
+contract-guard: ✗ packages/tenancy/src/Contracts changed WITHOUT packages/tenancy/CHANGELOG.md
+scripts/contract-guard.sh: line 39: printf: write error: Broken pipe
+contract-guard: ✗ packages/tools/src/Contracts changed WITHOUT packages/tools/CHANGELOG.md
+contract-guard: ✗ packages/transfer/src/Contracts changed WITHOUT packages/transfer/CHANGELOG.md
+contract-guard: ✗ packages/wakeup/src/Contracts changed WITHOUT packages/wakeup/CHANGELOG.md
+scripts/contract-guard.sh: line 39: printf: write error: Broken pipe
+contract-guard: ✗ packages/webhooks/src/Contracts changed WITHOUT packages/webhooks/CHANGELOG.md
+
+contract-guard: a Contracts change must carry a CHANGELOG entry in the same package
+                (ADR-008; breaking→CHANGELOG until v1.0 — D17).
+Script bash scripts/contract-guard.sh handling the contract-guard event returned with error code 1

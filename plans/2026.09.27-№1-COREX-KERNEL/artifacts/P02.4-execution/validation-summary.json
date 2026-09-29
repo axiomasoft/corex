@@ -1,0 +1,94 @@
+{
+  "root_test": {
+    "exit_code": 0,
+    "passed": 832,
+    "log": "root-test.log"
+  },
+  "pg_test": {
+    "exit_code": 0,
+    "passed": 240,
+    "log": "pg-test.log"
+  },
+  "package_tests": {
+    "exit_code": 0,
+    "passed": 852,
+    "log": "packages-test.log"
+  },
+  "golden": {
+    "exit_code": 0,
+    "passed": 4,
+    "rebaseline": false,
+    "log": "golden.log"
+  },
+  "analyse": {
+    "exit_code": 0,
+    "log": "analyse-final.log"
+  },
+  "deps_analyse": {
+    "exit_code": 0,
+    "log": "deps.log"
+  },
+  "lint": {
+    "exit_code": 0,
+    "log": "lint-final.log"
+  },
+  "mutation": {
+    "exit_code": 0,
+    "cases": 34,
+    "log": "mutation.log"
+  },
+  "negatives": {
+    "exit_code": 0,
+    "log": "negative-checks.json"
+  },
+  "ownership": {
+    "exit_code": 0,
+    "identifiers": 524,
+    "baselined": 0,
+    "log": "ownership-final.log"
+  },
+  "rename": {
+    "exit_code": 0,
+    "tokens": 528,
+    "log": "rename-final.log"
+  },
+  "package_docs": {
+    "exit_code": 0,
+    "log": "package-docs-final.log"
+  },
+  "contract_guard": {
+    "exit_code": 0,
+    "baseline": "90c3deea36cdd7d4b4e799904f5c53366cbe8950",
+    "log": "contract-guard-final.log"
+  },
+  "manifests": {
+    "exit_code": 0,
+    "roots": 22,
+    "log": "manifests.log"
+  },
+  "anti_weakening": {
+    "exit_code": 0,
+    "log": "anti-weakening-final.log"
+  },
+  "ceilings": {
+    "exit_code": 0,
+    "log": "ceilings-final.log"
+  },
+  "api_contract": {
+    "exit_code": 0,
+    "log": "api-contract.log"
+  },
+  "package_graph": {
+    "exit_code": 0,
+    "log": "package-graph.log"
+  },
+  "naming": {
+    "exit_code": 0,
+    "log": "naming.log"
+  },
+  "plan_lint": {
+    "exit_code": 0,
+    "log": "plan-lint.log"
+  },
+  "product_commit": "b335462447ce8201988694e1b36ace4318cab59f"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "tests/Feature/ConfigReportCompositionTest.php",
+    "sha256": "3a2e0e9d156204977c5e555e2ae5dc1984f5fee8f75e589c1117ee803e706fdf",
+    "unchanged": true
+  },
+  {
+    "path": "tests/Golden/baseline/events.json",
+    "sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+    "unchanged": true
+  },
+  {
+    "path": "tests/Golden/baseline/php-surface.json",
+    "sha256": "84da6f3d7e50ea96c2bbf3addae9946c17c6fdc284a83e51aa64fc795f8a8d5d",
+    "unchanged": true
+  },
+  {
+    "path": "tests/Golden/baseline/routes.json",
+    "sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+    "unchanged": true
+  },
+  {
+    "path": "tests/Golden/baseline/wire.json",
+    "sha256": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2",
+    "unchanged": true
+  },
+  {
+    "path": "tests/Golden/rename-map.json",
+    "sha256": "9f77199170ccce82fdde5032ecf1348d7e8b47f133a02e725f88edf792e5420d",
+    "unchanged": true
+  }
+]

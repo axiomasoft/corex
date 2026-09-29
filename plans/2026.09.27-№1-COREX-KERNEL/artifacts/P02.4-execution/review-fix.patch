@@ -1,0 +1,54 @@
+diff --git a/docs/architecture/configuration.md b/docs/architecture/configuration.md
+index 3c8c2e5..7c1813d 100644
+--- a/docs/architecture/configuration.md
++++ b/docs/architecture/configuration.md
+@@ -36,7 +36,7 @@
+ | corex-access.identity.table | axiomasoft/corex-access | string | users | no | deployment | no | use-site | — |  |  |
+ | corex-access.panel | axiomasoft/corex-access | string | app | no | deployment | no | use-site | — |  |  |
+ | corex-access.workspace_scope_class | axiomasoft/corex-access | string | CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope | no | product-policy | unobserved | use-site | — |  |  |
+-| corex-search-intl.enabled | axiomasoft/corex-search-intl | bool | false | no | deployment | no | unobserved | — |  | CFG-006 exception; tombstone after major of search-intl |
++| corex-search-intl.enabled | axiomasoft/corex-search-intl | bool | false | no | deployment | no | unobserved | — |  |  |
+ | corex-intl.formatting.icu_enabled | axiomasoft/corex-intl | unobserved | unobserved | no | product-policy | unobserved | unobserved | — |  |  |
+ | corex-intl.locale.allow_parent | axiomasoft/corex-intl | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+ | corex-intl.locale.app_tag | axiomasoft/corex-intl | string | en | no | product-policy | unobserved | unobserved | — |  |  |
+diff --git a/docs/architecture/constitution.md b/docs/architecture/constitution.md
+index 2e56330..3f75223 100644
+--- a/docs/architecture/constitution.md
++++ b/docs/architecture/constitution.md
+@@ -391,9 +391,9 @@
+   artisan, publish-теги)
+ **Владелец.** ../dev-doctrine.md §3 (D82)
+ **Enforcement.** ревью
+-**Исключения.** exceptions/CFG-006/corex-intl-search-key.md
+-**Почему.** Исключение `corex-search-intl` — `exceptions/CFG-006/corex-intl-search-key.md` (BC
+-  после ренейма в `axiomasoft/corex-search-intl`).
++**Исключения.** —
++**Почему.** `corex-search-intl` соответствует имени пакета `axiomasoft/corex-search-intl`;
++  переименование конфигурации объявлено в CHANGELOG пакета (PLAN3.D45).
+ 
+ ## Группа MSG — сообщения
+ 
+diff --git a/docs/architecture/exceptions/CFG-006/corex-intl-search-key.md b/docs/architecture/exceptions/CFG-006/corex-intl-search-key.md
+deleted file mode 100644
+index 3218042..0000000
+--- a/docs/architecture/exceptions/CFG-006/corex-intl-search-key.md
++++ /dev/null
+@@ -1,18 +0,0 @@
+-# Исключение: CFG-006 — конфиг-ключ `corex-search-intl`
+-
+-**Нарушаемая статья.** CFG-006
+-
+-**Затронутые пути.** `packages/search-intl/config/corex-search-intl.php`,
+-`packages/search-intl/src/SearchIntlServiceProvider.php` (ключ `corex-search-intl`, publish-тег
+-`corex-search-intl-config`).
+-
+-**Владелец.** `axiomasoft/corex-search-intl`
+-
+-**Причина.** Осознанное BC-решение после ренейма пакета в `axiomasoft/corex-search-intl`: переименование
+-ключа конфигурации сломало бы существующие установки и опубликованные файлы (`RAG:—`, N11).
+-
+-**Компенсирующий контроль.** Документированное исключение в конституции; новые пакеты обязаны
+-следовать правилу `corex/*`-имён; ключ перечислен в README пакета.
+-
+-**Условие снятия.** Мажорный релиз пакета `axiomasoft/corex-search-intl` с объявленной миграцией ключа
+-в CHANGELOG пакета.

@@ -1,0 +1,12 @@
+[
+  {
+    "path": "composer.lock",
+    "sha256": "c06dfdea7c10d44df3ffde2b59ee672a3501f33e7d608a674607b68c656c46e6",
+    "matches_input": true
+  },
+  {
+    "path": "artifacts/P12-package-graph/report.json",
+    "sha256": "adf742376f3cf7d3e1aabb6a037422392709010267ea3d57aeea0356a14aba64",
+    "matches_input": true
+  }
+]
