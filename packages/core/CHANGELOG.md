@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — source API metadata (PLAN3.P04.1)
+
+- Add final readonly `CoreX\Attributes\Api` and `Spi` metadata and the `SpiKind` backed enum.
+- Add a source-only API/SPI tooling scanner and deterministic `php-api/1` manifests, with nested PHPDoc, named-parameter and inheritance diagnostics.
+- The report command exposes classification debt; existing namespace/package gates remain required until the strict cutover. Parser dependencies remain development-only.
+
+
 ## Unreleased — package identifier alignment
 
 ### Changed

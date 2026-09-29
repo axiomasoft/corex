@@ -41,6 +41,7 @@
         "larastan/larastan": "^3.12",
         "mockery/mockery": "^1.6",
         "nikic/php-parser": "^5.4",
+        "phpstan/phpdoc-parser": "^2.3",
         "open-telemetry/api": "^1.4",
         "open-telemetry/sdk": "^1.4",
         "orchestra/testbench": "^10.12|^11.3",
@@ -72,6 +73,9 @@
             "package-type": "foundation",
             "stability": "stable",
             "public-api": [
+                "CoreX\\Attributes\\Api",
+                "CoreX\\Attributes\\Spi",
+                "CoreX\\Attributes\\SpiKind",
                 "CoreX\\Audit",
                 "CoreX\\Config\\Config",
                 "CoreX\\Config\\Contracts",

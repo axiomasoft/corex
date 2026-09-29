@@ -795,6 +795,9 @@ jobs:
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
 
+      - name: Source API surface report (classification debt is reported)
+        run: composer php-api:report
+
       - name: API contract compatibility
         run: composer api-contract
 

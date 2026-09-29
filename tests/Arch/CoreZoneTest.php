@@ -133,6 +133,13 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
+    'Attributes/Api.php' => 'Foundation',
+    'Attributes/Internal/SourceType.php' => 'Foundation',
+    'Attributes/Internal/SurfaceDiagnostic.php' => 'Foundation',
+    'Attributes/Internal/SurfaceReport.php' => 'Foundation',
+    'Attributes/Internal/SurfaceScanner.php' => 'Foundation',
+    'Attributes/Spi.php' => 'Foundation',
+    'Attributes/SpiKind.php' => 'Foundation',
     'Audit/Internal/AuditObserver.php' => 'Audit',
     'Audit/Contracts/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',

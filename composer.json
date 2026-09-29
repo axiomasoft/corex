@@ -156,8 +156,8 @@
     },
     "scripts": {
         "test": [
-            "vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage,TasksWorkflowPackage,Golden --order-by=default",
-            "vendor/bin/pest --testsuite=TasksWorkflowPackage --exclude-group=pg --order-by=default"
+            "vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage,TasksWorkflowPackage,Golden --order-by=default @additional_args",
+            "vendor/bin/pest --testsuite=TasksWorkflowPackage --exclude-group=pg --order-by=default @no_additional_args"
         ],
         "test:pg": "vendor/bin/pest --group=pg",
         "test:packages": "for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo \"==> $p\" && composer --working-dir=\"$p\" test || exit 1; done",
@@ -166,6 +166,7 @@
         "package-docs-gate": "php scripts/package-docs-gate.php",
         "dod-check": "python3 scripts/dod-1.0.py check --profile ci --candidate plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json",
         "module-layout-gate": "python3 scripts/module-layout-gate.py",
+        "php-api:report": "php scripts/php-api.php --report --format=json",
         "table-write-ownership-gate": "php scripts/table-write-ownership-gate.php",
         "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",
         "rename-completeness": "php scripts/rename-completeness-gate.php",

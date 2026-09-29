@@ -15,7 +15,7 @@ SPEC = importlib.util.spec_from_file_location('module_layout_gate', SCRIPT)
 assert SPEC and SPEC.loader
 GATE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GATE)
-CONFIG = {'kernel_modules': ['Audit', 'Data'], 'layer_buckets': ['Support', 'Models']}
+CONFIG = {'kernel_modules': ['Audit', 'Data', 'Attributes'], 'layer_buckets': ['Support', 'Models']}
 VALID = {
     'core/src/CoreServiceProvider.php': 'namespace CoreX; final class CoreServiceProvider {}',
     'core/src/Audit/Contracts/AuditLogger.php': 'namespace CoreX\\Audit\\Contracts; interface AuditLogger {}',
@@ -58,6 +58,20 @@ def rules(tmp: Path) -> list[str]:
 
 
 class ModuleLayoutGateTest(unittest.TestCase):
+    def test_attribute_exception_is_exact(self) -> None:
+        valid = {f'core/src/Attributes/{name}.php': f'namespace CoreX\\Attributes; final class {name} {{}}'
+                 for name in ('Api', 'Spi', 'SpiKind')}
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual([], rules(build(Path(tmp), valid)))
+        for extra in (
+            {'core/src/Attributes/Fourth.php': 'namespace CoreX\\Attributes; final class Fourth {}'},
+            {'core/src/Attributes/Api.php': 'namespace CoreX\\Attributes; final class Other {}'},
+            {'search/src/Attributes/Api.php': 'namespace CoreX\\Search\\Attributes; final class Api {}'},
+            {'core/src/Attributes/Api.php': 'namespace CoreX\\Attributes; final class Api {}\nfinal class Extra {}'},
+        ):
+            with self.subTest(extra=extra), tempfile.TemporaryDirectory() as tmp:
+                self.assertIn('R3', rules(build(Path(tmp), {**valid, **extra})))
+
     def test_valid_tree_is_clean(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual([], rules(build(Path(tmp), {})))

@@ -162,7 +162,11 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
         if not kernel and dirs and dirs[0] in buckets:
             add('R1', f, f'layer bucket {dirs[0]}/ at package root')
         inner = f['inner']
-        if root_entry:
+        attribute_entry = (kernel and f['dir'] == 'core' and dirs == ('Attributes',)
+                           and name in ('Api.php', 'Spi.php', 'SpiKind.php')
+                           and f['namespace'] == 'CoreX\\Attributes'
+                           and f['decls'] == [name[:-4]])
+        if root_entry or attribute_entry:
             pass
         elif not inner:
             add('R3', f, 'file outside categories and bridges of its module')

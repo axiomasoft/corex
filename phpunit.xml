@@ -33,6 +33,7 @@
             <directory>packages/panels/tests/SavedViews</directory>
         </testsuite>
         <testsuite name="CorePackage">
+            <directory>packages/core/tests/Attributes</directory>
             <directory>packages/core/tests/Unit</directory>
             <directory>packages/core/tests/Storage</directory>
             <directory>packages/core/tests/Feature</directory>

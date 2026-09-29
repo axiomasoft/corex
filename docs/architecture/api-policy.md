@@ -245,3 +245,13 @@ category, семантику path или retryability, удалить докум
 «либо так нельзя, либо владелец забыл объявить неймспейс публичным».
 
 Исключение оформляется в конфигурации гейта, а не в коде потребителя, и несёт причину.
+
+## Source metadata migration (PLAN3.P04.1)
+
+Types can declare `CoreX\Attributes\Api` or `Spi` (`SpiKind::Implement` / `Call`).
+`composer php-api:report` emits the source-derived inventory and current classification debt.
+A successful report is not strict API approval. Existing namespace graph checks remain required
+through P04.4; the three metadata types are explicitly listed in the current kernel manifest.
+The scanner schema, failure semantics and snapshot commands are documented in
+[php-api-schema](../reference/php-api-schema.md). An Api label permits calls, not implementation
+or inheritance by another package. Internal declarations cannot carry either label.
