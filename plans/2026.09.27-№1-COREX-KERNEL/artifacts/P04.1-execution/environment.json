@@ -1,0 +1,15 @@
+{
+  "php": "8.4.26",
+  "test_database": "corex_test",
+  "database_mode": "host",
+  "pgsql_host": "127.0.0.1",
+  "pgsql_port": 5432,
+  "database_preflight": "pg_isready=0; current_database()=corex_test; migrations owned by test harness; root SQLite :memory:; source fixtures unique temp directories",
+  "executor": "codex/gpt-6-astra/high",
+  "package_lane": {
+    "pgsql_port": 5434,
+    "database": "corex_test",
+    "server": "dedicated Docker PostgreSQL 16.14",
+    "process_timeout": "disabled for test execution only after measured tenancy timeout at 900s"
+  }
+}

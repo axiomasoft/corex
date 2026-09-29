@@ -1,0 +1,4 @@
+> vendor/bin/pest --exclude-group=pg --exclude-group=meilisearch --exclude-testsuite=SearchMeilisearchPackage,TasksWorkflowPackage,Golden --order-by=default
+{"tool":"pest","result":"passed","tests":853,"passed":853,"assertions":3643,"duration_ms":30455}
+> vendor/bin/pest --testsuite=TasksWorkflowPackage --exclude-group=pg --order-by=default
+{"tool":"pest","result":"passed","tests":10,"passed":10,"assertions":54,"duration_ms":1576}

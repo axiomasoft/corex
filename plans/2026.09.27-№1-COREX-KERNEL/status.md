@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: 34f81cb45e9c75f7c156a8d8b3b6a3aed59a26bffa4cf96c9c256e0e3d35dad5
+inputs_sha256: ee9048307609163e421da6ed501e97d5ad7f4c8bec3d8981c1bfebd7333dc561
 generated_by: task plan-views status
 -->
 
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
-| P04 | Application API, Extension SPI и типизированные ошибки | 0/4 | ⬜ Not started |
+| P04 | Application API, Extension SPI и типизированные ошибки | 1/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -66,7 +66,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P04.1 | Атрибуты и report-сканер символной поверхности | ⬜ Not started | — |
+| P04.1 | Атрибуты и report-сканер символной поверхности | 🟢 Done | 2026-09-29 |
 | P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | ⬜ Not started | — |
 | P04.3 | Типизированные package errors и compiled ProblemRegistry | ⬜ Not started | — |
 | P04.4 | Strict поверхность, manifests, SemVer и документация | ⬜ Not started | — |
@@ -208,6 +208,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | owner/design-acceptance/D66 | plan-audit · audit-green · D66: Owner accepts verified GREEN finish and waives repeat independent design audit. Legacy gate carrier only; no independent audit performed. See artifacts/P04-owner-acceptance/acceptance.json. |
+| 2026-09-29 | executor/codex/gpt-6-astra | plan-run · in-progress · — |
+| 2026-09-29 | executor/codex/gpt-6-astra | plan-run · local-repair · Bounded integration repairs and exact original validation carriers rerun GREEN; artifacts/P04.1-execution/integration-repair.json. No unresolved repair remains. |
+| 2026-09-29 | executor/codex/gpt-6-astra | plan-run · closed-green · P04.1 E14–E23 GREEN: artifacts/P04.1-execution/completion.md + proof-index.json. Golden +7 tooling types only. review: cursor/grok-4.7/high GREEN. Solo scope complete; P04.2 recommended.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

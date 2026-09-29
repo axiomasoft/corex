@@ -1,0 +1,11 @@
+{
+  "commit": "b4a52143ee2e5a09e357128789942146c997fd1c",
+  "files": {
+    "tests/Golden/baseline/wire.json": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2",
+    "tests/Golden/baseline/events.json": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+    "tests/Golden/baseline/php-surface.json": "84da6f3d7e50ea96c2bbf3addae9946c17c6fdc284a83e51aa64fc795f8a8d5d",
+    "tests/Golden/baseline/routes.json": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+    "tests/Golden/rename-map.json": "57f038dc8c0e9a9326b24cd729557465ff3271cad55cf59e214f88089364e524",
+    "tests/Golden/promoted-fixtures.json": "56a4a1dbc087fab2d8fec75938d2bddcde0cda3bbcc4f5ce2304cb7861c0fc8c"
+  }
+}

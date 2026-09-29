@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-29 — after P04
+# HANDOFF — 2026-09-29 — after P04.1
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2
 
 | Параметр | Значение |
 |:--|:--|
@@ -8,39 +8,30 @@
 | Model | frontier |
 | Thinking | high |
 | Capabilities | repository write · shell · PHP8.4 · isolated test DB · independent item review |
-| Context | cold-start-root: capability-missing |
-| Суть | Старт P04.1: Api/Spi и report-сканер; GREEN finish принят владельцем, повторный design audit отменён D66. |
-
-**Native Codex command:**
-
-```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1'
-```
+| Context | continue-root |
+| Суть | P04.1 закрыт; следующий P04.2 классифицирует API/SPI и вводит immutable DTO по D63. |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4", "loaded-inputs:reusable", "cold-start-cost:0", "checkpoint:artifacts/P04-owner-acceptance/completion.md"], "outcome": "cold-start-root", "reason": "capability-missing", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P04.1-execution/completion.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** GREEN finish P00–P04 принят владельцем (D66); ещё один independent
- design audit перед текущим P04 не требуется. Совместимый GREEN design gate carrier
-явно записывает owner acceptance, без заявления о проведённом независимом аудите.
-13 execution-sheet admissions согласованы; bundle P04.1 подготовлен штатным tooling.
+**Done:** P04.1: Api/Spi/SpiKind, AST source scanner, CLI report/strict/write/check,
+fixtures, exact layout exception, report CI, documentation and initial source report.
+Required suites and 34 mutation controls pass. Independent Cursor/Grok 4.7 High review GREEN.
+Golden includes exactly seven new tooling types; existing effective records and other layers unchanged.
 
-**Remaining:** P04.1 → P04.2 → P04.3 → P04.4 по строкам 10–13 execution-sheet.
-Каждый item требует своих Validation и full independent review. P04.2–P04.4 ждут
-producer outputs. После P04 close — дизайн P05 по фактическому результату; P05–P09 backlog.
+**Remaining:** P04.2 → P04.3 → P04.4. P04.2 is a recommendation, outside the completed
+owner-authorized solo P04.1 scope. No automatic successor execution.
 
-**Sources of truth:** decisions/D66-p04-owner-design-acceptance.md; plan.md §2/§3;
-roadmap.md строка 10; phases/P04/P04.1.md; bundles/P04.1.json;
-research/P04-design.md; research/P04-design-rag.md; artifacts/P04-design/examples.md;
-artifacts/P04-owner-acceptance/{acceptance.json,completion.md,continuity.json};
-artifacts/P04-design-finish/validation.json (предшествующие GREEN проверки).
+**Sources of truth:** phases/P04/P04.1.md; phases/P04/P04.2.md;
+decisions/D63-p04-public-surface-contract.md; decisions/D64-p04-errors-and-golden-delta.md;
+decisions/D66-p04-owner-design-acceptance.md; artifacts/P04.1-execution/scanner-contract.md;
+artifacts/P04.1-execution/completion.md; artifacts/P04.1-execution/proof-index.json;
+artifacts/P04.1-execution/review-verdict.md; journal.jsonl.
 
-**Open risks:** DTO/API/SPI/error semantics P04 требуют item tests и full reviews.
-D66 принимает только текущий fingerprint; substantive изменение дизайна требует
-нового допуска. Runtime item statuses пока Not started.
+**Open risks:** Current source tree intentionally retains classification debt. Report exit 0
+does not imply strict admission. P04.2 owns classification/DTO changes; P04.4 owns strict CI cutover.
 
-**Workarounds/Deferred/Open questions:** Task не имеет отдельного waiver enum;
-legacy audit-green carrier означает явное принятие владельцем D66, не independent
-review. P04.1 остаётся frontier/high; текущий Sol authoring route не даёт execution
-admission на Sol. Поэтому launch указывает Astra/high. Push/hosted CI отложены D47.
+**Workarounds/Deferred/Open questions:** See execution observations for recovered runner issues
+and bounded integration repairs. Run Testbench suites serially; package PG lane uses isolated
+corex_test on port 5434. Push, hosted CI, release and later items were not executed.

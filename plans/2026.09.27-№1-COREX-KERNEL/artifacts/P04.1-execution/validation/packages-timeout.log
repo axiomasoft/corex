@@ -1,0 +1,908 @@
+> for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done
+==> packages/access
+
+   PASS  Tests\Feature\ScopeAvailabilityTest
+  ✓ it throws ScopeCapabilityMismatch when the column exists but the ca… 0.48s
+  ✓ it leaves the scope unchanged once the matching capability is decla… 0.03s
+  ✓ it leaves none/account untouched regardless of capability or regist… 0.03s
+  ✓ it normalizes to none for an entity_key unknown to the registry      0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+
+   PASS  Tests\Feature\TenantContextGuardTest
+  ✓ it denies when the user has neither scoped nor global permission     0.10s
+  ✓ it returns false for an unknown context type                         0.03s
+  ✓ it grants when the user has the permission scoped to the entity      0.04s
+  ✓ it returns false when the context entity does not exist              0.03s
+  ✓ it falls back to a global permission within the panel                0.04s
+
+   PASS  Tests\Feature\PermissionSurfaceTest
+  ✓ it excludes a declaration whose owning module is inactive            0.04s
+  ✓ it excludes a declaration whose entity is unknown to EntityRegistry  0.03s
+  ✓ it includes every distinct scope when the entity declares both owna… 0.03s
+  ✓ it returns only account for a non-scopeable declaration              0.03s
+  ✓ it lists every declared action with the entity scope set for an act… 0.03s
+
+   PASS  Tests\Feature\WorkspaceScopeWiringTest
+  ✓ it silently skips wiring when the pinned scope class does not exist  0.04s
+  ✓ it silently skips wiring when the scope class is null (boxed profil… 0.03s
+  ✓ it does not wire the workspace global scope onto a model without th… 0.03s
+  ✓ it wires the workspace global scope onto every model whose entity d… 0.03s
+
+   PASS  Tests\Feature\PrincipalUserProviderTest
+  ✓ it returns false from validateCredentials() for a wrong password     0.12s
+  ✓ it makes retrieveByToken() a permanent no-op and updateRememberToke… 0.07s
+  ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.07s
+  ✓ it gives the same class and identity from Auth::attempt() and Auth:… 0.12s
+  ✓ it returns null from retrieveByCredentials() for an unknown email    0.07s
+  ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.07s
+  ✓ it works against a table with entirely different column names, driv… 0.10s
+  ✓ it logs a PrincipalIdentity(User) in via Auth::attempt() on the rig… 0.11s
+  ✓ it rehashes the password column only when Hash::needsRehash() is tr… 0.11s
+
+   PASS  Tests\Feature\BladeDirectivesTest
+  ✓ it compiles @scope to an entity-scoped role check                    0.04s
+  ✓ it compiles @entity to an entity-scoped permission check             0.03s
+
+   PASS  Tests\Feature\ScopeVersionConcurrencyTest
+  ✓ it invalidates the captured tenant even when the active context cha… 0.04s
+  ✓ it retains every concurrent invalidation even on the non-atomic fil… 1.16s
+
+   PASS  Tests\Unit\AuthOptionsTest
+  ✓ it normalizes an empty workspace scope class to null
+  ✓ it rejects an empty panel                                            0.04s
+  ✓ it accumulates an empty panel and incomplete identity columns in one exception
+
+  Tests:    38 passed (65 assertions)
+  Duration: 3.75s
+  Random Order Seed: 1790692407
+
+==> packages/core
+{"tool":"pest","result":"passed","tests":217,"passed":217,"assertions":729,"duration_ms":4284}
+==> packages/custom-fields
+{"tool":"pest","result":"passed","tests":70,"passed":70,"assertions":243,"duration_ms":865}
+==> packages/intl
+{"tool":"pest","result":"passed","tests":34,"passed":34,"assertions":103,"duration_ms":664}
+==> packages/media
+
+   PASS  CoreX\Media\Tests\ConfigReportSectionTest
+  ✓ section registers in report order and redacts its secrets            0.30s
+
+   PASS  Tests\Conversion\ConversionEdgeCasesTest
+  ✓ it does not advertise a conversion when no matching driver is insta… 0.15s
+  ✓ it keeps malformed source conversions pending for durable retry ins… 0.03s
+  ✓ it rejects output facts that exceed the immutable conversion profil… 0.02s
+
+   PASS  Tests\Conversion\ConversionTest
+  ✓ it creates one bounded GD thumbnail for a file/profile/version       0.03s
+  ✓ it purges a published conversion together with its deleting origina… 0.03s
+
+   PASS  Tests\Feature\MediaLifecycleEdgeCasesTest
+  ✓ it keeps staged uploads private and schedules their purge when stor… 0.03s
+  ✓ it keeps attachment operations idempotent and rejects unavailable f… 0.03s
+  ✓ it marks a failed purge unknown instead of publishing a false delet… 0.02s
+  ✓ it rejects malformed trusted media inputs before creating storage k… 0.02s
+  ✓ it rejects an unregistered purpose and a server-detected executable… 0.02s
+  ✓ it rechecks policy before publishing uploaded bytes and when an aut… 0.03s
+  ✓ it publishes media as a standalone CoreX module                      0.02s
+
+   PASS  Tests\Feature\MediaLifecycleTest
+  ✓ it stores, reads, replays, attaches, and detaches private media      0.03s
+  ✓ it denies all operations until a consumer policy explicitly allows…  0.02s
+  ✓ it rejects a replay key with a different content digest              0.02s
+  ✓ it refuses deletion while an authoritative relation exists and purg… 0.03s
+
+   PASS  Tests\Unit\MediaOptionsTest
+  ✓ it rejects a non-positive max upload bytes limit with (0)
+  ✓ it rejects a non-positive max upload bytes limit with (-1)
+  ✓ it rejects an empty allowed mime type list
+
+  Tests:    20 passed (58 assertions)
+  Duration: 1.14s
+
+==> packages/notifications
+{"tool":"pest","result":"passed","tests":19,"passed":19,"assertions":73,"duration_ms":791}
+==> packages/operations
+
+   PASS  CoreX\Operations\Tests\Feature\ApiRetentionTest
+  ✓ retention windows reject unsafe configuration                        0.27s
+  ✓ clock clears owned bulk results then tombstones and keeps active ro… 0.03s
+  ✓ bulk prune is limited to one hundred rows                            0.04s
+  ✓ reservation expiry never refunds and held reservation keeps buckets  0.04s
+  ✓ command prunes only the restored scope and rejects an unbounded bat… 0.13s
+  ✓ postgresql retention uses isolated schemas                           0.58s
+
+   PASS  CoreX\Operations\Tests\Feature\ApiRoutesTest
+  ✓ route list is exact and boot is idempotent                           0.05s
+  ✓ root discovery exposes code profile only                             0.04s
+  ✓ capabilities follow activation and ignore forged payload             0.01s
+  ✓ async sets location and deprecation headers are exact                0.06s
+  ✓ disabled routes register none                                        0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\AuthorizationLayersTest
+  ✓ resource ids round trip all supported strategies and reject mismatc… 0.01s
+  ✓ default client scope policy allows only unscoped operations          0.01s
+  ✓ replay rechecks scope actor and read fields without invoking handle… 0.01s
+  ✓ idempotent authorization denials leave no terminal store row         0.03s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkApiTest
+  ✓ submit is accepted once and poll cancel cover the status matrix      0.08s
+  ✓ result matrix is not ready then sealed then expired and partial fai… 0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkResultAccessTest
+  ✓ foreign caller and revoked field access do not read the result       0.02s
+  ✓ failure cursor rejects limits above 100                              0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkStoreTest
+  ✓ same submission returns one operation and pending polling needs no…  0.01s
+  ✓ state transition matrix and cancel completion fence                  0.02s
+  ✓ expired lease takeover and stale revision are rejected               0.01s
+  ✓ wrong active connection and unsafe input references fail closed      0.02s
+  ✓ postgresql concurrent submission and cancel completion race          0.31s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkTransferTest
+  ✓ missing factory and package fail before submit                       0.01s
+  ✓ import resume does not repeat sink effects around checkpoint crashe… 0.02s
+  ✓ repeat create returns the current token and export rotates an unsea… 0.01s
+  ✓ stamp drift fails before the next batch and observers cannot change… 0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\ContractSnapshotTest
+  ✓ generation is byte stable and check detects drift                    0.06s
+
+   PASS  CoreX\Operations\Tests\Feature\CostInvocationTest
+  ✓ budget denial rolls back unstarted idempotency and replay charges b… 0.02s
+  ✓ post admission unknown keeps estimate and store failure is not rate… 0.01s
+  ✓ http rate limit keeps retry after and store failure has no retry he… 0.08s
+
+   PASS  CoreX\Operations\Tests\Feature\ErrorRepresentationTest
+  ✓ every category keeps the same machine fields in both representation… 0.01s
+  ✓ human message change leaves the machine fixture unchanged            0.01s
+  ✓ accept q values wildcards and unsupported types                      0.03s
+  ✓ retry after requires a named bounded policy                          0.01s
+  ✓ unknown exception stays a safe internal error                        0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\IdempotencyStoreTest
+  ✓ fresh attempt completes and replays canonical outcome without stori… 0.01s
+  ✓ conflict contract mismatch takeover fence and retention matrix       0.01s
+  ✓ effect and terminal outcome roll back together before retry          0.01s
+  ✓ mutations require the active tenant connection and transaction       0.01s
+  ✓ migration has exact columns unique key and scoped rollback           0.01s
+  ✓ provider binds store and publishes only an explicit tenant tag       0.01s
+  ✓ two postgresql connections racing on one key yield one owner         0.32s
+
+   PASS  CoreX\Operations\Tests\Feature\IdempotentInvocationTest
+  ✓ same key replays across transports and rechecks current authority    0.02s
+  ✓ required forbidden conflict in progress and contract mismatch skip…  0.01s
+  ✓ auth validation and mapped internal failures have distinct persiste… 0.01s
+  ✓ terminal store failure rolls back effect and retry commits once      0.02s
+  ✓ ambiguous commit requires reconciliation without second effect       0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\LoadContourBootTest
+  ✓ public surface keeps transfer optional on laravel 12 or 13           0.01s
+  ✓ boot keeps cost and bulk transfer disabled                           0.01s
+  ✓ missing transfer package fails before submit and installed ports ar… 0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\LoadSchemaTest
+  ✓ publication is inert and requires explicit schema identity           0.01s
+  ✓ sqlite schemas constraints isolation and rollback                    0.02s
+  ✓ postgresql schema and constraints                                    0.42s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationBudgetTest
+  ✓ reserve debits four hmac buckets without persisting scope identifie… 0.02s
+  ✓ default global enforcement observes lower scope debt                 0.01s
+  ✓ enforced deficit rolls back every bucket debit and reservation       0.01s
+  ✓ settlement refunds once and conflicting terminal outcome cannot ref… 0.01s
+  ✓ reject refunds once and actual overrun becomes debt                  0.02s
+  ✓ expired and missing reservations never refund                        0.01s
+  ✓ scope isolation refill and clock rollback are deterministic          0.02s
+  ✓ postgresql concurrent reserve admits only available global capacity  0.19s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationErrorBoundaryTest
+  ✓ old wire snapshot has no new error fields                            0.02s
+  ✓ four argument api error still describes itself                       0.01s
+  ✓ explicit api error keeps its status                                  0.01s
+  ✓ described error maps every category to its default status            0.01s
+  ✓ unknown exception reports once and leaks nothing                     0.01s
+  ✓ framework fallbacks stay safe and gain a category                    0.01s
+  ✓ boundary preserves valid correlation internally without wire change  0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationParityTest
+  ✓ denied activation and authorization skip the handler                 0.01s
+  ✓ throwing handler restores request context                            0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\PlatformTest
+  ✓ default authentication and authorization deny                        0.02s
+  ✓ explicit mutation receives trusted context and envelope              0.01s
+  ✓ unknown routes methods versions and metadata are not executable      0.01s
+  ✓ missing boxed and disabled contexts fail closed                      0.01s
+  ✓ boxed profile requires explicit configuration                        0.01s
+  ✓ context and module state are read on every dispatch                  0.01s
+  ✓ malformed or forged input is rejected with data set #0               0.01s
+  ✓ malformed or forged input is rejected with data set #1               0.01s
+  ✓ malformed or forged input is rejected with data set #2               0.01s
+  ✓ malformed or forged input is rejected with data set #3               0.02s
+  ✓ malformed or forged input is rejected with data set #4               0.01s
+  ✓ malformed or forged input is rejected with data set #5               0.01s
+  ✓ malformed or forged input is rejected with data set #6               0.01s
+  ✓ malformed or forged input is rejected with data set #7               0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.01s
+  ✓ compilation preserves provenance roundtrip and old resource metadat… 0.01s
+  ✓ duplicate parameterized routes are compile errors                    0.01s
+  ✓ openapi is deterministic and derived from operations only            0.01s
+  ✓ provider mounts package routes and application can mount an explici… 0.02s
+  ✓ error boundary normalizes upstream errors with named version and re… 0.03s
+  ✓ generated request id is shared by the boundary and dispatcher        0.01s
+  ✓ query in a mutation and non json body are rejected                   0.02s
+  ✓ disabled account is rejected                                         0.01s
+  ✓ invalid declarations fail compilation with data set #0               0.01s
+  ✓ invalid declarations fail compilation with data set #1               0.01s
+  ✓ invalid declarations fail compilation with data set #2               0.01s
+  ✓ invalid declarations fail compilation with data set #3               0.01s
+  ✓ invalid declarations fail compilation with data set #4               0.01s
+  ✓ invalid declarations fail compilation with data set #5               0.01s
+  ✓ invalid declarations fail compilation with data set #6               0.01s
+  ✓ invalid declarations fail compilation with data set #7               0.01s
+  ✓ equal specificity overlapping routes are compile errors              0.01s
+  ✓ equivalent cross method templates require identical parameter names  0.01s
+  ✓ module adapters receive context only during the current operation    0.02s
+
+   PASS  Tests\Unit\ApiOperationContractTest
+  ✓ it keeps legacy operation declarations on the compatibility matrix   0.05s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects duplicate fields and scopes, bad capability and deprecat… 0.01s
+  ✓ it marks bulk modes unsupported and refuses enabled execution        0.01s
+  ✓ it projects the same contract hash when declaration order is revers… 0.01s
+  ✓ it reuses tagged compiler contributions across repeated compilation… 0.01s
+
+   PASS  Tests\Unit\ApiOperationCostTest
+  ✓ it keeps legacy declarations on default cost behavior and hash       0.02s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it compiles reversed cost declarations to the same canonical recipe… 0.01s
+  ✓ it accepts an explicit bulk recipe                                   0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\ApiProfileTest
+  ✓ reversed registry order keeps profile bytes and hash                 0.02s
+  ✓ activation changes effective capability without profile hash         0.01s
+  ✓ hidden denial omits unknown capabilities and unsupported operations… 0.01s
+  ✓ invalid profile inputs fail                                          0.01s
+  ✓ provider boots with typed options                                    0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\CursorCodecTest
+  ✓ golden wire round trips and page encodes after assembly              0.01s
+  ✓ tamper unknown and expired key and expired cursor are invalid        0.01s
+  ✓ previous key verifies until it leaves the ring                       0.01s
+  ✓ scope direction order arity and type mismatches are invalid          0.01s
+  ✓ reversed operation order keeps the registry bytes                    0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\InvocationMetadataTest
+  ✓ four argument construction falls back to request id
+  ✓ valid correlation id is preserved
+  ✓ missing correlation id falls back to request id
+  ✓ invalid correlation and request ids are rejected identically
+  ✓ invalid correlation falls back to valid request id
+
+   PASS  Tests\Unit\OperationCostTest
+  ✓ it estimates table-driven weights, page, export, field, relation, f… 0.01s
+  ✓ it denies overflow and absent bounded export                         0.01s
+  ✓ it does not call database, cache or network while estimating         0.02s
+  ✓ it keeps old positional constructors working and hashes cost additi… 0.01s
+
+   PASS  Tests\Unit\OperationRegistryDeterminismTest
+  ✓ it rejects duplicate normalized route identity and names both owner… 0.01s
+
+   PASS  Tests\Unit\OperationTest
+  ✓ it projects compiler metadata onto the runtime descriptor
+
+   PASS  CoreX\Operations\Tests\Unit\SchemaBudgetTest
+  ✓ admits small object schema
+  ✓ rejects remote ref in budget pass
+  ✓ assert payload rejects oversized raw json
+
+  Tests:    158 passed (1174 assertions)
+  Duration: 4.86s
+
+==> packages/panels
+
+   PASS  Tests\SavedViews\SavedViewPgSchemaTest
+  ✓ it creates the saved-view scope lock before the composite view fore… 0.90s
+
+   PASS  Tests\SavedViews\SqlSavedViewRepositoryTest
+  ✓ it persists only a validated AST and compiles it without SQL or ide… 0.07s
+  ✓ it resolves the current default on one repository across central, t… 0.01s
+  ✓ it keeps an explicit views connection fixed while the default chang… 0.01s
+
+   PASS  Tests\SavedViews\ViewConfigValidatorTest
+  ✓ it rejects an unsafe saved-view filter before a consumer can map it… 0.01s
+
+   PASS  Tests\Unit\ModulePanelCatalogueTest
+  ✓ it PAN-01: discovers only supported descriptors across two active n… 0.02s
+  ✓ it PAN-02: denies unknown entity, provider, panel and unavailable p… 0.01s
+  ✓ it fails closed when a provider returns an action outside its regis… 0.01s
+  ✓ it PAN-03: hides absent or disabled providers without evaluating th… 0.01s
+  ✓ it PAN-04: current entity and provider state revoke a descriptor th… 0.02s
+  ✓ it PAN-05: re-evaluates policy so a stale derived grant cannot outl… 0.01s
+  ✓ it PAN-06: allows an explicit independent guest policy but platform… 0.01s
+  ✓ it PAN-07: rejects duplicate keys and isolates current A/B state on… 0.02s
+  ✓ it validates trusted DTO boundaries                                  0.01s
+  ✓ it registers the tagged catalogue and exposes the package module ma… 0.01s
+
+   PASS  Tests\Views\EntityViewSchemaProviderTest
+  ✓ it maps only a current active entity registry entry into a neutral…  0.01s
+  ✓ it rejects an unknown or inactive entity instead of retaining a stale schema
+
+  Tests:    17 passed (73 assertions)
+  Duration: 1.59s
+
+==> packages/recurrence
+{"tool":"pest","result":"passed","tests":13,"passed":13,"assertions":28,"duration_ms":29}
+==> packages/search
+{"tool":"pest","result":"passed","tests":11,"passed":11,"assertions":28,"duration_ms":113}
+==> packages/search-intl
+{"tool":"pest","result":"passed","tests":6,"passed":6,"assertions":14,"duration_ms":211}
+==> packages/search-meilisearch
+{"tool":"pest","result":"passed","tests":4,"passed":4,"assertions":10,"duration_ms":132}
+==> packages/tasks
+
+   PASS  Tests\Feature\PlanningCommandsTest
+  ✓ it records time atomically with spent totals and operation receipts  0.88s
+  ✓ it supports boxed null workspace context for planning subjects       0.08s
+  ✓ it keeps existing create and complete commands byte-compatible       0.11s
+  ✓ it denies a project in another narrowed workspace                    0.09s
+  ✓ it validates sprint parent and date ordering before writes           0.08s
+  ✓ it creates maintenance project sprint and time log through the neut… 0.16s
+  ✓ it creates a project in the trusted workspace context                0.08s
+  ✓ it preserves existing completion policy without new workflow owners… 0.10s
+  ✓ it keeps canonical task tables and adds only the neutral operation…  0.06s
+  ✓ it replays the same project request key and rejects changed payload… 0.08s
+  ✓ it ships deny-by-default planning authorization                      0.06s
+
+   PASS  Tests\Feature\TasksContractTest
+  ✓ it authorizes mutations against the task inside its locking transac… 0.46s
+  ✓ it completes a task atomically and does not emit a duplicate event   0.16s
+  ✓ it rolls an update back with its outer tenant transaction            0.14s
+  ✓ it cannot move a task id that is absent from the current account da… 0.11s
+  ✓ it rejects a project outside the task workspace during update        0.14s
+  ✓ it denies commands when the module is inactive                       0.10s
+  ✓ it changes a task project through the public command and resets pro… 0.16s
+  ✓ it creates a UUIDv7 task and portable target references through the… 0.14s
+  ✓ it updates editable task fields through the public command           0.19s
+  ✓ it ships a deny-by-default host authorization seam                   0.11s
+  ✓ it participates in an outer tenant transaction                       0.13s
+  ✓ it cannot move a task from another narrowed workspace                0.14s
+  ✓ it moves only within the task project and applies the stage status   0.17s
+  ✓ it completes once through move and preserves the completion time on… 0.22s
+  ✓ it enforces completion authorization when moving to a Done stage     0.14s
+  ✓ it publishes the lifecycle manifest instead of loading migrations f… 0.10s
+  ✓ it does not complete a cancelled task                                0.13s
+  ✓ it rejects a stage from another project without a partial write      0.13s
+  ✓ it cannot complete a cancelled task by moving it                     0.14s
+  ✓ it rejects a workspace outside the narrowed tenant context           0.10s
+
+   PASS  Tests\Feature\TasksSchemaTest
+  ✓ it does not add columns outside the approved task contract           0.07s
+  ✓ it creates exactly the eight approved Tasks tables                   0.06s
+
+  Tests:    33 passed (106 assertions)
+  Duration: 5.40s
+  Random Order Seed: 1790692429
+
+==> packages/tasks-workflow
+
+   PASS  Tests\Pg\MaterializationPgTest
+  ✓ it MAT-06 schedules a stamped complete payload and materializes thr… 2.02s
+  ✓ it MAT-06b quarantines an exact handler version mismatch without in… 1.20s
+  ✓ it MAT-02 replays durable receipts after a failed outer attempt      0.83s
+  ✓ it MAT-01 serializes concurrent materialization to one task per occ… 0.91s
+  ✓ it MAT-07 captures workflow completion inside the task transaction…  0.97s
+  ✓ it MAT-08 denies cross-account restore epoch reuse on postgres       0.79s
+
+   PASS  Tests\Feature\MaterializationTest
+  ✓ it MAT-03 stops at a partial budget without advancing beyond the co… 0.19s
+  ✓ it MAT-05 keeps the original occurrence key across moved overrides…  0.24s
+  ✓ it MAT-08 denies stale restore epochs and re-checks access before w… 0.10s
+  ✓ it MAT-12 fails incomplete or tampered wakeup payloads without writ… 0.10s
+  ✓ it MAT-04 refuses materialization after retirement while keeping co… 0.14s
+  ✓ it MAT-10 encodes a complete wakeup payload and preserves the mater… 0.10s
+  ✓ it MAT-09 keeps boxed sqlite materialization off root credentials a… 0.12s
+  ✓ it MAT-11 materializes a valid stamped wakeup and stays idempotent…  0.15s
+  ✓ it MAT-01 deduplicates the same occurrence key through SQL uniquene… 0.17s
+  ✓ it MAT-02 replays the same operation key with the stored receipt     0.15s
+
+   PASS  Tests\Pg\WorkUnitIsolationPgTest
+  ✓ it isolates sequential postgres materializations when the first uni… 0.89s
+
+  Tests:    17 passed (128 assertions)
+  Duration: 9.38s
+  Random Order Seed: 1790692434
+
+==> packages/tenancy
+
+   PASS  Tests\Unit\MembershipEventTest
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with (… 0.04s
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('10')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('0')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('18446744073709551615')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('9007199254740991')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('9007199254740993')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('9007199254740992')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('9')
+  ✓ it keeps exact unsigned64 decimal values without lossy casts with ('9223372036854775807')
+  ✓ it roundtrips the proposed ordered RFC3986 scalar query fixture
+  ✓ it decodes legitimate JSON escaping arrays booleans and distinct object keys
+  ✓ it rejects tampered and malformed signatures with zero key retrieva… 0.29s
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"cnf":{"x":1,"x":2}}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('[]')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":[{"x":1,"x":2}]}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1} {}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":"xxxxxxxxxxxxxxxxxxxxxxx…xxxx"}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,"\u0061":2}')
+  ✓ it rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,"a":2}')
+  ✓ it rejects malformed and noncanonical UUIDs with ('11111111-1111-0111-8111-111111111111')
+  ✓ it rejects malformed and noncanonical UUIDs with ('11111111-1111-4111-7111-111111111111')
+  ✓ it rejects malformed and noncanonical UUIDs with ('123')
+  ✓ it rejects malformed and noncanonical UUIDs with ('AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('profile')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('actor')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('critical')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('kind')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('key-purpose')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('long-ttl')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('expired')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('unknown-key')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('audience')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('pii')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('iat-type')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('x5u')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('uuid')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('token-type')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('jku')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('account')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('future')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('product')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('none')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('issuer')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('reason')
+  ✓ it denies unsigned expired wrong context and unnegotiated trigger payloads with ('no-actor')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('01')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('NaN')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('1.0')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('+1')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('1e2')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with (' 1')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('18446744073709551616')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('Infinity')
+  ✓ it rejects noncanonical fractional exponential and overflowing counters with ('-1')
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #3
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id[]=x&account_id=x&…t_id=x')
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #1
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id%5B%5D=x&account_i…t_id=x')
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #2
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…nown=y')
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&identity_id=y&a…t_id=x')
+  ✓ it rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…=extra')
+  ✓ it authenticates trigger only and permits fresh re-enveloping of on… 0.01s
+
+   PASS  Tests\Unit\SchemaCatalogueSerializerTest
+  ✓ it encodes equivalent catalogue maps into identical canonical bytes  0.04s
+
+   PASS  Tests\Unit\TenancyOptionsTest
+  ✓ it accumulates oidc and wakeup violations in one exception           0.02s
+  ✓ it rejects oidc enabled without client secret
+  ✓ it rejects root_registry wakeup without root connection
+  ✓ it builds options from a valid tenancy snapshot
+
+   PASS  Tests\Feature\ProvisioningTest
+  ✓ it resolves the tenant connection from root_clusters+db_name and…  190.38s
+  ✓ it re-provisioning an already-created database is idempotent (repl… 37.90s
+  ✓ it fixes embedding_model/dim and other provisioning params onto the… 7.32s
+  ✓ it provisions a database by cloning the golden template via STRATEG… 1.76s
+  ✓ it refuses to clone a template that is not ready (template-parity g… 1.91s
+  ✓ it creates an Account with a UUIDv7 key and typed custom columns     1.15s
+  ✓ it rejects an untrusted template before changing provisioning param… 1.16s
+
+   PASS  Tests\Feature\IdentitySyncerTest
+  ✓ it syncToAccount() is idempotent — a second sync upserts, does not…  3.42s
+  ✓ it removing the membership row deactivates a projection without cha… 4.37s
+  ✓ it syncToAccount() creates a denormalized users row keyed by the id… 5.14s
+  ✓ it preserves source ordering independently of delivery time with (t… 4.79s
+  ✓ it preserves source ordering independently of delivery time with (f… 4.94s
+  ✓ it emits UserSynced on a real sync                                   4.47s
+  ✓ it corex:tenancy:reconcile-identities re-syncs failed and stale row… 5.66s
+  ✓ it rehashes only an active owned users row with its expected hash    5.46s
+  ✓ it the version-guard skips a stale write once the projection is alr… 5.97s
+  ✓ it a failure syncing one account does not block another (AC-16 г)    2.94s
+  ✓ it fanOut() reaches every account membership (AC-16 в)               5.47s
+  ✓ it treats a non-active membership as inactive without overwriting a… 2.87s
+  ✓ it treats a non-active membership as inactive without overwriting a… 2.71s
+  ✓ it keeps distinct UUID identities separate when their phone values…  4.07s
+  ✓ it reactivates the same UUID after an active regrant without touchi… 5.00s
+
+   PASS  Tests\Feature\AccountStatusGateTest
+  ✓ it exporting → 410                                                   4.13s
+  ✓ it grace + владелец + POST → 403                                     3.78s
+  ✓ it active → 200                                                      5.16s
+  ✓ it pending/provisioning/выдуманный статус → 403 (fail-closed) with…  3.78s
+  ✓ it pending/provisioning/выдуманный статус → 403 (fail-closed) with…  3.78s
+  ✓ it pending/provisioning/выдуманный статус → 403 (fail-closed) with…  3.36s
+  ✓ it trial → 200                                                       4.44s
+  ✓ it deleted → 410                                                     3.06s
+  ✓ it grace + владелец + POST на export-route → 200                     3.57s
+  ✓ it grace + владелец + GET → 200                                      2.26s
+  ✓ it suspended + не владелец → 403                                     3.63s
+  ✓ it смена status у аккаунта → следующий запрос видит НОВОЕ правило б… 2.42s
+  ✓ it suspended + владелец на payment-route → 200                       2.04s
+  ✓ it suspended + владелец вне payment-route → 403                      2.75s
+
+   PASS  Tests\Feature\RootSchemaTest
+  ✓ it treats NULL account_id as a value in root_feature_flags uniquene… 0.96s
+  ✓ it enforces partial-unique slug and primary-domain constraints       0.90s
+  ✓ it accepts any application product slug but keeps the shape invaria… 0.84s
+  ✓ it rejects an invalid account status                                 0.94s
+  ✓ it enforces the pending-slug and pending-owner table checks          0.90s
+  ✓ it creates every declared root_ table on the central connection      0.78s
+  ✓ it carries table/column comments (AC-32)                             0.85s
+  ✓ it cascades identity_accounts on delete and restricts cluster delet… 0.83s
+
+   PASS  Tests\Feature\ProviderRemediationTest
+  ✓ it executes the configured provisioning pipeline                     0.03s
+  ✓ it publishes control plane migrations only to the documented root d… 0.05s
+
+   PASS  Tests\Feature\MembershipInboxTest
+  ✓ it keeps failed refresh work pending and acknowledges only a comple… 0.10s
+  ✓ it deduplicates a fresh delivery envelope without deriving positive… 0.07s
+  ✓ it rejects expired input before any durable inbox write              0.06s
+
+   PASS  Tests\Feature\ImpersonationTest
+  ✓ it rejects a nested start before the second grant is consumed        9.53s
+  ✓ it в: expires_at в прошлом → 403                                     7.78s
+  ✓ it л/м/о/п/с/т/у: валидный грант — target≠sub, root_account_events,… 7.07s
+  ✓ it backfills a legacy session from the claimed grant reason          7.75s
+  ✓ it г: revoked_at выставлен → 403                                     8.20s
+  ✓ it ж: account_id гранта ≠ текущий тенант → 403                       4.67s
+  ✓ it э: stop() гасит сессию, пишет impersonation.ended и излучает Imp… 4.73s
+  ✓ it closes a legacy session whose claimed grant has no reason         5.40s
+  ✓ it з: is_staff=false у предъявителя → 403                            5.03s
+  ✓ it м: target_user_id = NULL → сессия открывается от имени owner_ide… 3.32s
+  ✓ it й: два start одного гранта → ровно один успех (одноразовость, D1… 3.11s
+  ✓ it а: imp в токене при impersonation.enabled=false → 403 (регресс P… 3.44s
+  ✓ it isolates impersonation state across requests in one worker conta… 0.96s
+  ✓ it isolates impersonation state across requests in one worker conta… 1.02s
+  ✓ it д: reason пустой → 403                                            4.25s
+  ✓ it е: staff_identity_id гранта ≠ sub токена → 403                    3.70s
+  ✓ it ю: TTL истёк → следующий запрос 401, сессия завершена             3.39s
+  ✓ it к/н: target-пользователя не существует → 403, но used_at выставл… 4.31s
+  ✓ it я: revoked_at выставлен извне mid-session → следующий запрос 401… 3.93s
+  ✓ it б: грант с used_at уже выставленным → 403                         4.71s
+  ✓ it р: заголовок X-CoreX-Impersonation присутствует на следующем зап… 5.29s
+  ✓ it и: require_approved_by=true и approved_by=NULL → 403; approved_b… 4.50s
+
+   PASS  Tests\Feature\MembershipPairStoreTest
+  ✓ it increments one barrier epoch once and cancels an older committed… 0.09s
+  ✓ it makes an operation replay idempotent and preserves a committed a… 0.07s
+  ✓ it cannot regrant an applied operation after a newer revoke barrier  0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.04s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.07s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.05s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it keeps exact counter boundaries and rejects every noncanonical va… 0.06s
+  ✓ it denies counter regression stale compare-and-swap and an unavaila… 0.07s
+
+   PASS  Tests\Feature\TenantSessionScopeTest
+  ✓ it а: sessions создаётся тенантской миграцией; сессия пишется в БД…  5.68s
+  ✓ it б: cookie-сессия тенанта A на домене тенанта B → 403 (ScopeSessi… 6.98s
+  ✓ it в: host_identification.enabled=false (boxed) → middleware не зар… 0.97s
+
+   PASS  Tests\Feature\AccountSwitcherTest
+  ✓ it always delegates a stale-menu click to the central authorization… 0.02s
+  ✓ it recomputes after only the version key is lost and never adopts a… 0.02s
+  ✓ it returns an unavailable empty menu when the authoritative read fa… 0.02s
+  ✓ it does not cross-hit a same identity cache entry for another produ… 0.02s
+  ✓ it keeps a regrant current and does not duplicate a repeated author… 0.02s
+
+   PASS  Tests\Feature\WorkspaceScopeTest
+  ✓ it AC-20: with no workspace narrowed (account-wide/admin context),…  0.08s
+  ✓ it AC-20: with a narrowed workspace, the scope keeps that workspace… 0.08s
+
+   PASS  Tests\Feature\HostResolutionTest
+  ✓ it в: host с verified_at IS NULL → отказ                             5.37s
+  ✓ it г: deleted_at у домена → отказ                                    4.66s
+  ✓ it б: host аккаунта с slug IS NULL (pending-болванка) → отказ (§7.3… 4.20s
+  ✓ it д: валидный host → tenancy()->initialized === true и tenant->id…  3.51s
+  ✓ it з: два аккаунта × два домена, чередование запросов → 0 пересечен… 6.99s
+  ✓ it й: подделанные X-Account-Id/X-Forwarded-Host не влияют на резолв  7.12s
+  ✓ it и: следующий host всегда читается из central после инициализации… 5.10s
+  ✓ it ж: смена домена → старый host больше не резолвится СРАЗУ (без ож… 2.84s
+  ✓ it е: второй запрос по тому же host делает 0 запросов в central-кон… 2.87s
+  ✓ it а: неизвестный host → отказ резолва (наш exception)               0.87s
+  ✓ it г: deleted_at у аккаунта → отказ                                  3.02s
+
+   PASS  Tests\Feature\MigrationWaveTest
+  ✓ it AC-12: the migration run issues pg_advisory_xact_lock(hashtext('… 6.06s
+  ✓ it creates root_account_schema_state rows (current_version=0) for a… 6.09s
+  ✓ it corex:tenancy:migrate requires --batch and does not hard-fail th… 8.01s
+  ✓ it AC-11: a failing account does not abort the batch; a second fail… 6.89s
+
+   PASS  Tests\Feature\PendingPoolTest
+  ✓ it empty pool falls back to a synchronous clone under the 10s thres… 6.44s
+  ✓ it artisan corex:tenancy:pending-create tops up to pending_pool_siz… 8.74s
+  ✓ it pullPending() claims a болванка (status→provisioning); db_count…  3.62s
+  ✓ it clearPending() requires at least one filter to avoid nuking the…  2.53s
+  ✓ it does not publish a pending row before provisioning completes or…  2.29s
+  ✓ it two concurrent pullPending() callers never claim the same болван… 4.48s
+  ✓ it creates pending болванки with cloned databases, status=pending,…  7.28s
+  ✓ it does not drop a pending account claimed after the cleanup scan    3.39s
+  ✓ it pullPending() picks the least-loaded cell (ORDER BY db_count)     3.20s
+  ✓ it pending-clear removes stale болванки by template_version (DROP+D… 4.84s
+
+   PASS  Tests\Feature\CentralApiClientTest
+  ✓ it reference old signed grant only triggers a pull of current revok… 0.03s
+  ✓ it reference rejects generation regression and equal revision confl… 0.02s
+  ✓ it reference rejects generation regression and equal revision confl… 0.02s
+  ✓ it reference rejects generation regression and equal revision confl… 0.02s
+  ✓ it reference rejects generation regression and equal revision confl… 0.02s
+  ✓ it reference central fixture parses GET and replays one revoke rece… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.03s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.03s
+  ✓ it reference response rejects wrong echo malformed fields and cache… 0.02s
+  ✓ it reference transport emits exact scalar GET bytes and mutual TLS…  0.02s
+  ✓ it keeps membership event payloads UUID-only and reason-enumerated   0.02s
+  ✓ it reference has no call without channel binding or qualified dedup… 0.02s
+  ✓ it reference has no call without channel binding or qualified dedup… 0.03s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.03s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.03s
+  ✓ it reference rejects malformed revoke receipt without local success… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.03s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.03s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.04s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference channel rejects certificate token and context mismatch… 0.02s
+  ✓ it reference rechecks certificate retirement on each request         0.02s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.02s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.03s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.02s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.02s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.03s
+  ✓ it reference maps read and revoke HTTP failures to distinct typed o… 0.02s
+  ✓ it reference revoke requires actual permission and preserves uncert… 0.03s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.03s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.02s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.04s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.03s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.03s
+  ✓ it reference snapshots retain nonactive tombstone counters and reje… 0.02s
+
+   PASS  Tests\Feature\PrincipalWorkspaceTest
+  ✓ it resolves explicit principals across two isolated account databa… 13.45s
+
+   PASS  Tests\Feature\WorkspaceResolverTest
+  ✓ it AC-17: enforces exactly one default workspace via partial-unique… 1.25s
+  ✓ it AC-18: resolve(slug) 403s without an active membership row        1.11s
+  ✓ it AC-17: parent RESTRICT blocks deleting a workspace that still ha… 0.83s
+  ✓ it AC-18: resolve(slug) 403s a suspended member                      1.58s
+  ✓ it AC-17: parent_id + path stay consistent under a subtree move (pa… 0.89s
+  ✓ it AC-19: accept() refuses a revoked invitation (410-class error)    0.87s
+  ✓ it Integration FK: all four cross-package FKs exist and hold         0.85s
+  ✓ it AC-18: a partner-workspace membership does not grant visibility…  0.86s
+  ✓ it AC-19: accept() creates membership, marks accepted, and checks u… 0.90s
+  ✓ it AC-19: accept() refuses an expired invitation even if its status… 0.91s
+  ✓ it AC-17: a soft-deleted workspace frees its slug and default flag…  1.80s
+  ✓ it serializes acceptance of separate invitations competing for one…  1.08s
+  ✓ it AC-19: accept() refuses once the users_max limit is already reac… 0.91s
+  ✓ it AC-18: resolve(null) throws when the user has no default workspa… 1.27s
+  ✓ it AC-18: resolve(slug) throws ModelNotFoundException for a nonexis… 2.06s
+  ✓ it AC-19: wsp_invitations.role_id carries no FK — accepting with a…  2.05s
+  ✓ it reloads a revoked invitation and rolls back membership when acce… 1.52s
+  ✓ it AC-17: enforces unique slug among living workspaces               1.22s
+  ✓ it AC-18: resolve(null) returns the user default workspace           1.24s
+  ✓ it AC-18: resolve(slug) succeeds for an active member                1.64s
+  ✓ it counts only active memberships against invitation quota           1.16s
+
+   PASS  Tests\Feature\OidcBoxedProfileTest
+  ✓ it р: oidc.enabled=false → OIDC routes are not registered, the app…  0.04s
+  ✓ it е: oidc.enabled=false → EnforceSessionLifetime is absent from th… 0.02s
+
+   PASS  Tests\Feature\ManagementIdentityHydratorTest
+  ✓ it keeps shared phone UUIDs separate and refuses email collision wi… 0.03s
+  ✓ it cannot grant or renew through new profile hydration or regrant    0.02s
+  ✓ it isolates a failed fan-out target from a healthy UUID target       0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it denies independently of unchanged profile clock and preserves fe… 0.02s
+  ✓ it rejects malformed UUID before querying the management store       0.02s
+  ✓ it denies tenant or absent management authority before root reads o… 0.02s
+  ✓ it denies tenant or absent management authority before root reads o… 0.02s
+  ✓ it preserves committed deny even when newer profile email conflicts  0.02s
+  ✓ it deactivates missing or deleted identities and accounts without r… 0.02s
+  ✓ it deactivates missing or deleted identities and accounts without r… 0.03s
+  ✓ it deactivates missing or deleted identities and accounts without r… 0.02s
+  ✓ it deactivates missing or deleted identities and accounts without r… 0.02s
+  ✓ it deactivates missing or deleted identities and accounts without r… 0.02s
+
+   PASS  Tests\Feature\ConnectionGuardedRestorerTest
+  ✓ it rejects a mismatched account before reading the connection        0.03s
+  ✓ it rejects workspace, boxed profile, and database mismatches         0.02s
+  ✓ it accepts the active cloud connection and a boxed identity without… 0.02s
+
+   WARN  Tests\Feature\StorageContextConformanceTest
+  - native object integration → it executes the same complete filesystem surface through the real SDK → Explicit isolated native SDK/service configuration is required.
+  ✓ it refuses local usage through a replaced account root               0.03s
+  ✓ it preserves the complete local filesystem surface with owned strea… 0.03s
+  - native object integration → it refuses configured provider connection failure without a local or other account fallback → Explicit isolated native SDK/service configuration is required.
+  - native object integration → it isolates independent archive and laboratory object prefixes and ephemeral local storage → Explicit isolated native SDK/service configuration is required.
+  ✓ it refuses the optional object branch explicitly when its native SD… 0.06s
+  ✓ it denies every retained handle entry point after switching account… 0.03s
+  ✓ it validates batch and destination paths before any part of the ope… 0.03s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+  ✓ it validates batch and destination paths before any part of the ope… 0.02s
+
+   PASS  Tests\Feature\FencedCredentialIssuanceTest
+  ✓ it does not issue a recaller when remember is disabled               0.11s
+  ✓ it clears every prepared credential cookie after a final denial      0.20s
+  ✓ it writes session, remember, and metadata as one fenced transaction  0.11s
+
+   PASS  Tests\Feature\ResolveWorkspaceTest
+  ✓ it ж: partner получает свой контекст (200), /w/{parent-slug} → 403… 11.73s
+  ✓ it и: happy /w/{slug}/deals → 200, context() = резолвленный workspa… 5.27s
+  ✓ it а: тенанси НЕ инициализирована → 403, context() остаётся пуст     6.34s
+  ✓ it п: алиас tenancy.workspace зарегистрирован (Router::getMiddlewar… 1.03s
+  ✓ it г: член со status=suspended → 403                                 9.84s
+  ✓ it к: happy без маркера (/dashboard) при активном default-членстве…  6.60s
+  ✓ it е: путь /w без следующего сегмента → 403                          4.68s
+  ✓ it р: после tenancy()->end() context() = null (workspace не пережив… 4.21s
+  ✓ it з: нет default-членства, путь без маркера (/dashboard) → 403, не… 4.92s
+  ✓ it в: не-член существующего workspace → 403                          3.28s
+  ✓ it н: post-condition — TenancyManager с no-op setWorkspace() → 403,… 1.80s
+  ✓ it б: guest (auth()->id() === null) → 403 даже при активном членств… 2.75s
+  ✓ it д: несуществующий slug → 403 (НЕ 404)                             3.38s
+  ✓ it о: под резолвленным контекстом WorkspaceScope на sys_departments… 3.13s
+  ✓ it м: кастомный маркер path_segment=ws — /ws/{slug} резолвит, /w/{s… 3.24s
+  ✓ it л: маркер глубже в пути → тот же результат; маркер дважды → выбр… 4.43s
+
+   WARN  Tests\Feature\RedisAccountMenuConformanceTest
+  - it keeps archive and laboratory Redis display-cache namespaces inde… 0.03s
+  - it rejects poisoned Redis bytes, separates product keys, expires bo… 0.02s
+  - it uses an isolated Redis namespace as a display-only cache across…  0.02s
+  ✓ it uses the exact accepted accounts read profile and rejects mTLS/t… 0.03s
+
+   PASS  Tests\Feature\MembershipRuntimeRegistrationTest
+  ✓ it does not register unfinished membership runtime consumers         0.02s
+
+   PASS  Tests\Feature\BootstrapperOrderTest
+  ✓ it сохраняет порядок семи bootstrapper-ов байтово                    0.02s
+
+   PASS  Tests\Feature\MembershipExpiryTest
+  ✓ it denies mismatched, restarted, and equality-bound clock readings   0.05s
+  ✓ it cancels a paused owner before its delayed commit can publish      0.13s
+
+   PASS  Tests\Feature\TemplateIntegrityTest
+  ✓ it rejects catalogue drift after a template was sealed               4.92s
+  ✓ it keeps a legacy template row nullable and therefore untrusted      4.30s
+  ✓ it accepts a trusted expected, recorded, and actual schema-hash tri… 3.74s
+
+   PASS  Tests\Feature\TenancyManagerTest
+  ✓ it is wired via the TenancyManager contract binding, not a hardcode… 3.38s
+  ✓ it a callback that throws inside runFor() still ends tenancy (uncon… 4.54s
+  ✓ it TenancyManagerContextResolver::current() throws CentralContextEx… 4.43s
+  ✓ it cloud initialize()/end() switches connection+session and context… 4.34s
+  ✓ it runFor() initializes, runs the closure, and always ends — nesti… 12.33s
+
+   PASS  Tests\Feature\DomainTrustTest
+  ✓ it issues and consumes a proof once, persisting only trusted state…  0.83s
+  ✓ it denies foreign and stale proof bindings before trusted state cha… 0.95s
+  ✓ it rejects malformed or reserved hosts and an authorizer denial bef… 0.67s
+  ✓ it denies verification and rolls back trusted state when resolver-c… 1.32s
+  ✓ it dispatches the lifecycle notification only after an enclosing tr… 0.61s
+  ✓ it keeps custom-domain verification disabled without consumer port…  0.73s
+  ✓ it clears trust and increments generation on revoke and reassignmen… 0.65s
+
+   PASS  Tests\Feature\AccountLifecycleTest
+  ✓ it activateFromPool() claims, sets slug/owner/vertical, transition… 11.59s
+  ✓ it purge() before a ready export throws and does NOT drop the datab… 8.41s
+  ✓ it suspend() writes account.suspended + fires AccountSuspended, res… 8.48s
+  ✓ it purge() under active impersonation throws ImpersonationRestrict… 10.33s
+  ✓ it startGrace() sets grace_until/purge_after and fires GraceStarted  5.07s
+  ✓ it refuses ready and DROP when an archive is unavailable             4.16s
+  ✓ it invalid transition throws and writes no root_account_events row   8.31s
+  ✓ it rejects impersonated signup before claiming or provisioning a po… 4.90s
+  ✓ it holds the account row lock while validating and committing a tra… 8.51s
+  ✓ it invalidates a warmed host resolver only when a status transition… 6.00s
+  ✓ it default export cannot become ready or authorize purge             7.26s
+  ✓ it retries failed physical purge without publishing a terminal acco… 8.82s
+  ✓ it purge() after a ready export drops the DB, soft-deletes the acco… 6.74s
+The following exception is caused by a process timeout
+Check https://getcomposer.org/doc/06-config.md#process-timeout for details
+
+In Process.php line 1222:
+
+  The process "pest" exceeded the timeout of 900 seconds.
+
+
+test [--dev] [--no-dev] [--] [<args>...]
+
+Script for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done handling the test:packages event returned with error code 1

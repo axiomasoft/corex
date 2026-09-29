@@ -1,0 +1,19 @@
+{
+  "added": [
+    "CoreX\\Attributes\\Api",
+    "CoreX\\Attributes\\Internal\\SourceType",
+    "CoreX\\Attributes\\Internal\\SurfaceDiagnostic",
+    "CoreX\\Attributes\\Internal\\SurfaceReport",
+    "CoreX\\Attributes\\Internal\\SurfaceScanner",
+    "CoreX\\Attributes\\Spi",
+    "CoreX\\Attributes\\SpiKind"
+  ],
+  "removed": [],
+  "changed": [],
+  "unchanged_layers": [
+    "routes",
+    "events",
+    "wire"
+  ],
+  "authorization": "PLAN3.D64 new Attribute/scanner records only"
+}

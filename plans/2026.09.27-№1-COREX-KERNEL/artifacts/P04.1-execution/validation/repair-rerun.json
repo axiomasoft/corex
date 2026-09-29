@@ -1,0 +1,14 @@
+[
+  {
+    "command": "scripts/php84 composer test",
+    "exit": 0
+  },
+  {
+    "command": "scripts/php84 composer lint:check",
+    "exit": 0
+  },
+  {
+    "command": "php scripts/rename-completeness-gate.php",
+    "exit": 0
+  }
+]
