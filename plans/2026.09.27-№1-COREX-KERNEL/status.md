@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: 31e6806419376490b58adf146428e44e7841c1d1b8f27aeebb89d7a63a48d0d8
+inputs_sha256: b5f3721c2f9ac5e9fd5b71e11b3608b531bd3d94d893ddf040b860f1cca9079c
 generated_by: task plan-views status
 -->
 
@@ -59,7 +59,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P03.1 | Гейт раскладки модулей и доктрина STR | 🟢 Done | 2026-09-29 |
-| P03.2 | Перенос по карте модулей | ⬜ Not started | — |
+| P03.2 | Перенос по карте модулей | 🟡 In progress | 2026-09-29 |
 
 ## 6. Update Log
 
@@ -179,6 +179,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | reviewer/cursor/grok-4.7/high | plan-audit · audit-green · D60 amendment independently reviewed with P03.1 candidate; unchanged P03.2 design retains prior audit evidence. Review: artifacts/P03.1-execution/review.json. All P03.1 declared Validation green; inherited P03.2 helper Pint findings explicit in D60. |
 | 2026-09-29 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 436/0 new/stale; Python8; SQLite832/PG240/pkg1338/Golden4; mutation34. D60. review: cursor/grok-4.7/high GREEN. Proof: artifacts/P03.1-execution/completion.md.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · in-progress · — |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-run · local-repair · D61: lossless read projection; exact plan-lint GREEN. No product scope or threshold change. |
+| 2026-09-29 | executor/codex/gpt-6-sol/xhigh | plan-design · no-op · D61 bounded input repair finished; current product run remains in progress; independent review pending. |
+| 2026-09-29 | reviewer/cursor/grok-4.7/high | plan-audit · audit-green · D61 exact input projection/formatting independently GREEN; prior design reused. Proof: artifacts/P03.2-execution/admission-review.json. |
 
 ## Owner Gates
 
