@@ -9,6 +9,23 @@
 `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` (независимая модель; только детализированные фазы) → исполнение строк
 execution-sheet → закрытие фазы → дизайн следующей по фактическому коду. Дизайн фаз вперёд не делается (B5).
 
+## Эстафета (D46)
+
+Каждая команда: свой контракт GREEN → коммит → `git push origin main` → `gh run watch` своего коммита → `handoff.md` с одним
+Next из колонки «Пишет Next» и launch-block **роли следующего шага**. Hosted CI не стартовал по внешней причине →
+`waiting: GREEN CI на <sha> → <следующая команда>`. Режим исполнения строки — `task:plan-run` или обычная сессия по item-spec
+с последующим reconcile в план (D46 п.6).
+
+| Шаг | Команда | Роль (пул `session-routing.md`) | Пишет Next |
+|:--|:--|:--|:--|
+| Дизайн фазы | `task:plan-design 2026.09.27-№1-COREX-KERNEL Pn` | claude-code opus/high | `design-finish` |
+| Finish | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | claude-code opus/high | `audit-design` |
+| Аудит дизайна | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | codex gpt-6-astra/high (не автор дизайна, не executor строк) | GREEN → `run-items` первой строки фазы в execution-sheet; findings → `design-phase` той же фазы (точечная правка автором) |
+| Строка execution-sheet | команда строки | executor/reviewer строки | следующая строка той же фазы; после последней — `close` фазы |
+| Закрытие фазы | `task:plan-close 2026.09.27-№1-COREX-KERNEL Pn` | executor последней строки, тот же root | `design-phase` следующей фазы из `backlog/`; после P09 — `archive` |
+
+Owner-gates фаз (карта ниже) превращают Next в `waiting:` с условием; после снятия условия — тот же Next.
+
 ## Карта фаз
 
 | Фаза | Суть | Маршрут (детали — execution-sheet) | Зависимости | Owner gate |

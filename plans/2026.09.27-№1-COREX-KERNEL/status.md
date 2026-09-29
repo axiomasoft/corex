@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-28
-inputs_sha256: 3a136ded1420f65b3fc52ed39ac8674ecf45aa1c2b4a1257eaa7d02ba4ad2401
+through: 2026-09-29
+inputs_sha256: 4157a10b0c50d956617a9d0fc9913f2d4da82db9e3e0291a4b0b088a8574d5d7
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-28 |
+| Last Updated | 2026-09-29 |
 
 ## 4. Phase Index & Status Board
 
@@ -130,6 +130,7 @@ Evidence: findings/P01.4-execution.md. |
 | 2026-09-28 | cursor/grok-4.7/xhigh | plan-audit · audit-green · GREEN local P01 safety net. O-3 retained: push, live CI, DOD-21 stale. findings/P01-phase-audit.md. |
 | 2026-09-28 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-28 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 

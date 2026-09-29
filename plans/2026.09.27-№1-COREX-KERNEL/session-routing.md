@@ -31,7 +31,17 @@ Cursor (effort — нативным селектором до запуска):
 agent --workspace "$(git rev-parse --show-toplevel)" --model grok-4.7 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.27-№1-COREX-KERNEL <exact-items-from-sheet>'
 ```
 
-Claude Code: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL <items>`.
+Claude Code (дизайн фаз, finish, reconcile — D46):
+
+```bash
+claude --model opus '/task:plan-design 2026.09.27-№1-COREX-KERNEL <Pn|finish>'
+```
+
+Codex astra (аудит дизайна):
+
+```bash
+codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-astra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
+```
 
 ## Full review runbook
 
@@ -43,10 +53,11 @@ Claude Code: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-CO
 
 ## Эстафета
 
-Любой агент завершает команду переписанным `handoff.md` с одним semantic Next и launch-block из строки execution-sheet.
-Следующий агент стартует только по этому Next (`git pull --ff-only` из корня клона).
+Порядок шагов, роли и Next каждого шага — `roadmap.md` §Эстафета (D46). Любой агент завершает команду коммитом, push и
+переписанным `handoff.md` с одним semantic Next и launch-block роли следующего шага. Следующий агент стартует только по
+этому Next (`git pull --ff-only` из корня клона).
 
-## Текущая сессия — 2026-09-27
+## История: сессия 2026-09-27
 
 По запросу владельца завершить readiness в этой сессии B00-A выполняется Codex gpt-6-astra/high,
 независимый reviewer — Cursor grok-4.7/high. Семантические frontier/high и full сохранены.
