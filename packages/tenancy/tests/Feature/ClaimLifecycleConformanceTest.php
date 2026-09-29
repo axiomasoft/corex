@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\ImpersonationGuard;
+use CoreX\Context\NullImpersonationService;
+use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Events\AccountPurged;
-use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\NullImpersonationService;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Provisioning\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\ClaimUnavailable;

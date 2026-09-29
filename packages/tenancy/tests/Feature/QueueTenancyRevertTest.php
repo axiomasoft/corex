@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Account;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;

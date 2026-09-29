@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Sprint\Data;
+
+use CoreX\Tasks\Task\Data\ActorData;
 
 final readonly class SprintDraft
 {

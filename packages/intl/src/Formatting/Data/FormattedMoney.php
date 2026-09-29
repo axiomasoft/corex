@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Data;
+namespace CoreX\Intl\Formatting\Data;
 
 final readonly class FormattedMoney
 {

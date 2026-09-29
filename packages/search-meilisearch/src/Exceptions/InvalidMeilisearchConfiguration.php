@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch\Exceptions;
+namespace CoreX\SearchMeilisearch\Exceptions;
 
 use RuntimeException;
 
@@ -32,7 +32,7 @@ final class InvalidMeilisearchConfiguration extends RuntimeException
     public static function missingSdk(): self
     {
         return new self(
-            'meilisearch/meilisearch-php is not installed. Require corex/search-meilisearch or run composer require meilisearch/meilisearch-php:1.16.1.',
+            'meilisearch/meilisearch-php is not installed. Require axiomasoft/corex-search-meilisearch or run composer require meilisearch/meilisearch-php:1.16.1.',
         );
     }
 }

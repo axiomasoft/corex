@@ -14,8 +14,8 @@ test('package docs gate reports every cohort package and assigns producer phases
 
     expect($report)->toBeArray()
         ->and($report['schema_version'])->toBe('corex-package-docs-gate/1')
-        ->and($report['cohort_count'])->toBe(19)
-        ->and($report['packages'])->toHaveCount(19);
+        ->and($report['cohort_count'])->toBe(20)
+        ->and($report['packages'])->toHaveCount(20);
 
     foreach ($report['violations'] as $violation) {
         expect($violation['package'])->not->toBe('')
@@ -30,7 +30,7 @@ test('package docs gate fails a planted missing heading', function (): void {
     $readme = $repoRoot.'/packages/search-intl/README.md';
     $original = (string) file_get_contents($readme);
     $planted = preg_replace('/^## Installation\R/m', "## Unrelated\n", $original, 1);
-    $planted = str_replace("composer require corex/search-intl\n", '', (string) $planted);
+    $planted = str_replace("composer require axiomasoft/corex-search-intl\n", '', (string) $planted);
 
     file_put_contents($readme, $planted);
 

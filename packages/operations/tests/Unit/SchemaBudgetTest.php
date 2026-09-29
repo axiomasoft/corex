@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\Internal\SchemaBudget;
-use CoreX\Api\Internal\SchemaProfile;
+use CoreX\Operations\Validation\SchemaBudget;
+use CoreX\Operations\Validation\SchemaProfile;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

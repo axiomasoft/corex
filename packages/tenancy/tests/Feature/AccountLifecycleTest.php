@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\ImpersonationRestrictedException;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use CoreX\Context\ImpersonationGuard;
+use CoreX\Context\ImpersonationState;
+use CoreX\Context\NullImpersonationService;
+use CoreX\Tenancy\Account\Events\AccountPurged;
+use CoreX\Tenancy\Account\Events\AccountSuspended;
+use CoreX\Tenancy\Account\Events\GraceStarted;
+use CoreX\Tenancy\Account\Events\TrialStarted;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\Events\AccountPurged;
-use CoreX\Tenancy\Events\AccountSuspended;
-use CoreX\Tenancy\Events\GraceStarted;
-use CoreX\Tenancy\Events\TrialStarted;
-use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\ImpersonationState;
-use CoreX\Tenancy\NullImpersonationService;
+use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;

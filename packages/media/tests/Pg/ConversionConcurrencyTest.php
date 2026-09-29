@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\Data\MediaAction;
@@ -9,8 +11,6 @@ use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Tests\PgTestCase;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 

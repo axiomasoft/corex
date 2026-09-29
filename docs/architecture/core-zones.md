@@ -1,4 +1,4 @@
-# Внутренние зоны `corex/core`
+# Внутренние зоны `axiomasoft/corex`
 
 | Поле | Значение |
 |:--|:--|
@@ -7,7 +7,7 @@
 | Область | `packages/core/src` |
 | Решения | D8, D32, D33, D34 |
 
-Этот документ задаёт логические зоны пакета `corex/core`, принадлежность каждого PHP-файла
+Этот документ задаёт логические зоны пакета `axiomasoft/corex`, принадлежность каждого PHP-файла
 и допустимое направление внутренних зависимостей. Зона не является Composer-пакетом и не
 меняет публичный FQCN. Физические переносы и совместимость имён принадлежат P15.
 
@@ -151,45 +151,45 @@ Money             → Foundation, TenancyContracts
 
 ```text
 packages/core/src/CoreServiceProvider.php
-packages/core/src/Support/Config.php
-packages/core/src/Support/ServiceProviderModuleRegistrar.php
+packages/core/src/Config/Config.php
+packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php
 ```
 
 Запланированные exact-пути `Support/CoreOptions.php`, `Support/PackageRegistrar.php` и
 `Support/RegistersNothingOnBoot.php` войдут в Composition только после появления в дереве.
 Шаблон вида `*ServiceProvider.php` запрещён.
 
-**E-BASEMODEL:** `packages/core/src/Models/BaseModel.php` — единственный файл Foundation,
-которому разрешён импорт Audit-типа `CoreX\Concerns\HasAuditLog`.
+**E-BASEMODEL:** `packages/core/src/Database/BaseModel.php` — единственный файл Foundation,
+которому разрешён импорт Audit-типа `CoreX\Audit\HasAuditLog`.
 
 **E-ZONE-EDGE (D116):** шесть публичных импортов разрешены только парой
 «файл + символ». Матрица зон от этого не расширяется.
 
 ```text
-packages/core/src/Support/Data/DataScope.php
-    CoreX\Tenancy\TenantContext
-packages/core/src/Events/DomainEvent.php
-    CoreX\Tenancy\TenantContext
-    CoreX\Tenancy\Contracts\TenantContextResolver
-packages/core/src/Events/FeatureFlagToggled.php
-    CoreX\Contracts\SettingsScope
+packages/core/src/Data/DataScope.php
+    CoreX\Context\Data\TenantContext
+packages/core/src/Messaging/Events/DomainEvent.php
+    CoreX\Context\Data\TenantContext
+    CoreX\Context\Contracts\TenantContextResolver
+packages/core/src/Features/Events/FeatureFlagToggled.php
+    CoreX\Settings\Contracts\SettingsScope
 packages/core/src/Features/DatabaseFeatureFlags.php
-    CoreX\Contracts\SettingsScope
-    CoreX\Enums\SettingScope
+    CoreX\Settings\Contracts\SettingsScope
+    CoreX\Settings\Enums\SettingScope
 ```
 
 **LITMUS_ELOQUENT:**
 
 ```text
-packages/core/src/Models/BaseModel.php
-packages/core/src/Concerns/HasConfiguredId.php
-packages/core/src/Support/Schema/IdColumns.php
+packages/core/src/Database/BaseModel.php
+packages/core/src/Database/HasConfiguredId.php
+packages/core/src/Database/Schema/IdColumns.php
 ```
 
 Список не расширяется без решения в Decision Log.
 
 **R-T1 (D33 закрыт в P16.10):** `packages/*/src` не импортирует `CoreX\Testing`,
-`CoreX\Auth\Testing`, `CoreX\Tasks\Testing` и `Flex\Crm\Testing`. Харнесс ядра лежит в
+`CoreX\Access\Testing`, `CoreX\Tasks\Testing` и `Flex\Crm\Testing`. Харнесс ядра лежит в
 `packages/core/tests/Support` и подключается только через `autoload-dev`.
 
 ## 4. Почему `Support/` и `Data/` остаются
@@ -211,10 +211,10 @@ P15.10 применил D88. Текущие имена:
 | Было | Стало |
 |:--|:--|
 | `CoreX\PubSub\*` | `CoreX\Messaging\*` |
-| `CoreX\Contracts\Audit*`, `CoreX\Contracts\Auditable` | `CoreX\Audit\Contracts\*` |
-| `CoreX\Models\AuditLog` | `CoreX\Audit\Internal\AuditLog` |
-| `CoreX\Views\*` | `CoreX\SavedViews\*` |
-| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Support\Data\DataScopeAccessDecision` |
+| `CoreX\Audit\Contracts*`, `CoreX\Audit\Contracts\Auditable` | `CoreX\Audit\Contracts\*` |
+| `CoreX\Audit\Internal\AuditLog` | `CoreX\Audit\Internal\AuditLog` |
+| `CoreX\Views\*` | `CoreX\Panels\SavedViews\*` |
+| `CoreX\Data\DataScopeAccessDecision` | `CoreX\Data\DataScopeAccessDecision` |
 
 Публичные типы `final`, поэтому forwarding subclass неприменим. `class_alias` не вводится:
 он не даёт полного BC-сигнала Roave/PHPStan и запрещён D32.
@@ -227,7 +227,7 @@ P15.10 применил D88. Текущие имена:
 | Departments | Оргдерево, cycle/workspace-семантика | Нет | Да, при расхождении продуктов |
 | Money | Eloquent cast и тяжёлая `brick/money` | Да, при независимом потребителе | Нет |
 
-Выделение `corex/money` требует потребителя, которому нужен `corex/core` без
+Выделение `corex/money` требует потребителя, которому нужен `axiomasoft/corex` без
 `brick/money`, и оплаченной стоимости отдельного release lifecycle. Departments остаётся
 в ядре до появления второго продукта без оргдерева либо расхождения значения «отдел».
 

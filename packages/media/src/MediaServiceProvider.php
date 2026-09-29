@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media;
 
-use CoreX\Contracts\ConfigReportSection;
-use CoreX\Contracts\TenantStorage;
+use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Media\Commands\SweepMediaOperations;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
@@ -20,6 +19,7 @@ use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\SqlRelationLookup;
 use CoreX\Media\Support\MediaConfigSection;
 use CoreX\Media\Support\MediaOptions;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;

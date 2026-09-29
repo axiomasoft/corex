@@ -6,8 +6,8 @@ namespace CoreX\Tests\Golden\Support;
 
 use BackedEnum;
 use Composer\Autoload\ClassLoader;
-use CoreX\Events\DomainEvent;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
+use CoreX\Messaging\Events\DomainEvent;
 use FilesystemIterator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +29,7 @@ final class GoldenSnapshot
         // Read declarations, then let Composer load their actual names exactly once.
         $classes = [];
         $files = [];
-        foreach (glob($repoRoot.'/packages/*/src') ?: [] as $base) {
+        foreach (array_merge(glob($repoRoot.'/packages/*/src') ?: [], glob($repoRoot.'/products/*/src') ?: []) as $base) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($base, FilesystemIterator::SKIP_DOTS));
             foreach ($iterator as $file) {
                 if ($file->getExtension() === 'php') {

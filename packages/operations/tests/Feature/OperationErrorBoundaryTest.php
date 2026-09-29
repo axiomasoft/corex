@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Internal\EnvelopeSerializer;
-use CoreX\Api\Internal\ErrorMapper;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Api\OperationErrorBoundary;
-use CoreX\Api\Tests\Support\ErrorBoundaryCountingHandler;
-use CoreX\Api\Tests\Support\SyntheticPackageFailure;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Data\ErrorDescriptor;
-use CoreX\Enums\ErrorCategory;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
+use CoreX\Operations\Errors\Internal\ErrorMapper;
+use CoreX\Operations\Errors\OperationErrorBoundary;
+use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Tests\Support\ErrorBoundaryCountingHandler;
+use CoreX\Operations\Tests\Support\SyntheticPackageFailure;
+use CoreX\Operations\Tests\TestCase;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;

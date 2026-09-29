@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Models;
+namespace CoreX\Tasks\Time\Models;
 
-use CoreX\Concerns\HasConfiguredId;
-use CoreX\Tasks\Enums\TimeLogSource;
+use CoreX\Database\HasConfiguredId;
+use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Time\Enums\TimeLogSource;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

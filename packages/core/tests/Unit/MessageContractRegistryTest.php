@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\MessageClass;
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
+use CoreX\Messaging\Enums\MessageClass;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 
 function registrySampleContract(

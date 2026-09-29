@@ -1,12 +1,12 @@
 {
-    "contract_fingerprint": "956aedacb0583d4fa63c38f41d4351ecfdc98a1d9670d7d0d01e4d015e6754bf",
+    "contract_fingerprint": "39ab05f3c70d1690f77ef5306e43d0f867eddf7c75ea319c00b2dc11f9107075",
     "files": {
-        "errors.json": "7ee83cc186d72bf8f50a4cd6bba78ce7d5bafb20973e81ee119ad4642111ca66",
-        "openapi.json": "b5c54bb9987ab4ab83ab30b5f8494c8fe36d87f1b6001b09cb8a0fe861f534d1",
-        "operations.json": "52e48b82218bebe846e65e0bf984dbe8e4f7f8ea481d6c67439cb38bf8ba8196",
+        "errors.json": "2ae0bdbede21df72f9606b20c83d5a7548c3dca4c4f618c948dc4b237d08463b",
+        "openapi.json": "a85b8d53f72e41bd8e2fd957d865b8f7972a565ba63bf6ff62c1ae68daf27fc3",
+        "operations.json": "76e3e2e445b06bd36f6371a6f4675ba492d2504d0a7ff555255ada1634af2814",
         "webhooks.json": "af380203beaa1accbee1296510329991e58adba88c17d54e2a9a3d1ca4759a65"
     },
     "major": "v1",
-    "registry_fingerprint": "2ccd40362ed99cbef6697b4fe26beb44aa5ceaa2f00111c171c19a58caac4056",
+    "registry_fingerprint": "72d8dd698cdd620a504454e97e7293ec85cd2e7e0c33671aac312d93dfb25da7",
     "schema": "corex-api-snapshot/1"
 }

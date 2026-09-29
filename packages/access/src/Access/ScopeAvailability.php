@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Exceptions\ScopeCapabilityMismatch;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Support\Facades\Schema;

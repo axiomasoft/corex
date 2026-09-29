@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Contracts\DataScopeCodec;
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Validation\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

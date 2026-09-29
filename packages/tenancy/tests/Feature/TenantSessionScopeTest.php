@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
-use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\ArraySessionHandler;
@@ -20,7 +20,7 @@ uses()->group('pg');
 
 const ROOT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_TSS = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_TSS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -99,7 +99,7 @@ function makeAccountTSS(array $overrides = []): Account
 
 /** Golden-template chain (D14/C4, mirrors WorkspaceResolverTest) — the tenant `sessions`
  *  migration coexists with `users`/`wsp_*`, whose cross-package FK migration needs
- *  corex/core's `sys_departments` to already exist on the same (now-switched) connection. */
+ *  axiomasoft/corex's `sys_departments` to already exist on the same (now-switched) connection. */
 function migrateTenantSessionsTSS(): void
 {
     Artisan::call('migrate', [

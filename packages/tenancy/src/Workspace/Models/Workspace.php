@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Workspace\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Models\BaseModel;
+use CoreX\Database\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

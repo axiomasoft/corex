@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace ThirdParty\Attributes;
 
-use CoreX\Attributes\Data\AttributeDefinition;
-use CoreX\Attributes\Data\AttributeId;
-use CoreX\Attributes\Data\AttributeLifecycle;
-use CoreX\Attributes\Data\IndexPolicy;
-use CoreX\Models\BaseModel;
+use CoreX\CustomFields\Data\AttributeDefinition;
+use CoreX\CustomFields\Data\AttributeId;
+use CoreX\CustomFields\Data\AttributeLifecycle;
+use CoreX\CustomFields\Data\IndexPolicy;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
 use RuntimeException;
 

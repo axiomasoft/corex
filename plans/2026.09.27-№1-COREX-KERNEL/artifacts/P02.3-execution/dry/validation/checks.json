@@ -1,0 +1,200 @@
+[
+  {
+    "check": "manifests",
+    "command": [
+      "python3",
+      "scripts/manifest-check.py"
+    ],
+    "exit": 0,
+    "seconds": 0.02,
+    "log": "manifests.log"
+  },
+  {
+    "check": "lint",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "lint:check"
+    ],
+    "exit": 0,
+    "seconds": 0.82,
+    "log": "lint.log"
+  },
+  {
+    "check": "golden",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "golden"
+    ],
+    "exit": 0,
+    "seconds": 1.42,
+    "log": "golden.log"
+  },
+  {
+    "check": "root-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test"
+    ],
+    "exit": 0,
+    "seconds": 17.54,
+    "log": "root-test.log"
+  },
+  {
+    "check": "pg-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:pg"
+    ],
+    "exit": 0,
+    "seconds": 25.74,
+    "log": "pg-test.log"
+  },
+  {
+    "check": "packages-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:packages"
+    ],
+    "exit": 0,
+    "seconds": 100.91,
+    "log": "packages-test.log"
+  },
+  {
+    "check": "analyse",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "analyse"
+    ],
+    "exit": 0,
+    "seconds": 23.27,
+    "log": "analyse.log"
+  },
+  {
+    "check": "deps-analyse",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "deps:analyse"
+    ],
+    "exit": 0,
+    "seconds": 198.85,
+    "log": "deps-analyse.log"
+  },
+  {
+    "check": "rename",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/rename-completeness-gate.php",
+      "--sections=classes,namespaces,packages,paths"
+    ],
+    "exit": 0,
+    "seconds": 0.16,
+    "log": "rename.log"
+  },
+  {
+    "check": "ownership",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/ownership-gate.php"
+    ],
+    "exit": 0,
+    "seconds": 0.12,
+    "log": "ownership.log"
+  },
+  {
+    "check": "ceilings",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/quality-ceiling-guard.php"
+    ],
+    "exit": 0,
+    "seconds": 0.03,
+    "log": "ceilings.log"
+  },
+  {
+    "check": "anti-weakening",
+    "command": [
+      "bash",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "exit": 0,
+    "seconds": 3.42,
+    "log": "anti-weakening.log"
+  },
+  {
+    "check": "package-graph-gate",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-graph-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.73,
+    "log": "package-graph-gate.log"
+  },
+  {
+    "check": "api-contract",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "api-contract"
+    ],
+    "exit": 0,
+    "seconds": 0.51,
+    "log": "api-contract.log"
+  },
+  {
+    "check": "contract-guard",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "contract-guard"
+    ],
+    "exit": 0,
+    "seconds": 0.48,
+    "log": "contract-guard.log"
+  },
+  {
+    "check": "naming-gate",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "naming-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.52,
+    "log": "naming-gate.log"
+  },
+  {
+    "check": "package-docs-gate",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-docs-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.6,
+    "log": "package-docs-gate.log"
+  },
+  {
+    "check": "mutation",
+    "command": [
+      "scripts/php84",
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 9.02,
+    "log": "mutation.log"
+  }
+]

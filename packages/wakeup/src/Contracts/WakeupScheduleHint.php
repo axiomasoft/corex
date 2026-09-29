@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Contracts;
 
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
 use DateTimeImmutable;
 
 interface WakeupScheduleHint

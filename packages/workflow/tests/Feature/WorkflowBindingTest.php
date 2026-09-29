@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Registry\CompiledModule;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\SignalRequest;
 use CoreX\Workflow\Data\TransitionRequest;
@@ -21,7 +21,7 @@ function triggerRequest(string $key, array $snapshot = ['status' => 'new']): Tri
 
     return new TriggerRequest(
         context: $context,
-        module: 'corex/workflow',
+        module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
         eventName: 'created',
@@ -70,7 +70,7 @@ it('rejects empty definition and version refs before insert', function (string $
 
     $binding->capture(new TriggerRequest(
         context: $context,
-        module: 'corex/workflow',
+        module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
         eventName: 'created',
@@ -96,7 +96,7 @@ it('stores the stamp inside the payload and excludes the fingerprint from the ha
     expect($stored['identity'])->toMatchArray([
         'schema' => 'workflow-definition/1',
         'point' => 'workflow.trigger',
-        'id' => 'corex/workflow:test.ticket:created',
+        'id' => 'axiomasoft/corex-workflow:test.ticket:created',
         'version' => 'version:1',
     ])->and($stored['registryFingerprint'])->toBe('module-free')
         ->and($row->payload_hash)->toBe(hash(
@@ -146,7 +146,7 @@ it('admits a legacy non-empty ref with the original hash and does not rewrite it
         'payload_hash' => $hash,
         'context_hash' => hash('sha256', $context->account->id."\0"),
         'restore_epoch' => str_repeat('0', 64),
-        'module' => 'corex/workflow',
+        'module' => 'axiomasoft/corex-workflow',
         'kind' => 'trigger',
         'definition_ref' => 'definition:1',
         'version_ref' => 'version:1',

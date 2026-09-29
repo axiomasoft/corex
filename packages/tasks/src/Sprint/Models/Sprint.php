@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Models;
+namespace CoreX\Tasks\Sprint\Models;
 
-use CoreX\Concerns\HasConfiguredId;
-use CoreX\Tasks\Enums\SprintStatus;
+use CoreX\Database\HasConfiguredId;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Sprint\Enums\SprintStatus;
+use CoreX\Tasks\Task\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

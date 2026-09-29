@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\PendingPool;

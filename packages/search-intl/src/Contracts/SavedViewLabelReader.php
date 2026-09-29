@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Contracts;
 
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Data\TranslationResult;
+use CoreX\Intl\Locale\Data\LocaleResolution;
+use CoreX\Intl\Translation\Data\TranslationResult;
 
 interface SavedViewLabelReader
 {

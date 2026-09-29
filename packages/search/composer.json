@@ -1,15 +1,15 @@
 {
-    "name": "corex/search",
+    "name": "axiomasoft/corex-search",
     "description": "Typed, policy-hydrated search boundary for CoreX.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
         "ext-openssl": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "php": "^8.4"
+        "illuminate/support": "^12.0|^13.0"
     },
     "autoload": {
         "psr-4": {
@@ -17,9 +17,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests"
-        ]
+        "psr-4": {
+            "CoreX\\Search\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "corex": {

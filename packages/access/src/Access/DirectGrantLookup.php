@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
 use AzGuard\Models\DirectGrant;
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Support\AuthOptions;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Support\AuthOptions;
 
 /**
  * Whether a principal holds an active AzGuard direct grant for one compiled

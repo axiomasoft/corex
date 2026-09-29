@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Locale;
+namespace CoreX\Intl\Translation\Internal;
 
-use CoreX\Intl\Contracts\TranslationReader;
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Data\LocalizedText;
-use CoreX\Intl\Data\TranslationResult;
-use CoreX\Intl\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Locale\Data\LocaleResolution;
+use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Translation\Contracts\TranslationReader;
+use CoreX\Intl\Translation\Data\LocalizedText;
+use CoreX\Intl\Translation\Data\TranslationResult;
 use Illuminate\Contracts\Translation\Translator;
 use Override;
 

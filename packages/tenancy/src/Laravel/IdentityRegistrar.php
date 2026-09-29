@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Contracts\IdentityPasswordRehasher;
-use CoreX\Support\PackageRegistrar;
-use CoreX\Support\RegistersNothingOnBoot;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\IdentityPasswordRehasher;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Tenancy\Identity\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Identity\IdentitySyncer;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

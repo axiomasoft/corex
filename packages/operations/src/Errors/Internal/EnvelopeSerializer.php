@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\ResponseSerializer;
-use CoreX\Api\InvocationMetadata;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 use Override;
 

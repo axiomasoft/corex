@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\OpenApi\Internal;
 
-use CoreX\Api\Contracts\ContractSnapshotSection;
-use CoreX\Api\Data\ApiProfile;
-use CoreX\Api\OpenApiDocumentGenerator;
-use CoreX\Api\Operation;
-use CoreX\Api\OperationRegistry;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
+use CoreX\Operations\OpenApi\OpenApiDocumentGenerator;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;
 
 /** @internal Installed-code v1 snapshot. It does not record tenant activation. */
@@ -214,7 +215,7 @@ final class ContractSnapshotBuilder
             'category' => $category,
             'code' => $code,
             'detail_keys' => [],
-            'owner' => 'corex/operations',
+            'owner' => 'axiomasoft/corex-operations',
             'path' => null,
             'retryable' => $retryable,
         ];
@@ -236,7 +237,7 @@ final class ContractSnapshotBuilder
                 'responses' => [(string) $operation['success_status'] => ['description' => 'Success']],
                 'x-corex-ability' => $operation['ability'],
                 'x-corex-cost' => $operation['cost'],
-                'x-corex-module' => 'corex/operations',
+                'x-corex-module' => 'axiomasoft/corex-operations',
             ];
         }
 
@@ -304,7 +305,7 @@ final class ContractSnapshotBuilder
             'idempotency' => $idempotency,
             'method' => $method,
             'mode' => $mode,
-            'module' => 'corex/operations',
+            'module' => 'axiomasoft/corex-operations',
             'pagination' => null,
             'path' => $path,
             'read_fields' => null,

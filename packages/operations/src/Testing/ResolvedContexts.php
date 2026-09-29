@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Testing;
+namespace CoreX\Operations\Testing;
 
-use CoreX\Api\Contracts\Principal;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Internal\ResolvedContext;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Internal\ResolvedContext;
+use CoreX\Operations\Invocation\InvocationMetadata;
 
 /** Build the engine's request context through its public contract. */
 final class ResolvedContexts

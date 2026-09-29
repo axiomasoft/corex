@@ -1,0 +1,474 @@
+[
+    {
+        "source": "packages/core/src/Features/Contracts/FeatureFlags.php",
+        "symbol": "CoreX\\Settings\\Contracts\\SettingsScope"
+    },
+    {
+        "source": "packages/core/src/Departments/Events/DepartmentMoved.php",
+        "symbol": "CoreX\\Messaging\\Events\\DomainEvent"
+    },
+    {
+        "source": "packages/core/src/Features/Events/FeatureFlagToggled.php",
+        "symbol": "CoreX\\Messaging\\Events\\DomainEvent"
+    },
+    {
+        "source": "packages/core/src/Settings/Events/SettingChanged.php",
+        "symbol": "CoreX\\Messaging\\Events\\DomainEvent"
+    },
+    {
+        "source": "packages/core/src/Context/GuardedTenantContextRestorer.php",
+        "symbol": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+        "source": "packages/core/src/Context/NullTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+        "source": "packages/core/src/Context/NullTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\AccountRef"
+    },
+    {
+        "source": "packages/core/src/Context/NullTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\WorkspaceRef"
+    },
+    {
+        "source": "packages/core/src/Context/SingleAccountResolver.php",
+        "symbol": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+        "source": "packages/core/src/Context/SingleAccountResolver.php",
+        "symbol": "CoreX\\Context\\Data\\AccountRef"
+    },
+    {
+        "source": "products/flex-crm/src/Company/Api/CreateCompanyOperation.php",
+        "symbol": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+        "source": "products/flex-crm/src/Company/Api/ShowCompanyOperation.php",
+        "symbol": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+        "source": "products/flex-crm/src/Company/Models/Company.php",
+        "symbol": "Flex\\Crm\\Contact\\Models\\Contact"
+    },
+    {
+        "source": "products/flex-crm/src/Company/Models/Company.php",
+        "symbol": "Flex\\Crm\\Contact\\Models\\ContactCompany"
+    },
+    {
+        "source": "products/flex-crm/src/Company/Models/Company.php",
+        "symbol": "Flex\\Crm\\Deal\\Models\\Deal"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Api/CreateContactCompanyOperation.php",
+        "symbol": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Api/CreateContactOperation.php",
+        "symbol": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Api/ShowContactOperation.php",
+        "symbol": "Flex\\Crm\\ApiShared\\CrmIdentifier"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Models/Contact.php",
+        "symbol": "Flex\\Crm\\Company\\Models\\Company"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Models/Contact.php",
+        "symbol": "Flex\\Crm\\Deal\\Models\\Deal"
+    },
+    {
+        "source": "products/flex-crm/src/Contact/Models/ContactCompany.php",
+        "symbol": "Flex\\Crm\\Company\\Models\\Company"
+    },
+    {
+        "source": "products/flex-crm/src/Context/Internal/RecordRules.php",
+        "symbol": "Flex\\Crm\\Support\\CrmOptions"
+    },
+    {
+        "source": "products/flex-crm/src/Context/Internal/RecordRules.php",
+        "symbol": "Flex\\Crm\\Context\\ContextGuard"
+    },
+    {
+        "source": "products/flex-crm/src/Context/Internal/RecordRules.php",
+        "symbol": "Flex\\Crm\\Context\\Channels"
+    },
+    {
+        "source": "products/flex-crm/src/Deal/Models/Deal.php",
+        "symbol": "Flex\\Crm\\Contact\\Models\\Contact"
+    },
+    {
+        "source": "products/flex-crm/src/Deal/Models/Deal.php",
+        "symbol": "Flex\\Crm\\Company\\Models\\Company"
+    },
+    {
+        "source": "products/flex-crm/src/Lead/Actions/ConvertLead.php",
+        "symbol": "Flex\\Crm\\Contact\\Actions\\CreateContact"
+    },
+    {
+        "source": "products/flex-crm/src/Lead/Actions/ConvertLead.php",
+        "symbol": "Flex\\Crm\\Company\\Actions\\CreateCompany"
+    },
+    {
+        "source": "products/flex-crm/src/Lead/Actions/ConvertLead.php",
+        "symbol": "Flex\\Crm\\Deal\\Actions\\CreateDeal"
+    },
+    {
+        "source": "products/flex-crm/src/Lead/Actions/ConvertLead.php",
+        "symbol": "Flex\\Crm\\Contact\\Actions\\AssociateContactCompany"
+    },
+    {
+        "source": "packages/tools/src/Internal/ApiToolValidator.php",
+        "symbol": "CoreX\\Operations\\Definition\\ApiOperationValidator"
+    },
+    {
+        "source": "packages/notifications/src/Delivery/Data/DeliveryInput.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Data\\NotificationContext"
+    },
+    {
+        "source": "packages/notifications/src/Delivery/Internal/ChannelDrivers.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict"
+    },
+    {
+        "source": "packages/notifications/src/Delivery/Internal/DeliveryStore.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict"
+    },
+    {
+        "source": "packages/notifications/src/Digest/Data/DigestRef.php",
+        "symbol": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference"
+    },
+    {
+        "source": "packages/notifications/src/Digest/Internal/SqlDigestBuilder.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied"
+    },
+    {
+        "source": "packages/notifications/src/Inbox/Data/NotificationInput.php",
+        "symbol": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference"
+    },
+    {
+        "source": "packages/notifications/src/Inbox/Data/NotificationRef.php",
+        "symbol": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference"
+    },
+    {
+        "source": "packages/notifications/src/Inbox/Data/NotificationSubject.php",
+        "symbol": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference"
+    },
+    {
+        "source": "packages/notifications/src/Preferences/Internal/SettingsPreferenceRepository.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict"
+    },
+    {
+        "source": "packages/notifications/src/Preferences/Internal/SettingsPreferenceRepository.php",
+        "symbol": "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied"
+    },
+    {
+        "source": "packages/operations/src/ApiServiceProvider.php",
+        "symbol": "CoreX\\Operations\\Definition\\OperationSectionCompiler"
+    },
+    {
+        "source": "packages/operations/src/ApiServiceProvider.php",
+        "symbol": "CoreX\\Operations\\Errors\\ApiError"
+    },
+    {
+        "source": "packages/operations/src/ApiServiceProvider.php",
+        "symbol": "CoreX\\Operations\\Definition\\OperationRegistry"
+    },
+    {
+        "source": "packages/operations/src/Authorization/Contracts/ClientScopeAuthorizer.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/operations/src/Authorization/Contracts/OperationAuthorizer.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/operations/src/Authorization/Contracts/OperationFieldAuthorizer.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/operations/src/Bulk/Laravel/BulkRegistrar.php",
+        "symbol": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar"
+    },
+    {
+        "source": "packages/operations/src/Cost/Laravel/CostRegistrar.php",
+        "symbol": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar"
+    },
+    {
+        "source": "packages/operations/src/Definition/Contracts/OperationHandler.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/operations/src/Definition/Internal/OperationContractHasher.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/Definition/Internal/OperationFingerprint.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/Definition/OperationRegistry.php",
+        "symbol": "CoreX\\Operations\\Errors\\ApiError"
+    },
+    {
+        "source": "packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php",
+        "symbol": "CoreX\\Operations\\Http\\Internal\\AcceptNegotiation"
+    },
+    {
+        "source": "packages/operations/src/Errors/OperationErrorBoundary.php",
+        "symbol": "CoreX\\Operations\\Invocation\\InvocationMetadata"
+    },
+    {
+        "source": "packages/operations/src/Http/ApiController.php",
+        "symbol": "CoreX\\Operations\\Invocation\\OperationDispatcher"
+    },
+    {
+        "source": "packages/operations/src/Http/ApiController.php",
+        "symbol": "CoreX\\Operations\\Definition\\OperationRegistry"
+    },
+    {
+        "source": "packages/operations/src/Http/ApiController.php",
+        "symbol": "CoreX\\Operations\\Errors\\ApiError"
+    },
+    {
+        "source": "packages/operations/src/Http/DiscoveryController.php",
+        "symbol": "CoreX\\Operations\\OpenApi\\OpenApiDocumentGenerator"
+    },
+    {
+        "source": "packages/operations/src/Idempotency/Data/StoredOperationOutcome.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Data\\OperationResult"
+    },
+    {
+        "source": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+        "symbol": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper"
+    },
+    {
+        "source": "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+        "symbol": "CoreX\\Operations\\Definition\\Internal\\OperationFingerprint"
+    },
+    {
+        "source": "packages/operations/src/Idempotency/Internal/SqlIdempotencyStore.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/Invocation/Contracts/ContextResolver.php",
+        "symbol": "CoreX\\Operations\\Authorization\\Contracts\\Principal"
+    },
+    {
+        "source": "packages/operations/src/Invocation/Contracts/RequestContext.php",
+        "symbol": "CoreX\\Operations\\Authorization\\Contracts\\Principal"
+    },
+    {
+        "source": "packages/operations/src/Invocation/Internal/CapabilityResolver.php",
+        "symbol": "CoreX\\Operations\\Versioning\\Internal\\ApiProfileFactory"
+    },
+    {
+        "source": "packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php",
+        "symbol": "CoreX\\Operations\\Authorization\\Internal\\DeclaredFieldAuthorizer"
+    },
+    {
+        "source": "packages/operations/src/Invocation/OperationDispatcher.php",
+        "symbol": "CoreX\\Operations\\Definition\\OperationRegistry"
+    },
+    {
+        "source": "packages/operations/src/Invocation/OperationDispatcher.php",
+        "symbol": "CoreX\\Operations\\Errors\\ApiError"
+    },
+    {
+        "source": "packages/operations/src/Invocation/OperationDispatcher.php",
+        "symbol": "CoreX\\Operations\\Definition\\Operation"
+    },
+    {
+        "source": "packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/OpenApi/Internal/SnapshotJson.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/OpenApi/OpenApiDocumentGenerator.php",
+        "symbol": "CoreX\\Operations\\Definition\\OperationRegistry"
+    },
+    {
+        "source": "packages/operations/src/Pagination/OrderingRegistry.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/operations/src/Pagination/SignedCursorCodec.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/tools/src/Contracts/ToolCatalogue.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/tools/src/Contracts/ToolExecutionGuard.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/tools/src/Contracts/ToolInvoker.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/tools/src/Contracts/ToolPolicy.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/tools/src/Contracts/ToolRequestContext.php",
+        "symbol": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+    },
+    {
+        "source": "packages/tools/src/Data/ToolCall.php",
+        "symbol": "CoreX\\Operations\\Validation\\Data\\JsonObject"
+    },
+    {
+        "source": "packages/tools/src/Data/ToolDescriptor.php",
+        "symbol": "CoreX\\Operations\\Validation\\Data\\JsonObject"
+    },
+    {
+        "source": "packages/tools/src/Data/ToolResult.php",
+        "symbol": "CoreX\\Operations\\Validation\\Data\\JsonObject"
+    },
+    {
+        "source": "packages/tools/src/Internal/GuardedToolInvoker.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/tools/src/Internal/McpToolsProjection.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/tools/src/Internal/OpisToolSchemaValidator.php",
+        "symbol": "CoreX\\Operations\\Validation\\SchemaProfile"
+    },
+    {
+        "source": "packages/tools/src/Internal/OpisToolSchemaValidator.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/tools/src/Internal/OpisToolSchemaValidator.php",
+        "symbol": "CoreX\\Operations\\Validation\\SchemaBudget"
+    },
+    {
+        "source": "packages/tools/src/Internal/ToolContractHasher.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/tools/src/Internal/ToolSchemaSupervisor.php",
+        "symbol": "CoreX\\Operations\\Validation\\SchemaProfile"
+    },
+    {
+        "source": "packages/operations/src/Versioning/Internal/ApiProfileFactory.php",
+        "symbol": "CoreX\\Operations\\Validation\\JsonCanonical"
+    },
+    {
+        "source": "packages/webhooks/src/Laravel/WebhookRegistrar.php",
+        "symbol": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar"
+    },
+    {
+        "source": "packages/tools/tests/Support/HeadlessWrappedHandler.php",
+        "symbol": "CoreX\\Operations\\Testing\\HttpDependentHandler"
+    },
+    {
+        "source": "packages/recurrence/src/RRuleRecurrenceExpander.php",
+        "symbol": "CoreX\\Recurrence\\Internal\\RuntimeProfile"
+    },
+    {
+        "source": "packages/recurrence/src/RRuleRecurrenceExpander.php",
+        "symbol": "CoreX\\Recurrence\\Internal\\CanonicalHasher"
+    },
+    {
+        "source": "packages/tasks/src/Project/Data/ProjectDraft.php",
+        "symbol": "CoreX\\Tasks\\Task\\Data\\ActorData"
+    },
+    {
+        "source": "packages/tasks/src/Project/Models/Project.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Stage"
+    },
+    {
+        "source": "packages/tasks/src/Project/Models/Project.php",
+        "symbol": "CoreX\\Tasks\\Sprint\\Models\\Sprint"
+    },
+    {
+        "source": "packages/tasks/src/Project/Models/Project.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tasks/src/Sprint/Data/SprintDraft.php",
+        "symbol": "CoreX\\Tasks\\Task\\Data\\ActorData"
+    },
+    {
+        "source": "packages/tasks/src/Sprint/Models/Sprint.php",
+        "symbol": "CoreX\\Tasks\\Project\\Models\\Project"
+    },
+    {
+        "source": "packages/tasks/src/Sprint/Models/Sprint.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tasks/src/Task/Models/Stage.php",
+        "symbol": "CoreX\\Tasks\\Project\\Models\\Project"
+    },
+    {
+        "source": "packages/tasks/src/Task/Models/Task.php",
+        "symbol": "CoreX\\Tasks\\Project\\Models\\Project"
+    },
+    {
+        "source": "packages/tasks/src/Task/Models/Task.php",
+        "symbol": "CoreX\\Tasks\\Sprint\\Models\\Sprint"
+    },
+    {
+        "source": "packages/tasks/src/Task/Models/Task.php",
+        "symbol": "CoreX\\Tasks\\Time\\Models\\TimeLog"
+    },
+    {
+        "source": "packages/tasks/src/Time/Data/TimeLogDraft.php",
+        "symbol": "CoreX\\Tasks\\Task\\Data\\ActorData"
+    },
+    {
+        "source": "packages/tasks/src/Time/Models/TimeLog.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tasks/src/Time/Models/Timer.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tenancy/src/Account/Models/Account.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Models\\Domain"
+    },
+    {
+        "source": "packages/tenancy/src/Account/Models/AccountSchemaState.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Models\\MigrationBatch"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Models/Domain.php",
+        "symbol": "CoreX\\Tenancy\\Account\\Models\\Account"
+    },
+    {
+        "source": "packages/tenancy/src/Runtime/StanclTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\WorkspaceRef"
+    },
+    {
+        "source": "packages/tenancy/src/Runtime/StanclTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+        "source": "packages/tenancy/src/Runtime/StanclTenancyManager.php",
+        "symbol": "CoreX\\Context\\Data\\AccountRef"
+    },
+    {
+        "source": "packages/tenancy/src/Runtime/TenancyManagerContextResolver.php",
+        "symbol": "CoreX\\Context\\Data\\TenantContext"
+    },
+    {
+        "source": "packages/tenancy/src/Workspace/Models/Invitation.php",
+        "symbol": "CoreX\\Tenancy\\Identity\\Models\\User"
+    },
+    {
+        "source": "packages/tenancy/src/Workspace/Models/WorkspaceMember.php",
+        "symbol": "CoreX\\Tenancy\\Identity\\Models\\User"
+    }
+]

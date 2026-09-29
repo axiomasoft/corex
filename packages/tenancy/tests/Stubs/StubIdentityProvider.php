@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Tests\Stubs;
 
-use CoreX\Tenancy\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Override;

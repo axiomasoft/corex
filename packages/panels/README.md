@@ -1,4 +1,4 @@
-# corex/panels
+# axiomasoft/corex-panels
 
 Headless, read-only **panel descriptors** for CoreX modules: named, entity-linked UI surfaces
 that applications can discover and authorize in the current module/entity context. Products register
@@ -35,7 +35,7 @@ This package does **not** own and does **not** ship:
 - Command/action execution or side effects
 - Cached grant materialization (reads current context; no cache layer)
 
-Applications and other packages own routing, UI, persistence, and execution. `corex/panels` only
+Applications and other packages own routing, UI, persistence, and execution. `axiomasoft/corex-panels` only
 describes and gates access to named surfaces in the active context.
 
 ## Structure (profile A, no move)
@@ -46,12 +46,12 @@ describes and gates access to named surfaces in the active context.
   for a single class would violate **STR-004** without a named follow-up item (P16.9 records a
   deliberate **no structural move**).
 
-Package identity stays `corex/panels`, namespace `CoreX\Panels`, with public API
+Package identity stays `axiomasoft/corex-panels`, namespace `CoreX\Panels`, with public API
 `CoreX\Panels\Contracts` and `CoreX\Panels\Data` only.
 
 ## Installation
 
-Install with `composer require corex/panels`. The consuming application registers tagged `PanelProvider` implementations and uses `PanelCatalogue` with its current entity/module context. This package has no database migration or UI deployment step.
+Install with `composer require axiomasoft/corex-panels`. The consuming application registers tagged `PanelProvider` implementations and uses `PanelCatalogue` with its current entity/module context. This package has no database migration or UI deployment step.
 
 ## Configuration
 

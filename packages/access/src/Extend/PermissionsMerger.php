@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Extend;
+namespace CoreX\Access\Extend;
 
-use CoreX\Auth\Contracts\RoleMatrixCompiler;
-use CoreX\Auth\Matrix\ActiveEntityFilter;
-use CoreX\Auth\Matrix\MatrixValidator;
+use CoreX\Access\Contracts\RoleMatrixCompiler;
+use CoreX\Access\Matrix\ActiveEntityFilter;
+use CoreX\Access\Matrix\MatrixValidator;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Events\ModuleDisabled;

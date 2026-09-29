@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Internal;
 
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Wakeup\Contracts\DueWakeupSource;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;

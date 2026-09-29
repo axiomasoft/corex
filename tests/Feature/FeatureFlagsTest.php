@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\FeatureFlagDefinition;
-use CoreX\Contracts\SettingsScope;
-use CoreX\Enums\SettingScope;
-use CoreX\Events\DomainEvent;
-use CoreX\Events\FeatureFlagToggled;
-use CoreX\Events\SettingChanged;
+use CoreX\Features\Contracts\FeatureFlagDefinition;
 use CoreX\Features\DatabaseFeatureFlags;
-use CoreX\Models\FeatureFlag;
-use CoreX\Models\FeatureOverride;
+use CoreX\Features\Events\FeatureFlagToggled;
+use CoreX\Features\Models\FeatureFlag;
+use CoreX\Features\Models\FeatureOverride;
+use CoreX\Messaging\Events\DomainEvent;
+use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Enums\SettingScope;
+use CoreX\Settings\Events\SettingChanged;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;

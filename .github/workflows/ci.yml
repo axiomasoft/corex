@@ -133,7 +133,7 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 
-  api-tests:
+  operations-tests:
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -141,7 +141,7 @@ jobs:
       fail-fast: false
       matrix:
         laravel: ['12.*', '13.*']
-    name: API package · Laravel ${{ matrix.laravel }}
+    name: Operations package · Laravel ${{ matrix.laravel }}
     env:
       LARAVEL_VERSION: ${{ matrix.laravel }}
     steps:
@@ -180,10 +180,114 @@ jobs:
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/operations
-      - name: API tests and coverage
+      - name: Operations tests and coverage
         run: composer --working-dir=packages/operations test:coverage
-      - name: API static analysis
+      - name: Operations static analysis
         run: composer --working-dir=packages/operations analyse
+
+  tools-tests:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12.*', '13.*']
+    name: Tools package · Laravel ${{ matrix.laravel }}
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
+          coverage: xdebug
+      - name: Constrain Laravel version
+        run: composer --working-dir=packages/tools require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+      - name: Constrain root Laravel version
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Root Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer --working-dir=packages/tools require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
+
+      - name: Install dependencies
+        run: composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/tools
+      - name: Tools tests and coverage
+        run: composer --working-dir=packages/tools test:coverage
+      - name: Tools static analysis
+        run: composer --working-dir=packages/tools analyse
+
+  webhooks-tests:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12.*', '13.*']
+    name: Webhooks package · Laravel ${{ matrix.laravel }}
+    env:
+      LARAVEL_VERSION: ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
+          coverage: xdebug
+      - name: Constrain Laravel version
+        run: composer --working-dir=packages/webhooks require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+      - name: Constrain root Laravel version
+        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+
+      - name: Root Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Laravel 12 test stack
+        if: matrix.laravel == '12.*'
+        run: composer --working-dir=packages/webhooks require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Stage sealed stancl provider candidates
+        run: python3 scripts/distribution/stage-stancl-providers.py
+
+      - name: Install root tooling and shared test dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked
+
+      - name: Install dependencies
+        run: composer --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit
+        run: composer audit --locked --working-dir=packages/webhooks
+      - name: Webhooks tests and coverage
+        run: composer --working-dir=packages/webhooks test:coverage
+      - name: Webhooks static analysis
+        run: composer --working-dir=packages/webhooks analyse
 
   notifications-wakeup-tests:
     permissions:
@@ -498,19 +602,19 @@ jobs:
         run: composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/crm update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/crm
+        run: composer audit --locked --working-dir=products/flex-crm
 
       - name: Crm tests
-        run: composer --working-dir=packages/crm test
+        run: composer --working-dir=products/flex-crm test
 
       - name: Crm PostgreSQL regressions
-        run: composer --working-dir=packages/crm test:pg
+        run: composer --working-dir=products/flex-crm test:pg
 
       - name: Crm coverage (P1.27 compensating gate)
-        run: composer --working-dir=packages/crm test:coverage
+        run: composer --working-dir=products/flex-crm test:coverage
 
   packages-tests:
     permissions:
@@ -541,7 +645,7 @@ jobs:
         run: composer test:packages
 
       - name: Core and modules suites
-        run: vendor/bin/pest packages/core/tests packages/modules/tests
+        run: vendor/bin/pest packages/core/tests packages/core/tests/Modules
 
   tasks-tests:
     permissions:
@@ -921,7 +1025,7 @@ jobs:
         run: python3 scripts/manifest-check.py
       - name: Strict validation of every installing root
         run: |
-          for manifest in composer.json packages/*/composer.json; do
+          for manifest in composer.json packages/*/composer.json products/*/composer.json; do
             composer validate --strict --no-check-lock --working-dir="$(dirname "$manifest")"
           done
 
@@ -995,7 +1099,7 @@ jobs:
         run: bash scripts/dependency-analyser.sh --all
       - name: Audit every standalone package lockfile
         run: |
-          for manifest in packages/*/composer.json; do
+          for manifest in packages/*/composer.json products/*/composer.json; do
             composer audit --locked --working-dir="$(dirname "$manifest")"
           done
 

@@ -20,7 +20,7 @@ POLICY = ROOT / "scripts/distribution/export-policy.json"
 REF = "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
 PUBLIC_TARBALL = "https://codeload.github.com/axiomasoft/azguard-private/tar.gz/253cbf4cce0226545cd96ca8c6bcbefe329b1403"
 AZGUARD = "axioma-studio/azguard-core"
-AUTH = "corex/access"
+AUTH = "axiomasoft/corex-access"
 VERSION = "0.1.0-p4.3"
 AZGUARD_VERSION = "0.3.0"
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -111,8 +111,8 @@ def repository(root: Path) -> tuple[Path, dict]:
     metadata["packages"][AZGUARD] = {AZGUARD_VERSION: {"name": AZGUARD, "version": AZGUARD_VERSION, "require": private_requires, "dist": {"type": "zip", "url": private_zip.as_uri(), "reference": REF}, "source": {"type": "git", "url": "https://github.com/axiomasoft/azguard-private.git", "reference": REF}}}
     auth_composer = json.loads((ROOT / "packages/access/composer.json").read_text())
     auth_composer["version"] = VERSION
-    auth_composer["require"]["corex/core"] = VERSION
-    auth_composer["require"]["corex/modules"] = VERSION
+    auth_composer["require"]["axiomasoft/corex"] = VERSION
+    auth_composer["require"]["axiomasoft/corex"] = VERSION
     metadata["packages"][AUTH] = {VERSION: {"name": AUTH, "version": VERSION, "require": auth_composer["require"], "dist": {"type": "zip", "url": auth_zip.as_uri(), "reference": "local-p4.5"}}}
     metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
     return stage, {"azguard_archive_sha256": private_sha, "azguard_composer_sha256": composer_sha, "auth_archive_sha256": auth_sha, "metadata_sha256": digest(metadata_path)}

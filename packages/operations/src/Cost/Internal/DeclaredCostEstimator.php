@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Cost;
+namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\OperationCostEstimator;
-use CoreX\Api\Data\ActualCost;
-use CoreX\Api\Data\CostInput;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Operation;
+use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
+use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\CostInput;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Validation\JsonCanonical;
 
 /** Pure declared-recipe estimator. No database, cache, network or handler reflection. */
 final readonly class DeclaredCostEstimator implements OperationCostEstimator

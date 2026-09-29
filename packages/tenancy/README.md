@@ -1,11 +1,11 @@
-# corex/tenancy
+# axiomasoft/corex-tenancy
 
 Laravel tenancy primitives for CoreX's physical PostgreSQL database-per-account
 profile.
 
 ## Optional wakeup root hints
 
-`corex-tenancy.wakeup.driver` defaults to `local_sweep`. With `corex/wakeup` installed, a cloud
+`corex-tenancy.wakeup.driver` defaults to `local_sweep`. With `axiomasoft/corex-wakeup` installed, a cloud
 deployment may explicitly select `root_registry`; this enables the advisory `root_wakeup_hints`
 table and the `corex:wakeup:root-sweep` command. Hints never replace a tenant-local request or
 provide authority to select an account connection.
@@ -43,7 +43,7 @@ constitute a publication promise.
 
 ## Installation
 
-Install with `composer require corex/tenancy` after configuring the approved immutable provider channels described below. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
+Install with `composer require axiomasoft/corex-tenancy` after configuring the approved immutable provider channels described below. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
 
 ## Extension contracts
 

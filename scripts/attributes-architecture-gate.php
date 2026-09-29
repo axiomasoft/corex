@@ -3,13 +3,11 @@
 
 declare(strict_types=1);
 
-/** P10.8 ratchet. The repository graph, config and ownership scanners remain authoritative. */
-
-use CoreX\Attributes\Internal\Laravel\AttributeComposition;
-use CoreX\Support\InvalidConfiguration;
+use CoreX\Config\InvalidConfiguration;
+use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 
 $root = dirname(__DIR__);
-$package = $root.'/packages/attributes';
+$package = $root.'/packages/custom-fields';
 $fixture = ($argv[1] ?? null) === '--fixture' ? ($argv[2] ?? null) : null;
 $violations = [];
 
@@ -45,7 +43,7 @@ if ($fixture !== null) {
     }
 
     foreach (['Schema', 'Values', 'Query', 'Storage', 'Integration', 'Laravel'] as $subsystem) {
-        if (! is_dir($package.'/src/'.$subsystem)) {
+        if (! is_dir($package.'/src/Internal/'.$subsystem)) {
             $violations[] = "A0 missing {$subsystem} subsystem";
         }
     }
@@ -59,7 +57,7 @@ if ($fixture !== null) {
     $composer = json_decode((string) file_get_contents($package.'/composer.json'), true);
     $public = $composer['extra']['corex']['public-api'] ?? null;
 
-    if ($public !== ['CoreX\\Attributes\\Contracts', 'CoreX\\Attributes\\Data', 'CoreX\\Attributes\\Exceptions']) {
+    if ($public !== ['CoreX\\CustomFields\\Contracts', 'CoreX\\CustomFields\\Data', 'CoreX\\CustomFields\\Exceptions']) {
         $violations[] = 'A0 public-api roots changed';
     }
 
@@ -70,8 +68,8 @@ if ($fixture !== null) {
         $subsystem = strtok($relative, '/');
 
         if (in_array($subsystem, ['Internal', 'Schema', 'Values', 'Query', 'Storage', 'Integration', 'Laravel'], true)) {
-            $namespacePath = $subsystem === 'Internal' ? $relative : 'Internal/'.$relative;
-            $expected = 'CoreX\\Attributes\\'.str_replace('/', '\\', $namespacePath);
+            $namespacePath = $relative;
+            $expected = 'CoreX\\CustomFields\\'.str_replace('/', '\\', $namespacePath);
             $expected = substr($expected, 0, (int) strrpos($expected, '\\'));
 
             if (preg_match('/^namespace\s+([^;]+);/m', (string) file_get_contents($file), $match) !== 1 || $match[1] !== $expected) {

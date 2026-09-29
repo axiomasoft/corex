@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Cost\Contracts;
 
-use CoreX\Api\Data\CostInput;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Operation;
+use CoreX\Operations\Cost\Data\CostInput;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Definition\Operation;
 
 interface OperationCostEstimator
 {

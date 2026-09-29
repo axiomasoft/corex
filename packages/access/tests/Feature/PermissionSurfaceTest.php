@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Access\PermissionSurface;
-use CoreX\Auth\Access\ScopeAvailability;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Matrix\ActiveEntityFilter;
-use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
-use CoreX\Auth\Tests\Stubs\Project;
+use CoreX\Access\Access\PermissionSurface;
+use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Matrix\ActiveEntityFilter;
+use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
+use CoreX\Access\Tests\Stubs\Project;
+use CoreX\Context\SingleAccountResolver;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
-use CoreX\Tenancy\SingleAccountResolver;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 

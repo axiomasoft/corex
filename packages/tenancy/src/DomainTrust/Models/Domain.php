@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\DomainTrust\Models;
 
 use Carbon\CarbonImmutable;
+use CoreX\Tenancy\Account\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Stancl\Tenancy\Database\Concerns\InvalidatesTenantsResolverCache;
@@ -12,7 +13,7 @@ use Stancl\Tenancy\Database\Concerns\InvalidatesTenantsResolverCache;
 /**
  * `root_domains` — per-account host registry (central connection, D14).
  * Not a stancl `Contracts\Domain` implementation: {@see
- * \CoreX\Tenancy\Resolvers\HostTenantResolver} owns host resolution
+ * \CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver} owns host resolution
  * directly against this table, stancl's own `Domain` machinery is unused
  * here (D119).
  *

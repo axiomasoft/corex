@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspace;
 
-use CoreX\Tenancy\Models\Invitation;
+use CoreX\Tenancy\Workspace\Models\Invitation;
 use RuntimeException;
 
 /**

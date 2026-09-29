@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Data;
+namespace CoreX\Notifications\Inbox\Data;
 
+use CoreX\Notifications\Delivery\Data\RecipientReference;
 use DateTimeImmutable;
 
 final readonly class NotificationRef

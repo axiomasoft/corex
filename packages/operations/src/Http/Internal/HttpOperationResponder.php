@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Http\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Operation;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Errors\ApiError;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\JsonResponse;

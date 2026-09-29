@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Settings;
 
-use CoreX\Contracts\SettingDefaultsProvider;
+use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Override;
 
 /**

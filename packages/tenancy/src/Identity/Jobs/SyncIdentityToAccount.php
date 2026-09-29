@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Jobs;
+namespace CoreX\Tenancy\Identity\Jobs;
 
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use Illuminate\Bus\Queueable;

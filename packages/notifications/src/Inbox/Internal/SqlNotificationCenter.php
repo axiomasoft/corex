@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Inbox\Internal;
 
-use CoreX\Notifications\Contracts\NotificationCenter;
-use CoreX\Notifications\Contracts\NotificationPolicy;
-use CoreX\Notifications\Data\CancelResult;
-use CoreX\Notifications\Data\EntityReference;
-use CoreX\Notifications\Data\InboxQuery;
-use CoreX\Notifications\Data\NotificationAction;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationInput;
-use CoreX\Notifications\Data\NotificationRef;
-use CoreX\Notifications\Data\NotificationSubject;
-use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
+use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
+use CoreX\Notifications\Inbox\Data\CancelResult;
+use CoreX\Notifications\Inbox\Data\EntityReference;
+use CoreX\Notifications\Inbox\Data\InboxQuery;
+use CoreX\Notifications\Inbox\Data\NotificationAction;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Data\NotificationInput;
+use CoreX\Notifications\Inbox\Data\NotificationRef;
+use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;

@@ -5,9 +5,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
-        "corex/core": "^1.0",
-        "corex/modules": "^1.0",
-        "corex/transfer": "^1.0"
+        "axiomasoft/corex": "^1.0",
+        "axiomasoft/corex": "^1.0",
+        "axiomasoft/corex-transfer": "^1.0"
     },
     "autoload": {
         "psr-4": {

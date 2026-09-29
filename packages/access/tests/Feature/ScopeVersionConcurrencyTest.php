@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Matrix\ScopeMapVersion;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\SingleAccountResolver;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Access\Matrix\ScopeMapVersion;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\SingleAccountResolver;
 use Illuminate\Contracts\Cache\Factory;
 use Symfony\Component\Process\Process;
 

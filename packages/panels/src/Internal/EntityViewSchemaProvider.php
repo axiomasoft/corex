@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\Internal;
 
-use CoreX\Contracts\ViewSchemaProvider;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\SavedViews\Data\ViewContext;
-use CoreX\SavedViews\Data\ViewField;
-use CoreX\SavedViews\Data\ViewSchema;
+use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
+use CoreX\Panels\SavedViews\Data\ViewContext;
+use CoreX\Panels\SavedViews\Data\ViewField;
+use CoreX\Panels\SavedViews\Data\ViewSchema;
 use LogicException;
 
 /** @internal */

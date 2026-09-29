@@ -2,37 +2,35 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Cost;
+namespace CoreX\Operations\Cost\Internal;
 
 use Closure;
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\BudgetReservation;
-use CoreX\Api\Contracts\OperationBudget;
-use CoreX\Api\Contracts\OperationCostEstimator;
-use CoreX\Api\Data\ActualCost;
-use CoreX\Api\Data\BudgetScope;
-use CoreX\Api\Data\CostInput;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Data\OperationResult;
-use CoreX\Api\Enums\OperationMode;
-use RuntimeException;
+use CoreX\Operations\Cost\Contracts\BudgetReservation;
+use CoreX\Operations\Cost\Contracts\OperationBudget;
+use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
+use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\BudgetScope;
+use CoreX\Operations\Cost\Data\CostInput;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Invocation\Data\OperationResult;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 
 /** @internal Admission and settlement inside the shared operation invocation seam. */
 final readonly class BudgetAdmission
 {
-    /** @var Closure(OperationInvocation): CostInput */
+    /** @var Closure(OperationInvocation):CostInput */
     private Closure $costInput;
 
-    /** @var Closure(OperationInvocation): ?string */
+    /** @var Closure(OperationInvocation):?string */
     private Closure $clientId;
 
     /**
-     * @param  null|Closure(OperationInvocation): CostInput  $costInput
-     * @param  null|Closure(OperationInvocation): ?string  $clientId
+     * @param  null|Closure(OperationInvocation):CostInput  $costInput
+     * @param  null|Closure(OperationInvocation):?string  $clientId
      */
     public function __construct(
         private OperationBudget $budget,
@@ -55,7 +53,7 @@ final readonly class BudgetAdmission
         new BudgetScope($installationId, '__validation__', null, null);
     }
 
-    /** @param Closure(Closure(): void): OperationResult $effect */
+    /** @param Closure(Closure():void):OperationResult $effect */
     public function invoke(OperationInvocation $invocation, Closure $effect): OperationResult
     {
         $estimate = $this->estimator->estimate($invocation->operation, ($this->costInput)($invocation));
@@ -181,9 +179,3 @@ final readonly class BudgetAdmission
         return $metadata;
     }
 }
-
-/** @internal Keeps budget storage failure distinct from an enforced 429. */
-final class BudgetStoreUnavailable extends RuntimeException {}
-
-/** @internal Identifies a reserve denial without conflating handler-originated 429s. */
-final class BudgetRateLimited extends TooManyRequestsHttpException {}

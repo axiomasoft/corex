@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Contracts\ContractSnapshotSection;
-use CoreX\Api\Internal\ContractSnapshotBuilder;
-use CoreX\Api\Tests\Support\ModuleFixture;
-use CoreX\Api\Tests\Support\NoteHandler;
-use CoreX\Api\Tests\TestCase;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
+use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
+use CoreX\Operations\Testing\ModuleFixture;
+use CoreX\Operations\Testing\NoteHandler;
+use CoreX\Operations\Tests\TestCase;
 
 final class ContractSnapshotTest extends TestCase
 {
@@ -113,7 +113,7 @@ final class ContractSnapshotTest extends TestCase
         return app(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: [], installedVersions: [
-            'corex/modules' => new InstalledPackageVersion('corex/modules', '1.0.0', 'p13-fixture'),
+            'axiomasoft/corex' => new InstalledPackageVersion('axiomasoft/corex', '1.0.0', 'p13-fixture'),
             'example/notes' => new InstalledPackageVersion('example/notes', '1.0.0', 'p13-fixture'),
         ]);
     }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Runtime\Storage;
 
-use CoreX\Contracts\TenantStorage;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\ExportArchiveRef;
 use CoreX\Storage\ScopedFilesystem;
 use CoreX\Storage\StorageCapabilities;
 use CoreX\Storage\StorageCapabilityUnavailable;
 use CoreX\Storage\StorageOperationFailed;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;

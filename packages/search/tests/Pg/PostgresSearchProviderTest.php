@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
 use CoreX\Search\Support\SearchQuery;
 use CoreX\Search\Support\SearchSnapshot;
 use CoreX\Search\Tests\PgTestCase;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');

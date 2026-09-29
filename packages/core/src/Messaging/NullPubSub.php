@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging;
 
 use Closure;
-use CoreX\Contracts\PubSub;
+use CoreX\Messaging\Contracts\PubSub;
 use Override;
 
 /**

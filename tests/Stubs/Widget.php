@@ -6,8 +6,8 @@ namespace CoreX\Tests\Stubs;
 
 use Brick\Money\Money;
 use CoreX\Audit\Contracts\Auditable;
-use CoreX\Models\BaseModel;
-use CoreX\Money\MoneyCast;
+use CoreX\Database\BaseModel;
+use CoreX\Intl\Money\MoneyCast;
 
 /**
  * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel)

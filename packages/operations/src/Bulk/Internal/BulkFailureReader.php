@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperation;
 use InvalidArgumentException;
 
 /** @internal Cursor page of safe bulk failure records. Limit 100 is mandatory. */
@@ -14,7 +14,7 @@ final readonly class BulkFailureReader
     public const int MAX_LIMIT = 100;
 
     /**
-     * @param  callable(DataScope, BulkOperation, ?string, int): array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}  $page
+     * @param  callable(DataScope, BulkOperation, ?string, int):array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}  $page
      */
     public function __construct(private mixed $page) {}
 

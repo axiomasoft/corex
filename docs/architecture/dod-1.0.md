@@ -11,7 +11,7 @@ mode is active on each row.
 |:--|:--|:--|:--|:--|:--|
 | DOD-01 | Every live package has a one-sentence purpose. | `P1.2`, `P17.8` | `candidate-receipt` | `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json` | `missing-purpose` |
 | DOD-02 | Package taxonomy is machine-checked. | `P3.3` | `live-command` | `php scripts/package-graph-gate.php` | `taxonomy-drift` |
-| DOD-03 | `corex/core` is foundation-only, not a capability warehouse. | `P6.1` | `live-command` | `php scripts/package-graph-gate.php` | `foundation-warehouse` |
+| DOD-03 | `axiomasoft/corex` is foundation-only, not a capability warehouse. | `P6.1` | `live-command` | `php scripts/package-graph-gate.php` | `foundation-warehouse` |
 | DOD-04 | Every public symbol is present in the declared API map. | `P1.2`, `P3.3` | `live-command` | `php scripts/package-graph-gate.php` | `missing-api-symbol` |
 | DOD-05 | Cross-package imports of implementation internals are forbidden. | `P3.2` | `live-command` | `php scripts/package-graph-gate.php` | `internal-import` |
 | DOD-06 | Every owned table has one declared owner. | `P2.3`, `P3.5` | `live-command` | `php scripts/table-ownership-gate.php` | `table-owner` |

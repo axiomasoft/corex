@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Scopes;
+namespace CoreX\Tenancy\Laravel\Scopes;
 
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\StanclTenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Tenancy\Runtime\StanclTenancyManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs;
 
-use CoreX\Contracts\SettingDefaultsProvider;
+use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Override;
 
 final class StubSettingDefaultsProvider implements SettingDefaultsProvider

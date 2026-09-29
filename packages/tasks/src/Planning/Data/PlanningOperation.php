@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Planning\Data;
 
 enum PlanningOperation: string
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\Tests\Support\StubOperationHandler;
-use CoreX\Api\Tests\TestCase;
 use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Operations\Testing\StubOperationHandler;
+use CoreX\Operations\Tests\TestCase;
 
 uses(TestCase::class);
 

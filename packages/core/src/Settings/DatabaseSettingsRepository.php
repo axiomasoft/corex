@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Settings;
 
-use CoreX\Contracts\SettingDefaultsProvider;
-use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\SettingsScope;
-use CoreX\Enums\SettingScope;
-use CoreX\Events\SettingChanged;
-use CoreX\Exceptions\SettingValueTooLargeException;
-use CoreX\Exceptions\UnsupportedScopeException;
-use CoreX\Models\Setting;
+use CoreX\Settings\Contracts\SettingDefaultsProvider;
+use CoreX\Settings\Contracts\SettingsRepository;
+use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Enums\SettingScope;
+use CoreX\Settings\Events\SettingChanged;
+use CoreX\Settings\Exceptions\SettingValueTooLargeException;
+use CoreX\Settings\Exceptions\UnsupportedScopeException;
+use CoreX\Settings\Models\Setting;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;

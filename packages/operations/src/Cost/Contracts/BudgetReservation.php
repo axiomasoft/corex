@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Cost\Contracts;
 
-use CoreX\Api\Data\ActualCost;
+use CoreX\Operations\Cost\Data\ActualCost;
 
 interface BudgetReservation
 {

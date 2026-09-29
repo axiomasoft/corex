@@ -1,6 +1,6 @@
-diff --git a/packages/modules/src/Laravel/LifecycleRegistrar.php b/packages/modules/src/Laravel/LifecycleRegistrar.php
---- a/packages/modules/src/Laravel/LifecycleRegistrar.php
-+++ b/packages/modules/src/Laravel/LifecycleRegistrar.php
+diff --git a/packages/core/src/Modules/Laravel/LifecycleRegistrar.php b/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
+--- a/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
++++ b/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
 @@ -35,9 +35,7 @@
          // class-string autowires $connection = null and silently reads the ambient
          // default, so with a configured module DB the enabled set comes back empty

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging;
 
-use CoreX\Support\Config;
+use CoreX\Config\Config;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Console\Command;

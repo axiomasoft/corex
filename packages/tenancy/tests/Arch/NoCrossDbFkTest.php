@@ -16,7 +16,7 @@ declare(strict_types=1);
 // конструкции, а не по внимательности автора миграции.
 //
 // Разрешение имён — по строковым литералам. Немногочисленные конфиг-driven
-// цели (`->constrained(Config::…())` в corex/core) статически не резолвятся:
+// цели (`->constrained(Config::…())` в axiomasoft/corex) статически не резолвятся:
 // они перечислены явным allowlist'ом ниже, любая НОВАЯ динамическая цель
 // краснит гейт и требует ручного разбора. Это заявленное ограничение
 // (Code Guidance P2.13), а не молчаливый пропуск.
@@ -151,7 +151,7 @@ $foreignKeyTargets = static function (string $source) use ($literalModelTables):
 
 /**
  * Таблицы, создаваемые миграцией: `Schema::create('X'` (только литералы —
- * конфиг-driven имена в corex/core проверяются директорией, не именем).
+ * конфиг-driven имена в axiomasoft/corex проверяются директорией, не именем).
  *
  * @return list<string>
  */
@@ -162,7 +162,7 @@ $createdTables = static function (string $source): array {
 };
 
 // Конфиг-driven цели FK, существующие в дереве на дату исполнения. Обе — в
-// corex/core, все резолвятся в `sys_*` (тенант-слой), все объявлены в
+// axiomasoft/corex, все резолвятся в `sys_*` (тенант-слой), все объявлены в
 // тенант-слойных миграциях: кросс-слойными они быть не могут, но зафиксированы
 // поимённо, чтобы НОВАЯ динамическая цель не проехала под этим исключением.
 $allowedDynamicTargets = ['Config::featureFlagsTable()', 'Config::departmentsTable()', 'Config::savedViewScopesTable()'];
@@ -207,8 +207,8 @@ test('the FK-target detector reads both Laravel forms and flags dynamic targets'
 
 test('literal model table resolution retains root detection and rejects unknown expressions', function () use ($foreignKeyTargets): void {
     $sample = <<<'PHP'
-    use CoreX\Tenancy\Models\Account;
-    use CoreX\Tenancy\Models\Workspace as Scope;
+    use CoreX\Tenancy\Account\Models\Account;
+    use CoreX\Tenancy\Workspace\Models\Workspace as Scope;
     $table->foreign('account_id')->references('id')->on((new Account)->getTable());
     $table->foreign('workspace_id')->constrained((new Scope)->getTable());
     $table->foreign('unknown_id')->constrained((new Unknown)->getTable());
@@ -289,7 +289,7 @@ test('tenant-layer migrations declare no foreign key to a root_ table', function
 // Pre-mortem A4 — migration-path partition.
 // ---------------------------------------------------------------------------
 
-test('every corex/tenancy migration is classified root or tenant by its directory', function () use ($packageRoot, $migrationFiles, $rootLayerDir, $tenantLayerDir): void {
+test('every axiomasoft/corex-tenancy migration is classified root or tenant by its directory', function () use ($packageRoot, $migrationFiles, $rootLayerDir, $tenantLayerDir): void {
     $all = $migrationFiles($packageRoot.'/database/migrations');
     $root = $migrationFiles($rootLayerDir);
     $tenant = $migrationFiles($tenantLayerDir);

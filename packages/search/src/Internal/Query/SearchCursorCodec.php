@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Query;
 
+use CoreX\Data\DataScope;
 use CoreX\Search\Support\SearchFilter;
 use CoreX\Search\Support\SearchQuery;
 use CoreX\Search\Support\SearchSnapshot;
-use CoreX\Support\Data\DataScope;
 use InvalidArgumentException;
 use JsonException;
 use RuntimeException;

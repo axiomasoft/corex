@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests;
+namespace CoreX\Operations\Tests;
 
-use CoreX\Api\ApiServiceProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Operations\ApiServiceProvider;
+use CoreX\Webhooks\WebhooksServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -22,7 +23,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ...json_decode((string) file_get_contents(__DIR__.'/../composer.json'), true)['extra']['laravel']['providers']];
+        return [ApiServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     /** @param Application $app */

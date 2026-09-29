@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
- * B-11 §7.3 п.1 / AC-29 — `Stancl\*` только в corex/tenancy.
+ * B-11 §7.3 п.1 / AC-29 — `Stancl\*` только в axiomasoft/corex-tenancy.
  *
  * Обе фикстуры лежат в неймспейсе `CoreX\Tenancy\*` и несут одинаковый код:
  * различает их ТОЛЬКО путь. Позитив (`data/outside/`) обязан покраснеть,
@@ -47,15 +47,15 @@ final class StanclImportBoundaryRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__.'/data/outside/stancl-import.php'], [
             [
-                'Importing "Stancl\Tenancy\Tenancy" outside corex/tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
+                'Importing "Stancl\Tenancy\Tenancy" outside axiomasoft/corex-tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
                 11,
             ],
             [
-                'Importing "Stancl\Tenancy\Tenancy" outside corex/tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
+                'Importing "Stancl\Tenancy\Tenancy" outside axiomasoft/corex-tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
                 25,
             ],
             [
-                'Importing "Stancl\Tenancy\Database\Models\Tenant" outside corex/tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
+                'Importing "Stancl\Tenancy\Database\Models\Tenant" outside axiomasoft/corex-tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
                 30,
             ],
         ]);

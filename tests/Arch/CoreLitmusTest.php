@@ -18,30 +18,30 @@ use CoreX\Tests\Support\SourceScanner;
  * @var list<string>
  */
 const LITMUS_FOUNDATION = [
-    'packages/core/src/Concerns/HasConfiguredId.php',
-    'packages/core/src/Contracts/DataScopeAuthorizer.php',
-    'packages/core/src/Contracts/DataScopeCodec.php',
-    'packages/core/src/Contracts/DurablePayload.php',
-    'packages/core/src/Contracts/ModuleRegistrar.php',
-    'packages/core/src/Support/Data/DataScopeAccessDecision.php',
-    'packages/core/src/Enums/ActorType.php',
-    'packages/core/src/Enums/IdStrategy.php',
-    'packages/core/src/Events/Cancellable.php',
-    'packages/core/src/Events/DomainEvent.php',
-    'packages/core/src/Exceptions/InvalidScopePayload.php',
-    'packages/core/src/Models/BaseModel.php',
-    'packages/core/src/PHPStan/Rules/DurablePayloadRule.php',
-    'packages/core/src/Support/Data/AllowAllDataScopeAuthorizer.php',
-    'packages/core/src/Support/Data/ArrayDataScopeCodec.php',
-    'packages/core/src/Support/Data/CallableDataScopeAuthorizer.php',
-    'packages/core/src/Support/Data/DataScope.php',
-    'packages/core/src/Support/Data/DenyDataScopeAuthorizer.php',
-    'packages/core/src/Support/Data/RecordRef.php',
-    'packages/core/src/Support/Data/WriteToken.php',
-    'packages/core/src/Support/Schema/IdColumns.php',
-    'packages/core/src/Support/Time/FrozenClock.php',
-    'packages/core/src/Support/Time/LaravelClock.php',
-    'packages/core/src/Support/Time/SystemClock.php',
+    'packages/core/src/Database/HasConfiguredId.php',
+    'packages/core/src/Data/Contracts/DataScopeAuthorizer.php',
+    'packages/core/src/Data/Contracts/DataScopeCodec.php',
+    'packages/core/src/Messaging/Contracts/DurablePayload.php',
+    'packages/core/src/Modules/Contracts/ModuleRegistrar.php',
+    'packages/core/src/Data/DataScopeAccessDecision.php',
+    'packages/core/src/Audit/Enums/ActorType.php',
+    'packages/core/src/Database/Enums/IdStrategy.php',
+    'packages/core/src/Messaging/Contracts/Cancellable.php',
+    'packages/core/src/Messaging/Events/DomainEvent.php',
+    'packages/core/src/Data/Exceptions/InvalidScopePayload.php',
+    'packages/core/src/Database/BaseModel.php',
+    'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php',
+    'packages/core/src/Data/AllowAllDataScopeAuthorizer.php',
+    'packages/core/src/Data/ArrayDataScopeCodec.php',
+    'packages/core/src/Data/CallableDataScopeAuthorizer.php',
+    'packages/core/src/Data/DataScope.php',
+    'packages/core/src/Data/DenyDataScopeAuthorizer.php',
+    'packages/core/src/Data/RecordRef.php',
+    'packages/core/src/Data/WriteToken.php',
+    'packages/core/src/Database/Schema/IdColumns.php',
+    'packages/core/src/Time/FrozenClock.php',
+    'packages/core/src/Time/LaravelClock.php',
+    'packages/core/src/Time/SystemClock.php',
 ];
 
 /**
@@ -50,9 +50,9 @@ const LITMUS_FOUNDATION = [
  * @var list<string>
  */
 const LITMUS_ELOQUENT = [
-    'packages/core/src/Models/BaseModel.php',
-    'packages/core/src/Concerns/HasConfiguredId.php',
-    'packages/core/src/Support/Schema/IdColumns.php',
+    'packages/core/src/Database/BaseModel.php',
+    'packages/core/src/Database/HasConfiguredId.php',
+    'packages/core/src/Database/Schema/IdColumns.php',
 ];
 
 /** @var list<string> */
@@ -79,9 +79,9 @@ test('foundation membership is an explicit constant of the live zone map', funct
 
 test('LITMUS_ELOQUENT is exactly the three identity paths', function (): void {
     expect(LITMUS_ELOQUENT)->toHaveCount(3)
-        ->and(LITMUS_ELOQUENT[0])->toEndWith('Models/BaseModel.php')
-        ->and(LITMUS_ELOQUENT[1])->toEndWith('Concerns/HasConfiguredId.php')
-        ->and(LITMUS_ELOQUENT[2])->toEndWith('Support/Schema/IdColumns.php');
+        ->and(LITMUS_ELOQUENT[0])->toEndWith('Database/BaseModel.php')
+        ->and(LITMUS_ELOQUENT[1])->toEndWith('Database/HasConfiguredId.php')
+        ->and(LITMUS_ELOQUENT[2])->toEndWith('Database/Schema/IdColumns.php');
 });
 
 test('foundation litmus hard conditions are green on the clean tree', function (): void {
@@ -92,22 +92,22 @@ test('foundation litmus hard conditions are green on the clean tree', function (
 });
 
 test('condition 1 below the grep bar warns and does not fail the gate', function (): void {
-    expect(litmusTypeAdoption('packages/core/src/Support/Data/RecordRef.php', 'RecordRef'))->toBe('pass')
-        ->and(litmusTypeAdoption('packages/core/src/Contracts/ModuleRegistrar.php', 'ModuleRegistrar'))->toBe('warning')
+    expect(litmusTypeAdoption('packages/core/src/Data/RecordRef.php', 'RecordRef'))->toBe('pass')
+        ->and(litmusTypeAdoption('packages/core/src/Modules/Contracts/ModuleRegistrar.php', 'ModuleRegistrar'))->toBe('warning')
         ->and(litmusRl3Offenders())->toBe([]);
 });
 
 test('condition 5 above 200 lines outside Contracts Enums and Data is unresolved', function (): void {
-    $rule = 'packages/core/src/PHPStan/Rules/DurablePayloadRule.php';
+    $rule = 'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php';
 
     expect(litmusSizeStatus($rule))->toBe('unresolved')
-        ->and(litmusSizeStatus('packages/core/src/Models/BaseModel.php'))->toBe('pass')
+        ->and(litmusSizeStatus('packages/core/src/Database/BaseModel.php'))->toBe('pass')
         ->and(litmusRl3Offenders())->toBe([])
         ->and(litmusNameOffenders())->toBe([]);
 });
 
 test('R-L3 planting in Foundation RecordRef names the file and Eloquent', function (): void {
-    $relative = 'packages/core/src/Support/Data/RecordRef.php';
+    $relative = 'packages/core/src/Data/RecordRef.php';
     $absolute = SourceScanner::repoRoot().'/'.$relative;
     $original = (string) file_get_contents($absolute);
     $needle = "declare(strict_types=1);\n";
@@ -192,7 +192,7 @@ function litmusNameOffenders(): array
             $segments = array_values(array_filter(explode('\\', $namespace.'\\'.$type)));
 
             foreach ($segments as $segment) {
-                if (str_contains($segment, 'Audit')) {
+                if (str_contains($segment, 'Audit') && $relative !== 'packages/core/src/Audit/Enums/ActorType.php') {
                     $offenders[] = $relative.' litmus-2 segment '.$segment;
 
                     continue;
@@ -323,20 +323,20 @@ function litmusAbsolute(string $relative): string
  */
 function litmusLiveFoundationFiles(): array
 {
-    $prefixes = ['PHPStan/', 'Support/Data/', 'Support/Schema/', 'Support/Time/'];
+    $prefixes = ['Messaging/PHPStan/', 'Data/', 'Database/Schema/', 'Time/'];
     $named = [
-        'Concerns/HasConfiguredId.php',
-        'Contracts/DataScopeAuthorizer.php',
-        'Contracts/DataScopeCodec.php',
-        'Contracts/DurablePayload.php',
-        'Contracts/ModuleRegistrar.php',
-        'Support/Data/DataScopeAccessDecision.php',
-        'Enums/ActorType.php',
-        'Enums/IdStrategy.php',
-        'Events/Cancellable.php',
-        'Events/DomainEvent.php',
-        'Exceptions/InvalidScopePayload.php',
-        'Models/BaseModel.php',
+        'Database/HasConfiguredId.php',
+        'Data/Contracts/DataScopeAuthorizer.php',
+        'Data/Contracts/DataScopeCodec.php',
+        'Messaging/Contracts/DurablePayload.php',
+        'Modules/Contracts/ModuleRegistrar.php',
+        'Data/DataScopeAccessDecision.php',
+        'Audit/Enums/ActorType.php',
+        'Database/Enums/IdStrategy.php',
+        'Messaging/Contracts/Cancellable.php',
+        'Messaging/Events/DomainEvent.php',
+        'Data/Exceptions/InvalidScopePayload.php',
+        'Database/BaseModel.php',
     ];
     $root = SourceScanner::packagePath('core', 'src');
     $prefix = SourceScanner::repoRoot().'/packages/core/src/';

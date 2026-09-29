@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Storage;
 
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;

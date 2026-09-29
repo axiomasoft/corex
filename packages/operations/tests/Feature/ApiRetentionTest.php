@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Commands\PruneApiOperations;
-use CoreX\Api\Contracts\BudgetReservation;
-use CoreX\Api\Data\BudgetScope;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Internal\Bulk\BulkRetention;
-use CoreX\Api\Internal\Cost\BudgetRetention;
-use CoreX\Api\Internal\Cost\SqlOperationBudget;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\ArrayDataScopeCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\SecretRef;
-use CoreX\Support\Time\FrozenClock;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
+use CoreX\Config\SecretRef;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\GuardedTenantContextRestorer;
+use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Internal\BulkRetention;
+use CoreX\Operations\Cost\Contracts\BudgetReservation;
+use CoreX\Operations\Cost\Data\BudgetScope;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Cost\Internal\BudgetRetention;
+use CoreX\Operations\Cost\Internal\SqlOperationBudget;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\Commands\PruneApiOperations;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Time\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Contracts\Console\Kernel;

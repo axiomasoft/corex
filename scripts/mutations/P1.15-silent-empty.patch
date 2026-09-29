@@ -1,7 +1,7 @@
-diff --git a/packages/modules/src/Registry/CompiledModuleRegistry.php b/packages/modules/src/Registry/CompiledModuleRegistry.php
+diff --git a/packages/core/src/Modules/Registry/CompiledModuleRegistry.php b/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
 index f1e16b4..a2df19d 100644
---- a/packages/modules/src/Registry/CompiledModuleRegistry.php
-+++ b/packages/modules/src/Registry/CompiledModuleRegistry.php
+--- a/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
++++ b/packages/core/src/Modules/Registry/CompiledModuleRegistry.php
 @@ -168,13 +168,6 @@ final class CompiledModuleRegistry implements ModuleRegistry
      private function readCache(): array
      {

@@ -2,22 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Reference;
+namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Intl\Data\DatasetManifest;
-use CoreX\Intl\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Territory\Data\DatasetManifest;
+use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
 use DateTimeImmutable;
 use JsonException;
 
 final class FixtureReferenceNormalizer
 {
     /**
-     * @return array{
-     *     manifest: DatasetManifest,
-     *     records: list<array<string, mixed>>,
-     *     rawHash: string,
-     *     normalizedHash: string
-     * }
+     * @return array{manifest: DatasetManifest, records: list<array<string, mixed>>, rawHash: string, normalizedHash: string}
      */
     public function parse(string $provider, string $fixturePath): array
     {

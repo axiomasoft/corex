@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Http\Internal;
 
 /** @internal Selects the error representation. An empty Accept keeps the JSON envelope. */
 final class AcceptNegotiation

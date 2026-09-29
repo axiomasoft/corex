@@ -1,10 +1,10 @@
 # CoreX Workflow
 
-`corex/workflow` supplies durable, tenant-scoped intent capture and typed ports for an independently owned workflow engine adapter. It does not install an engine or schedule a worker itself.
+`axiomasoft/corex-workflow` supplies durable, tenant-scoped intent capture and typed ports for an independently owned workflow engine adapter. It does not install an engine or schedule a worker itself.
 
 ## Installation
 
-Install with `composer require corex/workflow` from the approved CoreX channel. Install its package-owned schema on the intended tenant connection and bind an application-selected engine adapter before processing workflow intents. The application schedules its own engine worker.
+Install with `composer require axiomasoft/corex-workflow` from the approved CoreX channel. Install its package-owned schema on the intended tenant connection and bind an application-selected engine adapter before processing workflow intents. The application schedules its own engine worker.
 
 ## Configuration
 

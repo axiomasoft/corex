@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Config;
+use CoreX\Config\Config;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {

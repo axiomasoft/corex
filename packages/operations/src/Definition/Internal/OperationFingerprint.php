@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Definition\Internal;
 
-use CoreX\Api\Data\IdempotencyScope;
-use CoreX\Api\Data\OperationInvocation;
+use CoreX\Operations\Idempotency\Data\IdempotencyScope;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Validation\JsonCanonical;
 use Illuminate\Database\Connection;
 
 /** @internal Builds the stable request identity used by the tenant idempotency store. */

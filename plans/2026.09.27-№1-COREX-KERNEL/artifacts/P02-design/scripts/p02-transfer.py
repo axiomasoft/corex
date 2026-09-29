@@ -12,7 +12,7 @@ RenameClassRector (code references) → namespace declarations → git mv (PHP b
 and whole-directory renames) → manifests → tombstone removal → report.  Each token is rewritten exactly once:
 the literal pass never touches PHP code tokens, Rector never touches literals.
 """
-import argparse, collections, importlib.util, json, os, re, shutil, subprocess, sys
+import argparse, collections, importlib.util, json, os, re, shutil, subprocess, sys, tempfile
 
 PLAN = 'plans/2026.09.27-№1-COREX-KERNEL'
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -24,10 +24,10 @@ EXTRA_MOVES = f'{PLAN}/artifacts/P02-design/facts/extra-moves.tsv'
 # Seam rows P02.3 itself resolves (own Tests\TestCase per split package, D35); anything else left = stop.
 SCAFFOLD_TARGETS = {'CoreX\\Api\\Tests\\TestCase'}
 # Paths whose text is history or generated elsewhere; the literal pass must not rewrite them.
-LITERAL_SKIP = re.compile(r'^(plans/|audits/|vendor/|build/|composer\.lock$|tests/Golden/(baseline/|rename-map\.json$)'
-                          r'|scripts/p15-rename-completeness-manifest\.json$)|(^|/)CHANGELOG\.md$|/history/')
+LITERAL_SKIP = re.compile(r'^(plans/|audits/|vendor/|build/|composer\.lock$|tests/Golden/(baseline/|(?:rename-map|package-projection|promoted-fixtures)\.json$)'
+                          r'|scripts/(?:p15-rename-completeness-manifest|rename-completeness)\.json$)|(^|/)CHANGELOG\.md$|/history/')
 TEXT_EXT = {'.php', '.md', '.json', '.neon', '.yml', '.yaml', '.xml', '.dist', '.sh', '.py', '.txt', '.tsv', '.patch',
-            '.ts', '.js', '.vue', '.toml', '.ini', '.stub', ''}
+            '.ts', '.js', '.vue', '.toml', '.ini', '.stub', '.fixture', ''}
 FQCN = re.compile(r'(?<![\w\\])((?:\\\\|\\)?(?:CoreX|Flex)(?:(?:\\\\|\\)[A-Za-z_]\w*)+)')
 
 
@@ -101,9 +101,20 @@ def build_plan():
     for old_dir, rows in by_dir.items():
         if len(rows) == 1 and rows[0]['type'] not in ('tombstone-remove', 'kernel') and rows[0]['new_dir'] != old_dir:
             dirs[old_dir] = rows[0]['new_dir']  # whole-directory rename (attributes, crm)
+    public_origins = {}
+    for fq, f, final, owner in table.values():
+        if owner == cm.ROOT_TESTS:
+            continue
+        manifest = '/'.join(f.split('/')[:2]) + '/composer.json'
+        data = json.load(open(manifest))
+        if any(fq == prefix or fq.startswith(prefix + '\\') for prefix in data.get('extra', {}).get('corex', {}).get('public-api', [])):
+            public_origins[fq] = final
     tombstones = [r['old_dir'] for r in m.pkg_rows if r['type'] == 'tombstone-remove']
     return {
         'classes': dict(sorted(classes.items())),
+        'public_origins': public_origins,
+        'all_classes': {fq: final for fq, _f, final, owner in table.values() if owner != cm.ROOT_TESTS},
+        'class_sources': {fq: f for fq, f, _final, owner in table.values() if owner != cm.ROOT_TESTS},
         'namespace_rules': dict(sorted(ns_rules.items())),
         'moves': sorted(moves),
         'namespaces': dict(sorted(namespaces.items())),
@@ -174,7 +185,14 @@ def literal_rules(plan):
     for action, src, dst in plan['extra_moves']:
         if action == 'move':
             paths[src] = dst
-    dirs = dict(plan['dir_renames'])
+    dirs = {**plan['dir_renames'], 'packages/modules/tests': 'packages/core/tests/Modules',
+            'packages/modules/src': 'packages/core/src/Modules', 'packages/modules': 'packages/core',
+            'packages/import-export': 'packages/transfer'}
+    # Standalone package harnesses resolve installed dependencies by Composer
+    # vendor path, which has its own leading slash inside relative literals.
+    dirs.update({'vendor/' + old: 'vendor/' + new for old, new in names.items()})
+    dirs['vendor/corex/modules/src'] = 'vendor/axiomasoft/corex/src/Modules'
+    dirs['vendor/corex/modules/tests'] = 'vendor/axiomasoft/corex/tests/Modules'
     return classes, names, paths, dirs
 
 
@@ -202,12 +220,81 @@ def rewrite_text(text, classes, names, paths, dirs):
         new = new.replace('\\', '\\\\') if doubled else new
         return ('\\\\' if doubled else '\\') + new if lead else new
     text = FQCN.sub(fq, text)
-    for table, before, after in ((paths, r'(?<![\w./-])', r'(?![\w/])'), (dirs, r'(?<![\w./-])', r'(?=/|\b)'),
+    for table, before, after in ((paths, r'(?<![\w.-])', r'(?![\w/])'), (dirs, r'(?<![\w.-])', r'(?=/|\b)'),
                                  (names, r'(?<![\w./@-])', r'(?![\w-])')):
         rx = alternation(table, before, after)
         if rx is not None:
             text = rx.sub(lambda mo, t=table: t[mo.group(1)], text)
     return text
+
+
+
+def relative_pass(plan):
+    """Preserve resource targets of __DIR__/dirname after their caller moves."""
+    moved = dict(plan['moves'])
+    moved.update({src: dst for action, src, dst in plan['extra_moves'] if action == 'move'})
+    directories = {**plan['dir_renames'], 'packages/modules/tests': 'packages/core/tests/Modules',
+                   'packages/modules/src': 'packages/core/src/Modules', 'packages/modules': 'packages/core'}
+    directories.update({src: dst for action, src, dst in plan['extra_moves']
+                        if action == 'move' and os.path.isdir(src)})
+    # Directory resources can be projected only when every descendant retains
+    # its relative suffix under the same destination (fixtures, lint rules).
+    candidates = collections.defaultdict(set)
+    # Include unchanged resources: one moved config file does not imply its
+    # entire directory moved. Missing siblings would produce a false consensus.
+    files = set(git('ls-files').splitlines()) | set(moved)
+    for old in files:
+        new = moved.get(old, old)
+        if old not in moved:
+            for source, target in sorted(directories.items(), key=lambda kv: -len(kv[0])):
+                if old.startswith(source + '/'):
+                    new = target + old[len(source):]
+                    break
+        parent = os.path.dirname(old)
+        while parent.count('/') >= 1:
+            suffix = old[len(parent):]
+            candidates[parent].add(new[:-len(suffix)] if new.endswith(suffix) else None)
+            parent = os.path.dirname(parent)
+    for old, targets in candidates.items():
+        if len(targets) == 1 and None not in targets:
+            directories[old] = next(iter(targets))
+    root = os.getcwd()
+    rx = re.compile(r"(?P<base>__DIR__|dirname\(\s*__DIR__\s*(?:,\s*(?P<up>\d+)\s*)?\))(?P<join>\s*\.\s*)(?P<q>['\"])(?P<path>/[^'\"$\n]*)(?P=q)")
+    changed = 0
+    for f in git('ls-files').splitlines():
+        if not f.endswith('.php') or LITERAL_SKIP.search(f) or not os.path.isfile(f):
+            continue
+        src = open(f, encoding='utf-8').read()
+        def replace(m):
+            base = os.path.dirname(os.path.join(root, f))
+            if m['base'] != '__DIR__':
+                for _ in range(int(m['up'] or 1)):
+                    base = os.path.dirname(base)
+            target = os.path.relpath(os.path.normpath(os.path.join(base, m['path'].lstrip('/'))), root)
+            new_target = moved.get(target, target)
+            if target not in moved:
+                for old, new in sorted(directories.items(), key=lambda kv: -len(kv[0])):
+                    if target == old or target.startswith(old + '/'):
+                        new_target = new + target[len(old):]
+                        break
+            # An executable component must look for its own package installation.
+            old_owner = '/'.join(f.split('/')[:2])
+            new_file = moved.get(f, f)
+            new_owner = '/'.join(new_file.split('/')[:2])
+            if target == old_owner + '/vendor/autoload.php':
+                new_target = new_owner + '/vendor/autoload.php'
+            new_base = os.path.dirname(os.path.join(root, new_file))
+            if new_target == target and new_file == f:
+                return m.group(0)
+            suffix = '/' + os.path.relpath(os.path.join(root, new_target), new_base)
+            if m['path'].endswith('/'):
+                suffix += '/'
+            return '__DIR__' + m['join'] + m['q'] + suffix + m['q']
+        new = rx.sub(replace, src)
+        if new != src:
+            open(f, 'w', encoding='utf-8').write(new)
+            changed += 1
+    print(f'relative paths: {changed} files')
 
 
 def literal_pass(plan):
@@ -222,7 +309,7 @@ def literal_pass(plan):
             continue
         if os.path.splitext(f)[1] not in TEXT_EXT:
             continue
-        if f.endswith('.php'):
+        if f.endswith(('.php', '.php.fixture')):
             php_files.append(f)
             continue
         src = open(f, encoding='utf-8', errors='surrogateescape').read()
@@ -241,11 +328,20 @@ def literal_pass(plan):
 def rector(plan, no_rector):
     cfg = 'build/p02/rector.php'
     pairs = ''.join(f"        {json.dumps(o)} => {json.dumps(n)},\n" for o, n in plan['classes'].items())
+    # Directory discovery traverses standalone vendor trees and path-repository
+    # symlinks before applying skips. Tracked source files give the same scope
+    # without walking installed dependencies or resolving recursive links.
+    files = [f for f in git('ls-files').splitlines()
+             if f.endswith('.php') and f.startswith(('packages/', 'tests/', 'scripts/', 'fixtures/'))
+             and not LITERAL_SKIP.search(f) and os.path.isfile(f)]
+    source_paths = ',\n'.join("        __DIR__.'/../../" + f.replace("'", "\\'") + "'" for f in files)
     open(cfg, 'w').write(
         "<?php\n\ndeclare(strict_types=1);\n\nuse Rector\\Config\\RectorConfig;\n"
         "use Rector\\Renaming\\Rector\\Name\\RenameClassRector;\n\n"
         "return RectorConfig::configure()\n"
-        "    ->withPaths([__DIR__.'/../../packages', __DIR__.'/../../tests', __DIR__.'/../../scripts'])\n"
+        "    ->withoutParallel()\n"
+        "    ->withImportNames(importShortClasses: false)\n"
+        "    ->withPaths([\n" + source_paths + "\n    ])\n"
         "    ->withSkip([__DIR__.'/../../tests/Golden/baseline', '*/vendor/*'])\n"
         "    ->withConfiguredRule(RenameClassRector::class, [\n" + pairs + "    ]);\n")
     if no_rector:
@@ -255,7 +351,7 @@ def rector(plan, no_rector):
                           '--no-diffs'], capture_output=True, text=True)
     if res.returncode:
         die('rector failed: ' + (res.stdout + res.stderr)[-2000:])
-    print('rector: ' + res.stdout.strip().splitlines()[-1] if res.stdout.strip() else 'rector: done')
+    print('rector: done')
 
 
 def namespace_pass(plan):
@@ -328,6 +424,41 @@ def merge_composer(src, dst):
     subprocess.run(['git', 'rm', '-qf', src], check=True)
 
 
+def project_root_autoload(data, plan):
+    """Project classmap/files paths; the merged namespace-less tests retain a classmap."""
+    paths = dict(plan['moves'])
+    paths.update({src: dst for action, src, dst in plan['extra_moves'] if action == 'move'})
+    directories = {**plan['dir_renames'], 'packages/modules/tests': 'packages/core/tests/Modules'}
+    for section in ('autoload', 'autoload-dev'):
+        for kind in ('classmap', 'files'):
+            if kind not in data.get(section, {}):
+                continue
+            projected = []
+            for path in data[section][kind]:
+                new = paths.get(path, path)
+                if new == path:
+                    for old, target in sorted(directories.items(), key=lambda pair: -len(pair[0])):
+                        if path == old or path.startswith(old + '/'):
+                            new = target + path[len(old):]
+                            break
+                if new not in projected:
+                    projected.append(new)
+            data[section][kind] = projected
+
+
+def root_autoload_problems(data):
+    problems = []
+    for section in ('autoload', 'autoload-dev'):
+        config = data.get(section, {})
+        paths = list(config.get('classmap', [])) + list(config.get('files', []))
+        for value in config.get('psr-4', {}).values():
+            paths.extend(value if isinstance(value, list) else [value])
+        for path in paths:
+            if not os.path.exists(path):
+                problems.append(f'composer.json: missing {section} path {path}')
+    return problems
+
+
 def manifests(plan):
     """Names, one PSR-4 root per package, requires by projected edges (dossier §4.3, D44 п.2)."""
     m = cm.Maps(f'{PLAN}/artifacts/P00', f'{PLAN}/research/03-glossary.md')
@@ -364,8 +495,14 @@ def manifests(plan):
             before = {k for k in deps if k in release}
             wanted = (before | needs[pkg['new_name']][section]) - {pkg['new_name']}
             if section == 'require':
-                # An optional integration (declared in suggest/require-dev) stays optional.
-                wanted -= (set(data.get('suggest', {})) | set(data.get('require-dev', {}))) - before
+                # Guarded optional integrations stay optional. An unguarded
+                # shipped edge (Access→Tenancy, CRM→Intl) is a runtime require
+                # even when the preimage installed its target only for tests.
+                wanted -= set(data.get('suggest', {})) - before
+                optional = {('axiomasoft/corex-operations', 'axiomasoft/corex-transfer'),
+                            ('axiomasoft/corex-tenancy', 'axiomasoft/corex-wakeup'),
+                            ('axiomasoft/corex-tasks-workflow', 'axiomasoft/corex-wakeup')}
+                wanted -= {target for source, target in optional if source == pkg['new_name']}
             else:
                 wanted -= set(data.get('require', {}))
             for k in sorted(wanted):
@@ -374,10 +511,14 @@ def manifests(plan):
                     report.append(f'{path}: {section} added {k} (edge-derived)')
             if deps:
                 data[section] = dict(sorted(deps.items(), key=lambda kv: (not kv[0].startswith(('php', 'ext-')), kv[0])))
+            if section == 'require':
+                for name in wanted:
+                    data.get('require-dev', {}).pop(name, None)
         json.dump(data, open(path, 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
         open(path, 'a').write('\n')
     # Root autoload-dev: the monorepo runner autoloads every package test root (`composer test`).
     root_manifest = json.load(open('composer.json', encoding='utf-8'))
+    project_root_autoload(root_manifest, plan)
     psr4 = root_manifest.setdefault('autoload-dev', {}).setdefault('psr-4', {})
     for key in [k for k, d in psr4.items() if str(d).startswith(('packages/', 'products/'))]:
         psr4.pop(key)
@@ -394,8 +535,19 @@ def manifests(plan):
         print('manifest: ' + line)
 
 
-def cmd_apply(out, no_rector, allow_seams):
-    if git('status', '--porcelain').strip():
+def cmd_apply(out, no_rector, allow_seams, source_tree=None):
+    if source_tree:
+        # Admit only the exact preimage validated in the detached dry-run. A
+        # private index preserves the owner's index and existing worktree edits.
+        with tempfile.TemporaryDirectory() as tmp:
+            env = {**os.environ, 'GIT_INDEX_FILE': os.path.join(tmp, 'index')}
+            subprocess.run(['git', 'read-tree', 'HEAD'], env=env, check=True)
+            subprocess.run(['git', 'add', '-A'], env=env, check=True)
+            actual = subprocess.check_output(['git', 'write-tree'], env=env, text=True).strip()
+        expected = git('rev-parse', source_tree + '^{tree}').strip()
+        if actual != expected:
+            die('worktree differs from the validated source tree')
+    elif git('status', '--porcelain').strip():
         die('worktree not clean')
     plan, problems = build_plan()
     if problems or PENDING:
@@ -407,8 +559,11 @@ def cmd_apply(out, no_rector, allow_seams):
         die(f'{len(left)} unresolved seams (P02.1/P02.2), e.g. {left[0]["source_file"]} -> {left[0]["target_symbol"]}')
     os.makedirs(out, exist_ok=True)
     json.dump(plan, open(f'{out}/plan.json', 'w'), indent=1, ensure_ascii=False)
+    relative_pass(plan)
     literal_pass(plan)
     rector(plan, no_rector)
+    subprocess.run(['scripts/php84', 'php', os.path.join(HERE, 'p02-references.php'),
+                    'build/p02/literal-rules.json', 'build/p02/literal-php-files.txt'], check=True)
     namespace_pass(plan)
     move_pass(plan)
     manifests(plan)
@@ -422,8 +577,9 @@ VANISHED_ROOTS = ['CoreX\\Api', 'CoreX\\Auth', 'CoreX\\Search\\Meilisearch', 'Co
                   'CoreX\\Contracts', 'CoreX\\Enums', 'CoreX\\Events', 'CoreX\\Exceptions', 'CoreX\\Models',
                   'CoreX\\Concerns', 'CoreX\\Support', 'CoreX\\PHPStan']  # glossary §Reserved segments
 GATE_EXCLUDE = [r'~^(plans|audits)/~', r'~(^|/)CHANGELOG\.md$~', r'~/docs/history/~',
-                r'~^docs/architecture/rename-registry\.md$~', r'~^tests/Golden/rename-map\.json$~',
-                r'~^scripts/rename-completeness\.json$~']
+                r'~^docs/architecture/rename-registry\.md$~', r'~^tests/Golden/(?:rename-map|package-projection)\.json$~',
+                r'~^scripts/rename-completeness\.json$~', r'~^tests/Golden/baseline/~',
+                r'~^scripts/p15-rename-completeness-(gate\.php|manifest\.json)$~']
 
 
 def cmd_manifest(target):
@@ -462,7 +618,7 @@ def cmd_manifest(target):
 
 def cmd_verify(out):
     plan = json.load(open(f'{out}/plan.json'))
-    problems = []
+    problems = root_autoload_problems(json.load(open('composer.json', encoding='utf-8')))
     for src, dst in plan['moves']:
         if os.path.exists(src):
             problems.append(f'old path exists {src}')
@@ -502,11 +658,12 @@ def main():
     ap.add_argument('--out', default='build/p02')
     ap.add_argument('--no-rector', action='store_true')
     ap.add_argument('--allow-seams', action='store_true', help='design diagnostics only; never in P02.3 acceptance')
+    ap.add_argument('--source-tree', help='exact dry-run input tree; preserves pre-existing owner edits')
     a = ap.parse_args()
     if a.command == 'plan':
         return cmd_plan(a.out)
     if a.command == 'apply':
-        return cmd_apply(a.out, a.no_rector, a.allow_seams)
+        return cmd_apply(a.out, a.no_rector, a.allow_seams, a.source_tree)
     if a.command == 'manifest':
         return cmd_manifest(a.target)
     if a.command == 'seams':

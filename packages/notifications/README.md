@@ -1,4 +1,4 @@
-# corex/notifications
+# axiomasoft/corex-notifications
 
 Durable, tenant-local notification inbox primitives for CoreX. The package stores an idempotent
 notification intent and a delivery record in the same transaction. It defaults to denying all
@@ -21,7 +21,7 @@ checked before admission. Once admitted, the delivery is an immutable effect.
 
 ## Installation
 
-Install with `composer require corex/notifications` through the approved CoreX channel. Apply the package-owned notification schema on the tenant connection and provide `NotificationPolicy` before exposing inbox or delivery actions. Schedule `corex:notifications:sweep` in an already trusted tenant context.
+Install with `composer require axiomasoft/corex-notifications` through the approved CoreX channel. Apply the package-owned notification schema on the tenant connection and provide `NotificationPolicy` before exposing inbox or delivery actions. Schedule `corex:notifications:sweep` in an already trusted tenant context.
 
 ## Extension contracts
 

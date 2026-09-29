@@ -1,5 +1,5 @@
 {
-    "name": "corex/recurrence",
+    "name": "axiomasoft/corex-recurrence",
     "description": "Bounded RFC 5545 recurrence expansion for CoreX consumers.",
     "type": "library",
     "license": "MIT",
@@ -32,7 +32,8 @@
             "public-api": [
                 "CoreX\\Recurrence\\Contracts",
                 "CoreX\\Recurrence\\Data",
-                "CoreX\\Recurrence\\Exceptions"
+                "CoreX\\Recurrence\\Exceptions",
+                "CoreX\\Recurrence\\RRuleRecurrenceExpander"
             ]
         },
         "branch-alias": {

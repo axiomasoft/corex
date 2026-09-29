@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Contracts;
+namespace CoreX\Access\Contracts;
 
-use CoreX\Auth\Enums\PrincipalType;
+use CoreX\Access\Enums\PrincipalType;
 
 /**
  * A principal that can hold role assignments and be checked for capability —

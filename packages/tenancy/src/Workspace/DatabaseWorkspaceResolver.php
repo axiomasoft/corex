@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspace;
 
+use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
-use CoreX\Tenancy\Models\Workspace;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Tenancy\Workspace\Models\Workspace;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;

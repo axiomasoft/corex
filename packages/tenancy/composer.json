@@ -1,6 +1,6 @@
 {
-    "name": "corex/tenancy",
-    "description": "CoreX physical DB-per-account tenancy — root-schema control plane on stancl/tenancy v4 (B-11, D13).",
+    "name": "axiomasoft/corex-tenancy",
+    "description": "CoreX physical DB-per-account tenancy \u2014 root-schema control plane on stancl/tenancy v4 (B-11, D13).",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -16,22 +16,23 @@
         }
     ],
     "require": {
-        "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
-        "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
-        "corex/core": "^1.0@dev",
         "ext-filter": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "firebase/php-jwt": "^7.1",
-        "nesbot/carbon": "^3.0",
+        "ext-sodium": "*",
         "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
+        "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
+        "firebase/php-jwt": "^7.1",
         "laravel/framework": "^12.0|^13.0",
-        "ext-sodium": "*"
+        "nesbot/carbon": "^3.0"
     },
     "require-dev": {
-        "corex/wakeup": "^1.0@dev",
         "ext-pdo": "*",
         "ext-tokenizer": "*",
+        "phpstan/phpstan": "^2.2.16",
+        "axiomasoft/corex-wakeup": "^1.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "league/flysystem-aws-s3-v3": "3.35.3",
@@ -40,58 +41,18 @@
         "orchestra/testbench": "^10.12|^11.3",
         "orchestra/testbench-core": "^10.12|^11.3",
         "pestphp/pest": "^5.2",
-        "phpstan/phpstan": "^2.2.16",
         "symfony/console": "^7.2|^8.0",
         "symfony/http-kernel": "^7.2|^8.0",
-        "symfony/process": "^7.2|^8.0",
-        "corex/modules": "^1.0@dev"
+        "symfony/process": "^7.2|^8.0"
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Tenancy\\Events\\Identity\\": "src/Membership/Events/",
-            "CoreX\\Tenancy\\Events\\": [
-                "src/Account/Events/",
-                "src/Identity/Events/",
-                "src/DomainTrust/Events/",
-                "src/Impersonation/Events/"
-            ],
-            "CoreX\\Tenancy\\Jobs\\": [
-                "src/Membership/Jobs/",
-                "src/Provisioning/Jobs/",
-                "src/Identity/Jobs/"
-            ],
-            "CoreX\\Tenancy\\Models\\": [
-                "src/Account/Models/",
-                "src/Provisioning/Models/",
-                "src/Identity/Models/",
-                "src/DomainTrust/Models/",
-                "src/Impersonation/Models/",
-                "src/Workspace/Models/"
-            ],
-            "CoreX\\Tenancy\\Bootstrappers\\": "src/Laravel/Bootstrappers/",
-            "CoreX\\Tenancy\\Commands\\": "src/Laravel/Commands/",
-            "CoreX\\Tenancy\\Exceptions\\": [
-                "src/Runtime/Exceptions/",
-                "src/Authentication/Exceptions/"
-            ],
-            "CoreX\\Tenancy\\Http\\Controllers\\": "src/Authentication/Http/Controllers/",
-            "CoreX\\Tenancy\\Http\\Middleware\\": "src/Laravel/Http/Middleware/",
-            "CoreX\\Tenancy\\Listeners\\": "src/Laravel/Listeners/",
-            "CoreX\\Tenancy\\Resolvers\\": "src/Laravel/Resolvers/",
-            "CoreX\\Tenancy\\Scopes\\": "src/Laravel/Scopes/",
-            "CoreX\\Tenancy\\Support\\": "src/Laravel/Support/",
-            "CoreX\\Tenancy\\": [
-                "src/",
-                "src/Runtime/"
-            ]
-        },
-        "classmap": [
-            "src/Provisioning/Database/TemplateClonePostgreSQLManager.php"
-        ]
+            "CoreX\\Tenancy\\": "src/"
+        }
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
-        "corex/wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it."
+        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it."
     },
     "autoload-dev": {
         "psr-4": {
@@ -104,10 +65,20 @@
             "package-type": "capability",
             "stability": "stable",
             "public-api": [
+                "CoreX\\Tenancy\\Account\\Events",
+                "CoreX\\Tenancy\\Account\\Models",
+                "CoreX\\Tenancy\\Authentication\\Exceptions",
                 "CoreX\\Tenancy\\Contracts",
-                "CoreX\\Tenancy\\Events",
-                "CoreX\\Tenancy\\Exceptions",
-                "CoreX\\Tenancy\\Models"
+                "CoreX\\Tenancy\\DomainTrust\\Events",
+                "CoreX\\Tenancy\\DomainTrust\\Models",
+                "CoreX\\Tenancy\\Identity\\Events",
+                "CoreX\\Tenancy\\Identity\\Models",
+                "CoreX\\Tenancy\\Impersonation\\Events",
+                "CoreX\\Tenancy\\Impersonation\\Models",
+                "CoreX\\Tenancy\\Membership\\Events",
+                "CoreX\\Tenancy\\Provisioning\\Models",
+                "CoreX\\Tenancy\\Runtime\\Exceptions",
+                "CoreX\\Tenancy\\Workspace\\Models"
             ]
         },
         "laravel": {
@@ -124,20 +95,16 @@
             ]
         }
     },
-    "repositories": {
-        "0": {
+    "repositories": [
+        {
             "type": "path",
             "url": "../core"
         },
-        "1": {
+        {
             "type": "path",
             "url": "../wakeup"
-        },
-        "2": {
-            "type": "path",
-            "url": "../modules"
         }
-    },
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {

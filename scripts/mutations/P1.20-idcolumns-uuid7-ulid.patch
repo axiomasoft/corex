@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Support/Schema/IdColumns.php b/packages/core/src/Support/Schema/IdColumns.php
+diff --git a/packages/core/src/Database/Schema/IdColumns.php b/packages/core/src/Database/Schema/IdColumns.php
 index 084d300..c018ced 100644
---- a/packages/core/src/Support/Schema/IdColumns.php
-+++ b/packages/core/src/Support/Schema/IdColumns.php
+--- a/packages/core/src/Database/Schema/IdColumns.php
++++ b/packages/core/src/Database/Schema/IdColumns.php
 @@ -26,8 +26,8 @@ final class IdColumns
      {
          match (Config::idStrategy()) {

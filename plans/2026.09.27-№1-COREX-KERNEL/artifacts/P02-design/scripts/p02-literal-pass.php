@@ -23,10 +23,12 @@ foreach ($files as $file) {
     foreach (token_get_all($source) as $token) {
         if (is_array($token) && in_array($token[0], $literal, true)) {
             $out .= rewrite($token[1], $rules);
+
             continue;
         }
         $out .= is_array($token) ? $token[1] : $token;
     }
+
     if ($out !== $source) {
         file_put_contents($file, $out);
         $changed++;
@@ -46,6 +48,7 @@ function rewrite(string $text, array $rules): string
             $lead = $doubled ? str_starts_with($token, '\\\\') : str_starts_with($token, '\\');
             $bare = ltrim(str_replace('\\\\', '\\', $token), '\\');
             $new = $rules['classes'][$bare] ?? null;
+
             if ($new === null) {
                 return $token;
             }
@@ -56,8 +59,9 @@ function rewrite(string $text, array $rules): string
         $text,
     );
 
-    foreach ([['paths', '(?<![\w./-])', '(?![\w/])'], ['dirs', '(?<![\w./-])', '(?=/|\b)'], ['names', '(?<![\w./@-])', '(?![\w-])']] as [$kind, $before, $after]) {
+    foreach ([['paths', '(?<![\w.-])', '(?![\w/])'], ['dirs', '(?<![\w.-])', '(?=/|\b)'], ['names', '(?<![\w./@-])', '(?![\w-])']] as [$kind, $before, $after]) {
         $table = $rules[$kind];
+
         if ($table === []) {
             continue;
         }
@@ -71,6 +75,7 @@ function rewrite(string $text, array $rules): string
 function alternation(string $kind, array $table, string $before, string $after): string
 {
     static $cache = [];
+
     if (! isset($cache[$kind])) {
         $keys = array_keys($table);
         usort($keys, static fn (string $a, string $b): int => strlen($b) <=> strlen($a) ?: strcmp($a, $b));

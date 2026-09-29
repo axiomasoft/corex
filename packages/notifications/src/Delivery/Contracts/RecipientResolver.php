@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Delivery\Contracts;
 
-use CoreX\Notifications\Data\DeliveryTarget;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Notifications\Delivery\Data\DeliveryTarget;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
 
 interface RecipientResolver
 {

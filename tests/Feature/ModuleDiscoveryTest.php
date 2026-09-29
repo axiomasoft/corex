@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\DefaultSettingDefinition;
+use CoreX\Modules\Definition\ModuleDependency;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Exceptions\InvalidManifestException;
-use CoreX\Modules\ModuleDependency;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Modules\Settings\DefaultSettingDefinition;
 use CoreX\Tests\Stubs\StubModuleDefinition;
 use Illuminate\Support\Facades\Artisan;
 
@@ -20,7 +20,7 @@ it('builds a fluent manifest with readable fields', function (): void {
         ->title('Stub Module')
         ->description('A stub for tests.')
         ->tablePrefix('stb')
-        ->requires([ModuleDependency::module('corex/core')])
+        ->requires([ModuleDependency::module('axiomasoft/corex')])
         ->editions(['standard' => [], 'pro' => ['advanced-reports']])
         ->settings([DefaultSettingDefinition::make('greeting', 'hello')])
         ->listens(['App\\Events\\Foo' => ['App\\Listeners\\Bar']])
@@ -32,7 +32,7 @@ it('builds a fluent manifest with readable fields', function (): void {
         ->and($manifest->tablePrefix)->toBe('stb')
         ->and($manifest->requires)->toHaveCount(1)
         ->and($manifest->requires[0]->kind)->toBe('module')
-        ->and($manifest->requires[0]->package)->toBe('corex/core')
+        ->and($manifest->requires[0]->package)->toBe('axiomasoft/corex')
         ->and($manifest->editions)->toBe(['standard' => [], 'pro' => ['advanced-reports']])
         ->and($manifest->settings[0]->key)->toBe('greeting')
         ->and($manifest->listeners)->toBe(['App\\Events\\Foo' => ['App\\Listeners\\Bar']])

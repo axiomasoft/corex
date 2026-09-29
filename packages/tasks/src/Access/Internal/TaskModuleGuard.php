@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Support;
+namespace CoreX\Tasks\Access\Internal;
 
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tasks\Exceptions\TasksModuleDisabled;
+use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\TasksModule;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
 
 final class TaskModuleGuard
 {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Actions;
+namespace CoreX\Tasks\Task\Actions;
 
-use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Contracts\UpdateTaskCommand;
-use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Data\UpdateTaskData;
-use CoreX\Tasks\Events\TaskUpdated;
-use CoreX\Tasks\Models\Project;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tasks\Support\TaskModuleGuard;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Access\Internal\TaskModuleGuard;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
+use CoreX\Tasks\Task\Data\TaskReference;
+use CoreX\Tasks\Task\Data\UpdateTaskData;
+use CoreX\Tasks\Task\Events\TaskUpdated;
+use CoreX\Tasks\Task\Models\Task;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;

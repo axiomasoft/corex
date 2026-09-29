@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Events;
+namespace CoreX\Tenancy\Account\Events;
 
-use CoreX\Events\DomainEvent;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use DateTimeImmutable;
 use Override;
 

@@ -1,7 +1,7 @@
-diff --git a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
+diff --git a/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 index 96da474..39835a4 100644
---- a/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
-+++ b/packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php
+--- a/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
++++ b/packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 @@ -291,32 +291,23 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
              $migration = $this->runModuleMigrations($module);
              $codeVersion = $this->codeVersion($module);

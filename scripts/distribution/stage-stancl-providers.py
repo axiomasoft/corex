@@ -93,7 +93,7 @@ def register() -> None:
     if (tenancy / 'composer.json').is_file():
         targets.append(tenancy)
     root_manifest = json.loads((ROOT / 'composer.json').read_text(encoding='utf-8'))
-    if 'corex/access' in {**root_manifest.get('require', {}), **root_manifest.get('require-dev', {})}:
+    if 'axiomasoft/corex-access' in {**root_manifest.get('require', {}), **root_manifest.get('require-dev', {})}:
         targets.append(ROOT / 'packages/access')
     portable_locks()
     for cwd in targets:

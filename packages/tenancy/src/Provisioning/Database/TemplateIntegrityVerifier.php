@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Provisioning\Database;
 
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\ClaimRequest;
 use CoreX\Tenancy\Provisioning\QualifiedTemplate;
-use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 

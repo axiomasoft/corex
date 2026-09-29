@@ -10,7 +10,7 @@ updates:
       actions:
         patterns: ['*']
   - package-ecosystem: composer
-    directories: ['/', '/packages/*']
+    directories: ['/', '/packages/*', '/products/*']
     schedule:
       interval: weekly
     cooldown:

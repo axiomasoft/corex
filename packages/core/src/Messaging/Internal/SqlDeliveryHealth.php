@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
+use CoreX\Config\Config;
 use CoreX\Messaging\Data\DeliveryHealth;
-use CoreX\Support\Config;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;

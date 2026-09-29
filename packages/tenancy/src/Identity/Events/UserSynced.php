@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Events;
+namespace CoreX\Tenancy\Identity\Events;
 
-use CoreX\Events\DomainEvent;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**

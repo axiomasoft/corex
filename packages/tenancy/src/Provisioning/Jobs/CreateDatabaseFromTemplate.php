@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Jobs;
+namespace CoreX\Tenancy\Provisioning\Jobs;
 
-use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

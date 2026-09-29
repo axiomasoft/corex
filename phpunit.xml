@@ -19,21 +19,35 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="ToolsPackage">
+            <directory>packages/tools/tests</directory>
+        </testsuite>
+        <testsuite name="WebhooksPackage">
+            <directory>packages/webhooks/tests</directory>
+        </testsuite>
         <testsuite name="ApiPackage">
             <directory>packages/operations/tests/Feature</directory>
             <directory>packages/operations/tests/Unit</directory>
         </testsuite>
+        <testsuite name="SavedViewsPackage">
+            <directory>packages/panels/tests/SavedViews</directory>
+        </testsuite>
         <testsuite name="CorePackage">
-            <directory>packages/core/tests</directory>
+            <directory>packages/core/tests/Unit</directory>
+            <directory>packages/core/tests/Storage</directory>
+            <directory>packages/core/tests/Views</directory>
+            <directory>packages/core/tests/Feature</directory>
+            <directory>packages/core/tests/Pg</directory>
+            <directory>packages/core/tests/Support</directory>
         </testsuite>
         <testsuite name="ModulesPackage">
-            <directory>packages/modules/tests</directory>
+            <directory>packages/core/tests/Modules</directory>
         </testsuite>
         <testsuite name="WorkflowPackage">
             <directory>packages/workflow/tests</directory>
         </testsuite>
         <testsuite name="AttributesPackage">
-            <directory>packages/attributes/tests</directory>
+            <directory>packages/custom-fields/tests</directory>
         </testsuite>
         <testsuite name="TransferPackage">
             <directory>packages/transfer/tests</directory>
@@ -68,9 +82,9 @@
         <include>
             <directory>packages/operations/src</directory>
             <directory>packages/core/src</directory>
-            <directory>packages/modules/src</directory>
+            <directory>packages/core/src/Modules</directory>
             <directory>packages/workflow/src</directory>
-            <directory>packages/attributes/src</directory>
+            <directory>packages/custom-fields/src</directory>
             <directory>packages/transfer/src</directory>
             <directory>packages/search/src</directory>
             <directory>packages/search-meilisearch/src</directory>

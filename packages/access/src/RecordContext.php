@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth;
+namespace CoreX\Access;
 
 /**
  * Contextual override key for the role matrix (pipeline/stage, B-11 §5.5) —

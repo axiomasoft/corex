@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Stubs;
+namespace CoreX\Access\Tests\Stubs;
 
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Exceptions\ModuleNotFound;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Registry\CompiledModule;
-use CoreX\Tenancy\TenantContext;
 
 /**
  * Test double for ModuleRegistry. The real, file-backed

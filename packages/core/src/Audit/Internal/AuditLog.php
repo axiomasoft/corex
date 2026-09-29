@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Internal;
 
-use CoreX\Concerns\HasConfiguredId;
-use CoreX\Enums\ActorType;
-use CoreX\Support\Config;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Config\Config;
+use CoreX\Database\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Override;

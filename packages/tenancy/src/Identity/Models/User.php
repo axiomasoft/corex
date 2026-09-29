@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Identity\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Concerns\HasConfiguredId;
+use CoreX\Database\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
  * Tenant-DB projection of `root_identities` (B-11 §2.2, full denorm D4/C6).
- * Cannot extend `CoreX\Models\BaseModel` (its own docblock carves out
+ * Cannot extend `CoreX\Database\BaseModel` (its own docblock carves out
  * exactly this case): `id` is external (= root_identities.id, no generated
  * default) — {@see HasConfiguredId} would fight that.
  *

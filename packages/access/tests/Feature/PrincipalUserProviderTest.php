@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Access\PrincipalIdentity;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Identity\PrincipalUserProvider;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Contracts\IdentityPasswordRehasher;
+use CoreX\Access\Access\PrincipalIdentity;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Identity\PrincipalUserProvider;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 // P2.22 — PrincipalUserProvider (D125, OQ-18 variant A): the boxed-and-cloud
 // login lane's own UserProvider, entirely config-driven (table/columns), no
-// dependency on corex/tenancy's `users` model. `tests/database/migrations`
+// dependency on axiomasoft/corex-tenancy's `users` model. `tests/database/migrations`
 // (loaded by CoreAuthTestCase) does not carry a `users` fixture — every test
 // below assembles the table it needs itself, mirroring PermissionSurfaceTest's
 // inline Schema::create() precedent.
@@ -123,7 +123,7 @@ it('logs a PrincipalIdentity(User) in via Auth::attempt() on the right password'
 // (е) parity, половина 1 (premortem C4) — Auth::attempt() и Auth::loginUsingId()
 // must produce objects of the SAME class, equal by principalType()/
 // principalId()/getAuthIdentifier() — this is the seam the OIDC lane
-// (corex/tenancy) relies on to end in Auth::loginUsingId() without ever
+// (axiomasoft/corex-tenancy) relies on to end in Auth::loginUsingId() without ever
 // constructing a PrincipalIdentity itself.
 it('gives the same class and identity from Auth::attempt() and Auth::loginUsingId() (parity half 1)', function (): void {
     config(['auth.providers.users.driver' => 'corex-principal']);
@@ -164,7 +164,7 @@ it('makes retrieveByToken() a permanent no-op and updateRememberToken() run zero
 });
 
 // (з) таблица с ДРУГИМИ именами (app_users: uid/mail/pwd/enabled) работает
-// через конфиг, без правки кода — corex/access never imports a users model.
+// через конфиг, без правки кода — axiomasoft/corex-access never imports a users model.
 it('works against a table with entirely different column names, driven purely by config', function (): void {
     Schema::create('app_users', function (Blueprint $table): void {
         $table->uuid('uid')->primary();

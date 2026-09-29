@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\MessageClass;
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\InvalidMessage;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
+use CoreX\Messaging\Enums\MessageClass;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 
 function messagingSampleEnvelope(array $overrides = []): MessageEnvelope
 {
     return new MessageEnvelope(
         messageId: $overrides['messageId'] ?? 'msg-1',
-        source: $overrides['source'] ?? 'corex/core',
+        source: $overrides['source'] ?? 'axiomasoft/corex',
         name: $overrides['name'] ?? 'membership.expired',
         contractVersion: $overrides['contractVersion'] ?? 1,
         occurredAt: $overrides['occurredAt'] ?? new DateTimeImmutable('2026-01-01T00:00:00Z'),
@@ -96,7 +96,7 @@ it('canonicalizes payload keys recursively', function (): void {
 
 it('rejects a PHP class name as contract name', function (): void {
     new MessageContract(
-        name: 'CoreX\Events\Foo',
+        name: 'CoreX\Messaging\Events\Foo',
         version: 1,
         class: MessageClass::IntegrationEvent,
         owner: 'acme/widgets',

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch;
+namespace CoreX\SearchMeilisearch;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Meilisearch\Exceptions\InvalidMeilisearchConfiguration;
-use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
 use CoreX\Search\SearchManager;
+use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
+use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Meilisearch\Client;

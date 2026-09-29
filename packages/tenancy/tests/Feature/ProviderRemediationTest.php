@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\TenancyServiceProvider;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;

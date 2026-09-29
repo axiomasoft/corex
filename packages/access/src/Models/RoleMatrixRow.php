@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Models;
+namespace CoreX\Access\Models;
 
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Roles\SystemRoleImmutable;
-use CoreX\Concerns\HasConfiguredId;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Roles\SystemRoleImmutable;
+use CoreX\Database\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;

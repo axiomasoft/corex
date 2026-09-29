@@ -15,7 +15,7 @@
 - Та же лестница в нумерации D70 (дословно): «`corex/*` = агностик-платформа (L0) + домен-основы без продуктовой семантики (L1, аналог iblock);
   `flex/*` = тематические модули Flex (L2); продукты = композиция (L3); cross-ecosystem — standalone». D91 уточняет формулировку, не запреты.
 - **Тест агностичности:** «`corex/*` полезен проекту БЕЗ CRM/CMS/Store». Не прошёл — код едет на уровень 1 либо в standalone-пакет (AI-gateway, биллинг, метеринг, модерация).
-- Зависимость вверх запрещена: `corex/*` ↛ `flex/*`, `corex/core` не зависит ни от одного пакета монорепо (гейт — `tests/Arch/LayerTest.php`, §6).
+- Зависимость вверх запрещена: `corex/*` ↛ `flex/*`, `axiomasoft/corex` не зависит ни от одного пакета монорепо (гейт — `tests/Arch/LayerTest.php`, §6).
 - Запрет буквален и в ТЕКСТЕ: `flex`-литералов в `packages/{core,modules,tenancy,auth,tasks}`
   (php/json/md/sql) быть не должно — ни в DDL, ни в описаниях, ни в README, ни в идентификаторах
   фикстур. Легальны только `flex/crm`/`Flex\Crm` (имя пакета слоя L2, D82) и исторические
@@ -26,7 +26,7 @@
 CoreX владеет только собственными переиспользуемыми Laravel-модулями и их L0-доктриной. AzGuard
 независимо владеет своей ролевой системой; FlexCRM — самостоятельное приложение, которое
 композирует CoreX и AzGuard. Интеграция пакетов или их потребление не передаёт владение доменом,
-API, политиками или задачами между проектами. В частности, `corex/access` может документировать
+API, политиками или задачами между проектами. В частности, `axiomasoft/corex-access` может документировать
 необязательный адаптер, но не становится владельцем движка ролей, а приложение-потребитель само
 владеет проводкой и политикой композиции. Наличие существующих мостовых поверхностей не является
 ни доказательством отсутствия дублирования, ни завершённым аудитом: такой анализ и любая
@@ -40,7 +40,7 @@ API, политиками или задачами между проектами.
 - Новые тесты пакета кладутся В ПАКЕТ: `packages/<pkg>/tests/**` со своими `phpunit.xml`,
   `phpstan.neon`, `composer.json` (образец — `packages/tenancy/tests`). Канон D81, supersedes D19.
 - Самостоятельные пакетные харнессы — `auth`, `crm`, `tasks`, `tenancy`.
-  `packages/core/tests` и `packages/modules/tests` также существуют и включены в root `phpunit.xml`;
+  `packages/core/tests` и `packages/core/tests/Modules` также существуют и включены в root `phpunit.xml`;
   вместе с историческими root-suite они выполняются в root CI SQLite/PG lanes.
 - Корневой `tests/` — харнесс ядра/модулей и кросс-пакетные проверки: `Arch`, `Feature`,
   `Unit`, `PHPStan`, `Stubs`, `Support`, `database`. Он НЕ дом для тестов прикладных пакетов.
@@ -70,16 +70,16 @@ API, политиками или задачами между проектами.
 - Пять механизмов расширения: события (`DomainEvent`; подписки ТОЛЬКО в коде манифеста),
   extenders, компоненты (override по стабильному handle), capabilities, Contracts/DI-драйверы.
 - Extenders — ЗАКРЫТЫЙ набор из 8: `Entity`, `EntityField`, `Permissions`, `Api`, `Filament`,
-  `Menu`, `Routes`, `Workflow` (`ls packages/modules/src/Extend` — 8 + маркер-интерфейс
+  `Menu`, `Routes`, `Workflow` (`ls packages/core/src/Modules/Extend` — 8 + маркер-интерфейс
   `Extender.php`). Девятый extender заводится только через RFC (≥2 недель), не «по ходу item'а».
 - Модуль = composer-пакет `type: corex-module` + наследник `ModuleDefinition` с `manifest()`;
-  discovery читает `vendor/composer/installed.json` (`packages/modules/src/Discovery/ModuleDiscovery.php`).
+  discovery читает `vendor/composer/installed.json` (`packages/core/src/Modules/Discovery/ModuleDiscovery.php`).
   Один пакет = один модуль; версия — из `installed.json`, не из манифеста.
 - Запрещённые анти-паттерны: WP-hooks, подписки в БД, рой extenders (Flarum),
   alias-override (October), инфоблоки. Monkey-patching запрещён.
 
 Источник: `plans/archive/COREX-CORE/findings/brain-recon-doctrine-2026-07-18.md` §3–§4 (ADR-011/ADR-014);
-`packages/modules/src/Extend/Extender.php` (докблок закрытого набора).
+`packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора).
 
 ## 5. Контракт-дисциплина
 
@@ -95,11 +95,11 @@ API, политиками или задачами между проектами.
 ### Bridge-пакеты
 
 - Пакет-мост **декорирует** контракты своих хостов и **не владеет** предметными контрактами.
-  Пример: `corex/search-intl` — тонкий адаптер поверх `corex/intl` и `corex/search`, а не
+  Пример: `axiomasoft/corex-search-intl` — тонкий адаптер поверх `axiomasoft/corex-intl` и `axiomasoft/corex-search`, а не
   самостоятельная возможность.
 - Собственный контракт в `Contracts/` bridge-пакета допустим только если он описывает **саму
-  операцию декорирования** (например, `SavedViewLabelReader` в `corex/search-intl`), а не
-  предметную область хоста. Saved views принадлежат `corex/core` (`SavedViewRepository`), не bridge-пакету.
+  операцию декорирования** (например, `SavedViewLabelReader` в `axiomasoft/corex-search-intl`), а не
+  предметную область хоста. Saved views принадлежат `axiomasoft/corex` (`SavedViewRepository`), не bridge-пакету.
 - Контроль: правило **R2** гейта графа пакетов (`scripts/package-graph-gate.php` — запрет импорта
   чужого `Internal`) плюс ревью, что в `packages/<bridge>/src/Contracts/` не появляется контрактов,
   чьи реализации живут в других пакетах.

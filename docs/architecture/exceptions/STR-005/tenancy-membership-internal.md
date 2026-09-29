@@ -5,7 +5,7 @@
 **Затронутые пути.** `packages/tenancy/src/Membership/Internal/**` (39 файлов — весь bounded
 context Membership оформлен как `Internal/` пакета)
 
-**Владелец.** `corex/tenancy`
+**Владелец.** `axiomasoft/corex-tenancy`
 
 **Причина.** Membership вырос внутри пакета tenancy до появления правила «без внутреннего
 `Internal/` внутри bounded context»; измеренный долг — `00-baseline-metrics.md` (`RAG:—`).

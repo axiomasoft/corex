@@ -5,7 +5,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/attributes",
+        "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false
     },
@@ -15,7 +15,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/attributes",
+        "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": true
     },
@@ -25,7 +25,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/attributes",
+        "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false
     },
@@ -35,7 +35,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/attributes",
+        "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false
     },
@@ -45,7 +45,7 @@
         "detail_keys": [
             "reason"
         ],
-        "owner": "corex/attributes",
+        "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false
     },
@@ -53,7 +53,7 @@
         "category": "authorization",
         "code": "access_denied",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -61,7 +61,7 @@
         "category": "authorization",
         "code": "account_unavailable",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -69,7 +69,7 @@
         "category": "authentication",
         "code": "authentication_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -77,7 +77,7 @@
         "category": "conflict",
         "code": "bulk_not_ready",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": true
     },
@@ -85,7 +85,7 @@
         "category": "conflict",
         "code": "bulk_reconciliation_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -93,7 +93,7 @@
         "category": "not_found",
         "code": "bulk_result_expired",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -101,7 +101,7 @@
         "category": "authorization",
         "code": "catalogue_limit",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -109,7 +109,7 @@
         "category": "conflict",
         "code": "conflict",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -117,7 +117,7 @@
         "category": "authorization",
         "code": "context_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -125,7 +125,7 @@
         "category": "validation",
         "code": "cursor_invalid",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -133,7 +133,7 @@
         "category": "authorization",
         "code": "forbidden",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -141,7 +141,7 @@
         "category": "conflict",
         "code": "idempotency_conflict",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -149,7 +149,7 @@
         "category": "conflict",
         "code": "idempotency_contract_mismatch",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -157,7 +157,7 @@
         "category": "conflict",
         "code": "idempotency_in_progress",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": true
     },
@@ -165,7 +165,7 @@
         "category": "validation",
         "code": "idempotency_key_forbidden",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -173,7 +173,7 @@
         "category": "validation",
         "code": "idempotency_key_invalid",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -181,7 +181,7 @@
         "category": "validation",
         "code": "idempotency_key_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -189,7 +189,7 @@
         "category": "validation",
         "code": "idempotency_not_supported",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -197,7 +197,7 @@
         "category": "internal",
         "code": "internal_error",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -205,7 +205,7 @@
         "category": "validation",
         "code": "invalid_request",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -213,7 +213,7 @@
         "category": "not_found",
         "code": "module_unavailable",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -221,7 +221,7 @@
         "category": "not_found",
         "code": "not_found",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -229,7 +229,7 @@
         "category": "not_found",
         "code": "operation_not_found",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -237,7 +237,7 @@
         "category": "not_found",
         "code": "operation_unsupported",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -245,7 +245,7 @@
         "category": "validation",
         "code": "ordering_version_unsupported",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -253,7 +253,7 @@
         "category": "rate_limit",
         "code": "rate_limited",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -261,7 +261,7 @@
         "category": "conflict",
         "code": "reconciliation_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -269,7 +269,7 @@
         "category": "validation",
         "code": "request_rejected",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -277,7 +277,7 @@
         "category": "not_found",
         "code": "resource_not_found",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -285,7 +285,7 @@
         "category": "authorization",
         "code": "scope_required",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -293,7 +293,7 @@
         "category": "validation",
         "code": "unknown_message_contract",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -303,7 +303,7 @@
         "detail_keys": [
             "*"
         ],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -311,7 +311,7 @@
         "category": "conflict",
         "code": "webhook_endpoint_changed",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -319,7 +319,7 @@
         "category": "validation",
         "code": "webhook_payload_too_large",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -327,7 +327,7 @@
         "category": "conflict",
         "code": "webhook_replay_expired",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     },
@@ -335,7 +335,7 @@
         "category": "validation",
         "code": "webhook_subscription_cap",
         "detail_keys": [],
-        "owner": "corex/operations",
+        "owner": "axiomasoft/corex-operations",
         "path": null,
         "retryable": false
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
-use CoreX\Contracts\ConfigReportSection;
-use CoreX\Support\PackageRegistrar;
+use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\ConsoleRegistrar;
 use CoreX\Tenancy\Laravel\DatabaseRegistrar;
@@ -15,9 +15,9 @@ use CoreX\Tenancy\Laravel\HttpRegistrar;
 use CoreX\Tenancy\Laravel\IdentityRegistrar;
 use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
+use CoreX\Tenancy\Laravel\Support\TenancyConfigSection;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
-use CoreX\Tenancy\Support\TenancyConfigSection;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use Illuminate\Support\ServiceProvider;
@@ -43,7 +43,7 @@ final class TenancyServiceProvider extends ServiceProvider
         // root_* migrations are PG-only DDL (jsonb/CHECK/UNIQUE NULLS NOT
         // DISTINCT) targeting the CENTRAL connection, never a tenant/account
         // database (D14). Publish-only, not loadMigrationsFrom (mirrors
-        // corex/core CoreServiceProvider D33/A19/A62): an unconditional load
+        // axiomasoft/corex CoreServiceProvider D33/A19/A62): an unconditional load
         // would run root_ DDL against whatever connection a consumer's own
         // migrator defaults to. A consumer publishes then runs
         // `migrate --database=<central> --path=database/migrations/root`.

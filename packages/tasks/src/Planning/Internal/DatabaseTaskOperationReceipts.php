@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Internal\Planning;
+namespace CoreX\Tasks\Planning\Internal;
 
-use CoreX\Tasks\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Data\TaskOperationKind;
-use CoreX\Tasks\Data\TaskOperationReceipt;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Override;

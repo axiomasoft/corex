@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Tests;
 
-use CoreX\Notifications\Internal\Digest\DigestWakeupAdapter;
-use CoreX\Notifications\Internal\Digest\NotificationDigestDueSource;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
+use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\NotificationsServiceProvider;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;

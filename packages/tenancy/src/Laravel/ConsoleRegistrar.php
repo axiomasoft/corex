@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Tenancy\Commands\IdentitiesReconcileCommand;
-use CoreX\Tenancy\Commands\PendingClearCommand;
-use CoreX\Tenancy\Commands\PendingCreateCommand;
-use CoreX\Tenancy\Commands\TenantsMigrateCommand;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand;
+use CoreX\Tenancy\Laravel\Commands\PendingClearCommand;
+use CoreX\Tenancy\Laravel\Commands\PendingCreateCommand;
+use CoreX\Tenancy\Laravel\Commands\TenantsMigrateCommand;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Override;

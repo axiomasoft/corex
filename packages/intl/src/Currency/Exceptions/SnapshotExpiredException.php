@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Exceptions;
+namespace CoreX\Intl\Currency\Exceptions;
 
 use RuntimeException;
 

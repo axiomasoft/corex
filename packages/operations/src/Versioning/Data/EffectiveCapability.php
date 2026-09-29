@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Versioning\Data;
 
 /** Live caller view. It is not part of the code-profile fingerprint. */
 final readonly class EffectiveCapability

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Observability;
 
-use CoreX\Contracts\OperationObserver;
+use CoreX\Observability\Contracts\OperationObserver;
 use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;

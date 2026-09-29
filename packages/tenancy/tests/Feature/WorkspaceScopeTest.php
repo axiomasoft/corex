@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Scopes\WorkspaceScope;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;

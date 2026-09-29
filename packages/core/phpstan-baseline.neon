@@ -1,73 +1,91 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_07_13_000000_create_mod_modules_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php
+
+		-
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php
+
+		-
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
 
 		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
 
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
 
 		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 3
 			path: database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
 
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php
 
 		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php
 
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php
 
 		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php
 
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php
 
 		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 3
 			path: database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php
 
 		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php
 
 		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php
@@ -127,6 +145,78 @@ parameters:
 			path: src/Audit/PruneAuditLog.php
 
 		-
+			rawMessage: 'Method CoreX\Config\Commands\ValidateConfigCommand::configArray() should return array<string, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Config/Commands/ValidateConfigCommand.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Config\CoreOptions::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/Config.php
+
+		-
+			rawMessage: 'Parameter $auditLogger of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Audit\Contracts\AuditLogger>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $auditRetention of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Audit\Contracts\AuditRetention>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $dataScopeAuthorizer of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Data\Contracts\DataScopeAuthorizer>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $departmentRepository of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Departments\Contracts\DepartmentRepository>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $featureFlags of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Features\Contracts\FeatureFlags>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $impersonationService of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Context\Contracts\ImpersonationService>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $settingDefaultsProvider of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Settings\Contracts\SettingDefaultsProvider>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $settingsRepository of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Settings\Contracts\SettingsRepository>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $tenancyManager of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Context\Contracts\TenancyManager>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
+			rawMessage: 'Parameter $tenantContextResolver of class CoreX\Config\CoreOptions constructor expects class-string<CoreX\Context\Contracts\TenantContextResolver>, class-string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Config/CoreOptions.php
+
+		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -151,7 +241,7 @@ parameters:
 			path: src/CoreServiceProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Support\CoreOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter #1 $config of static method CoreX\Config\CoreOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreServiceProvider.php
@@ -205,7 +295,7 @@ parameters:
 			path: src/CoreServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $contexts of class CoreX\Storage\LocalTenantStorage constructor expects CoreX\Tenancy\Contracts\TenantContextResolver, mixed given.'
+			rawMessage: 'Parameter $contexts of class CoreX\Storage\LocalTenantStorage constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreServiceProvider.php
@@ -217,18 +307,16 @@ parameters:
 			path: src/CoreServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $dates of class CoreX\Support\Time\LaravelClock constructor expects Illuminate\Support\DateFactory, mixed given.'
+			rawMessage: 'Parameter $dates of class CoreX\Time\LaravelClock constructor expects Illuminate\Support\DateFactory, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreServiceProvider.php
-
 
 		-
-			rawMessage: 'Parameter $resolver of class CoreX\Tenancy\GuardedTenantContextRestorer constructor expects CoreX\Tenancy\Contracts\TenantContextResolver, mixed given.'
+			rawMessage: 'Parameter $resolver of class CoreX\Context\GuardedTenantContextRestorer constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreServiceProvider.php
-
 
 		-
 			rawMessage: 'Parameter $traces of class CoreX\Messaging\Internal\SqlOutbox constructor expects CoreX\Messaging\Contracts\TraceContextBridge, mixed given.'
@@ -236,15 +324,32 @@ parameters:
 			count: 1
 			path: src/CoreServiceProvider.php
 
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Database/BaseModel.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::orderBy().'
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Database/BaseModel.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Database/BaseModel.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Departments\Models\Department>::orderBy().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Departments/DatabaseDepartmentRepository.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Models\Department>::whereRaw().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Departments\Models\Department>::whereRaw().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Departments/DatabaseDepartmentRepository.php
@@ -254,6 +359,60 @@ parameters:
 			identifier: plus.leftNonNumeric
 			count: 1
 			path: src/Departments/DatabaseDepartmentRepository.php
+
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Departments/Models/Department.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Departments/Models/Department.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Departments/Models/Department.php
+
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Features/Models/FeatureFlag.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Features/Models/FeatureFlag.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Features/Models/FeatureFlag.php
+
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Features/Models/FeatureOverride.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Features/Models/FeatureOverride.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Features/Models/FeatureOverride.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
@@ -394,112 +553,460 @@ parameters:
 			path: src/Messaging/Internal/SqlOutboxRelay.php
 
 		-
+			rawMessage: Access to an undefined property PhpParser\Node\Expr\Error|PhpParser\Node\Expr\Variable::$name.
+			identifier: property.notFound
+			count: 1
+			path: src/Messaging/PHPStan/Rules/DurablePayloadRule.php
+
+		-
+			rawMessage: 'Parameter #1 $propertyName of method PHPStan\Reflection\ClassReflection::getNativeProperty() expects string, PhpParser\Node\Expr|string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Messaging/PHPStan/Rules/DurablePayloadRule.php
+
+		-
+			rawMessage: 'Parameter #2 $propertyName of static method CoreX\Messaging\PHPStan\Rules\DurablePayloadTypeChecker::buildError() expects string, PhpParser\Node\Expr|string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Messaging/PHPStan/Rules/DurablePayloadRule.php
+
+		-
+			rawMessage: 'Parameter $propertyName of static method CoreX\Messaging\PHPStan\Rules\DurablePayloadTypeChecker::untypedArrayErrors() expects string, PhpParser\Node\Expr|string given.'
+			identifier: argument.type
+			count: 1
+			path: src/Messaging/PHPStan/Rules/DurablePayloadRule.php
+
+		-
 			rawMessage: 'Dynamic call to static method Redis::publish().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Messaging/RedisPubSub.php
 
 		-
-			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
-			identifier: empty.notAllowed
+			rawMessage: Casting to bool something that's already bool.
+			identifier: cast.useless
 			count: 1
-			path: src/Models/BaseModel.php
+			path: src/Modules/Commands/ExplainModuleCommand.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			rawMessage: Casting to string something that's already string.
+			identifier: cast.useless
+			count: 2
+			path: src/Modules/Commands/ExplainModuleCommand.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array given.'
+			identifier: argument.type
+			count: 2
+			path: src/Modules/Compiler/CompilationValidator.php
+
+		-
+			rawMessage: 'Method CoreX\Modules\Compiler\CompiledRegistry::extenderToArray() should return array<string, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Modules/Compiler/CompiledRegistry.php
+
+		-
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(array<string, mixed>): mixed)|null, Closure(array{key: string, default: bool, module: string|null, payload: array<string, mixed>|null}): CoreX\Features\Contracts\FeatureFlagDefinition given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/BaseModel.php
+			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledEntityField::fromArray() expects array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/BaseModel.php
+			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
-			identifier: empty.notAllowed
-			count: 1
-			path: src/Models/Department.php
-
-		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledSettingDefault::fromArray() expects array{namespace: string, definition: array<string, mixed>}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/Department.php
+			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Registry\EntityDefinition::fromArray() expects array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ''bool''|''date''|''datetime''|''decimal''|''enum''|''int''|''json''|''money''|''relation''|''string'', required?: bool, searchable?: bool, meta?: array<string, mixed>|null}>, ...}, array<string, mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/Department.php
+			path: src/Modules/Compiler/CompiledRegistry.php
 
 		-
-			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
-			identifier: empty.notAllowed
+			rawMessage: 'Method CoreX\Modules\Compiler\CompiledSettingDefault::toArray() should return array{namespace: string, definition: array<string, mixed>} but returns array{namespace: string, definition: array<mixed>}.'
+			identifier: return.type
 			count: 1
-			path: src/Models/FeatureFlag.php
+			path: src/Modules/Compiler/CompiledSettingDefault.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			rawMessage: 'Parameter #1 $package of static method CoreX\Modules\Compiler\InstalledPackages::reference() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/FeatureFlag.php
+			path: src/Modules/Compiler/InstalledPackages.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			rawMessage: 'Parameter #1 $model of method CoreX\Modules\Compiler\RegistryCompiler::introspectCasts() expects class-string<Illuminate\Database\Eloquent\Model>, class-string given.'
+			identifier: argument.type
+			count: 2
+			path: src/Modules/Compiler/RegistryCompiler.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 3
+			path: src/Modules/Compiler/RegistryCompiler.php
+
+		-
+			rawMessage: Cannot access offset 'corex' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Modules/Discovery/ModuleDiscovery.php
+
+		-
+			rawMessage: Cannot access offset 'module' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Modules/Discovery/ModuleDiscovery.php
+
+		-
+			rawMessage: 'Method CoreX\Modules\Discovery\ModuleDiscovery::scanInstalledJson() should return list<class-string> but returns list<string>.'
+			identifier: return.type
+			count: 1
+			path: src/Modules/Discovery/ModuleDiscovery.php
+
+		-
+			rawMessage: 'Property CoreX\Modules\Extend\Entity::$model (class-string) does not accept string.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Modules/Extend/Entity.php
+
+		-
+			rawMessage: 'Property CoreX\Modules\Extend\EntityField::$relationType (''belongsTo''|''belongsToMany''|''hasMany''|null) does not accept string.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Modules/Extend/EntityField.php
+
+		-
+			rawMessage: 'Property CoreX\Modules\Extend\Routes::$kind (''api''|''web'') does not accept string.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Modules/Extend/Routes.php
+
+		-
+			rawMessage: 'Property CoreX\Modules\Extend\Workflow::$kind (''stepType''|''trigger'') does not accept string.'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Modules/Extend/Workflow.php
+
+		-
+			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: src/Modules/Internal/ReadRegistryIntrospection.php
+
+		-
+			rawMessage: 'Parameter $declaredConstraints of class CoreX\Modules\Data\ModuleExplanation constructor expects array<string, array<int|string, mixed>|bool|int|string|null>, array<string, mixed> given.'
+			identifier: argument.type
+			count: 4
+			path: src/Modules/Internal/ReadRegistryIntrospection.php
+
+		-
+			rawMessage: Cannot access offset 'events' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Modules/Laravel/ModulesBootRegistrar.php
+
+		-
+			rawMessage: Cannot access offset 1 on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Modules/Laravel/ModulesBootRegistrar.php
+
+		-
+			rawMessage: 'Cannot call method listen() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Modules/Laravel/ModulesBootRegistrar.php
+
+		-
+			rawMessage: PHPDoc tag @var with type CoreX\Modules\Contracts\ModuleRegistry is not subtype of type CoreX\Modules\Registry\CompiledModuleRegistry.
+			identifier: varTag.type
+			count: 1
+			path: src/Modules/Laravel/ModulesBootRegistrar.php
+
+		-
+			rawMessage: 'Parameter #1 $map of static method Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Model,mixed>::morphMap() expects array<class-string<Illuminate\Database\Eloquent\Model>>|null, array<string, class-string> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Models/FeatureFlag.php
+			path: src/Modules/Laravel/ModulesBootRegistrar.php
 
 		-
-			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
-			identifier: empty.notAllowed
+			rawMessage: 'Casting to int something that''s already int<0, max>.'
+			identifier: cast.useless
 			count: 1
-			path: src/Models/FeatureOverride.php
+			path: src/Modules/Laravel/RegistryRegistrar.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
-			identifier: argument.type
+			rawMessage: Access to an undefined property object::$edition.
+			identifier: property.notFound
 			count: 1
-			path: src/Models/FeatureOverride.php
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
-			identifier: argument.type
+			rawMessage: Access to an undefined property object::$schema_version.
+			identifier: property.notFound
 			count: 1
-			path: src/Models/FeatureOverride.php
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
-			identifier: empty.notAllowed
-			count: 1
-			path: src/Models/Setting.php
+			rawMessage: Access to an undefined property object::$state.
+			identifier: property.notFound
+			count: 8
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Models/Setting.php
+			rawMessage: Access to an undefined property object::$version.
+			identifier: property.notFound
+			count: 3
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
-			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
-			identifier: argument.type
+			rawMessage: 'Argument of an invalid type array|(callable)|class-string supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
 			count: 1
-			path: src/Models/Setting.php
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Binary operation "." between mixed and '.' results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Cannot access property $column_name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Cannot access property $name on mixed.
+			identifier: property.nonObject
+			count: 2
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Cannot access property $oid on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Cannot access property $table_name on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Cannot access property $tbl on mixed.
+			identifier: property.nonObject
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 1
-			path: src/Money/MoneyCast.php
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
+			count: 7
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: PHPDoc tag @var with type CoreX\Features\Contracts\FeatureFlags is not subtype of type CoreX\Features\DatabaseFeatureFlags.
+			identifier: varTag.type
 			count: 1
-			path: src/Money/MoneyCast.php
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #1 $identifier of method CoreX\Modules\Lifecycle\DatabaseModuleLifecycle::quoteIdentifier() expects string, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #1 $name of method Illuminate\Database\Migrations\Migrator::usingConnection() expects string, string|null given.'
+			identifier: argument.type
+			count: 2
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CoreX\Modules\Enums\ModuleState::from() expects int|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #2 $fromVersion of class CoreX\Modules\Events\ModuleUpgraded constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #2 $listener of method Illuminate\Events\Dispatcher::listen() expects array|(callable(): mixed)|class-string|Illuminate\Events\QueuedClosure|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #2 $state of static method CoreX\Modules\Exceptions\InvalidStateTransitionException::upgradeRequiresEnabled() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #2 $version2 of function version_compare expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #3 $from of method CoreX\Modules\Lifecycle\DatabaseModuleLifecycle::log() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter #3 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter $dbVersion of class CoreX\Modules\Definition\ModuleStatus constructor expects string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Parameter $edition of class CoreX\Modules\Definition\ModuleStatus constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleLifecycle.php
+
+		-
+			rawMessage: 'Method CoreX\Modules\Lifecycle\DatabaseModuleStateReader::enabledFor() should return array<string, array{state: string, edition: string}> but returns array<array{state: mixed, edition: mixed}>.'
+			identifier: return.type
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleStateReader.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: array.invalidKey
+			count: 1
+			path: src/Modules/Lifecycle/DatabaseModuleStateReader.php
+
+		-
+			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Modules/ModulesServiceProvider.php
+
+		-
+			rawMessage: 'Cannot call method get() on mixed.'
+			identifier: method.nonObject
+			count: 1
+			path: src/Modules/ModulesServiceProvider.php
+
+		-
+			rawMessage: 'Parameter #1 $config of static method CoreX\Modules\Support\ModulesOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/ModulesServiceProvider.php
+
+		-
+			rawMessage: 'Parameter $onDisableHook of class CoreX\Modules\Registry\CompiledModule constructor expects class-string|null, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Registry/CompiledModule.php
+
+		-
+			rawMessage: 'Parameter $onEnableHook of class CoreX\Modules\Registry\CompiledModule constructor expects class-string|null, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Registry/CompiledModule.php
+
+		-
+			rawMessage: 'Parameter $onPurgeHook of class CoreX\Modules\Registry\CompiledModule constructor expects class-string|null, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Registry/CompiledModule.php
+
+		-
+			rawMessage: 'Method CoreX\Modules\Registry\CompiledModuleRegistry::readCache() should return array<string, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: src/Modules/Registry/CompiledModuleRegistry.php
+
+		-
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledRegistry::fromArray() expects array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, ...}, array<string, mixed> given.'
+			identifier: argument.type
+			count: 2
+			path: src/Modules/Registry/CompiledModuleRegistry.php
+
+		-
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Registry\CompiledModule::fromArray() expects array{composerName: string, title: string|null, tablePrefix: string|null, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, ...}, array<string, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Registry/CompiledModuleRegistry.php
+
+		-
+			rawMessage: Binary operation "." between mixed and "\000" results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Modules/Testing/ExtensionContract.php
+
+		-
+			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Modules/Testing/ExtensionContract.php
+
+		-
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledRegistry::fromArray() expects array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, ...}, array<string, mixed> given.'
+			identifier: argument.type
+			count: 2
+			path: src/Modules/Testing/ExtensionContract.php
+
+		-
+			rawMessage: 'Parameter #1 $data of static method CoreX\Modules\Compiler\CompiledRegistry::fromArray() expects array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, ...}, non-empty-array<string, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: src/Modules/Testing/ExtensionContract.php
+
+		-
+			rawMessage: 'Part $extension[''id''] (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Modules/Testing/ExtensionContract.php
+
+		-
+			rawMessage: 'Part $extension[''point''] (mixed) of encapsed string cannot be cast to string.'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Modules/Testing/ExtensionContract.php
 
 		-
 			rawMessage: Cannot access offset 'traceparent'|'tracestate' on mixed.
@@ -514,172 +1021,28 @@ parameters:
 			path: src/Observability/OpenTelemetryBridge.php
 
 		-
-			rawMessage: Access to an undefined property PhpParser\Node\Expr\Error|PhpParser\Node\Expr\Variable::$name.
-			identifier: property.notFound
-			count: 1
-			path: src/PHPStan/Rules/DurablePayloadRule.php
-
-		-
-			rawMessage: 'Parameter #1 $propertyName of method PHPStan\Reflection\ClassReflection::getNativeProperty() expects string, PhpParser\Node\Expr|string given.'
-			identifier: argument.type
-			count: 1
-			path: src/PHPStan/Rules/DurablePayloadRule.php
-
-		-
-			rawMessage: 'Parameter #2 $propertyName of static method CoreX\PHPStan\Rules\DurablePayloadTypeChecker::buildError() expects string, PhpParser\Node\Expr|string given.'
-			identifier: argument.type
-			count: 1
-			path: src/PHPStan/Rules/DurablePayloadRule.php
-
-		-
-			rawMessage: 'Parameter $propertyName of static method CoreX\PHPStan\Rules\DurablePayloadTypeChecker::untypedArrayErrors() expects string, PhpParser\Node\Expr|string given.'
-			identifier: argument.type
-			count: 1
-			path: src/PHPStan/Rules/DurablePayloadRule.php
-
-		-
-			rawMessage: Access to an undefined property object::$entity_code.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$id.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$is_default.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$kind.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$owner_id.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$owner_kind.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$revision.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Access to an undefined property object::$workspace_id.
-			identifier: property.notFound
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 3
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Method CoreX\SavedViews\Internal\SqlSavedViewRepository::viewsFor() should return list<CoreX\SavedViews\Data\SavedViewRef> but returns array<int, CoreX\SavedViews\Data\SavedViewRef>.'
-			identifier: return.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #1 $config of method CoreX\SavedViews\Internal\ViewConfigValidator::validate() expects array<string, mixed>, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #1 $entityHandle of class CoreX\SavedViews\Data\ViewScope constructor expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #1 $id of class CoreX\SavedViews\Data\SavedViewRef constructor expects string, mixed given.'
-			identifier: argument.type
-			count: 2
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #1 $json of function json_decode expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #2 $scopeKey of method CoreX\SavedViews\Internal\SqlSavedViewRepository::lockScope() expects string, mixed given.'
-			identifier: argument.type
-			count: 2
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #2 $workspaceId of class CoreX\SavedViews\Data\ViewScope constructor expects string|null, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #3 $kind of class CoreX\SavedViews\Data\SavedViewRef constructor expects string, mixed given.'
-			identifier: argument.type
-			count: 2
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #3 $ownerKind of class CoreX\SavedViews\Data\ViewScope constructor expects string|null, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Parameter #4 $ownerId of class CoreX\SavedViews\Data\ViewScope constructor expects string|null, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/SavedViews/Internal/SqlSavedViewRepository.php
-
-		-
-			rawMessage: 'Method CoreX\SavedViews\Internal\ViewConfigValidator::validate() should return array{filters: array<string, mixed>, sorts: list<array{field: string, direction: string}>, columns: list<string>, groupBy: string|null} but returns array{filters: array<mixed, mixed>, sorts: list<non-empty-array<mixed>>, columns: list<string>, groupBy: string|null}.'
-			identifier: return.type
-			count: 1
-			path: src/SavedViews/Internal/ViewConfigValidator.php
-
-		-
-			rawMessage: 'Parameter #1 $node of method CoreX\SavedViews\Internal\ViewConfigValidator::filter() expects array<string, mixed>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 2
-			path: src/SavedViews/Internal/ViewConfigValidator.php
-
-		-
-			rawMessage: Possibly invalid array key type mixed.
-			identifier: offsetAccess.invalidOffset
-			count: 3
-			path: src/SavedViews/Internal/ViewConfigValidator.php
-
-		-
 			rawMessage: 'Parameter #1 $payload of static method Illuminate\Support\Facades\Crypt::decryptString() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Settings/DatabaseSettingsRepository.php
+
+		-
+			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
+			identifier: empty.notAllowed
+			count: 1
+			path: src/Settings/Models/Setting.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::getAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Settings/Models/Setting.php
+
+		-
+			rawMessage: 'Parameter #1 $key of method Illuminate\Database\Eloquent\Model::setAttribute() expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Settings/Models/Setting.php
 
 		-
 			rawMessage: 'Binary operation "+=" between (float|int) and mixed results in an error.'
@@ -860,81 +1223,3 @@ parameters:
 			identifier: method.dynamicName
 			count: 1
 			path: src/Storage/ScopedFilesystem.php
-
-		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Support\CoreOptions::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/Config.php
-
-		-
-			rawMessage: 'Method CoreX\Support\Console\ValidateConfigCommand::configArray() should return array<string, mixed> but returns array<mixed>.'
-			identifier: return.type
-			count: 1
-			path: src/Support/Console/ValidateConfigCommand.php
-
-		-
-			rawMessage: 'Parameter $auditLogger of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Audit\Contracts\AuditLogger>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $auditRetention of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Audit\Contracts\AuditRetention>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $dataScopeAuthorizer of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Contracts\DataScopeAuthorizer>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $departmentRepository of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Contracts\DepartmentRepository>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $featureFlags of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Contracts\FeatureFlags>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $impersonationService of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Tenancy\Contracts\ImpersonationService>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $settingDefaultsProvider of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Contracts\SettingDefaultsProvider>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $settingsRepository of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Contracts\SettingsRepository>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $tenancyManager of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Tenancy\Contracts\TenancyManager>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: 'Parameter $tenantContextResolver of class CoreX\Support\CoreOptions constructor expects class-string<CoreX\Tenancy\Contracts\TenantContextResolver>, class-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Support/CoreOptions.php
-
-		-
-			rawMessage: Trait CoreX\Support\RegistersNothingOnBoot is used zero times and is not analysed.
-			identifier: trait.unused
-			count: 1
-			path: src/Support/RegistersNothingOnBoot.php

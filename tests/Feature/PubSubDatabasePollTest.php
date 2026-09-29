@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\WorkerRuntime;
+use CoreX\Config\Config;
+use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\DatabasePollPubSub;
-use CoreX\Support\Config;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 

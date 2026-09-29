@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Events\Identity\MembershipRevoked;
+use CoreX\Tenancy\Membership\Events\MembershipRevoked;
 use CoreX\Tenancy\Membership\Transport\AccessTokenValidator;
 use CoreX\Tenancy\Membership\Transport\ActorRef;
 use CoreX\Tenancy\Membership\Transport\ActorType;

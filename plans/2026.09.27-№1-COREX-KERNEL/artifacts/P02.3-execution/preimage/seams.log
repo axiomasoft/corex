@@ -1,0 +1,19 @@
+seam remove packages/operations/tests/Feature/InstalledToolContractTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/ToolCatalogueTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/ToolContributionsTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/ToolGuardConcurrencyTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/ToolInvocationTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookConcurrencyTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookDeliveryTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookFanoutTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookManagementTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookRedactionTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookReplayTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookSubscriptionTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Feature/WebhookTransportTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Unit/ToolSchemaTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Unit/WebhookCompatibilityTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Unit/WebhookRotationTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Unit/WebhookSignatureTest.php -> CoreX\Api\Tests\TestCase
+seam remove packages/operations/tests/Unit/WebhookUrlPolicyTest.php -> CoreX\Api\Tests\TestCase
+seams: 18 unresolved (18 scaffold-owned, 0 blocking)

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Internal\UnavailableSearchProvider;
 use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
@@ -16,10 +20,6 @@ use CoreX\Search\Support\SearchCapabilities;
 use CoreX\Search\Support\SearchPage;
 use CoreX\Search\Support\SearchQuery;
 use CoreX\Search\Support\SearchSnapshot;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 
 it('keeps neutral search value objects typed and unsupported providers empty', function (): void {
     $record = new RecordRef(entity: 'equipment', id: 'pump-1');

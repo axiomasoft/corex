@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Invocation\Internal;
 
 use Closure;
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\ClientScopeAuthorizer;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\OperationFieldAuthorizer;
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Contracts\OperationInvoker;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Data\OperationResult;
-use CoreX\Api\Internal\Cost\BudgetAdmission;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
+use CoreX\Operations\Authorization\Internal\DeclaredFieldAuthorizer;
+use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Contracts\Container\Container;
 use LogicException;
 
@@ -108,7 +109,7 @@ final class DefaultOperationInvoker implements OperationInvoker
     }
 
     /**
-     * @param  Closure(): OperationResult  $callback
+     * @param  Closure():OperationResult  $callback
      */
     private function admitOnce(Closure $callback): OperationResult
     {

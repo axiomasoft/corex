@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Roles;
+namespace CoreX\Access\Roles;
 
 use Illuminate\Auth\Access\AuthorizationException;
 

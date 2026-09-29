@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Api\Support\ApiOptions;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Http\JsonResponse;
 
 /** @internal RFC 9457 projection of one mapped ApiError. */

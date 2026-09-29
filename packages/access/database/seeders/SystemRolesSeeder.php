@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Database\Seeders;
+namespace CoreX\Access\Database\Seeders;
 
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Models\Role;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Models\Role;
 use Illuminate\Database\Seeder;
 
 /**

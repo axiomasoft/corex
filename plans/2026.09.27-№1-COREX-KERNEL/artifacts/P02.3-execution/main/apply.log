@@ -1,0 +1,10 @@
+relative paths: 21 files
+literal pass: 182 text files; 145 php files
+rector: done
+namespace pass: 778 files
+move pass: 539 php, 17 extra, 2 dirs
+manifest: packages/access/composer.json: require added axiomasoft/corex-tenancy (edge-derived)
+manifest: products/flex-crm/composer.json: require added axiomasoft/corex-intl (edge-derived)
+manifest: scaffold packages/tools/composer.json (examples §4.1)
+manifest: scaffold packages/webhooks/composer.json (examples §4.1)
+apply: done — continue with dossier §4.3 steps 4–9 (verify, scaffold, composer update, pint, gates)

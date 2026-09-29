@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Invocation;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning;
 
-use CoreX\Tenancy\Models\Account;
+use CoreX\Context\ProvisionParams;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\ProvisionParams;
 use DateTimeInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

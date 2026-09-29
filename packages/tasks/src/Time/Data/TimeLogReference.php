@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Time\Data;
 
-use CoreX\Tasks\Models\TimeLog;
+use CoreX\Tasks\Time\Models\TimeLog;
 
 final readonly class TimeLogReference
 {

@@ -35,7 +35,7 @@
       "distribution": "private",
       "mirror": "axiomasoft/corex-access"
     },
-    "packages/attributes": {
+    "packages/custom-fields": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-attributes"
     },
@@ -51,7 +51,7 @@
       "distribution": "public",
       "mirror": "axiomasoft/corex-media"
     },
-    "packages/modules": {
+    "packages/core": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-modules"
     },
@@ -110,11 +110,11 @@
   },
   "excluded": [
     {
-      "path": "packages/crm",
+      "path": "products/flex-crm",
       "reason": "flex-product-consumer"
     },
     {
-      "path": "packages/import-export",
+      "path": "packages/transfer",
       "reason": "tombstone"
     }
   ]

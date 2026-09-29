@@ -22,7 +22,7 @@ $measure = static function (string $file, string $pattern): int {
 
 $actual = ['phpstan' => [], 'dependencies' => []];
 $actual['phpstan']['root'] = $measure($root.'/phpstan-baseline.neon', '/^\s+count: (\d+)$/m');
-foreach (glob($root.'/packages/*/composer.json') ?: [] as $manifest) {
+foreach (array_merge(glob($root.'/packages/*/composer.json') ?: [], glob($root.'/products/*/composer.json') ?: []) as $manifest) {
     $dir = basename(dirname($manifest));
     $actual['phpstan'][$dir] = $measure(dirname($manifest).'/phpstan-baseline.neon', '/^\s+count: (\d+)$/m');
     $actual['dependencies'][$dir] = substr_count((string) @file_get_contents(dirname($manifest).'/composer-dependency-analyser.php'), '// ratchet:');

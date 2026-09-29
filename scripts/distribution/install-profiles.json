@@ -3,25 +3,25 @@
   "profiles": [
     {
       "id": "bare-single",
-      "packages": ["corex/core"],
+      "packages": ["axiomasoft/corex"],
       "database": "sqlite-single",
       "http": false,
       "forbid": [
-        {"package": "corex/modules", "name": "modules"},
-        {"package": "corex/tenancy", "name": "tenancy"},
-        {"package": "corex/search-meilisearch", "name": "Meilisearch"},
-        {"package": "corex/search-intl", "name": "Search Intl"}
+        {"package": "axiomasoft/corex", "name": "modules"},
+        {"package": "axiomasoft/corex-tenancy", "name": "tenancy"},
+        {"package": "axiomasoft/corex-search-meilisearch", "name": "Meilisearch"},
+        {"package": "axiomasoft/corex-search-intl", "name": "Search Intl"}
       ]
     },
     {
       "id": "modular-single",
       "packages": [
-        "corex/core",
-        "corex/modules",
-        "corex/attributes",
-        "corex/search",
-        "corex/transfer",
-        "corex/workflow"
+        "axiomasoft/corex",
+        "axiomasoft/corex",
+        "axiomasoft/corex-custom-fields",
+        "axiomasoft/corex-search",
+        "axiomasoft/corex-transfer",
+        "axiomasoft/corex-workflow"
       ],
       "database": "sqlite-single",
       "http": true,
@@ -30,11 +30,11 @@
     {
       "id": "modular-multi",
       "packages": [
-        "corex/core",
-        "corex/modules",
-        "corex/tenancy",
-        "corex/attributes",
-        "corex/workflow"
+        "axiomasoft/corex",
+        "axiomasoft/corex",
+        "axiomasoft/corex-tenancy",
+        "axiomasoft/corex-custom-fields",
+        "axiomasoft/corex-workflow"
       ],
       "database": "postgres-two",
       "http": true,
@@ -43,11 +43,11 @@
     {
       "id": "worker-only",
       "packages": [
-        "corex/core",
-        "corex/wakeup",
-        "corex/workflow",
-        "corex/tasks",
-        "corex/tasks-workflow"
+        "axiomasoft/corex",
+        "axiomasoft/corex-wakeup",
+        "axiomasoft/corex-workflow",
+        "axiomasoft/corex-tasks",
+        "axiomasoft/corex-tasks-workflow"
       ],
       "database": "sqlite-single",
       "http": false,
@@ -55,12 +55,12 @@
     },
     {
       "id": "search-portable",
-      "packages": ["corex/core", "corex/search", "corex/search-intl"],
+      "packages": ["axiomasoft/corex", "axiomasoft/corex-search", "axiomasoft/corex-search-intl"],
       "database": "sqlite-single",
       "http": false,
-      "remove": ["corex/search-intl"],
+      "remove": ["axiomasoft/corex-search-intl"],
       "forbid": [
-        {"package": "corex/search-meilisearch", "name": "Meilisearch"}
+        {"package": "axiomasoft/corex-search-meilisearch", "name": "Meilisearch"}
       ]
     },
     {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Support;
+namespace CoreX\Operations\Tests\Support;
 
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Contracts\RequestContext;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 final class CostOperationHandler implements OperationHandler
 {

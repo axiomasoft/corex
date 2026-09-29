@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Data;
 
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
 use DateTimeImmutable;
 
 final readonly class SignalRequest

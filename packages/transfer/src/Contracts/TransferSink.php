@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Contracts;
 
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\ConflictRule;
 use CoreX\Transfer\Data\ImportDecision;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Authorization\Internal;
 
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Operation;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Override;
 
 /** @internal */

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Tests;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Tests\Support\TasksTestCase;
 use Mockery;
 use Override;

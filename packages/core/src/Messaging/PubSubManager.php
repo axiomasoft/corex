@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Messaging;
 
 use Closure;
-use CoreX\Contracts\PubSub;
-use CoreX\Enums\PubSubDriver;
-use CoreX\Support\Config;
+use CoreX\Config\Config;
+use CoreX\Messaging\Contracts\PubSub;
+use CoreX\Messaging\Enums\PubSubDriver;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Middleware;
+namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Tenancy\Models\User;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Identity\Models\User;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

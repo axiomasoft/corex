@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
 use RuntimeException;
 

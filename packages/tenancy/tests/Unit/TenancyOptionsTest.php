@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\InvalidConfiguration;
-use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
-use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Config\InvalidConfiguration;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager;
+use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
 use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
 use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 

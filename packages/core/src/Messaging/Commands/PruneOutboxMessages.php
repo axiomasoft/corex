@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Commands;
 
-use CoreX\Support\Config;
+use CoreX\Config\Config;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;

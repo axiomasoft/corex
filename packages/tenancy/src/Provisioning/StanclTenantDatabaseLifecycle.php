@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Provisioning;
 
 use Closure;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\Events\AccountPurged;
-use CoreX\Tenancy\Events\ExportReady;
+use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Events\AccountPurged;
+use CoreX\Tenancy\Account\Events\ExportReady;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -26,7 +26,7 @@ use RuntimeException;
 final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
 {
     /**
-     * @param  (Closure(AccountRef, string): array{storage_path: string, size_bytes: int})|null  $writer
+     * @param  Closure(AccountRef, string):array{storage_path: string, size_bytes: int}|null  $writer
      * @param  (Closure(string, int): bool)|null  $verifier
      */
     public function __construct(

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Versioning\Data;
 
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Operation;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Validation\JsonCanonical;
 
 /** Immutable code projection. It has no register, replace, or freeze API. */
 final readonly class ApiProfile

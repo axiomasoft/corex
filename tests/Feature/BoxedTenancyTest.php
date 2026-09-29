@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\NullTenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\NullTenancyManager;
 
 /**
  * P2.5 — boxed TenancyManager binding (D10, B-11 §6.1 L892–907): no
  * root-DB/stancl requirement, SingleAccountResolver's constant context flows
- * through unchanged, no Stancl class is ever instantiated (corex/tenancy is
- * not a dependency of corex/core or this test suite — a `use Stancl\*` here
+ * through unchanged, no Stancl class is ever instantiated (axiomasoft/corex-tenancy is
+ * not a dependency of axiomasoft/corex or this test suite — a `use Stancl\*` here
  * would be a hard composer error, not just a runtime skip; see also
  * `grep -r 'use Stancl' packages/core` in the item's Validation).
  */

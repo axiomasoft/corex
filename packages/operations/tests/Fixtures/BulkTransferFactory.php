@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Fixtures;
+namespace CoreX\Operations\Tests\Fixtures;
 
-use CoreX\Api\Contracts\BulkTransferFactory as BulkTransferFactoryContract;
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Data\BulkTransferSession;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkTransferSession;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\TransferResultReader;
@@ -20,7 +19,7 @@ use CoreX\Transfer\Data\TransferReceipt;
 use CoreX\Transfer\Data\TransferRef;
 use RuntimeException;
 
-final class BulkTransferFactory implements BulkTransferFactoryContract
+final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\BulkTransferFactory
 {
     /** @var array<string, string> */
     public array $tokens = [];

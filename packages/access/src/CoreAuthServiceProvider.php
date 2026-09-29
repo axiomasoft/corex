@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth;
+namespace CoreX\Access;
 
 use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Contracts\ContextGuard;
 use AzGuard\Contracts\PermissionLayer;
-use CoreX\Auth\Access\AutMatrixGrantSource;
-use CoreX\Auth\Access\DefaultAccessChecker;
-use CoreX\Auth\Access\DefaultScopeResolver;
-use CoreX\Auth\Access\ScopeAvailability;
-use CoreX\Auth\Access\WorkspacePermissionLayer;
-use CoreX\Auth\Access\WorkspaceScopeWiring;
-use CoreX\Auth\Contracts\AccessChecker;
-use CoreX\Auth\Contracts\RoleMatrixCompiler;
-use CoreX\Auth\Contracts\ScopeResolver;
-use CoreX\Auth\Extend\PermissionsMerger;
-use CoreX\Auth\Identity\PrincipalUserProvider;
-use CoreX\Auth\Matrix\DatabaseRoleMatrixCompiler;
-use CoreX\Auth\Matrix\MatrixPermissionCatalogBuilder;
-use CoreX\Auth\Support\AccessConfigSection;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Auth\Tenancy\TenantContextGuard;
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Access\Access\AutMatrixGrantSource;
+use CoreX\Access\Access\DefaultAccessChecker;
+use CoreX\Access\Access\DefaultScopeResolver;
+use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Access\WorkspacePermissionLayer;
+use CoreX\Access\Access\WorkspaceScopeWiring;
+use CoreX\Access\Contracts\AccessChecker;
+use CoreX\Access\Contracts\RoleMatrixCompiler;
+use CoreX\Access\Contracts\ScopeResolver;
+use CoreX\Access\Extend\PermissionsMerger;
+use CoreX\Access\Identity\PrincipalUserProvider;
+use CoreX\Access\Matrix\DatabaseRoleMatrixCompiler;
+use CoreX\Access\Matrix\MatrixPermissionCatalogBuilder;
+use CoreX\Access\Support\AccessConfigSection;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Access\Tenancy\TenantContextGuard;
+use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
@@ -47,7 +47,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
         $this->app->instance(AuthOptions::class, $options);
 
         // Provide AzGuard's optional ContextGuard binding (ADR-009): contextual
-        // checks (hasPermissionIn) resolve entities via corex/core's registry.
+        // checks (hasPermissionIn) resolve entities via axiomasoft/corex's registry.
         $this->app->singleton(ContextGuard::class, TenantContextGuard::class);
 
         // scoped(), not singleton() — DefaultAccessChecker's scopeFor() memo
@@ -98,7 +98,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * corex/access does not fork AzGuard (D15): the config pins that make
+     * axiomasoft/corex-access does not fork AzGuard (D15): the config pins that make
      * AzGuard line up with DB_SCHEMA §3.5 / CoreX's uuid principals (D104)
      * are applied onto AzGuard's own config here, sourced from OUR
      * publishable corex-auth config — never a second copy of the values.
@@ -143,7 +143,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
             __DIR__.'/../config/corex-auth.php' => config_path('corex-auth.php'),
         ], 'corex-auth-config');
 
-        // Publish-only, mirroring corex/tenancy's own tenant-DB migrations
+        // Publish-only, mirroring axiomasoft/corex-tenancy's own tenant-DB migrations
         // (D33/A19/A62 precedent): a golden-template build assembles these
         // deliberately, never an ad hoc migrate on a live tenant connection.
         $this->publishes([
@@ -151,7 +151,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
         ], 'corex-auth-migrations-tenant');
 
         // Cloud profile only (D102) — boxed installs never publish this tag,
-        // wsp_workspaces/users belong to corex/tenancy, absent there (AC-28).
+        // wsp_workspaces/users belong to axiomasoft/corex-tenancy, absent there (AC-28).
         $this->publishes([
             __DIR__.'/../database/migrations/tenant-cloud' => database_path('migrations/tenant-cloud'),
         ], 'corex-auth-migrations-tenant-cloud');

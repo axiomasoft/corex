@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Invocation\Contracts;
 
-use CoreX\Api\InvocationMetadata;
+use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\Request;
 
 interface ContextResolver

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\CoreAuthServiceProvider;
+use CoreX\Access\CoreAuthServiceProvider;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * (positive + negative case).
  *
  * $scopeClass absent or its class not loaded (boxed profile without
- * corex/tenancy, AC-28) ⇒ silent skip: boxed has no workspaces at all, and
+ * axiomasoft/corex-tenancy, AC-28) ⇒ silent skip: boxed has no workspaces at all, and
  * the RBAC `workspace` scope ({@see ScopePredicate}, D107) stays correct on
  * its own without this global scope ever being registered.
  *

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Database;
+namespace CoreX\Tenancy\Provisioning\Database;
 
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;

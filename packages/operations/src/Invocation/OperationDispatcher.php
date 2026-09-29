@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Invocation;
 
-use CoreX\Api\Contracts\ContextResolver;
-use CoreX\Api\Contracts\OperationInvoker;
-use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\ResponseSerializer;
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Internal\ErrorMapper;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+use CoreX\Operations\Errors\Internal\ErrorMapper;
+use CoreX\Operations\Invocation\Contracts\ContextResolver;
+use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\JsonResponse;

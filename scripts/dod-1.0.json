@@ -39,7 +39,7 @@
     },
     {
       "id": "DOD-03",
-      "statement": "`corex/core` is foundation-only, not a capability warehouse.",
+      "statement": "`axiomasoft/corex` is foundation-only, not a capability warehouse.",
       "owner": [
         "P6.1"
       ],

@@ -12,16 +12,16 @@
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
-| NEW-1 | `IntlModule` наследует `ModuleDefinition`, `manifest()` вместо несуществующего `ModuleDescriptor` | `ModuleDiscovery` обрабатывает `corex/intl` без `InvalidManifestException` |
-| A2b | Удалён `use CoreX\Tenancy\StanclTenancyManager` из контракта `TenancyManager` в ядре | `rg StanclTenancyManager packages/core/src/Tenancy/Contracts/` — пусто |
-| A3 | В `require` добавлены `corex/modules` (intl), `corex/workflow` (tasks-workflow); wakeup — `suggest` с guarded binding | `composer.json` пакетов; allowlist P12.3 |
+| NEW-1 | `IntlModule` наследует `ModuleDefinition`, `manifest()` вместо несуществующего `ModuleDescriptor` | `ModuleDiscovery` обрабатывает `axiomasoft/corex-intl` без `InvalidManifestException` |
+| A2b | Удалён `use CoreX\Tenancy\Runtime\StanclTenancyManager` из контракта `TenancyManager` в ядре | `rg StanclTenancyManager packages/core/src/Tenancy/Contracts/` — пусто |
+| A3 | В `require` добавлены `axiomasoft/corex` (intl), `axiomasoft/corex-workflow` (tasks-workflow); wakeup — `suggest` с guarded binding | `composer.json` пакетов; allowlist P12.3 |
 
 ## P12.2 — контур тестов 8 → 20
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
 | F1 | `composer test:packages` расширен на все 20 пакетов | корневой `composer.json` |
-| F2 | `packages/core` и `packages/modules` получили `test`/`analyse`/`lint:check` | прогон через корневой `phpunit.xml` |
+| F2 | `packages/core` и `packages/core` получили `test`/`analyse`/`lint:check` | прогон через корневой `phpunit.xml` |
 
 ## P12.3 — гейт графа пакетов
 
@@ -29,7 +29,7 @@
 | --- | --- | --- |
 | A2a | Исполняемый гейт R1–R3; legacy split `CoreX\Tenancy\` с `expires_when` | `scripts/package-graph-gate.php`, `tests/Arch/PackageGraphTest.php`, `artifacts/P12-package-graph/report.json` |
 
-## P12.4 — `corex/import-export` → `corex/transfer`
+## P12.4 — `corex/import-export` → `axiomasoft/corex-transfer`
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
@@ -40,20 +40,20 @@
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
-| C1, C2 | `SearchManager` + `extend()`; fail-closed конфиг; снята коллизия `SearchProvider` binding | observable checks null/postgres/meilisearch; `CoreX\Search\Meilisearch\` host-reserved |
+| C1, C2 | `SearchManager` + `extend()`; fail-closed конфиг; снята коллизия `SearchProvider` binding | observable checks null/postgres/meilisearch; `CoreX\SearchMeilisearch\` host-reserved |
 
-## P12.6 — `corex/intl-search` → `corex/search-intl`
+## P12.6 — `corex/intl-search` → `axiomasoft/corex-search-intl`
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
 | E1 | Hard rename; bridge-политика в `docs/dev-doctrine.md` | repo-wide sweep §6 пуст |
 | E3 | Владение saved views подтверждено в ядре, не в search-intl | read-only paths в receipt §P12.6 |
 
-## P12.7 — table-map и optional `corex/modules`
+## P12.7 — table-map и optional `axiomasoft/corex`
 
 | ID | Исправление | Доказательство |
 | --- | --- | --- |
-| B1, B2, B4 | `AttributeTables`; обязательный `FieldCatalogue`; `corex/modules` → `suggest` + allowlist | `packages/attributes` test/analyse/lint/test:pg; migration diff пуст |
+| B1, B2, B4 | `AttributeTables`; обязательный `FieldCatalogue`; `axiomasoft/corex` → `suggest` + allowlist | `packages/custom-fields` test/analyse/lint/test:pg; migration diff пуст |
 | B5 | **Не исправлено** — presence-семантика отложена | см. deferred |
 
 ## P12.8 — сериализуемый `DataScope` [G-API]

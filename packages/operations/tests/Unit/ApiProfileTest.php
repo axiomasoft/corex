@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Internal\ApiProfileFactory;
-use CoreX\Api\Support\ApiOptions;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Enums\UnavailabilityReason;
+use CoreX\Config\InvalidConfiguration;
+use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Extend\Api;
-use CoreX\Support\InvalidConfiguration;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use InvalidArgumentException;
 
 final class ApiProfileTest extends TestCase

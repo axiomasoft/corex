@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Reference;
+namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Intl\Contracts\DatasetImporter;
-use CoreX\Intl\Data\DatasetCandidate;
-use CoreX\Intl\Data\DatasetGeneration;
-use CoreX\Intl\Data\DatasetReceipt;
-use CoreX\Intl\Exceptions\AccessDeniedException;
-use CoreX\Intl\Exceptions\OperationConflictException;
-use CoreX\Intl\Exceptions\SchemaMismatchException;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Territory\Contracts\DatasetImporter;
+use CoreX\Intl\Territory\Data\DatasetCandidate;
+use CoreX\Intl\Territory\Data\DatasetGeneration;
+use CoreX\Intl\Territory\Data\DatasetReceipt;
+use CoreX\Intl\Territory\Exceptions\AccessDeniedException;
+use CoreX\Intl\Territory\Exceptions\OperationConflictException;
+use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Contracts\Config\Repository;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Events;
+namespace CoreX\Tenancy\DomainTrust\Events;
 
 use CoreX\Tenancy\DomainTrust\DomainTrustTransition;
 

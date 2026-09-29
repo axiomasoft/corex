@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Controllers;
+namespace CoreX\Tenancy\Authentication\Http\Controllers;
 
 use Carbon\CarbonImmutable;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Authentication\Oidc\OidcClient;
 use CoreX\Tenancy\Authentication\Oidc\OidcDiscovery;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Identity\IdentitySyncer;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Support\ImpersonationPolicy;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\DB;
  * equality — the enum is three-valued, `invited` must NOT pass) →
  * {@see IdentitySyncer::syncToAccount()}. Both lanes converge on
  * `session()->regenerate()` → `Auth::loginUsingId()` (the ONLY seam that
- * constructs the Principal — never a class from `corex/access`, D125) →
+ * constructs the Principal — never a class from `axiomasoft/corex-access`, D125) →
  * `_corex_auth_at` marker (AC-15, read by `EnforceSessionLifetime`). Any
  * failure is an {@see OidcAuthenticationException} — no partial login. The
  * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation

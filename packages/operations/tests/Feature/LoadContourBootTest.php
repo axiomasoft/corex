@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Contracts\BulkTransferFactory;
-use CoreX\Api\Data\BulkOperationDefinition;
-use CoreX\Api\Data\CostOptions;
-use CoreX\Api\Internal\Bulk\SqlBulkOperationStore;
-use CoreX\Api\Internal\Bulk\TransferBulkExecutor;
-use CoreX\Api\Internal\Bulk\TransferCapabilityUnavailable;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Tests\Fixtures\BulkTransferFactory as BulkTransferFactoryFixture;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Support\Data\ArrayDataScopeCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Time\FrozenClock;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\GuardedTenantContextRestorer;
+use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
+use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
+use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
+use CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable;
+use CoreX\Operations\Cost\Data\CostOptions;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Time\FrozenClock;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\TransferRunner;
 use DateTimeImmutable;
@@ -35,35 +34,20 @@ final class LoadContourBootTest extends TestCase
         $composer = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/composer.json'), true);
         $require = $composer['require'];
 
-        self::assertSame(['CoreX\\Api\\Contracts', 'CoreX\\Api\\Data', 'CoreX\\Api\\Testing', 'CoreX\\Api\\Webhooks'], $composer['extra']['corex']['public-api']);
-        self::assertSame([
-            'corex/core',
-            'corex/modules',
-            'ext-filter',
-            'ext-mbstring',
-            'illuminate/auth',
-            'illuminate/console',
-            'illuminate/contracts',
-            'illuminate/database',
-            'illuminate/http',
-            'illuminate/support',
-            'illuminate/validation',
-            'php',
-            'psr/clock',
-            'symfony/http-kernel',
-        ], array_keys($require));
+        self::assertSame(['CoreX\\Operations\\Authorization\\Contracts', 'CoreX\\Operations\\Bulk\\Contracts', 'CoreX\\Operations\\Bulk\\Data', 'CoreX\\Operations\\Cost\\Contracts', 'CoreX\\Operations\\Cost\\Data', 'CoreX\\Operations\\Definition\\ApiOperationValidator', 'CoreX\\Operations\\Definition\\Contracts', 'CoreX\\Operations\\Definition\\Data', 'CoreX\\Operations\\Definition\\Enums\\OperationMode', 'CoreX\\Operations\\Definition\\Operation', 'CoreX\\Operations\\Definition\\OperationRegistry', 'CoreX\\Operations\\Errors\\ApiError', 'CoreX\\Operations\\Errors\\Contracts', 'CoreX\\Operations\\Idempotency\\Contracts', 'CoreX\\Operations\\Idempotency\\Data', 'CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement', 'CoreX\\Operations\\Invocation\\Contracts', 'CoreX\\Operations\\Invocation\\Data', 'CoreX\\Operations\\Invocation\\InvocationMetadata', 'CoreX\\Operations\\Invocation\\OperationDispatcher', 'CoreX\\Operations\\Laravel\\ApiSchemaRegistrar', 'CoreX\\Operations\\Laravel\\Support\\ApiOptions', 'CoreX\\Operations\\OpenApi\\Contracts', 'CoreX\\Operations\\Pagination\\Contracts', 'CoreX\\Operations\\Pagination\\Data', 'CoreX\\Operations\\Pagination\\OrderingRegistry', 'CoreX\\Operations\\Pagination\\SignedCursorCodec', 'CoreX\\Operations\\Testing', 'CoreX\\Operations\\Validation\\Data', 'CoreX\\Operations\\Validation\\JsonCanonical', 'CoreX\\Operations\\Validation\\SchemaBudget', 'CoreX\\Operations\\Validation\\SchemaProfile', 'CoreX\\Operations\\Versioning\\Data'], $composer['extra']['corex']['public-api']);
+        self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
         self::assertSame('^12.0|^13.0', $require['illuminate/support']);
         self::assertSame('^12.0|^13.0', $require['illuminate/validation']);
-        self::assertArrayNotHasKey('corex/transfer', $require);
-        self::assertArrayHasKey('corex/transfer', $composer['suggest']);
+        self::assertArrayNotHasKey('axiomasoft/corex-transfer', $require);
+        self::assertArrayHasKey('axiomasoft/corex-transfer', $composer['suggest']);
         self::assertMatchesRegularExpression('/\A(12|13)\./', Application::VERSION);
         self::assertSame([], $this->foreignInternalImports());
 
         $gate = json_decode((string) file_get_contents(dirname(__DIR__, 4).'/scripts/package-graph-gate.json'), true);
         $edges = array_values(array_filter(
             $gate['allowlist'],
-            static fn (array $entry): bool => $entry['from'] === 'corex/operations' && $entry['to'] === 'corex/transfer',
+            static fn (array $entry): bool => $entry['from'] === 'axiomasoft/corex-operations' && $entry['to'] === 'axiomasoft/corex-transfer',
         ));
 
         self::assertSame([
@@ -130,7 +114,7 @@ final class LoadContourBootTest extends TestCase
 
         foreach ([
             new TransferBulkExecutor(null, $store, $clock, scopes: new ArrayDataScopeCodec),
-            new TransferBulkExecutor(new BulkTransferFactoryFixture, $store, $clock, transferInstalled: false, scopes: new ArrayDataScopeCodec),
+            new TransferBulkExecutor(new \CoreX\Operations\Tests\Fixtures\BulkTransferFactory, $store, $clock, transferInstalled: false, scopes: new ArrayDataScopeCodec),
         ] as $executor) {
             try {
                 $executor->submit($definition);
@@ -141,7 +125,7 @@ final class LoadContourBootTest extends TestCase
         }
 
         self::assertSame(0, $connection->table('sys_api_bulk_operations')->count());
-        (new TransferBulkExecutor(new BulkTransferFactoryFixture, $store, $clock, transferInstalled: true, scopes: new ArrayDataScopeCodec))
+        (new TransferBulkExecutor(new \CoreX\Operations\Tests\Fixtures\BulkTransferFactory, $store, $clock, transferInstalled: true, scopes: new ArrayDataScopeCodec))
             ->submit($definition);
         self::assertSame(1, $connection->table('sys_api_bulk_operations')->count());
     }
@@ -159,7 +143,7 @@ final class LoadContourBootTest extends TestCase
 
             $contents = (string) file_get_contents($file->getPathname());
 
-            if (preg_match('/^use CoreX\\\\(?!Api\\\\)[^;]*\\\\Internal\\\\/m', $contents) === 1) {
+            if (preg_match('/^use CoreX\\\\(?!Operations\\\\)[^;]*\\\\Internal\\\\/m', $contents) === 1) {
                 $imports[] = $file->getPathname();
             }
         }

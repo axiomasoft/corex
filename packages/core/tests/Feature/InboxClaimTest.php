@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\InboxRefused;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\Inbox;
-use CoreX\Support\Config;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Messaging\Exceptions\InboxRefused;
+use CoreX\Time\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

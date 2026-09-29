@@ -22,7 +22,7 @@ test('attributes search import probe fails A57 with file path', function (): voi
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Internal;
+namespace CoreX\CustomFields\Internal;
 
 use CoreX\Search\Contracts\SearchProvider;
 
@@ -92,7 +92,7 @@ final class A61ProbeSearchProvider implements SearchProvider
         throw new \LogicException('probe');
     }
 
-    public function query(\CoreX\Support\Data\DataScope $scope, \CoreX\Search\Support\SearchQuery $query): \CoreX\Search\Support\CandidatePage
+    public function query(\CoreX\Data\DataScope $scope, \CoreX\Search\Support\SearchQuery $query): \CoreX\Search\Support\CandidatePage
     {
         throw new \LogicException('probe');
     }

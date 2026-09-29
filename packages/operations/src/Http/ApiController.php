@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Http;
 
-use CoreX\Api\Internal\HttpOperationResponder;
+use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Http\Internal\HttpOperationResponder;
+use CoreX\Operations\Invocation\OperationDispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

@@ -7,7 +7,7 @@ namespace CoreX\Audit;
 use CoreX\Audit\Contracts\Auditable;
 use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
-use CoreX\Support\Config;
+use CoreX\Config\Config;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * Eloquent-observer instance (created/updated/deleted/restored/forceDeleted)
  * for models exposed via EntityRegistry::byCapability(Auditable) — attached in
  * CoreX\Modules\ModulesServiceProvider::boot(), not here: this package cannot
- * depend on corex/modules (corex/modules already requires corex/core, a
+ * depend on axiomasoft/corex (axiomasoft/corex already requires axiomasoft/corex, a
  * reverse dependency would cycle).
  *
  * @internal spec: B-10 §4.4, D22

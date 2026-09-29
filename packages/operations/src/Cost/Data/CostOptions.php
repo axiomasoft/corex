@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Cost\Data;
 
-use CoreX\Support\SecretRef;
-use CoreX\Support\ViolationList;
+use CoreX\Config\SecretRef;
+use CoreX\Config\ViolationList;
 
 /** Immutable cost-control activation policy read only by the package registrar. */
 final readonly class CostOptions

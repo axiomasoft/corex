@@ -1,0 +1,204 @@
+[
+  {
+    "check": "frozen-positive",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "frozen-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "frozen-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "rename-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "rename-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "rename-malformed",
+    "exit": 2,
+    "expected": 2
+  },
+  {
+    "check": "shared-tag-new-source-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "shared-tag-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "autoload-verify-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "autoload-composer-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "autoload-composer-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "autoload-verify-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "ratchet-source-transfer-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "ratchet-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "ceiling-negative",
+    "exit": 1,
+    "expected": 1
+  },
+  {
+    "check": "ceiling-restored",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-root",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-access",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-core",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-custom-fields",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-intl",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-media",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-notifications",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-operations",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-panels",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-recurrence",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-search",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-search-intl",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-search-meilisearch",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-tasks",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-tasks-workflow",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-tenancy",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-tools",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-transfer",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-wakeup",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-webhooks",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-workflow",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "strict-flex-crm",
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "php-l",
+    "files": 1824,
+    "exit": 0,
+    "expected": 0
+  },
+  {
+    "check": "E1",
+    "files": 1824,
+    "exit": 0,
+    "expected": 0
+  }
+]

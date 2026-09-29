@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistryCache;
 use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Definition\ModuleDefinition;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Exceptions\ModuleNotFound;
@@ -13,9 +17,7 @@ use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Gate\AllowAllActivationGate;
-use CoreX\Modules\ModuleActivationDecision;
-use CoreX\Modules\ModuleDefinition;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Modules\Gate\ModuleActivationDecision;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\ArrayModuleStateReader;
 use CoreX\Modules\Registry\CompiledModule;
@@ -23,8 +25,6 @@ use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Support\ModulesOptions;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\StubModuleDefinition;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Eloquent\Relations\Relation;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Support;
+namespace CoreX\Tasks\Access\Internal;
 
-use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Data\CompleteTaskData;
-use CoreX\Tasks\Data\UpdateTaskData;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Task\Data\CompleteTaskData;
+use CoreX\Tasks\Task\Data\UpdateTaskData;
+use CoreX\Tasks\Task\Models\Task;
 use Illuminate\Auth\Access\AuthorizationException;
 
 final class DenyTaskMutationAccess implements TaskMutationAccess

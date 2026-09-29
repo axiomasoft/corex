@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
+use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use Override;
 
 /**

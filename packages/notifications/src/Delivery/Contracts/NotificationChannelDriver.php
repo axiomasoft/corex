@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Delivery\Contracts;
 
-use CoreX\Notifications\Data\ChannelDescriptor;
-use CoreX\Notifications\Data\DeliveryInput;
-use CoreX\Notifications\Data\DeliveryOutcome;
+use CoreX\Notifications\Delivery\Data\ChannelDescriptor;
+use CoreX\Notifications\Delivery\Data\DeliveryInput;
+use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
 
 interface NotificationChannelDriver
 {

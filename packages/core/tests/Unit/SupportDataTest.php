@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Support\Data\CallableDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
-use CoreX\Support\Data\WriteToken;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
+use CoreX\Data\WriteToken;
 
 function dataScope(): DataScope
 {

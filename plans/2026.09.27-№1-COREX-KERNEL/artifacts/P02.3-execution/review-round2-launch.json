@@ -1,0 +1,8 @@
+{
+  "provider": "cursor",
+  "model": "grok-4.7",
+  "effort": "high",
+  "round": 2,
+  "workspace": "/home/vostrikov/projects/packages/corex-p023-dry",
+  "started": 1790663464.654808
+}

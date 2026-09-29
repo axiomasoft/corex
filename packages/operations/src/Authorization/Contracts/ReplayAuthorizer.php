@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Authorization\Contracts;
 
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Data\StoredOperationOutcome;
+use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
 
 /** Side-effect-free current-authority projection applied to fresh and replayed outcomes. */
 interface ReplayAuthorizer

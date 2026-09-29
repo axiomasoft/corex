@@ -283,7 +283,7 @@ parameters:
 			path: src/Internal/Transfer/SqlTransferExecutor.php
 
 		-
-			rawMessage: 'Parameter $subjectId of method CoreX\Contracts\DataScopeAuthorizer::authorize() expects string, mixed given.'
+			rawMessage: 'Parameter $subjectId of method CoreX\Data\Contracts\DataScopeAuthorizer::authorize() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Transfer/SqlTransferExecutor.php

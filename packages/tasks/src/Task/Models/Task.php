@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Models;
+namespace CoreX\Tasks\Task\Models;
 
-use CoreX\Models\BaseModel;
-use CoreX\Tasks\Enums\TaskPriority;
-use CoreX\Tasks\Enums\TaskStatus;
+use CoreX\Database\BaseModel;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Task\Enums\TaskPriority;
+use CoreX\Tasks\Task\Enums\TaskStatus;
+use CoreX\Tasks\Time\Models\TimeLog;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

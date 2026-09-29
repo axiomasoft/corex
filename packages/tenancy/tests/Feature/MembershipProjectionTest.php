@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Contracts\CentralApiClient;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Http\Middleware\RequireActiveMembership;
+use CoreX\Tenancy\Laravel\Http\Middleware\RequireActiveMembership;
 use CoreX\Tenancy\Membership\Projection\ApplyMembershipProjection;
 use CoreX\Tenancy\Membership\Transport\CentralUnavailable;
 use CoreX\Tenancy\Membership\Transport\MembershipQuery;
@@ -13,7 +14,6 @@ use CoreX\Tenancy\Membership\Transport\MembershipSnapshot;
 use CoreX\Tenancy\Membership\Transport\MembershipState;
 use CoreX\Tenancy\Membership\Transport\RevokeMembershipReceipt;
 use CoreX\Tenancy\Membership\Transport\RevokeMembershipRequest;
-use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Tests\Stubs\StubIdentity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 const ROOT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_MP = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_MP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

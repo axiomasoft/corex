@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Data;
+namespace CoreX\Intl\Currency\Data;
 
 use Brick\Math\RoundingMode;
 use Brick\Money\Context;

@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Operation;
-use CoreX\Api\OperationDispatcher;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\Support\IdentityFixture;
-use CoreX\Api\Tests\Support\ModuleFixture;
-use CoreX\Api\Tests\Support\NoteHandler;
-use CoreX\Api\Tests\TestCase;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Testing\IdentityFixture;
+use CoreX\Operations\Testing\ModuleFixture;
+use CoreX\Operations\Testing\NoteHandler;
+use CoreX\Operations\Tests\TestCase;
 use Illuminate\Http\Request;
 
 final class OperationParityTest extends TestCase

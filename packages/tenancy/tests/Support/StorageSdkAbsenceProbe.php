@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Aws\S3\S3Client;
 use Composer\Autoload\ClassLoader;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Storage\StorageCapabilityUnavailable;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Runtime\Storage\ObjectTenantStorage;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\FilesystemManager;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;

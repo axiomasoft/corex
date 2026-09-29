@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Data;
 
 use CoreX\Recurrence\Data\ExpansionCursor;
-use CoreX\Tasks\Data\TaskReference;
+use CoreX\Tasks\Task\Data\TaskReference;
 
 final readonly class MaterializationReceipt
 {

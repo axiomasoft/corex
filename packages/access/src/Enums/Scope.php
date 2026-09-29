@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Enums;
+namespace CoreX\Access\Enums;
 
 /**
  * Row-visibility scope compiled from the role matrix (B-11 §5.5). Several

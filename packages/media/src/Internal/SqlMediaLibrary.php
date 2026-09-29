@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Internal;
 
-use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\Data\DeleteResult;
@@ -16,6 +15,7 @@ use CoreX\Media\Data\MediaReadRef;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Support\MediaOptions;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;

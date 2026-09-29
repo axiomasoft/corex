@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal\Digest;
+namespace CoreX\Notifications\Digest\Internal;
 
-use CoreX\Notifications\Contracts\PreferenceRepository;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use RuntimeException;

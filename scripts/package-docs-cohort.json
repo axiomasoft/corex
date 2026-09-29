@@ -1,0 +1,84 @@
+{
+  "packages": [
+    {
+      "name": "axiomasoft/corex-access",
+      "path": "packages/access"
+    },
+    {
+      "name": "axiomasoft/corex-custom-fields",
+      "path": "packages/custom-fields"
+    },
+    {
+      "name": "axiomasoft/corex",
+      "path": "packages/core"
+    },
+    {
+      "name": "axiomasoft/corex-intl",
+      "path": "packages/intl"
+    },
+    {
+      "name": "axiomasoft/corex-media",
+      "path": "packages/media"
+    },
+    {
+      "name": "axiomasoft/corex-notifications",
+      "path": "packages/notifications"
+    },
+    {
+      "name": "axiomasoft/corex-operations",
+      "path": "packages/operations"
+    },
+    {
+      "name": "axiomasoft/corex-panels",
+      "path": "packages/panels"
+    },
+    {
+      "name": "axiomasoft/corex-recurrence",
+      "path": "packages/recurrence"
+    },
+    {
+      "name": "axiomasoft/corex-search",
+      "path": "packages/search"
+    },
+    {
+      "name": "axiomasoft/corex-search-intl",
+      "path": "packages/search-intl"
+    },
+    {
+      "name": "axiomasoft/corex-search-meilisearch",
+      "path": "packages/search-meilisearch"
+    },
+    {
+      "name": "axiomasoft/corex-tasks",
+      "path": "packages/tasks"
+    },
+    {
+      "name": "axiomasoft/corex-tasks-workflow",
+      "path": "packages/tasks-workflow"
+    },
+    {
+      "name": "axiomasoft/corex-tenancy",
+      "path": "packages/tenancy"
+    },
+    {
+      "name": "axiomasoft/corex-transfer",
+      "path": "packages/transfer"
+    },
+    {
+      "name": "axiomasoft/corex-wakeup",
+      "path": "packages/wakeup"
+    },
+    {
+      "name": "axiomasoft/corex-workflow",
+      "path": "packages/workflow"
+    },
+    {
+      "name": "axiomasoft/corex-tools",
+      "path": "packages/tools"
+    },
+    {
+      "name": "axiomasoft/corex-webhooks",
+      "path": "packages/webhooks"
+    }
+  ]
+}

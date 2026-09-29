@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow;
 
-use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
-use CoreX\Tasks\Contracts\CreateTaskCommand;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
+use CoreX\Tasks\Task\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Internal\CaptureTaskCompletion;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -25,7 +25,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-task-recurrence.php', 'corex-task-recurrence');
 
-        $this->app->singleton(RecurrenceExpander::class, 'CoreX\Recurrence\Internal\RRuleRecurrenceExpander');
+        $this->app->singleton(RecurrenceExpander::class, 'CoreX\Recurrence\RRuleRecurrenceExpander');
 
         $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
             return new SqlTaskRecurrenceMaterializer(

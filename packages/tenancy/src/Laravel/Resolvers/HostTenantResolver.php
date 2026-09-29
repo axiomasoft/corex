@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Resolvers;
+namespace CoreX\Tenancy\Laravel\Resolvers;
 
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\DomainTrust\Models\Domain;
 use CoreX\Tenancy\DomainTrust\NormalizedHost;
-use CoreX\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByHostException;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\Domain;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;

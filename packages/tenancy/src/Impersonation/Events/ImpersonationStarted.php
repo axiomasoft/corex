@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Events;
+namespace CoreX\Tenancy\Impersonation\Events;
 
-use CoreX\Events\DomainEvent;
+use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
 use Override;
 

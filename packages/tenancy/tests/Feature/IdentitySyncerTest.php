@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\IdentityPasswordRehasher;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Events\UserSynced;
+use CoreX\Context\Contracts\IdentityPasswordRehasher;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Identity\Events\UserSynced;
 use CoreX\Tenancy\Identity\IdentitySyncer;
-use CoreX\Tenancy\Models\Account;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -18,8 +18,8 @@ uses()->group('pg');
 const ROOT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/tenant';
 // P2.6's integration-FK migration (C4/D14) needs sys_departments — owned by
-// corex/core, assembled here the same way a real golden-template build would.
-const CORE_MIGRATIONS_PATH_IS = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+// axiomasoft/corex, assembled here the same way a real golden-template build would.
+const CORE_MIGRATIONS_PATH_IS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 const TENANT_DB_IS = 'acc_is_test';
 

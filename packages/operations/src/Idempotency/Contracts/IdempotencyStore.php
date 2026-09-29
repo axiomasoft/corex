@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Idempotency\Contracts;
 
-use CoreX\Api\Data\IdempotencyAttempt;
-use CoreX\Api\Data\IdempotencyScope;
+use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
+use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 
 /** Durable tenant-local admission and semantic-outcome store for mutations. */
 interface IdempotencyStore

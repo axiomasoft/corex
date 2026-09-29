@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Enums;
+namespace CoreX\Tasks\Project\Enums;
 
 enum ProjectStatus: string
 {

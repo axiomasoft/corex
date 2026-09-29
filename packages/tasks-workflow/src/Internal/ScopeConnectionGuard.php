@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use Illuminate\Database\Connection;
 

@@ -25,7 +25,7 @@ VERSION = "1.0.0"
 CARET = re.compile(r"^\^(\d+)\.(\d+)(?:\.(\d+))?$")
 INTERPRETER_MINORS = ("8.3", "8.4", "8.5")
 PROFILE_PHP = "8.4"
-REMOVAL_NAMES = {"corex/search-intl": "Search Intl"}
+REMOVAL_NAMES = {"axiomasoft/corex-search-intl": "Search Intl"}
 PROBE = r"""<?php
 declare(strict_types=1);
 
@@ -804,8 +804,8 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
             "mode": mode,
             "matrix": results,
             "dod": {
-                "DOD-14": "PASS" if any(cell.get("profile") == "search-portable" and cell["status"] == "passed" and "corex/search-meilisearch" not in cell.get("installed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
-                "DOD-15": "PASS" if any(cell.get("profile") == "search-portable" and "corex/search-intl" in cell.get("removed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
+                "DOD-14": "PASS" if any(cell.get("profile") == "search-portable" and cell["status"] == "passed" and "axiomasoft/corex-search-meilisearch" not in cell.get("installed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
+                "DOD-15": "PASS" if any(cell.get("profile") == "search-portable" and "axiomasoft/corex-search-intl" in cell.get("removed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
                 "DOD-26": "PASS" if len({cell["profile"] for cell in passed_profiles}) == 6 or mode != "all" else "FAIL",
             },
         }

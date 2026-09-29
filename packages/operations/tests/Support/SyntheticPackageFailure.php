@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Support;
+namespace CoreX\Operations\Tests\Support;
 
-use CoreX\Contracts\DescribesError;
-use CoreX\Data\ErrorDescriptor;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Data\ErrorDescriptor;
 use RuntimeException;
 
 final class SyntheticPackageFailure extends RuntimeException implements DescribesError

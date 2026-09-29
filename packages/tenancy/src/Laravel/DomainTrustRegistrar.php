@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Support\RegistersNothingOnBoot;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\DomainChallengeStore;
 use CoreX\Tenancy\Contracts\DomainOwnershipProofVerifier;
 use CoreX\Tenancy\Contracts\DomainTrustAuthorizer;
@@ -13,7 +13,7 @@ use CoreX\Tenancy\Contracts\DomainTrustPolicy;
 use CoreX\Tenancy\DomainTrust\DomainTrustCoordinator;
 use CoreX\Tenancy\DomainTrust\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\DomainTrustStateWriter;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
-use CoreX\Support\Data\RecordRef;
+use CoreX\Data\RecordRef;
 use InvalidArgumentException;
 
 final readonly class TargetResult

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Inbox\Internal;
 
 use RuntimeException;
 

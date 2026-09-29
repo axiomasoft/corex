@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Controllers;
+namespace CoreX\Tenancy\Authentication\Http\Controllers;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

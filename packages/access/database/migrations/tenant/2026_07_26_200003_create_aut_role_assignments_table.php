@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 // Tenant-DB migration (B-11 §2.3, D14/D16) — назначение роли принципалу
 // (user/agent/api_key, D101). Cross-package FK (workspace_id → wsp_workspaces,
 // granted_by → users) — отдельной cloud-миграцией (D102): эти таблицы
-// принадлежат corex/tenancy, отсутствующему в boxed-профиле (AC-28). См.
+// принадлежат axiomasoft/corex-tenancy, отсутствующему в boxed-профиле (AC-28). См.
 // DB_SCHEMA.md §3.5 aut_role_assignments.
 return new class extends Migration
 {

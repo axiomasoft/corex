@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Currency\Internal;
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Intl\Contracts\RateImporter;
-use CoreX\Intl\Data\RateBatch;
-use CoreX\Intl\Data\RateImportReceipt;
-use CoreX\Intl\Data\RateSnapshot;
-use CoreX\Intl\Exceptions\AccessDeniedException;
-use CoreX\Intl\Exceptions\InvalidRateException;
-use CoreX\Intl\Exceptions\OperationConflictException;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
+use CoreX\Intl\Currency\Contracts\RateImporter;
+use CoreX\Intl\Currency\Data\RateBatch;
+use CoreX\Intl\Currency\Data\RateImportReceipt;
+use CoreX\Intl\Currency\Data\RateSnapshot;
+use CoreX\Intl\Currency\Exceptions\InvalidRateException;
+use CoreX\Intl\Territory\Exceptions\AccessDeniedException;
+use CoreX\Intl\Territory\Exceptions\OperationConflictException;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\Connection;

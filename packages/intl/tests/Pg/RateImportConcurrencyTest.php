@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use CoreX\Intl\Contracts\RateImporter;
-use CoreX\Intl\Data\RateBatch;
-use CoreX\Intl\Data\RateSnapshot;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
+use CoreX\Intl\Currency\Contracts\RateImporter;
+use CoreX\Intl\Currency\Data\RateBatch;
+use CoreX\Intl\Currency\Data\RateSnapshot;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

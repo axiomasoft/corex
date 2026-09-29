@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Access\ScopeAvailability;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Exceptions\ScopeCapabilityMismatch;
-use CoreX\Auth\Tests\Stubs\Project;
+use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
+use CoreX\Access\Tests\Stubs\Project;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;

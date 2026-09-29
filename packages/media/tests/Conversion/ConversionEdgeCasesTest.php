@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Contracts\ConversionDriver;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
@@ -19,6 +18,7 @@ use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Jobs\ConvertMedia;
 use CoreX\Media\Support\MediaOptions;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 

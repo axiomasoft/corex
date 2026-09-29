@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Cost\Data;
 
 use DateTimeImmutable;
 use InvalidArgumentException;

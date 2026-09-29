@@ -2,24 +2,26 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Idempotency\Internal;
 
 use Closure;
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\IdempotencyStore;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\OperationInvoker;
-use CoreX\Api\Contracts\ReplayAuthorizer;
-use CoreX\Api\Data\IdempotencyAttempt;
-use CoreX\Api\Data\IdempotencyScope;
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Data\OperationResult;
-use CoreX\Api\Data\StoredOperationOutcome;
-use CoreX\Api\Enums\IdempotencyRequirement;
-use CoreX\Api\Internal\Cost\BudgetAdmission;
-use CoreX\Api\Internal\Cost\BudgetRateLimited;
-use CoreX\Api\Internal\Cost\BudgetStoreUnavailable;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Cost\Internal\BudgetRateLimited;
+use CoreX\Operations\Cost\Internal\BudgetStoreUnavailable;
+use CoreX\Operations\Definition\Internal\OperationFingerprint;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Internal\ErrorMapper;
+use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
+use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
+use CoreX\Operations\Idempotency\Data\IdempotencyScope;
+use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
+use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
+use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Database\Connection;
 use Override;
 use Throwable;

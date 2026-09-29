@@ -28,10 +28,10 @@ it('builds identical four-package candidates from the pinned Git source', functi
 
     expect($manifest['source_ref'])->toBe('ea7d0dbdf36b122904abba91e124018c11b939ed')
         ->and(array_keys($manifest['packages']))->toBe([
-            'corex/core',
-            'corex/modules',
-            'corex/tasks',
-            'corex/tenancy',
+            'axiomasoft/corex',
+            'axiomasoft/corex',
+            'axiomasoft/corex-tasks',
+            'axiomasoft/corex-tenancy',
         ]);
 });
 

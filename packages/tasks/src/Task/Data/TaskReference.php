@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Task\Data;
 
-use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Task\Models\Task;
 
 final readonly class TaskReference
 {

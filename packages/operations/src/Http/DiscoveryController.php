@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Http;
 
-use CoreX\Api\Internal\CapabilityResolver;
-use CoreX\Api\Support\ApiOptions;
+use CoreX\Operations\Invocation\Internal\CapabilityResolver;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\OpenApi\OpenApiDocumentGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

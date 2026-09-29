@@ -1,26 +1,26 @@
 {
-    "name": "corex/search-meilisearch",
-    "description": "Optional Meilisearch candidate adapter for corex/search.",
+    "name": "axiomasoft/corex-search-meilisearch",
+    "description": "Optional Meilisearch candidate adapter for axiomasoft/corex-search.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
-        "corex/search": "^1.0@dev",
         "ext-filter": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-search": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
-        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
-        "php": "^8.4"
+        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable"
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Search\\Meilisearch\\": "src/"
+            "CoreX\\SearchMeilisearch\\": "src/"
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests"
-        ]
+        "psr-4": {
+            "CoreX\\SearchMeilisearch\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "corex": {
@@ -28,12 +28,12 @@
             "package-type": "integration",
             "stability": "stable",
             "public-api": [
-                "CoreX\\Search\\Meilisearch\\Exceptions"
+                "CoreX\\SearchMeilisearch\\Exceptions"
             ]
         },
         "laravel": {
             "providers": [
-                "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider"
+                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
             ]
         },
         "branch-alias": {

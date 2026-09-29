@@ -18,6 +18,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped Illuminate imports/helpers use this component
     ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Pest loads local test classes and late use aliases when executing the recorded test files
-    ->ignoreUnknownClasses(['ActorType', 'DB', 'DataScope', 'DataScopeAuthorizer', 'MaterializationHasher', 'ModuleRegistry', 'Project', 'ScopeContextMismatch', 'SeriesSeeder', 'Stage', 'Task', 'TaskAccess', 'TaskRecurrenceCommand', 'TenantContextResolver', 'TenantContextRestorer'])
+    ->ignoreUnknownClasses(['DB', 'MaterializationHasher', 'ModuleRegistry', 'SeriesSeeder', 'TaskRecurrenceCommand'])
     // discovery: composer suggest; SqlTaskRecurrenceMaterializer resolves WakeupScheduler only when enabled and bound (package-graph allowlist)
-    ->ignoreErrorsOnPackage('corex/wakeup', [ErrorType::DEV_DEPENDENCY_IN_PROD]);
+    ->ignoreErrorsOnPackage('axiomasoft/corex-wakeup', [ErrorType::DEV_DEPENDENCY_IN_PROD]);

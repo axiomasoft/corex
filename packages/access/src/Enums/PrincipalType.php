@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Enums;
+namespace CoreX\Access\Enums;
 
 /**
  * @internal spec: B-11 §3.3

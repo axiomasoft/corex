@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Identity;
+namespace CoreX\Access\Identity;
 
-use CoreX\Auth\Access\PrincipalIdentity;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Contracts\IdentityPasswordRehasher;
+use CoreX\Access\Access\PrincipalIdentity;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\Query\Builder;
@@ -20,7 +20,7 @@ use SensitiveParameter;
  * The boxed-and-cloud login lane's own {@see UserProvider} (D125, OQ-18
  * variant A): reads a users-shaped table through query-builder, entirely by
  * {@see AuthOptions} identity fields — connection/table/column names — so
- * `corex/access` never imports a model from `corex/tenancy` (AC-28). Every
+ * `axiomasoft/corex-access` never imports a model from `axiomasoft/corex-tenancy` (AC-28). Every
  * lookup goes through {@see query()}, which always applies the "live user"
  * filter (active = true AND deleted_at IS NULL): without it in
  * retrieveById() too, a session survives the very deactivation meant to end

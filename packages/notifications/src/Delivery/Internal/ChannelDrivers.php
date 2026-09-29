@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Delivery\Internal;
 
-use CoreX\Notifications\Contracts\NotificationChannelDriver;
+use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
+use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
 
 final class ChannelDrivers
 {

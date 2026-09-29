@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch\Internal;
+namespace CoreX\SearchMeilisearch\Internal;
 
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\SearchCapabilities;
 use CoreX\Search\Support\SearchQuery;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
 use InvalidArgumentException;
 use Meilisearch\Client;
 

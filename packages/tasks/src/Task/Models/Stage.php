@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Models;
+namespace CoreX\Tasks\Task\Models;
 
-use CoreX\Concerns\HasConfiguredId;
-use CoreX\Tasks\Enums\TaskStatus;
+use CoreX\Database\HasConfiguredId;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Task\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

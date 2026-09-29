@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Panels\Internal\EntityViewSchemaProvider;
-use CoreX\SavedViews\Data\ViewContext;
-use CoreX\SavedViews\Data\ViewSchema;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Panels\SavedViews\Data\ViewContext;
+use CoreX\Panels\SavedViews\Data\ViewSchema;
 
 function savedViewContext(): ViewContext
 {

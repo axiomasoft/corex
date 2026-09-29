@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Models;
+namespace CoreX\Tasks\Project\Models;
 
-use CoreX\Models\BaseModel;
-use CoreX\Tasks\Enums\ProjectStatus;
+use CoreX\Database\BaseModel;
+use CoreX\Tasks\Project\Enums\ProjectStatus;
+use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Task\Models\Stage;
+use CoreX\Tasks\Task\Models\Task;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

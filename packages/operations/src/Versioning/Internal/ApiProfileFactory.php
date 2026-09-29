@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Versioning\Internal;
 
-use CoreX\Api\Data\ApiProfile;
-use CoreX\Api\Data\CapabilityDescriptor;
-use CoreX\Api\Data\DeprecationDescriptor;
-use CoreX\Api\Data\EffectiveCapability;
-use CoreX\Api\Operation;
-use CoreX\Api\Support\ApiOptions;
-use CoreX\Enums\UnavailabilityReason;
+use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Extend\Api;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Versioning\Data\ApiProfile;
+use CoreX\Operations\Versioning\Data\CapabilityDescriptor;
+use CoreX\Operations\Versioning\Data\DeprecationDescriptor;
+use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use InvalidArgumentException;
 
 /** Builds one sorted code profile. Tenant activation is resolved separately. */

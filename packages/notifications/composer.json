@@ -1,13 +1,12 @@
 {
-    "name": "corex/notifications",
+    "name": "axiomasoft/corex-notifications",
     "description": "Durable tenant-scoped notification primitives for CoreX.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
-        "corex/modules": "^1.0@dev",
-        "corex/wakeup": "^1.0@dev",
         "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-wakeup": "^1.0@dev",
         "laravel/framework": "^12.0|^13.0"
     },
     "require-dev": {
@@ -21,31 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Notifications\\": "src/",
-            "CoreX\\Notifications\\Contracts\\": [
-                "src/Inbox/Contracts/",
-                "src/Delivery/Contracts/",
-                "src/Digest/Contracts/",
-                "src/Preferences/Contracts/"
-            ],
-            "CoreX\\Notifications\\Data\\": [
-                "src/Inbox/Data/",
-                "src/Delivery/Data/",
-                "src/Digest/Data/",
-                "src/Preferences/Data/"
-            ],
-            "CoreX\\Notifications\\Internal\\": [
-                "src/Inbox/Internal/",
-                "src/Delivery/Internal/",
-                "src/Digest/Internal/",
-                "src/Preferences/Internal/"
-            ],
-            "CoreX\\Notifications\\Internal\\Digest\\": "src/Digest/Internal/",
-            "CoreX\\Notifications\\Jobs\\": [
-                "src/Delivery/Jobs/",
-                "src/Digest/Jobs/"
-            ],
-            "CoreX\\Notifications\\Commands\\": "src/Delivery/Commands/"
+            "CoreX\\Notifications\\": "src/"
         }
     },
     "autoload-dev": {
@@ -60,8 +35,14 @@
             "package-type": "capability",
             "stability": "stable",
             "public-api": [
-                "CoreX\\Notifications\\Contracts",
-                "CoreX\\Notifications\\Data"
+                "CoreX\\Notifications\\Delivery\\Contracts",
+                "CoreX\\Notifications\\Delivery\\Data",
+                "CoreX\\Notifications\\Digest\\Contracts",
+                "CoreX\\Notifications\\Digest\\Data",
+                "CoreX\\Notifications\\Inbox\\Contracts",
+                "CoreX\\Notifications\\Inbox\\Data",
+                "CoreX\\Notifications\\Preferences\\Contracts",
+                "CoreX\\Notifications\\Preferences\\Data"
             ]
         },
         "laravel": {
@@ -77,10 +58,6 @@
         {
             "type": "path",
             "url": "../core"
-        },
-        {
-            "type": "path",
-            "url": "../modules"
         },
         {
             "type": "path",

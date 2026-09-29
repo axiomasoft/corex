@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Locale;
+namespace CoreX\Intl\Locale\Internal;
 
-use CoreX\Intl\Contracts\LocaleResolver;
-use CoreX\Intl\Data\LocaleInputs;
-use CoreX\Intl\Data\LocalePolicy;
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Exceptions\InvalidLocaleException;
+use CoreX\Intl\Locale\Contracts\LocaleResolver;
+use CoreX\Intl\Locale\Data\LocaleInputs;
+use CoreX\Intl\Locale\Data\LocalePolicy;
+use CoreX\Intl\Locale\Data\LocaleResolution;
+use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Override;
 
 final class DefaultLocaleResolver implements LocaleResolver

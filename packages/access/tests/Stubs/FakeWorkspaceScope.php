@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Stubs;
+namespace CoreX\Access\Tests\Stubs;
 
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Stand-in for `CoreX\Tenancy\Scopes\WorkspaceScope` — unavailable here,
- * corex/access does not depend on corex/tenancy (AC-28). Identical filter
+ * Stand-in for `CoreX\Tenancy\Laravel\Scopes\WorkspaceScope` — unavailable here,
+ * axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28). Identical filter
  * (`workspace_id = ctx.workspace.id OR workspace_id IS NULL`), used to prove
  * WorkspaceScopeWiring registers a REAL global scope (not just a marker) and
  * that `scope=account` correctly lifts this specific class (D109) without

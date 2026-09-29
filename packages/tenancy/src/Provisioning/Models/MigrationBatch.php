@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Provisioning\Models;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;

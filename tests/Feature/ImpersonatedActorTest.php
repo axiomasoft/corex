@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Audit\CurrentActor;
-use CoreX\Enums\ActorType;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\ImpersonationState;
-use CoreX\Tenancy\NullImpersonationService;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\ImpersonationState;
+use CoreX\Context\NullImpersonationService;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 // P2.11 — root-harness coverage (D81: ядровые ACTOR/CHECK/boxed-дефолт cases
 // live here, not in packages/tenancy/tests, since ImpersonationService/
-// ActorType/CurrentActor are corex/core, not corex/tenancy). Cases а–бб per
+// ActorType/CurrentActor are axiomasoft/corex, not axiomasoft/corex-tenancy). Cases а–бб per
 // phases/P2.md P2.11 Validation; letters noted per test.
 //
 // Only the two CHECK-widening tests need PG (CHECK constraints are Postgres
@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
  * Controllable double for CurrentActor's CONSUMPTION of the contract (D139)
  * — not the real DatabaseImpersonationService (PG/session-bound,
  * corex/tenancy-only, exercised by packages/tenancy/tests/Feature/
- * ImpersonationTest.php instead). This file tests corex/core's own branch
+ * ImpersonationTest.php instead). This file tests axiomasoft/corex's own branch
  * logic in isolation, same spirit as AuditLogTest.php's inline fakes.
  */
 final class FakeImpersonationService implements ImpersonationService
@@ -151,7 +151,7 @@ it('mod_ll_actor_ck accepts support after the widening migration — CurrentActo
 
     test()->artisan('migrate', [
         '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../packages/modules/database/migrations'),
+        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
         '--realpath' => true,
         '--force' => true,
     ])->run();

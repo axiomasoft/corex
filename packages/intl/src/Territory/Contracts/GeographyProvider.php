@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Territory\Contracts;
 
-use CoreX\Intl\Data\DatasetManifest;
-use CoreX\Intl\Data\GeographyQuery;
-use CoreX\Intl\Data\ReferenceCursor;
-use CoreX\Intl\Data\ReferencePage;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Territory\Data\DatasetManifest;
+use CoreX\Intl\Territory\Data\GeographyQuery;
+use CoreX\Intl\Territory\Data\ReferenceCursor;
+use CoreX\Intl\Territory\Data\ReferencePage;
 
 interface GeographyProvider
 {

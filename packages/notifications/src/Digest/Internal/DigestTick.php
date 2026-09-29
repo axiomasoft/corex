@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal\Digest;
+namespace CoreX\Notifications\Digest\Internal;
 
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Wakeup\Data\WakeupWindow;
 
 final readonly class DigestTick

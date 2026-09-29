@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Config;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Config\Config;
+use CoreX\Time\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +57,7 @@ function pruneOutboxInsertRow(array $overrides = []): void
         'name' => 'membership.expired',
         'contract_version' => 1,
         'envelope_version' => 1,
-        'source' => 'corex/core',
+        'source' => 'axiomasoft/corex',
         'subject' => null,
         'correlation_id' => null,
         'causation_id' => null,

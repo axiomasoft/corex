@@ -40,7 +40,7 @@ test('package tests do not import another package Testing namespace', function (
 
 test('R-T1 planting in ActorType names the file', function (): void {
     $line = rt1Plant(
-        'packages/core/src/Enums/ActorType.php',
+        'packages/core/src/Audit/Enums/ActorType.php',
         'CoreX\\Testing\\CoreXTestCase',
     );
 

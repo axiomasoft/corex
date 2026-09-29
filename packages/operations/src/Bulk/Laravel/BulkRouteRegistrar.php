@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Laravel;
+namespace CoreX\Operations\Bulk\Laravel;
 
-use CoreX\Api\Data\BulkOperationDefinition;
-use CoreX\Api\Internal\Bulk\BulkOperations;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Internal\BulkOperations;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;

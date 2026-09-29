@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\Data;
 
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
 use InvalidArgumentException;
 
 final readonly class PanelContext

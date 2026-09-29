@@ -1,6 +1,6 @@
-# corex/recurrence
+# axiomasoft/corex-recurrence
 
-`corex/recurrence` exposes a bounded, typed recurrence expansion port over the qualified `rlanvin/php-rrule` v3.0.0 source. It has no Laravel, database, task, network, or scheduler dependency.
+`axiomasoft/corex-recurrence` exposes a bounded, typed recurrence expansion port over the qualified `rlanvin/php-rrule` v3.0.0 source. It has no Laravel, database, task, network, or scheduler dependency.
 
 ## Port
 
@@ -27,4 +27,4 @@ composer lint:check
 
 ## Installation
 
-Install with `composer require corex/recurrence` through the configured Composer channel. The package needs no Laravel provider, database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.
+Install with `composer require axiomasoft/corex-recurrence` through the configured Composer channel. The package needs no Laravel provider, database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
+use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
-use CoreX\Tenancy\Listeners\RevertTenancyOnJobException;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Listeners\RevertTenancyOnJobException;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobExceptionOccurred;

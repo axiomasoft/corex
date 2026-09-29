@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Middleware;
+namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
 use CoreX\Tenancy\TenancyServiceProvider;

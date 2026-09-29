@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\CentralContextException;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\StanclTenancyManager;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
+use CoreX\Tenancy\Runtime\StanclTenancyManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

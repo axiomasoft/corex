@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\DepartmentRepository;
+use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Departments\DatabaseDepartmentRepository;
-use CoreX\Events\DepartmentMoved;
-use CoreX\Exceptions\CrossWorkspaceMoveException;
-use CoreX\Exceptions\DepartmentCycleException;
-use CoreX\Models\Department as DepartmentModel;
+use CoreX\Departments\Events\DepartmentMoved;
+use CoreX\Departments\Exceptions\CrossWorkspaceMoveException;
+use CoreX\Departments\Exceptions\DepartmentCycleException;
+use CoreX\Departments\Models\Department;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseTransactionsManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -54,7 +54,7 @@ function seedDepartment(?string $parentId, ?string $parentPath, string $name, st
     $label = departmentLabel($id);
     $path = $parentPath !== null && $parentPath !== '' ? $parentPath.'.'.$label : $label;
 
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $id,
         'workspace_id' => $workspaceId,
         'parent_id' => $parentId,
@@ -102,9 +102,9 @@ it('AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query count, A25/
 
     expect($updates)->toHaveCount(1);
 
-    $movedRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($moving['id']);
-    $childRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id']);
-    $siblingRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($branchA['id']);
+    $movedRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($moving['id']);
+    $childRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id']);
+    $siblingRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($branchA['id']);
 
     expect($movedRow->parent_id)->toBe($branchB['id'])
         ->and($movedRow->path)->toBe($branchB['path'].'.'.departmentLabel($moving['id']))
@@ -136,7 +136,7 @@ it('AC-24b: move() waits on the workspace advisory lock — a holder blocks it, 
     $holder->rollBack();
 
     // The blocked move rolled back entirely — nothing moved.
-    $row = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($childA['id']);
+    $row = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($childA['id']);
     expect($row->path)->toBe($childA['path']);
 });
 
@@ -233,7 +233,7 @@ it('AC-24 (cycle): moving into its own subtree is rejected and leaves the DB unc
     expect(fn () => departments()->move($root['id'], $grandchild['id']))
         ->toThrow(DepartmentCycleException::class);
 
-    $rootRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($root['id']);
+    $rootRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($root['id']);
 
     expect($rootRow->path)->toBe($root['path'])
         ->and($rootRow->parent_id)->toBeNull();
@@ -246,8 +246,8 @@ it('AC-24 (root move): move($id, null) reparents the subtree to the workspace ro
 
     departments()->move($child['id'], null);
 
-    $childRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id']);
-    $grandRow = DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($grand['id']);
+    $childRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id']);
+    $grandRow = Department::on(DEPARTMENTS_TEST_CONNECTION)->find($grand['id']);
 
     expect($childRow->parent_id)->toBeNull()
         ->and($childRow->path)->toBe(departmentLabel($child['id']))
@@ -265,7 +265,7 @@ it('AC-24 (soft-delete): a removed department drops out of find/subtree/primaryO
         'is_primary' => true,
     ]);
 
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id'])->delete();
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->find($child['id'])->delete();
 
     expect(departments()->find($child['id']))->toBeNull()
         ->and(array_map(fn ($d) => $d->id, departments()->subtree($root['id'])))->toBe([$root['id']])
@@ -277,7 +277,7 @@ it('AC-24 (re-read guard): move() on a soft-deleted department throws instead of
     $target = seedDepartment(null, null, 'Target');
     $moving = seedDepartment($root['id'], $root['path'], 'Moving');
 
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->find($moving['id'])->delete();
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->find($moving['id'])->delete();
 
     expect(fn () => departments()->move($moving['id'], $target['id']))
         ->toThrow(ModelNotFoundException::class);
@@ -294,7 +294,7 @@ it('AC-24 (workspace scope): subtree() excludes a same-path row from another wor
     // A row in ANOTHER workspace whose ltree path is a descendant of root's path
     // (paths are globally unique but the contract is per-workspace, B-10 §5.7).
     $intruderId = (string) Str::uuid7();
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $intruderId,
         'workspace_id' => DEPARTMENTS_WORKSPACE_2,
         'parent_id' => null,
@@ -317,7 +317,7 @@ it('AC-24 (workspace scope): move() rewrites ONLY the moving workspace, never a 
     // filter, move()'s ONE-UPDATE would rewrite this foreign row's path.
     $intruderId = (string) Str::uuid7();
     $intruderPath = $root['path'].'.'.departmentLabel($intruderId);
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $intruderId,
         'workspace_id' => DEPARTMENTS_WORKSPACE_2,
         'parent_id' => null,
@@ -358,7 +358,7 @@ it('AC-24 (workspace scope): move() into a parent in ANOTHER workspace is reject
 
 it('AC-24 (DTO): the read-DTO carries sort_order', function (): void {
     $id = (string) Str::uuid7();
-    DepartmentModel::on(DEPARTMENTS_TEST_CONNECTION)->create([
+    Department::on(DEPARTMENTS_TEST_CONNECTION)->create([
         'id' => $id,
         'workspace_id' => DEPARTMENTS_WORKSPACE_1,
         'parent_id' => null,

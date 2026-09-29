@@ -20,7 +20,7 @@ use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
  * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
  * fallback, mirrors packages/access's self-contained testbench pattern (the
  * root monorepo tests/ suite does not run this package, D19 exception
- * already established for corex/access).
+ * already established for axiomasoft/corex-access).
  */
 abstract class TestCase extends Orchestra
 {
@@ -132,8 +132,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
 
         // Stands in for the app-configured `auth.provider` a real consumer
-        // would wire to corex/access's `corex-principal` driver (D125) —
-        // corex/tenancy itself does not depend on corex/access (AC-28). The
+        // would wire to axiomasoft/corex-access's `corex-principal` driver (D125) —
+        // axiomasoft/corex-tenancy itself does not depend on axiomasoft/corex-access (AC-28). The
         // seam `OidcLoginController`/`LogoutController` resolve through via
         // `Auth::guard()->loginUsingId()`/`->id()` (parity, premortem C4).
         $app->singleton(StubIdentityProvider::class);

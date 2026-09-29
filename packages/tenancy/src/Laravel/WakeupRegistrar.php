@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Integration\Wakeup\SweepRootWakeups;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Override;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Events\Identity;
+namespace CoreX\Tenancy\Membership\Events;
 
 use CoreX\Tenancy\Membership\Transport\ActorRef;
 use CoreX\Tenancy\Membership\Transport\CentralValue;

@@ -1,12 +1,12 @@
-# corex/access
+# axiomasoft/corex-access
 
-Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — движок прав; этот пакет добавляет
+Auth-мост между [`axiomasoft/corex`] и [AzGuard] (ADR-009). AzGuard — движок прав; этот пакет добавляет
 интеграционный слой экосистемы, **не дублируя** то, что уже есть в AzGuard.
 
 ## Граница ответственности
 
-`corex/access` — необязательный адаптер к независимому движку ролей, а не его владелец и не
-обязательная часть `corex/core`/`corex/modules`. Приложение-потребитель самостоятельно решает,
+`axiomasoft/corex-access` — необязательный адаптер к независимому движку ролей, а не его владелец и не
+обязательная часть `axiomasoft/corex`/`axiomasoft/corex`. Приложение-потребитель самостоятельно решает,
 подключать ли адаптер, и владеет собственной композицией, настройкой и политиками. Наличие
 адаптера не передаёт ему владение API, назначением ролей, проверкой полномочий вызывающего,
 обходами или аудитом независимого движка.
@@ -33,8 +33,8 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   кеша по workspace, конфиг-ключ `corex-auth.bind_permission_layer`) — мост к капабилити-слою
   AzGuard (P2.20, D101).
 - **Известное ограничение профиля:** `canOnRecord()` для scope `dept`/`dept_tree` читает
-  `users.department_id`/`sys_departments.path` — таблиц другого пакета (`corex/tenancy`,
-  `corex/core`'s department feature), которых в boxed-профиле может не быть. Отсутствующая таблица
+  `users.department_id`/`sys_departments.path` — таблиц другого пакета (`axiomasoft/corex-tenancy`,
+  `axiomasoft/corex`'s department feature), которых в boxed-профиле может не быть. Отсутствующая таблица
   — fail-closed `false` (никогда не трактуется как «весь скоуп»), не исключение и не access grant.
 - **`Contracts\ScopeResolver`** (`Access\DefaultScopeResolver`) — Builder-аналог `canOnRecord()`:
   накладывает WHERE по эффективному scope на листинг, а не на одну запись. Семантика 6 скоупов
@@ -49,7 +49,7 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   декларацией capability на `EntityDefinition`, не кодом). Нет ни capability, ни колонки — сужать
   нечем, тогда `account` легален.
 - **`Access\WorkspaceScopeWiring`** — регистрирует `WorkspaceScope` (глобальный scope, приходит из
-  `corex/tenancy` по конфиг-пину `corex-auth.workspace_scope_class`) на моделях с capability
+  `axiomasoft/corex-tenancy` по конфиг-пину `corex-auth.workspace_scope_class`) на моделях с capability
   `workspace_scoped` автоматически при `boot()`; boxed-профиль без пина — тихий пропуск.
 - **Известное ограничение профиля:** в дереве корневого проекта пока 0 сущностей с capability
   `ownable`/`workspace_scoped` — их раздача реальным продуктовым сущностям (CRM/Tasks) вне
@@ -59,9 +59,9 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   `Illuminate\Contracts\Auth\UserProvider`, читающий пользовательскую таблицу через
   query-builder ЦЕЛИКОМ по конфигу `corex-auth.identity` (`connection`/`table`/карта колонок
   `id`/`email`/`password`/`active`/`deleted_at`) и отдающий `Access\PrincipalIdentity(user,
-  <id>)`. Пакет не импортирует ни одну модель `corex/tenancy` — имя таблицы приходит строкой,
+  <id>)`. Пакет не импортирует ни одну модель `axiomasoft/corex-tenancy` — имя таблицы приходит строкой,
   тот же приём, что и `workspace_scope_class`. Это ЕДИНСТВЕННЫЙ шов, которым конструируется
-  принципал-пользователь: облачный OIDC-лейн (`corex/tenancy`, под `tenancy.oidc.enabled`)
+  принципал-пользователь: облачный OIDC-лейн (`axiomasoft/corex-tenancy`, под `tenancy.oidc.enabled`)
   заканчивается штатным `Auth::loginUsingId($sub)`, который резолвится через ЭТОТ ЖЕ
   провайдер — так оба входа (локальный `Auth::attempt()` и облачный OIDC) собирают ровно один
   класс `Principal` (premortem C4). Чтобы включить лейн, приложение указывает драйвер в
@@ -79,8 +79,8 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
   (`Auth::provider('corex-principal', …)`), проводка на гвард — дело приложения.
   `retrieveByToken()`/`updateRememberToken()` — постоянный no-op: колонки `remember_token` в
   замороженной схеме `users` нет (P2.7 закрыт), добавлять её запрещено.
-  При необходимом rehash провайдер вызывает `CoreX\Contracts\IdentityPasswordRehasher`,
-  передавая старый и новый хэш; он сам не пишет в чужую таблицу. `corex/tenancy`
+  При необходимом rehash провайдер вызывает `CoreX\Context\Contracts\IdentityPasswordRehasher`,
+  передавая старый и новый хэш; он сам не пишет в чужую таблицу. `axiomasoft/corex-tenancy`
   связывает этот порт со своим writer для `users.password_hash` и выполняет
   compare-and-swap только для активной записи. Если приложение использует другую
   таблицу или колонку, её владелец должен предоставить свою реализацию порта;
@@ -95,7 +95,7 @@ Auth-мост между [`corex/core`] и [AzGuard] (ADR-009). AzGuard — дв
 `axioma-studio/azguard-core` ^0.3 — публичный пакет из монорепозитория
 `https://github.com/axiomasoft/azguard-private` (снимок `main` `253cbf4`, каталог `packages/core`).
 Composer ставит его через `type: package` в `repositories`, без токена и без локального
-checkout. Репозитории Composer не транзитивны: потребитель `corex/access` добавляет
+checkout. Репозитории Composer не транзитивны: потребитель `axiomasoft/corex-access` добавляет
 тот же публичный источник у себя. Path-репозитории sibling-пакетов ядра остаются
 только в monorepo-манифесте.
 
@@ -110,4 +110,4 @@ composer lint       # Pint
 
 ## Installation
 
-Configure the approved Composer channels for CoreX and AzGuard, then run `composer require corex/access`. Composer repositories are application-owned and are not inherited from dependencies. Select the `corex-principal` user-provider driver in your own auth configuration and install the package-owned schema on the intended tenant connection before using the role matrix.
+Configure the approved Composer channels for CoreX and AzGuard, then run `composer require axiomasoft/corex-access`. Composer repositories are application-owned and are not inherited from dependencies. Select the `corex-principal` user-provider driver in your own auth configuration and install the package-owned schema on the intended tenant connection before using the role matrix.

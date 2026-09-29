@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Definition;
 
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Enums\IdempotencyRequirement;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Internal\OperationContractHasher;
-use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Extend\Api;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Internal\OperationContractHasher;
+use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use LogicException;
 
 /** Immutable runtime projection of one compiled declaration. */

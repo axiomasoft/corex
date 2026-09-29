@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

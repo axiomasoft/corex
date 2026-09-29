@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Invocation\Data;
 
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Operation;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 final readonly class OperationInvocation
 {

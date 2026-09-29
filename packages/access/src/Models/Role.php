@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Models;
+namespace CoreX\Access\Models;
 
-use CoreX\Auth\Roles\SystemRoleImmutable;
-use CoreX\Models\BaseModel;
+use CoreX\Access\Roles\SystemRoleImmutable;
+use CoreX\Database\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;

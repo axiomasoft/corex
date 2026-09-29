@@ -32,7 +32,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/bulk-operations/{id}": {
@@ -62,7 +62,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/bulk-operations/{id}/cancel": {
@@ -92,7 +92,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/bulk-operations/{id}/failures": {
@@ -122,7 +122,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/bulk-operations/{id}/result": {
@@ -152,7 +152,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/notes": {
@@ -2320,7 +2320,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-deliveries/replay": {
@@ -2350,7 +2350,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-deliveries/{id}": {
@@ -2380,7 +2380,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-deliveries/{id}/attempts": {
@@ -2410,7 +2410,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-deliveries/{id}/replay": {
@@ -2440,7 +2440,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-subscriptions": {
@@ -2470,7 +2470,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             },
             "post": {
                 "operationId": "webhook-subscriptions.create",
@@ -2498,7 +2498,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-subscriptions/{id}": {
@@ -2528,7 +2528,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         },
         "/webhook-subscriptions/{id}/disable": {
@@ -2558,7 +2558,7 @@
                         "side_effect": 0
                     }
                 },
-                "x-corex-module": "corex/operations"
+                "x-corex-module": "axiomasoft/corex-operations"
             }
         }
     },

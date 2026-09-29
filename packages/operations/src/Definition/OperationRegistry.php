@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Definition;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Errors\ApiError;
 use LogicException;
 
 final class OperationRegistry

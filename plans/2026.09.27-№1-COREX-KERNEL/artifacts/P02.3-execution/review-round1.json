@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "duration_ms": 749383,
+  "duration_api_ms": 749383,
+  "is_error": false,
+  "result": "I'll review P02.3 as a fresh-context read-only pass: the plan, D44/D51/D52, and the named dry-run artifacts, without touching unrelated owner changes.Dry-7 stopped at package tests because this worktree has no per-package vendor; I’ll treat that as harness state and review the transfer, scaffolds, and gate projections against the samples.The D52 tag allowlist never sees the two real migration publishes, so it is not an exact, expiring exception. Everything else checked in this pass holds.\n\n**High.** `scripts/ownership-gate.php:11` (`RX_TAG`) only accepts a quoted string as the publish tag. Both live declarations pass a list:\n\n- `packages/core/src/CoreServiceProvider.php:187-189`\n- `packages/panels/src/PanelsServiceProvider.php:25`\n\nA scan of package PHP with that pattern captures neither `corex-migrations` nor `corex-migrations-tenant`. Core yields only `corex-config`; the Panels provider yields nothing. `scripts/ownership-map.json:260-287` therefore never binds those declarations, and another package can copy the same array-form call without an O1. The sibling negative only reports `O2 tag axiomasoft/corex-panels corex-migrations expected-prefix corex-panels-` (`../corex-p023-dry/build/p023-dry-negatives/shared-tag-new-source-negative.log`), which is the string-tag prefix rule, not this declaration shape.\n\nCorrection: capture every quoted tag from either a string or a list argument, keep the allowlist to exactly those two provider files, and point the negative at one extra array-form publish outside them so it fails O1.\n\nSamples, relative `__DIR__` resources, optional curl/schema/transfer dependencies, supplemental PSR-4 paths, tools/webhooks `TestCase` boundaries, semantic API snapshot projection, frozen `tests/Golden/baseline` and `rename-map.json` (identical to `3d66ef5`), and the 2/31 source-debt caps are consistent with D44/D51. Sibling ceiling, ratchet, autoload, and rename negatives fail on real growth or a bad path and restore cleanly.\n\nDry-7 is finished, not green. Passed there: manifests, lint, golden (4), root-test (821+10), pg-test (240), plus apply/verify (`verify: 0 problems`). `packages-test` exited 1 because `packages/access/vendor/autoload.php` is absent in this worktree; fail-fast then skipped analyse, deps, rename, ownership, ceilings, anti-weakening, package-graph, api-contract, contract-guard, naming, package-docs, and mutation. Those are green in `../corex-p023-dry/build/p023-candidate-{fast,rest,deps}/checks.json`, where package vendors exist. Tests were not rerun.\n\nreview: cursor/grok-4.7 findings:1",
+  "session_id": "4c6ce7da-83dc-407d-a311-c92d5e0aba7c",
+  "request_id": "3ed108a6-234a-42b2-8d4e-54c21a44ed89",
+  "usage": {
+    "inputTokens": 306255,
+    "outputTokens": 44958,
+    "cacheReadTokens": 4279296,
+    "cacheWriteTokens": 0
+  }
+}

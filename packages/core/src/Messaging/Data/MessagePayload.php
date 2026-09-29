@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Exceptions\InvalidMessage;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 
 /**
  * Канонизованный payload сообщения: ограниченная карта объектов из null, bool, int,

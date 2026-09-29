@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Internal;
 
-use CoreX\Intl\Contracts\TranslationReader;
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Data\LocalizedText;
-use CoreX\Intl\Data\TranslationResult;
+use CoreX\Intl\Locale\Data\LocaleResolution;
+use CoreX\Intl\Translation\Contracts\TranslationReader;
+use CoreX\Intl\Translation\Data\LocalizedText;
+use CoreX\Intl\Translation\Data\TranslationResult;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use Override;
 

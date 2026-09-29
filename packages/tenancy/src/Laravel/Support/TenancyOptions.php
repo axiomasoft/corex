@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Support;
+namespace CoreX\Tenancy\Laravel\Support;
 
-use CoreX\Support\SecretRef;
-use CoreX\Support\ViolationList;
-use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Config\SecretRef;
+use CoreX\Config\ViolationList;
+use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 
 /** @internal Package composition type. */

@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantStorage;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\Contracts\RelationLookup;
@@ -17,8 +18,7 @@ use CoreX\Media\Internal\MediaFileInUse;
 use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Jobs\PurgeMedia;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 

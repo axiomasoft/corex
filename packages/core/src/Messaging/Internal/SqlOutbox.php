@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Exceptions\OutboxRefused;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Support\Config;
+use CoreX\Messaging\Exceptions\OutboxRefused;
 use Illuminate\Database\ConnectionInterface;
 use Override;
 use Psr\Clock\ClockInterface;

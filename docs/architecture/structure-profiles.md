@@ -23,10 +23,10 @@
 
 Профиль — **функция измеренного объёма**; отдельного решения владельца не требует.
 
-`corex/attributes` классифицируется как B по producer-adjusted census (D107): пол ≥ 44 файлов
+`axiomasoft/corex-custom-fields` классифицируется как B по producer-adjusted census (D107): пол ≥ 44 файлов
 до физической раскладки P16; компактный профиль A для него запрещён.
 
-Каталог `packages/import-export` — **тумбстоун** (D13, PKG-009): не входит в перечень живых
+Каталог `packages/transfer` — **тумбстоун** (D13, PKG-009): не входит в перечень живых
 пакетов и не получает профиль.
 
 ## Процедуры по статьям STR-002…STR-006
@@ -76,11 +76,11 @@ Census пересчитан после producer-фаз и P16.1–P16.10 (2026-0
 | tasks | 63 | B | P16.3 |
 | intl | 67 | B | P16.1 |
 | modules | 99 | B | P16.7 |
-| operations | 165 | C | P16.4–P16.6 (`CoreX\Api`) |
+| operations | 165 | C | P16.4–P16.6 (`CoreX\Operations`) |
 | core | 169 | C | P9 bounded contexts |
 | tenancy | 175 | C | P9 bounded contexts |
 
-## Карта роста `corex/transfer` (условная)
+## Карта роста `axiomasoft/corex-transfer` (условная)
 
 Сегодня **39** файлов — профиль **A**. Текущая раскладка: `Contracts/`, `Data/` (включая
 `Data/Export/`), `Internal/{Codecs,Export,Transfer}` и корневой `TransferServiceProvider`.

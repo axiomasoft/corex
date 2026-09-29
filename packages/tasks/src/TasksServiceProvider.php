@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks;
 
-use CoreX\Tasks\Actions\CompleteTask;
-use CoreX\Tasks\Actions\CreateTask;
-use CoreX\Tasks\Actions\MoveTaskToStage;
-use CoreX\Tasks\Actions\UpdateTask;
-use CoreX\Tasks\Contracts\CompleteTaskCommand;
-use CoreX\Tasks\Contracts\CreateTaskCommand;
-use CoreX\Tasks\Contracts\MoveTaskToStageCommand;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Contracts\TaskPlanningCommand;
-use CoreX\Tasks\Contracts\UpdateTaskCommand;
-use CoreX\Tasks\Internal\Planning\PlanningCommand;
-use CoreX\Tasks\Internal\Planning\PlanningOperationsServiceProvider;
-use CoreX\Tasks\Support\DenyTaskAccess;
-use CoreX\Tasks\Support\DenyTaskMutationAccess;
-use CoreX\Tasks\Support\DenyTaskPlanningAccess;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Access\Internal\DenyTaskAccess;
+use CoreX\Tasks\Access\Internal\DenyTaskMutationAccess;
+use CoreX\Tasks\Access\Internal\DenyTaskPlanningAccess;
+use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Internal\PlanningCommand;
+use CoreX\Tasks\Planning\Internal\PlanningOperationsServiceProvider;
+use CoreX\Tasks\Task\Actions\CompleteTask;
+use CoreX\Tasks\Task\Actions\CreateTask;
+use CoreX\Tasks\Task\Actions\MoveTaskToStage;
+use CoreX\Tasks\Task\Actions\UpdateTask;
+use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
+use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
+use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
+use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
 use Illuminate\Support\ServiceProvider;
 
 final class TasksServiceProvider extends ServiceProvider

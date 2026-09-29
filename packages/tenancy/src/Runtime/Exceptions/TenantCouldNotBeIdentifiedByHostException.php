@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Exceptions;
+namespace CoreX\Tenancy\Runtime\Exceptions;
 
-use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use Stancl\Tenancy\Contracts\TenantCouldNotBeIdentifiedException;
 
 /**

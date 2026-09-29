@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Currency\Internal;
 
-use CoreX\Intl\Contracts\RateProvider;
-use CoreX\Intl\Data\RateLookup;
-use CoreX\Intl\Data\RateQuery;
+use CoreX\Intl\Currency\Contracts\RateProvider;
+use CoreX\Intl\Currency\Data\RateLookup;
+use CoreX\Intl\Currency\Data\RateQuery;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Override;

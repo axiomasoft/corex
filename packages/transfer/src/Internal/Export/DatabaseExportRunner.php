@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Internal\Export;
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Contracts\TenantStorage;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\ExportSource;

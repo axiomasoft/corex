@@ -1,10 +1,10 @@
-# corex/tasks compatibility passport
+# axiomasoft/corex-tasks compatibility passport
 
 This is factual evidence, not a Composer constraint, runtime registry, or release promise.
 
 | Field | Recorded fact |
 | --- | --- |
-| Package / license / profile | `corex/tasks` / MIT / public L0 module, requires `corex/core` and `corex/modules` |
+| Package / license / profile | `axiomasoft/corex-tasks` / MIT / public L0 module, requires `axiomasoft/corex` and `axiomasoft/corex` |
 | Policy / declared constraint | PHP 8.4–8.5 and Laravel 12–13 / `php:^8.4`, Illuminate `^12.0|^13.0` |
 | Public local proof | P4.4 historical runtime versions: 8.3.33, 8.4.1 and 8.5.10 against Laravel 12 and 13; cold update, platform check and fresh lock install. Its package SQLite schema suite passed: two tests, twelve assertions. |
 | Release-ready status | Not claimed. The P4.4 receipt is local evidence; it is not a current hosted-runner or publication receipt. |

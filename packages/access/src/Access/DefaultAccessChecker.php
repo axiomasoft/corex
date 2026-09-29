@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\Contracts\AccessChecker;
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Matrix\ScopeMapVersion;
-use CoreX\Auth\RecordContext;
-use CoreX\Auth\Support\AuthOptions;
+use CoreX\Access\Contracts\AccessChecker;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Matrix\ScopeMapVersion;
+use CoreX\Access\RecordContext;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Tenancy\Contracts\TenancyManager;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

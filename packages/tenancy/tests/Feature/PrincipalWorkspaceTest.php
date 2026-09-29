@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
-use CoreX\Tenancy\Models\User;
-use CoreX\Tenancy\Models\Workspace;
-use CoreX\Tenancy\Models\WorkspaceMember;
+use CoreX\Tenancy\Identity\Models\User;
 use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspace\Models\Workspace;
+use CoreX\Tenancy\Workspace\Models\WorkspaceMember;
 use CoreX\Tenancy\Workspace\NoDefaultWorkspaceException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -32,7 +32,7 @@ it('resolves explicit principals across two isolated account databases without a
             DB::setDefaultConnection($connection);
             expect(DB::connection()->getDatabaseName())->toBe($database);
 
-            foreach ([__DIR__.'/../../vendor/corex/core/database/migrations/pg', __DIR__.'/../../database/migrations/tenant'] as $path) {
+            foreach ([__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg', __DIR__.'/../../database/migrations/tenant'] as $path) {
                 $this->artisan('migrate', ['--database' => $connection, '--path' => realpath($path), '--realpath' => true, '--force' => true])->assertExitCode(0);
             }
 

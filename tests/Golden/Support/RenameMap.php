@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden\Support;
 
+use RuntimeException;
+
 /**
  * Projects both the frozen baseline and the current snapshot using exact tokens.
  * Prefix replacement would be wrong: psr-4 folding maps one old prefix to many new ones.
@@ -29,6 +31,18 @@ final readonly class RenameMap
         foreach ($data['manual'] as $rule) {
             if ($rule['kind'] === 'identifier' && str_contains($rule['from'], '\\')) {
                 $classes[$rule['from']] = $rule['to'];
+            }
+        }
+
+        $projectionPath = dirname($path).'/package-projection.json';
+
+        if (is_file($projectionPath)) {
+            $projection = json_decode((string) file_get_contents($projectionPath), true, flags: JSON_THROW_ON_ERROR);
+            foreach ($projection as $old => $target) {
+                if (! in_array($target, $data['ambiguous_packages'][$old] ?? [], true)) {
+                    throw new RuntimeException('Invalid primary package projection.');
+                }
+                $packages[$old] = $target;
             }
         }
 

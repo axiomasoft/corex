@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Models;
+namespace CoreX\Access\Models;
 
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Concerns\HasConfiguredId;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Database\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Tests;
 
-use CoreX\Support\Time\LaravelClock;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Time\LaravelClock;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\DateFactory;

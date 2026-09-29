@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Data;
+namespace CoreX\Notifications\Delivery\Data;
+
+use CoreX\Notifications\Inbox\Data\NotificationContext;
 
 final readonly class DeliveryInput
 {

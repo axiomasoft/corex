@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\OutboxLeaseLost;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
-use CoreX\Support\Config;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

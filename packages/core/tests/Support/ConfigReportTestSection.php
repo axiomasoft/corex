@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Testing;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 
 final class ConfigReportTestSection implements ConfigReportSection
 {

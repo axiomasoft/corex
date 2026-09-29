@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Digest\Internal;
 
-use CoreX\Notifications\Contracts\DigestBuilder;
-use CoreX\Notifications\Data\DigestRef;
-use CoreX\Notifications\Data\DigestWindow;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Digest\Contracts\DigestBuilder;
+use CoreX\Notifications\Digest\Data\DigestRef;
+use CoreX\Notifications\Digest\Data\DigestWindow;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Internal\NotificationAccessDenied;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;

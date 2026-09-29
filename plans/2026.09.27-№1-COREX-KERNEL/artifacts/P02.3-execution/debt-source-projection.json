@@ -1,0 +1,141 @@
+{
+  "rows": [
+    {
+      "source": "packages/core/src/Money/MoneyCast.php",
+      "target": "packages/intl/src/Money/MoneyCast.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/Money/MoneyCast.php",
+      "target": "packages/intl/src/Money/MoneyCast.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 3
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 2
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 2
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 2
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "target": "packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/ViewConfigValidator.php",
+      "target": "packages/panels/src/SavedViews/Internal/ViewConfigValidator.php",
+      "count": 1
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/ViewConfigValidator.php",
+      "target": "packages/panels/src/SavedViews/Internal/ViewConfigValidator.php",
+      "count": 2
+    },
+    {
+      "source": "packages/core/src/SavedViews/Internal/ViewConfigValidator.php",
+      "target": "packages/panels/src/SavedViews/Internal/ViewConfigValidator.php",
+      "count": 3
+    }
+  ],
+  "transfers": [
+    {
+      "from": "core",
+      "to": "intl",
+      "phpstan": 2
+    },
+    {
+      "from": "core",
+      "to": "panels",
+      "phpstan": 31
+    }
+  ]
+}

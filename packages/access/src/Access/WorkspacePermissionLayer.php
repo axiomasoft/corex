@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
 use AzGuard\Contracts\PermissionLayer;
 use AzGuard\Registry\Values\PermissionSet;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 

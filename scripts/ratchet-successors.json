@@ -1,0 +1,80 @@
+{
+    "schema": "corex-ratchet-successors/1",
+    "groups": [
+        {
+            "before": [
+                "core",
+                "modules"
+            ],
+            "after": [
+                "core"
+            ]
+        },
+        {
+            "before": [
+                "operations"
+            ],
+            "after": [
+                "operations",
+                "tools",
+                "webhooks"
+            ]
+        },
+        {
+            "before": [
+                "attributes"
+            ],
+            "after": [
+                "custom-fields"
+            ]
+        },
+        {
+            "before": [
+                "crm"
+            ],
+            "after": [
+                "flex-crm"
+            ]
+        }
+    ],
+    "packages": {
+        "corex/access": "axiomasoft/corex-access",
+        "corex/attributes": "axiomasoft/corex-custom-fields",
+        "corex/core": "axiomasoft/corex",
+        "corex/intl": "axiomasoft/corex-intl",
+        "corex/media": "axiomasoft/corex-media",
+        "corex/modules": "axiomasoft/corex",
+        "corex/notifications": "axiomasoft/corex-notifications",
+        "corex/operations": "axiomasoft/corex-operations",
+        "corex/panels": "axiomasoft/corex-panels",
+        "corex/recurrence": "axiomasoft/corex-recurrence",
+        "corex/search": "axiomasoft/corex-search",
+        "corex/search-intl": "axiomasoft/corex-search-intl",
+        "corex/search-meilisearch": "axiomasoft/corex-search-meilisearch",
+        "corex/tasks": "axiomasoft/corex-tasks",
+        "corex/tasks-workflow": "axiomasoft/corex-tasks-workflow",
+        "corex/tenancy": "axiomasoft/corex-tenancy",
+        "corex/transfer": "axiomasoft/corex-transfer",
+        "corex/wakeup": "axiomasoft/corex-wakeup",
+        "corex/workflow": "axiomasoft/corex-workflow",
+        "flex/crm": "flex/crm"
+    },
+    "source_transfers": {
+        "when_before_contains": [
+            "core",
+            "modules"
+        ],
+        "entries": [
+            {
+                "from": "core",
+                "to": "intl",
+                "phpstan": 2
+            },
+            {
+                "from": "core",
+                "to": "panels",
+                "phpstan": 31
+            }
+        ]
+    }
+}

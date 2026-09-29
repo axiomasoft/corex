@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Definition\Internal;
 
 use CoreX\Modules\Extend\Api;
+use CoreX\Operations\Validation\JsonCanonical;
 
 /** Canonical operation-contract/1 hash. Excludes activation, host and time. */
 final class OperationContractHasher

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Access\Contracts;
 
-use CoreX\Tasks\Data\CompleteTaskData;
-use CoreX\Tasks\Data\UpdateTaskData;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Task\Data\CompleteTaskData;
+use CoreX\Tasks\Task\Data\UpdateTaskData;
+use CoreX\Tasks\Task\Models\Task;
 
 interface TaskMutationAccess
 {

@@ -5,7 +5,7 @@
   "observed_at": "2026-09-27T13:16:08Z",
   "packages": [
     {
-      "package": "corex/access",
+      "package": "axiomasoft/corex-access",
       "classification": "new-package",
       "prior_version": null,
       "channel": "github-release",
@@ -22,7 +22,7 @@
       }
     },
     {
-      "package": "corex/attributes",
+      "package": "axiomasoft/corex-custom-fields",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -36,7 +36,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/core",
+      "package": "axiomasoft/corex",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "package": "corex/intl",
+      "package": "axiomasoft/corex-intl",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -73,7 +73,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/media",
+      "package": "axiomasoft/corex-media",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -87,7 +87,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/modules",
+      "package": "axiomasoft/corex",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "package": "corex/notifications",
+      "package": "axiomasoft/corex-notifications",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -124,7 +124,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/operations",
+      "package": "axiomasoft/corex-operations",
       "classification": "new-package",
       "prior_version": null,
       "channel": "github-release",
@@ -141,7 +141,7 @@
       }
     },
     {
-      "package": "corex/panels",
+      "package": "axiomasoft/corex-panels",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -155,7 +155,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/recurrence",
+      "package": "axiomasoft/corex-recurrence",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -169,7 +169,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/search",
+      "package": "axiomasoft/corex-search",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -183,7 +183,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/search-intl",
+      "package": "axiomasoft/corex-search-intl",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -197,7 +197,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/search-meilisearch",
+      "package": "axiomasoft/corex-search-meilisearch",
       "classification": "new-package",
       "prior_version": null,
       "channel": "github-release",
@@ -214,7 +214,7 @@
       }
     },
     {
-      "package": "corex/tasks",
+      "package": "axiomasoft/corex-tasks",
       "classification": "upgraded",
       "prior_version": "0.1.0-p4.3",
       "channel": "github-release",
@@ -228,7 +228,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/tasks-workflow",
+      "package": "axiomasoft/corex-tasks-workflow",
       "classification": "new-package",
       "prior_version": null,
       "channel": "github-release",
@@ -245,7 +245,7 @@
       }
     },
     {
-      "package": "corex/tenancy",
+      "package": "axiomasoft/corex-tenancy",
       "classification": "upgraded",
       "prior_version": "0.1.0-p4.3",
       "channel": "github-release",
@@ -259,7 +259,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/transfer",
+      "package": "axiomasoft/corex-transfer",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -273,7 +273,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/wakeup",
+      "package": "axiomasoft/corex-wakeup",
       "classification": "upgraded",
       "prior_version": "0.4.0-alpha.20260918",
       "channel": "github-release",
@@ -287,7 +287,7 @@
       "supporting_archives": []
     },
     {
-      "package": "corex/workflow",
+      "package": "axiomasoft/corex-workflow",
       "classification": "new-package",
       "prior_version": null,
       "channel": "github-release",

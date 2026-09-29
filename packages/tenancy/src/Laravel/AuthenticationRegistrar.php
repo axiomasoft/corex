@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Support\RegistersNothingOnBoot;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\RegistersNothingOnBoot;
+use CoreX\Tenancy\Authentication\Http\Controllers\LogoutController;
+use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Authentication\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Authentication\Oidc\JwksKeySet;
 use CoreX\Tenancy\Authentication\Oidc\OidcClient;
 use CoreX\Tenancy\Authentication\Oidc\OidcDiscovery;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Http\Controllers\LogoutController;
-use CoreX\Tenancy\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Identity\IdentitySyncer;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
-use CoreX\Tenancy\Support\ImpersonationPolicy;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

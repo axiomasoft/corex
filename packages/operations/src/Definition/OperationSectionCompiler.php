@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Definition;
 
-use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Compiler\NormalizedExtension;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
 
 /** @internal Operation declaration compilation. */
 final class OperationSectionCompiler implements ManifestSectionCompiler

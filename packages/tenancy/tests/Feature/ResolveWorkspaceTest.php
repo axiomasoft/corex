@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Models\Department;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\Http\Middleware\ResolveWorkspace;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\User;
-use CoreX\Tenancy\Models\Workspace;
-use CoreX\Tenancy\Models\WorkspaceMember;
-use CoreX\Tenancy\NullTenancyManager;
-use CoreX\Tenancy\Scopes\WorkspaceScope;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\NullTenancyManager;
+use CoreX\Departments\Models\Department;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Identity\Models\User;
+use CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace;
+use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
+use CoreX\Tenancy\Workspace\Models\Workspace;
+use CoreX\Tenancy\Workspace\Models\WorkspaceMember;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ uses()->group('pg');
 
 const ROOT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_RW = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_RW = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

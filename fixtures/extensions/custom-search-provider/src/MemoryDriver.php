@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Support\Candidate;
@@ -14,8 +16,6 @@ use CoreX\Search\Support\IndexSubmission;
 use CoreX\Search\Support\IndexSwap;
 use CoreX\Search\Support\SearchCapabilities;
 use CoreX\Search\Support\SearchQuery;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
 
 final class MemoryDriver implements IndexDriver, SearchProvider
 {

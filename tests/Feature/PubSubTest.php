@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\PubSub;
-use CoreX\Contracts\WorkerRuntime;
-use CoreX\Enums\PubSubDriver;
+use CoreX\Messaging\Contracts\PubSub;
+use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\DatabasePollPubSub;
+use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Messaging\NullPubSub;
 use CoreX\Messaging\RedisPubSub;
 use CoreX\Messaging\SubscribeGuard;

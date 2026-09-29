@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Enums\BulkOperationStatus;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use DateTimeImmutable;
 
 /** @internal Typed bulk result projection. It does not read transfer tables itself. */
 final readonly class BulkResultReader
 {
     /**
-     * @param  callable(DataScope, BulkOperation): bool  $fieldAccess
-     * @param  callable(DataScope, BulkOperation): array<string, mixed>  $manifest
+     * @param  callable(DataScope, BulkOperation):bool  $fieldAccess
+     * @param  callable(DataScope, BulkOperation):array<string, mixed>  $manifest
      */
     public function __construct(
         private mixed $fieldAccess,

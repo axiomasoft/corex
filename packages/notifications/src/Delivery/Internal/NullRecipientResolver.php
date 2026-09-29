@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Delivery\Internal;
 
-use CoreX\Notifications\Contracts\RecipientResolver;
-use CoreX\Notifications\Data\DeliveryTarget;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\RecipientReference;
+use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
+use CoreX\Notifications\Delivery\Data\DeliveryTarget;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
 
 final class NullRecipientResolver implements RecipientResolver
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Recurrence\Internal\RRuleRecurrenceExpander;
+use CoreX\Recurrence\RRuleRecurrenceExpander;
 use CoreX\Recurrence\Tests\Consumers\CommunityTimetableConsumer;
 use CoreX\Recurrence\Tests\Consumers\EquipmentMaintenanceConsumer;
 

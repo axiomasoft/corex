@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tasks\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Contracts\TaskPlanningCommand;
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\PlanningToken;
-use CoreX\Tasks\Data\TimeLogDraft;
-use CoreX\Tasks\Enums\TimeLogSource;
-use CoreX\Tasks\Internal\Planning\PlanningHasher;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tasks\Models\TimeLog;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Data\PlanningToken;
+use CoreX\Tasks\Planning\Internal\PlanningHasher;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Time\Data\TimeLogDraft;
+use CoreX\Tasks\Time\Enums\TimeLogSource;
+use CoreX\Tasks\Time\Models\TimeLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;

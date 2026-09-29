@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Internal\Planning;
+namespace CoreX\Tasks\Planning\Internal;
 
-use CoreX\Tasks\Data\PlanningOperation;
-use CoreX\Tasks\Data\PlanningToken;
-use CoreX\Tasks\Data\TaskOperationKind;
-use CoreX\Tasks\Exceptions\PlanningConflict;
+use CoreX\Tasks\Planning\Data\PlanningOperation;
+use CoreX\Tasks\Planning\Data\PlanningToken;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Exceptions\PlanningConflict;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 

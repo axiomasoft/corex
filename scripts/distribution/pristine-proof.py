@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EXPORTER = ROOT / "scripts/distribution/export.py"
 P41_SOURCE = ROOT / "plans/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source"
 VERSION = "0.1.0-p4.3"
-PACKAGES = ("corex/core", "corex/modules", "corex/tasks", "corex/tenancy")
+PACKAGES = ("axiomasoft/corex", "axiomasoft/corex", "axiomasoft/corex-tasks", "axiomasoft/corex-tenancy")
 POLICY = ROOT / "scripts/distribution/export-policy.json"
 
 

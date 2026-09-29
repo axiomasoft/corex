@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Delivery\Internal;
 
-use CoreX\Notifications\Contracts\NotificationPolicy;
-use CoreX\Notifications\Contracts\RecipientResolver;
-use CoreX\Notifications\Data\DeliveryInput;
-use CoreX\Notifications\Data\NotificationAction;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationSubject;
-use CoreX\Notifications\Data\RecipientReference;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
+use CoreX\Notifications\Delivery\Data\DeliveryInput;
+use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
+use CoreX\Notifications\Inbox\Data\NotificationAction;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use Throwable;
 
 final class DeliveryCoordinator

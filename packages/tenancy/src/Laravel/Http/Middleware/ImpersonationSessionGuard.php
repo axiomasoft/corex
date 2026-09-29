@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Middleware;
+namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;

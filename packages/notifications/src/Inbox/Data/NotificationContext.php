@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Data;
+namespace CoreX\Notifications\Inbox\Data;
 
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
 
 final readonly class NotificationContext
 {

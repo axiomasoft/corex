@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantStorage;
-use CoreX\Exceptions\CentralContextException;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\StorageOperationFailed;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Support\Facades\File;
 
 final class TenantStorageContextResolverForP22 implements TenantContextResolver

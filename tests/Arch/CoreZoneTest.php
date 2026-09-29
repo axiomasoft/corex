@@ -12,6 +12,7 @@ use CoreX\Tests\Support\SourceScanner;
  */
 const CORE_ZONE_ALLOWED = [
     'Foundation' => [],
+    'Modules' => ['Foundation', 'TenancyContracts', 'Audit', 'Settings', 'SavedViews', 'Storage', 'Messaging', 'Features', 'Departments', 'Money'],
     'TenancyContracts' => ['Foundation'],
     'Audit' => ['Foundation', 'TenancyContracts'],
     'Settings' => ['Foundation', 'TenancyContracts'],
@@ -25,17 +26,17 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
-    'packages/core/src/Support/KernelConfigSection.php',
+    'packages/core/src/Config/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
-    'packages/core/src/Support/Config.php',
-    'packages/core/src/Support/CoreOptions.php',
-    'packages/core/src/Support/Console/ValidateConfigCommand.php',
-    'packages/core/src/Support/ServiceProviderModuleRegistrar.php',
-    'packages/core/src/Support/PackageRegistrar.php',
-    'packages/core/src/Support/RegistersNothingOnBoot.php',
+    'packages/core/src/Config/Config.php',
+    'packages/core/src/Config/CoreOptions.php',
+    'packages/core/src/Config/Commands/ValidateConfigCommand.php',
+    'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
+    'packages/core/src/Modules/Contracts/PackageRegistrar.php',
+    'packages/core/src/Modules/RegistersNothingOnBoot.php',
 ];
 
-const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Models/BaseModel.php';
+const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/BaseModel.php';
 
 /**
  * Closed public edges (D116). Not an ALLOWED widening: any other symbol stays R-Z1.
@@ -43,20 +44,43 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Models/BaseModel.php';
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
-    'packages/core/src/Tenancy/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
-    'packages/core/src/Support/Data/DataScope.php' => [
-        'CoreX\\Tenancy\\TenantContext',
+    'packages/core/src/Context/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
+    'packages/core/src/Data/DataScope.php' => [
+        'CoreX\\Context\\Data\\TenantContext',
     ],
-    'packages/core/src/Events/DomainEvent.php' => [
-        'CoreX\\Tenancy\\TenantContext',
-        'CoreX\\Tenancy\\Contracts\\TenantContextResolver',
+    'packages/core/src/Messaging/Events/DomainEvent.php' => [
+        'CoreX\\Context\\Data\\TenantContext',
+        'CoreX\\Context\\Contracts\\TenantContextResolver',
     ],
-    'packages/core/src/Events/FeatureFlagToggled.php' => [
-        'CoreX\\Contracts\\SettingsScope',
+    'packages/core/src/Features/Events/FeatureFlagToggled.php' => [
+        'CoreX\\Settings\\Contracts\\SettingsScope',
+
+        'CoreX\\Messaging\\Events\\DomainEvent',
     ],
     'packages/core/src/Features/DatabaseFeatureFlags.php' => [
-        'CoreX\\Contracts\\SettingsScope',
-        'CoreX\\Enums\\SettingScope',
+        'CoreX\\Settings\\Contracts\\SettingsScope',
+        'CoreX\\Settings\\Enums\\SettingScope',
+    ],
+    'packages/core/src/Context/GuardedTenantContextRestorer.php' => [
+        'CoreX\\Context\\Data\\TenantContext',
+    ],
+    'packages/core/src/Context/NullTenancyManager.php' => [
+        'CoreX\\Context\\Data\\AccountRef',
+        'CoreX\\Context\\Data\\TenantContext',
+        'CoreX\\Context\\Data\\WorkspaceRef',
+    ],
+    'packages/core/src/Context/SingleAccountResolver.php' => [
+        'CoreX\\Context\\Data\\AccountRef',
+        'CoreX\\Context\\Data\\TenantContext',
+    ],
+    'packages/core/src/Departments/Events/DepartmentMoved.php' => [
+        'CoreX\\Messaging\\Events\\DomainEvent',
+    ],
+    'packages/core/src/Features/Contracts/FeatureFlags.php' => [
+        'CoreX\\Settings\\Contracts\\SettingsScope',
+    ],
+    'packages/core/src/Settings/Events/SettingChanged.php' => [
+        'CoreX\\Messaging\\Events\\DomainEvent',
     ],
 ];
 
@@ -66,9 +90,9 @@ const CORE_ZONE_EXACT_IMPORTS = [
  * @var list<string>
  */
 const CORE_ZONE_FOUNDATION_SUPPORT = [
-    'Support/ViolationList.php',
-    'Support/InvalidConfiguration.php',
-    'Support/SecretRef.php',
+    'Config/ViolationList.php',
+    'Config/InvalidConfiguration.php',
+    'Config/SecretRef.php',
 ];
 
 /**
@@ -77,20 +101,17 @@ const CORE_ZONE_FOUNDATION_SUPPORT = [
  * @var array<string, string>
  */
 const CORE_ZONE_PREFIX = [
-    'Support/Time/' => 'Foundation',
-    'Support/Data/' => 'Foundation',
-    'Support/Schema/' => 'Foundation',
-    'PHPStan/' => 'Foundation',
     'Audit/' => 'Audit',
+    'Context/' => 'TenancyContracts',
+    'Data/' => 'Foundation',
     'Departments/' => 'Departments',
     'Features/' => 'Features',
-    'Money/' => 'Money',
-    'Observability/' => 'Foundation',
     'Messaging/' => 'Messaging',
+    'Modules/' => 'Modules',
+    'Money/' => 'Money',
     'Settings/' => 'Settings',
     'Storage/' => 'Storage',
-    'Tenancy/' => 'TenancyContracts',
-    'SavedViews/' => 'SavedViews',
+    'Time/' => 'Foundation',
 ];
 
 /**
@@ -99,83 +120,186 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
-    'Contracts/ConfigReportSection.php' => 'Foundation',
-    'Audit/Contracts/Auditable.php' => 'Audit',
+    'Audit/AuditObserver.php' => 'Audit',
     'Audit/Contracts/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',
     'Audit/Contracts/AuditRetention.php' => 'Audit',
-    'Contracts/DataScopeAuthorizer.php' => 'Foundation',
-    'Contracts/DataScopeCodec.php' => 'Foundation',
-    'Contracts/DescribesError.php' => 'Foundation',
-    'Contracts/DurablePayload.php' => 'Foundation',
-    'Contracts/ModuleRegistrar.php' => 'Foundation',
-    'Contracts/OperationObserver.php' => 'Foundation',
-    'Contracts/DepartmentRepository.php' => 'Departments',
-    'Contracts/FeatureFlagDefinition.php' => 'Features',
-    'Contracts/FeatureFlags.php' => 'Features',
-    'Contracts/IdentityPasswordRehasher.php' => 'TenancyContracts',
-    'Contracts/PubSub.php' => 'Messaging',
-    'Contracts/WorkerRuntime.php' => 'Messaging',
-    'Contracts/SavedViewRepository.php' => 'SavedViews',
-    'Contracts/ViewAccessPolicy.php' => 'SavedViews',
-    'Contracts/ViewSchemaProvider.php' => 'SavedViews',
-    'Contracts/SettingDefaultsProvider.php' => 'Settings',
-    'Contracts/SettingsRepository.php' => 'Settings',
-    'Contracts/SettingsScope.php' => 'Settings',
-    'Contracts/TenantStorage.php' => 'Storage',
-    'Models/BaseModel.php' => 'Foundation',
+    'Audit/Contracts/Auditable.php' => 'Audit',
+    'Audit/CurrentActor.php' => 'Audit',
+    'Audit/Enums/ActorType.php' => 'Foundation',
+    'Audit/HasAuditLog.php' => 'Audit',
     'Audit/Internal/AuditLog.php' => 'Audit',
-    'Models/Department.php' => 'Departments',
-    'Models/FeatureFlag.php' => 'Features',
-    'Models/FeatureOverride.php' => 'Features',
-    'Models/Setting.php' => 'Settings',
-    'Concerns/HasAuditLog.php' => 'Audit',
-    'Concerns/HasConfiguredId.php' => 'Foundation',
-    'Enums/ActorType.php' => 'Foundation',
-    'Enums/ErrorCategory.php' => 'Foundation',
-    'Enums/IdStrategy.php' => 'Foundation',
-    'Enums/UnavailabilityReason.php' => 'Foundation',
-    'Enums/ImpersonationRestrictedAction.php' => 'TenancyContracts',
-    'Enums/MessageClass.php' => 'Messaging',
-    'Enums/PiiClass.php' => 'Messaging',
-    'Enums/PubSubDriver.php' => 'Messaging',
-    'Enums/SettingScope.php' => 'Settings',
-    'Events/Cancellable.php' => 'Foundation',
-    'Events/DomainEvent.php' => 'Foundation',
-    'Events/DepartmentMoved.php' => 'Departments',
-    'Events/FeatureFlagToggled.php' => 'Features',
-    'Events/SettingChanged.php' => 'Settings',
-    'Exceptions/CentralContextException.php' => 'TenancyContracts',
-    'Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
-    'Exceptions/ScopeContextMismatch.php' => 'TenancyContracts',
-    'Exceptions/CrossWorkspaceMoveException.php' => 'Departments',
-    'Exceptions/DepartmentCycleException.php' => 'Departments',
-    'Exceptions/InboxRefused.php' => 'Messaging',
-    'Exceptions/InvalidMessage.php' => 'Messaging',
-    'Exceptions/InvalidScopePayload.php' => 'Foundation',
-    'Exceptions/OutboxLeaseLost.php' => 'Messaging',
-    'Exceptions/OutboxRefused.php' => 'Messaging',
-    'Exceptions/SettingValueTooLargeException.php' => 'Settings',
-    'Exceptions/UnknownMessageContract.php' => 'Messaging',
-    'Exceptions/UnsupportedScopeException.php' => 'Settings',
-    'Support/Data/DataScopeAccessDecision.php' => 'Foundation',
-    'Data/ErrorDescriptor.php' => 'Foundation',
+    'Audit/NullAuditRetention.php' => 'Audit',
+    'Audit/PruneAuditLog.php' => 'Audit',
+    'Audit/QueuedAuditLogger.php' => 'Audit',
+    'Audit/RecordAuditEntry.php' => 'Audit',
+    'Config/Contracts/ConfigReportSection.php' => 'Foundation',
+    'Config/InvalidConfiguration.php' => 'Foundation',
+    'Config/SecretRef.php' => 'Foundation',
+    'Config/ViolationList.php' => 'Foundation',
+    'Context/Contracts/AccountConnectionResolver.php' => 'TenancyContracts',
+    'Context/Contracts/IdentityPasswordRehasher.php' => 'TenancyContracts',
+    'Context/Contracts/ImpersonationService.php' => 'TenancyContracts',
+    'Context/Contracts/TenancyManager.php' => 'TenancyContracts',
+    'Context/Contracts/TenantContextResolver.php' => 'TenancyContracts',
+    'Context/Contracts/TenantContextRestorer.php' => 'TenancyContracts',
+    'Context/Contracts/TenantDatabaseLifecycle.php' => 'TenancyContracts',
+    'Context/Contracts/TenantDatabaseProvisioner.php' => 'TenancyContracts',
+    'Context/Data/AccountRef.php' => 'TenancyContracts',
+    'Context/Data/TenantContext.php' => 'TenancyContracts',
+    'Context/Data/WorkspaceRef.php' => 'TenancyContracts',
+    'Context/DatabaseConnectionConfig.php' => 'TenancyContracts',
+    'Context/Enums/ImpersonationRestrictedAction.php' => 'TenancyContracts',
+    'Context/Exceptions/CentralContextException.php' => 'TenancyContracts',
+    'Context/Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
+    'Context/Exceptions/ScopeContextMismatch.php' => 'TenancyContracts',
+    'Context/GuardedTenantContextRestorer.php' => 'TenancyContracts',
+    'Context/ImpersonationGuard.php' => 'TenancyContracts',
+    'Context/ImpersonationState.php' => 'TenancyContracts',
+    'Context/NullImpersonationService.php' => 'TenancyContracts',
+    'Context/NullTenancyManager.php' => 'TenancyContracts',
+    'Context/ProvisionParams.php' => 'TenancyContracts',
+    'Context/SingleAccountResolver.php' => 'TenancyContracts',
+    'Data/AllowAllDataScopeAuthorizer.php' => 'Foundation',
+    'Data/ArrayDataScopeCodec.php' => 'Foundation',
+    'Data/CallableDataScopeAuthorizer.php' => 'Foundation',
+    'Data/Contracts/DataScopeAuthorizer.php' => 'Foundation',
+    'Data/Contracts/DataScopeCodec.php' => 'Foundation',
+    'Data/DataScope.php' => 'Foundation',
+    'Data/DataScopeAccessDecision.php' => 'Foundation',
+    'Data/DenyDataScopeAuthorizer.php' => 'Foundation',
+    'Data/Exceptions/InvalidScopePayload.php' => 'Foundation',
+    'Data/RecordRef.php' => 'Foundation',
+    'Data/WriteToken.php' => 'Foundation',
+    'Database/BaseModel.php' => 'Foundation',
+    'Database/Enums/IdStrategy.php' => 'Foundation',
+    'Database/HasConfiguredId.php' => 'Foundation',
+    'Database/Schema/IdColumns.php' => 'Foundation',
+    'Departments/Contracts/DepartmentRepository.php' => 'Departments',
+    'Departments/DatabaseDepartmentRepository.php' => 'Departments',
+    'Departments/Department.php' => 'Departments',
+    'Departments/Events/DepartmentMoved.php' => 'Departments',
+    'Departments/Exceptions/CrossWorkspaceMoveException.php' => 'Departments',
+    'Departments/Exceptions/DepartmentCycleException.php' => 'Departments',
+    'Departments/Models/Department.php' => 'Departments',
+    'Errors/Contracts/DescribesError.php' => 'Foundation',
+    'Errors/Data/ErrorDescriptor.php' => 'Foundation',
+    'Errors/Enums/ErrorCategory.php' => 'Foundation',
+    'Errors/Enums/UnavailabilityReason.php' => 'Foundation',
+    'Features/Contracts/FeatureFlagDefinition.php' => 'Features',
+    'Features/Contracts/FeatureFlags.php' => 'Features',
+    'Features/DatabaseFeatureFlags.php' => 'Features',
+    'Features/Events/FeatureFlagToggled.php' => 'Features',
+    'Features/Models/FeatureFlag.php' => 'Features',
+    'Features/Models/FeatureOverride.php' => 'Features',
+    'Messaging/Commands/PruneOutboxMessages.php' => 'Messaging',
+    'Messaging/Commands/RelayOutbox.php' => 'Messaging',
+    'Messaging/Commands/ShowDeliveryHealth.php' => 'Messaging',
+    'Messaging/Contracts/Cancellable.php' => 'Foundation',
+    'Messaging/Contracts/DurableMessagePublisher.php' => 'Messaging',
+    'Messaging/Contracts/DurablePayload.php' => 'Foundation',
+    'Messaging/Contracts/Inbox.php' => 'Messaging',
+    'Messaging/Contracts/MessageContractRegistry.php' => 'Messaging',
+    'Messaging/Contracts/MessagePublisher.php' => 'Messaging',
+    'Messaging/Contracts/Outbox.php' => 'Messaging',
+    'Messaging/Contracts/OutboxRelay.php' => 'Messaging',
+    'Messaging/Contracts/PubSub.php' => 'Messaging',
+    'Messaging/Contracts/TraceContextBridge.php' => 'Messaging',
+    'Messaging/Contracts/WorkerRuntime.php' => 'Messaging',
+    'Messaging/Data/DeliveryHealth.php' => 'Messaging',
+    'Messaging/Data/LeasedMessage.php' => 'Messaging',
+    'Messaging/Data/MessageContract.php' => 'Messaging',
+    'Messaging/Data/MessageEnvelope.php' => 'Messaging',
+    'Messaging/Data/MessagePayload.php' => 'Messaging',
+    'Messaging/DatabasePollPubSub.php' => 'Messaging',
+    'Messaging/DefaultWorkerRuntime.php' => 'Messaging',
+    'Messaging/Enums/MessageClass.php' => 'Messaging',
+    'Messaging/Enums/PiiClass.php' => 'Messaging',
+    'Messaging/Enums/PubSubDriver.php' => 'Messaging',
+    'Messaging/Events/DomainEvent.php' => 'Foundation',
+    'Messaging/Exceptions/InboxRefused.php' => 'Messaging',
+    'Messaging/Exceptions/InvalidMessage.php' => 'Messaging',
+    'Messaging/Exceptions/OutboxLeaseLost.php' => 'Messaging',
+    'Messaging/Exceptions/OutboxRefused.php' => 'Messaging',
+    'Messaging/Exceptions/UnknownMessageContract.php' => 'Messaging',
+    'Messaging/Internal/ArrayMessageContractRegistry.php' => 'Messaging',
+    'Messaging/Internal/NullTraceContextBridge.php' => 'Messaging',
+    'Messaging/Internal/OpenTelemetryTraceContextBridge.php' => 'Messaging',
+    'Messaging/Internal/SqlDeliveryHealth.php' => 'Messaging',
+    'Messaging/Internal/SqlInbox.php' => 'Messaging',
+    'Messaging/Internal/SqlOutbox.php' => 'Messaging',
+    'Messaging/Internal/SqlOutboxRelay.php' => 'Messaging',
+    'Messaging/NullPubSub.php' => 'Messaging',
+    'Messaging/PHPStan/Rules/DurablePayloadRule.php' => 'Foundation',
+    'Messaging/PrunePubSubMessages.php' => 'Messaging',
+    'Messaging/PubSubManager.php' => 'Messaging',
+    'Messaging/RedisPubSub.php' => 'Messaging',
+    'Messaging/SubscribeGuard.php' => 'Messaging',
+    'Messaging/Testing/MessagingFixtures.php' => 'Messaging',
+    'Modules/Contracts/ModuleRegistrar.php' => 'Foundation',
+    'Observability/Contracts/OperationObserver.php' => 'Foundation',
+    'Observability/MetricAttributes.php' => 'Foundation',
+    'Observability/NullOperationObserver.php' => 'Foundation',
+    'Observability/OpenTelemetryBridge.php' => 'Foundation',
+    'Observability/OperationCompleted.php' => 'Foundation',
+    'Observability/OperationContext.php' => 'Foundation',
+    'Observability/OperationFailed.php' => 'Foundation',
+    'Observability/OperationOutcome.php' => 'Foundation',
+    'Observability/OperationStarted.php' => 'Foundation',
+    'Observability/PsrLogOperationObserver.php' => 'Foundation',
+    'Settings/Contracts/SettingDefaultsProvider.php' => 'Settings',
+    'Settings/Contracts/SettingsRepository.php' => 'Settings',
+    'Settings/Contracts/SettingsScope.php' => 'Settings',
+    'Settings/DatabaseSettingsRepository.php' => 'Settings',
+    'Settings/Enums/SettingScope.php' => 'Settings',
+    'Settings/Events/SettingChanged.php' => 'Settings',
+    'Settings/Exceptions/SettingValueTooLargeException.php' => 'Settings',
+    'Settings/Exceptions/UnsupportedScopeException.php' => 'Settings',
+    'Settings/Models/Setting.php' => 'Settings',
+    'Settings/NullSettingDefaultsProvider.php' => 'Settings',
+    'Storage/Contracts/TenantStorage.php' => 'Storage',
+    'Storage/ExportArchiveRef.php' => 'Storage',
+    'Storage/LocalTenantStorage.php' => 'Storage',
+    'Storage/ScopedFilesystem.php' => 'Storage',
+    'Storage/StorageCapabilities.php' => 'Storage',
+    'Storage/StorageCapabilityUnavailable.php' => 'Storage',
+    'Storage/StorageOperationFailed.php' => 'Storage',
+    'Time/FrozenClock.php' => 'Foundation',
+    'Time/LaravelClock.php' => 'Foundation',
+    'Time/SystemClock.php' => 'Foundation',
+    'packages/intl/src/Money/MoneyCast.php' => 'Money',
+    'packages/panels/src/SavedViews/Contracts/SavedViewRepository.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Contracts/ViewAccessPolicy.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Contracts/ViewSchemaProvider.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/SaveViewInput.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/SavedQuery.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/SavedViewRef.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewAction.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewContext.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewField.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewSchema.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewScope.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Data/ViewSubject.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Internal/DenyViewAccessPolicy.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Internal/UnavailableViewSchemaProvider.php' => 'SavedViews',
+    'packages/panels/src/SavedViews/Internal/ViewConfigValidator.php' => 'SavedViews',
 ];
 
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
         ->and(zoneOf('packages/core/src/Messaging/PubSubManager.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
-        ->and(zoneOf('packages/core/src/Support/ViolationList.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Support/InvalidConfiguration.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Support/SecretRef.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Contracts/DescribesError.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Data/ErrorDescriptor.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Enums/ErrorCategory.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Enums/UnavailabilityReason.php'))->toBe('Foundation')
-        ->and(coreZoneKind('packages/core/src/Support/CoreOptions.php'))->toBe('composition')
-        ->and(coreZoneKind('packages/core/src/Support/PackageRegistrar.php'))->toBe('composition')
-        ->and(coreZoneKind('packages/core/src/Support/RegistersNothingOnBoot.php'))->toBe('composition');
+        ->and(zoneOf('packages/core/src/Config/ViolationList.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Config/InvalidConfiguration.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Config/SecretRef.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Errors/Contracts/DescribesError.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Errors/Data/ErrorDescriptor.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Errors/Enums/ErrorCategory.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Errors/Enums/UnavailabilityReason.php'))->toBe('Foundation')
+        ->and(coreZoneKind('packages/core/src/Config/CoreOptions.php'))->toBe('composition')
+        ->and(coreZoneKind('packages/core/src/Modules/Contracts/PackageRegistrar.php'))->toBe('composition')
+        ->and(coreZoneKind('packages/core/src/Modules/RegistersNothingOnBoot.php'))->toBe('composition');
 });
 
 test('zone files import only allowed CoreX zones (R-Z1)', function (): void {
@@ -188,8 +312,8 @@ test('foreign files do not import zone Internal (R-Z2)', function (): void {
 
 test('R-Z1 planting in Foundation RecordRef names the file and symbol', function (): void {
     $line = coreZonePlant(
-        'packages/core/src/Support/Data/RecordRef.php',
-        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
+        'packages/core/src/Data/RecordRef.php',
+        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz1Offenders(...),
     );
 
@@ -200,8 +324,8 @@ test('R-Z1 planting in Foundation RecordRef names the file and symbol', function
 
 test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', function (): void {
     $line = coreZonePlant(
-        'packages/core/src/Tenancy/AccountRef.php',
-        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
+        'packages/core/src/Context/Data/AccountRef.php',
+        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz1Offenders(...),
     );
 
@@ -212,8 +336,8 @@ test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', f
 
 test('R-Z2 planting in ActorType names the file and symbol', function (): void {
     $line = coreZonePlant(
-        'packages/core/src/Enums/ActorType.php',
-        'CoreX\\SavedViews\\Internal\\SqlSavedViewRepository',
+        'packages/core/src/Audit/Enums/ActorType.php',
+        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
         rz2Offenders(...),
     );
 
@@ -223,14 +347,14 @@ test('R-Z2 planting in ActorType names the file and symbol', function (): void {
 });
 
 test('R-Z0 planting of an unclassified error file names the path', function (): void {
-    $relative = 'packages/core/src/Data/UnclassifiedError.php';
+    $relative = 'packages/core/src/Errors/Data/UnclassifiedError.php';
     $absolute = SourceScanner::repoRoot().'/'.$relative;
     $contents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Data;
+namespace CoreX\Errors\Data;
 
 final class UnclassifiedError
 {
@@ -242,12 +366,12 @@ PHP;
     try {
         $hits = array_values(array_filter(
             rz0Offenders(),
-            static fn (string $line): bool => str_contains($line, 'Data/UnclassifiedError.php'),
+            static fn (string $line): bool => str_contains($line, 'Errors/Data/UnclassifiedError.php'),
         ));
 
         expect($hits)->not->toBe([])
             ->and($hits[0])->toContain('R-Z0')
-            ->and($hits[0])->toContain('Data/UnclassifiedError.php');
+            ->and($hits[0])->toContain('Errors/Data/UnclassifiedError.php');
     } finally {
         if (is_file($absolute)) {
             unlink($absolute);
@@ -256,14 +380,14 @@ PHP;
 });
 
 test('R-Z0 planting of an unclassified Support file names the file', function (): void {
-    $relative = 'packages/core/src/Support/Probe.php';
+    $relative = 'packages/core/src/Config/Probe.php';
     $absolute = SourceScanner::repoRoot().'/'.$relative;
     $contents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 final class Probe
 {
@@ -275,7 +399,7 @@ PHP;
     try {
         $hits = array_values(array_filter(
             rz0Offenders(),
-            static fn (string $line): bool => str_contains($line, 'Support/Probe.php'),
+            static fn (string $line): bool => str_contains($line, 'Config/Probe.php'),
         ));
 
         expect($hits)->not->toBe([])
@@ -347,6 +471,10 @@ function coreZoneKind(string $relative): string
 
     if (in_array($under, CORE_ZONE_FOUNDATION_SUPPORT, true)) {
         return 'Foundation';
+    }
+
+    if (isset(CORE_ZONE_DUMP[$under])) {
+        return CORE_ZONE_DUMP[$under];
     }
 
     foreach (CORE_ZONE_PREFIX as $pathPrefix => $zone) {
@@ -462,7 +590,7 @@ function rz2Offenders(): array
         $absolute = SourceScanner::repoRoot().'/'.$relative;
 
         foreach (coreZoneCoreXImports($absolute) as $import) {
-            if (preg_match('/^CoreX\\\\([^\\\\]+)\\\\Internal\\\\([^\\\\]+)$/', $import) !== 1) {
+            if (preg_match('/^CoreX\\\\.+\\\\Internal\\\\/', $import) !== 1) {
                 continue;
             }
 
@@ -482,26 +610,7 @@ function rz2Offenders(): array
 
 function coreZoneFileInZoneDirectories(string $relative, string $zone): bool
 {
-    $directories = match ($zone) {
-        'Messaging' => ['Messaging'],
-        'SavedViews' => ['SavedViews'],
-        'TenancyContracts' => ['Tenancy'],
-        'Foundation' => [
-            'Support', 'PHPStan', 'Data', 'Concerns', 'Contracts', 'Models', 'Enums', 'Events', 'Exceptions',
-        ],
-        'Audit', 'Departments', 'Features', 'Money', 'Settings', 'Storage' => [$zone],
-        default => [],
-    };
-
-    $under = substr($relative, strlen('packages/core/src/'));
-
-    foreach ($directories as $directory) {
-        if (str_starts_with($under, $directory.'/')) {
-            return true;
-        }
-    }
-
-    return false;
+    return coreZoneKind($relative) === $zone;
 }
 
 /**

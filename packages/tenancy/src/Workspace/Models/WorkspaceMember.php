@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Workspace\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Concerns\HasConfiguredId;
+use CoreX\Database\HasConfiguredId;
+use CoreX\Tenancy\Identity\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * `wsp_workspace_members` — fast admission flag for the resolver (403
- * without an active row); roles are NOT stored here (corex/access owns
+ * without an active row); roles are NOT stored here (axiomasoft/corex-access owns
  * aut_role_assignments, P2.8). No soft deletes — the table carries no
  * `deleted_at` (B-11 §2.2).
  *

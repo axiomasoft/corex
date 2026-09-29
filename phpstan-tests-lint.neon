@@ -19,7 +19,7 @@
 # ВТРОЕ меньше вызовов: подъём уровня здесь ОСЛАБЛЯЕТ гейт, а не усиливает.
 
 includes:
-    - packages/modules/extension.neon
+    - packages/core/extension.neon
 
 parameters:
     tmpDir: build/phpstan-tests-lint
@@ -28,14 +28,14 @@ parameters:
         - tests
         - packages/operations/tests
         - packages/access/tests
-        - packages/crm/tests
+        - products/flex-crm/tests
         - packages/tasks/tests
         - packages/tenancy/tests
 
     scanDirectories:
         - packages/access/src
         - packages/access/database/seeders
-        - packages/crm/src
+        - products/flex-crm/src
         - packages/tasks/src
         - packages/tenancy/src
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Locale;
+namespace CoreX\Intl\Locale\Internal;
 
-use CoreX\Intl\Exceptions\InvalidLocaleException;
+use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Locale;
 
 final class Bcp47Validator

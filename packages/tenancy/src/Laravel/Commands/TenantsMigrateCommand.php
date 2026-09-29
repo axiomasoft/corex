@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Commands;
+namespace CoreX\Tenancy\Laravel\Commands;
 
 use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use Illuminate\Console\Command;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Api\Enums\IdempotencyRequirement;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Operation;
-use CoreX\Api\Tests\Support\OperationHandlerDouble;
 use CoreX\Modules\Extend\Api;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
+use CoreX\Operations\Tests\Support\OperationHandlerDouble;
 
 $schema = ['type' => 'object'];
 

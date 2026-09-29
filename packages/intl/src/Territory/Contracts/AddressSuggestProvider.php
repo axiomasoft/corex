@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Territory\Contracts;
 
-use CoreX\Intl\Data\AddressQuery;
-use CoreX\Intl\Data\SuggestionLimits;
-use CoreX\Intl\Data\SuggestionResult;
+use CoreX\Intl\Territory\Data\AddressQuery;
+use CoreX\Intl\Territory\Data\SuggestionLimits;
+use CoreX\Intl\Territory\Data\SuggestionResult;
 
 interface AddressSuggestProvider
 {

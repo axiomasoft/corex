@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\OpenApi;
 
-use CoreX\Api\Contracts\SchemaContributor;
+use CoreX\Operations\Definition\Contracts\SchemaContributor;
+use CoreX\Operations\Definition\OperationRegistry;
 
 /** Build-time installed-code projection; not a public endpoint or a grant of access. */
 final class OpenApiDocumentGenerator

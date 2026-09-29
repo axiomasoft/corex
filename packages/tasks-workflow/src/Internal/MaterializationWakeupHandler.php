@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use Illuminate\Contracts\Container\Container;

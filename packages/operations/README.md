@@ -11,14 +11,14 @@ single declaration authority. `ApiProfile` and the five `api/v1` snapshot files
 are deterministic code projections; account activation and actor authorization
 remain live per invocation. GraphQL is outside this contract.
 
-Requires PHP 8.4+ and Laravel 12 or 13, `corex/core` and `corex/modules`. Physical tenancy is
+Requires PHP 8.4+ and Laravel 12 or 13, `axiomasoft/corex` and `axiomasoft/corex`. Physical tenancy is
 provided separately by the application; this package has no dependency on an identity product,
 role engine, application user class or a particular tenancy implementation.
 
 ## Explicit installation
 
-Install `corex/operations` together with the compatible `corex/modules` operation-declaration version.
-Add `CoreX\Api\ApiServiceProvider::class` to the application's provider list. The Composer
+Install `axiomasoft/corex-operations` together with the compatible `axiomasoft/corex` operation-declaration version.
+Add `CoreX\Operations\ApiServiceProvider::class` to the application's provider list. The Composer
 package deliberately has **no** `extra.laravel.providers` entry. Once this provider is
 installed, package routes are enabled by default under `/api`. Set `routes.enabled` to
 `false` before keeping a handwritten mount. Prefix and extra middleware come from
@@ -89,12 +89,12 @@ Success must carry an envelope, so 204 is not supported. Use a new operation/API
 breaking request or response change. Public interface changes follow the package's SemVer policy.
 
 ```php
-final class CreateNoteOperation implements \CoreX\Api\Contracts\OperationHandler
+final class CreateNoteOperation implements \CoreX\Operations\Definition\Contracts\OperationHandler
 {
     public function __construct(private readonly CreateNote $action) {}
 
     public function handle(
-        \CoreX\Api\Contracts\RequestContext $context,
+        \CoreX\Operations\Invocation\Contracts\RequestContext $context,
         array $input,
         array $parameters,
     ): array {
@@ -146,7 +146,7 @@ and a non-active account with `account_unavailable` 403. A boxed deployment may 
 The default context resolver trusts workspace narrowing performed by the surrounding pipeline.
 For token/service authentication, that pipeline must check membership for the **same** identity returned
 by `PrincipalResolver`; operation authorization must recheck revocation as required by the product.
-Use `corex/tenancy`'s additive `Contracts\PrincipalWorkspaceResolver::resolveFor($principalId, $slug)`
+Use `axiomasoft/corex-tenancy`'s additive `Contracts\PrincipalWorkspaceResolver::resolveFor($principalId, $slug)`
 for this check: it uses the active account database and reads active membership afresh, without `auth()`.
 Then call the existing `TenancyManager::setWorkspace($workspace)` and verify the resulting context.
 The legacy session `WorkspaceResolver::resolve()` remains supported and delegates to this same query.
@@ -218,7 +218,7 @@ catalogue as a tenant's authorization listing. This package does not ship a clie
 
 ## Tool catalogue and policy
 
-Register `CoreX\Api\ToolServiceProvider::class` alongside `ApiServiceProvider` when exposing the
+Register `CoreX\Tools\ToolServiceProvider::class` alongside `ApiServiceProvider` when exposing the
 optional tool surface. It binds `Contracts\ToolCatalogue` and `Contracts\ToolPolicy` only; no routes,
 migrations or network calls are installed.
 
@@ -300,7 +300,7 @@ store unavailability is an infrastructure error. Host body/rate/concurrency caps
 
 ## Durable bulk operations
 
-`corex/transfer` is optional (`suggest`), and owns all import/export reads, mapping, writes
+`axiomasoft/corex-transfer` is optional (`suggest`), and owns all import/export reads, mapping, writes
 and result storage. Bind `Contracts\BulkTransferFactory` explicitly in installed application
 code. It creates a transfer job atomically and idempotently using the bulk operation id,
 and returns a `Data\BulkTransferSession` with public transfer ports and the current token.

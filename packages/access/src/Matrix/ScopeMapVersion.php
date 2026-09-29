@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
 use Closure;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository;
@@ -17,7 +17,7 @@ use Illuminate\Contracts\Cache\Repository;
  * п.8), never before the transaction that wrote the matching AzGuard keys
  * commits. Carries an explicit tenant salt (the account id) rather than
  * relying on a cache-store prefix bootstrapper (findings/P2.8-azguard-
- * inventory-2026-07-26.md §5): `corex/access` runs in boxed installs too,
+ * inventory-2026-07-26.md §5): `axiomasoft/corex-access` runs in boxed installs too,
  * where no such bootstrapper is wired.
  */
 final readonly class ScopeMapVersion

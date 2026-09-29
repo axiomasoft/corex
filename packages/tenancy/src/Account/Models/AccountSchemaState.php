@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Account\Models;
 
 use Carbon\CarbonImmutable;
+use CoreX\Tenancy\Provisioning\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Locale;
+namespace CoreX\Intl\Locale\Internal;
 
-use CoreX\Intl\Data\LocaleResolution;
+use CoreX\Intl\Locale\Data\LocaleResolution;
 
 final class RequestLocaleScope
 {

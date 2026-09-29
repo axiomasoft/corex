@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Authentication\Oidc\OidcClient;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Account;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
@@ -42,7 +42,7 @@ const OL_JWKS_URI = OL_ISSUER.'/jwks';
 
 const ROOT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_OL = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_OL = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

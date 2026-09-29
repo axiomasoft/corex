@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Tests;
 
-use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Intl\Tests\Support\IntlTestCase;
-use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
 use Illuminate\Foundation\Application;
 use Override;
 

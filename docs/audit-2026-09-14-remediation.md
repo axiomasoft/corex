@@ -84,7 +84,7 @@
 | Root pest --group=pg | 107 passed, 356 assertions |
 | APP_ENV=testing packages/tenancy/vendor/bin/pest -c packages/tenancy/phpunit.xml | 411 passed, 1067 assertions, включая missing-archive/DROP |
 | APP_ENV=testing packages/auth/vendor/bin/pest -c packages/auth/phpunit.xml | 147 passed, 354 assertions, SQLite + PG |
-| APP_ENV=testing packages/crm/vendor/bin/pest -c packages/crm/phpunit.xml | 17 passed, 66 assertions, SQLite + PG |
+| APP_ENV=testing products/flex-crm/vendor/bin/pest -c products/flex-crm/phpunit.xml | 17 passed, 66 assertions, SQLite + PG |
 | Tasks: --exclude-group=pg / --group=pg | 20 / 2 passed, 65 / 19 assertions |
 | Root PHPStan, phpstan-tests-lint.neon; PHPStan auth/crm/tasks/tenancy | PASS, 0 errors. В существующем CentralApiClientTest добавлен отсутствовавший import Str. Новых suppressions нет. |
 | Root pint --test; git diff --check | PASS |
@@ -92,7 +92,7 @@
 | Root coverage, --coverage --min=80 | **88.6%**, 217 tests passed |
 | CRM coverage, --coverage --min=95 | **95.4%**, 17 tests passed |
 
-Coverage: `XDEBUG_MODE=coverage /usr/bin/php8.4 vendor/bin/pest --coverage --min=80` из root, аналогичная команда с --min=95 из packages/crm. Использован уже установленный PHP **8.4.25 / Xdebug 3.5.3**: основной Herd PHP не поддерживает dynamic loading. PHP configuration не изменена. Это локальное доказательство, не current CI GREEN или вся PHP/Laravel matrix.
+Coverage: `XDEBUG_MODE=coverage /usr/bin/php8.4 vendor/bin/pest --coverage --min=80` из root, аналогичная команда с --min=95 из products/flex-crm. Использован уже установленный PHP **8.4.25 / Xdebug 3.5.3**: основной Herd PHP не поддерживает dynamic loading. PHP configuration не изменена. Это локальное доказательство, не current CI GREEN или вся PHP/Laravel matrix.
 
 Mutation runner не запускался на дереве владельца: его fallback содержит reset/checkout. Использована копия `/tmp/corex-audit-mutations-1zcybq` со своей .git, rebased vendor symlinks и snapshot commits **только внутри копии**. Package-файлы сверены побайтово. Логи сохранены в `/tmp/corex-remediation-*.log`; coverage — root-coverage/crm-coverage, suites — sqlite/root-pg/tenancy/auth-all/crm-all/tasks-sqlite/tasks-pg, sabotage — mutations.
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 
 /** @internal Configuration report composition. */
 final class IntlConfigSection implements ConfigReportSection

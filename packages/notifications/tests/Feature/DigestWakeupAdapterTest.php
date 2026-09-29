@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\SettingsScope;
 use CoreX\CoreServiceProvider;
 use CoreX\Notifications\Tests\TestCase;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Settings\Contracts\SettingsRepository;
+use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Time\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Testing\WakeupFixtures;

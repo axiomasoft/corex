@@ -23,13 +23,13 @@ test('config composition gate exits 0 on a clean tree', function (): void {
 
 test('config composition gate exits 1 and names the planted file', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/ConfigCompositionProbe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/ConfigCompositionProbe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 final class ConfigCompositionProbe
 {
@@ -63,13 +63,13 @@ PHP;
 
 test('config composition gate catches qualified and dynamic calls without counting methods', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/ConfigCompositionProbe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/ConfigCompositionProbe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 final class ConfigCompositionProbe
 {

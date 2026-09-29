@@ -44,8 +44,8 @@ class ReleaseCandidateTest(unittest.TestCase):
                 'packages/beta': {'distribution': 'private', 'mirror': 'example/corex-beta'},
             },
             'excluded': [
-                {'path': 'packages/crm', 'reason': 'flex-product-consumer'},
-                {'path': 'packages/import-export', 'reason': 'tombstone'},
+                {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
+                {'path': 'packages/transfer', 'reason': 'tombstone'},
             ],
         }
 

@@ -14,18 +14,18 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * `Stancl\*` живёт только в corex/tenancy (B-11 §7.3 п.1, D13): boxed-профиль
+ * `Stancl\*` живёт только в axiomasoft/corex-tenancy (B-11 §7.3 п.1, D13): boxed-профиль
  * не тянет stancl/tenancy вообще, поэтому любой другой пакет —
- * включая `CoreX\Tenancy\Contracts\*`, которые физически лежат в corex/core —
+ * включая `CoreX\Tenancy\Contracts\*`, которые физически лежат в axiomasoft/corex —
  * обязан ходить через контракты ядра, а не через типы вендора.
  *
  * Граница проверяется по ПУТИ файла, а не по неймспейсу: неймспейс
- * `CoreX\Tenancy\` принадлежит ДВУМ пакетам (контракты в corex/core,
- * реализации в corex/tenancy, D13), и namespace-проверка пропустила бы
+ * `CoreX\Tenancy\` принадлежит ДВУМ пакетам (контракты в axiomasoft/corex,
+ * реализации в axiomasoft/corex-tenancy, D13), и namespace-проверка пропустила бы
  * ровно тот случай, ради которого инвариант существует — импорт Stancl в
- * boxed-безопасном corex/core. Разрешённые фрагменты пути приходят из
+ * boxed-безопасном axiomasoft/corex. Разрешённые фрагменты пути приходят из
  * `parameters.corexTenancy.stanclAllowedPathFragments` (`extension.neon`),
- * как у контекстных правил modules-lint в corex/modules (P1.13).
+ * как у контекстных правил modules-lint в axiomasoft/corex (P1.13).
  *
  * Правило работает на {@see FileNode} и обходит дерево само: так один проход
  * ловит и `use Stancl\...` (обычный/групповой), и полностью-квалифицированную
@@ -94,7 +94,7 @@ final class StanclImportBoundaryRule implements Rule
             $reportedLines[$line] = true;
 
             $errors[] = RuleErrorBuilder::message(sprintf(
-                'Importing "%s" outside corex/tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
+                'Importing "%s" outside axiomasoft/corex-tenancy is forbidden (B-11 §7.3 п.1, AC-29) — go through the CoreX\Tenancy\Contracts\* seam so the boxed profile stays free of stancl/tenancy.',
                 $referenced,
             ))
                 ->identifier('corexTenancy.stanclImportBoundary')

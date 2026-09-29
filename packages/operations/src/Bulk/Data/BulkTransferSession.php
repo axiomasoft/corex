@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Bulk\Data;
 
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ExportRunner;

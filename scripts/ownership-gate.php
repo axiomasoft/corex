@@ -52,6 +52,8 @@ try {
             $catalog[trim($m[1])] = $m[2];
         }
     }
+    /** @var array<string, array<string, array<string, list<string>>>> $sourceInventory */
+    $sourceInventory = [];
     $inventory = [];
     $violations = [];
     foreach (glob($root.'/packages/*/composer.json') ?: [] as $manifest) {
@@ -127,6 +129,14 @@ try {
                 };
                 foreach ($patterns as $kind => $pattern) {
                     preg_match_all($pattern, $source, $matches);
+
+                    if ($kind === 'tag') {
+                        preg_match_all('/->publishes(?:Migrations)?\(\s*\[.*?\]\s*,\s*\[([^\]]*)\]/s', $source, $tagArrays);
+                        foreach ($tagArrays[1] as $tags) {
+                            preg_match_all('~[\'"]([^\'"]+)[\'"]~', $tags, $tagNames);
+                            $matches[1] = array_merge($matches[1], $tagNames[1]);
+                        }
+                    }
                     foreach ($matches[1] as $id) {
                         if ($kind === 'namespace') {
                             $sourceNamespaces[$id] = true;
@@ -143,6 +153,7 @@ try {
 
                 // A pre-transfer identifier expires when its exact source declarations disappear.
                 $declaredSources = $identifierSources[$kind][$id] ?? [];
+                $sourceInventory[$kind][$id][$package] = $declaredSources;
                 $packageKey = is_string($package) ? $package : '';
                 $allowedSources = $plannedSources[$packageKey][$kind][$id] ?? [];
                 $planned = ! in_array('--strict', $argv, true) && $declaredSources !== []
@@ -187,11 +198,24 @@ try {
     }
     $owners = [];
     foreach ($inventory as $record) {
-        $owners[$record['kind']][$record['id']][$record['package']] = $map['packages'][$record['package']]['target'];
+        $owners[$record['kind']][$record['id']][$record['package']] = $record['package'];
     }
     foreach ($owners as $kind => $ids) {
         foreach ($ids as $id => $packages) {
-            if (count(array_unique($packages)) > 1) {
+            $shared = $kind === 'tag' && ! in_array('--strict', $argv, true)
+                ? ($map['projected_shared_tags'][$id] ?? []) : [];
+            $sourcesMatch = $shared !== [] && array_diff(array_keys($packages), $shared) === [];
+            foreach (array_keys($packages) as $owner) {
+                $expectedSources = $owner === 'axiomasoft/corex'
+                    ? ['packages/core/src/CoreServiceProvider.php']
+                    : ($plannedSources[$owner][$kind][$id] ?? []);
+
+                if (($sourceInventory[$kind][$id][$owner] ?? []) !== $expectedSources) {
+                    $sourcesMatch = false;
+                }
+            }
+
+            if (count(array_unique($packages)) > 1 && ! $sourcesMatch) {
                 $names = array_keys($packages);
                 sort($names);
                 $violations[] = "O1 {$kind} {$id} owners ".implode(',', $names);

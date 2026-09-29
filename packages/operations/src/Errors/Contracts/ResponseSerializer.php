@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Errors\Contracts;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\InvocationMetadata;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 
 interface ResponseSerializer

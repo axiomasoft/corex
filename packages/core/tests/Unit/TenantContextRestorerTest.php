@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\GuardedTenantContextRestorer;
+use CoreX\Data\DataScope;
 
 final class MutableRestorerContextResolver implements TenantContextResolver
 {

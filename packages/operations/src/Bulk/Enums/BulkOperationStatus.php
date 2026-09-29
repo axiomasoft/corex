@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Enums;
+namespace CoreX\Operations\Bulk\Enums;
 
 /** @internal Bulk status is projected through the bulk operation contract and wire representation. */
 enum BulkOperationStatus: string

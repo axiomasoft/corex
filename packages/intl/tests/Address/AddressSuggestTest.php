@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Intl\Contracts\AddressSuggestProvider;
-use CoreX\Intl\Data\AddressQuery;
-use CoreX\Intl\Data\SuggestionLimits;
-use CoreX\Intl\Internal\Address\AddressSuggestGuard;
-use CoreX\Intl\Internal\Address\FixtureAddressSuggestProvider;
-use CoreX\Intl\Internal\Address\MapAddressSuggestProvider;
-use CoreX\Intl\Internal\Address\UnsupportedAddressSuggestProvider;
-use CoreX\Intl\Internal\Locale\Bcp47Validator;
+use CoreX\Intl\Locale\Internal\Bcp47Validator;
+use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
+use CoreX\Intl\Territory\Data\AddressQuery;
+use CoreX\Intl\Territory\Data\SuggestionLimits;
+use CoreX\Intl\Territory\Internal\Address\AddressSuggestGuard;
+use CoreX\Intl\Territory\Internal\Address\FixtureAddressSuggestProvider;
+use CoreX\Intl\Territory\Internal\Address\MapAddressSuggestProvider;
+use CoreX\Intl\Territory\Internal\Address\UnsupportedAddressSuggestProvider;
 
 function addressGuard(): AddressSuggestGuard
 {

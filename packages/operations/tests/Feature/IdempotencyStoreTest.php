@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\ApiServiceProvider;
-use CoreX\Api\Contracts\IdempotencyStore;
-use CoreX\Api\Data\IdempotencyAttempt;
-use CoreX\Api\Data\IdempotencyScope;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\SqlIdempotencyStore;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Support\SecretRef;
-use CoreX\Support\Time\FrozenClock;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Config\SecretRef;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
+use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
+use CoreX\Operations\Idempotency\Data\IdempotencyScope;
+use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Time\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

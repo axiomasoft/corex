@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
-use CoreX\Tasks\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Data\TaskOperationKind;
-use CoreX\Tasks\Enums\TaskStatus;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Task\Enums\TaskStatus;
+use CoreX\Tasks\Task\Models\Task;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Contracts\Config\Repository;
@@ -54,7 +54,7 @@ final class CaptureTaskCompletion
 
         $workflowBinding->capture(new TriggerRequest(
             context: app(TenantContextResolver::class)->current(),
-            module: 'corex/tasks-workflow',
+            module: 'axiomasoft/corex-tasks-workflow',
             entityHandle: 'tsk.task',
             eventId: 'task:'.$task->getKey(),
             eventName: 'completed',

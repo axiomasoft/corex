@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Contracts;
+namespace CoreX\Access\Contracts;
 
 /**
  * Compiles aut_role_matrix rows into AzGuard's az_guard_role_permissions

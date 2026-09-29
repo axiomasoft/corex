@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Preferences\Contracts;
 
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationPreference;
-use CoreX\Notifications\Data\PreferenceInput;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Preferences\Data\NotificationPreference;
+use CoreX\Notifications\Preferences\Data\PreferenceInput;
 
 interface PreferenceRepository
 {

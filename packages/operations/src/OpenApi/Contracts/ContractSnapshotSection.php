@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\OpenApi\Contracts;
 
 /** A package-owned document in the installed-code contract snapshot. */
 interface ContractSnapshotSection

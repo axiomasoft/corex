@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Http\Middleware\AccountStatusGate;
-use CoreX\Tenancy\Http\Middleware\ResolveTenantFromHost;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\Domain;
-use CoreX\Tenancy\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\DomainTrust\Models\Domain;
+use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
+use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
+use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;

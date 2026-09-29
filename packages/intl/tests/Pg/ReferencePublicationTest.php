@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Intl\Contracts\DatasetImporter;
-use CoreX\Intl\Contracts\GeographyProvider;
-use CoreX\Intl\Data\DatasetCandidate;
-use CoreX\Intl\Data\DatasetGeneration;
-use CoreX\Intl\Internal\Reference\FixtureReferenceNormalizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Territory\Contracts\DatasetImporter;
+use CoreX\Intl\Territory\Contracts\GeographyProvider;
+use CoreX\Intl\Territory\Data\DatasetCandidate;
+use CoreX\Intl\Territory\Data\DatasetGeneration;
+use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {

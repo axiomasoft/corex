@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Support;
 
-use CoreX\Support\Data\RecordRef;
+use CoreX\Data\RecordRef;
 
 final readonly class Candidate
 {

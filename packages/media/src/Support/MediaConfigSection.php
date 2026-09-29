@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Support;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 
 /** @internal Configuration report composition. */
 final class MediaConfigSection implements ConfigReportSection

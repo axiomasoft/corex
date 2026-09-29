@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\OutboxLeaseLost;
+use CoreX\Config\Config;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
-use CoreX\Support\Config;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Time\FrozenClock;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
 
@@ -55,7 +55,7 @@ function outboxRelayInsertRow(array $overrides = []): string
     $storedEnvelopeVersion = $overrides['envelope_version'] ?? MessageEnvelope::ENVELOPE_VERSION;
     $envelope = new MessageEnvelope(
         messageId: $overrides['id'] ?? '01932f5a-0000-7000-8000-000000000001',
-        source: 'corex/core',
+        source: 'axiomasoft/corex',
         name: 'membership.expired',
         contractVersion: 1,
         occurredAt: new DateTimeImmutable('2026-01-01T00:00:00Z'),

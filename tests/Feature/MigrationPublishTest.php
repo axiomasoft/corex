@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Panels\PanelsServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -58,6 +59,7 @@ function migratePublishedInIsolation(array $files): string
 }
 
 it('publishes exactly the 12 sys_* migrations and they migrate on a clean PG schema', function (): void {
+    $this->app->register(PanelsServiceProvider::class);
     $target = publishTarget();
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
@@ -84,9 +86,10 @@ it('publishes exactly the 12 sys_* migrations and they migrate on a clean PG sch
 
 it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG schema', function (): void {
     // The publish group is registered by ModulesServiceProvider (not part of
-    // the default package providers for corex/core tests).
+    // the default package providers for axiomasoft/corex tests).
     $this->app->register(ModulesServiceProvider::class);
 
+    $this->app->register(PanelsServiceProvider::class);
     $target = publishTarget();
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-modules-migrations', '--force' => true])->run();
@@ -127,7 +130,7 @@ it('declares explicit µs precision on every sys_*/mod_* timestamptz column (D32
 
     foreach ([
         realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        realpath(__DIR__.'/../../packages/modules/database/migrations'),
+        realpath(__DIR__.'/../../packages/core/database/migrations'),
     ] as $path) {
         $this->artisan('migrate', [
             '--database' => PUBLISH_TEST_CONNECTION,

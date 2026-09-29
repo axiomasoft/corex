@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Data;
+namespace CoreX\Notifications\Digest\Data;
+
+use CoreX\Notifications\Delivery\Data\RecipientReference;
 
 final readonly class DigestRef
 {

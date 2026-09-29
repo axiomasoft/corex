@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Support;
+namespace CoreX\Operations\Laravel\Support;
 
-use CoreX\Api\Data\ApiVersion;
-use CoreX\Api\Data\ApiVersionStatus;
-use CoreX\Api\Data\CapabilityDescriptor;
-use CoreX\Support\InvalidConfiguration;
-use CoreX\Support\SecretRef;
-use CoreX\Support\ViolationList;
+use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\SecretRef;
+use CoreX\Config\ViolationList;
+use CoreX\Operations\Versioning\Data\ApiVersion;
+use CoreX\Operations\Versioning\Data\ApiVersionStatus;
+use CoreX\Operations\Versioning\Data\CapabilityDescriptor;
 use InvalidArgumentException;
 
 /** @internal Package composition type. The provider is the only config reader. */

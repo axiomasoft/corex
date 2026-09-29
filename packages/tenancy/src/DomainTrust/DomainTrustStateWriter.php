@@ -6,8 +6,8 @@ namespace CoreX\Tenancy\DomainTrust;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Contracts\DomainChallengeStore;
-use CoreX\Tenancy\Events\DomainTrustChanged;
-use CoreX\Tenancy\Models\Domain;
+use CoreX\Tenancy\DomainTrust\Events\DomainTrustChanged;
+use CoreX\Tenancy\DomainTrust\Models\Domain;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;

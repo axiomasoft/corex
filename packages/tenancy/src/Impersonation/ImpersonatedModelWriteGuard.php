@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Impersonation;
 
 use Closure;
-use CoreX\Exceptions\ImpersonationRestrictedException;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\Models\ImpersonationGrant;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use CoreX\Context\ImpersonationGuard;
+use CoreX\Tenancy\Impersonation\Models\ImpersonationGrant;
 use Illuminate\Database\Eloquent\Model;
 
 /**

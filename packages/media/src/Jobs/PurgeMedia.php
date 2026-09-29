@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Jobs;
 
-use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

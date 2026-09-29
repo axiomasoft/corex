@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Access\WorkspaceScopeWiring;
-use CoreX\Auth\Tests\Stubs\FakeWorkspaceScope;
+use CoreX\Access\Access\WorkspaceScopeWiring;
+use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
@@ -97,7 +97,7 @@ it('silently skips wiring when the scope class is null (boxed profile, no config
     expect($model->getGlobalScopes())->toBe([]);
 });
 
-// Symmetric case — a pinned class that does not exist (e.g. corex/tenancy not installed) also silently skips.
+// Symmetric case — a pinned class that does not exist (e.g. axiomasoft/corex-tenancy not installed) also silently skips.
 it('silently skips wiring when the pinned scope class does not exist', function (): void {
     $model = new class extends Model
     {
@@ -119,7 +119,7 @@ it('silently skips wiring when the pinned scope class does not exist', function 
         titleAttribute: null,
     ));
 
-    WorkspaceScopeWiring::wire($registry, 'CoreX\\Auth\\Tests\\Stubs\\DoesNotExist');
+    WorkspaceScopeWiring::wire($registry, 'CoreX\\Access\\Tests\\Stubs\\DoesNotExist');
 
     expect($model->getGlobalScopes())->toBe([]);
 });

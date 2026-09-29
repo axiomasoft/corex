@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging;
 
-use CoreX\Contracts\WorkerRuntime;
+use CoreX\Messaging\Contracts\WorkerRuntime;
 use Override;
 
 /**

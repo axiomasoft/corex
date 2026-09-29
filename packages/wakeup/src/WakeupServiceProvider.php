@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup;
 
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Commands\SweepWakeups;
 use CoreX\Wakeup\Commands\ValidateWakeupStamps;
 use CoreX\Wakeup\Contracts\DueWakeupSource;

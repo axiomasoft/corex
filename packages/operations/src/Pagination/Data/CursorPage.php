@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Pagination\Data;
 
-use CoreX\Api\Internal\OrderingRegistry;
-use CoreX\Api\Internal\SignedCursorCodec;
+use CoreX\Operations\Pagination\OrderingRegistry;
+use CoreX\Operations\Pagination\SignedCursorCodec;
 
 /** Assembled page. The next cursor is signed only after the item list exists. */
 final readonly class CursorPage

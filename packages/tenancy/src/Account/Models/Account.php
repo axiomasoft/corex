@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Account\Models;
 
 use Carbon\CarbonImmutable;
+use CoreX\Tenancy\DomainTrust\Models\Domain;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
@@ -12,7 +13,13 @@ use Stancl\Tenancy\Database\Concerns\HasDatabase;
 use Stancl\Tenancy\Database\Concerns\InvalidatesResolverCache;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Models\Tenant;
-use Stancl\Tenancy\Events;
+use Stancl\Tenancy\Events\CreatingTenant;
+use Stancl\Tenancy\Events\DeletingTenant;
+use Stancl\Tenancy\Events\SavingTenant;
+use Stancl\Tenancy\Events\TenantDeleted;
+use Stancl\Tenancy\Events\TenantSaved;
+use Stancl\Tenancy\Events\TenantUpdated;
+use Stancl\Tenancy\Events\UpdatingTenant;
 
 /**
  * `root_accounts` — physical DB-per-account tenant (B-11 §3.1, D14). Typed
@@ -65,13 +72,13 @@ final class Account extends Tenant implements TenantWithDatabase
      * not implicitly by row-creation.
      */
     protected $dispatchesEvents = [
-        'saving' => Events\SavingTenant::class,
-        'saved' => Events\TenantSaved::class,
-        'creating' => Events\CreatingTenant::class,
-        'updating' => Events\UpdatingTenant::class,
-        'updated' => Events\TenantUpdated::class,
-        'deleting' => Events\DeletingTenant::class,
-        'deleted' => Events\TenantDeleted::class,
+        'saving' => SavingTenant::class,
+        'saved' => TenantSaved::class,
+        'creating' => CreatingTenant::class,
+        'updating' => UpdatingTenant::class,
+        'updated' => TenantUpdated::class,
+        'deleting' => DeletingTenant::class,
+        'deleted' => TenantDeleted::class,
     ];
 
     #[Override]

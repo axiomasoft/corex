@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Messaging;
 
 use Closure;
-use CoreX\Contracts\PubSub;
-use CoreX\Contracts\WorkerRuntime;
-use CoreX\Support\Config;
+use CoreX\Config\Config;
+use CoreX\Messaging\Contracts\PubSub;
+use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Override;

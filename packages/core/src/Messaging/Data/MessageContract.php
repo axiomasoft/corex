@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Enums\MessageClass;
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\InvalidMessage;
+use CoreX\Messaging\Enums\MessageClass;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 
 /**
  * Объявление опубликованного контракта сообщения.

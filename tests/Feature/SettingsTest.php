@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\SettingDefaultsProvider;
-use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\SettingsScope;
-use CoreX\Events\SettingChanged;
-use CoreX\Exceptions\SettingValueTooLargeException;
-use CoreX\Exceptions\UnsupportedScopeException;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\DefaultSettingDefinition;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Lifecycle\DatabaseModuleStateReader;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
+use CoreX\Modules\Settings\DefaultSettingDefinition;
 use CoreX\Modules\Support\ModulesOptions;
+use CoreX\Settings\Contracts\SettingDefaultsProvider;
+use CoreX\Settings\Contracts\SettingsRepository;
+use CoreX\Settings\Contracts\SettingsScope;
 use CoreX\Settings\DatabaseSettingsRepository;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Settings\Events\SettingChanged;
+use CoreX\Settings\Exceptions\SettingValueTooLargeException;
+use CoreX\Settings\Exceptions\UnsupportedScopeException;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
@@ -227,8 +227,8 @@ it('rejects a value over the 64KB quota', function (): void {
         ->toThrow(SettingValueTooLargeException::class);
 });
 
-it('resolves a manifest-declared DefaultSettingDefinition through the container-bound SettingDefaultsProvider once corex/modules is registered (P1.25, A68, test в)', function (): void {
-    // Registering corex/modules must rebind the boxed Null default
+it('resolves a manifest-declared DefaultSettingDefinition through the container-bound SettingDefaultsProvider once axiomasoft/corex is registered (P1.25, A68, test в)', function (): void {
+    // Registering axiomasoft/corex must rebind the boxed Null default
     // (CoreServiceProvider::register()) to CompiledSettingDefaultsProvider —
     // reading the manifest default without any row in sys_settings is
     // exactly the wiring gap A68/Pending Work-P1 left open.

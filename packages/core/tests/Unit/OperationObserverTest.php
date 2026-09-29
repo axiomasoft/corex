@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Data\ErrorDescriptor;
-use CoreX\Enums\ActorType;
-use CoreX\Enums\ErrorCategory;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Observability\NullOperationObserver;
 use CoreX\Observability\OperationCompleted;
 use CoreX\Observability\OperationContext;

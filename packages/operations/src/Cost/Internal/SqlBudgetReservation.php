@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Cost;
+namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Api\Contracts\BudgetReservation;
-use CoreX\Api\Data\ActualCost;
-use CoreX\Api\Data\ThrottleStatus;
+use CoreX\Operations\Cost\Contracts\BudgetReservation;
+use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\ThrottleStatus;
 use Override;
 
 /** @internal */

@@ -1,0 +1,92 @@
+# axiomasoft/corex
+
+Модульная система CoreX (namespace `CoreX\Modules\`): манифест модуля, discovery,
+`RegistryCompiler` + extenders, `ModuleRegistry` (compiled hot-path),
+lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр владения
+для безопасного purge. Ставится поверх `axiomasoft/corex`. MIT.
+
+## Требование к СУБД
+
+Модульная система **требует PostgreSQL 16**: `mod_*`-таблицы и lifecycle-FSM
+используют `pg_advisory_xact_lock`/`CHECK`/`jsonb`. SQLite-лейн покрывает
+только pure-PHP код; lifecycle/purge/кеш-инвалидация проверяются
+исключительно на `composer test:pg`.
+
+## Установка миграций (важно)
+
+Таблицы модульной системы (`mod_modules`, `mod_records`, `mod_lifecycle_log`) —
+**PostgreSQL-only** (advisory-locks, `CHECK`, jsonb) и **тенантские**. Пакет их
+**НЕ подключает автоматически** — схема ставится явной публикацией:
+
+```bash
+# 1. Скопировать миграции в приложение
+php artisan vendor:publish --tag=corex-modules-migrations
+
+# 2. Прогнать их НА ТЕНАНТСКОМ коннекшене
+php artisan migrate --database=<tenant>
+```
+
+Тег `corex-modules-migrations-tenant` — синоним, явно называющий скоуп
+коннекшена (`mod_*` — тенант-схема). Коннекшн, на котором работает hot-path
+реестра и lifecycle, задаётся `config('corex-modules.connection')` (`null` =
+дефолтный; под P2 stancl подменяет дефолт на базу тенанта).
+
+### Версия схемы и апгрейды
+
+Потребитель публикует **копию** миграций; изменения схемы поставляются **новыми
+аддитивными миграциями** под тем же тегом (при апгрейде повторите
+`vendor:publish` + `migrate`). Текущее поколение —
+`CoreX\Modules\ModulesServiceProvider::SCHEMA_VERSION`.
+
+## Идентификаторы и время
+
+Ключевые колонки (`mod_modules.id`, `mod_lifecycle_log.id`/`actor_id`) следуют
+`config('corex.ids.strategy')` через `CoreX\Database\Schema\IdColumns` (шов
+axiomasoft/corex). Все `timestamptz` — с явной микросекундной точностью
+(`precision: 6`). Порядок purge в `mod_records` детерминирован монотонным
+`seq bigserial` (не часами) — FK-безопасный обратный порядок удаления.
+
+## Tool declarations (P8)
+
+Modules may expose headless tools through the existing `Api` extender: `Api::tool()` for
+standalone handlers and `Api::exposeTool()` to project an already-declared operation. Tool
+declarations compile into the same API slice as HTTP operations; they do not create routes or
+implicit CRUD. Canonical tuple, wire name, contract hash and schema validation are enforced at
+compile time; runtime catalogue and guarded invocation live in optional `axiomasoft/corex-operations`.
+
+## Registry introspection
+
+`RegistryIntrospection` exposes a read-only map of the eight compiled extenders, entity/field
+ownership and capability traits, plus a bounded `why()` explanation for module activation.
+Diagnostics redact handler classes, connection topology and other confidential internals.
+The local operator CLI is:
+
+```bash
+php artisan corex:modules:why example/demo
+php artisan corex:modules:why example/demo --account=<trusted-account-id> --json
+```
+
+Without `--account`, output is declaration-only and does not claim a tenant activation verdict.
+Tested installed compatibility passports remain a consumer/P9 obligation.
+
+## Compatibility evidence
+
+The factual compatibility passport, its local proof class, and explicit limits
+are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
+constitute a publication promise.
+
+## Failure semantics
+
+Invalid or conflicting module declarations fail compilation before publishing a registry. A disabled module is not an implicit grant. Lifecycle and purge require the supported tenant PostgreSQL connection and package-owned schema; connection, dependency or ownership failures must be resolved before retry. Preserve transaction boundaries and do not replace a rejected lifecycle operation with direct table writes.
+
+### Optional compiler contributions
+
+Resolve `RegistryCompiler` through the container so installed contributors are included.
+A package may register its Eloquent cast with `FieldCastRegistry::register($castClass, $type)`;
+cast arguments such as `:USD` are ignored during lookup. The built-in scalar mappings still work
+without optional packages.
+
+Packages tag their `ManifestSectionCompiler` implementation with the interface name. Each
+compiler owns one API declaration mode, its validation phase and normalized records. Operations
+runs before tools, allowing exposed tools to resolve declared operations. An unsupported mode
+fails compilation instead of silently omitting declarations.

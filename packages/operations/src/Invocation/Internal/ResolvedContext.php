@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Invocation\Internal;
 
-use CoreX\Api\Contracts\Principal;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\InvocationMetadata;
 use Override;
 
 /** @internal */

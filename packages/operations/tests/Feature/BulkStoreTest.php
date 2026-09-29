@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Data\BulkOperationDefinition;
-use CoreX\Api\Enums\BulkOperationStatus;
-use CoreX\Api\Internal\Bulk\SqlBulkOperationStore;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\ArrayDataScopeCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Time\FrozenClock;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\GuardedTenantContextRestorer;
+use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
+use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Time\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

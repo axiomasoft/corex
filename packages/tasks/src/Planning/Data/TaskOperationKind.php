@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Planning\Data;
 
 /** Kinds accepted by the tasks-owned durable operation ledger. */
 enum TaskOperationKind: string

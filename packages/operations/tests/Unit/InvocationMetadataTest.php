@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\InvocationMetadata;
+use CoreX\Operations\Invocation\InvocationMetadata;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 

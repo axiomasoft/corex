@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\MessageClass;
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\OutboxRefused;
-use CoreX\Exceptions\UnknownMessageContract;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessagePayload;
+use CoreX\Messaging\Enums\MessageClass;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\OutboxRefused;
+use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Observability\OperationContext;
-use CoreX\Support\Config;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Time\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

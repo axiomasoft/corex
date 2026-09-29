@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace CoreX\SearchIntl\Internal;
 
 use Closure;
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Data\LocalizedText;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
+use CoreX\Intl\Locale\Data\LocaleResolution;
+use CoreX\Intl\Translation\Data\LocalizedText;
 use CoreX\Search\Contracts\SearchHydrator;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\SearchPage;
 use CoreX\Search\Support\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
 use Override;
 
 final readonly class LocalizedSearchHydrator implements SearchHydrator
 {
     /**
      * @param  list<LocalizedFieldBinding>  $bindings
-     * @param  Closure(DataScope, LocalizedFieldBinding, RecordRef): ?LocalizedText  $loadLocalized
+     * @param  Closure(DataScope, LocalizedFieldBinding, RecordRef):?LocalizedText  $loadLocalized
      */
     public function __construct(
         private SearchHydrator $base,

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Definition\Internal;
 
-use CoreX\Api\Contracts\SchemaContributor;
-use CoreX\Api\Operation;
+use CoreX\Operations\Definition\Contracts\SchemaContributor;
+use CoreX\Operations\Definition\Operation;
 use Override;
 
 /** @internal */

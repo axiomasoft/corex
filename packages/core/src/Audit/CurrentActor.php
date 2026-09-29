@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Audit;
 
-use CoreX\Enums\ActorType;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\ImpersonationState;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\ImpersonationState;
 
 /**
  * Actor/request snapshot for an audit entry built outside a queue worker
  * (context: ip/user_agent/request_id/module). Real agent/api_key actor
  * wiring lands with entity-scoped auth. Under an active impersonation
  * (D137/§5.9 п.3) the actor is `support`/staff — resolved from the
- * `ImpersonationService` CONTRACT via the container, never a `corex/tenancy`
+ * `ImpersonationService` CONTRACT via the container, never a `axiomasoft/corex-tenancy`
  * import (D139 — this class lives in ядро, level 0 must not depend on the
  * cloud package).
  *

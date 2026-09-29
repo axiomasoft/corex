@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Contracts;
+namespace CoreX\Access\Contracts;
 
-use CoreX\Auth\RecordContext;
+use CoreX\Access\RecordContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\ImpersonationRestrictedException;
-use CoreX\Tenancy\AccountRef;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Oidc\OidcClient;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Events\ImpersonationEnded;
-use CoreX\Tenancy\Events\ImpersonationStarted;
-use CoreX\Tenancy\Exceptions\OidcAuthenticationException;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\User;
+use CoreX\Tenancy\Identity\Models\User;
+use CoreX\Tenancy\Impersonation\Events\ImpersonationEnded;
+use CoreX\Tenancy\Impersonation\Events\ImpersonationStarted;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -83,7 +83,7 @@ const IM_JWKS_URI = IM_ISSUER.'/jwks';
 
 const ROOT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/root';
 const TENANT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_IM = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_IM = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');

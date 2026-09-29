@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\EntityNotFound;
 use CoreX\Modules\Registry\ArrayEntityRegistry;
 use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -135,7 +135,7 @@ it('round-trips an EntityDefinition — enums collapse to ->value, fields recurs
         handle: 'core.widget',
         model: Widget::class,
         table: 'widgets',
-        module: 'corex/core',
+        module: 'axiomasoft/corex',
         labelSingular: 'Widget',
         labelPlural: 'Widgets',
         capabilities: [Capability::Auditable, Capability::Searchable],

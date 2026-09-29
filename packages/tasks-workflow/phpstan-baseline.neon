@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Support\Schema\IdColumns from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 2
 			path: database/migrations/2026_09_15_000072_create_task_series_mapping.php
@@ -43,7 +43,7 @@ parameters:
 			path: src/Internal/MaterializationStore.php
 
 		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(array<string, mixed>): CoreX\Tasks\Data\TaskReference given.'
+			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(array<string, mixed>): CoreX\Tasks\Task\Data\TaskReference given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/MaterializationStore.php
@@ -67,7 +67,7 @@ parameters:
 			path: src/Internal/MaterializationStore.php
 
 		-
-			rawMessage: 'Parameter $taskRefs of class CoreX\TasksWorkflow\Data\MaterializationReceipt constructor expects list<CoreX\Tasks\Data\TaskReference>, array<CoreX\Tasks\Data\TaskReference> given.'
+			rawMessage: 'Parameter $taskRefs of class CoreX\TasksWorkflow\Data\MaterializationReceipt constructor expects list<CoreX\Tasks\Task\Data\TaskReference>, array<CoreX\Tasks\Task\Data\TaskReference> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/MaterializationStore.php
@@ -133,7 +133,7 @@ parameters:
 			path: src/Internal/SeriesDefinitionCodec.php
 
 		-
-			rawMessage: 'Parameter $context of class CoreX\Tasks\Data\ActorData constructor expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter $context of class CoreX\Tasks\Task\Data\ActorData constructor expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/SeriesDefinitionCodec.php

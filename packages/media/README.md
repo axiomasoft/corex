@@ -1,4 +1,4 @@
-# corex/media
+# axiomasoft/corex-media
 
 Private, tenant-scoped media lifecycle primitives for CoreX. The package stores no public URLs and defaults to denying every media action until an application supplies a `MediaPolicy`.
 
@@ -10,4 +10,4 @@ Consumers must bind `MediaPolicy`, provide the existing `TenantStorage` contract
 
 ## Installation
 
-Install with `composer require corex/media` through your configured distribution channel. Supply the existing tenant storage binding and a `MediaPolicy`, then install the package-owned media schema on the tenant connection. Upload/read permissions remain denied until the host policy authorizes them; configure the private storage disk before accepting uploads.
+Install with `composer require axiomasoft/corex-media` through your configured distribution channel. Supply the existing tenant storage binding and a `MediaPolicy`, then install the package-owned media schema on the tenant connection. Upload/read permissions remain denied until the host policy authorizes them; configure the private storage disk before accepting uploads.

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Commands;
+namespace CoreX\Operations\OpenApi\Commands;
 
-use CoreX\Api\Contracts\ContractSnapshotSection;
-use CoreX\Api\Internal\ApiProfileFactory;
-use CoreX\Api\Internal\ContractSnapshotBuilder;
-use CoreX\Api\OpenApiDocumentGenerator;
-use CoreX\Api\OperationRegistry;
-use CoreX\Api\Support\ApiOptions;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
+use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
+use CoreX\Operations\OpenApi\OpenApiDocumentGenerator;
+use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Console\Command;
 use RuntimeException;
 

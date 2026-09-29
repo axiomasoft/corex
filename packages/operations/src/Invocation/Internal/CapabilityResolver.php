@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Invocation\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\ContextResolver;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Data\ApiProfile;
-use CoreX\Api\Data\EffectiveCapability;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Api\Support\ApiOptions;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\Contracts\ContextResolver;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Versioning\Data\ApiProfile;
+use CoreX\Operations\Versioning\Data\EffectiveCapability;
+use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Http\Request;
 
 /** Live capability view. Payload tenant, workspace and actor fields are ignored. */

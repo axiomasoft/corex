@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks;
 
+use CoreX\Modules\Definition\ModuleDefinition;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\ModuleDefinition;
-use CoreX\Modules\ModuleManifest;
-use CoreX\Tasks\Models\Project;
-use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Task\Models\Task;
 
 final class TasksModule extends ModuleDefinition
 {
-    public const string NAME = 'corex/tasks';
+    public const string NAME = 'axiomasoft/corex-tasks';
 
     public function manifest(): ModuleManifest
     {

@@ -1,0 +1,11 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: max
+    tmpDir: ../../build/phpstan/tools
+    paths:
+        - src
+    checkModelProperties: true
+    checkPhpDocMissingReturn: true

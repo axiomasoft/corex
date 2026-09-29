@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch;
+namespace CoreX\SearchMeilisearch;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 
 /** @internal Configuration report composition. */
 final class MeilisearchConfigSection implements ConfigReportSection

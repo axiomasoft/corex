@@ -20,7 +20,7 @@
   проверяет tenant/workspace-контекст и атомарно обновляет `spent_minutes` при
   `recordTime`.
 - Публичный `TaskOperationReceipts` даёт интеграциям read/record операции в
-  транзакции вызывающей стороны; только `corex/tasks` знает физическую таблицу.
+  транзакции вызывающей стороны; только `axiomasoft/corex-tasks` знает физическую таблицу.
   Повтор ключа вызывает ошибку уникальности: клиент читает сохранённый receipt
   и сверяет payload hash перед признанием повтора.
 
@@ -30,8 +30,8 @@
 commit/rollback.
 
 ```php
-$task = app(\CoreX\Tasks\Contracts\CreateTaskCommand::class)->handle(
-    new \CoreX\Tasks\Data\TaskDraft(
+$task = app(\CoreX\Tasks\Task\Contracts\CreateTaskCommand::class)->handle(
+    new \CoreX\Tasks\Task\Data\TaskDraft(
         workspaceId: $workspaceId,
         title: 'Подготовить предложение',
         actor: $actor,
@@ -41,7 +41,7 @@ $task = app(\CoreX\Tasks\Contracts\CreateTaskCommand::class)->handle(
 );
 ```
 
-Миграции применяет lifecycle `corex/modules`; service provider их не загружает.
+Миграции применяет lifecycle `axiomasoft/corex`; service provider их не загружает.
 Alignment migration автоматически заменяет только пустую legacy-схему. При
 наличии legacy-строк она останавливается до DDL и требует отдельного
 согласованного переноса данных.
@@ -63,4 +63,4 @@ constitute a publication promise.
 
 ## Installation
 
-Install with `composer require corex/tasks` from the approved CoreX channel and register the module through `corex/modules`. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
+Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through `axiomasoft/corex`. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.

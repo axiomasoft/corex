@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspace;
 
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Data\WorkspaceRef;
 
 /**
  * Resolves `/w/{slug}` to a workspace, checking the current user's

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Exceptions\InboxRefused;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\Inbox;
-use CoreX\Support\Config;
+use CoreX\Messaging\Exceptions\InboxRefused;
 use Illuminate\Database\ConnectionInterface;
 use Override;
 use Psr\Clock\ClockInterface;

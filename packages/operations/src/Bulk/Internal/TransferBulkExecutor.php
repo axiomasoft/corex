@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Api\Contracts\BulkOperationStore;
-use CoreX\Api\Contracts\BulkTransferFactory;
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Data\BulkOperationDefinition;
-use CoreX\Api\Data\BulkTransferSession;
-use CoreX\Api\Enums\BulkOperationStatus;
-use CoreX\Contracts\DataScopeCodec;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
+use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Data\BulkTransferSession;
+use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\TransferRunner;
 use CoreX\Transfer\Data\TransferReceipt;

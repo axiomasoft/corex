@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Stubs;
+namespace CoreX\Access\Tests\Stubs;
 
 use Closure;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
 
 /**
  * Test double letting AccessChecker/GrantSource/PermissionLayer tests move
- * the active workspace context on demand. `corex/core`'s own boxed default
+ * the active workspace context on demand. `axiomasoft/corex`'s own boxed default
  * (NullTenancyManager) makes setWorkspace() a deliberate no-op — it cannot
- * stand in here, corex/access does not depend on corex/tenancy (AC-28) so
+ * stand in here, axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28) so
  * there is no real StanclTenancyManager available in this package's tests.
  */
 final class FakeTenancyManager implements TenancyManager

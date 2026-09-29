@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Validation\Data;
 
-use CoreX\Api\Internal\JsonCanonical;
+use CoreX\Operations\Validation\JsonCanonical;
 use InvalidArgumentException;
 
 /** Canonical JSON scalar or structured value for bounded schema validation. */

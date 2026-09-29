@@ -20,7 +20,7 @@ use CoreX\Tests\Support\SourceScanner;
 // Foundation = the CoreX\*-namespaced packages (L0 agnostic + L1 domain-base). The
 // crm package IS the Flex\* thematic layer (L2, may depend on corex/*) — it is
 // intentionally excluded from the "may not import Flex" scan.
-$foundationPackages = ['core', 'modules', 'tenancy', 'access', 'tasks', 'operations', 'recurrence'];
+$foundationPackages = ['core', 'tenancy', 'access', 'tasks', 'operations', 'tools', 'webhooks', 'recurrence'];
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
 // The vendor inversion D70 fixed was exactly this kind of leak.
@@ -53,10 +53,10 @@ test('foundation packages declare no upward composer dependencies', function () 
     expect($offenders)->toBe([]);
 });
 
-// (2a) corex/core is the L0 agnostic platform: its composer require-graph must
+// (2a) axiomasoft/corex is the L0 agnostic platform: its composer require-graph must
 // contain no sibling monorepo package (the item's own criterion — "core без
 // require corex/*"). This is a package fact, not a namespace fact.
-test('corex/core declares no monorepo package dependencies', function (): void {
+test('axiomasoft/corex declares no monorepo package dependencies', function (): void {
     $composer = json_decode(
         (string) file_get_contents(SourceScanner::packagePath('core', 'composer.json')),
         associative: true,
@@ -65,7 +65,7 @@ test('corex/core declares no monorepo package dependencies', function (): void {
 
     $monorepoRequires = array_values(array_filter(
         array_keys($composer['require'] ?? []),
-        static fn (string $pkg): bool => str_starts_with($pkg, 'corex/') || str_starts_with($pkg, 'flex/'),
+        static fn (string $pkg): bool => str_starts_with($pkg, 'axiomasoft/corex-') || str_starts_with($pkg, 'flex/'),
     ));
 
     expect($monorepoRequires)->toBe([]);
@@ -74,10 +74,10 @@ test('corex/core declares no monorepo package dependencies', function (): void {
 // (2b) Source-level counterpart of 2a: core owns the CoreX\Tenancy\* contracts
 // physically (boxed-safe, brain-recon §5), so those imports are legal; forbidden
 // are the *sibling packages* Modules/Auth/Tasks and any Flex\* namespace.
-test('corex/core source imports no sibling package namespace', function (): void {
+test('axiomasoft/corex source imports no sibling package namespace', function (): void {
     $offenders = SourceScanner::filesMatching(
         SourceScanner::packagePath('core', 'src'),
-        '/\buse\s+(CoreX\\\\(Modules|Auth|Tasks|Api)|Flex)\\\\/',
+        '/\buse\s+(CoreX\\\\(Access|Tasks|Operations|Tools|Webhooks)|Flex)\\\\/',
     );
 
     expect($offenders)->toBe([]);
@@ -126,10 +126,11 @@ test('foundation packages carry no flex product literals', function () use ($fou
 
     // Whole-file allowance, by filename, for history that must not be rewritten.
     $allowedFile = [
-        // CHANGELOG entries record the `flex/modules` → `corex/modules` and
+        // CHANGELOG entries record the `flex/modules` → `axiomasoft/corex` and
         // `flex:modules:*` → `corex:modules:*` renames themselves (P2.0/P3.3).
         // Scrubbing the old names would make the changelog false.
         'CHANGELOG.md',
+        'corex-modules-CHANGELOG.md',
     ];
 
     $offenders = [];

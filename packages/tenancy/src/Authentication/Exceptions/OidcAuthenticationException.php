@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Exceptions;
+namespace CoreX\Tenancy\Authentication\Exceptions;
 
 use Illuminate\Http\Response;
 use RuntimeException;

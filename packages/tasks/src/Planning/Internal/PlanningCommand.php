@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Internal\Planning;
+namespace CoreX\Tasks\Planning\Internal;
 
 use Closure;
-use CoreX\Tasks\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Contracts\TaskPlanningCommand;
-use CoreX\Tasks\Data\PlanningOperation;
-use CoreX\Tasks\Data\PlanningSubject;
-use CoreX\Tasks\Data\PlanningToken;
-use CoreX\Tasks\Data\ProjectDraft;
-use CoreX\Tasks\Data\ProjectReference;
-use CoreX\Tasks\Data\SprintDraft;
-use CoreX\Tasks\Data\SprintReference;
-use CoreX\Tasks\Data\TimeLogDraft;
-use CoreX\Tasks\Data\TimeLogReference;
-use CoreX\Tasks\Enums\ProjectStatus;
-use CoreX\Tasks\Enums\SprintStatus;
-use CoreX\Tasks\Exceptions\InvalidPlanningDraft;
-use CoreX\Tasks\Models\Project;
-use CoreX\Tasks\Models\Sprint;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tasks\Models\TimeLog;
-use CoreX\Tasks\Support\TaskModuleGuard;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Access\Internal\TaskModuleGuard;
+use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Data\PlanningOperation;
+use CoreX\Tasks\Planning\Data\PlanningSubject;
+use CoreX\Tasks\Planning\Data\PlanningToken;
+use CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft;
+use CoreX\Tasks\Project\Data\ProjectDraft;
+use CoreX\Tasks\Project\Data\ProjectReference;
+use CoreX\Tasks\Project\Enums\ProjectStatus;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Sprint\Data\SprintDraft;
+use CoreX\Tasks\Sprint\Data\SprintReference;
+use CoreX\Tasks\Sprint\Enums\SprintStatus;
+use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Time\Data\TimeLogDraft;
+use CoreX\Tasks\Time\Data\TimeLogReference;
+use CoreX\Tasks\Time\Models\TimeLog;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
@@ -386,7 +386,7 @@ final class PlanningCommand implements TaskPlanningCommand
         return $date !== false && $date->format('Y-m-d') === $value;
     }
 
-    /** @param  Closure(): TimeLogReference  $callback */
+    /** @param Closure():TimeLogReference $callback */
     private function transactionWithRetry(Connection $connection, Closure $callback): TimeLogReference
     {
         $attempt = 0;

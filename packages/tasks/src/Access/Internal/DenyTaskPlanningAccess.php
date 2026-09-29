@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Support;
+namespace CoreX\Tasks\Access\Internal;
 
-use CoreX\Tasks\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\PlanningOperation;
-use CoreX\Tasks\Data\PlanningSubject;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Planning\Data\PlanningOperation;
+use CoreX\Tasks\Planning\Data\PlanningSubject;
+use CoreX\Tasks\Task\Data\ActorData;
 use Illuminate\Auth\Access\AuthorizationException;
 
 final class DenyTaskPlanningAccess implements TaskPlanningAccess

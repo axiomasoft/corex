@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Data;
+namespace CoreX\Intl\Locale\Data;
 
 final readonly class LocalePolicy
 {

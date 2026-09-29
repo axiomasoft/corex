@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace ThirdParty\Panels;
 
-use CoreX\Models\BaseModel;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Panels\Contracts\PanelCatalogue;
 use CoreX\Panels\Contracts\PanelProvider;
@@ -16,8 +18,6 @@ use CoreX\Panels\Data\PanelAccess;
 use CoreX\Panels\Data\PanelContext;
 use CoreX\Panels\Data\PanelDescriptor;
 use CoreX\Panels\Data\PanelReference;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use RuntimeException;
 
 final class Module

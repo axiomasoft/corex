@@ -10,8 +10,8 @@ use CoreX\Recurrence\Data\RecurrenceSet;
 use CoreX\Recurrence\Data\RecurrenceWindow;
 use CoreX\Recurrence\Exceptions\StaleCursorException;
 use CoreX\Recurrence\Internal\CanonicalHasher;
-use CoreX\Recurrence\Internal\RRuleRecurrenceExpander;
 use CoreX\Recurrence\Internal\RuntimeProfile;
+use CoreX\Recurrence\RRuleRecurrenceExpander;
 
 function recurrenceSet(
     string $seriesId,

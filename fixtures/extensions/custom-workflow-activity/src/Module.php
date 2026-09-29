@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ThirdParty\Workflow;
 
-use CoreX\Models\BaseModel;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
 use CoreX\Modules\Data\ExtensionStamp;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Workflow;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Testing\ExtensionContract;
 use RuntimeException;

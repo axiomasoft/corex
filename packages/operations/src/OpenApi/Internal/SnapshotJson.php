@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\OpenApi\Internal;
 
+use CoreX\Operations\Validation\JsonCanonical;
 use InvalidArgumentException;
 use JsonException;
 use stdClass;

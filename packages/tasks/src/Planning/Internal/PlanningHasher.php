@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Internal\Planning;
+namespace CoreX\Tasks\Planning\Internal;
 
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\PlanningOperation;
-use CoreX\Tasks\Data\ProjectDraft;
-use CoreX\Tasks\Data\SprintDraft;
-use CoreX\Tasks\Data\TimeLogDraft;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Planning\Data\PlanningOperation;
+use CoreX\Tasks\Project\Data\ProjectDraft;
+use CoreX\Tasks\Sprint\Data\SprintDraft;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Time\Data\TimeLogDraft;
 
 /** @internal Canonical payload digests for planning operations. */
 final class PlanningHasher

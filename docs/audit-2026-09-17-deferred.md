@@ -11,7 +11,7 @@ Ledger фазы P12.9. Нормативная матрица — `research/P12-a
 | 1 | Explicit `SetAttribute`/`RemoveAttribute`, presence-тип, различение missing/null/remove в `ValuePatch`/`ValueBag` | B5 | Меняет семантику хранилища шире table-map P12.7 | — | ADR-ATTRIBUTES-PRESENCE |
 | 2 | Разделение `DatabaseTransferRunner`; таксономия ошибок; вынос внешнего вызова из retryable-транзакции; снятие `catch (Throwable)`; семантика dry-run | TR2, TR3, TR4 | P12.4 — hard rename без смены поведения; смешивание сделало бы дифф непроверяемым | — | ADR-TRANSFER-RUNNER-REFACTOR |
 | 3 | Полная декомпозиция `DataScope` на `AccessContext`/`StorageContext` | A1 | P12.8 снял только `Closure`; остальное меняет `shared-data-foundation/1` шире выданного G-API | G-API (major) | ADR-DATASCOPE-DECOMPOSITION |
-| 4 | Сокращение `corex/core` | §2 reconciliation | Извлечение 6–8 пакетов — отдельная программа вне глубины P12 | G-API, G-SCHEMA | ADR-CORE-REDUCTION |
+| 4 | Сокращение `axiomasoft/corex` | §2 reconciliation | Извлечение 6–8 пакетов — отдельная программа вне глубины P12 | G-API, G-SCHEMA | ADR-CORE-REDUCTION |
 | 5 | Вынос `config()` из domain/repository/engine в типизированные options-объекты | G1 | ≥20 call-sites; вне выбранной глубины P12 | — | ADR-TYPED-CONFIG-INJECTION |
 | 6 | Перевод tenant-зависимых `singleton` в `scoped`/resettable | G3 | Lifetime change может сломать tenancy composition | — | ADR-TENANT-SCOPED-SERVICES |
 | 7 | Перенос DTO из `core/src/Contracts/` в `core/src/Data/` | B7 | Публичный перенос — breaking | **G-API** | ADR-CONTRACTS-DTO-CANON |
@@ -23,7 +23,7 @@ Ledger фазы P12.9. Нормативная матрица — `research/P12-a
 Условие снятия **совпадает** с `expires_when` в `scripts/package-graph-gate.json`:
 
 ```text
-corex/core reduction lands; core defines zero classes under CoreX\Tenancy\
+axiomasoft/corex reduction lands; core defines zero classes under CoreX\Tenancy\
 ```
 
 До выполнения ADR-CORE-REDUCTION (или эквивалента) гейт продолжает печатать именованное просроченное исключение на каждом прогоне.

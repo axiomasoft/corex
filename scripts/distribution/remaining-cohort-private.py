@@ -45,7 +45,7 @@ AZGUARD_PACKAGE = 'axioma-studio/azguard-core'
 AZGUARD_GIT_URL = 'https://github.com/axiomasoft/azguard-private.git'
 AZGUARD_PUBLIC_REF = '253cbf4cce0226545cd96ca8c6bcbefe329b1403'
 AZGUARD_REPO_API = 'axiomasoft/azguard-private'
-AUTH_PACKAGE = 'corex/access'
+AUTH_PACKAGE = 'axiomasoft/corex-access'
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 SECRET_PATTERNS = (
     re.compile(r'ghp_[A-Za-z0-9]{20,}'),
@@ -203,8 +203,8 @@ def auth_archive(destination: Path, version: str) -> str:
         if relative.as_posix() == 'composer.json':
             composer = json.loads(body)
             composer['version'] = version
-            composer['require']['corex/core'] = candidate_core_version()
-            composer['require']['corex/modules'] = candidate_core_version()
+            composer['require']['axiomasoft/corex'] = candidate_core_version()
+            composer['require']['axiomasoft/corex'] = candidate_core_version()
             body = (json.dumps(composer, indent=2, sort_keys=True) + '\n').encode()
         entries.append((relative.as_posix(), body))
     write_zip(destination, entries)
@@ -212,7 +212,7 @@ def auth_archive(destination: Path, version: str) -> str:
 
 
 def candidate_core_version() -> str:
-    return load_json(REPO_DELIVERY / 'candidate.json')['version_vector']['corex/core']
+    return load_json(REPO_DELIVERY / 'candidate.json')['version_vector']['axiomasoft/corex']
 
 
 def stage_private_repository(inspection: dict, auth_ver: str) -> tuple[Path, dict]:
@@ -247,8 +247,8 @@ def stage_private_repository(inspection: dict, auth_ver: str) -> tuple[Path, dic
     }
     auth_composer = json.loads((ROOT / 'packages/access/composer.json').read_text())
     auth_composer['version'] = auth_ver
-    auth_composer['require']['corex/core'] = candidate_core_version()
-    auth_composer['require']['corex/modules'] = candidate_core_version()
+    auth_composer['require']['axiomasoft/corex'] = candidate_core_version()
+    auth_composer['require']['axiomasoft/corex'] = candidate_core_version()
     metadata['packages'][AUTH_PACKAGE] = {
         auth_ver: {
             'name': AUTH_PACKAGE,
@@ -596,7 +596,7 @@ def build_evidence(
 def case_catalog() -> list[tuple[str, str, str]]:
     return [
         ('PRIVATE-01', 'R45 R51', 'Exact accepted G-PRIVATE source/channel/ref/license/checksum and narrow read scope verified before private fetch; no historical blanket D14 authority'),
-        ('PRIVATE-02', 'R45 R51', 'Cold direct corex/access install plus transitive example consumer install from approved private channel, separate homes/caches, lock+vendor ref verified'),
+        ('PRIVATE-02', 'R45 R51', 'Cold direct axiomasoft/corex-access install plus transitive example consumer install from approved private channel, separate homes/caches, lock+vendor ref verified'),
         ('PRIVATE-03', 'R45 R51', 'Real installed auth suite/default-deny missing grant/unknown resource and current tenant/department scope positive and negative evidence; no role engine duplicate'),
         ('PRIVATE-04', 'R45 R51', 'Explicit adapter-missing host public boot denies protected abilities safely; public no-credential graph independently remains usable'),
         ('PRIVATE-05', 'R45 R51', 'Laravel12 approved PHP intersection tested; Laravel13 refused unless independent engine owner source/compatibility+G-API/G-DEPENDENCY approval actually supplied'),

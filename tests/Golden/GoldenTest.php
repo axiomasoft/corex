@@ -32,6 +32,10 @@ it('matches the frozen golden baseline modulo planned renames', function (string
     }
 
     $baseline = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
+
+    if ($layer === 'php-surface') {
+        $baseline += json_decode((string) file_get_contents(__DIR__.'/promoted-fixtures.json'), true, flags: JSON_THROW_ON_ERROR);
+    }
     $expected = Normalizer::normalize($map->apply($baseline));
 
     // Compare records separately so one API change produces a bounded, useful diff.

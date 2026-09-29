@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Support;
 
-use CoreX\Support\ViolationList;
+use CoreX\Config\ViolationList;
 
 /** @internal Package composition type. */
 final readonly class MediaOptions

@@ -2,7 +2,7 @@
     {
         "ability": "bulk.manage",
         "capabilities": [],
-        "contract_hash": "5439ca7c9514891bd77f52ebe64f27760b40d3abb19d3e777e9836e444995f81",
+        "contract_hash": "53cb0a79c1d9f94773e30e2fe2142e604a805a44f65957e193df773b417565c0",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -28,7 +28,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "async_command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/bulk-operations/{id}/cancel",
         "read_fields": null,
@@ -65,7 +65,7 @@
     {
         "ability": "bulk.manage",
         "capabilities": [],
-        "contract_hash": "e2e76f19383b37067ea6e045c04d99ba81c2bf8178c7cb4497b1b0fb37f4f073",
+        "contract_hash": "0bff2f26bfae77f1c0515330baee3098b9d2967e25f628bfc0445f750520c913",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -91,7 +91,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/bulk-operations/{id}/failures",
         "read_fields": null,
@@ -111,7 +111,7 @@
     {
         "ability": "bulk.manage",
         "capabilities": [],
-        "contract_hash": "574b760fdc25be8e1810be9bf49918785f1cb90fdf5f326e7f65285ab69cb839",
+        "contract_hash": "346f48e215cbd916fe753bd526cb727e163c87c8d6672ebf575aa6eac5abb668",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -137,7 +137,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/bulk-operations/{id}/result",
         "read_fields": null,
@@ -157,7 +157,7 @@
     {
         "ability": "bulk.manage",
         "capabilities": [],
-        "contract_hash": "31d795b68599cc599e58d3cdf09cadefece9f8c0337205fa591b1ec89d5ba70d",
+        "contract_hash": "fdb99bc075e483bddad7fa44b74c7536e1c4d96ca10de222776a9844e923e45e",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -183,7 +183,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/bulk-operations/{id}",
         "read_fields": null,
@@ -220,7 +220,7 @@
     {
         "ability": "bulk.manage",
         "capabilities": [],
-        "contract_hash": "79c0c07e2f548aaea499bd68684a517c62e40e1a1a31ca2f8c13630d1931d362",
+        "contract_hash": "d256300595493833f1e02622dd66572c437f2d0de0c5c22095d88f10651c9d1e",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -246,7 +246,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "async_command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/bulk-operations",
         "read_fields": null,
@@ -287,7 +287,7 @@
     {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "0550f5d1efa7cbae12308da1351f9729e512b363807e39d1be529306a53ae6e9",
+        "contract_hash": "0d90b785107bc47573978790ea285ff01d8c232bcc47a2808a81dea63f83c286",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -331,7 +331,7 @@
     {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "93f9104954827fb1b76b5c9b019f20356d4eb9cfd3d375b566ecddd4621312f7",
+        "contract_hash": "4bcb1d1a341603a3d078bfafb52ce81e86a6684ebcfabecaba3b35355aa2eaae",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -375,7 +375,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "fcbe28e29cc7c9c4f2a6172d2bcfd5542e4cf6744411a91f7a106bd9a4aac5ab",
+        "contract_hash": "83f393cda2aa135a7e728637e1400c7006657b6f6d12a241ba08f723bff350a6",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -401,7 +401,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-deliveries/{id}/attempts",
         "read_fields": null,
@@ -421,7 +421,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "4f1df0981665ea716c17bb500eee13be683405dcf2167bd1f5fb32e7d1044d7a",
+        "contract_hash": "12095ee01a7cfbadae8631bd1bccc12897178203850a5ac41d57f900d060d280",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -447,7 +447,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-deliveries",
         "read_fields": null,
@@ -467,7 +467,7 @@
     {
         "ability": "webhooks.replay",
         "capabilities": [],
-        "contract_hash": "a6009d7db392b54be6875351249cd7a55cd93f8a648f7dbf62bfdfec5be1ab9d",
+        "contract_hash": "5b0a80951b356b5dae8df74a81c47beb821f7e1e40c85103bee011e6bce0c3ea",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -493,7 +493,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-deliveries/replay",
         "read_fields": null,
@@ -513,7 +513,7 @@
     {
         "ability": "webhooks.replay",
         "capabilities": [],
-        "contract_hash": "baac13d2633ed0589a035e78f79e15c4ea18affcd91032c50a71dd57ac526b42",
+        "contract_hash": "2cbb689c97e95d3f381505e99f03a942a09bd24ec6e48c8c904c3bf38cb6501c",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -539,7 +539,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-deliveries/{id}/replay",
         "read_fields": null,
@@ -559,7 +559,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "d2412e78c818d6789041ea332e9d1924e1449091e040695edd637f44cebc1ba0",
+        "contract_hash": "177fcf6d1440d7eb68b6e142ca1e9664756396317a0708ba4b929fe5223ab09e",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -585,7 +585,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-deliveries/{id}",
         "read_fields": null,
@@ -605,7 +605,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "514ffbcc08d394f0e1479c232b12ecafa3f5eb21769da605bcaca4077713dfd4",
+        "contract_hash": "28b57c601cb057da38c1c29ab5f4ab937d29a8cb0b0b68ffc7b413ec4fc53eff",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -631,7 +631,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-subscriptions",
         "read_fields": null,
@@ -651,7 +651,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "deb0c6c528daedb50ff86849d9b7f2d0f57d301e6e356922db7b25e6b670c1c7",
+        "contract_hash": "9441d9f4fc277be161e362e20b4f4315f9ab2350859d97d3cfe7c1b202ab688b",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -677,7 +677,7 @@
         "idempotency": "required",
         "method": "POST",
         "mode": "command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-subscriptions/{id}/disable",
         "read_fields": null,
@@ -697,7 +697,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "353883bdfec715b6978ded924f847a2c811c9190e6115aa46077539e124c4c60",
+        "contract_hash": "f8433707b5106cbda5c784163334e650992b97c36dfab5673e843cfceec956a6",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -723,7 +723,7 @@
         "idempotency": "forbidden",
         "method": "GET",
         "mode": "query",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-subscriptions",
         "read_fields": null,
@@ -743,7 +743,7 @@
     {
         "ability": "webhooks.manage",
         "capabilities": [],
-        "contract_hash": "7cd38f1fcc95a45dff45a8d7feffdbced20160fcfed5f0c1de67d6e9bb418188",
+        "contract_hash": "9720f8dda482af26ed274fdda745505835953c9acca5f1fb8d1d5287b2e6a8b5",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -769,7 +769,7 @@
         "idempotency": "required",
         "method": "PATCH",
         "mode": "command",
-        "module": "corex/operations",
+        "module": "axiomasoft/corex-operations",
         "pagination": null,
         "path": "/webhook-subscriptions/{id}",
         "read_fields": null,

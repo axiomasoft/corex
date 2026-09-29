@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\CursorKeyring;
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Data\CursorPage;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Internal\OrderingRegistry;
-use CoreX\Api\Internal\SignedCursorCodec;
-use CoreX\Api\Operation;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Pagination\Contracts\CursorKeyring;
+use CoreX\Operations\Pagination\Data\CursorPage;
+use CoreX\Operations\Pagination\OrderingRegistry;
+use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Time\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;

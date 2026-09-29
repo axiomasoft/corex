@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
 use CoreX\Search\Support\SearchFilter;
 use CoreX\Search\Support\SearchQuery;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use Meilisearch\Client;
 
 it('returns candidate identifiers only from an isolated local Meilisearch service', function (): void {

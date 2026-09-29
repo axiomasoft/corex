@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Currency\Contracts;
 
 use Brick\Money\Money;
-use CoreX\Intl\Data\ConversionPolicy;
-use CoreX\Intl\Data\ConversionReceipt;
-use CoreX\Intl\Data\RateSnapshot;
+use CoreX\Intl\Currency\Data\ConversionPolicy;
+use CoreX\Intl\Currency\Data\ConversionReceipt;
+use CoreX\Intl\Currency\Data\RateSnapshot;
 
 interface CurrencyConverter
 {

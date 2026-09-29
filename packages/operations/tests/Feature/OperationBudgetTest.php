@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\Data\ActualCost;
-use CoreX\Api\Data\BudgetScope;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Internal\Cost\SqlBudgetReservation;
-use CoreX\Api\Internal\Cost\SqlOperationBudget;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Support\SecretRef;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Config\SecretRef;
+use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\BudgetScope;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Cost\Internal\SqlBudgetReservation;
+use CoreX\Operations\Cost\Internal\SqlOperationBudget;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Time\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

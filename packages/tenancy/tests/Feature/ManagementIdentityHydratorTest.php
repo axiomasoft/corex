@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Membership\Identity\ManagementIdentityHydrator;
 use Illuminate\Support\Facades\DB;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\OutboxLeaseLost;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Support\Config;
+use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;

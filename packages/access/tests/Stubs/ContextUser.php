@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Stubs;
+namespace CoreX\Access\Tests\Stubs;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 

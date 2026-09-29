@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api;
+namespace CoreX\Operations\Errors;
 
-use CoreX\Contracts\DescribesError;
-use CoreX\Data\ErrorDescriptor;
-use CoreX\Enums\ErrorCategory;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
 use RuntimeException;
 
 /** Explicit public error. Never pass database or infrastructure exception messages here. */

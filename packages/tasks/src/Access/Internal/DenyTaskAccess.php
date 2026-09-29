@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Support;
+namespace CoreX\Tasks\Access\Internal;
 
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\EntityReference;
-use CoreX\Tasks\Data\MoveTaskToStageData;
-use CoreX\Tasks\Data\TaskDraft;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Task\Data\EntityReference;
+use CoreX\Tasks\Task\Data\MoveTaskToStageData;
+use CoreX\Tasks\Task\Data\TaskDraft;
 use Illuminate\Auth\Access\AuthorizationException;
 
 final class DenyTaskAccess implements TaskAccess

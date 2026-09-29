@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning;
 
-use CoreX\Tenancy\Contracts\TenantDatabaseProvisioner;
-use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
-use CoreX\Tenancy\Models\Account;
+use CoreX\Context\Contracts\TenantDatabaseProvisioner;
+use CoreX\Context\ProvisionParams;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\ProvisionParams;
+use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
 use Stancl\Tenancy\Events\TenantCreated;
 
 /**

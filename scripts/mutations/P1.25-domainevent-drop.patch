@@ -1,12 +1,12 @@
-diff --git a/packages/modules/src/Events/ModuleEnabled.php b/packages/modules/src/Events/ModuleEnabled.php
+diff --git a/packages/core/src/Modules/Events/ModuleEnabled.php b/packages/core/src/Modules/Events/ModuleEnabled.php
 index 5c1d1e8..ea19563 100644
---- a/packages/modules/src/Events/ModuleEnabled.php
-+++ b/packages/modules/src/Events/ModuleEnabled.php
+--- a/packages/core/src/Modules/Events/ModuleEnabled.php
++++ b/packages/core/src/Modules/Events/ModuleEnabled.php
 @@ -4,30 +4,13 @@ declare(strict_types=1);
  
  namespace CoreX\Modules\Events;
  
--use CoreX\Events\DomainEvent;
+-use CoreX\Messaging\Events\DomainEvent;
 -use Override;
 -
 -/**

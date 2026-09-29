@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Authorization\Internal;
 
-use CoreX\Api\Contracts\Principal;
-use CoreX\Api\Contracts\PrincipalResolver;
+use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use Illuminate\Http\Request;
 use Override;
 

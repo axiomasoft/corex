@@ -1,0 +1,19 @@
+diff --git a/dev/stdin b/scripts/ownership-gate.php
+index 0000000..963cea7 100644
+--- a/dev/stdin
++++ b/scripts/ownership-gate.php
+@@ -129,6 +129,14 @@ try {
+                 };
+                 foreach ($patterns as $kind => $pattern) {
+                     preg_match_all($pattern, $source, $matches);
++
++                    if ($kind === 'tag') {
++                        preg_match_all('/->publishes(?:Migrations)?\(\s*\[.*?\]\s*,\s*\[([^\]]*)\]/s', $source, $tagArrays);
++                        foreach ($tagArrays[1] as $tags) {
++                            preg_match_all('~[\'"]([^\'"]+)[\'"]~', $tags, $tagNames);
++                            $matches[1] = array_merge($matches[1], $tagNames[1]);
++                        }
++                    }
+                     foreach ($matches[1] as $id) {
+                         if ($kind === 'namespace') {
+                             $sourceNamespaces[$id] = true;

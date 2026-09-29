@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Observability;
 
-use CoreX\Contracts\OperationObserver;
+use CoreX\Observability\Contracts\OperationObserver;
 
 final class NullOperationObserver implements OperationObserver
 {

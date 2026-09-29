@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Task\Data;
 
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
 
 final readonly class ActorData
 {

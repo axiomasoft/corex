@@ -187,7 +187,7 @@ function supplementalOutcomeTokens(): array
         ],
         [
             'old' => 'CoreX\\Data\\DataScopeAccessDecision',
-            'new' => 'CoreX\\Support\\Data\\DataScopeAccessDecision',
+            'new' => 'CoreX\\Data\\DataScopeAccessDecision',
             'item' => 'P15.10',
             'allowlist_globs' => ['docs/architecture/core-zones.md'],
         ],

@@ -456,14 +456,14 @@ def baseline(rows: list[dict]) -> dict:
     discovery = composer_discovery()
     return {
         "schema": "p9-compatibility-baseline/v1",
-        "package": "corex/tenancy",
+        "package": "axiomasoft/corex-tenancy",
         "allowed_deltas": [
             {
                 "id": "D49",
                 "kind": "binding-concrete",
-                "abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+                "abstract": "CoreX\\Context\\Contracts\\TenantContextRestorer",
                 "lifetime": "scoped",
-                "concrete_before": "CoreX\\Tenancy\\GuardedTenantContextRestorer",
+                "concrete_before": "CoreX\\Context\\GuardedTenantContextRestorer",
                 "only_permitted_behavior_delta": True,
             }
         ],
@@ -537,9 +537,9 @@ def final_projection() -> tuple[dict, dict]:
         fail("P9.1 map drift")
     if baseline_data["allowed_deltas"] != [{
         "id": "D49", "kind": "binding-concrete",
-        "abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+        "abstract": "CoreX\\Context\\Contracts\\TenantContextRestorer",
         "lifetime": "scoped",
-        "concrete_before": "CoreX\\Tenancy\\GuardedTenantContextRestorer",
+        "concrete_before": "CoreX\\Context\\GuardedTenantContextRestorer",
         "only_permitted_behavior_delta": True,
     }]:
         fail("D49 is not the only permitted behavior delta")
@@ -616,7 +616,7 @@ def final_projection() -> tuple[dict, dict]:
         "files": sorted(final_rows, key=lambda item: item["path"]),
         "public_fqcn": [{"fqcn": item["fqcn"], "kind": item["kind"], "path": next(r["to"] for r in rows if r["from"] == item["path"])} for item in baseline_data["public_fqcn"]],
         "bindings": baseline_data["bindings"],
-        "restorer_binding": {"abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+        "restorer_binding": {"abstract": "CoreX\\Context\\Contracts\\TenantContextRestorer",
                              "concrete": D49_FQCN, "lifetime": "scoped", "decision": "D49"},
         "bootstrapper_order": bootstrapper_order(),
         "double_init_revert": {"measured": True, "test": "packages/tenancy/tests/Feature/TenancyManagerTest.php",
@@ -634,7 +634,7 @@ def final_projection() -> tuple[dict, dict]:
         "path_moves": [{"from": item["from"], "to": item["to"]} for item in rows if item["from"] != item["to"]],
         "internal_fqcn_changes": [{"from": item["fqcn_before"], "to": item["fqcn_after"]} for item in rows if item["fqcn_before"] != item["fqcn_after"]],
         "added": [{"path": D49_FILE, "fqcn": D49_FQCN, "decision": "D49"}],
-        "binding_changes": [{"abstract": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer", "from": "CoreX\\Tenancy\\GuardedTenantContextRestorer", "to": D49_FQCN, "lifetime": "scoped", "decision": "D49"}],
+        "binding_changes": [{"abstract": "CoreX\\Context\\Contracts\\TenantContextRestorer", "from": "CoreX\\Context\\GuardedTenantContextRestorer", "to": D49_FQCN, "lifetime": "scoped", "decision": "D49"}],
         "other_changes": [],
     }
     return final_data, diff_data

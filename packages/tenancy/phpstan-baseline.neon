@@ -43,19 +43,19 @@ parameters:
 			path: src/Authentication/Oidc/IdTokenVerifier.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::lockForUpdate().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/DomainTrust/DomainTrustStateWriter.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 2
 			path: src/DomainTrust/DomainTrustStateWriter.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereRaw().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::whereRaw().'
 			identifier: staticMethod.dynamicCall
 			count: 2
 			path: src/DomainTrust/DomainTrustStateWriter.php
@@ -91,7 +91,7 @@ parameters:
 			path: src/Identity/DatabaseIdentitySyncer.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\User>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Identity\Models\User>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Identity/DatabaseIdentitySyncer.php
@@ -235,7 +235,7 @@ parameters:
 			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
 
 		-
-			rawMessage: PHPDoc tag @var with type CoreX\Tenancy\Contracts\TenancyManager is not subtype of type CoreX\Tenancy\StanclTenancyManager.
+			rawMessage: PHPDoc tag @var with type CoreX\Context\Contracts\TenancyManager is not subtype of type CoreX\Tenancy\Runtime\StanclTenancyManager.
 			identifier: varTag.type
 			count: 1
 			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
@@ -247,7 +247,7 @@ parameters:
 			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
 
 		-
-			rawMessage: 'Parameter #2 $workspaceId of static method CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper::restore() expects string|null, mixed given.'
+			rawMessage: 'Parameter #2 $workspaceId of static method CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper::restore() expects string|null, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
@@ -319,7 +319,7 @@ parameters:
 			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
 
 		-
-			rawMessage: 'Method CoreX\Tenancy\Http\Middleware\ResolveWorkspace::extractSlug() should return string|null but returns mixed.'
+			rawMessage: 'Method CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace::extractSlug() should return string|null but returns mixed.'
 			identifier: return.type
 			count: 1
 			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
@@ -373,43 +373,43 @@ parameters:
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNotNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNotNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNotNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::whereNotNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Domain>::whereRaw().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Models\Domain>::whereRaw().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Method CoreX\Tenancy\Resolvers\HostTenantResolver::getPossibleCacheKeys() should return list<string> but returns array<int, string>.'
+			rawMessage: 'Method CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver::getPossibleCacheKeys() should return list<string> but returns array<int, string>.'
 			identifier: return.type
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Models\Account|null.'
+			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Account\Models\Account|null.'
 			identifier: varTag.type
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
@@ -433,13 +433,13 @@ parameters:
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
-			rawMessage: 'Parameter $corexTenancy of static method CoreX\Tenancy\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter $corexTenancy of static method CoreX\Tenancy\Laravel\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
-			rawMessage: 'Parameter $tenancy of static method CoreX\Tenancy\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter $tenancy of static method CoreX\Tenancy\Laravel\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Laravel/RuntimeRegistrar.php
@@ -451,13 +451,13 @@ parameters:
 			path: src/Laravel/Scopes/WorkspaceScope.php
 
 		-
-			rawMessage: 'Method CoreX\Tenancy\Support\TenancyOptions::arrayMap() should return array<string, array<string, mixed>> but returns array<string, array<mixed, mixed>>.'
+			rawMessage: 'Method CoreX\Tenancy\Laravel\Support\TenancyOptions::arrayMap() should return array<string, array<string, mixed>> but returns array<string, array<mixed, mixed>>.'
 			identifier: return.type
 			count: 1
 			path: src/Laravel/Support/TenancyOptions.php
 
 		-
-			rawMessage: 'Method CoreX\Tenancy\Support\TenancyOptions::classString() should return class-string but returns string.'
+			rawMessage: 'Method CoreX\Tenancy\Laravel\Support\TenancyOptions::classString() should return class-string but returns string.'
 			identifier: return.type
 			count: 2
 			path: src/Laravel/Support/TenancyOptions.php
@@ -493,7 +493,7 @@ parameters:
 			path: src/Membership/Identity/ManagementIdentityHydrator.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\User>::lockForUpdate().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Identity\Models\User>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Membership/Identity/ManagementIdentityHydrator.php
@@ -685,19 +685,19 @@ parameters:
 			path: src/Provisioning/ClusterAccountConnectionResolver.php
 
 		-
-			rawMessage: 'Parameter $database of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			rawMessage: 'Parameter $database of class CoreX\Context\DatabaseConnectionConfig constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/ClusterAccountConnectionResolver.php
 
 		-
-			rawMessage: 'Parameter $host of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			rawMessage: 'Parameter $host of class CoreX\Context\DatabaseConnectionConfig constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/ClusterAccountConnectionResolver.php
 
 		-
-			rawMessage: 'Parameter $username of class CoreX\Tenancy\DatabaseConnectionConfig constructor expects string, mixed given.'
+			rawMessage: 'Parameter $username of class CoreX\Context\DatabaseConnectionConfig constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/ClusterAccountConnectionResolver.php
@@ -907,7 +907,7 @@ parameters:
 			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
 
 		-
-			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
+			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
@@ -1039,19 +1039,19 @@ parameters:
 			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Account>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\AccountSchemaState>::orderBy().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\AccountSchemaState>::orderBy().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\AccountSchemaState>::select().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\AccountSchemaState>::select().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Provisioning/Migrations/MigrationWaveOrchestrator.php
@@ -1123,13 +1123,13 @@ parameters:
 			path: src/Provisioning/PendingPool.php
 
 		-
-			rawMessage: 'Parameter $clusterId of class CoreX\Tenancy\ProvisionParams constructor expects string, mixed given.'
+			rawMessage: 'Parameter $clusterId of class CoreX\Context\ProvisionParams constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/PendingPool.php
 
 		-
-			rawMessage: 'Parameter $embeddingModel of class CoreX\Tenancy\ProvisionParams constructor expects string, mixed given.'
+			rawMessage: 'Parameter $embeddingModel of class CoreX\Context\ProvisionParams constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/PendingPool.php
@@ -1153,7 +1153,7 @@ parameters:
 			path: src/Provisioning/StanclTenantDatabaseLifecycle.php
 
 		-
-			rawMessage: 'CoreX\Tenancy\Exceptions\TenantCouldNotBeIdentifiedByHostException::__construct() does not call parent constructor from Exception.'
+			rawMessage: 'CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException::__construct() does not call parent constructor from Exception.'
 			identifier: constructor.missingParentCall
 			count: 1
 			path: src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php
@@ -1165,7 +1165,7 @@ parameters:
 			path: src/Runtime/StanclTenancyManager.php
 
 		-
-			rawMessage: 'Method CoreX\Tenancy\StanclTenancyManager::runFor() should return T but returns (T of mixed)|null.'
+			rawMessage: 'Method CoreX\Tenancy\Runtime\StanclTenancyManager::runFor() should return T but returns (T of mixed)|null.'
 			identifier: return.type
 			count: 1
 			path: src/Runtime/StanclTenancyManager.php
@@ -1225,31 +1225,31 @@ parameters:
 			path: src/Workspace/DatabaseWorkspaceResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::exists().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Models\WorkspaceMember>::exists().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Workspace/DatabaseWorkspaceResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::where().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Models\WorkspaceMember>::where().'
 			identifier: staticMethod.dynamicCall
 			count: 2
 			path: src/Workspace/DatabaseWorkspaceResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Invitation>::lockForUpdate().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Models\Invitation>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Workspace/Models/Invitation.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\Workspace>::lockForUpdate().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Models\Workspace>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Workspace/Models/Invitation.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Models\WorkspaceMember>::count().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Models\WorkspaceMember>::count().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Workspace/Models/Invitation.php

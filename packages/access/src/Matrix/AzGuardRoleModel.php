@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
 use AzGuard\Configuration\Config;
 use AzGuard\Models\Role as AzGuardRole;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tenancy\Integration\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Integration\Wakeup\SweepRootWakeups;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Tenancy\Tests\TestCase;
-use CoreX\Tenancy\WorkspaceRef;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +66,7 @@ final class WakeupRoutingSweeper implements DueWakeupSweeper
     /** @var array<string, DateTimeImmutable|null> */
     public array $due = [];
 
-    /** @var null|Closure(TenantContext): void */
+    /** @var null|Closure(TenantContext):void */
     public ?Closure $onSweep = null;
 
     public function sweep(TenantContext $context, int $limit): SweepResult

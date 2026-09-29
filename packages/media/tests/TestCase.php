@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Tests;
 
-use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\MediaServiceProvider;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;

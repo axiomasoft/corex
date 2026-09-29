@@ -1,13 +1,13 @@
 {
-    "name": "corex/operations",
+    "name": "axiomasoft/corex-operations",
     "description": "Opt-in module operation dispatch, trusted context contracts and OpenAPI projection for Laravel.",
     "type": "library",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
-        "corex/modules": "^1.0@dev",
         "ext-filter": "*",
         "ext-mbstring": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
         "illuminate/auth": "^12.0|^13.0",
         "illuminate/console": "^12.0|^13.0",
         "illuminate/contracts": "^12.0|^13.0",
@@ -15,107 +15,37 @@
         "illuminate/http": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0",
         "illuminate/validation": "^12.0|^13.0",
-        "php": "^8.4",
         "psr/clock": "^1.0",
         "symfony/http-kernel": "^7.2|^8.0"
     },
     "suggest": {
-        "corex/transfer": "Optional bounded import/export adapter for durable bulk operations",
+        "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
         "opis/json-schema": "2.4.1 \u2014 bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
-        "corex/transfer": "^1.0@dev",
+        "ext-curl": "*",
         "ext-openssl": "*",
         "ext-pcntl": "*",
         "ext-pdo": "*",
+        "phpunit/phpunit": "^12.0|^13.0",
+        "axiomasoft/corex-transfer": "^1.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "opis/json-schema": "^2.4.1",
         "orchestra/testbench": "^10.12|^11.3",
         "orchestra/testbench-core": "^10.12|^11.3",
         "pestphp/pest": "^5.2",
-        "phpunit/phpunit": "^12.0|^13.0",
-        "ext-curl": "*"
+        "axiomasoft/corex-webhooks": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Api\\": [
-                "src/",
-                "src/Definition/",
-                "src/Invocation/",
-                "src/Errors/",
-                "src/Http/",
-                "src/OpenApi/",
-                "src/Tools/"
-            ],
-            "CoreX\\Api\\Contracts\\": [
-                "src/Definition/Contracts/",
-                "src/Invocation/Contracts/",
-                "src/Authorization/Contracts/",
-                "src/Idempotency/Contracts/",
-                "src/Pagination/Contracts/",
-                "src/Errors/Contracts/",
-                "src/Tools/Contracts/",
-                "src/Cost/Contracts/",
-                "src/Bulk/Contracts/",
-                "src/Webhooks/Contracts/",
-                "src/OpenApi/Contracts/"
-            ],
-            "CoreX\\Api\\Data\\": [
-                "src/Definition/Data/",
-                "src/Invocation/Data/",
-                "src/Validation/Data/",
-                "src/Versioning/Data/",
-                "src/Idempotency/Data/",
-                "src/Pagination/Data/",
-                "src/Tools/Data/",
-                "src/Cost/Data/",
-                "src/Bulk/Data/",
-                "src/Webhooks/Data/"
-            ],
-            "CoreX\\Api\\Enums\\": [
-                "src/Definition/Enums/",
-                "src/Idempotency/Enums/",
-                "src/Bulk/Enums/"
-            ],
-            "CoreX\\Api\\Internal\\": [
-                "src/Definition/Internal/",
-                "src/Invocation/Internal/",
-                "src/Authorization/Internal/",
-                "src/Validation/Internal/",
-                "src/Versioning/Internal/",
-                "src/Idempotency/Internal/",
-                "src/Pagination/Internal/",
-                "src/Errors/Internal/",
-                "src/Http/Internal/",
-                "src/OpenApi/Internal/",
-                "src/Tools/Internal/"
-            ],
-            "CoreX\\Api\\Commands\\": [
-                "src/OpenApi/Commands/",
-                "src/Bulk/Commands/",
-                "src/Webhooks/Commands/",
-                "src/Laravel/Commands/"
-            ],
-            "CoreX\\Api\\Support\\": "src/Laravel/Support/",
-            "CoreX\\Api\\Internal\\Cost\\": "src/Cost/Internal/",
-            "CoreX\\Api\\Internal\\Bulk\\": "src/Bulk/Internal/",
-            "CoreX\\Api\\Laravel\\": [
-                "src/Laravel/",
-                "src/Cost/Laravel/",
-                "src/Bulk/Laravel/",
-                "src/Webhooks/Laravel/"
-            ],
-            "CoreX\\Api\\Internal\\Webhook\\": "src/Webhooks/Internal/"
-        },
-        "classmap": [
-            "src/Cost/Internal/BudgetAdmission.php"
-        ]
+            "CoreX\\Operations\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "CoreX\\Api\\Tests\\": "tests/"
+            "CoreX\\Operations\\Tests\\": "tests/"
         }
     },
     "repositories": [
@@ -125,11 +55,11 @@
         },
         {
             "type": "path",
-            "url": "../modules"
+            "url": "../transfer"
         },
         {
             "type": "path",
-            "url": "../transfer"
+            "url": "../webhooks"
         }
     ],
     "minimum-stability": "stable",
@@ -151,19 +81,46 @@
             "package-type": "capability",
             "stability": "stable",
             "public-api": [
-                "CoreX\\Api\\Contracts",
-                "CoreX\\Api\\Data",
-                "CoreX\\Api\\Testing",
-                "CoreX\\Api\\Webhooks"
+                "CoreX\\Operations\\Authorization\\Contracts",
+                "CoreX\\Operations\\Bulk\\Contracts",
+                "CoreX\\Operations\\Bulk\\Data",
+                "CoreX\\Operations\\Cost\\Contracts",
+                "CoreX\\Operations\\Cost\\Data",
+                "CoreX\\Operations\\Definition\\ApiOperationValidator",
+                "CoreX\\Operations\\Definition\\Contracts",
+                "CoreX\\Operations\\Definition\\Data",
+                "CoreX\\Operations\\Definition\\Enums\\OperationMode",
+                "CoreX\\Operations\\Definition\\Operation",
+                "CoreX\\Operations\\Definition\\OperationRegistry",
+                "CoreX\\Operations\\Errors\\ApiError",
+                "CoreX\\Operations\\Errors\\Contracts",
+                "CoreX\\Operations\\Idempotency\\Contracts",
+                "CoreX\\Operations\\Idempotency\\Data",
+                "CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement",
+                "CoreX\\Operations\\Invocation\\Contracts",
+                "CoreX\\Operations\\Invocation\\Data",
+                "CoreX\\Operations\\Invocation\\InvocationMetadata",
+                "CoreX\\Operations\\Invocation\\OperationDispatcher",
+                "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar",
+                "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+                "CoreX\\Operations\\OpenApi\\Contracts",
+                "CoreX\\Operations\\Pagination\\Contracts",
+                "CoreX\\Operations\\Pagination\\Data",
+                "CoreX\\Operations\\Pagination\\OrderingRegistry",
+                "CoreX\\Operations\\Pagination\\SignedCursorCodec",
+                "CoreX\\Operations\\Testing",
+                "CoreX\\Operations\\Validation\\Data",
+                "CoreX\\Operations\\Validation\\JsonCanonical",
+                "CoreX\\Operations\\Validation\\SchemaBudget",
+                "CoreX\\Operations\\Validation\\SchemaProfile",
+                "CoreX\\Operations\\Versioning\\Data"
             ]
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
         },
         "laravel": {
-            "providers": [
-                "CoreX\\Api\\Webhooks\\WebhooksServiceProvider"
-            ]
+            "providers": []
         }
     }
 }

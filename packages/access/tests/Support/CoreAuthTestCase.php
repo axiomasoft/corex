@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Support;
+namespace CoreX\Access\Tests\Support;
 
 use AzGuard\AzGuardServiceProvider;
-use CoreX\Auth\CoreAuthServiceProvider;
+use CoreX\Access\CoreAuthServiceProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
- * Testbench base wiring corex/core + AzGuard + corex/access.
+ * Testbench base wiring axiomasoft/corex + AzGuard + axiomasoft/corex-access.
  */
 abstract class CoreAuthTestCase extends Orchestra
 {

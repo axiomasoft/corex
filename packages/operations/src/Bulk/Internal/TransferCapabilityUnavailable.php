@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Contracts\DescribesError;
-use CoreX\Data\ErrorDescriptor;
-use CoreX\Enums\ErrorCategory;
-use CoreX\Enums\UnavailabilityReason;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Enums\UnavailabilityReason;
 use RuntimeException;
 
 /** @internal Fail-closed before a transfer bulk row exists. */

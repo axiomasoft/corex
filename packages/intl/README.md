@@ -1,4 +1,4 @@
-# corex/intl
+# axiomasoft/corex-intl
 
 Typed locale resolution, explicit translation fallback, immutable money/rate snapshots, and offline geography reference lookup for CoreX.
 
@@ -12,7 +12,7 @@ Typed locale resolution, explicit translation fallback, immutable money/rate sna
 ## Installation
 
 ```bash
-composer require corex/intl
+composer require axiomasoft/corex-intl
 ```
 
 Register `CoreX\Intl\IntlServiceProvider` or enable the `intl` module descriptor.

@@ -2,10 +2,10 @@
   "source_ref": "9152dde68ccace20d111f044aecf132bb8d49861",
   "version": "0.1.0-p4.3",
   "packages": {
-    "corex/core": "packages/core",
-    "corex/modules": "packages/modules",
-    "corex/tasks": "packages/tasks",
-    "corex/tenancy": "packages/tenancy"
+    "axiomasoft/corex": "packages/core",
+    "axiomasoft/corex": "packages/core",
+    "axiomasoft/corex-tasks": "packages/tasks",
+    "axiomasoft/corex-tenancy": "packages/tenancy"
   },
   "include": ["composer.json", "src/", "config/", "database/migrations/", "resources/", "README.md", "PACKAGE.md", "CHANGELOG.md", "LICENSE"],
   "forbidden_segments": ["vendor", "node_modules", ".env", "auth.json", ".git", ".plan-cache"]

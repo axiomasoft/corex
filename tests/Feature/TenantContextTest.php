@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\SingleAccountResolver;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\SingleAccountResolver;
 
 it('resolves a boxed TenantContext via SingleAccountResolver', function (): void {
     $context = app(TenantContextResolver::class)->current();

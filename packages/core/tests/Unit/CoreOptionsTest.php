@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\CoreOptions;
-use CoreX\Support\InvalidConfiguration;
-use CoreX\Support\SecretRef;
+use CoreX\Config\CoreOptions;
+use CoreX\Config\InvalidConfiguration;
+use CoreX\Config\SecretRef;
 
 it('resolves settings cache ttl by key existence', function (array $config, ?int $expected): void {
     expect(CoreOptions::fromArray($config)->settingsCacheTtl)->toBe($expected);

@@ -67,44 +67,44 @@ class ProfileProofTest(unittest.TestCase):
     def test_bare_single_names_modules_meilisearch_and_search_intl(self) -> None:
         profile = MODULE.require_profile(self.manifest, "bare-single")
         for package, name in (
-            ("corex/modules", "modules"),
-            ("corex/search-meilisearch", "Meilisearch"),
-            ("corex/search-intl", "Search Intl"),
+            ("axiomasoft/corex", "modules"),
+            ("axiomasoft/corex-search-meilisearch", "Meilisearch"),
+            ("axiomasoft/corex-search-intl", "Search Intl"),
         ):
             with self.subTest(name=name):
                 with self.assertRaises(MODULE.ProfileError) as caught:
-                    MODULE.assert_profile_clean(profile, ["corex/core", package])
+                    MODULE.assert_profile_clean(profile, ["axiomasoft/corex", package])
                 self.assertIn(name, str(caught.exception))
                 self.assertIn("bare-single", str(caught.exception))
 
     def test_search_portable_names_meilisearch(self) -> None:
         profile = MODULE.require_profile(self.manifest, "search-portable")
         with self.assertRaises(MODULE.ProfileError) as caught:
-            MODULE.assert_profile_clean(profile, ["corex/core", "corex/search", "corex/search-meilisearch"])
+            MODULE.assert_profile_clean(profile, ["axiomasoft/corex", "axiomasoft/corex-search", "axiomasoft/corex-search-meilisearch"])
         self.assertIn("Meilisearch", str(caught.exception))
 
     def test_removed_search_intl_is_named(self) -> None:
-        profile = {**MODULE.require_profile(self.manifest, "search-portable"), "remove_observed": ["corex/search-intl"]}
+        profile = {**MODULE.require_profile(self.manifest, "search-portable"), "remove_observed": ["axiomasoft/corex-search-intl"]}
         with self.assertRaises(MODULE.ProfileError) as caught:
-            MODULE.assert_profile_clean(profile, ["corex/core", "corex/search", "corex/search-intl"])
+            MODULE.assert_profile_clean(profile, ["axiomasoft/corex", "axiomasoft/corex-search", "axiomasoft/corex-search-intl"])
         self.assertIn("Search Intl", str(caught.exception))
 
     def test_constraints_do_not_cross_every_package_with_every_lane(self) -> None:
-        self.assertEqual(MODULE.declared_laravel_majors(self.composers["corex/access"]), (12,))
-        self.assertEqual(MODULE.declared_laravel_majors(self.composers["corex/core"]), (12, 13))
-        self.assertEqual(MODULE.declared_laravel_majors(self.composers["corex/recurrence"]), ())
-        self.assertFalse(MODULE.allows(MODULE.php_constraint(self.composers["corex/tenancy"]), (8, 3, 0)))
-        self.assertTrue(MODULE.allows(MODULE.php_constraint(self.composers["corex/tenancy"]), (8, 4, 1)))
+        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex-access"]), (12,))
+        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex"]), (12, 13))
+        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex-recurrence"]), ())
+        self.assertFalse(MODULE.allows(MODULE.php_constraint(self.composers["axiomasoft/corex-tenancy"]), (8, 3, 0)))
+        self.assertTrue(MODULE.allows(MODULE.php_constraint(self.composers["axiomasoft/corex-tenancy"]), (8, 4, 1)))
         signatures = {tuple(row["packages"][:1]): row["laravel"] for row in MODULE.group_packages(self.composers)}
-        self.assertEqual(signatures[("corex/access",)], [12])
-        self.assertNotIn(13, signatures[("corex/access",)])
-        self.assertEqual(signatures[("corex/recurrence",)], [])
+        self.assertEqual(signatures[("axiomasoft/corex-access",)], [12])
+        self.assertNotIn(13, signatures[("axiomasoft/corex-access",)])
+        self.assertEqual(signatures[("axiomasoft/corex-recurrence",)], [])
 
     def test_full_corex_laravel_13_is_excluded_by_access(self) -> None:
         cells = MODULE.plan_profiles(self.manifest, self.composers, list(AVAILABLE))
         excluded = next(cell for cell in cells if cell["id"] == "full-corex-php8.4-l13")
         self.assertEqual(excluded["status"], "excluded")
-        self.assertIn("corex/access", excluded["reason"])
+        self.assertIn("axiomasoft/corex-access", excluded["reason"])
         included = [cell["id"] for cell in cells if cell["profile"] == "bare-single" and cell["status"] == "included"]
         self.assertEqual(included, ["bare-single-php8.4-l12", "bare-single-php8.4-l13"])
 
@@ -112,7 +112,7 @@ class ProfileProofTest(unittest.TestCase):
         cells = MODULE.plan_edges(self.composers, list(AVAILABLE))
         excluded = next(cell for cell in cells if cell["id"] == "edge-excluded-php8.3-corex/tenancy")
         self.assertEqual(excluded["status"], "excluded")
-        self.assertIn("corex/tenancy", excluded["reason"])
+        self.assertIn("axiomasoft/corex-tenancy", excluded["reason"])
         self.assertIn("8.4", excluded["reason"])
 
 

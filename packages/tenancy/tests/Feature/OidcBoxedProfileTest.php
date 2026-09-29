@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Http\Controllers\LogoutController;
-use CoreX\Tenancy\Http\Controllers\OidcLoginController;
-use CoreX\Tenancy\Http\Middleware\EnforceSessionLifetime;
+use CoreX\Tenancy\Authentication\Http\Controllers\LogoutController;
+use CoreX\Tenancy\Authentication\Http\Controllers\OidcLoginController;
+use CoreX\Tenancy\Laravel\Http\Middleware\EnforceSessionLifetime;
 use Illuminate\Support\Facades\Route;
 
 // AC-28 — `tenancy.oidc.enabled` defaults to false (config/tenancy.php).

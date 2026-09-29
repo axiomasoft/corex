@@ -10,7 +10,6 @@ use CoreX\Tenancy\Membership\Transport\JwsVerifier;
 use CoreX\Tenancy\Membership\Transport\MembershipQuery;
 use CoreX\Tenancy\Membership\Transport\StrictTransport;
 use CoreX\Tenancy\Membership\Transport\TriggerParser;
-use Illuminate\Support\Facades\Http;
 use OpenSSLAsymmetricKey;
 
 /** Fixed isolated reference consumer: real signatures, fake HTTP, no deployment. */

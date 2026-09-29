@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Workspace\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Concerns\HasConfiguredId;
+use CoreX\Database\HasConfiguredId;
+use CoreX\Tenancy\Identity\Models\User;
 use CoreX\Tenancy\Workspace\InvitationNotAcceptableException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -78,7 +79,7 @@ final class Invitation extends Model
      * (persisted-or-lazily) expired → not acceptable; `$usersMax` (from the
      * account's `limits`) is checked against the workspace's active member
      * count before creating the membership. Role assignment lands with
-     * corex/access's `aut_role_assignments` (P2.8, Scope Excluded here) —
+     * axiomasoft/corex-access's `aut_role_assignments` (P2.8, Scope Excluded here) —
      * `role_id` is only carried on the invitation row.
      */
     public function accept(string $userId, int $usersMax): ?WorkspaceMember

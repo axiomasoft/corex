@@ -4,7 +4,7 @@
   "entries": [
     {
       "package": "core",
-      "class": "CoreX\\Support\\ServiceProviderModuleRegistrar",
+      "class": "CoreX\\Modules\\Internal\\ServiceProviderModuleRegistrar",
       "parameter": "app",
       "owner_phase": "P6",
       "note": "Captures Illuminate Application; migrate to scoped or factory (composition root)."

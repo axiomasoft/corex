@@ -78,25 +78,25 @@
 
 | Пакет | composer `name` | composer `type` | `package-type` | `module` (если есть) |
 |:--|:--|:--|:--|:--|
-| core | corex/core | library | `foundation` | — |
-| modules | corex/modules | library | `foundation` | — |
-| tenancy | corex/tenancy | library | `capability` | — |
-| auth | corex/access | library | `capability` | — |
-| attributes | corex/attributes | corex-module | `capability` | — |
-| media | corex/media | corex-module | `capability` | `MediaModule` |
-| notifications | corex/notifications | corex-module | `capability` | `NotificationsModule` |
-| intl | corex/intl | corex-module | `capability` | `IntlModule` |
-| search | corex/search | corex-module | `capability` | — |
-| tasks | corex/tasks | corex-module | `capability` | `TasksModule` |
-| workflow | corex/workflow | corex-module | `capability` | `WorkflowModule` |
-| wakeup | corex/wakeup | corex-module | `capability` | `WakeupModule` |
-| transfer | corex/transfer | corex-module | `capability` | — |
-| recurrence | corex/recurrence | library | `capability` | — |
-| panels | corex/panels | corex-module | `capability` | `PanelsModule` |
-| api | corex/operations | library | `capability` | — |
-| search-intl | corex/search-intl | corex-module | `integration` | — |
-| search-meilisearch | corex/search-meilisearch | corex-module | `integration` | — |
-| tasks-workflow | corex/tasks-workflow | corex-module | `integration` | `TaskWorkflowIntegration` |
+| core | axiomasoft/corex | library | `foundation` | — |
+| modules | axiomasoft/corex | library | `foundation` | — |
+| tenancy | axiomasoft/corex-tenancy | library | `capability` | — |
+| auth | axiomasoft/corex-access | library | `capability` | — |
+| attributes | axiomasoft/corex-custom-fields | corex-module | `capability` | — |
+| media | axiomasoft/corex-media | corex-module | `capability` | `MediaModule` |
+| notifications | axiomasoft/corex-notifications | corex-module | `capability` | `NotificationsModule` |
+| intl | axiomasoft/corex-intl | corex-module | `capability` | `IntlModule` |
+| search | axiomasoft/corex-search | corex-module | `capability` | — |
+| tasks | axiomasoft/corex-tasks | corex-module | `capability` | `TasksModule` |
+| workflow | axiomasoft/corex-workflow | corex-module | `capability` | `WorkflowModule` |
+| wakeup | axiomasoft/corex-wakeup | corex-module | `capability` | `WakeupModule` |
+| transfer | axiomasoft/corex-transfer | corex-module | `capability` | — |
+| recurrence | axiomasoft/corex-recurrence | library | `capability` | — |
+| panels | axiomasoft/corex-panels | corex-module | `capability` | `PanelsModule` |
+| api | axiomasoft/corex-operations | library | `capability` | — |
+| search-intl | axiomasoft/corex-search-intl | corex-module | `integration` | — |
+| search-meilisearch | axiomasoft/corex-search-meilisearch | corex-module | `integration` | — |
+| tasks-workflow | axiomasoft/corex-tasks-workflow | corex-module | `integration` | `TaskWorkflowIntegration` |
 | crm | flex/crm | corex-module | `product` | `CrmModule` |
 
 **Почему `api` — `capability`, а не отдельный вид.** Вид `gateway` не вводится: ответственность
@@ -106,5 +106,5 @@
 **Почему `recurrence` — `capability` при composer `type: library`.** Оси ортогональны:
 `library` — способ установки Composer, `capability` — предметная роль в архитектуре.
 
-**Тумбстоун.** `packages/import-export` метаданных не получает: нет `composer.json`
+**Тумбстоун.** `packages/transfer` метаданных не получает: нет `composer.json`
 (PKG-009).

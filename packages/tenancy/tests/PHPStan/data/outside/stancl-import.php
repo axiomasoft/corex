@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-// Фикстура-нарушение: файл ВНЕ corex/tenancy. Неймспейс намеренно `CoreX\Tenancy\*` —
-// именно так выглядят контракты, физически живущие в corex/core (D13), и именно их
+// Фикстура-нарушение: файл ВНЕ axiomasoft/corex-tenancy. Неймспейс намеренно `CoreX\Tenancy\*` —
+// именно так выглядят контракты, физически живущие в axiomasoft/corex (D13), и именно их
 // namespace-проверка пропустила бы. Дискриминатор правила — путь файла.
 
 namespace CoreX\Tenancy\Contracts\Fixture;
@@ -32,7 +32,7 @@ final class StanclImportOutsideFixture
 
     /**
      * Докблок-упоминание `Stancl\Tenancy` легально: правило смотрит AST, а не текст —
-     * ровно поэтому `packages/core/src/Tenancy/Contracts/TenantDatabaseLifecycle.php`
+     * ровно поэтому `packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php`
      * остаётся зелёным.
      */
     public function mentionInCommentIsLegal(): string

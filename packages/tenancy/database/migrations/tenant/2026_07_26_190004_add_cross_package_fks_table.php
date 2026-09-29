@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Config;
+use CoreX\Config\Config;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 // Final integration migration of the tenant-DB chain (C4/D14, audit F17):
 // cross-package FKs the owning packages' own DDL deliberately omit (inline
-// FK would fix a publication order between corex/core, corex/tenancy and
-// corex/access that isn't guaranteed — DB_SCHEMA.md §Конфликты C4, resolved
+// FK would fix a publication order between axiomasoft/corex, axiomasoft/corex-tenancy and
+// axiomasoft/corex-access that isn't guaranteed — DB_SCHEMA.md §Конфликты C4, resolved
 // variant "б"). All four land here, on whichever package's migration runs
 // last in the golden-template chain:
 //   1) users.department_id            → sys_departments   (nullable, SET NULL)

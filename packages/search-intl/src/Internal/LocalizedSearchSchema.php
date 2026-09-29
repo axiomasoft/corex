@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Internal;
 
+use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Support\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
-use CoreX\Support\Data\DataScope;
 use InvalidArgumentException;
 use Override;
 

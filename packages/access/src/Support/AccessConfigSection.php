@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Support;
+namespace CoreX\Access\Support;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 
 /** @internal Configuration report composition. */
 final class AccessConfigSection implements ConfigReportSection

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace ThirdParty\Transfer;
 
-use CoreX\Models\BaseModel;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
+use CoreX\Data\WriteToken;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
-use CoreX\Support\Data\WriteToken;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;

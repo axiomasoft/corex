@@ -57,7 +57,7 @@ $legacySplits = [];
 $activeReservations = [];
 
 foreach ($packages as $dirName => $meta) {
-    $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+    $srcDir = $repoRoot.'/'.$meta['path'].'/src';
 
     if (! is_dir($srcDir)) {
         continue;
@@ -356,6 +356,7 @@ function loadConfig(string $path, string $repoRoot): array
  * @return array<string, array{
  *     name: string,
  *     dir: string,
+ *     path: string,
  *     require: list<string>,
  *     psr4: array<string, string>,
  *     package_type: string,
@@ -367,7 +368,7 @@ function discoverPackages(string $repoRoot): array
 {
     $packages = [];
 
-    foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $composerPath) {
+    foreach (array_merge(glob($repoRoot.'/packages/*/composer.json') ?: [], glob($repoRoot.'/products/*/composer.json') ?: []) as $composerPath) {
         $dirName = basename(dirname($composerPath));
         $composer = json_decode((string) file_get_contents($composerPath), true);
 
@@ -383,6 +384,7 @@ function discoverPackages(string $repoRoot): array
         $corex = parseExtraCorex($composer, $composerPath);
 
         $packages[$dirName] = [
+            'path' => substr(dirname($composerPath), strlen($repoRoot) + 1),
             'name' => (string) $composer['name'],
             'dir' => $dirName,
             'require' => array_keys($composer['require'] ?? []),
@@ -399,7 +401,7 @@ function discoverPackages(string $repoRoot): array
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  * @return array<string, string>
  */
 function buildClassIndex(string $repoRoot, array $packages): array
@@ -407,7 +409,7 @@ function buildClassIndex(string $repoRoot, array $packages): array
     $index = [];
 
     foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
 
         if (! is_dir($srcDir)) {
             continue;
@@ -933,7 +935,7 @@ function isClosureUse(array $tokens, int $useIndex): bool
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  * @param  array<string, string>  $classIndex
  */
 function resolveOwner(string $import, array $packages, array $classIndex): ?string
@@ -958,7 +960,7 @@ function resolveOwner(string $import, array $packages, array $classIndex): ?stri
         return null;
     }
 
-    if (! str_starts_with($owner, 'corex/') && ! str_starts_with($owner, 'flex/')) {
+    if (! str_starts_with($owner, 'axiomasoft/corex') && ! str_starts_with($owner, 'flex/')) {
         return null;
     }
 
@@ -1036,7 +1038,7 @@ function parseExtraCorex(array $composer, string $composerPath): array
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  */
 function violatesPublicApi(string $import, string $fromPackage, string $ownerPackage, array $packages): ?string
 {
@@ -1106,7 +1108,7 @@ function isPublicApiException(string $fromPackage, string $toPackage, string $re
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  */
 function violatesPackageTypeDirection(string $fromPackage, string $toPackage, array $packages): ?string
 {
@@ -1192,7 +1194,7 @@ function loadUndeclaredSurfaceSnapshot(string $path): array
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  * @return list<array{dir: string, file: string, line: int, fqcn: string, docblock: string}>
  */
 function collectTopLevelTypes(string $repoRoot, array $packages): array
@@ -1200,7 +1202,7 @@ function collectTopLevelTypes(string $repoRoot, array $packages): array
     $types = [];
 
     foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
 
         if (! is_dir($srcDir)) {
             continue;
@@ -1294,7 +1296,7 @@ function docblockBeforeIndex(array $tokens, int $typeIndex): string
 }
 
 /**
- * @param  array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $ownerMeta
+ * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $ownerMeta
  */
 function isUndeclaredSurfaceType(string $fqcn, string $docblock, array $ownerMeta): bool
 {
@@ -1314,7 +1316,7 @@ function isUndeclaredSurfaceType(string $fqcn, string $docblock, array $ownerMet
 }
 
 /**
- * @param  array{name: string, dir: string, require: list<string>, psr4: array<string, string>}  $fromMeta
+ * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $fromMeta
  * @param  list<array<string, mixed>>  $allowlist
  * @param  list<array<string, string>>  $exceptions
  */
@@ -1427,7 +1429,7 @@ function allowlistGuardIsValid(array $entry, string $repoRoot): bool
 
 /**
  * @param  array<string, string>  $classIndex
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  * @param  list<array<string, string>>  $reservations
  * @return list<array<string, mixed>>
  */
@@ -1496,7 +1498,7 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
         $evaluations[] = [
             'kind' => 'violation',
             'prefix' => $prefix,
-            'file' => 'packages/'.$ownerMeta['dir'].'/composer.json',
+            'file' => $ownerMeta['path'].'/composer.json',
             'line' => 1,
             'owner' => $host.', '.$owner,
             'message' => 'host-reserved namespace conditions not met: '.implode('; ', $messages),
@@ -1508,7 +1510,7 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
 
 /**
  * @param  array<string, string>  $classIndex
- * @param  array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
  * @param  array{
  *     allowlist: list<array<string, mixed>>,
  *     undeclared_dependency_exceptions: list<array<string, string>>,
@@ -1560,6 +1562,7 @@ function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, a
             $prefixClaims[] = [
                 'package' => $meta['name'],
                 'dir' => $meta['dir'],
+                'path' => $meta['path'],
                 'prefix' => $prefix,
             ];
         }
@@ -1611,7 +1614,7 @@ function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, a
                 'kind' => 'violation',
                 'prefix' => $overlap,
                 'packages' => $owners,
-                'file' => 'packages/'.$left['dir'].'/composer.json',
+                'file' => $left['path'].'/composer.json',
                 'line' => 1,
                 'message' => 'namespace prefix owned by multiple packages without reservation',
             ];
@@ -1765,7 +1768,7 @@ function emitPackageGraphBaseline(string $repoRoot, string $configPath): void
     $seenPublicApi = [];
 
     foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/packages/'.$dirName.'/src';
+        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
 
         if (! is_dir($srcDir)) {
             continue;

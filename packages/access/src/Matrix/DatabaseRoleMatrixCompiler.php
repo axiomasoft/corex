@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
 use AzGuard\Models\RolePermission;
-use CoreX\Auth\Contracts\RoleMatrixCompiler as RoleMatrixCompilerContract;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Models\Role;
-use CoreX\Auth\Models\RoleMatrixRow;
-use CoreX\Auth\Support\AuthOptions;
+use CoreX\Access\Contracts\RoleMatrixCompiler;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Models\Role;
+use CoreX\Access\Models\RoleMatrixRow;
+use CoreX\Access\Support\AuthOptions;
 use Illuminate\Support\Facades\DB;
 use Override;
 
@@ -21,7 +21,7 @@ use Override;
  * after it commits — a failure mid-compile leaves neither new keys nor a
  * new version.
  */
-final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompilerContract
+final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
 {
     /**
      * `$activeEntities` defaults to null (resolved from the container

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\AccountSchemaState;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Provisioning\PendingPool;
@@ -197,7 +197,7 @@ it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\'))
     });
 
     // Default runner (no override) — this package's tenant migrations
-    // reference cross-package tables (`sys_departments`, corex/core) that
+    // reference cross-package tables (`sys_departments`, axiomasoft/corex) that
     // this test's bare fixture database doesn't have, so the migrate step
     // itself may fail past the lock statement; that failure is swallowed
     // into schema_state.status='failed' by the orchestrator (already

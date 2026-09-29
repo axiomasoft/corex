@@ -10,7 +10,7 @@ Run from the authoritative monorepo checkout:
 
 ```bash
 python3 scripts/distribution/export.py --check
-python3 scripts/distribution/pristine-proof.py --package corex/core --laravel 12
+python3 scripts/distribution/pristine-proof.py --package axiomasoft/corex --laravel 12
 ```
 
 The exporter reads the committed source pinned in

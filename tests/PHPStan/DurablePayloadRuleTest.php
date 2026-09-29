@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\PHPStan;
 
-use CoreX\PHPStan\Rules\DurablePayloadPromotedPropertyRule;
-use CoreX\PHPStan\Rules\DurablePayloadRule;
+use CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule;
+use CoreX\Messaging\PHPStan\Rules\DurablePayloadRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 

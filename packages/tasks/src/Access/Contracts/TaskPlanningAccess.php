@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Access\Contracts;
 
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\PlanningOperation;
-use CoreX\Tasks\Data\PlanningSubject;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Planning\Data\PlanningOperation;
+use CoreX\Tasks\Planning\Data\PlanningSubject;
+use CoreX\Tasks\Task\Data\ActorData;
 
 interface TaskPlanningAccess
 {

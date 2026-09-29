@@ -18,13 +18,13 @@ test('provider size gate exits 0 on a clean tree', function (): void {
     expect($exitCode)->toBe(0)
         ->and($joined)->toContain('provider-size-gate: OK')
         ->and($snapshot['ratchet']['packages/tenancy/src/TenancyServiceProvider.php'])->toBe(0)
-        ->and($snapshot['ratchet']['packages/modules/src/ModulesServiceProvider.php'])->toBe(0)
+        ->and($snapshot['ratchet']['packages/core/src/Modules/ModulesServiceProvider.php'])->toBe(0)
         ->and($snapshot['max_bindings'])->toBe(20);
 });
 
 test('provider size gate exits 1 and names the planted provider', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/ProviderSizeProbeProvider.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/ProviderSizeProbeProvider.php';
     $calls = [];
 
     for ($index = 0; $index < 21; $index++) {
@@ -37,7 +37,7 @@ test('provider size gate exits 1 and names the planted provider', function (): v
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -62,7 +62,7 @@ PHP;
         $joined = implode("\n", $output);
 
         expect($exitCode)->toBe(1)
-            ->and($joined)->toContain('packages/core/src/Support/ProviderSizeProbeProvider.php')
+            ->and($joined)->toContain('packages/core/src/Config/ProviderSizeProbeProvider.php')
             ->and($joined)->toContain('singleton=21')
             ->and($joined)->toContain('total=21')
             ->and($joined)->toContain('max_bindings=20');
@@ -75,7 +75,7 @@ PHP;
 
 test('provider size gate does not count bindings outside a service provider', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/HelperServiceProvider.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/HelperServiceProvider.php';
     $calls = [];
 
     for ($index = 0; $index < 21; $index++) {
@@ -88,7 +88,7 @@ test('provider size gate does not count bindings outside a service provider', fu
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 final class HelperServiceProvider
 {

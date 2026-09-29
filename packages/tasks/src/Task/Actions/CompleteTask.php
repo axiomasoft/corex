@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Actions;
+namespace CoreX\Tasks\Task\Actions;
 
-use CoreX\Tasks\Contracts\CompleteTaskCommand;
-use CoreX\Tasks\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Data\CompleteTaskData;
-use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Events\TaskCompleted;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tasks\Support\TaskCompletion;
-use CoreX\Tasks\Support\TaskModuleGuard;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Access\Internal\TaskCompletion;
+use CoreX\Tasks\Access\Internal\TaskModuleGuard;
+use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
+use CoreX\Tasks\Task\Data\CompleteTaskData;
+use CoreX\Tasks\Task\Data\TaskReference;
+use CoreX\Tasks\Task\Events\TaskCompleted;
+use CoreX\Tasks\Task\Models\Task;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 

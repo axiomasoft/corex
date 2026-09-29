@@ -28,6 +28,14 @@ def automatic(r):
     return r['new'] != '-' and not r['note'].startswith('section:')
 
 
+def identifier_pattern(table):
+    """Match complete config basenames even after a slash, plus ordinary identifiers."""
+    identifiers = '|'.join(re.escape(r['old']) for r in sorted(table, key=lambda r: -len(r['old'])))
+    files = '|'.join(re.escape(r['old'] + '.php') for r in table if r['kind'] == 'config')
+    return re.compile(r'(?<![\w.-])(?P<file>' + files + r')(?![\w.-])|'
+                      + BEFORE + '(?P<id>' + identifiers + ')' + AFTER)
+
+
 def text_files():
     for f in subprocess.run(['git', 'ls-files'], capture_output=True, text=True, check=True).stdout.splitlines():
         if SKIP.search(f) or not os.path.isfile(f):
@@ -53,11 +61,13 @@ def apply():
         if r['kind'] == 'config' and m:
             src = f"{package_dir(r['package'])}/config/{r['old']}.php"
             subprocess.run(['git', 'mv', src, f"{package_dir(r['package'])}/{m.group(1)}"], check=True)
-    rules = {r['old']: r['new'] for r in table if automatic(r)}
-    rx = re.compile(BEFORE + '(' + '|'.join(re.escape(k) for k in sorted(rules, key=len, reverse=True)) + ')' + AFTER)
+    automatic_rows = [r for r in table if automatic(r)]
+    rules = {r['old']: r['new'] for r in automatic_rows}
+    files = {r['old'] + '.php': r['new'] + '.php' for r in automatic_rows if r['kind'] == 'config'}
+    rx = identifier_pattern(automatic_rows)
     changed = 0
     for f, text in text_files():
-        new = rx.sub(lambda mo: rules[mo.group(1)], text)
+        new = rx.sub(lambda mo: files[mo['file']] if mo['file'] else rules[mo['id']], text)
         if new != text:
             open(f, 'w', encoding='utf-8').write(new)
             changed += 1
@@ -69,12 +79,12 @@ def apply():
 
 def check():
     table = rows()
-    rx = re.compile(BEFORE + '(' + '|'.join(re.escape(r['old']) for r in sorted(table, key=lambda r: -len(r['old']))) + ')' + AFTER)
+    rx = identifier_pattern(table)
     hits = 0
     for f, text in text_files():
         for i, line in enumerate(text.splitlines(), 1):
             for mo in rx.finditer(line):
-                print(f'{f}:{i} {mo.group(1)}')
+                print(f'{f}:{i} {mo["file"] or mo["id"]}')
                 hits += 1
     print(f'identifiers check: {hits} remaining')
     return 1 if hits else 0

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Data\CallableDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\DataScope;
 use CoreX\Transfer\Data\TransferRef;
 use CoreX\Transfer\Internal\Transfer\SqlTransferResultReader;
 use CoreX\Transfer\Internal\Transfer\TransferUnavailable;

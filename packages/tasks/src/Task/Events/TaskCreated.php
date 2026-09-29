@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Events;
+namespace CoreX\Tasks\Task\Events;
 
-use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Task\Models\Task;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 

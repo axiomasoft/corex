@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Pagination\Data;
 
 /** Signed continuation values. Field names and SQL direction stay in the ordering registry. */
 final readonly class CursorPayload

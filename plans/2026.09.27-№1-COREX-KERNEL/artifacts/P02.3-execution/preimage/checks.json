@@ -1,0 +1,18 @@
+[
+  {
+    "check": "seams",
+    "exit": 0
+  },
+  {
+    "check": "plan",
+    "exit": 0
+  },
+  {
+    "check": "manifest",
+    "exit": 0
+  },
+  {
+    "check": "golden-map",
+    "exit": 0
+  }
+]

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
-use CoreX\Auth\Access\ScopeAvailability;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Models\Role;
-use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Access\Access\ScopeAvailability;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Models\Role;
+use CoreX\Access\Models\RoleMatrixRow;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Support\Facades\Schema;

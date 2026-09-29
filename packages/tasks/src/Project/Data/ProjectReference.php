@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Project\Data;
 
-use CoreX\Tasks\Models\Project;
+use CoreX\Tasks\Project\Models\Project;
 
 final readonly class ProjectReference
 {

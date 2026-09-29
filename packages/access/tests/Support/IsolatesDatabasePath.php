@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Support;
+namespace CoreX\Access\Tests\Support;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;

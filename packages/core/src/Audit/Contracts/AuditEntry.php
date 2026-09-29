@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Contracts;
 
-use CoreX\Enums\ActorType;
-use CoreX\Tenancy\ImpersonationState;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\ImpersonationState;
 use DateTimeImmutable;
 
 /**

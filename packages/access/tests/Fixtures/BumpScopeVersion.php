@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Matrix\ScopeMapVersion;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Tenancy\SingleAccountResolver;
+use CoreX\Access\Matrix\ScopeMapVersion;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\SingleAccountResolver;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;

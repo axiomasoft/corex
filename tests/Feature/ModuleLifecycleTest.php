@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\FeatureFlags;
-use CoreX\Events\DomainEvent;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\DatabaseFeatureFlags;
+use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistryCache;
@@ -31,9 +34,6 @@ use CoreX\Modules\Registry\CompiledModule;
 use CoreX\Modules\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Support\ModulesOptions;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\Lifecycle\StubDependentModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFailingModule;
@@ -137,7 +137,7 @@ beforeEach(function (): void {
 
     $this->artisan('migrate', [
         '--database' => LIFECYCLE_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/modules/database/migrations'),
+        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
         '--realpath' => true,
         '--force' => true,
     ])->run();

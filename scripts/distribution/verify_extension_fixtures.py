@@ -27,7 +27,7 @@ FIXTURES = (
         "id": "custom-attribute-source",
         "package": "thirdparty/custom-attribute-source",
         "class": r"ThirdParty\Attributes\Module",
-        "forbidden": r"CoreX\Attributes\Internal\UnavailableAttributes",
+        "forbidden": r"CoreX\CustomFields\Internal\UnavailableAttributes",
     },
     {
         "id": "custom-transfer-codec",

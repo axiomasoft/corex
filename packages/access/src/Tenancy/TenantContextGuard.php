@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tenancy;
+namespace CoreX\Access\Tenancy;
 
 use AzGuard\Contracts\ContextGuard;
 use CoreX\Modules\Contracts\EntityRegistry;
@@ -13,7 +13,7 @@ use Override;
 /**
  * Implements AzGuard's ContextGuard seam (the binding AzGuard expects from an
  * external package) so `$user->hasPermissionIn($type, $id, $permission)` works:
- * the context entity is resolved through corex/modules's EntityRegistry (single
+ * the context entity is resolved through axiomasoft/corex's EntityRegistry (single
  * morph source, ADR-003), and the check passes when the user has the
  * permission scoped to that entity, or globally within the panel.
  *

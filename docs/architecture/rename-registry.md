@@ -38,11 +38,11 @@
 | `OpenApi` | `OpenApiDocumentGenerator` | api | P15 | P15.8 | — | A68 |
 | `AccountsResult` | `AvailableAccounts` | tenancy | P15 | P15.9 | — | A79 |
 | `TasksWorkflowModule` | `TaskWorkflowIntegration` | tasks-workflow | P15 | P15.6 | discovery; идентификатор модуля (composer-имя) **не меняется** | A80 |
-| `corex/api` | `corex/operations` | api | P15 | P15.11 | принято D134; каталог `packages/operations` | A67 |
-| `corex/auth` | `corex/access` | auth | P15 | P15.12 | принято D135; каталог `packages/access` | A72 |
+| `corex/api` | `axiomasoft/corex-operations` | api | P15 | P15.11 | принято D134; каталог `packages/operations` | A67 |
+| `corex/auth` | `axiomasoft/corex-access` | auth | P15 | P15.12 | принято D135; каталог `packages/access` | A72 |
 
-`RecordRules` в реестр **не входит**: класс живёт в `packages/crm/src/Context/Internal/`, а не в
-`corex/access` (A71 опровергнуто).
+`RecordRules` в реестр **не входит**: класс живёт в `products/flex-crm/src/Context/Internal/`, а не в
+`axiomasoft/corex-access` (A71 опровергнуто).
 
 Дополнительные исходы P15.6/P15.10 (не строки реестра) включены в manifest гейта:
 `CompletionCaptureObserver` → `CaptureTaskCompletion`; зоновые FQCN D88 — см.

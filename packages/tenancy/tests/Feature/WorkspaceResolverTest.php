@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Models\Invitation;
-use CoreX\Tenancy\Models\User;
-use CoreX\Tenancy\Models\Workspace;
-use CoreX\Tenancy\Models\WorkspaceMember;
+use CoreX\Tenancy\Identity\Models\User;
 use CoreX\Tenancy\Workspace\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspace\InvitationNotAcceptableException;
+use CoreX\Tenancy\Workspace\Models\Invitation;
+use CoreX\Tenancy\Workspace\Models\Workspace;
+use CoreX\Tenancy\Workspace\Models\WorkspaceMember;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const CORE_MIGRATIONS_PATH_WSP = __DIR__.'/../../vendor/corex/core/database/migrations/pg';
+const CORE_MIGRATIONS_PATH_WSP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 const TENANT_MIGRATIONS_PATH_WSP = __DIR__.'/../../database/migrations/tenant';
 
 beforeEach(function (): void {
@@ -26,8 +26,8 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    // Assembles the golden-template chain (D14/C4): corex/core owns
-    // sys_departments/sys_department_user, corex/tenancy owns
+    // Assembles the golden-template chain (D14/C4): axiomasoft/corex owns
+    // sys_departments/sys_department_user, axiomasoft/corex-tenancy owns
     // users/wsp_*/the integration FK — two ordered migrate calls, same as
     // a real golden-template build.
     $this->artisan('migrate', [

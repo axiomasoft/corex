@@ -7,10 +7,10 @@
 столбцы `aut_role_assignments.workspace_id → wsp_workspaces.id`,
 `aut_role_assignments.granted_by → users.id`.
 
-**Владелец.** `corex/access`
+**Владелец.** `axiomasoft/corex-access`
 
-**Причина.** Таблицы `wsp_workspaces` и `users` принадлежат `corex/tenancy` и отсутствуют в
-boxed-профиле; `corex/access` должен оставаться функциональным без tenancy в boxed-установке.
+**Причина.** Таблицы `wsp_workspaces` и `users` принадлежат `axiomasoft/corex-tenancy` и отсутствуют в
+boxed-профиле; `axiomasoft/corex-access` должен оставаться функциональным без tenancy в boxed-установке.
 
 **Компенсирующий контроль.** Отдельный publish-тег `corex-auth-migrations-tenant-cloud`: cloud-профиль
 ставит FK отдельной миграцией; boxed публикует только каталог `tenant/` без этих ограничений.

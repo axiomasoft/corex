@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tools\Tests;
+
+use CoreX\CoreServiceProvider;
+use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Operations\ApiServiceProvider;
+use CoreX\Tools\ToolServiceProvider;
+use Illuminate\Foundation\Application;
+use Orchestra\Testbench\TestCase as Orchestra;
+
+abstract class TestCase extends Orchestra
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->register(CoreServiceProvider::class);
+        $this->app->register(ModulesServiceProvider::class);
+    }
+
+    /** @param Application $app */
+    protected function getPackageProviders($app): array
+    {
+        return [ApiServiceProvider::class, ToolServiceProvider::class];
+    }
+
+    /** @param Application $app */
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections.sqlite.database', ':memory:');
+        $app['config']->set('cache.default', 'array');
+        $app['config']->set('session.driver', 'array');
+        $app['config']->set('queue.default', 'sync');
+    }
+}

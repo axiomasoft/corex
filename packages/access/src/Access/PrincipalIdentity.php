@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
 use AzGuard\Concerns\HasPermissions as HasPermissionsConcern;
 use AzGuard\Contracts\HasPermissions as HasPermissionsContract;
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Identity\PrincipalUserProvider;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Identity\PrincipalUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 

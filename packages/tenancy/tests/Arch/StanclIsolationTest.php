@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// B-11 §7.3 п.1 / AC-29 — `Stancl\*` живёт только в corex/tenancy.
+// B-11 §7.3 п.1 / AC-29 — `Stancl\*` живёт только в axiomasoft/corex-tenancy.
 //
 // Второй, независимый от PHPStan носитель того же инварианта (ТЗ P2.13:
 // «PHPStan-правило + arch-тест Pest в CI»). Правило работает по путям из
@@ -27,7 +27,7 @@ $repoRoot = \dirname($packageRoot, 2);
  * Ссылки на `Stancl\*` в КОДЕ файла: `use Stancl\…` (в т.ч. групповые) и
  * полностью-квалифицированные `\Stancl\…`. Комментарии и докблоки вырезаются
  * токенайзером — упоминание вендора в докблоке контракта ядра легально
- * (`packages/core/src/Tenancy/Contracts/TenantDatabaseLifecycle.php`) и
+ * (`packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php`) и
  * ловиться не должно. Ровно та же семантика, что у `StanclImportBoundaryRule`,
  * только на токенах вместо AST.
  *
@@ -95,7 +95,7 @@ $phpFiles = static function (string $dir): array {
 // (1) Анти-вакуум-самопроверка детектора: пока `packages/tenancy/src` реально
 // пронизан Stancl-импортами, детектор ОБЯЗАН их видеть. Без этого теста весь
 // файл мог бы зеленеть просто потому, что сканер ничего не находит нигде.
-test('the stancl detector actually detects (positive control on corex/tenancy itself)', function () use ($packageRoot, $phpFiles, $stanclCodeReferences): void {
+test('the stancl detector actually detects (positive control on axiomasoft/corex-tenancy itself)', function () use ($packageRoot, $phpFiles, $stanclCodeReferences): void {
     $found = [];
 
     foreach ($phpFiles($packageRoot.'/src') as $file) {
@@ -149,10 +149,10 @@ test('the stancl detector ignores comments and docblocks', function () use ($sta
         ->and(\count($dirty))->toBe(2);
 });
 
-// (3) Сам инвариант: ни один пакет, КРОМЕ corex/tenancy, не ссылается на
+// (3) Сам инвариант: ни один пакет, КРОМЕ axiomasoft/corex-tenancy, не ссылается на
 // `Stancl\*` в коде. Boxed-профиль не тянет stancl/tenancy вообще —
 // импорт где-либо ещё ломает его сборку молча (D13, B-11 §7.3 п.1).
-test('no package outside corex/tenancy references Stancl in code', function () use ($repoRoot, $packageRoot, $phpFiles, $stanclCodeReferences): void {
+test('no package outside axiomasoft/corex-tenancy references Stancl in code', function () use ($repoRoot, $packageRoot, $phpFiles, $stanclCodeReferences): void {
     // Split-зеркало пакета несёт только его собственное дерево — соседей там
     // физически нет, и сканировать нечего. В монорепо они есть, и (1) выше
     // уже доказал, что сканер не пуст.

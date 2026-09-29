@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Observability;
 
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
 use InvalidArgumentException;
 
 /**

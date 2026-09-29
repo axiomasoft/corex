@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Contracts\DescribesError;
-use CoreX\Enums\ErrorCategory;
-use CoreX\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\ApiError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

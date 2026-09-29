@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Reference;
+namespace CoreX\Intl\Territory\Internal\Reference;
 
 final class BoxesReferenceProvider extends AbstractFixtureReferenceProvider
 {

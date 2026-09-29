@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Support\SearchConfigSection;
 use Illuminate\Contracts\Foundation\Application;

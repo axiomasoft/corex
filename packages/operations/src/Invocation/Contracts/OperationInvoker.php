@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Invocation\Contracts;
 
-use CoreX\Api\Data\OperationInvocation;
-use CoreX\Api\Data\OperationResult;
+use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Invocation\Data\OperationResult;
 
 interface OperationInvoker
 {

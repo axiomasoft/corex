@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Contracts;
 
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
 use CoreX\Transfer\Data\Export\ExportCursor;
 use CoreX\Transfer\Data\Export\ExportManifest;
 

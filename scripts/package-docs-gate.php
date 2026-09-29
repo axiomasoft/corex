@@ -15,25 +15,24 @@ const EXIT_CONFIG = 2;
 
 /** @var array<string, string> */
 const PRODUCER_PHASE = [
-    'corex/access' => 'P7',
-    'corex/attributes' => 'P10',
-    'corex/core' => 'P6',
-    'corex/intl' => 'P16',
-    'corex/media' => 'P7',
-    'corex/modules' => 'P8',
-    'corex/notifications' => 'P5',
-    'corex/operations' => 'P13',
-    'corex/panels' => 'P11',
-    'corex/recurrence' => 'P4',
-    'corex/search' => 'P12',
-    'corex/search-intl' => 'P12',
-    'corex/search-meilisearch' => 'P12',
-    'corex/tasks' => 'P16',
-    'corex/tasks-workflow' => 'P4',
-    'corex/tenancy' => 'P9',
-    'corex/transfer' => 'P12',
-    'corex/wakeup' => 'P5',
-    'corex/workflow' => 'P11',
+    'axiomasoft/corex-access' => 'P7',
+    'axiomasoft/corex-custom-fields' => 'P10',
+    'axiomasoft/corex' => 'P6',
+    'axiomasoft/corex-intl' => 'P16',
+    'axiomasoft/corex-media' => 'P7',
+    'axiomasoft/corex-notifications' => 'P5',
+    'axiomasoft/corex-operations' => 'P13',
+    'axiomasoft/corex-panels' => 'P11',
+    'axiomasoft/corex-recurrence' => 'P4',
+    'axiomasoft/corex-search' => 'P12',
+    'axiomasoft/corex-search-intl' => 'P12',
+    'axiomasoft/corex-search-meilisearch' => 'P12',
+    'axiomasoft/corex-tasks' => 'P16',
+    'axiomasoft/corex-tasks-workflow' => 'P4',
+    'axiomasoft/corex-tenancy' => 'P9',
+    'axiomasoft/corex-transfer' => 'P12',
+    'axiomasoft/corex-wakeup' => 'P5',
+    'axiomasoft/corex-workflow' => 'P11',
 ];
 
 const TOPICS = ['installation', 'configuration', 'extension', 'failure'];
@@ -91,7 +90,7 @@ function runDocsGate(string $repoRoot, bool $pristine): array
  */
 function loadCohort(string $repoRoot): array
 {
-    $cohortPath = $repoRoot.'/plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json';
+    $cohortPath = $repoRoot.'/scripts/package-docs-cohort.json';
 
     if (! is_file($cohortPath)) {
         throw new RuntimeException('missing release-cohort.json');
@@ -545,7 +544,7 @@ function coveredByAnyPublicApi(string $fqcn, array $maps): bool
  */
 function compileAgainstArchive(string $repoRoot, array $package, array $symbols): array
 {
-    $cohortPath = $repoRoot.'/plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json';
+    $cohortPath = $repoRoot.'/scripts/package-docs-cohort.json';
     $cohort = json_decode((string) file_get_contents($cohortPath), true);
     $archiveSha = null;
     foreach ($cohort['packages'] ?? [] as $row) {

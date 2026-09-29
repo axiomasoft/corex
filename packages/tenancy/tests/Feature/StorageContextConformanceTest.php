@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Aws\S3\S3Client;
-use CoreX\Exceptions\CentralContextException;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Storage\StorageCapabilityUnavailable;
 use CoreX\Storage\StorageOperationFailed;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Tenancy\Runtime\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Storage\ObjectTenantStorage;
-use CoreX\Tenancy\TenantContext;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Facades\File;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 
 /**
  * Single owner of "does this entity_key currently give out a permission

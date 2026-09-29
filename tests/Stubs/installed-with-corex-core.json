@@ -1,11 +1,11 @@
 {
     "packages": [
         {
-            "name": "corex/core",
+            "name": "axiomasoft/corex",
             "version": "dev-main"
         },
         {
-            "name": "corex/modules",
+            "name": "axiomasoft/corex",
             "version": "dev-main"
         }
     ]

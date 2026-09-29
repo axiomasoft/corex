@@ -5,11 +5,11 @@ cd "$(git rev-parse --show-toplevel)"
 
 run() {
     local dir="$1" result=0 task_snapshot=""
-    if [[ ! -f "packages/$dir/composer.json" ]]; then
+    if [[ ! -f "$dir/composer.json" ]]; then
         echo "Unknown package: $dir" >&2
         return 2
     fi
-    if [[ "$dir" == tenancy || "$dir" == access ]]; then
+    if [[ "$dir" == packages/tenancy || "$dir" == packages/access ]]; then
         task_snapshot=$(mktemp -d)
         for manifest in composer.json packages/tenancy/composer.json packages/access/composer.json; do
             mkdir -p "$task_snapshot/$(dirname "$manifest")"
@@ -18,9 +18,9 @@ run() {
         python3 scripts/distribution/stage-stancl-providers.py >/dev/null || result=$?
     fi
     if (( result == 0 )); then
-        composer --working-dir="packages/$dir" update --no-interaction --no-progress --quiet || result=$?
+        composer --working-dir="$dir" update --no-interaction --no-progress --quiet || result=$?
     fi
-    if [[ "$dir" == tenancy || "$dir" == access ]]; then
+    if [[ "$dir" == packages/tenancy || "$dir" == packages/access ]]; then
         # The staging tool registers three installing roots. Reconcile every one,
         # including after a failed staging or Composer invocation.
         composer config --unset repositories.stancl-providers || result=$?
@@ -35,17 +35,19 @@ run() {
     fi
     (( result == 0 )) || return "$result"
     vendor/bin/composer-dependency-analyser \
-        --composer-json="packages/$dir/composer.json" \
-        --config="packages/$dir/composer-dependency-analyser.php"
+        --composer-json="$dir/composer.json" \
+        --config="$dir/composer-dependency-analyser.php"
 }
 
 if [[ "${1:-}" == --all ]]; then
     status=0
-    for manifest in packages/*/composer.json; do
-        dir="$(basename "$(dirname "$manifest")")"
+    for manifest in packages/*/composer.json products/*/composer.json; do
+        dir="$(dirname "$manifest")"
         echo "==> $dir"
         run "$dir" || status=1
     done
     exit "$status"
 fi
-run "${1:?usage: dependency-analyser.sh <package-dir>|--all}"
+dir="${1:?usage: dependency-analyser.sh <package-dir>|--all}"
+[[ "$dir" == */* ]] || dir="packages/$dir"
+run "$dir"

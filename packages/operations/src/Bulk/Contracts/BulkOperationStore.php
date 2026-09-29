@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Bulk\Contracts;
 
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Data\BulkOperationDefinition;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 
 interface BulkOperationStore
 {

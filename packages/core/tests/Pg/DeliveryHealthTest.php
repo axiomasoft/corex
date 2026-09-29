@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Config;
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
-use CoreX\Support\Config;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
@@ -17,7 +17,7 @@ function deliveryHealthInsertRow(array $overrides = []): void
         'name' => $overrides['name'] ?? 'membership.expired',
         'contract_version' => $overrides['contract_version'] ?? 1,
         'envelope_version' => 1,
-        'source' => 'corex/core',
+        'source' => 'axiomasoft/corex',
         'subject' => 'subject-1',
         'correlation_id' => 'corr-1',
         'causation_id' => 'cause-1',

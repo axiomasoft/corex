@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests;
+namespace CoreX\Access\Tests;
 
-use CoreX\Auth\Tests\Support\CoreAuthTestCase;
+use CoreX\Access\Tests\Support\CoreAuthTestCase;
 
 abstract class TestCase extends CoreAuthTestCase
 {

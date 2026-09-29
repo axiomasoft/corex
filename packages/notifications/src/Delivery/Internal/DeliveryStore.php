@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Delivery\Internal;
 
-use CoreX\Notifications\Data\DeliveryClaim;
-use CoreX\Notifications\Data\DeliveryOutcome;
+use CoreX\Notifications\Delivery\Data\DeliveryClaim;
+use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
+use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
 use Illuminate\Database\ConnectionInterface;
 use JsonException;
 

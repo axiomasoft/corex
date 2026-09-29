@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\Capability;
@@ -16,8 +18,6 @@ use CoreX\Panels\Data\PanelReference;
 use CoreX\Panels\Internal\ModulePanelCatalogue;
 use CoreX\Panels\PanelsModule;
 use CoreX\Panels\PanelsServiceProvider;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 
 function panelContext(string $account = 'account-a', string $actorKind = 'guest', ?string $actorId = null): PanelContext
 {
@@ -244,6 +244,6 @@ it('registers the tagged catalogue and exposes the package module manifest', fun
 
     expect($this->app->make(PanelCatalogue::class))
         ->toBeInstanceOf(ModulePanelCatalogue::class)
-        ->and((new PanelsModule)->manifest()->composerName)->toBe('corex/panels')
+        ->and((new PanelsModule)->manifest()->composerName)->toBe('axiomasoft/corex-panels')
         ->and((new PanelsModule)->manifest()->tablePrefix)->toBe('pnl');
 });

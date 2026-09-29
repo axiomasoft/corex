@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Observability;
 
-use CoreX\Data\ErrorDescriptor;
+use CoreX\Errors\Data\ErrorDescriptor;
 use InvalidArgumentException;
 
 final readonly class OperationFailed

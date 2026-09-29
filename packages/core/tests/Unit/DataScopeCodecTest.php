@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\InvalidScopePayload;
-use CoreX\Support\Data\ArrayDataScopeCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Data\Exceptions\InvalidScopePayload;
 
 function codecSampleScope(?string $workspaceId = null, bool $boxed = true): DataScope
 {

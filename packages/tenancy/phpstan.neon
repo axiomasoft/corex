@@ -4,6 +4,8 @@ includes:
 
 parameters:
     level: max
+    bootstrapFiles:
+        - ../../scripts/phpstan-tenancy-commands.php
     tmpDir: ../../build/phpstan/tenancy
     paths:
         - src

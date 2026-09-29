@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging;
 
-use CoreX\Contracts\WorkerRuntime;
+use CoreX\Messaging\Contracts\WorkerRuntime;
 use LogicException;
 
 /**
@@ -13,7 +13,7 @@ use LogicException;
  * either from an HTTP request cycle hangs that worker. `runningInConsole()`
  * is trustworthy for a plain PHP-FPM/CLI split (Octane is not part of
  * the supported runtime), but an Octane runtime invalidates that check (see
- * `CoreX\Contracts\WorkerRuntime` docblock): under Octane, `subscribe()` is
+ * `CoreX\Messaging\Contracts\WorkerRuntime` docblock): under Octane, `subscribe()` is
  * refused unless the caller explicitly opts in via
  * `config('corex.pubsub.octane_worker_opt_in')`, set only by a dedicated
  * worker command — never by request-handling code.

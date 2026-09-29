@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\DataScopeAuthorizer;
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
 use Illuminate\Contracts\Container\Container;
 
 final class WorkUnitMutableContextResolver implements TenantContextResolver

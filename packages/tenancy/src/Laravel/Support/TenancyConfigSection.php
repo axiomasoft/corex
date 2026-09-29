@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Support;
+namespace CoreX\Tenancy\Laravel\Support;
 
-use CoreX\Contracts\ConfigReportSection;
-use CoreX\Enums\PubSubDriver;
+use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Messaging\Enums\PubSubDriver;
 
 /** @internal Configuration report composition. */
 final class TenancyConfigSection implements ConfigReportSection

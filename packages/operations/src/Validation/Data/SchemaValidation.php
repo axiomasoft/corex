@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Validation\Data;
 
 /** Bounded schema validation outcome without leaking raw arguments. */
 final readonly class SchemaValidation

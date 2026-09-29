@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Support\RegistersNothingOnBoot;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\RegistersNothingOnBoot;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Application as FoundationApplication;
 

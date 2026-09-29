@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Testing\Stubs\Lifecycle;
 
-use CoreX\Contracts\FeatureFlagDefinition;
-use CoreX\Modules\ModuleDefinition;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Features\Contracts\FeatureFlagDefinition;
+use CoreX\Modules\Definition\ModuleDefinition;
+use CoreX\Modules\Definition\ModuleManifest;
 
 /**
  * No migrations/hooks — exists solely to exercise `ModuleManifest::$featureFlags`

@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method fromArray() of internal class CoreX\Attributes\Internal\Laravel\AttributeComposition from outside its root namespace CoreX.'
+			rawMessage: 'Call to static method fromArray() of internal class CoreX\CustomFields\Internal\Laravel\AttributeComposition from outside its root namespace CoreX.'
 			identifier: staticMethod.internalClass
 			count: 1
 			path: scripts/attributes-architecture-gate.php
@@ -49,7 +49,7 @@ parameters:
 			path: scripts/attributes-architecture-gate.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Attributes\Internal\Laravel\AttributeComposition::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
+			rawMessage: 'Parameter #1 $config of static method CoreX\CustomFields\Internal\Laravel\AttributeComposition::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/attributes-architecture-gate.php
@@ -379,7 +379,7 @@ parameters:
 			path: scripts/distribution/extension_fixture_probe.php
 
 		-
-			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\ModuleManifest>, array{mixed} given.'
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Definition\ModuleManifest>, array{mixed} given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/distribution/extension_fixture_probe.php
@@ -463,7 +463,7 @@ parameters:
 			path: scripts/extension-contract-gate.php
 
 		-
-			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\ModuleManifest>, mixed given.'
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Definition\ModuleManifest>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/extension-contract-gate.php
@@ -597,7 +597,13 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'packages' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
+			count: 3
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset 'projected_shared_tags' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
 			path: scripts/ownership-gate.php
 
 		-
@@ -625,12 +631,6 @@ parameters:
 			path: scripts/ownership-gate.php
 
 		-
-			rawMessage: Cannot access offset 'target' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/ownership-gate.php
-
-		-
 			rawMessage: Cannot access offset 'violations' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -639,7 +639,13 @@ parameters:
 		-
 			rawMessage: Cannot access offset mixed on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
+			rawMessage: Cannot access offset string on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
 			path: scripts/ownership-gate.php
 
 		-
@@ -709,6 +715,12 @@ parameters:
 			path: scripts/ownership-gate.php
 
 		-
+			rawMessage: 'Parameter #2 ...$arrays of function array_diff expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: scripts/ownership-gate.php
+
+		-
 			rawMessage: 'Part $expected (mixed) of encapsed string cannot be cast to string.'
 			identifier: encapsedStringPart.nonString
 			count: 1
@@ -729,7 +741,7 @@ parameters:
 		-
 			rawMessage: Possibly invalid array key type mixed.
 			identifier: offsetAccess.invalidOffset
-			count: 1
+			count: 2
 			path: scripts/ownership-gate.php
 
 		-
@@ -1057,7 +1069,7 @@ parameters:
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Function discoverPackages() should return array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> but returns array<string, array{name: string, dir: string, require: list<int|string>, psr4: array<non-falsy-string, mixed>, package_type: string, stability: string, public_api: list<string>}>.'
+			rawMessage: 'Function discoverPackages() should return array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> but returns array<string, array{path: string, name: string, dir: string, require: list<int|string>, psr4: array<non-falsy-string, mixed>, package_type: string, stability: string, public_api: list<string>}>.'
 			identifier: return.type
 			count: 1
 			path: scripts/package-graph-gate.php
@@ -1067,7 +1079,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: scripts/package-graph-gate.php
-
 
 		-
 			rawMessage: 'Function parseExtraCorex() has parameter $composer with no value type specified in iterable type array.'
@@ -1117,7 +1128,6 @@ parameters:
 			count: 1
 			path: scripts/package-graph-gate.php
 
-
 		-
 			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
 			identifier: argument.type
@@ -1128,12 +1138,6 @@ parameters:
 			rawMessage: 'Parameter #1 $array of function array_values expects array<T>, mixed given.'
 			identifier: argument.type
 			count: 2
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $fromMeta of function violatesUndeclaredDependency expects array{name: string, dir: string, require: list<string>, psr4: array<string, string>}, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>} given.'
-			identifier: argument.type
-			count: 1
 			path: scripts/package-graph-gate.php
 
 		-
@@ -1167,35 +1171,10 @@ parameters:
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter #2 $packages of function buildClassIndex expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
-			identifier: argument.type
-			count: 2
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #2 $packages of function detectNamespaceOwnershipConflicts expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #2 $packages of function evaluateReservations expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #2 $packages of function resolveOwner expects array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>}>, array<string, array{name: string, dir: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> given.'
-			identifier: argument.type
-			count: 2
-			path: scripts/package-graph-gate.php
-
-		-
 			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 3
 			path: scripts/package-graph-gate.php
-
 
 		-
 			rawMessage: 'Parameter #3 $prefix of function readUseEntry expects string, string|null given.'
@@ -1272,7 +1251,7 @@ parameters:
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
-			count: 1
+			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
@@ -1356,7 +1335,7 @@ parameters:
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
-			count: 2
+			count: 3
 			path: scripts/quality-ceiling-guard.php
 
 		-
@@ -1612,6 +1591,12 @@ parameters:
 			path: tests/Golden/GoldenTest.php
 
 		-
+			rawMessage: 'Binary operation "+=" between mixed and mixed results in an error.'
+			identifier: assignOp.invalid
+			count: 1
+			path: tests/Golden/GoldenTest.php
+
+		-
 			rawMessage: 'Call to method toBe() of internal class Pest\Mixins\Expectation<TValue> from outside its root namespace Pest.'
 			identifier: method.internalClass
 			count: 2
@@ -1764,7 +1749,7 @@ parameters:
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
-			count: 2
+			count: 3
 			path: tests/Golden/Support/GoldenSnapshot.php
 
 		-
@@ -1788,7 +1773,13 @@ parameters:
 		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
-			count: 2
+			count: 3
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset 'ambiguous_packages' on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
 			path: tests/Golden/Support/RenameMap.php
 
 		-
@@ -1819,6 +1810,12 @@ parameters:
 			rawMessage: Cannot access offset 'to' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 4
+			path: tests/Golden/Support/RenameMap.php
+
+		-
+			rawMessage: Cannot access offset mixed on mixed.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
 			path: tests/Golden/Support/RenameMap.php
 
 		-
@@ -1864,6 +1861,12 @@ parameters:
 			path: tests/Golden/Support/RenameMap.php
 
 		-
+			rawMessage: 'Parameter #2 $haystack of function in_array expects array, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: tests/Golden/Support/RenameMap.php
+
+		-
 			rawMessage: 'Parameter #3 $manual of class CoreX\Tests\Golden\Support\RenameMap constructor expects array, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -1872,7 +1875,7 @@ parameters:
 		-
 			rawMessage: Possibly invalid array key type mixed.
 			identifier: offsetAccess.invalidOffset
-			count: 3
+			count: 4
 			path: tests/Golden/Support/RenameMap.php
 
 		-

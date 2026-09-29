@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
-use CoreX\Models\BaseModel;
+use CoreX\Data\DataScope;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Support\IndexBatch;
 use CoreX\Search\Support\SearchQuery;
-use CoreX\Support\Data\DataScope;
 use RuntimeException;
 
 final class Module

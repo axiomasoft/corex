@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Currency\Internal;
 
-use CoreX\Intl\Data\RateSnapshot;
+use CoreX\Intl\Currency\Data\RateSnapshot;
 use DateTimeImmutable;
 use stdClass;
 

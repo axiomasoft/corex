@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Models\BaseModel;
+use CoreX\Database\BaseModel;
 use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Entity;
 use CoreX\Modules\Extend\Menu;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
 
 /**

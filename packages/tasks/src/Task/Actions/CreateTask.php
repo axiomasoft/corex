@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Actions;
+namespace CoreX\Tasks\Task\Actions;
 
-use CoreX\Enums\ActorType;
-use CoreX\Tasks\Contracts\CreateTaskCommand;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Data\TaskDraft;
-use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Events\TaskCreated;
-use CoreX\Tasks\Models\Project;
-use CoreX\Tasks\Models\Sprint;
-use CoreX\Tasks\Models\Stage;
-use CoreX\Tasks\Models\Task;
-use CoreX\Tasks\Models\TaskTarget;
-use CoreX\Tasks\Support\TaskModuleGuard;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Access\Internal\TaskModuleGuard;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Sprint\Models\Sprint;
+use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
+use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Data\TaskReference;
+use CoreX\Tasks\Task\Events\TaskCreated;
+use CoreX\Tasks\Task\Models\Stage;
+use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Models\TaskTarget;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;

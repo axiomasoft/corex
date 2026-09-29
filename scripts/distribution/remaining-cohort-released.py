@@ -370,7 +370,7 @@ def build_compatibility_passport(
         '| Remote GitHub composer install against live split repositories | PLAN-CLOSE-CI | D45 deferral while `scripts/.plan-close-deferred` active |',
         '| Full G-RELEASE publication reconcile (PUB-03..05) | PLAN-CLOSE-CI | owner grant + network at plan close |',
         '| Live deployed / aggregate consumer acceptance | P10/P11 | release bytes ≠ deployment proof |',
-        '| corex/access optional private profile runtime in public channel | P9.6/P10 | private envelope separately owned |',
+        '| axiomasoft/corex-access optional private profile runtime in public channel | P9.6/P10 | private envelope separately owned |',
         '',
         '## Gate summary',
         '',

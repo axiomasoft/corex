@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\ApiServiceProvider;
-use CoreX\Api\Laravel\ApiSchemaRegistrar;
-use CoreX\Api\Tests\TestCase;
+use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\QueryException;
@@ -203,7 +203,7 @@ final class LoadSchemaTest extends TestCase
     {
         $budget = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
         $bulk = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
-        $webhook = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+        $webhook = require __DIR__.'/../../../webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php';
 
         if ($includeBudget) {
             $budget->up();

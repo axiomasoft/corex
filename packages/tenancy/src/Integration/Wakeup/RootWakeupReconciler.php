@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Integration\Wakeup;
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

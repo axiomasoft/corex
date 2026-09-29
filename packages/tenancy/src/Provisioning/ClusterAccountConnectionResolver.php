@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning;
 
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\AccountConnectionResolver;
-use CoreX\Tenancy\DatabaseConnectionConfig;
+use CoreX\Context\Contracts\AccountConnectionResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\DatabaseConnectionConfig;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 

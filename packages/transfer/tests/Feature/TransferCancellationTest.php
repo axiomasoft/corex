@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Data\CallableDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
-use CoreX\Support\Data\WriteToken;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
+use CoreX\Data\WriteToken;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;

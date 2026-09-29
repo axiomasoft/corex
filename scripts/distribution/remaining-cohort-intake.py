@@ -18,29 +18,29 @@ COHORT_VERSION = '0.4.0-alpha.20260918'
 REPOSITORY = 'axiomasoft/corex'
 
 PUBLIC_PACKAGES: list[tuple[str, str, list[str]]] = [
-    ('corex/core', 'packages/core', ['R45', 'R52']),
-    ('corex/modules', 'packages/modules', ['R04', 'R08', 'R36', 'R45', 'R50', 'R52']),
-    ('corex/operations', 'packages/operations', ['R04', 'R36', 'R45', 'R52']),
-    ('corex/tasks', 'packages/tasks', ['R17', 'R45', 'R52']),
-    ('corex/tenancy', 'packages/tenancy', ['R02', 'R33', 'R45', 'R52']),
-    ('corex/panels', 'packages/panels', ['R14', 'R45', 'R52']),
-    ('corex/media', 'packages/media', ['R15', 'R45', 'R52']),
-    ('corex/notifications', 'packages/notifications', ['R16', 'R45', 'R52']),
-    ('corex/wakeup', 'packages/wakeup', ['R10', 'R45', 'R52']),
-    ('corex/workflow', 'packages/workflow', ['R09', 'R10', 'R45', 'R52']),
-    ('corex/attributes', 'packages/attributes', ['R11', 'R45', 'R52']),
-    ('corex/transfer', 'packages/transfer', ['R12', 'R45', 'R52']),
-    ('corex/search', 'packages/search', ['R32', 'R45', 'R52']),
-    ('corex/search-meilisearch', 'packages/search-meilisearch', ['R32', 'R45', 'R52']),
-    ('corex/recurrence', 'packages/recurrence', ['R20', 'R45', 'R52']),
-    ('corex/tasks-workflow', 'packages/tasks-workflow', ['R10', 'R17', 'R45', 'R52']),
-    ('corex/intl', 'packages/intl', ['R23', 'R24', 'R45', 'R52']),
-    ('corex/search-intl', 'packages/search-intl', ['R25', 'R45', 'R52']),
+    ('axiomasoft/corex', 'packages/core', ['R45', 'R52']),
+    ('axiomasoft/corex', 'packages/core', ['R04', 'R08', 'R36', 'R45', 'R50', 'R52']),
+    ('axiomasoft/corex-operations', 'packages/operations', ['R04', 'R36', 'R45', 'R52']),
+    ('axiomasoft/corex-tasks', 'packages/tasks', ['R17', 'R45', 'R52']),
+    ('axiomasoft/corex-tenancy', 'packages/tenancy', ['R02', 'R33', 'R45', 'R52']),
+    ('axiomasoft/corex-panels', 'packages/panels', ['R14', 'R45', 'R52']),
+    ('axiomasoft/corex-media', 'packages/media', ['R15', 'R45', 'R52']),
+    ('axiomasoft/corex-notifications', 'packages/notifications', ['R16', 'R45', 'R52']),
+    ('axiomasoft/corex-wakeup', 'packages/wakeup', ['R10', 'R45', 'R52']),
+    ('axiomasoft/corex-workflow', 'packages/workflow', ['R09', 'R10', 'R45', 'R52']),
+    ('axiomasoft/corex-custom-fields', 'packages/custom-fields', ['R11', 'R45', 'R52']),
+    ('axiomasoft/corex-transfer', 'packages/transfer', ['R12', 'R45', 'R52']),
+    ('axiomasoft/corex-search', 'packages/search', ['R32', 'R45', 'R52']),
+    ('axiomasoft/corex-search-meilisearch', 'packages/search-meilisearch', ['R32', 'R45', 'R52']),
+    ('axiomasoft/corex-recurrence', 'packages/recurrence', ['R20', 'R45', 'R52']),
+    ('axiomasoft/corex-tasks-workflow', 'packages/tasks-workflow', ['R10', 'R17', 'R45', 'R52']),
+    ('axiomasoft/corex-intl', 'packages/intl', ['R23', 'R24', 'R45', 'R52']),
+    ('axiomasoft/corex-search-intl', 'packages/search-intl', ['R25', 'R45', 'R52']),
 ]
 
 PRIVATE_PROFILE = {
     'profile_id': 'optional-auth-azguard',
-    'package': 'corex/access',
+    'package': 'axiomasoft/corex-access',
     'path': 'packages/access',
     'requires_r': ['R51'],
     'supported': {'php': ['8.3', '8.4', '8.5'], 'laravel': ['12'], 'database': ['sqlite', 'pg16']},
@@ -56,7 +56,7 @@ PRIVATE_PROFILE = {
 UPGRADE_BASELINE = {
     'released_version': '0.1.0-p4.3',
     'released_source_ref': '9152dde68ccace20d111f044aecf132bb8d49861',
-    'packages': ['corex/core', 'corex/modules', 'corex/tasks', 'corex/tenancy'],
+    'packages': ['axiomasoft/corex', 'axiomasoft/corex', 'axiomasoft/corex-tasks', 'axiomasoft/corex-tenancy'],
 }
 
 PRODUCER_SEALS = {
@@ -100,12 +100,12 @@ def overlay_bytes(package_path: Path, version: str) -> tuple[str, str]:
 def build_profile_plan() -> dict:
     cells = []
     for name, _, _ in PUBLIC_PACKAGES:
-        profile = 'boxed-sqlite' if name != 'corex/tenancy' else 'physical-pg16'
+        profile = 'boxed-sqlite' if name != 'axiomasoft/corex-tenancy' else 'physical-pg16'
         for php in ('8.3', '8.4', '8.5'):
             for laravel in ('12', '13'):
-                if name == 'corex/tenancy' and php == '8.3':
+                if name == 'axiomasoft/corex-tenancy' and php == '8.3':
                     continue
-                cells.append({'package': name, 'php': php, 'laravel': laravel, 'database': 'pg16' if name == 'corex/tenancy' else 'sqlite', 'profile': profile, 'status': 'selected'})
+                cells.append({'package': name, 'php': php, 'laravel': laravel, 'database': 'pg16' if name == 'axiomasoft/corex-tenancy' else 'sqlite', 'profile': profile, 'status': 'selected'})
     return {
         'schema_version': 'p9-profile-plan/1',
         'policy': 'A',

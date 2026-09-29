@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Tests;
 
-use CoreX\Contracts\DataScopeAuthorizer;
 use CoreX\CoreServiceProvider;
+use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Support\Data\AllowAllDataScopeAuthorizer;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Contracts\TaskMutationAccess;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\TasksServiceProvider;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;

@@ -26,7 +26,7 @@
 
 - Каталог `exceptions/` — именованные исключения из статей конституции; каждая запись несёт
   условие снятия.
-- `packages/import-export` — **тумбстоун** ренейма в `corex/transfer` (D13, статья PKG-009): не
+- `packages/transfer` — **тумбстоун** ренейма в `axiomasoft/corex-transfer` (D13, статья PKG-009): не
   входит в тесты, статанализ, CI и split-зеркала.
 
 ## Сводный реестр правил
@@ -41,7 +41,7 @@
 |:--|:--|:--|:--|
 | PKG-001 | PKG | Нет — P3 (гейт scorecard'а читает первую строку README и падает на пустой либо на перечислении). … | объявлено, фаза P3 |
 | PKG-002 | PKG | `composer test:arch` → `tests/Arch/LayerTest.php` («foundation packages do not import flex/* name… | исполняется |
-| PKG-003 | PKG | `composer test:arch` → «corex/core declares no monorepo package dependencies», «corex/core source… | исполняется |
+| PKG-003 | PKG | `composer test:arch` → «axiomasoft/corex declares no monorepo package dependencies», «axiomasoft/corex source… | исполняется |
 | PKG-004 | PKG | `composer package-graph-gate` → правило R1, на каждый PR | исполняется |
 | PKG-005 | PKG | `composer package-graph-gate` → allowlist с валидацией guard'а | исполняется |
 | PKG-006 | PKG | `composer package-graph-gate` → R2 плюс ревью `Contracts/` bridge-пакета | исполняется |
@@ -88,7 +88,7 @@
 | MSG-006 | MSG | нет — P5 | объявлено, фаза P5 |
 | MSG-007 | MSG | нет — P5 | объявлено, фаза P5 |
 | MSG-008 | MSG | нет — P5 (outbox) | объявлено, фаза P5 |
-| EXT-001 | EXT | `packages/modules/src/Extend/Extender.php` (докблок закрытого набора) + ревью | объявлено, фаза P1 |
+| EXT-001 | EXT | `packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора) + ревью | объявлено, фаза P1 |
 | EXT-002 | EXT | ревью | объявлено, фаза P1 |
 | EXT-003 | EXT | нет — P11 | объявлено, фаза P11 |
 | EXT-004 | EXT | нет — P11 | объявлено, фаза P11 |

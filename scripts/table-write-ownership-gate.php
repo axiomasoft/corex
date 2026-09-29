@@ -52,7 +52,7 @@ if ($fixture !== null && ! in_array($fixture, ['foreign-table-write', 'foreign-h
 $files = [];
 
 if ($fixture !== null) {
-    $files[$root.'/tests/fixtures/table-write-ownership/'.$fixture.'.php'] = 'corex/tenancy';
+    $files[$root.'/tests/fixtures/table-write-ownership/'.$fixture.'.php'] = 'axiomasoft/corex-tenancy';
 } else {
     foreach (glob($root.'/packages/*/composer.json') ?: [] as $composerFile) {
         $data = json_decode((string) file_get_contents($composerFile), true);
@@ -196,7 +196,7 @@ foreach ($violations as $violation) {
 }
 
 if ($fixture !== null) {
-    if (count($violations) !== 1 || ! str_contains($violations[0], "writes 'sys_settings' owned by corex/core")) {
+    if (count($violations) !== 1 || ! str_contains($violations[0], "writes 'sys_settings' owned by axiomasoft/corex")) {
         fwrite(STDERR, "DATA-003 fixture did not fail for the expected foreign write\n");
         exit(2);
     }
@@ -375,14 +375,14 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         } elseif ($expr->var instanceof Expr\MethodCall && $expr->var->var instanceof Expr\Variable && $expr->var->var->name === 'this' && $expr->var->name instanceof Node\Identifier) {
             $sourceType = typeName(enclosingClass($site)?->getMethod($expr->var->name->toString())?->returnType);
         } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
-            && $expr->var->class->toString() === 'CoreX\\Support\\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
+            && $expr->var->class->toString() === 'CoreX\\Config\\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
             $sourceType = 'CoreOptions';
         }
 
         return in_array($sourceType, ['CoreOptions', 'AuthOptions', 'AttributeTables'], true) ? ($tableDefaults[$slot] ?? '') : '';
     }
 
-    if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\\Support\\Config') {
+    if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\\Config\\Config') {
         return $tableDefaults[$expr->name->toString()] ?? '';
     }
 

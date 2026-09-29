@@ -1,6 +1,6 @@
-# corex/search-intl
+# axiomasoft/corex-search-intl
 
-Optional localized projection glue between `corex/intl` and `corex/search`. Disabled by default; no network or index work at boot.
+Optional localized projection glue between `axiomasoft/corex-intl` and `axiomasoft/corex-search`. Disabled by default; no network or index work at boot.
 
 ## Capabilities
 
@@ -12,7 +12,7 @@ Optional localized projection glue between `corex/intl` and `corex/search`. Disa
 ## Installation
 
 ```bash
-composer require corex/search-intl
+composer require axiomasoft/corex-search-intl
 ```
 
 Enable explicitly in configuration:

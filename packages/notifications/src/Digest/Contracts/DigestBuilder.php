@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Digest\Contracts;
 
-use CoreX\Notifications\Data\DigestRef;
-use CoreX\Notifications\Data\DigestWindow;
-use CoreX\Notifications\Data\NotificationContext;
+use CoreX\Notifications\Digest\Data\DigestRef;
+use CoreX\Notifications\Digest\Data\DigestWindow;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
 
 interface DigestBuilder
 {

@@ -1,0 +1,2698 @@
+{
+ "schema": "corex-rename-completeness/1",
+ "generated_by": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py manifest",
+ "exclude": [
+  "~^(plans|audits)/~",
+  "~(^|/)CHANGELOG\\.md$~",
+  "~/docs/history/~",
+  "~^docs/architecture/rename-registry\\.md$~",
+  "~^tests/Golden/(?:rename-map|package-projection)\\.json$~",
+  "~^scripts/rename-completeness\\.json$~",
+  "~^tests/Golden/baseline/~",
+  "~^scripts/p15-rename-completeness-(gate\\.php|manifest\\.json)$~"
+ ],
+ "tokens": {
+  "classes": [
+   {
+    "old": "CoreX\\Attributes\\AttributesServiceProvider",
+    "new": "CoreX\\CustomFields\\AttributesServiceProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts\\AttributeFilter",
+    "new": "CoreX\\CustomFields\\Contracts\\AttributeFilter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts\\AttributeStore",
+    "new": "CoreX\\CustomFields\\Contracts\\AttributeStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts\\AttributeStoreResolver",
+    "new": "CoreX\\CustomFields\\Contracts\\AttributeStoreResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts\\FieldCatalogue",
+    "new": "CoreX\\CustomFields\\Contracts\\FieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts\\SchemaOperations",
+    "new": "CoreX\\CustomFields\\Contracts\\SchemaOperations",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\AttributeDefinition",
+    "new": "CoreX\\CustomFields\\Data\\AttributeDefinition",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\AttributeId",
+    "new": "CoreX\\CustomFields\\Data\\AttributeId",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\AttributeLifecycle",
+    "new": "CoreX\\CustomFields\\Data\\AttributeLifecycle",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\AttributeStoragePolicy",
+    "new": "CoreX\\CustomFields\\Data\\AttributeStoragePolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\AttributeTables",
+    "new": "CoreX\\CustomFields\\Data\\AttributeTables",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data\\IndexPolicy",
+    "new": "CoreX\\CustomFields\\Data\\IndexPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Exceptions\\InvalidAttributeTables",
+    "new": "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageContractRegistry",
+    "new": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContractRegistry",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageContracts",
+    "new": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContracts",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Integration\\AttributeMessageTranslator",
+    "new": "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageTranslator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Integration\\AttributeValuesChanged",
+    "new": "CoreX\\CustomFields\\Internal\\Integration\\AttributeValuesChanged",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\InvalidAttributeValue",
+    "new": "CoreX\\CustomFields\\Internal\\InvalidAttributeValue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\KeyConflict",
+    "new": "CoreX\\CustomFields\\Internal\\KeyConflict",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Laravel\\AttributeComposition",
+    "new": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Laravel\\AttributeCompositionRegistrar",
+    "new": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeCompositionRegistrar",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Laravel\\AttributeMessagingRegistrar",
+    "new": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeMessagingRegistrar",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Query\\AttributeIndexPlanner",
+    "new": "CoreX\\CustomFields\\Internal\\Query\\AttributeIndexPlanner",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Query\\AttributeIndexReceipt",
+    "new": "CoreX\\CustomFields\\Internal\\Query\\AttributeIndexReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Query\\SchemaAttributeFilter",
+    "new": "CoreX\\CustomFields\\Internal\\Query\\SchemaAttributeFilter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\SchemaOperationConflict",
+    "new": "CoreX\\CustomFields\\Internal\\SchemaOperationConflict",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\CachedFieldCatalogue",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\CachedFieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\CatalogueConflictPolicy",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\CatalogueConflictPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\CompositeFieldCatalogue",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\CompositeFieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\DatabaseFieldCatalogue",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\DatabaseFieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\DefinitionEvolution",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\DefinitionEvolution",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\ModuleFieldCatalogue",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\ModuleFieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\QueuedSchemaOperations",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\QueuedSchemaOperations",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\SchemaOperationWorker",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\SchemaOperationWorker",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema\\StaticFieldCatalogue",
+    "new": "CoreX\\CustomFields\\Internal\\Schema\\StaticFieldCatalogue",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\ScopeDenied",
+    "new": "CoreX\\CustomFields\\Internal\\ScopeDenied",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Storage\\ConfiguredAttributeStoreResolver",
+    "new": "CoreX\\CustomFields\\Internal\\Storage\\ConfiguredAttributeStoreResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Storage\\ResolvingAttributeStore",
+    "new": "CoreX\\CustomFields\\Internal\\Storage\\ResolvingAttributeStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Storage\\ScopeConnectionGuard",
+    "new": "CoreX\\CustomFields\\Internal\\Storage\\ScopeConnectionGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\UnavailableAttributes",
+    "new": "CoreX\\CustomFields\\Internal\\UnavailableAttributes",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\UnsupportedAttributeCapability",
+    "new": "CoreX\\CustomFields\\Internal\\UnsupportedAttributeCapability",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\AttributeBackfill",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\AttributeBackfill",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\AttributeValueTransformerRegistry",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\AttributeValueTransformerRegistry",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\AttributeWriteGuard",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\AttributeWriteGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\EavAttributeStore",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\EavAttributeStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\FieldValueValidator",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\FieldValueValidator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values\\JsonbAttributeStore",
+    "new": "CoreX\\CustomFields\\Internal\\Values\\JsonbAttributeStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\VersionConflict",
+    "new": "CoreX\\CustomFields\\Internal\\VersionConflict",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\AttributeWriteResult",
+    "new": "CoreX\\CustomFields\\Support\\AttributeWriteResult",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\FieldSelection",
+    "new": "CoreX\\CustomFields\\Support\\FieldSelection",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\FieldSnapshot",
+    "new": "CoreX\\CustomFields\\Support\\FieldSnapshot",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\FilterNode",
+    "new": "CoreX\\CustomFields\\Support\\FilterNode",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\FilterPlan",
+    "new": "CoreX\\CustomFields\\Support\\FilterPlan",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\RecordSelection",
+    "new": "CoreX\\CustomFields\\Support\\RecordSelection",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema\\DriftReport",
+    "new": "CoreX\\CustomFields\\Support\\Schema\\DriftReport",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema\\OperationRef",
+    "new": "CoreX\\CustomFields\\Support\\Schema\\OperationRef",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema\\SchemaChange",
+    "new": "CoreX\\CustomFields\\Support\\Schema\\SchemaChange",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema\\SchemaOperationId",
+    "new": "CoreX\\CustomFields\\Support\\Schema\\SchemaOperationId",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema\\SchemaReceipt",
+    "new": "CoreX\\CustomFields\\Support\\Schema\\SchemaReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Validation",
+    "new": "CoreX\\CustomFields\\Support\\Validation",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\ValueBag",
+    "new": "CoreX\\CustomFields\\Support\\ValueBag",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\ValueBatch",
+    "new": "CoreX\\CustomFields\\Support\\ValueBatch",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\ValuePatch",
+    "new": "CoreX\\CustomFields\\Support\\ValuePatch",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\PgTestCase",
+    "new": "CoreX\\CustomFields\\Tests\\PgTestCase",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Pg\\AttributeBackfillPgTestCase",
+    "new": "CoreX\\CustomFields\\Tests\\Pg\\AttributeBackfillPgTestCase",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Pg\\AttributeEvolutionPgTestCase",
+    "new": "CoreX\\CustomFields\\Tests\\Pg\\AttributeEvolutionPgTestCase",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Pg\\DatabaseFieldCataloguePgTestCase",
+    "new": "CoreX\\CustomFields\\Tests\\Pg\\DatabaseFieldCataloguePgTestCase",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Support\\AttributeCompositionProbe",
+    "new": "CoreX\\CustomFields\\Tests\\Support\\AttributeCompositionProbe",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Support\\PgTestSupport",
+    "new": "CoreX\\CustomFields\\Tests\\Support\\PgTestSupport",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Support\\RecordingAttributeStore",
+    "new": "CoreX\\CustomFields\\Tests\\Support\\RecordingAttributeStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Unit\\AttributeTablesTest",
+    "new": "CoreX\\CustomFields\\Tests\\Unit\\AttributeTablesTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Unit\\AttributesServiceProviderTest",
+    "new": "CoreX\\CustomFields\\Tests\\Unit\\AttributesServiceProviderTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Data\\ErrorDescriptor",
+    "new": "CoreX\\Errors\\Data\\ErrorDescriptor",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\AddressSuggestProvider",
+    "new": "CoreX\\Intl\\Territory\\Contracts\\AddressSuggestProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\CurrencyConverter",
+    "new": "CoreX\\Intl\\Currency\\Contracts\\CurrencyConverter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\CurrencyMetadata",
+    "new": "CoreX\\Intl\\Currency\\Contracts\\CurrencyMetadata",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\DatasetImporter",
+    "new": "CoreX\\Intl\\Territory\\Contracts\\DatasetImporter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\GeographyProvider",
+    "new": "CoreX\\Intl\\Territory\\Contracts\\GeographyProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\LocaleResolver",
+    "new": "CoreX\\Intl\\Locale\\Contracts\\LocaleResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\MoneyFormatter",
+    "new": "CoreX\\Intl\\Formatting\\Contracts\\MoneyFormatter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\RateImporter",
+    "new": "CoreX\\Intl\\Currency\\Contracts\\RateImporter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\RateProvider",
+    "new": "CoreX\\Intl\\Currency\\Contracts\\RateProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Contracts\\TranslationReader",
+    "new": "CoreX\\Intl\\Translation\\Contracts\\TranslationReader",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\AddressQuery",
+    "new": "CoreX\\Intl\\Territory\\Data\\AddressQuery",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\ConversionPolicy",
+    "new": "CoreX\\Intl\\Currency\\Data\\ConversionPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\ConversionReceipt",
+    "new": "CoreX\\Intl\\Currency\\Data\\ConversionReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\CurrencyInfo",
+    "new": "CoreX\\Intl\\Currency\\Data\\CurrencyInfo",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\DatasetCandidate",
+    "new": "CoreX\\Intl\\Territory\\Data\\DatasetCandidate",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\DatasetGeneration",
+    "new": "CoreX\\Intl\\Territory\\Data\\DatasetGeneration",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\DatasetManifest",
+    "new": "CoreX\\Intl\\Territory\\Data\\DatasetManifest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\DatasetReceipt",
+    "new": "CoreX\\Intl\\Territory\\Data\\DatasetReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\FormatPolicy",
+    "new": "CoreX\\Intl\\Formatting\\Data\\FormatPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\FormattedMoney",
+    "new": "CoreX\\Intl\\Formatting\\Data\\FormattedMoney",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\GeographyQuery",
+    "new": "CoreX\\Intl\\Territory\\Data\\GeographyQuery",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\LocaleInputs",
+    "new": "CoreX\\Intl\\Locale\\Data\\LocaleInputs",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\LocalePolicy",
+    "new": "CoreX\\Intl\\Locale\\Data\\LocalePolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\LocaleResolution",
+    "new": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\LocalizedText",
+    "new": "CoreX\\Intl\\Translation\\Data\\LocalizedText",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\RateBatch",
+    "new": "CoreX\\Intl\\Currency\\Data\\RateBatch",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\RateImportReceipt",
+    "new": "CoreX\\Intl\\Currency\\Data\\RateImportReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\RateLookup",
+    "new": "CoreX\\Intl\\Currency\\Data\\RateLookup",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\RateQuery",
+    "new": "CoreX\\Intl\\Currency\\Data\\RateQuery",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\RateSnapshot",
+    "new": "CoreX\\Intl\\Currency\\Data\\RateSnapshot",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\ReferenceCursor",
+    "new": "CoreX\\Intl\\Territory\\Data\\ReferenceCursor",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\ReferenceIdentity",
+    "new": "CoreX\\Intl\\Territory\\Data\\ReferenceIdentity",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\ReferencePage",
+    "new": "CoreX\\Intl\\Territory\\Data\\ReferencePage",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\SuggestionLimits",
+    "new": "CoreX\\Intl\\Territory\\Data\\SuggestionLimits",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\SuggestionResult",
+    "new": "CoreX\\Intl\\Territory\\Data\\SuggestionResult",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Data\\TranslationResult",
+    "new": "CoreX\\Intl\\Translation\\Data\\TranslationResult",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\AccessDeniedException",
+    "new": "CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\InvalidLocaleException",
+    "new": "CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\InvalidRateException",
+    "new": "CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\OperationConflictException",
+    "new": "CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\SchemaMismatchException",
+    "new": "CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\SnapshotExpiredException",
+    "new": "CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Exceptions\\UnsupportedFormattingException",
+    "new": "CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Address\\AddressSuggestGuard",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Address\\AddressSuggestGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Address\\FixtureAddressSuggestProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Address\\FixtureAddressSuggestProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Address\\MapAddressSuggestProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Address\\MapAddressSuggestProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Address\\UnsupportedAddressSuggestProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Address\\UnsupportedAddressSuggestProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Locale\\Bcp47Validator",
+    "new": "CoreX\\Intl\\Locale\\Internal\\Bcp47Validator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Locale\\DefaultLocaleResolver",
+    "new": "CoreX\\Intl\\Locale\\Internal\\DefaultLocaleResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Locale\\LaravelTranslationReader",
+    "new": "CoreX\\Intl\\Translation\\Internal\\LaravelTranslationReader",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Locale\\LocalePolicyBuilder",
+    "new": "CoreX\\Intl\\Locale\\Internal\\LocalePolicyBuilder",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Locale\\RequestLocaleScope",
+    "new": "CoreX\\Intl\\Locale\\Internal\\RequestLocaleScope",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\BrickCurrencyConverter",
+    "new": "CoreX\\Intl\\Currency\\Internal\\BrickCurrencyConverter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\BrickCurrencyMetadata",
+    "new": "CoreX\\Intl\\Currency\\Internal\\BrickCurrencyMetadata",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\PlainMoneyFormatter",
+    "new": "CoreX\\Intl\\Formatting\\Internal\\PlainMoneyFormatter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\RateSnapshotMapper",
+    "new": "CoreX\\Intl\\Currency\\Internal\\RateSnapshotMapper",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\SqlRateImporter",
+    "new": "CoreX\\Intl\\Currency\\Internal\\SqlRateImporter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Money\\SqlRateProvider",
+    "new": "CoreX\\Intl\\Currency\\Internal\\SqlRateProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\AbstractFixtureReferenceProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\AbstractFixtureReferenceProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\BoxesReferenceProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\BoxesReferenceProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\CompactReferenceProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\CompactReferenceProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\FixtureReferenceNormalizer",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\FixtureReferenceNormalizer",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\ReferenceCursorCodec",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\ReferenceCursorCodec",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\SqlDatasetImporter",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\SqlDatasetImporter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference\\SqlGeographyProvider",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference\\SqlGeographyProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Tests\\Unit\\ConfigReportSectionTest",
+    "new": "CoreX\\Intl\\Tests\\ConfigReportSectionTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Media\\Tests\\Unit\\ConfigReportSectionTest",
+    "new": "CoreX\\Media\\Tests\\ConfigReportSectionTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Compiler\\ApiOperationValidator",
+    "new": "CoreX\\Operations\\Definition\\ApiOperationValidator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Compiler\\ApiToolValidator",
+    "new": "CoreX\\Tools\\Internal\\ApiToolValidator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\DefaultSettingDefinition",
+    "new": "CoreX\\Modules\\Settings\\DefaultSettingDefinition",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleActivationDecision",
+    "new": "CoreX\\Modules\\Gate\\ModuleActivationDecision",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleDefinition",
+    "new": "CoreX\\Modules\\Definition\\ModuleDefinition",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleDependency",
+    "new": "CoreX\\Modules\\Definition\\ModuleDependency",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleManifest",
+    "new": "CoreX\\Modules\\Definition\\ModuleManifest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleRuntimeContext",
+    "new": "CoreX\\Modules\\Definition\\ModuleRuntimeContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\ModuleStatus",
+    "new": "CoreX\\Modules\\Definition\\ModuleStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Tests\\Support\\StubToolHandler",
+    "new": "CoreX\\Operations\\Testing\\StubToolHandler",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Tests\\Unit\\ConfigReportSectionTest",
+    "new": "CoreX\\Testing\\Modules\\ConfigReportSectionTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Commands\\SweepNotificationDeliveries",
+    "new": "CoreX\\Notifications\\Delivery\\Commands\\SweepNotificationDeliveries",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\DigestBuilder",
+    "new": "CoreX\\Notifications\\Digest\\Contracts\\DigestBuilder",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\NotificationCenter",
+    "new": "CoreX\\Notifications\\Inbox\\Contracts\\NotificationCenter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\NotificationChannelDriver",
+    "new": "CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\NotificationPolicy",
+    "new": "CoreX\\Notifications\\Inbox\\Contracts\\NotificationPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\PreferenceRepository",
+    "new": "CoreX\\Notifications\\Preferences\\Contracts\\PreferenceRepository",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Contracts\\RecipientResolver",
+    "new": "CoreX\\Notifications\\Delivery\\Contracts\\RecipientResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\CancelResult",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\CancelResult",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\ChannelDescriptor",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\ChannelDescriptor",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DeliveryClaim",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\DeliveryClaim",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DeliveryInput",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\DeliveryInput",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DeliveryOutcome",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\DeliveryOutcome",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DeliveryTarget",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\DeliveryTarget",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DigestRef",
+    "new": "CoreX\\Notifications\\Digest\\Data\\DigestRef",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\DigestWindow",
+    "new": "CoreX\\Notifications\\Digest\\Data\\DigestWindow",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\EntityReference",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\EntityReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\InboxQuery",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\InboxQuery",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationAction",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\NotificationAction",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationContext",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\NotificationContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationInput",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\NotificationInput",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationPreference",
+    "new": "CoreX\\Notifications\\Preferences\\Data\\NotificationPreference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationRef",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\NotificationRef",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\NotificationSubject",
+    "new": "CoreX\\Notifications\\Inbox\\Data\\NotificationSubject",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\PreferenceInput",
+    "new": "CoreX\\Notifications\\Preferences\\Data\\PreferenceInput",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Data\\RecipientReference",
+    "new": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\ChannelDrivers",
+    "new": "CoreX\\Notifications\\Delivery\\Internal\\ChannelDrivers",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\DeliveryCoordinator",
+    "new": "CoreX\\Notifications\\Delivery\\Internal\\DeliveryCoordinator",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\DeliveryStore",
+    "new": "CoreX\\Notifications\\Delivery\\Internal\\DeliveryStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\DenyNotificationPolicy",
+    "new": "CoreX\\Notifications\\Inbox\\Internal\\DenyNotificationPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\Digest\\DigestTick",
+    "new": "CoreX\\Notifications\\Digest\\Internal\\DigestTick",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\Digest\\DigestWakeupAdapter",
+    "new": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupAdapter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\Digest\\DigestWakeupHandler",
+    "new": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupHandler",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\Digest\\NotificationDigestDueSource",
+    "new": "CoreX\\Notifications\\Digest\\Internal\\NotificationDigestDueSource",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\InAppChannelDriver",
+    "new": "CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\NotificationAccessDenied",
+    "new": "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\NotificationOperationConflict",
+    "new": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\NullRecipientResolver",
+    "new": "CoreX\\Notifications\\Delivery\\Internal\\NullRecipientResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\SettingsPreferenceRepository",
+    "new": "CoreX\\Notifications\\Preferences\\Internal\\SettingsPreferenceRepository",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\SqlDigestBuilder",
+    "new": "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\SqlNotificationCenter",
+    "new": "CoreX\\Notifications\\Inbox\\Internal\\SqlNotificationCenter",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Jobs\\DeliverDigest",
+    "new": "CoreX\\Notifications\\Digest\\Jobs\\DeliverDigest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Jobs\\DeliverNotification",
+    "new": "CoreX\\Notifications\\Delivery\\Jobs\\DeliverNotification",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Recurrence\\Internal\\RRuleRecurrenceExpander",
+    "new": "CoreX\\Recurrence\\RRuleRecurrenceExpander",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Actions\\CompleteTask",
+    "new": "CoreX\\Tasks\\Task\\Actions\\CompleteTask",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Actions\\CreateTask",
+    "new": "CoreX\\Tasks\\Task\\Actions\\CreateTask",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Actions\\MoveTaskToStage",
+    "new": "CoreX\\Tasks\\Task\\Actions\\MoveTaskToStage",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Actions\\UpdateTask",
+    "new": "CoreX\\Tasks\\Task\\Actions\\UpdateTask",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\CompleteTaskCommand",
+    "new": "CoreX\\Tasks\\Task\\Contracts\\CompleteTaskCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\CreateTaskCommand",
+    "new": "CoreX\\Tasks\\Task\\Contracts\\CreateTaskCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\MoveTaskToStageCommand",
+    "new": "CoreX\\Tasks\\Task\\Contracts\\MoveTaskToStageCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\TaskAccess",
+    "new": "CoreX\\Tasks\\Access\\Contracts\\TaskAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\TaskMutationAccess",
+    "new": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\TaskOperationReceipts",
+    "new": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\TaskPlanningAccess",
+    "new": "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\TaskPlanningCommand",
+    "new": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Contracts\\UpdateTaskCommand",
+    "new": "CoreX\\Tasks\\Task\\Contracts\\UpdateTaskCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\ActorData",
+    "new": "CoreX\\Tasks\\Task\\Data\\ActorData",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\CompleteTaskData",
+    "new": "CoreX\\Tasks\\Task\\Data\\CompleteTaskData",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\EntityReference",
+    "new": "CoreX\\Tasks\\Task\\Data\\EntityReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\MoveTaskToStageData",
+    "new": "CoreX\\Tasks\\Task\\Data\\MoveTaskToStageData",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\PlanningOperation",
+    "new": "CoreX\\Tasks\\Planning\\Data\\PlanningOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\PlanningSubject",
+    "new": "CoreX\\Tasks\\Planning\\Data\\PlanningSubject",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\PlanningToken",
+    "new": "CoreX\\Tasks\\Planning\\Data\\PlanningToken",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\ProjectDraft",
+    "new": "CoreX\\Tasks\\Project\\Data\\ProjectDraft",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\ProjectReference",
+    "new": "CoreX\\Tasks\\Project\\Data\\ProjectReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\SprintDraft",
+    "new": "CoreX\\Tasks\\Sprint\\Data\\SprintDraft",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\SprintReference",
+    "new": "CoreX\\Tasks\\Sprint\\Data\\SprintReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TaskDraft",
+    "new": "CoreX\\Tasks\\Task\\Data\\TaskDraft",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TaskOperationKind",
+    "new": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TaskOperationReceipt",
+    "new": "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TaskReference",
+    "new": "CoreX\\Tasks\\Task\\Data\\TaskReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TimeLogDraft",
+    "new": "CoreX\\Tasks\\Time\\Data\\TimeLogDraft",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\TimeLogReference",
+    "new": "CoreX\\Tasks\\Time\\Data\\TimeLogReference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Data\\UpdateTaskData",
+    "new": "CoreX\\Tasks\\Task\\Data\\UpdateTaskData",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Enums\\ProjectStatus",
+    "new": "CoreX\\Tasks\\Project\\Enums\\ProjectStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Enums\\SprintStatus",
+    "new": "CoreX\\Tasks\\Sprint\\Enums\\SprintStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Enums\\TaskPriority",
+    "new": "CoreX\\Tasks\\Task\\Enums\\TaskPriority",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Enums\\TaskStatus",
+    "new": "CoreX\\Tasks\\Task\\Enums\\TaskStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Enums\\TimeLogSource",
+    "new": "CoreX\\Tasks\\Time\\Enums\\TimeLogSource",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Events\\TaskCompleted",
+    "new": "CoreX\\Tasks\\Task\\Events\\TaskCompleted",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Events\\TaskCreated",
+    "new": "CoreX\\Tasks\\Task\\Events\\TaskCreated",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Events\\TaskMovedToStage",
+    "new": "CoreX\\Tasks\\Task\\Events\\TaskMovedToStage",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Events\\TaskUpdated",
+    "new": "CoreX\\Tasks\\Task\\Events\\TaskUpdated",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Exceptions\\InvalidPlanningDraft",
+    "new": "CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Exceptions\\PlanningConflict",
+    "new": "CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Exceptions\\TasksModuleDisabled",
+    "new": "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning\\DatabaseTaskOperationReceipts",
+    "new": "CoreX\\Tasks\\Planning\\Internal\\DatabaseTaskOperationReceipts",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning\\OperationStore",
+    "new": "CoreX\\Tasks\\Planning\\Internal\\OperationStore",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning\\PlanningCommand",
+    "new": "CoreX\\Tasks\\Planning\\Internal\\PlanningCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning\\PlanningHasher",
+    "new": "CoreX\\Tasks\\Planning\\Internal\\PlanningHasher",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning\\PlanningOperationsServiceProvider",
+    "new": "CoreX\\Tasks\\Planning\\Internal\\PlanningOperationsServiceProvider",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\Project",
+    "new": "CoreX\\Tasks\\Project\\Models\\Project",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\Sprint",
+    "new": "CoreX\\Tasks\\Sprint\\Models\\Sprint",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\Stage",
+    "new": "CoreX\\Tasks\\Task\\Models\\Stage",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\Task",
+    "new": "CoreX\\Tasks\\Task\\Models\\Task",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\TaskTarget",
+    "new": "CoreX\\Tasks\\Task\\Models\\TaskTarget",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\TaskWatcher",
+    "new": "CoreX\\Tasks\\Task\\Models\\TaskWatcher",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\TimeLog",
+    "new": "CoreX\\Tasks\\Time\\Models\\TimeLog",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Models\\Timer",
+    "new": "CoreX\\Tasks\\Time\\Models\\Timer",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support\\DenyTaskAccess",
+    "new": "CoreX\\Tasks\\Access\\Internal\\DenyTaskAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support\\DenyTaskMutationAccess",
+    "new": "CoreX\\Tasks\\Access\\Internal\\DenyTaskMutationAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support\\DenyTaskPlanningAccess",
+    "new": "CoreX\\Tasks\\Access\\Internal\\DenyTaskPlanningAccess",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support\\TaskCompletion",
+    "new": "CoreX\\Tasks\\Access\\Internal\\TaskCompletion",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support\\TaskModuleGuard",
+    "new": "CoreX\\Tasks\\Access\\Internal\\TaskModuleGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\AccountRef",
+    "new": "CoreX\\Context\\Data\\AccountRef",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Bootstrappers\\WorkspaceContextBootstrapper",
+    "new": "CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Commands\\IdentitiesReconcileCommand",
+    "new": "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Commands\\PendingClearCommand",
+    "new": "CoreX\\Tenancy\\Laravel\\Commands\\PendingClearCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Commands\\PendingCreateCommand",
+    "new": "CoreX\\Tenancy\\Laravel\\Commands\\PendingCreateCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Commands\\TenantsMigrateCommand",
+    "new": "CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\AccountConnectionResolver",
+    "new": "CoreX\\Context\\Contracts\\AccountConnectionResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\ImpersonationService",
+    "new": "CoreX\\Context\\Contracts\\ImpersonationService",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\TenancyManager",
+    "new": "CoreX\\Context\\Contracts\\TenancyManager",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\TenantContextResolver",
+    "new": "CoreX\\Context\\Contracts\\TenantContextResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
+    "new": "CoreX\\Context\\Contracts\\TenantContextRestorer",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\TenantDatabaseLifecycle",
+    "new": "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Contracts\\TenantDatabaseProvisioner",
+    "new": "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\DatabaseConnectionConfig",
+    "new": "CoreX\\Context\\DatabaseConnectionConfig",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Database\\TemplateClonePostgreSQLManager",
+    "new": "CoreX\\Tenancy\\Provisioning\\Database\\TemplateClonePostgreSQLManager",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\AccountPurged",
+    "new": "CoreX\\Tenancy\\Account\\Events\\AccountPurged",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\AccountSuspended",
+    "new": "CoreX\\Tenancy\\Account\\Events\\AccountSuspended",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\DomainTrustChanged",
+    "new": "CoreX\\Tenancy\\DomainTrust\\Events\\DomainTrustChanged",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\ExportReady",
+    "new": "CoreX\\Tenancy\\Account\\Events\\ExportReady",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\GraceStarted",
+    "new": "CoreX\\Tenancy\\Account\\Events\\GraceStarted",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\Identity\\MembershipGranted",
+    "new": "CoreX\\Tenancy\\Membership\\Events\\MembershipGranted",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\Identity\\MembershipRevoked",
+    "new": "CoreX\\Tenancy\\Membership\\Events\\MembershipRevoked",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\ImpersonationEnded",
+    "new": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\ImpersonationStarted",
+    "new": "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationStarted",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\TrialStarted",
+    "new": "CoreX\\Tenancy\\Account\\Events\\TrialStarted",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\UserSynced",
+    "new": "CoreX\\Tenancy\\Identity\\Events\\UserSynced",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Exceptions\\OidcAuthenticationException",
+    "new": "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Exceptions\\TenantCouldNotBeIdentifiedByHostException",
+    "new": "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\GuardedTenantContextRestorer",
+    "new": "CoreX\\Context\\GuardedTenantContextRestorer",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Controllers\\LogoutController",
+    "new": "CoreX\\Tenancy\\Authentication\\Http\\Controllers\\LogoutController",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Controllers\\OidcLoginController",
+    "new": "CoreX\\Tenancy\\Authentication\\Http\\Controllers\\OidcLoginController",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\AccountStatusGate",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\AllowImpersonatedWrites",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\DenyImpersonatedWrites",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\EnforceSessionLifetime",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\ImpersonationSessionGuard",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\RequireActiveMembership",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\ResolveTenantFromHost",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware\\ResolveWorkspace",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\ImpersonationGuard",
+    "new": "CoreX\\Context\\ImpersonationGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\ImpersonationState",
+    "new": "CoreX\\Context\\ImpersonationState",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Jobs\\CreateDatabaseFromTemplate",
+    "new": "CoreX\\Tenancy\\Provisioning\\Jobs\\CreateDatabaseFromTemplate",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Jobs\\RefreshAccountMembership",
+    "new": "CoreX\\Tenancy\\Membership\\Jobs\\RefreshAccountMembership",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Jobs\\SyncIdentityToAccount",
+    "new": "CoreX\\Tenancy\\Identity\\Jobs\\SyncIdentityToAccount",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Listeners\\RevertTenancyOnJobException",
+    "new": "CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\Account",
+    "new": "CoreX\\Tenancy\\Account\\Models\\Account",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\AccountExport",
+    "new": "CoreX\\Tenancy\\Account\\Models\\AccountExport",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\AccountSchemaState",
+    "new": "CoreX\\Tenancy\\Account\\Models\\AccountSchemaState",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\Domain",
+    "new": "CoreX\\Tenancy\\DomainTrust\\Models\\Domain",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\ImpersonationGrant",
+    "new": "CoreX\\Tenancy\\Impersonation\\Models\\ImpersonationGrant",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\Invitation",
+    "new": "CoreX\\Tenancy\\Workspace\\Models\\Invitation",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\MigrationBatch",
+    "new": "CoreX\\Tenancy\\Provisioning\\Models\\MigrationBatch",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\User",
+    "new": "CoreX\\Tenancy\\Identity\\Models\\User",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\Workspace",
+    "new": "CoreX\\Tenancy\\Workspace\\Models\\Workspace",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Models\\WorkspaceMember",
+    "new": "CoreX\\Tenancy\\Workspace\\Models\\WorkspaceMember",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\NullImpersonationService",
+    "new": "CoreX\\Context\\NullImpersonationService",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\NullTenancyManager",
+    "new": "CoreX\\Context\\NullTenancyManager",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\ProvisionParams",
+    "new": "CoreX\\Context\\ProvisionParams",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Resolvers\\HostTenantResolver",
+    "new": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Scopes\\WorkspaceScope",
+    "new": "CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\SingleAccountResolver",
+    "new": "CoreX\\Context\\SingleAccountResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\StanclTenancyManager",
+    "new": "CoreX\\Tenancy\\Runtime\\StanclTenancyManager",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support\\AccountLifecyclePolicy",
+    "new": "CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support\\ImpersonationPolicy",
+    "new": "CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support\\StatusGatePolicy",
+    "new": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support\\TenancyConfigSection",
+    "new": "CoreX\\Tenancy\\Laravel\\Support\\TenancyConfigSection",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support\\TenancyOptions",
+    "new": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\TenancyManagerContextResolver",
+    "new": "CoreX\\Tenancy\\Runtime\\TenancyManagerContextResolver",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\TenantContext",
+    "new": "CoreX\\Context\\Data\\TenantContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Tests\\Unit\\ConfigReportSectionTest",
+    "new": "CoreX\\Tenancy\\Tests\\ConfigReportSectionTest",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\WorkspaceRef",
+    "new": "CoreX\\Context\\Data\\WorkspaceRef",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\AssociateContactCompany",
+    "new": "Flex\\Crm\\Contact\\Actions\\AssociateContactCompany",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\ConvertLead",
+    "new": "Flex\\Crm\\Lead\\Actions\\ConvertLead",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\CreateCompany",
+    "new": "Flex\\Crm\\Company\\Actions\\CreateCompany",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\CreateContact",
+    "new": "Flex\\Crm\\Contact\\Actions\\CreateContact",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\CreateDeal",
+    "new": "Flex\\Crm\\Deal\\Actions\\CreateDeal",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\CreateLead",
+    "new": "Flex\\Crm\\Lead\\Actions\\CreateLead",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\LogActivity",
+    "new": "Flex\\Crm\\Activity\\Actions\\LogActivity",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Actions\\MoveDealToStage",
+    "new": "Flex\\Crm\\Deal\\Actions\\MoveDealToStage",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CompanyPayload",
+    "new": "Flex\\Crm\\Company\\Api\\CompanyPayload",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\ContactPayload",
+    "new": "Flex\\Crm\\Contact\\Api\\ContactPayload",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CreateCompanyOperation",
+    "new": "Flex\\Crm\\Company\\Api\\CreateCompanyOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CreateContactCompanyOperation",
+    "new": "Flex\\Crm\\Contact\\Api\\CreateContactCompanyOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CreateContactOperation",
+    "new": "Flex\\Crm\\Contact\\Api\\CreateContactOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CrmIdentifier",
+    "new": "Flex\\Crm\\ApiShared\\CrmIdentifier",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\CrmSchemas",
+    "new": "Flex\\Crm\\ApiShared\\CrmSchemas",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\ListCompaniesOperation",
+    "new": "Flex\\Crm\\Company\\Api\\ListCompaniesOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\ListContactsOperation",
+    "new": "Flex\\Crm\\Contact\\Api\\ListContactsOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\ShowCompanyOperation",
+    "new": "Flex\\Crm\\Company\\Api\\ShowCompanyOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Api\\ShowContactOperation",
+    "new": "Flex\\Crm\\Contact\\Api\\ShowContactOperation",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Casts\\DealAmount",
+    "new": "Flex\\Crm\\Deal\\Casts\\DealAmount",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Contracts\\CrmExecutionContext",
+    "new": "Flex\\Crm\\Context\\Contracts\\CrmExecutionContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Data\\Actor",
+    "new": "Flex\\Crm\\Context\\Data\\Actor",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Data\\CompanyData",
+    "new": "Flex\\Crm\\Company\\Data\\CompanyData",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Data\\ContactData",
+    "new": "Flex\\Crm\\Contact\\Data\\ContactData",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Data\\ExecutionContext",
+    "new": "Flex\\Crm\\Context\\Data\\ExecutionContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Enums\\ActivityType",
+    "new": "Flex\\Crm\\Activity\\Enums\\ActivityType",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Enums\\DealStatus",
+    "new": "Flex\\Crm\\Deal\\Enums\\DealStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Enums\\LeadSource",
+    "new": "Flex\\Crm\\Lead\\Enums\\LeadSource",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Enums\\LeadStatus",
+    "new": "Flex\\Crm\\Lead\\Enums\\LeadStatus",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\ActivityLogged",
+    "new": "Flex\\Crm\\Activity\\Events\\ActivityLogged",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\CompanyCreated",
+    "new": "Flex\\Crm\\Company\\Events\\CompanyCreated",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\ContactCompanyAssociated",
+    "new": "Flex\\Crm\\Contact\\Events\\ContactCompanyAssociated",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\ContactCreated",
+    "new": "Flex\\Crm\\Contact\\Events\\ContactCreated",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\DealCreated",
+    "new": "Flex\\Crm\\Deal\\Events\\DealCreated",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\DealMovedToStage",
+    "new": "Flex\\Crm\\Deal\\Events\\DealMovedToStage",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\LeadConverted",
+    "new": "Flex\\Crm\\Lead\\Events\\LeadConverted",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Events\\LeadCreated",
+    "new": "Flex\\Crm\\Lead\\Events\\LeadCreated",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Activity",
+    "new": "Flex\\Crm\\Activity\\Models\\Activity",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\ActivityTarget",
+    "new": "Flex\\Crm\\Activity\\Models\\ActivityTarget",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Company",
+    "new": "Flex\\Crm\\Company\\Models\\Company",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Concerns\\HasActivities",
+    "new": "Flex\\Crm\\Context\\Models\\Concerns\\HasActivities",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Concerns\\HasCrmContext",
+    "new": "Flex\\Crm\\Context\\Models\\Concerns\\HasCrmContext",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Contact",
+    "new": "Flex\\Crm\\Contact\\Models\\Contact",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\ContactCompany",
+    "new": "Flex\\Crm\\Contact\\Models\\ContactCompany",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Deal",
+    "new": "Flex\\Crm\\Deal\\Models\\Deal",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Lead",
+    "new": "Flex\\Crm\\Lead\\Models\\Lead",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Pipeline",
+    "new": "Flex\\Crm\\Deal\\Models\\Pipeline",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Source",
+    "new": "Flex\\Crm\\Context\\Models\\Source",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Stage",
+    "new": "Flex\\Crm\\Deal\\Models\\Stage",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Support\\Channels",
+    "new": "Flex\\Crm\\Context\\Channels",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Support\\ContextGuard",
+    "new": "Flex\\Crm\\Context\\ContextGuard",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Support\\CrmScope",
+    "new": "Flex\\Crm\\Context\\CrmScope",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Support\\RecordRules",
+    "new": "Flex\\Crm\\Context\\Internal\\RecordRules",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Tests\\Fixtures\\RegistryMoneyModel",
+    "new": "Flex\\Crm\\Tests\\RegistryMoneyModel",
+    "match": "fqcn"
+   }
+  ],
+  "namespaces": [
+   {
+    "old": "CoreX\\Api",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Auth",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Search\\Meilisearch",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Money",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\SavedViews",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Contracts",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Enums",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Events",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Exceptions",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Models",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Concerns",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Support",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\PHPStan",
+    "new": "—",
+    "match": "prefix"
+   },
+   {
+    "old": "CoreX\\Attributes",
+    "new": "CoreX\\CustomFields",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Contracts",
+    "new": "CoreX\\CustomFields\\Contracts",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Data",
+    "new": "CoreX\\CustomFields\\Data",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Exceptions",
+    "new": "CoreX\\CustomFields\\Exceptions",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal",
+    "new": "CoreX\\CustomFields\\Internal",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Integration",
+    "new": "CoreX\\CustomFields\\Internal\\Integration",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Laravel",
+    "new": "CoreX\\CustomFields\\Internal\\Laravel",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Query",
+    "new": "CoreX\\CustomFields\\Internal\\Query",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Schema",
+    "new": "CoreX\\CustomFields\\Internal\\Schema",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Storage",
+    "new": "CoreX\\CustomFields\\Internal\\Storage",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Internal\\Values",
+    "new": "CoreX\\CustomFields\\Internal\\Values",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support",
+    "new": "CoreX\\CustomFields\\Support",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Support\\Schema",
+    "new": "CoreX\\CustomFields\\Support\\Schema",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests",
+    "new": "CoreX\\CustomFields\\Tests",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Pg",
+    "new": "CoreX\\CustomFields\\Tests\\Pg",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Support",
+    "new": "CoreX\\CustomFields\\Tests\\Support",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Attributes\\Tests\\Unit",
+    "new": "CoreX\\CustomFields\\Tests\\Unit",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Address",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Address",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Internal\\Reference",
+    "new": "CoreX\\Intl\\Territory\\Internal\\Reference",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Intl\\Tests\\Unit",
+    "new": "CoreX\\Intl\\Tests",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Media\\Tests\\Unit",
+    "new": "CoreX\\Media\\Tests",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Tests\\Support",
+    "new": "CoreX\\Operations\\Testing",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Modules\\Tests\\Unit",
+    "new": "CoreX\\Testing\\Modules",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Commands",
+    "new": "CoreX\\Notifications\\Delivery\\Commands",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Notifications\\Internal\\Digest",
+    "new": "CoreX\\Notifications\\Digest\\Internal",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Actions",
+    "new": "CoreX\\Tasks\\Task\\Actions",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Events",
+    "new": "CoreX\\Tasks\\Task\\Events",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Internal\\Planning",
+    "new": "CoreX\\Tasks\\Planning\\Internal",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tasks\\Support",
+    "new": "CoreX\\Tasks\\Access\\Internal",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Bootstrappers",
+    "new": "CoreX\\Tenancy\\Laravel\\Bootstrappers",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Commands",
+    "new": "CoreX\\Tenancy\\Laravel\\Commands",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Database",
+    "new": "CoreX\\Tenancy\\Provisioning\\Database",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Events\\Identity",
+    "new": "CoreX\\Tenancy\\Membership\\Events",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Controllers",
+    "new": "CoreX\\Tenancy\\Authentication\\Http\\Controllers",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Http\\Middleware",
+    "new": "CoreX\\Tenancy\\Laravel\\Http\\Middleware",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Listeners",
+    "new": "CoreX\\Tenancy\\Laravel\\Listeners",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Resolvers",
+    "new": "CoreX\\Tenancy\\Laravel\\Resolvers",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Scopes",
+    "new": "CoreX\\Tenancy\\Laravel\\Scopes",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Support",
+    "new": "CoreX\\Tenancy\\Laravel\\Support",
+    "match": "fqcn"
+   },
+   {
+    "old": "CoreX\\Tenancy\\Tests\\Unit",
+    "new": "CoreX\\Tenancy\\Tests",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Casts",
+    "new": "Flex\\Crm\\Deal\\Casts",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Contracts",
+    "new": "Flex\\Crm\\Context\\Contracts",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Models\\Concerns",
+    "new": "Flex\\Crm\\Context\\Models\\Concerns",
+    "match": "fqcn"
+   },
+   {
+    "old": "Flex\\Crm\\Tests\\Fixtures",
+    "new": "Flex\\Crm\\Tests",
+    "match": "fqcn"
+   }
+  ],
+  "packages": [
+   {
+    "old": "corex/access",
+    "new": "axiomasoft/corex-access",
+    "match": "word"
+   },
+   {
+    "old": "corex/attributes",
+    "new": "axiomasoft/corex-custom-fields",
+    "match": "word"
+   },
+   {
+    "old": "corex/core",
+    "new": "axiomasoft/corex",
+    "match": "word"
+   },
+   {
+    "old": "corex/intl",
+    "new": "axiomasoft/corex-intl",
+    "match": "word"
+   },
+   {
+    "old": "corex/media",
+    "new": "axiomasoft/corex-media",
+    "match": "word"
+   },
+   {
+    "old": "corex/modules",
+    "new": "axiomasoft/corex",
+    "match": "word"
+   },
+   {
+    "old": "corex/notifications",
+    "new": "axiomasoft/corex-notifications",
+    "match": "word"
+   },
+   {
+    "old": "corex/operations",
+    "new": "axiomasoft/corex-operations",
+    "match": "word"
+   },
+   {
+    "old": "corex/panels",
+    "new": "axiomasoft/corex-panels",
+    "match": "word"
+   },
+   {
+    "old": "corex/recurrence",
+    "new": "axiomasoft/corex-recurrence",
+    "match": "word"
+   },
+   {
+    "old": "corex/search",
+    "new": "axiomasoft/corex-search",
+    "match": "word"
+   },
+   {
+    "old": "corex/search-intl",
+    "new": "axiomasoft/corex-search-intl",
+    "match": "word"
+   },
+   {
+    "old": "corex/search-meilisearch",
+    "new": "axiomasoft/corex-search-meilisearch",
+    "match": "word"
+   },
+   {
+    "old": "corex/tasks",
+    "new": "axiomasoft/corex-tasks",
+    "match": "word"
+   },
+   {
+    "old": "corex/tasks-workflow",
+    "new": "axiomasoft/corex-tasks-workflow",
+    "match": "word"
+   },
+   {
+    "old": "corex/tenancy",
+    "new": "axiomasoft/corex-tenancy",
+    "match": "word"
+   },
+   {
+    "old": "corex/transfer",
+    "new": "axiomasoft/corex-transfer",
+    "match": "word"
+   },
+   {
+    "old": "corex/wakeup",
+    "new": "axiomasoft/corex-wakeup",
+    "match": "word"
+   },
+   {
+    "old": "corex/workflow",
+    "new": "axiomasoft/corex-workflow",
+    "match": "word"
+   }
+  ],
+  "paths": [
+   {
+    "old": "packages/attributes",
+    "new": "packages/custom-fields",
+    "match": "word"
+   },
+   {
+    "old": "packages/crm",
+    "new": "products/flex-crm",
+    "match": "word"
+   },
+   {
+    "old": "packages/import-export",
+    "new": "—",
+    "match": "word"
+   },
+   {
+    "old": "packages/modules",
+    "new": "—",
+    "match": "word"
+   }
+  ],
+  "identifiers": [
+   {
+    "old": "corex-auth",
+    "new": "corex-access",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-attributes",
+    "new": "corex-custom-fields",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-api",
+    "new": "corex-operations",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-intl-search",
+    "new": "corex-search-intl",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-task-recurrence",
+    "new": "corex-tasks-workflow",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-modules",
+    "new": "corex.modules",
+    "match": "word",
+    "kind": "config"
+   },
+   {
+    "old": "corex-auth-config",
+    "new": "corex-access-config",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-auth-migrations-tenant",
+    "new": "corex-access-migrations-tenant",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-auth-migrations-tenant-cloud",
+    "new": "corex-access-migrations-tenant-cloud",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-api-config",
+    "new": "corex-operations-config",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-api-migrations-tenant",
+    "new": "corex-operations-migrations-tenant",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-api-tenant-migrations",
+    "new": "corex-operations-migrations-tenant",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-api-budget-migrations",
+    "new": "corex-operations-migrations-budget",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-intl-search-config",
+    "new": "corex-search-intl-config",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-modules-config",
+    "new": "-",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-modules-migrations",
+    "new": "corex-migrations",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex-modules-migrations-tenant",
+    "new": "corex-migrations-tenant",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "tenancy-config",
+    "new": "corex-tenancy-config",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "tenancy-migrations",
+    "new": "corex-tenancy-migrations",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "tenancy-migrations-tenant",
+    "new": "corex-tenancy-migrations-tenant",
+    "match": "word",
+    "kind": "tag"
+   },
+   {
+    "old": "corex:pubsub:prune",
+    "new": "corex:messaging:prune-pubsub",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "corex:api:prune",
+    "new": "corex:operations:prune",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "corex:api-snapshots",
+    "new": "corex:operations:snapshot",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "corex:bulk-work",
+    "new": "corex:operations:bulk-work",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "corex:wakeup:root-sweep",
+    "new": "corex:tenancy:wakeup-root-sweep",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "tenants:migrate",
+    "new": "corex:tenancy:migrate",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "tenants:pending-create",
+    "new": "corex:tenancy:pending-create",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "tenants:pending-clear",
+    "new": "corex:tenancy:pending-clear",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "identities:reconcile",
+    "new": "corex:tenancy:reconcile-identities",
+    "match": "word",
+    "kind": "command"
+   },
+   {
+    "old": "COREX_INTL_SEARCH_ENABLED",
+    "new": "COREX_SEARCH_INTL_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_BIND_PERMISSION_LAYER",
+    "new": "COREX_ACCESS_BIND_PERMISSION_LAYER",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_CACHE_STORE",
+    "new": "COREX_ACCESS_CACHE_STORE",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_IDENTITY_CONNECTION",
+    "new": "COREX_ACCESS_IDENTITY_CONNECTION",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_IDENTITY_ENABLED",
+    "new": "COREX_ACCESS_IDENTITY_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_IDENTITY_TABLE",
+    "new": "COREX_ACCESS_IDENTITY_TABLE",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "COREX_AUTH_PANEL",
+    "new": "COREX_ACCESS_PANEL",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_CENTRAL_CONNECTION",
+    "new": "COREX_TENANCY_CENTRAL_CONNECTION",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_DOMAIN_TRUST_CHALLENGE_TTL_SECONDS",
+    "new": "COREX_TENANCY_DOMAIN_TRUST_CHALLENGE_TTL_SECONDS",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_DOMAIN_TRUST_ENABLED",
+    "new": "COREX_TENANCY_DOMAIN_TRUST_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_GRACE_DAYS",
+    "new": "COREX_TENANCY_GRACE_DAYS",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_HOST_IDENTIFICATION_ENABLED",
+    "new": "COREX_TENANCY_HOST_IDENTIFICATION_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_CLIENT_ID",
+    "new": "COREX_TENANCY_OIDC_CLIENT_ID",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_CLIENT_SECRET",
+    "new": "COREX_TENANCY_OIDC_CLIENT_SECRET",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_DISCOVERY_CACHE_STORE",
+    "new": "COREX_TENANCY_OIDC_DISCOVERY_CACHE_STORE",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_DISCOVERY_CACHE_TTL",
+    "new": "COREX_TENANCY_OIDC_DISCOVERY_CACHE_TTL",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_ENABLED",
+    "new": "COREX_TENANCY_OIDC_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_GUARD",
+    "new": "COREX_TENANCY_OIDC_GUARD",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_IMPERSONATION_ENABLED",
+    "new": "COREX_TENANCY_OIDC_IMPERSONATION_ENABLED",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY",
+    "new": "COREX_TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_ISSUER",
+    "new": "COREX_TENANCY_OIDC_ISSUER",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_JWKS_CACHE_STORE",
+    "new": "COREX_TENANCY_OIDC_JWKS_CACHE_STORE",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_JWKS_CACHE_TTL",
+    "new": "COREX_TENANCY_OIDC_JWKS_CACHE_TTL",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS",
+    "new": "COREX_TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_LEEWAY_SECONDS",
+    "new": "COREX_TENANCY_OIDC_LEEWAY_SECONDS",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES",
+    "new": "COREX_TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_OIDC_REDIRECT_URI",
+    "new": "COREX_TENANCY_OIDC_REDIRECT_URI",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_PLATFORM_DOMAIN",
+    "new": "COREX_TENANCY_PLATFORM_DOMAIN",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_STORAGE_DURABLE_DRIVER",
+    "new": "COREX_TENANCY_STORAGE_DURABLE_DRIVER",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_STORAGE_DURABLE_ROOT",
+    "new": "COREX_TENANCY_STORAGE_DURABLE_ROOT",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_STORAGE_EPHEMERAL_ROOT",
+    "new": "COREX_TENANCY_STORAGE_EPHEMERAL_ROOT",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_TRIAL_DAYS",
+    "new": "COREX_TENANCY_TRIAL_DAYS",
+    "match": "word",
+    "kind": "env"
+   },
+   {
+    "old": "TENANCY_WORKSPACE_PATH_SEGMENT",
+    "new": "COREX_TENANCY_WORKSPACE_PATH_SEGMENT",
+    "match": "word",
+    "kind": "env"
+   }
+  ]
+ }
+}

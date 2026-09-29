@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Projection;
 
-use CoreX\Tenancy\AccountRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Contracts\CentralApiClient;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Tenancy\Identity\Models\User;
 use CoreX\Tenancy\Membership\Transport\MembershipQuery;
 use CoreX\Tenancy\Membership\Transport\MembershipState;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Throwable;

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Audit\RecordAuditEntry;
-use CoreX\Enums\ActorType;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\ImpersonationState;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\ImpersonationState;
 use Illuminate\Support\Facades\Queue;
 
 test('P12 stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Task\Contracts;
 
-use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Data\UpdateTaskData;
+use CoreX\Tasks\Task\Data\TaskReference;
+use CoreX\Tasks\Task\Data\UpdateTaskData;
 
 interface UpdateTaskCommand
 {

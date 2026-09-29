@@ -17,7 +17,7 @@ new ApiError('p12_unregistered_probe', 409, 'probe');
 PHP);
 
     try {
-        expect(p12ErrorContractViolations())->toContain('E-UNREGISTERED-CODE corex/operations p12_unregistered_probe');
+        expect(p12ErrorContractViolations())->toContain('E-UNREGISTERED-CODE axiomasoft/corex-operations p12_unregistered_probe');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -34,7 +34,7 @@ new ApiError('validation_failed', 409, 'probe');
 PHP);
 
     try {
-        expect(p12ErrorContractViolations())->toContain('E-CONTRACT-DRIFT corex/operations validation_failed');
+        expect(p12ErrorContractViolations())->toContain('E-CONTRACT-DRIFT axiomasoft/corex-operations validation_failed');
     } finally {
         if (is_file($path)) {
             unlink($path);
@@ -111,8 +111,8 @@ function p12DeclaredErrorContracts(array &$violations, array $adapters): array
     $contracts = [];
     $dynamicSources = array_fill_keys(array_column($adapters, 'source'), true);
 
-    foreach (['operations' => 'ApiError', 'attributes' => 'ErrorDescriptor'] as $package => $class) {
-        $owner = 'corex/'.$package;
+    foreach (['operations' => 'ApiError', 'tools' => 'ApiError', 'webhooks' => 'ApiError', 'custom-fields' => 'ErrorDescriptor'] as $package => $class) {
+        $owner = 'axiomasoft/corex-'.(in_array($package, ['tools', 'webhooks'], true) ? 'operations' : $package);
         $directory = SourceScanner::packagePath($package, 'src');
 
         foreach (SourceScanner::filesMatching($directory, '/\bnew\s+(?:\\\\?[A-Za-z_][A-Za-z0-9_\\\\]*)?'.preg_quote($class, '/').'\s*\(/') as $path) {

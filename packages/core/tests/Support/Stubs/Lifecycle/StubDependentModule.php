@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Testing\Stubs\Lifecycle;
 
-use CoreX\Modules\ModuleDefinition;
-use CoreX\Modules\ModuleDependency;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Modules\Definition\ModuleDefinition;
+use CoreX\Modules\Definition\ModuleDependency;
+use CoreX\Modules\Definition\ModuleManifest;
 
 /** Requires {@see StubBaseModule} — exercises AC-6/AC-8/cascade. */
 final class StubDependentModule extends ModuleDefinition

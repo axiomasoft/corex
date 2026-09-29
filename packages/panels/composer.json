@@ -1,14 +1,13 @@
 {
-    "name": "corex/panels",
+    "name": "axiomasoft/corex-panels",
     "description": "Headless panel descriptors and current-context access catalogue for CoreX modules.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
-        "corex/modules": "^1.0@dev",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
         "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "php": "^8.4"
+        "illuminate/support": "^12.0|^13.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
@@ -36,7 +35,10 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Panels\\Contracts",
-                "CoreX\\Panels\\Data"
+                "CoreX\\Panels\\Data",
+                "CoreX\\Panels\\SavedViews\\Contracts\\SavedViewRepository",
+                "CoreX\\Panels\\SavedViews\\Contracts\\ViewAccessPolicy",
+                "CoreX\\Panels\\SavedViews\\Contracts\\ViewSchemaProvider"
             ]
         },
         "laravel": {
@@ -52,10 +54,6 @@
         {
             "type": "path",
             "url": "../core"
-        },
-        {
-            "type": "path",
-            "url": "../modules"
         }
     ],
     "minimum-stability": "stable",

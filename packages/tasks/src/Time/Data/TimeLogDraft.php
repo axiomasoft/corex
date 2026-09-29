@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Time\Data;
 
-use CoreX\Tasks\Enums\TimeLogSource;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Time\Enums\TimeLogSource;
 
 final readonly class TimeLogDraft
 {

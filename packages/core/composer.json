@@ -1,6 +1,6 @@
 {
-    "name": "corex/core",
-    "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+    "name": "axiomasoft/corex",
+    "description": "CoreX kernel \u2014 base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -19,28 +19,35 @@
         }
     ],
     "require": {
-        "brick/money": "^0.9 || ^0.10",
         "ext-ctype": "*",
+        "ext-mbstring": "*",
         "php": "^8.4",
-        "psr/clock": "^1.0",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/events": "^12.0|^13.0",
+        "illuminate/queue": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
         "laravel/framework": "^12.0|^13.0",
-        "ext-mbstring": "*"
+        "psr/clock": "^1.0"
     },
     "provide": {
         "psr/clock-implementation": "1.0"
     },
     "require-dev": {
         "ext-pdo": "*",
+        "phpstan/phpstan": "^2.2.16",
+        "larastan/larastan": "^3.12",
+        "mockery/mockery": "^1.6",
         "nikic/php-parser": "^5.4",
         "open-telemetry/api": "^1.4",
         "open-telemetry/sdk": "^1.4",
         "orchestra/testbench": "^10.12|^11.3",
         "orchestra/testbench-core": "^10.12|^11.3",
-        "phpstan/phpstan": "^2.2.16",
         "psr/log": "^3.0",
         "symfony/console": "^7.2|^8.0",
-        "symfony/process": "^7.2|^8.0",
-        "corex/modules": "^1.0@dev"
+        "symfony/process": "^7.2|^8.0"
     },
     "suggest": {
         "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
@@ -65,39 +72,65 @@
             "package-type": "foundation",
             "stability": "stable",
             "public-api": [
-                "CoreX\\Contracts",
-                "CoreX\\Data",
-                "CoreX\\Enums",
-                "CoreX\\Events",
-                "CoreX\\Exceptions",
-                "CoreX\\Models",
-                "CoreX\\Concerns",
-                "CoreX\\Audit\\Contracts",
-                "CoreX\\Observability",
+                "CoreX\\Audit",
+                "CoreX\\Config\\Config",
+                "CoreX\\Config\\Contracts",
+                "CoreX\\Config\\CoreOptions",
+                "CoreX\\Config\\InvalidConfiguration",
+                "CoreX\\Config\\SecretRef",
+                "CoreX\\Config\\ViolationList",
+                "CoreX\\Context\\Contracts",
+                "CoreX\\Context\\Data\\AccountRef",
+                "CoreX\\Context\\Data\\TenantContext",
+                "CoreX\\Context\\Data\\WorkspaceRef",
+                "CoreX\\Context\\Enums",
+                "CoreX\\Context\\Exceptions",
+                "CoreX\\Context\\ImpersonationGuard",
+                "CoreX\\Data\\Contracts",
+                "CoreX\\Data\\DataScope",
+                "CoreX\\Data\\DataScopeAccessDecision",
+                "CoreX\\Data\\Exceptions",
+                "CoreX\\Database",
+                "CoreX\\Departments\\Contracts",
+                "CoreX\\Departments\\Events",
+                "CoreX\\Departments\\Exceptions",
+                "CoreX\\Departments\\Models",
+                "CoreX\\Errors\\Contracts",
+                "CoreX\\Errors\\Data",
+                "CoreX\\Errors\\Enums",
+                "CoreX\\Features\\Contracts",
+                "CoreX\\Features\\Events",
+                "CoreX\\Features\\Models",
                 "CoreX\\Messaging\\Contracts",
                 "CoreX\\Messaging\\Data",
-                "CoreX\\Support\\ViolationList",
-                "CoreX\\Support\\InvalidConfiguration",
-                "CoreX\\Support\\SecretRef",
-                "CoreX\\Support\\Data\\DataScope",
-                "CoreX\\Support\\Data\\DataScopeAccessDecision",
-                "CoreX\\Support\\PackageRegistrar",
-                "CoreX\\Support\\RegistersNothingOnBoot",
-                "CoreX\\Tenancy\\Contracts\\TenantContextResolver",
-                "CoreX\\Tenancy\\Contracts\\TenantContextRestorer",
-                "CoreX\\Tenancy\\Contracts\\TenancyManager",
-                "CoreX\\Tenancy\\Contracts\\TenantDatabaseLifecycle",
-                "CoreX\\Tenancy\\Contracts\\ImpersonationService",
-                "CoreX\\Tenancy\\ImpersonationGuard",
-                "CoreX\\Tenancy\\AccountRef",
-                "CoreX\\Tenancy\\TenantContext",
-                "CoreX\\Tenancy\\WorkspaceRef",
-                "CoreX\\Messaging\\Testing"
+                "CoreX\\Messaging\\Enums",
+                "CoreX\\Messaging\\Events",
+                "CoreX\\Messaging\\Exceptions",
+                "CoreX\\Messaging\\Testing",
+                "CoreX\\Modules\\Compiler\\CompiledRegistry",
+                "CoreX\\Modules\\Contracts",
+                "CoreX\\Modules\\Data",
+                "CoreX\\Modules\\Enums",
+                "CoreX\\Modules\\Events",
+                "CoreX\\Modules\\Exceptions",
+                "CoreX\\Modules\\Extend",
+                "CoreX\\Modules\\RegistersNothingOnBoot",
+                "CoreX\\Modules\\Registry\\CompiledModule",
+                "CoreX\\Modules\\Testing",
+                "CoreX\\Observability",
+                "CoreX\\Panels\\SavedViews\\Contracts",
+                "CoreX\\Settings\\Contracts",
+                "CoreX\\Settings\\Enums",
+                "CoreX\\Settings\\Events",
+                "CoreX\\Settings\\Exceptions",
+                "CoreX\\Settings\\Models",
+                "CoreX\\Storage\\Contracts"
             ]
         },
         "laravel": {
             "providers": [
-                "CoreX\\CoreServiceProvider"
+                "CoreX\\CoreServiceProvider",
+                "CoreX\\Modules\\ModulesServiceProvider"
             ]
         },
         "branch-alias": {
@@ -112,16 +145,11 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
-        "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg",
-        "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --group=pg",
-        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage --exclude-group=pg --coverage --min=80",
+        "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg --coverage --min=80",
         "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "../../vendor/bin/pint --test"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../modules"
-        }
-    ]
+    "repositories": []
 }

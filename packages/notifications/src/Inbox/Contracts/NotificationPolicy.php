@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Inbox\Contracts;
 
-use CoreX\Notifications\Data\NotificationAction;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationSubject;
+use CoreX\Notifications\Inbox\Data\NotificationAction;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Data\NotificationSubject;
 
 interface NotificationPolicy
 {

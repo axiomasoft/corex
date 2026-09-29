@@ -469,7 +469,7 @@ def _judge_profile(identifier: str, receipt: dict, mark: str | None) -> tuple[st
             return "red", "omitted profile: bare-single"
         for cell in bare:
             packages = cell.get("packages") or []
-            if "corex/search-intl" in packages:
+            if "axiomasoft/corex-search-intl" in packages:
                 return "red", "Search Intl is not removable from bare-single"
     if mark is not None:
         return _mark_status(mark)

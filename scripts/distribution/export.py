@@ -39,7 +39,7 @@ def git(*args: str) -> bytes:
 
 def policy() -> dict:
     value = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
-    if set(value.get("packages", {})) != {"corex/core", "corex/modules", "corex/tasks", "corex/tenancy"}:
+    if set(value.get("packages", {})) != {"axiomasoft/corex", "axiomasoft/corex", "axiomasoft/corex-tasks", "axiomasoft/corex-tenancy"}:
         raise ExportError("policy allowlist is invalid")
     return value
 

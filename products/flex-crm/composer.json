@@ -1,0 +1,113 @@
+{
+    "name": "flex/crm",
+    "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
+    "type": "corex-module",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "crm",
+        "pipeline",
+        "deals",
+        "multi-tenancy"
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-intl": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "brick/money": "^0.9 || ^0.10",
+        "giggsey/libphonenumber-for-php-lite": "^9.0",
+        "laravel/framework": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flex\\Crm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flex\\Crm\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "module": "Flex\\Crm\\CrmModule",
+            "package-type": "product",
+            "stability": "experimental",
+            "public-api": [
+                "Flex\\Crm\\Activity\\Enums",
+                "Flex\\Crm\\Activity\\Events",
+                "Flex\\Crm\\Activity\\Models",
+                "Flex\\Crm\\Company\\Data",
+                "Flex\\Crm\\Company\\Events",
+                "Flex\\Crm\\Company\\Models",
+                "Flex\\Crm\\Contact\\Data",
+                "Flex\\Crm\\Contact\\Events",
+                "Flex\\Crm\\Contact\\Models",
+                "Flex\\Crm\\Context\\Contracts",
+                "Flex\\Crm\\Context\\Data",
+                "Flex\\Crm\\Context\\Models",
+                "Flex\\Crm\\Deal\\Enums",
+                "Flex\\Crm\\Deal\\Events",
+                "Flex\\Crm\\Deal\\Models",
+                "Flex\\Crm\\Lead\\Enums",
+                "Flex\\Crm\\Lead\\Events",
+                "Flex\\Crm\\Lead\\Models"
+            ]
+        },
+        "laravel": {
+            "providers": [
+                "Flex\\Crm\\CrmServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../packages/core"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/intl"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/operations"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest --exclude-group=pg",
+        "test:pg": "pest --group=pg",
+        "test:coverage": "pest --coverage --min=95",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c products/flex-crm/phpstan.neon --memory-limit=2G --no-progress",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    }
+}

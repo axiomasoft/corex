@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Delivery\Internal;
 
-use CoreX\Notifications\Contracts\NotificationChannelDriver;
-use CoreX\Notifications\Data\ChannelDescriptor;
-use CoreX\Notifications\Data\DeliveryInput;
-use CoreX\Notifications\Data\DeliveryOutcome;
+use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
+use CoreX\Notifications\Delivery\Data\ChannelDescriptor;
+use CoreX\Notifications\Delivery\Data\DeliveryInput;
+use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
 
 final class InAppChannelDriver implements NotificationChannelDriver
 {

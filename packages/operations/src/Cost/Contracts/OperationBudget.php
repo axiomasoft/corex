@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Cost\Contracts;
 
-use CoreX\Api\Data\BudgetScope;
-use CoreX\Api\Data\EstimatedCost;
+use CoreX\Operations\Cost\Data\BudgetScope;
+use CoreX\Operations\Cost\Data\EstimatedCost;
 
 interface OperationBudget
 {

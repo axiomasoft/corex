@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Laravel;
+namespace CoreX\Operations\Cost\Laravel;
 
-use CoreX\Api\Contracts\OperationBudget;
-use CoreX\Api\Contracts\OperationCostEstimator;
-use CoreX\Api\Data\CostOptions;
-use CoreX\Api\Internal\Cost\BudgetAdmission;
-use CoreX\Api\Internal\Cost\BudgetRetention;
-use CoreX\Api\Internal\Cost\DeclaredCostEstimator;
-use CoreX\Api\Internal\Cost\SqlOperationBudget;
+use CoreX\Operations\Cost\Contracts\OperationBudget;
+use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
+use CoreX\Operations\Cost\Data\CostOptions;
+use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Cost\Internal\BudgetRetention;
+use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
+use CoreX\Operations\Cost\Internal\SqlOperationBudget;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 

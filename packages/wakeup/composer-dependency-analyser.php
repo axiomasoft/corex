@@ -18,4 +18,6 @@ return (new Configuration)
     // discovery: Testbench laravel/framework replaces illuminate/database; shipped component imports retain their standalone constraint
     ->ignoreErrorsOnPackage('illuminate/database', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped component imports retain their standalone constraint
-    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY]);
+    ->ignoreErrorsOnPackage('illuminate/support', [ErrorType::UNUSED_DEPENDENCY])
+    // Pest declares these exact local fixtures while executing its test files.
+    ->ignoreUnknownClasses(['FailingWakeupTestHandler', 'NotAWakeupHandler', 'PayloadRecordingWakeupHandler', 'PgVersionedWakeupHandler', 'RecordingWakeupHint', 'RegistryTestHandler', 'WakeupTestHandler']);

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch\Tests\Unit;
+namespace CoreX\SearchMeilisearch\Tests\Unit;
 
-use CoreX\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
-use CoreX\Search\Meilisearch\MeilisearchConfigSection;
-use CoreX\Search\Meilisearch\MeilisearchServiceProvider;
+use CoreX\SearchMeilisearch\MeilisearchConfigSection;
+use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 

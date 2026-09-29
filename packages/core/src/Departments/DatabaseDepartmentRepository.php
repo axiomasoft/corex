@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Departments;
 
-use CoreX\Contracts\DepartmentRepository;
-use CoreX\Events\DepartmentMoved;
-use CoreX\Exceptions\CrossWorkspaceMoveException;
-use CoreX\Exceptions\DepartmentCycleException;
-use CoreX\Models\Department as DepartmentModel;
-use CoreX\Support\Config;
+use CoreX\Config\Config;
+use CoreX\Departments\Contracts\DepartmentRepository;
+use CoreX\Departments\Events\DepartmentMoved;
+use CoreX\Departments\Exceptions\CrossWorkspaceMoveException;
+use CoreX\Departments\Exceptions\DepartmentCycleException;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -34,22 +33,22 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
     #[Override]
     public function find(string $id): ?Department
     {
-        $row = DepartmentModel::on($this->connection)->where('id', $id)->first();
+        $row = Models\Department::on($this->connection)->where('id', $id)->first();
 
-        return $row instanceof DepartmentModel ? $this->toDto($row) : null;
+        return $row instanceof Models\Department ? $this->toDto($row) : null;
     }
 
     #[Override]
     public function subtree(string $departmentId): array
     {
-        $root = DepartmentModel::on($this->connection)->where('id', $departmentId)->first();
+        $root = Models\Department::on($this->connection)->where('id', $departmentId)->first();
 
-        if (! $root instanceof DepartmentModel) {
+        if (! $root instanceof Models\Department) {
             return [];
         }
 
-        /** @var list<DepartmentModel> $rows */
-        $rows = DepartmentModel::on($this->connection)
+        /** @var list<Models\Department> $rows */
+        $rows = Models\Department::on($this->connection)
             ->where('workspace_id', $root->workspace_id)
             ->whereRaw('path <@ ?::ltree', [$root->path])
             ->orderBy('path')
@@ -84,7 +83,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                 ->value('workspace_id');
 
             if (! is_string($lockWorkspaceId)) {
-                throw (new ModelNotFoundException)->setModel(DepartmentModel::class, [$departmentId]);
+                throw (new ModelNotFoundException)->setModel(Models\Department::class, [$departmentId]);
             }
 
             // (2) Advisory lock BEFORE reading the mutable path (A5). Xact-scoped,
@@ -96,8 +95,8 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             //     so firstOrFail() throws instead of running a no-op UPDATE that
             //     matches nothing (A5/A24 If-then). All downstream maths use THIS
             //     row, never the pre-lock read.
-            /** @var DepartmentModel $moving */
-            $moving = DepartmentModel::on($this->connection)->where('id', $departmentId)->firstOrFail();
+            /** @var Models\Department $moving */
+            $moving = Models\Department::on($this->connection)->where('id', $departmentId)->firstOrFail();
 
             // The lock key was read before the lock; workspace_id is immutable,
             // but if it changed under us a concurrent writer is doing something
@@ -109,8 +108,8 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             $newParentPath = '';
 
             if ($newParentId !== null) {
-                /** @var DepartmentModel $newParent */
-                $newParent = DepartmentModel::on($this->connection)->where('id', $newParentId)->firstOrFail();
+                /** @var Models\Department $newParent */
+                $newParent = Models\Department::on($this->connection)->where('id', $newParentId)->firstOrFail();
 
                 // Parent-side workspace guard, symmetric to the descendant-side
                 // filter on the UPDATE below: the new parent
@@ -162,7 +161,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
         });
     }
 
-    private function toDto(DepartmentModel $row): Department
+    private function toDto(Models\Department $row): Department
     {
         return new Department(
             id: $row->id,

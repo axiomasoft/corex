@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Invocation\Internal;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Contracts\RequestContextProvider;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use Illuminate\Contracts\Container\Container;
 use Override;
 

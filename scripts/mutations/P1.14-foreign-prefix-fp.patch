@@ -1,7 +1,7 @@
-diff --git a/packages/modules/src/PHPStan/Rules/NoForeignPrefixSqlRule.php b/packages/modules/src/PHPStan/Rules/NoForeignPrefixSqlRule.php
+diff --git a/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php b/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
 index f587bab..330dbce 100644
---- a/packages/modules/src/PHPStan/Rules/NoForeignPrefixSqlRule.php
-+++ b/packages/modules/src/PHPStan/Rules/NoForeignPrefixSqlRule.php
+--- a/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
++++ b/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
 @@ -7,9 +7,6 @@ namespace CoreX\Modules\PHPStan\Rules;
  use CoreX\Modules\PHPStan\Rules\Support\DatabaseCall;
  use PhpParser\Node;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\IdStrategy;
+use CoreX\Database\Enums\IdStrategy;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;

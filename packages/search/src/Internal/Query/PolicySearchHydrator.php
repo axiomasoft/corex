@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace CoreX\Search\Internal\Query;
 
 use Closure;
-use CoreX\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchHydrator;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\CurrentSearchRecord;
 use CoreX\Search\Support\SearchPage;
 use CoreX\Search\Support\SearchSnapshot;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
 
 final readonly class PolicySearchHydrator implements SearchHydrator
 {
     /**
-     * @param  Closure(DataScope, RecordRef, SearchSnapshot): ?CurrentSearchRecord  $loadCurrent
+     * @param  Closure(DataScope, RecordRef, SearchSnapshot):?CurrentSearchRecord  $loadCurrent
      */
     public function __construct(
         private Closure $loadCurrent,

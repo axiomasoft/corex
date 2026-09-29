@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Task\Contracts;
 
-use CoreX\Tasks\Data\CompleteTaskData;
-use CoreX\Tasks\Data\TaskReference;
+use CoreX\Tasks\Task\Data\CompleteTaskData;
+use CoreX\Tasks\Task\Data\TaskReference;
 
 interface CompleteTaskCommand
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Currency\Internal;
 
 use Brick\Money\Money;
-use CoreX\Intl\Contracts\CurrencyConverter;
-use CoreX\Intl\Data\ConversionPolicy;
-use CoreX\Intl\Data\ConversionReceipt;
-use CoreX\Intl\Data\RateSnapshot;
-use CoreX\Intl\Exceptions\InvalidRateException;
+use CoreX\Intl\Currency\Contracts\CurrencyConverter;
+use CoreX\Intl\Currency\Data\ConversionPolicy;
+use CoreX\Intl\Currency\Data\ConversionReceipt;
+use CoreX\Intl\Currency\Data\RateSnapshot;
+use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use Override;
 
 final class BrickCurrencyConverter implements CurrencyConverter

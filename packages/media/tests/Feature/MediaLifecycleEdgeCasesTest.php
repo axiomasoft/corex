@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantStorage;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\Contracts\RelationLookup;
@@ -19,8 +20,7 @@ use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Jobs\PurgeMedia;
 use CoreX\Media\MediaModule;
 use CoreX\Media\Support\MediaOptions;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -169,6 +169,6 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
 it('publishes media as a standalone CoreX module', function (): void {
     $manifest = (new MediaModule)->manifest();
 
-    expect($manifest->composerName)->toBe('corex/media')
+    expect($manifest->composerName)->toBe('axiomasoft/corex-media')
         ->and($manifest->tablePrefix)->toBe('med');
 });

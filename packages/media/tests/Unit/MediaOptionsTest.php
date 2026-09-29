@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\InvalidConfiguration;
 use CoreX\Media\Support\MediaOptions;
-use CoreX\Support\InvalidConfiguration;
 
 it('rejects a non-positive max upload bytes limit', function (int $bytes): void {
     try {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\GuardedTenantContextRestorer;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\GuardedTenantContextRestorer;
+use CoreX\Data\DataScope;
 use CoreX\Tenancy\Runtime\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\TenantContext;
-use CoreX\Tenancy\WorkspaceRef;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,7 @@ function restorerScope(TenantContext $context, string $connectionIdentity): Data
 }
 
 /**
- * @param  callable(): TenantContext  $current
+ * @param  callable():TenantContext  $current
  */
 function guardedRestorer(callable $current, ?DatabaseManager $database = null): ConnectionGuardedTenantContextRestorer
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Jobs;
+namespace CoreX\Tenancy\Membership\Jobs;
 
 use CoreX\Tenancy\Membership\Projection\ApplyMembershipProjection;
 use Illuminate\Bus\Queueable;

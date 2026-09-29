@@ -1,0 +1,67 @@
+[
+  {
+    "check": "manifests",
+    "command": [
+      "python3",
+      "scripts/manifest-check.py"
+    ],
+    "exit": 0,
+    "seconds": 0.02,
+    "log": "manifests.log"
+  },
+  {
+    "check": "lint",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "lint:check"
+    ],
+    "exit": 0,
+    "seconds": 0.9,
+    "log": "lint.log"
+  },
+  {
+    "check": "golden",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "golden"
+    ],
+    "exit": 0,
+    "seconds": 1.45,
+    "log": "golden.log"
+  },
+  {
+    "check": "root-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test"
+    ],
+    "exit": 0,
+    "seconds": 19.44,
+    "log": "root-test.log"
+  },
+  {
+    "check": "pg-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:pg"
+    ],
+    "exit": 0,
+    "seconds": 30.3,
+    "log": "pg-test.log"
+  },
+  {
+    "check": "packages-test",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:packages"
+    ],
+    "exit": 1,
+    "seconds": 88.69,
+    "log": "packages-test.log"
+  }
+]

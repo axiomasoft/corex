@@ -3,26 +3,26 @@
 declare(strict_types=1);
 
 use Brick\Money\Money;
-use CoreX\Intl\Contracts\LocaleResolver;
-use CoreX\Intl\Contracts\MoneyFormatter;
-use CoreX\Intl\Contracts\TranslationReader;
-use CoreX\Intl\Data\FormatPolicy;
-use CoreX\Intl\Data\GeographyQuery;
-use CoreX\Intl\Data\LocaleInputs;
-use CoreX\Intl\Data\LocalePolicy;
-use CoreX\Intl\Data\LocalizedText;
-use CoreX\Intl\Exceptions\InvalidLocaleException;
-use CoreX\Intl\Exceptions\SchemaMismatchException;
-use CoreX\Intl\Internal\Locale\Bcp47Validator;
-use CoreX\Intl\Internal\Locale\LocalePolicyBuilder;
-use CoreX\Intl\Internal\Locale\RequestLocaleScope;
-use CoreX\Intl\Internal\Reference\BoxesReferenceProvider;
-use CoreX\Intl\Internal\Reference\CompactReferenceProvider;
-use CoreX\Intl\Internal\Reference\FixtureReferenceNormalizer;
-use CoreX\Intl\Internal\Reference\ReferenceCursorCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
+use CoreX\Intl\Formatting\Data\FormatPolicy;
+use CoreX\Intl\Locale\Contracts\LocaleResolver;
+use CoreX\Intl\Locale\Data\LocaleInputs;
+use CoreX\Intl\Locale\Data\LocalePolicy;
+use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
+use CoreX\Intl\Locale\Internal\Bcp47Validator;
+use CoreX\Intl\Locale\Internal\LocalePolicyBuilder;
+use CoreX\Intl\Locale\Internal\RequestLocaleScope;
+use CoreX\Intl\Territory\Data\GeographyQuery;
+use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Territory\Internal\Reference\BoxesReferenceProvider;
+use CoreX\Intl\Territory\Internal\Reference\CompactReferenceProvider;
+use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
+use CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec;
+use CoreX\Intl\Translation\Contracts\TranslationReader;
+use CoreX\Intl\Translation\Data\LocalizedText;
 
 it('LOC-01 validates supported allowlist and rejects invalid tags', function (): void {
     $policy = app(LocalePolicy::class);

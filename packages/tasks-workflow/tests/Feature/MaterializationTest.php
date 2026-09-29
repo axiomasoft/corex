@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceSet;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
-use CoreX\Tasks\Contracts\TaskAccess;
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\TaskDraft;
-use CoreX\Tasks\Models\Project;
-use CoreX\Tasks\Models\Stage;
-use CoreX\Tasks\Models\Task;
+use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Models\Stage;
+use CoreX\Tasks\Task\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
@@ -23,7 +24,6 @@ use CoreX\TasksWorkflow\Internal\MaterializationHasher;
 use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\ScopeConnectionGuard;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Data\WakeupRequest;
 use Illuminate\Auth\Access\AuthorizationException;

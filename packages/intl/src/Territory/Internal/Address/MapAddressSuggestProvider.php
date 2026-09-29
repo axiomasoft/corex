@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Address;
+namespace CoreX\Intl\Territory\Internal\Address;
 
-use CoreX\Intl\Contracts\AddressSuggestProvider;
-use CoreX\Intl\Data\AddressQuery;
-use CoreX\Intl\Data\SuggestionLimits;
-use CoreX\Intl\Data\SuggestionResult;
+use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
+use CoreX\Intl\Territory\Data\AddressQuery;
+use CoreX\Intl\Territory\Data\SuggestionLimits;
+use CoreX\Intl\Territory\Data\SuggestionResult;
 use Override;
 
 final class MapAddressSuggestProvider implements AddressSuggestProvider

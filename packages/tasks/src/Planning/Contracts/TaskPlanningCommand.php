@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Planning\Contracts;
 
-use CoreX\Tasks\Data\PlanningToken;
-use CoreX\Tasks\Data\ProjectDraft;
-use CoreX\Tasks\Data\ProjectReference;
-use CoreX\Tasks\Data\SprintDraft;
-use CoreX\Tasks\Data\SprintReference;
-use CoreX\Tasks\Data\TimeLogDraft;
-use CoreX\Tasks\Data\TimeLogReference;
+use CoreX\Tasks\Planning\Data\PlanningToken;
+use CoreX\Tasks\Project\Data\ProjectDraft;
+use CoreX\Tasks\Project\Data\ProjectReference;
+use CoreX\Tasks\Sprint\Data\SprintDraft;
+use CoreX\Tasks\Sprint\Data\SprintReference;
+use CoreX\Tasks\Time\Data\TimeLogDraft;
+use CoreX\Tasks\Time\Data\TimeLogReference;
 
 interface TaskPlanningCommand
 {

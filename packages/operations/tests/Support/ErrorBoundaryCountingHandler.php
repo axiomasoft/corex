@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Support;
+namespace CoreX\Operations\Tests\Support;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Throwable;

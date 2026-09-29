@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\FeatureFlagDefinition;
+use CoreX\Features\Contracts\FeatureFlagDefinition;
 use CoreX\Modules\Compiler\CompiledEntityField;
 use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Compiler\InstalledPackages;
 use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\DefaultSettingDefinition;
+use CoreX\Modules\Definition\ModuleDependency;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
@@ -18,9 +19,8 @@ use CoreX\Modules\Extend\Menu;
 use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Extend\Routes;
 use CoreX\Modules\Extend\Workflow;
-use CoreX\Modules\ModuleDependency;
-use CoreX\Modules\ModuleManifest;
 use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Modules\Settings\DefaultSettingDefinition;
 use CoreX\Tests\Stubs\StubEntityAlphaThing;
 use CoreX\Tests\Stubs\StubEntityBetaThing;
 use CoreX\Tests\Stubs\StubRogueExtender;
@@ -132,12 +132,12 @@ it('resolves requires against installed.json contents, not a hardcoded package l
         __DIR__.'/../Stubs/installed-with-corex-core.json',
     );
 
-    expect($installedPackages)->toContain('corex/core');
+    expect($installedPackages)->toContain('axiomasoft/corex');
 
     $requiresInstalled = ModuleManifest::make('corex/stub-requires-real')
         ->title('Requires Real')
         ->tablePrefix('rrl')
-        ->requires([ModuleDependency::module('corex/core')]);
+        ->requires([ModuleDependency::module('axiomasoft/corex')]);
 
     $registry = app(RegistryCompiler::class)->compile([$requiresInstalled], $installedPackages);
 

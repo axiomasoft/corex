@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Definition\Contracts;
+
+use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 interface OperationHandler
 {

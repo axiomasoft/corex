@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceSet;
-use CoreX\Tasks\Data\ActorData;
-use CoreX\Tasks\Data\TaskDraft;
-use CoreX\Tasks\Data\TaskReference;
-use CoreX\Tasks\Enums\TaskPriority;
+use CoreX\Tasks\Task\Data\ActorData;
+use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Data\TaskReference;
+use CoreX\Tasks\Task\Enums\TaskPriority;
 use DateTimeImmutable;
 use InvalidArgumentException;
 

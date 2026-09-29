@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Currency\Internal;
 
 use Brick\Money\Currency;
-use CoreX\Intl\Contracts\CurrencyMetadata;
-use CoreX\Intl\Data\CurrencyInfo;
-use CoreX\Intl\Exceptions\InvalidRateException;
+use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
+use CoreX\Intl\Currency\Data\CurrencyInfo;
+use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use Override;
 use Throwable;
 

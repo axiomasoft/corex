@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\Outbox;
-use CoreX\Support\Config;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {

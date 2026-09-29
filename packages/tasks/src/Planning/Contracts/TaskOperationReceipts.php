@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Contracts;
+namespace CoreX\Tasks\Planning\Contracts;
 
-use CoreX\Tasks\Data\TaskOperationKind;
-use CoreX\Tasks\Data\TaskOperationReceipt;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
 use Illuminate\Database\Connection;
 
 /** Tasks-owned ledger port. The supplied connection preserves the caller's transaction. */

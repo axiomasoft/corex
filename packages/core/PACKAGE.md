@@ -1,10 +1,10 @@
-# corex/core compatibility passport
+# axiomasoft/corex compatibility passport
 
 This is factual evidence, not a Composer constraint, runtime registry, or release promise.
 
 | Field | Recorded fact |
 | --- | --- |
-| Package / license / profile | `corex/core` / MIT / public L0 |
+| Package / license / profile | `axiomasoft/corex` / MIT / public L0 |
 | Policy / declared constraint | PHP 8.4–8.5 and Laravel 12–13 / `php:^8.4`, Illuminate `^12.0|^13.0` |
 | Public local proof | P4.4 historical runtime versions: 8.3.33, 8.4.1 and 8.5.10 against Laravel 12 and 13; cold update, platform check and fresh lock install |
 | Release-ready status | Not claimed. The P4.4 receipt is local evidence; it is not a current hosted-runner or publication receipt. |
@@ -14,3 +14,5 @@ This is factual evidence, not a Composer constraint, runtime registry, or releas
 | Limitations | No publication, current hosted-runner claim, or support beyond the stated policy is implied. PostgreSQL requirements remain as documented in the README. |
 
 The package README documents installation and database constraints.
+
+The merged module subsystem is documented in [modules/README](docs/modules/README.md) and [modules/PACKAGE](docs/modules/PACKAGE.md). Its original changelog is retained in [history](docs/history/corex-modules-CHANGELOG.md).

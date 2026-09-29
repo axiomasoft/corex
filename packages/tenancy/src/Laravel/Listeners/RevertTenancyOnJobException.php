@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Listeners;
+namespace CoreX\Tenancy\Laravel\Listeners;
 
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Stancl\Tenancy\Tenancy;

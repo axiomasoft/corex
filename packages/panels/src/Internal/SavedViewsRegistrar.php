@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\Internal;
 
-use CoreX\Contracts\SavedViewRepository;
-use CoreX\Contracts\ViewAccessPolicy;
-use CoreX\Contracts\ViewSchemaProvider;
-use CoreX\SavedViews\Internal\DenyViewAccessPolicy;
-use CoreX\SavedViews\Internal\SqlSavedViewRepository;
-use CoreX\SavedViews\Internal\UnavailableViewSchemaProvider;
-use CoreX\SavedViews\Internal\ViewConfigValidator;
-use CoreX\Support\CoreOptions;
+use CoreX\Config\CoreOptions;
+use CoreX\Panels\SavedViews\Contracts\SavedViewRepository;
+use CoreX\Panels\SavedViews\Contracts\ViewAccessPolicy;
+use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
+use CoreX\Panels\SavedViews\Internal\DenyViewAccessPolicy;
+use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
+use CoreX\Panels\SavedViews\Internal\UnavailableViewSchemaProvider;
+use CoreX\Panels\SavedViews\Internal\ViewConfigValidator;
 use Illuminate\Contracts\Foundation\Application;
 
 /** @internal Saved-view bindings composed by the owning panel provider. */

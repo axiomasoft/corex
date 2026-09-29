@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Data\CostInput;
-use CoreX\Api\Internal\Cost\DeclaredCostEstimator;
-use CoreX\Api\Operation;
-use CoreX\Api\Tests\Support\CostOperationHandler;
-use CoreX\Api\Tests\TestCase;
 use CoreX\Modules\Extend\Api;
+use CoreX\Operations\Cost\Data\CostInput;
+use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Tests\Support\CostOperationHandler;
+use CoreX\Operations\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;

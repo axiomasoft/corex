@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Bootstrappers\WorkspaceContextBootstrapper;
-use CoreX\Tenancy\Database\TemplateClonePostgreSQLManager;
-use CoreX\Tenancy\Jobs\CreateDatabaseFromTemplate;
-use CoreX\Tenancy\Models\Account;
-use Stancl\Tenancy\Bootstrappers;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
+use CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager;
+use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
+use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
+use Stancl\Tenancy\Bootstrappers\DatabaseSessionBootstrapper;
+use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
+use Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper;
+use Stancl\Tenancy\Bootstrappers\Integrations\ScoutPrefixBootstrapper;
+use Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper;
 use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 
 return [
@@ -86,15 +91,15 @@ return [
     | Implementation Rule (P2.5), not incidental.
     */
     'bootstrapper_order' => [
-        Bootstrappers\DatabaseTenancyBootstrapper::class,
+        DatabaseTenancyBootstrapper::class,
         // P2.6 — narrows the workspace within the already-switched account
         // connection; must run after the account-level Database bootstrapper.
         WorkspaceContextBootstrapper::class,
-        Bootstrappers\CacheTenancyBootstrapper::class,
-        Bootstrappers\DatabaseSessionBootstrapper::class,
-        Bootstrappers\QueueTenancyBootstrapper::class,
-        Bootstrappers\FilesystemTenancyBootstrapper::class,
-        Bootstrappers\Integrations\ScoutPrefixBootstrapper::class,
+        CacheTenancyBootstrapper::class,
+        DatabaseSessionBootstrapper::class,
+        QueueTenancyBootstrapper::class,
+        FilesystemTenancyBootstrapper::class,
+        ScoutPrefixBootstrapper::class,
     ],
 
     /*

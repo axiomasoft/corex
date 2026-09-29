@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\Contracts\AccessChecker;
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Contracts\ScopeResolver;
-use CoreX\Auth\RecordContext;
-use CoreX\Auth\Support\AuthOptions;
+use CoreX\Access\Contracts\AccessChecker;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Contracts\ScopeResolver;
+use CoreX\Access\RecordContext;
+use CoreX\Access\Support\AuthOptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;

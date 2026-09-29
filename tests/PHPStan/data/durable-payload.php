@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tests\PHPStan\Data\DurablePayload;
 
 use Closure;
-use CoreX\Contracts\DurablePayload;
+use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Tenancy\Contracts\TenantContext;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;

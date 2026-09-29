@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Bootstrappers;
+namespace CoreX\Tenancy\Laravel\Bootstrappers;
 
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Workspace;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Tenancy\Workspace\Models\Workspace;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobProcessing;

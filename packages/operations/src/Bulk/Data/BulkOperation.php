@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Bulk\Data;
 
-use CoreX\Api\Enums\BulkOperationStatus;
+use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use DateTimeImmutable;
 use InvalidArgumentException;
 

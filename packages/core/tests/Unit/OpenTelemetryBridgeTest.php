@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\OperationObserver;
-use CoreX\Enums\ActorType;
+use CoreX\Audit\Enums\ActorType;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Messaging\Internal\NullTraceContextBridge;
+use CoreX\Observability\Contracts\OperationObserver;
 use CoreX\Observability\MetricAttributes;
 use CoreX\Observability\NullOperationObserver;
 use CoreX\Observability\OpenTelemetryBridge;

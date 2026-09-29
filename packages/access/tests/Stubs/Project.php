@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests\Stubs;
+namespace CoreX\Access\Tests\Stubs;
 
-use CoreX\Models\BaseModel;
+use CoreX\Database\BaseModel;
 
 /**
  * Stub used as an authorization context entity.

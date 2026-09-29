@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Internal\Planning;
+namespace CoreX\Tasks\Planning\Internal;
 
-use CoreX\Tasks\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use Illuminate\Support\ServiceProvider;
 
 /** @internal Composition for the tasks-owned operation ledger. */

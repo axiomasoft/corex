@@ -1,19 +1,18 @@
 {
-    "name": "corex/intl",
+    "name": "axiomasoft/corex-intl",
     "description": "Typed locale, money/rate snapshots, and offline geography reference utilities for CoreX.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "brick/math": "^0.14|^0.15",
-        "brick/money": "^0.9 || ^0.10",
-        "corex/core": "^1.0@dev",
-        "corex/modules": "^1.0@dev",
         "ext-intl": "*",
         "ext-mbstring": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "brick/math": "^0.14|^0.15",
+        "brick/money": "^0.9 || ^0.10",
         "illuminate/contracts": "^12.0|^13.0",
         "illuminate/database": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "php": "^8.4"
+        "illuminate/support": "^12.0|^13.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
@@ -24,37 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CoreX\\Intl\\": "src/",
-            "CoreX\\Intl\\Contracts\\": [
-                "src/Locale/Contracts/",
-                "src/Translation/Contracts/",
-                "src/Currency/Contracts/",
-                "src/Formatting/Contracts/",
-                "src/Territory/Contracts/"
-            ],
-            "CoreX\\Intl\\Data\\": [
-                "src/Locale/Data/",
-                "src/Translation/Data/",
-                "src/Currency/Data/",
-                "src/Formatting/Data/",
-                "src/Territory/Data/"
-            ],
-            "CoreX\\Intl\\Exceptions\\": [
-                "src/Locale/Exceptions/",
-                "src/Currency/Exceptions/",
-                "src/Formatting/Exceptions/",
-                "src/Territory/Exceptions/"
-            ],
-            "CoreX\\Intl\\Internal\\Locale\\": [
-                "src/Locale/Internal/",
-                "src/Translation/Internal/"
-            ],
-            "CoreX\\Intl\\Internal\\Money\\": [
-                "src/Currency/Internal/",
-                "src/Formatting/Internal/"
-            ],
-            "CoreX\\Intl\\Internal\\Address\\": "src/Territory/Internal/Address/",
-            "CoreX\\Intl\\Internal\\Reference\\": "src/Territory/Internal/Reference/"
+            "CoreX\\Intl\\": "src/"
         }
     },
     "autoload-dev": {
@@ -69,9 +38,20 @@
             "package-type": "capability",
             "stability": "stable",
             "public-api": [
-                "CoreX\\Intl\\Contracts",
-                "CoreX\\Intl\\Data",
-                "CoreX\\Intl\\Exceptions"
+                "CoreX\\Intl\\Currency\\Contracts",
+                "CoreX\\Intl\\Currency\\Data",
+                "CoreX\\Intl\\Currency\\Exceptions",
+                "CoreX\\Intl\\Formatting\\Contracts",
+                "CoreX\\Intl\\Formatting\\Data",
+                "CoreX\\Intl\\Formatting\\Exceptions",
+                "CoreX\\Intl\\Locale\\Contracts",
+                "CoreX\\Intl\\Locale\\Data",
+                "CoreX\\Intl\\Locale\\Exceptions",
+                "CoreX\\Intl\\Territory\\Contracts",
+                "CoreX\\Intl\\Territory\\Data",
+                "CoreX\\Intl\\Territory\\Exceptions",
+                "CoreX\\Intl\\Translation\\Contracts",
+                "CoreX\\Intl\\Translation\\Data"
             ]
         },
         "laravel": {
@@ -87,10 +67,6 @@
         {
             "type": "path",
             "url": "../core"
-        },
-        {
-            "type": "path",
-            "url": "../modules"
         }
     ],
     "minimum-stability": "stable",

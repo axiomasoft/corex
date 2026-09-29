@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Data;
+namespace CoreX\Tasks\Task\Data;
 
-use CoreX\Tasks\Enums\TaskPriority;
+use CoreX\Tasks\Task\Enums\TaskPriority;
 use DateTimeImmutable;
 
 final readonly class TaskDraft

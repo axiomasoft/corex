@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Internal\Query\PolicySearchHydrator;
 use CoreX\Search\Support\Candidate;
 use CoreX\Search\Support\CandidatePage;
 use CoreX\Search\Support\CurrentSearchRecord;
 use CoreX\Search\Support\SearchSnapshot;
-use CoreX\Support\Data\CallableDataScopeAuthorizer;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 
 it('drops deleted, stale and policy-denied candidates before returning schema-approved fields', function (): void {
     $schema = new SearchSnapshot(

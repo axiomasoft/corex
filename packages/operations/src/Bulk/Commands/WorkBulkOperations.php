@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Commands;
+namespace CoreX\Operations\Bulk\Commands;
 
-use CoreX\Api\Internal\Bulk\BulkWorker;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Internal\BulkWorker;
 use Illuminate\Console\Command;
 
 /** @internal Runs one leased bulk step in the already restored tenant. */

@@ -72,7 +72,7 @@ check_added_pattern 'continue-on-error' 'continue-on-error' '.github/workflows/*
 # Initial introduction is permitted once; later additions are rejected even when
 # the remote comparison base predates creation. Include uncommitted changes.
 python3 - "$BASE_REF" <<'PYRATCHET' || log_fail "quality ceilings or ownership baseline grew"
-import json, pathlib, subprocess, sys
+import json, pathlib, subprocess, sys, re
 base = sys.argv[1]
 paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership'}
 def read(ref, path):
@@ -91,11 +91,30 @@ def check(old, new, kind):
         return old is None
     if old is None:
         return True
+    succ_path = pathlib.Path('scripts/ratchet-successors.json')
+    succ = json.loads(succ_path.read_text()) if succ_path.exists() else {'groups': [], 'packages': {}}
     if kind == 'ownership':
-        return not (set(new['violations']) - set(old['violations']))
+        def project(value):
+            for name in sorted(succ['packages'], key=len, reverse=True):
+                value = re.sub(r'(?<![\w/-])' + re.escape(name) + r'(?![\w/-])', succ['packages'][name], value)
+            return value
+        return not (set(new['violations']) - {project(v) for v in old['violations']})
     for category in ['phpstan', 'dependencies']:
-        before, after = old[category], new[category]
-        if any(value > before.get(package, 0) for package, value in after.items()):
+        before, after = dict(old[category]), new[category]
+        projection = succ.get('source_transfers', {})
+        if all(k in before for k in projection.get('when_before_contains', ['__absent__'])):
+            for transfer in projection['entries']:
+                amount = transfer.get(category, 0)
+                before[transfer['from']] -= amount
+                before[transfer['to']] = before.get(transfer['to'], 0) + amount
+        grouped = set()
+        for group in succ['groups']:
+            if not all(k in before for k in group['before']) or any(k in before for k in group['after'] if k not in group['before']):
+                continue
+            if sum(after.get(k, 0) for k in group['after']) > sum(before.get(k, 0) for k in group['before']):
+                return False
+            grouped.update(group['after'])
+        if any(value > before.get(package, 0) for package, value in after.items() if package not in grouped):
             return False
         if sum(after.values()) > sum(before.values()):
             return False
@@ -180,7 +199,7 @@ count_tests() {
     local test_dirs=()
     [ -d "$worktree/tests" ] && test_dirs+=("$worktree/tests")
     local pkg_tests
-    for pkg_tests in "$worktree"/packages/*/tests; do
+    for pkg_tests in "$worktree"/packages/*/tests "$worktree"/products/*/tests; do
         [ -d "$pkg_tests" ] && test_dirs+=("$pkg_tests")
     done
 

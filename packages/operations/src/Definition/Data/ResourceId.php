@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Definition\Data;
 
-use CoreX\Enums\IdStrategy;
+use CoreX\Database\Enums\IdStrategy;
 use InvalidArgumentException;
 use Stringable;
 

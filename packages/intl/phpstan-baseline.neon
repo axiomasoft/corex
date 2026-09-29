@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Method CoreX\Intl\Data\RateBatch::__construct() has parameter $sourceManifest with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Currency\Data\RateBatch::__construct() has parameter $sourceManifest with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Currency/Data/RateBatch.php
@@ -73,25 +73,25 @@ parameters:
 			path: src/IntlServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $config of method CoreX\Intl\Internal\Locale\LocalePolicyBuilder::build() expects array<string, mixed>, array given.'
+			rawMessage: 'Parameter $config of method CoreX\Intl\Locale\Internal\LocalePolicyBuilder::build() expects array<string, mixed>, array given.'
 			identifier: argument.type
 			count: 1
 			path: src/IntlServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Internal\Money\SqlRateImporter constructor expects Illuminate\Database\Connection, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateImporter constructor expects Illuminate\Database\Connection, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/IntlServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Internal\Money\SqlRateProvider constructor expects Illuminate\Database\Connection, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateProvider constructor expects Illuminate\Database\Connection, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/IntlServiceProvider.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\LocalePolicy::__construct() has parameter $explicitFallbackTags with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Locale\Data\LocalePolicy::__construct() has parameter $explicitFallbackTags with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Locale/Data/LocalePolicy.php
@@ -109,13 +109,13 @@ parameters:
 			path: src/Locale/Internal/Bcp47Validator.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Internal\Locale\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{mixed, non-empty-list, true}.'
+			rawMessage: 'Method CoreX\Intl\Locale\Internal\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{mixed, non-empty-list, true}.'
 			identifier: return.type
 			count: 1
 			path: src/Locale/Internal/DefaultLocaleResolver.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Internal\Locale\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{string, non-empty-list, true}.'
+			rawMessage: 'Method CoreX\Intl\Locale\Internal\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{string, non-empty-list, true}.'
 			identifier: return.type
 			count: 1
 			path: src/Locale/Internal/DefaultLocaleResolver.php
@@ -127,19 +127,19 @@ parameters:
 			path: src/Locale/Internal/DefaultLocaleResolver.php
 
 		-
-			rawMessage: 'Parameter $fallbackChain of class CoreX\Intl\Data\LocaleResolution constructor expects list<string>, list given.'
+			rawMessage: 'Parameter $fallbackChain of class CoreX\Intl\Locale\Data\LocaleResolution constructor expects list<string>, list given.'
 			identifier: argument.type
 			count: 1
 			path: src/Locale/Internal/DefaultLocaleResolver.php
 
 		-
-			rawMessage: 'Parameter $tag of method CoreX\Intl\Internal\Locale\Bcp47Validator::canonicalize() expects string, mixed given.'
+			rawMessage: 'Parameter $tag of method CoreX\Intl\Locale\Internal\Bcp47Validator::canonicalize() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Locale/Internal/DefaultLocaleResolver.php
 
 		-
-			rawMessage: 'Parameter $tag of method CoreX\Intl\Internal\Locale\Bcp47Validator::isSupported() expects string, mixed given.'
+			rawMessage: 'Parameter $tag of method CoreX\Intl\Locale\Internal\Bcp47Validator::isSupported() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Locale/Internal/DefaultLocaleResolver.php
@@ -169,25 +169,37 @@ parameters:
 			path: src/Locale/Internal/LocalePolicyBuilder.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\DatasetManifest::__construct() has parameter $counts with no value type specified in iterable type array.'
+			rawMessage: Cannot cast mixed to int.
+			identifier: cast.int
+			count: 1
+			path: src/Money/MoneyCast.php
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 1
+			path: src/Money/MoneyCast.php
+
+		-
+			rawMessage: 'Method CoreX\Intl\Territory\Data\DatasetManifest::__construct() has parameter $counts with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/DatasetManifest.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\DatasetManifest::__construct() has parameter $types with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Territory\Data\DatasetManifest::__construct() has parameter $types with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/DatasetManifest.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\ReferencePage::__construct() has parameter $provenance with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Territory\Data\ReferencePage::__construct() has parameter $provenance with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/ReferencePage.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\ReferencePage::__construct() has parameter $records with no value type specified in iterable type list<mixed>.'
+			rawMessage: 'Method CoreX\Intl\Territory\Data\ReferencePage::__construct() has parameter $records with no value type specified in iterable type list<mixed>.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/ReferencePage.php
@@ -199,19 +211,19 @@ parameters:
 			path: src/Territory/Data/ReferencePage.php
 
 		-
-			rawMessage: PHPDoc type for property CoreX\Intl\Data\ReferencePage::$records contains unresolvable type.
+			rawMessage: PHPDoc type for property CoreX\Intl\Territory\Data\ReferencePage::$records contains unresolvable type.
 			identifier: property.unresolvableType
 			count: 1
 			path: src/Territory/Data/ReferencePage.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\SuggestionResult::__construct() has parameter $provenance with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Territory\Data\SuggestionResult::__construct() has parameter $provenance with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/SuggestionResult.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Data\SuggestionResult::__construct() has parameter $suggestions with no value type specified in iterable type list<mixed>.'
+			rawMessage: 'Method CoreX\Intl\Territory\Data\SuggestionResult::__construct() has parameter $suggestions with no value type specified in iterable type list<mixed>.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Data/SuggestionResult.php
@@ -223,7 +235,7 @@ parameters:
 			path: src/Territory/Data/SuggestionResult.php
 
 		-
-			rawMessage: PHPDoc type for property CoreX\Intl\Data\SuggestionResult::$suggestions contains unresolvable type.
+			rawMessage: PHPDoc type for property CoreX\Intl\Territory\Data\SuggestionResult::$suggestions contains unresolvable type.
 			identifier: property.unresolvableType
 			count: 1
 			path: src/Territory/Data/SuggestionResult.php
@@ -241,25 +253,25 @@ parameters:
 			path: src/Territory/Internal/Address/FixtureAddressSuggestProvider.php
 
 		-
-			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Data\SuggestionResult|null given.'
+			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Territory\Data\SuggestionResult|null given.'
 			identifier: if.condNotBoolean
 			count: 2
 			path: src/Territory/Internal/Address/FixtureAddressSuggestProvider.php
 
 		-
-			rawMessage: 'Property CoreX\Intl\Internal\Address\FixtureAddressSuggestProvider::$entries (list<array<string, mixed>>) does not accept array<mixed, mixed>.'
+			rawMessage: 'Property CoreX\Intl\Territory\Internal\Address\FixtureAddressSuggestProvider::$entries (list<array<string, mixed>>) does not accept array<mixed, mixed>.'
 			identifier: assign.propertyType
 			count: 1
 			path: src/Territory/Internal/Address/FixtureAddressSuggestProvider.php
 
 		-
-			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Data\SuggestionResult|null given.'
+			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Territory\Data\SuggestionResult|null given.'
 			identifier: if.condNotBoolean
 			count: 2
 			path: src/Territory/Internal/Address/MapAddressSuggestProvider.php
 
 		-
-			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Data\SuggestionResult|null given.'
+			rawMessage: 'Only booleans are allowed in an if condition, CoreX\Intl\Territory\Data\SuggestionResult|null given.'
 			identifier: if.condNotBoolean
 			count: 2
 			path: src/Territory/Internal/Address/UnsupportedAddressSuggestProvider.php
@@ -283,7 +295,7 @@ parameters:
 			path: src/Territory/Internal/Reference/FixtureReferenceNormalizer.php
 
 		-
-			rawMessage: 'Parameter $record of method CoreX\Intl\Internal\Reference\FixtureReferenceNormalizer::normalizeRecord() expects array<string, mixed>, array<mixed, mixed> given.'
+			rawMessage: 'Parameter $record of method CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer::normalizeRecord() expects array<string, mixed>, array<mixed, mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/FixtureReferenceNormalizer.php
@@ -295,13 +307,13 @@ parameters:
 			path: src/Territory/Internal/Reference/ReferenceCursorCodec.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Internal\Reference\ReferenceCursorCodec::encode() has parameter $position with no value type specified in iterable type array.'
+			rawMessage: 'Method CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec::encode() has parameter $position with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Territory/Internal/Reference/ReferenceCursorCodec.php
 
 		-
-			rawMessage: 'Parameter $position of method CoreX\Intl\Internal\Reference\ReferenceCursorCodec::proof() expects array<string, string>, array given.'
+			rawMessage: 'Parameter $position of method CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec::proof() expects array<string, string>, array given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/ReferenceCursorCodec.php
@@ -361,31 +373,31 @@ parameters:
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-
-			rawMessage: 'Parameter $coveredCountries of class CoreX\Intl\Data\DatasetManifest constructor expects list<string>, array<mixed, mixed> given.'
+			rawMessage: 'Parameter $coveredCountries of class CoreX\Intl\Territory\Data\DatasetManifest constructor expects list<string>, array<mixed, mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-
-			rawMessage: 'Parameter $records of class CoreX\Intl\Data\ReferencePage constructor expects list<mixed>, array<int, array<string, mixed>> given.'
+			rawMessage: 'Parameter $records of class CoreX\Intl\Territory\Data\ReferencePage constructor expects list<mixed>, array<int, array<string, mixed>> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-
-			rawMessage: 'Parameter $snapshotId of class CoreX\Intl\Data\ReferencePage constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $snapshotId of class CoreX\Intl\Territory\Data\ReferencePage constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-
-			rawMessage: 'Parameter $snapshotId of method CoreX\Intl\Internal\Reference\ReferenceCursorCodec::decode() expects string, mixed given.'
+			rawMessage: 'Parameter $snapshotId of method CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec::decode() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-
-			rawMessage: 'Parameter $snapshotId of method CoreX\Intl\Internal\Reference\ReferenceCursorCodec::encode() expects string, mixed given.'
+			rawMessage: 'Parameter $snapshotId of method CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec::encode() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php

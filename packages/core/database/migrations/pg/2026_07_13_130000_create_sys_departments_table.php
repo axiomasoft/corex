@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Support\Config;
-use CoreX\Support\Schema\IdColumns;
+use CoreX\Config\Config;
+use CoreX\Database\Schema\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Schema;
 // `corex-migrations`/`corex-migrations-tenant` (D33/D43), not auto-loaded on
 // the sqlite default lane. id/workspace_id/parent_id/head_user_id follow
 // config('corex.ids.strategy') via IdColumns (D3/A58); workspace_id/head_user_id
-// are loose references — the FKs land with corex/tenancy and corex/access (P2,
+// are loose references — the FKs land with axiomasoft/corex-tenancy and axiomasoft/corex-access (P2,
 // DB_SCHEMA C4). timestampTz precision is explicit µs (D32/A66). See
 // DB_SCHEMA.md §3.2 sys_departments; B-10 §2 for the DDL this mirrors.
 return new class extends Migration

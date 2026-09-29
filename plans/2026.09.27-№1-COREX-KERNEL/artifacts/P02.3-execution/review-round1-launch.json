@@ -1,0 +1,10 @@
+{
+  "provider": "cursor",
+  "model": "grok-4.7",
+  "effort": "high",
+  "round": 1,
+  "workspace": "/home/vostrikov/projects/packages/corex-p023-final",
+  "started": 1790662334.9983382,
+  "mode": "ask",
+  "force_read_commands": true
+}

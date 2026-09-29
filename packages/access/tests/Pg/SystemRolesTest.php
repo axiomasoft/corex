@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Auth\Database\Seeders\SystemRolesSeeder;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Models\Role;
-use CoreX\Auth\Models\RoleMatrixRow;
-use CoreX\Auth\Roles\RoleCloner;
+use CoreX\Access\Database\Seeders\SystemRolesSeeder;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Models\Role;
+use CoreX\Access\Models\RoleMatrixRow;
+use CoreX\Access\Roles\RoleCloner;
 use Illuminate\Auth\Access\AuthorizationException;
 
 uses()->group('pg');

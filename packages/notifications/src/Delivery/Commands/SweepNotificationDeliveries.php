@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Commands;
+namespace CoreX\Notifications\Delivery\Commands;
 
-use CoreX\Notifications\Internal\DeliveryStore;
-use CoreX\Notifications\Jobs\DeliverNotification;
+use CoreX\Notifications\Delivery\Internal\DeliveryStore;
+use CoreX\Notifications\Delivery\Jobs\DeliverNotification;
 use Illuminate\Console\Command;
 
 final class SweepNotificationDeliveries extends Command

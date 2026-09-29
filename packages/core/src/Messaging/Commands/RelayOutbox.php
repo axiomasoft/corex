@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Commands;
 
-use CoreX\Exceptions\OutboxLeaseLost;
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\OutboxRelay;
-use CoreX\Support\Config;
+use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Throwable;

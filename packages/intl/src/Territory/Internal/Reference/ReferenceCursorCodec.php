@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Reference;
+namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Intl\Data\GeographyQuery;
-use CoreX\Intl\Data\ReferenceCursor;
+use CoreX\Intl\Territory\Data\GeographyQuery;
+use CoreX\Intl\Territory\Data\ReferenceCursor;
 use InvalidArgumentException;
 use JsonException;
 use RuntimeException;

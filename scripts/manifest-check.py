@@ -40,7 +40,7 @@ def pinned(constraint: str | None, version: str) -> bool:
 
 def main() -> int:
     packages = {}
-    for manifest in sorted(ROOT.glob('packages/*/composer.json')):
+    for manifest in sorted([*ROOT.glob('packages/*/composer.json'), *ROOT.glob('products/*/composer.json')]):
         data = load(manifest)
         packages[data['name']] = (manifest.parent.name, data)
     mono = set(packages)
@@ -71,8 +71,8 @@ def main() -> int:
             violations.append(f'{label}: {code}: {detail}')
 
         requires = {**data.get('require', {}), **data.get('require-dev', {})}
-        if is_root and 'corex/access' not in requires:
-            bad('golden-closure', 'root must install corex/access and its upstreams for the all-package golden surface')
+        if is_root and 'axiomasoft/corex-access' not in requires:
+            bad('golden-closure', 'root must install axiomasoft/corex-access and its upstreams for the all-package golden surface')
         if data.get('require', {}).get('php') != PHP:
             bad('php', f"require.php={data.get('require', {}).get('php')!r}, expected {PHP!r}")
         if data.get('minimum-stability') != 'stable':
@@ -112,7 +112,7 @@ def main() -> int:
         # tenancy/access must pin their pre-release upstreams itself.
         installs = closure(data) | ({data['name']} if data.get('name') in mono else set())
         needed = {}
-        if 'corex/tenancy' in installs:
+        if 'axiomasoft/corex-tenancy' in installs:
             needed.update({k: ALLOWED_PRERELEASE[k] for k in ('axiomasoft/stancl-tenancy', 'axiomasoft/stancl-jobpipeline')})
         for name, constraint in sorted(needed.items()):
             if not pinned(requires.get(name), constraint):

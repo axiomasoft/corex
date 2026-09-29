@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
-use CoreX\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Data\MessageContract;
+use CoreX\Messaging\Exceptions\UnknownMessageContract;
 
 /**
  * Реестр объявленных контрактов сообщений (MSG-002).

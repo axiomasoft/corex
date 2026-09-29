@@ -20,13 +20,13 @@ test('naming gate reports no violations on clean tree', function (): void {
 
 test('naming gate reports N1 for ProbeHelper in core Contracts', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Contracts/ProbeHelper.php';
+    $probePath = $repoRoot.'/packages/core/src/Settings/Contracts/ProbeHelper.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Contracts;
+namespace CoreX\Settings\Contracts;
 
 final class ProbeHelper
 {
@@ -67,13 +67,13 @@ test('config composition gate is blocking on a clean tree', function (): void {
 
 test('config composition gate names the probe file and exits 1', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/ConfigCompositionProbe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/ConfigCompositionProbe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Support;
+namespace CoreX\Config;
 
 final class ConfigCompositionProbe
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Authentication\Oidc;
 
-use CoreX\Tenancy\Exceptions\OidcAuthenticationException;
+use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use Firebase\JWT\JWT;
 use Throwable;
 

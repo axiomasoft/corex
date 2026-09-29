@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Laravel;
+namespace CoreX\Operations\Laravel;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;

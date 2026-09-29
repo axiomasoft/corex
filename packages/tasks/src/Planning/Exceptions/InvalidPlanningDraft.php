@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tasks\Exceptions;
+namespace CoreX\Tasks\Planning\Exceptions;
 
 use DomainException;
 

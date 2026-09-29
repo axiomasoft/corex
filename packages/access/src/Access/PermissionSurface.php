@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Exceptions\ScopeCapabilityMismatch;
-use CoreX\Auth\Matrix\ActiveEntityFilter;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
+use CoreX\Access\Matrix\ActiveEntityFilter;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Extend\Permissions;
 

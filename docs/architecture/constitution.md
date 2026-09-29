@@ -68,11 +68,11 @@
 **Исключения.** —
 **Почему.** Уровень 0 обязан быть полезен проекту без CRM/CMS/Store
 
-### PKG-003 — `corex/core` не зависит ни от одного пакета монорепо
-**Правило.** `corex/core` не зависит ни от одного пакета монорепо
+### PKG-003 — `axiomasoft/corex` не зависит ни от одного пакета монорепо
+**Правило.** `axiomasoft/corex` не зависит ни от одного пакета монорепо
 **Владелец.** ../dev-doctrine.md §1
-**Enforcement.** `composer test:arch` → «corex/core declares no monorepo package dependencies»,
-  «corex/core source imports no sibling package namespace»
+**Enforcement.** `composer test:arch` → «axiomasoft/corex declares no monorepo package dependencies»,
+  «axiomasoft/corex source imports no sibling package namespace»
 **Исключения.** —
 **Почему.** Ядро — низ пирамиды; зависимость вверх делает его непереиспользуемым
 
@@ -116,8 +116,8 @@
   **20 живых пакетов** (все, кроме тумбстоуна). Утверждение «контур неполон» в статью не
   переносится: оно опровергнуто.
 
-### PKG-009 — Каталог `packages/import-export` — тумбстоун ренейма: он не входит ни в один контур…
-**Правило.** Каталог `packages/import-export` — тумбстоун ренейма: он не входит ни в один контур
+### PKG-009 — Каталог `packages/transfer` — тумбстоун ренейма: он не входит ни в один контур…
+**Правило.** Каталог `packages/transfer` — тумбстоун ренейма: он не входит ни в один контур
   (тесты, статанализ, CI, split) и не получает кода
 **Владелец.** Этот документ.
 **Enforcement.** нет — свойство проверяется отсутствием пути в `composer.json` и `phpstan.neon`
@@ -393,7 +393,7 @@
 **Enforcement.** ревью
 **Исключения.** exceptions/CFG-006/corex-intl-search-key.md
 **Почему.** Исключение `corex-intl-search` — `exceptions/CFG-006/corex-intl-search-key.md` (BC
-  после ренейма в `corex/search-intl`).
+  после ренейма в `axiomasoft/corex-search-intl`).
 
 ## Группа MSG — сообщения
 
@@ -465,7 +465,7 @@
 **Правило.** Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся только
   через RFC/ADR
 **Владелец.** ../dev-doctrine.md §4 (ADR-011, ADR-014)
-**Enforcement.** `packages/modules/src/Extend/Extender.php` (докблок закрытого набора) + ревью
+**Enforcement.** `packages/core/src/Modules/Extend/Extender.php` (докблок закрытого набора) + ревью
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -542,7 +542,7 @@
 | NON-001 | Перенос каталогов и переименование символов раньше, чем зафиксирована семантика | D1 |
 | NON-002 | Физические каталоги `packages/capabilities/`, `packages/integrations/`, `packages/kernel/` | новое решение при радикальном росте числа пакетов (A24) |
 | NON-003 | Выделение `Money`, `Features`, `Departments`, `Settings`, `Audit`, `PubSub`, `Storage`, `Views` в отдельные Composer-пакеты | D8: отдельный release lifecycle либо внешний потребитель без остального ядра |
-| NON-004 | Переименование `Extend`→`Extension(s)` и `Gate`→`Activation` в `corex/modules` | A45: имя закреплено ADR-011/ADR-014 и доктриной |
+| NON-004 | Переименование `Extend`→`Extension(s)` и `Gate`→`Activation` в `axiomasoft/corex` | A45: имя закреплено ADR-011/ADR-014 и доктриной |
 | NON-005 | Date-based версии внешнего API (`YYYY-MM`) как основной механизм совместимости | D2 |
 | NON-006 | Квартальный cadence выпуска версий внешнего API | следствие D2 |
 | NON-007 | GraphQL как канонический транспорт, схема GraphQL, адаптер и его зависимость | D7 |

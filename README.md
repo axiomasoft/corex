@@ -8,9 +8,9 @@ FlexStore) без переписывания фундамента. Моноре�
 
 | Пакет | Назначение | Статус |
 |---|---|---|
-| `corex/core` | Ядро: Contracts, BaseModel (ULID), EntityRegistry, мульти-тенантность, Settings, Audit, Money, Module Loader | в разработке (0.x) |
+| `axiomasoft/corex` | Ядро: Contracts, BaseModel (ULID), EntityRegistry, мульти-тенантность, Settings, Audit, Money, Module Loader | в разработке (0.x) |
 
-Остальные модули (`corex/access`, `corex/crm`, `corex/tasks`, …) добавляются по принципу product-first.
+Остальные модули (`axiomasoft/corex-access`, `corex/crm`, `axiomasoft/corex-tasks`, …) добавляются по принципу product-first.
 
 ## Стек
 
@@ -18,7 +18,7 @@ FlexStore) без переписывания фундамента. Моноре�
 - ULID-идентификаторы ([[ADR-003 ULID]]); морфы — через `EntityRegistry`.
 - Деньги — `brick/money`, minor units ([[ADR-005 Money]]).
 - Мульти-тенантность — опциональная, row-level, включается биндингом `TenantService` ([[ADR-004 Multi-Tenancy]]).
-- Auth — поверх AzGuard ([[ADR-009 Auth via AzGuard]]), в пакете `corex/access`.
+- Auth — поверх AzGuard ([[ADR-009 Auth via AzGuard]]), в пакете `axiomasoft/corex-access`.
 - Контракты под строгим SemVer — не ломаются без major ([[ADR-008 Versioning]]).
 
 ## Разработка

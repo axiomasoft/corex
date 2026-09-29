@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\ApiServiceProvider;
-use CoreX\Api\Contracts\OperationAuthorizer;
-use CoreX\Api\Contracts\OperationHandler;
-use CoreX\Api\Contracts\PrincipalResolver;
-use CoreX\Api\Contracts\RequestContext;
-use CoreX\Api\Internal\ApiProfileFactory;
-use CoreX\Api\Operation;
-use CoreX\Api\Support\ApiOptions;
-use CoreX\Api\Tests\Support\ContextFixture;
-use CoreX\Api\Tests\Support\IdentityFixture;
-use CoreX\Api\Tests\Support\ModuleFixture;
-use CoreX\Api\Tests\TestCase;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Testing\IdentityFixture;
+use CoreX\Operations\Testing\ModuleFixture;
+use CoreX\Operations\Tests\TestCase;
+use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;

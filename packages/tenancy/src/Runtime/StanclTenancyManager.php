@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy;
+namespace CoreX\Tenancy\Runtime;
 
 use Closure;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Account;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Tenancy\Account\Models\Account;
 use RuntimeException;
 use Stancl\Tenancy\Database\Models\Tenant as StanclTenant;
 use Stancl\Tenancy\Tenancy as Stancl;

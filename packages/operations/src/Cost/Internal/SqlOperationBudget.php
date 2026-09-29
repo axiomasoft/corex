@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Cost;
+namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Api\Contracts\BudgetReservation;
-use CoreX\Api\Contracts\OperationBudget;
-use CoreX\Api\Data\ActualCost;
-use CoreX\Api\Data\BudgetScope;
-use CoreX\Api\Data\EstimatedCost;
-use CoreX\Api\Data\ThrottleStatus;
-use CoreX\Api\Internal\JsonCanonical;
-use CoreX\Support\SecretRef;
+use CoreX\Config\SecretRef;
+use CoreX\Operations\Cost\Contracts\BudgetReservation;
+use CoreX\Operations\Cost\Contracts\OperationBudget;
+use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\BudgetScope;
+use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Cost\Data\ThrottleStatus;
+use CoreX\Operations\Validation\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

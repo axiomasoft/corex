@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Formatting\Contracts;
 
 use Brick\Money\Money;
-use CoreX\Intl\Data\FormatPolicy;
-use CoreX\Intl\Data\FormattedMoney;
-use CoreX\Intl\Data\LocaleResolution;
+use CoreX\Intl\Formatting\Data\FormatPolicy;
+use CoreX\Intl\Formatting\Data\FormattedMoney;
+use CoreX\Intl\Locale\Data\LocaleResolution;
 
 interface MoneyFormatter
 {

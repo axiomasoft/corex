@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\CoreServiceProvider;
-use CoreX\Support\Time\FrozenClock;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Time\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
@@ -473,7 +473,7 @@ it('rejects unregistered handlers and invalid window contracts before scheduling
             end: new DateTimeImmutable('2026-09-15T13:00:00+03:00'),
             period: 'daily',
         ))->toThrow(InvalidArgumentException::class)
-        ->and((new WakeupModule)->manifest()->composerName)->toBe('corex/wakeup');
+        ->and((new WakeupModule)->manifest()->composerName)->toBe('axiomasoft/corex-wakeup');
 });
 
 it('computes handler backoff from the injected clock', function (): void {

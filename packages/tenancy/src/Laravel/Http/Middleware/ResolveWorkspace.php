@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Http\Middleware;
+namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Workspace\NoDefaultWorkspaceException;
 use CoreX\Tenancy\Workspace\WorkspaceResolver;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -22,7 +22,7 @@ use Illuminate\Http\Response;
  * `->middleware(['tenant', 'tenancy.workspace'])` narrows AFTER `'tenant'`
  * has already proven the session belongs to this account. Every failure is
  * fail-closed 403 (D134): a pass-through would leave {@see
- * \CoreX\Tenancy\Scopes\WorkspaceScope} unfiltered, showing every workspace
+ * \CoreX\Tenancy\Laravel\Scopes\WorkspaceScope} unfiltered, showing every workspace
  * in the account.
  *
  * @internal spec: B-11 §5.4 п.4, AC-18

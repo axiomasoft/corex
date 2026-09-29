@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Currency\Contracts;
 
-use CoreX\Intl\Data\CurrencyInfo;
+use CoreX\Intl\Currency\Data\CurrencyInfo;
 
 interface CurrencyMetadata
 {

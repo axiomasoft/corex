@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Postgres;
 
+use CoreX\Data\DataScope;
+use CoreX\Data\RecordRef;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
@@ -13,8 +15,6 @@ use CoreX\Search\Support\SearchCapabilities;
 use CoreX\Search\Support\SearchFilter;
 use CoreX\Search\Support\SearchQuery;
 use CoreX\Search\Support\SearchSnapshot;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\RecordRef;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 

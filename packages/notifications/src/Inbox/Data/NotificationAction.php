@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Data;
+namespace CoreX\Notifications\Inbox\Data;
 
 enum NotificationAction: string
 {

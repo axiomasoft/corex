@@ -9,13 +9,13 @@ declare(strict_types=1);
  * T4 cross-package FK: migration package must not reference another owner's table via
  * foreign()/constrained(), except D102 (aut_role_assignments → users/wsp_workspaces via
  * raw SQL is out of scope) and except established platform references to users /
- * wsp_workspaces from packages other than corex/core (frozen CRM/tasks parity).
+ * wsp_workspaces from packages other than axiomasoft/corex (frozen CRM/tasks parity).
  */
 const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
 const EXIT_CONFIG = 2;
 
-const CORE_PLATFORM_OWNER = 'corex/core';
+const CORE_PLATFORM_OWNER = 'axiomasoft/corex';
 
 /** @var list<string> */
 const PLATFORM_REFERENCE_TABLES = ['users', 'wsp_workspaces'];
@@ -120,7 +120,7 @@ function loadPackageComposerNames(string $repoRoot): array
 function loadConfigTableDefaults(string $repoRoot): array
 {
     $defaults = [];
-    $configPath = $repoRoot.'/packages/core/src/Support/Config.php';
+    $configPath = $repoRoot.'/packages/core/src/Config/Config.php';
 
     if (! is_file($configPath)) {
         return $defaults;

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 use CoreX\Audit\NullAuditRetention;
 use CoreX\Audit\QueuedAuditLogger;
+use CoreX\Context\NullImpersonationService;
+use CoreX\Context\NullTenancyManager;
+use CoreX\Context\SingleAccountResolver;
+use CoreX\Data\DenyDataScopeAuthorizer;
+use CoreX\Database\Enums\IdStrategy;
 use CoreX\Departments\DatabaseDepartmentRepository;
-use CoreX\Enums\IdStrategy;
-use CoreX\Enums\PubSubDriver;
 use CoreX\Features\DatabaseFeatureFlags;
+use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Settings\DatabaseSettingsRepository;
 use CoreX\Settings\NullSettingDefaultsProvider;
-use CoreX\Support\Data\DenyDataScopeAuthorizer;
-use CoreX\Tenancy\NullImpersonationService;
-use CoreX\Tenancy\NullTenancyManager;
-use CoreX\Tenancy\SingleAccountResolver;
 
 return [
 
@@ -55,16 +55,16 @@ return [
     |--------------------------------------------------------------------------
     | TenantContextResolver binding. Boxed installs default to
     | SingleAccountResolver (constant context, no real tenancy). Real
-    | resolvers (host/root, corex/tenancy) land in P2.
+    | resolvers (host/root, axiomasoft/corex-tenancy) land in P2.
     |
     | `manager` (P2.5): TenancyManager binding — single switch point for
     | connection/cache/queue/fs. Boxed default is a null-manager (no-op,
-    | constant context via `resolver` above); corex/tenancy rebinds this to
+    | constant context via `resolver` above); axiomasoft/corex-tenancy rebinds this to
     | StanclTenancyManager when the package is present (D10 — container
     | binding, never an `if(cloud)` branch).
     |
     | `impersonation` (P2.11, D139): ImpersonationService binding — boxed
-    | default has no grants at all (B-11 §6.1); corex/tenancy rebinds this to
+    | default has no grants at all (B-11 §6.1); axiomasoft/corex-tenancy rebinds this to
     | DatabaseImpersonationService under `tenancy.oidc.impersonation.enabled`.
     */
     'tenant_context' => [

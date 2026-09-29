@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Cost;
+namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Api\Internal\JsonCanonical;
+use CoreX\Operations\Validation\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

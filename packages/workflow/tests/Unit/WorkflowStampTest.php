@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
 use CoreX\Workflow\Data\TriggerRequest;
 use CoreX\Workflow\Internal\WorkflowDefinitionStamp;
 
@@ -12,7 +12,7 @@ function stampRequest(string $definitionRef = 'definition:1', string $versionRef
 {
     return new TriggerRequest(
         context: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'workflow-test', 'active', [], [])),
-        module: 'corex/workflow',
+        module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
         eventName: 'created',
@@ -36,7 +36,7 @@ it('derives the trigger identity and keeps the fingerprint out of the replay has
     ));
 
     expect($stamp->point)->toBe('workflow.trigger')
-        ->and($stamp->id)->toBe('corex/workflow:test.ticket:created')
+        ->and($stamp->id)->toBe('axiomasoft/corex-workflow:test.ticket:created')
         ->and($stamp->version)->toBe('version:1')
         ->and($stored['registryFingerprint'])->toBe('fingerprint-a')
         ->and(WorkflowDefinitionStamp::payloadHash('trigger', 'workflow:stamp:1', WorkflowDefinitionStamp::canonicalPayload($stored)))

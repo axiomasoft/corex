@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Currency\Contracts;
 
-use CoreX\Intl\Data\RateBatch;
-use CoreX\Intl\Data\RateImportReceipt;
-use CoreX\Support\Data\DataScope;
-use CoreX\Support\Data\WriteToken;
+use CoreX\Data\DataScope;
+use CoreX\Data\WriteToken;
+use CoreX\Intl\Currency\Data\RateBatch;
+use CoreX\Intl\Currency\Data\RateImportReceipt;
 
 interface RateImporter
 {

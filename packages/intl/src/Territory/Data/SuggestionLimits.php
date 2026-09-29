@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Data;
+namespace CoreX\Intl\Territory\Data;
 
 final readonly class SuggestionLimits
 {

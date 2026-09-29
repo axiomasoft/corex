@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use AzGuard\Models\RolePermission;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Extend\PermissionsMerger;
-use CoreX\Auth\Matrix\AzGuardRoleModel;
-use CoreX\Auth\Models\Role;
-use CoreX\Auth\Models\RoleMatrixRow;
-use CoreX\Auth\Tests\Stubs\Deal;
-use CoreX\Auth\Tests\Stubs\FakeModuleRegistry;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Extend\PermissionsMerger;
+use CoreX\Access\Matrix\AzGuardRoleModel;
+use CoreX\Access\Models\Role;
+use CoreX\Access\Models\RoleMatrixRow;
+use CoreX\Access\Tests\Stubs\Deal;
+use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Events\ModuleDisabled;

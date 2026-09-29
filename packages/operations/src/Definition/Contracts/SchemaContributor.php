@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Contracts;
+namespace CoreX\Operations\Definition\Contracts;
 
-use CoreX\Api\Operation;
+use CoreX\Operations\Definition\Operation;
 
 interface SchemaContributor
 {

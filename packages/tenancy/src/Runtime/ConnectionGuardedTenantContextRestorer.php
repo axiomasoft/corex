@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Runtime;
 
-use CoreX\Exceptions\ScopeContextMismatch;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\DataScope;
 use Illuminate\Database\DatabaseManager;
 use Override;
 

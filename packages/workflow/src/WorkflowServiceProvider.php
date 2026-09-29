@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow;
 
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Internal\SqlWorkflowBinding;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
 use AzGuard\Configuration\Config as AzGuardConfig;
 use AzGuard\Registry\Contracts\GrantSource;
 use AzGuard\Registry\Values\PermissionSet;
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Tenancy\Contracts\TenancyManager;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;

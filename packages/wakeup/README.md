@@ -1,6 +1,6 @@
-# corex/wakeup
+# axiomasoft/corex-wakeup
 
-`corex/wakeup` provides durable, tenant-local wakeup requests for CoreX modules. A producer
+`axiomasoft/corex-wakeup` provides durable, tenant-local wakeup requests for CoreX modules. A producer
 stores an idempotent request in its current account database; `corex:wakeup:sweep` claims due
 requests and runs registered transactional handlers with a generation and lease.
 
@@ -16,7 +16,7 @@ outbox.
 
 ## Installation
 
-Install with `composer require corex/wakeup`. Apply the package-owned tenant wakeup schema, register handler kinds, and schedule `corex:wakeup:sweep` for each already trusted tenant connection. The package does not infer an account connection from a request payload.
+Install with `composer require axiomasoft/corex-wakeup`. Apply the package-owned tenant wakeup schema, register handler kinds, and schedule `corex:wakeup:sweep` for each already trusted tenant connection. The package does not infer an account connection from a request payload.
 
 ## Extension contracts
 

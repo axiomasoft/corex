@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Feature;
+namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Api\ApiError;
-use CoreX\Api\Internal\EnvelopeSerializer;
-use CoreX\Api\Internal\ErrorWire;
-use CoreX\Api\Internal\NegotiatingResponseSerializer;
-use CoreX\Api\Internal\RetryAfterPolicy;
-use CoreX\Api\InvocationMetadata;
-use CoreX\Api\OperationErrorBoundary;
-use CoreX\Api\Support\ApiOptions;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Enums\ErrorCategory;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\ApiError;
+use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
+use CoreX\Operations\Errors\Internal\ErrorWire;
+use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
+use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
+use CoreX\Operations\Errors\OperationErrorBoundary;
+use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Tests\TestCase;
 use RuntimeException;
 
 final class ErrorRepresentationTest extends TestCase

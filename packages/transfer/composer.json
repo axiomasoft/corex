@@ -1,13 +1,13 @@
 {
-    "name": "corex/transfer",
+    "name": "axiomasoft/corex-transfer",
     "description": "Bounded import and export primitives for CoreX.",
     "type": "corex-module",
     "license": "MIT",
     "require": {
-        "corex/core": "^1.0@dev",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
         "illuminate/database": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "php": "^8.4"
+        "illuminate/support": "^12.0|^13.0"
     },
     "autoload": {
         "psr-4": {

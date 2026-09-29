@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Meilisearch\Exceptions\InvalidMeilisearchConfiguration;
-use CoreX\Search\Meilisearch\Internal\MeilisearchSearchProvider;
-use CoreX\Search\Meilisearch\MeilisearchServiceProvider;
 use CoreX\Search\SearchServiceProvider;
+use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
+use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
+use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 final class MeilisearchServiceProviderTest extends TestCase

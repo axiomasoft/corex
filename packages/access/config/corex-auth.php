@@ -1,7 +1,8 @@
 <?php
 
 declare(strict_types=1);
-use CoreX\Auth\Matrix\AzGuardRoleModel;
+
+use CoreX\Access\Matrix\AzGuardRoleModel;
 
 return [
 
@@ -48,18 +49,18 @@ return [
     | Class WorkspaceScopeWiring::wire() registers as a global scope on every
     | Capability::WorkspaceScoped model, and Access\ScopePredicate lifts via
     | withoutGlobalScope() for scope `account` — a STRING, never an imported
-    | class reference: corex/access does not depend on corex/tenancy (AC-28),
-    | so CoreX\Tenancy\Scopes\WorkspaceScope is not necessarily loadable.
+    | class reference: axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28),
+    | so CoreX\Tenancy\Laravel\Scopes\WorkspaceScope is not necessarily loadable.
     | null = there is no workspace scope to register or lift (boxed profiles
-    | without corex/tenancy).
+    | without axiomasoft/corex-tenancy).
     */
-    'workspace_scope_class' => 'CoreX\\Tenancy\\Scopes\\WorkspaceScope',
+    'workspace_scope_class' => 'CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope',
 
     /*
     |--------------------------------------------------------------------------
     | AzGuard pins (D104)
     |--------------------------------------------------------------------------
-    | corex/access does not fork AzGuard (D15) — these values are applied onto
+    | axiomasoft/corex-access does not fork AzGuard (D15) — these values are applied onto
     | AzGuard's own config at boot (CoreAuthServiceProvider) instead.
     | table_names.roles must read "az_guard_roles" to match DB_SCHEMA §3.5;
     | column_names.morph_type must be "uuid" for CoreX's uuid-keyed
@@ -73,10 +74,10 @@ return [
     | `Identity\PrincipalUserProvider` reads this table via query-builder and
     | returns a PrincipalIdentity(user, <id>) — the shared seam BOTH login
     | lanes construct through (parity, premortem C4): the OIDC lane
-    | (corex/tenancy) ends in `Auth::loginUsingId($sub)`, which resolves
+    | (axiomasoft/corex-tenancy) ends in `Auth::loginUsingId($sub)`, which resolves
     | through this exact provider. `connection`/`table` name a table by
-    | STRING, never an imported model — corex/access does not depend on
-    | corex/tenancy (AC-28), so a boxed profile without it points `table` at
+    | STRING, never an imported model — axiomasoft/corex-access does not depend on
+    | axiomasoft/corex-tenancy (AC-28), so a boxed profile without it points `table` at
     | its own users table instead. `enabled=false` skips registering the
     | `corex-principal` auth driver entirely.
     */
@@ -103,7 +104,7 @@ return [
         // AzGuard's own Role model does not read table_names.roles itself
         // (only RolePermission does) — this seam (config/az-guard.php
         // "Models") swaps in a subclass that does, so the table_names pin
-        // above actually resolves. See CoreX\Auth\Matrix\AzGuardRoleModel.
+        // above actually resolves. See CoreX\Access\Matrix\AzGuardRoleModel.
         'models' => [
             'role' => AzGuardRoleModel::class,
         ],

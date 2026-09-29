@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Roles;
+namespace CoreX\Access\Roles;
 
-use CoreX\Auth\Models\Role;
-use CoreX\Auth\Models\RoleMatrixRow;
+use CoreX\Access\Models\Role;
+use CoreX\Access\Models\RoleMatrixRow;
 use Illuminate\Support\Facades\DB;
 
 /**

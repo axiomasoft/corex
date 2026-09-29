@@ -4,5 +4,5 @@
 # Возврат к 80% — time-gated item P1.27 (D47/D158): владельческий триггер выдан
 # 2026-07-27, item закрыт 2026-07-28 — floor поднят обратно на 80. D159/D160: заодно
 # починена сама метрика (снят --exclude-group=pg, <source> сужен до core+modules с
-# compensating-гейтом в packages/crm и packages/tasks) — честное покрытие 88.3%
+# compensating-гейтом в products/flex-crm и packages/tasks) — честное покрытие 88.3%
 # перекрывало цель ещё до этого item'а, порог поднят без дописывания тестов.

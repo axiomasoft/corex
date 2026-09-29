@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\SettingsScope;
-use CoreX\Enums\IdStrategy;
+use CoreX\Config\Config;
+use CoreX\Database\Enums\IdStrategy;
+use CoreX\Database\Schema\IdColumns;
+use CoreX\Settings\Contracts\SettingsScope;
 use CoreX\Settings\DatabaseSettingsRepository;
-use CoreX\Support\Config;
-use CoreX\Support\Schema\IdColumns;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Schema\Blueprint;

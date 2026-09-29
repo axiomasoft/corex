@@ -1,6 +1,6 @@
 # CoreX Transfer
 
-`corex/transfer` provides narrow, typed ports for bounded CSV/NDJSON transfers. A consumer supplies its source, mapper and target through dependency injection; it owns domain mappings and credentials. The package never discovers connectors or applies migrations automatically.
+`axiomasoft/corex-transfer` provides narrow, typed ports for bounded CSV/NDJSON transfers. A consumer supplies its source, mapper and target through dependency injection; it owns domain mappings and credentials. The package never discovers connectors or applies migrations automatically.
 
 Use `TransferRunner::step()` with a trusted `DataScope`, immutable source manifest and current checkpoint token. A resume refuses hash, schema, restore-epoch or lease-epoch drift. `dryRun` evaluates parsing and conflict decisions without writing target, checkpoint, reference or outbox state.
 
@@ -19,7 +19,7 @@ existing part is accepted only when its bytes still match its declared SHA-256.
 
 ## Installation
 
-Install with `composer require corex/transfer` through the configured CoreX channel. Bind the consumer source, mapper and sink and apply the package-owned transfer schema explicitly before durable runs. The host supplies the current trusted tenant scope; installing the provider does not discover connectors.
+Install with `composer require axiomasoft/corex-transfer` through the configured CoreX channel. Bind the consumer source, mapper and sink and apply the package-owned transfer schema explicitly before durable runs. The host supplies the current trusted tenant scope; installing the provider does not discover connectors.
 
 ## Configuration
 

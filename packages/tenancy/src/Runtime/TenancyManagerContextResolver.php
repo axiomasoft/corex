@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy;
+namespace CoreX\Tenancy\Runtime;
 
-use CoreX\Exceptions\CentralContextException;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\CentralContextException;
 
 /**
  * Adapts the cloud {@see TenancyManager} to the P1.12

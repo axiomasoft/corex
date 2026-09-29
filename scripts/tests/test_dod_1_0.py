@@ -96,16 +96,16 @@ class DodSchemaTest(unittest.TestCase):
 
     def test_bc_classifier_accepts_experimental_break_and_rejects_weakening(self) -> None:
         ok = "\n".join([
-            "bc-check: corex/core (core) |compatible| stability=experimental base=abc1234 candidate=def5678",
-            "bc-check: corex/attributes (attributes) |bc-break| stability=experimental base=abc1234 candidate=def5678",
+            "bc-check: axiomasoft/corex (core) |compatible| stability=experimental base=abc1234 candidate=def5678",
+            "bc-check: axiomasoft/corex-custom-fields (attributes) |bc-break| stability=experimental base=abc1234 candidate=def5678",
             "bc-check: OK",
         ])
         status, _detail = MODULE.classify_bc_output(ok)
         self.assertEqual(status, "green")
         for sample, expected in (
             ("bc-check: skip — requires PHP 8.4", "skipped"),
-            ("bc-check: corex/core (core) |infrastructure| stability=experimental base=abc1234 candidate=def5678", "red"),
-            ("bc-check: corex/core (core) |bc-break| stability=stable base=abc1234 candidate=", "red"),
+            ("bc-check: axiomasoft/corex (core) |infrastructure| stability=experimental base=abc1234 candidate=def5678", "red"),
+            ("bc-check: axiomasoft/corex (core) |bc-break| stability=stable base=abc1234 candidate=", "red"),
             ("no rows", "red"),
         ):
             with self.subTest(sample=sample):

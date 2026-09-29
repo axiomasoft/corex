@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Storage;
 
-use CoreX\Contracts\TenantStorage;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;

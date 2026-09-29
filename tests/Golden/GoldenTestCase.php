@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace CoreX\Tests\Golden;
 
 use AzGuard\AzGuardServiceProvider;
-use CoreX\Api\ApiServiceProvider;
-use CoreX\Api\ToolServiceProvider;
-use CoreX\Attributes\AttributesServiceProvider;
-use CoreX\Auth\CoreAuthServiceProvider;
+use CoreX\Access\CoreAuthServiceProvider;
 use CoreX\CoreServiceProvider;
+use CoreX\CustomFields\AttributesServiceProvider;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Media\MediaServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Notifications\NotificationsServiceProvider;
+use CoreX\Operations\ApiServiceProvider;
 use CoreX\Panels\PanelsServiceProvider;
-use CoreX\Search\Meilisearch\MeilisearchServiceProvider;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
+use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
 use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tests\TestCase;
+use CoreX\Tools\ToolServiceProvider;
 use CoreX\Transfer\TransferServiceProvider;
 use CoreX\Wakeup\WakeupServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
@@ -62,7 +62,7 @@ abstract class GoldenTestCase extends TestCase
     /** @return list<class-string> */
     private function manifestProviders(): array
     {
-        $manifest = json_decode((string) file_get_contents(__DIR__.'/../../packages/operations/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+        $manifest = json_decode((string) file_get_contents(__DIR__.'/../../packages/webhooks/composer.json'), true, flags: JSON_THROW_ON_ERROR);
         $extra = is_array($manifest) ? ($manifest['extra'] ?? []) : [];
         $laravel = is_array($extra) ? ($extra['laravel'] ?? []) : [];
         $declared = is_array($laravel) ? ($laravel['providers'] ?? []) : [];

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Features;
 
-use CoreX\Contracts\FeatureFlagDefinition;
-use CoreX\Contracts\FeatureFlags;
-use CoreX\Contracts\SettingsScope;
-use CoreX\Enums\SettingScope;
-use CoreX\Models\FeatureFlag;
-use CoreX\Models\FeatureOverride;
+use CoreX\Features\Contracts\FeatureFlagDefinition;
+use CoreX\Features\Contracts\FeatureFlags;
+use CoreX\Features\Models\FeatureFlag;
+use CoreX\Features\Models\FeatureOverride;
+use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Enums\SettingScope;
 use Override;
 
 /**

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
-use CoreX\Support\Config;
 use CoreX\Testing\Fixtures\RecordingPublisher;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Schema\Blueprint;

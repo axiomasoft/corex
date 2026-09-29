@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Internal;
 
-use CoreX\Contracts\TenantStorage;
 use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 use CoreX\Media\Data\MediaConversionRef;
 use CoreX\Media\Support\MediaOptions;
+use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Throwable;
 

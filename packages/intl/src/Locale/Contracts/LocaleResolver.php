@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Locale\Contracts;
 
-use CoreX\Intl\Data\LocaleInputs;
-use CoreX\Intl\Data\LocalePolicy;
-use CoreX\Intl\Data\LocaleResolution;
+use CoreX\Intl\Locale\Data\LocaleInputs;
+use CoreX\Intl\Locale\Data\LocalePolicy;
+use CoreX\Intl\Locale\Data\LocaleResolution;
 
 interface LocaleResolver
 {

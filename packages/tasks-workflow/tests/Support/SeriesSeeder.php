@@ -6,7 +6,7 @@ namespace CoreX\TasksWorkflow\Tests\Support;
 
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceSet;
-use CoreX\Tasks\Data\TaskDraft;
+use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Internal\SeriesDefinitionCodec;
 use Illuminate\Support\Facades\DB;

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Tests\Unit;
+namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Api\Enums\IdempotencyRequirement;
-use CoreX\Api\Enums\OperationMode;
-use CoreX\Api\Operation;
-use CoreX\Api\Tests\Support\StubOperationHandler;
-use CoreX\Api\Tests\TestCase;
-use CoreX\Modules\Compiler\ApiOperationValidator;
 use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Modules\Definition\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Extend\Api;
-use CoreX\Modules\ModuleManifest;
+use CoreX\Operations\Definition\ApiOperationValidator;
+use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
+use CoreX\Operations\Testing\StubOperationHandler;
+use CoreX\Operations\Tests\TestCase;
 
 uses(TestCase::class);
 

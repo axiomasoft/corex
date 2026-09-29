@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Support\PackageRegistrar;
-use CoreX\Support\RegistersNothingOnBoot;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Context\ImpersonationGuard;
+use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Contracts\TenantDatabaseLifecycle;
-use CoreX\Tenancy\ImpersonationGuard;
+use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier as DatabaseTemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Migrations\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Provisioning\PendingPool;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Provisioning\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Support\AccountLifecyclePolicy;
-use CoreX\Tenancy\Support\TenancyOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 

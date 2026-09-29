@@ -1,6 +1,8 @@
 /vendor/
 /packages/*/vendor/
 /packages/*/composer.lock
+/products/*/vendor/
+/products/*/composer.lock
 .phpunit.result.cache
 .phpunit.cache/
 .php-cs-fixer.cache

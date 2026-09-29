@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Data;
+namespace CoreX\Operations\Bulk\Data;
 
-use CoreX\Support\ViolationList;
+use CoreX\Config\ViolationList;
 
 /** Immutable durable-bulk activation policy read only by the package registrar. */
 final readonly class BulkOptions

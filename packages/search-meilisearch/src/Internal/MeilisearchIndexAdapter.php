@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch\Internal;
+namespace CoreX\SearchMeilisearch\Internal;
 
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Support\IndexBatch;

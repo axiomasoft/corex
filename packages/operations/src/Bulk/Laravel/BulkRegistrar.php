@@ -2,24 +2,25 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Laravel;
+namespace CoreX\Operations\Bulk\Laravel;
 
-use CoreX\Api\Contracts\BulkOperationStore;
-use CoreX\Api\Contracts\BulkTransferFactory;
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Data\BulkOptions;
-use CoreX\Api\Data\BulkTransferSession;
-use CoreX\Api\Internal\Bulk\BulkFailureReader;
-use CoreX\Api\Internal\Bulk\BulkOperations;
-use CoreX\Api\Internal\Bulk\BulkResultReader;
-use CoreX\Api\Internal\Bulk\BulkRetention;
-use CoreX\Api\Internal\Bulk\BulkWorker;
-use CoreX\Api\Internal\Bulk\SqlBulkOperationStore;
-use CoreX\Api\Internal\Bulk\TransferBulkExecutor;
-use CoreX\Api\Internal\Bulk\TransferCapabilityUnavailable;
-use CoreX\Contracts\DataScopeCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
+use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkOptions;
+use CoreX\Operations\Bulk\Data\BulkTransferSession;
+use CoreX\Operations\Bulk\Internal\BulkFailureReader;
+use CoreX\Operations\Bulk\Internal\BulkOperations;
+use CoreX\Operations\Bulk\Internal\BulkResultReader;
+use CoreX\Operations\Bulk\Internal\BulkRetention;
+use CoreX\Operations\Bulk\Internal\BulkWorker;
+use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
+use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
+use CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 

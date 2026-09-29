@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Tests;
+namespace CoreX\Access\Tests;
 
-use CoreX\Auth\Tests\Support\CoreAuthTestCase;
+use CoreX\Access\Tests\Support\CoreAuthTestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -63,14 +63,14 @@ abstract class PgTestCase extends CoreAuthTestCase
         $this->migratePath(__DIR__.'/../database/migrations/tenant-cloud');
     }
 
-    /** Minimal users/wsp_workspaces fixtures (D105) — real corex/tenancy is not a dependency (boxed doctrine). */
+    /** Minimal users/wsp_workspaces fixtures (D105) — real axiomasoft/corex-tenancy is not a dependency (boxed doctrine). */
     protected function migrateFixtures(): void
     {
         $this->migratePath(__DIR__.'/database/migrations/pg');
     }
 
     /**
-     * The REAL `sys_departments` migration from corex/core (not a fixture) —
+     * The REAL `sys_departments` migration from axiomasoft/corex (not a fixture) —
      * closes the P2.20 debt of dept/dept_tree never running against a real
      * ltree-backed table (P2.9). Requires {@see migrateFixtures()} to have
      * already created `users` (department_id's FK target column, though the
@@ -79,7 +79,7 @@ abstract class PgTestCase extends CoreAuthTestCase
      */
     protected function migrateCoreDepartments(): void
     {
-        $this->migratePath(__DIR__.'/../vendor/corex/core/database/migrations/pg');
+        $this->migratePath(__DIR__.'/../vendor/axiomasoft/corex/database/migrations/pg');
     }
 
     private function migratePath(string $path): void

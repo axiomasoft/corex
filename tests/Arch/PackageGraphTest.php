@@ -18,9 +18,9 @@ test('package graph gate reports no violations', function (): void {
     $joined = implode("\n", $output);
 
     expect($joined)->toContain('package-graph-gate: OK')
-        ->and($joined)->toContain('LEGACY NAMESPACE SPLIT: CoreX\\Tenancy\\')
-        ->and($joined)->toContain('HOST-RESERVED NAMESPACE: CoreX\\Search\\Meilisearch\\')
-        ->and($joined)->toContain('UNDECLARED DEPENDENCY EXCEPTION: corex/tasks-workflow -> corex/wakeup');
+        ->and($joined)->not->toContain('LEGACY NAMESPACE SPLIT:')
+        ->and($joined)->toContain('HOST-RESERVED NAMESPACE: CoreX\\SearchMeilisearch\\')
+        ->and($joined)->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup');
 
     $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
     expect(is_file($reportPath))->toBeTrue();
@@ -28,7 +28,7 @@ test('package graph gate reports no violations', function (): void {
     $report = json_decode((string) file_get_contents($reportPath), true, flags: JSON_THROW_ON_ERROR);
 
     expect($report['violations'] ?? null)->toBe([])
-        ->and($report['legacy_namespace_splits'] ?? null)->not->toBeEmpty()
+        ->and($report['legacy_namespace_splits'] ?? null)->toBe([])
         ->and($report['reservations'] ?? null)->not->toBeEmpty()
         ->and($report['undeclared_dependency_exceptions'] ?? null)->not->toBeEmpty();
 });
@@ -65,7 +65,7 @@ test('package graph gate reports R3 when host defines classes under reserved pre
 
 declare(strict_types=1);
 
-namespace CoreX\Search\Meilisearch;
+namespace CoreX\SearchMeilisearch;
 
 final class ProbeMeilisearchViolation
 {
@@ -92,13 +92,13 @@ PHP;
 
 test('package graph gate reports R1 for group-use import (tokenizer graph)', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/GroupUseProbe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/GroupUseProbe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 use CoreX\Wakeup\Contracts\{WakeupScheduleHint};
 
@@ -132,13 +132,13 @@ PHP;
 
 test('package graph gate reports R1 for FQCN reference without use (tokenizer graph)', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/FqcnGraphProbe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/FqcnGraphProbe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 final class FqcnGraphProbe
 {
@@ -174,13 +174,13 @@ PHP;
 
 test('package graph gate reports R4 for import outside owner public-api', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/PublicApiR4Probe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/PublicApiR4Probe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 use CoreX\Tenancy\Support\DoesNotExist;
 
@@ -215,13 +215,13 @@ PHP;
 
 test('package graph gate reports R2 for foreign Internal without R4 wording', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/InternalR2Probe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/InternalR2Probe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 use CoreX\Tenancy\Internal\X;
 
@@ -256,13 +256,13 @@ PHP;
 
 test('package graph gate reports R4b for accidental public top-level type', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/AccidentalPublic.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/AccidentalPublic.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 final class AccidentalPublic
 {
@@ -294,13 +294,13 @@ PHP;
 
 test('package graph gate reports R5 for foundation importing product namespace', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/core/src/Support/PackageTypeR5Probe.php';
+    $probePath = $repoRoot.'/packages/core/src/Config/PackageTypeR5Probe.php';
     $probeContents = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
-namespace CoreX\Core\Support;
+namespace CoreX\Config;
 
 use Flex\Crm\Contracts\X;
 
@@ -354,7 +354,7 @@ test('package graph gate reports R1 for wakeup import outside Integration/Wakeup
         expect($exitCode)->toBe(1)
             ->and($joined)->toContain('[R1]')
             ->and($joined)->toContain('WakeupForeignContextProbe.php')
-            ->and($joined)->toContain('corex/wakeup');
+            ->and($joined)->toContain('axiomasoft/corex-wakeup');
     } finally {
         if (is_file($probePath)) {
             unlink($probePath);

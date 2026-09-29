@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-use CoreX\Intl\Contracts\DatasetImporter;
-use CoreX\Intl\Contracts\GeographyProvider;
-use CoreX\Intl\Data\DatasetCandidate;
-use CoreX\Intl\Data\DatasetGeneration;
-use CoreX\Intl\Data\DatasetManifest;
-use CoreX\Intl\Data\GeographyQuery;
-use CoreX\Intl\Data\ReferenceIdentity;
-use CoreX\Intl\Exceptions\SchemaMismatchException;
-use CoreX\Intl\Exceptions\SnapshotExpiredException;
-use CoreX\Intl\Internal\Reference\BoxesReferenceProvider;
-use CoreX\Intl\Internal\Reference\CompactReferenceProvider;
-use CoreX\Intl\Internal\Reference\FixtureReferenceNormalizer;
-use CoreX\Intl\Internal\Reference\ReferenceCursorCodec;
-use CoreX\Support\Data\DataScope;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\TenantContext;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Currency\Exceptions\SnapshotExpiredException;
+use CoreX\Intl\Territory\Contracts\DatasetImporter;
+use CoreX\Intl\Territory\Contracts\GeographyProvider;
+use CoreX\Intl\Territory\Data\DatasetCandidate;
+use CoreX\Intl\Territory\Data\DatasetGeneration;
+use CoreX\Intl\Territory\Data\DatasetManifest;
+use CoreX\Intl\Territory\Data\GeographyQuery;
+use CoreX\Intl\Territory\Data\ReferenceIdentity;
+use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Territory\Internal\Reference\BoxesReferenceProvider;
+use CoreX\Intl\Territory\Internal\Reference\CompactReferenceProvider;
+use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
+use CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec;
 
 function geoScope(): DataScope
 {

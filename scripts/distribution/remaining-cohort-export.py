@@ -380,7 +380,7 @@ def verify_public_metadata(candidate_path: Path) -> int:
             return 1
         for section in ('require', 'require-dev', 'suggest'):
             for name in composer.get(section, {}):
-                if name.startswith('flex/') or name == 'corex/access' or 'azguard' in name.lower():
+                if name.startswith('flex/') or name == 'axiomasoft/corex-access' or 'azguard' in name.lower():
                     return 1
         tree, _ = build_release_tree(ref, package, build['candidate'], build['policy'])
         for path, meta in tree.items():

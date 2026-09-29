@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Contracts\DurablePayload;
-use CoreX\Enums\PiiClass;
-use CoreX\Exceptions\InvalidMessage;
+use CoreX\Messaging\Contracts\DurablePayload;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 use DateTimeImmutable;
 
 /**

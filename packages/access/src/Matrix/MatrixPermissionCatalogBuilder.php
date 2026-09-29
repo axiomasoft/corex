@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Matrix;
+namespace CoreX\Access\Matrix;
 
 use AzGuard\Registry\Contracts\PermissionCatalogBuilder;
 use AzGuard\Registry\Contracts\PermissionDefinition;
 use AzGuard\Registry\Definitions\SimplePermissionDefinition;
 use AzGuard\Registry\Resolver\EffectivePermissionResolver;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Models\RoleMatrixRow;
-use CoreX\Auth\Support\AuthOptions;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Models\RoleMatrixRow;
+use CoreX\Access\Support\AuthOptions;
 use Override;
 
 /**

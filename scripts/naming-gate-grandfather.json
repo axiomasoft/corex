@@ -1,5 +1,5 @@
 [
-    "CoreX\\Intl\\Data\\CurrencyInfo",
-    "CoreX\\Tenancy\\Contracts\\ImpersonationService",
-    "CoreX\\Tenancy\\Contracts\\TenancyManager"
+    "CoreX\\Intl\\Currency\\Data\\CurrencyInfo",
+    "CoreX\\Context\\Contracts\\ImpersonationService",
+    "CoreX\\Context\\Contracts\\TenancyManager"
 ]

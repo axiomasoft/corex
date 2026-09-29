@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Contracts;
+namespace CoreX\Notifications\Inbox\Contracts;
 
-use CoreX\Notifications\Data\CancelResult;
-use CoreX\Notifications\Data\InboxQuery;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationInput;
-use CoreX\Notifications\Data\NotificationRef;
+use CoreX\Notifications\Inbox\Data\CancelResult;
+use CoreX\Notifications\Inbox\Data\InboxQuery;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Data\NotificationInput;
+use CoreX\Notifications\Inbox\Data\NotificationRef;
 
 interface NotificationCenter
 {

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use CoreX\Enums\ImpersonationRestrictedAction;
-use CoreX\Exceptions\ImpersonationRestrictedException;
-use CoreX\Tenancy\Contracts\ImpersonationService;
-use CoreX\Tenancy\Http\Middleware\AllowImpersonatedWrites;
-use CoreX\Tenancy\Http\Middleware\DenyImpersonatedWrites;
-use CoreX\Tenancy\Http\Middleware\ImpersonationSessionGuard;
+use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Enums\ImpersonationRestrictedAction;
+use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use CoreX\Context\ImpersonationGuard;
+use CoreX\Context\ImpersonationState;
 use CoreX\Tenancy\Impersonation\ImpersonatedModelWriteGuard;
-use CoreX\Tenancy\ImpersonationGuard;
-use CoreX\Tenancy\ImpersonationState;
-use CoreX\Tenancy\Models\ImpersonationGrant;
+use CoreX\Tenancy\Impersonation\Models\ImpersonationGrant;
+use CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites;
+use CoreX\Tenancy\Laravel\Http\Middleware\DenyImpersonatedWrites;
+use CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +93,7 @@ beforeEach(function (): void {
 
     test()->artisan('migrate', [
         '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../vendor/corex/core/database/migrations/pg'),
+        '--path' => realpath(__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg'),
         '--realpath' => true,
         '--force' => true,
     ])->run();

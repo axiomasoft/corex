@@ -1,10 +1,10 @@
-# corex/tenancy compatibility passport
+# axiomasoft/corex-tenancy compatibility passport
 
 This is factual evidence, not a Composer constraint, runtime registry, or release promise.
 
 | Field | Recorded fact |
 | --- | --- |
-| Package / license / profile | `corex/tenancy` / MIT / public physical DB-per-account profile, requires `corex/core` |
+| Package / license / profile | `axiomasoft/corex-tenancy` / MIT / public physical DB-per-account profile, requires `axiomasoft/corex` |
 | Policy / declared constraint | PHP 8.4–8.5 and Laravel 12–13 / `php:^8.4`, Illuminate `^12.0|^13.0` |
 | Public local proof | P4.4: PHP 8.4.1 and 8.5.10 against Laravel 12 and 13; cold update, platform check and fresh lock install. The PG16 template-integrity suite passed: three tests, three assertions. Runtime 8.3 is explicitly untested and outside the declared constraint. |
 | Release-ready status | Not claimed. The P4.4 receipt is local evidence; it is not a current hosted-runner or publication receipt. |

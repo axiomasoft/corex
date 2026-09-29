@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal;
+namespace CoreX\Operations\Idempotency\Internal;
 
-use CoreX\Api\Contracts\IdempotencyStore;
-use CoreX\Api\Data\IdempotencyAttempt;
-use CoreX\Api\Data\IdempotencyScope;
-use CoreX\Support\SecretRef;
-use CoreX\Tenancy\Contracts\TenantContextResolver;
+use CoreX\Config\SecretRef;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
+use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
+use CoreX\Operations\Idempotency\Data\IdempotencyScope;
+use CoreX\Operations\Validation\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

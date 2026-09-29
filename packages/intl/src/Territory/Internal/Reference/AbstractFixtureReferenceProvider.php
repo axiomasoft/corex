@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Reference;
+namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Intl\Contracts\GeographyProvider;
-use CoreX\Intl\Data\DatasetManifest;
-use CoreX\Intl\Data\GeographyQuery;
-use CoreX\Intl\Data\ReferenceCursor;
-use CoreX\Intl\Data\ReferenceIdentity;
-use CoreX\Intl\Data\ReferencePage;
-use CoreX\Intl\Exceptions\SnapshotExpiredException;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Currency\Exceptions\SnapshotExpiredException;
+use CoreX\Intl\Territory\Contracts\GeographyProvider;
+use CoreX\Intl\Territory\Data\DatasetManifest;
+use CoreX\Intl\Territory\Data\GeographyQuery;
+use CoreX\Intl\Territory\Data\ReferenceCursor;
+use CoreX\Intl\Territory\Data\ReferenceIdentity;
+use CoreX\Intl\Territory\Data\ReferencePage;
 
 abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 {

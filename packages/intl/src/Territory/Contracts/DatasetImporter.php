@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Contracts;
+namespace CoreX\Intl\Territory\Contracts;
 
-use CoreX\Intl\Data\DatasetCandidate;
-use CoreX\Intl\Data\DatasetGeneration;
-use CoreX\Intl\Data\DatasetReceipt;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Intl\Territory\Data\DatasetCandidate;
+use CoreX\Intl\Territory\Data\DatasetGeneration;
+use CoreX\Intl\Territory\Data\DatasetReceipt;
 
 interface DatasetImporter
 {

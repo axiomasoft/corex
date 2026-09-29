@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Support\Config;
-use CoreX\Support\Time\FrozenClock;
+use CoreX\Time\FrozenClock;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -112,7 +112,7 @@ it('refuses a null-transport publisher before markPublished', function (): void 
         'name' => 'membership.expired',
         'contract_version' => 1,
         'envelope_version' => MessageEnvelope::ENVELOPE_VERSION,
-        'source' => 'corex/core',
+        'source' => 'axiomasoft/corex',
         'subject' => null,
         'correlation_id' => null,
         'causation_id' => null,
@@ -146,7 +146,7 @@ it('refuses a redis-publish publisher before markPublished', function (): void {
         'name' => 'membership.expired',
         'contract_version' => 1,
         'envelope_version' => MessageEnvelope::ENVELOPE_VERSION,
-        'source' => 'corex/core',
+        'source' => 'axiomasoft/corex',
         'subject' => null,
         'correlation_id' => null,
         'causation_id' => null,

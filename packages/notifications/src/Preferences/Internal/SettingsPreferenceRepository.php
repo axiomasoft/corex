@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Internal;
+namespace CoreX\Notifications\Preferences\Internal;
 
-use CoreX\Contracts\SettingsRepository;
-use CoreX\Contracts\SettingsScope;
-use CoreX\Notifications\Contracts\PreferenceRepository;
-use CoreX\Notifications\Data\NotificationContext;
-use CoreX\Notifications\Data\NotificationPreference;
-use CoreX\Notifications\Data\PreferenceInput;
+use CoreX\Notifications\Inbox\Data\NotificationContext;
+use CoreX\Notifications\Inbox\Internal\NotificationAccessDenied;
+use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
+use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
+use CoreX\Notifications\Preferences\Data\NotificationPreference;
+use CoreX\Notifications\Preferences\Data\PreferenceInput;
+use CoreX\Settings\Contracts\SettingsRepository;
+use CoreX\Settings\Contracts\SettingsScope;
 use Illuminate\Database\ConnectionInterface;
 
 final class SettingsPreferenceRepository implements PreferenceRepository

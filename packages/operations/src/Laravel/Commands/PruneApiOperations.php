@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Commands;
+namespace CoreX\Operations\Laravel\Commands;
 
-use CoreX\Api\Internal\Bulk\BulkRetention;
-use CoreX\Api\Internal\Cost\BudgetRetention;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Internal\BulkRetention;
+use CoreX\Operations\Cost\Internal\BudgetRetention;
 use Illuminate\Console\Command;
 
 /**

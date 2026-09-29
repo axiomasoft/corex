@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Support;
+namespace CoreX\Tenancy\Laravel\Support;
 
 /** @internal Package composition type. */
 final readonly class StatusGatePolicy

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Provisioning\Migrations;
 
 use Closure;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Account;
-use CoreX\Tenancy\Models\AccountSchemaState;
-use CoreX\Tenancy\Models\MigrationBatch;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +34,7 @@ use Throwable;
 final class MigrationWaveOrchestrator
 {
     /**
-     * @param  (Closure(AccountRef): void)|null  $migrationRunner
+     * @param  Closure(AccountRef):void|null  $migrationRunner
      */
     public function __construct(
         private readonly string $centralConnection,
@@ -146,7 +146,7 @@ final class MigrationWaveOrchestrator
     }
 
     /**
-     * @return Closure(AccountRef): void
+     * @return Closure(AccountRef):void
      */
     private static function defaultMigrationRunner(): Closure
     {

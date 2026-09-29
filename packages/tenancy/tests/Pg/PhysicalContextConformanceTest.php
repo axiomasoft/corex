@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Contracts\TenantStorage;
-use CoreX\Exceptions\CentralContextException;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\StorageOperationFailed;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\Account;
+use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Tests\TestCase;
-use CoreX\Tenancy\WorkspaceRef;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Queue\Events\JobExceptionOccurred;

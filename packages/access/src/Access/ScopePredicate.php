@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Auth\Access;
+namespace CoreX\Access\Access;
 
-use CoreX\Auth\Contracts\Principal;
-use CoreX\Auth\Enums\PrincipalType;
-use CoreX\Auth\Enums\Scope;
-use CoreX\Auth\Support\AuthOptions;
-use CoreX\Models\Department;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\WorkspaceRef;
+use CoreX\Access\Contracts\Principal;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Support\AuthOptions;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Departments\Models\Department;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;

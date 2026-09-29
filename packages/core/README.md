@@ -1,4 +1,4 @@
-# corex/core
+# axiomasoft/corex
 
 Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
 System→Tenant→User), append-only `Audit`, `MoneyCast`, департаменты (ltree),
@@ -53,8 +53,8 @@ php artisan migrate --database=<tenant>
 
 Тип ключевых колонок (`id`, ссылки, FK) следует `config('corex.ids.strategy')`:
 `uuid7` (дефолт, ADR-003), `uuid`, `ulid`, `int`. Миграции пишут колонки через
-`CoreX\Support\Schema\IdColumns`, модели — через трейт
-`CoreX\Concerns\HasConfiguredId`, так что boxed/legacy-установка выравнивает
+`CoreX\Database\Schema\IdColumns`, модели — через трейт
+`CoreX\Database\HasConfiguredId`, так что boxed/legacy-установка выравнивает
 ключи ядра под свой тип без форка миграций. Меняйте стратегию **до** первого
 `migrate` — она фиксирует тип колонок в БД.
 
@@ -75,10 +75,12 @@ constitute a publication promise.
 
 ### Configuration report contributions
 
-`corex:config:validate` collects services tagged with `CoreX\Contracts\ConfigReportSection`.
+`corex:config:validate` collects services tagged with `CoreX\Config\Contracts\ConfigReportSection`.
 Each package owns its options types, secret keys and defaults, drivers and adapters. Sections
 supply an integer order; the command retains its stable report format and redacts secret values.
 Kernel installations require no optional package to build the report.
 
 Consumer tests can create messaging adapters through
 `CoreX\Messaging\Testing\MessagingFixtures`; the factory returns the public messaging contracts.
+
+The merged module subsystem is documented in [modules/README](docs/modules/README.md) and [modules/PACKAGE](docs/modules/PACKAGE.md). Its original changelog is retained in [history](docs/history/corex-modules-CHANGELOG.md).

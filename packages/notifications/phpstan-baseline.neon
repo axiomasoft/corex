@@ -19,91 +19,91 @@ parameters:
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Method CoreX\Notifications\Internal\DeliveryStore::dueIds() should return list<string> but returns array<mixed>.'
+			rawMessage: 'Method CoreX\Notifications\Delivery\Internal\DeliveryStore::dueIds() should return list<string> but returns array<mixed>.'
 			identifier: return.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Method CoreX\Notifications\Internal\DeliveryStore::message() should return array<string, mixed> but returns array<mixed, mixed>.'
+			rawMessage: 'Method CoreX\Notifications\Delivery\Internal\DeliveryStore::message() should return array<string, mixed> but returns array<mixed, mixed>.'
 			identifier: return.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter #1 $message of method CoreX\Notifications\Internal\DeliveryStore::message() expects string|null, mixed given.'
+			rawMessage: 'Parameter #1 $message of method CoreX\Notifications\Delivery\Internal\DeliveryStore::message() expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $channel of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $channel of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $deliveryKey of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $deliveryKey of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $digestRunId of class CoreX\Notifications\Data\DeliveryClaim constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $digestRunId of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $driverVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $driverVersion of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $messageHash of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $messageHash of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Data\DeliveryClaim constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $policyVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $policyVersion of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter $templateVersion of class CoreX\Notifications\Data\DeliveryClaim constructor expects string, mixed given.'
+			rawMessage: 'Parameter $templateVersion of class CoreX\Notifications\Delivery\Data\DeliveryClaim constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Internal/DeliveryStore.php
 
 		-
-			rawMessage: 'Parameter #2 $eventType of method CoreX\Notifications\Contracts\PreferenceRepository::get() expects string, mixed given.'
+			rawMessage: 'Parameter #2 $eventType of method CoreX\Notifications\Preferences\Contracts\PreferenceRepository::get() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/DigestWakeupHandler.php
 
 		-
-			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Delivery\Data\RecipientReference constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/DigestWakeupHandler.php
 
 		-
-			rawMessage: 'Parameter $kind of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			rawMessage: 'Parameter $kind of class CoreX\Notifications\Delivery\Data\RecipientReference constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/DigestWakeupHandler.php
@@ -115,19 +115,19 @@ parameters:
 			path: src/Digest/Internal/NotificationDigestDueSource.php
 
 		-
-			rawMessage: 'Parameter $actorId of class CoreX\Notifications\Data\NotificationContext constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $actorId of class CoreX\Notifications\Inbox\Data\NotificationContext constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/NotificationDigestDueSource.php
 
 		-
-			rawMessage: 'Parameter $actorKind of class CoreX\Notifications\Data\NotificationContext constructor expects string, mixed given.'
+			rawMessage: 'Parameter $actorKind of class CoreX\Notifications\Inbox\Data\NotificationContext constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/NotificationDigestDueSource.php
 
 		-
-			rawMessage: 'Parameter $period of class CoreX\Notifications\Data\DigestWindow constructor expects string, mixed given.'
+			rawMessage: 'Parameter $period of class CoreX\Notifications\Digest\Data\DigestWindow constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/NotificationDigestDueSource.php
@@ -169,7 +169,7 @@ parameters:
 			path: src/Digest/Internal/SqlDigestBuilder.php
 
 		-
-			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\DigestRef constructor expects string, mixed given.'
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Digest\Data\DigestRef constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Digest/Internal/SqlDigestBuilder.php
@@ -241,7 +241,7 @@ parameters:
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Method CoreX\Notifications\Internal\SqlNotificationCenter::dispatchedChannels() should return list<string> but returns array<mixed>.'
+			rawMessage: 'Method CoreX\Notifications\Inbox\Internal\SqlNotificationCenter::dispatchedChannels() should return list<string> but returns array<mixed>.'
 			identifier: return.type
 			count: 1
 			path: src/Inbox/Internal/SqlNotificationCenter.php
@@ -253,31 +253,31 @@ parameters:
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Parameter $eventType of class CoreX\Notifications\Data\NotificationRef constructor expects string, mixed given.'
+			rawMessage: 'Parameter $eventType of class CoreX\Notifications\Inbox\Data\NotificationRef constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\NotificationRef constructor expects string, mixed given.'
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Inbox\Data\NotificationRef constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Parameter $id of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			rawMessage: 'Parameter $id of class CoreX\Notifications\Delivery\Data\RecipientReference constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Parameter $kind of class CoreX\Notifications\Data\RecipientReference constructor expects string, mixed given.'
+			rawMessage: 'Parameter $kind of class CoreX\Notifications\Delivery\Data\RecipientReference constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: src/Inbox/Internal/SqlNotificationCenter.php
 
 		-
-			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Data\NotificationSubject constructor expects string|null, mixed given.'
+			rawMessage: 'Parameter $notificationId of class CoreX\Notifications\Inbox\Data\NotificationSubject constructor expects string|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Inbox/Internal/SqlNotificationCenter.php
@@ -319,43 +319,43 @@ parameters:
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $drivers of class CoreX\Notifications\Internal\ChannelDrivers constructor expects iterable<CoreX\Notifications\Contracts\NotificationChannelDriver>, iterable given.'
+			rawMessage: 'Parameter #1 $drivers of class CoreX\Notifications\Delivery\Internal\ChannelDrivers constructor expects iterable<CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver>, iterable given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\DeliveryStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Delivery\Internal\DeliveryStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\Digest\DigestWakeupHandler constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Digest\Internal\DigestWakeupHandler constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\Digest\NotificationDigestDueSource constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Digest\Internal\NotificationDigestDueSource constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SettingsPreferenceRepository constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Preferences\Internal\SettingsPreferenceRepository constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SqlDigestBuilder constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Digest\Internal\SqlDigestBuilder constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
-			rawMessage: 'Parameter $connection of class CoreX\Notifications\Internal\SqlNotificationCenter constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
+			rawMessage: 'Parameter $connection of class CoreX\Notifications\Inbox\Internal\SqlNotificationCenter constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/NotificationsServiceProvider.php

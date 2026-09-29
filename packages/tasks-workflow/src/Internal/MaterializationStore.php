@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Recurrence\Data\ExpansionCursor;
-use CoreX\Tasks\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Data\TaskOperationKind;
-use CoreX\Tasks\Data\TaskOperationReceipt;
-use CoreX\Tasks\Data\TaskReference;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
+use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\TasksWorkflow\Data\MaterializationReceipt;
 use CoreX\TasksWorkflow\Exceptions\MaterializationConflict;
 use Illuminate\Database\Connection;

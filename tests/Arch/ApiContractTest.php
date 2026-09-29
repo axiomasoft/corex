@@ -105,7 +105,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     }
 
     $dispatcher = (string) file_get_contents($src.'/Invocation/OperationDispatcher.php');
-    $tools = (string) file_get_contents($src.'/Tools/Internal/GuardedToolInvoker.php');
+    $tools = (string) file_get_contents(SourceScanner::packagePath('tools', 'src/Internal/GuardedToolInvoker.php'));
     $profile = (string) file_get_contents($src.'/Versioning/Data/ApiProfile.php');
     $factory = (string) file_get_contents($src.'/Versioning/Internal/ApiProfileFactory.php');
     $defaultInvoker = (string) file_get_contents($src.'/Invocation/Internal/DefaultOperationInvoker.php');

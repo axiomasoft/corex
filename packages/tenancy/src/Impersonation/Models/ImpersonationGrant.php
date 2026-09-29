@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Tenancy\Models;
+namespace CoreX\Tenancy\Impersonation\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Impersonation\DatabaseImpersonationService;
-use CoreX\Tenancy\Support\TenancyOptions;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 

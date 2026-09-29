@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Identity;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\AccountRef;
-use CoreX\Tenancy\Contracts\TenancyManager;
-use CoreX\Tenancy\Models\User;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Identity\Models\User;
 use DomainException;
 use Illuminate\Support\Facades\DB;
 use Throwable;

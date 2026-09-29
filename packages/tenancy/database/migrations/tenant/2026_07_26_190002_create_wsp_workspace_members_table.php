@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 // Tenant-DB migration (B-11 §2.2, D14/D16) — membership is a fast admission
 // flag read by the resolver (403 without it); roles are NOT stored here
-// (corex/access owns aut_role_assignments, P2.8). See DB_SCHEMA.md §3.4
+// (axiomasoft/corex-access owns aut_role_assignments, P2.8). See DB_SCHEMA.md §3.4
 // wsp_workspace_members for the column-by-column source.
 return new class extends Migration
 {
@@ -35,7 +35,7 @@ return new class extends Migration
         DB::statement('CREATE INDEX wsp_members_user_ix ON wsp_workspace_members (user_id)');
         DB::statement('CREATE UNIQUE INDEX wsp_members_default_uq ON wsp_workspace_members (user_id) WHERE is_default');
 
-        DB::statement("COMMENT ON TABLE wsp_workspace_members IS 'Membership = fast admission flag for the resolver (403 without it); PERMISSIONS live only in corex/access (roles) — role not stored in this pivot'");
+        DB::statement("COMMENT ON TABLE wsp_workspace_members IS 'Membership = fast admission flag for the resolver (403 without it); PERMISSIONS live only in axiomasoft/corex-access (roles) — role not stored in this pivot'");
     }
 
     public function down(): void

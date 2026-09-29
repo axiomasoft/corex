@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Intl\Internal\Money;
+namespace CoreX\Intl\Formatting\Internal;
 
 use Brick\Money\Money;
-use CoreX\Intl\Contracts\MoneyFormatter;
-use CoreX\Intl\Data\FormatPolicy;
-use CoreX\Intl\Data\FormattedMoney;
-use CoreX\Intl\Data\LocaleResolution;
-use CoreX\Intl\Exceptions\UnsupportedFormattingException;
+use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
+use CoreX\Intl\Formatting\Data\FormatPolicy;
+use CoreX\Intl\Formatting\Data\FormattedMoney;
+use CoreX\Intl\Formatting\Exceptions\UnsupportedFormattingException;
+use CoreX\Intl\Locale\Data\LocaleResolution;
 use Locale;
 use NumberFormatter;
 use Override;

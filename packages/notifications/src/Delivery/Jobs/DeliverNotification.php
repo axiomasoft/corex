@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Notifications\Jobs;
+namespace CoreX\Notifications\Delivery\Jobs;
 
-use CoreX\Notifications\Internal\DeliveryCoordinator;
+use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

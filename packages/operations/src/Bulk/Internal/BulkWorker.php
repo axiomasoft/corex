@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Api\Internal\Bulk;
+namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Api\Contracts\BulkOperationStore;
-use CoreX\Api\Data\BulkOperation;
-use CoreX\Api\Enums\BulkOperationStatus;
-use CoreX\Support\Data\DataScope;
+use CoreX\Data\DataScope;
+use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
+use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
