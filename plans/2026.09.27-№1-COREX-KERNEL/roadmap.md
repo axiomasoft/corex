@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P02 закрыты; P03 детализирована (D57, items P03.1–P03.2), ждёт finish + design audit; P04–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
+**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P02 закрыты; P03 детализирована (D57/D58, items P03.1–P03.2), remediation finish; ждёт независимый design audit; P04–P09 — skeleton в `backlog/` (катящийся дизайн, D21, D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -55,7 +55,9 @@ P02.1 → P02.2: общий инструментарий швов (`check-maps.p
 | 6 · solo P02.3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3` | `implementation/xhigh` | `full` | `codex/gpt-6-sol/xhigh` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/xhigh`, ≤2 rounds | B02-A GREEN; `seams … 0 blocking` | Механический перенос по картам; сухой прогон; golden без rebaseline |
 | 7 · solo P02.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.6/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P02.3 GREEN; O-3 для P02 после item | Идентификаторы, гейт полноты, ownership strict; push + hosted CI — владелец |
 | 8 · solo P03.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | design audit GREEN; P02 closed | Гейт раскладки R0–R5 с baseline 436, ретайр tenancy-structure, STR-доктрина |
-| 9 · solo P03.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2` | `implementation/xhigh` | `full` | `codex/gpt-6-sol/xhigh` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/xhigh`, ≤2 rounds | P03.1 GREEN; `p03-transfer.py plan … 0 problems` | Перенос 278 классов по карте; сухой прогон; golden без rebaseline; baseline = прогноз 159 |
+| 9 · solo P03.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2` | `implementation/xhigh` | `full` | `codex/gpt-6-sol/xhigh` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/xhigh`, ≤2 rounds | P03.1 GREEN; `p03-transfer.py plan … 0 problems` | Перенос 278 классов по карте; manifest/lock sync (D58); сухой прогон; golden без rebaseline; baseline = прогноз 159 |
+
+D58: remediation и повторный finish выполнены codex/gpt-6-astra/high по прямому мандату владельца; исходный аудит ATTENTION сохранён. Следующий design audit читает delta A1–A5 в новом независимом контексте.
 
 ## P03 — последовательность команд
 
@@ -66,9 +68,11 @@ sheet). Носители плана пишет один автор за раз (
 |:--|:--|:--|:--|:--|:--|
 | 0 | Дизайн фазы (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL P03` | `claude-code/claude-opus-5-5/high` (автор плана) | `/task:plan-design 2026.09.27-№1-COREX-KERNEL P03` | P02 закрыта |
 | 1 | Finish дизайна (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | `claude-code/claude-opus-5-5/high` (автор плана, D56) | `/task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | шаг 0; `plan-lint` OK |
-| 2 | Независимый аудит дизайна | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | `codex/gpt-6-sol/high` (не автор дизайна) | `codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'` | finish записан; `design-gate` ждёт аудит |
+| 2 | Независимый аудит нового fingerprint | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | `codex/gpt-6-astra/xhigh` (отдельный reviewer, свежий контекст; маршрут Task audit) | `codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-astra -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'` | finish записан; `design-gate` ждёт аудит |
 | 3 | Исполнение P03.1 (sheet 8) | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1` | `codex/gpt-6-sol/high`; review `cursor/grok-4.7/high` | `codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1'` | design audit GREEN |
 | 4 | Исполнение P03.2 (sheet 9) | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2` | `codex/gpt-6-sol/xhigh`; review `cursor/grok-4.7/high` | `codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2'` | P03.1 GREEN |
-| 5 | Фазовый аудит | `task:plan-audit 2026.09.27-№1-COREX-KERNEL P03` | `codex/gpt-6-sol/high` (не исполнитель P03.2 по сессии) | `codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL P03'` | P03.1, P03.2 GREEN (Phase Assurance: public-contract) |
-| 6 | Закрытие фазы | `task:plan-close 2026.09.27-№1-COREX-KERNEL P03` | `claude-code/claude-opus-5-5/high` (автор плана, D56 п.5) | `/task:plan-close 2026.09.27-№1-COREX-KERNEL P03` | фазовый аудит GREEN |
+| 5 | Закрытие P03 в owning continuation | последний GREEN item P03.2 закрывает фазу по D56.5 | root исполнения, по sheet | текущая сессия | items и independent review GREEN; phase close gate allow |
+| 6 | Дополнительный adversarial audit (не обязателен) | `task:plan-audit 2026.09.27-№1-COREX-KERNEL P03` | `codex/gpt-6-astra/xhigh`, свежий reviewer | provider-native launch по Task | только принятое candidate/run-bound `audit-admission/v2`; не автоматически из Phase Assurance |
 | 7 | Дизайн следующей фазы | `task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | `claude-code/claude-opus-5-5/high` | `/task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | P03 закрыта |
+
+D59: P03 full replay исправляется текущим owner-authorized root; после GREEN design audit следующий шаг — P03.1 (sheet 8), без ещё одного круга дизайна. Полный audit вместо owning close не назначается автоматически.

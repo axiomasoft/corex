@@ -1,0 +1,9 @@
+implicit imports: 12 preserved
+fixtures: exact zone/path projection; existing negative controls retained
+relative paths: 1 files
+literal pass: 42 text files; 17 php files
+rector: done
+namespace pass: 278 files
+move pass: 278 php, 0 extra, 0 dirs
+baseline paths: 8 files (no rebaseline)
+apply: done — continue with research/P03-design.md §4.2 (manifest, golden, lock, verify, pint, baseline, gates)

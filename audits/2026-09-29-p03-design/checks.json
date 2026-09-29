@@ -1,0 +1,46 @@
+{
+  "scope": "P03 design delta; completed P00-P02 evidence reused",
+  "head": "556c5478f428290a7b60959388783f860f1f29b0",
+  "fingerprint": "3f592897c5ed169202d6d22fbee4560a15c78c0a3949ad9e41e126995b9f05d9",
+  "transfer_mode": "isolated detached worktree, apply --no-rector (design diagnostic only)",
+  "moved_classes": 278,
+  "verify_before_golden": {
+    "exit_code": 1,
+    "problems": 376
+  },
+  "golden_rules_added": 376,
+  "verify_after_golden": {
+    "exit_code": 0,
+    "problems": 0
+  },
+  "module_layout": {
+    "current_violations": 436,
+    "predicted_violations": 159,
+    "after_transfer_violations": 159,
+    "matches_prediction": true
+  },
+  "changed_package_manifests": [
+    "packages/access/composer.json",
+    "packages/core/composer.json",
+    "packages/operations/composer.json",
+    "packages/tasks-workflow/composer.json",
+    "packages/tasks/composer.json",
+    "packages/tenancy/composer.json"
+  ],
+  "composer_lock_unchanged": true,
+  "rename_completeness_after_manifest_and_golden": {
+    "exit_code": 1,
+    "occurrences": 13,
+    "all_in": "composer.lock"
+  },
+  "package_graph_after_transfer": "OK",
+  "scan_reproduction": "10/10 source artifacts byte-identical; redirected to ignored build output",
+  "unit_tests": "3/3 passed",
+  "full_rector_and_product_suites_run": false,
+  "verdict": "ATTENTION",
+  "findings": {
+    "Major": 4,
+    "Minor": 1
+  },
+  "plan_integration": "pending owning author under PLAN3.D56; authoritative journal/handoff untouched"
+}

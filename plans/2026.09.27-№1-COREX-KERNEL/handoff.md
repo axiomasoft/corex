@@ -1,28 +1,20 @@
 # HANDOFF — 2026-09-29 — after P03
 
-**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
-| Model class | frontier |
-| Effort | high |
-| Capabilities | — |
-| Context | cold-start-root: whole-plan-independent-audit |
-| Суть | Независимый аудит дизайна P00–P03 (текущий fingerprint после finish) моделью, не автором дизайна (D56). После GREEN — исполнение строки 8 execution-sheet (`roadmap.md` §P03 — последовательность команд, шаг 3). |
+| Batch | solo |
+| Model | codex/gpt-6-sol |
+| Thinking | high |
+| Context | continue-root |
 
-**Provider-native command:**
+**Done:** Design audit GREEN текущего fingerprint (см. audit-snapshot); A1–A5 перепроверены, B1–B4 исправлены в этой сессии по D59. Полный Rector replay: root 822+10, PG 240, Golden 4, package suites 21, mutation 34/34; PHPStan/deps и все гейты GREEN. Independent review: cursor/grok-4.7/high GREEN. Finish, audit journal и generated views согласованы. Product items остаются Not started.
 
-```bash
-codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
-```
+**Remaining:** Исполнить P03.1 (sheet 8), затем P03.2 (sheet 9) с их собственными Validation и независимым review. Нового design audit до старта не требуется, пока fingerprint не меняется.
 
-**Done:** Finish дизайна P00–P03 (2026-09-29): `plan-lint` OK, execution-sheet строки 8–9 согласованы с Routing P03, fingerprint записан. `backlog/P03.md` → `phases/P03/P03.md` + `P03.1.md`, `P03.2.md`. D57 (заменяет D05): корень `src/` пакета = корневой модуль, feature modules — подкаталоги с тем же набором; карта `artifacts/P03/module-map.tsv` — 278 переносов, 68 классов остаются на месте (внешний потребитель, `config/*.php` пакета, glossary), продукт вне N5 (N8), 0 коллизий; гейт `module-layout-gate` R0–R5 с ratchet-baseline (сейчас 436 → после переноса 159); ретайр красного `tenancy-structure-gate`; golden без rebaseline через `manual`-правила; glossary N5. Черновые выводы проверены, поправки — в D57 п.3–4. Проверено на `52446de`: скан воспроизводится, `p03-transfer.py plan` 0 problems, сухой прогон без Rector + `verify` 0 problems, гейт на перенесённом дереве = прогноз, тест гейта 3/3 OK.
+**Sources of truth:** decisions/D59-p03-full-replay-readiness.md; phases/P03/P03.1.md; phases/P03/P03.2.md; research/P03-design.md; audits/2026-09-29-p03-design-recheck.md; audits/2026-09-29-p03-design-recheck/{audit-snapshot.json,final-replay.json,independent-review.md,continuity.json} (audits — от корня репозитория).
 
-**Remaining:** `task:plan-audit … design` Codex gpt-6-sol/high (не автор) → P03.1, P03.2 по execution-sheet строки 8–9 → фазовый аудит → закрытие; все команды — `roadmap.md` §P03 — последовательность команд. Носители плана сводит только автор плана (D56).
+**Open risks:** Hosted CI/push отложены D47. Scratch доказал механический перенос на базе P02; P03.1 устанавливает composer/CI/docs wiring. Execution повторяет проверки на своём input tree. Локальные package vendors — копии имеющегося dependency set, не fresh-install proof.
 
-**Sources of truth:** phases/P03/P03.md; phases/P03/P03.1.md; phases/P03/P03.2.md; decisions/D57-p03-feature-module-layout.md; research/P03-design.md; research/P03-design-rag.md; artifacts/P03-design/examples.md; artifacts/P03-design/scripts/; artifacts/P03/; artifacts/P03-design/cloud/README.md; artifacts/P03-design-rag/README.md.
-
-**Open risks:** Rector-шаг и полный тестовый стек переноса не прогонялись в дизайне (нет `vendor` в scratch-worktree) — проверяются в обязательном сухом прогоне P03.2. 23 публичных FQCN, которые называют другие пакеты, меняются (D01). Hosted CI отложен (D47).
-
-**Workarounds/Deferred/Open questions:** 68 классов в `public-by-usage.tsv` и 91 межмодульная ссылка в `Internal` (R5) остаются в baseline гейта до P04. Модели/jobs без morph-алиаса: сохранённые FQCN не мигрируются (D01, CHANGELOG).
+**Workarounds/Deferred/Open questions:** Нет открытых design findings. 68 public-by-usage/91 R5 — P04 по D57. Context continue-root означает завершённый scope аудита; это не автоматическое исполнение следующего item. Маршрут следующего запуска — implementation/high из sheet 8; переход в новую сессию не требуется.

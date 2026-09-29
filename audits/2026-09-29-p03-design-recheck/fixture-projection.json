@@ -1,0 +1,23 @@
+{
+  "core_zone_edges": {
+    "packages/core/src/Messaging/Contracts/TraceContextBridge.php": [
+      "CoreX\\Observability\\Internal\\OperationContext"
+    ],
+    "packages/core/src/Messaging/Internal/NullTraceContextBridge.php": [
+      "CoreX\\Observability\\Internal\\OperationContext"
+    ],
+    "packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php": [
+      "CoreX\\Observability\\Internal\\OpenTelemetryBridge",
+      "CoreX\\Observability\\Internal\\OperationContext"
+    ],
+    "packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php": [
+      "CoreX\\Audit\\Internal\\AuditObserver"
+    ]
+  },
+  "package_paths": [
+    "tests/Arch/ObservabilityContractTest.php",
+    "tests/Arch/AchievedInvariantTest.php",
+    "packages/tenancy/tests/Arch/NoCrossDbFkTest.php"
+  ],
+  "removed_empty_suite_directory": "packages/core/tests/Views"
+}

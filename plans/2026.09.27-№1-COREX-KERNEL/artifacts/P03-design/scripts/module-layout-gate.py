@@ -11,7 +11,7 @@ Scope: every PHP file under `packages/*/src/` (the product keeps its own layout,
       also hold its service provider directly, and only a package root holds `<Pkg>Module.php`.
   R4  `Internal` only directly under a module (never nested).
   R5  no reference into the `Internal` of another module of the same package, except from a composition root
-      (package-root provider/`*Module.php`, any `Laravel` bridge).
+      (permitted provider/root entry, `Laravel` directly under the module; PLAN3.D58).
 
 The package root is itself a module (the package's primary module); its sub-directories that are neither categories nor
 bridges are feature modules. The kernel has no root module. Foreign-package `Internal` references stay with
@@ -38,10 +38,22 @@ BRIDGES = ('Internal', 'Laravel', 'Testing', 'PHPStan')
 KERNEL = 'axiomasoft/corex'
 NS_RE = re.compile(r'^\s*namespace\s+([\w\\]+)\s*;', re.M)
 DECL_RE = re.compile(r'^\s*(?:(?:final|abstract|readonly)\s+)*(?:class|interface|trait|enum)\s+(\w+)', re.M)
-USE_RE = re.compile(r'^\s*use\s+(?!function\b|const\b)([\w\\]+)\s*(?:\{([^}]*)\}|(?:\s+as\s+\w+)?)\s*;', re.M)
-FQ_RE = re.compile(r'(?<![\w\\])\\((?:CoreX|Flex)(?:\\\w+)+)')
-COMMENT_RE = re.compile(r'/\*.*?\*/|//[^\n]*|#(?!\[)[^\n]*', re.S)
-STRING_RE = re.compile(r"'(?:\\.|[^'\\])*'|\"(?:\\.|[^\"\\])*\"", re.S)
+USE_RE = re.compile(r'\buse\s+([^;()]+);')
+NAME_RE = re.compile(r'(?<![\w\\])\\?[A-Za-z_]\w*(?:\\[A-Za-z_]\w*)+')
+# Match strings and comments in a single pass: comment markers inside a quoted
+# URL must not swallow a later import/reference. Preserve newlines for declarations.
+NON_CODE_RE = re.compile(r"'(?:\\.|[^'\\])*'|\"(?:\\.|[^\"\\])*\"|/\*.*?\*/|//[^\n]*|#(?!\[)[^\n]*", re.S)
+
+
+def resolve(name: str, namespace: str, imports: dict[str, str]) -> str:
+    if name.startswith('\\'):
+        return name.lstrip('\\')
+    first, sep, rest = name.partition('\\')
+    if first.lower() == 'namespace':
+        return namespace + ('\\' + rest if sep else '')
+    if first.lower() in imports:
+        return imports[first.lower()] + ('\\' + rest if sep else '')
+    return namespace + '\\' + name if namespace else name
 
 
 def load_packages(root: Path) -> dict[str, dict]:
@@ -55,17 +67,34 @@ def load_packages(root: Path) -> dict[str, dict]:
 
 
 def parse(text: str) -> tuple[str, list[str], set[str]]:
-    code = STRING_RE.sub("''", COMMENT_RE.sub('', text))
+    code = NON_CODE_RE.sub(lambda m: re.sub(r'[^\n]', ' ', m[0]), text)
     ns = NS_RE.search(code)
     namespace = ns.group(1) if ns else ''
-    refs = set()
+    refs, imports, spans = set(), {}, []
     for m in USE_RE.finditer(code):
-        if m.group(2) is not None:
-            refs.update(m.group(1).rstrip('\\') + '\\' + part.strip().split(' as ')[0].strip()
-                        for part in m.group(2).split(',') if part.strip())
-        else:
-            refs.add(m.group(1))
-    refs.update(FQ_RE.findall(code))
+        # A trait-use inside a class is not a namespace import. Closure use (...)
+        # is excluded by USE_RE. Package sources use one unbracketed namespace.
+        before = code[:m.start()]
+        if before.count('{') != before.count('}'):
+            continue
+        spans.append(m.span())
+        body = m[1].strip()
+        if re.match(r'(?:function|const)\b', body):
+            continue
+        group = re.fullmatch(r'([\w\\]+)\s*\{(.*)\}', body, re.S)
+        prefix, members = (group[1].rstrip('\\') + '\\', group[2]) if group else ('', body)
+        for member in members.split(','):
+            part = re.fullmatch(r'\s*([\w\\]+)(?:\s+as\s+(\w+))?\s*', member)
+            if not part:  # grouped function/const imports are not class references
+                continue
+            full = (prefix + part[1]).lstrip('\\')
+            imports[(part[2] or full.rsplit('\\', 1)[-1]).lower()] = full
+            refs.add(full)
+    body = code
+    for start, end in reversed(spans):
+        body = body[:start] + ' ' * (end - start) + body[end:]
+    body = NS_RE.sub('', body)
+    refs.update(resolve(m[0], namespace, imports) for m in NAME_RE.finditer(body))
     return namespace, DECL_RE.findall(code), refs
 
 
@@ -116,7 +145,7 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
     for f in files:
         f['module'], f['inner'] = module_of(f, kernel_modules)
         for decl in f['decls']:
-            owner[f"{f['namespace']}\\{decl}"] = f
+            owner[f"{f['namespace']}\\{decl}".lower()] = f
     for f in files:
         dirs, name = f['rel'][:-1], f['rel'][-1]
         expected = '\\'.join((f['root_ns'],) + dirs)
@@ -125,7 +154,8 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
         kernel = f['package'] == KERNEL
         # A service provider may sit directly in the package root or in its own module; `<Pkg>Module.php` only in the root.
         root_entry = (name.endswith('ServiceProvider.php') and not f['inner'] and f['module'] is not None) or \
-            (not dirs and (name.endswith('ServiceProvider.php') or (not kernel and name.endswith('Module.php'))))
+            (not dirs and (name == 'CoreServiceProvider.php' if kernel else
+                          name.endswith(('ServiceProvider.php', 'Module.php'))))
         if kernel and not root_entry and f['module'] is None:
             add('R1', f, 'kernel root holds only CoreServiceProvider and kernel modules')
             continue
@@ -142,9 +172,9 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
             add('R2', f, 'category not directly under the module')
         if 'Internal' in inner[1:]:
             add('R4', f, 'nested Internal')
-        composition = root_entry or 'Laravel' in inner
+        composition = root_entry or inner[:1] == ('Laravel',)
         for ref in sorted(f['refs']):
-            target = owner.get(ref)
+            target = owner.get(ref.lower())
             if (target is None or target is f or target['package'] != f['package'] or composition
                     or target['module'] == f['module'] or not target['inner'] or target['inner'][0] != 'Internal'):
                 continue

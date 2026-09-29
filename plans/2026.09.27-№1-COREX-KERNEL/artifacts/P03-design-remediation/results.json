@@ -1,0 +1,199 @@
+{
+  "gate-tests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts",
+      "-p",
+      "test_module_layout_gate.py"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "map-check": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-module-map.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "baseline-current": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout-gate.py",
+      "--config",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout.json",
+      "--write-baseline",
+      "--baseline",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design-remediation/baseline.current.json"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "baseline-predicted": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout-gate.py",
+      "--config",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout.json",
+      "--project",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03/module-map.tsv",
+      "--write-baseline",
+      "--baseline",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design-remediation/baseline.predicted.json"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "worktree-add": {
+    "command": [
+      "git",
+      "worktree",
+      "add",
+      "--detach",
+      "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "apply": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py",
+      "apply",
+      "--no-rector"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "manifest": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py",
+      "manifest"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "golden": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py",
+      "golden"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "lock": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py",
+      "lock"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "verify": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py",
+      "verify"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "rename-completeness": {
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/rename-completeness-gate.php"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "layout-after-transfer": {
+    "command": [
+      "python3",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout-gate.py",
+      "--config",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout.json",
+      "--root",
+      "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm",
+      "--baseline",
+      "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03/module-layout-baseline.predicted.json"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "frozen-golden": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "HEAD",
+      "--",
+      "tests/Golden/baseline"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "lock-negative-controls": [
+    "version",
+    "require",
+    "source",
+    "autoload"
+  ],
+  "old-lock-negative": {
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/rename-completeness-gate.php"
+    ],
+    "exit_code": 1,
+    "expected": 1
+  },
+  "changed_manifests": [
+    "packages/access/composer.json",
+    "packages/core/composer.json",
+    "packages/operations/composer.json",
+    "packages/tasks-workflow/composer.json",
+    "packages/tasks/composer.json",
+    "packages/tenancy/composer.json"
+  ],
+  "locked_packages": 233,
+  "diff-stat": {
+    "command": [
+      "git",
+      "diff",
+      "--stat",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "worktree-remove": {
+    "command": [
+      "git",
+      "worktree",
+      "remove",
+      "--force",
+      "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm"
+    ],
+    "exit_code": 0,
+    "expected": 0
+  },
+  "source_head": "556c5478f428290a7b60959388783f860f1f29b0",
+  "script_sha256": {
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design-remediation/check.py": "bd8fa34902f65e59508048a3b96ac610082348f381370ad217d167415424e4f4",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/module-layout-gate.py": "a1ddd0d8ef059860299703d656650dbc4d0d1bf5b98443cb19644e8807e3a72b",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-module-map.py": "bac7885b2858fe794ec6207342f90c520e4fd4992bd18868e1aad3e70bae5c5f",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/p03-transfer.py": "075b77e3bc608af9f9bac068a18a096ed7cdc070244c3a593d246b58dc2bf661",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts/test_module_layout_gate.py": "8577d12ac273af9d5ae45e679558d594fbc768ca01fead103ec9eacc9b657a8a"
+  }
+}

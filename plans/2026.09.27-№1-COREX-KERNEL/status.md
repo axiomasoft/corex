@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: fca7881aa39ee9b87e1a00a08f4c06b6428f41861e7d10471fbe6728f9cd6032
+inputs_sha256: 29fbf7b1fda70426b3419f095d999cc2206850371edb08c668d1422727f508d3
 generated_by: task plan-views status
 -->
 
@@ -161,6 +161,18 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | claude-code/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | codex/gpt-6-sol/high | plan-audit · audit-attention · P03 design audit: 4 Major + 1 Minor. Source audits/2026-09-29-p03-design.md; prior reviewer result reconciled by owner-authorized P03 designer. Product unchanged. |
+| 2026-09-29 | designer/codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | gpt-6-astra/xhigh | plan-audit · in-progress · Independent P03 recheck after D58; owner additionally authorizes inline design fixes in this session. |
+| 2026-09-29 | gpt-6-astra/xhigh | plan-audit · audit-attention · Full Rector replay found missing implicit sibling imports (fatal Golden) and stale package-relative PHPStan paths. Exact logs: audits/2026-09-29-p03-design-recheck/full-initial. Owner-authorized inline repair continues. |
+| 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-astra/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | gpt-6-astra/xhigh | plan-audit · audit-green · D59 fixes independently reviewed by Cursor/grok-4.7/high GREEN. Full Rector replay: Golden4, root822+10, PG240, package21, mutation34 and all gates GREEN. Report: audits/2026-09-29-p03-design-recheck.md. Next P03.1. |
 
 ## Owner Gates
 

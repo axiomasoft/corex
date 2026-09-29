@@ -1,0 +1,15 @@
+Installing dependencies from lock file (including require-dev)
+Verifying lock file contents can be installed on current platform.
+Package operations: 0 installs, 6 updates, 0 removals
+    0 [>---------------------------]    0 [->--------------------------]
+  - Upgrading axiomasoft/corex (dev-main 14d7ea1 => dev-main 21d414b): Source already present
+  - Upgrading axiomasoft/corex-access (dev-main 25af727 => dev-main 633919b): Source already present
+  - Upgrading axiomasoft/corex-tasks (dev-main 93c3f66 => dev-main e251b35): Source already present
+  - Upgrading axiomasoft/corex-tasks-workflow (dev-main bee69d6 => dev-main 049e7c7): Source already present
+  - Upgrading axiomasoft/corex-tenancy (dev-main 1ef359c => dev-main a5ea449): Source already present
+  - Upgrading axiomasoft/corex-operations (dev-main ae6fc27 => dev-main 4456d0c): Source already present
+    0 [>---------------------------]    0 [->--------------------------]
+Generating autoload files
+109 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+phpstan/extension-installer: Extensions installed

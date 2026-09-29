@@ -1,0 +1,39 @@
+[
+  {
+    "case": "full-import-control",
+    "source": "namespace CoreX\\Search\\Data; use CoreX\\Search\\Index\\Internal\\Driver; final class Consumer { public function run(): object { return new Driver(); }}",
+    "violations": [
+      {
+        "rule": "R5",
+        "file": "packages/search/src/Data/Consumer.php",
+        "detail": "CoreX\\Search\\Index\\Internal\\Driver"
+      }
+    ]
+  },
+  {
+    "case": "namespace-alias",
+    "source": "namespace CoreX\\Search\\Data; use CoreX\\Search\\Index; final class Consumer { public function run(): object { return new Index\\Internal\\Driver(); }}",
+    "violations": []
+  },
+  {
+    "case": "laravel-nested-in-internal",
+    "source": "namespace CoreX\\Search\\Index\\Internal\\Laravel; use CoreX\\Search\\Internal\\Hydrator; final class Uses {}",
+    "violations": []
+  },
+  {
+    "case": "unknown-kernel-root-provider",
+    "source": "namespace CoreX; final class ExtraServiceProvider {}",
+    "violations": []
+  },
+  {
+    "case": "layer-bucket-disguised-as-module",
+    "source": "namespace CoreX\\Search\\Support\\Data; final class Helper {}",
+    "violations": [
+      {
+        "rule": "R1",
+        "file": "packages/search/src/Support/Data/Helper.php",
+        "detail": "layer bucket Support/ at package root"
+      }
+    ]
+  }
+]

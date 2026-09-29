@@ -1,6 +1,6 @@
 # P03 — примеры: карта, гейт, доктрина, golden
 
-Нормы — D57; досье — `research/P03-design.md`. Все числа — прогон дизайна на `52446de`.
+Нормы — D57 + D58 + D59; досье — `research/P03-design.md`. Все числа — прогон дизайна на `52446de`.
 
 ## 1 Карта модулей (строки `artifacts/P03/module-map.tsv`)
 
@@ -53,11 +53,13 @@ module-layout OK: 1112 files, 159 violations, 159 baselined, 0 new, 0 stale; R0 
 
 Негативные контроли — `scripts/tests/test_module_layout_gate.py` (копия артефакта): чистое дерево-фикстура → 0 нарушений;
 по одному подброшенному файлу на правило R0…R5 → правило найдено; baseline: новая запись → exit 1, исправленная, но
-оставленная запись (stale) → exit 1.
+оставленная запись (stale) → exit 1. Дополнительно (D58): namespace aliases, group/comma imports,
+qualified/namespace-relative/FQCN references → R5; собственный Internal → разрешён; прямой Laravel bridge → разрешён,
+Internal/Laravel и Data/Laravel → R5; посторонний kernel provider → R1; строки/комментарии/function/const imports не дают ложных ссылок.
 
 ```text
 $ python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
-Ran 3 tests … OK
+Ran 8 tests … OK
 ```
 
 Негатив на реальном дереве (P03.1 Validation): `mkdir -p packages/search/src/Support && printf '<?php\nnamespace CoreX\\Search\\Support;\nfinal class Planted {}\n' > packages/search/src/Support/Planted.php`
@@ -90,7 +92,7 @@ Ran 3 tests … OK
 ```
 
 Дизайн-прогон: `golden: 376 manual rules added, 376 total`. `generated`, `ambiguous_packages`, `tests/Golden/baseline/**`
-не меняются; `python3 plans/…/artifacts/P01-design/scripts/golden-rename-map.py --check` остаётся OK (он сохраняет `manual`).
+не меняются; `python3 …/p03-transfer.py golden-check` → `golden-check OK: frozen fields unchanged, 376 exact manual additions`. P01 generator читает pre-P02 layout и не используется после переноса; его stale уже воспроизводится на исходном HEAD (D59).
 
 ## 5 composer и CI
 
@@ -115,3 +117,19 @@ Ran 3 tests … OK
   (`Contracts|Data|Enums|Events|Exceptions`); see `docs/architecture/constitution.md` STR-003. Drain queues before
   upgrading; stored `*_type` values that hold an old model FQCN no longer resolve (no aliases, D01).
 ```
+
+## 7 Полный перенос: executable additions (D59)
+
+- `apply`: `implicit imports: 12 preserved`; `baseline paths: 8 files (no rebaseline)`;
+  `fixtures: exact zone/path projection; existing negative controls retained`.
+- После Pint: `python3 …/p03-transfer.py adapters` → `adapter hashes: 5 mechanically equivalent sources`.
+- Преднамеренная замена `return 1` → `return 2` в adapter fixture → exit != 0; fixture hash не записывается.
+- `python3 -m unittest discover -s plans/2026.09.27-№1-COREX-KERNEL/artifacts/P03-design/scripts -p test_p03_transfer.py`
+  → `Ran 3 tests`, `OK`: caller move с unmoved sibling, package-relative baseline projection с неизменным count.
+- CORE_ZONE_EXACT_IMPORTS пополняется пятью ранее существовавшими imports в четырёх файлах, не wildcard:
+  TraceContextBridge → OperationContext; NullTraceContextBridge → OperationContext;
+  OpenTelemetryTraceContextBridge → OperationContext/OpenTelemetryBridge;
+  AuditCapabilityWiring → AuditObserver. Полные новые FQCN и source paths — `build/p03/fixture-projection.json`.
+- Полный suite из чистого дерева использует `packages/custom-fields/src`, не ghost `packages/attributes/src`;
+  root phpunit больше не ссылается на отсутствующий/пустой `packages/core/tests/Views`.
+- Итоговые команды и исходы: `audits/2026-09-29-p03-design-recheck/final-replay.json` от корня репозитория.

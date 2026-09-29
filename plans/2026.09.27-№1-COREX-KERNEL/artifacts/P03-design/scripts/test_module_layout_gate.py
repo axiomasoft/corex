@@ -67,6 +67,68 @@ class ModuleLayoutGateTest(unittest.TestCase):
             with self.subTest(rule=rule), tempfile.TemporaryDirectory() as tmp:
                 self.assertIn(rule, rules(build(Path(tmp), {rel: body})))
 
+    def test_r5_resolves_namespace_aliases_and_relative_names(self) -> None:
+        bodies = [
+            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Index; '
+            'final class Uses { public function run() { return new Index\\Internal\\Driver(); }}',
+            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Index as Feature; '
+            'final class Uses { public function run() { return Feature\\Internal\\Driver::class; }}',
+            'namespace CoreX\\Search\\Data; use CoreX\\Search\\{Index as Feature, Other}; '
+            'final class Uses extends Feature\\Internal\\Driver {}',
+            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Other, CoreX\\Search\\Index as Feature; '
+            'final class Uses { public Feature\\Internal\\Driver $driver; }',
+            'namespace CoreX\\Search; final class Uses { public Index\\Internal\\Driver $driver; }',
+            'namespace CoreX\\Search; final class Uses { public namespace\\Index\\Internal\\Driver $driver; }',
+            'namespace CoreX\\Search\\Data; final class Uses { public \\CoreX\\Search\\Index\\Internal\\Driver $driver; }',
+        ]
+        for body in bodies:
+            with self.subTest(body=body), tempfile.TemporaryDirectory() as tmp:
+                rel = 'search/src/Data/Uses.php' if 'namespace CoreX\\Search\\Data;' in body else 'search/src/Uses.php'
+                self.assertIn('R5', rules(build(Path(tmp), {rel: body})))
+
+    def test_only_direct_laravel_bridge_is_composition(self) -> None:
+        for path, namespace, forbidden in (
+            ('Index/Laravel', 'Index\\Laravel', False),
+            ('Index/Internal/Laravel', 'Index\\Internal\\Laravel', True),
+            ('Index/Data/Laravel', 'Index\\Data\\Laravel', True),
+        ):
+            with self.subTest(path=path), tempfile.TemporaryDirectory() as tmp:
+                body = f'namespace CoreX\\Search\\{namespace}; use CoreX\\Search\\Internal\\Hydrator; final class Uses {{}}'
+                self.assertEqual(forbidden, 'R5' in rules(build(Path(tmp), {f'search/src/{path}/Uses.php': body})))
+
+    def test_kernel_root_provider_name_is_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = build(Path(tmp), {'core/src/ExtraServiceProvider.php':
+                                    'namespace CoreX; final class ExtraServiceProvider {}'})
+            self.assertIn('R1', rules(root))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = build(Path(tmp), {'core/src/Audit/AuditServiceProvider.php':
+                                    'namespace CoreX\\Audit; final class AuditServiceProvider {}'})
+            self.assertEqual([], rules(root))
+
+    def test_strings_comments_and_nonclass_imports_are_not_references(self) -> None:
+        source = '''<?php
+namespace CoreX\\Search\\Data;
+use function CoreX\\Search\\Index\\Internal\\Driver;
+use const CoreX\\Search\\Internal\\Hydrator;
+final class Uses {
+    public const URL = 'https://example.test';
+    public const TEXT = 'CoreX\\Search\\Index\\Internal\\Driver';
+    // new \\CoreX\\Search\\Index\\Internal\\Driver();
+}
+'''
+        ns, declarations, refs = GATE.parse(source)
+        self.assertEqual('CoreX\\Search\\Data', ns)
+        self.assertEqual(['Uses'], declarations)
+        self.assertEqual(set(), refs)
+
+    def test_alias_of_own_module_internal_remains_allowed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = build(Path(tmp), {'search/src/Index/Data/Uses.php':
+                'namespace CoreX\\Search\\Index\\Data; use CoreX\\Search\\Index as Feature; '
+                'final class Uses { public Feature\\Internal\\Driver $driver; }'})
+            self.assertEqual([], rules(root))
+
     def test_baseline_rejects_new_and_stale_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = build(Path(tmp), {PLANTED['R3'][0]: PLANTED['R3'][1]})

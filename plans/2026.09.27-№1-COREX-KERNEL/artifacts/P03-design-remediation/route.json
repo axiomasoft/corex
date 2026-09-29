@@ -1,0 +1,11 @@
+{
+  "model_class": "frontier",
+  "effort": "high",
+  "source": "provider-thread-state",
+  "ts": "2026-09-29T10:55:12Z",
+  "model": "gpt-6-astra",
+  "thread_id": "01a0eca9-3625-7293-9a71-1a3bd5c379c2",
+  "source_version": "codex-turn-context-v1",
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "invocation": "$ task:plan-design 2026.09.27-№1-COREX-KERNEL P03"
+}

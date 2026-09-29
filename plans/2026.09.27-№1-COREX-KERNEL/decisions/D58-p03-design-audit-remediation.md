@@ -1,0 +1,52 @@
+---
+id: D58
+date: 2026-09-29
+status: accepted
+item: P03
+items: [P03, P03.1, P03.2]
+supersedes: []
+superseded_by: null
+---
+# D58 — P03 design audit A1–A5 remediation (accepted)
+
+**Actor:** owner-authorized designer/codex/gpt-6-astra/high. Владелец вызвал `task:plan-design … P03`
+для исправления аудита и после ROUTE_UNDERSHOOT выбрал перезапуск на Astra/high; `design-context` принял
+фактический frontier/high. Это узкий мандат на правку дизайна P03 и finish поверх D56;
+авторство последующих фаз и полномочия на исполнение не меняются.
+**Evidence:** `audits/2026-09-29-p03-design.md` (4 Major + 1 Minor, исходный fingerprint
+`3f592897c5ed169202d6d22fbee4560a15c78c0a3949ad9e41e126995b9f05d9`);
+`artifacts/P03-design-remediation/README.md` и логи. Исходные audit artifacts сохранены.
+
+## Решение
+
+1. **A1, поправка к D57 п.6.** Literal pass изменяет FQCN в `extra.corex.public-api` и `extra.corex.module` шести манифестов
+   `packages/{access,core,operations,tasks-workflow,tasks,tenancy}/composer.json`.
+   Имена пакетов, зависимости и PSR-4 корни сохраняются. Корневой `composer.lock` должен получить такую же metadata.
+   `p03-transfer.py lock` использует Composer `update --lock --no-install --no-scripts --no-plugins`,
+   staging sealed Stancl providers и точное восстановление манифестов после staging;
+   проверяет неизменность зависимостей и соответствие public-api/module локальным манифестам.
+   Неуспех восстанавливает исходный lock; повторный запуск допустим. Все затронутые файлы включены в P03.2.
+2. **A2.** Порядок после `apply`: `manifest → golden → lock → verify → Pint → baseline → gates`.
+   `verify` требует Golden rules, поэтому не может предшествовать `golden`. Frozen baseline и `generated` не меняются.
+3. **A3.** R5 разрешает class/namespace imports (alias, group, comma), qualified имена относительно
+   namespace и `namespace\`, абсолютные FQCN; сравнивает владельцев без учёта регистра PHP-имён.
+   Комментарии, строки и импорты function/const не считаются ссылками на классы.
+   Область парсера — принятый в package sources один unbracketed namespace; динамические class-string вне R5.
+4. **A4, уточнение D57 п.5.** Исключение composition root для Laravel действует только на
+   `<Module>/Laravel/**` непосредственно под модулем. `Internal/Laravel/**` и `Data/Laravel/**` не получают исключения.
+5. **A5.** Корень kernel разрешает ровно `CoreServiceProvider.php`; произвольный `*ServiceProvider.php`
+   там — R1. Provider непосредственно в разрешённом feature module остаётся допустим.
+
+## Почему
+
+Аудит воспроизвёл stale lock, неверный порядок команд и три пропуска гейта. Исправления делают
+инструмент и executable contract согласованными с исходной нормой D57; D57 сохранён как история.
+Composer refresh ограничен сравнением полного lock; неизвестный metadata drift останавливает перенос.
+
+## Consequences
+
+Карта остаётся 278 переносов / 68 public-by-usage. Обе baseline пересчитываются исправленным гейтом:
+436 до переноса, 159 после; содержимое должно совпасть с прежними эталонами байт в байт.
+Regression checks и изолированный перенос без Rector проверяют исправления дизайна, а не закрывают P03.
+Полный сухой прогон с Rector и продуктовыми suites остаётся обязательным в P03.2.
+Новый finish требует независимого аудита нового fingerprint; эта сессия GREEN себе не выставляет.

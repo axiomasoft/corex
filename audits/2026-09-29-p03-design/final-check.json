@@ -1,0 +1,27 @@
+{
+  "tracked_checkout_byte_changes": [],
+  "product_unchanged": true,
+  "authoritative_plan_unchanged": true,
+  "diagnostic_worktree_removed": true,
+  "audit_only_files": [
+    "apply.log",
+    "checks.json",
+    "continuity.json",
+    "coverage.json",
+    "design-inputs.json",
+    "dry-diff-stat.txt",
+    "dry-gate.log",
+    "dry-graph.log",
+    "dry-rename.log",
+    "gate-reproductions.json",
+    "golden.log",
+    "journal-events.pending.json",
+    "manifest-delta.patch",
+    "manifest.log",
+    "reproduce-gate.py",
+    "route.json",
+    "verify-after-golden.log",
+    "verify-before-golden.log",
+    "worktree-anchor.json"
+  ]
+}

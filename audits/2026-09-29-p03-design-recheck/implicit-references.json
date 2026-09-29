@@ -1,0 +1,466 @@
+[
+    {
+        "source": "packages/access/src/Matrix/Internal/DatabaseRoleMatrixCompiler.php",
+        "symbol": "CoreX\\Access\\Matrix\\Data\\ActiveEntityFilter"
+    },
+    {
+        "source": "packages/access/src/Matrix/Internal/DatabaseRoleMatrixCompiler.php",
+        "symbol": "CoreX\\Access\\Matrix\\AzGuardRoleModel"
+    },
+    {
+        "source": "packages/access/src/Matrix/Internal/MatrixPermissionCatalogBuilder.php",
+        "symbol": "CoreX\\Access\\Matrix\\Data\\ActiveEntityFilter"
+    },
+    {
+        "source": "packages/core/src/Audit/Internal/AuditObserver.php",
+        "symbol": "CoreX\\Audit\\CurrentActor"
+    },
+    {
+        "source": "packages/core/src/Config/Internal/KernelConfigSection.php",
+        "symbol": "CoreX\\Config\\CoreOptions"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Compiler/CompilationValidator.php",
+        "symbol": "CoreX\\Modules\\Compiler\\NormalizedExtension"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Compiler/InstalledPackages.php",
+        "symbol": "CoreX\\Modules\\Compiler\\InstalledPackageVersion"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Extend/Filament.php",
+        "symbol": "CoreX\\Modules\\Contracts\\Extender"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Extend/Menu.php",
+        "symbol": "CoreX\\Modules\\Contracts\\Extender"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Extend/Routes.php",
+        "symbol": "CoreX\\Modules\\Contracts\\Extender"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Extend/Workflow.php",
+        "symbol": "CoreX\\Modules\\Contracts\\Extender"
+    },
+    {
+        "source": "packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php",
+        "symbol": "CoreX\\Modules\\Registry\\CompiledModule"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/NullOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationStarted"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/NullOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationCompleted"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/NullOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationFailed"
+    },
+    {
+        "source": "packages/core/src/Observability/Data/OperationCompleted.php",
+        "symbol": "CoreX\\Observability\\Internal\\OperationContext"
+    },
+    {
+        "source": "packages/core/src/Observability/Data/OperationCompleted.php",
+        "symbol": "CoreX\\Observability\\Enums\\OperationOutcome"
+    },
+    {
+        "source": "packages/core/src/Observability/Data/OperationFailed.php",
+        "symbol": "CoreX\\Observability\\Internal\\OperationContext"
+    },
+    {
+        "source": "packages/core/src/Observability/Data/OperationStarted.php",
+        "symbol": "CoreX\\Observability\\Internal\\OperationContext"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/PsrLogOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationStarted"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/PsrLogOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationCompleted"
+    },
+    {
+        "source": "packages/core/src/Observability/Internal/PsrLogOperationObserver.php",
+        "symbol": "CoreX\\Observability\\Data\\OperationFailed"
+    },
+    {
+        "source": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+        "symbol": "CoreX\\Storage\\Data\\StorageCapabilities"
+    },
+    {
+        "source": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+        "symbol": "CoreX\\Storage\\Exceptions\\StorageOperationFailed"
+    },
+    {
+        "source": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+        "symbol": "CoreX\\Storage\\Data\\ExportArchiveRef"
+    },
+    {
+        "source": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+        "symbol": "CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable"
+    },
+    {
+        "source": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+        "symbol": "CoreX\\Storage\\ScopedFilesystem"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/AttributeWriteResult.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/FieldSelection.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/FieldSnapshot.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/FilterNode.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/FilterPlan.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/ValueBag.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/custom-fields/src/Data/ValuePatch.php",
+        "symbol": "CoreX\\CustomFields\\Internal\\Support\\Validation"
+    },
+    {
+        "source": "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
+        "symbol": "CoreX\\Operations\\Definition\\ApiOperationValidator"
+    },
+    {
+        "source": "packages/tasks/src/Task/Internal/Models/TaskTarget.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tasks/src/Task/Internal/Models/TaskWatcher.php",
+        "symbol": "CoreX\\Tasks\\Task\\Models\\Task"
+    },
+    {
+        "source": "packages/tenancy/src/Account/Internal/Models/AccountExport.php",
+        "symbol": "CoreX\\Tenancy\\Account\\Models\\Account"
+    },
+    {
+        "source": "packages/tenancy/src/Account/Internal/Models/AccountSchemaState.php",
+        "symbol": "CoreX\\Tenancy\\Account\\Models\\Account"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Data/DomainChallenge.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Internal\\NormalizedHost"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Data/DomainChallengeBinding.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Internal\\NormalizedHost"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Data/DomainChallengeDraft.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Internal\\NormalizedHost"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\DomainTrustActor"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\IssuedDomainChallenge"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Enums\\DomainTrustOperation"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\DomainChallengeDraft"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\DomainTrustTransition"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\ObservedDomainProof"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\DomainTrustTransition"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Data\\DomainChallengeBinding"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Enums\\DomainTrustChangeReason"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Data/DomainTrustTransition.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Internal\\NormalizedHost"
+    },
+    {
+        "source": "packages/tenancy/src/DomainTrust/Data/DomainTrustTransition.php",
+        "symbol": "CoreX\\Tenancy\\DomainTrust\\Enums\\DomainTrustChangeReason"
+    },
+    {
+        "source": "packages/tenancy/src/Identity/Internal/DatabaseIdentitySyncer.php",
+        "symbol": "CoreX\\Tenancy\\Identity\\Contracts\\IdentitySyncer"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Credentials/FencedCredentialIssuer.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Credentials/FinalWriteAdmission.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Inbox/DurableInbox.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Data/PairState.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\PairKey"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\PairState"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\PairWitness"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Projection/ReferenceMembershipProjection.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Contracts/AccountClickAuthorizer.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenu.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Contracts/AccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Contracts/AccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Contracts\\AccountsReadTransport"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Contracts\\AccountMenuCache"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Contracts\\AccountClickAuthorizer"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Contracts/AccountsReadTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Contracts/AccountsReadTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Contracts\\AccountMenuCache"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountListEntry"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/StrictAccountsTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Contracts\\AccountsReadTransport"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/StrictAccountsTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Switcher/StrictAccountsTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Timing/Elapsed.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Data\\ClockReading"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/AccessTokenValidator.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Data/ActorRef.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\ActorType"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Data/ActorRef.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Internal\\Transport\\CentralValue"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/CentralValue.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/ChannelBinding.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/ChannelBinding.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/JwsVerifier.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/MembershipQuery.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/MembershipSnapshot.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipState"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/MembershipSnapshot.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/MembershipTrigger.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipEventKind"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/MembershipTrigger.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipReason"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/RevokeMembershipReceipt.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/RevokeMembershipRequest.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipReason"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/StrictJson.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipEventKind"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Enums\\MembershipReason"
+    },
+    {
+        "source": "packages/tenancy/src/Membership/Internal/Transport/Value.php",
+        "symbol": "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Data\\ClaimRequest"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Data\\ClaimResult"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Data\\QualifiedTemplate"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/Database/TemplateIntegrityVerifier.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException"
+    },
+    {
+        "source": "packages/tenancy/src/Provisioning/Internal/Database/TemplateManifest.php",
+        "symbol": "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException"
+    },
+    {
+        "source": "packages/tenancy/src/Workspace/Internal/DatabaseWorkspaceResolver.php",
+        "symbol": "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver"
+    },
+    {
+        "source": "packages/tenancy/src/Workspace/Internal/DatabaseWorkspaceResolver.php",
+        "symbol": "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException"
+    }
+]
