@@ -1,0 +1,71 @@
+{
+  "scope_completion": {
+    "outcome": "continue-root",
+    "reason": "authorized-scope-complete",
+    "evidence": [
+      "batch:57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "lifecycle:scope-complete",
+      "checkpoint:artifacts/P04-owner-acceptance/completion.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": false,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "active",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "artifacts/P04-owner-acceptance/completion.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "cold-start-root",
+    "reason": "capability-missing",
+    "evidence": [
+      "batch:57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "checkpoint:artifacts/P04-owner-acceptance/completion.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "next": {
+    "kind": "run-items",
+    "command_id": "task:plan-run",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "arguments": [
+      "2026.09.27-№1-COREX-KERNEL",
+      "P04.1"
+    ],
+    "context_kind": "cold-start-root",
+    "item_ids": [
+      "P04.1"
+    ],
+    "cold_start_scope": [],
+    "continuity": {
+      "outcome": "cold-start-root",
+      "reason": "capability-missing",
+      "evidence": [
+        "batch:57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0",
+        "checkpoint:artifacts/P04-owner-acceptance/completion.md"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    }
+  },
+  "basis": "Current provider gpt-6-sol/high; P04.1 frontier/high requires gpt-6-astra/high. D65/D66 cover design acceptance, not runtime route. No independent audit capability is requested."
+}

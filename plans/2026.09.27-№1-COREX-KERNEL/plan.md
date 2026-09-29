@@ -60,7 +60,7 @@ operations, независимые модули, детерминированн�
   Остаточная ссылка на старое имя — дефект (гейт rename-completeness).
 - **Катящийся дизайн с немедленным исполнением** (D21). Фаза проектируется `task:plan-design <ID> <Pn>` по фактическому коду
   после закрытия предыдущей, проходит phase design check (plan-lint + self-check §Self-check досье → `finish` →
-  `task:plan-audit <ID> design` другой моделью, D24) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
+  `task:plan-audit <ID> design` другой моделью, D24; текущий P04 принят владельцем без повторного audit по D66) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
   skeleton в `backlog/Pnn.md` (не phase carriers) до своей очереди; design audit охватывает только детализированные фазы,
   дизайн вперёд не делается (владелец, B5; D24).
 - Порядок фаз: механические структурные изменения (P02, P03) — до проектирования API/подсистем (P04+), чтобы не делать
@@ -150,6 +150,7 @@ operations, независимые модули, детерминированн�
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-09-29 | Owner D66 accepts GREEN P04 finish and waives another independent design audit for this fingerprint. Legacy gate records explicit owner acceptance; handoff/bundle now point to execution-sheet row 10, P04.1. No independent audit or runtime execution claimed. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | `task:plan-design finish`: D65 owner-authorized Sol/high; validated P00–P04 dependencies and 13 execution-sheet admissions; confirmed four sequential P04 solo routes/full reviews; reused linked dossiers/captures and seven sealed P04 inputs. New finish fingerprint awaits independent design audit; execution not started. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | `task:plan-design P04`: D62 owner-authorized Sol/high authoring; D63 symbol surface/DTO/transaction seam; D64 typed error registry and reviewed semantic Golden delta. P04.1–P04.4, all-type/source/85-site maps, dossier/retrieval/examples, proposed solo routes; runtime not executed. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | P03.2 owning admission repair D61: lossless full-map reading projection and inherited adapter formatting; product scope and gates preserved | executor/codex/gpt-6-sol/xhigh |

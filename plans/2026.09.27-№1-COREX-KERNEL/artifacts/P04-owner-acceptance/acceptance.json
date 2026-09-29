@@ -1,0 +1,49 @@
+{
+  "decision": "D66",
+  "acceptance_kind": "owner-acceptance-with-independent-design-audit-waived",
+  "independent_audit_performed": false,
+  "design_gate": {
+    "allowed": true,
+    "code": "PLAN_DESIGN_AUDIT_GREEN",
+    "fingerprint": "57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4",
+    "phases": [
+      "P00",
+      "P01",
+      "P02",
+      "P03",
+      "P04"
+    ],
+    "items": 17
+  },
+  "gate_event": {
+    "ts": "2026-09-29T14:03:12Z",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "design",
+    "command": "plan-audit",
+    "session_id": "01a0ed6e-3c14-7533-9458-d468c893e910",
+    "run_id": null,
+    "attempt": 1,
+    "actor": "owner/design-acceptance/D66",
+    "friction": [],
+    "result": "audit-green",
+    "cost_usd": null,
+    "num_turns": null,
+    "duration_ms": null,
+    "note": "D66: Owner accepts verified GREEN finish and waives repeat independent design audit. Legacy gate carrier only; no independent audit performed. See artifacts/P04-owner-acceptance/acceptance.json.",
+    "fingerprint": "57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4"
+  },
+  "checks": {
+    "plan_lint": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "supporting_artifacts": "complete",
+    "execution_sheet_admissions": 13,
+    "sealed_P04_inputs": "7 digests current",
+    "source_inventory": "all type source hashes current",
+    "bundle_P04_1": "materialized, schema-valid and fresh",
+    "execution_design_admission": "allow",
+    "handoff_receipt": "verified",
+    "runtime_execution_started": false
+  }
+}

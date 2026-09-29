@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: bcac11cd8b4e923d9a69cbe6f0e02c38a814c8ba0432f10d973071c7dc8e2e83
+inputs_sha256: 34f81cb45e9c75f7c156a8d8b3b6a3aed59a26bffa4cf96c9c256e0e3d35dad5
 generated_by: task plan-views status
 -->
 
@@ -206,6 +206,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | owner/design-acceptance/D66 | plan-audit · audit-green · D66: Owner accepts verified GREEN finish and waives repeat independent design audit. Legacy gate carrier only; no independent audit performed. See artifacts/P04-owner-acceptance/acceptance.json. |
 
 ## Owner Gates
 

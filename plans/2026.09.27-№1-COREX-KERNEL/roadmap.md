@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P03 закрыты GREEN; P04 детализирована (D62–D64); finish P00–P04 выполнен (D65), независимый design audit нового fingerprint ожидается; P05–P09 — skeleton в `backlog/` (D21/D24)
+**Обновлён:** 2026-09-29 · **Соответствует plan.md:** P00–P03 закрыты GREEN; P04 детализирована (D62–D64); finish P00–P04 выполнен (D65), GREEN finish принят владельцем без повторного design audit (D66); следующий запуск P04.1; P05–P09 — skeleton в `backlog/` (D21/D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -39,8 +39,9 @@ execution-sheet → закрытие фазы → дизайн следующе�
 P00–P03 закрыты GREEN. Строки 1–9 сохраняют историю принятых запусков;
 D47 откладывает push/hosted CI. P04 строки 10–13 подтверждены finish
 2026-09-29 (D65): четыре последовательных solo, без изменения маршрутов/review.
-Пока независимый GREEN design audit текущего finish fingerprint не записан,
-строки P04 не являются execution admission. P05–P09 backlog не входят в finish (D24).
+Для текущего fingerprint P04 повторный design audit снят владельцем (D66):
+GREEN finish и явное owner acceptance открывают строку 10. Строки 11–13 требуют
+GREEN результатов своих предшественников. P05–P09 backlog не входят в finish (D24).
 P04.1 → P04.2 → P04.3 → P04.4: first report tooling, then classified/DTO surface,
 then typed registry, then fixed strict cutover. Public semantics требуют frontier/high
 для первых трёх, последняя строка implementation/high. Все reviews full и другой моделью.
@@ -56,7 +57,7 @@ then typed registry, then fixed strict cutover. Public semantics требуют 
 | 7 · solo P02.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.6/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P02.3 GREEN; O-3 для P02 после item | Идентификаторы, гейт полноты, ownership strict; push + hosted CI — владелец |
 | 8 · solo P03.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | design audit GREEN; P02 closed | Гейт раскладки R0–R5 с baseline 436, ретайр tenancy-structure, STR-доктрина |
 | 9 · solo P03.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2` | `implementation/xhigh` | `full` | `codex/gpt-6-sol/xhigh` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/xhigh`, ≤2 rounds | P03.1 GREEN; `p03-transfer.py plan … 0 problems` | Перенос 278 классов по карте; manifest/lock sync (D58); сухой прогон; golden без rebaseline; baseline = прогноз 159 |
-| 10 · solo P04.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | finish + GREEN current design audit; P03 closed | Api/Spi/source scanner, report + negatives before mass classification |
+| 10 · solo P04.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | GREEN finish + owner acceptance D66; P03 closed | Api/Spi/source scanner, report + negatives before mass classification |
 | 11 · solo P04.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | P04.1 GREEN | Type verdicts/DTO/transaction capture/R5=0, reviewed Golden delta and mechanical replay |
 | 12 · solo P04.3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.3` | `frontier/high` | `full` | `codex/gpt-6-astra/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-astra/high`, ≤2 rounds | P04.2 GREEN | Error ownership/boot compilation and safe persisted replay; 85 constructor sites |
 | 13 · solo P04.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.4` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P04.2 + P04.3 artifacts GREEN | Strict graph/manifests/Roave/semver/docs, no new product design |
@@ -88,7 +89,7 @@ D59: P03 full replay исправляется текущим owner-authorized ro
 |:--|:--|:--|
 | Дизайн P04 (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL P04` | P03 GREEN; current author Sol/high по D62 |
 | Finish (выполнен, D65) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | phase finalize + plan-lint GREEN; confirm rows 10–13 |
-| Независимый design audit | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | новый finish fingerprint; модель != Sol author, fresh context |
+| Принятие дизайна (выполнено, D66) | owner acceptance текущего GREEN finish | повторный design audit отменён владельцем; fingerprint-bound gate GREEN |
 | Исполнение | exact commands rows 10–13 | GREEN audit; each predecessor terminal GREEN |
 | Закрытие | final GREEN P04.4 owning continuation | item Validation/full reviews + phase close gate GREEN |
 | Дизайн P05 | `task:plan-design 2026.09.27-№1-COREX-KERNEL P05` | P04 closed; actual code input |

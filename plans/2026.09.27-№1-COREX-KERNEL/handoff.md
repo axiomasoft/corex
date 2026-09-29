@@ -1,47 +1,46 @@
 # HANDOFF — 2026-09-29 — after P04
 
-**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
+| Batch | solo |
 | Model | frontier |
-| Thinking | xhigh |
-| Capabilities | repository read · Task Python runtime · independent reviewer |
-| Context | cold-start-root: whole-plan-independent-audit |
-| Суть | Независимо проверить новый finish fingerprint P00–P04; модель != Sol, свежий контекст. |
+| Thinking | high |
+| Capabilities | repository write · shell · PHP8.4 · isolated test DB · independent item review |
+| Context | cold-start-root: capability-missing |
+| Суть | Старт P04.1: Api/Spi и report-сканер; GREEN finish принят владельцем, повторный design audit отменён D66. |
 
 **Native Codex command:**
 
 ```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
+codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1'
 ```
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:0a6daddb7dd2a45c3dd22ad814b26bfca8139b602cbd192194606cfff54a0e98", "loaded-inputs:reusable", "cold-start-cost:0", "checkpoint:artifacts/P04-design-finish/completion.md"], "outcome": "cold-start-root", "reason": "whole-plan-independent-audit", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:57808729be1010ff00df4ae25e63e17d0bfb5011459ff362aaf24cf2eba61aa4", "loaded-inputs:reusable", "cold-start-cost:0", "checkpoint:artifacts/P04-owner-acceptance/completion.md"], "outcome": "cold-start-root", "reason": "capability-missing", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** Finish P00–P04 выполнен на Sol/high по явному разрешению D65.
-Подтверждены 13 execution-sheet admissions; P04 — четыре последовательных solo,
-frontier/high для P04.1–P04.3, implementation/high для P04.4, full independent review.
-Досье/verified retrieval/examples/captures пяти детализированных фаз согласованы;
-семь sealed P04 inputs проверены. P00–P03 GREEN evidence переиспользуется.
+**Done:** GREEN finish P00–P04 принят владельцем (D66); ещё один independent
+ design audit перед текущим P04 не требуется. Совместимый GREEN design gate carrier
+явно записывает owner acceptance, без заявления о проведённом независимом аудите.
+13 execution-sheet admissions согласованы; bundle P04.1 подготовлен штатным tooling.
 
-**Remaining:** Независимый GREEN design audit нового fingerprint; затем P04.1–P04.4
-по строкам 10–13 execution-sheet. Только P04.1 готова по dependencies; future producer
-artifacts не созданы. После P04 close — дизайн P05 по фактическому результату.
-P05–P09 остаются backlog (D24).
+**Remaining:** P04.1 → P04.2 → P04.3 → P04.4 по строкам 10–13 execution-sheet.
+Каждый item требует своих Validation и full independent review. P04.2–P04.4 ждут
+producer outputs. После P04 close — дизайн P05 по фактическому результату; P05–P09 backlog.
 
-**Sources of truth:** plan.md §2/§3; roadmap.md execution-sheet;
-phases/P04/P04.md и P04.1–P04.4.md; research/P04-design.md;
-research/P04-design-rag.md; artifacts/P04-design/examples.md и input-manifest.json;
-decisions/D63–D65; artifacts/P04-design-finish/{completion.md,finalize.json,continuity.json,validation.json}.
+**Sources of truth:** decisions/D66-p04-owner-design-acceptance.md; plan.md §2/§3;
+roadmap.md строка 10; phases/P04/P04.1.md; bundles/P04.1.json;
+research/P04-design.md; research/P04-design-rag.md; artifacts/P04-design/examples.md;
+artifacts/P04-owner-acceptance/{acceptance.json,completion.md,continuity.json};
+artifacts/P04-design-finish/validation.json (предшествующие GREEN проверки).
 
-**Open risks:** Finish не открывает execution без GREEN audit текущего fingerprint.
-API/SPI/DTO и error transport — SemVer delta D01/D63/D64; audit проверяет текущий
-P04 design и переход report → strict. Прежний P03 audit не допускает P04.
+**Open risks:** DTO/API/SPI/error semantics P04 требуют item tests и full reviews.
+D66 принимает только текущий fingerprint; substantive изменение дизайна требует
+нового допуска. Runtime item statuses пока Not started.
 
-**Workarounds/Deferred/Open questions:** Authoring route override D65 не распространяется
-на аудит или исполнение. Captures P04 переиспользованы без новых внешних решений.
-Push/hosted CI отложены D47; HTTP policy P06, typed config P05, engine P07.
-Текущий design scope complete; независимый аудит — рекомендация, отдельный вызов владельца.
+**Workarounds/Deferred/Open questions:** Task не имеет отдельного waiver enum;
+legacy audit-green carrier означает явное принятие владельцем D66, не independent
+review. P04.1 остаётся frontier/high; текущий Sol authoring route не даёт execution
+admission на Sol. Поэтому launch указывает Astra/high. Push/hosted CI отложены D47.
