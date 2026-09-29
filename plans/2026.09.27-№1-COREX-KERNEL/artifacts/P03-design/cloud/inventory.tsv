@@ -1,0 +1,1169 @@
+package	path	namespace	symbol	kind	modifiers	role	top	depth	ns_matches_path
+axiomasoft/corex	packages/core/src/Audit/AuditObserver.php	CoreX\Audit	AuditObserver	class	final	other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/Contracts/AuditEntry.php	CoreX\Audit\Contracts	AuditEntry	class	final/readonly	other	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/Contracts/AuditLogger.php	CoreX\Audit\Contracts	AuditLogger	interface		contract	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/Contracts/AuditRetention.php	CoreX\Audit\Contracts	AuditRetention	interface		contract	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/Contracts/Auditable.php	CoreX\Audit\Contracts	Auditable	interface		contract	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/CurrentActor.php	CoreX\Audit	CurrentActor	class	final	other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/Enums/ActorType.php	CoreX\Audit\Enums	ActorType	enum		enum	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/HasAuditLog.php	CoreX\Audit	HasAuditLog	trait		other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/Internal/AuditLog.php	CoreX\Audit\Internal	AuditLog	class	final	model	Audit	2	yes
+axiomasoft/corex	packages/core/src/Audit/NullAuditRetention.php	CoreX\Audit	NullAuditRetention	class	final	other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/PruneAuditLog.php	CoreX\Audit	PruneAuditLog	class	final	command	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/QueuedAuditLogger.php	CoreX\Audit	QueuedAuditLogger	class	final	other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Audit/RecordAuditEntry.php	CoreX\Audit	RecordAuditEntry	class	final	other	Audit	1	yes
+axiomasoft/corex	packages/core/src/Config/Commands/ValidateConfigCommand.php	CoreX\Config\Commands	ValidateConfigCommand	class	final	command	Config	2	yes
+axiomasoft/corex	packages/core/src/Config/Config.php	CoreX\Config	Config	class	final	other	Config	1	yes
+axiomasoft/corex	packages/core/src/Config/Contracts/ConfigReportSection.php	CoreX\Config\Contracts	ConfigReportSection	interface		contract	Config	2	yes
+axiomasoft/corex	packages/core/src/Config/CoreOptions.php	CoreX\Config	CoreOptions	class	final/readonly	other	Config	1	yes
+axiomasoft/corex	packages/core/src/Config/InvalidConfiguration.php	CoreX\Config	InvalidConfiguration	class	final	exception	Config	1	yes
+axiomasoft/corex	packages/core/src/Config/KernelConfigSection.php	CoreX\Config	KernelConfigSection	class	final	other	Config	1	yes
+axiomasoft/corex	packages/core/src/Config/SecretRef.php	CoreX\Config	SecretRef	class	final	other	Config	1	yes
+axiomasoft/corex	packages/core/src/Config/ViolationList.php	CoreX\Config	ViolationList	class	final	other	Config	1	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/AccountConnectionResolver.php	CoreX\Context\Contracts	AccountConnectionResolver	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/IdentityPasswordRehasher.php	CoreX\Context\Contracts	IdentityPasswordRehasher	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/ImpersonationService.php	CoreX\Context\Contracts	ImpersonationService	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/TenancyManager.php	CoreX\Context\Contracts	TenancyManager	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/TenantContextResolver.php	CoreX\Context\Contracts	TenantContextResolver	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/TenantContextRestorer.php	CoreX\Context\Contracts	TenantContextRestorer	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php	CoreX\Context\Contracts	TenantDatabaseLifecycle	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Contracts/TenantDatabaseProvisioner.php	CoreX\Context\Contracts	TenantDatabaseProvisioner	interface		contract	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Data/AccountRef.php	CoreX\Context\Data	AccountRef	class	final/readonly	data	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Data/TenantContext.php	CoreX\Context\Data	TenantContext	class	final/readonly	other	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Data/WorkspaceRef.php	CoreX\Context\Data	WorkspaceRef	class	final/readonly	data	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/DatabaseConnectionConfig.php	CoreX\Context	DatabaseConnectionConfig	class	final/readonly	data	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/Enums/ImpersonationRestrictedAction.php	CoreX\Context\Enums	ImpersonationRestrictedAction	enum		enum	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Exceptions/CentralContextException.php	CoreX\Context\Exceptions	CentralContextException	class	final	exception	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Exceptions/ImpersonationRestrictedException.php	CoreX\Context\Exceptions	ImpersonationRestrictedException	class	final	exception	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/Exceptions/ScopeContextMismatch.php	CoreX\Context\Exceptions	ScopeContextMismatch	class	final	exception	Context	2	yes
+axiomasoft/corex	packages/core/src/Context/GuardedTenantContextRestorer.php	CoreX\Context	GuardedTenantContextRestorer	class	final/readonly	other	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/ImpersonationGuard.php	CoreX\Context	ImpersonationGuard	class	final	other	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/ImpersonationState.php	CoreX\Context	ImpersonationState	class	final/readonly	data	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/NullImpersonationService.php	CoreX\Context	NullImpersonationService	class	final	other	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/NullTenancyManager.php	CoreX\Context	NullTenancyManager	class	final	other	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/ProvisionParams.php	CoreX\Context	ProvisionParams	class	final/readonly	data	Context	1	yes
+axiomasoft/corex	packages/core/src/Context/SingleAccountResolver.php	CoreX\Context	SingleAccountResolver	class	final	other	Context	1	yes
+axiomasoft/corex	packages/core/src/CoreServiceProvider.php	CoreX	CoreServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex	packages/core/src/Data/AllowAllDataScopeAuthorizer.php	CoreX\Data	AllowAllDataScopeAuthorizer	class	final	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/ArrayDataScopeCodec.php	CoreX\Data	ArrayDataScopeCodec	class	final/readonly	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/CallableDataScopeAuthorizer.php	CoreX\Data	CallableDataScopeAuthorizer	class	final/readonly	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/Contracts/DataScopeAuthorizer.php	CoreX\Data\Contracts	DataScopeAuthorizer	interface		contract	Data	2	yes
+axiomasoft/corex	packages/core/src/Data/Contracts/DataScopeCodec.php	CoreX\Data\Contracts	DataScopeCodec	interface		contract	Data	2	yes
+axiomasoft/corex	packages/core/src/Data/DataScope.php	CoreX\Data	DataScope	class	final/readonly	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/DataScopeAccessDecision.php	CoreX\Data	DataScopeAccessDecision	class	final/readonly	data	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/DenyDataScopeAuthorizer.php	CoreX\Data	DenyDataScopeAuthorizer	class	final	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/Exceptions/InvalidScopePayload.php	CoreX\Data\Exceptions	InvalidScopePayload	class	final	exception	Data	2	yes
+axiomasoft/corex	packages/core/src/Data/RecordRef.php	CoreX\Data	RecordRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex	packages/core/src/Data/WriteToken.php	CoreX\Data	WriteToken	class	final/readonly	other	Data	1	yes
+axiomasoft/corex	packages/core/src/Database/BaseModel.php	CoreX\Database	BaseModel	class	abstract	model	Database	1	yes
+axiomasoft/corex	packages/core/src/Database/Enums/IdStrategy.php	CoreX\Database\Enums	IdStrategy	enum		enum	Database	2	yes
+axiomasoft/corex	packages/core/src/Database/HasConfiguredId.php	CoreX\Database	HasConfiguredId	trait		other	Database	1	yes
+axiomasoft/corex	packages/core/src/Database/Schema/IdColumns.php	CoreX\Database\Schema	IdColumns	class	final	other	Database	2	yes
+axiomasoft/corex	packages/core/src/Departments/Contracts/DepartmentRepository.php	CoreX\Departments\Contracts	DepartmentRepository	interface		contract	Departments	2	yes
+axiomasoft/corex	packages/core/src/Departments/DatabaseDepartmentRepository.php	CoreX\Departments	DatabaseDepartmentRepository	class	final	other	Departments	1	yes
+axiomasoft/corex	packages/core/src/Departments/Department.php	CoreX\Departments	Department	class	final/readonly	data	Departments	1	yes
+axiomasoft/corex	packages/core/src/Departments/Events/DepartmentMoved.php	CoreX\Departments\Events	DepartmentMoved	class	final	other	Departments	2	yes
+axiomasoft/corex	packages/core/src/Departments/Exceptions/CrossWorkspaceMoveException.php	CoreX\Departments\Exceptions	CrossWorkspaceMoveException	class	final	exception	Departments	2	yes
+axiomasoft/corex	packages/core/src/Departments/Exceptions/DepartmentCycleException.php	CoreX\Departments\Exceptions	DepartmentCycleException	class	final	exception	Departments	2	yes
+axiomasoft/corex	packages/core/src/Departments/Models/Department.php	CoreX\Departments\Models	Department	class	final	model	Departments	2	yes
+axiomasoft/corex	packages/core/src/Errors/Contracts/DescribesError.php	CoreX\Errors\Contracts	DescribesError	interface		contract	Errors	2	yes
+axiomasoft/corex	packages/core/src/Errors/Data/ErrorDescriptor.php	CoreX\Errors\Data	ErrorDescriptor	class	final/readonly	other	Errors	2	yes
+axiomasoft/corex	packages/core/src/Errors/Enums/ErrorCategory.php	CoreX\Errors\Enums	ErrorCategory	enum		enum	Errors	2	yes
+axiomasoft/corex	packages/core/src/Errors/Enums/UnavailabilityReason.php	CoreX\Errors\Enums	UnavailabilityReason	enum		enum	Errors	2	yes
+axiomasoft/corex	packages/core/src/Features/Contracts/FeatureFlagDefinition.php	CoreX\Features\Contracts	FeatureFlagDefinition	class	final/readonly	other	Features	2	yes
+axiomasoft/corex	packages/core/src/Features/Contracts/FeatureFlags.php	CoreX\Features\Contracts	FeatureFlags	interface		contract	Features	2	yes
+axiomasoft/corex	packages/core/src/Features/DatabaseFeatureFlags.php	CoreX\Features	DatabaseFeatureFlags	class	final	other	Features	1	yes
+axiomasoft/corex	packages/core/src/Features/Events/FeatureFlagToggled.php	CoreX\Features\Events	FeatureFlagToggled	class	final	other	Features	2	yes
+axiomasoft/corex	packages/core/src/Features/Models/FeatureFlag.php	CoreX\Features\Models	FeatureFlag	class	final	model	Features	2	yes
+axiomasoft/corex	packages/core/src/Features/Models/FeatureOverride.php	CoreX\Features\Models	FeatureOverride	class	final	model	Features	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Commands/PruneOutboxMessages.php	CoreX\Messaging\Commands	PruneOutboxMessages	class	final	command	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Commands/RelayOutbox.php	CoreX\Messaging\Commands	RelayOutbox	class	final	command	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Commands/ShowDeliveryHealth.php	CoreX\Messaging\Commands	ShowDeliveryHealth	class	final	command	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/Cancellable.php	CoreX\Messaging\Contracts	Cancellable	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/DurableMessagePublisher.php	CoreX\Messaging\Contracts	DurableMessagePublisher	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/DurablePayload.php	CoreX\Messaging\Contracts	DurablePayload	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/Inbox.php	CoreX\Messaging\Contracts	Inbox	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/MessageContractRegistry.php	CoreX\Messaging\Contracts	MessageContractRegistry	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/MessagePublisher.php	CoreX\Messaging\Contracts	MessagePublisher	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/Outbox.php	CoreX\Messaging\Contracts	Outbox	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/OutboxRelay.php	CoreX\Messaging\Contracts	OutboxRelay	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/PubSub.php	CoreX\Messaging\Contracts	PubSub	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/TraceContextBridge.php	CoreX\Messaging\Contracts	TraceContextBridge	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Contracts/WorkerRuntime.php	CoreX\Messaging\Contracts	WorkerRuntime	interface		contract	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Data/DeliveryHealth.php	CoreX\Messaging\Data	DeliveryHealth	class	final/readonly	data	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Data/LeasedMessage.php	CoreX\Messaging\Data	LeasedMessage	class	final/readonly	data	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Data/MessageContract.php	CoreX\Messaging\Data	MessageContract	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Data/MessageEnvelope.php	CoreX\Messaging\Data	MessageEnvelope	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Data/MessagePayload.php	CoreX\Messaging\Data	MessagePayload	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/DatabasePollPubSub.php	CoreX\Messaging	DatabasePollPubSub	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/DefaultWorkerRuntime.php	CoreX\Messaging	DefaultWorkerRuntime	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/Enums/MessageClass.php	CoreX\Messaging\Enums	MessageClass	enum		enum	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Enums/PiiClass.php	CoreX\Messaging\Enums	PiiClass	enum		enum	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Enums/PubSubDriver.php	CoreX\Messaging\Enums	PubSubDriver	enum		enum	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Events/DomainEvent.php	CoreX\Messaging\Events	DomainEvent	class	abstract	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Exceptions/InboxRefused.php	CoreX\Messaging\Exceptions	InboxRefused	class	final	exception	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Exceptions/InvalidMessage.php	CoreX\Messaging\Exceptions	InvalidMessage	class	final	exception	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Exceptions/OutboxLeaseLost.php	CoreX\Messaging\Exceptions	OutboxLeaseLost	class	final	exception	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Exceptions/OutboxRefused.php	CoreX\Messaging\Exceptions	OutboxRefused	class	final	exception	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Exceptions/UnknownMessageContract.php	CoreX\Messaging\Exceptions	UnknownMessageContract	class	final	exception	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/ArrayMessageContractRegistry.php	CoreX\Messaging\Internal	ArrayMessageContractRegistry	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/NullTraceContextBridge.php	CoreX\Messaging\Internal	NullTraceContextBridge	class	final	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php	CoreX\Messaging\Internal	OpenTelemetryTraceContextBridge	class	final	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/SqlDeliveryHealth.php	CoreX\Messaging\Internal	SqlDeliveryHealth	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/SqlInbox.php	CoreX\Messaging\Internal	SqlInbox	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/SqlOutbox.php	CoreX\Messaging\Internal	SqlOutbox	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/Internal/SqlOutboxRelay.php	CoreX\Messaging\Internal	SqlOutboxRelay	class	final/readonly	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Messaging/NullPubSub.php	CoreX\Messaging	NullPubSub	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php	CoreX\Messaging\PHPStan\Rules	DurablePayloadRule	class	final	other	Messaging	3	yes
+axiomasoft/corex	packages/core/src/Messaging/PrunePubSubMessages.php	CoreX\Messaging	PrunePubSubMessages	class	final	command	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/PubSubManager.php	CoreX\Messaging	PubSubManager	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/RedisPubSub.php	CoreX\Messaging	RedisPubSub	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/SubscribeGuard.php	CoreX\Messaging	SubscribeGuard	class	final	other	Messaging	1	yes
+axiomasoft/corex	packages/core/src/Messaging/Testing/MessagingFixtures.php	CoreX\Messaging\Testing	MessagingFixtures	class	final	other	Messaging	2	yes
+axiomasoft/corex	packages/core/src/Modules/Audit/AuditCapabilityWiring.php	CoreX\Modules\Audit	AuditCapabilityWiring	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Commands/CompileModulesCommand.php	CoreX\Modules\Commands	CompileModulesCommand	class	final	command	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Commands/ExplainModuleCommand.php	CoreX\Modules\Commands	ExplainModuleCommand	class	final	command	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/CompilationValidator.php	CoreX\Modules\Compiler	CompilationValidator	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/CompiledEntityField.php	CoreX\Modules\Compiler	CompiledEntityField	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/CompiledRegistry.php	CoreX\Modules\Compiler	CompiledRegistry	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/CompiledSettingDefault.php	CoreX\Modules\Compiler	CompiledSettingDefault	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/ExtensionReplacement.php	CoreX\Modules\Compiler	ExtensionReplacement	class	final/readonly	data	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/FieldCastMap.php	CoreX\Modules\Compiler	FieldCastMap	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/InstalledPackageVersion.php	CoreX\Modules\Compiler	InstalledPackageVersion	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/InstalledPackages.php	CoreX\Modules\Compiler	InstalledPackages	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/NormalizedExtension.php	CoreX\Modules\Compiler	NormalizedExtension	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/PipelineStages.php	CoreX\Modules\Compiler	PipelineStages	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Compiler/RegistryCompiler.php	CoreX\Modules\Compiler	RegistryCompiler	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/DisableHook.php	CoreX\Modules\Contracts	DisableHook	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/EnableHook.php	CoreX\Modules\Contracts	EnableHook	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/EntityRegistry.php	CoreX\Modules\Contracts	EntityRegistry	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/FieldCastRegistry.php	CoreX\Modules\Contracts	FieldCastRegistry	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ManifestSectionCompiler.php	CoreX\Modules\Contracts	ManifestSectionCompiler	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleActivationGate.php	CoreX\Modules\Contracts	ModuleActivationGate	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleLifecycle.php	CoreX\Modules\Contracts	ModuleLifecycle	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleRegistrar.php	CoreX\Modules\Contracts	ModuleRegistrar	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleRegistry.php	CoreX\Modules\Contracts	ModuleRegistry	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleRegistryCache.php	CoreX\Modules\Contracts	ModuleRegistryCache	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/ModuleStateReader.php	CoreX\Modules\Contracts	ModuleStateReader	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/PackageRegistrar.php	CoreX\Modules\Contracts	PackageRegistrar	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/PurgeHook.php	CoreX\Modules\Contracts	PurgeHook	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/RecordsRegistrar.php	CoreX\Modules\Contracts	RecordsRegistrar	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Contracts/RegistryIntrospection.php	CoreX\Modules\Contracts	RegistryIntrospection	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Data/ExtensionStamp.php	CoreX\Modules\Data	ExtensionStamp	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Data/ModuleExplanation.php	CoreX\Modules\Data	ModuleExplanation	class	final/readonly	data	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Data/RegistryMap.php	CoreX\Modules\Data	RegistryMap	class	final/readonly	data	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Definition/ModuleDefinition.php	CoreX\Modules\Definition	ModuleDefinition	class	abstract	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Definition/ModuleDependency.php	CoreX\Modules\Definition	ModuleDependency	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Definition/ModuleManifest.php	CoreX\Modules\Definition	ModuleManifest	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Definition/ModuleRuntimeContext.php	CoreX\Modules\Definition	ModuleRuntimeContext	class	final/readonly	data	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Definition/ModuleStatus.php	CoreX\Modules\Definition	ModuleStatus	class	final/readonly	data	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Discovery/ModuleDiscovery.php	CoreX\Modules\Discovery	ModuleDiscovery	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Enums/Capability.php	CoreX\Modules\Enums	Capability	enum		enum	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Enums/DisableReason.php	CoreX\Modules\Enums	DisableReason	enum		enum	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Enums/ModuleState.php	CoreX\Modules\Enums	ModuleState	enum		enum	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ManifestListeners.php	CoreX\Modules\Events	ManifestListeners	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ModuleArchived.php	CoreX\Modules\Events	ModuleArchived	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ModuleDisabled.php	CoreX\Modules\Events	ModuleDisabled	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ModuleEnabled.php	CoreX\Modules\Events	ModuleEnabled	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ModulePurged.php	CoreX\Modules\Events	ModulePurged	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Events/ModuleUpgraded.php	CoreX\Modules\Events	ModuleUpgraded	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/CompilationException.php	CoreX\Modules\Exceptions	CompilationException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/EntityNotFound.php	CoreX\Modules\Exceptions	EntityNotFound	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/HasEnabledDependentsException.php	CoreX\Modules\Exceptions	HasEnabledDependentsException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/InvalidManifestException.php	CoreX\Modules\Exceptions	InvalidManifestException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/InvalidRegistryPoint.php	CoreX\Modules\Exceptions	InvalidRegistryPoint	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/InvalidStateTransitionException.php	CoreX\Modules\Exceptions	InvalidStateTransitionException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/MissingDependencyException.php	CoreX\Modules\Exceptions	MissingDependencyException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/ModuleEnableFailedException.php	CoreX\Modules\Exceptions	ModuleEnableFailedException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/ModuleNotFound.php	CoreX\Modules\Exceptions	ModuleNotFound	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/ModuleUpgradeFailedException.php	CoreX\Modules\Exceptions	ModuleUpgradeFailedException	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/RegistryFrozen.php	CoreX\Modules\Exceptions	RegistryFrozen	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/RegistryInputUnavailable.php	CoreX\Modules\Exceptions	RegistryInputUnavailable	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Exceptions/StaleRegistryRevision.php	CoreX\Modules\Exceptions	StaleRegistryRevision	class	final	exception	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Api.php	CoreX\Modules\Extend	Api	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Entity.php	CoreX\Modules\Extend	Entity	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/EntityField.php	CoreX\Modules\Extend	EntityField	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Extender.php	CoreX\Modules\Extend	Extender	interface		contract	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Filament.php	CoreX\Modules\Extend	Filament	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Menu.php	CoreX\Modules\Extend	Menu	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Permissions.php	CoreX\Modules\Extend	Permissions	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Routes.php	CoreX\Modules\Extend	Routes	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Extend/Workflow.php	CoreX\Modules\Extend	Workflow	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Gate/AllowAllActivationGate.php	CoreX\Modules\Gate	AllowAllActivationGate	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Gate/ModuleActivationDecision.php	CoreX\Modules\Gate	ModuleActivationDecision	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Internal/ReadRegistryIntrospection.php	CoreX\Modules\Internal	ReadRegistryIntrospection	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php	CoreX\Modules\Internal	ServiceProviderModuleRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Laravel/LifecycleRegistrar.php	CoreX\Modules\Laravel	LifecycleRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Laravel/ModulesBootRegistrar.php	CoreX\Modules\Laravel	ModulesBootRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Laravel/RegistryRegistrar.php	CoreX\Modules\Laravel	RegistryRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Laravel/SettingsRegistrar.php	CoreX\Modules\Laravel	SettingsRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Lifecycle/DatabaseModuleLifecycle.php	CoreX\Modules\Lifecycle	DatabaseModuleLifecycle	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Lifecycle/DatabaseModuleStateReader.php	CoreX\Modules\Lifecycle	DatabaseModuleStateReader	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Lifecycle/DatabaseRecordsRegistrar.php	CoreX\Modules\Lifecycle	DatabaseRecordsRegistrar	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/ModulesServiceProvider.php	CoreX\Modules	ModulesServiceProvider	class	final	provider	Modules	1	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/AbstractDatabaseCallRule.php	CoreX\Modules\PHPStan\Rules	AbstractDatabaseCallRule	class	abstract	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoDirectSystemTableWriteRule.php	CoreX\Modules\PHPStan\Rules	NoDirectSystemTableWriteRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoEvalRule.php	CoreX\Modules\PHPStan\Rules	NoEvalRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php	CoreX\Modules\PHPStan\Rules	NoForeignPrefixSqlRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoFsOutsideModuleRule.php	CoreX\Modules\PHPStan\Rules	NoFsOutsideModuleRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoListenNotifyRule.php	CoreX\Modules\PHPStan\Rules	NoListenNotifyRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoSessionAdvisoryLockRule.php	CoreX\Modules\PHPStan\Rules	NoSessionAdvisoryLockRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoSetWithoutLocalRule.php	CoreX\Modules\PHPStan\Rules	NoSetWithoutLocalRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoSqlPrepareRule.php	CoreX\Modules\PHPStan\Rules	NoSqlPrepareRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/NoTempTableRule.php	CoreX\Modules\PHPStan\Rules	NoTempTableRule	class	final	other	Modules	3	yes
+axiomasoft/corex	packages/core/src/Modules/PHPStan/Rules/Support/DatabaseCall.php	CoreX\Modules\PHPStan\Rules\Support	DatabaseCall	class	final	other	Modules	4	yes
+axiomasoft/corex	packages/core/src/Modules/RegistersNothingOnBoot.php	CoreX\Modules	RegistersNothingOnBoot	trait		other	Modules	1	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/ArrayEntityRegistry.php	CoreX\Modules\Registry	ArrayEntityRegistry	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/ArrayModuleStateReader.php	CoreX\Modules\Registry	ArrayModuleStateReader	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/CompiledModule.php	CoreX\Modules\Registry	CompiledModule	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/CompiledModuleRegistry.php	CoreX\Modules\Registry	CompiledModuleRegistry	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/EntityDefinition.php	CoreX\Modules\Registry	EntityDefinition	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/FieldDefinition.php	CoreX\Modules\Registry	FieldDefinition	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Registry/RepositoryModuleRegistryCache.php	CoreX\Modules\Registry	RepositoryModuleRegistryCache	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Settings/CompiledSettingDefaultsProvider.php	CoreX\Modules\Settings	CompiledSettingDefaultsProvider	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Settings/DefaultSettingDefinition.php	CoreX\Modules\Settings	DefaultSettingDefinition	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Support/ModulesConfigSection.php	CoreX\Modules\Support	ModulesConfigSection	class	final	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Support/ModulesOptions.php	CoreX\Modules\Support	ModulesOptions	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Modules/Testing/ExtensionContract.php	CoreX\Modules\Testing	ExtensionContract	class	final/readonly	other	Modules	2	yes
+axiomasoft/corex	packages/core/src/Observability/Contracts/OperationObserver.php	CoreX\Observability\Contracts	OperationObserver	interface		contract	Observability	2	yes
+axiomasoft/corex	packages/core/src/Observability/MetricAttributes.php	CoreX\Observability	MetricAttributes	class	final/readonly	other	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/NullOperationObserver.php	CoreX\Observability	NullOperationObserver	class	final	other	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OpenTelemetryBridge.php	CoreX\Observability	OpenTelemetryBridge	class	final	other	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OperationCompleted.php	CoreX\Observability	OperationCompleted	class	final/readonly	data	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OperationContext.php	CoreX\Observability	OperationContext	class	final/readonly	other	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OperationFailed.php	CoreX\Observability	OperationFailed	class	final/readonly	data	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OperationOutcome.php	CoreX\Observability	OperationOutcome	enum		enum	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/OperationStarted.php	CoreX\Observability	OperationStarted	class	final/readonly	data	Observability	1	yes
+axiomasoft/corex	packages/core/src/Observability/PsrLogOperationObserver.php	CoreX\Observability	PsrLogOperationObserver	class	final	other	Observability	1	yes
+axiomasoft/corex	packages/core/src/Settings/Contracts/SettingDefaultsProvider.php	CoreX\Settings\Contracts	SettingDefaultsProvider	interface		contract	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Contracts/SettingsRepository.php	CoreX\Settings\Contracts	SettingsRepository	interface		contract	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Contracts/SettingsScope.php	CoreX\Settings\Contracts	SettingsScope	class	final/readonly	other	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/DatabaseSettingsRepository.php	CoreX\Settings	DatabaseSettingsRepository	class	final	other	Settings	1	yes
+axiomasoft/corex	packages/core/src/Settings/Enums/SettingScope.php	CoreX\Settings\Enums	SettingScope	enum		enum	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Events/SettingChanged.php	CoreX\Settings\Events	SettingChanged	class	final	other	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Exceptions/SettingValueTooLargeException.php	CoreX\Settings\Exceptions	SettingValueTooLargeException	class	final	exception	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Exceptions/UnsupportedScopeException.php	CoreX\Settings\Exceptions	UnsupportedScopeException	class	final	exception	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/Models/Setting.php	CoreX\Settings\Models	Setting	class	final	model	Settings	2	yes
+axiomasoft/corex	packages/core/src/Settings/NullSettingDefaultsProvider.php	CoreX\Settings	NullSettingDefaultsProvider	class	final	other	Settings	1	yes
+axiomasoft/corex	packages/core/src/Storage/Contracts/TenantStorage.php	CoreX\Storage\Contracts	TenantStorage	interface		contract	Storage	2	yes
+axiomasoft/corex	packages/core/src/Storage/ExportArchiveRef.php	CoreX\Storage	ExportArchiveRef	class	final/readonly	data	Storage	1	yes
+axiomasoft/corex	packages/core/src/Storage/LocalTenantStorage.php	CoreX\Storage	LocalTenantStorage	class	final	other	Storage	1	yes
+axiomasoft/corex	packages/core/src/Storage/ScopedFilesystem.php	CoreX\Storage	ScopedFilesystem	class	final	other	Storage	1	yes
+axiomasoft/corex	packages/core/src/Storage/StorageCapabilities.php	CoreX\Storage	StorageCapabilities	class	final/readonly	data	Storage	1	yes
+axiomasoft/corex	packages/core/src/Storage/StorageCapabilityUnavailable.php	CoreX\Storage	StorageCapabilityUnavailable	class	final	exception	Storage	1	yes
+axiomasoft/corex	packages/core/src/Storage/StorageOperationFailed.php	CoreX\Storage	StorageOperationFailed	class	final	exception	Storage	1	yes
+axiomasoft/corex	packages/core/src/Time/FrozenClock.php	CoreX\Time	FrozenClock	class	final	other	Time	1	yes
+axiomasoft/corex	packages/core/src/Time/LaravelClock.php	CoreX\Time	LaravelClock	class	final/readonly	other	Time	1	yes
+axiomasoft/corex	packages/core/src/Time/SystemClock.php	CoreX\Time	SystemClock	class	final	other	Time	1	yes
+axiomasoft/corex-access	packages/access/src/Access/AutMatrixGrantSource.php	CoreX\Access\Access	AutMatrixGrantSource	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/DefaultAccessChecker.php	CoreX\Access\Access	DefaultAccessChecker	class	final	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/DefaultScopeResolver.php	CoreX\Access\Access	DefaultScopeResolver	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/DirectGrantLookup.php	CoreX\Access\Access	DirectGrantLookup	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/PermissionSurface.php	CoreX\Access\Access	PermissionSurface	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/PrincipalIdentity.php	CoreX\Access\Access	PrincipalIdentity	class	final	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/ScopeAvailability.php	CoreX\Access\Access	ScopeAvailability	class	final	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/ScopePredicate.php	CoreX\Access\Access	ScopePredicate	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/WorkspacePermissionLayer.php	CoreX\Access\Access	WorkspacePermissionLayer	class	final/readonly	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Access/WorkspaceScopeWiring.php	CoreX\Access\Access	WorkspaceScopeWiring	class	final	other	Access	1	yes
+axiomasoft/corex-access	packages/access/src/Contracts/AccessChecker.php	CoreX\Access\Contracts	AccessChecker	interface		contract	Contracts	1	yes
+axiomasoft/corex-access	packages/access/src/Contracts/Principal.php	CoreX\Access\Contracts	Principal	interface		contract	Contracts	1	yes
+axiomasoft/corex-access	packages/access/src/Contracts/RoleMatrixCompiler.php	CoreX\Access\Contracts	RoleMatrixCompiler	interface		contract	Contracts	1	yes
+axiomasoft/corex-access	packages/access/src/Contracts/ScopeResolver.php	CoreX\Access\Contracts	ScopeResolver	interface		contract	Contracts	1	yes
+axiomasoft/corex-access	packages/access/src/CoreAuthServiceProvider.php	CoreX\Access	CoreAuthServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-access	packages/access/src/Enums/PrincipalType.php	CoreX\Access\Enums	PrincipalType	enum		enum	Enums	1	yes
+axiomasoft/corex-access	packages/access/src/Enums/Scope.php	CoreX\Access\Enums	Scope	enum		enum	Enums	1	yes
+axiomasoft/corex-access	packages/access/src/Exceptions/ScopeCapabilityMismatch.php	CoreX\Access\Exceptions	ScopeCapabilityMismatch	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-access	packages/access/src/Extend/PermissionsMerger.php	CoreX\Access\Extend	PermissionsMerger	class	final/readonly	other	Extend	1	yes
+axiomasoft/corex-access	packages/access/src/Identity/PrincipalUserProvider.php	CoreX\Access\Identity	PrincipalUserProvider	class	final	other	Identity	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/ActiveEntityFilter.php	CoreX\Access\Matrix	ActiveEntityFilter	class	final/readonly	data	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/AzGuardRoleModel.php	CoreX\Access\Matrix	AzGuardRoleModel	class	final	other	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/DatabaseRoleMatrixCompiler.php	CoreX\Access\Matrix	DatabaseRoleMatrixCompiler	class	final/readonly	other	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/MatrixPermissionCatalogBuilder.php	CoreX\Access\Matrix	MatrixPermissionCatalogBuilder	class	final/readonly	other	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/MatrixValidator.php	CoreX\Access\Matrix	MatrixValidator	class	final/readonly	other	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Matrix/ScopeMapVersion.php	CoreX\Access\Matrix	ScopeMapVersion	class	final/readonly	other	Matrix	1	yes
+axiomasoft/corex-access	packages/access/src/Models/Role.php	CoreX\Access\Models	Role	class	final	model	Models	1	yes
+axiomasoft/corex-access	packages/access/src/Models/RoleAssignment.php	CoreX\Access\Models	RoleAssignment	class	final	model	Models	1	yes
+axiomasoft/corex-access	packages/access/src/Models/RoleMatrixRow.php	CoreX\Access\Models	RoleMatrixRow	class	final	model	Models	1	yes
+axiomasoft/corex-access	packages/access/src/RecordContext.php	CoreX\Access	RecordContext	class	final/readonly	data	<root>	0	yes
+axiomasoft/corex-access	packages/access/src/Roles/RoleCloner.php	CoreX\Access\Roles	RoleCloner	class	final/readonly	other	Roles	1	yes
+axiomasoft/corex-access	packages/access/src/Roles/SystemRoleImmutable.php	CoreX\Access\Roles	SystemRoleImmutable	trait		other	Roles	1	yes
+axiomasoft/corex-access	packages/access/src/Support/AccessConfigSection.php	CoreX\Access\Support	AccessConfigSection	class	final	other	Support	1	yes
+axiomasoft/corex-access	packages/access/src/Support/AuthOptions.php	CoreX\Access\Support	AuthOptions	class	final/readonly	other	Support	1	yes
+axiomasoft/corex-access	packages/access/src/Tenancy/TenantContextGuard.php	CoreX\Access\Tenancy	TenantContextGuard	class	final	other	Tenancy	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/AttributesServiceProvider.php	CoreX\CustomFields	AttributesServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Contracts/AttributeFilter.php	CoreX\CustomFields\Contracts	AttributeFilter	interface		contract	Contracts	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Contracts/AttributeStore.php	CoreX\CustomFields\Contracts	AttributeStore	interface		contract	Contracts	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Contracts/AttributeStoreResolver.php	CoreX\CustomFields\Contracts	AttributeStoreResolver	interface		contract	Contracts	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Contracts/FieldCatalogue.php	CoreX\CustomFields\Contracts	FieldCatalogue	interface		contract	Contracts	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Contracts/SchemaOperations.php	CoreX\CustomFields\Contracts	SchemaOperations	interface		contract	Contracts	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/AttributeDefinition.php	CoreX\CustomFields\Data	AttributeDefinition	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/AttributeId.php	CoreX\CustomFields\Data	AttributeId	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/AttributeLifecycle.php	CoreX\CustomFields\Data	AttributeLifecycle	enum		enum	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/AttributeStoragePolicy.php	CoreX\CustomFields\Data	AttributeStoragePolicy	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/AttributeTables.php	CoreX\CustomFields\Data	AttributeTables	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Data/IndexPolicy.php	CoreX\CustomFields\Data	IndexPolicy	enum		enum	Data	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Exceptions/InvalidAttributeTables.php	CoreX\CustomFields\Exceptions	InvalidAttributeTables	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Integration/AttributeMessageContractRegistry.php	CoreX\CustomFields\Internal\Integration	AttributeMessageContractRegistry	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Integration/AttributeMessageContracts.php	CoreX\CustomFields\Internal\Integration	AttributeMessageContracts	class	final	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Integration/AttributeMessageTranslator.php	CoreX\CustomFields\Internal\Integration	AttributeMessageTranslator	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Integration/AttributeValuesChanged.php	CoreX\CustomFields\Internal\Integration	AttributeValuesChanged	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/InvalidAttributeValue.php	CoreX\CustomFields\Internal	InvalidAttributeValue	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/KeyConflict.php	CoreX\CustomFields\Internal	KeyConflict	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Laravel/AttributeComposition.php	CoreX\CustomFields\Internal\Laravel	AttributeComposition	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php	CoreX\CustomFields\Internal\Laravel	AttributeCompositionRegistrar	class	final	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Laravel/AttributeMessagingRegistrar.php	CoreX\CustomFields\Internal\Laravel	AttributeMessagingRegistrar	class	final	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Query/AttributeIndexPlanner.php	CoreX\CustomFields\Internal\Query	AttributeIndexPlanner	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Query/AttributeIndexReceipt.php	CoreX\CustomFields\Internal\Query	AttributeIndexReceipt	class	final/readonly	data	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Query/SchemaAttributeFilter.php	CoreX\CustomFields\Internal\Query	SchemaAttributeFilter	class	final	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/CachedFieldCatalogue.php	CoreX\CustomFields\Internal\Schema	CachedFieldCatalogue	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/CatalogueConflictPolicy.php	CoreX\CustomFields\Internal\Schema	CatalogueConflictPolicy	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/CompositeFieldCatalogue.php	CoreX\CustomFields\Internal\Schema	CompositeFieldCatalogue	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/DatabaseFieldCatalogue.php	CoreX\CustomFields\Internal\Schema	DatabaseFieldCatalogue	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/DefinitionEvolution.php	CoreX\CustomFields\Internal\Schema	DefinitionEvolution	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/ModuleFieldCatalogue.php	CoreX\CustomFields\Internal\Schema	ModuleFieldCatalogue	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/QueuedSchemaOperations.php	CoreX\CustomFields\Internal\Schema	QueuedSchemaOperations	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/SchemaOperationWorker.php	CoreX\CustomFields\Internal\Schema	SchemaOperationWorker	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Schema/StaticFieldCatalogue.php	CoreX\CustomFields\Internal\Schema	StaticFieldCatalogue	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/SchemaOperationConflict.php	CoreX\CustomFields\Internal	SchemaOperationConflict	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/ScopeDenied.php	CoreX\CustomFields\Internal	ScopeDenied	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Storage/ConfiguredAttributeStoreResolver.php	CoreX\CustomFields\Internal\Storage	ConfiguredAttributeStoreResolver	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Storage/ResolvingAttributeStore.php	CoreX\CustomFields\Internal\Storage	ResolvingAttributeStore	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Storage/ScopeConnectionGuard.php	CoreX\CustomFields\Internal\Storage	ScopeConnectionGuard	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/UnavailableAttributes.php	CoreX\CustomFields\Internal	UnavailableAttributes	class	final	other	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/UnsupportedAttributeCapability.php	CoreX\CustomFields\Internal	UnsupportedAttributeCapability	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/AttributeBackfill.php	CoreX\CustomFields\Internal\Values	AttributeBackfill	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/AttributeValueTransformerRegistry.php	CoreX\CustomFields\Internal\Values	AttributeValueTransformerRegistry	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/AttributeWriteGuard.php	CoreX\CustomFields\Internal\Values	AttributeWriteGuard	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/EavAttributeStore.php	CoreX\CustomFields\Internal\Values	EavAttributeStore	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/FieldValueValidator.php	CoreX\CustomFields\Internal\Values	FieldValueValidator	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/Values/JsonbAttributeStore.php	CoreX\CustomFields\Internal\Values	JsonbAttributeStore	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Internal/VersionConflict.php	CoreX\CustomFields\Internal	VersionConflict	class	final	exception	Internal	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/AttributeWriteResult.php	CoreX\CustomFields\Support	AttributeWriteResult	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/FieldSelection.php	CoreX\CustomFields\Support	FieldSelection	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/FieldSnapshot.php	CoreX\CustomFields\Support	FieldSnapshot	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/FilterNode.php	CoreX\CustomFields\Support	FilterNode	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/FilterPlan.php	CoreX\CustomFields\Support	FilterPlan	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/RecordSelection.php	CoreX\CustomFields\Support	RecordSelection	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Schema/DriftReport.php	CoreX\CustomFields\Support\Schema	DriftReport	class	final/readonly	data	Support	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Schema/OperationRef.php	CoreX\CustomFields\Support\Schema	OperationRef	class	final/readonly	data	Support	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Schema/SchemaChange.php	CoreX\CustomFields\Support\Schema	SchemaChange	class	final/readonly	data	Support	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Schema/SchemaOperationId.php	CoreX\CustomFields\Support\Schema	SchemaOperationId	class	final/readonly	data	Support	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Schema/SchemaReceipt.php	CoreX\CustomFields\Support\Schema	SchemaReceipt	class	final/readonly	data	Support	2	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/Validation.php	CoreX\CustomFields\Support	Validation	class	final	other	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/ValueBag.php	CoreX\CustomFields\Support	ValueBag	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/ValueBatch.php	CoreX\CustomFields\Support	ValueBatch	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-custom-fields	packages/custom-fields/src/Support/ValuePatch.php	CoreX\CustomFields\Support	ValuePatch	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Contracts/CurrencyConverter.php	CoreX\Intl\Currency\Contracts	CurrencyConverter	interface		contract	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Contracts/CurrencyMetadata.php	CoreX\Intl\Currency\Contracts	CurrencyMetadata	interface		contract	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Contracts/RateImporter.php	CoreX\Intl\Currency\Contracts	RateImporter	interface		contract	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Contracts/RateProvider.php	CoreX\Intl\Currency\Contracts	RateProvider	interface		contract	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/ConversionPolicy.php	CoreX\Intl\Currency\Data	ConversionPolicy	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/ConversionReceipt.php	CoreX\Intl\Currency\Data	ConversionReceipt	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/CurrencyInfo.php	CoreX\Intl\Currency\Data	CurrencyInfo	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/RateBatch.php	CoreX\Intl\Currency\Data	RateBatch	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/RateImportReceipt.php	CoreX\Intl\Currency\Data	RateImportReceipt	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/RateLookup.php	CoreX\Intl\Currency\Data	RateLookup	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/RateQuery.php	CoreX\Intl\Currency\Data	RateQuery	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Data/RateSnapshot.php	CoreX\Intl\Currency\Data	RateSnapshot	class	final/readonly	data	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Exceptions/InvalidRateException.php	CoreX\Intl\Currency\Exceptions	InvalidRateException	class	final	exception	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Exceptions/SnapshotExpiredException.php	CoreX\Intl\Currency\Exceptions	SnapshotExpiredException	class	final	exception	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Internal/BrickCurrencyConverter.php	CoreX\Intl\Currency\Internal	BrickCurrencyConverter	class	final	other	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Internal/BrickCurrencyMetadata.php	CoreX\Intl\Currency\Internal	BrickCurrencyMetadata	class	final	other	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Internal/RateSnapshotMapper.php	CoreX\Intl\Currency\Internal	RateSnapshotMapper	class	final	other	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Internal/SqlRateImporter.php	CoreX\Intl\Currency\Internal	SqlRateImporter	class	final	other	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Currency/Internal/SqlRateProvider.php	CoreX\Intl\Currency\Internal	SqlRateProvider	class	final	other	Currency	2	yes
+axiomasoft/corex-intl	packages/intl/src/Formatting/Contracts/MoneyFormatter.php	CoreX\Intl\Formatting\Contracts	MoneyFormatter	interface		contract	Formatting	2	yes
+axiomasoft/corex-intl	packages/intl/src/Formatting/Data/FormatPolicy.php	CoreX\Intl\Formatting\Data	FormatPolicy	class	final/readonly	data	Formatting	2	yes
+axiomasoft/corex-intl	packages/intl/src/Formatting/Data/FormattedMoney.php	CoreX\Intl\Formatting\Data	FormattedMoney	class	final/readonly	data	Formatting	2	yes
+axiomasoft/corex-intl	packages/intl/src/Formatting/Exceptions/UnsupportedFormattingException.php	CoreX\Intl\Formatting\Exceptions	UnsupportedFormattingException	class	final	exception	Formatting	2	yes
+axiomasoft/corex-intl	packages/intl/src/Formatting/Internal/PlainMoneyFormatter.php	CoreX\Intl\Formatting\Internal	PlainMoneyFormatter	class	final	other	Formatting	2	yes
+axiomasoft/corex-intl	packages/intl/src/IntlConfigSection.php	CoreX\Intl	IntlConfigSection	class	final	other	<root>	0	yes
+axiomasoft/corex-intl	packages/intl/src/IntlModule.php	CoreX\Intl	IntlModule	class	final	other	<root>	0	yes
+axiomasoft/corex-intl	packages/intl/src/IntlServiceProvider.php	CoreX\Intl	IntlServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Contracts/LocaleResolver.php	CoreX\Intl\Locale\Contracts	LocaleResolver	interface		contract	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Data/LocaleInputs.php	CoreX\Intl\Locale\Data	LocaleInputs	class	final/readonly	data	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Data/LocalePolicy.php	CoreX\Intl\Locale\Data	LocalePolicy	class	final/readonly	data	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Data/LocaleResolution.php	CoreX\Intl\Locale\Data	LocaleResolution	class	final/readonly	data	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Exceptions/InvalidLocaleException.php	CoreX\Intl\Locale\Exceptions	InvalidLocaleException	class	final	exception	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Internal/Bcp47Validator.php	CoreX\Intl\Locale\Internal	Bcp47Validator	class	final	other	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Internal/DefaultLocaleResolver.php	CoreX\Intl\Locale\Internal	DefaultLocaleResolver	class	final	other	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Internal/LocalePolicyBuilder.php	CoreX\Intl\Locale\Internal	LocalePolicyBuilder	class	final	other	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Locale/Internal/RequestLocaleScope.php	CoreX\Intl\Locale\Internal	RequestLocaleScope	class	final	other	Locale	2	yes
+axiomasoft/corex-intl	packages/intl/src/Money/MoneyCast.php	CoreX\Intl\Money	MoneyCast	class	final	other	Money	1	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Contracts/AddressSuggestProvider.php	CoreX\Intl\Territory\Contracts	AddressSuggestProvider	interface		contract	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Contracts/DatasetImporter.php	CoreX\Intl\Territory\Contracts	DatasetImporter	interface		contract	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Contracts/GeographyProvider.php	CoreX\Intl\Territory\Contracts	GeographyProvider	interface		contract	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/AddressQuery.php	CoreX\Intl\Territory\Data	AddressQuery	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/DatasetCandidate.php	CoreX\Intl\Territory\Data	DatasetCandidate	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/DatasetGeneration.php	CoreX\Intl\Territory\Data	DatasetGeneration	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/DatasetManifest.php	CoreX\Intl\Territory\Data	DatasetManifest	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/DatasetReceipt.php	CoreX\Intl\Territory\Data	DatasetReceipt	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/GeographyQuery.php	CoreX\Intl\Territory\Data	GeographyQuery	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/ReferenceCursor.php	CoreX\Intl\Territory\Data	ReferenceCursor	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/ReferenceIdentity.php	CoreX\Intl\Territory\Data	ReferenceIdentity	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/ReferencePage.php	CoreX\Intl\Territory\Data	ReferencePage	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/SuggestionLimits.php	CoreX\Intl\Territory\Data	SuggestionLimits	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Data/SuggestionResult.php	CoreX\Intl\Territory\Data	SuggestionResult	class	final/readonly	data	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Exceptions/AccessDeniedException.php	CoreX\Intl\Territory\Exceptions	AccessDeniedException	class	final	exception	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Exceptions/OperationConflictException.php	CoreX\Intl\Territory\Exceptions	OperationConflictException	class	final	exception	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Exceptions/SchemaMismatchException.php	CoreX\Intl\Territory\Exceptions	SchemaMismatchException	class	final	exception	Territory	2	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Address/AddressSuggestGuard.php	CoreX\Intl\Territory\Internal\Address	AddressSuggestGuard	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php	CoreX\Intl\Territory\Internal\Address	FixtureAddressSuggestProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Address/MapAddressSuggestProvider.php	CoreX\Intl\Territory\Internal\Address	MapAddressSuggestProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Address/UnsupportedAddressSuggestProvider.php	CoreX\Intl\Territory\Internal\Address	UnsupportedAddressSuggestProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/AbstractFixtureReferenceProvider.php	CoreX\Intl\Territory\Internal\Reference	AbstractFixtureReferenceProvider	class	abstract	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/BoxesReferenceProvider.php	CoreX\Intl\Territory\Internal\Reference	BoxesReferenceProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/CompactReferenceProvider.php	CoreX\Intl\Territory\Internal\Reference	CompactReferenceProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/FixtureReferenceNormalizer.php	CoreX\Intl\Territory\Internal\Reference	FixtureReferenceNormalizer	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/ReferenceCursorCodec.php	CoreX\Intl\Territory\Internal\Reference	ReferenceCursorCodec	class	final/readonly	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/SqlDatasetImporter.php	CoreX\Intl\Territory\Internal\Reference	SqlDatasetImporter	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Territory/Internal/Reference/SqlGeographyProvider.php	CoreX\Intl\Territory\Internal\Reference	SqlGeographyProvider	class	final	other	Territory	3	yes
+axiomasoft/corex-intl	packages/intl/src/Translation/Contracts/TranslationReader.php	CoreX\Intl\Translation\Contracts	TranslationReader	interface		contract	Translation	2	yes
+axiomasoft/corex-intl	packages/intl/src/Translation/Data/LocalizedText.php	CoreX\Intl\Translation\Data	LocalizedText	class	final/readonly	data	Translation	2	yes
+axiomasoft/corex-intl	packages/intl/src/Translation/Data/TranslationResult.php	CoreX\Intl\Translation\Data	TranslationResult	class	final/readonly	data	Translation	2	yes
+axiomasoft/corex-intl	packages/intl/src/Translation/Internal/LaravelTranslationReader.php	CoreX\Intl\Translation\Internal	LaravelTranslationReader	class	final	other	Translation	2	yes
+axiomasoft/corex-media	packages/media/src/Commands/SweepMediaOperations.php	CoreX\Media\Commands	SweepMediaOperations	class	final	command	Commands	1	yes
+axiomasoft/corex-media	packages/media/src/Contracts/ConversionDriver.php	CoreX\Media\Contracts	ConversionDriver	interface		contract	Contracts	1	yes
+axiomasoft/corex-media	packages/media/src/Contracts/MediaLibrary.php	CoreX\Media\Contracts	MediaLibrary	interface		contract	Contracts	1	yes
+axiomasoft/corex-media	packages/media/src/Contracts/MediaPolicy.php	CoreX\Media\Contracts	MediaPolicy	interface		contract	Contracts	1	yes
+axiomasoft/corex-media	packages/media/src/Contracts/RelationLookup.php	CoreX\Media\Contracts	RelationLookup	interface		contract	Contracts	1	yes
+axiomasoft/corex-media	packages/media/src/Data/AttachmentInput.php	CoreX\Media\Data	AttachmentInput	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/AttachmentRef.php	CoreX\Media\Data	AttachmentRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/ConversionClaim.php	CoreX\Media\Data	ConversionClaim	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/ConversionInput.php	CoreX\Media\Data	ConversionInput	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/ConversionOperationRequest.php	CoreX\Media\Data	ConversionOperationRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/ConversionOutput.php	CoreX\Media\Data	ConversionOutput	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/ConversionProfile.php	CoreX\Media\Data	ConversionProfile	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/DeleteResult.php	CoreX\Media\Data	DeleteResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaAction.php	CoreX\Media\Data	MediaAction	enum		enum	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaContext.php	CoreX\Media\Data	MediaContext	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaConversionRef.php	CoreX\Media\Data	MediaConversionRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaFileRef.php	CoreX\Media\Data	MediaFileRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaReadRef.php	CoreX\Media\Data	MediaReadRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/MediaSubject.php	CoreX\Media\Data	MediaSubject	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/PurgeClaim.php	CoreX\Media\Data	PurgeClaim	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Data/UploadInput.php	CoreX\Media\Data	UploadInput	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/ConversionCoordinator.php	CoreX\Media\Internal	ConversionCoordinator	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/ConversionProfiles.php	CoreX\Media\Internal	ConversionProfiles	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/DenyMediaPolicy.php	CoreX\Media\Internal	DenyMediaPolicy	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/GdThumbnailDriver.php	CoreX\Media\Internal	GdThumbnailDriver	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/MediaAccessDenied.php	CoreX\Media\Internal	MediaAccessDenied	class	final	exception	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/MediaFileInUse.php	CoreX\Media\Internal	MediaFileInUse	class	final	exception	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/MediaOperationConflict.php	CoreX\Media\Internal	MediaOperationConflict	class	final	exception	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/MediaOperationStore.php	CoreX\Media\Internal	MediaOperationStore	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/SqlMediaLibrary.php	CoreX\Media\Internal	SqlMediaLibrary	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Internal/SqlRelationLookup.php	CoreX\Media\Internal	SqlRelationLookup	class	final	other	Internal	1	yes
+axiomasoft/corex-media	packages/media/src/Jobs/ConvertMedia.php	CoreX\Media\Jobs	ConvertMedia	class	final	job	Jobs	1	yes
+axiomasoft/corex-media	packages/media/src/Jobs/PurgeMedia.php	CoreX\Media\Jobs	PurgeMedia	class	final	job	Jobs	1	yes
+axiomasoft/corex-media	packages/media/src/MediaModule.php	CoreX\Media	MediaModule	class	final	other	<root>	0	yes
+axiomasoft/corex-media	packages/media/src/MediaServiceProvider.php	CoreX\Media	MediaServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-media	packages/media/src/Support/MediaConfigSection.php	CoreX\Media\Support	MediaConfigSection	class	final	other	Support	1	yes
+axiomasoft/corex-media	packages/media/src/Support/MediaOptions.php	CoreX\Media\Support	MediaOptions	class	final/readonly	other	Support	1	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Commands/SweepNotificationDeliveries.php	CoreX\Notifications\Delivery\Commands	SweepNotificationDeliveries	class	final	command	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Contracts/NotificationChannelDriver.php	CoreX\Notifications\Delivery\Contracts	NotificationChannelDriver	interface		contract	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Contracts/RecipientResolver.php	CoreX\Notifications\Delivery\Contracts	RecipientResolver	interface		contract	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/ChannelDescriptor.php	CoreX\Notifications\Delivery\Data	ChannelDescriptor	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/DeliveryClaim.php	CoreX\Notifications\Delivery\Data	DeliveryClaim	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/DeliveryInput.php	CoreX\Notifications\Delivery\Data	DeliveryInput	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/DeliveryOutcome.php	CoreX\Notifications\Delivery\Data	DeliveryOutcome	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/DeliveryTarget.php	CoreX\Notifications\Delivery\Data	DeliveryTarget	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Data/RecipientReference.php	CoreX\Notifications\Delivery\Data	RecipientReference	class	final/readonly	data	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Internal/ChannelDrivers.php	CoreX\Notifications\Delivery\Internal	ChannelDrivers	class	final	other	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Internal/DeliveryCoordinator.php	CoreX\Notifications\Delivery\Internal	DeliveryCoordinator	class	final	other	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Internal/DeliveryStore.php	CoreX\Notifications\Delivery\Internal	DeliveryStore	class	final	other	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Internal/InAppChannelDriver.php	CoreX\Notifications\Delivery\Internal	InAppChannelDriver	class	final	other	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Internal/NullRecipientResolver.php	CoreX\Notifications\Delivery\Internal	NullRecipientResolver	class	final	other	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Delivery/Jobs/DeliverNotification.php	CoreX\Notifications\Delivery\Jobs	DeliverNotification	class	final	job	Delivery	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Contracts/DigestBuilder.php	CoreX\Notifications\Digest\Contracts	DigestBuilder	interface		contract	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Data/DigestRef.php	CoreX\Notifications\Digest\Data	DigestRef	class	final/readonly	data	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Data/DigestWindow.php	CoreX\Notifications\Digest\Data	DigestWindow	class	final/readonly	data	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Internal/DigestTick.php	CoreX\Notifications\Digest\Internal	DigestTick	class	final/readonly	data	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Internal/DigestWakeupAdapter.php	CoreX\Notifications\Digest\Internal	DigestWakeupAdapter	class	final	other	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Internal/DigestWakeupHandler.php	CoreX\Notifications\Digest\Internal	DigestWakeupHandler	class	final	other	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Internal/NotificationDigestDueSource.php	CoreX\Notifications\Digest\Internal	NotificationDigestDueSource	class	final	other	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Internal/SqlDigestBuilder.php	CoreX\Notifications\Digest\Internal	SqlDigestBuilder	class	final	other	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Digest/Jobs/DeliverDigest.php	CoreX\Notifications\Digest\Jobs	DeliverDigest	class	final	job	Digest	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Contracts/NotificationCenter.php	CoreX\Notifications\Inbox\Contracts	NotificationCenter	interface		contract	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Contracts/NotificationPolicy.php	CoreX\Notifications\Inbox\Contracts	NotificationPolicy	interface		contract	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/CancelResult.php	CoreX\Notifications\Inbox\Data	CancelResult	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/EntityReference.php	CoreX\Notifications\Inbox\Data	EntityReference	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/InboxQuery.php	CoreX\Notifications\Inbox\Data	InboxQuery	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/NotificationAction.php	CoreX\Notifications\Inbox\Data	NotificationAction	enum		enum	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/NotificationContext.php	CoreX\Notifications\Inbox\Data	NotificationContext	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/NotificationInput.php	CoreX\Notifications\Inbox\Data	NotificationInput	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/NotificationRef.php	CoreX\Notifications\Inbox\Data	NotificationRef	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Data/NotificationSubject.php	CoreX\Notifications\Inbox\Data	NotificationSubject	class	final/readonly	data	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Internal/DenyNotificationPolicy.php	CoreX\Notifications\Inbox\Internal	DenyNotificationPolicy	class	final	other	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Internal/NotificationAccessDenied.php	CoreX\Notifications\Inbox\Internal	NotificationAccessDenied	class	final	exception	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Internal/NotificationOperationConflict.php	CoreX\Notifications\Inbox\Internal	NotificationOperationConflict	class	final	exception	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Inbox/Internal/SqlNotificationCenter.php	CoreX\Notifications\Inbox\Internal	SqlNotificationCenter	class	final	other	Inbox	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/NotificationsModule.php	CoreX\Notifications	NotificationsModule	class	final	other	<root>	0	yes
+axiomasoft/corex-notifications	packages/notifications/src/NotificationsServiceProvider.php	CoreX\Notifications	NotificationsServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-notifications	packages/notifications/src/Preferences/Contracts/PreferenceRepository.php	CoreX\Notifications\Preferences\Contracts	PreferenceRepository	interface		contract	Preferences	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Preferences/Data/NotificationPreference.php	CoreX\Notifications\Preferences\Data	NotificationPreference	class	final/readonly	data	Preferences	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Preferences/Data/PreferenceInput.php	CoreX\Notifications\Preferences\Data	PreferenceInput	class	final/readonly	data	Preferences	2	yes
+axiomasoft/corex-notifications	packages/notifications/src/Preferences/Internal/SettingsPreferenceRepository.php	CoreX\Notifications\Preferences\Internal	SettingsPreferenceRepository	class	final	other	Preferences	2	yes
+axiomasoft/corex-operations	packages/operations/src/ApiServiceProvider.php	CoreX\Operations	ApiServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/ClientScopeAuthorizer.php	CoreX\Operations\Authorization\Contracts	ClientScopeAuthorizer	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/OperationAuthorizer.php	CoreX\Operations\Authorization\Contracts	OperationAuthorizer	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/OperationFieldAuthorizer.php	CoreX\Operations\Authorization\Contracts	OperationFieldAuthorizer	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/Principal.php	CoreX\Operations\Authorization\Contracts	Principal	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/PrincipalResolver.php	CoreX\Operations\Authorization\Contracts	PrincipalResolver	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Contracts/ReplayAuthorizer.php	CoreX\Operations\Authorization\Contracts	ReplayAuthorizer	interface		contract	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Internal/DeclaredFieldAuthorizer.php	CoreX\Operations\Authorization\Internal	DeclaredFieldAuthorizer	class	final	other	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Internal/DenyClientScopeAuthorizer.php	CoreX\Operations\Authorization\Internal	DenyClientScopeAuthorizer	class	final	other	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Internal/DenyOperationAuthorizer.php	CoreX\Operations\Authorization\Internal	DenyOperationAuthorizer	class	final	other	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Authorization/Internal/DenyPrincipalResolver.php	CoreX\Operations\Authorization\Internal	DenyPrincipalResolver	class	final	other	Authorization	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Commands/WorkBulkOperations.php	CoreX\Operations\Bulk\Commands	WorkBulkOperations	class	final	command	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Contracts/BulkOperationStore.php	CoreX\Operations\Bulk\Contracts	BulkOperationStore	interface		contract	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Contracts/BulkTransferFactory.php	CoreX\Operations\Bulk\Contracts	BulkTransferFactory	interface		contract	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Data/BulkOperation.php	CoreX\Operations\Bulk\Data	BulkOperation	class	final/readonly	data	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Data/BulkOperationDefinition.php	CoreX\Operations\Bulk\Data	BulkOperationDefinition	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Data/BulkOptions.php	CoreX\Operations\Bulk\Data	BulkOptions	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Data/BulkTransferSession.php	CoreX\Operations\Bulk\Data	BulkTransferSession	class	final/readonly	data	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Enums/BulkOperationStatus.php	CoreX\Operations\Bulk\Enums	BulkOperationStatus	enum		enum	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/BulkFailureReader.php	CoreX\Operations\Bulk\Internal	BulkFailureReader	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/BulkOperations.php	CoreX\Operations\Bulk\Internal	BulkOperations	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/BulkResultReader.php	CoreX\Operations\Bulk\Internal	BulkResultReader	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/BulkRetention.php	CoreX\Operations\Bulk\Internal	BulkRetention	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/BulkWorker.php	CoreX\Operations\Bulk\Internal	BulkWorker	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/SqlBulkOperationStore.php	CoreX\Operations\Bulk\Internal	SqlBulkOperationStore	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/TransferBulkExecutor.php	CoreX\Operations\Bulk\Internal	TransferBulkExecutor	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/TransferCapabilityUnavailable.php	CoreX\Operations\Bulk\Internal	TransferCapabilityUnavailable	class	final	exception	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Internal/TransferStampDrift.php	CoreX\Operations\Bulk\Internal	TransferStampDrift	class	final	exception	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Laravel/BulkRegistrar.php	CoreX\Operations\Bulk\Laravel	BulkRegistrar	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php	CoreX\Operations\Bulk\Laravel	BulkRouteRegistrar	class	final/readonly	other	Bulk	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Contracts/BudgetReservation.php	CoreX\Operations\Cost\Contracts	BudgetReservation	interface		contract	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Contracts/OperationBudget.php	CoreX\Operations\Cost\Contracts	OperationBudget	interface		contract	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Contracts/OperationCostEstimator.php	CoreX\Operations\Cost\Contracts	OperationCostEstimator	interface		contract	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/ActualCost.php	CoreX\Operations\Cost\Data	ActualCost	class	final/readonly	data	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/BudgetScope.php	CoreX\Operations\Cost\Data	BudgetScope	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/CostInput.php	CoreX\Operations\Cost\Data	CostInput	class	final/readonly	data	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/CostOptions.php	CoreX\Operations\Cost\Data	CostOptions	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/EstimatedCost.php	CoreX\Operations\Cost\Data	EstimatedCost	class	final/readonly	data	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Data/ThrottleStatus.php	CoreX\Operations\Cost\Data	ThrottleStatus	class	final/readonly	data	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/BudgetAdmission.php	CoreX\Operations\Cost\Internal	BudgetAdmission	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/BudgetRateLimited.php	CoreX\Operations\Cost\Internal	BudgetRateLimited	class	final	exception	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/BudgetRetention.php	CoreX\Operations\Cost\Internal	BudgetRetention	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/BudgetStoreUnavailable.php	CoreX\Operations\Cost\Internal	BudgetStoreUnavailable	class	final	exception	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/DeclaredCostEstimator.php	CoreX\Operations\Cost\Internal	DeclaredCostEstimator	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/SqlBudgetReservation.php	CoreX\Operations\Cost\Internal	SqlBudgetReservation	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Internal/SqlOperationBudget.php	CoreX\Operations\Cost\Internal	SqlOperationBudget	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Cost/Laravel/CostRegistrar.php	CoreX\Operations\Cost\Laravel	CostRegistrar	class	final/readonly	other	Cost	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/ApiOperationValidator.php	CoreX\Operations\Definition	ApiOperationValidator	class	final	other	Definition	1	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Contracts/OperationHandler.php	CoreX\Operations\Definition\Contracts	OperationHandler	interface		contract	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Contracts/SchemaContributor.php	CoreX\Operations\Definition\Contracts	SchemaContributor	interface		contract	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Data/ResourceId.php	CoreX\Operations\Definition\Data	ResourceId	class	final/readonly	other	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Enums/OperationMode.php	CoreX\Operations\Definition\Enums	OperationMode	enum		enum	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Internal/DeclaredSchemaContributor.php	CoreX\Operations\Definition\Internal	DeclaredSchemaContributor	class	final	other	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Internal/OperationContractHasher.php	CoreX\Operations\Definition\Internal	OperationContractHasher	class	final	other	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Internal/OperationFingerprint.php	CoreX\Operations\Definition\Internal	OperationFingerprint	class	final	other	Definition	2	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/Operation.php	CoreX\Operations\Definition	Operation	class	final/readonly	other	Definition	1	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/OperationRegistry.php	CoreX\Operations\Definition	OperationRegistry	class	final	other	Definition	1	yes
+axiomasoft/corex-operations	packages/operations/src/Definition/OperationSectionCompiler.php	CoreX\Operations\Definition	OperationSectionCompiler	class	final	other	Definition	1	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/ApiError.php	CoreX\Operations\Errors	ApiError	class	final	exception	Errors	1	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Contracts/ResponseSerializer.php	CoreX\Operations\Errors\Contracts	ResponseSerializer	interface		contract	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/EnvelopeSerializer.php	CoreX\Operations\Errors\Internal	EnvelopeSerializer	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/ErrorMapper.php	CoreX\Operations\Errors\Internal	ErrorMapper	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/ErrorWire.php	CoreX\Operations\Errors\Internal	ErrorWire	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php	CoreX\Operations\Errors\Internal	NegotiatingResponseSerializer	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php	CoreX\Operations\Errors\Internal	ProblemDetailsSerializer	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/Internal/RetryAfterPolicy.php	CoreX\Operations\Errors\Internal	RetryAfterPolicy	class	final	other	Errors	2	yes
+axiomasoft/corex-operations	packages/operations/src/Errors/OperationErrorBoundary.php	CoreX\Operations\Errors	OperationErrorBoundary	class	final	other	Errors	1	yes
+axiomasoft/corex-operations	packages/operations/src/Http/ApiController.php	CoreX\Operations\Http	ApiController	class	final	other	Http	1	yes
+axiomasoft/corex-operations	packages/operations/src/Http/DiscoveryController.php	CoreX\Operations\Http	DiscoveryController	class	final	other	Http	1	yes
+axiomasoft/corex-operations	packages/operations/src/Http/Internal/AcceptNegotiation.php	CoreX\Operations\Http\Internal	AcceptNegotiation	class	final	other	Http	2	yes
+axiomasoft/corex-operations	packages/operations/src/Http/Internal/HttpOperationResponder.php	CoreX\Operations\Http\Internal	HttpOperationResponder	class	final	other	Http	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Contracts/IdempotencyStore.php	CoreX\Operations\Idempotency\Contracts	IdempotencyStore	interface		contract	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Data/IdempotencyAttempt.php	CoreX\Operations\Idempotency\Data	IdempotencyAttempt	class	final/readonly	other	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Data/IdempotencyScope.php	CoreX\Operations\Idempotency\Data	IdempotencyScope	class	final/readonly	other	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Data/StoredOperationOutcome.php	CoreX\Operations\Idempotency\Data	StoredOperationOutcome	class	final/readonly	other	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Enums/IdempotencyRequirement.php	CoreX\Operations\Idempotency\Enums	IdempotencyRequirement	enum		enum	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php	CoreX\Operations\Idempotency\Internal	IdempotentOperationInvoker	class	final	other	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Idempotency/Internal/SqlIdempotencyStore.php	CoreX\Operations\Idempotency\Internal	SqlIdempotencyStore	class	final/readonly	other	Idempotency	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Contracts/ContextResolver.php	CoreX\Operations\Invocation\Contracts	ContextResolver	interface		contract	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Contracts/OperationInvoker.php	CoreX\Operations\Invocation\Contracts	OperationInvoker	interface		contract	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Contracts/RequestContext.php	CoreX\Operations\Invocation\Contracts	RequestContext	interface		contract	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Contracts/RequestContextProvider.php	CoreX\Operations\Invocation\Contracts	RequestContextProvider	interface		contract	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Data/OperationInvocation.php	CoreX\Operations\Invocation\Data	OperationInvocation	class	final/readonly	data	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Data/OperationResult.php	CoreX\Operations\Invocation\Data	OperationResult	class	final/readonly	data	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Internal/CapabilityResolver.php	CoreX\Operations\Invocation\Internal	CapabilityResolver	class	final	other	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Internal/CurrentRequestContext.php	CoreX\Operations\Invocation\Internal	CurrentRequestContext	class	final	other	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php	CoreX\Operations\Invocation\Internal	DefaultOperationInvoker	class	final	other	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Internal/ResolvedContext.php	CoreX\Operations\Invocation\Internal	ResolvedContext	class	final/readonly	other	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/Internal/TrustedContextResolver.php	CoreX\Operations\Invocation\Internal	TrustedContextResolver	class	final	other	Invocation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/InvocationMetadata.php	CoreX\Operations\Invocation	InvocationMetadata	class	final/readonly	other	Invocation	1	yes
+axiomasoft/corex-operations	packages/operations/src/Invocation/OperationDispatcher.php	CoreX\Operations\Invocation	OperationDispatcher	class	final	other	Invocation	1	yes
+axiomasoft/corex-operations	packages/operations/src/Laravel/ApiSchemaRegistrar.php	CoreX\Operations\Laravel	ApiSchemaRegistrar	class	final/readonly	other	Laravel	1	yes
+axiomasoft/corex-operations	packages/operations/src/Laravel/Commands/PruneApiOperations.php	CoreX\Operations\Laravel\Commands	PruneApiOperations	class	final	command	Laravel	2	yes
+axiomasoft/corex-operations	packages/operations/src/Laravel/Support/ApiOptions.php	CoreX\Operations\Laravel\Support	ApiOptions	class	final/readonly	other	Laravel	2	yes
+axiomasoft/corex-operations	packages/operations/src/OpenApi/Commands/WriteApiSnapshots.php	CoreX\Operations\OpenApi\Commands	WriteApiSnapshots	class	final	command	OpenApi	2	yes
+axiomasoft/corex-operations	packages/operations/src/OpenApi/Contracts/ContractSnapshotSection.php	CoreX\Operations\OpenApi\Contracts	ContractSnapshotSection	interface		contract	OpenApi	2	yes
+axiomasoft/corex-operations	packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php	CoreX\Operations\OpenApi\Internal	ContractSnapshotBuilder	class	final	other	OpenApi	2	yes
+axiomasoft/corex-operations	packages/operations/src/OpenApi/Internal/SnapshotJson.php	CoreX\Operations\OpenApi\Internal	SnapshotJson	class	final	other	OpenApi	2	yes
+axiomasoft/corex-operations	packages/operations/src/OpenApi/OpenApiDocumentGenerator.php	CoreX\Operations\OpenApi	OpenApiDocumentGenerator	class	final	other	OpenApi	1	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/Contracts/CursorKeyring.php	CoreX\Operations\Pagination\Contracts	CursorKeyring	interface		contract	Pagination	2	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/Data/CursorPage.php	CoreX\Operations\Pagination\Data	CursorPage	class	final/readonly	other	Pagination	2	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/Data/CursorPayload.php	CoreX\Operations\Pagination\Data	CursorPayload	class	final/readonly	data	Pagination	2	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/Data/CursorPosition.php	CoreX\Operations\Pagination\Data	CursorPosition	class	final/readonly	other	Pagination	2	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/OrderingRegistry.php	CoreX\Operations\Pagination	OrderingRegistry	class	final/readonly	other	Pagination	1	yes
+axiomasoft/corex-operations	packages/operations/src/Pagination/SignedCursorCodec.php	CoreX\Operations\Pagination	SignedCursorCodec	class	final/readonly	other	Pagination	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/BrokenHandler.php	CoreX\Operations\Testing	BrokenHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/CatalogueModuleFixture.php	CoreX\Operations\Testing	CatalogueModuleFixture	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/ContextFixture.php	CoreX\Operations\Testing	ContextFixture	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/HttpDependentHandler.php	CoreX\Operations\Testing	HttpDependentHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/IdentityFixture.php	CoreX\Operations\Testing	IdentityFixture	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/InvocationFixtures.php	CoreX\Operations\Testing	InvocationFixtures	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/LoadContourModule.php	CoreX\Operations\Testing	LoadContourModule	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/ModuleFixture.php	CoreX\Operations\Testing	ModuleFixture	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/MutatingHandler.php	CoreX\Operations\Testing	MutatingHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/NoteHandler.php	CoreX\Operations\Testing	NoteHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/OutputMismatchHandler.php	CoreX\Operations\Testing	OutputMismatchHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/ProviderKeyHandler.php	CoreX\Operations\Testing	ProviderKeyHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/ResolvedContexts.php	CoreX\Operations\Testing	ResolvedContexts	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/StubOperationHandler.php	CoreX\Operations\Testing	StubOperationHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Testing/StubToolHandler.php	CoreX\Operations\Testing	StubToolHandler	class	final	other	Testing	1	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/Data/JsonObject.php	CoreX\Operations\Validation\Data	JsonObject	class	final/readonly	other	Validation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/Data/JsonValue.php	CoreX\Operations\Validation\Data	JsonValue	class	final/readonly	other	Validation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/Data/SchemaHandle.php	CoreX\Operations\Validation\Data	SchemaHandle	class	final/readonly	data	Validation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/Data/SchemaValidation.php	CoreX\Operations\Validation\Data	SchemaValidation	class	final/readonly	data	Validation	2	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/JsonCanonical.php	CoreX\Operations\Validation	JsonCanonical	class	final	other	Validation	1	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/SchemaBudget.php	CoreX\Operations\Validation	SchemaBudget	class	final	other	Validation	1	yes
+axiomasoft/corex-operations	packages/operations/src/Validation/SchemaProfile.php	CoreX\Operations\Validation	SchemaProfile	class	final	other	Validation	1	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/ApiProfile.php	CoreX\Operations\Versioning\Data	ApiProfile	class	final/readonly	other	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/ApiVersion.php	CoreX\Operations\Versioning\Data	ApiVersion	class	final/readonly	other	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/ApiVersionStatus.php	CoreX\Operations\Versioning\Data	ApiVersionStatus	enum		enum	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/CapabilityDescriptor.php	CoreX\Operations\Versioning\Data	CapabilityDescriptor	class	final/readonly	other	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/DeprecationDescriptor.php	CoreX\Operations\Versioning\Data	DeprecationDescriptor	class	final/readonly	other	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Data/EffectiveCapability.php	CoreX\Operations\Versioning\Data	EffectiveCapability	class	final/readonly	other	Versioning	2	yes
+axiomasoft/corex-operations	packages/operations/src/Versioning/Internal/ApiProfileFactory.php	CoreX\Operations\Versioning\Internal	ApiProfileFactory	class	final	other	Versioning	2	yes
+axiomasoft/corex-panels	packages/panels/src/Contracts/PanelCatalogue.php	CoreX\Panels\Contracts	PanelCatalogue	interface		contract	Contracts	1	yes
+axiomasoft/corex-panels	packages/panels/src/Contracts/PanelProvider.php	CoreX\Panels\Contracts	PanelProvider	interface		contract	Contracts	1	yes
+axiomasoft/corex-panels	packages/panels/src/Data/EntityReference.php	CoreX\Panels\Data	EntityReference	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-panels	packages/panels/src/Data/PanelAccess.php	CoreX\Panels\Data	PanelAccess	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-panels	packages/panels/src/Data/PanelContext.php	CoreX\Panels\Data	PanelContext	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-panels	packages/panels/src/Data/PanelDescriptor.php	CoreX\Panels\Data	PanelDescriptor	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-panels	packages/panels/src/Data/PanelReference.php	CoreX\Panels\Data	PanelReference	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-panels	packages/panels/src/Internal/EntityViewSchemaProvider.php	CoreX\Panels\Internal	EntityViewSchemaProvider	class	final	other	Internal	1	yes
+axiomasoft/corex-panels	packages/panels/src/Internal/ModulePanelCatalogue.php	CoreX\Panels\Internal	ModulePanelCatalogue	class	final	other	Internal	1	yes
+axiomasoft/corex-panels	packages/panels/src/Internal/SavedViewsRegistrar.php	CoreX\Panels\Internal	SavedViewsRegistrar	class	final	other	Internal	1	yes
+axiomasoft/corex-panels	packages/panels/src/PanelsModule.php	CoreX\Panels	PanelsModule	class	final	other	<root>	0	yes
+axiomasoft/corex-panels	packages/panels/src/PanelsServiceProvider.php	CoreX\Panels	PanelsServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Contracts/SavedViewRepository.php	CoreX\Panels\SavedViews\Contracts	SavedViewRepository	interface		contract	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Contracts/ViewAccessPolicy.php	CoreX\Panels\SavedViews\Contracts	ViewAccessPolicy	interface		contract	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Contracts/ViewSchemaProvider.php	CoreX\Panels\SavedViews\Contracts	ViewSchemaProvider	interface		contract	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/SaveViewInput.php	CoreX\Panels\SavedViews\Data	SaveViewInput	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/SavedQuery.php	CoreX\Panels\SavedViews\Data	SavedQuery	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/SavedViewRef.php	CoreX\Panels\SavedViews\Data	SavedViewRef	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewAction.php	CoreX\Panels\SavedViews\Data	ViewAction	enum		enum	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewContext.php	CoreX\Panels\SavedViews\Data	ViewContext	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewField.php	CoreX\Panels\SavedViews\Data	ViewField	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewSchema.php	CoreX\Panels\SavedViews\Data	ViewSchema	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewScope.php	CoreX\Panels\SavedViews\Data	ViewScope	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Data/ViewSubject.php	CoreX\Panels\SavedViews\Data	ViewSubject	class	final/readonly	data	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Internal/DenyViewAccessPolicy.php	CoreX\Panels\SavedViews\Internal	DenyViewAccessPolicy	class	final	other	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php	CoreX\Panels\SavedViews\Internal	SqlSavedViewRepository	class	final	other	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Internal/UnavailableViewSchemaProvider.php	CoreX\Panels\SavedViews\Internal	UnavailableViewSchemaProvider	class	final	other	SavedViews	2	yes
+axiomasoft/corex-panels	packages/panels/src/SavedViews/Internal/ViewConfigValidator.php	CoreX\Panels\SavedViews\Internal	ViewConfigValidator	class	final	other	SavedViews	2	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Contracts/RecurrenceExpander.php	CoreX\Recurrence\Contracts	RecurrenceExpander	interface		contract	Contracts	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/DateStart.php	CoreX\Recurrence\Data	DateStart	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/DateWindow.php	CoreX\Recurrence\Data	DateWindow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/ExpansionCursor.php	CoreX\Recurrence\Data	ExpansionCursor	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/ExpansionLimits.php	CoreX\Recurrence\Data	ExpansionLimits	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/InstantWindow.php	CoreX\Recurrence\Data	InstantWindow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/Occurrence.php	CoreX\Recurrence\Data	Occurrence	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/OccurrencePage.php	CoreX\Recurrence\Data	OccurrencePage	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/RecurrenceOverride.php	CoreX\Recurrence\Data	RecurrenceOverride	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/RecurrenceSet.php	CoreX\Recurrence\Data	RecurrenceSet	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Data/RecurrenceWindow.php	CoreX\Recurrence\Data	RecurrenceWindow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Exceptions/StaleCursorException.php	CoreX\Recurrence\Exceptions	StaleCursorException	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Exceptions/UnsupportedEnvironmentException.php	CoreX\Recurrence\Exceptions	UnsupportedEnvironmentException	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Internal/CanonicalHasher.php	CoreX\Recurrence\Internal	CanonicalHasher	class	final	other	Internal	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/Internal/RuntimeProfile.php	CoreX\Recurrence\Internal	RuntimeProfile	class	final	other	Internal	1	yes
+axiomasoft/corex-recurrence	packages/recurrence/src/RRuleRecurrenceExpander.php	CoreX\Recurrence	RRuleRecurrenceExpander	class	final	other	<root>	0	yes
+axiomasoft/corex-search	packages/search/src/Contracts/IndexDriver.php	CoreX\Search\Contracts	IndexDriver	interface		contract	Contracts	1	yes
+axiomasoft/corex-search	packages/search/src/Contracts/SearchDocuments.php	CoreX\Search\Contracts	SearchDocuments	interface		contract	Contracts	1	yes
+axiomasoft/corex-search	packages/search/src/Contracts/SearchHydrator.php	CoreX\Search\Contracts	SearchHydrator	interface		contract	Contracts	1	yes
+axiomasoft/corex-search	packages/search/src/Contracts/SearchProvider.php	CoreX\Search\Contracts	SearchProvider	interface		contract	Contracts	1	yes
+axiomasoft/corex-search	packages/search/src/Contracts/SearchSchema.php	CoreX\Search\Contracts	SearchSchema	interface		contract	Contracts	1	yes
+axiomasoft/corex-search	packages/search/src/Exceptions/InvalidSearchConfiguration.php	CoreX\Search\Exceptions	InvalidSearchConfiguration	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-search	packages/search/src/Internal/Index/DurableIndexLane.php	CoreX\Search\Internal\Index	DurableIndexLane	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-search	packages/search/src/Internal/Index/DurableIndexRebuild.php	CoreX\Search\Internal\Index	DurableIndexRebuild	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-search	packages/search/src/Internal/Postgres/PostgresSearchProvider.php	CoreX\Search\Internal\Postgres	PostgresSearchProvider	class	final	other	Internal	2	yes
+axiomasoft/corex-search	packages/search/src/Internal/Query/PolicySearchHydrator.php	CoreX\Search\Internal\Query	PolicySearchHydrator	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-search	packages/search/src/Internal/Query/SearchCursorCodec.php	CoreX\Search\Internal\Query	SearchCursorCodec	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-search	packages/search/src/Internal/UnavailableSearchProvider.php	CoreX\Search\Internal	UnavailableSearchProvider	class	final	other	Internal	1	yes
+axiomasoft/corex-search	packages/search/src/SearchManager.php	CoreX\Search	SearchManager	class	final	other	<root>	0	yes
+axiomasoft/corex-search	packages/search/src/SearchServiceProvider.php	CoreX\Search	SearchServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-search	packages/search/src/Support/Candidate.php	CoreX\Search\Support	Candidate	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/CandidatePage.php	CoreX\Search\Support	CandidatePage	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/CurrentSearchRecord.php	CoreX\Search\Support	CurrentSearchRecord	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/DocumentBatch.php	CoreX\Search\Support	DocumentBatch	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/DocumentCursor.php	CoreX\Search\Support	DocumentCursor	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/IndexBatch.php	CoreX\Search\Support	IndexBatch	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/IndexClaim.php	CoreX\Search\Support	IndexClaim	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/IndexOutcome.php	CoreX\Search\Support	IndexOutcome	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/IndexSubmission.php	CoreX\Search\Support	IndexSubmission	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/IndexSwap.php	CoreX\Search\Support	IndexSwap	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchCapabilities.php	CoreX\Search\Support	SearchCapabilities	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchConfigSection.php	CoreX\Search\Support	SearchConfigSection	class	final	other	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchFilter.php	CoreX\Search\Support	SearchFilter	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchPage.php	CoreX\Search\Support	SearchPage	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchQuery.php	CoreX\Search\Support	SearchQuery	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Support/SearchSnapshot.php	CoreX\Search\Support	SearchSnapshot	class	final/readonly	data	Support	1	yes
+axiomasoft/corex-search	packages/search/src/Testing/SearchFixtures.php	CoreX\Search\Testing	SearchFixtures	class	final	other	Testing	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Contracts/SavedViewLabelReader.php	CoreX\SearchIntl\Contracts	SavedViewLabelReader	interface		contract	Contracts	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Data/LocalizedFieldBinding.php	CoreX\SearchIntl\Data	LocalizedFieldBinding	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Internal/LocalizedFieldProjector.php	CoreX\SearchIntl\Internal	LocalizedFieldProjector	class	final	other	Internal	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Internal/LocalizedSearchHydrator.php	CoreX\SearchIntl\Internal	LocalizedSearchHydrator	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Internal/LocalizedSearchSchema.php	CoreX\SearchIntl\Internal	LocalizedSearchSchema	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Internal/SqlSavedViewLabelReader.php	CoreX\SearchIntl\Internal	SqlSavedViewLabelReader	class	final	other	Internal	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/Internal/TranslationRevision.php	CoreX\SearchIntl\Internal	TranslationRevision	class	final	other	Internal	1	yes
+axiomasoft/corex-search-intl	packages/search-intl/src/SearchIntlServiceProvider.php	CoreX\SearchIntl	SearchIntlServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-search-meilisearch	packages/search-meilisearch/src/Exceptions/InvalidMeilisearchConfiguration.php	CoreX\SearchMeilisearch\Exceptions	InvalidMeilisearchConfiguration	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-search-meilisearch	packages/search-meilisearch/src/Internal/MeilisearchIndexAdapter.php	CoreX\SearchMeilisearch\Internal	MeilisearchIndexAdapter	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-search-meilisearch	packages/search-meilisearch/src/Internal/MeilisearchSearchProvider.php	CoreX\SearchMeilisearch\Internal	MeilisearchSearchProvider	class	final	other	Internal	1	yes
+axiomasoft/corex-search-meilisearch	packages/search-meilisearch/src/MeilisearchConfigSection.php	CoreX\SearchMeilisearch	MeilisearchConfigSection	class	final	other	<root>	0	yes
+axiomasoft/corex-search-meilisearch	packages/search-meilisearch/src/MeilisearchServiceProvider.php	CoreX\SearchMeilisearch	MeilisearchServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Contracts/TaskAccess.php	CoreX\Tasks\Access\Contracts	TaskAccess	interface		contract	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Contracts/TaskMutationAccess.php	CoreX\Tasks\Access\Contracts	TaskMutationAccess	interface		contract	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Contracts/TaskPlanningAccess.php	CoreX\Tasks\Access\Contracts	TaskPlanningAccess	interface		contract	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Exceptions/TasksModuleDisabled.php	CoreX\Tasks\Access\Exceptions	TasksModuleDisabled	class	final	exception	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Internal/DenyTaskAccess.php	CoreX\Tasks\Access\Internal	DenyTaskAccess	class	final	other	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Internal/DenyTaskMutationAccess.php	CoreX\Tasks\Access\Internal	DenyTaskMutationAccess	class	final	other	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Internal/DenyTaskPlanningAccess.php	CoreX\Tasks\Access\Internal	DenyTaskPlanningAccess	class	final	other	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Internal/TaskCompletion.php	CoreX\Tasks\Access\Internal	TaskCompletion	class	final/readonly	other	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Access/Internal/TaskModuleGuard.php	CoreX\Tasks\Access\Internal	TaskModuleGuard	class	final	other	Access	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Contracts/TaskOperationReceipts.php	CoreX\Tasks\Planning\Contracts	TaskOperationReceipts	interface		contract	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Contracts/TaskPlanningCommand.php	CoreX\Tasks\Planning\Contracts	TaskPlanningCommand	interface		contract	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Data/PlanningOperation.php	CoreX\Tasks\Planning\Data	PlanningOperation	enum		enum	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Data/PlanningSubject.php	CoreX\Tasks\Planning\Data	PlanningSubject	class	final/readonly	data	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Data/PlanningToken.php	CoreX\Tasks\Planning\Data	PlanningToken	class	final/readonly	data	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Data/TaskOperationKind.php	CoreX\Tasks\Planning\Data	TaskOperationKind	enum		enum	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Data/TaskOperationReceipt.php	CoreX\Tasks\Planning\Data	TaskOperationReceipt	class	final/readonly	data	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Exceptions/InvalidPlanningDraft.php	CoreX\Tasks\Planning\Exceptions	InvalidPlanningDraft	class	final	exception	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Exceptions/PlanningConflict.php	CoreX\Tasks\Planning\Exceptions	PlanningConflict	class	final	exception	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Internal/DatabaseTaskOperationReceipts.php	CoreX\Tasks\Planning\Internal	DatabaseTaskOperationReceipts	class	final	other	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Internal/OperationStore.php	CoreX\Tasks\Planning\Internal	OperationStore	class	final	other	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Internal/PlanningCommand.php	CoreX\Tasks\Planning\Internal	PlanningCommand	class	final	other	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Internal/PlanningHasher.php	CoreX\Tasks\Planning\Internal	PlanningHasher	class	final	other	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Planning/Internal/PlanningOperationsServiceProvider.php	CoreX\Tasks\Planning\Internal	PlanningOperationsServiceProvider	class	final	provider	Planning	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Project/Data/ProjectDraft.php	CoreX\Tasks\Project\Data	ProjectDraft	class	final/readonly	data	Project	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Project/Data/ProjectReference.php	CoreX\Tasks\Project\Data	ProjectReference	class	final/readonly	other	Project	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Project/Enums/ProjectStatus.php	CoreX\Tasks\Project\Enums	ProjectStatus	enum		enum	Project	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Project/Models/Project.php	CoreX\Tasks\Project\Models	Project	class	final	model	Project	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Sprint/Data/SprintDraft.php	CoreX\Tasks\Sprint\Data	SprintDraft	class	final/readonly	data	Sprint	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Sprint/Data/SprintReference.php	CoreX\Tasks\Sprint\Data	SprintReference	class	final/readonly	other	Sprint	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Sprint/Enums/SprintStatus.php	CoreX\Tasks\Sprint\Enums	SprintStatus	enum		enum	Sprint	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Sprint/Models/Sprint.php	CoreX\Tasks\Sprint\Models	Sprint	class	final	model	Sprint	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Actions/CompleteTask.php	CoreX\Tasks\Task\Actions	CompleteTask	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Actions/CreateTask.php	CoreX\Tasks\Task\Actions	CreateTask	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Actions/MoveTaskToStage.php	CoreX\Tasks\Task\Actions	MoveTaskToStage	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Actions/UpdateTask.php	CoreX\Tasks\Task\Actions	UpdateTask	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Contracts/CompleteTaskCommand.php	CoreX\Tasks\Task\Contracts	CompleteTaskCommand	interface		contract	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Contracts/CreateTaskCommand.php	CoreX\Tasks\Task\Contracts	CreateTaskCommand	interface		contract	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Contracts/MoveTaskToStageCommand.php	CoreX\Tasks\Task\Contracts	MoveTaskToStageCommand	interface		contract	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Contracts/UpdateTaskCommand.php	CoreX\Tasks\Task\Contracts	UpdateTaskCommand	interface		contract	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/ActorData.php	CoreX\Tasks\Task\Data	ActorData	class	final/readonly	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/CompleteTaskData.php	CoreX\Tasks\Task\Data	CompleteTaskData	class	final/readonly	data	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/EntityReference.php	CoreX\Tasks\Task\Data	EntityReference	class	final/readonly	data	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/MoveTaskToStageData.php	CoreX\Tasks\Task\Data	MoveTaskToStageData	class	final/readonly	data	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/TaskDraft.php	CoreX\Tasks\Task\Data	TaskDraft	class	final/readonly	data	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/TaskReference.php	CoreX\Tasks\Task\Data	TaskReference	class	final/readonly	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Data/UpdateTaskData.php	CoreX\Tasks\Task\Data	UpdateTaskData	class	final/readonly	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Enums/TaskPriority.php	CoreX\Tasks\Task\Enums	TaskPriority	enum		enum	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Enums/TaskStatus.php	CoreX\Tasks\Task\Enums	TaskStatus	enum		enum	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Events/TaskCompleted.php	CoreX\Tasks\Task\Events	TaskCompleted	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Events/TaskCreated.php	CoreX\Tasks\Task\Events	TaskCreated	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Events/TaskMovedToStage.php	CoreX\Tasks\Task\Events	TaskMovedToStage	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Events/TaskUpdated.php	CoreX\Tasks\Task\Events	TaskUpdated	class	final	other	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Models/Stage.php	CoreX\Tasks\Task\Models	Stage	class	final	model	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Models/Task.php	CoreX\Tasks\Task\Models	Task	class	final	model	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Models/TaskTarget.php	CoreX\Tasks\Task\Models	TaskTarget	class	final	model	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Task/Models/TaskWatcher.php	CoreX\Tasks\Task\Models	TaskWatcher	class	final	model	Task	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/TasksModule.php	CoreX\Tasks	TasksModule	class	final	other	<root>	0	yes
+axiomasoft/corex-tasks	packages/tasks/src/TasksServiceProvider.php	CoreX\Tasks	TasksServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-tasks	packages/tasks/src/Time/Data/TimeLogDraft.php	CoreX\Tasks\Time\Data	TimeLogDraft	class	final/readonly	data	Time	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Time/Data/TimeLogReference.php	CoreX\Tasks\Time\Data	TimeLogReference	class	final/readonly	other	Time	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Time/Enums/TimeLogSource.php	CoreX\Tasks\Time\Enums	TimeLogSource	enum		enum	Time	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Time/Models/TimeLog.php	CoreX\Tasks\Time\Models	TimeLog	class	final	model	Time	2	yes
+axiomasoft/corex-tasks	packages/tasks/src/Time/Models/Timer.php	CoreX\Tasks\Time\Models	Timer	class	final	model	Time	2	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Contracts/TaskRecurrenceCommand.php	CoreX\TasksWorkflow\Contracts	TaskRecurrenceCommand	interface		contract	Contracts	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Data/MaterializationReceipt.php	CoreX\TasksWorkflow\Data	MaterializationReceipt	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Data/MaterializationWindow.php	CoreX\TasksWorkflow\Data	MaterializationWindow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Data/SeriesReference.php	CoreX\TasksWorkflow\Data	SeriesReference	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Exceptions/MaterializationConflict.php	CoreX\TasksWorkflow\Exceptions	MaterializationConflict	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Exceptions/StaleMaterialization.php	CoreX\TasksWorkflow\Exceptions	StaleMaterialization	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Exceptions/UnsupportedMaterialization.php	CoreX\TasksWorkflow\Exceptions	UnsupportedMaterialization	class	final	exception	Exceptions	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/CaptureTaskCompletion.php	CoreX\TasksWorkflow\Internal	CaptureTaskCompletion	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/MaterializationHasher.php	CoreX\TasksWorkflow\Internal	MaterializationHasher	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/MaterializationStore.php	CoreX\TasksWorkflow\Internal	MaterializationStore	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php	CoreX\TasksWorkflow\Internal	MaterializationWakeupHandler	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/ScopeConnectionGuard.php	CoreX\TasksWorkflow\Internal	ScopeConnectionGuard	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/SeriesDefinitionCodec.php	CoreX\TasksWorkflow\Internal	SeriesDefinitionCodec	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php	CoreX\TasksWorkflow\Internal	SqlTaskRecurrenceMaterializer	class	final	other	Internal	1	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/TaskWorkflowIntegration.php	CoreX\TasksWorkflow	TaskWorkflowIntegration	class	final	other	<root>	0	yes
+axiomasoft/corex-tasks-workflow	packages/tasks-workflow/src/TasksWorkflowServiceProvider.php	CoreX\TasksWorkflow	TasksWorkflowServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Events/AccountPurged.php	CoreX\Tenancy\Account\Events	AccountPurged	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Events/AccountSuspended.php	CoreX\Tenancy\Account\Events	AccountSuspended	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Events/ExportReady.php	CoreX\Tenancy\Account\Events	ExportReady	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Events/GraceStarted.php	CoreX\Tenancy\Account\Events	GraceStarted	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Events/TrialStarted.php	CoreX\Tenancy\Account\Events	TrialStarted	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Lifecycle/AccountLifecycle.php	CoreX\Tenancy\Account\Lifecycle	AccountLifecycle	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Lifecycle/AccountLifecycleFsm.php	CoreX\Tenancy\Account\Lifecycle	AccountLifecycleFsm	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Models/Account.php	CoreX\Tenancy\Account\Models	Account	class	final	other	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Models/AccountExport.php	CoreX\Tenancy\Account\Models	AccountExport	class	final	model	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Account/Models/AccountSchemaState.php	CoreX\Tenancy\Account\Models	AccountSchemaState	class	final	model	Account	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php	CoreX\Tenancy\Authentication\Exceptions	OidcAuthenticationException	class	final	exception	Authentication	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Http/Controllers/LogoutController.php	CoreX\Tenancy\Authentication\Http\Controllers	LogoutController	class	final	other	Authentication	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Http/Controllers/OidcLoginController.php	CoreX\Tenancy\Authentication\Http\Controllers	OidcLoginController	class	final	other	Authentication	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Oidc/IdTokenVerifier.php	CoreX\Tenancy\Authentication\Oidc	IdTokenVerifier	class	final	other	Authentication	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Oidc/JwksKeySet.php	CoreX\Tenancy\Authentication\Oidc	JwksKeySet	class	final	other	Authentication	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Oidc/OidcClient.php	CoreX\Tenancy\Authentication\Oidc	OidcClient	class	final	other	Authentication	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Authentication/Oidc/OidcDiscovery.php	CoreX\Tenancy\Authentication\Oidc	OidcDiscovery	class	final	other	Authentication	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/CentralApiClient.php	CoreX\Tenancy\Contracts	CentralApiClient	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/DomainChallengeStore.php	CoreX\Tenancy\Contracts	DomainChallengeStore	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/DomainOwnershipProofVerifier.php	CoreX\Tenancy\Contracts	DomainOwnershipProofVerifier	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/DomainTrustAuthorizer.php	CoreX\Tenancy\Contracts	DomainTrustAuthorizer	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/DomainTrustPolicy.php	CoreX\Tenancy\Contracts	DomainTrustPolicy	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/PrincipalWorkspaceResolver.php	CoreX\Tenancy\Contracts	PrincipalWorkspaceResolver	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/ProvisioningClaim.php	CoreX\Tenancy\Contracts	ProvisioningClaim	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Contracts/TemplateIntegrityVerifier.php	CoreX\Tenancy\Contracts	TemplateIntegrityVerifier	interface		contract	Contracts	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/ChallengeConsumption.php	CoreX\Tenancy\DomainTrust	ChallengeConsumption	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainChallenge.php	CoreX\Tenancy\DomainTrust	DomainChallenge	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainChallengeBinding.php	CoreX\Tenancy\DomainTrust	DomainChallengeBinding	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainChallengeDraft.php	CoreX\Tenancy\DomainTrust	DomainChallengeDraft	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustActor.php	CoreX\Tenancy\DomainTrust	DomainTrustActor	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustChangeReason.php	CoreX\Tenancy\DomainTrust	DomainTrustChangeReason	enum		enum	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustCoordinator.php	CoreX\Tenancy\DomainTrust	DomainTrustCoordinator	class	final	other	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustDenied.php	CoreX\Tenancy\DomainTrust	DomainTrustDenied	class	final	exception	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustDisabled.php	CoreX\Tenancy\DomainTrust	DomainTrustDisabled	class	final	exception	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustOperation.php	CoreX\Tenancy\DomainTrust	DomainTrustOperation	enum		enum	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustStateWriter.php	CoreX\Tenancy\DomainTrust	DomainTrustStateWriter	class	final	other	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/DomainTrustTransition.php	CoreX\Tenancy\DomainTrust	DomainTrustTransition	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/Events/DomainTrustChanged.php	CoreX\Tenancy\DomainTrust\Events	DomainTrustChanged	class	final	other	DomainTrust	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/IssuedDomainChallenge.php	CoreX\Tenancy\DomainTrust	IssuedDomainChallenge	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/Models/Domain.php	CoreX\Tenancy\DomainTrust\Models	Domain	class	final	model	DomainTrust	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/NormalizedHost.php	CoreX\Tenancy\DomainTrust	NormalizedHost	class	final/readonly	other	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/DomainTrust/ObservedDomainProof.php	CoreX\Tenancy\DomainTrust	ObservedDomainProof	class	final/readonly	data	DomainTrust	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Identity/DatabaseIdentitySyncer.php	CoreX\Tenancy\Identity	DatabaseIdentitySyncer	class	final	other	Identity	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Identity/Events/UserSynced.php	CoreX\Tenancy\Identity\Events	UserSynced	class	final	other	Identity	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Identity/IdentitySyncer.php	CoreX\Tenancy\Identity	IdentitySyncer	interface		contract	Identity	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Identity/Jobs/SyncIdentityToAccount.php	CoreX\Tenancy\Identity\Jobs	SyncIdentityToAccount	class	final	job	Identity	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Identity/Models/User.php	CoreX\Tenancy\Identity\Models	User	class	final	model	Identity	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Impersonation/DatabaseImpersonationService.php	CoreX\Tenancy\Impersonation	DatabaseImpersonationService	class	final	other	Impersonation	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php	CoreX\Tenancy\Impersonation\Events	ImpersonationEnded	class	final	other	Impersonation	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php	CoreX\Tenancy\Impersonation\Events	ImpersonationStarted	class	final	other	Impersonation	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php	CoreX\Tenancy\Impersonation	ImpersonatedModelWriteGuard	class	final	other	Impersonation	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Impersonation/Models/ImpersonationGrant.php	CoreX\Tenancy\Impersonation\Models	ImpersonationGrant	class	final	model	Impersonation	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Integration/Wakeup/RootRegistryWakeupHint.php	CoreX\Tenancy\Integration\Wakeup	RootRegistryWakeupHint	class	final	other	Integration	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Integration/Wakeup/RootWakeupReconciler.php	CoreX\Tenancy\Integration\Wakeup	RootWakeupReconciler	class	final	other	Integration	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Integration/Wakeup/SweepRootWakeups.php	CoreX\Tenancy\Integration\Wakeup	SweepRootWakeups	class	final	command	Integration	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/AuthenticationRegistrar.php	CoreX\Tenancy\Laravel	AuthenticationRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php	CoreX\Tenancy\Laravel\Bootstrappers	WorkspaceContextBootstrapper	class	final	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php	CoreX\Tenancy\Laravel\Commands	IdentitiesReconcileCommand	class	final	command	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Commands/PendingClearCommand.php	CoreX\Tenancy\Laravel\Commands	PendingClearCommand	class	final	command	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php	CoreX\Tenancy\Laravel\Commands	PendingCreateCommand	class	final	command	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php	CoreX\Tenancy\Laravel\Commands	TenantsMigrateCommand	class	final	command	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/ConsoleRegistrar.php	CoreX\Tenancy\Laravel	ConsoleRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/DatabaseRegistrar.php	CoreX\Tenancy\Laravel	DatabaseRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/DomainTrustRegistrar.php	CoreX\Tenancy\Laravel	DomainTrustRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/EventsRegistrar.php	CoreX\Tenancy\Laravel	EventsRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php	CoreX\Tenancy\Laravel\Http\Middleware	AccountStatusGate	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/AllowImpersonatedWrites.php	CoreX\Tenancy\Laravel\Http\Middleware	AllowImpersonatedWrites	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/DenyImpersonatedWrites.php	CoreX\Tenancy\Laravel\Http\Middleware	DenyImpersonatedWrites	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/EnforceSessionLifetime.php	CoreX\Tenancy\Laravel\Http\Middleware	EnforceSessionLifetime	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php	CoreX\Tenancy\Laravel\Http\Middleware	ImpersonationSessionGuard	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/RequireActiveMembership.php	CoreX\Tenancy\Laravel\Http\Middleware	RequireActiveMembership	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php	CoreX\Tenancy\Laravel\Http\Middleware	ResolveTenantFromHost	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Http/Middleware/ResolveWorkspace.php	CoreX\Tenancy\Laravel\Http\Middleware	ResolveWorkspace	class	final	other	Laravel	3	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/HttpRegistrar.php	CoreX\Tenancy\Laravel	HttpRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/IdentityRegistrar.php	CoreX\Tenancy\Laravel	IdentityRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Listeners/RevertTenancyOnJobException.php	CoreX\Tenancy\Laravel\Listeners	RevertTenancyOnJobException	class	final	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/ProvisioningRegistrar.php	CoreX\Tenancy\Laravel	ProvisioningRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php	CoreX\Tenancy\Laravel\Resolvers	HostTenantResolver	class	final	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/RuntimeRegistrar.php	CoreX\Tenancy\Laravel	RuntimeRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Scopes/WorkspaceScope.php	CoreX\Tenancy\Laravel\Scopes	WorkspaceScope	class	final	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Support/AccountLifecyclePolicy.php	CoreX\Tenancy\Laravel\Support	AccountLifecyclePolicy	class	final/readonly	data	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php	CoreX\Tenancy\Laravel\Support	ImpersonationPolicy	class	final/readonly	data	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Support/StatusGatePolicy.php	CoreX\Tenancy\Laravel\Support	StatusGatePolicy	class	final/readonly	data	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Support/TenancyConfigSection.php	CoreX\Tenancy\Laravel\Support	TenancyConfigSection	class	final	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/Support/TenancyOptions.php	CoreX\Tenancy\Laravel\Support	TenancyOptions	class	final/readonly	other	Laravel	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/WakeupRegistrar.php	CoreX\Tenancy\Laravel	WakeupRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Laravel/WorkspaceRegistrar.php	CoreX\Tenancy\Laravel	WorkspaceRegistrar	class	final	other	Laravel	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Credentials/CredentialCookieQueue.php	CoreX\Tenancy\Membership\Credentials	CredentialCookieQueue	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Credentials/CredentialIssuanceDenied.php	CoreX\Tenancy\Membership\Credentials	CredentialIssuanceDenied	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Credentials/FencedCredentialIssuer.php	CoreX\Tenancy\Membership\Credentials	FencedCredentialIssuer	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Credentials/FinalWriteAdmission.php	CoreX\Tenancy\Membership\Credentials	FinalWriteAdmission	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Events/MembershipGranted.php	CoreX\Tenancy\Membership\Events	MembershipGranted	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Events/MembershipRevoked.php	CoreX\Tenancy\Membership\Events	MembershipRevoked	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Expiration/ExpiryScheduler.php	CoreX\Tenancy\Membership\Expiration	ExpiryScheduler	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Identity/ManagementIdentityHydrator.php	CoreX\Tenancy\Membership\Identity	ManagementIdentityHydrator	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Inbox/DurableInbox.php	CoreX\Tenancy\Membership\Inbox	DurableInbox	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Inbox/InboxConflict.php	CoreX\Tenancy\Membership\Inbox	InboxConflict	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Jobs/RefreshAccountMembership.php	CoreX\Tenancy\Membership\Jobs	RefreshAccountMembership	class	final	job	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Persistence/PairKey.php	CoreX\Tenancy\Membership\Persistence	PairKey	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Persistence/PairState.php	CoreX\Tenancy\Membership\Persistence	PairState	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Persistence/PairStore.php	CoreX\Tenancy\Membership\Persistence	PairStore	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Persistence/PairStoreViolation.php	CoreX\Tenancy\Membership\Persistence	PairStoreViolation	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Persistence/PairWitness.php	CoreX\Tenancy\Membership\Persistence	PairWitness	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Projection/ApplyMembershipProjection.php	CoreX\Tenancy\Membership\Projection	ApplyMembershipProjection	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Projection/ProjectionDenied.php	CoreX\Tenancy\Membership\Projection	ProjectionDenied	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Projection/ReferenceMembershipProjection.php	CoreX\Tenancy\Membership\Projection	ReferenceMembershipProjection	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Refresh/RefreshCoordinator.php	CoreX\Tenancy\Membership\Refresh	RefreshCoordinator	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountClickAuthorizer.php	CoreX\Tenancy\Membership\Switcher	AccountClickAuthorizer	interface		contract	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountListEntry.php	CoreX\Tenancy\Membership\Switcher	AccountListEntry	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountMenu.php	CoreX\Tenancy\Membership\Switcher	AccountMenu	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountMenuCache.php	CoreX\Tenancy\Membership\Switcher	AccountMenuCache	interface		contract	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountMenuReader.php	CoreX\Tenancy\Membership\Switcher	AccountMenuReader	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountsQuery.php	CoreX\Tenancy\Membership\Switcher	AccountsQuery	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AccountsReadTransport.php	CoreX\Tenancy\Membership\Switcher	AccountsReadTransport	interface		contract	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/AvailableAccounts.php	CoreX\Tenancy\Membership\Switcher	AvailableAccounts	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/RedisAccountMenuCache.php	CoreX\Tenancy\Membership\Switcher	RedisAccountMenuCache	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Switcher/StrictAccountsTransport.php	CoreX\Tenancy\Membership\Switcher	StrictAccountsTransport	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Timing/ClockReading.php	CoreX\Tenancy\Membership\Timing	ClockReading	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Timing/Elapsed.php	CoreX\Tenancy\Membership\Timing	Elapsed	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Timing/Lease.php	CoreX\Tenancy\Membership\Timing	Lease	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/AccessTokenValidator.php	CoreX\Tenancy\Membership\Transport	AccessTokenValidator	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/ActorRef.php	CoreX\Tenancy\Membership\Transport	ActorRef	class	final/readonly	data	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/ActorType.php	CoreX\Tenancy\Membership\Transport	ActorType	enum		enum	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/CentralProtocolViolation.php	CoreX\Tenancy\Membership\Transport	CentralProtocolViolation	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/CentralUnauthorized.php	CoreX\Tenancy\Membership\Transport	CentralUnauthorized	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/CentralUnavailable.php	CoreX\Tenancy\Membership\Transport	CentralUnavailable	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/CentralValue.php	CoreX\Tenancy\Membership\Transport	CentralValue	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/ChannelBinding.php	CoreX\Tenancy\Membership\Transport	ChannelBinding	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/JwsVerifier.php	CoreX\Tenancy\Membership\Transport	JwsVerifier	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipEventKind.php	CoreX\Tenancy\Membership\Transport	MembershipEventKind	enum		enum	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipQuery.php	CoreX\Tenancy\Membership\Transport	MembershipQuery	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipReason.php	CoreX\Tenancy\Membership\Transport	MembershipReason	enum		enum	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipSnapshot.php	CoreX\Tenancy\Membership\Transport	MembershipSnapshot	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipState.php	CoreX\Tenancy\Membership\Transport	MembershipState	enum		enum	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/MembershipTrigger.php	CoreX\Tenancy\Membership\Transport	MembershipTrigger	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/RevokeMembershipReceipt.php	CoreX\Tenancy\Membership\Transport	RevokeMembershipReceipt	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/RevokeMembershipRequest.php	CoreX\Tenancy\Membership\Transport	RevokeMembershipRequest	class	final/readonly	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/RevokeUncertain.php	CoreX\Tenancy\Membership\Transport	RevokeUncertain	class	final	exception	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/StrictJson.php	CoreX\Tenancy\Membership\Transport	StrictJson	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/StrictTransport.php	CoreX\Tenancy\Membership\Transport	StrictTransport	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/TriggerParser.php	CoreX\Tenancy\Membership\Transport	TriggerParser	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Membership/Transport/Value.php	CoreX\Tenancy\Membership\Transport	Value	class	final	other	Membership	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/PHPStan/Rules/StanclImportBoundaryRule.php	CoreX\Tenancy\PHPStan\Rules	StanclImportBoundaryRule	class	final	other	PHPStan	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClaimAccountSignup.php	CoreX\Tenancy\Provisioning	ClaimAccountSignup	class	final	other	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClaimConflict.php	CoreX\Tenancy\Provisioning	ClaimConflict	class	final	exception	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClaimRequest.php	CoreX\Tenancy\Provisioning	ClaimRequest	class	final/readonly	data	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClaimResult.php	CoreX\Tenancy\Provisioning	ClaimResult	class	final/readonly	data	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClaimUnavailable.php	CoreX\Tenancy\Provisioning	ClaimUnavailable	class	final	exception	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/ClusterAccountConnectionResolver.php	CoreX\Tenancy\Provisioning	ClusterAccountConnectionResolver	class	final	other	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/SchemaCatalogueSerializer.php	CoreX\Tenancy\Provisioning\Database	SchemaCatalogueSerializer	class	final	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/TemplateClonePostgreSQLManager.php	CoreX\Tenancy\Provisioning\Database	TemplateClonePostgreSQLManager	class	final	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/TemplateIntegrityException.php	CoreX\Tenancy\Provisioning\Database	TemplateIntegrityException	class	final	exception	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/TemplateIntegrityLock.php	CoreX\Tenancy\Provisioning\Database	TemplateIntegrityLock	class	final	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/TemplateIntegrityVerifier.php	CoreX\Tenancy\Provisioning\Database	TemplateIntegrityVerifier	class	final	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Database/TemplateManifest.php	CoreX\Tenancy\Provisioning\Database	TemplateManifest	class	final/readonly	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Jobs/CreateDatabaseFromTemplate.php	CoreX\Tenancy\Provisioning\Jobs	CreateDatabaseFromTemplate	class	final	job	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Migrations/MigrationWaveOrchestrator.php	CoreX\Tenancy\Provisioning\Migrations	MigrationWaveOrchestrator	class	final	other	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/Models/MigrationBatch.php	CoreX\Tenancy\Provisioning\Models	MigrationBatch	class	final	model	Provisioning	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/PendingPool.php	CoreX\Tenancy\Provisioning	PendingPool	class	final	other	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/QualifiedTemplate.php	CoreX\Tenancy\Provisioning	QualifiedTemplate	class	final/readonly	data	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php	CoreX\Tenancy\Provisioning	StanclTenantDatabaseLifecycle	class	final	other	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Provisioning/StanclTenantDatabaseProvisioner.php	CoreX\Tenancy\Provisioning	StanclTenantDatabaseProvisioner	class	final	other	Provisioning	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/ConnectionGuardedTenantContextRestorer.php	CoreX\Tenancy\Runtime	ConnectionGuardedTenantContextRestorer	class	final/readonly	other	Runtime	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php	CoreX\Tenancy\Runtime\Exceptions	TenantCouldNotBeIdentifiedByHostException	class	final	exception	Runtime	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/StanclTenancyManager.php	CoreX\Tenancy\Runtime	StanclTenancyManager	class	final	other	Runtime	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/Storage/ContextTenantStorage.php	CoreX\Tenancy\Runtime\Storage	ContextTenantStorage	class	final	other	Runtime	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/Storage/ObjectTenantStorage.php	CoreX\Tenancy\Runtime\Storage	ObjectTenantStorage	class	final	other	Runtime	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Runtime/TenancyManagerContextResolver.php	CoreX\Tenancy\Runtime	TenancyManagerContextResolver	class	final	other	Runtime	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/TenancyServiceProvider.php	CoreX\Tenancy	TenancyServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/DatabaseWorkspaceResolver.php	CoreX\Tenancy\Workspace	DatabaseWorkspaceResolver	class	final	other	Workspace	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/InvitationNotAcceptableException.php	CoreX\Tenancy\Workspace	InvitationNotAcceptableException	class	final	exception	Workspace	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/Models/Invitation.php	CoreX\Tenancy\Workspace\Models	Invitation	class	final	model	Workspace	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/Models/Workspace.php	CoreX\Tenancy\Workspace\Models	Workspace	class	final	model	Workspace	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/Models/WorkspaceMember.php	CoreX\Tenancy\Workspace\Models	WorkspaceMember	class	final	model	Workspace	2	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/NoDefaultWorkspaceException.php	CoreX\Tenancy\Workspace	NoDefaultWorkspaceException	class	final	exception	Workspace	1	yes
+axiomasoft/corex-tenancy	packages/tenancy/src/Workspace/WorkspaceResolver.php	CoreX\Tenancy\Workspace	WorkspaceResolver	interface		contract	Workspace	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolCatalogue.php	CoreX\Tools\Contracts	ToolCatalogue	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolExecutionGuard.php	CoreX\Tools\Contracts	ToolExecutionGuard	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolInvoker.php	CoreX\Tools\Contracts	ToolInvoker	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolPolicy.php	CoreX\Tools\Contracts	ToolPolicy	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolRequestContext.php	CoreX\Tools\Contracts	ToolRequestContext	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Contracts/ToolSchemaValidator.php	CoreX\Tools\Contracts	ToolSchemaValidator	interface		contract	Contracts	1	yes
+axiomasoft/corex-tools	packages/tools/src/Data/ToolCall.php	CoreX\Tools\Data	ToolCall	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tools	packages/tools/src/Data/ToolCatalogueView.php	CoreX\Tools\Data	ToolCatalogueView	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tools	packages/tools/src/Data/ToolDescriptor.php	CoreX\Tools\Data	ToolDescriptor	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-tools	packages/tools/src/Data/ToolResult.php	CoreX\Tools\Data	ToolResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ApiToolValidator.php	CoreX\Tools\Internal	ApiToolValidator	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/CompiledToolCatalogue.php	CoreX\Tools\Internal	CompiledToolCatalogue	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/DenyToolPolicy.php	CoreX\Tools\Internal	DenyToolPolicy	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/GuardedToolInvoker.php	CoreX\Tools\Internal	GuardedToolInvoker	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/McpToolsProjection.php	CoreX\Tools\Internal	McpToolsProjection	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/OpisToolSchemaValidator.php	CoreX\Tools\Internal	OpisToolSchemaValidator	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ReadOnlyToolExecutionGuard.php	CoreX\Tools\Internal	ReadOnlyToolExecutionGuard	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ToolContractHasher.php	CoreX\Tools\Internal	ToolContractHasher	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ToolName.php	CoreX\Tools\Internal	ToolName	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ToolRequestContext.php	CoreX\Tools\Internal	ToolRequestContext	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ToolSchemaSupervisor.php	CoreX\Tools\Internal	ToolSchemaSupervisor	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/Internal/ToolSchemaWorker.php	CoreX\Tools\Internal	ToolSchemaWorker	class	final	other	Internal	1	yes
+axiomasoft/corex-tools	packages/tools/src/ToolSectionCompiler.php	CoreX\Tools	ToolSectionCompiler	class	final	other	<root>	0	yes
+axiomasoft/corex-tools	packages/tools/src/ToolServiceProvider.php	CoreX\Tools	ToolServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/CancellationSignal.php	CoreX\Transfer\Contracts	CancellationSignal	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/ExportRunner.php	CoreX\Transfer\Contracts	ExportRunner	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/ExportSource.php	CoreX\Transfer\Contracts	ExportSource	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/RecordMapper.php	CoreX\Transfer\Contracts	RecordMapper	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/TransferResultReader.php	CoreX\Transfer\Contracts	TransferResultReader	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/TransferRunner.php	CoreX\Transfer\Contracts	TransferRunner	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/TransferSink.php	CoreX\Transfer\Contracts	TransferSink	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Contracts/TransferSource.php	CoreX\Transfer\Contracts	TransferSource	interface		contract	Contracts	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/CanonicalRecord.php	CoreX\Transfer\Data	CanonicalRecord	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/ConflictRule.php	CoreX\Transfer\Data	ConflictRule	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/Export/ExportCursor.php	CoreX\Transfer\Data\Export	ExportCursor	class	final/readonly	data	Data	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/Export/ExportManifest.php	CoreX\Transfer\Data\Export	ExportManifest	class	final/readonly	data	Data	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/Export/ExportPage.php	CoreX\Transfer\Data\Export	ExportPage	class	final/readonly	data	Data	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/Export/ExportPart.php	CoreX\Transfer\Data\Export	ExportPart	class	final/readonly	data	Data	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/ImportDecision.php	CoreX\Transfer\Data	ImportDecision	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/MappingResult.php	CoreX\Transfer\Data	MappingResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/MappingSnapshot.php	CoreX\Transfer\Data	MappingSnapshot	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/RowBatch.php	CoreX\Transfer\Data	RowBatch	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/SourceCursor.php	CoreX\Transfer\Data	SourceCursor	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/SourceManifest.php	CoreX\Transfer\Data	SourceManifest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/SourceRow.php	CoreX\Transfer\Data	SourceRow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/StepToken.php	CoreX\Transfer\Data	StepToken	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/TargetResult.php	CoreX\Transfer\Data	TargetResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/TransferLimits.php	CoreX\Transfer\Data	TransferLimits	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/TransferReceipt.php	CoreX\Transfer\Data	TransferReceipt	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/TransferRef.php	CoreX\Transfer\Data	TransferRef	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Data/Validation.php	CoreX\Transfer\Data	Validation	class	final	other	Data	1	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Codecs/CsvCodec.php	CoreX\Transfer\Internal\Codecs	CsvCodec	class	final	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Codecs/NdjsonCodec.php	CoreX\Transfer\Internal\Codecs	NdjsonCodec	class	final	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Export/CanonicalExportCodec.php	CoreX\Transfer\Internal\Export	CanonicalExportCodec	class	final	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Export/DatabaseExportRunner.php	CoreX\Transfer\Internal\Export	DatabaseExportRunner	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Export/ExportUnavailable.php	CoreX\Transfer\Internal\Export	ExportUnavailable	class	final	exception	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/ExecutionGuard.php	CoreX\Transfer\Internal\Transfer	ExecutionGuard	class	final	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/NeverCancelled.php	CoreX\Transfer\Internal\Transfer	NeverCancelled	class	final	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/SqlTransferExecutor.php	CoreX\Transfer\Internal\Transfer	SqlTransferExecutor	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/SqlTransferResultReader.php	CoreX\Transfer\Internal\Transfer	SqlTransferResultReader	class	final/readonly	other	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/TransferLimitReached.php	CoreX\Transfer\Internal\Transfer	TransferLimitReached	class	final	exception	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/Internal/Transfer/TransferUnavailable.php	CoreX\Transfer\Internal\Transfer	TransferUnavailable	class	final	exception	Internal	2	yes
+axiomasoft/corex-transfer	packages/transfer/src/TransferServiceProvider.php	CoreX\Transfer	TransferServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Commands/SweepWakeups.php	CoreX\Wakeup\Commands	SweepWakeups	class	final	command	Commands	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Commands/ValidateWakeupStamps.php	CoreX\Wakeup\Commands	ValidateWakeupStamps	class	final	command	Commands	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Contracts/DueWakeupHandler.php	CoreX\Wakeup\Contracts	DueWakeupHandler	interface		contract	Contracts	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Contracts/DueWakeupSource.php	CoreX\Wakeup\Contracts	DueWakeupSource	interface		contract	Contracts	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Contracts/DueWakeupSweeper.php	CoreX\Wakeup\Contracts	DueWakeupSweeper	interface		contract	Contracts	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Contracts/WakeupScheduleHint.php	CoreX\Wakeup\Contracts	WakeupScheduleHint	interface		contract	Contracts	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Contracts/WakeupScheduler.php	CoreX\Wakeup\Contracts	WakeupScheduler	interface		contract	Contracts	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/CancelResult.php	CoreX\Wakeup\Data	CancelResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/ScheduleResult.php	CoreX\Wakeup\Data	ScheduleResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/SweepResult.php	CoreX\Wakeup\Data	SweepResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/WakeupDelivery.php	CoreX\Wakeup\Data	WakeupDelivery	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/WakeupHandlerDefinition.php	CoreX\Wakeup\Data	WakeupHandlerDefinition	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/WakeupRequest.php	CoreX\Wakeup\Data	WakeupRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Data/WakeupWindow.php	CoreX\Wakeup\Data	WakeupWindow	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Internal/SqlWakeupScheduler.php	CoreX\Wakeup\Internal	SqlWakeupScheduler	class	final	other	Internal	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Internal/SweepRunner.php	CoreX\Wakeup\Internal	SweepRunner	class	final	other	Internal	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Internal/SystemClock.php	CoreX\Wakeup\Internal	SystemClock	class	final	other	Internal	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Internal/WakeupHandlerRegistry.php	CoreX\Wakeup\Internal	WakeupHandlerRegistry	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/Testing/WakeupFixtures.php	CoreX\Wakeup\Testing	WakeupFixtures	class	final	other	Testing	1	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/WakeupModule.php	CoreX\Wakeup	WakeupModule	class	final	other	<root>	0	yes
+axiomasoft/corex-wakeup	packages/wakeup/src/WakeupServiceProvider.php	CoreX\Wakeup	WakeupServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Commands/DeliverWebhooks.php	CoreX\Webhooks\Commands	DeliverWebhooks	class	final	command	Commands	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Commands/PruneWebhooks.php	CoreX\Webhooks\Commands	PruneWebhooks	class	final	command	Commands	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Contracts/WebhookDeliveryStore.php	CoreX\Webhooks\Contracts	WebhookDeliveryStore	interface		contract	Contracts	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Contracts/WebhookHttpTransport.php	CoreX\Webhooks\Contracts	WebhookHttpTransport	interface		contract	Contracts	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Contracts/WebhookPayloadProjector.php	CoreX\Webhooks\Contracts	WebhookPayloadProjector	interface		contract	Contracts	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Contracts/WebhookSigner.php	CoreX\Webhooks\Contracts	WebhookSigner	interface		contract	Contracts	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Contracts/WebhookSubscriptionStore.php	CoreX\Webhooks\Contracts	WebhookSubscriptionStore	interface		contract	Contracts	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/ValidatedWebhookRequest.php	CoreX\Webhooks\Data	ValidatedWebhookRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookDelivery.php	CoreX\Webhooks\Data	WebhookDelivery	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookHttpResult.php	CoreX\Webhooks\Data	WebhookHttpResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookOptions.php	CoreX\Webhooks\Data	WebhookOptions	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookSignedHeaders.php	CoreX\Webhooks\Data	WebhookSignedHeaders	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookSubscription.php	CoreX\Webhooks\Data	WebhookSubscription	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Data/WebhookTopic.php	CoreX\Webhooks\Data	WebhookTopic	class	final/readonly	other	Data	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/CurlWebhookTransport.php	CoreX\Webhooks\Internal	CurlWebhookTransport	class	final	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/HmacWebhookSigner.php	CoreX\Webhooks\Internal	HmacWebhookSigner	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php	CoreX\Webhooks\Internal	SqlWebhookDeliveryStore	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php	CoreX\Webhooks\Internal	SqlWebhookSubscriptionStore	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookDeliveryWorker.php	CoreX\Webhooks\Internal	WebhookDeliveryWorker	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookFanout.php	CoreX\Webhooks\Internal	WebhookFanout	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookKeyRing.php	CoreX\Webhooks\Internal	WebhookKeyRing	class	final	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookManagement.php	CoreX\Webhooks\Internal	WebhookManagement	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookMessagePublisher.php	CoreX\Webhooks\Internal	WebhookMessagePublisher	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookReplay.php	CoreX\Webhooks\Internal	WebhookReplay	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookRetention.php	CoreX\Webhooks\Internal	WebhookRetention	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookRetryPolicy.php	CoreX\Webhooks\Internal	WebhookRetryPolicy	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookSnapshotSection.php	CoreX\Webhooks\Internal	WebhookSnapshotSection	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookTopicCatalogue.php	CoreX\Webhooks\Internal	WebhookTopicCatalogue	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Internal/WebhookUrlPolicy.php	CoreX\Webhooks\Internal	WebhookUrlPolicy	class	final/readonly	other	Internal	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Laravel/WebhookRegistrar.php	CoreX\Webhooks\Laravel	WebhookRegistrar	class	final/readonly	other	Laravel	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/Laravel/WebhookRouteRegistrar.php	CoreX\Webhooks\Laravel	WebhookRouteRegistrar	class	final/readonly	other	Laravel	1	yes
+axiomasoft/corex-webhooks	packages/webhooks/src/WebhooksServiceProvider.php	CoreX\Webhooks	WebhooksServiceProvider	class	final	provider	<root>	0	yes
+axiomasoft/corex-workflow	packages/workflow/src/Contracts/EngineAdapter.php	CoreX\Workflow\Contracts	EngineAdapter	interface		contract	Contracts	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Contracts/WorkflowBinding.php	CoreX\Workflow\Contracts	WorkflowBinding	interface		contract	Contracts	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/CaptureResult.php	CoreX\Workflow\Data	CaptureResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/SignalRequest.php	CoreX\Workflow\Data	SignalRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/SignalResult.php	CoreX\Workflow\Data	SignalResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/StartResult.php	CoreX\Workflow\Data	StartResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/TransitionRequest.php	CoreX\Workflow\Data	TransitionRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/TransitionResult.php	CoreX\Workflow\Data	TransitionResult	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Data/TriggerRequest.php	CoreX\Workflow\Data	TriggerRequest	class	final/readonly	data	Data	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Internal/SqlWorkflowBinding.php	CoreX\Workflow\Internal	SqlWorkflowBinding	class	final	other	Internal	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Internal/UnavailableEngineAdapter.php	CoreX\Workflow\Internal	UnavailableEngineAdapter	class	final	other	Internal	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Internal/UnsupportedWorkflowCapability.php	CoreX\Workflow\Internal	UnsupportedWorkflowCapability	class	final	exception	Internal	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/Internal/WorkflowDefinitionStamp.php	CoreX\Workflow\Internal	WorkflowDefinitionStamp	class	final	other	Internal	1	yes
+axiomasoft/corex-workflow	packages/workflow/src/WorkflowModule.php	CoreX\Workflow	WorkflowModule	class	final	other	<root>	0	yes
+axiomasoft/corex-workflow	packages/workflow/src/WorkflowServiceProvider.php	CoreX\Workflow	WorkflowServiceProvider	class	final	provider	<root>	0	yes
+flex/crm	products/flex-crm/src/Activity/Actions/LogActivity.php	Flex\Crm\Activity\Actions	LogActivity	class	final	other	Activity	2	yes
+flex/crm	products/flex-crm/src/Activity/Enums/ActivityType.php	Flex\Crm\Activity\Enums	ActivityType	enum		enum	Activity	2	yes
+flex/crm	products/flex-crm/src/Activity/Events/ActivityLogged.php	Flex\Crm\Activity\Events	ActivityLogged	class	final	other	Activity	2	yes
+flex/crm	products/flex-crm/src/Activity/Models/Activity.php	Flex\Crm\Activity\Models	Activity	class	final	model	Activity	2	yes
+flex/crm	products/flex-crm/src/Activity/Models/ActivityTarget.php	Flex\Crm\Activity\Models	ActivityTarget	class	final	model	Activity	2	yes
+flex/crm	products/flex-crm/src/ApiShared/CrmIdentifier.php	Flex\Crm\ApiShared	CrmIdentifier	class	final	other	ApiShared	1	yes
+flex/crm	products/flex-crm/src/ApiShared/CrmSchemas.php	Flex\Crm\ApiShared	CrmSchemas	class	final	other	ApiShared	1	yes
+flex/crm	products/flex-crm/src/Company/Actions/CreateCompany.php	Flex\Crm\Company\Actions	CreateCompany	class	final/readonly	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Api/CompanyPayload.php	Flex\Crm\Company\Api	CompanyPayload	class	final	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Api/CreateCompanyOperation.php	Flex\Crm\Company\Api	CreateCompanyOperation	class	final/readonly	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Api/ListCompaniesOperation.php	Flex\Crm\Company\Api	ListCompaniesOperation	class	final/readonly	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Api/ShowCompanyOperation.php	Flex\Crm\Company\Api	ShowCompanyOperation	class	final/readonly	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Data/CompanyData.php	Flex\Crm\Company\Data	CompanyData	class	final/readonly	data	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Events/CompanyCreated.php	Flex\Crm\Company\Events	CompanyCreated	class	final	other	Company	2	yes
+flex/crm	products/flex-crm/src/Company/Models/Company.php	Flex\Crm\Company\Models	Company	class	final	model	Company	2	yes
+flex/crm	products/flex-crm/src/Contact/Actions/AssociateContactCompany.php	Flex\Crm\Contact\Actions	AssociateContactCompany	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Actions/CreateContact.php	Flex\Crm\Contact\Actions	CreateContact	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Api/ContactPayload.php	Flex\Crm\Contact\Api	ContactPayload	class	final	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Api/CreateContactCompanyOperation.php	Flex\Crm\Contact\Api	CreateContactCompanyOperation	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Api/CreateContactOperation.php	Flex\Crm\Contact\Api	CreateContactOperation	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Api/ListContactsOperation.php	Flex\Crm\Contact\Api	ListContactsOperation	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Api/ShowContactOperation.php	Flex\Crm\Contact\Api	ShowContactOperation	class	final/readonly	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Data/ContactData.php	Flex\Crm\Contact\Data	ContactData	class	final/readonly	data	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Events/ContactCompanyAssociated.php	Flex\Crm\Contact\Events	ContactCompanyAssociated	class	final	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Events/ContactCreated.php	Flex\Crm\Contact\Events	ContactCreated	class	final	other	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Models/Contact.php	Flex\Crm\Contact\Models	Contact	class	final	model	Contact	2	yes
+flex/crm	products/flex-crm/src/Contact/Models/ContactCompany.php	Flex\Crm\Contact\Models	ContactCompany	class	final	model	Contact	2	yes
+flex/crm	products/flex-crm/src/Context/Channels.php	Flex\Crm\Context	Channels	class	final	other	Context	1	yes
+flex/crm	products/flex-crm/src/Context/ContextGuard.php	Flex\Crm\Context	ContextGuard	class	final/readonly	other	Context	1	yes
+flex/crm	products/flex-crm/src/Context/Contracts/CrmExecutionContext.php	Flex\Crm\Context\Contracts	CrmExecutionContext	interface		contract	Context	2	yes
+flex/crm	products/flex-crm/src/Context/CrmScope.php	Flex\Crm\Context	CrmScope	class	final	other	Context	1	yes
+flex/crm	products/flex-crm/src/Context/Data/Actor.php	Flex\Crm\Context\Data	Actor	class	final/readonly	other	Context	2	yes
+flex/crm	products/flex-crm/src/Context/Data/ExecutionContext.php	Flex\Crm\Context\Data	ExecutionContext	class	final/readonly	data	Context	2	yes
+flex/crm	products/flex-crm/src/Context/Internal/RecordRules.php	Flex\Crm\Context\Internal	RecordRules	class	final	other	Context	2	yes
+flex/crm	products/flex-crm/src/Context/Models/Concerns/HasActivities.php	Flex\Crm\Context\Models\Concerns	HasActivities	trait		other	Context	3	yes
+flex/crm	products/flex-crm/src/Context/Models/Concerns/HasCrmContext.php	Flex\Crm\Context\Models\Concerns	HasCrmContext	trait		other	Context	3	yes
+flex/crm	products/flex-crm/src/Context/Models/Source.php	Flex\Crm\Context\Models	Source	class	final	model	Context	2	yes
+flex/crm	products/flex-crm/src/CrmModule.php	Flex\Crm	CrmModule	class	final	other	<root>	0	yes
+flex/crm	products/flex-crm/src/CrmServiceProvider.php	Flex\Crm	CrmServiceProvider	class	final	provider	<root>	0	yes
+flex/crm	products/flex-crm/src/Deal/Actions/CreateDeal.php	Flex\Crm\Deal\Actions	CreateDeal	class	final	other	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Actions/MoveDealToStage.php	Flex\Crm\Deal\Actions	MoveDealToStage	class	final	other	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Casts/DealAmount.php	Flex\Crm\Deal\Casts	DealAmount	class	final	other	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Enums/DealStatus.php	Flex\Crm\Deal\Enums	DealStatus	enum		enum	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Events/DealCreated.php	Flex\Crm\Deal\Events	DealCreated	class	final	other	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Events/DealMovedToStage.php	Flex\Crm\Deal\Events	DealMovedToStage	class	final	other	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Models/Deal.php	Flex\Crm\Deal\Models	Deal	class	final	model	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Models/Pipeline.php	Flex\Crm\Deal\Models	Pipeline	class	final	model	Deal	2	yes
+flex/crm	products/flex-crm/src/Deal/Models/Stage.php	Flex\Crm\Deal\Models	Stage	class	final	model	Deal	2	yes
+flex/crm	products/flex-crm/src/Lead/Actions/ConvertLead.php	Flex\Crm\Lead\Actions	ConvertLead	class	final	other	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Actions/CreateLead.php	Flex\Crm\Lead\Actions	CreateLead	class	final	other	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Enums/LeadSource.php	Flex\Crm\Lead\Enums	LeadSource	enum		enum	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Enums/LeadStatus.php	Flex\Crm\Lead\Enums	LeadStatus	enum		enum	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Events/LeadConverted.php	Flex\Crm\Lead\Events	LeadConverted	class	final	other	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Events/LeadCreated.php	Flex\Crm\Lead\Events	LeadCreated	class	final	other	Lead	2	yes
+flex/crm	products/flex-crm/src/Lead/Models/Lead.php	Flex\Crm\Lead\Models	Lead	class	final	model	Lead	2	yes
+flex/crm	products/flex-crm/src/Support/CrmOptions.php	Flex\Crm\Support	CrmOptions	class	final/readonly	other	Support	1	yes
