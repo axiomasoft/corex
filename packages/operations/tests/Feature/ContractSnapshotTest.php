@@ -24,8 +24,8 @@ final class ContractSnapshotTest extends TestCase
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
         $first = sys_get_temp_dir().'/corex-api-snapshot-a-'.bin2hex(random_bytes(4));
         $second = sys_get_temp_dir().'/corex-api-snapshot-b-'.bin2hex(random_bytes(4));
-        $this->artisan('corex:api-snapshots', ['directory' => $first, '--fixture' => $fixture])->assertSuccessful();
-        $this->artisan('corex:api-snapshots', ['directory' => $second, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $second, '--fixture' => $fixture])->assertSuccessful();
         $this->assertSame($this->files($first), $this->files($second));
         $this->assertSame(hash('sha256', $this->files($first)['errors.json']), json_decode($this->files($first)['manifest.json'], true)['files']['errors.json']);
         $this->assertSame(hash('sha256', $this->files($first)['openapi.json']), json_decode($this->files($first)['manifest.json'], true)['files']['openapi.json']);
@@ -49,11 +49,11 @@ final class ContractSnapshotTest extends TestCase
 
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(true)));
         $reversed = sys_get_temp_dir().'/corex-api-snapshot-c-'.bin2hex(random_bytes(4));
-        $this->artisan('corex:api-snapshots', ['directory' => $reversed, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $reversed, '--fixture' => $fixture])->assertSuccessful();
         $this->assertSame($this->files($first), $this->files($reversed));
         $changed = sys_get_temp_dir().'/corex-api-snapshot-e-'.bin2hex(random_bytes(4));
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false, 'notes.changed')));
-        $this->artisan('corex:api-snapshots', ['directory' => $changed, '--fixture' => $fixture])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $changed, '--fixture' => $fixture])->assertSuccessful();
         $this->assertNotSame($this->files($first)['manifest.json'], $this->files($changed)['manifest.json']);
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
 
@@ -62,15 +62,15 @@ final class ContractSnapshotTest extends TestCase
         foreach ($this->files($first) as $name => $bytes) {
             file_put_contents($drift.'/'.$name, $name === 'operations.json' ? $bytes.' ' : $bytes);
         }
-        $this->artisan('corex:api-snapshots', ['directory' => $drift, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
-        $this->artisan('corex:api-snapshots', ['directory' => $first, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $drift, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
+        $this->artisan('corex:operations:snapshot', ['directory' => $first, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
         $committed = dirname(__DIR__, 4).'/api/v1';
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(false)));
 
         if (! is_file($committed.'/manifest.json')) {
-            $this->artisan('corex:api-snapshots', ['directory' => $committed, '--fixture' => $fixture])->assertSuccessful();
+            $this->artisan('corex:operations:snapshot', ['directory' => $committed, '--fixture' => $fixture])->assertSuccessful();
         }
-        $this->artisan('corex:api-snapshots', ['directory' => $committed, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
+        $this->artisan('corex:operations:snapshot', ['directory' => $committed, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
 
         $joined = implode("\n", $this->files($first));
         $this->assertStringNotContainsString('/home/', $joined);

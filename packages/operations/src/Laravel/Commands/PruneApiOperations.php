@@ -19,7 +19,7 @@ use Illuminate\Console\Command;
  */
 final class PruneApiOperations extends Command
 {
-    protected $signature = 'corex:api:prune
+    protected $signature = 'corex:operations:prune
         {--max=100 : Maximum rows in this pass}';
 
     protected $description = 'Prune expired CoreX API bulk results and budget reservations.';

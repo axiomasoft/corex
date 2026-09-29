@@ -105,7 +105,7 @@ def repository(root: Path) -> tuple[Path, dict]:
             package["dist"]["url"] = (stage / package["dist"]["url"]).as_uri()
     artifacts = stage / "artifacts"
     private_zip = artifacts / "azguard-core-private.zip"
-    auth_zip = artifacts / "corex-auth.zip"
+    auth_zip = artifacts / "corex-access.zip"
     private_sha, composer_sha, private_requires = azguard_archive(private_zip)
     auth_sha = auth_archive(auth_zip)
     metadata["packages"][AZGUARD] = {AZGUARD_VERSION: {"name": AZGUARD, "version": AZGUARD_VERSION, "require": private_requires, "dist": {"type": "zip", "url": private_zip.as_uri(), "reference": REF}, "source": {"type": "git", "url": "https://github.com/axiomasoft/azguard-private.git", "reference": REF}}}

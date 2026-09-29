@@ -9,7 +9,7 @@
   "~^tests/Golden/(?:rename-map|package-projection)\\.json$~",
   "~^scripts/rename-completeness\\.json$~",
   "~^tests/Golden/baseline/~",
-  "~^scripts/p15-rename-completeness-(gate\\.php|manifest\\.json)$~"
+  "~^scripts/ratchet-successors\\.json$~"
  ],
  "tokens": {
   "classes": [

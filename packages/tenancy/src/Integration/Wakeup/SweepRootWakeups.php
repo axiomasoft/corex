@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 /** @internal Host-first wakeup command. Not package public API. */
 final class SweepRootWakeups extends Command
 {
-    protected $signature = 'corex:wakeup:root-sweep {--limit=100 : Maximum due account hints} {--reconcile : Rebuild one bounded page of advisory hints} {--cursor= : Resume after this account id}';
+    protected $signature = 'corex:tenancy:wakeup-root-sweep {--limit=100 : Maximum due account hints} {--reconcile : Rebuild one bounded page of advisory hints} {--cursor= : Resume after this account id}';
 
     protected $description = 'Run due CoreX wakeup hints through trusted tenant context switching.';
 

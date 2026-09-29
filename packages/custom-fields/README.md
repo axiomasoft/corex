@@ -15,7 +15,7 @@ Without `axiomasoft/corex`, `FieldCatalogue`, `AttributeStore`, and `SchemaOpera
 `UnavailableAttributes`. Dynamic attribute fields are unavailable in that configuration; this is an
 observable fail-closed state, not a silent degradation.
 
-Table names are configured once through `corex-attributes.tables` and normalized into an immutable
+Table names are configured once through `corex-custom-fields.tables` and normalized into an immutable
 `AttributeTables` object at provider registration. Defaults match the shipped `sys_attribute_*`
 migrations byte-for-byte; migrations themselves are not overridden by configuration.
 

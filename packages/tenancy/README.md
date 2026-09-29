@@ -7,7 +7,7 @@ profile.
 
 `corex-tenancy.wakeup.driver` defaults to `local_sweep`. With `axiomasoft/corex-wakeup` installed, a cloud
 deployment may explicitly select `root_registry`; this enables the advisory `root_wakeup_hints`
-table and the `corex:wakeup:root-sweep` command. Hints never replace a tenant-local request or
+table and the `corex:tenancy:wakeup-root-sweep` command. Hints never replace a tenant-local request or
 provide authority to select an account connection.
 
 ## Local immutable provider proof

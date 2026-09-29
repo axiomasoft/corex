@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Rename the config file and key to `corex-tasks-workflow`.
+
 ## Unreleased
 
 - Add `corex/tasks-workflow` package with `TaskRecurrenceCommand` materialization (P7.4).

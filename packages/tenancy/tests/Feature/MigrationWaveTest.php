@@ -14,7 +14,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-// P2.12 — MigrationWaveOrchestrator + tenants:migrate (B-11 §5.6). "MW"
+// P2.12 — MigrationWaveOrchestrator + corex:tenancy:migrate (B-11 §5.6). "MW"
 // suffix on shared helpers, same reasoning as AccountLifecycleTest.php's
 // "LC" suffix (Pest loads every test file into one process).
 uses()->group('pg');
@@ -234,8 +234,8 @@ it('creates root_account_schema_state rows (current_version=0) for accounts miss
         ->and($state->status)->toBe('ok');
 });
 
-it('tenants:migrate requires --batch and does not hard-fail the command on a per-account failure (--skip-failing semantics)', function (): void {
-    test()->artisan('tenants:migrate')->assertExitCode(1);
+it('corex:tenancy:migrate requires --batch and does not hard-fail the command on a per-account failure (--skip-failing semantics)', function (): void {
+    test()->artisan('corex:tenancy:migrate')->assertExitCode(1);
 
     [$goodId, $badId] = makeMwAccounts(2);
     $batchId = makeMwBatch();
@@ -251,7 +251,7 @@ it('tenants:migrate requires --batch and does not hard-fail the command on a per
         },
     ));
 
-    test()->artisan('tenants:migrate', ['--batch' => $batchId, '--skip-failing' => true])->assertExitCode(0);
+    test()->artisan('corex:tenancy:migrate', ['--batch' => $batchId, '--skip-failing' => true])->assertExitCode(0);
 
     expect(AccountSchemaState::query()->findOrFail($goodId)->status)->toBe('ok')
         ->and(AccountSchemaState::query()->findOrFail($badId)->status)->toBe('failed');

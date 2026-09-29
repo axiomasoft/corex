@@ -10,7 +10,7 @@ and optional `axiomasoft/corex-workflow` completion capture.
 
 ## Configuration
 
-See `config/corex-task-recurrence.php` for wakeup and completion-capture toggles.
+See `config/corex-tasks-workflow.php` for wakeup and completion-capture toggles.
 
 ## Installation
 

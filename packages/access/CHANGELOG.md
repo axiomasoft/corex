@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Rename config and publish identifiers to `corex-access` and environment variables to `COREX_ACCESS_*`.
+
 Все заметные изменения `corex/auth` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 

@@ -20,7 +20,7 @@ final readonly class CostRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-api.cost');
+        $config = $app['config']->get('corex-operations.cost');
         $options = CostOptions::fromArray(is_array($config) ? $config : []);
         $app->instance(CostOptions::class, $options);
         $app->singleton(OperationCostEstimator::class, DeclaredCostEstimator::class);

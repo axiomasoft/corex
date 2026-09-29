@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Rename publish tags to `corex-tenancy-*`, commands to `corex:tenancy:*`, and environment variables to `COREX_TENANCY_*`. The engine still reads the `tenancy` config key.
+
 ## Unreleased
 
 - D49 now decorates core's scoped semantic restorer; the identity owner supplies the `users` password rehash writer.

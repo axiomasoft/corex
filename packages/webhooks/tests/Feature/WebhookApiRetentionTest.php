@@ -417,7 +417,7 @@ final class WebhookApiRetentionTest extends TestCase
         string $tenantDatabase,
     ): void {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => $budget, 'driver' => $budgetDriver, 'database' => $budgetDatabase],
             'tenant' => ['connection' => $tenant, 'driver' => $tenantDriver, 'database' => $tenantDatabase],
         ]);

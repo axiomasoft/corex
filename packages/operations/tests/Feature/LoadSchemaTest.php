@@ -45,13 +45,14 @@ final class LoadSchemaTest extends TestCase
     {
         self::assertFalse(DB::connection('sqlite')->getSchemaBuilder()->hasTable('sys_api_budget_buckets'));
 
-        $budget = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-api-budget-migrations');
-        $tenant = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-api-tenant-migrations');
+        $budget = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-budget');
+        $tenant = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-tenant');
 
         self::assertSame([
             realpath(__DIR__.'/../../database/migrations/budget') => database_path('migrations/budget'),
         ], array_combine(array_map('realpath', array_keys($budget)), array_values($budget)));
         self::assertSame([
+            realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
             realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
         ], array_combine(array_map('realpath', array_keys($tenant)), array_values($tenant)));
 
@@ -184,7 +185,7 @@ final class LoadSchemaTest extends TestCase
     private function selectSchema(string $budget, string $tenant): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => $budget,
                 'driver' => (string) $this->app['config']->get('database.connections.'.$budget.'.driver'),

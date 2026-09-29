@@ -32,9 +32,7 @@ final class ModulesServiceProvider extends ServiceProvider
     {
         $this->app->tag([ModulesConfigSection::class], ConfigReportSection::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../../config/corex-modules.php', 'corex-modules');
-
-        $raw = $this->app['config']->get('corex-modules', []);
+        $raw = $this->app['config']->get('corex.modules', []);
         $options = ModulesOptions::fromArray(is_array($raw) ? $raw : []);
         $this->app->instance(ModulesOptions::class, $options);
 
@@ -55,20 +53,16 @@ final class ModulesServiceProvider extends ServiceProvider
         // DDL (advisory locks, CHECK, jsonb). NOT loadMigrationsFrom — see the
         // note above; consumers publish + migrate explicitly on the tenant
         // connection. The `-tenant` tag names that scope (caught in an earlier
-        // pre-mortem); the plain `corex-modules-migrations` alias serves the
+        // pre-mortem); the plain `corex-migrations` alias serves the
         // boxed single-DB case.
         $this->publishes([
             __DIR__.'/../../database/migrations' => database_path('migrations'),
-        ], ['corex-modules-migrations', 'corex-modules-migrations-tenant']);
-
-        $this->publishes([
-            __DIR__.'/../../config/corex-modules.php' => config_path('corex-modules.php'),
-        ], 'corex-modules-config');
+        ], ['corex-migrations', 'corex-migrations-tenant']);
 
         // Deploy hook: `php artisan optimize` recompiles the registry. No
         // clear command — `optimize:clear` leaves the file, the next
         // `optimize` overwrites it atomically.
-        $this->optimizes(optimize: 'corex:modules:compile', key: 'corex-modules');
+        $this->optimizes(optimize: 'corex:modules:compile', key: 'corex.modules');
 
         foreach ($this->registrars() as $registrar) {
             $registrar->boot($this->app);

@@ -255,7 +255,7 @@ final class GoldenSnapshot
         }
 
         try {
-            if (Artisan::call('corex:api-snapshots', ['directory' => $tmp, '--fixture' => $fixture]) !== 0) {
+            if (Artisan::call('corex:operations:snapshot', ['directory' => $tmp, '--fixture' => $fixture]) !== 0) {
                 throw new RuntimeException('Snapshot command failed: '.Artisan::output());
             }
             $out = [];

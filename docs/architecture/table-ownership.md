@@ -15,7 +15,7 @@ AzGuard управляет схемой своих таблиц как зави�
 
 | ORM model | table | source |
 |:--|:--|:--|
-| `CoreX\Access\Matrix\AzGuardRoleModel` | `az_guard_roles` | `corex-auth.azguard_pins.table_names.roles` |
+| `CoreX\Access\Matrix\AzGuardRoleModel` | `az_guard_roles` | `corex-access.azguard_pins.table_names.roles` |
 | `AzGuard\Models\RolePermission` | `az_guard_role_permissions` | AzGuard `table_names.role_permissions` default |
 
 ## Разделённый префикс `sys_`

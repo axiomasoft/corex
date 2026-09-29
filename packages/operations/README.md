@@ -141,7 +141,7 @@ Bindings are transient by default and provider defaults preserve bindings instal
 Application adapters should be transient or request-scoped; never cache a principal/context in a singleton.
 The default physical profile rejects missing/boxed/mismatched manager state with `context_required` 403,
 and a non-active account with `account_unavailable` 403. A boxed deployment may explicitly set
-`corex-api.require_physical_tenancy=false`; this does not bypass identity, authorization or module activation.
+`corex-operations.require_physical_tenancy=false`; this does not bypass identity, authorization or module activation.
 
 The default context resolver trusts workspace narrowing performed by the surrounding pipeline.
 For token/service authentication, that pipeline must check membership for the **same** identity returned
@@ -266,17 +266,17 @@ Bulk operations require an explicit recipe and bounded row counts. Estimation us
 schema fields and declared page limits, checks integer overflow and performs no I/O.
 
 Before enabling cost control, configure two distinct named database connections in
-`corex-api.schema`. Each of `budget` and `tenant` requires `connection`, `driver`, and
+`corex-operations.schema`. Each of `budget` and `tenant` requires `connection`, `driver`, and
 `database`, matching the actual configured connection. Every API node must use the same
 installation-wide budget store; tenant state remains on the already active tenant connection.
 Boxed installations may use two connection names to the same database. Payloads cannot
 choose either connection. Table ownership and retention are recorded in
 [table-ownership.md](../../docs/architecture/table-ownership.md).
 
-Publish `corex-api-budget-migrations` and `corex-api-tenant-migrations`, then apply the new
+Publish `corex-operations-migrations-budget` and `corex-operations-migrations-tenant`, then apply the new
 migrations explicitly to their owning databases using the host's migration procedure.
 Provider boot never runs DDL. Configure a host-owned `scope_hmac_secret` and stable
-`installation_id`, and set `corex-api.cost.enabled=true`. The shipped activation flag is
+`installation_id`, and set `corex-operations.cost.enabled=true`. The shipped activation flag is
 false until setup; it is distinct from the enforcement policy below. Do not treat an
 installation with cost control disabled as protected by SQL budgets. Once enabled, a
 missing or failed store prevents handler execution; it never silently disables enforcement.
@@ -315,7 +315,7 @@ Webhook management routes use the shared dispatcher; the host owns bulk admissio
 Submit requires an idempotency key and returns 202 with a stable id, `status_url` and
 `Location`. Poll returns progress and an execution error separately from admission;
 active responses carry `Retry-After: 2`. Pending-row polling is durable authority;
-queue notifications may be lost. `corex:bulk-work` advances one bounded step under a
+queue notifications may be lost. `corex:operations:bulk-work` advances one bounded step under a
 trusted, already active tenant context. Each step rechecks authorization, restore epoch,
 contract hash and extension stamp, fences the lease/revision, and budgets a batch separately.
 There is no generic arbitrary-class executor or cross-account scheduler.
@@ -406,7 +406,7 @@ Terminal webhook bodies remain seven days and metadata/attempts 30 days. Shorter
 retention must shorten replay horizon with it. Active rows are never pruned. Dedup tombstones
 and the P5 webhook inbox must survive every possible replay of the original event; the inbox
 default is indefinite. `corex:webhooks:prune --max=100` cleans webhook bodies, attempts and inbox history
-only in an already restored trusted tenant scope. `corex:api:prune --max=100` cleans bulk results
+only in an already restored trusted tenant scope. `corex:operations:prune --max=100` cleans bulk results
 and shared budgets, checks bulk ref ownership/hash, and never refunds unknown reservations or removes held bucket keys.
 
 `WebhooksServiceProvider` is discovered from the package manifest. Its `corex-webhooks` config
@@ -425,7 +425,7 @@ Transfer additionally provides `composer --working-dir=packages/transfer test:pg
 Real principal/workspace membership isolation is verified in the owning tenancy suite.
 From the monorepo root, `tests/Feature/OperationContractTest.php` covers real
 routes and exposed tools, `tests/Arch/ApiContractTest.php` guards the one-authority
-boundary, `corex:api-snapshots api/v1 --fixture=tests/fixtures/public-error-contract.php --check`
+boundary, `corex:operations:snapshot api/v1 --fixture=tests/fixtures/public-error-contract.php --check`
 checks exact bytes, and `composer api-contract` checks intra-major compatibility. `webhooks.json`
 extends the same generator and manifest; planted topic/payload/PII/signature/id/major/cost-default
 changes must fail the compatibility gate. Current commands, input/snapshot/output hashes,

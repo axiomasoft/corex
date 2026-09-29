@@ -275,10 +275,10 @@ it('cascade_view off hides child-workspace rows; on shows them', function (): vo
 
 // D109 — account lifts EXACTLY the pinned scope class, never an unrelated one.
 it('account scope lifts exactly the pinned workspace scope class, never an unrelated global scope', function (): void {
-    config(['corex-auth.workspace_scope_class' => FakeWorkspaceScope::class]);
+    config(['corex-access.workspace_scope_class' => FakeWorkspaceScope::class]);
     app()->instance(
         AuthOptions::class,
-        AuthOptions::fromArray((array) config('corex-auth')),
+        AuthOptions::fromArray((array) config('corex-access')),
     );
 
     $workspaceId = ($this->makeWorkspace)('wsAccount');

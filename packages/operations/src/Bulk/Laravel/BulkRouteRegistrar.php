@@ -16,7 +16,7 @@ final readonly class BulkRouteRegistrar
 {
     public static function register(Application $app): void
     {
-        $prefix = (string) $app['config']->get('corex-api.routes.prefix', 'api');
+        $prefix = (string) $app['config']->get('corex-operations.routes.prefix', 'api');
 
         Route::prefix($prefix)->group(static function (): void {
             Route::post('v1/bulk-operations', [self::class, 'submit'])->name('corex.api.bulk.submit');

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Rename config/publish identifiers to `corex-operations` and commands to `corex:operations:*`. The tenant migration tag publishes both idempotency and tenant schema migrations.
+
 ## Unreleased
 
 - Extract webhook provider/config, snapshot section and bounded `corex:webhooks:prune`; the engine uses the snapshot SPI and owns only bulk/budget retention.

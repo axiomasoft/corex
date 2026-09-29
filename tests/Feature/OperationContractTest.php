@@ -194,12 +194,12 @@ final class OperationContractTest extends TestCase
         $fixture = dirname(__DIR__, 2).'/tests/fixtures/public-error-contract.php';
 
         try {
-            $this->artisan('corex:api-snapshots', ['directory' => $directory, '--fixture' => $fixture])->assertSuccessful();
-            $this->artisan('corex:api-snapshots', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture])->assertSuccessful();
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertSuccessful();
             $path = $directory.'/operations.json';
             $stale = (string) file_get_contents($path).' ';
             file_put_contents($path, $stale);
-            $this->artisan('corex:api-snapshots', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
+            $this->artisan('corex:operations:snapshot', ['directory' => $directory, '--fixture' => $fixture, '--check' => true])->assertExitCode(1);
             self::assertSame($stale, file_get_contents($path));
         } finally {
             foreach (glob($directory.'/*') ?: [] as $path) {

@@ -16,7 +16,7 @@ use Illuminate\Console\Command;
  */
 final class TenantsMigrateCommand extends Command
 {
-    protected $signature = 'tenants:migrate {--batch=} {--p=8} {--skip-failing}';
+    protected $signature = 'corex:tenancy:migrate {--batch=} {--p=8} {--skip-failing}';
 
     protected $description = 'Run a migration-wave batch across its target accounts.';
 
@@ -31,7 +31,7 @@ final class TenantsMigrateCommand extends Command
         }
 
         $this->components->info(sprintf(
-            'tenants:migrate batch=%s -p=%s skip-failing=%s',
+            'corex:tenancy:migrate batch=%s -p=%s skip-failing=%s',
             $batchId,
             (string) $this->option('p'),
             $this->option('skip-failing') ? 'yes' : 'no',

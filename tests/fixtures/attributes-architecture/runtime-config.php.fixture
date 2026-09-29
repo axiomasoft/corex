@@ -2,4 +2,4 @@
 
 namespace CoreX\CustomFields\Internal\Values;
 
-$driver = config('corex-attributes.storage_driver');
+$driver = config('corex-custom-fields.storage_driver');

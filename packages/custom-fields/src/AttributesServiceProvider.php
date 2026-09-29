@@ -38,7 +38,7 @@ final class AttributesServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-attributes.php', 'corex-attributes');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-custom-fields.php', 'corex-custom-fields');
         (new AttributeMessagingRegistrar)->register($this->app);
         (new AttributeCompositionRegistrar)->register($this->app);
         $this->app->scoped(UnavailableAttributes::class);

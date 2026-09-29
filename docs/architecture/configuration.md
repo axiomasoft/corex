@@ -9,34 +9,34 @@
 | key | owner | type | default | secret | mode | reloadable | validation | typed_options_field | deprecated_aliases | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | auth.* | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-api.require_physical_tenancy | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.drivers.ddl | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.drivers.eav | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.drivers.jsonb | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.storage_driver | axiomasoft/corex-custom-fields | string | jsonb | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.tables.documents | axiomasoft/corex-custom-fields | string | sys_attribute_documents | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.tables.eav_records | axiomasoft/corex-custom-fields | string | sys_attribute_eav_records | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.tables.eav_values | axiomasoft/corex-custom-fields | string | sys_attribute_eav_values | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.tables.schema_operations | axiomasoft/corex-custom-fields | string | sys_attribute_schema_operations | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-attributes.tables.write_tokens | axiomasoft/corex-custom-fields | string | *** | yes | secret | unobserved | unobserved | — |  |  |
-| corex-auth.azguard_pins.column_names.morph_type | axiomasoft/corex-access | string | uuid | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.azguard_pins.models.role | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.azguard_pins.table_names.roles | axiomasoft/corex-access | string | az_guard_roles | no | product-policy | unobserved | use-site | — |  |  |
-| corex-auth.bind_permission_layer | axiomasoft/corex-access | bool | true | no | deployment | no | use-site | — |  |  |
-| corex-auth.cache.store | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-auth.identity.columns | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-auth.identity.columns.active | axiomasoft/corex-access | string | is_active | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.deleted_at | axiomasoft/corex-access | string | deleted_at | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.email | axiomasoft/corex-access | string | email | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.id | axiomasoft/corex-access | string | id | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-auth.identity.columns.password | axiomasoft/corex-access | string | *** | yes | secret | unobserved | unobserved | — |  |  |
-| corex-auth.identity.connection | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity.enabled | axiomasoft/corex-access | bool | true | no | deployment | no | use-site | — |  |  |
-| corex-auth.identity.table | axiomasoft/corex-access | string | users | no | deployment | no | use-site | — |  |  |
-| corex-auth.panel | axiomasoft/corex-access | string | app | no | deployment | no | use-site | — |  |  |
-| corex-auth.workspace_scope_class | axiomasoft/corex-access | string | CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope | no | product-policy | unobserved | use-site | — |  |  |
-| corex-intl-search.enabled | axiomasoft/corex-search-intl | bool | false | no | deployment | no | unobserved | — |  | CFG-006 exception; tombstone after major of search-intl |
+| corex-operations.require_physical_tenancy | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.drivers.ddl | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.drivers.eav | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.drivers.jsonb | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.storage_driver | axiomasoft/corex-custom-fields | string | jsonb | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.tables.documents | axiomasoft/corex-custom-fields | string | sys_attribute_documents | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.tables.eav_records | axiomasoft/corex-custom-fields | string | sys_attribute_eav_records | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.tables.eav_values | axiomasoft/corex-custom-fields | string | sys_attribute_eav_values | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.tables.schema_operations | axiomasoft/corex-custom-fields | string | sys_attribute_schema_operations | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-custom-fields.tables.write_tokens | axiomasoft/corex-custom-fields | string | *** | yes | secret | unobserved | unobserved | — |  |  |
+| corex-access.azguard_pins.column_names.morph_type | axiomasoft/corex-access | string | uuid | no | product-policy | unobserved | use-site | — |  |  |
+| corex-access.azguard_pins.models.role | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  |  |
+| corex-access.azguard_pins.table_names.roles | axiomasoft/corex-access | string | az_guard_roles | no | product-policy | unobserved | use-site | — |  |  |
+| corex-access.bind_permission_layer | axiomasoft/corex-access | bool | true | no | deployment | no | use-site | — |  |  |
+| corex-access.cache.store | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex-access.identity | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex-access.identity.columns | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex-access.identity.columns.active | axiomasoft/corex-access | string | is_active | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-access.identity.columns.deleted_at | axiomasoft/corex-access | string | deleted_at | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-access.identity.columns.email | axiomasoft/corex-access | string | email | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-access.identity.columns.id | axiomasoft/corex-access | string | id | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-access.identity.columns.password | axiomasoft/corex-access | string | *** | yes | secret | unobserved | unobserved | — |  |  |
+| corex-access.identity.connection | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex-access.identity.enabled | axiomasoft/corex-access | bool | true | no | deployment | no | use-site | — |  |  |
+| corex-access.identity.table | axiomasoft/corex-access | string | users | no | deployment | no | use-site | — |  |  |
+| corex-access.panel | axiomasoft/corex-access | string | app | no | deployment | no | use-site | — |  |  |
+| corex-access.workspace_scope_class | axiomasoft/corex-access | string | CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope | no | product-policy | unobserved | use-site | — |  |  |
+| corex-search-intl.enabled | axiomasoft/corex-search-intl | bool | false | no | deployment | no | unobserved | — |  |  |
 | corex-intl.formatting.icu_enabled | axiomasoft/corex-intl | unobserved | unobserved | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-intl.locale.allow_parent | axiomasoft/corex-intl | bool | true | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-intl.locale.app_tag | axiomasoft/corex-intl | string | en | no | product-policy | unobserved | unobserved | — |  |  |
@@ -60,11 +60,11 @@
 | corex-media.max_image_pixels | axiomasoft/corex-media | int | 20_000_000 | no | product-policy | unobserved | use-site | — |  |  |
 | corex-media.max_upload_bytes | axiomasoft/corex-media | int | 10 | no | product-policy | unobserved | use-site | — |  |  |
 | corex-media.purposes | axiomasoft/corex-media | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-modules.cache.* | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-modules.cache.prefix | axiomasoft/corex | string | corex-modules | no | deployment | no | use-site | — |  |  |
-| corex-modules.cache.store | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
-| corex-modules.cache.ttl | axiomasoft/corex | int | 3600 | no | deployment | no | use-site | — |  |  |
-| corex-modules.connection | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex.modules.cache.* | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
+| corex.modules.cache.prefix | axiomasoft/corex | string | corex.modules | no | deployment | no | use-site | — |  |  |
+| corex.modules.cache.store | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
+| corex.modules.cache.ttl | axiomasoft/corex | int | 3600 | no | deployment | no | use-site | — |  |  |
+| corex.modules.connection | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | — |  |  |
 | corex-notifications.delivery.claim_seconds | axiomasoft/corex-notifications | int | 60 | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-notifications.delivery.max_attempts | axiomasoft/corex-notifications | int | 5 | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-notifications.digest.enabled | axiomasoft/corex-notifications | bool | false | no | product-policy | unobserved | unobserved | — |  |  |
@@ -76,9 +76,9 @@
 | corex-search.driver | axiomasoft/corex-search | string | null | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-search.postgres.scan_budget | axiomasoft/corex-search | int | 1000 | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-search.postgres.text_search_config | axiomasoft/corex-search | string | simple | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-task-recurrence.completion_capture.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-task-recurrence.wakeup.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | — |  |  |
-| corex-task-recurrence.wakeup.handler_kind | axiomasoft/corex-tasks-workflow | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-tasks-workflow.completion_capture.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-tasks-workflow.wakeup.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | — |  |  |
+| corex-tasks-workflow.wakeup.handler_kind | axiomasoft/corex-tasks-workflow | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | — |  |  |
 | corex-tenancy.wakeup.driver | axiomasoft/corex-tenancy | string | local_sweep | no | deployment | no | use-site | — |  |  |
 | corex-tenancy.wakeup.lease_seconds | axiomasoft/corex-tenancy | int | 60 | no | deployment | no | use-site | — |  |  |
 | corex-tenancy.wakeup.root_connection | axiomasoft/corex-tenancy | string | pgsql | no | deployment | no | use-site | — |  |  |

@@ -251,7 +251,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
             stateReader: new DatabaseModuleStateReader(connection: SETTINGS_TEST_CONNECTION),
             cache: new RepositoryModuleRegistryCache(
                 Cache::store(),
-                ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+                ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
             ),
             versionResolver: static fn (TenantContext $ctx): int => 0,
         ));

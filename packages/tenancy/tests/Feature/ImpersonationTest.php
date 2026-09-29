@@ -42,11 +42,11 @@ uses()->group('pg');
 // without touching TestCase.php.
 beforeAll(function (): void {
     TestCase::$oidcEnabled = true;
-    putenv('TENANCY_OIDC_IMPERSONATION_ENABLED=true');
+    putenv('COREX_TENANCY_OIDC_IMPERSONATION_ENABLED=true');
 });
 afterAll(function (): void {
     TestCase::$oidcEnabled = false;
-    putenv('TENANCY_OIDC_IMPERSONATION_ENABLED=false');
+    putenv('COREX_TENANCY_OIDC_IMPERSONATION_ENABLED=false');
 });
 
 const IM_ISSUER = 'https://idp.corex.test';

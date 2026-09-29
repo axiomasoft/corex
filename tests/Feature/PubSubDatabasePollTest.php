@@ -126,13 +126,13 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
     expect($secondRun)->toBe([['module' => 'sales']]);
 });
 
-it('(д) corex:pubsub:prune truncates rows older than the threshold, leaving fresh rows intact', function (): void {
+it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, leaving fresh rows intact', function (): void {
     pubsubPg()->table(Config::pubsubMessagesTable())->insert([
         ['channel' => 'module.enabled', 'payload' => '{"module":"stale"}', 'created_at' => now()->subDays(60)],
         ['channel' => 'module.enabled', 'payload' => '{"module":"fresh"}', 'created_at' => now()],
     ]);
 
-    $this->artisan('corex:pubsub:prune', [
+    $this->artisan('corex:messaging:prune-pubsub', [
         '--older-than' => '30 days',
         '--database' => PUBSUB_DB_POLL_TEST_CONNECTION,
     ])->assertSuccessful();

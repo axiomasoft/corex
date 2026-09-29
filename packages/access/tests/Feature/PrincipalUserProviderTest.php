@@ -185,8 +185,8 @@ it('works against a table with entirely different column names, driven purely by
 
     config([
         'auth.providers.users.driver' => 'corex-principal',
-        'corex-auth.identity.table' => 'app_users',
-        'corex-auth.identity.columns' => [
+        'corex-access.identity.table' => 'app_users',
+        'corex-access.identity.columns' => [
             'id' => 'uid',
             'email' => 'mail',
             'password' => 'pwd',
@@ -196,7 +196,7 @@ it('works against a table with entirely different column names, driven purely by
     ]);
     app()->instance(
         AuthOptions::class,
-        AuthOptions::fromArray((array) config('corex-auth')),
+        AuthOptions::fromArray((array) config('corex-access')),
     );
 
     $attempted = Auth::attempt(['email' => 'custom@example.test', 'password' => 'correct-password']);

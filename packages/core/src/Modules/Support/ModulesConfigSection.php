@@ -16,7 +16,7 @@ final class ModulesConfigSection implements ConfigReportSection
 
     public function options(): array
     {
-        return [ModulesOptions::class => ['corex-modules']];
+        return [ModulesOptions::class => ['corex.modules']];
     }
 
     public function secretKeys(): array

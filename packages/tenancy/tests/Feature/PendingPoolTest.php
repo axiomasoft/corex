@@ -289,17 +289,17 @@ it('does not publish a pending row before provisioning completes or after it fai
     $other->disconnect();
 });
 
-it('artisan tenants:pending-create tops up to pending_pool_size, tenants:pending-clear removes stale rows', function (): void {
+it('artisan corex:tenancy:pending-create tops up to pending_pool_size, corex:tenancy:pending-clear removes stale rows', function (): void {
     $clusterId = makePendingClusterRow(['pending_pool_size' => 2]);
     makePendingTemplateRow(1);
 
-    $this->artisan('tenants:pending-create', ['--cluster' => $clusterId])->assertExitCode(0);
+    $this->artisan('corex:tenancy:pending-create', ['--cluster' => $clusterId])->assertExitCode(0);
     expect(DB::table('root_accounts')->where('cluster_id', $clusterId)->where('status', 'pending')->count())->toBe(2);
 
     // Already at pool size — a second top-up run is a no-op.
-    $this->artisan('tenants:pending-create', ['--cluster' => $clusterId])->assertExitCode(0);
+    $this->artisan('corex:tenancy:pending-create', ['--cluster' => $clusterId])->assertExitCode(0);
     expect(DB::table('root_accounts')->where('cluster_id', $clusterId)->where('status', 'pending')->count())->toBe(2);
 
-    $this->artisan('tenants:pending-clear', ['--template-version' => 1])->assertExitCode(0);
+    $this->artisan('corex:tenancy:pending-clear', ['--template-version' => 1])->assertExitCode(0);
     expect(DB::table('root_accounts')->where('cluster_id', $clusterId)->count())->toBe(0);
 });

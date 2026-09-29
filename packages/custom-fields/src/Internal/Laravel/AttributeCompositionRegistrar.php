@@ -14,7 +14,7 @@ final class AttributeCompositionRegistrar
     {
         $app->singleton(AttributeTables::class, static function (Application $app): AttributeTables {
             /** @var array<string, mixed> $tables */
-            $tables = (array) $app['config']->get('corex-attributes.tables', []);
+            $tables = (array) $app['config']->get('corex-custom-fields.tables', []);
 
             return new AttributeTables(
                 documents: (string) ($tables['documents'] ?? 'sys_attribute_documents'),
@@ -26,7 +26,7 @@ final class AttributeCompositionRegistrar
         });
         $app->singleton(AttributeComposition::class, static function (Application $app): AttributeComposition {
             /** @var array<string, mixed> $config */
-            $config = (array) $app['config']->get('corex-attributes', []);
+            $config = (array) $app['config']->get('corex-custom-fields', []);
 
             return AttributeComposition::fromArray($config);
         });

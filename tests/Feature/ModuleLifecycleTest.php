@@ -92,7 +92,7 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
  * Resolve the lifecycle THROUGH the container (not a hand-built constructor):
  * connection comes from the Options snapshot captured at provider registration,
  * codeVersions/migrationPaths from the
- * `corex-modules.wiring` binding the ModulesServiceProvider populates from
+ * `corex.modules.wiring` binding the ModulesServiceProvider populates from
  * installed.json. Tests override that binding with stub paths to prove the
  * container assembly actually wires migrations (C: empty autowired arrays).
  *
@@ -101,7 +101,7 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
  */
 function lifecycleFromContainer(array $migrationPaths = [], array $codeVersions = []): ModuleLifecycle
 {
-    app()->instance('corex-modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
+    app()->instance('corex.modules.wiring', ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths]);
     app()->forgetInstance(RecordsRegistrar::class);
     app()->forgetInstance(ModuleLifecycle::class);
 
@@ -125,7 +125,7 @@ beforeEach(function (): void {
     lifecyclePg()->statement('CREATE SCHEMA public');
     DB::purge(LIFECYCLE_TEST_CONNECTION);
 
-    config(['corex-modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    config(['corex.modules.connection' => LIFECYCLE_TEST_CONNECTION]);
     $this->app->register(ModulesServiceProvider::class);
 
     $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [
@@ -170,7 +170,7 @@ function lifecycleModuleRegistry(string $path, ?ModuleRegistryCache $cache = nul
         stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
         cache: $cache ?? new RepositoryModuleRegistryCache(
             Cache::store(),
-            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
         ),
         versionResolver: static fn (TenantContext $ctx): int => (int) lifecyclePg()->table('mod_lifecycle_log')->count(),
     );
@@ -186,7 +186,7 @@ function lifecycleIsolatedCache(): RepositoryModuleRegistryCache
 {
     return new RepositoryModuleRegistryCache(
         new CacheRepository(new ArrayStore),
-        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
     );
 }
 
@@ -541,7 +541,7 @@ it('runs the corex:modules:repair artisan command against the module connection'
 
 it('runs migrations resolved through the container, not a hand-built constructor (wiring from discovery)', function (): void {
     // No manual migrationPaths in a constructor — they come from the container
-    // `corex-modules.wiring` binding (installed.json in prod, stub path here).
+    // `corex.modules.wiring` binding (installed.json in prod, stub path here).
     lifecycleFromContainer(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])
         ->enable('corex/stub-base');
 

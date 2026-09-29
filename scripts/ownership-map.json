@@ -119,7 +119,10 @@
             "config": "corex-tenancy",
             "tag_prefix": "corex-tenancy-",
             "env_prefix": "COREX_TENANCY_",
-            "command_prefix": "corex:tenancy:"
+            "command_prefix": "corex:tenancy:",
+            "upstream_config": [
+                "tenancy"
+            ]
         },
         "axiomasoft/corex-transfer": {
             "dir": "transfer",
@@ -198,91 +201,6 @@
             "CoreX\\Testing\\",
             "CoreX\\Testing\\Fixtures\\",
             "CoreX\\Access\\Database\\Seeders\\"
-        ]
-    },
-    "planned_identifier_sources": [
-        {
-            "package": "axiomasoft/corex-webhooks",
-            "kind": "command",
-            "id": "corex:webhooks:prune",
-            "source_files": [
-                "packages/webhooks/src/Commands/PruneWebhooks.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-webhooks",
-            "kind": "config",
-            "id": "corex-webhooks",
-            "source_files": [
-                "packages/webhooks/src/WebhooksServiceProvider.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-operations",
-            "kind": "namespace",
-            "id": "CoreX\\Operations\\Testing",
-            "source_files": [
-                "packages/operations/src/Testing/ResolvedContexts.php",
-                "packages/operations/src/Testing/InvocationFixtures.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-webhooks",
-            "kind": "namespace",
-            "id": "CoreX\\Webhooks",
-            "source_files": [
-                "packages/webhooks/src/WebhooksServiceProvider.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-webhooks",
-            "kind": "tag",
-            "id": "corex-webhooks-config",
-            "source_files": [
-                "packages/webhooks/src/WebhooksServiceProvider.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-webhooks",
-            "kind": "tag",
-            "id": "corex-webhooks-migrations-tenant",
-            "source_files": [
-                "packages/webhooks/src/WebhooksServiceProvider.php"
-            ],
-            "decision": "PLAN3.D50"
-        },
-        {
-            "package": "axiomasoft/corex-panels",
-            "kind": "tag",
-            "id": "corex-migrations",
-            "source_files": [
-                "packages/panels/src/PanelsServiceProvider.php"
-            ],
-            "decision": "PLAN3.D52"
-        },
-        {
-            "package": "axiomasoft/corex-panels",
-            "kind": "tag",
-            "id": "corex-migrations-tenant",
-            "source_files": [
-                "packages/panels/src/PanelsServiceProvider.php"
-            ],
-            "decision": "PLAN3.D52"
-        }
-    ],
-    "projected_shared_tags": {
-        "corex-migrations": [
-            "axiomasoft/corex",
-            "axiomasoft/corex-panels"
-        ],
-        "corex-migrations-tenant": [
-            "axiomasoft/corex",
-            "axiomasoft/corex-panels"
         ]
     }
 }

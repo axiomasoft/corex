@@ -19,6 +19,12 @@ PG-нативные конструкции без SQLite-эквивалента.
 
 ## Установка миграций (важно)
 
+Настройки ядра публикуются через `php artisan vendor:publish --tag=corex-config` в `config/corex.php`.
+Подсистема модулей использует вложенный раздел `modules` (`corex.modules.connection`, `corex.modules.cache.*`)
+и переменные `COREX_MODULES_*`. Теги `corex-migrations` и `corex-migrations-tenant` публикуют обе группы
+миграций ядра: `sys_*` и `mod_*`. SavedViews поставляется пакетом `axiomasoft/corex-panels` и публикуется
+отдельно через `corex-panels-migrations-tenant` на том же tenant-коннекшене.
+
 Миграции ядра (`sys_*`) — **PostgreSQL-only** (jsonb, `CHECK`, `UNIQUE NULLS NOT
 DISTINCT`, BRIN, ltree/GIST) и **тенантские** (живут в базе аккаунта, не в
 корневой control-plane БД). Поэтому пакет их **НЕ подключает автоматически**

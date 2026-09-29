@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Schema;
 uses()->group('pg');
 
 beforeEach(function (): void {
-    config(['database.default' => 'pgsql', 'corex-modules.connection' => 'pgsql']);
+    config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->app->register(ModulesServiceProvider::class);

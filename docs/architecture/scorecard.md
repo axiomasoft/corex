@@ -39,7 +39,7 @@ KPI. Один сводный числовой показатель по крит
 
 | package | criterion | score | measurement |
 |:--|:--|:--:|:--|
-| `axiomasoft/corex-access` | `config` | 0 | use-site keys: auth.*, corex-auth.azguard_pins.column_names.morph_type, corex-auth.azguard_pins.models.role, corex-auth.azguard_pins.table_names.roles, corex-auth.bind_permission_layer |
+| `axiomasoft/corex-access` | `config` | 0 | use-site keys: auth.*, corex-access.azguard_pins.column_names.morph_type, corex-access.azguard_pins.models.role, corex-access.azguard_pins.table_names.roles, corex-access.bind_permission_layer |
 | `axiomasoft/corex-access` | `data-ownership` | 1 | unobserved PII/retention: aut_role_assignments:pii=unobserved,retention=unobserved; aut_role_matrix:pii=unobserved,retention=unobserved; aut_roles:pii=unobserved,retention=unobserved |
 | `axiomasoft/corex-access` | `observability` | 0 | no package Events and no Log facade |
 | `axiomasoft/corex-custom-fields` | `config` | 1 | no typed *Options class in src |
@@ -59,7 +59,7 @@ KPI. Один сводный числовой показатель по крит
 | `axiomasoft/corex-media` | `data-ownership` | 1 | unobserved PII/retention: med_conversions:pii=unobserved,retention=unobserved; med_files:pii=unobserved,retention=unobserved; med_operations:pii=unobserved,retention=unobserved; med_relations:pii=unobserved,retention=unobserved |
 | `axiomasoft/corex-media` | `worker-safety` | 1 | ShouldQueue without Data Receipt/idempotency type: ConvertMedia, PurgeMedia |
 | `axiomasoft/corex-media` | `observability` | 0 | no package Events and no Log facade |
-| `axiomasoft/corex` | `config` | 0 | use-site keys: corex-modules.cache.*, corex-modules.cache.prefix, corex-modules.cache.store, corex-modules.cache.ttl, corex-modules.connection |
+| `axiomasoft/corex` | `config` | 0 | use-site keys: corex.modules.cache.*, corex.modules.cache.prefix, corex.modules.cache.store, corex.modules.cache.ttl, corex.modules.connection |
 | `axiomasoft/corex` | `data-ownership` | 1 | unobserved PII/retention: mod_lifecycle_log:pii=unobserved,retention=unobserved; mod_modules:pii=unobserved,retention=unobserved; mod_records:pii=unobserved,retention=unobserved |
 | `axiomasoft/corex-notifications` | `config` | 1 | no typed *Options class in src |
 | `axiomasoft/corex-notifications` | `extension` | 1 | Contracts/Extend present without extension-point test |

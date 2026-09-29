@@ -15,9 +15,9 @@ final class SearchIntlServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-intl-search.php', 'corex-intl-search');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-search-intl.php', 'corex-search-intl');
 
-        if ($this->app['config']->get('corex-intl-search.enabled') !== true) {
+        if ($this->app['config']->get('corex-search-intl.enabled') !== true) {
             return;
         }
 
@@ -28,7 +28,7 @@ final class SearchIntlServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../config/corex-intl-search.php' => config_path('corex-intl-search.php'),
-        ], 'corex-intl-search-config');
+            __DIR__.'/../config/corex-search-intl.php' => config_path('corex-search-intl.php'),
+        ], 'corex-search-intl-config');
     }
 }

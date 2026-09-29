@@ -247,9 +247,10 @@ final class IdempotencyStoreTest extends TestCase
 
         self::assertInstanceOf(SqlIdempotencyStore::class, $this->app->make(IdempotencyStore::class));
 
-        $published = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-api-migrations-tenant');
+        $published = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-tenant');
         self::assertSame([
             realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
+            realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
         ], array_combine(array_map('realpath', array_keys($published)), array_values($published)));
     }
 

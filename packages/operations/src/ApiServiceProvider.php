@@ -65,9 +65,9 @@ final class ApiServiceProvider extends ServiceProvider
     {
         $this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-api.php', 'corex-api');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-operations.php', 'corex-operations');
         $this->app->bind(ApiOptions::class, static function (Application $app): ApiOptions {
-            $config = $app['config']->get('corex-api');
+            $config = $app['config']->get('corex-operations');
 
             return ApiOptions::fromArray(is_array($config) ? $config : []);
         });
@@ -190,8 +190,8 @@ final class ApiServiceProvider extends ServiceProvider
                 contexts: $app->make(TenantContextResolver::class),
                 clock: $app->make(ClockInterface::class),
                 keyHmacSecret: new SecretRef($secret),
-                leaseSeconds: (int) $app['config']->get('corex-api.idempotency.lease_seconds', 30),
-                retentionSeconds: (int) $app['config']->get('corex-api.idempotency.retention_seconds', 86_400),
+                leaseSeconds: (int) $app['config']->get('corex-operations.idempotency.lease_seconds', 30),
+                retentionSeconds: (int) $app['config']->get('corex-operations.idempotency.retention_seconds', 86_400),
             );
         });
 
@@ -231,14 +231,14 @@ final class ApiServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../database/migrations/create_sys_api_idempotency_table.php' => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
-        ], 'corex-api-migrations-tenant');
+        ], 'corex-operations-migrations-tenant');
         $this->publishes([
             __DIR__.'/../database/migrations/budget' => database_path('migrations/budget'),
-        ], 'corex-api-budget-migrations');
+        ], 'corex-operations-migrations-budget');
         $this->publishes([
             __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
-        ], 'corex-api-tenant-migrations');
+        ], 'corex-operations-migrations-tenant');
 
-        $this->publishes([__DIR__.'/../config/corex-api.php' => config_path('corex-api.php')], 'corex-api-config');
+        $this->publishes([__DIR__.'/../config/corex-operations.php' => config_path('corex-operations.php')], 'corex-operations-config');
     }
 }

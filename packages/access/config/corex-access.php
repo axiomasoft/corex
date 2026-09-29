@@ -14,7 +14,7 @@ return [
     | "{panel}.{entity_key}.{action}". One UI-matrix per account — the panel
     | is an interface plane (app/admin), not a module.
     */
-    'panel' => env('COREX_AUTH_PANEL', 'app'),
+    'panel' => env('COREX_ACCESS_PANEL', 'app'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
     | for tenant isolation — this is checked, never assumed.
     */
     'cache' => [
-        'store' => env('COREX_AUTH_CACHE_STORE'),
+        'store' => env('COREX_ACCESS_CACHE_STORE'),
     ],
 
     /*
@@ -40,7 +40,7 @@ return [
     | (e.g. azguard/context) binds its own layer, so this one steps aside
     | instead of conflicting.
     */
-    'bind_permission_layer' => env('COREX_AUTH_BIND_PERMISSION_LAYER', true),
+    'bind_permission_layer' => env('COREX_ACCESS_BIND_PERMISSION_LAYER', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,9 +82,9 @@ return [
     | `corex-principal` auth driver entirely.
     */
     'identity' => [
-        'enabled' => (bool) env('COREX_AUTH_IDENTITY_ENABLED', true),
-        'connection' => env('COREX_AUTH_IDENTITY_CONNECTION'),
-        'table' => env('COREX_AUTH_IDENTITY_TABLE', 'users'),
+        'enabled' => (bool) env('COREX_ACCESS_IDENTITY_ENABLED', true),
+        'connection' => env('COREX_ACCESS_IDENTITY_CONNECTION'),
+        'table' => env('COREX_ACCESS_IDENTITY_TABLE', 'users'),
         'columns' => [
             'id' => 'id',
             'email' => 'email',

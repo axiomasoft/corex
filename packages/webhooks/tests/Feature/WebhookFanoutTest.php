@@ -251,7 +251,7 @@ final class WebhookFanoutTest extends TestCase
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
         $driver = (string) $this->app['config']->get('database.connections.'.$tenant.'.driver');
         $database = (string) $this->app['config']->get('database.connections.'.$tenant.'.database');
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => $tenant, 'driver' => $driver, 'database' => $database],
         ]);

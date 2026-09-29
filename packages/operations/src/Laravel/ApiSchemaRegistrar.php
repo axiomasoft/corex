@@ -14,10 +14,10 @@ final readonly class ApiSchemaRegistrar
     public static function register(Application $app): void
     {
         $app->singleton(self::class, static function (Application $app): self {
-            $schema = $app['config']->get('corex-api.schema');
+            $schema = $app['config']->get('corex-operations.schema');
 
             if (! is_array($schema)) {
-                throw new InvalidArgumentException('Explicit corex-api.schema budget and tenant settings are required.');
+                throw new InvalidArgumentException('Explicit corex-operations.schema budget and tenant settings are required.');
             }
 
             $budget = self::identity($schema, 'budget');
@@ -80,7 +80,7 @@ final readonly class ApiSchemaRegistrar
         $identity = $schema[$scope] ?? null;
 
         if (! is_array($identity)) {
-            throw new InvalidArgumentException(sprintf('Explicit corex-api.schema.%s settings are required.', $scope));
+            throw new InvalidArgumentException(sprintf('Explicit corex-operations.schema.%s settings are required.', $scope));
         }
 
         $connection = $identity['connection'] ?? null;
@@ -90,7 +90,7 @@ final readonly class ApiSchemaRegistrar
         if (! is_string($connection) || $connection === ''
             || ! is_string($driver) || $driver === ''
             || ! is_string($database) || $database === '') {
-            throw new InvalidArgumentException(sprintf('The corex-api.schema.%s connection, driver and database must be non-empty strings.', $scope));
+            throw new InvalidArgumentException(sprintf('The corex-operations.schema.%s connection, driver and database must be non-empty strings.', $scope));
         }
 
         return compact('connection', 'driver', 'database');

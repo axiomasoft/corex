@@ -422,11 +422,11 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
     private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window): void
     {
-        if (! $this->config->get('corex-task-recurrence.wakeup.enabled', false) || ! $this->container->bound(WakeupScheduler::class)) {
+        if (! $this->config->get('corex-tasks-workflow.wakeup.enabled', false) || ! $this->container->bound(WakeupScheduler::class)) {
             return;
         }
 
-        $kind = (string) $this->config->get('corex-task-recurrence.wakeup.handler_kind', MaterializationHasher::HANDLER_KIND);
+        $kind = (string) $this->config->get('corex-tasks-workflow.wakeup.handler_kind', MaterializationHasher::HANDLER_KIND);
         $fireAt = (new DateTimeImmutable($window->end))->sub(new DateInterval('P1D'));
 
         $this->container->make(WakeupScheduler::class)->schedule(new WakeupRequest(

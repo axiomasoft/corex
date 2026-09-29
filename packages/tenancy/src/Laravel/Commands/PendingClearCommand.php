@@ -17,7 +17,7 @@ use InvalidArgumentException;
  */
 final class PendingClearCommand extends Command
 {
-    protected $signature = 'tenants:pending-clear {--older-than=} {--template-version=}';
+    protected $signature = 'corex:tenancy:pending-clear {--older-than=} {--template-version=}';
 
     protected $description = 'Delete stale pending account болванки by template version and/or age.';
 

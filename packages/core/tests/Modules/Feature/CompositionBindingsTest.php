@@ -51,14 +51,14 @@ it('keeps Lifecycle register bindings on the measured key, concrete and lifetime
     assertSingletonBinding($app, RecordsRegistrar::class, DatabaseRecordsRegistrar::class);
     assertSingletonBinding($app, ModuleLifecycle::class, DatabaseModuleLifecycle::class);
 
-    expect($app->getBindings())->toHaveKey('corex-modules.wiring');
-    expect($app->isShared('corex-modules.wiring'))->toBeTrue();
-    $first = $app->make('corex-modules.wiring');
+    expect($app->getBindings())->toHaveKey('corex.modules.wiring');
+    expect($app->isShared('corex.modules.wiring'))->toBeTrue();
+    $first = $app->make('corex.modules.wiring');
     expect($first)->toBeArray()
         ->and($first)->toHaveKeys(['codeVersions', 'migrationPaths']);
-    expect($app->make('corex-modules.wiring'))->toBe($first);
+    expect($app->make('corex.modules.wiring'))->toBe($first);
     $app->forgetScopedInstances();
-    expect($app->make('corex-modules.wiring'))->toBe($first);
+    expect($app->make('corex.modules.wiring'))->toBe($first);
 });
 
 it('keeps Settings register bindings on the measured key, concrete and lifetime', function (): void {
@@ -75,6 +75,18 @@ it('resolves ModulesOptions from the composition instance', function (): void {
     $first = $app->make(ModulesOptions::class);
     expect($first)->toBeInstanceOf(ModulesOptions::class)
         ->and($app->make(ModulesOptions::class))->toBe($first);
+});
+
+it('reads module options from the nested kernel configuration', function (): void {
+    config()->set('corex.modules.connection', 'module-test');
+    config()->set('corex.modules.cache', ['store' => 'array', 'ttl' => 42, 'prefix' => 'module-test']);
+    $this->app->register(ModulesServiceProvider::class, force: true);
+
+    $options = $this->app->make(ModulesOptions::class);
+    expect($options->connection)->toBe('module-test')
+        ->and($options->cacheStore)->toBe('array')
+        ->and($options->cacheTtl)->toBe(42)
+        ->and($options->cachePrefix)->toBe('module-test');
 });
 
 it('registers composition modules through PackageRegistrar', function (): void {

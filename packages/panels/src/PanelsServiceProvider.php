@@ -22,7 +22,7 @@ final class PanelsServiceProvider extends ServiceProvider
     {
         SavedViewsRegistrar::register($this->app);
         $this->app->booted(function (): void {
-            $this->publishes([__DIR__.'/../database/migrations/pg' => database_path('migrations')], ['corex-migrations', 'corex-migrations-tenant']);
+            $this->publishes([__DIR__.'/../database/migrations/pg' => database_path('migrations')], ['corex-panels-migrations', 'corex-panels-migrations-tenant']);
         });
         $this->mergeConfigFrom(__DIR__.'/../config/corex-panels.php', 'corex-panels');
         $this->app->singleton(PanelCatalogue::class, static fn (Application $app): ModulePanelCatalogue => new ModulePanelCatalogue(

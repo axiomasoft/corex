@@ -50,7 +50,7 @@ final class OptionalBridgesTest extends TestCase
     {
         $app = new Application;
         $app->instance('config', new Repository([
-            'corex-intl-search' => ['enabled' => false],
+            'corex-search-intl' => ['enabled' => false],
         ]));
 
         (new SearchIntlServiceProvider($app))->register();

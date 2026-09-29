@@ -30,7 +30,7 @@ Auth-мост между [`axiomasoft/corex`] и [AzGuard] (ADR-009). AzGuard �
   `allowed()` спрашивает НАСТОЯЩИЙ AzGuard через `Access\PrincipalIdentity` (капабилити-кеш, ≤1мс);
   `scopeFor()`/`canOnRecord()` компилируют эффективный scope из `aut_role_matrix` напрямую.
   `Access\AutMatrixGrantSource` (priority 85) + `Access\WorkspacePermissionLayer` (дискриминатор
-  кеша по workspace, конфиг-ключ `corex-auth.bind_permission_layer`) — мост к капабилити-слою
+  кеша по workspace, конфиг-ключ `corex-access.bind_permission_layer`) — мост к капабилити-слою
   AzGuard (P2.20, D101).
 - **Известное ограничение профиля:** `canOnRecord()` для scope `dept`/`dept_tree` читает
   `users.department_id`/`sys_departments.path` — таблиц другого пакета (`axiomasoft/corex-tenancy`,
@@ -49,7 +49,7 @@ Auth-мост между [`axiomasoft/corex`] и [AzGuard] (ADR-009). AzGuard �
   декларацией capability на `EntityDefinition`, не кодом). Нет ни capability, ни колонки — сужать
   нечем, тогда `account` легален.
 - **`Access\WorkspaceScopeWiring`** — регистрирует `WorkspaceScope` (глобальный scope, приходит из
-  `axiomasoft/corex-tenancy` по конфиг-пину `corex-auth.workspace_scope_class`) на моделях с capability
+  `axiomasoft/corex-tenancy` по конфиг-пину `corex-access.workspace_scope_class`) на моделях с capability
   `workspace_scoped` автоматически при `boot()`; boxed-профиль без пина — тихий пропуск.
 - **Известное ограничение профиля:** в дереве корневого проекта пока 0 сущностей с capability
   `ownable`/`workspace_scoped` — их раздача реальным продуктовым сущностям (CRM/Tasks) вне
@@ -57,7 +57,7 @@ Auth-мост между [`axiomasoft/corex`] и [AzGuard] (ADR-009). AzGuard �
 
 - **`Identity\PrincipalUserProvider` — локальный лейн входа (D125)**: собственный
   `Illuminate\Contracts\Auth\UserProvider`, читающий пользовательскую таблицу через
-  query-builder ЦЕЛИКОМ по конфигу `corex-auth.identity` (`connection`/`table`/карта колонок
+  query-builder ЦЕЛИКОМ по конфигу `corex-access.identity` (`connection`/`table`/карта колонок
   `id`/`email`/`password`/`active`/`deleted_at`) и отдающий `Access\PrincipalIdentity(user,
   <id>)`. Пакет не импортирует ни одну модель `axiomasoft/corex-tenancy` — имя таблицы приходит строкой,
   тот же приём, что и `workspace_scope_class`. Это ЕДИНСТВЕННЫЙ шов, которым конструируется

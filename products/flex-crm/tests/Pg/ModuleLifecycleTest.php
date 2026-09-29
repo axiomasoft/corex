@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 uses()->group('pg');
 
 it('discovers CRM composer metadata and manages its schema through the standard lifecycle', function (): void {
-    config(['database.default' => 'pgsql', 'corex-modules.connection' => 'pgsql']);
+    config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();

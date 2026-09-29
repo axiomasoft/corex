@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class PendingCreateCommand extends Command
 {
-    protected $signature = 'tenants:pending-create {--count=} {--cluster=}';
+    protected $signature = 'corex:tenancy:pending-create {--count=} {--cluster=}';
 
     protected $description = 'Top up (or explicitly seed) the pending account pool for one or all active clusters.';
 

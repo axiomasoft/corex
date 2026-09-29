@@ -56,7 +56,7 @@ final class AttributeTablesTest extends TestCase
 
     public function test_it_rejects_invalid_table_names_loaded_from_provider_configuration(): void
     {
-        $this->app['config']->set('corex-attributes.tables.documents', 'Bad-Name');
+        $this->app['config']->set('corex-custom-fields.tables.documents', 'Bad-Name');
 
         expect(fn (): AttributeTables => $this->app->make(AttributeTables::class))
             ->toThrow(InvalidAttributeTables::class);

@@ -111,7 +111,7 @@ envelope и RFC 9457 Problem Details; человеческий текст не �
 capability и снимок не входят в этот контракт.
 
 Зелёный контракт проверяют `tests/Feature/OperationContractTest.php`,
-`tests/Arch/ApiContractTest.php`, `corex:api-snapshots --check` и
+`tests/Arch/ApiContractTest.php`, `corex:operations:snapshot --check` и
 `composer api-contract`. Изменение публичной поверхности требует нового решения
 о совместимости; эта запись не разрешает релиз или автоматическое обновление
 baseline.

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Rename configuration and publish identifiers to `corex-search-intl` and the enabled variable to `COREX_SEARCH_INTL_ENABLED`.
+
 ## [Unreleased]
 
 ### Changed

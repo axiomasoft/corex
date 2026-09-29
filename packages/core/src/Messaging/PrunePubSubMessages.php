@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\DB;
  * silent, permanent invalidation loss, not just noise.
  *
  * Example scheduler wiring (host's `routes/console.php` or `AppServiceProvider`):
- * `Schedule::command('corex:pubsub:prune')->daily();`
+ * `Schedule::command('corex:messaging:prune-pubsub')->daily();`
  *
  * @internal spec: D44, P1.24, pre-mortem P1R C7
  */
 final class PrunePubSubMessages extends Command
 {
-    protected $signature = 'corex:pubsub:prune
+    protected $signature = 'corex:messaging:prune-pubsub
         {--older-than= : DateInterval-parseable age threshold, e.g. "30 days" (default: corex.pubsub.retention)}
         {--database= : Connection to prune (default: the app default)}';
 

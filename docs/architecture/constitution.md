@@ -391,9 +391,9 @@
   artisan, publish-теги)
 **Владелец.** ../dev-doctrine.md §3 (D82)
 **Enforcement.** ревью
-**Исключения.** exceptions/CFG-006/corex-intl-search-key.md
-**Почему.** Исключение `corex-intl-search` — `exceptions/CFG-006/corex-intl-search-key.md` (BC
-  после ренейма в `axiomasoft/corex-search-intl`).
+**Исключения.** —
+**Почему.** `corex-search-intl` соответствует имени пакета `axiomasoft/corex-search-intl`;
+  переименование конфигурации объявлено в CHANGELOG пакета (PLAN3.D45).
 
 ## Группа MSG — сообщения
 

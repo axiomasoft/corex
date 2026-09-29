@@ -277,7 +277,7 @@ final class Config
     }
 
     /**
-     * Default `--older-than` for `corex:pubsub:prune` — a
+     * Default `--older-than` for `corex:messaging:prune-pubsub` — a
      * `DateInterval`-parseable relative-time string. MUST stay longer than
      * the worst-case subscriber downtime: pruning a message before every
      * durable cursor behind it has passed it is a silent, permanent

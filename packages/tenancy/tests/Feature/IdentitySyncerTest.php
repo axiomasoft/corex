@@ -429,14 +429,14 @@ it('preserves source ordering independently of delivery time', function (bool $d
     DB::purge('identity_writer_test');
 })->with([false, true]);
 
-it('identities:reconcile re-syncs failed and stale rows (AC-16 з)', function (): void {
+it('corex:tenancy:reconcile-identities re-syncs failed and stale rows (AC-16 з)', function (): void {
     $account = makeAccountIS(makeClusterIS());
     migrateUsersTableIS(accountRefIS($account));
 
     $identityId = makeIdentityIS();
     makeMembershipIS($identityId, $account->id, ['sync_status' => 'failed']);
 
-    $this->artisan('identities:reconcile')->assertExitCode(0);
+    $this->artisan('corex:tenancy:reconcile-identities')->assertExitCode(0);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */

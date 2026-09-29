@@ -173,7 +173,7 @@ final class WebhookSubscriptionTest extends TestCase
 
         try {
             $this->selectSchema();
-            $this->app['config']->set('corex-api.schema.tenant', [
+            $this->app['config']->set('corex-operations.schema.tenant', [
                 'connection' => 'api_pg_tenant',
                 'driver' => 'pgsql',
                 'database' => $database,
@@ -277,7 +277,7 @@ final class WebhookSubscriptionTest extends TestCase
     private function selectSchema(): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],
         ]);

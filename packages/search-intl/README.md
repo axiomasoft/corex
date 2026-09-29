@@ -18,7 +18,7 @@ composer require axiomasoft/corex-search-intl
 Enable explicitly in configuration:
 
 ```php
-'corex-intl-search.enabled' => true,
+'corex-search-intl.enabled' => true,
 ```
 
 ## Testing

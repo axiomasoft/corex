@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package identifier alignment
+
+- Breaking before 1.0: Move module configuration into `corex.modules` within `config/corex.php`; publish it through `corex-config`, combine kernel migration tags, and rename the PubSub prune command to `corex:messaging:prune-pubsub`. Module cache identifiers use `corex.modules`.
+
 ## Unreleased
 
 - Added package-contributed configuration reports through `ConfigReportSection` and public messaging test fixtures. Saved Views default bindings now register with panels.

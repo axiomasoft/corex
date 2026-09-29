@@ -16,7 +16,7 @@ final class AccessConfigSection implements ConfigReportSection
 
     public function options(): array
     {
-        return [AuthOptions::class => ['corex-auth']];
+        return [AuthOptions::class => ['corex-access']];
     }
 
     public function secretKeys(): array

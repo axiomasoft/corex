@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 /** @internal Runs one leased bulk step in the already restored tenant. */
 final class WorkBulkOperations extends Command
 {
-    protected $signature = 'corex:bulk-work {--worker=api-bulk : Lease owner for one bounded step}';
+    protected $signature = 'corex:operations:bulk-work {--worker=api-bulk : Lease owner for one bounded step}';
 
     protected $description = 'Claim and advance one durable bulk operation';
 

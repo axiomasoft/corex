@@ -17,7 +17,7 @@ use RuntimeException;
 /** @internal Writes the installed-code v1 contract snapshot. It does not accept tenant state. */
 final class WriteApiSnapshots extends Command
 {
-    protected $signature = 'corex:api-snapshots {directory : Destination for the v1 JSON carriers} {--check : Compare without writing} {--fixture= : P12 public-error contract PHP file} {--major=v1}';
+    protected $signature = 'corex:operations:snapshot {directory : Destination for the v1 JSON carriers} {--check : Compare without writing} {--fixture= : P12 public-error contract PHP file} {--major=v1}';
 
     protected $description = 'Write or check the deterministic v1 API contract snapshot';
 

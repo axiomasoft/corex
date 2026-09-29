@@ -26,7 +26,7 @@ final readonly class ModulesOptions
         $cache = is_array($config['cache'] ?? null) ? $config['cache'] : [];
         $cacheStore = self::nullableNonEmptyString($cache['store'] ?? null);
         $cacheTtl = self::positiveInt($violations, 'cache.ttl', $cache['ttl'] ?? 3600);
-        $cachePrefix = self::nonEmpty($violations, 'cache.prefix', $cache['prefix'] ?? 'corex-modules');
+        $cachePrefix = self::nonEmpty($violations, 'cache.prefix', $cache['prefix'] ?? 'corex.modules');
 
         $violations->failIfAny();
 

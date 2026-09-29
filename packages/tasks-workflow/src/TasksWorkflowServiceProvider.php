@@ -23,7 +23,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-task-recurrence.php', 'corex-task-recurrence');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');
 
         $this->app->singleton(RecurrenceExpander::class, 'CoreX\Recurrence\RRuleRecurrenceExpander');
 

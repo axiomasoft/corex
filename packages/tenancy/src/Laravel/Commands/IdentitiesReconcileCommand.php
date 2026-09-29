@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class IdentitiesReconcileCommand extends Command
 {
-    protected $signature = 'identities:reconcile';
+    protected $signature = 'corex:tenancy:reconcile-identities';
 
     protected $description = 'Re-sync failed, pending, and stale identity projections into their account users tables.';
 

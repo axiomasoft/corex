@@ -40,9 +40,9 @@ final class CoreAuthServiceProvider extends ServiceProvider
     {
         $this->app->tag([AccessConfigSection::class], ConfigReportSection::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-auth.php', 'corex-auth');
+        $this->mergeConfigFrom(__DIR__.'/../config/corex-access.php', 'corex-access');
 
-        $raw = $this->app['config']->get('corex-auth', []);
+        $raw = $this->app['config']->get('corex-access', []);
         $options = AuthOptions::fromArray(is_array($raw) ? $raw : []);
         $this->app->instance(AuthOptions::class, $options);
 
@@ -101,7 +101,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
      * axiomasoft/corex-access does not fork AzGuard (D15): the config pins that make
      * AzGuard line up with DB_SCHEMA §3.5 / CoreX's uuid principals (D104)
      * are applied onto AzGuard's own config here, sourced from OUR
-     * publishable corex-auth config — never a second copy of the values.
+     * publishable corex-access config — never a second copy of the values.
      * AzGuard's migrations read this config at `migrate` time (findings/
      * P2.8-azguard-inventory-2026-07-26.md §2), so setting it in register()
      * — well before any migrate call — is early enough regardless of
@@ -140,21 +140,21 @@ final class CoreAuthServiceProvider extends ServiceProvider
     private function registerPublishing(): void
     {
         $this->publishes([
-            __DIR__.'/../config/corex-auth.php' => config_path('corex-auth.php'),
-        ], 'corex-auth-config');
+            __DIR__.'/../config/corex-access.php' => config_path('corex-access.php'),
+        ], 'corex-access-config');
 
         // Publish-only, mirroring axiomasoft/corex-tenancy's own tenant-DB migrations
         // (D33/A19/A62 precedent): a golden-template build assembles these
         // deliberately, never an ad hoc migrate on a live tenant connection.
         $this->publishes([
             __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
-        ], 'corex-auth-migrations-tenant');
+        ], 'corex-access-migrations-tenant');
 
         // Cloud profile only (D102) — boxed installs never publish this tag,
         // wsp_workspaces/users belong to axiomasoft/corex-tenancy, absent there (AC-28).
         $this->publishes([
             __DIR__.'/../database/migrations/tenant-cloud' => database_path('migrations/tenant-cloud'),
-        ], 'corex-auth-migrations-tenant-cloud');
+        ], 'corex-access-migrations-tenant-cloud');
     }
 
     /**

@@ -10,7 +10,7 @@ it('allows a null module connection', function (): void {
 
     expect($options->connection)->toBeNull()
         ->and($options->cacheTtl)->toBe(3600)
-        ->and($options->cachePrefix)->toBe('corex-modules');
+        ->and($options->cachePrefix)->toBe('corex.modules');
 });
 
 it('rejects a zero or negative cache ttl', function (int $ttl): void {

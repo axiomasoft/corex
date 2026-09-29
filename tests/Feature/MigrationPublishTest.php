@@ -63,6 +63,7 @@ it('publishes exactly the 12 sys_* migrations and they migrate on a clean PG sch
     $target = publishTarget();
 
     $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
+    $this->artisan('vendor:publish', ['--tag' => 'corex-panels-migrations', '--force' => true])->run();
 
     $published = glob($target.'/*_create_sys_*_table.php') ?: [];
     // P4.7 adds the saved-view scope lock and views tables as two additive,
@@ -92,7 +93,7 @@ it('publishes exactly the 3 mod_* migrations and they migrate on a clean PG sche
     $this->app->register(PanelsServiceProvider::class);
     $target = publishTarget();
 
-    $this->artisan('vendor:publish', ['--tag' => 'corex-modules-migrations', '--force' => true])->run();
+    $this->artisan('vendor:publish', ['--tag' => 'corex-migrations', '--force' => true])->run();
 
     $published = glob($target.'/*_create_mod_*_table.php') ?: [];
     expect($published)->toHaveCount(3);
@@ -114,7 +115,7 @@ it('exposes the -tenant connection-scope alias for both migration sets (D43)', f
     );
     $modules = ServiceProvider::pathsToPublish(
         ModulesServiceProvider::class,
-        'corex-modules-migrations-tenant',
+        'corex-migrations-tenant',
     );
 
     expect($core)->not->toBeEmpty()

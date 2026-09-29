@@ -24,7 +24,7 @@ return [
     | database, never a tenant/account database. Override per-host if the
     | central DB uses a different Laravel connection name.
     */
-    'central_connection' => env('TENANCY_CENTRAL_CONNECTION', 'pgsql'),
+    'central_connection' => env('COREX_TENANCY_CENTRAL_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -124,9 +124,9 @@ return [
     |
     */
     'storage' => [
-        'durable_driver' => env('TENANCY_STORAGE_DURABLE_DRIVER', 'local'),
-        'durable_root' => env('TENANCY_STORAGE_DURABLE_ROOT', storage_path('app/corex/tenancy-durable')),
-        'ephemeral_root' => env('TENANCY_STORAGE_EPHEMERAL_ROOT', storage_path('app/corex/tenancy-ephemeral')),
+        'durable_driver' => env('COREX_TENANCY_STORAGE_DURABLE_DRIVER', 'local'),
+        'durable_root' => env('COREX_TENANCY_STORAGE_DURABLE_ROOT', storage_path('app/corex/tenancy-durable')),
+        'ephemeral_root' => env('COREX_TENANCY_STORAGE_EPHEMERAL_ROOT', storage_path('app/corex/tenancy-ephemeral')),
     ],
 
     /*
@@ -142,7 +142,7 @@ return [
     | application's global middleware stack either way (D10).
     */
     'host_identification' => [
-        'enabled' => (bool) env('TENANCY_HOST_IDENTIFICATION_ENABLED', false),
+        'enabled' => (bool) env('COREX_TENANCY_HOST_IDENTIFICATION_ENABLED', false),
         'cache' => true,
         'cache_ttl' => 300,
         'cache_store' => null, // null = default store
@@ -160,8 +160,8 @@ return [
     |
     */
     'domain_trust' => [
-        'enabled' => (bool) env('TENANCY_DOMAIN_TRUST_ENABLED', false),
-        'challenge_ttl_seconds' => (int) env('TENANCY_DOMAIN_TRUST_CHALLENGE_TTL_SECONDS', 300),
+        'enabled' => (bool) env('COREX_TENANCY_DOMAIN_TRUST_ENABLED', false),
+        'challenge_ttl_seconds' => (int) env('COREX_TENANCY_DOMAIN_TRUST_CHALLENGE_TTL_SECONDS', 300),
     ],
 
     /*
@@ -192,33 +192,33 @@ return [
     | the Discovery document (`Oidc\OidcDiscovery`), never hardcoded (D123).
     */
     'oidc' => [
-        'enabled' => (bool) env('TENANCY_OIDC_ENABLED', false),
+        'enabled' => (bool) env('COREX_TENANCY_OIDC_ENABLED', false),
 
-        'issuer' => env('TENANCY_OIDC_ISSUER'),
-        'client_id' => env('TENANCY_OIDC_CLIENT_ID'),
-        'client_secret' => env('TENANCY_OIDC_CLIENT_SECRET'),
-        'redirect_uri' => env('TENANCY_OIDC_REDIRECT_URI'),
+        'issuer' => env('COREX_TENANCY_OIDC_ISSUER'),
+        'client_id' => env('COREX_TENANCY_OIDC_CLIENT_ID'),
+        'client_secret' => env('COREX_TENANCY_OIDC_CLIENT_SECRET'),
+        'redirect_uri' => env('COREX_TENANCY_OIDC_REDIRECT_URI'),
 
         // RS256-only allow-list (D123) — checked against the id_token
         // HEADER before JWT::decode() ever runs (Oidc\IdTokenVerifier).
         'allowed_algs' => ['RS256'],
-        'leeway_seconds' => (int) env('TENANCY_OIDC_LEEWAY_SECONDS', 30),
+        'leeway_seconds' => (int) env('COREX_TENANCY_OIDC_LEEWAY_SECONDS', 30),
 
         // The guard `Auth::loginUsingId()`/`Auth::logout()` operate on —
         // the consuming app's own guard name, this package assumes nothing
         // beyond what it is told.
-        'guard' => env('TENANCY_OIDC_GUARD', 'web'),
+        'guard' => env('COREX_TENANCY_OIDC_GUARD', 'web'),
 
         'discovery' => [
-            'cache_store' => env('TENANCY_OIDC_DISCOVERY_CACHE_STORE'), // null = default store
-            'cache_ttl' => (int) env('TENANCY_OIDC_DISCOVERY_CACHE_TTL', 3600),
+            'cache_store' => env('COREX_TENANCY_OIDC_DISCOVERY_CACHE_STORE'), // null = default store
+            'cache_ttl' => (int) env('COREX_TENANCY_OIDC_DISCOVERY_CACHE_TTL', 3600),
         ],
 
         'jwks' => [
-            'cache_store' => env('TENANCY_OIDC_JWKS_CACHE_STORE'), // null = default store
-            'cache_ttl' => (int) env('TENANCY_OIDC_JWKS_CACHE_TTL', 3600),
+            'cache_store' => env('COREX_TENANCY_OIDC_JWKS_CACHE_STORE'), // null = default store
+            'cache_ttl' => (int) env('COREX_TENANCY_OIDC_JWKS_CACHE_TTL', 3600),
             // D130: ONE forced refetch per unknown kid, gated by this cooldown.
-            'refetch_cooldown_seconds' => (int) env('TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS', 60),
+            'refetch_cooldown_seconds' => (int) env('COREX_TENANCY_OIDC_JWKS_REFETCH_COOLDOWN_SECONDS', 60),
         ],
 
         // P2.11 — grant validation (`root_impersonation_grants`, D143) +
@@ -232,13 +232,13 @@ return [
         // working, a prod profile flips it to reject any grant missing
         // `approved_by`.
         'impersonation' => [
-            'enabled' => (bool) env('TENANCY_OIDC_IMPERSONATION_ENABLED', false),
-            'require_approved_by' => (bool) env('TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY', false),
+            'enabled' => (bool) env('COREX_TENANCY_OIDC_IMPERSONATION_ENABLED', false),
+            'require_approved_by' => (bool) env('COREX_TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY', false),
         ],
 
         // AC-15 — enforced by Http\Middleware\EnforceSessionLifetime
         // regardless of the consuming app's own `session.lifetime`.
-        'max_session_lifetime_minutes' => (int) env('TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
+        'max_session_lifetime_minutes' => (int) env('COREX_TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
     ],
 
     /*
@@ -253,7 +253,7 @@ return [
     | route-binding are the consuming application's concern (D133).
     */
     'workspace' => [
-        'path_segment' => env('TENANCY_WORKSPACE_PATH_SEGMENT', 'w'),
+        'path_segment' => env('COREX_TENANCY_WORKSPACE_PATH_SEGMENT', 'w'),
     ],
 
     /*
@@ -265,8 +265,8 @@ return [
     | grants before `grace_until`; `purge_after` is always `grace_until` plus
     | a further fixed 30 days (§7.3 п.7 retention), not itself configurable.
     */
-    'trial_days' => (int) env('TENANCY_TRIAL_DAYS', 14),
-    'grace_days' => (int) env('TENANCY_GRACE_DAYS', 30),
+    'trial_days' => (int) env('COREX_TENANCY_TRIAL_DAYS', 14),
+    'grace_days' => (int) env('COREX_TENANCY_GRACE_DAYS', 30),
 
     /*
     |--------------------------------------------------------------------------
@@ -277,6 +277,6 @@ return [
     | the platform domain as `<slug>.<platform_domain>`. The default is only
     | a neutral placeholder — every real deployment overrides it.
     */
-    'platform_domain' => env('TENANCY_PLATFORM_DOMAIN', 'example.test'),
+    'platform_domain' => env('COREX_TENANCY_PLATFORM_DOMAIN', 'example.test'),
 
 ];

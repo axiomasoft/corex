@@ -24,7 +24,7 @@ final class CaptureTaskCompletion
 
     public function saving(Task $task): void
     {
-        if (! $this->config->get('corex-task-recurrence.completion_capture.enabled', false)) {
+        if (! $this->config->get('corex-tasks-workflow.completion_capture.enabled', false)) {
             return;
         }
 
@@ -59,8 +59,8 @@ final class CaptureTaskCompletion
             eventId: 'task:'.$task->getKey(),
             eventName: 'completed',
             subjectRef: 'task:'.$task->getKey(),
-            definitionRef: (string) $this->config->get('corex-task-recurrence.completion_capture.definition_ref', 'task-completion/1'),
-            versionRef: (string) $this->config->get('corex-task-recurrence.completion_capture.version_ref', 'task-completion/1'),
+            definitionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.definition_ref', 'task-completion/1'),
+            versionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.version_ref', 'task-completion/1'),
             scalarSnapshot: $payload,
             requestKey: $requestKey,
         ));

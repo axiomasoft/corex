@@ -174,7 +174,7 @@ final class ToolCostInvocationTest extends TestCase
         ]);
         DB::purge('api_budget_admission');
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => 'api_budget_admission',
                 'driver' => 'sqlite',

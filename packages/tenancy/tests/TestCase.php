@@ -76,7 +76,7 @@ abstract class TestCase extends Orchestra
     /**
      * `TenancyServiceProvider::register()` reads `config('tenancy.oidc.
      * enabled')` — populated from `config/tenancy.php`'s
-     * `env('TENANCY_OIDC_ENABLED', false)` at `mergeConfigFrom()` time —
+     * `env('COREX_TENANCY_OIDC_ENABLED', false)` at `mergeConfigFrom()` time —
      * BEFORE Testbench's `defineEnvironment()` hook ever runs (Testbench's
      * `resolveApplicationBootstrappers()` calls `RegisterProviders::
      * bootstrap()`, i.e. every provider's `register()`, BEFORE calling
@@ -94,7 +94,7 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function resolveApplicationCore($app): void
     {
-        putenv('TENANCY_OIDC_ENABLED='.(static::$oidcEnabled ? 'true' : 'false'));
+        putenv('COREX_TENANCY_OIDC_ENABLED='.(static::$oidcEnabled ? 'true' : 'false'));
 
         $this->resolveIsolatedApplicationCore($app);
     }

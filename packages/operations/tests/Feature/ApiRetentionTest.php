@@ -209,10 +209,10 @@ final class ApiRetentionTest extends TestCase
         self::assertInstanceOf(ConsoleKernel::class, $kernel);
         $kernel->registerCommand(new PruneApiOperations);
 
-        $this->artisan('corex:api:prune', ['--max' => 101])->assertExitCode(2);
+        $this->artisan('corex:operations:prune', ['--max' => 101])->assertExitCode(2);
         self::assertNotNull($this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-command')->value('result_ref'));
 
-        $this->artisan('corex:api:prune', ['--max' => 100])->assertSuccessful();
+        $this->artisan('corex:operations:prune', ['--max' => 100])->assertSuccessful();
         self::assertNull($this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-command')->value('result_ref'));
         self::assertNotNull($this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-command')->first());
     }
@@ -394,7 +394,7 @@ final class ApiRetentionTest extends TestCase
         string $tenantDatabase,
     ): void {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => $budget, 'driver' => $budgetDriver, 'database' => $budgetDatabase],
             'tenant' => ['connection' => $tenant, 'driver' => $tenantDriver, 'database' => $tenantDatabase],
         ]);

@@ -39,7 +39,7 @@ final class ApiRoutesTest extends TestCase
     protected function defineEnvironment($app): void
     {
         parent::defineEnvironment($app);
-        $app['config']->set('corex-api.routes.enabled', self::$routesEnabled);
+        $app['config']->set('corex-operations.routes.enabled', self::$routesEnabled);
     }
 
     protected function setUp(): void

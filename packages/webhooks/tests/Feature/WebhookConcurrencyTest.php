@@ -189,7 +189,7 @@ final class WebhookConcurrencyTest extends TestCase
         $this->app['config']->set('database.connections.api_budget_stub', [
             'driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '',
         ]);
-        $this->app['config']->set('corex-api.schema', [
+        $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_pg_tenant', 'driver' => 'pgsql', 'database' => $database],
         ]);

@@ -130,7 +130,7 @@ it('MAT-02 replays durable receipts after a failed outer attempt', function (): 
 it('MAT-06 schedules a stamped complete payload and materializes through the handler', function (): void {
     registerMaterializationWakeup();
     expect($this->migrateWakeup())->toBe(0);
-    app()['config']->set('corex-task-recurrence.wakeup.enabled', true);
+    app()['config']->set('corex-tasks-workflow.wakeup.enabled', true);
     app()->forgetScopedInstances();
 
     $set = SeriesSeeder::dailySet('series-pg-06', 'rev-1', 1);
@@ -212,7 +212,7 @@ it('MAT-07 captures workflow completion inside the task transaction when enabled
     app()->register(WorkflowServiceProvider::class);
     expect($this->migrateWorkflow())->toBe(0);
     app()['config']->set('corex-workflow.enforce_declarations', false);
-    app()['config']->set('corex-task-recurrence.completion_capture.enabled', true);
+    app()['config']->set('corex-tasks-workflow.completion_capture.enabled', true);
     app()->forgetScopedInstances();
 
     $set = SeriesSeeder::dailySet('series-pg-07', 'rev-1', 1);

@@ -750,71 +750,16 @@ parameters:
 			count: 1
 			path: scripts/ownership-gate.php
 
-		-
-			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
-			identifier: foreach.nonIterable
-			count: 2
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Offset ''line_exemptions'' on array{old: string, new: string, item: string, allowlist_globs: list<string>, match: string} on left side of ?? does not exist.'
-			identifier: nullCoalesce.offset
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Offset ''match'' on array{old: string, new: string, item: string, allowlist_globs: list<string>} on left side of ?? does not exist.'
-			identifier: nullCoalesce.offset
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #1 $tokens of function dedupeTokens expects list<array{old: string, new: string, item: string, allowlist_globs: list<string>}>, list<array{old: string, new: string, item: string, match: string, allowlist_globs: list<string>, line_exemptions: list<string>}> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #1 ...$arrays of function array_merge expects array, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #2 $globs of function pathMatchesAnyGlob expects list<string>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #2 $roots of function listTrackedFiles expects list<string>, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #3 $entry of function lineNumberOfToken expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #3 $entry of function tokenMatches expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: 'Parameter #4 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
-		-
-			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
-			identifier: ternary.shortNotAllowed
-			count: 1
-			path: scripts/p15-rename-completeness-gate.php
 
 		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'

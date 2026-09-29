@@ -24,7 +24,7 @@ use Throwable;
  * concurrent {@see fanOut()} waves converge on the latest state instead of
  * an older job clobbering a newer one. Any failure — missing identity,
  * missing account, a tenant-context error — is swallowed into
- * `sync_status=failed` (AC-16 г): retried later by `identities:reconcile`,
+ * `sync_status=failed` (AC-16 г): retried later by `corex:tenancy:reconcile-identities`,
  * never left to throw across the whole fan-out.
  */
 final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer

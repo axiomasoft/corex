@@ -88,7 +88,7 @@ function newModuleRegistry(
         stateReader: $reader,
         cache: $cache ?? new RepositoryModuleRegistryCache(
             Cache::store(),
-            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules']]),
+            ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
         ),
         versionResolver: $versionResolver ?? static fn (TenantContext $ctx): int => 0,
         failIfMissing: $failIfMissing,
@@ -357,7 +357,7 @@ it('reads active()/isActive() on a non-taggable file store without BadMethodCall
     ]);
     $fileCache = new RepositoryModuleRegistryCache(
         Cache::store('file'),
-        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex-modules-a1']]),
+        ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules-a1']]),
     );
     $registry = newModuleRegistry($path, $reader, cache: $fileCache);
     $ctx = moduleRegistryCtx('acc-1');
@@ -450,14 +450,14 @@ it('rejects a corrupt compiled artifact and keeps activation off the fingerprint
 it('builds the registry cache from configured Options — store, ttl and prefix are read, not hardcoded (A45/A46)', function (): void {
     // Point the module cache at a named array store and a custom prefix, then
     // assert the resolved cache writes the epoch-stamped key THERE — proving
-    // config('corex-modules.cache.*') drives the binding (no hardcoded 3600).
-    config()->set('corex-modules.cache.store', 'array');
-    config()->set('corex-modules.cache.prefix', 'cfg-driven');
-    config()->set('corex-modules.cache.ttl', 3600);
+    // config('corex.modules.cache.*') drives the binding (no hardcoded 3600).
+    config()->set('corex.modules.cache.store', 'array');
+    config()->set('corex.modules.cache.prefix', 'cfg-driven');
+    config()->set('corex.modules.cache.ttl', 3600);
 
     // Options is a provider-time snapshot. Replace it after changing test
     // config, then rebuild the already-resolved cache singleton.
-    $this->app->instance(ModulesOptions::class, ModulesOptions::fromArray(config('corex-modules')));
+    $this->app->instance(ModulesOptions::class, ModulesOptions::fromArray(config('corex.modules')));
     $this->app->forgetInstance(ModuleRegistryCache::class);
     $cache = $this->app->make(ModuleRegistryCache::class);
     $cache->rememberEnabled('acc-9', 7, static fn (): array => ['corex/alpha' => ['state' => 'enabled', 'edition' => 'standard']]);

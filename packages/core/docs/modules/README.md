@@ -20,15 +20,15 @@ lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр �
 
 ```bash
 # 1. Скопировать миграции в приложение
-php artisan vendor:publish --tag=corex-modules-migrations
+php artisan vendor:publish --tag=corex-migrations
 
 # 2. Прогнать их НА ТЕНАНТСКОМ коннекшене
 php artisan migrate --database=<tenant>
 ```
 
-Тег `corex-modules-migrations-tenant` — синоним, явно называющий скоуп
+Тег `corex-migrations-tenant` — синоним, явно называющий скоуп
 коннекшена (`mod_*` — тенант-схема). Коннекшн, на котором работает hot-path
-реестра и lifecycle, задаётся `config('corex-modules.connection')` (`null` =
+реестра и lifecycle, задаётся `config('corex.modules.connection')` (`null` =
 дефолтный; под P2 stancl подменяет дефолт на базу тенанта).
 
 ### Версия схемы и апгрейды

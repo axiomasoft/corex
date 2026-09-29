@@ -51,11 +51,11 @@ final class LifecycleRegistrar implements PackageRegistrar
         // installed.json (empty autowired arrays = migrations never run
         // in prod). Exposed as an overridable binding so tests inject stub paths
         // and resolve the lifecycle from the container, not a hand-built ctor.
-        $app->singleton('corex-modules.wiring', fn (): array => $this->moduleWiring());
+        $app->singleton('corex.modules.wiring', fn (): array => $this->moduleWiring());
 
         $app->singleton(ModuleLifecycle::class, static function (Application $app): DatabaseModuleLifecycle {
             /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
-            $wiring = $app->make('corex-modules.wiring');
+            $wiring = $app->make('corex.modules.wiring');
             $connection = $app->make(ModulesOptions::class)->connection;
 
             return new DatabaseModuleLifecycle(

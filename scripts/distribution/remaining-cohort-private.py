@@ -223,7 +223,7 @@ def stage_private_repository(inspection: dict, auth_ver: str) -> tuple[Path, dic
     artifacts = staging / 'artifacts'
     artifacts.mkdir(parents=True, exist_ok=True)
     private_zip = artifacts / 'azguard-core-private.zip'
-    auth_zip = artifacts / 'corex-auth.zip'
+    auth_zip = artifacts / 'corex-access.zip'
     private_sha, composer_sha, private_requires = azguard_archive(private_zip, inspection)
     auth_sha = auth_archive(auth_zip, auth_ver)
     metadata_path = staging / 'packages.json'

@@ -40,7 +40,7 @@ abstract class TestCase extends SearchIntlTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('corex-intl-search.enabled', true);
+        $this->app['config']->set('corex-search-intl.enabled', true);
         $this->app->scoped(LocalizedFieldProjector::class);
         $this->app->scoped(SavedViewLabelReader::class, SqlSavedViewLabelReader::class);
     }
@@ -50,7 +50,7 @@ abstract class TestCase extends SearchIntlTestCase
     {
         parent::defineEnvironment($app);
 
-        $app['config']->set('corex-intl-search.enabled', true);
+        $app['config']->set('corex-search-intl.enabled', true);
         $app['config']->set('corex-intl.locale.supported_tags', ['en', 'ru', 'en-US', 'ru-RU']);
         $app['config']->set('corex-intl.locale.app_tag', 'en');
     }

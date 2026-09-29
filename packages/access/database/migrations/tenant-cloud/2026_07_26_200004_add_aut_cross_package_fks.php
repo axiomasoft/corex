@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 // (AC-28 — axiomasoft/corex-access must be fully functional without it). tenant/
 // migrations above carry no FK/hasTable-guard on these two columns — a
 // silent guard-skip in the cloud profile would be indistinguishable from
-// success. Publish-tag corex-auth-migrations-tenant-cloud (cloud profile
+// success. Publish-tag corex-access-migrations-tenant-cloud (cloud profile
 // only; boxed publishes tenant/ alone).
 return new class extends Migration
 {

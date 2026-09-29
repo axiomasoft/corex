@@ -64,7 +64,7 @@ final readonly class ScopeMapVersion
     {
         $accountId = $this->tenantContext->current()->account->id;
 
-        return "corex-auth.scope-map.{$accountId}.{$roleId}";
+        return "corex-access.scope-map.{$accountId}.{$roleId}";
     }
 
     private function store(): Repository

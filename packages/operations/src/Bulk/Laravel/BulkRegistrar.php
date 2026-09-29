@@ -29,7 +29,7 @@ final readonly class BulkRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-api.bulk');
+        $config = $app['config']->get('corex-operations.bulk');
         $options = BulkOptions::fromArray(is_array($config) ? $config : []);
         $app->instance(BulkOptions::class, $options);
         $app->singleton(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(

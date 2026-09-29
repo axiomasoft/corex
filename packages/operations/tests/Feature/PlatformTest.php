@@ -153,7 +153,7 @@ final class PlatformTest extends TestCase
     {
         $this->allow();
         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
-        $this->app['config']->set('corex-api.require_physical_tenancy', false);
+        $this->app['config']->set('corex-operations.require_physical_tenancy', false);
         self::assertSame(201, $this->dispatch()->getStatusCode());
     }
 

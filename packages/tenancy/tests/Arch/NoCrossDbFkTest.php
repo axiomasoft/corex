@@ -11,7 +11,7 @@ declare(strict_types=1);
 //
 // Плюс arch-тест «migration-path partition» (pre-mortem A4, Scope Included
 // P2.13): файл миграции классифицируется root|tenant ПО ДИРЕКТОРИИ, множества
-// путей central- и tenant-раннеров дизъюнктны, `tenants:migrate` грузит только
+// путей central- и tenant-раннеров дизъюнктны, `corex:tenancy:migrate` грузит только
 // tenant-пути — так root_-таблица в тенант-БД (и наоборот) невозможна по
 // конструкции, а не по внимательности автора миграции.
 //
@@ -326,8 +326,8 @@ test('the central and tenant runners load disjoint migration paths', function ()
     $orchestrator = (string) file_get_contents($packageRoot.'/src/Provisioning/Migrations/MigrationWaveOrchestrator.php');
 
     // Публикация разведена по тегам: root-директория — только под
-    // `tenancy-migrations` (central-коннект), tenant-директория — только под
-    // `tenancy-migrations-tenant`.
+    // `corex-tenancy-migrations` (central-коннект), tenant-директория — только под
+    // `corex-tenancy-migrations-tenant`.
     preg_match_all(
         "/__DIR__\.'\/\.\.\/database\/migrations\/(root|tenant)'.*?\], '([a-z-]+)'/s",
         $provider,
@@ -341,7 +341,7 @@ test('the central and tenant runners load disjoint migration paths', function ()
         $tags[$publish[1]] = $publish[2];
     }
 
-    expect($tags)->toBe(['root' => 'tenancy-migrations', 'tenant' => 'tenancy-migrations-tenant']);
+    expect($tags)->toBe(['root' => 'corex-tenancy-migrations', 'tenant' => 'corex-tenancy-migrations-tenant']);
 
     // Ни одна из директорий не загружается безусловно: ВЫЗОВ
     // `$this->loadMigrationsFrom(...)` погнал бы root_ DDL на коннект по
@@ -349,7 +349,7 @@ test('the central and tenant runners load disjoint migration paths', function ()
     // докблок провайдера объясняет ровно это решение и обязан остаться.
     expect(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);
 
-    // `tenants:migrate` (волна P2.12) знает ТОЛЬКО tenant-путь.
+    // `corex:tenancy:migrate` (волна P2.12) знает ТОЛЬКО tenant-путь.
     preg_match_all("/database\/migrations\/(root|tenant)/", $orchestrator, $runnerPaths);
 
     expect($runnerPaths[1])->not->toBe([])

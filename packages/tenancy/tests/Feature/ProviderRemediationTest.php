@@ -30,7 +30,7 @@ it('executes the configured provisioning pipeline', function (): void {
 });
 
 it('publishes control plane migrations only to the documented root directory', function (): void {
-    $this->artisan('vendor:publish', ['--tag' => 'tenancy-migrations', '--force' => true])->assertSuccessful();
+    $this->artisan('vendor:publish', ['--tag' => 'corex-tenancy-migrations', '--force' => true])->assertSuccessful();
     expect(glob(database_path('migrations/*.php')))->toBe([])
         ->and(glob(database_path('migrations/root/*.php')))->not->toBeEmpty();
 });

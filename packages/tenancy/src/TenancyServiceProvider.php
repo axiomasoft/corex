@@ -49,18 +49,18 @@ final class TenancyServiceProvider extends ServiceProvider
         // `migrate --database=<central> --path=database/migrations/root`.
         $this->publishes([
             __DIR__.'/../database/migrations/root' => database_path('migrations/root'),
-        ], 'tenancy-migrations');
+        ], 'corex-tenancy-migrations');
 
         // Tenant-DB DDL (`users`, D14/D16) — same publish-only rationale as
         // root above; a consumer's golden-template build assembles these
         // (P2.12), never an ad hoc migrate on a live tenant connection.
         $this->publishes([
             __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
-        ], 'tenancy-migrations-tenant');
+        ], 'corex-tenancy-migrations-tenant');
 
         $this->publishes([
             __DIR__.'/../config/tenancy.php' => config_path('tenancy.php'),
-        ], 'tenancy-config');
+        ], 'corex-tenancy-config');
 
         foreach ($this->registrars() as $registrar) {
             $registrar->boot($this->app);

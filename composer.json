@@ -167,7 +167,7 @@
         "tenancy-structure-gate": "python3 scripts/tenancy-structure-gate.py check",
         "table-write-ownership-gate": "php scripts/table-write-ownership-gate.php",
         "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",
-        "p15-rename-completeness-gate": "bash scripts/ci-deferred-guard.sh php scripts/p15-rename-completeness-gate.php",
+        "rename-completeness": "php scripts/rename-completeness-gate.php",
         "config-composition-gate": "bash scripts/ci-deferred-guard.sh php scripts/config-composition-gate.php",
         "table-ownership-gate": "bash scripts/ci-deferred-guard.sh php scripts/table-ownership-gate.php",
         "contract-guard": "bash scripts/contract-guard.sh",
@@ -182,7 +182,7 @@
         "refactor:check": "vendor/bin/rector process --dry-run",
         "manifests:check": "python3 scripts/manifest-check.py",
         "golden": "vendor/bin/pest --testsuite=Golden",
-        "ownership-gate": "php scripts/ownership-gate.php",
+        "ownership-gate": "php scripts/ownership-gate.php --strict",
         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
         "deps:analyse": "bash scripts/dependency-analyser.sh --all"
     }

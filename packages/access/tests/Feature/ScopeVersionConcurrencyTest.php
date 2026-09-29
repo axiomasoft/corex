@@ -29,7 +29,7 @@ it('invalidates the captured tenant even when the active context changes before 
 
 it('retains every concurrent invalidation even on the non-atomic file cache', function (): void {
     $path = database_path('version-cache');
-    config(['cache.stores.remediation' => ['driver' => 'file', 'path' => $path], 'corex-auth.cache.store' => 'remediation']);
+    config(['cache.stores.remediation' => ['driver' => 'file', 'path' => $path], 'corex-access.cache.store' => 'remediation']);
     $processes = [];
     for ($worker = 0; $worker < 4; $worker++) {
         $process = new Process([PHP_BINARY, __DIR__.'/../Fixtures/BumpScopeVersion.php', $path]);

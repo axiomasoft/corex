@@ -187,6 +187,16 @@ try {
 
                     continue;
                 }
+
+                $upstreamConfig = is_array($rule) ? ($rule['upstream_config'] ?? []) : [];
+
+                if (! is_array($upstreamConfig)) {
+                    throw new RuntimeException('invalid upstream config for '.$packageKey);
+                }
+
+                if ($kind === 'config' && in_array($id, $upstreamConfig, true)) {
+                    continue;
+                }
                 $field = ['config' => 'config', 'tag' => 'tag_prefix', 'env' => 'env_prefix', 'command' => 'command_prefix'][$kind];
                 $expected = $rule[$field];
 
