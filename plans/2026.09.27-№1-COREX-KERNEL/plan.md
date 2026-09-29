@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28) |
+| Authoring Model | claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -123,7 +123,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00, P01, P02. Фазы P03–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01, P02, P03. Фазы P04–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
@@ -139,6 +139,8 @@ operations, независимые модули, детерминированн�
 | B02-A | P02.2 | implementation/high | manual | full | recommended: швы operations тем же инструментарием и runbook; вторым в B02-A, после зелёного P02.1. |
 | solo | P02.3 | implementation/xhigh | manual | full | recommended: механический перенос ≥500 файлов с сухим прогоном и полным стеком — отдельная сессия и максимальный effort класса. |
 | solo | P02.4 | implementation/high | manual | full | recommended: идентификаторы и гейты на перенесённом дереве; отдельная сессия после P02.3. |
+| solo | P03.1 | implementation/high | manual | full | recommended: гейт раскладки, ретайр гейта tenancy и STR-доктрина — CI/docs-контекст, отдельный от массового переноса; первым в P03. |
+| solo | P03.2 | implementation/xhigh | manual | full | recommended: механический перенос 278 классов с сухим прогоном, Rector и полным стеком — отдельная сессия и максимальный effort класса, как P02.3; после зелёного P03.1. |
 
 ## 4. Update Log
 
@@ -157,6 +159,7 @@ operations, независимые модули, детерминированн�
 | 2026-09-28 | `task:plan-design finish`: согласованы P00–P02; execution-sheet строки 5 (B02-A), 6 (solo P02.3, implementation/xhigh), 7 (solo P02.4); P02 допускается после GREEN design audit и O-3. Граница — дизайн P00–P02 по D24. | designer/claude-opus-5-5/high |
 
 | 2026-09-28 | Owner-authorized same-session P02 A1–A4 remediation: D46, config-filename references and negative gates, root classmap/files projection and existence checks, predecessor-produced Required Read, protected Golden diff scope; dossier/examples aligned. Product unchanged; actual implementation/high, recommended frontier/high recorded. | fixer/codex/gpt-6-sol/high |
+| 2026-09-29 | `task:plan-design P03`: `backlog/P03.md` → `phases/P03/`, items P03.1–P03.2, D57 (заменяет D05: корень пакета = модуль, 278 переносов, 68 остаются, продукт вне N5, гейт `module-layout` R0–R5, ретайр `tenancy-structure-gate`), glossary N5; досье `research/P03-design.md`, примеры/скрипты/эталоны `artifacts/P03-design/`, `artifacts/P03/`; черновые выводы проверены (поправки: 23 внешних FQCN меняются, продукт не переносится, config/glossary-классы остаются); Routing solo P03.1, solo P03.2. | claude-opus-5-5/high |
 
 ## 5. Decision Log
 

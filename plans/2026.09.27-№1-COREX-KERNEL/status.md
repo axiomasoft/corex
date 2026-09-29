@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-09-29
-inputs_sha256: 602314b33d045bc934b1a5331af1dd171f8230015c6dde6f0b256833480a2e6f
+inputs_sha256: fca7881aa39ee9b87e1a00a08f4c06b6428f41861e7d10471fbe6728f9cd6032
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟢 Done |
+| Status | 🟡 In progress |
 | Last Updated | 2026-09-29 |
 
 ## 4. Phase Index & Status Board
@@ -26,6 +26,7 @@ generated_by: task plan-views status
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
+| P03 | Feature modules и `Internal` | 0/2 | ⬜ Not started |
 
 ## Phase P00
 
@@ -52,6 +53,13 @@ generated_by: task plan-views status
 | P02.2 | Operations отдаёт webhooks и tools через SPI | 🟢 Done | 2026-09-28 |
 | P02.3 | Механический перенос по картам P00 | 🟢 Done | 2026-09-29 |
 | P02.4 | Идентификаторы пакетов и гейт полноты переименований | 🟢 Done | 2026-09-29 |
+
+## Phase P03
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P03.1 | Гейт раскладки модулей и доктрина STR | ⬜ Not started | — |
+| P03.2 | Перенос по карте модулей | ⬜ Not started | — |
 
 ## 6. Update Log
 
@@ -150,6 +158,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · P02 local closure: all four items GREEN, direct-close allow; no phase audit admitted. Proof: artifacts/P02.4-execution/phase-close-admission.json. Hosted CI owner-deferred under D47. |
 | 2026-09-29 | cursor/grok-4.7 | plan-audit · in-progress · P02 phase audit reserved. Candidate 8a70cb68 matches grant. Product read-only. D47 hosted CI not certified. Pinned route frontier/xhigh. |
 | 2026-09-29 | cursor/grok-4.7 | plan-audit · audit-green · GREEN: P02.1–P02.4 contracts hold after moves and renames. Hosted CI stays deferred under D47. findings/P02-phase-audit.md. Product unchanged. |
+| 2026-09-29 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-09-29 | claude-code/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 

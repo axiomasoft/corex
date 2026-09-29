@@ -1,6 +1,6 @@
-# HANDOFF — 2026-09-29 — after P02
+# HANDOFF — 2026-09-29 — after P03
 
-**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P03
+**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
 
 | Параметр | Значение |
 |:--|:--|
@@ -8,21 +8,21 @@
 | Model class | frontier |
 | Effort | high |
 | Capabilities | — |
-| Context | cold-start-root: owner-requested-new-session |
-| Суть | Дизайн P03 по фактам облака (`artifacts/P03-design/cloud/`) и черновым выводам `artifacts/P03-design/design-notes.md`: D57, items, досье, примеры, finish. |
+| Context | cold-start-root: whole-plan-independent-audit |
+| Суть | Независимый аудит дизайна P00–P03 (текущий fingerprint после finish) моделью, не автором дизайна (D56). После GREEN — исполнение строки 8 execution-sheet (`roadmap.md` §P03 — последовательность команд, шаг 3). |
 
 **Provider-native command:**
 
-```text
-/task:plan-design 2026.09.27-№1-COREX-KERNEL P03
+```bash
+codex -C "$(git rev-parse --show-toplevel)" -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
 ```
 
-**Done:** P02 закрыта: Phase Handoff в `phases/P02/P02.md`, GREEN фазовый аудит D55, hosted CI отложен (D47). Для P03 снят внешний ресерч: E1 — Pest 5 arch не выражает раскладку каталогов и связь «тот же модуль», поэтому гейт раскладки — собственный скрипт; E2 — PHPStan `@internal` работает по первому сегменту namespace (переиспользовано). Задание облаку — `artifacts/P03-design/cloud-brief.md`: инвентарь, формы пакетов, внутрипакетные ссылки, потребители, строковые FQCN, нарушения D05 L1–L5, два варианта карты модулей S1/S2.
+**Done:** Finish дизайна P00–P03 (2026-09-29): `plan-lint` OK, execution-sheet строки 8–9 согласованы с Routing P03, fingerprint записан. `backlog/P03.md` → `phases/P03/P03.md` + `P03.1.md`, `P03.2.md`. D57 (заменяет D05): корень `src/` пакета = корневой модуль, feature modules — подкаталоги с тем же набором; карта `artifacts/P03/module-map.tsv` — 278 переносов, 68 классов остаются на месте (внешний потребитель, `config/*.php` пакета, glossary), продукт вне N5 (N8), 0 коллизий; гейт `module-layout-gate` R0–R5 с ratchet-baseline (сейчас 436 → после переноса 159); ретайр красного `tenancy-structure-gate`; golden без rebaseline через `manual`-правила; glossary N5. Черновые выводы проверены, поправки — в D57 п.3–4. Проверено на `52446de`: скан воспроизводится, `p03-transfer.py plan` 0 problems, сухой прогон без Rector + `verify` 0 problems, гейт на перенесённом дереве = прогноз, тест гейта 3/3 OK.
 
-**Remaining:** облачный скан выполнен (`1350c1c`, слит в `main`); прототип карты модулей и черновые выводы — `artifacts/P03-design/design-notes.md`; D56 (уроки облачных сессий) принято → `task:plan-design 2026.09.27-№1-COREX-KERNEL P03` (claude-code opus: слияние фактов, решение S1/S2, items, досье, finish) → `task:plan-audit … design` (не автор) → исполнение Codex по execution-sheet.
+**Remaining:** `task:plan-audit … design` Codex gpt-6-sol/high (не автор) → P03.1, P03.2 по execution-sheet строки 8–9 → фазовый аудит → закрытие; все команды — `roadmap.md` §P03 — последовательность команд. Носители плана сводит только автор плана (D56).
 
-**Sources of truth:** phases/P02/P02.md; phases/P02/P02.closed.md; findings/P02-phase-audit.md; backlog/P03.md; research/P03-design-rag.md; artifacts/P03-design-rag/README.md; artifacts/P03-design/cloud-brief.md; artifacts/P03-design/cloud/README.md; artifacts/P03-design/design-notes.md; decisions/D56-cloud-sessions-and-relay-lessons.md.
+**Sources of truth:** phases/P03/P03.md; phases/P03/P03.1.md; phases/P03/P03.2.md; decisions/D57-p03-feature-module-layout.md; research/P03-design.md; research/P03-design-rag.md; artifacts/P03-design/examples.md; artifacts/P03-design/scripts/; artifacts/P03/; artifacts/P03-design/cloud/README.md; artifacts/P03-design-rag/README.md.
 
-**Open risks:** Hosted CI не проверялся с P01 (D47). Однофункциональные пакеты держат корзины на уровне пакета: выбор S1/S2 меняет объём переноса и публичную поверхность, решается в дизайне P03 по фактам облака.
+**Open risks:** Rector-шаг и полный тестовый стек переноса не прогонялись в дизайне (нет `vendor` в scratch-worktree) — проверяются в обязательном сухом прогоне P03.2. 23 публичных FQCN, которые называют другие пакеты, меняются (D01). Hosted CI отложен (D47).
 
-**Workarounds/Deferred/Open questions:** В облаке нет Task/MCP — носители плана ведёт только автор плана (вариант C).
+**Workarounds/Deferred/Open questions:** 68 классов в `public-by-usage.tsv` и 91 межмодульная ссылка в `Internal` (R5) остаются в baseline гейта до P04. Модели/jobs без morph-алиаса: сохранённые FQCN не мигрируются (D01, CHANGELOG).

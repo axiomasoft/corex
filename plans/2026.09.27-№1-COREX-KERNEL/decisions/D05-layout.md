@@ -1,11 +1,11 @@
 ---
 id: D05
 date: 2026-09-27
-status: accepted
+status: superseded
 item: P03
 items: [P03]
 supersedes: []
-superseded_by: null
+superseded_by: D57
 ---
 # D05 — layout (accepted)
 

@@ -10,10 +10,11 @@
 | `artifacts/P00-design/facts/` | сырые факты репозитория для P00 | P00 |
 | `research/P00-design.md`, `research/P00-design-rag.md`, `artifacts/P00-design/examples.md`, `artifacts/P00-design-rag/README.md` | досье дизайна P00 | P00 |
 | `research/P01-design.md`, `research/P01-design-rag.md`, `artifacts/P01-design/{examples.md,facts/,scripts/}`, `artifacts/P01-design-rag/` | досье дизайна P01 | P01 |
-| `decisions/D01–D39` | принятые решения | все |
+| `research/P02-design.md`, `research/P03-design.md` (+ `-rag.md`), `artifacts/P0{2,3}-design/`, `artifacts/P03/` | досье дизайна P02/P03, карта модулей P03 | P02, P03 |
+| `decisions/D01–D57` | принятые решения | все |
 | `research/03-glossary.md`, `research/04-architecture.md` | имена и норма ядра (P00) | P01–P09 |
 | `phases/Pnn/Pnn.md` | индекс детализированной фазы (P00 закрыта, P01) | фаза |
-| `backlog/Pnn.md` | skeleton фаз P02–P09 до их дизайна (D24) | фаза |
+| `backlog/Pnn.md` | skeleton фаз P04–P09 до их дизайна (D24) | фаза |
 | `roadmap.md` | карта фаз + execution-sheet | все |
 | `session-routing.md` | pool моделей, native launch, review runbook | все |
 | `open-questions.md` | открытые развилки и owner-gates | — |
