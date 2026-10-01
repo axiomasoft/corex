@@ -1,0 +1,2 @@
+> python3 scripts/module-layout-gate.py
+module-layout OK: 1209 files, 0 violations, 0 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0

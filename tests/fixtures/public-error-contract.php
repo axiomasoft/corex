@@ -45,9 +45,9 @@ return [
     ],
     'dynamic_adapters' => [
         ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/webhooks/src/Internal/WebhookTopicCatalogue.php', 'adapter' => 'declared-webhook-topic-admission', 'sha256' => 'ed63147b2a68eaed01ae8bc6a2af337b8b93a54d7a1c3f4e9fe225992d7b5e43'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Exceptions/ApiError.php', 'adapter' => 'api-error-instance-descriptor', 'sha256' => 'ee59caeac9eb6c02575a9deb0ec041f3c7910bb603b75b0ea99f466fd761290e'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php', 'adapter' => 'stored-api-error-outcome', 'sha256' => '850cc7832066d5b50d9475a858d20ddb235cd716713a2ae7b9d72fab8201aaeb'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php', 'adapter' => 'field-path-api-error', 'sha256' => 'b17ba7eb8e4dcc5dc65534b6a1d5445f2c31f36644adf16a4c8cacc8711dcc72'],
-        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php', 'adapter' => 'descriptor-and-framework-status-map', 'sha256' => '738384b0209e19eb524f07bb85aa3aa5dacf28c6bb43e119f1d6507176422208'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Exceptions/ApiError.php', 'adapter' => 'api-error-instance-descriptor', 'sha256' => '4e46ee7d7fe14f8856f0ac5d39712b0e002900796e21f0e9fb73bea2f26df12d'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php', 'adapter' => 'stored-api-error-outcome', 'sha256' => '7ba4a169cdd41a9d858ee0994075925f19d1583815b8b0a8c615ec2b44b6021a'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php', 'adapter' => 'field-path-api-error', 'sha256' => 'ef02a7237511b3aa9c9504658d7bd7f4a165b801ec71a517bb7092ba6525d5d7'],
+        ['owner' => 'axiomasoft/corex-operations', 'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php', 'adapter' => 'descriptor-and-framework-status-map', 'sha256' => 'b18c3bf07c5d5423e682633ce9c5ffe1754f112daa22a05654ea7690bdfaa6f6'],
     ],
 ];

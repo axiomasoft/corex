@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Media\Data;
 
 use Closure;
+use CoreX\Attributes\Api;
 
+#[Api(since: '1.0')]
 final readonly class MediaReadRef
 {
     /** @param Closure():resource $openStream */

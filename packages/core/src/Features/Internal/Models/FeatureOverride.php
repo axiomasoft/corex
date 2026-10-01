@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Internal\Models;
 
-use CoreX\Config\Config;
-use CoreX\Database\HasConfiguredId;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\Database\Laravel\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
@@ -41,6 +41,6 @@ final class FeatureOverride extends Model
     #[Override]
     public function getTable(): string
     {
-        return Config::featureOverridesTable();
+        return app(CoreOptions::class)->featureOverridesTable;
     }
 }

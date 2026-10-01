@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Testing;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -12,6 +14,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ContextFixture implements TenancyManager, TenantContextResolver
 {
     public ?TenantContext $value = null;

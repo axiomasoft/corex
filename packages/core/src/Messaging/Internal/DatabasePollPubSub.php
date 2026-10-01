@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal;
 
 use Closure;
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Database\ConnectionInterface;
@@ -58,7 +58,7 @@ final class DatabasePollPubSub implements PubSub
                 bindings: ['corex-pubsub:'.$channel],
             );
 
-            $connection->table(Config::pubsubMessagesTable())->insert([
+            $connection->table(app(CoreOptions::class)->pubsubMessagesTable)->insert([
                 'channel' => $channel,
                 'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
                 'created_at' => now(),
@@ -86,11 +86,11 @@ final class DatabasePollPubSub implements PubSub
         string $subscriber = 'default',
         bool $replayBacklog = false,
     ): void {
-        SubscribeGuard::assert($this->runtime, Config::pubsubOctaneWorkerOptIn(), self::class);
+        SubscribeGuard::assert($this->runtime, app(CoreOptions::class)->pubsubOctaneWorkerOptIn, self::class);
 
         $connection = DB::connection($this->connection);
-        $messagesTable = Config::pubsubMessagesTable();
-        $cursorsTable = Config::pubsubCursorsTable();
+        $messagesTable = app(CoreOptions::class)->pubsubMessagesTable;
+        $cursorsTable = app(CoreOptions::class)->pubsubCursorsTable;
 
         $cursor = $this->loadOrBootstrapCursor($connection, $cursorsTable, $messagesTable, $channel, $subscriber, $replayBacklog);
         $polls = 0;
@@ -114,7 +114,7 @@ final class DatabasePollPubSub implements PubSub
             $polls++;
 
             if ($maxPolls === null || $polls < $maxPolls) {
-                usleep($this->pollIntervalMicroseconds ?? Config::pubsubPollIntervalMicroseconds());
+                usleep($this->pollIntervalMicroseconds ?? app(CoreOptions::class)->pubsubPollIntervalMicroseconds);
             }
         }
     }

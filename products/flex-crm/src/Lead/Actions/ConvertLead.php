@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Lead\Actions;
 
 use Brick\Money\Money;
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Enums\IdStrategy;
 use Flex\Crm\Company\Actions\CreateCompany;
 use Flex\Crm\Company\Data\CompanyData;
@@ -89,7 +89,7 @@ final class ConvertLead
                 }
                 $values = ['deal_id' => $deal->id, 'contact_id' => $contact->id, 'is_primary' => true, 'created_at' => now(), 'updated_at' => now()];
 
-                if (Config::idStrategy() !== IdStrategy::Int) {
+                if (app(CoreOptions::class)->idStrategy !== IdStrategy::Int) {
                     $values['id'] = $deal->newUniqueId();
                 }
                 $deal->getConnection()->table('crm_deal_contacts')->insert($values);

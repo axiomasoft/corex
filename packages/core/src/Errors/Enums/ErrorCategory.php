@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Errors\Enums;
 
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 enum ErrorCategory: string
 {
     case Authentication = 'authentication';

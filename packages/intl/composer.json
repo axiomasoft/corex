@@ -51,7 +51,13 @@
                 "CoreX\\Intl\\Territory\\Data",
                 "CoreX\\Intl\\Territory\\Exceptions",
                 "CoreX\\Intl\\Translation\\Contracts",
-                "CoreX\\Intl\\Translation\\Data"
+                "CoreX\\Intl\\Translation\\Data",
+                "CoreX\\Intl\\Currency\\Laravel\\ConversionPolicy",
+                "CoreX\\Intl\\Currency\\Laravel\\ConversionReceipt",
+                "CoreX\\Intl\\IntlModule",
+                "CoreX\\Intl\\IntlServiceProvider",
+                "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
+                "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings"
             ]
         },
         "laravel": {

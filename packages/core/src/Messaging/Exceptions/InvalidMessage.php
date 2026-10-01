@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Exceptions;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final class InvalidMessage extends InvalidArgumentException
 {
     public static function identity(string $name): self

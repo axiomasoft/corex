@@ -5,7 +5,8 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CoreServiceProvider;
-use CoreX\Time\FrozenClock;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
@@ -61,7 +62,7 @@ final class PayloadRecordingWakeupHandler implements DueWakeupHandler
 
     public function handle(WakeupDelivery $delivery): void
     {
-        $this->payloads[] = $delivery->request->payload;
+        $this->payloads[] = JsonDocuments::map($delivery->request->payload);
     }
 }
 
@@ -93,7 +94,7 @@ it('persists idempotent requests and completes the local handler once', function
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
     $scheduler = app(WakeupScheduler::class);
-    $request = new WakeupRequest($context, 'test.reminder', 'reminder-1', new DateTimeImmutable('-1 minute'), null, ['message' => 'wake']);
+    $request = new WakeupRequest($context, 'test.reminder', 'reminder-1', new DateTimeImmutable('-1 minute'), null, JsonDocuments::capture(['message' => 'wake']));
 
     expect($scheduler->schedule($request)->status)->toBe('created')
         ->and($scheduler->schedule($request)->status)->toBe('existing');
@@ -123,7 +124,7 @@ it('stores a versioned envelope and exposes only business data to the handler', 
         requestKey: 'versioned-envelope',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: ['message' => 'wake'],
+        payload: JsonDocuments::capture(['message' => 'wake']),
     );
 
     expect(app(WakeupScheduler::class)->schedule($request)->status)->toBe('created');
@@ -175,7 +176,7 @@ it('keeps exact replay valid when only registry provenance changes', function ()
         requestKey: 'fingerprint-drift',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: ['message' => 'wake'],
+        payload: JsonDocuments::capture(['message' => 'wake']),
     );
     $schedulerA = new SqlWakeupScheduler(
         connection: DB::connection(),
@@ -233,7 +234,7 @@ it('retains the legacy digest algorithm for unstamped existing rows', function (
         requestKey: 'legacy-existing',
         fireAt: $fireAt,
         window: null,
-        payload: $payload,
+        payload: JsonDocuments::capture($payload),
     ));
 
     expect($result->status)->toBe('existing')
@@ -351,7 +352,7 @@ it('persists a retryable handler failure without reusing its generation', functi
         requestKey: 'failure-1',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ));
 
     $result = app(DueWakeupSweeper::class)->sweep($context, 10);
@@ -375,7 +376,7 @@ it('rejects unsafe request data before writing a durable request', function (): 
         requestKey: 'not-utc',
         fireAt: new DateTimeImmutable('2026-09-15T12:00:00+03:00'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ))->toThrow(InvalidArgumentException::class);
 
     expect(fn () => app(WakeupScheduler::class)->schedule(new WakeupRequest(
@@ -384,7 +385,7 @@ it('rejects unsafe request data before writing a durable request', function (): 
         requestKey: 'float-payload',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: ['amount' => 1.5],
+        payload: JsonDocuments::capture(['amount' => 1.5]),
     )))->toThrow(RuntimeException::class);
 
     expect(DB::table('sys_wakeup_requests')->count())->toBe(0);
@@ -408,7 +409,7 @@ it('keeps cancellation keys unambiguous across registered kinds and dispatches a
         requestKey: 'shared-key',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ))->status)->toBe('created');
 
     expect($scheduler->schedule(new WakeupRequest(
@@ -417,7 +418,7 @@ it('keeps cancellation keys unambiguous across registered kinds and dispatches a
         requestKey: 'shared-key',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ))->status)->toBe('conflict')
         ->and($hint->accounts)->toBe([$context->account->id])
         ->and(DB::table('sys_wakeup_requests')->count())->toBe(1);
@@ -437,7 +438,7 @@ it('makes cancellation outcomes explicit without depending on a root hint', func
         requestKey: 'cancelled',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: ['nested' => ['b' => 2, 'a' => true]],
+        payload: JsonDocuments::capture(['nested' => ['b' => 2, 'a' => true]]),
     ));
 
     expect($scheduler->cancel(context: $context, requestKey: 'cancelled'))->status->toBe('cancelled')
@@ -449,7 +450,7 @@ it('makes cancellation outcomes explicit without depending on a root hint', func
         requestKey: 'completed',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ));
     DB::table('sys_wakeup_requests')->where('request_key', 'completed')->update(['status' => 'completed']);
 
@@ -464,7 +465,7 @@ it('rejects unregistered handlers and invalid window contracts before scheduling
         requestKey: 'unknown-handler',
         fireAt: new DateTimeImmutable('2026-09-15T12:00:00Z'),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     );
 
     expect(fn () => app(WakeupScheduler::class)->schedule($request))->toThrow(RuntimeException::class)
@@ -492,7 +493,7 @@ it('computes handler backoff from the injected clock', function (): void {
         requestKey: 'backoff-steps',
         fireAt: $anchor->sub(new DateInterval('PT1M')),
         window: null,
-        payload: [],
+        payload: JsonDocuments::capture([]),
     ));
 
     $expectedOffsets = [2, 4, 8, 16];

@@ -1,0 +1,9 @@
+{
+  "name": "graph",
+  "command": "scripts/php84 php scripts/package-graph-gate.php",
+  "exit_code": 0,
+  "duration_ms": 390,
+  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "log": "validation-final/graph.log",
+  "log_sha256": "572cd24e26b0ec044bdc176553af7e6fd385d4104f04001d3dbfe5a4af4443a8"
+}

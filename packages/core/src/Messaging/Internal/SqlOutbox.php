@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Config;
+use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
@@ -43,7 +43,7 @@ final readonly class SqlOutbox implements Outbox
         $now = $this->clock->now();
         $metadata = $this->traces->inject(metadata: $message->metadata);
 
-        $this->connection->table(Config::outboxMessagesTable())->insert([
+        $this->connection->table(CoreOptionsParser::current()->outboxMessagesTable)->insert([
             'id' => $message->messageId,
             'name' => $message->name,
             'contract_version' => $message->contractVersion,

@@ -6,7 +6,7 @@ namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use InvalidArgumentException;
 use RuntimeException;

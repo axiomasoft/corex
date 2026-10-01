@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use CoreX\Operations\Tests\Support\ErrorBoundaryCountingHandler;
 use CoreX\Operations\Tests\Support\SyntheticPackageFailure;
 use CoreX\Operations\Tests\TestCase;
@@ -113,7 +115,7 @@ final class OperationErrorBoundaryTest extends TestCase
             $this->assertSame($category, $mapped->category);
             $this->assertSame($category === ErrorCategory::Unavailable, $mapped->retryable);
             $this->assertSame('/field', $mapped->path);
-            $this->assertSame(['reason' => $category->value], $mapped->details);
+            $this->assertSame(['reason' => $category->value], JsonDocuments::map($mapped->details));
             $this->assertStringNotContainsString('secret', $mapped->getMessage());
         }
     }
@@ -126,7 +128,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $mapped = (new ErrorMapper)->map(new RuntimeException('private SQLSTATE secret'));
         $this->assertCount(1, $reported);
         $this->assertSame('internal_error', $mapped->errorCode);
-        $this->assertSame([], $mapped->details);
+        $this->assertSame([], JsonDocuments::map($mapped->details));
         $this->assertStringNotContainsString('secret', $mapped->getMessage());
         $this->assertSame($mapped->errorCode, (new ErrorMapper)->map($mapped)->errorCode);
         $this->assertCount(1, $reported);
@@ -169,7 +171,7 @@ final class OperationErrorBoundaryTest extends TestCase
 
         $this->assertSame(422, $validation->status);
         $this->assertSame(ErrorCategory::Validation, $validation->category);
-        $this->assertSame(['title' => ['Required.']], $validation->details);
+        $this->assertSame(['title' => ['Required.']], JsonDocuments::map($validation->details));
         $this->assertSame(409, $http->status);
         $this->assertSame('conflict', $http->errorCode);
         $this->assertSame(ErrorCategory::Conflict, $http->category);
@@ -186,7 +188,7 @@ final class OperationErrorBoundaryTest extends TestCase
             'X-Request-ID' => 'req-123',
             'X-Correlation-ID' => 'corr-456',
         ]);
-        $metadata = InvocationMetadata::fromRequest(
+        $metadata = InvocationMetadataFactory::fromRequest(
             request: Request::create('/denied/v2', 'GET', server: [
                 'HTTP_X_REQUEST_ID' => 'req-123',
                 'HTTP_X_CORRELATION_ID' => 'corr-456',

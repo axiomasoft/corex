@@ -10,7 +10,7 @@ use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;

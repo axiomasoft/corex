@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Tests\Stubs\Widget;
 
 // P2.9/A9 — introducing Ownable/WorkspaceScoped must not shift the existing

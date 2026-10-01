@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TransferServiceProvider extends ServiceProvider
 {
     #[Override]

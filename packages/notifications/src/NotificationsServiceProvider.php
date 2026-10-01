@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Internal\ChannelDrivers;
@@ -12,6 +14,7 @@ use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
 use CoreX\Notifications\Delivery\Internal\DeliveryStore;
 use CoreX\Notifications\Delivery\Internal\InAppChannelDriver;
 use CoreX\Notifications\Delivery\Internal\NullRecipientResolver;
+use CoreX\Notifications\Delivery\Laravel\DeliveryPortBindings;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Internal\DigestTick;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
@@ -30,11 +33,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NotificationsServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
+        DeliveryPortBindings::register($this->app);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-notifications.php', 'corex-notifications');
 
         $this->app->singleton(DigestWakeupHandler::class, static fn (Application $app): DigestWakeupHandler => new DigestWakeupHandler(

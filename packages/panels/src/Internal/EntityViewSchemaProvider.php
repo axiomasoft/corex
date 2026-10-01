@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Panels\Internal;
 
 use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Modules\Data\FieldDefinition;
 use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
 use CoreX\Panels\SavedViews\Data\ViewContext;
 use CoreX\Panels\SavedViews\Data\ViewField;

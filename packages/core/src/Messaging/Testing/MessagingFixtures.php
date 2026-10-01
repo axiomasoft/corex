@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Testing;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
@@ -17,6 +19,7 @@ use Illuminate\Database\ConnectionInterface;
 use Psr\Clock\ClockInterface;
 
 /** The same implementations, exposed through contracts for consumer tests. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class MessagingFixtures
 {
     /** @param list<MessageContract> $contracts */

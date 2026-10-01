@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Modules\Enums\DisableReason;
 use Override;
@@ -11,10 +13,9 @@ use Override;
 /**
  * Domain event dispatched when a module is disabled. Name matches the
  * domain-events table (`mod.module.disabled`).
- *
- * @internal spec: P1.25, A68, B-10 §3.1
  */
-final class ModuleDisabled extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ModuleDisabled extends DomainEvent
 {
     public function __construct(
         public readonly string $module,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;

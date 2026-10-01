@@ -6,8 +6,9 @@ namespace CoreX\Tools\Tests\Unit;
 
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Operations\Validation\SchemaProfile;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
+use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use CoreX\Tools\Internal\ToolSchemaSupervisor;
 use CoreX\Tools\Tests\TestCase;
 use InvalidArgumentException;
@@ -25,7 +26,7 @@ final class ToolSchemaTest extends TestCase
 
     private function objectSchema(array $extra = []): JsonObject
     {
-        return JsonObject::fromArray([
+        return JsonObjectFactory::fromArray([
             '$schema' => 'https://json-schema.org/draft/2020-12/schema',
             'type' => 'object',
             'additionalProperties' => false,
@@ -38,7 +39,7 @@ final class ToolSchemaTest extends TestCase
 
     public function test_admits_draft2020_12_schema_closure_offline(): void
     {
-        $schema = JsonObject::fromArray([
+        $schema = JsonObjectFactory::fromArray([
             '$schema' => 'https://json-schema.org/draft/2020-12/schema',
             'type' => 'object',
             'additionalProperties' => false,
@@ -58,7 +59,7 @@ final class ToolSchemaTest extends TestCase
 
     public function test_rejects_remote_refs_and_dynamic_keywords(): void
     {
-        $remote = JsonObject::fromArray([
+        $remote = JsonObjectFactory::fromArray([
             '$schema' => 'https://json-schema.org/draft/2020-12/schema',
             'type' => 'object',
             'properties' => ['id' => ['$ref' => 'https://example.com/schema.json']],
@@ -70,7 +71,7 @@ final class ToolSchemaTest extends TestCase
 
     public function test_preserves_object_vs_array_and_safe_integers(): void
     {
-        $this->assertSame('{}', JsonObject::fromArray([])->canonicalJson);
+        $this->assertSame('{}', JsonObjectFactory::fromArray([])->canonicalJson);
         $this->assertSame('[1,2]', JsonCanonical::encode([1, 2]));
         $this->assertSame('{"count":1}', JsonCanonical::encode(['count' => 1.0]));
 
@@ -90,7 +91,7 @@ final class ToolSchemaTest extends TestCase
 
     public function test_rejects_dynamic_schema_keywords(): void
     {
-        $dynamic = JsonObject::fromArray([
+        $dynamic = JsonObjectFactory::fromArray([
             '$schema' => 'https://json-schema.org/draft/2020-12/schema',
             'type' => 'object',
             '$dynamicRef' => '#foo',
@@ -102,7 +103,7 @@ final class ToolSchemaTest extends TestCase
 
     public function test_additional_properties_same_subschema_semantics(): void
     {
-        $schema = JsonObject::fromArray([
+        $schema = JsonObjectFactory::fromArray([
             '$schema' => 'https://json-schema.org/draft/2020-12/schema',
             'type' => 'object',
             'additionalProperties' => false,

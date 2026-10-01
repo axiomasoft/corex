@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Features\Contracts\FeatureFlagDefinition;
-use CoreX\Features\DatabaseFeatureFlags;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Features\Events\FeatureFlagToggled;
+use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Features\Internal\Models\FeatureFlag;
 use CoreX\Features\Internal\Models\FeatureOverride;
 use CoreX\Messaging\Events\DomainEvent;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use CoreX\Settings\Events\SettingChanged;
 use Illuminate\Database\Connection;
@@ -55,8 +56,8 @@ it('stamps a DomainEvent with a UUIDv7 eventId, occurredAt and a stable name()',
         key: 'theme',
         scopeType: SettingScope::Account,
         scopeId: null,
-        old: 'a',
-        new: 'b',
+        old: JsonDocuments::capture('a'),
+        new: JsonDocuments::capture('b'),
         sensitive: false,
     );
 
@@ -109,7 +110,7 @@ it('AC-22: a narrower workspace override wins over the account-level default', f
     ]);
 
     expect($flags->active('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1)))->toBeTrue()
-        ->and($flags->value('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1)))->toBe(['variant' => 'beta'])
+        ->and(JsonDocuments::decode($flags->value('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1))))->toBe(['variant' => 'beta'])
         // A different workspace and the bare account-level read stay unaffected.
         ->and($flags->active('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_2)))->toBeFalse()
         ->and($flags->active('crm.lead_mode'))->toBeFalse();
@@ -223,7 +224,7 @@ it('AC-22 (c): falls back to the account-level default when no narrow override m
 
 it('AC-22 (d): value() falls back to the flag payload when the override payload is NULL', function (): void {
     $flags = featureFlags();
-    $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false, payload: ['variant' => 'flag-level']));
+    $flags->define(new FeatureFlagDefinition(key: 'crm.lead_mode', default: false, payload: JsonDocuments::nullable(['variant' => 'flag-level'])));
     $flagId = FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->value('id');
 
     // This override only toggles is_enabled — payload NULL must not blank
@@ -236,7 +237,7 @@ it('AC-22 (d): value() falls back to the flag payload when the override payload 
         'payload' => null,
     ]);
 
-    expect($flags->value('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1)))
+    expect(JsonDocuments::decode($flags->value('crm.lead_mode', SettingsScope::workspace(FEATURE_FLAGS_WORKSPACE_1))))
         ->toBe(['variant' => 'flag-level']);
 });
 

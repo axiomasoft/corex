@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Testing\Stubs;
 
 use CoreX\Audit\Contracts\Auditable;
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 
 /**
  * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel)

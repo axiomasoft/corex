@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\AuditObserver;
+use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
-use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Context\NullImpersonationService;
+use CoreX\Context\Internal\NullImpersonationService;
+use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
         action: 'direct',
         actorType: ActorType::User,
         actorId: 'caller',
-        context: ['ip' => '10.0.0.8', 'impersonation' => ['grant' => 'spoof', 'reason' => 'lie']],
+        context: JsonDocuments::capture(['ip' => '10.0.0.8', 'impersonation' => ['grant' => 'spoof', 'reason' => 'lie']]),
     ));
 
     $rows = DB::table('sys_audit_log')->orderBy('action')->get();
@@ -70,8 +71,8 @@ it('leaves user and system records byte-equivalent when no impersonation is acti
     $workspaceId = Str::uuid7()->toString();
     $actorId = Str::uuid7()->toString();
     $logger = new QueuedAuditLogger('pgsql', fixedTenant($workspaceId));
-    $user = new AuditEntry(action: 'user-act', actorType: ActorType::User, actorId: $actorId, context: ['ip' => '1.1.1.1']);
-    $system = new AuditEntry(action: 'system-act', actorType: ActorType::System, context: ['module' => 'core']);
+    $user = new AuditEntry(action: 'user-act', actorType: ActorType::User, actorId: $actorId, context: JsonDocuments::capture(['ip' => '1.1.1.1']));
+    $system = new AuditEntry(action: 'system-act', actorType: ActorType::System, context: JsonDocuments::capture(['module' => 'core']));
 
     $logger->record($user);
     $logger->record($system);
@@ -128,7 +129,7 @@ it('keeps snapshot and impersonation fields in either copy order', function (): 
         action: 'ordered',
         actorType: ActorType::User,
         actorId: 'caller',
-        context: ['ip' => '8.8.8.8', 'impersonation' => ['grant' => 'spoof']],
+        context: JsonDocuments::capture(['ip' => '8.8.8.8', 'impersonation' => ['grant' => 'spoof']]),
     );
 
     $first = $entry->withImpersonation($state)->withSnapshot($at, 'ws-order');
@@ -139,8 +140,8 @@ it('keeps snapshot and impersonation fields in either copy order', function (): 
         ->and($first->actorId)->toBe($state->staffIdentityId)
         ->and($first->occurredAt)->toEqual($at)
         ->and($first->workspaceId)->toBe('ws-order')
-        ->and($first->context['ip'])->toBe('8.8.8.8')
-        ->and($first->context['impersonation']['grant'])->toBe($state->grantId);
+        ->and(JsonDocuments::map($first->context)['ip'])->toBe('8.8.8.8')
+        ->and(JsonDocuments::map($first->context)['impersonation']['grant'])->toBe($state->grantId);
 })->group('pg');
 
 function impersonationState(string $reason): ImpersonationState

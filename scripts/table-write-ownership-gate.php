@@ -375,14 +375,14 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         } elseif ($expr->var instanceof Expr\MethodCall && $expr->var->var instanceof Expr\Variable && $expr->var->var->name === 'this' && $expr->var->name instanceof Node\Identifier) {
             $sourceType = typeName(enclosingClass($site)?->getMethod($expr->var->name->toString())?->returnType);
         } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
-            && $expr->var->class->toString() === 'CoreX\\Config\\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
+            && $expr->var->class->toString() === 'CoreX\Config\Internal\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
             $sourceType = 'CoreOptions';
         }
 
         return in_array($sourceType, ['CoreOptions', 'AuthOptions', 'AttributeTables'], true) ? ($tableDefaults[$slot] ?? '') : '';
     }
 
-    if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\\Config\\Config') {
+    if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\Config\Internal\Config') {
         return $tableDefaults[$expr->name->toString()] ?? '';
     }
 

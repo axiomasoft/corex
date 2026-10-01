@@ -5,26 +5,28 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\NoteHandler;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Internal\CompiledToolCatalogue;
 use CoreX\Tools\Internal\DenyToolPolicy;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
 use CoreX\Tools\ToolServiceProvider;
@@ -120,11 +122,11 @@ final class ToolCatalogueTest extends TestCase
         $catalogue = new CompiledToolCatalogue($this->modules, $policy);
 
         self::assertFalse($policy->discover(
-            ToolDescriptor::fromDeclaration($this->modules->registry->api[0]),
+            ToolDescriptorFactory::fromDeclaration($this->modules->registry->api[0]),
             $this->context(),
         ));
         self::assertFalse($policy->invoke(
-            ToolDescriptor::fromDeclaration($this->modules->registry->api[0]),
+            ToolDescriptorFactory::fromDeclaration($this->modules->registry->api[0]),
             $this->context(),
             new JsonObject('{}'),
         ));
@@ -224,10 +226,10 @@ final class ToolCatalogueTest extends TestCase
 
     public function test_contract_hash_tracks_current_compiled_bytes_cat_08(): void
     {
-        $first = ToolDescriptor::fromDeclaration($this->modules->registry->api[0]);
+        $first = ToolDescriptorFactory::fromDeclaration($this->modules->registry->api[0]);
         $mutated = $this->modules->registry->api[0];
         $mutated->title = 'Changed title';
-        $second = ToolDescriptor::fromDeclaration($mutated);
+        $second = ToolDescriptorFactory::fromDeclaration($mutated);
 
         self::assertNotSame($first->contractHash, $second->contractHash);
         self::assertSame(
@@ -244,8 +246,8 @@ final class ToolCatalogueTest extends TestCase
         self::assertCount(1, $view->descriptors);
         $descriptor = $view->descriptors[0];
         self::assertStringNotContainsString('notes.note', json_encode($descriptor, JSON_THROW_ON_ERROR));
-        self::assertArrayNotHasKey('fields', $descriptor->availability);
-        self::assertArrayNotHasKey('capabilities', $descriptor->availability);
+        self::assertArrayNotHasKey('fields', JsonDocuments::map($descriptor->availability));
+        self::assertArrayNotHasKey('capabilities', JsonDocuments::map($descriptor->availability));
 
         $this->policy->allowDiscover = false;
         self::assertSame([], $this->app->make(ToolCatalogue::class)->discover($this->context())->descriptors);

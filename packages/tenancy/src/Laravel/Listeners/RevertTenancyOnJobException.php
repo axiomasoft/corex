@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Listeners;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Stancl\Tenancy\Tenancy;
 
@@ -19,6 +21,7 @@ use Stancl\Tenancy\Tenancy;
  * installs run no queues under stancl, so this listener has nothing to do
  * there.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RevertTenancyOnJobException
 {
     public function __construct(

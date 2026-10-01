@@ -6,8 +6,8 @@ namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Internal\Http\AcceptNegotiation;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Errors\Laravel\AcceptNegotiation;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 use Override;
 use Symfony\Component\HttpKernel\Exception\HttpException;

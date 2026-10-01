@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Laravel;
 
-use CoreX\Data\DataScope;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Internal\BulkFailureLimit;
 use CoreX\Operations\Bulk\Internal\BulkOperations;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 
-/** @internal Literal bulk routes registered before the version wildcard. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class BulkRouteRegistrar
 {
     public static function register(Application $app): void
@@ -96,10 +99,4 @@ final readonly class BulkRouteRegistrar
 
         return $definition;
     }
-}
-
-/** @internal Default failure page size stays inside the hard cap. */
-final class BulkFailureLimit
-{
-    public const int DEFAULT = 50;
 }

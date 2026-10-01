@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Exceptions;
 
+use CoreX\Attributes\Api;
 use CoreX\Settings\Enums\SettingScope;
 use RuntimeException;
 
@@ -13,9 +14,8 @@ use RuntimeException;
  * (`sys_feature_overrides` CHECK already allows it). A caller handing
  * a department scope to `SettingsRepository` gets this instead of a silent
  * account-level write.
- *
- * @internal spec: D38
  */
+#[Api(since: '1.0')]
 final class UnsupportedScopeException extends RuntimeException
 {
     public function __construct(SettingScope $scope)

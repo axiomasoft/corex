@@ -45,7 +45,9 @@
             "public-api": [
                 "CoreX\\TasksWorkflow\\Contracts",
                 "CoreX\\TasksWorkflow\\Data",
-                "CoreX\\TasksWorkflow\\Exceptions"
+                "CoreX\\TasksWorkflow\\Exceptions",
+                "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
+                "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings"
             ]
         },
         "laravel": {

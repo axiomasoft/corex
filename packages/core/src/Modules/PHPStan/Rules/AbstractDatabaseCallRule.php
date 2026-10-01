@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\PHPStan\Rules\Support\DatabaseCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
@@ -21,9 +23,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * модуля не должен зависеть от версии и настроек пулера.
  *
  * @implements Rule<CallLike>
- *
- * @internal spec: B-10 §7.3
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 abstract class AbstractDatabaseCallRule implements Rule
 {
     public function getNodeType(): string

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 final readonly class SourceCursor
 {
     public function __construct(public string $ordinal, public ?string $boundaryByteOffset, public string $sourceHash)

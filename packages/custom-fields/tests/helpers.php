@@ -7,10 +7,10 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
-use CoreX\Data\CallableDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 
 function jsonbScope(string $connectionIdentity = 'pgsql:corex_test', ?string $restoreEpoch = null): DataScope
 {

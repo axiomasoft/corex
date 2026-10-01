@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Operations\Tests\TestCase;
 

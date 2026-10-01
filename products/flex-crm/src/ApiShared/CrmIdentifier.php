@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\ApiShared;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Enums\IdStrategy;
 use Illuminate\Validation\ValidationException;
 
@@ -22,7 +22,7 @@ final class CrmIdentifier
 
     private static function from(mixed $value): string|int
     {
-        if (Config::idStrategy() === IdStrategy::Int) {
+        if (app(CoreOptions::class)->idStrategy === IdStrategy::Int) {
             if (is_int($value) && $value > 0) {
                 return $value;
             }

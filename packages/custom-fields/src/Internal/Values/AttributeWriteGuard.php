@@ -10,8 +10,8 @@ use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 
 final readonly class AttributeWriteGuard
 {
@@ -106,9 +106,9 @@ final readonly class AttributeWriteGuard
     {
         $definitions = [];
         foreach ($snapshot->activeFields as $definition) {
-            $code = is_array($definition) ? ($definition['code'] ?? $definition['key'] ?? null) : null;
+            $code = ($definition['code'] ?? $definition['key'] ?? null);
 
-            if (! is_array($definition) || ! is_string($code) || $code === '') {
+            if (! is_string($code) || $code === '') {
                 $this->deny('attributes.catalogue.malformed');
             }
 

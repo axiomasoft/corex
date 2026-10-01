@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Detects whether the current process is eligible to call
  * `PubSub::subscribe()`. `Application::runningInConsole()` alone is NOT
@@ -17,9 +20,8 @@ namespace CoreX\Messaging\Contracts;
  * `laravel/octane` package installed (it is not a require of this package)
  * — implement this interface with a small test double and bind it over the
  * container's default.
- *
- * @internal spec: B-10 §3.1
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface WorkerRuntime
 {
     /**

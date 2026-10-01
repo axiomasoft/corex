@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class WakeupHandlerDefinition
 {
     /** @var class-string<DueWakeupHandler> */

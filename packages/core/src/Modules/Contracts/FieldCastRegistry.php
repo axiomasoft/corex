@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /** Packages register their Eloquent casts without coupling the kernel to them. */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface FieldCastRegistry
 {
     /**

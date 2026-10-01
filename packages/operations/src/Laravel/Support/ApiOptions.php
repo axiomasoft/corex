@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel\Support;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Config\SecretRef;
-use CoreX\Config\ViolationList;
+use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Operations\Versioning\Data\ApiVersion;
 use CoreX\Operations\Versioning\Data\ApiVersionStatus;
 use CoreX\Operations\Versioning\Data\CapabilityDescriptor;
 use InvalidArgumentException;
 
-/** @internal Package composition type. The provider is the only config reader. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ApiOptions
 {
     /**
@@ -43,7 +45,7 @@ final readonly class ApiOptions
     /** @param  array<string, mixed>  $config */
     public static function fromArray(array $config): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
         $routes = self::array($config['routes'] ?? []);
         $idempotency = self::array($config['idempotency'] ?? []);
         $cursor = self::array($config['cursor'] ?? []);
@@ -166,7 +168,7 @@ final readonly class ApiOptions
     /**
      * @return list<ApiVersion>
      */
-    private static function versions(ViolationList $violations, mixed $value): array
+    private static function versions(ConfigurationValidator $violations, mixed $value): array
     {
         if ($value === null) {
             return [new ApiVersion('v1', ApiVersionStatus::Stable, null)];
@@ -253,7 +255,19 @@ final readonly class ApiOptions
 
             $status = is_string($row['status'] ?? null) ? $row['status'] : 'available';
             $limits = is_array($row['limits'] ?? null) ? $row['limits'] : [];
-            CapabilityDescriptor::assertPublicLimits($limits);
+            $publicLimits = [];
+            foreach ($limits as $key => $limitValue) {
+                if (! is_string($key)) {
+                    throw new InvalidArgumentException('capability: public map rejects infrastructure keys');
+                }
+
+                if (! is_int($limitValue) && ! is_string($limitValue)) {
+                    throw new InvalidArgumentException('capability: limits must be bounded scalars');
+                }
+                $publicLimits[$key] = $limitValue;
+            }
+            CapabilityDescriptor::assertPublicLimits($publicLimits);
+            $limits = $publicLimits;
 
             if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/', $id) !== 1 || ! in_array($status, ['available', 'deprecated'], true)) {
                 throw new InvalidArgumentException('id and status must be public');
@@ -269,7 +283,7 @@ final readonly class ApiOptions
     }
 
     /** @return array<string, SecretRef> */
-    private static function keyring(ViolationList $violations, mixed $value): array
+    private static function keyring(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
             $violations->add('cursor.keyring', 'must be a map of SecretRef values');
@@ -307,7 +321,7 @@ final readonly class ApiOptions
     }
 
     /** @return list<string> */
-    private static function middleware(ViolationList $violations, mixed $value): array
+    private static function middleware(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
             $violations->add('routes.middleware', 'must be a list of strings');
@@ -330,7 +344,7 @@ final readonly class ApiOptions
         return $middleware;
     }
 
-    private static function bool(ViolationList $violations, string $path, mixed $value): bool
+    private static function bool(ConfigurationValidator $violations, string $path, mixed $value): bool
     {
         if (is_bool($value)) {
             return $value;
@@ -341,7 +355,7 @@ final readonly class ApiOptions
         return false;
     }
 
-    private static function nonEmpty(ViolationList $violations, string $path, mixed $value): string
+    private static function nonEmpty(ConfigurationValidator $violations, string $path, mixed $value): string
     {
         if (is_string($value) && $value !== '') {
             return $value;
@@ -352,7 +366,7 @@ final readonly class ApiOptions
         return 'invalid';
     }
 
-    private static function positiveInt(ViolationList $violations, string $path, mixed $value): int
+    private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
         if (is_int($value) && $value > 0) {
             return $value;

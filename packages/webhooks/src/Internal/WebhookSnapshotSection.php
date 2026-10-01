@@ -86,8 +86,8 @@ final readonly class WebhookSnapshotSection implements ContractSnapshotSection
         $required = [];
 
         foreach ($topic->schema as $field => $type) {
-            $properties[(string) $field] = ['type' => $type];
-            $required[] = (string) $field;
+            $properties[$field] = ['type' => $type];
+            $required[] = $field;
         }
 
         sort($required);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;

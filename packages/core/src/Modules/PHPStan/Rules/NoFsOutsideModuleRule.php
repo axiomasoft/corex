@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -26,9 +28,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * `parameters.corexModules.moduleNamespaces` (ядро и приложение не затрагиваются).
  *
  * @implements Rule<FuncCall>
- *
- * @internal spec: B-10 §7.3
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoFsOutsideModuleRule implements Rule
 {
     private const FS_FUNCTIONS = [

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Transfer\Internal\Transfer;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Transfer\Contracts\TransferResultReader;
 use CoreX\Transfer\Data\TransferRef;
 use Illuminate\Database\ConnectionInterface;

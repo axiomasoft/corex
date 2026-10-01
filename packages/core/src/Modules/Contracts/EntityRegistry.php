@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
+use CoreX\Attributes\Api;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\EntityNotFound;
-use CoreX\Modules\Registry\EntityDefinition;
 
 /**
  * Central registry of ecosystem entities. Single source of the polymorphic
  * morph map (ADR-003) and the contract satellites (search, audit,
  * attributes, workflow, comments, documents) query via byCapability() to
  * wire themselves without knowing the owning module.
- *
- * @internal spec: B-10 §3.4
  */
+#[Api(since: '1.0')]
 interface EntityRegistry
 {
     /** @throws EntityNotFound */

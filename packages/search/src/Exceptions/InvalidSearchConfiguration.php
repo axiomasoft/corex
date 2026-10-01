@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class InvalidSearchConfiguration extends RuntimeException
 {
     public static function missingDriver(): self

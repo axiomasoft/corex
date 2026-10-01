@@ -11,7 +11,7 @@ use CoreX\Recurrence\Data\RecurrenceWindow;
 use CoreX\Recurrence\Exceptions\StaleCursorException;
 use CoreX\Recurrence\Internal\CanonicalHasher;
 use CoreX\Recurrence\Internal\RuntimeProfile;
-use CoreX\Recurrence\RRuleRecurrenceExpander;
+use CoreX\Recurrence\Laravel\RecurrenceFactory;
 
 function recurrenceSet(
     string $seriesId,
@@ -41,7 +41,7 @@ it('REC-01 expands monthly January 31 COUNT 4 without invalid date rollover', fu
         rrule: 'FREQ=MONTHLY;COUNT=4',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-08-01T00:00:00Z'),
         limits: new ExpansionLimits,
@@ -60,7 +60,7 @@ it('REC-02 keeps civil weekly time across America/New_York DST transitions', fun
         rrule: 'FREQ=WEEKLY;COUNT=3',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-03-01T00:00:00Z', end: '2026-04-01T00:00:00Z'),
         limits: new ExpansionLimits,
@@ -83,7 +83,7 @@ it('REC-03 omits spring gap occurrences that do not match nominal wall time', fu
         rrule: 'FREQ=DAILY;COUNT=3',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-03-07T00:00:00Z', end: '2026-03-11T00:00:00Z'),
         limits: new ExpansionLimits,
@@ -100,7 +100,7 @@ it('REC-04 resolves autumn fold to a single first occurrence', function (): void
         rrule: 'FREQ=WEEKLY;COUNT=2',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-10-25T00:00:00Z', end: '2026-11-15T00:00:00Z'),
         limits: new ExpansionLimits,
@@ -121,7 +121,7 @@ it('REC-05 applies EXDATE without replenishing COUNT and unions RDATE once', fun
         rdates: ['2026-01-02T09:00:00Z'],
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-01-10T00:00:00Z'),
         limits: new ExpansionLimits,
@@ -134,7 +134,7 @@ it('REC-05 applies EXDATE without replenishing COUNT and unions RDATE once', fun
 });
 
 it('REC-06 rejects COUNT with UNTIL and unsupported profile features', function (): void {
-    $expander = new RRuleRecurrenceExpander;
+    $expander = RecurrenceFactory::create();
     $window = new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-02-01T00:00:00Z');
     $start = new DateStart(valueType: 'UTC', nominalStart: '2026-01-01T09:00:00Z', tzid: null);
 
@@ -152,7 +152,7 @@ it('REC-07 expands DATE windows without midnight conversion', function (): void 
         rrule: 'FREQ=DAILY;COUNT=3',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'DATE', start: '2026-01-11', end: '2026-01-13'),
         limits: new ExpansionLimits,
@@ -175,7 +175,7 @@ it('REC-08 preserves occurrence keys across pages and applies overrides', functi
     );
 
     $window = new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-01-10T00:00:00Z');
-    $expander = new RRuleRecurrenceExpander;
+    $expander = RecurrenceFactory::create();
 
     $first = $expander->expand(set: $set, window: $window, limits: new ExpansionLimits(emitted: 2));
     $second = $expander->expand(set: $set, window: $window, limits: new ExpansionLimits(emitted: 10), after: $first->nextCursor);
@@ -202,7 +202,7 @@ it('REC-09 stops within candidate and wall limits before first emission when nee
         rrule: 'FREQ=SECONDLY;COUNT=1000000',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-02-01T00:00:00Z'),
         limits: new ExpansionLimits(emitted: 10, candidateSteps: 50, wallSeconds: 30),
@@ -230,7 +230,7 @@ it('REC-10 rejects cursor hash mismatches', function (): void {
         resumePosition: ['scanned' => 0, 'emitted' => 0],
     );
 
-    expect(fn () => (new RRuleRecurrenceExpander)->expand(set: $set, window: $window, limits: new ExpansionLimits, after: $cursor))
+    expect(fn () => RecurrenceFactory::create()->expand(set: $set, window: $window, limits: new ExpansionLimits, after: $cursor))
         ->toThrow(StaleCursorException::class);
 });
 
@@ -243,7 +243,7 @@ it('REC-11 refuses pinned tzdb versions that differ from runtime', function (): 
         tzdbVersion: '1970.1',
     );
 
-    $page = (new RRuleRecurrenceExpander)->expand(
+    $page = RecurrenceFactory::create()->expand(
         set: $set,
         window: new RecurrenceWindow(valueType: 'UTC', start: '2026-01-01T00:00:00Z', end: '2026-01-10T00:00:00Z'),
         limits: new ExpansionLimits,

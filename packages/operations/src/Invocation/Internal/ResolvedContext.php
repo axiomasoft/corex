@@ -7,7 +7,7 @@ namespace CoreX\Operations\Invocation\Internal;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Operations\Authorization\Contracts\Principal;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Override;
 
 /** @internal */

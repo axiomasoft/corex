@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Panels;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Panels\Contracts\PanelCatalogue;
 use CoreX\Panels\Internal\EntityViewSchemaProvider;
 use CoreX\Panels\Internal\ModulePanelCatalogue;
-use CoreX\Panels\Internal\SavedViewsRegistrar;
 use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
+use CoreX\Panels\SavedViews\Laravel\SavedViewsRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class PanelsServiceProvider extends ServiceProvider
 {
     #[Override]

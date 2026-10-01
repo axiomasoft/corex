@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Impersonation\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -16,7 +15,7 @@ use Override;
  * default connection, because callers run this from ALREADY tenant-scoped
  * request context — P2.10 initializes tenancy before the OIDC lane runs).
  * The one-time atomic claim itself is a query-builder `UPDATE` in
- * {@see DatabaseImpersonationService} (D143),
+ * {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService} (D143),
  * not an Eloquent write — this model exists for the L2 exempt-list
  * (`ImpersonatedModelWriteGuard`) and read access after the claim.
  *

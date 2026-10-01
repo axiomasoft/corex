@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Exceptions\SnapshotExpiredException;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
 use CoreX\Intl\Territory\Data\DatasetManifest;
@@ -14,6 +15,7 @@ use CoreX\Intl\Territory\Data\ReferencePage;
 use DateTimeImmutable;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Connection;
+use InvalidArgumentException;
 use Override;
 use stdClass;
 
@@ -64,7 +66,7 @@ final class SqlGeographyProvider implements GeographyProvider
         }
 
         if ($snapshotId === null) {
-            return new ReferencePage(status: 'snapshotExpired', records: [], next: null, snapshotId: null, provenance: []);
+            return new ReferencePage(status: 'snapshotExpired', records: JsonDocuments::capture([]), next: null, snapshotId: null, provenance: JsonDocuments::capture([]));
         }
 
         $exists = $this->connection->table('corex_reference_datasets')
@@ -157,10 +159,10 @@ final class SqlGeographyProvider implements GeographyProvider
 
         return new ReferencePage(
             status: $records === [] ? 'notFound' : 'available',
-            records: $records,
+            records: JsonDocuments::capture($records),
             next: $next,
             snapshotId: $snapshotId,
-            provenance: ['datasetKey' => $datasetKey, 'snapshotId' => $snapshotId],
+            provenance: JsonDocuments::capture(['datasetKey' => $datasetKey, 'snapshotId' => $snapshotId]),
         );
     }
 
@@ -169,6 +171,20 @@ final class SqlGeographyProvider implements GeographyProvider
         /** @var array<string, mixed> $manifest */
         $manifest = json_decode((string) $row->manifest, true, 16, JSON_THROW_ON_ERROR);
 
+        $types = (array) ($manifest['types'] ?? []);
+        foreach ($types as $type) {
+            if (! is_string($type)) {
+                throw new InvalidArgumentException('Dataset types must be strings.');
+            }
+        }
+        $counts = (array) ($manifest['counts'] ?? []);
+        foreach ($counts as $key => $count) {
+            if (! is_string($key) || ! is_int($count)) {
+                throw new InvalidArgumentException('Dataset counts must be named integers.');
+            }
+        }
+
+        /** @var array<string, int> $counts */
         return new DatasetManifest(
             schema: (string) ($manifest['schema'] ?? 'reference-data/1'),
             snapshotId: (string) $row->snapshot_id,
@@ -182,8 +198,8 @@ final class SqlGeographyProvider implements GeographyProvider
             licenseUri: (string) ($manifest['licenseUri'] ?? ''),
             attribution: (string) ($manifest['attribution'] ?? ''),
             coveredCountries: (array) ($manifest['coveredCountries'] ?? []),
-            types: (array) ($manifest['types'] ?? []),
-            counts: (array) ($manifest['counts'] ?? []),
+            types: array_values($types),
+            counts: $counts,
             coverageNotes: (string) ($manifest['coverageNotes'] ?? ''),
             tzdbVersion: (string) ($manifest['tzdbVersion'] ?? ''),
             status: (string) $row->state,

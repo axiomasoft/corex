@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Membership\Data\ActorRef;
 use CoreX\Tenancy\Membership\Enums\MembershipReason;
 use CoreX\Tenancy\Membership\Internal\Transport\CentralValue;
 use DateTimeImmutable;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class MembershipRevoked
 {
     public function __construct(

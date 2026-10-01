@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class CapabilityDescriptor
 {
     /** @var list<string> */
@@ -39,7 +41,7 @@ final readonly class CapabilityDescriptor
             throw new InvalidArgumentException('capability: operations must be a non-empty sorted list');
         }
 
-        self::assertPublicLimits($limits);
+        self::validateLimits($limits);
     }
 
     /** @return array{id: string, status: string, limits: array<string, int|string>, operations: list<string>} */
@@ -53,8 +55,14 @@ final readonly class CapabilityDescriptor
         ];
     }
 
-    /** @param  array<mixed, mixed>  $limits */
+    /** @param array<string, int|string> $limits */
     public static function assertPublicLimits(array $limits): void
+    {
+        self::validateLimits($limits);
+    }
+
+    /** @param array<array-key, mixed> $limits */
+    private static function validateLimits(array $limits): void
     {
         foreach ($limits as $key => $value) {
             if (! is_string($key) || in_array($key, self::FORBIDDEN_KEYS, true)) {

@@ -1,0 +1,9 @@
+{
+  "name": "lint-delta",
+  "command": "scripts/php84 vendor/bin/pint --test packages/operations/tests/Feature/LoadContourBootTest.php",
+  "exit_code": 0,
+  "duration_ms": 393,
+  "patch_sha256": "d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe",
+  "log": "validation-final/lint-delta.log",
+  "log_sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2"
+}

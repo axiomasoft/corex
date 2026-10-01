@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
 /** Tenant-local identity included in an idempotency key's collision domain. */
+#[Api(since: '1.0')]
 final readonly class IdempotencyScope
 {
     public function __construct(

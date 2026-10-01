@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use DateTimeImmutable;
@@ -16,10 +18,9 @@ use Illuminate\Support\Str;
  * can abort the operation ({@see Cancellable}), not mixed into this base:
  * most domain events (SettingChanged, FeatureFlagToggled, …) are purely
  * informational.
- *
- * @internal spec: B-10 §3.1, D27
  */
-abstract class DomainEvent
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
+abstract readonly class DomainEvent
 {
     public readonly string $eventId;
 
@@ -36,8 +37,6 @@ abstract class DomainEvent
 
     /**
      * Stable dotted name, e.g. `core.setting.changed`.
-     *
-     * @internal spec: B-10 domain-events table
      */
     abstract public static function name(): string;
 }

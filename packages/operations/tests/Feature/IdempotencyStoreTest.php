@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Operations\ApiServiceProvider;
@@ -14,8 +14,8 @@ use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

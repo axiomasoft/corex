@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Modules\Enums\ModuleState;
 
 /**
@@ -11,9 +12,8 @@ use CoreX\Modules\Enums\ModuleState;
  * `pendingUpgrade` is derived (codeVersion > dbVersion), never stored — a
  * lagging schema is a normal state between deploy and the control-plane's
  * upgrade wave.
- *
- * @internal spec: B-10 §3.3, §5.5
  */
+#[Api(since: '1.0')]
 final readonly class ModuleStatus
 {
     public function __construct(

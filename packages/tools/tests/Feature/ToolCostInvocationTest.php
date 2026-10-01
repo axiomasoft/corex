@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use Closure;
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
@@ -23,26 +24,28 @@ use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Cost\Contracts\OperationBudget;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\InvocationFixtures;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
-use CoreX\Operations\Testing\InvocationFixtures;
 use CoreX\Operations\Testing\ModuleFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
@@ -125,15 +128,15 @@ final class ToolCostInvocationTest extends TestCase
             new ToolCall(
                 code: 'notes.read',
                 toolVersion: 'v1',
-                expectedContractHash: ToolDescriptor::fromDeclaration($toolDeclaration)->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'read']),
+                expectedContractHash: ToolDescriptorFactory::fromDeclaration($toolDeclaration)->contractHash,
+                arguments: JsonObjectFactory::fromArray(['name' => 'read']),
                 requestId: 'tool-cost',
                 operationKey: null,
             ),
         );
 
         $httpCost = $http->getData(true)['meta']['cost'];
-        $toolCost = $tool->metadata['cost'];
+        $toolCost = JsonDocuments::map($tool->metadata)['cost'];
         self::assertSame(200, $http->getStatusCode());
         self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
         self::assertSame(2, ToolCostInvocationCostInvocationHandler::$calls);

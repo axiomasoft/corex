@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Modules\Testing\ExtensionContract;
-use CoreX\Search\SearchManager;
+use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 

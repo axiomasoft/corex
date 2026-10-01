@@ -9,8 +9,8 @@ use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 use DateTimeImmutable;
 use Exception;
 
@@ -77,7 +77,7 @@ final readonly class FieldValueValidator
                 continue;
             }
 
-            $this->assertConstraints(code: (string) $code, field: $field, value: $value);
+            $this->assertConstraints(code: $code, field: $field, value: $value);
         }
     }
 
@@ -87,9 +87,9 @@ final readonly class FieldValueValidator
         $fields = [];
 
         foreach ($snapshot->activeFields as $field) {
-            $code = is_array($field) ? ($field['code'] ?? $field['key'] ?? null) : null;
+            $code = ($field['code'] ?? $field['key'] ?? null);
 
-            if (! is_array($field) || ! is_string($code) || ! is_string($field['type'] ?? null)) {
+            if (! is_string($code) || ! is_string($field['type'] ?? null)) {
                 throw new InvalidAttributeValue('The field catalogue returned an invalid active-field descriptor.');
             }
 

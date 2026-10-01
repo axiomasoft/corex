@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
-use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
 use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
@@ -268,8 +269,8 @@ final class WebhookManagementTest extends TestCase
             path: $path,
             ability: $ability,
             handler: WebhookContractHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: $method === 'GET' ? OperationMode::Query : OperationMode::Command,

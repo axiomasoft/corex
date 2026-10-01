@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Deal\Casts;
 
 use Brick\Money\Money;
-use CoreX\Intl\Money\MoneyCast;
+use CoreX\Intl\Money\Laravel\MoneyCast;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 

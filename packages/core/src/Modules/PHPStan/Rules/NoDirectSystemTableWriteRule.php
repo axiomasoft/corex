@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\PHPStan\Rules\Support\DatabaseCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -25,9 +27,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * именно они и есть легальная реализация записи.
  *
  * @implements Rule<CallLike>
- *
- * @internal spec: B-10 §7.4 п.9
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoDirectSystemTableWriteRule implements Rule
 {
     private const WRITE_METHODS = [

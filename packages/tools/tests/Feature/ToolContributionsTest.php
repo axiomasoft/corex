@@ -8,11 +8,11 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
-use CoreX\Operations\Validation\Data\JsonObject;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
@@ -231,7 +231,7 @@ final class ToolContributionsTest extends TestCase
             code: $readDescriptor->code,
             toolVersion: $readDescriptor->toolVersion,
             expectedContractHash: $readDescriptor->contractHash,
-            arguments: JsonObject::fromArray(['name' => 'archive']),
+            arguments: JsonObjectFactory::fromArray(['name' => 'archive']),
             requestId: 'req-archive-read',
         );
         $readResult = $this->app->make(ToolInvoker::class)->invoke($this->context(), $readCall);
@@ -246,7 +246,7 @@ final class ToolContributionsTest extends TestCase
             code: $writeDescriptor->code,
             toolVersion: $writeDescriptor->toolVersion,
             expectedContractHash: $writeDescriptor->contractHash,
-            arguments: JsonObject::fromArray(['name' => 'lab-task']),
+            arguments: JsonObjectFactory::fromArray(['name' => 'lab-task']),
             requestId: 'req-lab-write',
             operationKey: 'lab-task-1',
         );

@@ -5,10 +5,10 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
+use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
+use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,10 @@ beforeEach(function (): void {
         '--force' => true,
     ])->run();
 
-    DB::statement('DROP DATABASE IF EXISTS '.MW_TEMPLATE_DB);
+    if (DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [MW_TEMPLATE_DB]) !== null) {
+        DB::statement('ALTER DATABASE '.MW_TEMPLATE_DB.' WITH IS_TEMPLATE false');
+    }
+    DB::statement('DROP DATABASE IF EXISTS '.MW_TEMPLATE_DB.' WITH (FORCE)');
     DB::statement('CREATE DATABASE '.MW_TEMPLATE_DB);
 
     $probe = mwConnectTo(MW_TEMPLATE_DB);
@@ -53,7 +56,7 @@ afterEach(function (): void {
     DB::purge('tenant');
 
     foreach (DB::table('root_accounts')->pluck('db_name') as $db) {
-        DB::statement('DROP DATABASE IF EXISTS "'.$db.'"');
+        DB::statement('DROP DATABASE IF EXISTS "'.$db.'" WITH (FORCE)');
     }
 
     DB::statement('ALTER DATABASE '.MW_TEMPLATE_DB.' WITH IS_TEMPLATE false');

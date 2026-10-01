@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Access\Internal\TaskModuleGuard;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Project\Contracts\ProjectRead;
+use CoreX\Tasks\Project\Data\ProjectView;
 use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
 use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Data\UpdateTaskData;
 use CoreX\Tasks\Task\Events\TaskUpdated;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
+use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
@@ -55,7 +58,7 @@ final class UpdateTask implements UpdateTaskCommand
             $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
         }
 
-        $this->access->authorizeUpdate(data: $data, context: $context, task: $task);
+        $this->access->authorizeUpdate(data: $data, context: $context, task: TaskSnapshot::fromTask($task));
 
         if ($data->has('title')) {
             $title = trim((string) $data->title);
@@ -94,7 +97,7 @@ final class UpdateTask implements UpdateTaskCommand
                 connectionName: $connectionName,
             );
 
-            $task->project_id = $project?->getKey();
+            $task->project_id = $project?->id;
 
             if ($task->isDirty('project_id')) {
                 // Смена проекта сбрасывает связанные с ним этап и спринт.
@@ -134,10 +137,10 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($changed !== []) {
             $task->save();
-            TaskUpdated::dispatch($task, $changed);
+            event(new TaskUpdated(TaskSnapshot::fromTask($task), $changed));
         }
 
-        return TaskReference::fromTask($task);
+        return TaskReferenceFactory::fromTask($task);
     }
 
     private function validateProvidedFields(UpdateTaskData $data): void
@@ -153,16 +156,16 @@ final class UpdateTask implements UpdateTaskCommand
         }
     }
 
-    private function project(?string $id, string $workspaceId, ?string $connectionName): ?Project
+    private function project(?string $id, string $workspaceId, ?string $connectionName): ?ProjectView
     {
         if ($id === null) {
             return null;
         }
 
-        /** @var Project|null $project */
-        $project = Project::on($connectionName)->find($id);
+        /** @var ProjectView|null $project */
+        $project = app(ProjectRead::class)->find($id, $connectionName);
 
-        if ($project === null || $project->workspace_id !== $workspaceId) {
+        if ($project === null || $project->workspaceId !== $workspaceId) {
             $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
         }
 

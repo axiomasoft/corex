@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Intl\Territory\Internal\Reference;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Data\DatasetCandidate;
 use CoreX\Intl\Territory\Data\DatasetGeneration;

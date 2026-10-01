@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\ProvisionParams;
 
 /**
@@ -12,9 +14,8 @@ use CoreX\Context\Data\ProvisionParams;
  * (replayable pipeline). `drop()`/`export()` are lifecycle operations owned
  * by the `AccountLifecycle`/`TenantDatabaseLifecycle` contracts, not this
  * one.
- *
- * @internal spec: premortem B4, P2.12, Code Guidance P2.3
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TenantDatabaseProvisioner
 {
     public function provision(ProvisionParams $params): void;

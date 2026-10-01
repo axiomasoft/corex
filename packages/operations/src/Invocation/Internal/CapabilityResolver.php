@@ -9,16 +9,17 @@ use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
+use CoreX\Operations\Invocation\Contracts\EffectiveCapabilities;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
-use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Http\Request;
 
 /** Live capability view. Payload tenant, workspace and actor fields are ignored. */
-final class CapabilityResolver
+final class CapabilityResolver implements EffectiveCapabilities
 {
     public function __construct(
         private readonly ModuleRegistry $modules,
@@ -38,7 +39,7 @@ final class CapabilityResolver
     public function effective(Request $request): array
     {
         $version = $request->route('version');
-        $metadata = InvocationMetadata::fromRequest($request, is_string($version) ? $version : $this->options->defaultMajor);
+        $metadata = InvocationMetadataFactory::fromRequest($request, is_string($version) ? $version : $this->options->defaultMajor);
         $principal = $this->principals->resolve($request)
             ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
         $context = $this->contexts->resolve($request, $principal, $metadata);

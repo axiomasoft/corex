@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Sprint\Internal\Models;
 
-use CoreX\Database\HasConfiguredId;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Tasks\Project\Laravel\ProjectRelations;
 use CoreX\Tasks\Sprint\Enums\SprintStatus;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Laravel\TaskRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,25 +29,21 @@ final class Sprint extends Model
     /** @var array<string, mixed> */
     protected $attributes = ['status' => 'planned'];
 
-    /** @return BelongsTo<Project, $this> */
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return ProjectRelations::belongsTo($this, 'project_id', null, 'project');
     }
 
-    /** @return HasMany<Task, $this> */
+    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return TaskRelations::hasMany($this);
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return [
-            'status' => SprintStatus::class,
-            'starts_on' => 'date',
-            'ends_on' => 'date',
-        ];
+        return ['status' => SprintStatus::class, 'starts_on' => 'date', 'ends_on' => 'date'];
     }
 }

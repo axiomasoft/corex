@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Locale\Internal\Bcp47Validator;
 use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
 use CoreX\Intl\Territory\Data\AddressQuery;
@@ -32,7 +33,7 @@ it('OPT-01 keeps offline base valid when address provider is absent', function (
     );
 
     expect($result->status)->toBe('unsupported')
-        ->and($result->suggestions)->toBe([])
+        ->and(JsonDocuments::list($result->suggestions))->toBe([])
         ->and($result->source)->toBeNull();
 });
 
@@ -53,9 +54,9 @@ it('OPT-04 rejects invalid query bounds and enforces response limits', function 
 
     expect($available->status)->toBe('available')
         ->and($available->source)->toBe('fixture-address/1')
-        ->and($available->suggestions)->toHaveCount(2)
-        ->and($available->provenance)->not->toHaveKey('secret')
-        ->and($available->provenance)->not->toHaveKey('token');
+        ->and(JsonDocuments::list($available->suggestions))->toHaveCount(2)
+        ->and(JsonDocuments::map($available->provenance))->not->toHaveKey('secret')
+        ->and(JsonDocuments::map($available->provenance))->not->toHaveKey('token');
 
     $notFound = $provider->suggest(
         query: new AddressQuery(text: 'unknown street', locale: 'en', country: null, consentReference: 'consent-3'),
@@ -96,7 +97,7 @@ it('OPT-05 swaps two installed address drivers through the same port', function 
         ->and($configuredResult->status)->toBe('available')
         ->and($fixtureResult->source)->toBe('fixture-address/1')
         ->and($configuredResult->source)->toBe('configured-address/1')
-        ->and($fixtureResult->suggestions[0]['label'])->not->toBe($configuredResult->suggestions[0]['label']);
+        ->and(JsonDocuments::list($fixtureResult->suggestions)[0]['label'])->not->toBe(JsonDocuments::list($configuredResult->suggestions)[0]['label']);
 });
 
 it('OPT-04 exposes distinct unavailable and rateLimited statuses', function (): void {

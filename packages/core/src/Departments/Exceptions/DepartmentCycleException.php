@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
  * Move-guard: the new parent must not be inside the moving department's own
  * subtree (`new_parent.path <@ moving.path`).
- *
- * @internal spec: B-10 §5.7
  */
+#[Api(since: '1.0')]
 final class DepartmentCycleException extends RuntimeException
 {
     public function __construct(string $departmentId, string $newParentId)

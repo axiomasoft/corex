@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Address;
 
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Intl\Locale\Contracts\LocaleValidation as Bcp47Validator;
 use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
-use CoreX\Intl\Locale\Internal\Bcp47Validator;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
@@ -70,9 +71,9 @@ final class AddressSuggestGuard
     {
         return new SuggestionResult(
             status: 'invalid',
-            suggestions: [],
+            suggestions: JsonDocuments::capture([]),
             source: null,
-            provenance: ['reason' => $reason],
+            provenance: JsonDocuments::capture(['reason' => $reason]),
         );
     }
 }

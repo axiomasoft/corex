@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\EstimatedCost;
@@ -12,8 +12,8 @@ use CoreX\Operations\Cost\Internal\SqlBudgetReservation;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

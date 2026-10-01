@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * Здоровье доставки: вход для таксономии наблюдаемости P12.
  *
@@ -13,6 +15,7 @@ namespace CoreX\Messaging\Data;
  * Частота дублей здесь отсутствует: её нельзя прочитать из таблиц, она считается
  * потребителем по возврату Inbox::claim() === false.
  */
+#[Api(since: '1.0')]
 final readonly class DeliveryHealth
 {
     /** @param array<string, int> $oldestPendingSecondsByContract */

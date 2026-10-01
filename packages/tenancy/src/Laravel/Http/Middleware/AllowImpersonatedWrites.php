@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\TenancyServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,9 +19,8 @@ use Illuminate\Http\Response;
  * a "deny" middleware from the group). Precedent for an empty middleware
  * used purely as a route-context flag: stancl's own `'tenant'` group
  * registration ({@see TenancyServiceProvider}).
- *
- * @internal spec: B-11 §5.9, D141
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AllowImpersonatedWrites
 {
     /** @return Response|mixed */

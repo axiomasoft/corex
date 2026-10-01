@@ -19,7 +19,7 @@ use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Tests\Pg\AttributeBackfillPgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 
 uses(AttributeBackfillPgTestCase::class)->group('pg');

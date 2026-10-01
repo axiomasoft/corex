@@ -8,19 +8,20 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\TaskDraft;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 
 uses(PgTestCase::class);
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
@@ -83,7 +84,7 @@ beforeEach(function (): void {
     $this->project = Project::query()->create([
         'workspace_id' => $this->workspaceId,
         'name' => 'Launch',
-        'created_by' => $this->actor->toArray(),
+        'created_by' => JsonDocuments::decodeTree($this->actor->toArray()),
     ]);
     $this->stage = Stage::query()->create([
         'project_id' => $this->project->getKey(),

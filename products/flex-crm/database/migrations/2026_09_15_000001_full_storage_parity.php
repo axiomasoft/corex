@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Schema\IdColumns;
+use CoreX\Database\Laravel\IdColumns;
 use Flex\Crm\Activity\Models\Activity;
 use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Deal\Models\Pipeline;

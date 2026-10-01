@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 
-/** @internal Local, validated display data. It is never an authorization grant. */
+#[Api(since: '1.0')]
 final readonly class AccountListEntry
 {
     public function __construct(

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Delivery\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Notifications\Delivery\Contracts\DeliveryExecution;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Data\DeliveryInput;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
@@ -14,7 +16,7 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use Throwable;
 
-final class DeliveryCoordinator
+final class DeliveryCoordinator implements DeliveryExecution
 {
     public function __construct(
         private readonly DeliveryStore $deliveries,
@@ -32,7 +34,7 @@ final class DeliveryCoordinator
             return;
         }
 
-        $recipient = $claim->message['recipient'] ?? null;
+        $recipient = JsonDocuments::map($claim->message)['recipient'] ?? null;
 
         if (! is_array($recipient) || ! isset($recipient['kind'], $recipient['id']) || ! is_string($recipient['kind']) || ! is_string($recipient['id'])) {
             $this->deliveries->skip($claim, 'invalid-recipient');
@@ -70,7 +72,7 @@ final class DeliveryCoordinator
                 deliveryKey: $claim->deliveryKey,
                 attemptEpoch: $claim->epoch,
                 target: $target,
-                message: $claim->message,
+                message: JsonDocuments::capture(JsonDocuments::map($claim->message)),
                 context: $context,
                 messageSha256: $claim->messageHash,
                 templateVersion: $claim->templateVersion,

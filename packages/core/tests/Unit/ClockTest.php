@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Time\FrozenClock;
-use CoreX\Time\LaravelClock;
-use CoreX\Time\SystemClock;
+use CoreX\Time\Laravel\LaravelClock;
+use CoreX\Time\Laravel\SystemClock;
+use CoreX\Time\Testing\FrozenClock;
 use Psr\Clock\ClockInterface;
 
 it('returns UTC from system clock', function (): void {

@@ -1,0 +1,8 @@
+{
+  "schema": "p04-replay-equality/v1",
+  "patch_sha256": "2f12c8f2adf123d76c1bdf8255a18c76954aabf13140aeb8d0e0cf73cd5adc14",
+  "paths": 1545,
+  "mapped_classes": 115,
+  "mismatches": [],
+  "vendor": "independent relocated copy; own package links resolve inside replay checkout"
+}

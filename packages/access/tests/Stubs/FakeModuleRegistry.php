@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Access\Tests\Stubs;
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Exceptions\ModuleNotFound;
-use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\Registry\CompiledModule;
 
 /**
  * Test double for ModuleRegistry. The real, file-backed

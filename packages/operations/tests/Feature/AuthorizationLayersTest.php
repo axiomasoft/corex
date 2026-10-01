@@ -8,11 +8,12 @@ use Closure;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Enums\IdStrategy;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -20,20 +21,21 @@ use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Authorization\Internal\DenyClientScopeAuthorizer;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -187,20 +189,20 @@ final class AuthorizationLayersTest extends TestCase
     {
         $this->fields->deniedRead = ['/owner'];
         $authorizer = $this->app->make(ReplayAuthorizer::class);
-        $outcome = StoredOperationOutcome::success([
+        $outcome = StoredOperationOutcome::success(JsonDocuments::capture([
             'id' => self::LocalResource,
             'title' => 'Stored',
             'owner' => 'trusted-user',
             'account' => 'account-a',
             'secret' => 'stored-secret',
-        ]);
+        ]));
         $projected = $authorizer->authorize($this->invocation(), $outcome, true);
 
         self::assertSame([
             'id' => self::LocalResource,
             'title' => 'Stored',
             'account' => 'account-a',
-        ], $projected->data);
+        ], JsonDocuments::optionalArray($projected->data));
         self::assertSame(0, AuthorizationHandler::$calls);
 
         $this->clientScopes->allow = false;
@@ -283,7 +285,7 @@ final class AuthorizationLayersTest extends TestCase
         return new OperationInvocation(
             operation: $this->operation(),
             context: $this->context(),
-            input: $this->validInput(),
+            input: JsonDocuments::capture($this->validInput()),
             parameters: [],
             idempotencyKey: null,
         );
@@ -295,7 +297,7 @@ final class AuthorizationLayersTest extends TestCase
         $declaration = collect($this->modules->registry->api)->first(
             static fn (Api $api): bool => $api->mode === 'operation' && $api->operationId === 'notes.update',
         );
-        $operation = Operation::fromDeclaration($declaration, $this->modules->compiled()->fingerprint);
+        $operation = OperationFactory::fromDeclaration($declaration, $this->modules->compiled()->fingerprint);
 
         if ($requiredScopes === null) {
             return $operation;
@@ -309,8 +311,8 @@ final class AuthorizationLayersTest extends TestCase
             path: $operation->path,
             ability: $operation->ability,
             handler: $operation->handler,
-            requestSchema: $operation->requestSchema,
-            responseSchema: $operation->responseSchema,
+            requestSchema: JsonDocuments::capture(JsonDocuments::map($operation->requestSchema)),
+            responseSchema: JsonDocuments::capture(JsonDocuments::map($operation->responseSchema)),
             inputRules: $operation->inputRules,
             successStatus: $operation->successStatus,
             mode: $operation->mode,

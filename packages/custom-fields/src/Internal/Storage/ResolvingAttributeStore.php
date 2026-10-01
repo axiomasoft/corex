@@ -12,9 +12,9 @@ use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValueBag;
 use CoreX\CustomFields\Data\ValueBatch;
 use CoreX\CustomFields\Data\ValuePatch;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
 
 final readonly class ResolvingAttributeStore implements AttributeStore
 {

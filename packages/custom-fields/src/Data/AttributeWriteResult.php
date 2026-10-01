@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\CustomFields\Internal\Support\Validation;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class AttributeWriteResult
 {
     public function __construct(

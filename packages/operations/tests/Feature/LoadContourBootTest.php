@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
@@ -17,7 +18,7 @@ use CoreX\Operations\Cost\Data\CostOptions;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\TransferRunner;
 use DateTimeImmutable;
@@ -34,7 +35,59 @@ final class LoadContourBootTest extends TestCase
         $composer = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/composer.json'), true);
         $require = $composer['require'];
 
-        self::assertSame(['CoreX\\Operations\\Authorization\\Contracts', 'CoreX\\Operations\\Bulk\\Contracts', 'CoreX\\Operations\\Bulk\\Data', 'CoreX\\Operations\\Cost\\Contracts', 'CoreX\\Operations\\Cost\\Data', 'CoreX\\Operations\\Definition\\ApiOperationValidator', 'CoreX\\Operations\\Definition\\Contracts', 'CoreX\\Operations\\Definition\\Data', 'CoreX\\Operations\\Definition\\Enums\\OperationMode', 'CoreX\\Operations\\Definition\\Operation', 'CoreX\\Operations\\Definition\\OperationRegistry', 'CoreX\\Operations\\Errors\\Exceptions\\ApiError', 'CoreX\\Operations\\Errors\\Contracts', 'CoreX\\Operations\\Idempotency\\Contracts', 'CoreX\\Operations\\Idempotency\\Data', 'CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement', 'CoreX\\Operations\\Invocation\\Contracts', 'CoreX\\Operations\\Invocation\\Data', 'CoreX\\Operations\\Invocation\\InvocationMetadata', 'CoreX\\Operations\\Invocation\\OperationDispatcher', 'CoreX\\Operations\\Laravel\\ApiSchemaRegistrar', 'CoreX\\Operations\\Laravel\\Support\\ApiOptions', 'CoreX\\Operations\\OpenApi\\Contracts', 'CoreX\\Operations\\Pagination\\Contracts', 'CoreX\\Operations\\Pagination\\Data', 'CoreX\\Operations\\Pagination\\OrderingRegistry', 'CoreX\\Operations\\Pagination\\SignedCursorCodec', 'CoreX\\Operations\\Testing', 'CoreX\\Operations\\Validation\\Data', 'CoreX\\Operations\\Validation\\JsonCanonical', 'CoreX\\Operations\\Validation\\SchemaBudget', 'CoreX\\Operations\\Validation\\SchemaProfile', 'CoreX\\Operations\\Versioning\\Data'], $composer['extra']['corex']['public-api']);
+        self::assertSame([
+            'CoreX\\Operations\\Authorization\\Contracts',
+            'CoreX\\Operations\\Bulk\\Contracts',
+            'CoreX\\Operations\\Bulk\\Data',
+            'CoreX\\Operations\\Cost\\Contracts',
+            'CoreX\\Operations\\Cost\\Data',
+            'CoreX\\Operations\\Definition\\Contracts',
+            'CoreX\\Operations\\Definition\\Data',
+            'CoreX\\Operations\\Definition\\Enums\\OperationMode',
+            'CoreX\\Operations\\Definition\\Data\\Operation',
+            'CoreX\\Operations\\Errors\\Exceptions\\ApiError',
+            'CoreX\\Operations\\Errors\\Contracts',
+            'CoreX\\Operations\\Idempotency\\Contracts',
+            'CoreX\\Operations\\Idempotency\\Data',
+            'CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement',
+            'CoreX\\Operations\\Invocation\\Contracts',
+            'CoreX\\Operations\\Invocation\\Data',
+            'CoreX\\Operations\\Invocation\\Data\\InvocationMetadata',
+            'CoreX\\Operations\\Laravel\\ApiSchemaRegistrar',
+            'CoreX\\Operations\\Laravel\\Support\\ApiOptions',
+            'CoreX\\Operations\\OpenApi\\Contracts',
+            'CoreX\\Operations\\Pagination\\Contracts',
+            'CoreX\\Operations\\Pagination\\Data',
+            'CoreX\\Operations\\Testing',
+            'CoreX\\Operations\\Validation\\Data',
+            'CoreX\\Operations\\Validation\\Laravel\\JsonCanonical',
+            'CoreX\\Operations\\Versioning\\Data',
+            'CoreX\\Operations\\ApiServiceProvider',
+            'CoreX\\Operations\\Authorization\\Laravel\\DeclaredFieldAuthorizer',
+            'CoreX\\Operations\\Bulk\\Enums\\BulkOperationStatus',
+            'CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser',
+            'CoreX\\Operations\\Bulk\\Laravel\\BulkRegistrar',
+            'CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar',
+            'CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited',
+            'CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable',
+            'CoreX\\Operations\\Cost\\Laravel\\CostOptionsParser',
+            'CoreX\\Operations\\Cost\\Laravel\\CostRegistrar',
+            'CoreX\\Operations\\Definition\\Laravel\\OperationFactory',
+            'CoreX\\Operations\\Definition\\Laravel\\OperationFingerprint',
+            'CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation',
+            'CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory',
+            'CoreX\\Operations\\Invocation\\Laravel\\ResolvedContexts',
+            'CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations',
+            'CoreX\\Operations\\Laravel\\InvocationFixtures',
+            'CoreX\\Operations\\Pagination\\Laravel\\CursorPageBuilder',
+            'CoreX\\Operations\\Pagination\\Laravel\\OrderingFactory',
+            'CoreX\\Operations\\Validation\\Laravel\\JsonObjectFactory',
+            'CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory',
+            'CoreX\\Operations\\Validation\\Laravel\\SchemaBudget',
+            'CoreX\\Operations\\Validation\\Laravel\\SchemaProfile',
+            'CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles',
+            'CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings',
+        ], $composer['extra']['corex']['public-api']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
         self::assertSame('^12.0|^13.0', $require['illuminate/support']);
@@ -101,15 +154,15 @@ final class LoadContourBootTest extends TestCase
             encodedScope: (new ArrayDataScopeCodec)->encode($scope),
             actorId: 'actor-1',
             clientId: 'client-1',
-            extensionStamp: [
+            extensionStamp: JsonDocuments::capture([
                 'point' => 'api.operation',
                 'id' => 'notes.bulk-import',
                 'version' => '1',
                 'rights' => 'read',
                 'restore_epoch' => hash('sha256', 'load-contour-restore'),
                 'registryFingerprint' => hash('sha256', 'registry'),
-            ],
-            inputRef: ['kind' => 'import', 'format' => 'ndjson', 'sha256' => hash('sha256', 'import'), 'length' => 1],
+            ]),
+            inputRef: JsonDocuments::capture(['kind' => 'import', 'format' => 'ndjson', 'sha256' => hash('sha256', 'import'), 'length' => 1]),
         );
 
         foreach ([

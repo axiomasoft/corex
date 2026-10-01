@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\SavedViews\Contracts;
 
+use CoreX\Attributes\Api;
 use CoreX\Panels\SavedViews\Data\SavedQuery;
 use CoreX\Panels\SavedViews\Data\SavedViewRef;
 use CoreX\Panels\SavedViews\Data\SaveViewInput;
 use CoreX\Panels\SavedViews\Data\ViewContext;
 use CoreX\Panels\SavedViews\Data\ViewScope;
 
+#[Api(since: '1.0')]
 interface SavedViewRepository
 {
     /** @return list<SavedViewRef> */

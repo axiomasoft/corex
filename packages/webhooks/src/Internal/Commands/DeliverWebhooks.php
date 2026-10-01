@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal\Commands;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use Illuminate\Console\Command;
 

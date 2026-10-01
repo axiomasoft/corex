@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
@@ -70,7 +71,7 @@ it('persists and dispatches a versioned wakeup envelope on PostgreSQL', function
         requestKey: 'pg-versioned-envelope',
         fireAt: new DateTimeImmutable('-1 minute'),
         window: null,
-        payload: ['message' => 'wake'],
+        payload: JsonDocuments::capture(['message' => 'wake']),
     ));
 
     $payload = json_decode(

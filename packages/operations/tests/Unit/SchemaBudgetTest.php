@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Operations\Validation\SchemaBudget;
-use CoreX\Operations\Validation\SchemaProfile;
+use CoreX\Operations\Validation\Laravel\SchemaBudget;
+use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

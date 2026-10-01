@@ -6,7 +6,7 @@ namespace CoreX\Access\Access\Internal;
 
 use AzGuard\Models\DirectGrant;
 use CoreX\Access\Contracts\Principal;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 
 /**
  * Whether a principal holds an active AzGuard direct grant for one compiled

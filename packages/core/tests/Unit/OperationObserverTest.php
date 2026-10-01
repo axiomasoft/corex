@@ -6,11 +6,11 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Observability\Data\OperationCompleted;
+use CoreX\Observability\Data\OperationContext;
 use CoreX\Observability\Data\OperationFailed;
 use CoreX\Observability\Data\OperationStarted;
 use CoreX\Observability\Enums\OperationOutcome;
 use CoreX\Observability\Internal\NullOperationObserver;
-use CoreX\Observability\Internal\OperationContext;
 use CoreX\Observability\Internal\PsrLogOperationObserver;
 use Psr\Log\AbstractLogger;
 

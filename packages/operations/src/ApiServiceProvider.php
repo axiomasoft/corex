@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations;
 
-use CoreX\Config\SecretRef;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
@@ -14,18 +17,19 @@ use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
-use CoreX\Operations\Authorization\Internal\DeclaredFieldAuthorizer;
 use CoreX\Operations\Authorization\Internal\DenyClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Internal\DenyOperationAuthorizer;
 use CoreX\Operations\Authorization\Internal\DenyPrincipalResolver;
+use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Bulk\Data\BulkOptions;
 use CoreX\Operations\Bulk\Internal\Commands\WorkBulkOperations;
 use CoreX\Operations\Bulk\Laravel\BulkRegistrar;
 use CoreX\Operations\Cost\Laravel\CostRegistrar;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
 use CoreX\Operations\Definition\Internal\DeclaredSchemaContributor;
+use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Definition\Internal\OperationSectionCompiler;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Definition\Laravel\OperationPortBindings;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
@@ -45,10 +49,11 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Laravel\Commands\PruneApiOperations;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Internal\Commands\WriteApiSnapshots;
+use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
-use CoreX\Operations\Pagination\OrderingRegistry;
-use CoreX\Operations\Pagination\SignedCursorCodec;
-use CoreX\Time\SystemClock;
+use CoreX\Operations\Pagination\Internal\OrderingRegistry;
+use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
+use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Route;
@@ -58,11 +63,14 @@ use Override;
 use Psr\Clock\ClockInterface;
 
 /** Manually registered; routes and tenant migration publication remain explicit. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ApiServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
+        OperationPortBindings::register($this->app);
+
         $this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-operations.php', 'corex-operations');
@@ -104,13 +112,13 @@ final class ApiServiceProvider extends ServiceProvider
                     throw new ApiError('access_denied', 403, 'Operation is not permitted.');
                 }
 
-                if ($replayed && $outcome->kind === 'success' && $outcome->data !== null) {
-                    return StoredOperationOutcome::success(DeclaredFieldAuthorizer::prune(
+                if ($replayed && $outcome->kind === 'success' && JsonDocuments::optionalArray($outcome->data) !== null) {
+                    return StoredOperationOutcome::success(JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
                         operation: $invocation->operation,
                         context: $invocation->context,
                         authorizer: $this->fields,
-                        data: $outcome->data,
-                    ));
+                        data: JsonDocuments::optionalArray($outcome->data),
+                    )));
                 }
 
                 return $outcome;
@@ -177,6 +185,9 @@ final class ApiServiceProvider extends ServiceProvider
                 (new OperationRegistry($app->make(ModuleRegistry::class)))->all($options->defaultMajor),
             );
         });
+
+        $this->app->alias(SignedCursorCodec::class, CursorCodec::class);
+        $this->app->alias(OrderingRegistry::class, Pagination\Contracts\OrderingRegistry::class);
 
         $this->app->scoped(IdempotencyStore::class, static function (Application $app): SqlIdempotencyStore {
             $secret = $app['config']->get('app.key');

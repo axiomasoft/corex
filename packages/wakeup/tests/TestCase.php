@@ -7,7 +7,7 @@ namespace CoreX\Wakeup\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Time\LaravelClock;
+use CoreX\Time\Laravel\LaravelClock;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\DateFactory;

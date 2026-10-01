@@ -5,7 +5,8 @@ System→Tenant→User), append-only `Audit`, `MoneyCast`, департамен�
 фичефлаги, PubSub-контракт и реестр сущностей. MIT.
 
 Пакет ставится как зависимость приложения-потребителя; публичные контракты —
-в `src/Contracts/`, реализации скрыты.
+в `<Module>/Contracts/`; DTO помечены `#[Api]`, адаптеры интеграции — `#[Spi]`.
+Классы под `Internal` принадлежат своему модулю и не являются контрактом приложения.
 
 ## Требование к СУБД
 
@@ -59,8 +60,8 @@ php artisan migrate --database=<tenant>
 
 Тип ключевых колонок (`id`, ссылки, FK) следует `config('corex.ids.strategy')`:
 `uuid7` (дефолт, ADR-003), `uuid`, `ulid`, `int`. Миграции пишут колонки через
-`CoreX\Database\Schema\IdColumns`, модели — через трейт
-`CoreX\Database\HasConfiguredId`, так что boxed/legacy-установка выравнивает
+`CoreX\Database\Laravel\IdColumns`, модели — через трейт
+`CoreX\Database\Laravel\HasConfiguredId`, так что boxed/legacy-установка выравнивает
 ключи ядра под свой тип без форка миграций. Меняйте стратегию **до** первого
 `migrate` — она фиксирует тип колонок в БД.
 
@@ -90,3 +91,22 @@ Consumer tests can create messaging adapters through
 `CoreX\Messaging\Testing\MessagingFixtures`; the factory returns the public messaging contracts.
 
 The merged module subsystem is documented in [modules/README](docs/modules/README.md) and [modules/PACKAGE](docs/modules/PACKAGE.md). Its original changelog is retained in [history](docs/history/corex-modules-CHANGELOG.md).
+
+## JSON в публичных DTO
+
+Произвольные JSON-данные передаются как неизменяемый `CoreX\Data\Data\JsonDocument`.
+Интеграционный адаптер `CoreX\Data\Laravel\JsonDocuments` проверяет входное дерево
+и сохраняет различие целых и дробных чисел. Объекты, ресурсы и бесконечные числа
+не принимаются. Сохранённый JSON и HTTP-представление продолжают содержать обычные
+JSON-значения.
+
+```php
+use CoreX\Data\Laravel\JsonDocuments;
+
+$document = JsonDocuments::capture(['enabled' => true, 'weight' => 1.5]);
+$value = JsonDocuments::map($document);
+```
+
+`SettingsRepository::get()`/`FeatureFlags::value()` возвращают JSON-документ;
+`SettingsRepository::set()` принимает его. `CoreOptions` — неизменяемый снимок
+текущей конфигурации: новое разрешение из контейнера видит её актуальное состояние.

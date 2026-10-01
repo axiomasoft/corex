@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningToken;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
@@ -48,7 +49,7 @@ final class OperationStore
         }
 
         /** @var array{id: string, type: string, display: string} */
-        return $existing->resultRef;
+        return JsonDocuments::map($existing->resultRef);
     }
 
     /** @param array{id: string, type: string, display: string} $resultRef */

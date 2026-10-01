@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Data\Contracts;
 
-use CoreX\Data\DataScope;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface DataScopeCodec
 {
     /** @return array<string, scalar|null> */

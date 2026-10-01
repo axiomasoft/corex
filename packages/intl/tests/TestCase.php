@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Tests;
 
-use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Intl\Tests\Support\IntlTestCase;
 use Illuminate\Foundation\Application;

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Session-level advisory lock переживает транзакцию и остаётся висеть на
  * чужом клиенте пула. Легальны только транзакционные `*_xact_*`.
- *
- * @internal spec: B-10 §7.3 п.3
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoSessionAdvisoryLockRule extends AbstractDatabaseCallRule
 {
     protected function isViolation(string $sql): bool

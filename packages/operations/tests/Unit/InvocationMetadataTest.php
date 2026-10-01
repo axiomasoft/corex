@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ final class InvocationMetadataTest extends TestCase
 
     public function test_valid_correlation_id_is_preserved(): void
     {
-        $metadata = InvocationMetadata::fromRequest(
+        $metadata = InvocationMetadataFactory::fromRequest(
             request: Request::create(
                 uri: '/v1/notes',
                 method: 'GET',
@@ -38,7 +39,7 @@ final class InvocationMetadataTest extends TestCase
 
     public function test_missing_correlation_id_falls_back_to_request_id(): void
     {
-        $metadata = InvocationMetadata::fromRequest(
+        $metadata = InvocationMetadataFactory::fromRequest(
             request: Request::create(
                 uri: '/v1/notes',
                 method: 'GET',
@@ -52,7 +53,7 @@ final class InvocationMetadataTest extends TestCase
 
     public function test_invalid_correlation_and_request_ids_are_rejected_identically(): void
     {
-        $metadata = InvocationMetadata::fromRequest(
+        $metadata = InvocationMetadataFactory::fromRequest(
             request: Request::create(
                 uri: '/v1/notes',
                 method: 'GET',
@@ -70,7 +71,7 @@ final class InvocationMetadataTest extends TestCase
 
     public function test_invalid_correlation_falls_back_to_valid_request_id(): void
     {
-        $metadata = InvocationMetadata::fromRequest(
+        $metadata = InvocationMetadataFactory::fromRequest(
             request: Request::create(
                 uri: '/v1/notes',
                 method: 'GET',

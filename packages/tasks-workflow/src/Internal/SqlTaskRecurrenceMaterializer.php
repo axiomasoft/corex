@@ -7,8 +7,9 @@ namespace CoreX\TasksWorkflow\Internal;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Recurrence\Data\ExpansionLimits;
@@ -435,7 +436,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             requestKey: 'materialize:'.$series->id,
             fireAt: $fireAt,
             window: null,
-            payload: MaterializationHasher::wakeupPayload(series: $series, window: $window),
+            payload: JsonDocuments::capture(MaterializationHasher::wakeupPayload(series: $series, window: $window)),
         ));
     }
 }

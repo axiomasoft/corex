@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class DigestWindow
 {
     public function __construct(public DateTimeImmutable $start, public DateTimeImmutable $end, public string $period)

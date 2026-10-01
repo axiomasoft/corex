@@ -1,0 +1,24 @@
+{
+  "classes": {
+    "CoreX\\Access\\Matrix\\Data\\ActiveEntityFilter": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+    "CoreX\\Modules\\Events\\ManifestListeners": "CoreX\\Modules\\Internal\\Events\\ManifestListeners"
+  },
+  "moves": [
+    {
+      "old": "CoreX\\Access\\Matrix\\Data\\ActiveEntityFilter",
+      "new": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+      "path": "packages/access/src/Matrix/Data/ActiveEntityFilter.php",
+      "target_path": "packages/access/src/Matrix/Internal/ActiveEntityFilter.php",
+      "verdict": "internal",
+      "public_target": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter"
+    },
+    {
+      "old": "CoreX\\Modules\\Events\\ManifestListeners",
+      "new": "CoreX\\Modules\\Internal\\Events\\ManifestListeners",
+      "path": "packages/core/src/Modules/Events/ManifestListeners.php",
+      "target_path": "packages/core/src/Modules/Internal/Events/ManifestListeners.php",
+      "verdict": "internal",
+      "public_target": "CoreX\\Modules\\Internal\\Events\\ManifestListeners"
+    }
+  ]
+}

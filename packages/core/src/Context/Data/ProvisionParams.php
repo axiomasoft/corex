@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * Fixes embedding_model/dim on the account row at provisioning time — never
  * read from global config on the fly.
- *
- * @internal spec: B-11 §3.2 (owner: B-11), AC-10, R-16
  */
+#[Api(since: '1.0')]
 final readonly class ProvisionParams
 {
     public function __construct(

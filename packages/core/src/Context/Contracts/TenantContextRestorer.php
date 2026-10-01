@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 
 /**
  * Восстанавливает рантайм-контекст из durable-скоупа.
@@ -16,6 +18,7 @@ use CoreX\Data\DataScope;
  * обработчиком по durable-payload'у и обязан отказать, если процесс исполняется не в
  * том аккаунте, воркспейсе или соединении, которые записаны в скоупе.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TenantContextRestorer
 {
     /** @throws ScopeContextMismatch */

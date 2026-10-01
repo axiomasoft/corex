@@ -6,7 +6,8 @@ namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
-use CoreX\Data\DataScope;
+use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -39,9 +40,6 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
             $snapshot = $source->snapshot($scope, $entity);
             $drivers = array_replace($drivers, $snapshot->driverCapabilities);
             foreach ($snapshot->activeFields as $field) {
-                if (! is_array($field)) {
-                    throw new RuntimeException('Catalogue source returned a malformed field.');
-                }
 
                 $field = $this->normalize($field);
                 $id = (string) ($field['id'] ?? 'legacy:'.$sourceName.':'.$field['key']);
@@ -111,6 +109,8 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
         $fields = array_map(static fn (array $entry): array => $entry['field'], array_values($byId));
         usort($fields, static fn (array $left, array $right): int => [$left['key'], $left['id'] ?? ''] <=> [$right['key'], $right['id'] ?? '']);
         $hash = hash('sha256', $entity."\n".$this->canonical($fields));
+
+        $fields = Validation::validatedMapList($fields, 'active fields');
 
         return new FieldSnapshot(
             entity: $entity,

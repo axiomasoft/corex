@@ -13,7 +13,7 @@ use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');

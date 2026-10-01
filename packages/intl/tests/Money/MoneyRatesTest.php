@@ -7,17 +7,18 @@ use Brick\Money\Context\CustomContext;
 use Brick\Money\Money;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
 use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Contracts\RateProvider;
-use CoreX\Intl\Currency\Data\ConversionPolicy;
 use CoreX\Intl\Currency\Data\RateBatch;
 use CoreX\Intl\Currency\Data\RateQuery;
 use CoreX\Intl\Currency\Data\RateSnapshot;
 use CoreX\Intl\Currency\Exceptions\InvalidRateException;
+use CoreX\Intl\Currency\Laravel\ConversionPolicy;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Data\FormatPolicy;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
@@ -80,13 +81,13 @@ it('FX-03 imports immutable snapshots idempotently and detects conflicts', funct
 
     $first = $importer->import(
         scope: intlScope(),
-        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt'), sourceManifest: ['source' => 'manual']),
+        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt'), sourceManifest: JsonDocuments::capture(['source' => 'manual'])),
         token: $token,
     );
 
     $second = $importer->import(
         scope: intlScope(),
-        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt'), sourceManifest: ['source' => 'manual']),
+        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt'), sourceManifest: JsonDocuments::capture(['source' => 'manual'])),
         token: $token,
     );
 
@@ -108,7 +109,7 @@ it('FX-05 distinguishes missing and stale lookup results', function (): void {
     $snapshot = sampleRate(validOn: '2026-01-01');
     $importer->import(
         scope: intlScope(),
-        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt2'), sourceManifest: []),
+        batch: new RateBatch(snapshots: [$snapshot], expectedGeneration: 1, formatHash: hash('sha256', 'fmt2'), sourceManifest: JsonDocuments::capture([])),
         token: new WriteToken(operationKey: hash('sha256', 'fx-05'), payloadHash: hash('sha256', 'batch-2'), expectedRecordVersion: 'rev-1'),
     );
 
@@ -206,7 +207,7 @@ it('FX-10 keeps old snapshots addressable after corrected import revision', func
 
     $importer->import(
         scope: intlScope(),
-        batch: new RateBatch(snapshots: [$old], expectedGeneration: 1, formatHash: hash('sha256', 'hist'), sourceManifest: []),
+        batch: new RateBatch(snapshots: [$old], expectedGeneration: 1, formatHash: hash('sha256', 'hist'), sourceManifest: JsonDocuments::capture([])),
         token: new WriteToken(operationKey: hash('sha256', 'fx-10-a'), payloadHash: hash('sha256', 'hist-a'), expectedRecordVersion: 'rev-1'),
     );
 
@@ -226,7 +227,7 @@ it('FX-10 keeps old snapshots addressable after corrected import revision', func
 
     $importer->import(
         scope: intlScope(),
-        batch: new RateBatch(snapshots: [$corrected], expectedGeneration: 2, formatHash: hash('sha256', 'hist'), sourceManifest: []),
+        batch: new RateBatch(snapshots: [$corrected], expectedGeneration: 2, formatHash: hash('sha256', 'hist'), sourceManifest: JsonDocuments::capture([])),
         token: new WriteToken(operationKey: hash('sha256', 'fx-10-b'), payloadHash: hash('sha256', 'hist-b'), expectedRecordVersion: 'rev-2'),
     );
 

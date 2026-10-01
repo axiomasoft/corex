@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
-use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\TaskDraft;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
@@ -64,7 +65,7 @@ beforeEach(function (): void {
     $this->project = Project::query()->create([
         'workspace_id' => $this->workspaceId,
         'name' => 'Launch',
-        'created_by' => $this->actor->toArray(),
+        'created_by' => JsonDocuments::decodeTree($this->actor->toArray()),
     ]);
     $this->stage = Stage::query()->create([
         'project_id' => $this->project->getKey(),
@@ -157,10 +158,10 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
         requestKey: 'manual:series-pg-06b',
         fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
         window: null,
-        payload: MaterializationHasher::wakeupPayload(
+        payload: JsonDocuments::capture(MaterializationHasher::wakeupPayload(
             series: $secondSeries,
             window: new MaterializationWindow(start: '2026-09-01', end: '2026-09-05'),
-        ),
+        )),
     ))->status)->toBe('created');
 
     $result = app(DueWakeupSweeper::class)->sweep($context, 10);

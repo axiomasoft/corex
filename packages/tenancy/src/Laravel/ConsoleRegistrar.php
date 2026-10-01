@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Laravel\Commands\PendingClearCommand;
@@ -13,7 +15,7 @@ use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ConsoleRegistrar implements PackageRegistrar
 {
     #[Override]

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * B-11 §3.2 (L618–624): keeps an account's tenant-DB `users` projection in
  * step with the central `root_identities` row (full denormalization, D4).
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface IdentitySyncer
 {
     /** Idempotent upsert of the users-row for one account (AC-16). */

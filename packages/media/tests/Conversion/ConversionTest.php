@@ -14,6 +14,7 @@ use CoreX\Media\Internal\ConversionCoordinator;
 use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
+use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,7 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
     $bytes = thumbnailBytes();
     $file = app(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('conversion-request', UploadedFile::fake()->createWithContent('source.jpg', $bytes), 'attachment'),
+        new UploadInput('conversion-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', $bytes)), 'attachment'),
     );
 
     expect(app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail'))->toBeNull();
@@ -80,7 +81,7 @@ it('purges a published conversion together with its deleting original', function
 
     $file = app(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('conversion-purge-request', UploadedFile::fake()->createWithContent('source.jpg', thumbnailBytes()), 'attachment'),
+        new UploadInput('conversion-purge-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', thumbnailBytes())), 'attachment'),
     );
     app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
     (new ConvertMedia($file->id, 'thumbnail'))->handle(app(ConversionCoordinator::class));

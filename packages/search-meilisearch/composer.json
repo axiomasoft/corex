@@ -28,7 +28,8 @@
             "package-type": "integration",
             "stability": "stable",
             "public-api": [
-                "CoreX\\SearchMeilisearch\\Exceptions"
+                "CoreX\\SearchMeilisearch\\Exceptions",
+                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
             ]
         },
         "laravel": {

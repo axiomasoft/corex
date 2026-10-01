@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Tasks\Task\Enums\TaskPriority;
 use DateTimeImmutable;
 
+#[Api(since: '1.0')]
 final readonly class UpdateTaskData
 {
     private const array FIELDS = [

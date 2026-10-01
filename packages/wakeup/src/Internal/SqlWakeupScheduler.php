@@ -6,6 +6,7 @@ namespace CoreX\Wakeup\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\CancelResult;
@@ -43,7 +44,7 @@ final class SqlWakeupScheduler implements WakeupScheduler
         }
 
         $scope = $this->scope($request->context);
-        $data = $this->canonical($request->payload);
+        $data = $this->canonical(JsonDocuments::map($request->payload));
         $payload = $this->handlers->envelope(
             definition: $definition,
             data: $data,

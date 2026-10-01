@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Activity\Models;
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Flex\Crm\Activity\Enums\ActivityType;
 use Flex\Crm\Context\Models\Concerns\HasCrmContext;
 use Illuminate\Database\Eloquent\Relations\HasMany;

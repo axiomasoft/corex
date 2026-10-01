@@ -6,10 +6,10 @@ namespace CoreX\Intl\Currency\Internal;
 
 use Brick\Money\Money;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
-use CoreX\Intl\Currency\Data\ConversionPolicy;
-use CoreX\Intl\Currency\Data\ConversionReceipt;
 use CoreX\Intl\Currency\Data\RateSnapshot;
 use CoreX\Intl\Currency\Exceptions\InvalidRateException;
+use CoreX\Intl\Currency\Laravel\ConversionPolicy;
+use CoreX\Intl\Currency\Laravel\ConversionReceipt;
 use Override;
 
 final class BrickCurrencyConverter implements CurrencyConverter

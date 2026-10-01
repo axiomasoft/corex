@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks;
 
-use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Tasks\Project\Models\Project;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Modules\Contracts\ModuleDefinition;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Tasks\Project\Internal\Models\Project;
+use CoreX\Tasks\Task\Internal\Models\Task;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TasksModule extends ModuleDefinition
 {
     public const string NAME = 'axiomasoft/corex-tasks';

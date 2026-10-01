@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;

@@ -12,7 +12,8 @@ use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
-use CoreX\Data\DataScope;
+use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 use JsonException;
@@ -20,6 +21,7 @@ use RuntimeException;
 use stdClass;
 use ValueError;
 
+/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
 final readonly class DatabaseFieldCatalogue implements FieldCatalogue
 {
     /** @param array<string, bool> $drivers */
@@ -53,10 +55,10 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
             entity: $entity,
             schemaVersion: $hash,
             schemaHash: $hash,
-            activeFields: array_map(
+            activeFields: Validation::validatedMapList(array_map(
                 static fn (AttributeDefinition $definition): array => $definition->snapshotRow(),
                 $definitions,
-            ),
+            ), 'active fields'),
             driverCapabilities: $this->drivers,
         );
     }
@@ -157,7 +159,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
         return $definition;
     }
 
-    /** @return array<string, mixed> */
+    /** @return JsonMap */
     private function map(mixed $value, string $name): array
     {
         $decoded = $this->decode($value, $name);
@@ -165,6 +167,8 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
         if (! is_array($decoded) || array_is_list($decoded) && $decoded !== []) {
             throw new RuntimeException("Stored attribute {$name} must be a JSON object.");
         }
+
+        $decoded = Validation::validatedMap($decoded, $name);
 
         return $decoded;
     }

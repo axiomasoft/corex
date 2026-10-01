@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Data\Laravel\SystemDataScopeAuthorization;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
@@ -24,7 +25,7 @@ final class MaterializationWakeupHandler implements DueWakeupHandler
 
     public function handle(WakeupDelivery $delivery): void
     {
-        $decoded = MaterializationHasher::decodeWakeupPayload($delivery->request->payload);
+        $decoded = MaterializationHasher::decodeWakeupPayload(JsonDocuments::map($delivery->request->payload));
         $series = $decoded['series'];
         $window = $decoded['window'];
         $connection = app('db')->connection();
@@ -47,7 +48,7 @@ final class MaterializationWakeupHandler implements DueWakeupHandler
             ? $this->container->make(DataScopeAuthorizer::class)
             : null;
 
-        $this->container->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
+        $this->container->instance(DataScopeAuthorizer::class, new SystemDataScopeAuthorization);
         $this->container->forgetScopedInstances();
 
         try {

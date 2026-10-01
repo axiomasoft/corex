@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * Read-model returned by `DepartmentRepository` implementations.
- *
- * @internal spec: B-10 §3.1
  */
+#[Api(since: '1.0')]
 final readonly class Department
 {
     public function __construct(

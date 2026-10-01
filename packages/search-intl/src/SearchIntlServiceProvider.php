@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
 use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchIntlServiceProvider extends ServiceProvider
 {
     #[Override]

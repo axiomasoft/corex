@@ -1,0 +1,7 @@
+> for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done
+==> packages/access
+PHPUnit 13.3.4 by Sebastian Bergmann and contributors.
+
+Cannot open bootstrap script "/home/vostrikov/projects/packages/corex/build/p04-replay-final/packages/access/vendor/autoload.php"
+Script pest --exclude-group=pg handling the test event returned with error code 2
+Script for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done handling the test:packages event returned with error code 1

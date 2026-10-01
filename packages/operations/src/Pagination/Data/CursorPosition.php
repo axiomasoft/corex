@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
 /** Server-owned ordering plus the signed tuple. Continuation is strict and skips the boundary row. */
+#[Api(since: '1.0')]
 final readonly class CursorPosition
 {
     /**

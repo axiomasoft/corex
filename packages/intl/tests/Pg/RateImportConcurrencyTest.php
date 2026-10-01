@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Data\RateBatch;
 use CoreX\Intl\Currency\Data\RateSnapshot;
@@ -43,7 +44,7 @@ it('FX-04 imports concurrent rate batches into one immutable row set', function 
         snapshots: [$snapshot],
         expectedGeneration: 1,
         formatHash: hash('sha256', 'fmt-pg'),
-        sourceManifest: ['source' => 'manual'],
+        sourceManifest: JsonDocuments::capture(['source' => 'manual']),
     );
 
     $importer = app(RateImporter::class);

@@ -16,8 +16,9 @@ use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
+use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 
 final readonly class QueuedSchemaOperations implements SchemaOperations
@@ -125,6 +126,8 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
         }
 
         $schemaHash = $this->catalogue->snapshot($scope, $entity)->schemaHash;
+
+        $drift = Validation::validatedMapList($drift, 'schema drift');
 
         return new DriftReport(entity: $entity, schemaHash: $schemaHash, drift: $drift, status: $drift === [] ? 'clean' : 'drifted');
     }

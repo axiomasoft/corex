@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Media;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
@@ -24,6 +26,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class MediaServiceProvider extends ServiceProvider
 {
     #[Override]

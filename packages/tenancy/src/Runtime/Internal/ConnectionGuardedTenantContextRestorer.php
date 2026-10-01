@@ -7,7 +7,7 @@ namespace CoreX\Tenancy\Runtime\Internal;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\DatabaseManager;
 use Override;
 

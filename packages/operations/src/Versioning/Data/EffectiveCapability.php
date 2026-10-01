@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
+use CoreX\Attributes\Api;
+
 /** Live caller view. It is not part of the code-profile fingerprint. */
+#[Api(since: '1.0')]
 final readonly class EffectiveCapability
 {
     /**

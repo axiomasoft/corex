@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Config\Internal\Commands;
 
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Config\SecretRef;
 use Illuminate\Console\Command;
 use Throwable;
 use UnexpectedValueException;

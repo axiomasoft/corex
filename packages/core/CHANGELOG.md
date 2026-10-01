@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — P04.2
+
+- Закрыта API/SPI-поверхность: скалярные контракты, JSON-документы и снимки CoreOptions; конкретные реализации принадлежат Internal.
+
+
 ## Unreleased — source API metadata (PLAN3.P04.1)
 
 - Add final readonly `CoreX\Attributes\Api` and `Spi` metadata and the `SpiKind` backed enum.

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 
-/** @internal Test-only reference key; it is not a runtime tenant binding. */
+#[Api(since: '1.0')]
 final readonly class PairKey
 {
     public function __construct(

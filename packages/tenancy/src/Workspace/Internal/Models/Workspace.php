@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

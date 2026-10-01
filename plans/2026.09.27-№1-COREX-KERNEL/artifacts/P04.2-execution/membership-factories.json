@@ -1,0 +1,4 @@
+{
+    "CoreX\\Tenancy\\Membership\\Data\\MembershipSnapshot": "CoreX\\Tenancy\\Membership\\Laravel\\MembershipSnapshotFactory",
+    "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipReceipt": "CoreX\\Tenancy\\Membership\\Laravel\\RevokeMembershipReceiptFactory"
+}

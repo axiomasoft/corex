@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
-use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Contracts\ModuleDefinition;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\ModuleManifest;
 use Flex\Crm\Activity\Models\Activity;
 use Flex\Crm\ApiShared\CrmSchemas;
 use Flex\Crm\Company\Api\CreateCompanyOperation;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Matrix\Internal;
 
-use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\Data\RoleMatrixEntry;
+use CoreX\Access\Roles\Data\RoleView;
+use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Schema;
  *    whose table HAS the matching column (`owner_id`/`workspace_id`) but
  *    whose `EntityDefinition` never declared the matching capability
  *    (`Ownable`/`WorkspaceScoped`) — declaration drift that
- *    {@see ScopeAvailability} would fail closed on at
+ *    {@see CoreX\Access\Access\Internal\ScopeAvailability} would fail closed on at
  *    request time; this surfaces the same condition earlier, at
  *    matrix-authoring time.
  *
@@ -54,7 +54,7 @@ final readonly class MatrixValidator
     ) {}
 
     /** @return list<string> */
-    public function validate(Role $role): array
+    public function validate(RoleView $role): array
     {
         return [
             ...$this->degradedScopeWarnings($role),
@@ -63,18 +63,15 @@ final readonly class MatrixValidator
     }
 
     /** @return list<string> */
-    private function degradedScopeWarnings(Role $role): array
+    private function degradedScopeWarnings(RoleView $role): array
     {
-        $nonUserAssignable = array_values(array_diff($role->assignable_to, [PrincipalType::User->value]));
+        $nonUserAssignable = array_values(array_diff($role->assignableTo, [PrincipalType::User->value]));
 
         if ($nonUserAssignable === []) {
             return [];
         }
 
-        $hasDegradedScope = RoleMatrixRow::query()
-            ->where('role_id', $role->id)
-            ->whereIn('scope', self::OWNER_DEGRADED_SCOPES)
-            ->exists();
+        $hasDegradedScope = array_any(RoleMatrixData::matrix($role->id), static fn (RoleMatrixEntry $row): bool => in_array($row->scope->value, self::OWNER_DEGRADED_SCOPES, true));
 
         if (! $hasDegradedScope) {
             return [];
@@ -88,18 +85,16 @@ final readonly class MatrixValidator
     }
 
     /** @return list<string> */
-    private function capabilityDriftWarnings(Role $role): array
+    private function capabilityDriftWarnings(RoleView $role): array
     {
-        $rows = RoleMatrixRow::query()
-            ->where('role_id', $role->id)
-            ->whereIn('scope', array_keys(self::SCOPE_CAPABILITY_REQUIREMENT))
-            ->get(['entity_key', 'scope'])
-            ->unique(fn (RoleMatrixRow $row): string => "{$row->entity_key}|{$row->scope->value}");
+        $rows = collect(RoleMatrixData::matrix($role->id))
+            ->filter(static fn (RoleMatrixEntry $row): bool => isset(self::SCOPE_CAPABILITY_REQUIREMENT[$row->scope->value]))
+            ->unique(fn (RoleMatrixEntry $row): string => "{$row->entityKey}|{$row->scope->value}");
 
         $warnings = [];
 
         foreach ($rows as $row) {
-            $warning = $this->capabilityDriftWarning($role, $row->entity_key, $row->scope->value);
+            $warning = $this->capabilityDriftWarning($role, $row->entityKey, $row->scope->value);
 
             if ($warning !== null) {
                 $warnings[] = $warning;
@@ -109,7 +104,7 @@ final readonly class MatrixValidator
         return $warnings;
     }
 
-    private function capabilityDriftWarning(Role $role, string $entityKey, string $scope): ?string
+    private function capabilityDriftWarning(RoleView $role, string $entityKey, string $scope): ?string
     {
         if (! $this->entities()->has($entityKey)) {
             return null;

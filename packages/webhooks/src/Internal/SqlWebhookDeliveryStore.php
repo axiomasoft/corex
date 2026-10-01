@@ -6,8 +6,8 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Data\Data\DataScope;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
 use CoreX\Webhooks\Data\WebhookDelivery;
 use CoreX\Webhooks\Data\WebhookHttpResult;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Internal\Projection;
 
 use Closure;
+use CoreX\Tenancy\Membership\Data\MembershipSnapshot;
 use CoreX\Tenancy\Membership\Data\PairKey;
 use CoreX\Tenancy\Membership\Data\PairState;
 use CoreX\Tenancy\Membership\Data\PairWitness;
@@ -18,7 +19,6 @@ use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
 use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use CoreX\Tenancy\Membership\Internal\Refresh\RefreshCoordinator;
 use CoreX\Tenancy\Membership\Internal\Timing\Lease;
-use CoreX\Tenancy\Membership\Internal\Transport\MembershipSnapshot;
 use CoreX\Tenancy\Membership\Internal\Transport\MembershipTrigger;
 use Illuminate\Database\ConnectionInterface;
 

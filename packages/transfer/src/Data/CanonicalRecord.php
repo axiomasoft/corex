@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
+/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+#[Api(since: '1.0')]
 final readonly class CanonicalRecord
 {
-    /** @param array<string, null|bool|int|string|array<array-key, mixed>> $values */
+    /** @param JsonMap $values */
     public function __construct(public string $entity, public string $externalSystem, public string $externalId, public string $sourceRevision, public ?DateTimeImmutable $sourceUpdatedAt, public array $values, public string $payloadHash)
     {
         if (preg_match('/\\A[a-z][a-z0-9._-]{0,127}\\z/D', $entity) !== 1) {

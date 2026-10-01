@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use CoreX\Intl\IntlServiceProvider;
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use Flex\Crm\Tests\RegistryMoneyModel;
 
 it('compiles a consumer money field using the intl cast registration', function (): void {

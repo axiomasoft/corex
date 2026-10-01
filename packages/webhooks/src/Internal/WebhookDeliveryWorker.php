@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookSigner;

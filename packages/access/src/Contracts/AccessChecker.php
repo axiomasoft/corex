@@ -6,15 +6,16 @@ namespace CoreX\Access\Contracts;
 
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 
 /**
  * Two-phase permission check (B-11 §5.5): allowed() is the capability gate
  * (AzGuard cache, ≤1ms), scopeFor()/canOnRecord() apply the compiled
  * row-visibility scope on top. Implemented by P2.20's DefaultAccessChecker
  * over the schema/compiler produced by P2.8.
- *
- * @internal spec: B-11 §3.3
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface AccessChecker
 {
     /** Capability check (AzGuard cache): can the principal do $action on the $entityKey type at all. */

@@ -6,6 +6,8 @@ namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Carbon\CarbonImmutable;
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
@@ -20,9 +22,8 @@ use Illuminate\Support\Facades\DB;
  * from root on EVERY request without caching (D144): it is the compliance
  * kill-switch, and a cached answer would survive the revocation for the
  * length of the cache TTL.
- *
- * @internal spec: B-11 §5.9, D144/D147/D149
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ImpersonationSessionGuard
 {
     public function __construct(

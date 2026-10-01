@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
-use CoreX\Tasks\Access\Internal\TaskCompletion;
-use CoreX\Tasks\Access\Internal\TaskModuleGuard;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Events\TaskCompleted;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tasks\Task\Internal\TaskCompletion;
+use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
+use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 
@@ -51,12 +53,12 @@ final class CompleteTask implements CompleteTaskCommand
         }
 
         if (! (new TaskCompletion($this->access))->apply($task, $data, $context)) {
-            return TaskReference::fromTask($task);
+            return TaskReferenceFactory::fromTask($task);
         }
         $task->save();
-        TaskCompleted::dispatch($task);
+        event(new TaskCompleted(TaskSnapshot::fromTask($task)));
 
-        return TaskReference::fromTask($task);
+        return TaskReferenceFactory::fromTask($task);
     }
 
     /** @return never */

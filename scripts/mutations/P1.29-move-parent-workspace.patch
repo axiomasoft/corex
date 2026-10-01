@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Departments/DatabaseDepartmentRepository.php b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 index 3536fea..e967beb 100644
---- a/packages/core/src/Departments/DatabaseDepartmentRepository.php
-+++ b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+--- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
++++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 @@ -112,17 +112,6 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                  /** @var Models\Department $newParent */
                  $newParent = Models\Department::on($this->connection)->where('id', $newParentId)->firstOrFail();

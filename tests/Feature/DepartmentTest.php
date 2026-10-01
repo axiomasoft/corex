@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use CoreX\Departments\Contracts\DepartmentRepository;
-use CoreX\Departments\DatabaseDepartmentRepository;
 use CoreX\Departments\Events\DepartmentMoved;
 use CoreX\Departments\Exceptions\CrossWorkspaceMoveException;
 use CoreX\Departments\Exceptions\DepartmentCycleException;
-use CoreX\Departments\Models\Department;
+use CoreX\Departments\Internal\DatabaseDepartmentRepository;
+use CoreX\Departments\Internal\Models\Department;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseTransactionsManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Tests\Support\OperationHandlerDouble;
 
@@ -21,9 +21,9 @@ it('projects compiler metadata onto the runtime descriptor', function () use ($s
         ->deprecated('notes.create', '2026-09-01', null, 'notes.create.v2', 'https://example.test/migrate');
     $api->declaringModule = 'example/notes';
 
-    $operation = Operation::fromDeclaration($api, 'fingerprint-a');
-    $again = Operation::fromDeclaration($api, 'fingerprint-a');
-    $otherFingerprint = Operation::fromDeclaration($api, 'fingerprint-b');
+    $operation = OperationFactory::fromDeclaration($api, 'fingerprint-a');
+    $again = OperationFactory::fromDeclaration($api, 'fingerprint-a');
+    $otherFingerprint = OperationFactory::fromDeclaration($api, 'fingerprint-b');
 
     expect($operation->mode)->toBe(OperationMode::Command)
         ->and($operation->idempotency)->toBe(IdempotencyRequirement::Required)

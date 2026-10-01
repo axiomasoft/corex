@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Settings\Enums\SettingScope;
 use Override;
@@ -18,29 +22,30 @@ use Override;
  * logs.
  *
  * Retrofitted onto `DomainEvent` — was interim `CoreEvent` before that.
- *
- * @internal spec: B-10 §3.1, §7.4 п.8, D38, P1.22, P1.9, OQ-4, P1.7
  */
-final class SettingChanged extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class SettingChanged extends DomainEvent
 {
     private const MASK = '••••••';
 
-    public readonly mixed $old;
+    /** Immutable JSON value. */
+    public readonly JsonDocument $old;
 
-    public readonly mixed $new;
+    /** Immutable JSON value. */
+    public readonly JsonDocument $new;
 
     public function __construct(
         public readonly string $namespace,
         public readonly string $key,
         public readonly SettingScope $scopeType,
         public readonly ?string $scopeId,
-        mixed $old,
-        mixed $new,
+        JsonDocument $old,
+        JsonDocument $new,
         public readonly bool $sensitive,
     ) {
         parent::__construct();
-        $this->old = $this->sensitive ? self::MASK : $old;
-        $this->new = $this->sensitive ? self::MASK : $new;
+        $this->old = $this->sensitive ? JsonDocuments::capture(self::MASK) : $old;
+        $this->new = $this->sensitive ? JsonDocuments::capture(self::MASK) : $new;
     }
 
     #[Override]

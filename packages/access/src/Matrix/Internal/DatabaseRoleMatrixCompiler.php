@@ -7,11 +7,10 @@ namespace CoreX\Access\Matrix\Internal;
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Internal\Support\AuthOptions;
-use CoreX\Access\Matrix\AzGuardRoleModel;
-use CoreX\Access\Matrix\Data\ActiveEntityFilter;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
+use CoreX\Access\Roles\Data\RoleMatrixEntry;
+use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use Illuminate\Support\Facades\DB;
 use Override;
 
@@ -44,13 +43,12 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
         $panel = $this->options->panel;
 
         DB::transaction(function () use ($roleId, $panel): void {
-            $role = Role::query()->findOrFail($roleId);
+            $role = RoleMatrixData::role($roleId);
 
             $azguardRole = AzGuardRoleModel::query()->firstOrCreate(['name' => $role->slug]);
 
-            if ($role->azguard_role_id !== $azguardRole->id) {
-                $role->forceFill(['azguard_role_id' => $azguardRole->id]);
-                Role::withSystemMutationAllowed(fn (): bool => $role->save());
+            if ($role->azguardRoleId !== $azguardRole->id) {
+                RoleMatrixData::bindAzGuardRole($roleId, $azguardRole->id);
             }
 
             RolePermission::query()
@@ -58,12 +56,10 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
                 ->where('panel_id', $panel)
                 ->delete();
 
-            $keys = RoleMatrixRow::query()
-                ->where('role_id', $role->id)
-                ->where('scope', '!=', Scope::None->value)
-                ->get(['entity_key', 'action'])
-                ->filter(fn (RoleMatrixRow $row): bool => $this->activeEntities()->isActive($row->entity_key))
-                ->map(static fn (RoleMatrixRow $row): string => "{$panel}.{$row->entity_key}.{$row->action}")
+            $keys = collect(RoleMatrixData::matrix($role->id))
+                ->filter(static fn (RoleMatrixEntry $row): bool => $row->scope !== Scope::None)
+                ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities()->isActive($row->entityKey))
+                ->map(static fn (RoleMatrixEntry $row): string => "{$panel}.{$row->entityKey}.{$row->action}")
                 ->unique();
 
             foreach ($keys as $key) {
@@ -80,9 +76,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
     #[Override]
     public function recompileAll(): void
     {
-        Role::query()
-            ->whereNull('deleted_at')
-            ->pluck('id')
+        collect(RoleMatrixData::roleIds())
             ->each(fn (string $roleId) => $this->compile($roleId));
     }
 

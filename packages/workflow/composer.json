@@ -28,7 +28,9 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Workflow\\Contracts",
-                "CoreX\\Workflow\\Data"
+                "CoreX\\Workflow\\Data",
+                "CoreX\\Workflow\\WorkflowModule",
+                "CoreX\\Workflow\\WorkflowServiceProvider"
             ]
         },
         "laravel": {

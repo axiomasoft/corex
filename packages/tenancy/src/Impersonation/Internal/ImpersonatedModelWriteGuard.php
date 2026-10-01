@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Impersonation\Internal;
 
 use Closure;
+use CoreX\Audit\Laravel\AuditWriteExemption;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Context\ImpersonationGuard;
 use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use Illuminate\Database\Eloquent\Model;
 
@@ -53,7 +53,7 @@ final class ImpersonatedModelWriteGuard
 
         $model = $payload[0] ?? null;
 
-        if (! $model instanceof Model || in_array($model::class, [...self::EXEMPT, ...ImpersonationGuard::writeExemptModels()], true)) {
+        if (! $model instanceof Model || (in_array($model::class, self::EXEMPT, true) || AuditWriteExemption::permits($model))) {
             return;
         }
 

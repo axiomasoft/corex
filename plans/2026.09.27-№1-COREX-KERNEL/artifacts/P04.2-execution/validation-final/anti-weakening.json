@@ -1,0 +1,9 @@
+{
+  "name": "anti-weakening",
+  "command": "scripts/php84 bash scripts/anti-weakening-gate.sh",
+  "exit_code": 0,
+  "duration_ms": 3674,
+  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "log": "validation-final/anti-weakening.log",
+  "log_sha256": "e7f98aa279431d1bdb69d9995dcc904f8670cfe870e1086f276d98af1c28117e"
+}

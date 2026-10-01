@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Schema\IdColumns;
+use CoreX\Database\Laravel\IdColumns;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Contact\Models\ContactCompany;

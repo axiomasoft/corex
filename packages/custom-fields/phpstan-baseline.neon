@@ -97,24 +97,6 @@ parameters:
 			path: src/Internal/Query/AttributeIndexPlanner.php
 
 		-
-			rawMessage: 'Parameter #1 $keys of function array_fill_keys expects an array of values castable to string, list given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Query/SchemaAttributeFilter.php
-
-		-
-			rawMessage: 'Parameter #2 $fields of method CoreX\CustomFields\Internal\Query\SchemaAttributeFilter::validate() expects array<string, true>, array<true> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Query/SchemaAttributeFilter.php
-
-		-
-			rawMessage: 'Parameter $fields of method CoreX\Data\Contracts\DataScopeAuthorizer::authorize() expects list<string>, list given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Query/SchemaAttributeFilter.php
-
-		-
 			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
 			identifier: binaryOp.invalid
 			count: 1
@@ -139,12 +121,6 @@ parameters:
 			path: src/Internal/Schema/CompositeFieldCatalogue.php
 
 		-
-			rawMessage: 'Parameter #1 $field of method CoreX\CustomFields\Internal\Schema\CompositeFieldCatalogue::normalize() expects array<string, mixed>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Schema/CompositeFieldCatalogue.php
-
-		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 1
@@ -154,12 +130,6 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 6
-			path: src/Internal/Schema/DatabaseFieldCatalogue.php
-
-		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue::map() should return array<string, mixed> but returns array.'
-			identifier: return.type
-			count: 1
 			path: src/Internal/Schema/DatabaseFieldCatalogue.php
 
 		-
@@ -289,24 +259,6 @@ parameters:
 			path: src/Internal/Schema/StaticFieldCatalogue.php
 
 		-
-			rawMessage: Anonymous function should return CoreX\Data\Data\RecordRef but returns mixed.
-			identifier: return.type
-			count: 1
-			path: src/Internal/Storage/ResolvingAttributeStore.php
-
-		-
-			rawMessage: Cannot access property $entity on mixed.
-			identifier: property.nonObject
-			count: 1
-			path: src/Internal/Storage/ResolvingAttributeStore.php
-
-		-
-			rawMessage: 'Parameter #1 $entity of method CoreX\CustomFields\Contracts\AttributeStoreResolver::forEntity() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Storage/ResolvingAttributeStore.php
-
-		-
 			rawMessage: 'Binary operation "+" between mixed and int<0, max> results in an error.'
 			identifier: binaryOp.invalid
 			count: 1
@@ -397,12 +349,6 @@ parameters:
 			path: src/Internal/Values/AttributeBackfill.php
 
 		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\AttributeWriteGuard::definitions() should return array<string, array<string, mixed>> but returns array<string, array<mixed, mixed>>.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Values/AttributeWriteGuard.php
-
-		-
 			rawMessage: Binary operation "." between mixed and "\n" results in an error.
 			identifier: binaryOp.invalid
 			count: 1
@@ -411,30 +357,6 @@ parameters:
 		-
 			rawMessage: Binary operation "." between non-falsy-string and mixed results in an error.
 			identifier: binaryOp.invalid
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: Cannot access offset 'code' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: Cannot access offset 'key' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: Cannot access property $entity on mixed.
-			identifier: property.nonObject
-			count: 2
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: Cannot access property $id on mixed.
-			identifier: property.nonObject
 			count: 1
 			path: src/Internal/Values/EavAttributeStore.php
 
@@ -457,19 +379,7 @@ parameters:
 			path: src/Internal/Values/EavAttributeStore.php
 
 		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\EavAttributeStore::definitionsFromSnapshot() should return array<string, array<string, mixed>> but returns array<string, mixed>.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
 			rawMessage: 'Method CoreX\CustomFields\Internal\Values\EavAttributeStore::readKeys() should return list<string> but returns non-empty-list<mixed>.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\EavAttributeStore::recordsByEntity() should return array<string, list<string>> but returns array<non-empty-list>.'
 			identifier: return.type
 			count: 1
 			path: src/Internal/Values/EavAttributeStore.php
@@ -477,12 +387,6 @@ parameters:
 		-
 			rawMessage: 'Method CoreX\CustomFields\Internal\Values\EavAttributeStore::writeKeys() should return list<string> but returns non-empty-list<mixed>.'
 			identifier: return.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Data\Data\RecordRef): CoreX\CustomFields\Data\ValueBag given.'
-			identifier: argument.type
 			count: 1
 			path: src/Internal/Values/EavAttributeStore.php
 
@@ -511,18 +415,6 @@ parameters:
 			path: src/Internal/Values/EavAttributeStore.php
 
 		-
-			rawMessage: 'Parameter #2 $patch of method CoreX\CustomFields\Internal\Values\EavAttributeStore::expandPatch() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
-			rawMessage: 'Parameter #2 $record of method CoreX\CustomFields\Internal\Values\EavAttributeStore::authorize() expects CoreX\Data\Data\RecordRef, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
 			rawMessage: 'Parameter #2 $stored of method CoreX\CustomFields\Internal\Values\EavAttributeStore::assertNoDrift() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
@@ -535,12 +427,6 @@ parameters:
 			path: src/Internal/Values/EavAttributeStore.php
 
 		-
-			rawMessage: 'Parameter $record of method CoreX\CustomFields\Internal\Values\FieldValueValidator::validateSelection() expects CoreX\Data\Data\RecordRef, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/EavAttributeStore.php
-
-		-
 			rawMessage: 'Parameter $recordVersion of class CoreX\CustomFields\Data\AttributeWriteResult constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -549,18 +435,12 @@ parameters:
 		-
 			rawMessage: Possibly invalid array key type mixed.
 			identifier: offsetAccess.invalidOffset
-			count: 4
+			count: 2
 			path: src/Internal/Values/EavAttributeStore.php
 
 		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
-			count: 1
-			path: src/Internal/Values/FieldValueValidator.php
-
-		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\FieldValueValidator::fields() should return array<string, array<string, mixed>> but returns array<string, array<mixed>>.'
-			identifier: return.type
 			count: 1
 			path: src/Internal/Values/FieldValueValidator.php
 
@@ -595,30 +475,6 @@ parameters:
 			path: src/Internal/Values/JsonbAttributeStore.php
 
 		-
-			rawMessage: Cannot access offset 'code' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: Cannot access offset 'key' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: Cannot access property $entity on mixed.
-			identifier: property.nonObject
-			count: 2
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: Cannot access property $id on mixed.
-			identifier: property.nonObject
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
 			rawMessage: 'Cannot call method orWhere() on mixed.'
 			identifier: method.nonObject
 			count: 1
@@ -643,19 +499,7 @@ parameters:
 			path: src/Internal/Values/JsonbAttributeStore.php
 
 		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::definitionsFromSnapshot() should return array<string, array<string, mixed>> but returns array<string, mixed>.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
 			rawMessage: 'Method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::readKeys() should return list<string> but returns non-empty-list<mixed>.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: 'Method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::recordsByEntity() should return array<string, list<string>> but returns array<non-empty-list>.'
 			identifier: return.type
 			count: 1
 			path: src/Internal/Values/JsonbAttributeStore.php
@@ -663,12 +507,6 @@ parameters:
 		-
 			rawMessage: 'Method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::writeKeys() should return list<string> but returns non-empty-list<mixed>.'
 			identifier: return.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Data\Data\RecordRef): CoreX\CustomFields\Data\ValueBag given.'
-			identifier: argument.type
 			count: 1
 			path: src/Internal/Values/JsonbAttributeStore.php
 
@@ -691,31 +529,7 @@ parameters:
 			path: src/Internal/Values/JsonbAttributeStore.php
 
 		-
-			rawMessage: 'Parameter #2 $patch of method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::expandPatch() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: 'Parameter #2 $record of method CoreX\CustomFields\Internal\Values\JsonbAttributeStore::authorize() expects CoreX\Data\Data\RecordRef, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: 'Parameter $record of method CoreX\CustomFields\Internal\Values\FieldValueValidator::validateSelection() expects CoreX\Data\Data\RecordRef, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
 			rawMessage: 'Parameter $recordVersion of class CoreX\CustomFields\Data\AttributeWriteResult constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Internal/Values/JsonbAttributeStore.php
-
-		-
-			rawMessage: Possibly invalid array key type mixed.
-			identifier: offsetAccess.invalidOffset
-			count: 2
 			path: src/Internal/Values/JsonbAttributeStore.php

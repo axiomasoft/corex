@@ -10,7 +10,7 @@ use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
 use CoreX\Storage\Exceptions\StorageCapabilityUnavailable;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
-use CoreX\Storage\ScopedFilesystem;
+use CoreX\Storage\Laravel\ScopedFilesystemFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;
@@ -82,12 +82,12 @@ final class ContextTenantStorage implements TenantStorage
         throw new StorageCapabilityUnavailable('Storage export is unavailable for the tenancy storage drivers.');
     }
 
-    private function scopedDisk(string $root): ScopedFilesystem
+    private function scopedDisk(string $root): Filesystem
     {
         $context = $this->contexts->current();
         $tenantRoot = $this->tenantRoot(root: $root, accountId: $context->account->id);
 
-        return new ScopedFilesystem(
+        return ScopedFilesystemFactory::create(
             filesystem: $this->filesystems->build(config: [
                 // Both approved modes use Laravel's local adapter. `fake-s3`
                 // exists solely to exercise object-prefix parity without a

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Data\SearchSnapshot;

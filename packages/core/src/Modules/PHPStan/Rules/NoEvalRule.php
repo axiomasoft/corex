@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Eval_;
 use PHPStan\Analyser\Scope;
@@ -16,9 +18,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * код из-под ревью маркетплейса и статик-анализа.
  *
  * @implements Rule<Eval_>
- *
- * @internal spec: B-10 §7.4
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoEvalRule implements Rule
 {
     public function getNodeType(): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
@@ -17,8 +17,8 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use CoreX\Webhooks\Data\WebhookTopic;

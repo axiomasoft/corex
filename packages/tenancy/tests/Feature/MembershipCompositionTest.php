@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Membership\Data\MembershipSnapshot;
 use CoreX\Tenancy\Membership\Data\PairKey;
 use CoreX\Tenancy\Membership\Data\PairState;
 use CoreX\Tenancy\Membership\Data\PairWitness;
@@ -14,7 +15,6 @@ use CoreX\Tenancy\Membership\Internal\Expiration\ExpiryScheduler;
 use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
 use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use CoreX\Tenancy\Membership\Internal\Projection\ReferenceMembershipProjection;
-use CoreX\Tenancy\Membership\Internal\Transport\MembershipSnapshot;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\CredentialFixture;
 use CoreX\Tenancy\Tests\Support\Membership\Consumer\InboxFixture;
 use CoreX\Tenancy\Tests\Support\Membership\PairStoreFixture;

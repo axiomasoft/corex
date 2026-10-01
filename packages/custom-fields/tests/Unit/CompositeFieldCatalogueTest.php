@@ -7,7 +7,7 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Internal\Schema\CachedFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\CatalogueConflictPolicy;
 use CoreX\CustomFields\Internal\Schema\CompositeFieldCatalogue;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;

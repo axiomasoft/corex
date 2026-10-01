@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -35,7 +35,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     {
         $now = $this->clock->now();
         $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
-        $table = Config::outboxMessagesTable();
+        $table = app(CoreOptions::class)->outboxMessagesTable;
 
         /** @var list<object> $rows */
         $rows = $this->connection->transaction(function () use ($table, $leaseOwner, $batchSize, $now, $leaseUntil): array {
@@ -124,7 +124,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     {
         $now = $this->clock->now();
 
-        $changed = $this->connection->table(Config::outboxMessagesTable())
+        $changed = $this->connection->table(app(CoreOptions::class)->outboxMessagesTable)
             ->where('id', $message->envelope->messageId)
             ->where('status', 'publishing')
             ->where('lease_owner', $message->leaseOwner)
@@ -150,7 +150,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         $dead = $message->attempt >= $this->maxAttempts;
         $delay = min($this->backoffCapSeconds, 2 ** $message->attempt);
 
-        $changed = $this->connection->table(Config::outboxMessagesTable())
+        $changed = $this->connection->table(app(CoreOptions::class)->outboxMessagesTable)
             ->where('id', $message->envelope->messageId)
             ->where('status', 'publishing')
             ->where('lease_owner', $message->leaseOwner)
@@ -197,8 +197,6 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     {
         /** @var array<string, scalar|null> $scope */
         $scope = json_decode((string) $row->scope, true, flags: JSON_THROW_ON_ERROR);
-        /** @var array<string, mixed> $payload */
-        $payload = json_decode((string) $row->payload, true, flags: JSON_THROW_ON_ERROR);
         /** @var array<string, scalar|null> $metadata */
         $metadata = json_decode((string) $row->metadata, true, flags: JSON_THROW_ON_ERROR);
 
@@ -209,7 +207,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
             contractVersion: (int) $row->contract_version,
             occurredAt: $this->date($row->occurred_at),
             scope: $scope,
-            payload: new MessagePayload($payload),
+            payload: MessagePayload::fromJson((string) $row->payload),
             piiClass: PiiClass::from((string) $row->pii_class),
             subject: $row->subject === null ? null : (string) $row->subject,
             correlationId: $row->correlation_id === null ? null : (string) $row->correlation_id,

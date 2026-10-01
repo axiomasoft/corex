@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Enums\IdStrategy;
-use CoreX\Database\Schema\IdColumns;
-use CoreX\Settings\Contracts\SettingsScope;
-use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Database\Laravel\IdColumns;
+use CoreX\Settings\Data\SettingsScope;
+use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Schema\Blueprint;
@@ -157,10 +158,10 @@ it('core tables build and accept a settings row under the ulid id strategy', fun
         connection: 'pgsql',
     );
 
-    $repository->set('crm', 'theme', 'dark', SettingsScope::account());
+    $repository->set('crm', 'theme', JsonDocuments::capture('dark'), SettingsScope::account());
 
     $id = DB::connection('pgsql')->table('sys_settings')->value('id');
 
     expect(Str::isUlid((string) $id))->toBeTrue()
-        ->and($repository->get('crm', 'theme', SettingsScope::account(), 'fallback'))->toBe('dark');
+        ->and(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::account(), JsonDocuments::capture('fallback'))))->toBe('dark');
 })->group('pg');

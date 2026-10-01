@@ -6,7 +6,6 @@ namespace CoreX\Tenancy\Authentication\Internal\Http\Controllers;
 
 use Carbon\CarbonImmutable;
 use CoreX\Context\Contracts\ImpersonationService;
-use CoreX\Tenancy\Account\Models\Account;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
@@ -18,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stancl\Tenancy\Database\Models\Tenant as Account;
 
 /**
  * Authorization-code + PKCE RP endpoints (AC-14). `callback()` runs the
@@ -101,7 +101,7 @@ final class OidcLoginController
 
         $this->assertMembership($sub, $account);
 
-        $this->syncer->syncToAccount($sub, $account->id);
+        $this->syncer->syncToAccount($sub, (string) $account->id);
 
         $request->session()->regenerate();
 

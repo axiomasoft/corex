@@ -13,9 +13,9 @@ use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Query\SchemaAttributeFilter;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 
 it('keeps field selections bounded and unique', function (): void {
     expect((new FieldSelection(fields: ['email', 'status']))->fields)->toBe(['email', 'status']);

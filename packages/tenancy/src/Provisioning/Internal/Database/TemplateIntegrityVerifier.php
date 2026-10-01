@@ -6,14 +6,16 @@ namespace CoreX\Tenancy\Provisioning\Internal\Database;
 
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
+use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 
 /** @internal */
-final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContract
+final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, TemplateIntegrityVerifierContract
 {
     public function __construct(
         private readonly string $centralConnection,
@@ -32,6 +34,20 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityVerifierContra
             templateVersion: (int) $template->version,
             artifactDigest: $this->manifestFor((string) $template->id)->digest($this->serializer),
         );
+    }
+
+    public function verifyCurrent(int $version, ?string $clusterId = null): void
+    {
+        $this->assertCurrent($version, $clusterId);
+    }
+
+    public function verifyAccount(TemplateAccountView $account): void
+    {
+        $this->assertAccount((object) [
+            'template_version' => $account->templateVersion,
+            'cluster_id' => $account->clusterId,
+            'db_name' => $account->databaseName,
+        ]);
     }
 
     public function assertCurrent(int $version, ?string $clusterId = null): object

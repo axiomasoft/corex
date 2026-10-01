@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Enums;
 
+use CoreX\Attributes\Api;
+
 /**
  * Per-account module state machine. `Available` is virtual — code is
  * deployed but `mod_modules` has no row for the module yet.
- *
- * @internal spec: B-10 §5.1
  */
+#[Api(since: '1.0')]
 enum ModuleState: string
 {
     case Available = 'available';

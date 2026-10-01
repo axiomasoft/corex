@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Tests\Support;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceSet;
 use CoreX\Tasks\Task\Data\TaskDraft;
@@ -24,7 +25,7 @@ final class SeriesSeeder
     ): SeriesReference {
         $definition = SeriesDefinitionCodec::encodeSet($set);
         $templateJson = SeriesDefinitionCodec::encodeTemplate($template);
-        $actorJson = json_encode($template->actor->toArray(), JSON_THROW_ON_ERROR);
+        $actorJson = json_encode(JsonDocuments::decodeTree($template->actor->toArray()), JSON_THROW_ON_ERROR);
         $contextHash = hash('sha256', $template->workspaceId);
 
         DB::table('corex_task_series')->insert([

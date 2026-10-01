@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ValidatedWebhookRequest
 {
     private const MAX_BODY_BYTES = 20 * 1024;
@@ -16,7 +18,7 @@ final readonly class ValidatedWebhookRequest
     public array $signatureHeaders;
 
     /**
-     * @param  array<string, mixed>  $signatureHeaders
+     * @param  array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}  $signatureHeaders
      */
     public function __construct(
         public string $canonicalHost,
@@ -26,6 +28,23 @@ final readonly class ValidatedWebhookRequest
         array $signatureHeaders,
         public int $timeoutSeconds = 10,
     ) {
+        self::validateInput($canonicalHost, $url, $address, $body, $signatureHeaders, $timeoutSeconds);
+        $this->signatureHeaders = [
+            'webhook-id' => $signatureHeaders['webhook-id'],
+            'webhook-timestamp' => $signatureHeaders['webhook-timestamp'],
+            'webhook-signature' => $signatureHeaders['webhook-signature'],
+        ];
+    }
+
+    /** @param array<array-key, mixed> $signatureHeaders */
+    private static function validateInput(
+        string $canonicalHost,
+        string $url,
+        string $address,
+        string $body,
+        array $signatureHeaders,
+        int $timeoutSeconds = 10,
+    ): void {
         $parts = parse_url($url);
 
         if ($parts === false
@@ -75,11 +94,5 @@ final readonly class ValidatedWebhookRequest
         if ($timeoutSeconds < 1 || $timeoutSeconds > 10) {
             throw new InvalidArgumentException('Webhook request timeout must be between 1 and 10 seconds.');
         }
-
-        $this->signatureHeaders = [
-            'webhook-id' => $signatureHeaders['webhook-id'],
-            'webhook-timestamp' => $signatureHeaders['webhook-timestamp'],
-            'webhook-signature' => $signatureHeaders['webhook-signature'],
-        ];
     }
 }

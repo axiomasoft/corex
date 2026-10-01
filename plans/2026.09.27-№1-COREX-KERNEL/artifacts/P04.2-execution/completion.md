@@ -1,0 +1,15 @@
+# P04.2 — implementation, review and final validation
+
+Independent review: `codex/gpt-6 GREEN`; one fresh-session review following D67. Three bounded findings repaired; no open findings. Candidate SHA-256: `d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe`.
+
+Classification contains all 1173 original rows, all 68 public-by-usage rows resolved, and 94 additional types with current source seals. Strict source diagnostics are zero. Module-layout has zero violations/baseline/new/stale and R0–R5 zero. 115 moves and all 1521 real candidate paths match the sealed replay by SHA-256. Eight new Laravel composition registrars retain finite declarations and previous binding semantics.
+
+Final root tests: 863/3689 assertions plus TasksWorkflow 14/69; PostgreSQL: 240/1149; Arch: 92/302; TaskCompletion filter: 4/15. Golden 4/4 without GOLDEN_UPDATE. All 21 package/product suites pass: unchanged green prefix of six packages reused, then serial continuation from repaired operations through FlexCRM. Full analyse/lint and scoped lint of the test repair pass. Strict/module/graph/ceilings/rename/ownership/docs/anti-weakening pass; all 34 mutations produce their required failures. Existing package suite skips remain visible in logs; no new skip was added.
+
+Runtime source is unchanged after the initial successful PG/mutation/analysis/gate checks; later changes only restore Golden key order and add one missing exact public-api test expectation. validation-final-result.json records each original candidate hash and the reuse reason. Historical failed runs are retained; old validation-result.json/replay-equality.json do not represent the final candidate. The graph gate's output differs only in generated_at; generated output is retained in validation-final and the sealed artifact bytes restored.
+
+review-verdict.md describes findings and coverage. classification-proof.json, transformation-manifest.json, replay-equality-final.json and golden-semantic-delta.json bind the final evidence. Owner constraint is recorded in implementation-handoff.md: maximize implementation with light checks, independent review in a fresh session, no extra SKM review cycles or unneeded reruns.
+
+No push/release/P04.3. Closure is recorded through normal Task libraries; this evidence is included in the scoped commit with ordinary Git hooks; route probing remains waived under the original owner instruction, with no attested route claim.
+
+Plan closure tooling regenerates current item/state and the next ready bundle. Overall plan-lint retains two read-budget errors for the P04.3 successor (288416 estimated tokens; the 631636-byte classification carrier exceeds single-read limits). P04.2 implementation acceptance is GREEN; P04.3 readability repair is outside the authorized scope. Its specification/thresholds were not changed. Formatting of the effective write-site override and the Next carrier was corrected append-only through Task. See plan-lint-final.log.

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\SavedViews\Internal;
 
-use CoreX\Config\Config;
-use CoreX\Config\CoreOptions;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Panels\SavedViews\Contracts\SavedViewRepository;
 use CoreX\Panels\SavedViews\Contracts\ViewAccessPolicy;
 use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
@@ -47,9 +47,9 @@ final class SqlSavedViewRepository implements SavedViewRepository
     {
         $this->authorize($context, $input->id === null ? ViewAction::Create : ViewAction::Update, $input->scope, $input->id);
         $schema = $this->schemas->schema($context, $input->scope->entityHandle);
-        $normalized = $this->validator->validate($input->config, $schema);
+        $normalized = $this->validator->validate(JsonDocuments::map($input->config), $schema);
 
-        if ($input->kind === '' || count($input->localizedName) === 0 || strlen(json_encode($input->config, JSON_THROW_ON_ERROR)) > 65_536) {
+        if ($input->kind === '' || count($input->localizedName) === 0 || strlen(json_encode(JsonDocuments::map($input->config), JSON_THROW_ON_ERROR)) > 65_536) {
             throw new InvalidArgumentException('Invalid saved view input.');
         }
 
@@ -137,7 +137,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
         $config = json_decode($row->config, true, flags: JSON_THROW_ON_ERROR);
         $validated = $this->validator->validate($config, $schema);
 
-        return new SavedQuery($schema->version, $validated['filters'], $validated['sorts'], $validated['columns'], $validated['groupBy']);
+        return new SavedQuery($schema->version, JsonDocuments::capture($validated['filters']), $validated['sorts'], $validated['columns'], $validated['groupBy']);
     }
 
     /**
@@ -148,7 +148,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
     {
         $now = now();
 
-        return ['id' => $id, 'entity_code' => $input->scope->entityHandle, 'workspace_id' => $input->scope->workspaceId, 'owner_kind' => $input->scope->ownerKind, 'owner_id' => $input->scope->ownerId, 'scope_key' => $scopeKey, 'kind' => $input->kind, 'name' => json_encode($input->localizedName, JSON_THROW_ON_ERROR), 'config' => json_encode($input->config, JSON_THROW_ON_ERROR), 'schema_version' => $schemaVersion, 'revision' => $revision, 'is_default' => $isDefault, 'default_scope_key' => $isDefault ? $scopeKey : null, 'position' => 0, 'created_by' => $context->actorId ?? $context->actorKind, 'created_at' => $now, 'updated_at' => $now];
+        return ['id' => $id, 'entity_code' => $input->scope->entityHandle, 'workspace_id' => $input->scope->workspaceId, 'owner_kind' => $input->scope->ownerKind, 'owner_id' => $input->scope->ownerId, 'scope_key' => $scopeKey, 'kind' => $input->kind, 'name' => json_encode($input->localizedName, JSON_THROW_ON_ERROR), 'config' => json_encode(JsonDocuments::map($input->config), JSON_THROW_ON_ERROR), 'schema_version' => $schemaVersion, 'revision' => $revision, 'is_default' => $isDefault, 'default_scope_key' => $isDefault ? $scopeKey : null, 'position' => 0, 'created_by' => $context->actorId ?? $context->actorKind, 'created_at' => $now, 'updated_at' => $now];
     }
 
     private function authorize(ViewContext $context, ViewAction $action, ViewScope $scope, ?string $viewId): void
@@ -198,7 +198,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function resolvedOptions(): CoreOptions
     {
-        return $this->options ?? Config::options();
+        return $this->options ?? app(CoreOptions::class);
     }
 
     private function manager(): DatabaseManager

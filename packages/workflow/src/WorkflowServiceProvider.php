@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Workflow\Contracts\EngineAdapter;
@@ -14,6 +16,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkflowServiceProvider extends ServiceProvider
 {
     #[Override]

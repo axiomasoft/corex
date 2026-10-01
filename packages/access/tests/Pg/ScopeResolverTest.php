@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Panels\Panel;
-use CoreX\Access\Access\Internal\PrincipalIdentity;
 use CoreX\Access\Access\Internal\ScopePredicate;
+use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
-use CoreX\Access\Contracts\ScopeResolver;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleAssignment;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
+use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleAssignment;
+use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Access\Tests\Stubs\FakeTenancyManager;
@@ -26,9 +27,9 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -556,7 +557,7 @@ it('MatrixValidator warns when a matrix row names a scope the entity is missing 
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.drift', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = (new MatrixValidator(app(EntityRegistry::class)))->validate($role);
+    $warnings = (new MatrixValidator(app(EntityRegistry::class)))->validate(RoleMatrixData::role((string) $role->getKey()));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('crm.drift')

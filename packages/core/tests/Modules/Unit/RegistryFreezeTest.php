@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\RegistryFrozen;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 function freezeDefinition(string $handle): EntityDefinition

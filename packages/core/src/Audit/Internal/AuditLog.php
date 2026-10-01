@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Audit\Internal;
 
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Config\Config;
-use CoreX\Database\HasConfiguredId;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\Database\Laravel\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Override;
@@ -52,6 +52,6 @@ final class AuditLog extends Model
     #[Override]
     public function getTable(): string
     {
-        return Config::auditLogsTable();
+        return app(CoreOptions::class)->auditLogsTable;
     }
 }

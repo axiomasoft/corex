@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal\Http;
 
-use CoreX\Operations\Invocation\Internal\CapabilityResolver;
+use CoreX\Operations\Invocation\Contracts\EffectiveCapabilities as CapabilityResolver;
 use CoreX\Operations\Laravel\Support\ApiOptions;
-use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
+use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments as OpenApiDocumentGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

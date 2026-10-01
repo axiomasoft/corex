@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: Access to constant on internal class CoreX\Operations\Laravel\ApiSchemaRegistrar.
-			identifier: classConstant.internalClass
-			count: 2
-			path: database/migrations/tenant/create_sys_api_webhook_tables.php
-
-		-
-			rawMessage: 'Call to method tenant() of internal class CoreX\Operations\Laravel\ApiSchemaRegistrar from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 2
-			path: database/migrations/tenant/create_sys_api_webhook_tables.php
-
-		-
 			rawMessage: Cannot cast array|bool|float|int|string|null to string.
 			identifier: cast.string
 			count: 1
@@ -23,12 +11,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Commands/DeliverWebhooks.php
-
-		-
-			rawMessage: 'Property CoreX\Webhooks\Data\ValidatedWebhookRequest::$signatureHeaders (array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}) does not accept array{webhook-id: mixed, webhook-timestamp: mixed, webhook-signature: mixed}.'
-			identifier: assign.propertyType
-			count: 1
-			path: src/Data/ValidatedWebhookRequest.php
 
 		-
 			rawMessage: 'Parameter #2 $options of function curl_setopt_array expects array{10002: non-empty-string, 47: bool, 10015: array|string, 10023: array<int, string>, 10203: array, 52: bool, 68: int, 181: int, ...}, array{10002: string, 47: true, 10015: string, 10023: list<string>, 10203: array{non-falsy-string}, 52: false, 68: 0, 181: 2, ...} given.'
@@ -409,20 +391,8 @@ parameters:
 			path: src/Internal/WebhookManagement.php
 
 		-
-			rawMessage: 'Method CoreX\Webhooks\Internal\WebhookManagement::deliveries() should return array{items: list<array<string, mixed>>, next: string|null} but returns array{items: list<mixed>, next: string|null}.'
-			identifier: return.type
-			count: 1
-			path: src/Internal/WebhookManagement.php
-
-		-
 			rawMessage: 'Method CoreX\Webhooks\Internal\WebhookManagement::subscriptions() should return list<array<string, mixed>> but returns array<int, array<string, mixed>>.'
 			identifier: return.type
-			count: 1
-			path: src/Internal/WebhookManagement.php
-
-		-
-			rawMessage: 'Parameter $items of static method CoreX\Operations\Pagination\Data\CursorPage::assemble() expects list<mixed>, array<int, array<string, mixed>> given.'
-			identifier: argument.type
 			count: 1
 			path: src/Internal/WebhookManagement.php
 
@@ -567,11 +537,5 @@ parameters:
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/WebhookRegistrar.php
-
-		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Webhooks\Data\WebhookOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
 			count: 1
 			path: src/Laravel/WebhookRegistrar.php

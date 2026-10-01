@@ -6,18 +6,20 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Pagination\Data\CursorPage;
-use CoreX\Operations\Pagination\OrderingRegistry;
-use CoreX\Operations\Pagination\SignedCursorCodec;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Pagination\Contracts\CursorCodec;
+use CoreX\Operations\Pagination\Contracts\OrderingRegistry;
+use CoreX\Operations\Pagination\Laravel\CursorPageBuilder;
+use CoreX\Operations\Pagination\Laravel\OrderingFactory;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use DateTimeImmutable;
@@ -40,7 +42,7 @@ final readonly class WebhookManagement
         private Connection $connection,
         private TenantContextRestorer $contexts,
         private WebhookSubscriptionStore $subscriptions,
-        private SignedCursorCodec $cursors,
+        private CursorCodec $cursors,
     ) {}
 
     /** @return array<string, mixed> */
@@ -158,8 +160,8 @@ final readonly class WebhookManagement
         $pageRows = $rows->take($limit)->values();
         $items = $pageRows->map(fn (object $row): array => $this->deliveryRow($row))->all();
         $last = $hasMore ? $pageRows->last() : null;
-        $page = CursorPage::assemble(
-            items: $items,
+        $page = CursorPageBuilder::assemble(
+            items: array_values($items),
             nextValues: $last === null ? null : [$this->instant($last->created_at)->format('Y-m-d\TH:i:s.uP'), (string) $last->id],
             codec: $this->cursors,
             registry: $registry,
@@ -172,7 +174,7 @@ final readonly class WebhookManagement
             orderingId: self::DeliveryOrdering,
         );
 
-        return ['items' => $page->items, 'next' => $page->next];
+        return ['items' => JsonDocuments::maps($page->items), 'next' => $page->next];
     }
 
     /** @return array<string, mixed>|null */
@@ -209,7 +211,7 @@ final readonly class WebhookManagement
 
     public static function deliveryOrdering(): OrderingRegistry
     {
-        return OrderingRegistry::fromOperations([new Operation(
+        return OrderingFactory::fromOperations([new Operation(
             module: 'axiomasoft/corex-operations',
             id: 'webhook-deliveries.list',
             version: 'v1',
@@ -217,20 +219,20 @@ final readonly class WebhookManagement
             path: '/webhook-deliveries',
             ability: 'webhooks.manage',
             handler: WebhookCursorOperationHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Query,
             requiredScopes: ['webhooks.manage'],
             idempotency: IdempotencyRequirement::Forbidden,
-            pagination: [
+            pagination: JsonDocuments::nullable([
                 'ordering' => self::DeliveryOrdering,
                 'direction' => 'asc',
                 'fields' => ['created_at', 'id'],
                 'types' => ['string', 'string'],
                 'unique' => 'id',
-            ],
+            ]),
         )]);
     }
 

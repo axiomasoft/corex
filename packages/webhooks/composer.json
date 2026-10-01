@@ -19,7 +19,7 @@
     },
     "suggest": {
         "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
-        "opis/json-schema": "2.4.1 \u2014 bounded offline tool-schema/1 validation adapter",
+        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
@@ -81,7 +81,10 @@
             "public-api": [
                 "CoreX\\Webhooks\\Contracts",
                 "CoreX\\Webhooks\\Data",
-                "CoreX\\Webhooks\\WebhooksServiceProvider"
+                "CoreX\\Webhooks\\WebhooksServiceProvider",
+                "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser",
+                "CoreX\\Webhooks\\Laravel\\WebhookRegistrar",
+                "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
             ]
         },
         "branch-alias": {

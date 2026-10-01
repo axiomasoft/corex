@@ -6,9 +6,9 @@ namespace CoreX\Access\Access\Internal;
 
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\Principal;
-use CoreX\Access\Contracts\ScopeResolver;
 use CoreX\Access\Data\RecordContext;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Laravel\ScopeResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;

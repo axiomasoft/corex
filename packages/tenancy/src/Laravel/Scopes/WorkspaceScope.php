@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Scopes;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
+ * @corex-model-extension Eloquent global scope on nullable workspace_id; preserves unrelated scopes and relations.
  * Global scope for workspace_scoped entities (B-11 §5.4, AC-20):
  * `workspace_id = context.workspace.id OR workspace_id IS NULL` (NULL =
  * account-wide record, visible regardless of the narrowed workspace).
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Scope;
  *
  * @implements Scope<Model>
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkspaceScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
@@ -42,7 +45,7 @@ final class WorkspaceScope implements Scope
      * whose `context()` narrows to non-null) is otherwise what Larastan
      * infers from a direct `app(TenancyManager::class)` call, which would
      * misreport the nullsafe access below as dead code even though the
-     * cloud binding ({@see StanclTenancyManager}) genuinely
+     * cloud binding ({@see CoreX\Tenancy\Runtime\Internal\StanclTenancyManager}) genuinely
      * returns null outside any tenant.
      */
     private function manager(): TenancyManager

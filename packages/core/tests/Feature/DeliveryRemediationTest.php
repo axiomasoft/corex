@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\Contracts\AuditEntry;
+use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Audit\QueuedAuditLogger;
-use CoreX\Features\Contracts\FeatureFlagDefinition;
-use CoreX\Features\DatabaseFeatureFlags;
+use CoreX\Audit\Internal\QueuedAuditLogger;
+use CoreX\Features\Data\FeatureFlagDefinition;
+use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;

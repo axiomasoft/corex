@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -20,7 +21,7 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
@@ -124,8 +125,8 @@ final class BulkApiTest extends TestCase
             encodedScope: (new ArrayDataScopeCodec)->encode($this->scope),
             actorId: 'actor-1',
             clientId: 'client-1',
-            extensionStamp: ['point' => 'api.operation', 'id' => 'notes.bulk-import', 'version' => '1'],
-            inputRef: ['kind' => 'parameters', 'parameters' => ['limit' => 10]],
+            extensionStamp: JsonDocuments::capture(['point' => 'api.operation', 'id' => 'notes.bulk-import', 'version' => '1']),
+            inputRef: JsonDocuments::capture(['kind' => 'parameters', 'parameters' => ['limit' => 10]]),
         );
     }
 
@@ -137,17 +138,17 @@ final class BulkApiTest extends TestCase
     {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: $operation->transferRef,
+            transferRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->transferRef)),
             status: $status,
             terminalStatus: null,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: ['sequence' => '1'],
-            progress: $progress,
-            resultRef: $resultRef,
-            error: null,
+            checkpoint: JsonDocuments::capture(['sequence' => '1']),
+            progress: JsonDocuments::capture($progress),
+            resultRef: JsonDocuments::nullable($resultRef),
+            error: JsonDocuments::nullable(null),
             attempt: $operation->attempt,
             nextAttemptAt: $operation->nextAttemptAt,
             createdAt: $operation->createdAt,

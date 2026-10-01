@@ -5,19 +5,20 @@ declare(strict_types=1);
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Database\Seeders\SystemRolesSeeder;
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Internal\Support\AuthOptions;
-use CoreX\Access\Matrix\AzGuardRoleModel;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
+use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
+use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -174,7 +175,7 @@ it('warns (does not throw) when a role assignable to agent uses own/dept scope',
 
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = (new MatrixValidator)->validate($role);
+    $warnings = (new MatrixValidator)->validate(RoleMatrixData::role((string) $role->getKey()));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('agent');
@@ -190,7 +191,7 @@ it('returns no warning for a user-only role using own/dept scope', function (): 
 
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    expect((new MatrixValidator)->validate($role))->toBeEmpty();
+    expect((new MatrixValidator)->validate(RoleMatrixData::role((string) $role->getKey())))->toBeEmpty();
 });
 
 // findings/P2.8-azguard-inventory-2026-07-26.md §7 — compiled keys are reachable through AzGuard's own catalog builder.

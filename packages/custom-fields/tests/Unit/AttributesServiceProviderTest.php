@@ -16,7 +16,7 @@ use CoreX\CustomFields\Internal\Schema\StaticFieldCatalogue;
 use CoreX\CustomFields\Internal\Storage\ResolvingAttributeStore;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DenyDataScopeAuthorizer;
+use CoreX\Data\Internal\DenyDataScopeAuthorizer;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use Orchestra\Testbench\TestCase;
 use Override;

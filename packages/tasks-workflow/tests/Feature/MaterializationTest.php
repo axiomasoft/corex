@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceSet;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\TaskDraft;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
@@ -40,7 +41,7 @@ beforeEach(function (): void {
     $this->project = Project::query()->create([
         'workspace_id' => $this->workspaceId,
         'name' => 'Launch',
-        'created_by' => $this->actor->toArray(),
+        'created_by' => JsonDocuments::decodeTree($this->actor->toArray()),
     ]);
     $this->stage = Stage::query()->create([
         'project_id' => $this->project->getKey(),
@@ -310,7 +311,7 @@ function wakeupDelivery(object $context, array $payload, string $requestKey): Wa
             requestKey: $requestKey,
             fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
             window: null,
-            payload: $payload,
+            payload: JsonDocuments::capture($payload),
         ),
         generation: 1,
         attempt: 1,

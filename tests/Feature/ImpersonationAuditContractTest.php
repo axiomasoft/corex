@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
+use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
-use CoreX\Audit\QueuedAuditLogger;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Support\Facades\Queue;
 
 test('P12 stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {
@@ -27,7 +28,7 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
         action: 'direct-contract-proof',
         actorType: ActorType::User,
         actorId: 'spoofed-user',
-        context: ['request' => 'request-p12', 'impersonation' => ['grant' => 'spoofed']],
+        context: JsonDocuments::capture(['request' => 'request-p12', 'impersonation' => ['grant' => 'spoofed']]),
     ));
 
     Queue::assertPushed(RecordAuditEntry::class, function (RecordAuditEntry $job): bool {
@@ -39,7 +40,7 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
             ->and($entry->actorId)->toBe('staff-p12')
             ->and($entry->workspaceId)->toBe('workspace-p12')
             ->and($entry->occurredAt)->not->toBeNull()
-            ->and($entry->context)->toBe([
+            ->and(JsonDocuments::map($entry->context))->toBe([
                 'request' => 'request-p12',
                 'impersonation' => [
                     'grant' => 'grant-p12',
@@ -53,7 +54,7 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
 });
 
 test('P12 direct audit ratchet rejects bypassing the impersonation stamp', function (): void {
-    $path = dirname(__DIR__, 2).'/packages/core/src/Audit/QueuedAuditLogger.php';
+    $path = dirname(__DIR__, 2).'/packages/core/src/Audit/Internal/QueuedAuditLogger.php';
     $original = (string) file_get_contents($path);
     $changed = str_replace('$entry = $entry->withImpersonation($state);', '$entry = $entry;', $original);
     file_put_contents($path, $changed);
@@ -68,7 +69,7 @@ test('P12 direct audit ratchet rejects bypassing the impersonation stamp', funct
 /** @return list<string> */
 function p12ImpersonationAuditViolations(): array
 {
-    $path = dirname(__DIR__, 2).'/packages/core/src/Audit/QueuedAuditLogger.php';
+    $path = dirname(__DIR__, 2).'/packages/core/src/Audit/Internal/QueuedAuditLogger.php';
     $tokens = token_get_all((string) file_get_contents($path));
     $stamp = null;
     $dispatch = null;

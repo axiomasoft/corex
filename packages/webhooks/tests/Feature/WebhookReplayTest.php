@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Data\AuditEntry;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
@@ -18,10 +19,10 @@ use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
-use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
 use CoreX\Webhooks\Internal\WebhookReplay;
@@ -111,8 +112,8 @@ final class WebhookReplayTest extends TestCase
         self::assertCount(1, $this->audit->entries);
         self::assertSame('webhook.delivery.replayed', $this->audit->entries[0]->action);
         self::assertSame('actor-a', $this->audit->entries[0]->actorId);
-        self::assertArrayHasKey('reason_sha256', $this->audit->entries[0]->context);
-        self::assertStringNotContainsString('operator incident 42', JsonCanonical::encode($this->audit->entries[0]->context));
+        self::assertArrayHasKey('reason_sha256', JsonDocuments::map($this->audit->entries[0]->context));
+        self::assertStringNotContainsString('operator incident 42', JsonCanonical::encode(JsonDocuments::map($this->audit->entries[0]->context)));
     }
 
     public function test_active_lease_changed_or_disabled_destination_removed_topic_expiry_and_cycle_cap_refuse(): void

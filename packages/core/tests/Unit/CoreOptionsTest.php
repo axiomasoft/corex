@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\CoreOptions;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Config\SecretRef;
+use CoreX\Config\Laravel\CoreOptionsParser;
 
 it('resolves settings cache ttl by key existence', function (array $config, ?int $expected): void {
-    expect(CoreOptions::fromArray($config)->settingsCacheTtl)->toBe($expected);
+    expect(CoreOptionsParser::fromArray($config)->settingsCacheTtl)->toBe($expected);
 })->with([
     'missing settings' => [[], 3600],
     'missing key' => [['settings' => ['cache_store' => 'array']], 3600],
@@ -18,7 +18,7 @@ it('resolves settings cache ttl by key existence', function (array $config, ?int
 
 it('accumulates invalid cache ttl and cache store in one exception', function (): void {
     try {
-        CoreOptions::fromArray([
+        CoreOptionsParser::fromArray([
             'settings' => [
                 'cache_store' => '',
                 'cache_ttl' => -1,

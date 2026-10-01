@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class BudgetScope
 {
     public const string AnonymousActor = '__anonymous_actor__';

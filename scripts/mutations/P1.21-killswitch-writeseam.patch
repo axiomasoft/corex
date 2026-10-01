@@ -1,11 +1,11 @@
-diff --git a/packages/core/src/Audit/QueuedAuditLogger.php b/packages/core/src/Audit/QueuedAuditLogger.php
---- a/packages/core/src/Audit/QueuedAuditLogger.php
-+++ b/packages/core/src/Audit/QueuedAuditLogger.php
+diff --git a/packages/core/src/Audit/Internal/QueuedAuditLogger.php b/packages/core/src/Audit/Internal/QueuedAuditLogger.php
+--- a/packages/core/src/Audit/Internal/QueuedAuditLogger.php
++++ b/packages/core/src/Audit/Internal/QueuedAuditLogger.php
 @@ -46,10 +46,6 @@
          // gate lives at enqueue time, not in RecordAuditEntry::handle(): an
          // event captured while auditing was ON must still land if config flips
          // before the worker runs (the journal records what happened).
--        if (! Config::auditEnabled()) {
+-        if (! app(CoreOptions::class)->auditEnabled) {
 -            return;
 -        }
 -

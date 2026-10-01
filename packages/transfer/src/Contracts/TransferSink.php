@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Contracts;
 
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
 use CoreX\Transfer\Data\CanonicalRecord;
 use CoreX\Transfer\Data\ConflictRule;
 use CoreX\Transfer\Data\ImportDecision;
 use CoreX\Transfer\Data\TargetResult;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TransferSink
 {
     public function preview(DataScope $scope, CanonicalRecord $record, ConflictRule $rule): ImportDecision;

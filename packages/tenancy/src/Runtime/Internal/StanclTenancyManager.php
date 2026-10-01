@@ -9,8 +9,9 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use RuntimeException;
+use Stancl\Tenancy\Database\Models\Tenant as Account;
 use Stancl\Tenancy\Database\Models\Tenant as StanclTenant;
 use Stancl\Tenancy\Tenancy as Stancl;
 
@@ -87,13 +88,11 @@ final class StanclTenancyManager implements TenancyManager
         /** @var StanclTenant&Account $tenant */
         $tenant = $this->tenancy->tenant;
 
-        $account = new AccountRef(
-            id: (string) $tenant->getTenantKey(),
-            slug: (string) $tenant->slug,
-            status: (string) $tenant->status,
-            features: [],
-            limits: [],
-        );
+        $account = app(AccountRead::class)->find((string) $tenant->getTenantKey());
+
+        if ($account === null) {
+            throw new RuntimeException('Current tenant account is missing.');
+        }
 
         return new TenantContext($account, $this->workspace);
     }

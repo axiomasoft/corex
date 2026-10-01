@@ -7,14 +7,13 @@ namespace CoreX\Modules\Internal\Settings;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Internal\Compiler\CompiledSettingDefault;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
-use CoreX\Settings\NullSettingDefaultsProvider;
 use Override;
 
 /**
  * Real {@see SettingDefaultsProvider} for axiomasoft/corex — direction
  * core←modules stays intact: `axiomasoft/corex` only ever sees the contract, this
  * implementation lives here and `ModulesServiceProvider` rebinds it over the
- * boxed {@see NullSettingDefaultsProvider} default. Reads manifest-declared
+ * boxed {@see CoreX\Settings\Internal\NullSettingDefaultsProvider} default. Reads manifest-declared
  * {@see DefaultSettingDefinition}s off the COMPILED registry
  * ({@see ModuleRegistry::compiled()}) — never off `ModuleDiscovery::discover()`,
  * which would re-parse every manifest's `manifest()` method on this hot path

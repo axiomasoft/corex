@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
-use CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager;
-use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 use Stancl\Tenancy\Bootstrappers\DatabaseSessionBootstrapper;
 use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;

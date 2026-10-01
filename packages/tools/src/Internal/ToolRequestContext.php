@@ -7,7 +7,7 @@ namespace CoreX\Tools\Internal;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Operations\Authorization\Contracts\Principal;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Override;
 
 /** @internal Additive wrapper exposing validated tool metadata to handlers. */

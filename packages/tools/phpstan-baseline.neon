@@ -13,12 +13,6 @@ parameters:
 			path: src/Internal/GuardedToolInvoker.php
 
 		-
-			rawMessage: 'Parameter #1 $value of static method CoreX\Operations\Validation\Data\JsonObject::fromArray() expects array<string, mixed>, array<int<0, max>|string, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/GuardedToolInvoker.php
-
-		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
 			count: 1
@@ -55,7 +49,7 @@ parameters:
 			path: src/Internal/OpisToolSchemaValidator.php
 
 		-
-			rawMessage: 'Parameter #1 $schema of static method CoreX\Operations\Validation\SchemaBudget::admit() expects array<string, mixed>, array<int|string, mixed> given.'
+			rawMessage: 'Parameter #1 $schema of static method CoreX\Operations\Validation\Laravel\SchemaBudget::admit() expects array<string, mixed>, array<int|string, mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/OpisToolSchemaValidator.php

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;

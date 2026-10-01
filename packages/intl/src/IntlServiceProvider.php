@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
@@ -23,7 +25,8 @@ use CoreX\Intl\Locale\Internal\Bcp47Validator;
 use CoreX\Intl\Locale\Internal\DefaultLocaleResolver;
 use CoreX\Intl\Locale\Internal\LocalePolicyBuilder;
 use CoreX\Intl\Locale\Internal\RequestLocaleScope;
-use CoreX\Intl\Money\MoneyCast;
+use CoreX\Intl\Locale\Laravel\LocalePortBindings;
+use CoreX\Intl\Money\Laravel\MoneyCast;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
 use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
@@ -37,11 +40,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IntlServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
+        LocalePortBindings::register($this->app);
+
         $this->app->tag([IntlConfigSection::class], ConfigReportSection::class);
 
         $this->callAfterResolving(FieldCastRegistry::class, static function (FieldCastRegistry $casts): void {

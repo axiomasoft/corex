@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Preferences\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
-use CoreX\Notifications\Inbox\Internal\NotificationAccessDenied;
-use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
+use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
+use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Preferences\Data\NotificationPreference;
 use CoreX\Notifications\Preferences\Data\PreferenceInput;
 use CoreX\Settings\Contracts\SettingsRepository;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 use Illuminate\Database\ConnectionInterface;
 
 final class SettingsPreferenceRepository implements PreferenceRepository
@@ -30,7 +31,7 @@ final class SettingsPreferenceRepository implements PreferenceRepository
             ->where('kind', $recipient['kind'])
             ->where('id', $recipient['id'])
             ->first();
-        $value = $this->settings->get(self::NAMESPACE, $eventType, $this->scope($recipient['id']), $this->defaultPreference());
+        $value = JsonDocuments::decode($this->settings->get(self::NAMESPACE, $eventType, $this->scope($recipient['id']), JsonDocuments::capture($this->defaultPreference())));
 
         return $this->preference($value, $state === null ? '1' : (string) $state->preference_revision);
     }
@@ -58,7 +59,7 @@ final class SettingsPreferenceRepository implements PreferenceRepository
 
             $next = (string) ((int) $version + 1);
             $value = ['channels' => $input->channels, 'digest' => $input->digest];
-            $this->settings->set(self::NAMESPACE, $input->eventType, $value, $this->scope($recipient['id']));
+            $this->settings->set(self::NAMESPACE, $input->eventType, JsonDocuments::capture($value), $this->scope($recipient['id']));
             $this->connection->table('ntf_recipient_state')
                 ->where('kind', $recipient['kind'])
                 ->where('id', $recipient['id'])

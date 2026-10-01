@@ -1,30 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Data/PanelAccess.php
-
-		-
-			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Data/PanelDescriptor.php
-
-		-
-			rawMessage: 'Parameter #1 $array of function array_diff expects an array of values castable to string, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/ModulePanelCatalogue.php
-
-		-
-			rawMessage: 'Parameter #2 $arrays of function array_diff expects an array of values castable to string, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/ModulePanelCatalogue.php
-
-		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1

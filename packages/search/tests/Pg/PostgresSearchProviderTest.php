@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;

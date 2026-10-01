@@ -151,7 +151,7 @@ Money             → Foundation, TenancyContracts
 
 ```text
 packages/core/src/CoreServiceProvider.php
-packages/core/src/Config/Config.php
+packages/core/src/Config/Internal/Config.php
 packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php
 ```
 
@@ -159,31 +159,31 @@ packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php
 `Support/RegistersNothingOnBoot.php` войдут в Composition только после появления в дереве.
 Шаблон вида `*ServiceProvider.php` запрещён.
 
-**E-BASEMODEL:** `packages/core/src/Database/BaseModel.php` — единственный файл Foundation,
-которому разрешён импорт Audit-типа `CoreX\Audit\HasAuditLog`.
+**E-BASEMODEL:** `packages/core/src/Database/Laravel/BaseModel.php` — единственный файл Foundation,
+которому разрешён импорт Audit-типа `CoreX\Audit\Laravel\HasAuditLog`.
 
 **E-ZONE-EDGE (D116):** шесть публичных импортов разрешены только парой
 «файл + символ». Матрица зон от этого не расширяется.
 
 ```text
-packages/core/src/Data/DataScope.php
+packages/core/src/Data/Data/DataScope.php
     CoreX\Context\Data\TenantContext
 packages/core/src/Messaging/Events/DomainEvent.php
     CoreX\Context\Data\TenantContext
     CoreX\Context\Contracts\TenantContextResolver
 packages/core/src/Features/Events/FeatureFlagToggled.php
-    CoreX\Settings\Contracts\SettingsScope
-packages/core/src/Features/DatabaseFeatureFlags.php
-    CoreX\Settings\Contracts\SettingsScope
+    CoreX\Settings\Internal\Contracts\SettingsScope
+packages/core/src/Features/Internal/DatabaseFeatureFlags.php
+    CoreX\Settings\Internal\Contracts\SettingsScope
     CoreX\Settings\Enums\SettingScope
 ```
 
 **LITMUS_ELOQUENT:**
 
 ```text
-packages/core/src/Database/BaseModel.php
-packages/core/src/Database/HasConfiguredId.php
-packages/core/src/Database/Schema/IdColumns.php
+packages/core/src/Database/Laravel/BaseModel.php
+packages/core/src/Database/Laravel/HasConfiguredId.php
+packages/core/src/Database/Laravel/IdColumns.php
 ```
 
 Список не расширяется без решения в Decision Log.

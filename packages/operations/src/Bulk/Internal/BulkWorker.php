@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -85,7 +86,7 @@ final readonly class BulkWorker
     {
         $metrics = [];
 
-        foreach ($operation->progress as $key => $value) {
+        foreach (JsonDocuments::map($operation->progress) as $key => $value) {
             if (is_int($value) || is_string($value)) {
                 $metrics[$key] = $value;
             }
@@ -98,17 +99,17 @@ final readonly class BulkWorker
     {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: $operation->transferRef,
+            transferRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->transferRef)),
             status: BulkOperationStatus::Failed,
             terminalStatus: $operation->terminalStatus,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: $operation->checkpoint,
-            progress: ['phase' => 'failed'],
-            resultRef: $operation->resultRef,
-            error: ['code' => $code],
+            checkpoint: JsonDocuments::capture(JsonDocuments::map($operation->checkpoint)),
+            progress: JsonDocuments::capture(['phase' => 'failed']),
+            resultRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->resultRef)),
+            error: JsonDocuments::nullable(['code' => $code]),
             attempt: $operation->attempt,
             nextAttemptAt: $operation->nextAttemptAt,
             createdAt: $operation->createdAt,

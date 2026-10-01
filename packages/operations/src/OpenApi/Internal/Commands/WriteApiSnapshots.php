@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Operations\OpenApi\Internal\Commands;
 
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
-use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
+use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;
 use Illuminate\Console\Command;
 use RuntimeException;
 

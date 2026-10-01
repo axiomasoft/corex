@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\CallableDataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
@@ -37,7 +38,7 @@ it('rejects a page that exceeds the row cap even when it is a single part', func
     expect(fn () => exportLimitRunner(records: 2, limits: new TransferLimits(batchRows: 1))->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class)
         ->and(DB::table('corex_export_manifests')->count())->toBe(0);
@@ -52,7 +53,7 @@ it('seals several parts when each page stays inside the row cap', function (): v
     $sealed = exportLimitRunner(records: 1, pages: 2, limits: new TransferLimits(batchRows: 1))->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     );
 
@@ -69,7 +70,7 @@ it('enforces the byte cap independently of the part count', function (): void {
     expect(fn () => exportLimitRunner(records: 1, limits: new TransferLimits(maxFileBytes: 1, maxRecordBytes: 1))->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class)
         ->and(DB::table('corex_export_manifests')->where('state', 'sealed')->count())->toBe(0);
@@ -92,14 +93,14 @@ it('drops an interrupted capture so a new manifest can be sealed', function (): 
     expect(fn () => exportLimitRunner(records: 1, cancellation: $signal)->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($interrupted, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($interrupted, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class);
 
     $sealed = exportLimitRunner(records: 1)->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($fresh, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($fresh, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     );
 
@@ -122,7 +123,7 @@ it('checks runtime and memory before each page and rolls the capture back', func
     expect(fn () => exportLimitRunner(records: 1, guard: $guard)->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(TransferLimitReached::class)
         ->and(DB::table('corex_export_manifests')->count())->toBe(0);

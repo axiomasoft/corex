@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\CoreOptions;
+use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Panels\SavedViews\Contracts\ViewAccessPolicy;
 use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
 use CoreX\Panels\SavedViews\Data\SaveViewInput;
@@ -72,13 +73,13 @@ it('persists only a validated AST and compiles it without SQL or identifiers', f
     $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
     $scope = new ViewScope('lab.sample', null, null, null);
 
-    $view = $repository->save($context, new SaveViewInput(null, '', $scope, 'table', ['en' => 'Sample'], [
+    $view = $repository->save($context, new SaveViewInput(null, '', $scope, 'table', ['en' => 'Sample'], JsonDocuments::capture([
         'version' => 'saved-view/1', 'filters' => ['field' => 'name', 'op' => 'eq', 'value' => 'safe'], 'sorts' => [], 'columns' => ['name'], 'groupBy' => null, 'presentation' => [],
-    ]));
+    ])));
 
     expect($view->revision)->toBe('1')
         ->and($view->isDefault)->toBeTrue()
-        ->and($repository->compile($context, $view->id)->filters)->toBe(['field' => 'name', 'op' => 'eq', 'value' => 'safe']);
+        ->and(JsonDocuments::array($repository->compile($context, $view->id)->filters))->toBe(['field' => 'name', 'op' => 'eq', 'value' => 'safe']);
 });
 
 it('resolves the current default on one repository across central, tenant, and restored central', function (): void {
@@ -103,7 +104,7 @@ it('keeps an explicit views connection fixed while the default changes', functio
     }
 
     expect($manager->selected)->toBe(['pinned', 'pinned', 'pinned'])
-        ->and(CoreOptions::fromArray(['views' => ['connection' => 'pinned']])->viewsConnection)->toBe('pinned');
+        ->and(CoreOptionsParser::fromArray(['views' => ['connection' => 'pinned']])->viewsConnection)->toBe('pinned');
 });
 
 /**
@@ -169,7 +170,7 @@ function corexSavedViewConnectionProbe(Application $app, ?string $override = nul
             return true;
         }
     };
-    $options = CoreOptions::fromArray($override === null ? [] : ['views' => ['connection' => $override]]);
+    $options = CoreOptionsParser::fromArray($override === null ? [] : ['views' => ['connection' => $override]]);
     $repository = new SqlSavedViewRepository(
         schemas: $schemas,
         policy: $policy,

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
-/** @internal No authoritative local success may be inferred from this outcome. */
+#[Api(since: '1.0')]
 final class RevokeUncertain extends RuntimeException
 {
     public function __construct(public readonly string $requestId)

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Internal;
 
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

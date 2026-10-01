@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Time\Internal\Models;
 
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Laravel\TaskRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,10 +21,10 @@ final class Timer extends Model
     /** @var list<string> */
     protected $fillable = ['user_id', 'task_id', 'started_at'];
 
-    /** @return BelongsTo<Task, $this> */
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function task(): BelongsTo
     {
-        return $this->belongsTo(Task::class);
+        return TaskRelations::belongsTo($this, 'task_id', null, 'task');
     }
 
     /** @return array<string, string> */

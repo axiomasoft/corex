@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\InvalidManifestException;
 use CoreX\Modules\Internal\Compiler\InstalledPackages;
 

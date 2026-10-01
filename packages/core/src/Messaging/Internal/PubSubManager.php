@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal;
 
 use Closure;
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Enums\PubSubDriver;
 use Illuminate\Contracts\Foundation\Application;
@@ -42,7 +42,7 @@ final class PubSubManager implements PubSub
 
     private function driver(): PubSub
     {
-        return $this->driver ??= match (Config::pubsubDriver()) {
+        return $this->driver ??= match (app(CoreOptions::class)->pubsubDriver) {
             PubSubDriver::Redis => $this->app->make(RedisPubSub::class),
             PubSubDriver::Database => $this->app->make(DatabasePollPubSub::class),
             PubSubDriver::Null => $this->app->make(NullPubSub::class),

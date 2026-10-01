@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Database\HasConfiguredId;
-use CoreX\Tenancy\Identity\Internal\Models\User;
+use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Tenancy\Identity\Laravel\UserRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -40,18 +40,15 @@ final class WorkspaceMember extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    /** @return BelongsTo<User, $this> */
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return UserRelations::belongsTo($this, 'user_id', null, 'user');
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return [
-            'is_default' => 'boolean',
-            'joined_at' => 'datetime',
-        ];
+        return ['is_default' => 'boolean', 'joined_at' => 'datetime'];
     }
 }

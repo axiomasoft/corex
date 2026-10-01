@@ -6,6 +6,7 @@ namespace CoreX\Wakeup\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Wakeup\Contracts\DueWakeupSource;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;
@@ -211,7 +212,7 @@ final class SweepRunner implements DueWakeupSweeper
     {
         $window = $row->window_start === null ? null : new WakeupWindow(start: $this->date($row->window_start), end: $this->date($row->window_end), period: $row->period);
 
-        return new WakeupRequest(context: $context, kind: $row->kind, requestKey: $row->request_key, fireAt: $this->date($row->fire_at), window: $window, payload: $payload);
+        return new WakeupRequest(context: $context, kind: $row->kind, requestKey: $row->request_key, fireAt: $this->date($row->fire_at), window: $window, payload: JsonDocuments::capture($payload));
     }
 
     private function terminalFailure(string $id, string $code, DateTimeImmutable $now): void

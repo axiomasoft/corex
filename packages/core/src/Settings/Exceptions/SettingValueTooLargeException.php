@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
  * Quota: `sys_settings.value` ≤ 64 KB encoded.
- *
- * @internal spec: B-10 §7.2
  */
+#[Api(since: '1.0')]
 final class SettingValueTooLargeException extends RuntimeException
 {
     public function __construct(string $namespace, string $key, int $bytes, int $limit)

@@ -6,8 +6,8 @@ index 3da3fc4..f3c5060 100644
          // HasAuditLog::boot: a boot-time skip never re-enables when the
          // config flips, and the capability path (::observe) never saw the flag
          // at all — a disabled audit still wrote through byCapability(Auditable).
--        if (! Config::auditEnabled()) {
-+        if (! Config::auditEnabled() && false) {
+-        if (! app(CoreOptions::class)->auditEnabled) {
++        if (! app(CoreOptions::class)->auditEnabled && false) {
              return;
          }
  

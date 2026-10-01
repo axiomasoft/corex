@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Context\SingleAccountResolver;
+use CoreX\Context\Internal\SingleAccountResolver;
 use Illuminate\Contracts\Cache\Factory;
 use Symfony\Component\Process\Process;
 

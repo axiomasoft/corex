@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Internal\Commands\DeliverWebhooks;
@@ -14,6 +16,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 
 /** Explicit webhook composition; remote delivery remains opt-in. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WebhooksServiceProvider extends ServiceProvider
 {
     #[Override]

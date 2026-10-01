@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Config;
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
+use CoreX\Config\Internal\Config;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -17,8 +17,8 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;

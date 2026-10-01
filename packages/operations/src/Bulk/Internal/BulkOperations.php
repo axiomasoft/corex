@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Bulk\Internal;
 
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
@@ -51,8 +52,8 @@ final readonly class BulkOperations
         $response = response()->json([
             'operation_id' => $operation->definition->id,
             'status' => $operation->status->value,
-            'progress' => $operation->progress,
-            'has_failures' => ($operation->progress['invalid'] ?? 0) !== 0,
+            'progress' => JsonDocuments::map($operation->progress),
+            'has_failures' => (JsonDocuments::map($operation->progress)['invalid'] ?? 0) !== 0,
         ]);
 
         if (! $operation->status->isTerminal()) {

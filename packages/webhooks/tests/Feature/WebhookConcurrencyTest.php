@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;

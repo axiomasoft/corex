@@ -31,7 +31,9 @@
             "public-api": [
                 "CoreX\\Wakeup\\Contracts",
                 "CoreX\\Wakeup\\Data",
-                "CoreX\\Wakeup\\Testing"
+                "CoreX\\Wakeup\\Testing",
+                "CoreX\\Wakeup\\WakeupModule",
+                "CoreX\\Wakeup\\WakeupServiceProvider"
             ]
         },
         "laravel": {

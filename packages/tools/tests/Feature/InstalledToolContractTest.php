@@ -8,12 +8,12 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
-use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
@@ -162,7 +162,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $readDescriptor->code,
                 toolVersion: $readDescriptor->toolVersion,
                 expectedContractHash: $readDescriptor->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'archive']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'archive']),
                 requestId: 'req-archive-read',
             ),
         );
@@ -173,7 +173,7 @@ final class InstalledToolContractTest extends TestCase
             code: $writeDescriptor->code,
             toolVersion: $writeDescriptor->toolVersion,
             expectedContractHash: $writeDescriptor->contractHash,
-            arguments: JsonObject::fromArray(['name' => 'export']),
+            arguments: JsonObjectFactory::fromArray(['name' => 'export']),
             requestId: 'req-export',
             operationKey: 'op-1',
         );
@@ -197,7 +197,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $writeDescriptor->code,
                 toolVersion: $writeDescriptor->toolVersion,
                 expectedContractHash: $writeDescriptor->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'export']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'export']),
                 requestId: 'req-foreign',
                 operationKey: 'op-foreign',
             ),
@@ -239,7 +239,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $descriptor->code,
                 toolVersion: $descriptor->toolVersion,
                 expectedContractHash: $descriptor->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'parity']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'parity']),
                 requestId: 'req-parity',
             ),
         );
@@ -295,7 +295,7 @@ final class InstalledToolContractTest extends TestCase
                 code: 'missing.tool',
                 toolVersion: 'v1',
                 expectedContractHash: str_repeat('a', 64),
-                arguments: JsonObject::fromArray(['name' => 'x']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'x']),
                 requestId: 'req-unknown',
             ),
         );
@@ -308,7 +308,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $descriptor->code,
                 toolVersion: $descriptor->toolVersion,
                 expectedContractHash: str_repeat('b', 64),
-                arguments: JsonObject::fromArray(['name' => 'x']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'x']),
                 requestId: 'req-forged',
             ),
         );
@@ -322,7 +322,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $descriptor->code,
                 toolVersion: $descriptor->toolVersion,
                 expectedContractHash: $descriptor->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'x']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'x']),
                 requestId: 'req-disabled',
             ),
         );
@@ -338,7 +338,7 @@ final class InstalledToolContractTest extends TestCase
                 code: $writeDescriptor->code,
                 toolVersion: $writeDescriptor->toolVersion,
                 expectedContractHash: $writeDescriptor->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'export']),
+                arguments: JsonObjectFactory::fromArray(['name' => 'export']),
                 requestId: 'req-unguarded',
                 operationKey: 'op-unguarded',
             ),

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Registry\CompiledModule;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
 use LogicException;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ModuleFixture implements ModuleRegistry
 {
     public bool $enabled = true;

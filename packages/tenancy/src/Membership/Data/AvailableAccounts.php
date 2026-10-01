@@ -4,21 +4,40 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 use DateTimeImmutable;
 
-/** @internal Local, authoritative read result; no public DTO is introduced. */
+#[Api(since: '1.0')]
 final readonly class AvailableAccounts
 {
-    /** @param list<mixed> $accounts */
-    public function __construct(
-        public string $identityId,
-        public string $product,
-        public string $membershipVersion,
-        public array $accounts,
-        public DateTimeImmutable $observedAt,
-    ) {
+    /** @param list<AccountListEntry> $accounts */
+    public function __construct(public string $identityId, public string $product, public string $membershipVersion, public array $accounts, public DateTimeImmutable $observedAt)
+    {
+        self::validateInput($identityId, $product, $membershipVersion, $accounts, $observedAt);
+    }
+
+    public function isFor(AccountsQuery $query): bool
+    {
+        return $this->identityId === $query->identityId && $this->product === $query->product;
+    }
+
+    /** Runtime validation also rejects values from untyped integration callers.
+     * @param  array<array-key, mixed>  $accounts
+     */
+    private static function validateInput(
+        /** Runtime input. */
+        string $identityId,
+        /** Runtime input. */
+        string $product,
+        /** Runtime input. */
+        string $membershipVersion,
+        /** Runtime input. */
+        array $accounts,
+        /** Runtime input. */
+        DateTimeImmutable $observedAt,
+    ): void {
         Value::uuid($identityId);
         Value::product($product);
 
@@ -34,10 +53,5 @@ final readonly class AvailableAccounts
 
             $accountIds[$account->accountId] = true;
         }
-    }
-
-    public function isFor(AccountsQuery $query): bool
-    {
-        return $this->identityId === $query->identityId && $this->product === $query->product;
     }
 }

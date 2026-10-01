@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use CoreX\Features\Contracts\FeatureFlagDefinition;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Permissions;
+use CoreX\Features\Data\FeatureFlagDefinition;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\EntityField;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Internal\Extend\Filament;
 use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Internal\Extend\Routes;
 use CoreX\Modules\Internal\Extend\Workflow;
 use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 
 // Fluent-canon pin (P3.6, A13): a manifest-authoring DTO in Contracts/Extend
 // is never built with `new` by a module author — it exposes at least one

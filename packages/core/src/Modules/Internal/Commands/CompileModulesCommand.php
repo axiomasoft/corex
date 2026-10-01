@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Commands;
 
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Data\CompiledModule;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Exceptions\InvalidManifestException;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Registry\CompiledModule;
 use Illuminate\Console\Command;
 
 /**

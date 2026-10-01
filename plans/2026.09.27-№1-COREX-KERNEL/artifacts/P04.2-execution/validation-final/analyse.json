@@ -1,0 +1,9 @@
+{
+  "name": "analyse",
+  "command": "scripts/php84 composer analyse",
+  "exit_code": 0,
+  "duration_ms": 45988,
+  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "log": "validation-final/analyse.log",
+  "log_sha256": "5d386a949478a6f48f7ddadb6417ee2fadbbacfbaaea179def6f60a8bbdc3fc4"
+}

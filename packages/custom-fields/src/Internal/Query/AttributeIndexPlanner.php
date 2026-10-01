@@ -11,7 +11,7 @@ use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\SchemaChange;
 use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 use RuntimeException;

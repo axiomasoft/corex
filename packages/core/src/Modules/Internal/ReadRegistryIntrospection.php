@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace CoreX\Modules\Internal;
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledEntityField;
-use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleActivationGate;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\RegistryIntrospection;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledEntityField;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Data\EntityField;
 use CoreX\Modules\Data\ModuleExplanation;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Data\RegistryMap;
 use CoreX\Modules\Exceptions\InvalidRegistryPoint;
 use CoreX\Modules\Exceptions\ModuleNotFound;
 use CoreX\Modules\Exceptions\RegistryInputUnavailable;
 use CoreX\Modules\Exceptions\StaleRegistryRevision;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Internal\Compiler\InstalledPackages;
 use CoreX\Modules\Internal\Compiler\PipelineStages;
 use CoreX\Modules\Internal\Extend\Filament;
 use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Internal\Extend\Routes;
 use CoreX\Modules\Internal\Extend\Workflow;
-use CoreX\Modules\Registry\CompiledModule;
-use CoreX\Modules\Registry\EntityDefinition;
 use Override;
 
 /**
@@ -223,7 +223,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @return list<array{kind: string, name?: string, entryCount?: int, owners?: array<string, int>, handle?: string, module?: string, capabilities?: list<string>, entityHandle?: string, sleeping?: bool}>
      */
     private function buildExtensionPoints(CompiledRegistry $compiled): array
     {
@@ -419,7 +419,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         }
     }
 
-    /** @return array<string, mixed> */
+    /** @return array{requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, compatibilityPassport: string, installedPackagePresent: bool} */
     private function declaredConstraints(CompiledModule $module): array
     {
         return [

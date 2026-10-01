@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Fixtures;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkTransferSession;
 use CoreX\Transfer\Contracts\CancellationSignal;
@@ -38,23 +39,23 @@ final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\Bulk
     public function create(BulkOperation $operation): BulkTransferSession
     {
         $id = $operation->definition->id;
-        $kind = $operation->definition->inputRef['kind'] ?? 'import';
-        $attempt = is_string($operation->checkpoint['attempt_id'] ?? null)
-            ? $operation->checkpoint['attempt_id']
+        $kind = JsonDocuments::map($operation->definition->inputRef)['kind'] ?? 'import';
+        $attempt = is_string(JsonDocuments::map($operation->checkpoint)['attempt_id'] ?? null)
+            ? JsonDocuments::map($operation->checkpoint)['attempt_id']
             : $id;
 
-        if ($kind === 'export' && ($operation->checkpoint['sealed'] ?? true) !== true && ! isset($this->tokens[$id])) {
+        if ($kind === 'export' && (JsonDocuments::map($operation->checkpoint)['sealed'] ?? true) !== true && ! isset($this->tokens[$id])) {
             $attempt .= '-retry';
         }
 
         $this->tokens[$id] ??= $attempt;
-        $stamp = $operation->definition->extensionStamp;
+        $stamp = JsonDocuments::map($operation->definition->extensionStamp);
         $restore = $this->drift['restore_epoch'] ?? (string) $stamp['restore_epoch'];
         $version = $this->drift['version'] ?? (string) $stamp['version'];
         $rights = $this->drift['rights'] ?? (string) $stamp['rights'];
         $zero = hash('sha256', 'zero');
         $token = new StepToken(
-            checkpointSequence: (string) ($operation->checkpoint['sequence'] ?? '0'),
+            checkpointSequence: (string) (JsonDocuments::map($operation->checkpoint)['sequence'] ?? '0'),
             epoch: '1',
             sourceHash: $zero,
             mappingHash: hash('sha256', $rights),
@@ -90,7 +91,7 @@ final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\Bulk
                 snapshotMode: 'coherent',
                 schemaHash: $token->schemaHash,
                 restoreEpoch: $token->restoreEpoch,
-                roster: ['rows' => 1],
+                roster: JsonDocuments::capture(['rows' => 1]),
                 partsHash: $zero,
             );
 

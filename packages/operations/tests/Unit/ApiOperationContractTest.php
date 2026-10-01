@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
-use CoreX\Operations\Definition\ApiOperationValidator;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Operations\Tests\TestCase;
@@ -40,11 +40,11 @@ it('keeps legacy operation declarations on the compatibility matrix', function (
         ->and($post->operationMode)->toBe('command')
         ->and($post->idempotencyRequirement)->toBe('optional')
         ->and($post->effectMode)->toBeNull()
-        ->and(fn () => ApiOperationValidator::validate($get))->not->toThrow(CompilationException::class);
+        ->and(fn () => OperationDefinitionValidator::validate($get))->not->toThrow(CompilationException::class);
 });
 
 it('rejects illegal mode, method and idempotency pairs', function (Api $api): void {
-    expect(fn () => ApiOperationValidator::validate($api))->toThrow(CompilationException::class);
+    expect(fn () => OperationDefinitionValidator::validate($api))->toThrow(CompilationException::class);
 })->with([
     'query post' => [$operation('POST')->asQuery()],
     'query required' => [$operation()->asQuery()->idempotency('required')->effect('tenant_transactional')],
@@ -61,17 +61,17 @@ it('rejects illegal mode, method and idempotency pairs', function (Api $api): vo
 ]);
 
 it('rejects duplicate fields and scopes, bad capability and deprecation, and unsafe effects', function () use ($operation): void {
-    expect(fn () => ApiOperationValidator::validate($operation()->fields(['id', 'id'])))
+    expect(fn () => OperationDefinitionValidator::validate($operation()->fields(['id', 'id'])))
         ->toThrow(CompilationException::class, 'duplicate read field')
-        ->and(fn () => ApiOperationValidator::validate($operation('POST')->requiresScopes('crm.write', 'crm.write')->idempotency('required')->effect('tenant_transactional')))
+        ->and(fn () => OperationDefinitionValidator::validate($operation('POST')->requiresScopes('crm.write', 'crm.write')->idempotency('required')->effect('tenant_transactional')))
         ->toThrow(CompilationException::class, 'duplicate scope')
-        ->and(fn () => ApiOperationValidator::validate($operation()->capability('CRM.Write')))
+        ->and(fn () => OperationDefinitionValidator::validate($operation()->capability('CRM.Write')))
         ->toThrow(CompilationException::class, 'Invalid capability')
-        ->and(fn () => ApiOperationValidator::validate(tap($operation(), fn (Api $api) => $api->deprecation = ['message' => 'gone'])))
+        ->and(fn () => OperationDefinitionValidator::validate(tap($operation(), fn (Api $api) => $api->deprecation = ['message' => 'gone'])))
         ->toThrow(CompilationException::class, 'Invalid deprecation')
-        ->and(fn () => ApiOperationValidator::validate($operation('POST')->idempotency('required')))
+        ->and(fn () => OperationDefinitionValidator::validate($operation('POST')->idempotency('required')))
         ->toThrow(CompilationException::class, 'Unsafe idempotent effect')
-        ->and(fn () => ApiOperationValidator::validate($operation('POST')->idempotency('required')->effect('direct_external')))
+        ->and(fn () => OperationDefinitionValidator::validate($operation('POST')->idempotency('required')->effect('direct_external')))
         ->toThrow(CompilationException::class, 'Unsafe idempotent effect');
 });
 
@@ -83,7 +83,7 @@ it('marks bulk modes unsupported and refuses enabled execution', function () use
 
     $bulk->bulkExecutionEnabled = true;
 
-    expect(fn () => ApiOperationValidator::validate($bulk))->toThrow(CompilationException::class, 'cannot enable execution');
+    expect(fn () => OperationDefinitionValidator::validate($bulk))->toThrow(CompilationException::class, 'cannot enable execution');
 });
 
 it('projects the same contract hash when declaration order is reversed', function () use ($schema): void {
@@ -103,11 +103,11 @@ it('projects the same contract hash when declaration order is reversed', functio
         ], installedPackages: []);
 
         return [
-            Operation::fromDeclaration(
+            OperationFactory::fromDeclaration(
                 collect($compiled->api)->first(fn (Api $api): bool => $api->operationId === 'notes.list'),
                 $compiled->fingerprint,
             ),
-            Operation::fromDeclaration(
+            OperationFactory::fromDeclaration(
                 collect($compiled->api)->first(fn (Api $api): bool => $api->operationId === 'notes.create'),
                 $compiled->fingerprint,
             ),

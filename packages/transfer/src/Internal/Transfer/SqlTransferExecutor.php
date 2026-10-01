@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Transfer\Internal\Transfer;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferRunner;

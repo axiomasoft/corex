@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
-/** @internal A fenced credential write must not be presented as authenticated. */
+#[Api(since: '1.0')]
 final class CredentialIssuanceDenied extends RuntimeException {}

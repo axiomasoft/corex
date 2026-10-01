@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Data;
 
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use InvalidArgumentException;
 use JsonException;
 
+#[Api(since: '1.0')]
 final readonly class BulkOperationDefinition
 {
     /**
      * @param  array<string, scalar|null>  $encodedScope
-     * @param  array<string, mixed>  $extensionStamp
-     * @param  array<string, mixed>  $inputRef
      */
     public function __construct(
         public string $id,
@@ -23,8 +25,8 @@ final readonly class BulkOperationDefinition
         public array $encodedScope,
         public string $actorId,
         public string $clientId,
-        public array $extensionStamp,
-        public array $inputRef,
+        public JsonDocument $extensionStamp,
+        public JsonDocument $inputRef,
     ) {
         self::assertString($id, 'id', 64);
         self::assertString($submissionId, 'submission id', 64);
@@ -41,9 +43,9 @@ final readonly class BulkOperationDefinition
             throw new InvalidArgumentException('Bulk encoded scope must be a non-empty JSON object.');
         }
 
-        self::assertJsonObject($extensionStamp, 'extension stamp');
-        self::assertJsonObject($inputRef, 'input reference');
-        self::assertSafeInputReference($inputRef);
+        self::assertJsonObject(JsonDocuments::map($extensionStamp), 'extension stamp');
+        self::assertJsonObject(JsonDocuments::map($inputRef), 'input reference');
+        self::assertSafeInputReference(JsonDocuments::map($inputRef));
     }
 
     private static function assertString(string $value, string $name, int $maximum): void

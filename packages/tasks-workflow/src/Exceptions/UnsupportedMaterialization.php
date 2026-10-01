@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class UnsupportedMaterialization extends RuntimeException
 {
     public static function connection(string $message): self

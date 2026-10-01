@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Operations\Idempotency\Internal;
 
 use Closure;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
-use CoreX\Operations\Cost\Internal\BudgetAdmission;
-use CoreX\Operations\Cost\Internal\BudgetRateLimited;
-use CoreX\Operations\Cost\Internal\BudgetStoreUnavailable;
-use CoreX\Operations\Definition\Internal\OperationFingerprint;
+use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
+use CoreX\Operations\Cost\Exceptions\BudgetRateLimited;
+use CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable;
+use CoreX\Operations\Definition\Laravel\OperationFingerprint;
+use CoreX\Operations\Errors\Contracts\ErrorMapping as ErrorMapper;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
@@ -53,13 +54,13 @@ final class IdempotentOperationInvoker implements OperationInvoker
 
         if ($key === null) {
             $result = $this->inner->invoke($invocation);
-            $fresh = StoredOperationOutcome::success($result->data);
+            $fresh = StoredOperationOutcome::success(JsonDocuments::capture(JsonDocuments::array($result->data)));
             $projected = $this->project($invocation, $fresh, $result->replayed);
 
             return new OperationResult(
-                data: $projected->data,
+                data: JsonDocuments::capture(JsonDocuments::array($projected->data)),
                 replayed: $projected->replayed,
-                metadata: $result->metadata,
+                metadata: JsonDocuments::capture(JsonDocuments::map($result->metadata)),
             );
         }
 
@@ -105,7 +106,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
                 try {
                     $result = $this->inner->invoke($invocation);
                     $effectCompleted = true;
-                    $freshMetadata = $result->metadata;
+                    $freshMetadata = JsonDocuments::map($result->metadata);
                 } catch (BudgetStoreUnavailable $error) {
                     throw $error;
                 } catch (BudgetRateLimited $error) {
@@ -116,7 +117,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
                     throw $error;
                 }
 
-                $outcome = StoredOperationOutcome::success($result->data);
+                $outcome = StoredOperationOutcome::success(JsonDocuments::capture(JsonDocuments::array($result->data)));
                 $store->complete($attempt, $outcome->canonicalJson());
                 $terminalPersisted = true;
 
@@ -165,9 +166,9 @@ final class IdempotentOperationInvoker implements OperationInvoker
         }
 
         return new OperationResult(
-            data: $projected->data,
+            data: JsonDocuments::capture(JsonDocuments::array($projected->data)),
             replayed: $projected->replayed,
-            metadata: $freshMetadata,
+            metadata: JsonDocuments::capture($freshMetadata),
         );
     }
 

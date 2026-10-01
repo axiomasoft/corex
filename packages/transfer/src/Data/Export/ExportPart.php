@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data\Export;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ExportPart
 {
     /** @param array<string, int> $rowCounts */

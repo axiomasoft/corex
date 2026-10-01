@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
 use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 
 /** Pure declared-recipe estimator. No database, cache, network or handler reflection. */
 final readonly class DeclaredCostEstimator implements OperationCostEstimator
@@ -86,7 +87,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
     private function declaredPageMaximum(Operation $operation): int
     {
         foreach (['max', 'max_rows', 'limit'] as $key) {
-            $value = $operation->pagination[$key] ?? null;
+            $value = JsonDocuments::optionalMap($operation->pagination)[$key] ?? null;
 
             if (is_int($value) && $value >= 0) {
                 return $value;

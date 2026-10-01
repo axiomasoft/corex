@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Compiler;
 
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Data\InstalledPackageVersion;
 
 /**
  * The real composer dependency graph {@see RegistryCompiler::compile()}
  * checks `requires(ModuleDependency::module(...))` against by default. Reads the
  * standard `vendor/composer/installed.json` (Composer's own installed-set
- * manifest — no custom format, same file {@see ModuleDiscovery} scans for
+ * manifest — no custom format, same file {@see CoreX\Modules\Internal\Discovery\ModuleDiscovery} scans for
  * corex-module packages). A missing/unreadable file resolves to an empty
  * list rather than failing — a deployment with zero third-party composer
  * packages is legal, and `requires` between manifests being compiled

@@ -6,7 +6,7 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use DateInterval;
 use Illuminate\Database\Connection;

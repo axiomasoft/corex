@@ -115,25 +115,7 @@ parameters:
 			path: src/Internal/Export/DatabaseExportRunner.php
 
 		-
-			rawMessage: 'Parameter $records of method CoreX\Transfer\Internal\Export\DatabaseExportRunner::assertPageBounds() expects list<CoreX\Transfer\Data\CanonicalRecord>, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Export/DatabaseExportRunner.php
-
-		-
-			rawMessage: 'Parameter $records of method CoreX\Transfer\Internal\Export\DatabaseExportRunner::stagePart() expects list<CoreX\Transfer\Data\CanonicalRecord>, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Export/DatabaseExportRunner.php
-
-		-
 			rawMessage: 'Parameter $restoreEpoch of class CoreX\Transfer\Data\Export\ExportManifest constructor expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Export/DatabaseExportRunner.php
-
-		-
-			rawMessage: 'Parameter $roster of class CoreX\Transfer\Data\Export\ExportManifest constructor expects array<string, array<mixed>|bool|int|string|null>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Export/DatabaseExportRunner.php
@@ -205,19 +187,7 @@ parameters:
 			path: src/Internal/Transfer/SqlTransferExecutor.php
 
 		-
-			rawMessage: Cannot access property $ordinal on mixed.
-			identifier: property.nonObject
-			count: 5
-			path: src/Internal/Transfer/SqlTransferExecutor.php
-
-		-
 			rawMessage: Cannot access property $payloadHash on CoreX\Transfer\Data\CanonicalRecord|null.
-			identifier: property.nonObject
-			count: 1
-			path: src/Internal/Transfer/SqlTransferExecutor.php
-
-		-
-			rawMessage: Cannot access property $values on mixed.
 			identifier: property.nonObject
 			count: 1
 			path: src/Internal/Transfer/SqlTransferExecutor.php
@@ -254,24 +224,6 @@ parameters:
 
 		-
 			rawMessage: 'Parameter $ordinal of class CoreX\Transfer\Data\SourceCursor constructor expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Transfer/SqlTransferExecutor.php
-
-		-
-			rawMessage: 'Parameter $ordinal of method CoreX\Transfer\Internal\Transfer\SqlTransferExecutor::recordResult() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Transfer/SqlTransferExecutor.php
-
-		-
-			rawMessage: 'Parameter $ordinal of method CoreX\Transfer\Internal\Transfer\SqlTransferExecutor::saveRow() expects string, mixed given.'
-			identifier: argument.type
-			count: 2
-			path: src/Internal/Transfer/SqlTransferExecutor.php
-
-		-
-			rawMessage: 'Parameter $row of method CoreX\Transfer\Contracts\RecordMapper::map() expects CoreX\Transfer\Data\SourceRow, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Transfer/SqlTransferExecutor.php

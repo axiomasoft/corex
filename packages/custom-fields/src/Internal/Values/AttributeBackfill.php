@@ -10,7 +10,7 @@ use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\VersionConflict;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;

@@ -61,33 +61,15 @@ parameters:
 			path: src/Access/Internal/DirectGrantLookup.php
 
 		-
-			rawMessage: 'Return type (string|null) of method CoreX\Access\Access\Internal\PrincipalIdentity::getAuthPassword() should be covariant with return type (string) of method Illuminate\Contracts\Auth\Authenticatable::getAuthPassword()'
+			rawMessage: 'Return type (string|null) of method CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthPassword() should be covariant with return type (string) of method Illuminate\Contracts\Auth\Authenticatable::getAuthPassword()'
 			identifier: method.childReturnType
 			count: 1
-			path: src/Access/Internal/PrincipalIdentity.php
+			path: src/Access/Laravel/PrincipalIdentity.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Access/Internal/ScopePredicate.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Departments\Models\Department>::exists().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Access/Internal/ScopePredicate.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Departments\Models\Department>::select().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Access/Internal/ScopePredicate.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Departments\Models\Department>::whereRaw().'
-			identifier: staticMethod.dynamicCall
-			count: 2
 			path: src/Access/Internal/ScopePredicate.php
 
 		-
@@ -139,7 +121,7 @@ parameters:
 			path: src/CoreAuthServiceProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Access\Internal\Support\AuthOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter #1 $config of static method CoreX\Access\Laravel\AuthOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: src/CoreAuthServiceProvider.php
@@ -148,73 +130,49 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
 			rawMessage: Casting to string something that's already string.
 			identifier: cast.useless
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
-			rawMessage: 'Parameter #1 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Internal\PrincipalUserProvider::retrieveByCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::retrieveByCredentials()'
+			rawMessage: 'Parameter #1 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Laravel\PrincipalUserProvider::retrieveByCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::retrieveByCredentials()'
 			identifier: method.childParameterType
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
 			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Query\Builder::whereRaw() expects Illuminate\Contracts\Database\Query\Expression|literal-string, non-falsy-string given.'
 			identifier: argument.type
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
-			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Internal\PrincipalUserProvider::rehashPasswordIfRequired() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::rehashPasswordIfRequired()'
+			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Laravel\PrincipalUserProvider::rehashPasswordIfRequired() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::rehashPasswordIfRequired()'
 			identifier: method.childParameterType
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
-			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Internal\PrincipalUserProvider::validateCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::validateCredentials()'
+			rawMessage: 'Parameter #2 $credentials (array<string, mixed>) of method CoreX\Access\Identity\Laravel\PrincipalUserProvider::validateCredentials() should be contravariant with parameter $credentials (array) of method Illuminate\Contracts\Auth\UserProvider::validateCredentials()'
 			identifier: method.childParameterType
 			count: 1
-			path: src/Identity/Internal/PrincipalUserProvider.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
 			rawMessage: Variable property access on object.
 			identifier: property.dynamicName
 			count: 2
-			path: src/Identity/Internal/PrincipalUserProvider.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Internal\Models\Role>::whereNull().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Matrix/Internal/DatabaseRoleMatrixCompiler.php
-
-		-
-			rawMessage: 'Parameter #1 $callback of method Illuminate\Support\Collection<(int|string),mixed>::each() expects callable(mixed, int|string): mixed, Closure(string): void given.'
-			identifier: argument.type
-			count: 1
-			path: src/Matrix/Internal/DatabaseRoleMatrixCompiler.php
+			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
 			rawMessage: 'Method CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder::build() should return list<AzGuard\Registry\Contracts\PermissionDefinition> but returns array<int, AzGuard\Registry\Definitions\SimplePermissionDefinition>.'
 			identifier: return.type
 			count: 1
 			path: src/Matrix/Internal/MatrixPermissionCatalogBuilder.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Internal\Models\RoleMatrixRow>::exists().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Matrix/Internal/MatrixValidator.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Internal\Models\RoleMatrixRow>::whereIn().'
-			identifier: staticMethod.dynamicCall
-			count: 2
-			path: src/Matrix/Internal/MatrixValidator.php
 
 		-
 			rawMessage: Anonymous function should return int but returns mixed.
@@ -238,28 +196,28 @@ parameters:
 			rawMessage: Casting to bool something that's already bool.
 			identifier: cast.useless
 			count: 1
-			path: src/Internal/Models/Role.php
+			path: src/Roles/Internal/Models/Role.php
 
 		-
 			rawMessage: 'Call to function array_filter() requires parameter #2 to be passed to avoid loose comparison semantics.'
 			identifier: arrayFilter.strict
 			count: 1
-			path: src/Internal/Models/RoleMatrixRow.php
+			path: src/Roles/Internal/Models/RoleMatrixRow.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Internal\Models\Role>::exists().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Roles\Internal\Models\Role>::exists().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Internal/Models/RoleMatrixRow.php
+			path: src/Roles/Internal/Models/RoleMatrixRow.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Internal\Models\Role>::whereIn().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Access\Roles\Internal\Models\Role>::whereIn().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Internal/Models/RoleMatrixRow.php
+			path: src/Roles/Internal/Models/RoleMatrixRow.php
 
 		-
-			rawMessage: 'Parameter $azguardPins of class CoreX\Access\Internal\Support\AuthOptions constructor expects array<string, mixed>, array<mixed> given.'
+			rawMessage: 'Parameter $azguardPins of class CoreX\Access\Laravel\AuthOptions constructor expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
-			path: src/Internal/Support/AuthOptions.php
+			path: src/Laravel/AuthOptions.php

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** @internal Shares safe normalization between dispatch and the surrounding middleware pipeline. */
-final class ErrorMapper
+final class ErrorMapper implements ErrorMapping
 {
     public function map(Throwable $error, bool $reportUnexpected = true): ApiError
     {
@@ -31,7 +33,7 @@ final class ErrorMapper
                 errorCode: $descriptor->code,
                 status: $this->statusFor($descriptor->category),
                 message: $this->messageFor($descriptor->category),
-                details: $descriptor->details,
+                details: JsonDocuments::capture($descriptor->details),
                 category: $descriptor->category,
                 retryable: $descriptor->retryable,
                 path: $descriptor->path,
@@ -43,7 +45,7 @@ final class ErrorMapper
                 errorCode: 'validation_failed',
                 status: 422,
                 message: 'Input validation failed.',
-                details: $error->errors(),
+                details: JsonDocuments::capture($error->errors()),
                 category: ErrorCategory::Validation,
             );
         }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Config\Internal;
 
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Config\CoreOptions;
+use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Messaging\Enums\PubSubDriver;
-use CoreX\Messaging\Internal\RedisPubSub;
+use CoreX\Messaging\Laravel\PubSubAdapters;
 
 /** @internal Configuration report composition. */
 final class KernelConfigSection implements ConfigReportSection
@@ -19,7 +19,7 @@ final class KernelConfigSection implements ConfigReportSection
 
     public function options(): array
     {
-        return [CoreOptions::class => ['corex']];
+        return [CoreOptionsParser::class => ['corex']];
     }
 
     public function secretKeys(): array
@@ -43,7 +43,7 @@ final class KernelConfigSection implements ConfigReportSection
     {
         $driver = config('corex.pubsub.driver');
         $selected = $driver === PubSubDriver::Redis || $driver === 'redis';
-        $available = class_exists(RedisPubSub::class);
+        $available = PubSubAdapters::redisAvailable();
 
         return [['line' => 'adapter pubsub.redis='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'), 'error' => $selected && ! $available ? 'adapter pubsub.redis missing' : null]];
     }

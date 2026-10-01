@@ -11,7 +11,7 @@ use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
 use CoreX\Storage\Exceptions\StorageCapabilityUnavailable;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
-use CoreX\Storage\ScopedFilesystem;
+use CoreX\Storage\Laravel\ScopedFilesystemFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
@@ -53,7 +53,7 @@ final class ObjectTenantStorage implements TenantStorage
         $accountId = $this->accountId();
         $prefix = 'tenants/'.$accountId;
 
-        return new ScopedFilesystem(
+        return ScopedFilesystemFactory::create(
             filesystem: $this->filesystems->build(config: array_merge($this->durableConfig, [
                 'root' => $prefix,
                 'visibility' => 'private',
@@ -72,7 +72,7 @@ final class ObjectTenantStorage implements TenantStorage
         $accountId = $this->accountId();
         $root = rtrim($this->ephemeralRoot, DIRECTORY_SEPARATOR).'/tenants/'.$accountId;
 
-        return new ScopedFilesystem(
+        return ScopedFilesystemFactory::create(
             filesystem: $this->filesystems->build(config: [
                 'driver' => 'local', 'root' => $root, 'visibility' => 'private', 'links' => 'disallow', 'throw' => true,
             ]),

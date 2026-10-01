@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Audit\Enums\ActorType;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceSet;
@@ -55,7 +56,7 @@ final class SeriesDefinitionCodec
         $actorData = new ActorData(
             type: ActorType::from((string) $actor['type']),
             id: isset($actor['id']) ? (string) $actor['id'] : null,
-            context: is_array($actor['context'] ?? null) ? $actor['context'] : [],
+            context: JsonDocuments::capture(is_array($actor['context'] ?? null) ? $actor['context'] : []),
         );
         $draft = new TaskDraft(
             workspaceId: (string) $template['workspaceId'],

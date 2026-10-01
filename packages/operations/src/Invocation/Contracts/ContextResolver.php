@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Authorization\Contracts\Principal;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\Request;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ContextResolver
 {
     /** Consume initialized tenancy; optional workspace narrowing must verify this principal's membership. */

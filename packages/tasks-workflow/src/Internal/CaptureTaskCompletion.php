@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
+use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
 use CoreX\Tasks\Task\Enums\TaskStatus;
-use CoreX\Tasks\Task\Models\Task;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Connection;
 
-final class CaptureTaskCompletion
+final class CaptureTaskCompletion implements TaskCompletionCapture
 {
     public function __construct(
         private readonly Connection $connection,
@@ -22,13 +24,13 @@ final class CaptureTaskCompletion
         private readonly TaskOperationReceipts $receipts,
     ) {}
 
-    public function saving(Task $task): void
+    public function capture(TaskCompletionCandidate $candidate): void
     {
         if (! $this->config->get('corex-tasks-workflow.completion_capture.enabled', false)) {
             return;
         }
 
-        if ($task->status !== TaskStatus::Done || ! $task->isDirty('status')) {
+        if ($candidate->status !== TaskStatus::Done || ! $candidate->statusChanged) {
             return;
         }
 
@@ -39,9 +41,9 @@ final class CaptureTaskCompletion
 
         $workflowBinding = app()->make(WorkflowBinding::class);
         $restoreEpoch = str_repeat('0', 64);
-        $requestKey = hash('sha256', 'completion-capture/1'."\0".$task->getKey()."\0".$restoreEpoch);
+        $requestKey = hash('sha256', 'completion-capture/1'."\0".$candidate->taskId."\0".$restoreEpoch);
         $payload = [
-            'taskId' => (string) $task->getKey(),
+            'taskId' => $candidate->taskId,
             'status' => TaskStatus::Done->value,
         ];
         $payloadHash = hash('sha256', 'completionCapture/1'."\0".$requestKey."\0".json_encode($payload, JSON_THROW_ON_ERROR));
@@ -56,12 +58,12 @@ final class CaptureTaskCompletion
             context: app(TenantContextResolver::class)->current(),
             module: 'axiomasoft/corex-tasks-workflow',
             entityHandle: 'tsk.task',
-            eventId: 'task:'.$task->getKey(),
+            eventId: 'task:'.$candidate->taskId,
             eventName: 'completed',
-            subjectRef: 'task:'.$task->getKey(),
+            subjectRef: 'task:'.$candidate->taskId,
             definitionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.definition_ref', 'task-completion/1'),
             versionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.version_ref', 'task-completion/1'),
-            scalarSnapshot: $payload,
+            scalarSnapshot: JsonDocuments::capture($payload),
             requestKey: $requestKey,
         ));
 
@@ -71,7 +73,7 @@ final class CaptureTaskCompletion
             requestKey: $requestKey,
             payloadHash: $payloadHash,
             restoreEpoch: $restoreEpoch,
-            resultRef: ['taskId' => (string) $task->getKey()],
+            resultRef: ['taskId' => $candidate->taskId],
         );
     }
 }

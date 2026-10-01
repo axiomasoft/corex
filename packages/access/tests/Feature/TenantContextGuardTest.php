@@ -5,8 +5,8 @@ declare(strict_types=1);
 use AzGuard\Contracts\ContextGuard;
 use CoreX\Access\Tests\Stubs\ContextUser;
 use CoreX\Access\Tests\Stubs\Project;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 
 beforeEach(function (): void {
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(

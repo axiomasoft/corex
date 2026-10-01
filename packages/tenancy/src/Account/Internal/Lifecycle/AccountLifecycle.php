@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Account\Internal\Lifecycle;
 
 use Closure;
-use CoreX\Audit\CurrentActor;
+use CoreX\Audit\Contracts\CurrentActor;
+use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
-use CoreX\Context\ImpersonationGuard;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Tenancy\Account\Events\AccountSuspended;
 use CoreX\Tenancy\Account\Events\GraceStarted;
 use CoreX\Tenancy\Account\Events\TrialStarted;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks as TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -33,7 +33,7 @@ use RuntimeException;
  * a dedicated {@see DomainEvent} subclass also fire it
  * (`startTrial`→TrialStarted, `suspend`→AccountSuspended,
  * `startGrace`→GraceStarted; `AccountPurged`/`ExportReady` are fired by
- * {@see StanclTenantDatabaseLifecycle}, not
+ * {@see CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle}, not
  * here — see that class's docblock). `activate()`/`resume()`/
  * `requestExport()` have no dedicated event class in this item's scope
  * (Files list, P2.12) — they still write a `root_account_events` row.
@@ -302,7 +302,7 @@ final class AccountLifecycle
     {
         $account = Account::on($this->centralConnection)->findOrFail($accountId);
 
-        $this->templateIntegrityVerifier->assertAccount($account);
+        $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
     }
 
     /**

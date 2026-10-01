@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal\Jobs;
 
-use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
+use CoreX\Notifications\Delivery\Contracts\DeliveryExecution as DeliveryCoordinator;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

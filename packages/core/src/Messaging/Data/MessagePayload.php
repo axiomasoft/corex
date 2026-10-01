@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Messaging\Exceptions\InvalidMessage;
 
 /**
@@ -19,6 +20,18 @@ use CoreX\Messaging\Exceptions\InvalidMessage;
  * скаляров» статическим типом PHP/PHPStan не выражается, поэтому MessageEnvelope
  * хранит этот объект, а не array<string, mixed>.
  */
+/**
+ * @phpstan-type JsonLevel0 null|bool|int|string
+ * @phpstan-type JsonLevel1 null|bool|int|string|array<array-key, JsonLevel0>
+ * @phpstan-type JsonLevel2 null|bool|int|string|array<array-key, JsonLevel1>
+ * @phpstan-type JsonLevel3 null|bool|int|string|array<array-key, JsonLevel2>
+ * @phpstan-type JsonLevel4 null|bool|int|string|array<array-key, JsonLevel3>
+ * @phpstan-type JsonLevel5 null|bool|int|string|array<array-key, JsonLevel4>
+ * @phpstan-type JsonLevel6 null|bool|int|string|array<array-key, JsonLevel5>
+ * @phpstan-type JsonLevel7 null|bool|int|string|array<array-key, JsonLevel6>
+ * @phpstan-type MessageMap array<string, JsonLevel7>
+ */
+#[Api(since: '1.0')]
 final readonly class MessagePayload
 {
     public const int MAX_DEPTH = 8;
@@ -27,13 +40,28 @@ final readonly class MessagePayload
 
     public const int MAX_BYTES = 65_536;
 
-    /** @var array<string, mixed> */
+    /** @var array<string, JsonLevel7> */
     public array $values;
 
-    /** @param array<array-key, mixed> $values */
+    /** @param array<string, JsonLevel7> $values */
     public function __construct(array $values)
     {
-        $this->values = self::canonical($values);
+        /** @var array<string, JsonLevel7> $canonical Validated by the bounded scalar-tree validator. */
+        $canonical = self::canonical($values);
+        $this->values = $canonical;
+    }
+
+    public static function fromJson(string $json): self
+    {
+        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+
+        if (! is_array($decoded)) {
+            throw InvalidMessage::payloadShape('must be a bounded object map, not a scalar');
+        }
+        /** @var MessageMap $canonical Validated by the same bounded scalar-tree validator as construction. */
+        $canonical = self::canonical($decoded);
+
+        return new self($canonical);
     }
 
     public static function empty(): self
@@ -41,7 +69,7 @@ final readonly class MessagePayload
         return new self([]);
     }
 
-    /** @return array<string, mixed> */
+    /** @return array<string, JsonLevel7> */
     public function toArray(): array
     {
         return $this->values;

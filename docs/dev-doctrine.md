@@ -73,7 +73,7 @@ API, политиками или задачами между проектами.
   `Menu`, `Routes`, `Workflow` (`ls packages/core/src/Modules/Extend` — 8 + маркер-интерфейс
   `Extender.php`). Девятый extender заводится только через RFC (≥2 недель), не «по ходу item'а».
 - Модуль = composer-пакет `type: corex-module` + наследник `ModuleDefinition` с `manifest()`;
-  discovery читает `vendor/composer/installed.json` (`packages/core/src/Modules/Discovery/ModuleDiscovery.php`).
+  discovery читает `vendor/composer/installed.json` (`packages/core/src/Modules/Internal/Discovery/ModuleDiscovery.php`).
   Один пакет = один модуль; версия — из `installed.json`, не из манифеста.
 - Запрещённые анти-паттерны: WP-hooks, подписки в БД, рой extenders (Flarum),
   alias-override (October), инфоблоки. Monkey-patching запрещён.

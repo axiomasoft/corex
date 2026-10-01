@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;

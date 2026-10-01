@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Operations\Invocation\Internal;
 
 use Closure;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
-use CoreX\Operations\Authorization\Internal\DeclaredFieldAuthorizer;
-use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
+use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
@@ -56,7 +57,7 @@ final class DefaultOperationInvoker implements OperationInvoker
             operation: $operation,
             context: $invocation->context,
             authorizer: $this->fields,
-            input: $invocation->input,
+            input: JsonDocuments::map($invocation->input),
         );
 
         if ($forbiddenWrite !== null) {
@@ -86,11 +87,11 @@ final class DefaultOperationInvoker implements OperationInvoker
                     throw new LogicException('Operation invocation callback invoked more than once.');
                 }
 
-                return new OperationResult(data: $handler->handle(
+                return new OperationResult(data: JsonDocuments::capture($handler->handle(
                     $invocation->context,
-                    $invocation->input,
+                    JsonDocuments::map($invocation->input),
                     $invocation->parameters,
-                ));
+                )));
             };
 
             $result = $this->budget === null
@@ -100,12 +101,12 @@ final class DefaultOperationInvoker implements OperationInvoker
             $this->restore($previous);
         }
 
-        return new OperationResult(data: DeclaredFieldAuthorizer::prune(
+        return new OperationResult(data: JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
             operation: $operation,
             context: $invocation->context,
             authorizer: $this->fields,
-            data: $result->data,
-        ), replayed: $result->replayed, metadata: $result->metadata);
+            data: JsonDocuments::array($result->data),
+        )), replayed: $result->replayed, metadata: JsonDocuments::capture(JsonDocuments::map($result->metadata)));
     }
 
     /**

@@ -1,5 +1,5 @@
---- a/packages/core/src/Features/DatabaseFeatureFlags.php
-+++ b/packages/core/src/Features/DatabaseFeatureFlags.php
+--- a/packages/core/src/Features/Internal/DatabaseFeatureFlags.php
++++ b/packages/core/src/Features/Internal/DatabaseFeatureFlags.php
 @@ -105,7 +105,7 @@
       */
      private function findOverride(string $flagId, ?SettingsScope $scope): ?FeatureOverride

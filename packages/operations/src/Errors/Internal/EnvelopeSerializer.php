@@ -6,7 +6,7 @@ namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 use Override;
 

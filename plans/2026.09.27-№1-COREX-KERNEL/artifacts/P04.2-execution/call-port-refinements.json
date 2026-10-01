@@ -1,0 +1,110 @@
+[
+    {
+        "implementation": "CoreX\\Access\\Matrix\\Internal\\ScopeMapVersion",
+        "port": "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions",
+        "methods": [
+            "current"
+        ],
+        "consumers": [
+            "packages/access/src/Access/Internal/DefaultAccessChecker.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+        "port": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+        "methods": [
+            "isActive"
+        ],
+        "consumers": [
+            "packages/access/src/Access/Internal/PermissionSurface.php",
+            "packages/access/src/Extend/Internal/PermissionsMerger.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Operations\\Cost\\Internal\\BudgetAdmission",
+        "port": "CoreX\\Operations\\Cost\\Contracts\\BudgetExecution",
+        "methods": [
+            "invoke",
+            "replay"
+        ],
+        "consumers": [
+            "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+            "packages/operations/src/Testing/InvocationFixtures.php",
+            "packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper",
+        "port": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+        "methods": [
+            "map"
+        ],
+        "consumers": [
+            "packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php",
+            "packages/operations/src/Invocation/Internal/OperationDispatcher.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Operations\\Versioning\\Internal\\ApiProfileFactory",
+        "port": "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
+        "methods": [
+            "make",
+            "effective"
+        ],
+        "consumers": [
+            "packages/operations/src/Invocation/Internal/CapabilityResolver.php",
+            "packages/operations/src/OpenApi/Internal/Commands/WriteApiSnapshots.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Operations\\Invocation\\Internal\\CapabilityResolver",
+        "port": "CoreX\\Operations\\Invocation\\Contracts\\EffectiveCapabilities",
+        "methods": [
+            "fingerprint",
+            "effective"
+        ],
+        "consumers": [
+            "packages/operations/src/Internal/Http/DiscoveryController.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator",
+        "port": "CoreX\\Operations\\OpenApi\\Contracts\\OpenApiDocuments",
+        "methods": [
+            "document"
+        ],
+        "consumers": [
+            "packages/operations/src/Internal/Http/DiscoveryController.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Notifications\\Delivery\\Internal\\DeliveryCoordinator",
+        "port": "CoreX\\Notifications\\Delivery\\Contracts\\DeliveryExecution",
+        "methods": [
+            "deliver"
+        ],
+        "consumers": [
+            "packages/notifications/src/Digest/Internal/Jobs/DeliverDigest.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    },
+    {
+        "implementation": "CoreX\\Observability\\Internal\\OpenTelemetryBridge",
+        "port": "CoreX\\Observability\\Contracts\\TracePropagation",
+        "methods": [
+            "inject",
+            "linkedConsumer"
+        ],
+        "consumers": [
+            "packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php"
+        ],
+        "reason": "Expose only actual cross-module calls; implementation and constructor remain Internal. Provider resolves the existing binding to preserve scope/configuration."
+    }
+]

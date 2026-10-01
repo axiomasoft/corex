@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Config\Exceptions\InvalidConfiguration;
 
 it('normalizes an empty workspace scope class to null', function (): void {

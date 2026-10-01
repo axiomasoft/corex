@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * SQL-level `PREPARE`/`DEALLOCATE` привязывает стейтмент к серверному
  * коннекту, которого у клиента после коммита уже нет.
  *
  * Запрет тотален СОЗНАТЕЛЬНО: protocol-level prepared statements PgBouncer ≥1.21
  * проносит (`max_prepared_statements`), но это свойство инфры, а не кода модуля.
- *
- * @internal spec: B-10 §7.3 п.5
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoSqlPrepareRule extends AbstractDatabaseCallRule
 {
     protected function isViolation(string $sql): bool

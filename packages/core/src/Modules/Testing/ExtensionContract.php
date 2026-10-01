@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Testing;
 
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Exceptions\RegistryFrozen;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use InvalidArgumentException;
 use Throwable;
 
@@ -21,6 +22,7 @@ use Throwable;
  * The result is deliberately independent of a test runner, so package authors
  * can use the same contract in PHPUnit, Pest or a standalone fixture gate.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ExtensionContract
 {
     /** @param list<string> $errors */

@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "d7e05ce761cf1c5ea69b6dbebe24b8aea0491897"
+                "reference": "4194432502c5cead278d4492d7fd4bb859594012"
             },
             "require": {
                 "ext-ctype": "*",
@@ -61,58 +61,92 @@
                         "CoreX\\Attributes\\Spi",
                         "CoreX\\Attributes\\SpiKind",
                         "CoreX\\Audit",
-                        "CoreX\\Config\\Config",
                         "CoreX\\Config\\Contracts",
-                        "CoreX\\Config\\CoreOptions",
+                        "CoreX\\Config\\Data\\CoreOptions",
                         "CoreX\\Config\\Exceptions\\InvalidConfiguration",
-                        "CoreX\\Config\\SecretRef",
-                        "CoreX\\Config\\ViolationList",
+                        "CoreX\\Config\\Data\\SecretRef",
                         "CoreX\\Context\\Contracts",
                         "CoreX\\Context\\Data\\AccountRef",
                         "CoreX\\Context\\Data\\TenantContext",
                         "CoreX\\Context\\Data\\WorkspaceRef",
                         "CoreX\\Context\\Enums",
                         "CoreX\\Context\\Exceptions",
-                        "CoreX\\Context\\ImpersonationGuard",
                         "CoreX\\Data\\Contracts",
-                        "CoreX\\Data\\DataScope",
+                        "CoreX\\Data\\Data\\DataScope",
                         "CoreX\\Data\\Data\\DataScopeAccessDecision",
                         "CoreX\\Data\\Exceptions",
                         "CoreX\\Database",
                         "CoreX\\Departments\\Contracts",
                         "CoreX\\Departments\\Events",
                         "CoreX\\Departments\\Exceptions",
-                        "CoreX\\Departments\\Models",
                         "CoreX\\Errors\\Contracts",
                         "CoreX\\Errors\\Data",
                         "CoreX\\Errors\\Enums",
                         "CoreX\\Features\\Contracts",
                         "CoreX\\Features\\Events",
-                        "CoreX\\Features\\Internal\\Models",
                         "CoreX\\Messaging\\Contracts",
                         "CoreX\\Messaging\\Data",
                         "CoreX\\Messaging\\Enums",
                         "CoreX\\Messaging\\Events",
                         "CoreX\\Messaging\\Exceptions",
                         "CoreX\\Messaging\\Testing",
-                        "CoreX\\Modules\\Compiler\\CompiledRegistry",
+                        "CoreX\\Modules\\Data\\CompiledRegistry",
                         "CoreX\\Modules\\Contracts",
                         "CoreX\\Modules\\Data",
                         "CoreX\\Modules\\Enums",
                         "CoreX\\Modules\\Events",
                         "CoreX\\Modules\\Exceptions",
-                        "CoreX\\Modules\\Extend",
-                        "CoreX\\Modules\\RegistersNothingOnBoot",
-                        "CoreX\\Modules\\Registry\\CompiledModule",
+                        "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot",
+                        "CoreX\\Modules\\Data\\CompiledModule",
                         "CoreX\\Modules\\Testing",
                         "CoreX\\Observability",
-                        "CoreX\\Panels\\SavedViews\\Contracts",
                         "CoreX\\Settings\\Contracts",
                         "CoreX\\Settings\\Enums",
                         "CoreX\\Settings\\Events",
                         "CoreX\\Settings\\Exceptions",
-                        "CoreX\\Settings\\Internal\\Models",
-                        "CoreX\\Storage\\Contracts"
+                        "CoreX\\Storage\\Contracts",
+                        "CoreX\\Config\\Laravel\\ConfigurationValidator",
+                        "CoreX\\Config\\Laravel\\CoreOptionsParser",
+                        "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                        "CoreX\\Context\\Data\\ImpersonationState",
+                        "CoreX\\Context\\Data\\ProvisionParams",
+                        "CoreX\\CoreServiceProvider",
+                        "CoreX\\Data\\Data\\JsonDocument",
+                        "CoreX\\Data\\Data\\RecordRef",
+                        "CoreX\\Data\\Data\\WriteToken",
+                        "CoreX\\Data\\Laravel\\JsonDocuments",
+                        "CoreX\\Data\\Laravel\\SystemDataScopeAuthorization",
+                        "CoreX\\Departments\\Data\\Department",
+                        "CoreX\\Departments\\Laravel\\DepartmentQueries",
+                        "CoreX\\Features\\Data\\FeatureFlagDefinition",
+                        "CoreX\\Messaging\\Laravel\\PubSubAdapters",
+                        "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule",
+                        "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule",
+                        "CoreX\\Modules\\Laravel\\LifecycleRegistrar",
+                        "CoreX\\Modules\\Laravel\\ModulesBootRegistrar",
+                        "CoreX\\Modules\\Laravel\\RegistryRegistrar",
+                        "CoreX\\Modules\\Laravel\\SettingsRegistrar",
+                        "CoreX\\Modules\\ModulesServiceProvider",
+                        "CoreX\\Modules\\PHPStan\\Rules\\AbstractDatabaseCallRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoDirectSystemTableWriteRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoEvalRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoForeignPrefixSqlRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoFsOutsideModuleRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoListenNotifyRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoSessionAdvisoryLockRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoSetWithoutLocalRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoSqlPrepareRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\NoTempTableRule",
+                        "CoreX\\Modules\\PHPStan\\Rules\\Support\\DatabaseCall",
+                        "CoreX\\Settings\\Data\\SettingsScope",
+                        "CoreX\\Storage\\Data\\ExportArchiveRef",
+                        "CoreX\\Storage\\Data\\StorageCapabilities",
+                        "CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable",
+                        "CoreX\\Storage\\Exceptions\\StorageOperationFailed",
+                        "CoreX\\Storage\\Laravel\\ScopedFilesystemFactory",
+                        "CoreX\\Time\\Laravel\\LaravelClock",
+                        "CoreX\\Time\\Laravel\\SystemClock",
+                        "CoreX\\Time\\Testing\\FrozenClock"
                     ]
                 },
                 "laravel": {
@@ -277,7 +311,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "2898d0047e5e5676fb1246635205ea364e1f7119"
+                "reference": "f95465f89864523c201111994671d207f5447dc8"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -318,7 +352,13 @@
                         "CoreX\\Intl\\Territory\\Data",
                         "CoreX\\Intl\\Territory\\Exceptions",
                         "CoreX\\Intl\\Translation\\Contracts",
-                        "CoreX\\Intl\\Translation\\Data"
+                        "CoreX\\Intl\\Translation\\Data",
+                        "CoreX\\Intl\\Currency\\Laravel\\ConversionPolicy",
+                        "CoreX\\Intl\\Currency\\Laravel\\ConversionReceipt",
+                        "CoreX\\Intl\\IntlModule",
+                        "CoreX\\Intl\\IntlServiceProvider",
+                        "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
+                        "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings"
                     ]
                 },
                 "laravel": {
@@ -371,7 +411,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "9f98dd0258bec212868db4753d61785ac1f89a46"
+                "reference": "bf130dea20224f4a6a4882809761e36cd97b2e10"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -399,7 +439,10 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\Media\\Contracts",
-                        "CoreX\\Media\\Data"
+                        "CoreX\\Media\\Data",
+                        "CoreX\\Media\\Laravel\\UploadedFileSource",
+                        "CoreX\\Media\\MediaModule",
+                        "CoreX\\Media\\MediaServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -452,7 +495,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "00fdc74aec0e28837e4c9e9c313154a78e0f022e"
+                "reference": "ff39e9ffce256d2ab27cf256504a355fc632c50c"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -484,7 +527,12 @@
                         "CoreX\\Notifications\\Inbox\\Contracts",
                         "CoreX\\Notifications\\Inbox\\Data",
                         "CoreX\\Notifications\\Preferences\\Contracts",
-                        "CoreX\\Notifications\\Preferences\\Data"
+                        "CoreX\\Notifications\\Preferences\\Data",
+                        "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied",
+                        "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
+                        "CoreX\\Notifications\\NotificationsModule",
+                        "CoreX\\Notifications\\NotificationsServiceProvider",
+                        "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings"
                     ]
                 },
                 "laravel": {
@@ -537,7 +585,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "4456d0ce49d1e40b6273d3e48f55d525aad79685"
+                "reference": "0933fd7d838c33186b8abe37529d9224f383e5c9"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -586,12 +634,10 @@
                         "CoreX\\Operations\\Bulk\\Data",
                         "CoreX\\Operations\\Cost\\Contracts",
                         "CoreX\\Operations\\Cost\\Data",
-                        "CoreX\\Operations\\Definition\\ApiOperationValidator",
                         "CoreX\\Operations\\Definition\\Contracts",
                         "CoreX\\Operations\\Definition\\Data",
                         "CoreX\\Operations\\Definition\\Enums\\OperationMode",
-                        "CoreX\\Operations\\Definition\\Operation",
-                        "CoreX\\Operations\\Definition\\OperationRegistry",
+                        "CoreX\\Operations\\Definition\\Data\\Operation",
                         "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
                         "CoreX\\Operations\\Errors\\Contracts",
                         "CoreX\\Operations\\Idempotency\\Contracts",
@@ -599,21 +645,41 @@
                         "CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement",
                         "CoreX\\Operations\\Invocation\\Contracts",
                         "CoreX\\Operations\\Invocation\\Data",
-                        "CoreX\\Operations\\Invocation\\InvocationMetadata",
-                        "CoreX\\Operations\\Invocation\\OperationDispatcher",
+                        "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
                         "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar",
                         "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
                         "CoreX\\Operations\\OpenApi\\Contracts",
                         "CoreX\\Operations\\Pagination\\Contracts",
                         "CoreX\\Operations\\Pagination\\Data",
-                        "CoreX\\Operations\\Pagination\\OrderingRegistry",
-                        "CoreX\\Operations\\Pagination\\SignedCursorCodec",
                         "CoreX\\Operations\\Testing",
                         "CoreX\\Operations\\Validation\\Data",
-                        "CoreX\\Operations\\Validation\\JsonCanonical",
-                        "CoreX\\Operations\\Validation\\SchemaBudget",
-                        "CoreX\\Operations\\Validation\\SchemaProfile",
-                        "CoreX\\Operations\\Versioning\\Data"
+                        "CoreX\\Operations\\Validation\\Laravel\\JsonCanonical",
+                        "CoreX\\Operations\\Versioning\\Data",
+                        "CoreX\\Operations\\ApiServiceProvider",
+                        "CoreX\\Operations\\Authorization\\Laravel\\DeclaredFieldAuthorizer",
+                        "CoreX\\Operations\\Bulk\\Enums\\BulkOperationStatus",
+                        "CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser",
+                        "CoreX\\Operations\\Bulk\\Laravel\\BulkRegistrar",
+                        "CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar",
+                        "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited",
+                        "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable",
+                        "CoreX\\Operations\\Cost\\Laravel\\CostOptionsParser",
+                        "CoreX\\Operations\\Cost\\Laravel\\CostRegistrar",
+                        "CoreX\\Operations\\Definition\\Laravel\\OperationFactory",
+                        "CoreX\\Operations\\Definition\\Laravel\\OperationFingerprint",
+                        "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation",
+                        "CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory",
+                        "CoreX\\Operations\\Invocation\\Laravel\\ResolvedContexts",
+                        "CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations",
+                        "CoreX\\Operations\\Laravel\\InvocationFixtures",
+                        "CoreX\\Operations\\Pagination\\Laravel\\CursorPageBuilder",
+                        "CoreX\\Operations\\Pagination\\Laravel\\OrderingFactory",
+                        "CoreX\\Operations\\Validation\\Laravel\\JsonObjectFactory",
+                        "CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory",
+                        "CoreX\\Operations\\Validation\\Laravel\\SchemaBudget",
+                        "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+                        "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
+                        "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings"
                     ]
                 },
                 "branch-alias": {
@@ -661,7 +727,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "f785914b40e5407e2fff7ca7bdd0dfcce9a7e8d3"
+                "reference": "79f228911145f61b6f0c9fb8718d2d1c44ec1194"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -689,7 +755,19 @@
                         "CoreX\\Panels\\Data",
                         "CoreX\\Panels\\SavedViews\\Contracts\\SavedViewRepository",
                         "CoreX\\Panels\\SavedViews\\Contracts\\ViewAccessPolicy",
-                        "CoreX\\Panels\\SavedViews\\Contracts\\ViewSchemaProvider"
+                        "CoreX\\Panels\\SavedViews\\Contracts\\ViewSchemaProvider",
+                        "CoreX\\Panels\\PanelsModule",
+                        "CoreX\\Panels\\PanelsServiceProvider",
+                        "CoreX\\Panels\\SavedViews\\Data\\SaveViewInput",
+                        "CoreX\\Panels\\SavedViews\\Data\\SavedQuery",
+                        "CoreX\\Panels\\SavedViews\\Data\\SavedViewRef",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewAction",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewContext",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewField",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewSchema",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewScope",
+                        "CoreX\\Panels\\SavedViews\\Data\\ViewSubject",
+                        "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar"
                     ]
                 },
                 "laravel": {
@@ -739,9 +817,10 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "96667ba7fd0b3ab3eb7b93fc8e035413d6de52a0"
+                "reference": "2cdcf8a6b1ee6be9565b2236d7e83ddba890bc1e"
             },
             "require": {
+                "axiomasoft/corex": "^1.0@dev",
                 "php": "^8.4",
                 "rlanvin/php-rrule": "^3.0"
             },
@@ -755,7 +834,7 @@
                         "CoreX\\Recurrence\\Contracts",
                         "CoreX\\Recurrence\\Data",
                         "CoreX\\Recurrence\\Exceptions",
-                        "CoreX\\Recurrence\\RRuleRecurrenceExpander"
+                        "CoreX\\Recurrence\\Laravel\\RecurrenceFactory"
                     ]
                 },
                 "branch-alias": {
@@ -797,7 +876,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "13b299fe012c61fcc670e2ff367ccca43a063cf2"
+                "reference": "5e407842719c0d1be41e818cdf338f915a49b0ab"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -820,7 +899,24 @@
                     "public-api": [
                         "CoreX\\Search\\Contracts",
                         "CoreX\\Search\\Exceptions",
-                        "CoreX\\Search\\Testing"
+                        "CoreX\\Search\\Testing",
+                        "CoreX\\Search\\Data\\Candidate",
+                        "CoreX\\Search\\Data\\CandidatePage",
+                        "CoreX\\Search\\Data\\CurrentSearchRecord",
+                        "CoreX\\Search\\Data\\DocumentBatch",
+                        "CoreX\\Search\\Data\\DocumentCursor",
+                        "CoreX\\Search\\Data\\IndexBatch",
+                        "CoreX\\Search\\Data\\IndexClaim",
+                        "CoreX\\Search\\Data\\IndexOutcome",
+                        "CoreX\\Search\\Data\\IndexSubmission",
+                        "CoreX\\Search\\Data\\IndexSwap",
+                        "CoreX\\Search\\Data\\SearchCapabilities",
+                        "CoreX\\Search\\Data\\SearchFilter",
+                        "CoreX\\Search\\Data\\SearchPage",
+                        "CoreX\\Search\\Data\\SearchQuery",
+                        "CoreX\\Search\\Data\\SearchSnapshot",
+                        "CoreX\\Search\\SearchServiceProvider",
+                        "CoreX\\Search\\Laravel\\SearchPortBindings"
                     ]
                 },
                 "laravel": {
@@ -873,7 +969,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "a7ca52897ffc2a5dfc87b86fa12c6813c543b683"
+                "reference": "59f5d3b12c005cacb53098af7beedc8266ad1a6d"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -897,7 +993,8 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\SearchIntl\\Contracts",
-                        "CoreX\\SearchIntl\\Data"
+                        "CoreX\\SearchIntl\\Data",
+                        "CoreX\\SearchIntl\\SearchIntlServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -944,7 +1041,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "18c616f0947386d3578080c0602c52b30639fa28"
+                "reference": "2e5438f2600b208551ce7b90de76a271e2b11980"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -966,7 +1063,8 @@
                     "package-type": "integration",
                     "stability": "stable",
                     "public-api": [
-                        "CoreX\\SearchMeilisearch\\Exceptions"
+                        "CoreX\\SearchMeilisearch\\Exceptions",
+                        "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -1019,7 +1117,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "e251b35bf598a68ea233c2522202eded9af83bcf"
+                "reference": "099b9b8834b741fb53a224fa8a40450eef5528a1"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1050,18 +1148,25 @@
                         "CoreX\\Tasks\\Planning\\Exceptions",
                         "CoreX\\Tasks\\Project\\Data",
                         "CoreX\\Tasks\\Project\\Enums",
-                        "CoreX\\Tasks\\Project\\Models",
                         "CoreX\\Tasks\\Sprint\\Data",
                         "CoreX\\Tasks\\Sprint\\Enums",
-                        "CoreX\\Tasks\\Sprint\\Internal\\Models",
                         "CoreX\\Tasks\\Task\\Contracts",
                         "CoreX\\Tasks\\Task\\Data",
                         "CoreX\\Tasks\\Task\\Enums",
                         "CoreX\\Tasks\\Task\\Events",
-                        "CoreX\\Tasks\\Task\\Models",
                         "CoreX\\Tasks\\Time\\Data",
                         "CoreX\\Tasks\\Time\\Enums",
-                        "CoreX\\Tasks\\Time\\Internal\\Models"
+                        "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
+                        "CoreX\\Tasks\\Project\\Contracts\\ProjectRead",
+                        "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations",
+                        "CoreX\\Tasks\\Sprint\\Contracts\\SprintRead",
+                        "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations",
+                        "CoreX\\Tasks\\Task\\Laravel\\StageRelations",
+                        "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
+                        "CoreX\\Tasks\\TasksModule",
+                        "CoreX\\Tasks\\TasksServiceProvider",
+                        "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations",
+                        "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings"
                     ]
                 },
                 "laravel": {
@@ -1130,7 +1235,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "049e7c769e14ee812d026e128d8fe95c2daa3737"
+                "reference": "c0e0b801f892bcacf381dd7988b86e150de71da2"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1165,7 +1270,9 @@
                     "public-api": [
                         "CoreX\\TasksWorkflow\\Contracts",
                         "CoreX\\TasksWorkflow\\Data",
-                        "CoreX\\TasksWorkflow\\Exceptions"
+                        "CoreX\\TasksWorkflow\\Exceptions",
+                        "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
+                        "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings"
                     ]
                 },
                 "laravel": {
@@ -1215,7 +1322,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "a5ea44964430552a227fe47a62451f4237ca15bf"
+                "reference": "331d05d911b13e0f0affdbd83409aef9ab21461a"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1259,19 +1366,110 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\Tenancy\\Account\\Events",
-                        "CoreX\\Tenancy\\Account\\Models",
                         "CoreX\\Tenancy\\Authentication\\Exceptions",
                         "CoreX\\Tenancy\\Contracts",
                         "CoreX\\Tenancy\\DomainTrust\\Events",
-                        "CoreX\\Tenancy\\DomainTrust\\Internal\\Models",
                         "CoreX\\Tenancy\\Identity\\Events",
-                        "CoreX\\Tenancy\\Identity\\Internal\\Models",
                         "CoreX\\Tenancy\\Impersonation\\Events",
-                        "CoreX\\Tenancy\\Impersonation\\Internal\\Models",
                         "CoreX\\Tenancy\\Membership\\Events",
-                        "CoreX\\Tenancy\\Provisioning\\Internal\\Models",
                         "CoreX\\Tenancy\\Runtime\\Exceptions",
-                        "CoreX\\Tenancy\\Workspace\\Internal\\Models"
+                        "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "CoreX\\Tenancy\\Account\\Laravel\\AccountRelations",
+                        "CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot",
+                        "CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\ChallengeConsumption",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\DomainChallenge",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\DomainChallengeBinding",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\DomainChallengeDraft",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\DomainTrustActor",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\DomainTrustTransition",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\IssuedDomainChallenge",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\NormalizedHost",
+                        "CoreX\\Tenancy\\DomainTrust\\Data\\ObservedDomainProof",
+                        "CoreX\\Tenancy\\DomainTrust\\Enums\\DomainTrustChangeReason",
+                        "CoreX\\Tenancy\\DomainTrust\\Enums\\DomainTrustOperation",
+                        "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied",
+                        "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled",
+                        "CoreX\\Tenancy\\DomainTrust\\Laravel\\DomainRelations",
+                        "CoreX\\Tenancy\\Identity\\Contracts\\IdentitySyncer",
+                        "CoreX\\Tenancy\\Identity\\Contracts\\MembershipProjection",
+                        "CoreX\\Tenancy\\Identity\\Laravel\\UserRelations",
+                        "CoreX\\Tenancy\\Laravel\\AuthenticationRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper",
+                        "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand",
+                        "CoreX\\Tenancy\\Laravel\\Commands\\PendingClearCommand",
+                        "CoreX\\Tenancy\\Laravel\\Commands\\PendingCreateCommand",
+                        "CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand",
+                        "CoreX\\Tenancy\\Laravel\\ConsoleRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\DatabaseRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\DomainTrustRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\EventsRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\HttpRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost",
+                        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace",
+                        "CoreX\\Tenancy\\Laravel\\IdentityRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException",
+                        "CoreX\\Tenancy\\Laravel\\ProvisioningRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
+                        "CoreX\\Tenancy\\Laravel\\RuntimeRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope",
+                        "CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
+                        "CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy",
+                        "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+                        "CoreX\\Tenancy\\Laravel\\Support\\TenancyConfigSection",
+                        "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "CoreX\\Tenancy\\Laravel\\WakeupRegistrar",
+                        "CoreX\\Tenancy\\Laravel\\WorkspaceRegistrar",
+                        "CoreX\\Tenancy\\Membership\\Contracts\\AccountClickAuthorizer",
+                        "CoreX\\Tenancy\\Membership\\Contracts\\AccountMenuCache",
+                        "CoreX\\Tenancy\\Membership\\Contracts\\AccountsReadTransport",
+                        "CoreX\\Tenancy\\Membership\\Data\\AccountListEntry",
+                        "CoreX\\Tenancy\\Membership\\Data\\AccountsQuery",
+                        "CoreX\\Tenancy\\Membership\\Data\\ActorRef",
+                        "CoreX\\Tenancy\\Membership\\Data\\AvailableAccounts",
+                        "CoreX\\Tenancy\\Membership\\Data\\ClockReading",
+                        "CoreX\\Tenancy\\Membership\\Data\\MembershipQuery",
+                        "CoreX\\Tenancy\\Membership\\Data\\MembershipSnapshot",
+                        "CoreX\\Tenancy\\Membership\\Data\\PairKey",
+                        "CoreX\\Tenancy\\Membership\\Data\\PairState",
+                        "CoreX\\Tenancy\\Membership\\Data\\PairWitness",
+                        "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipReceipt",
+                        "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipRequest",
+                        "CoreX\\Tenancy\\Membership\\Enums\\ActorType",
+                        "CoreX\\Tenancy\\Membership\\Enums\\MembershipEventKind",
+                        "CoreX\\Tenancy\\Membership\\Enums\\MembershipReason",
+                        "CoreX\\Tenancy\\Membership\\Enums\\MembershipState",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied",
+                        "CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain",
+                        "CoreX\\Tenancy\\Membership\\Laravel\\MembershipSnapshotFactory",
+                        "CoreX\\Tenancy\\Membership\\Laravel\\RevokeMembershipReceiptFactory",
+                        "CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule",
+                        "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
+                        "CoreX\\Tenancy\\Provisioning\\Data\\ClaimRequest",
+                        "CoreX\\Tenancy\\Provisioning\\Data\\ClaimResult",
+                        "CoreX\\Tenancy\\Provisioning\\Data\\QualifiedTemplate",
+                        "CoreX\\Tenancy\\Provisioning\\Data\\TemplateAccountView",
+                        "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict",
+                        "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable",
+                        "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException",
+                        "CoreX\\Tenancy\\Provisioning\\Laravel\\MigrationBatchRelations",
+                        "CoreX\\Tenancy\\TenancyServiceProvider",
+                        "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver",
+                        "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException",
+                        "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException",
+                        "CoreX\\Tenancy\\Laravel\\TenancyPortBindings"
                     ]
                 },
                 "laravel": {
@@ -1338,7 +1536,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/transfer",
-                "reference": "d9cb74a32b33da9942a1851a967713e4c22a1de6"
+                "reference": "7d874e56419553e2a5e6fa2e0849510a856ea207"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1359,7 +1557,8 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\Transfer\\Contracts",
-                        "CoreX\\Transfer\\Data"
+                        "CoreX\\Transfer\\Data",
+                        "CoreX\\Transfer\\TransferServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -1412,7 +1611,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
-                "reference": "d0a51ae71565bfc2f527deda0990bd36e82b7d57"
+                "reference": "da038d8ea046c8a60defc2a7091dcd4b6b31188c"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1438,7 +1637,9 @@
                     "public-api": [
                         "CoreX\\Wakeup\\Contracts",
                         "CoreX\\Wakeup\\Data",
-                        "CoreX\\Wakeup\\Testing"
+                        "CoreX\\Wakeup\\Testing",
+                        "CoreX\\Wakeup\\WakeupModule",
+                        "CoreX\\Wakeup\\WakeupServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -1491,7 +1692,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "9172f24ebde99d4346e5d938a276a36b9a87f05f"
+                "reference": "5458d1689674516893c43eaaa86ce7e6be6cc7bd"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1513,7 +1714,9 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\Workflow\\Contracts",
-                        "CoreX\\Workflow\\Data"
+                        "CoreX\\Workflow\\Data",
+                        "CoreX\\Workflow\\WorkflowModule",
+                        "CoreX\\Workflow\\WorkflowServiceProvider"
                     ]
                 },
                 "laravel": {
@@ -8533,7 +8736,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "633919bf6ce0dbad4fa4ddebfbc74506f454aba8"
+                "reference": "b576633629e823a44e06e54da7316c6da52ba013"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.3",
@@ -8567,7 +8770,19 @@
                         "CoreX\\Access\\Contracts",
                         "CoreX\\Access\\Enums",
                         "CoreX\\Access\\Exceptions",
-                        "CoreX\\Access\\Extend\\Internal"
+                        "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+                        "CoreX\\Access\\CoreAuthServiceProvider",
+                        "CoreX\\Access\\Data\\RecordContext",
+                        "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
+                        "CoreX\\Access\\Laravel\\AuthOptions",
+                        "CoreX\\Access\\Laravel\\ScopeResolver",
+                        "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions",
+                        "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel",
+                        "CoreX\\Access\\Roles\\Data\\RoleMatrixEntry",
+                        "CoreX\\Access\\Roles\\Data\\RoleView",
+                        "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData",
+                        "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable"
                     ]
                 },
                 "laravel": {
@@ -8634,7 +8849,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "cd332272cdff63f28aa0440cb041bdff3bf537ed"
+                "reference": "e6fba6d3532aefedd51e175c595e9e721a7f227e"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -8676,7 +8891,8 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\Tools\\Contracts",
-                        "CoreX\\Tools\\Data"
+                        "CoreX\\Tools\\Data",
+                        "CoreX\\Tools\\ToolServiceProvider"
                     ]
                 },
                 "branch-alias": {
@@ -8726,7 +8942,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "1cbc977bd5a9da2e540e3054eb493e7b5253a73e"
+                "reference": "42ced962653d97963b644fbfd29a9a920174b423"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -8770,7 +8986,10 @@
                     "public-api": [
                         "CoreX\\Webhooks\\Contracts",
                         "CoreX\\Webhooks\\Data",
-                        "CoreX\\Webhooks\\WebhooksServiceProvider"
+                        "CoreX\\Webhooks\\WebhooksServiceProvider",
+                        "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser",
+                        "CoreX\\Webhooks\\Laravel\\WebhookRegistrar",
+                        "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
                     ]
                 },
                 "branch-alias": {

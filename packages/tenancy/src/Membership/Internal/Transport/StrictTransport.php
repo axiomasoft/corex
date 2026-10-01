@@ -9,10 +9,16 @@ use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Membership\Data\AccountListEntry;
 use CoreX\Tenancy\Membership\Data\AccountsQuery;
 use CoreX\Tenancy\Membership\Data\AvailableAccounts;
+use CoreX\Tenancy\Membership\Data\MembershipQuery;
+use CoreX\Tenancy\Membership\Data\MembershipSnapshot;
+use CoreX\Tenancy\Membership\Data\RevokeMembershipReceipt;
+use CoreX\Tenancy\Membership\Data\RevokeMembershipRequest;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
 use CoreX\Tenancy\Membership\Exceptions\RevokeUncertain;
+use CoreX\Tenancy\Membership\Laravel\MembershipSnapshotFactory;
+use CoreX\Tenancy\Membership\Laravel\RevokeMembershipReceiptFactory;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\Client\ConnectionException;
@@ -62,7 +68,7 @@ final class StrictTransport implements CentralApiClient
             throw new CentralUnavailable('Central membership read unavailable.');
         }
         $this->assertResponse(response: $response, revokeId: null);
-        $snapshot = MembershipSnapshot::fromPayload(StrictJson::object($response->body()));
+        $snapshot = MembershipSnapshotFactory::fromPayload(StrictJson::object($response->body()));
         $this->assertEcho(requestId: $query->requestId, identityId: $query->identityId, accountId: $query->accountId, product: $query->product, response: $snapshot);
         $key = $query->accountId.':'.$query->identityId.':'.$query->product;
         $previous = $this->snapshots[$key] ?? null;
@@ -104,7 +110,7 @@ final class StrictTransport implements CentralApiClient
             throw new RevokeUncertain($request->requestId);
         }
         $this->assertResponse(response: $response, revokeId: $request->requestId);
-        $receipt = RevokeMembershipReceipt::fromPayload(StrictJson::object($response->body()));
+        $receipt = RevokeMembershipReceiptFactory::fromPayload(StrictJson::object($response->body()));
         $this->assertEcho(requestId: $request->requestId, identityId: $request->identityId, accountId: $request->accountId, product: $request->product, response: $receipt);
 
         return $receipt;
@@ -251,7 +257,7 @@ final class StrictTransport implements CentralApiClient
                 identityId: $query->identityId,
                 product: $query->product,
                 membershipVersion: $payload['membership_version'],
-                accounts: $accounts,
+                accounts: array_values($accounts),
                 observedAt: $observedAt,
             );
         } catch (CentralProtocolViolation) {

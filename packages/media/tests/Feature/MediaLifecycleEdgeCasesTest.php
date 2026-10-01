@@ -19,6 +19,7 @@ use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\Support\MediaOptions;
+use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Media\MediaModule;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -48,7 +49,7 @@ function allowMediaEdges(): void
 
 function edgeUpload(string $requestKey, string $contents): UploadInput
 {
-    return new UploadInput($requestKey, UploadedFile::fake()->createWithContent('safe.txt', $contents), 'attachment');
+    return new UploadInput($requestKey, UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', $contents)), 'attachment');
 }
 
 it('keeps staged uploads private and schedules their purge when storage write fails', function (): void {
@@ -105,9 +106,9 @@ it('marks a failed purge unknown instead of publishing a false delete', function
 it('rejects malformed trusted media inputs before creating storage keys', function (): void {
     expect(fn (): AttachmentInput => new AttachmentInput('', 'crm:contact', 'contact-edge', 'avatar'))
         ->toThrow(InvalidArgumentException::class);
-    expect(fn (): UploadInput => new UploadInput('', UploadedFile::fake()->createWithContent('safe.txt', 'bytes'), 'attachment'))
+    expect(fn (): UploadInput => new UploadInput('', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', 'bytes')), 'attachment'))
         ->toThrow(InvalidArgumentException::class);
-    expect(fn (): UploadInput => new UploadInput("request\0key", UploadedFile::fake()->createWithContent('safe.txt', 'bytes'), 'attachment'))
+    expect(fn (): UploadInput => new UploadInput("request\0key", UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', 'bytes')), 'attachment'))
         ->toThrow(InvalidArgumentException::class);
     expect(fn (): MediaContext => new MediaContext(mediaEdgeContext()->tenant, 'user', null))
         ->toThrow(InvalidArgumentException::class);
@@ -119,11 +120,11 @@ it('rejects an unregistered purpose and a server-detected executable MIME type',
 
     expect(fn (): mixed => $library->store(
         mediaEdgeContext(),
-        new UploadInput('unknown-purpose', UploadedFile::fake()->createWithContent('safe.txt', 'bytes'), 'unknown'),
+        new UploadInput('unknown-purpose', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', 'bytes')), 'unknown'),
     ))->toThrow(MediaOperationConflict::class);
     expect(fn (): mixed => $library->store(
         mediaEdgeContext(),
-        new UploadInput('executable-mime', UploadedFile::fake()->createWithContent('unsafe.php', '<?php echo 1;'), 'attachment'),
+        new UploadInput('executable-mime', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('unsafe.php', '<?php echo 1;')), 'attachment'),
     ))->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_files')->whereIn('request_key', ['unknown-purpose', 'executable-mime'])->count())->toBe(0);

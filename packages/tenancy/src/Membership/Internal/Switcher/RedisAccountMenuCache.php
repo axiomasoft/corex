@@ -154,7 +154,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
                 identityId: $decoded['identity_id'],
                 product: $decoded['product'],
                 membershipVersion: $decoded['membership_version'],
-                accounts: $accounts,
+                accounts: array_values($accounts),
                 observedAt: (new DateTimeImmutable($decoded['observed_at']))->setTimezone(new DateTimeZone('+00:00')),
             );
 

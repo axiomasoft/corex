@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Errors\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Errors\Enums\ErrorCategory;
 use InvalidArgumentException;
 
@@ -11,6 +12,7 @@ use InvalidArgumentException;
  * Stable machine shape of a package-owned failure. Human message, exception
  * class and HTTP status are not fields of this contract.
  */
+#[Api(since: '1.0')]
 final readonly class ErrorDescriptor
 {
     public const int MAX_CODE_BYTES = 120;

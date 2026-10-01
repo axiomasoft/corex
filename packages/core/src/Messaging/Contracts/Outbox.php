@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\MessageEnvelope;
 
 /**
@@ -16,6 +18,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
  *
  * Порядок доставки НЕ гарантируется (D28, research/P5-design.md §5.9).
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface Outbox
 {
     public function append(MessageEnvelope $message): void;

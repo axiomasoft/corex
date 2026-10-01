@@ -5,7 +5,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "rlanvin/php-rrule": "^3.0"
+        "rlanvin/php-rrule": "^3.0",
+        "axiomasoft/corex": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +34,7 @@
                 "CoreX\\Recurrence\\Contracts",
                 "CoreX\\Recurrence\\Data",
                 "CoreX\\Recurrence\\Exceptions",
-                "CoreX\\Recurrence\\RRuleRecurrenceExpander"
+                "CoreX\\Recurrence\\Laravel\\RecurrenceFactory"
             ]
         },
         "branch-alias": {

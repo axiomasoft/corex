@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
@@ -19,6 +20,7 @@ use DateTimeImmutable;
  * Наружу публикуется одна идентичность контракта — contract(), то есть `name.vN`:
  * подписка на имя без версии однажды получит следующую мажорную версию (D24).
  */
+#[Api(since: '1.0')]
 final readonly class MessageEnvelope implements DurablePayload
 {
     public const int ENVELOPE_VERSION = 1;

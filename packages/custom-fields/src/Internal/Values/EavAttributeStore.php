@@ -20,11 +20,12 @@ use CoreX\CustomFields\Internal\Integration\AttributeValuesChanged;
 use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
+use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
@@ -59,7 +60,10 @@ final readonly class EavAttributeStore implements AttributeStore
             $values[$row->field] = $this->decode($row->value);
         }
 
-        return new ValueBag(values: $this->projectValues($definitions, $values));
+        $values = $this->projectValues($definitions, $values);
+        $values = Validation::validatedMap($values, 'attribute values');
+
+        return new ValueBag(values: $values);
     }
 
     public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): AttributeWriteResult
@@ -153,10 +157,10 @@ final readonly class EavAttributeStore implements AttributeStore
         }
 
         return new ValueBatch(records: array_map(
-            fn (RecordRef $record): ValueBag => new ValueBag(values: $this->projectValues(
+            fn (RecordRef $record): ValueBag => new ValueBag(values: Validation::validatedMap($this->projectValues(
                 $definitionsByEntity[$record->entity],
                 $valuesByRecord[$record->entity."\n".$record->id] ?? [],
-            )),
+            ), 'attribute values')),
             $records->records,
         ));
     }

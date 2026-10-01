@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Time\Internal\Models;
 
-use CoreX\Database\HasConfiguredId;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Tasks\Task\Laravel\TaskRelations;
 use CoreX\Tasks\Time\Enums\TimeLogSource;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -28,19 +28,15 @@ final class TimeLog extends Model
     /** @var array<string, mixed> */
     protected $attributes = ['source' => 'manual'];
 
-    /** @return BelongsTo<Task, $this> */
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function task(): BelongsTo
     {
-        return $this->belongsTo(Task::class);
+        return TaskRelations::belongsTo($this, 'task_id', null, 'task');
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return [
-            'minutes' => 'integer',
-            'spent_on' => 'date',
-            'source' => TimeLogSource::class,
-        ];
+        return ['minutes' => 'integer', 'spent_on' => 'date', 'source' => TimeLogSource::class];
     }
 }

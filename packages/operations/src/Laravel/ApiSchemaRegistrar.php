@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
 
-/** @internal Explicit schema connection boundary for shared budget and tenant API state. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ApiSchemaRegistrar
 {
     public static function register(Application $app): void

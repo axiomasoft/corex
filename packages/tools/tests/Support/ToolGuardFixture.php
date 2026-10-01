@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
@@ -146,7 +147,7 @@ final class ToolGuardFixture implements ToolExecutionGuard
 
                 return new ToolResult(
                     outcome: ToolResult::OUTCOME_COMMITTED,
-                    structuredData: JsonObject::fromArray($payload),
+                    structuredData: JsonObjectFactory::fromArray($payload),
                     errorCode: null,
                     operationKey: $operationKey,
                     replayed: true,

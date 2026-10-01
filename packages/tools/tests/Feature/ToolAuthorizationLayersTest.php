@@ -10,10 +10,10 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Database\Enums\IdStrategy;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
@@ -21,24 +21,26 @@ use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -280,8 +282,8 @@ final class ToolAuthorizationLayersTest extends TestCase
         return new ToolCall(
             code: 'notes.update',
             toolVersion: 'v1',
-            expectedContractHash: ToolDescriptor::fromDeclaration($declaration)->contractHash,
-            arguments: JsonObject::fromArray($input),
+            expectedContractHash: ToolDescriptorFactory::fromDeclaration($declaration)->contractHash,
+            arguments: JsonObjectFactory::fromArray($input),
             requestId: 'tool-request',
         );
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
@@ -13,8 +13,8 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\OutboxRefused;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
-use CoreX\Observability\Internal\OperationContext;
-use CoreX\Time\FrozenClock;
+use CoreX\Observability\Data\OperationContext;
+use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

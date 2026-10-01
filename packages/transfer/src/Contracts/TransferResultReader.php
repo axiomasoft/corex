@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Contracts;
 
-use CoreX\Data\DataScope;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
 use CoreX\Transfer\Data\TransferRef;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TransferResultReader
 {
     /**

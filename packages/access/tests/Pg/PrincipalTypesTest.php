@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Panels\Panel;
-use CoreX\Access\Access\Internal\PrincipalIdentity;
+use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleAssignment;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
+use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleAssignment;
+use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Support\Str;
 
 uses()->group('pg');

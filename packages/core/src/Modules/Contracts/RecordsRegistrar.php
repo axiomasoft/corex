@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Ownership registry for everything a module created in the current
  * tenant's database (`mod_records` — mirrors Odoo `ir_model_data`). Purge
@@ -12,9 +15,8 @@ namespace CoreX\Modules\Contracts;
  * predictable, FK-safe teardown. Schema claims (table/column/index) are
  * written automatically by the lifecycle's migration wrapper; hooks claim
  * logical records (setting/role/menu) explicitly.
- *
- * @internal spec: B-10 §3.3, §5.4
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface RecordsRegistrar
 {
     /** @param  array<string, mixed>  $meta */

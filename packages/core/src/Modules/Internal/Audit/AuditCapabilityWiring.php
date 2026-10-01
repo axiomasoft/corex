@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Audit;
 
-use CoreX\Audit\HasAuditLog;
-use CoreX\Audit\Internal\AuditObserver;
+use CoreX\Audit\Laravel\AuditRegistration;
+use CoreX\Audit\Laravel\HasAuditLog;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use function class_uses_recursive;
 
 /**
- * Attaches CoreX\Audit\Internal\AuditObserver to every model registered with
+ * Attaches the owner audit observer to every model registered with
  * capability Auditable. AuditObserver itself lives in axiomasoft/corex, but this
  * lookup needs EntityRegistry — axiomasoft/corex cannot depend on axiomasoft/corex
  * (the reverse of this package's own require would cycle) — so the wiring
@@ -35,7 +35,7 @@ final class AuditCapabilityWiring
             $model = $definition->model;
 
             if (! in_array(HasAuditLog::class, class_uses_recursive($model), true)) {
-                $model::observe(AuditObserver::class);
+                AuditRegistration::observe($model);
             }
         }
     }

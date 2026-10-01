@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Data;
 
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 final readonly class EntityReference
 {
     public function __construct(

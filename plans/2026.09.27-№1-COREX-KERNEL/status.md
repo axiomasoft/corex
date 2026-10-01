@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-09-29
-inputs_sha256: ee9048307609163e421da6ed501e97d5ad7f4c8bec3d8981c1bfebd7333dc561
+through: 2026-10-01
+inputs_sha256: 80b898ca0148c8aa41b63e0f2fc2ee3550136f4d626272efc5642c3a15375262
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-09-29 |
+| Last Updated | 2026-10-01 |
 
 ## 4. Phase Index & Status Board
 
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
-| P04 | Application API, Extension SPI и типизированные ошибки | 1/4 | 🟡 In progress |
+| P04 | Application API, Extension SPI и типизированные ошибки | 2/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -67,7 +67,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P04.1 | Атрибуты и report-сканер символной поверхности | 🟢 Done | 2026-09-29 |
-| P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | ⬜ Not started | — |
+| P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | 🟢 Done | 2026-10-01 |
 | P04.3 | Типизированные package errors и compiled ProblemRegistry | ⬜ Not started | — |
 | P04.4 | Strict поверхность, manifests, SemVer и документация | ⬜ Not started | — |
 
@@ -211,6 +211,11 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | executor/codex/gpt-6-astra | plan-run · in-progress · — |
 | 2026-09-29 | executor/codex/gpt-6-astra | plan-run · local-repair · Bounded integration repairs and exact original validation carriers rerun GREEN; artifacts/P04.1-execution/integration-repair.json. No unresolved repair remains. |
 | 2026-09-29 | executor/codex/gpt-6-astra | plan-run · closed-green · P04.1 E14–E23 GREEN: artifacts/P04.1-execution/completion.md + proof-index.json. Golden +7 tooling types only. review: cursor/grok-4.7/high GREEN. Solo scope complete; P04.2 recommended.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · in-progress · Owner authorizes GPT-6.1 Sol and explicitly waives executor-route verification; Validation and independent result review remain required. |
+| 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · no-op · D67: implementation saved; owner stopped all checks and moved review/validation to a new session. Item remains In progress. Checkpoint: artifacts/P04.2-execution/implementation-handoff.md; final validation pending. |
+| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:122 |
+| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · no-op · Format correction: effective pre_mutation allow uses the existing owner route waiver; raw ROUTE-UNVERIFIABLE remains in write-sites.json. Actual pre_final allow uses validation receipts.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

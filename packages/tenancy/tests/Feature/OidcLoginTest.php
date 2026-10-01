@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\TestCase;

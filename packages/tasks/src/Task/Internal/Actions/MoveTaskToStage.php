@@ -6,18 +6,22 @@ namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
-use CoreX\Tasks\Access\Internal\TaskCompletion;
-use CoreX\Tasks\Access\Internal\TaskModuleGuard;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
+use CoreX\Tasks\Project\Contracts\ProjectRead;
+use CoreX\Tasks\Project\Data\ProjectView;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
+use CoreX\Tasks\Task\Data\StageView;
 use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Events\TaskCompleted;
 use CoreX\Tasks\Task\Events\TaskMovedToStage;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tasks\Task\Internal\TaskCompletion;
+use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
+use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 
@@ -65,15 +69,15 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
             $this->invalid('stage_id', 'Стадия не принадлежит проекту задачи.');
         }
 
-        /** @var Project|null $project */
-        $project = Project::on($connectionName)->find($stage->project_id);
+        /** @var ProjectView|null $project */
+        $project = app(ProjectRead::class)->find($stage->project_id, $connectionName);
 
-        if ($project === null || $project->workspace_id !== $task->workspace_id) {
+        if ($project === null || $project->workspaceId !== $task->workspace_id) {
             $this->invalid('stage_id', 'Проект стадии не принадлежит рабочему пространству задачи.');
         }
 
         if ($task->stage_id === $stage->getKey()) {
-            return TaskReference::fromTask($task);
+            return TaskReferenceFactory::fromTask($task);
         }
 
         $task->stage_id = $stage->getKey();
@@ -91,11 +95,11 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         $task->save();
 
         if ($completed) {
-            TaskCompleted::dispatch($task);
+            event(new TaskCompleted(TaskSnapshot::fromTask($task)));
         }
-        TaskMovedToStage::dispatch($task, $stage);
+        event(new TaskMovedToStage(TaskSnapshot::fromTask($task), new StageView($stage->id, $stage->project_id, $stage->name, (bool) $stage->getAttribute('is_final'))));
 
-        return TaskReference::fromTask($task);
+        return TaskReferenceFactory::fromTask($task);
     }
 
     /** @return never */

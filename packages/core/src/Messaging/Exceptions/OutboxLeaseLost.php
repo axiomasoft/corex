@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class OutboxLeaseLost extends RuntimeException
 {
     public static function superseded(string $messageId): self

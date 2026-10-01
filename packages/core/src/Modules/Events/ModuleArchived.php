@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**
  * Retrofitted onto `DomainEvent` (see {@see ModuleEnabled}). `mod.module.archived`.
- *
- * @internal spec: P1.25, A68, B-10 §3.1
  */
-final class ModuleArchived extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ModuleArchived extends DomainEvent
 {
     public function __construct(public readonly string $module)
     {

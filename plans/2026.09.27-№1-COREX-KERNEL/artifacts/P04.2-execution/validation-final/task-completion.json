@@ -1,0 +1,9 @@
+{
+  "name": "task-completion",
+  "command": "scripts/php84 composer test -- --filter=TaskCompletion",
+  "exit_code": 0,
+  "duration_ms": 1881,
+  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "log": "validation-final/task-completion.log",
+  "log_sha256": "14fb1deb7874578566b0fdd853c1c9c15dc144e335be935df1435c7841ddeaa5"
+}

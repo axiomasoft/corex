@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Operations\Versioning\Internal;
 
 use CoreX\Errors\Enums\UnavailabilityReason;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Extend\Api;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Laravel\Support\ApiOptions;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Versioning\Contracts\ApiProfiles;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\CapabilityDescriptor;
 use CoreX\Operations\Versioning\Data\DeprecationDescriptor;
@@ -17,7 +19,7 @@ use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use InvalidArgumentException;
 
 /** Builds one sorted code profile. Tenant activation is resolved separately. */
-final class ApiProfileFactory
+final class ApiProfileFactory implements ApiProfiles
 {
     public function make(CompiledRegistry $registry, ApiOptions $options): ApiProfile
     {
@@ -46,7 +48,7 @@ final class ApiProfileFactory
             }
 
             $seen[$key] = true;
-            $operation = Operation::fromDeclaration($declaration, $registry->fingerprint);
+            $operation = OperationFactory::fromDeclaration($declaration, $registry->fingerprint);
 
             if ($operation->version !== $options->defaultVersion()->major && ! $this->declaresMajor($options, $operation->version)) {
                 throw new InvalidArgumentException('profile: operation version is not a configured major');

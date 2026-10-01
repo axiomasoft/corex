@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Enums;
 
+use CoreX\Attributes\Api;
+
 /**
  * Row-visibility scope compiled from the role matrix (B-11 §5.5). Several
  * roles resolve to the max weight of their base rows; a contextual row
  * (pipeline/stage) then overrides the base row for its own context,
  * including narrowing it.
- *
- * @internal spec: B-11 §3.3
  */
+#[Api(since: '1.0')]
 enum Scope: string
 {
     case None = 'none';

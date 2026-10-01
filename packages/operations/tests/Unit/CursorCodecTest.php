@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
-use CoreX\Operations\Pagination\Data\CursorPage;
-use CoreX\Operations\Pagination\OrderingRegistry;
-use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Pagination\Internal\OrderingRegistry;
+use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
+use CoreX\Operations\Pagination\Laravel\CursorPageBuilder;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Operations\Validation\JsonCanonical;
-use CoreX\Time\FrozenClock;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -64,7 +65,7 @@ final class CursorCodecTest extends TestCase
         $this->assertFalse($position->admits([10, 'a']));
         $this->assertFalse($position->admits([9, 'z']));
 
-        $page = CursorPage::assemble(
+        $page = CursorPageBuilder::assemble(
             items: [['id' => 'a']],
             nextValues: [10, 'b'],
             codec: $codec,
@@ -78,10 +79,10 @@ final class CursorCodecTest extends TestCase
             orderingId: 'notes.list.v1',
         );
 
-        $this->assertSame([['id' => 'a']], $page->items);
+        $this->assertSame([['id' => 'a']], JsonDocuments::list($page->items));
         $this->assertNotNull($page->next);
         $this->assertSame([10, 'b'], $codec->decode($page->next, ...$this->decodeScope($registry))->values);
-        $this->assertNull(CursorPage::assemble([['id' => 'a']], null, $codec, $registry, 'acct-1', 'ws-1', 'v1', 'notes.list', ['status' => 'open'], ['id', 'title'], 'notes.list.v1')->next);
+        $this->assertNull(CursorPageBuilder::assemble([['id' => 'a']], null, $codec, $registry, 'acct-1', 'ws-1', 'v1', 'notes.list', ['status' => 'open'], ['id', 'title'], 'notes.list.v1')->next);
     }
 
     public function test_tamper_unknown_and_expired_key_and_expired_cursor_are_invalid(): void
@@ -219,18 +220,18 @@ final class CursorCodecTest extends TestCase
             path: '/'.$id,
             ability: 'notes.read',
             handler: CursorHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Query,
-            pagination: [
+            pagination: JsonDocuments::nullable([
                 'ordering' => $ordering,
                 'direction' => $direction,
                 'fields' => $fields,
                 'types' => $types,
                 'unique' => $unique,
-            ],
+            ]),
         );
     }
 

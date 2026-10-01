@@ -6,17 +6,22 @@ namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
-use CoreX\Tasks\Access\Internal\TaskModuleGuard;
-use CoreX\Tasks\Project\Models\Project;
-use CoreX\Tasks\Sprint\Internal\Models\Sprint;
+use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
+use CoreX\Tasks\Project\Contracts\ProjectRead;
+use CoreX\Tasks\Project\Data\ProjectView;
+use CoreX\Tasks\Sprint\Contracts\SprintRead;
+use CoreX\Tasks\Sprint\Data\SprintView;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Events\TaskCreated;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\Models\TaskTarget;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
+use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -118,7 +123,7 @@ final class CreateTask implements CreateTaskCommand
             'priority' => $draft->priority,
             'author_id' => $authorId,
             'assignee_id' => $draft->assigneeId,
-            'created_by' => $draft->actor->toArray(),
+            'created_by' => JsonDocuments::decodeTree($draft->actor->toArray()),
             'starts_at' => $draft->startsAt,
             'due_at' => $draft->dueAt,
             'estimate_minutes' => $draft->estimateMinutes,
@@ -136,42 +141,42 @@ final class CreateTask implements CreateTaskCommand
             $link->save();
         }
 
-        TaskCreated::dispatch($task);
+        event(new TaskCreated(TaskSnapshot::fromTask($task)));
 
-        return TaskReference::fromTask($task);
+        return TaskReferenceFactory::fromTask($task);
     }
 
-    private function project(?string $id, string $workspaceId, ?string $connectionName): ?Project
+    private function project(?string $id, string $workspaceId, ?string $connectionName): ?ProjectView
     {
         if ($id === null) {
             return null;
         }
 
-        /** @var Project|null $project */
-        $project = Project::on($connectionName)->find($id);
+        /** @var ProjectView|null $project */
+        $project = app(ProjectRead::class)->find($id, $connectionName);
 
-        if ($project === null || $project->workspace_id !== $workspaceId) {
+        if ($project === null || $project->workspaceId !== $workspaceId) {
             $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
         }
 
         return $project;
     }
 
-    private function validateSprint(?string $id, ?Project $project, ?string $connectionName): void
+    private function validateSprint(?string $id, ?ProjectView $project, ?string $connectionName): void
     {
         if ($id === null) {
             return;
         }
 
-        /** @var Sprint|null $sprint */
-        $sprint = Sprint::on($connectionName)->find($id);
+        /** @var SprintView|null $sprint */
+        $sprint = app(SprintRead::class)->find($id, $connectionName);
 
-        if ($project === null || $sprint === null || $sprint->project_id !== $project->getKey()) {
+        if ($project === null || $sprint === null || $sprint->projectId !== $project->id) {
             $this->invalid('sprint_id', 'Спринт не принадлежит проекту задачи.');
         }
     }
 
-    private function validateStage(?string $id, ?Project $project, ?string $connectionName): void
+    private function validateStage(?string $id, ?ProjectView $project, ?string $connectionName): void
     {
         if ($id === null) {
             return;
@@ -180,7 +185,7 @@ final class CreateTask implements CreateTaskCommand
         /** @var Stage|null $stage */
         $stage = Stage::on($connectionName)->find($id);
 
-        if ($project === null || $stage === null || $stage->project_id !== $project->getKey()) {
+        if ($project === null || $stage === null || $stage->project_id !== $project->id) {
             $this->invalid('stage_id', 'Стадия не принадлежит проекту задачи.');
         }
     }

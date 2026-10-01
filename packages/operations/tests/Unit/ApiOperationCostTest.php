@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
-use CoreX\Operations\Definition\ApiOperationValidator;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Operations\Tests\TestCase;
@@ -50,14 +50,14 @@ it('keeps legacy declarations on default cost behavior and hash', function () us
 
     expect($first->cost)->toBeNull()
         ->and($first->costExplicit)->toBeFalse()
-        ->and(fn () => ApiOperationValidator::validate($first))->not->toThrow(CompilationException::class)
-        ->and(Operation::fromDeclaration($first, 'fp')->contractHash)
-        ->toBe(Operation::fromDeclaration($second, 'fp')->contractHash)
-        ->and(Operation::fromDeclaration($first, 'fp')->cost)->toBeNull();
+        ->and(fn () => OperationDefinitionValidator::validate($first))->not->toThrow(CompilationException::class)
+        ->and(OperationFactory::fromDeclaration($first, 'fp')->contractHash)
+        ->toBe(OperationFactory::fromDeclaration($second, 'fp')->contractHash)
+        ->and(OperationFactory::fromDeclaration($first, 'fp')->cost)->toBeNull();
 });
 
 it('rejects unknown keys, negative weights, overflow bounds and missing bulk recipes', function (Api $api, string $message) {
-    expect(fn () => ApiOperationValidator::validate($api))->toThrow(CompilationException::class, $message);
+    expect(fn () => OperationDefinitionValidator::validate($api))->toThrow(CompilationException::class, $message);
 })->with([
     'unknown key' => [$operation()->cost(['tokens' => 1]), 'Unknown cost key'],
     'negative weight' => [$operation()->cost(['row' => -1]), 'Negative cost weight'],
@@ -83,10 +83,10 @@ it('compiles reversed cost declarations to the same canonical recipe and hash', 
     $forward->declaringModule = 'example/notes';
     $reverse->declaringModule = 'example/notes';
 
-    expect(Operation::fromDeclaration($forward, 'fp')->contractHash)
-        ->toBe(Operation::fromDeclaration($reverse, 'fp')->contractHash)
-        ->and(Operation::fromDeclaration($forward, 'fp')->mode)->toBe(OperationMode::Query)
-        ->and(Operation::fromDeclaration($forward, 'fp')->idempotency)->toBe(IdempotencyRequirement::Forbidden);
+    expect(OperationFactory::fromDeclaration($forward, 'fp')->contractHash)
+        ->toBe(OperationFactory::fromDeclaration($reverse, 'fp')->contractHash)
+        ->and(OperationFactory::fromDeclaration($forward, 'fp')->mode)->toBe(OperationMode::Query)
+        ->and(OperationFactory::fromDeclaration($forward, 'fp')->idempotency)->toBe(IdempotencyRequirement::Forbidden);
 });
 
 it('accepts an explicit bulk recipe', function () use ($operation, $compile, $defaults): void {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal\Http;
 
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

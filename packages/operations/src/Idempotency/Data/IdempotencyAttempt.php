@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
 /** A fenced store decision. It never contains the caller's raw idempotency key. */
+#[Api(since: '1.0')]
 final readonly class IdempotencyAttempt
 {
     public const string Owner = 'owner';

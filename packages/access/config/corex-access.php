@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Matrix\AzGuardRoleModel;
+use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
 
 return [
 
@@ -105,6 +105,7 @@ return [
         // (only RolePermission does) — this seam (config/az-guard.php
         // "Models") swaps in a subclass that does, so the table_names pin
         // above actually resolves. See CoreX\Access\Matrix\AzGuardRoleModel.
+        // above actually resolves. See CoreX\Access\Matrix\Laravel\AzGuardRoleModel.
         'models' => [
             'role' => AzGuardRoleModel::class,
         ],

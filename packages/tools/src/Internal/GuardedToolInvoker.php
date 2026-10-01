@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use Closure;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
@@ -55,7 +58,7 @@ final class GuardedToolInvoker implements ToolInvoker
             return $this->denied('tool_unavailable', $call);
         }
 
-        $tool = ToolDescriptor::fromDeclaration($declaration);
+        $tool = ToolDescriptorFactory::fromDeclaration($declaration);
 
         if ($call->expectedContractHash !== $tool->contractHash) {
             return $this->denied('tool_revision_conflict', $call);
@@ -160,7 +163,7 @@ final class GuardedToolInvoker implements ToolInvoker
                     $result = $this->operations->invoke(new OperationInvocation(
                         operation: $this->exposedOperation($declaration),
                         context: $context,
-                        input: $input,
+                        input: JsonDocuments::capture($input),
                         parameters: $parameters,
                         idempotencyKey: $call->operationKey,
                     ));
@@ -176,9 +179,9 @@ final class GuardedToolInvoker implements ToolInvoker
                     throw $error;
                 }
 
-                $output = $result->data;
+                $output = JsonDocuments::array($result->data);
                 $replayed = $result->replayed;
-                $metadata = $result->metadata;
+                $metadata = JsonDocuments::map($result->metadata);
             } else {
                 $handler = $this->container->make($declaration->handler ?? throw new LogicException('Tool handler missing.'));
 
@@ -194,7 +197,7 @@ final class GuardedToolInvoker implements ToolInvoker
                 $output = $handler->handle(context: $toolContext, input: $input, parameters: $parameters);
             }
 
-            $structured = JsonObject::fromArray($output);
+            $structured = JsonObjectFactory::fromArray($output);
 
             $outputError = $this->validateOutput(tool: $tool, structured: $structured, call: $call);
 
@@ -208,7 +211,7 @@ final class GuardedToolInvoker implements ToolInvoker
                 errorCode: null,
                 operationKey: $call->operationKey,
                 replayed: $replayed,
-                metadata: $metadata,
+                metadata: JsonDocuments::capture($metadata),
             );
         } catch (Throwable $exception) {
             if ($tool->idempotency === 'provider-key') {
@@ -225,7 +228,7 @@ final class GuardedToolInvoker implements ToolInvoker
 
         foreach ($this->modules->compiled()->api as $api) {
             if ($api->mode === 'operation' && $api->version.':'.$api->operationId === $ref) {
-                return Operation::fromDeclaration($api, $this->modules->compiled()->fingerprint);
+                return OperationFactory::fromDeclaration($api, $this->modules->compiled()->fingerprint);
             }
         }
 

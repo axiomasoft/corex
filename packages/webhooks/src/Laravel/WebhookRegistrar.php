@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
-use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
@@ -33,13 +35,13 @@ use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-/** @internal Explicit composition root; remote delivery remains opt-in and fail-closed. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class WebhookRegistrar
 {
     public static function register(Application $app): void
     {
         $config = $app['config']->get('corex-webhooks');
-        $options = WebhookOptions::fromArray(is_array($config) ? $config : []);
+        $options = WebhookOptionsParser::fromArray(is_array($config) ? $config : []);
         $urlPolicy = new WebhookUrlPolicy(organizationDeniedCidrs: $options->organizationDeniedCidrs);
         $app->instance(WebhookOptions::class, $options);
         $app->instance(WebhookUrlPolicy::class, $urlPolicy);
@@ -60,14 +62,14 @@ final readonly class WebhookRegistrar
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             subscriptions: $app->make(WebhookSubscriptionStore::class),
-            cursors: $app->make(SignedCursorCodec::class),
+            cursors: $app->make(CursorCodec::class),
         ));
         $app->singleton(WebhookReplay::class, static fn (Application $app): WebhookReplay => new WebhookReplay(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             topics: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
-            cursors: $app->make(SignedCursorCodec::class),
+            cursors: $app->make(CursorCodec::class),
             audit: $app->make(AuditLogger::class),
         ));
         $app->singleton(WebhookFanout::class, static fn (Application $app): WebhookFanout => new WebhookFanout(

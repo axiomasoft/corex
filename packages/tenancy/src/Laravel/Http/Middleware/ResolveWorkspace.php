@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
@@ -24,9 +26,8 @@ use Illuminate\Http\Response;
  * fail-closed 403 (D134): a pass-through would leave {@see
  * \CoreX\Tenancy\Laravel\Scopes\WorkspaceScope} unfiltered, showing every workspace
  * in the account.
- *
- * @internal spec: B-11 §5.4 п.4, AC-18
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ResolveWorkspace
 {
     public function __construct(

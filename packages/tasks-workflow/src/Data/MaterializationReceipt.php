@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Tasks\Task\Data\TaskReference;
 
+#[Api(since: '1.0')]
 final readonly class MaterializationReceipt
 {
     /** @param list<TaskReference> $taskRefs */

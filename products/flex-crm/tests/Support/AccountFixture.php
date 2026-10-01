@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Tests\Support;
 
-use CoreX\Database\Schema\IdColumns;
+use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 

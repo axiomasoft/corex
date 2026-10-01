@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Events;
 
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Tasks\Task\Data\TaskView;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
-use Illuminate\Foundation\Events\Dispatchable;
 
-final class TaskUpdated implements ShouldDispatchAfterCommit
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class TaskUpdated implements ShouldDispatchAfterCommit
 {
-    use Dispatchable;
-
     /** @param list<string> $changed */
     public function __construct(
-        public readonly Task $task,
+        public readonly TaskView $task,
         public readonly array $changed,
     ) {}
 }

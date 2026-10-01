@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Enums;
 
-/** @internal Bulk status is projected through the bulk operation contract and wire representation. */
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 enum BulkOperationStatus: string
 {
     case Pending = 'pending';

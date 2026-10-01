@@ -6,11 +6,11 @@ namespace ThirdParty\Panels;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Panels\Contracts\PanelCatalogue;
 use CoreX\Panels\Contracts\PanelProvider;
 use CoreX\Panels\Data\EntityReference;

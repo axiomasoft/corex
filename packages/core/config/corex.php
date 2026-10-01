@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\NullAuditRetention;
-use CoreX\Audit\QueuedAuditLogger;
-use CoreX\Context\NullImpersonationService;
-use CoreX\Context\NullTenancyManager;
-use CoreX\Context\SingleAccountResolver;
-use CoreX\Data\DenyDataScopeAuthorizer;
+use CoreX\Audit\Internal\NullAuditRetention;
+use CoreX\Audit\Internal\QueuedAuditLogger;
+use CoreX\Context\Internal\NullImpersonationService;
+use CoreX\Context\Internal\NullTenancyManager;
+use CoreX\Context\Internal\SingleAccountResolver;
+use CoreX\Data\Internal\DenyDataScopeAuthorizer;
 use CoreX\Database\Enums\IdStrategy;
-use CoreX\Departments\DatabaseDepartmentRepository;
-use CoreX\Features\DatabaseFeatureFlags;
+use CoreX\Departments\Internal\DatabaseDepartmentRepository;
+use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
-use CoreX\Settings\DatabaseSettingsRepository;
-use CoreX\Settings\NullSettingDefaultsProvider;
+use CoreX\Settings\Internal\DatabaseSettingsRepository;
+use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 
 return [
 

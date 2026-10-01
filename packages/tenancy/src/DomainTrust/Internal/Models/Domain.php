@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\DomainTrust\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Laravel\AccountRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Stancl\Tenancy\Database\Concerns\InvalidatesTenantsResolverCache;
@@ -44,20 +44,15 @@ final class Domain extends Model
      */
     protected function casts(): array
     {
-        return [
-            'is_primary' => 'boolean',
-            'verified_at' => 'immutable_datetime',
-            'verification_generation' => 'integer',
-            'deleted_at' => 'immutable_datetime',
-        ];
+        return ['is_primary' => 'boolean', 'verified_at' => 'immutable_datetime', 'verification_generation' => 'integer', 'deleted_at' => 'immutable_datetime'];
     }
 
     /**
-     * @return BelongsTo<Account, $this>
+     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
      */
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'account_id');
+        return AccountRelations::belongsTo($this, 'account_id', null, 'account');
     }
 
     /**
@@ -65,7 +60,7 @@ final class Domain extends Model
      * (`$model->tenant`) — the trait is vendor-owned and reads exactly that
      * accessor name; `account()` above is this item's own naming (D14).
      *
-     * @return BelongsTo<Account, $this>
+     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
      */
     public function tenant(): BelongsTo
     {

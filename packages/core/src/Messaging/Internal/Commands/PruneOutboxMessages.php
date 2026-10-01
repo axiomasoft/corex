@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal\Commands;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -40,10 +40,10 @@ final class PruneOutboxMessages extends Command
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $published = $publishedOption ?? Config::messagingOutboxRetention();
-        $dead = $deadOption ?? Config::messagingDeadRetention();
+        $published = $publishedOption ?? app(CoreOptions::class)->messagingOutboxRetention;
+        $dead = $deadOption ?? app(CoreOptions::class)->messagingDeadRetention;
         $now = $clock->now();
-        $table = Config::outboxMessagesTable();
+        $table = app(CoreOptions::class)->outboxMessagesTable;
 
         $prunedPublished = DB::connection($connection)->table($table)
             ->where('status', 'published')

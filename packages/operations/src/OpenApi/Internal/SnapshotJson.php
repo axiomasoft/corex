@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal;
 
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 use JsonException;
 use stdClass;

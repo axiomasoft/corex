@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
@@ -14,7 +16,7 @@ use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupRegistrar implements PackageRegistrar
 {
     private const WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper';

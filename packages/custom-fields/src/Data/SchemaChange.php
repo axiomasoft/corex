@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\CustomFields\Internal\Support\Validation;
 use InvalidArgumentException;
 
+/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+#[Api(since: '1.0')]
 final readonly class SchemaChange
 {
-    /** @param array<array-key, mixed> $definition */
+    /** @param JsonMap $definition */
     public function __construct(
         public string $entity,
         public string $kind,

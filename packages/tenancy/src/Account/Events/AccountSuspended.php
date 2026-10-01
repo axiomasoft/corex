@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Messaging\Events\DomainEvent;
-use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use Override;
 
 /**
- * Fired after {@see AccountLifecycle::suspend()} has transitioned
+ * Fired after {@see CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle::suspend()} has transitioned
  * `active → suspended` and mirrored `root_account_events` (B-11 §5.1). Built
  * with an explicit {@see TenantContext} — see {@see TrialStarted}'s
  * docblock for why.
  */
-final class AccountSuspended extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class AccountSuspended extends DomainEvent
 {
     public readonly string $accountId;
 

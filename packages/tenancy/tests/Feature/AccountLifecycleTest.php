@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Context\ImpersonationGuard;
-use CoreX\Context\NullImpersonationService;
+use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Events\AccountSuspended;
 use CoreX\Tenancy\Account\Events\GraceStarted;
 use CoreX\Tenancy\Account\Events\TrialStarted;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
+use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
@@ -163,7 +163,7 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
         ),
         fsm: new AccountLifecycleFsm,
         tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new StanclTenantDatabaseLifecycle('pgsql'),
-        impersonationGuard: new ImpersonationGuard($impersonation ?? new NullImpersonationService),
+        impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => $impersonation ?? new NullImpersonationService]),
         templateIntegrityVerifier: $templateIntegrityVerifier,
     );
 }

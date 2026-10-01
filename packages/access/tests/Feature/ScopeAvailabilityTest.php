@@ -6,9 +6,9 @@ use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Tests\Stubs\Project;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 

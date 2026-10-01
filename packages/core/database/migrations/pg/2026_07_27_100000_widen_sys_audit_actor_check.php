@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 

@@ -8,7 +8,7 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
 use CoreX\Operations\Validation\Data\SchemaValidation;
-use CoreX\Operations\Validation\SchemaProfile;
+use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use CoreX\Tools\Contracts\ToolSchemaValidator;
 use JsonException;
 use Override;

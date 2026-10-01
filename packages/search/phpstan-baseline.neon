@@ -79,28 +79,10 @@ parameters:
 			path: src/Internal/Postgres/PostgresSearchProvider.php
 
 		-
-			rawMessage: 'Parameter $filter of method CoreX\Search\Internal\Postgres\PostgresSearchProvider::applyFilter() expects CoreX\Search\Data\SearchFilter, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Postgres/PostgresSearchProvider.php
-
-		-
 			rawMessage: Variable property access on stdClass|null.
 			identifier: property.dynamicName
 			count: 1
 			path: src/Internal/Postgres/PostgresSearchProvider.php
-
-		-
-			rawMessage: 'Parameter $records of class CoreX\Search\Data\SearchPage constructor expects list<array<string, bool|float|int|string|null>>, list<array<string, mixed>> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Query/PolicySearchHydrator.php
-
-		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Search\Data\SearchFilter): array{field: string, values: list<mixed>} given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/Query/SearchCursorCodec.php
 
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
@@ -112,7 +94,7 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/SearchManager.php
+			path: src/Internal/SearchManager.php
 
 		-
 			rawMessage: Anonymous function should return CoreX\Search\Contracts\SearchProvider but returns mixed.

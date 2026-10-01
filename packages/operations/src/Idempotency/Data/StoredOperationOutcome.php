@@ -4,33 +4,37 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationResult;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 
 /** Canonical transport-neutral operation result persisted for semantic replay. */
+#[Api(since: '1.0')]
 final readonly class StoredOperationOutcome
 {
     private function __construct(
         public string $kind,
-        /** @var array<string, mixed>|list<mixed>|null */
-        public ?array $data,
+        /** JSON value captured at the integration boundary. */
+        public ?JsonDocument $data,
         public ?string $errorCode,
         public ?int $errorStatus,
         public ?string $errorMessage,
-        /** @var array<string, mixed> */
-        public array $errorDetails,
+        /** JSON value captured at the integration boundary. */
+        public JsonDocument $errorDetails,
         public ?string $errorCategory,
         public bool $errorRetryable,
         public ?string $errorPath,
     ) {}
 
-    /** @param array<string, mixed>|list<mixed> $data */
-    public static function success(array $data): self
+    /** Immutable JSON value. */
+    public static function success(JsonDocument $data): self
     {
-        return new self('success', $data, null, null, null, [], null, false, null);
+        return new self('success', JsonDocuments::nullable($data), null, null, null, JsonDocuments::capture([]), null, false, null);
     }
 
     public static function failure(ApiError $error): self
@@ -39,11 +43,11 @@ final readonly class StoredOperationOutcome
 
         return new self(
             kind: 'error',
-            data: null,
+            data: JsonDocuments::nullable(null),
             errorCode: $error->errorCode,
             errorStatus: $error->status,
             errorMessage: $error->getMessage(),
-            errorDetails: $error->details,
+            errorDetails: JsonDocuments::capture(JsonDocuments::map($error->details)),
             errorCategory: $descriptor->category->value,
             errorRetryable: $error->retryable,
             errorPath: $error->path,
@@ -63,7 +67,7 @@ final readonly class StoredOperationOutcome
         sort($rootKeys);
 
         if ($kind === 'success' && $rootKeys === ['data', 'kind'] && is_array($payload['data'] ?? null)) {
-            return self::success($payload['data']);
+            return self::success(JsonDocuments::capture($payload['data']));
         }
 
         $error = $payload['error'] ?? null;
@@ -95,11 +99,11 @@ final readonly class StoredOperationOutcome
 
         return new self(
             kind: 'error',
-            data: null,
+            data: JsonDocuments::nullable(null),
             errorCode: $code,
             errorStatus: $status,
             errorMessage: $message,
-            errorDetails: $details,
+            errorDetails: JsonDocuments::capture($details),
             errorCategory: ErrorCategory::from($category)->value,
             errorRetryable: $retryable,
             errorPath: $path,
@@ -109,12 +113,12 @@ final readonly class StoredOperationOutcome
     public function canonicalJson(): string
     {
         return JsonCanonical::encode($this->kind === 'success'
-            ? ['data' => $this->data, 'kind' => 'success']
+            ? ['data' => JsonDocuments::optionalArray($this->data), 'kind' => 'success']
             : [
                 'error' => [
                     'category' => $this->errorCategory,
                     'code' => $this->errorCode,
-                    'details' => $this->errorDetails,
+                    'details' => JsonDocuments::map($this->errorDetails),
                     'message' => $this->errorMessage,
                     'path' => $this->errorPath,
                     'retryable' => $this->errorRetryable,
@@ -130,7 +134,7 @@ final readonly class StoredOperationOutcome
             throw new InvalidArgumentException('An error outcome cannot become an operation result.');
         }
 
-        return new OperationResult(data: $this->data, replayed: $replayed);
+        return new OperationResult(data: JsonDocuments::capture($this->data), replayed: $replayed);
     }
 
     public function error(): ApiError
@@ -144,7 +148,7 @@ final readonly class StoredOperationOutcome
             errorCode: $this->errorCode,
             status: $this->errorStatus,
             message: $this->errorMessage,
-            details: $this->errorDetails,
+            details: JsonDocuments::capture($this->errorDetails),
             category: ErrorCategory::from($this->errorCategory),
             retryable: $this->errorRetryable,
             path: $this->errorPath,

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Enums;
 
-/**
- * @internal spec: B-11 §3.3
- */
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 enum PrincipalType: string
 {
     case User = 'user';

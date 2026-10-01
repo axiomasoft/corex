@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications;
 
-use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Modules\Contracts\ModuleDefinition;
+use CoreX\Modules\Data\ModuleManifest;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NotificationsModule extends ModuleDefinition
 {
     #[Override]

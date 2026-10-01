@@ -10,9 +10,9 @@ use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
-use CoreX\Data\CallableDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');

@@ -6,10 +6,10 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use DateTimeImmutable;

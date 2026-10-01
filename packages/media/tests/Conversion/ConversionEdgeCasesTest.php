@@ -18,6 +18,7 @@ use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\Support\MediaOptions;
+use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,7 @@ it('does not advertise a conversion when no matching driver is installed', funct
     allowMediaConversions();
     $file = app(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('unsupported-profile', UploadedFile::fake()->createWithContent('source.txt', 'bytes'), 'attachment'),
+        new UploadInput('unsupported-profile', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
 
     expect(app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'missing-profile'))->toBeNull()
@@ -49,7 +50,7 @@ it('keeps malformed source conversions pending for durable retry instead of publ
     allowMediaConversions();
     $file = app(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('malformed-conversion', UploadedFile::fake()->createWithContent('source.jpg', 'not an image'), 'attachment'),
+        new UploadInput('malformed-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', 'not an image')), 'attachment'),
     );
 
     app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
@@ -81,7 +82,7 @@ it('rejects output facts that exceed the immutable conversion profile', function
 
     $file = app(MediaLibrary::class)->store(
         conversionContext(),
-        new UploadInput('bounded-conversion', UploadedFile::fake()->createWithContent('source.txt', 'bytes'), 'attachment'),
+        new UploadInput('bounded-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
     $profiles = new ConversionProfiles([$driver]);
     $digest = $profiles->digest($driver);

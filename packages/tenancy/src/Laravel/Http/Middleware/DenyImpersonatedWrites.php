@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use Illuminate\Http\Request;
@@ -17,9 +19,8 @@ use Illuminate\Http\Response;
  * FQCN). Reuses `tenancy.status_gate.read_only_methods` (already the
  * project's one definition of "these HTTP methods are read-only") rather
  * than inventing a second config surface for the same fact (D116/D121).
- *
- * @internal spec: B-11 §5.9, D141
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class DenyImpersonatedWrites
 {
     public function __construct(

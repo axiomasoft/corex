@@ -1,0 +1,566 @@
+{
+  "CoreX\\Access\\Matrix\\Contracts\\EntityActivity": {
+    "path": "packages/access/src/Matrix/Contracts/EntityActivity.php",
+    "verdict": "Spi call",
+    "sha256": "c1a06290879d1a5d99c532141d29610822497591ad2b52479ff637d5d103f92d",
+    "internal_doc": false
+  },
+  "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions": {
+    "path": "packages/access/src/Matrix/Contracts/ScopeMapVersions.php",
+    "verdict": "Spi call",
+    "sha256": "2d716ff069b50927979c7daf58ea031d23c233d28f6d00186aeb72b63002944b",
+    "internal_doc": false
+  },
+  "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings": {
+    "path": "packages/access/src/Matrix/Laravel/MatrixPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "bab2a84ca0c2531bf31425362543591ab6215e08635c9ebbf3b5b9eaefdfe5b9",
+    "internal_doc": false
+  },
+  "CoreX\\Access\\Roles\\Data\\RoleMatrixEntry": {
+    "path": "packages/access/src/Roles/Data/RoleMatrixEntry.php",
+    "verdict": "Api",
+    "sha256": "552811815bdff90e578c2b889877a22e8626b574a2971e4a680e7e4db2a017e6",
+    "internal_doc": false
+  },
+  "CoreX\\Access\\Roles\\Data\\RoleView": {
+    "path": "packages/access/src/Roles/Data/RoleView.php",
+    "verdict": "Api",
+    "sha256": "b9ac0e25e1993035e56c58f0e41ad609932445e28a94a909b49ae94ea68df919",
+    "internal_doc": false
+  },
+  "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData": {
+    "path": "packages/access/src/Roles/Laravel/RoleMatrixData.php",
+    "verdict": "Spi call",
+    "sha256": "d8c349b6697b8f30f36e7bac95b38d993884a37278af5283ca178f3b9f70abfb",
+    "internal_doc": false
+  },
+  "CoreX\\Attributes\\Api": {
+    "path": "packages/core/src/Attributes/Api.php",
+    "verdict": "Api",
+    "sha256": "90ee75fc5e64540f9a1c3e85e199e3ca3fa95e42d228fd5a6e265aa71fa63913",
+    "internal_doc": false
+  },
+  "CoreX\\Attributes\\Internal\\SourceType": {
+    "path": "packages/core/src/Attributes/Internal/SourceType.php",
+    "verdict": "internal",
+    "sha256": "72cee27abd8e4b63aa8dbf02cc5de512461b7196cfde1db50084fceb63af49af",
+    "internal_doc": true
+  },
+  "CoreX\\Attributes\\Internal\\SurfaceDiagnostic": {
+    "path": "packages/core/src/Attributes/Internal/SurfaceDiagnostic.php",
+    "verdict": "internal",
+    "sha256": "a10e8e528ac7a2098e10d45079d0f950cf236532e4cc9fbe04e02df98869deb1",
+    "internal_doc": true
+  },
+  "CoreX\\Attributes\\Internal\\SurfaceReport": {
+    "path": "packages/core/src/Attributes/Internal/SurfaceReport.php",
+    "verdict": "internal",
+    "sha256": "b5eb246600a22bb261816c0058d56d997b5e6f0bbf3782b336ed241f5a699b2a",
+    "internal_doc": true
+  },
+  "CoreX\\Attributes\\Internal\\SurfaceScanner": {
+    "path": "packages/core/src/Attributes/Internal/SurfaceScanner.php",
+    "verdict": "internal",
+    "sha256": "80d7e10901211a2fa2c426acf76d13560ffced4f9c95bccff9a55e9e14347b9a",
+    "internal_doc": true
+  },
+  "CoreX\\Attributes\\Spi": {
+    "path": "packages/core/src/Attributes/Spi.php",
+    "verdict": "Api",
+    "sha256": "42a56b372fe626f68be001ea35f06f0ef494e661d8e8b217504677a3febfa146",
+    "internal_doc": false
+  },
+  "CoreX\\Attributes\\SpiKind": {
+    "path": "packages/core/src/Attributes/SpiKind.php",
+    "verdict": "Api",
+    "sha256": "5a7c6d20e453a77d1d21ba4d3771d909c4ab577000c905e50a4e1b0358e02c9b",
+    "internal_doc": false
+  },
+  "CoreX\\Audit\\Contracts\\CurrentActor": {
+    "path": "packages/core/src/Audit/Contracts/CurrentActor.php",
+    "verdict": "Spi call",
+    "sha256": "93d8c4cefeddf52c7d60dfeee0450d527b69cc5df86fb1ca1af43150ffe875a4",
+    "internal_doc": false
+  },
+  "CoreX\\Audit\\Laravel\\AuditRegistration": {
+    "path": "packages/core/src/Audit/Laravel/AuditRegistration.php",
+    "verdict": "Spi call",
+    "sha256": "14e7b5b6e2b24bafa3237c7c1306721ded3716fa4e5096c6b58c7ff044ae5ca5",
+    "internal_doc": false
+  },
+  "CoreX\\Audit\\Laravel\\AuditWriteExemption": {
+    "path": "packages/core/src/Audit/Laravel/AuditWriteExemption.php",
+    "verdict": "Spi call",
+    "sha256": "4a29300f05e71dd9777e65947378679b5b0e2b47aeaf102826ca7006e71b19df",
+    "internal_doc": false
+  },
+  "CoreX\\Config\\Laravel\\CoreOptionsParser": {
+    "path": "packages/core/src/Config/Laravel/CoreOptionsParser.php",
+    "verdict": "Spi call",
+    "sha256": "d163fd8537c96764ec988b925618997b1ffebbc3f9a532320a9765227393d167",
+    "internal_doc": false
+  },
+  "CoreX\\Context\\Contracts\\ImpersonationGuard": {
+    "path": "packages/core/src/Context/Contracts/ImpersonationGuard.php",
+    "verdict": "Spi call",
+    "sha256": "2f7cbefdff0386fe61c9d1eb3c27b5324389c989f36250d400358438ae4947a7",
+    "internal_doc": false
+  },
+  "CoreX\\Data\\Data\\JsonDocument": {
+    "path": "packages/core/src/Data/Data/JsonDocument.php",
+    "verdict": "Api",
+    "sha256": "7534bef03f654f78ec775533622b216c6aa01deedb6e2d8644c7fade9ced9833",
+    "internal_doc": false
+  },
+  "CoreX\\Data\\Laravel\\JsonDocuments": {
+    "path": "packages/core/src/Data/Laravel/JsonDocuments.php",
+    "verdict": "Spi call",
+    "sha256": "833d7252f31b3e46c71a3a9ea3c468ac100eed6f77fa8f3a0d1aeb5806b08d1e",
+    "internal_doc": false
+  },
+  "CoreX\\Data\\Laravel\\SystemDataScopeAuthorization": {
+    "path": "packages/core/src/Data/Laravel/SystemDataScopeAuthorization.php",
+    "verdict": "Spi call",
+    "sha256": "95da7c10fdea6dc917e9079b8e64b84ce6b500e8319cf7088268d0c2d5c42861",
+    "internal_doc": false
+  },
+  "CoreX\\Departments\\Laravel\\DepartmentQueries": {
+    "path": "packages/core/src/Departments/Laravel/DepartmentQueries.php",
+    "verdict": "Spi call",
+    "sha256": "fb5e34acb7371e5cacfc9cca4647c400ea797294483fb3f911385085a88bffb1",
+    "internal_doc": false
+  },
+  "CoreX\\Intl\\Locale\\Contracts\\LocaleValidation": {
+    "path": "packages/intl/src/Locale/Contracts/LocaleValidation.php",
+    "verdict": "Spi call",
+    "sha256": "7d32696a5d9a0250921ded13fdf103fa79581bcd61235859bc6c4dc95417f69a",
+    "internal_doc": false
+  },
+  "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings": {
+    "path": "packages/intl/src/Locale/Laravel/LocalePortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "76a8054b7a9dd5eee4a1361f2b8d80cc872daaa091003b23059f0eaa38bd658d",
+    "internal_doc": false
+  },
+  "CoreX\\Media\\Data\\UploadFile": {
+    "path": "packages/media/src/Data/UploadFile.php",
+    "verdict": "Api",
+    "sha256": "c2440a6c2d781f61e4a28ae356b8ffe726cecba769da78123224f0e1b48ddfb8",
+    "internal_doc": false
+  },
+  "CoreX\\Media\\Laravel\\UploadedFileSource": {
+    "path": "packages/media/src/Laravel/UploadedFileSource.php",
+    "verdict": "Spi call",
+    "sha256": "9040135d15fb436d392352114c06a751e26199bfe06b2c91d3a67e50a3ad6be0",
+    "internal_doc": false
+  },
+  "CoreX\\Messaging\\Laravel\\PubSubAdapters": {
+    "path": "packages/core/src/Messaging/Laravel/PubSubAdapters.php",
+    "verdict": "Spi call",
+    "sha256": "f8bc4d4299c8a456e0fc7cf07700bbab44df918fc7a6947e14fdec0189e83631",
+    "internal_doc": false
+  },
+  "CoreX\\Modules\\Contracts\\ModuleCompilation": {
+    "path": "packages/core/src/Modules/Contracts/ModuleCompilation.php",
+    "verdict": "Spi implement",
+    "sha256": "8c22ccb2b6074ba403e2ea055182ed3ff1aecb564ce0bdbf8935fb489e020813",
+    "internal_doc": false
+  },
+  "CoreX\\Modules\\Contracts\\ModuleDiscovery": {
+    "path": "packages/core/src/Modules/Contracts/ModuleDiscovery.php",
+    "verdict": "Spi implement",
+    "sha256": "5fcd81fbc9136052ba1a4daecea17ac4749e45e7447a62b481b94630af3ff888",
+    "internal_doc": false
+  },
+  "CoreX\\Notifications\\Delivery\\Contracts\\DeliveryExecution": {
+    "path": "packages/notifications/src/Delivery/Contracts/DeliveryExecution.php",
+    "verdict": "Spi call",
+    "sha256": "6308c907e71b269b171f71699fe599945dea903bf368bbfd77cdb4c85d1c2780",
+    "internal_doc": false
+  },
+  "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings": {
+    "path": "packages/notifications/src/Delivery/Laravel/DeliveryPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "7dca5994c795f20c37045f47d39de2920cd21f4c5cfc6a11d1338c97d22d61b8",
+    "internal_doc": false
+  },
+  "CoreX\\Observability\\Contracts\\TracePropagation": {
+    "path": "packages/core/src/Observability/Contracts/TracePropagation.php",
+    "verdict": "Spi call",
+    "sha256": "0ba703f8d9241f842f8b75000ff1efb95d0e4abec83bd7013d73792991f2d56d",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser": {
+    "path": "packages/operations/src/Bulk/Laravel/BulkOptionsParser.php",
+    "verdict": "Spi call",
+    "sha256": "4f43317d3dd0a7cf392e209494d49f8437636843ebcb7b0acf74f41df16046d8",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Cost\\Contracts\\BudgetExecution": {
+    "path": "packages/operations/src/Cost/Contracts/BudgetExecution.php",
+    "verdict": "Spi call",
+    "sha256": "d6086e8ec895d5fa8cd788e567f54efa6b8b8a909100e14b0c60c4a7bcf3f79f",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Cost\\Laravel\\CostOptionsParser": {
+    "path": "packages/operations/src/Cost/Laravel/CostOptionsParser.php",
+    "verdict": "Spi call",
+    "sha256": "a265cd58d1aa80d6e4aeeb65227926a7edeca47c1119ac6b98a823d261d786c5",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Definition\\Contracts\\OperationDefinitionValidator": {
+    "path": "packages/operations/src/Definition/Contracts/OperationDefinitionValidator.php",
+    "verdict": "Spi call",
+    "sha256": "f9d52aabf3f46ca409c3bbd3e11207fdc7c85ada28109ff9396d9abe4edc3ba3",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry": {
+    "path": "packages/operations/src/Definition/Contracts/OperationRegistry.php",
+    "verdict": "Spi call",
+    "sha256": "8d171238a01d6f26a5613e5ad4cd885d4268b146de6f67c71f4ab2b35639c803",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Definition\\Laravel\\OperationFactory": {
+    "path": "packages/operations/src/Definition/Laravel/OperationFactory.php",
+    "verdict": "Spi call",
+    "sha256": "3029f4c621d271375f91483c65dbf16ad65c12400bd3b064414d9b6bed498874",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings": {
+    "path": "packages/operations/src/Definition/Laravel/OperationPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "f4745f7e1835bd988daf5b6432f1b8134bf3bbef2451f3c7da613a2e237b3db8",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping": {
+    "path": "packages/operations/src/Errors/Contracts/ErrorMapping.php",
+    "verdict": "Spi call",
+    "sha256": "da35fb01754df5211d83deab240dbc19081d42ae36656dfbeeaeec5b34bc999a",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Invocation\\Contracts\\EffectiveCapabilities": {
+    "path": "packages/operations/src/Invocation/Contracts/EffectiveCapabilities.php",
+    "verdict": "Spi call",
+    "sha256": "05449fa083301ef2dc87ee7deed1eb24ea145f3dd569b759c42fc16679952e1b",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher": {
+    "path": "packages/operations/src/Invocation/Contracts/OperationDispatcher.php",
+    "verdict": "Spi call",
+    "sha256": "c7d57f07b12f7176efbe0a2fd7f5de70b7693c4abc4da598fe7196c7396c62b5",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory": {
+    "path": "packages/operations/src/Invocation/Laravel/InvocationMetadataFactory.php",
+    "verdict": "Spi call",
+    "sha256": "69e1cf25ad55eee677b5c8568fbe0024b24f90099a835a42d646c76522b96ee1",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\OpenApi\\Contracts\\OpenApiDocuments": {
+    "path": "packages/operations/src/OpenApi/Contracts/OpenApiDocuments.php",
+    "verdict": "Spi call",
+    "sha256": "fa53c1df9022b934b1bd951ab733cca13a415c3d578618139a037c4edcdaa7a0",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Pagination\\Contracts\\CursorCodec": {
+    "path": "packages/operations/src/Pagination/Contracts/CursorCodec.php",
+    "verdict": "Spi call",
+    "sha256": "c3d423e8ad7f8a9ac90c1fb5cca028165dc4f4e44e23853adf2666e77fb04b89",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry": {
+    "path": "packages/operations/src/Pagination/Contracts/OrderingRegistry.php",
+    "verdict": "Spi call",
+    "sha256": "338c34e77a6c3ec944d2ba9c950d74a7bf4e840943fddbe3d0b3592892545ecd",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Pagination\\Laravel\\CursorPageBuilder": {
+    "path": "packages/operations/src/Pagination/Laravel/CursorPageBuilder.php",
+    "verdict": "Spi call",
+    "sha256": "a90197612b325139bcc363531ff6ce71e6dc390171c0c633e50eed8a06bfad4c",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Pagination\\Laravel\\OrderingFactory": {
+    "path": "packages/operations/src/Pagination/Laravel/OrderingFactory.php",
+    "verdict": "Spi call",
+    "sha256": "ecad97a9e98092264832d557d4014139239bc3fd5a2440a76a39bb7f208c015b",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Validation\\Laravel\\JsonObjectFactory": {
+    "path": "packages/operations/src/Validation/Laravel/JsonObjectFactory.php",
+    "verdict": "Spi call",
+    "sha256": "b4e9c2cf7631b1ead1639317de4b65beee47dbc6aa0ace35cf4f20a59d2512e8",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory": {
+    "path": "packages/operations/src/Validation/Laravel/JsonValueFactory.php",
+    "verdict": "Spi call",
+    "sha256": "8521eb388c132de2aa7ae3c21451ba95fb2e422194b17530b7c01a53d7d37064",
+    "internal_doc": false
+  },
+  "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles": {
+    "path": "packages/operations/src/Versioning/Contracts/ApiProfiles.php",
+    "verdict": "Spi call",
+    "sha256": "62f903e447591258d6b2000405cd05d2da5e813f3a4479007831ea45bd8c4ef9",
+    "internal_doc": false
+  },
+  "CoreX\\Recurrence\\Laravel\\RecurrenceFactory": {
+    "path": "packages/recurrence/src/Laravel/RecurrenceFactory.php",
+    "verdict": "Spi call",
+    "sha256": "d49c13c1c58c33b48157f862e7e9744cd4949803a76ae55470ae6e46bfbe3273",
+    "internal_doc": false
+  },
+  "CoreX\\Search\\Contracts\\SearchDriverRegistry": {
+    "path": "packages/search/src/Contracts/SearchDriverRegistry.php",
+    "verdict": "Spi call",
+    "sha256": "a9f38368a456c4d6fce8737847d9c5fbc366b9f78c477bb780158df800e874b0",
+    "internal_doc": false
+  },
+  "CoreX\\Search\\Internal\\ManagerDriverRegistry": {
+    "path": "packages/search/src/Internal/ManagerDriverRegistry.php",
+    "verdict": "internal",
+    "sha256": "32755b266edb2a68e950ba39718fc756a7cc75bc5be5b42739ad1ed5c4efe5a2",
+    "internal_doc": false
+  },
+  "CoreX\\Search\\Laravel\\SearchPortBindings": {
+    "path": "packages/search/src/Laravel/SearchPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "3d5c27ffde33b65b2543c22a59b9e386d140bc5a56d439707e194c7f1a455715",
+    "internal_doc": false
+  },
+  "CoreX\\Storage\\Laravel\\ScopedFilesystemFactory": {
+    "path": "packages/core/src/Storage/Laravel/ScopedFilesystemFactory.php",
+    "verdict": "Spi call",
+    "sha256": "8c06db7cf93fc6646c5c72f1afadc163e4c54c37a234f0ec34e34bb352dcf19a",
+    "internal_doc": false
+  },
+  "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings": {
+    "path": "packages/tasks-workflow/src/Laravel/CompletionBindings.php",
+    "verdict": "Spi call",
+    "sha256": "7d1609df0f9094d65f290b6412139d15374cfd26a3e029b26c718da26fdfb1be",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Access\\Contracts\\TaskModuleContext": {
+    "path": "packages/tasks/src/Access/Contracts/TaskModuleContext.php",
+    "verdict": "Spi call",
+    "sha256": "6584d09fa12bb751ab223ee1df7964364af959fc9ddef166bb024c44cd68e4e8",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Project\\Contracts\\ProjectRead": {
+    "path": "packages/tasks/src/Project/Contracts/ProjectRead.php",
+    "verdict": "Api",
+    "sha256": "5ad3fe12d329d0fd8974123a4791a2917ac3152afa6649e15972a5e08f228650",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Project\\Data\\ProjectView": {
+    "path": "packages/tasks/src/Project/Data/ProjectView.php",
+    "verdict": "Api",
+    "sha256": "a1b94262f7a8583551c30f5dfcdfb5be8a09f1971e84a7123f409aef7279dafe",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Project\\Internal\\ProjectReferenceFactory": {
+    "path": "packages/tasks/src/Project/Internal/ProjectReferenceFactory.php",
+    "verdict": "internal",
+    "sha256": "388e21a600a7f9f8170d44d32776f974d83dc21031ad895c04014010a2eeb0c0",
+    "internal_doc": true
+  },
+  "CoreX\\Tasks\\Project\\Internal\\SqlProjectRead": {
+    "path": "packages/tasks/src/Project/Internal/SqlProjectRead.php",
+    "verdict": "internal",
+    "sha256": "e61c64f05c693373e64fbf364dc2d0f7c3f8fa96083c8cd27304bf3fa7b415cd",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations": {
+    "path": "packages/tasks/src/Project/Laravel/ProjectRelations.php",
+    "verdict": "Spi call",
+    "sha256": "993bb5a11f21100fdfb06030efa9949bf4598bdce27cadc42d40f89fcf5d720c",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Sprint\\Contracts\\SprintRead": {
+    "path": "packages/tasks/src/Sprint/Contracts/SprintRead.php",
+    "verdict": "Api",
+    "sha256": "55012a28f25a689c0ae630d11f3060abfe28678a9ad69b9c7f9cc85d001f1080",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Sprint\\Data\\SprintView": {
+    "path": "packages/tasks/src/Sprint/Data/SprintView.php",
+    "verdict": "Api",
+    "sha256": "4f85c0191a7905c7d8febb45f4c6a6ff2e2413fb48874973be423dc4d8f27164",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Sprint\\Internal\\SprintReferenceFactory": {
+    "path": "packages/tasks/src/Sprint/Internal/SprintReferenceFactory.php",
+    "verdict": "internal",
+    "sha256": "e18f31106845d418a93e77047a681532f1dfe81e7cd17dd4f83b3da01b114a1a",
+    "internal_doc": true
+  },
+  "CoreX\\Tasks\\Sprint\\Internal\\SqlSprintRead": {
+    "path": "packages/tasks/src/Sprint/Internal/SqlSprintRead.php",
+    "verdict": "internal",
+    "sha256": "e5b11fc93b3f4fb5cf412676c4c2838e5bd07a9663f427d4fa826e13db8a998f",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations": {
+    "path": "packages/tasks/src/Sprint/Laravel/SprintRelations.php",
+    "verdict": "Spi call",
+    "sha256": "8a0262397a7d9d3453f251e2a8a86bc2e8808a12c0f1d9a82c4c7be46b72a8fe",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture": {
+    "path": "packages/tasks/src/Task/Contracts/TaskCompletionCapture.php",
+    "verdict": "Spi implement",
+    "sha256": "1a85fbbcd2a0bad74f5bdf0f9113f7dbaaa9ed1b1686ff3e7043973d572d3638",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Data\\StageView": {
+    "path": "packages/tasks/src/Task/Data/StageView.php",
+    "verdict": "Api",
+    "sha256": "968f160587ce4e0b6cf2aae6628602cef85a307954e0c2bff03021a8f1849853",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Data\\TaskCompletionCandidate": {
+    "path": "packages/tasks/src/Task/Data/TaskCompletionCandidate.php",
+    "verdict": "Api",
+    "sha256": "eccaa10fc2fb8971fea70258c2f0bae9ba33ec82b6ade80525169e2fcbb7c3dd",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Data\\TaskView": {
+    "path": "packages/tasks/src/Task/Data/TaskView.php",
+    "verdict": "Api",
+    "sha256": "28deef74e0a81c81bdb494bcdc709f282028fa4cc890dd2a546d86d10fd8cffb",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Internal\\TaskReferenceFactory": {
+    "path": "packages/tasks/src/Task/Internal/TaskReferenceFactory.php",
+    "verdict": "internal",
+    "sha256": "ce0fc8d31e1403dde0f3855432a67cd69dc5c28c081ceaa085487c8b50789536",
+    "internal_doc": true
+  },
+  "CoreX\\Tasks\\Task\\Internal\\TaskSnapshot": {
+    "path": "packages/tasks/src/Task/Internal/TaskSnapshot.php",
+    "verdict": "internal",
+    "sha256": "eb9eec2f05d28ec95c0f0b5ba25e0056f24dcf0ad9ea7f5720bea64081bdc814",
+    "internal_doc": true
+  },
+  "CoreX\\Tasks\\Task\\Laravel\\StageRelations": {
+    "path": "packages/tasks/src/Task/Laravel/StageRelations.php",
+    "verdict": "Spi call",
+    "sha256": "578e4caa04949fa4b6e3436a1ca4a6432c07f9c95b3cd09f65df3e57b6aa1549",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings": {
+    "path": "packages/tasks/src/Task/Laravel/TaskPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "b9b0ee020fadeacda4aedd58162434faa78b783413d7beff8e37b270ba92fdd5",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Task\\Laravel\\TaskRelations": {
+    "path": "packages/tasks/src/Task/Laravel/TaskRelations.php",
+    "verdict": "Spi call",
+    "sha256": "c5c16bc326e0fa7f0f178f58c359a24ab21fc5e90dcdca5c9c461db433f1e282",
+    "internal_doc": false
+  },
+  "CoreX\\Tasks\\Time\\Internal\\TimeLogReferenceFactory": {
+    "path": "packages/tasks/src/Time/Internal/TimeLogReferenceFactory.php",
+    "verdict": "internal",
+    "sha256": "4c6f4fe24c8ddb4c7414bc2c9a803cb027ce3f4d87c00e0176e630baae26d00e",
+    "internal_doc": true
+  },
+  "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations": {
+    "path": "packages/tasks/src/Time/Laravel/TimeLogRelations.php",
+    "verdict": "Spi call",
+    "sha256": "fd64c2dbb937fcaea54f9a28917401b61f18c63e377330aff31a4ff7f3d8100c",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Account\\Contracts\\AccountRead": {
+    "path": "packages/tenancy/src/Account/Contracts/AccountRead.php",
+    "verdict": "Api",
+    "sha256": "ad7d39dad91b236fde9962f7221c32c1f0a4383e032563e62c3fd5d9404285a5",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Account\\Internal\\SqlAccountRead": {
+    "path": "packages/tenancy/src/Account/Internal/SqlAccountRead.php",
+    "verdict": "internal",
+    "sha256": "4878fddbd6c28f9e95b2bceaf6eabe3e38d76f988c690672af4463f0d997514a",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Account\\Laravel\\AccountRelations": {
+    "path": "packages/tenancy/src/Account/Laravel/AccountRelations.php",
+    "verdict": "Spi call",
+    "sha256": "a1e8b817abcc0805809a31bb41f5f71fbf3d4b8418e09333f50eff869d8f296c",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot": {
+    "path": "packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php",
+    "verdict": "Spi call",
+    "sha256": "1a141da295c5c5ddec225828a895c678467871a11540b960f98da9df46c06bd5",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\DomainTrust\\Laravel\\DomainRelations": {
+    "path": "packages/tenancy/src/DomainTrust/Laravel/DomainRelations.php",
+    "verdict": "Spi call",
+    "sha256": "f9da8613b0fe9a83eb602ee3706176021a02fac869075e6c7a4010f20816f122",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Identity\\Contracts\\MembershipProjection": {
+    "path": "packages/tenancy/src/Identity/Contracts/MembershipProjection.php",
+    "verdict": "Spi call",
+    "sha256": "2384463ea30ba6fe9fa80750738389dca365f0dc6c8b89891bf5d39da4ff0754",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Identity\\Laravel\\UserRelations": {
+    "path": "packages/tenancy/src/Identity/Laravel/UserRelations.php",
+    "verdict": "Spi call",
+    "sha256": "d1aad09d2a7db856e99e98a9c7ca7961eb800dd7044cabd03c568e4dd70c075b",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Laravel\\TenancyPortBindings": {
+    "path": "packages/tenancy/src/Laravel/TenancyPortBindings.php",
+    "verdict": "Spi call",
+    "sha256": "8361cc4251e3c88148e15ac5a01de25e64192737c4b9624cb8518448ac75163b",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Membership\\Laravel\\MembershipSnapshotFactory": {
+    "path": "packages/tenancy/src/Membership/Laravel/MembershipSnapshotFactory.php",
+    "verdict": "Spi call",
+    "sha256": "e9ce091951f8c870fac9b44eec8060b03aee02c2e7ed521f9c2dd4b824959e95",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Membership\\Laravel\\RevokeMembershipReceiptFactory": {
+    "path": "packages/tenancy/src/Membership/Laravel/RevokeMembershipReceiptFactory.php",
+    "verdict": "Spi call",
+    "sha256": "e1897c97916c1139ed62133edb8c24d64a6c25d78c9359c9d377ed51e28f2df8",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks": {
+    "path": "packages/tenancy/src/Provisioning/Contracts/TemplateIntegrityChecks.php",
+    "verdict": "Spi call",
+    "sha256": "d335a73c8db5f7525e902e400f69323a1943febca763b1a1ff29239e4f9ee519",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Provisioning\\Data\\TemplateAccountView": {
+    "path": "packages/tenancy/src/Provisioning/Data/TemplateAccountView.php",
+    "verdict": "Api",
+    "sha256": "536d648112d3ca2753cdfa787614c70c9e8e8054b911655dfeccfde70d96913d",
+    "internal_doc": false
+  },
+  "CoreX\\Tenancy\\Provisioning\\Laravel\\MigrationBatchRelations": {
+    "path": "packages/tenancy/src/Provisioning/Laravel/MigrationBatchRelations.php",
+    "verdict": "Spi call",
+    "sha256": "464c4ec2dc815b0cae874112d35af423d5ef56483e6f22d8fb82200069ecc3fa",
+    "internal_doc": false
+  },
+  "CoreX\\Tools\\Internal\\ToolDescriptorFactory": {
+    "path": "packages/tools/src/Internal/ToolDescriptorFactory.php",
+    "verdict": "internal",
+    "sha256": "b622441866922265847bf405543204dbd773543fba75002a1b114fda5041dfb0",
+    "internal_doc": false
+  },
+  "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser": {
+    "path": "packages/webhooks/src/Laravel/WebhookOptionsParser.php",
+    "verdict": "Spi call",
+    "sha256": "41c69d9d4afd3daf41ab93ccf311d971160097e7552271c56df81f868299c8a7",
+    "internal_doc": false
+  }
+}

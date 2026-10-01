@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal\Commands;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Exceptions\OutboxLeaseLost;
@@ -39,7 +39,7 @@ final class RelayOutbox extends Command
     {
         /** @var string|null $batchOption */
         $batchOption = $this->option('batch');
-        $batch = $batchOption === null ? Config::messagingBatchSize() : (int) $batchOption;
+        $batch = $batchOption === null ? app(CoreOptions::class)->messagingBatchSize : (int) $batchOption;
 
         if ($batch < 1 || $batch > 1_000) {
             $this->error('The --batch option must be between 1 and 1000.');

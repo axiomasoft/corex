@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules\Support;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -15,6 +17,7 @@ use PHPStan\Analyser\Scope;
  * Распознавание обращений к БД (`DB::`/`Schema::`, методы с SQL-аргументом) и
  * извлечение из них строк-констант. Общая часть правил corex/modules-lint.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class DatabaseCall
 {
     /** Фасады, любой вызов которых считается обращением к БД. */

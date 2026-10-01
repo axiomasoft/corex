@@ -34,7 +34,8 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\SearchIntl\\Contracts",
-                "CoreX\\SearchIntl\\Data"
+                "CoreX\\SearchIntl\\Data",
+                "CoreX\\SearchIntl\\SearchIntlServiceProvider"
             ]
         },
         "laravel": {

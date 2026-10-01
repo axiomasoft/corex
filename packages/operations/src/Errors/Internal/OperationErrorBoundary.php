@@ -6,7 +6,8 @@ namespace CoreX\Operations\Errors\Internal;
 
 use Closure;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,7 +24,7 @@ final class OperationErrorBoundary
     public function handle(Request $request, Closure $next): mixed
     {
         $version = $request->route('version');
-        $metadata = InvocationMetadata::fromRequest($request, is_string($version) ? $version : 'v1');
+        $metadata = InvocationMetadataFactory::fromRequest($request, is_string($version) ? $version : 'v1');
         $previous = $request->attributes->get(InvocationMetadata::class);
         $request->attributes->set(InvocationMetadata::class, $metadata);
 

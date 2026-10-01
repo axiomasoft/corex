@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Deal\Models;
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**

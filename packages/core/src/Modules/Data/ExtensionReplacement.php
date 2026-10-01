@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * Explicit target→replacement directive for one extension point.
- *
- * @internal compiler input; not a runtime registry
  */
+#[Api(since: '1.0')]
 final readonly class ExtensionReplacement
 {
     public function __construct(

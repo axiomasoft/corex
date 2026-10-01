@@ -4,25 +4,46 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class WebhookSubscription
 {
-    /** @param  array<mixed>  $keyRefs */
-    public function __construct(
-        public string $id,
-        public int $revision,
-        public string $major,
-        public string $topic,
-        public int $topicVersion,
-        public string $endpointUrl,
-        public string $status,
-        public string $maxPiiClass,
-        public array $keyRefs,
-        public DateTimeImmutable $createdAt,
-        public DateTimeImmutable $updatedAt,
-    ) {
+    /** @param  list<string>  $keyRefs */
+    public function __construct(public string $id, public int $revision, public string $major, public string $topic, public int $topicVersion, public string $endpointUrl, public string $status, public string $maxPiiClass, public array $keyRefs, public DateTimeImmutable $createdAt, public DateTimeImmutable $updatedAt)
+    {
+        self::validateInput($id, $revision, $major, $topic, $topicVersion, $endpointUrl, $status, $maxPiiClass, $keyRefs, $createdAt, $updatedAt);
+    }
+
+    /** Runtime validation also rejects values from untyped integration callers.
+     * @param  array<array-key, mixed>  $keyRefs
+     */
+    private static function validateInput(
+        /** Runtime input. */
+        string $id,
+        /** Runtime input. */
+        int $revision,
+        /** Runtime input. */
+        string $major,
+        /** Runtime input. */
+        string $topic,
+        /** Runtime input. */
+        int $topicVersion,
+        /** Runtime input. */
+        string $endpointUrl,
+        /** Runtime input. */
+        string $status,
+        /** Runtime input. */
+        string $maxPiiClass,
+        /** Runtime input. */
+        array $keyRefs,
+        /** Runtime input. */
+        DateTimeImmutable $createdAt,
+        /** Runtime input. */
+        DateTimeImmutable $updatedAt,
+    ): void {
         if (preg_match('/\A[A-Za-z0-9][A-Za-z0-9._-]{0,63}\z/D', $id) !== 1) {
             throw new InvalidArgumentException('Webhook subscription id must be an opaque identifier.');
         }

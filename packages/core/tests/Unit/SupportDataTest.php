@@ -5,11 +5,11 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Data\CallableDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 
 function dataScope(): DataScope
 {

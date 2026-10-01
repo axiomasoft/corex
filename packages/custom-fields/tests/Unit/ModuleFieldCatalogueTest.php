@@ -6,15 +6,15 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
-use CoreX\Data\DataScope;
-use CoreX\Modules\Compiler\CompiledEntityField;
-use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Data\Data\DataScope;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\CompiledEntityField;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Data\EntityField;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Registry\CompiledModule;
-use CoreX\Modules\Registry\EntityDefinition;
 
 it('projects active compiled entity fields without creating another registry', function (): void {
     $context = new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true);

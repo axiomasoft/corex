@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Contracts;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 
 /**
  * Cross-process pub/sub. The sole channel for cross-process notifications in
  * the kernel — `LISTEN`/`NOTIFY` is forbidden everywhere (incompatible with
  * PgBouncer transaction-mode pooling).
- *
- * @internal spec: B-10 §3.1/§7.3, R-15
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface PubSub
 {
     /** @param array<string, mixed> $payload */

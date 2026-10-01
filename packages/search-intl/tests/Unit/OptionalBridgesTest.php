@@ -6,9 +6,9 @@ namespace CoreX\SearchIntl\Tests\Unit;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
 use CoreX\Intl\Locale\Data\LocaleInputs;

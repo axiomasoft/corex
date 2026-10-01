@@ -7,12 +7,13 @@ namespace CoreX\Operations\Bulk\Internal;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -58,8 +59,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 'actor_id' => $definition->actorId,
                 'client_id' => $definition->clientId,
                 'contract_hash' => $definition->contractHash,
-                'extension_stamp' => JsonCanonical::encode($definition->extensionStamp),
-                'input_ref' => JsonCanonical::encode($definition->inputRef),
+                'extension_stamp' => JsonCanonical::encode(JsonDocuments::map($definition->extensionStamp)),
+                'input_ref' => JsonCanonical::encode(JsonDocuments::map($definition->inputRef)),
                 'transfer_ref' => null,
                 'status' => BulkOperationStatus::Pending->value,
                 'terminal_status' => null,
@@ -217,16 +218,16 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 ->where('revision', $revision)
                 ->where('lease_until', '>', $now)
                 ->update([
-                    'transfer_ref' => $this->jsonOrNull($operation->transferRef),
+                    'transfer_ref' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->transferRef)),
                     'status' => $operation->status->value,
                     'terminal_status' => null,
                     'revision' => $revision + 1,
                     'lease_owner' => $terminal ? null : $leaseOwner,
                     'lease_until' => $terminal ? null : $now->add(new DateInterval("PT{$this->leaseSeconds}S")),
-                    'checkpoint' => JsonCanonical::encode($operation->checkpoint),
-                    'progress' => JsonCanonical::encode($operation->progress),
-                    'result_ref' => $this->jsonOrNull($operation->resultRef),
-                    'error' => $this->jsonOrNull($operation->error),
+                    'checkpoint' => JsonCanonical::encode(JsonDocuments::map($operation->checkpoint)),
+                    'progress' => JsonCanonical::encode(JsonDocuments::map($operation->progress)),
+                    'result_ref' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->resultRef)),
+                    'error' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->error)),
                     'next_attempt_at' => $operation->nextAttemptAt,
                     'finished_at' => $terminal ? $now : null,
                     'expires_at' => $terminal
@@ -352,8 +353,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             && JsonCanonical::encode($requested->encodedScope) === JsonCanonical::encode($stored->encodedScope)
             && $requested->actorId === $stored->actorId
             && $requested->clientId === $stored->clientId
-            && JsonCanonical::encode($requested->extensionStamp) === JsonCanonical::encode($stored->extensionStamp)
-            && JsonCanonical::encode($requested->inputRef) === JsonCanonical::encode($stored->inputRef);
+            && JsonCanonical::encode(JsonDocuments::map($requested->extensionStamp)) === JsonCanonical::encode(JsonDocuments::map($stored->extensionStamp))
+            && JsonCanonical::encode(JsonDocuments::map($requested->inputRef)) === JsonCanonical::encode(JsonDocuments::map($stored->inputRef));
     }
 
     private function sameDefinition(BulkOperationDefinition $stored, BulkOperationDefinition $requested): bool
@@ -398,13 +399,13 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             encodedScope: $this->canonicalScopeArray($row->scope),
             actorId: (string) $row->actor_id,
             clientId: (string) $row->client_id,
-            extensionStamp: $this->objectArray($row->extension_stamp, 'extension stamp'),
-            inputRef: $this->objectArray($row->input_ref, 'input reference'),
+            extensionStamp: JsonDocuments::capture($this->objectArray($row->extension_stamp, 'extension stamp')),
+            inputRef: JsonDocuments::capture($this->objectArray($row->input_ref, 'input reference')),
         );
 
         return new BulkOperation(
             definition: $definition,
-            transferRef: $this->nullableObjectArray($row->transfer_ref, 'transfer reference'),
+            transferRef: JsonDocuments::nullable($this->nullableObjectArray($row->transfer_ref, 'transfer reference')),
             status: BulkOperationStatus::from((string) $row->status),
             terminalStatus: $row->terminal_status === null
                 ? null
@@ -413,10 +414,10 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             leaseOwner: $row->lease_owner === null ? null : (string) $row->lease_owner,
             leaseUntil: $this->date($row->lease_until),
             cancelRequestedAt: $this->date($row->cancel_requested_at),
-            checkpoint: $this->objectArray($row->checkpoint, 'checkpoint'),
-            progress: $this->objectArray($row->progress, 'progress'),
-            resultRef: $this->nullableObjectArray($row->result_ref, 'result reference'),
-            error: $this->nullableObjectArray($row->error, 'error'),
+            checkpoint: JsonDocuments::capture($this->objectArray($row->checkpoint, 'checkpoint')),
+            progress: JsonDocuments::capture($this->objectArray($row->progress, 'progress')),
+            resultRef: JsonDocuments::nullable($this->nullableObjectArray($row->result_ref, 'result reference')),
+            error: JsonDocuments::nullable($this->nullableObjectArray($row->error, 'error')),
             attempt: (int) $row->attempt,
             nextAttemptAt: $this->requiredDate($row->next_attempt_at, 'next attempt'),
             createdAt: $this->requiredDate($row->created_at, 'created'),

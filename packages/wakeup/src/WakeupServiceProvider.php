@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Wakeup\Contracts\DueWakeupSource;
@@ -23,6 +25,7 @@ use Override;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupServiceProvider extends ServiceProvider
 {
     #[Override]

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Runtime\Exceptions;
 
+use CoreX\Attributes\Api;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use Stancl\Tenancy\Contracts\TenantCouldNotBeIdentifiedException;
 
@@ -13,6 +14,7 @@ use Stancl\Tenancy\Contracts\TenantCouldNotBeIdentifiedException;
  * \Stancl\Tenancy\Middleware\IdentificationMiddleware::initializeTenancy()}
  * catches it in its `$onFail` handler.
  */
+#[Api(since: '1.0')]
 final class TenantCouldNotBeIdentifiedByHostException extends TenantCouldNotBeIdentifiedException
 {
     public function __construct(string $host)

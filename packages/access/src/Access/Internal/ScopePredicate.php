@@ -7,10 +7,10 @@ namespace CoreX\Access\Access\Internal;
 use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Departments\Models\Department;
+use CoreX\Departments\Laravel\DepartmentQueries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +81,7 @@ final readonly class ScopePredicate
             return $q->whereRaw('1 = 0');
         }
 
-        if (! Schema::hasTable('users') || ! Schema::hasTable((new Department)->getTable())) {
+        if (! Schema::hasTable('users') || ! Schema::hasTable(DepartmentQueries::table())) {
             return $q->whereRaw('1 = 0');
         }
 
@@ -97,7 +97,7 @@ final readonly class ScopePredicate
             return $q->whereIn($column, DB::table('users')->where('department_id', $principalDeptId)->select('id'));
         }
 
-        $principalPath = Department::query()->where('id', $principalDeptId)->value('path');
+        $principalPath = DepartmentQueries::path($principalDeptId);
 
         if (! is_string($principalPath)) {
             return $q->whereRaw('1 = 0');
@@ -106,7 +106,7 @@ final readonly class ScopePredicate
         // ONE `path <@` subquery (premortem A6) — no recursive traversal: the
         // department subtree resolves in the same statement as the owning
         // users lookup, never per-row.
-        $deptIds = Department::query()->whereRaw('path <@ ?::ltree', [$principalPath])->select('id');
+        $deptIds = DepartmentQueries::subtreeIds($principalPath);
 
         return $q->whereIn($column, DB::table('users')->whereIn('department_id', $deptIds)->select('id'));
     }
@@ -124,7 +124,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! Schema::hasTable('users') || ! Schema::hasTable((new Department)->getTable())) {
+        if (! Schema::hasTable('users') || ! Schema::hasTable(DepartmentQueries::table())) {
             return false;
         }
 
@@ -145,16 +145,13 @@ final readonly class ScopePredicate
             return $ownerDeptId === $principalDeptId;
         }
 
-        $principalPath = Department::query()->where('id', $principalDeptId)->value('path');
+        $principalPath = DepartmentQueries::path($principalDeptId);
 
         if (! is_string($principalPath)) {
             return false;
         }
 
-        return Department::query()
-            ->where('id', $ownerDeptId)
-            ->whereRaw('path <@ ?::ltree', [$principalPath])
-            ->exists();
+        return DepartmentQueries::contains($ownerDeptId, $principalPath);
     }
 
     // ─── workspace — Builder + record ──────────────────────────────────────

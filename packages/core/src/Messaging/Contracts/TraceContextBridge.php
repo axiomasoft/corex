@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Contracts;
 
 use Closure;
-use CoreX\Observability\Internal\OperationContext;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Observability\Data\OperationContext;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TraceContextBridge
 {
     /**

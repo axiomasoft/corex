@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Unit;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Testing\StubOperationHandler;
-use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use Orchestra\Testbench\TestCase;
 use stdClass;
@@ -60,7 +60,7 @@ it('compiles explicit tool declarations into the existing API slice (DESC-01)', 
         ->and($tool->toolCode)->toBe('notes.create')
         ->and(CompiledRegistry::fromArray($compiled->toArray()))->toEqual($compiled);
 
-    $descriptor = ToolDescriptor::fromDeclaration($tool);
+    $descriptor = ToolDescriptorFactory::fromDeclaration($tool);
     expect($descriptor->module)->toBe('example/tools')
         ->and($descriptor->wireName)->toBe('notes_create__v1');
 });
@@ -99,8 +99,8 @@ it('keeps stable tool tuple and contract hash across declaration order (DESC-03)
         ModuleManifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$second, $first]),
     ], installedPackages: []);
 
-    $forwardHash = ToolDescriptor::fromDeclaration(collect($forward->api)->first(fn (Api $api): bool => $api->toolCode === 'alpha.first'))->contractHash;
-    $reverseHash = ToolDescriptor::fromDeclaration(collect($reverse->api)->first(fn (Api $api): bool => $api->toolCode === 'alpha.first'))->contractHash;
+    $forwardHash = ToolDescriptorFactory::fromDeclaration(collect($forward->api)->first(fn (Api $api): bool => $api->toolCode === 'alpha.first'))->contractHash;
+    $reverseHash = ToolDescriptorFactory::fromDeclaration(collect($reverse->api)->first(fn (Api $api): bool => $api->toolCode === 'alpha.first'))->contractHash;
 
     expect($forwardHash)->toBe($reverseHash);
 });

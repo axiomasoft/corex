@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Console\Command;
@@ -38,14 +38,14 @@ final class PrunePubSubMessages extends Command
     {
         /** @var string|null $olderThanOption */
         $olderThanOption = $this->option('older-than');
-        $olderThan = $olderThanOption ?? Config::pubsubRetention();
+        $olderThan = $olderThanOption ?? app(CoreOptions::class)->pubsubRetention;
 
         $cutoff = (new DateTimeImmutable)->sub(DateInterval::createFromDateString($olderThan));
 
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $deleted = DB::connection($connection)->table(Config::pubsubMessagesTable())
+        $deleted = DB::connection($connection)->table(app(CoreOptions::class)->pubsubMessagesTable)
             ->where('created_at', '<', $cutoff)
             ->delete();
 

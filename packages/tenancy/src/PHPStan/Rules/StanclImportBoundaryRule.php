@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\NodeFinder;
@@ -33,9 +35,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  * упоминание `Stancl\*` в докблоке контракта ядра легально и остаётся таким.
  *
  * @implements Rule<FileNode>
- *
- * @internal spec: B-11 §7.3 п.1 (AC-29)
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class StanclImportBoundaryRule implements Rule
 {
     /**

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Tenancy\Account\Internal\PendingPool;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
@@ -15,6 +17,7 @@ use InvalidArgumentException;
  * (`--template-version`) and/or whose `created_at` is older than
  * `--older-than` (e.g. `24h`, `7d`, `30m`, `45s`).
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class PendingClearCommand extends Command
 {
     protected $signature = 'corex:tenancy:pending-clear {--older-than=} {--template-version=}';

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\SavedViews\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Context\Data\TenantContext;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ViewContext
 {
     public function __construct(public TenantContext $tenant, public string $actorKind, public ?string $actorId)

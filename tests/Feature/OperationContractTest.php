@@ -8,17 +8,17 @@ use Closure;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Pagination\Data\CursorPayload;
 use CoreX\Operations\Testing\ContextFixture;
@@ -26,7 +26,7 @@ use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
@@ -35,6 +35,7 @@ use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -166,14 +167,14 @@ final class OperationContractTest extends TestCase
         $asyncDeclaration = $this->toolDeclaration('notes.export');
         $asyncTool = $this->app->make(ToolInvoker::class)->invoke(
             new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('p13-export-tool', 'v1', 'notes.export', 'POST')),
-            new ToolCall('notes.export', 'v1', ToolDescriptor::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
+            new ToolCall('notes.export', 'v1', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
         );
         self::assertSame(ToolResult::OUTCOME_COMMITTED, $asyncTool->outcome, (string) $asyncTool->errorCode);
         self::assertTrue($asyncTool->replayed);
         self::assertSame($async->json('data'), json_decode((string) $asyncTool->structuredData?->canonicalJson, true));
 
         $declaration = $this->toolDeclaration('notes.create');
-        $descriptor = ToolDescriptor::fromDeclaration($declaration);
+        $descriptor = ToolDescriptorFactory::fromDeclaration($declaration);
         $context = new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('p13-tool', 'v1', 'notes.create', 'POST'));
         $tool = $this->app->make(ToolInvoker::class)->invoke($context, new ToolCall(
             'notes.create', 'v1', $descriptor->contractHash,

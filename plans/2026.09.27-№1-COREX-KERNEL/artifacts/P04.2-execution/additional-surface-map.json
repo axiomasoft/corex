@@ -1,0 +1,97 @@
+{
+  "schema": "p04.2-move-map/1",
+  "moves": [
+    {
+      "path": "packages/notifications/src/Inbox/Internal/NotificationOperationConflict.php",
+      "target_path": "packages/notifications/src/Inbox/Exceptions/NotificationOperationConflict.php",
+      "old": "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict",
+      "new": "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
+      "reason": "Typed operation failure is caught by Delivery/Preferences consumers; expose the existing exception, preserving messages/codes.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/notifications/src/Inbox/Internal/NotificationAccessDenied.php",
+      "target_path": "packages/notifications/src/Inbox/Exceptions/NotificationAccessDenied.php",
+      "old": "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied",
+      "new": "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied",
+      "reason": "Typed authorization failure is caught by Digest/Preferences consumers; exception identity is an existing consumer contract.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Cost/Internal/BudgetRateLimited.php",
+      "target_path": "packages/operations/src/Cost/Exceptions/BudgetRateLimited.php",
+      "old": "CoreX\\Operations\\Cost\\Internal\\BudgetRateLimited",
+      "new": "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited",
+      "reason": "Existing typed budget failure consumed by Idempotency; error code registry is untouched.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Cost/Internal/BudgetStoreUnavailable.php",
+      "target_path": "packages/operations/src/Cost/Exceptions/BudgetStoreUnavailable.php",
+      "old": "CoreX\\Operations\\Cost\\Internal\\BudgetStoreUnavailable",
+      "new": "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable",
+      "reason": "Existing typed infrastructure failure consumed by Idempotency; error code registry is untouched.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/tasks/src/Planning/Internal/PlanningCommand.php",
+      "target_path": "packages/tasks/src/Planning/Laravel/PlanningCommand.php",
+      "old": "CoreX\\Tasks\\Planning\\Internal\\PlanningCommand",
+      "new": "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
+      "reason": "Existing SQL planning adapter composes Project/Sprint/Task/Time transactions behind TaskPlanningCommand; public methods return immutable references and keep locks/idempotency.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/MembershipQuery.php",
+      "target_path": "packages/tenancy/src/Membership/Data/MembershipQuery.php",
+      "old": "CoreX\\Tenancy\\Membership\\Internal\\Transport\\MembershipQuery",
+      "new": "CoreX\\Tenancy\\Membership\\Data\\MembershipQuery",
+      "reason": "Existing CentralApiClient transport record is readonly data actually passed across the module contract.",
+      "layer": "Api",
+      "kind": null
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/MembershipSnapshot.php",
+      "target_path": "packages/tenancy/src/Membership/Data/MembershipSnapshot.php",
+      "old": "CoreX\\Tenancy\\Membership\\Internal\\Transport\\MembershipSnapshot",
+      "new": "CoreX\\Tenancy\\Membership\\Data\\MembershipSnapshot",
+      "reason": "Existing CentralApiClient transport record is readonly data actually passed across the module contract.",
+      "layer": "Api",
+      "kind": null
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/RevokeMembershipReceipt.php",
+      "target_path": "packages/tenancy/src/Membership/Data/RevokeMembershipReceipt.php",
+      "old": "CoreX\\Tenancy\\Membership\\Internal\\Transport\\RevokeMembershipReceipt",
+      "new": "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipReceipt",
+      "reason": "Existing CentralApiClient transport record is readonly data actually passed across the module contract.",
+      "layer": "Api",
+      "kind": null
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/RevokeMembershipRequest.php",
+      "target_path": "packages/tenancy/src/Membership/Data/RevokeMembershipRequest.php",
+      "old": "CoreX\\Tenancy\\Membership\\Internal\\Transport\\RevokeMembershipRequest",
+      "new": "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipRequest",
+      "reason": "Existing CentralApiClient transport record is readonly data actually passed across the module contract.",
+      "layer": "Api",
+      "kind": null
+    }
+  ],
+  "classes": {
+    "CoreX\\Notifications\\Inbox\\Internal\\NotificationOperationConflict": "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
+    "CoreX\\Notifications\\Inbox\\Internal\\NotificationAccessDenied": "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied",
+    "CoreX\\Operations\\Cost\\Internal\\BudgetRateLimited": "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited",
+    "CoreX\\Operations\\Cost\\Internal\\BudgetStoreUnavailable": "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable",
+    "CoreX\\Tasks\\Planning\\Internal\\PlanningCommand": "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
+    "CoreX\\Tenancy\\Membership\\Internal\\Transport\\MembershipQuery": "CoreX\\Tenancy\\Membership\\Data\\MembershipQuery",
+    "CoreX\\Tenancy\\Membership\\Internal\\Transport\\MembershipSnapshot": "CoreX\\Tenancy\\Membership\\Data\\MembershipSnapshot",
+    "CoreX\\Tenancy\\Membership\\Internal\\Transport\\RevokeMembershipReceipt": "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipReceipt",
+    "CoreX\\Tenancy\\Membership\\Internal\\Transport\\RevokeMembershipRequest": "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipRequest"
+  }
+}

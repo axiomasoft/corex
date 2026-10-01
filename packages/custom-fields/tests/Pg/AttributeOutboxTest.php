@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContracts;
@@ -11,12 +11,12 @@ use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
-use CoreX\Data\ArrayDataScopeCodec;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Testing\MessagingFixtures;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Model;
 
 // Each test below declares its OWN `new class extends Model {}` at its own

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Webhooks\Contracts\WebhookSigner;
 use CoreX\Webhooks\Data\WebhookSignedHeaders;
 use InvalidArgumentException;

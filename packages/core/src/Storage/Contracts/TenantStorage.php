@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Storage\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TenantStorage
 {
     public function disk(): Filesystem;

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class InvalidAttributeTables extends RuntimeException
 {
     public static function invalidIdentifier(string $property, string $table): self

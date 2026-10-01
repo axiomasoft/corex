@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\CustomFields\Contracts\AttributeFilter;
 use CoreX\CustomFields\Contracts\AttributeStore;
@@ -33,6 +35,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 use Psr\Clock\ClockInterface;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AttributesServiceProvider extends ServiceProvider
 {
     #[Override]

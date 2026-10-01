@@ -29,6 +29,7 @@ use ReflectionMethod;
 use ReflectionProperty;
 use RuntimeException;
 use SplFileInfo;
+use Throwable;
 
 /** @internal Parses production source without executing or booting the inspected packages. */
 final class SurfaceScanner
@@ -48,6 +49,8 @@ final class SurfaceScanner
     private Lexer $lexer;
 
     private PhpDocParser $docParser;
+
+    private TypeParser $typeParser;
 
     /** @var array<string, SourceType> */
     private array $types = [];
@@ -92,7 +95,8 @@ final class SurfaceScanner
         $config = new ParserConfig(['lines' => true]);
         $this->lexer = new Lexer($config);
         $const = new ConstExprParser($config);
-        $this->docParser = new PhpDocParser($config, new TypeParser($config, $const), $const);
+        $this->typeParser = new TypeParser($config, $const);
+        $this->docParser = new PhpDocParser($config, $this->typeParser, $const);
     }
 
     public function scan(string $root): SurfaceReport
@@ -414,6 +418,18 @@ final class SurfaceScanner
             }
         }
 
+        if (! isset($this->types[$name]) && str_starts_with($name, 'PHPStan\\')) {
+            foreach (ClassLoader::getRegisteredLoaders() as $vendor => $loader) {
+                $source = 'phar://'.$vendor.'/phpstan/phpstan/phpstan.phar/src/'.str_replace('\\', '/', substr($name, 8)).'.php';
+
+                if (is_file($source)) {
+                    $this->parseFile($source, '@vendor/'.$name, '@vendor', false);
+
+                    break;
+                }
+            }
+        }
+
         return $this->types[$name] ?? null;
     }
 
@@ -497,6 +513,7 @@ final class SurfaceScanner
                         }
                     }
                     $paramName = $param->var instanceof Node\Expr\Variable && is_string($param->var->name) ? $param->var->name : '?';
+                    $promotedDoc = $param->flags !== 0 ? $this->doc($type, $param, 'properties.'.$paramName) : [];
 
                     if ($meta['layer'] === 'api') {
                         $parameterDocs = [];
@@ -507,12 +524,13 @@ final class SurfaceScanner
                                 }
                             }
                         }
+                        $parameterDocs = array_merge($parameterDocs, $promotedDoc['@var'] ?? []);
                         $this->ambiguousNative($type, $param->type, $parameterDocs, $path.'.parameters.'.$paramName);
                     }
                     $parameters[] = ['name' => $paramName, 'type' => $this->native($type, $param->type, $path.'.parameters.'.$paramName), 'by_reference' => $param->byRef, 'variadic' => $param->variadic, 'optional' => $param->default !== null || $param->variadic, 'default' => $this->expression($param->default), 'flags' => $param->flags];
 
                     if ($param->flags !== 0 && ($param->flags & Modifiers::PRIVATE) === 0) {
-                        $members['properties'][$paramName] = ['flags' => $param->flags, 'type' => $this->native($type, $param->type, 'properties.'.$paramName), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => $methodDoc, 'hooks' => []];
+                        $members['properties'][$paramName] = ['flags' => $param->flags, 'type' => $this->native($type, $param->type, 'properties.'.$paramName), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($methodDoc, $promotedDoc), 'hooks' => []];
                     }
                 }
 
@@ -699,7 +717,9 @@ final class SurfaceScanner
 
                     if ($alias instanceof Doc\Type\TypeNode) {
                         $this->walkDoc($source, $alias, 'class.alias', $this->aliases[$source->name] ?? [], [], $source->node->getStartLine());
-                        $aliases[$tag->value->importedAs ?? $tag->value->importedAlias] = $alias;
+                        // Expansion can replace a leaf alias with a union or a generic tree.
+                        // Reparse its normalized form so a later import never mistakes that tree for a class name.
+                        $aliases[$tag->value->importedAs ?? $tag->value->importedAlias] = $this->typeParser->parse(new TokenIterator($this->lexer->tokenize((string) $alias)));
                     }
                 }
             }
@@ -809,7 +829,7 @@ final class SurfaceScanner
         $marked = in_array($meta['layer'], ['api', 'spi-implement', 'spi-call'], true);
         $propertyRecords = $this->records[$type->name]['properties'] ?? [];
         $publicData = is_array($propertyRecords) && array_any($propertyRecords, static fn (mixed $property): bool => is_array($property) && ($property['visibility'] ?? '') === 'public');
-        $data = $meta['layer'] === 'api' && ($publicData || str_contains($type->name, '\\Data\\'));
+        $data = $meta['layer'] === 'api' && ! $this->isThrowable($type->name, []) && ($publicData || str_contains($type->name, '\\Data\\'));
         $event = $meta['layer'] === 'spi-call' && str_contains($type->name, '\\Events\\');
 
         if (($data || $event) && $node instanceof Node\Stmt\Class_ && (! $node->isReadonly() || ! $node->isFinal())) {
@@ -821,7 +841,7 @@ final class SurfaceScanner
             }
             $target = $this->lookup($reference['target']);
 
-            if ($target === null && ! in_array($reference['target'], ['Closure', 'Throwable', 'Stringable', 'UnitEnum', 'BackedEnum', 'DateTimeImmutable', 'DateTimeInterface', 'stdClass', 'Attribute'], true)) {
+            if ($target === null && ! $this->isNativeType($reference['target'])) {
                 $this->error($type, 'API-UNRESOLVED-TYPE', $reference['path'], $reference['target'], $reference['line']);
             } elseif ($target !== null && $target->owner !== $type->owner && str_contains($target->name, '\\Internal\\') && $marked) {
                 $this->error($type, 'API-INTERNAL-TYPE', $reference['path'], $target->name, $reference['line']);
@@ -893,11 +913,40 @@ final class SurfaceScanner
             return;
         }
         $visited[] = $name;
+        $properties = $this->records[$name]['properties'] ?? [];
+        foreach (is_array($properties) ? $properties : [] as $field => $property) {
+            if (! is_array($property) || ($property['visibility'] ?? '') !== 'public') {
+                continue;
+            }
+            $native = $property['type'] ?? null;
+            $propertyDoc = is_array($property['doc'] ?? null) ? $property['doc'] : [];
+            $docs = is_array($propertyDoc['@var'] ?? null) ? array_filter($propertyDoc['@var'], is_string(...)) : [];
+            $params = is_array($propertyDoc['@param'] ?? null) ? $propertyDoc['@param'] : [];
+            foreach ($params as $doc) {
+                if (! is_string($doc)) {
+                    continue;
+                }
+
+                if (preg_match('/\\$'.preg_quote((string) $field, '/').'(?=\\s|$)/', $doc) === 1) {
+                    $docs[] = $doc;
+                }
+            }
+            $description = implode(' ', $docs);
+
+            if ($native === null || (is_string($native) && preg_match('/(?:^|[?(&|])(?:mixed|object)(?:$|[)|&])/', $native) === 1)
+                || (is_string($native) && str_contains($native, 'array') && ($docs === [] || preg_match('/(?<![a-zA-Z0-9_\\\\])(?:mixed|object)(?![a-zA-Z0-9_])/', $description) === 1))) {
+                $this->error($origin, 'API-UNTYPED-PAYLOAD', $path.' → properties.'.$field, 'Reachable payload field requires a closed value type');
+            }
+        }
         foreach ($this->payloads[$name] ?? [] as $reference) {
             if (! $this->visibleReference($name, $reference['path'], false)) {
                 continue;
             }
             $targetName = $reference['target'];
+
+            if ((str_contains($reference['path'], '@throws') && $this->isThrowable($targetName, [])) || (str_starts_with($reference['path'], 'inherited(') && $this->isThrowable($name, []))) {
+                continue;
+            }
             $target = $this->lookup($targetName);
             $next = $path.' → '.$reference['path'].' → '.$targetName;
 
@@ -905,7 +954,7 @@ final class SurfaceScanner
                 $this->error($origin, 'API-INTERNAL-TYPE', $next, $targetName, $reference['line']);
             }
 
-            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection($targetName, []) || ($target !== null && $target->node instanceof Node\Stmt\Class_ && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
+            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Node\Stmt\Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection($targetName, []) || ($target !== null && $target->node instanceof Node\Stmt\Class_ && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
                 $this->error($origin, 'API-PAYLOAD', $next, 'Model, collection or mutable object payload: '.$targetName, $reference['line']);
             }
 
@@ -913,6 +962,36 @@ final class SurfaceScanner
                 $this->walkPayload($origin, $target->name, $visited, $next);
             }
         }
+    }
+
+    private function isNativeType(string $name): bool
+    {
+        return (class_exists($name, false) || interface_exists($name, false))
+            && (new ReflectionClass($name))->isInternal();
+    }
+
+    /** @param list<string> $visited */
+    private function isThrowable(string $name, array $visited): bool
+    {
+        if ($this->isNativeType($name)) {
+            return is_a($name, Throwable::class, true);
+        }
+
+        if (in_array($name, $visited, true)) {
+            return false;
+        }
+        $type = $this->lookup($name);
+
+        if ($type === null) {
+            return false;
+        }
+        foreach ($this->parents($type) as $parent) {
+            if ($this->isThrowable($parent, [...$visited, $name])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** @param list<string> $visited */

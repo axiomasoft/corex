@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Workflow\Data\TriggerRequest;
 use CoreX\Workflow\Internal\WorkflowDefinitionStamp;
@@ -19,7 +20,7 @@ function stampRequest(string $definitionRef = 'definition:1', string $versionRef
         subjectRef: 'ticket:1',
         definitionRef: $definitionRef,
         versionRef: $versionRef,
-        scalarSnapshot: ['status' => 'new'],
+        scalarSnapshot: JsonDocuments::capture(['status' => 'new']),
         requestKey: 'workflow:stamp:1',
     );
 }

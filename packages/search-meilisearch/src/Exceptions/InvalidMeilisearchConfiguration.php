@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class InvalidMeilisearchConfiguration extends RuntimeException
 {
     public static function invalidHost(): self

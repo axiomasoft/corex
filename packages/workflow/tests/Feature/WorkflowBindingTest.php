@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledRegistry;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Registry\CompiledModule;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\SignalRequest;
 use CoreX\Workflow\Data\TransitionRequest;
@@ -28,7 +29,7 @@ function triggerRequest(string $key, array $snapshot = ['status' => 'new']): Tri
         subjectRef: 'ticket:1',
         definitionRef: 'definition:1',
         versionRef: 'version:1',
-        scalarSnapshot: $snapshot,
+        scalarSnapshot: JsonDocuments::capture($snapshot),
         requestKey: $key,
     );
 }
@@ -53,15 +54,15 @@ it('delegates signal and transition operations to the configured engine adapter'
     $binding = app(WorkflowBinding::class);
     $context = app(TenantContextResolver::class)->current();
 
-    expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', [], 'workflow:signal:1', new DateTimeImmutable('+1 hour')))->status)->toBe('buffered')
-        ->and($binding->fire(new TransitionRequest($context, 'ticket:1', 'approve', 'user:1', [], 'workflow:transition:1'))->status)->toBe('completed');
+    expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', JsonDocuments::capture([]), 'workflow:signal:1', new DateTimeImmutable('+1 hour')))->status)->toBe('buffered')
+        ->and($binding->fire(new TransitionRequest($context, 'ticket:1', 'approve', 'user:1', JsonDocuments::capture([]), 'workflow:transition:1'))->status)->toBe('completed');
 });
 
 it('does not send expired signals to the engine adapter', function (): void {
     $binding = app(WorkflowBinding::class);
     $context = app(TenantContextResolver::class)->current();
 
-    expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', [], 'workflow:signal:expired', new DateTimeImmutable('-1 second')))->status)->toBe('expired');
+    expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', JsonDocuments::capture([]), 'workflow:signal:expired', new DateTimeImmutable('-1 second')))->status)->toBe('expired');
 });
 
 it('rejects empty definition and version refs before insert', function (string $definitionRef, string $versionRef): void {
@@ -77,7 +78,7 @@ it('rejects empty definition and version refs before insert', function (string $
         subjectRef: 'ticket:1',
         definitionRef: $definitionRef,
         versionRef: $versionRef,
-        scalarSnapshot: ['status' => 'new'],
+        scalarSnapshot: JsonDocuments::capture(['status' => 'new']),
         requestKey: 'workflow:empty:1',
     ));
 })->with([
@@ -122,7 +123,7 @@ it('conflicts when the pinned version does not match the stored identity', funct
         subjectRef: $changed->subjectRef,
         definitionRef: $changed->definitionRef,
         versionRef: 'version:2',
-        scalarSnapshot: $changed->scalarSnapshot,
+        scalarSnapshot: JsonDocuments::capture(JsonDocuments::map($changed->scalarSnapshot)),
         requestKey: $changed->requestKey,
     );
 

@@ -14,9 +14,9 @@ use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Errors\Enums\UnavailabilityReason;
 

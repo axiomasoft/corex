@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Roles\Internal;
 
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use Illuminate\Support\Facades\DB;
 
 /**

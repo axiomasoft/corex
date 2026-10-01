@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal;
 
 use Closure;
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Support\Facades\Redis;
@@ -37,7 +37,7 @@ final class RedisPubSub implements PubSub
     #[Override]
     public function subscribe(string $channel, Closure $handler): void
     {
-        SubscribeGuard::assert($this->runtime, Config::pubsubOctaneWorkerOptIn(), self::class);
+        SubscribeGuard::assert($this->runtime, app(CoreOptions::class)->pubsubOctaneWorkerOptIn, self::class);
 
         Redis::connection($this->connection)->subscribe([$channel], function (string $message) use ($handler): void {
             /** @var array<string, mixed> $payload */

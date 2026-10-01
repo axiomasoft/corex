@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Database\HasConfiguredId;
-use CoreX\Tenancy\Identity\Internal\Models\User;
+use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Tenancy\Identity\Laravel\UserRelations;
 use CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,9 +43,7 @@ final class Invitation extends Model
      *
      * @var array<string, mixed>
      */
-    protected $attributes = [
-        'status' => 'pending',
-    ];
+    protected $attributes = ['status' => 'pending'];
 
     /** @var list<string> */
     protected $fillable = ['email', 'workspace_id', 'role_id', 'invited_by', 'token_hash', 'status', 'expires_at', 'accepted_at'];
@@ -59,19 +57,16 @@ final class Invitation extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    /** @return BelongsTo<User, $this> */
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
     public function invitedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'invited_by');
+        return UserRelations::belongsTo($this, 'invited_by', null, 'invitedBy');
     }
 
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return [
-            'expires_at' => 'datetime',
-            'accepted_at' => 'datetime',
-        ];
+        return ['expires_at' => 'datetime', 'accepted_at' => 'datetime'];
     }
 
     /**
@@ -97,22 +92,14 @@ final class Invitation extends Model
 
                 return null;
             }
-
             // All invitations for this workspace compete for the same quota resource.
             Workspace::on($this->getConnectionName())->whereKey($this->workspace_id)->lockForUpdate()->firstOrFail();
-            $currentMembers = WorkspaceMember::on($this->getConnectionName())->where('workspace_id', $this->workspace_id)
-                ->where('status', 'active')->count();
+            $currentMembers = WorkspaceMember::on($this->getConnectionName())->where('workspace_id', $this->workspace_id)->where('status', 'active')->count();
 
             if ($currentMembers >= $usersMax) {
                 throw new InvitationNotAcceptableException("Workspace [{$this->workspace_id}] has reached its users_max limit ({$usersMax}).");
             }
-
-            $member = WorkspaceMember::on($this->getConnectionName())->create([
-                'workspace_id' => $this->workspace_id,
-                'user_id' => $userId,
-                'status' => 'active',
-            ]);
-
+            $member = WorkspaceMember::on($this->getConnectionName())->create(['workspace_id' => $this->workspace_id, 'user_id' => $userId, 'status' => 'active']);
             $this->update(['status' => 'accepted', 'accepted_at' => now()]);
 
             return $member;

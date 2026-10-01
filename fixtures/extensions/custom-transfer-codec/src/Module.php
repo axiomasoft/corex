@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace ThirdParty\Transfer;
 
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;

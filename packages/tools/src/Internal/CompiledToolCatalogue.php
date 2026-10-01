@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -37,7 +38,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
                 continue;
             }
 
-            $descriptor = ToolDescriptor::fromDeclaration($api);
+            $descriptor = ToolDescriptorFactory::fromDeclaration($api);
 
             if ($this->isDeniedByAvailability($descriptor)) {
                 continue;
@@ -79,7 +80,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
 
     private function isDeniedByAvailability(ToolDescriptor $tool): bool
     {
-        return array_key_exists('discover', $tool->availability)
-            && $tool->availability['discover'] === false;
+        return array_key_exists('discover', JsonDocuments::map($tool->availability))
+            && JsonDocuments::map($tool->availability)['discover'] === false;
     }
 }

@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Resolvers;
 
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\DomainTrust\Data\NormalizedHost;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
-use CoreX\Tenancy\DomainTrust\Internal\NormalizedHost;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
+use LogicException;
 use Override;
 use Stancl\Tenancy\Contracts\Tenant;
 use Stancl\Tenancy\Resolvers\Contracts\CachedTenantResolver;
 
 /**
+ * @corex-model-extension Stancl cached resolver; reads Account slug/deleted_at and verified Domain host/account_id/deleted_at, returns the Stancl Tenant model.
  * Resolves `Request::getHost()` to an {@see Account} through `root_domains`
  * (D119 — no bespoke cache class: the base class already owns cache
  * keys/TTL/store/invalidation, this class only supplies the source of
@@ -24,6 +28,7 @@ use Stancl\Tenancy\Resolvers\Contracts\CachedTenantResolver;
  * `root_domains` row nor a `slug`, so it is unreachable by host even before
  * the `slug IS NOT NULL` check below runs.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class HostTenantResolver extends CachedTenantResolver
 {
     public function __construct(
@@ -73,7 +78,13 @@ final class HostTenantResolver extends CachedTenantResolver
 
         /** @var Account $tenant */
         return $tenant->domains
-            ->map(fn (Domain $domain): string => $this->formatCacheKey(self::normalizeHost($domain->host)))
+            ->map(function (Model $model): string {
+                if (! $model instanceof Domain) {
+                    throw new LogicException('Expected a tenant domain.');
+                }
+
+                return $this->formatCacheKey(self::normalizeHost($model->host));
+            })
             ->all();
     }
 

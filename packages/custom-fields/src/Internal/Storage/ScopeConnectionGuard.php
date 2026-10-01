@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Storage;
 
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 
 final readonly class ScopeConnectionGuard

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Recurrence\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ExpansionCursor
 {
     /**
-     * @param  array<string, null|bool|int|string|array<int|string, mixed>>  $resumePosition
+     * @param  array{scanned?: int, emitted?: int}  $resumePosition
      */
     public function __construct(
         public string $setHash,

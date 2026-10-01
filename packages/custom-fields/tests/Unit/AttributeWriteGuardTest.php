@@ -10,9 +10,9 @@ use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Values\AttributeWriteGuard;
 use CoreX\CustomFields\Internal\Values\FieldValueValidator;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 
 /** @param list<array<string, mixed>> $fields */
 function p106Catalogue(array $fields, ?string $hash = null): FieldCatalogue

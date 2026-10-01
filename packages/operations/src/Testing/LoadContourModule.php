@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Extend\Api;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class LoadContourModule implements OperationHandler
 {
     public static int $calls = 0;

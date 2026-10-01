@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\Internal\Extend\Menu;
-use CoreX\Modules\Registry\FieldDefinition;
 
 function determinismEntity(string $name, string $prefix, string $handle): Entity
 {

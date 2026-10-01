@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**
  * Retrofitted onto `DomainEvent` (see {@see ModuleEnabled}). `mod.module.upgraded`.
- *
- * @internal spec: P1.25, A68, B-10 §3.1
  */
-final class ModuleUpgraded extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ModuleUpgraded extends DomainEvent
 {
     /** @param  list<string>  $migrationsRun */
     public function __construct(

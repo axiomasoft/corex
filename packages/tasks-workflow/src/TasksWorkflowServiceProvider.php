@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
+use CoreX\Recurrence\Laravel\RecurrenceFactory;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
-use CoreX\Tasks\Task\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
-use CoreX\TasksWorkflow\Internal\CaptureTaskCompletion;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
+use CoreX\TasksWorkflow\Laravel\CompletionBindings;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TasksWorkflowServiceProvider extends ServiceProvider
 {
     #[Override]
@@ -25,7 +28,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');
 
-        $this->app->singleton(RecurrenceExpander::class, 'CoreX\Recurrence\RRuleRecurrenceExpander');
+        $this->app->singleton(RecurrenceExpander::class, static fn (): RecurrenceExpander => RecurrenceFactory::create());
 
         $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
             return new SqlTaskRecurrenceMaterializer(
@@ -44,6 +47,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Task::observe($this->app->make(CaptureTaskCompletion::class));
+        CompletionBindings::register($this->app);
+
     }
 }

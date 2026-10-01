@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\CustomFields\Internal\Support\Validation;
 
+/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+#[Api(since: '1.0')]
 final readonly class FieldSnapshot
 {
     /**
-     * @param  array<array-key, mixed>  $activeFields
-     * @param  array<array-key, mixed>  $driverCapabilities
+     * @param  list<JsonMap>  $activeFields
+     * @param  JsonMap  $driverCapabilities
      */
     public function __construct(
         public string $entity,

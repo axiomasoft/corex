@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Webhooks\Data\WebhookTopic;
 
@@ -13,6 +15,7 @@ use CoreX\Webhooks\Data\WebhookTopic;
  * The service id is resolved from the installed code map. A class or event name
  * from JSON is not a projector.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface WebhookPayloadProjector
 {
     /**

@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**
  * Retrofitted onto `DomainEvent` (see {@see ModuleEnabled}). `mod.module.purged`.
- *
- * @internal spec: P1.25, A68, B-10 §3.1
  */
-final class ModulePurged extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ModulePurged extends DomainEvent
 {
     /** @param  list<string>  $droppedTables */
     public function __construct(

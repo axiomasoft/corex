@@ -3,19 +3,19 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Database\Laravel\BaseModel;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Discovery\ModuleDiscovery;
-use CoreX\Modules\Events\ManifestListeners;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\Internal\Definition\ModuleDependency;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
+use CoreX\Modules\Internal\Events\ManifestListeners;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 
 final class RemediationManifestListener
 {

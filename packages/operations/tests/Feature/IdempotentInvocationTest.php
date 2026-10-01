@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use Closure;
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Internal\OperationFingerprint;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFingerprint;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
@@ -24,16 +25,16 @@ use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
@@ -107,7 +108,7 @@ final class IdempotentInvocationTest extends TestCase
 
         self::assertFalse($fresh->replayed);
         self::assertTrue($replay->replayed);
-        self::assertSame(['name' => 'alpha'], $replay->data);
+        self::assertSame(['name' => 'alpha'], JsonDocuments::array($replay->data));
         self::assertSame(1, $this->inner->calls);
         self::assertSame(1, $this->connection->table('idempotent_effects')->count());
 
@@ -233,7 +234,7 @@ final class IdempotentInvocationTest extends TestCase
                 authenticatedPrincipal: $this->principal,
                 requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
             ),
-            input: $input,
+            input: JsonDocuments::capture($input),
             parameters: ['parent' => 'root'],
             idempotencyKey: $key,
         );
@@ -252,8 +253,8 @@ final class IdempotentInvocationTest extends TestCase
             path: '/notes',
             ability: 'notes.write',
             handler: NoteHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Command,
@@ -312,9 +313,9 @@ final class EffectInvokerFixture implements OperationInvoker
             throw new RuntimeException('SQLSTATE secret must not escape');
         }
 
-        $this->connection->table('idempotent_effects')->insert(['value' => (string) $invocation->input['name']]);
+        $this->connection->table('idempotent_effects')->insert(['value' => (string) JsonDocuments::map($invocation->input)['name']]);
 
-        return new OperationResult(data: ['name' => $invocation->input['name'], 'secret' => 'protected']);
+        return new OperationResult(data: JsonDocuments::capture(['name' => JsonDocuments::map($invocation->input)['name'], 'secret' => 'protected']));
     }
 }
 
@@ -334,10 +335,10 @@ final class ReplayAuthorizerFixture implements ReplayAuthorizer
         }
 
         if ($this->removeSecret && $outcome->kind === 'success') {
-            $data = $outcome->data ?? [];
+            $data = JsonDocuments::optionalArray($outcome->data) ?? [];
             unset($data['secret']);
 
-            return StoredOperationOutcome::success($data);
+            return StoredOperationOutcome::success(JsonDocuments::capture($data));
         }
 
         return $outcome;

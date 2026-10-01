@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Internal;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;

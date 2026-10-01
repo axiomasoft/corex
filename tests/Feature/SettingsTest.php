@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
@@ -14,11 +15,11 @@ use CoreX\Modules\Internal\Support\ModulesOptions;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
-use CoreX\Settings\Contracts\SettingsScope;
-use CoreX\Settings\DatabaseSettingsRepository;
+use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Events\SettingChanged;
 use CoreX\Settings\Exceptions\SettingValueTooLargeException;
 use CoreX\Settings\Exceptions\UnsupportedScopeException;
+use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
@@ -71,32 +72,32 @@ it('cascades user over workspace over account over manifest default', function (
     $repository = settingsRepositoryFor(defaults: ['crm.theme' => 'default-theme']);
 
     // Nothing stored anywhere yet: manifest default wins.
-    expect($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1), 'fallback'))->toBe('default-theme');
+    expect(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1), JsonDocuments::capture('fallback'))))->toBe('default-theme');
 
-    $repository->set('crm', 'theme', 'account-theme');
-    expect($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1)))->toBe('account-theme');
+    $repository->set('crm', 'theme', JsonDocuments::capture('account-theme'));
+    expect(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1))))->toBe('account-theme');
 
-    $repository->set('crm', 'theme', 'workspace-theme', SettingsScope::workspace(SETTINGS_WORKSPACE_1));
-    expect($repository->get('crm', 'theme', SettingsScope::workspace(SETTINGS_WORKSPACE_1)))->toBe('workspace-theme');
+    $repository->set('crm', 'theme', JsonDocuments::capture('workspace-theme'), SettingsScope::workspace(SETTINGS_WORKSPACE_1));
+    expect(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::workspace(SETTINGS_WORKSPACE_1))))->toBe('workspace-theme');
 
-    $repository->set('crm', 'theme', 'user-theme', SettingsScope::user(SETTINGS_USER_1));
-    expect($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1)))->toBe('user-theme');
+    $repository->set('crm', 'theme', JsonDocuments::capture('user-theme'), SettingsScope::user(SETTINGS_USER_1));
+    expect(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1))))->toBe('user-theme');
 
     // Account level is untouched by the narrower writes above.
-    expect($repository->get('crm', 'theme'))->toBe('account-theme');
+    expect(JsonDocuments::decode($repository->get('crm', 'theme')))->toBe('account-theme');
 
     // No default when nothing is stored and no manifest default exists.
-    expect($repository->get('crm', 'missing', null, 'fallback'))->toBe('fallback');
+    expect(JsonDocuments::decode($repository->get('crm', 'missing', null, JsonDocuments::capture('fallback'))))->toBe('fallback');
 });
 
 it('lets a narrower scope override a broader one without leaking across ids', function (): void {
     $repository = settingsRepositoryFor();
 
-    $repository->set('crm', 'locale', 'ru', SettingsScope::user(SETTINGS_USER_1));
+    $repository->set('crm', 'locale', JsonDocuments::capture('ru'), SettingsScope::user(SETTINGS_USER_1));
 
-    expect($repository->get('crm', 'locale', SettingsScope::user(SETTINGS_USER_1), 'en'))->toBe('ru')
-        ->and($repository->get('crm', 'locale', SettingsScope::user(SETTINGS_USER_2), 'en'))->toBe('en')
-        ->and($repository->get('crm', 'locale', null, 'en'))->toBe('en');
+    expect(JsonDocuments::decode($repository->get('crm', 'locale', SettingsScope::user(SETTINGS_USER_1), JsonDocuments::capture('en'))))->toBe('ru')
+        ->and(JsonDocuments::decode($repository->get('crm', 'locale', SettingsScope::user(SETTINGS_USER_2), JsonDocuments::capture('en'))))->toBe('en')
+        ->and(JsonDocuments::decode($repository->get('crm', 'locale', null, JsonDocuments::capture('en'))))->toBe('en');
 });
 
 it('encrypts a sensitive value at rest and masks it in SettingChanged', function (): void {
@@ -106,31 +107,31 @@ it('encrypts a sensitive value at rest and masks it in SettingChanged', function
     Event::fake([SettingChanged::class]);
     $repository = settingsRepositoryFor(sensitive: ['crm.api_key']);
 
-    $repository->set('crm', 'api_key', 'super-secret');
+    $repository->set('crm', 'api_key', JsonDocuments::capture('super-secret'));
 
     $raw = settingsPg()->table('sys_settings')
         ->where('namespace', 'crm')->where('key', 'api_key')
         ->value('value');
 
     expect($raw)->not->toContain('super-secret')
-        ->and($repository->get('crm', 'api_key'))->toBe('super-secret');
+        ->and(JsonDocuments::decode($repository->get('crm', 'api_key')))->toBe('super-secret');
 
     Event::assertDispatched(SettingChanged::class, function (SettingChanged $event): bool {
         return $event->namespace === 'crm'
             && $event->key === 'api_key'
             && $event->sensitive === true
-            && $event->old === '••••••'
-            && $event->new === '••••••';
+            && JsonDocuments::decode($event->old) === '••••••'
+            && JsonDocuments::decode($event->new) === '••••••';
     });
 });
 
 it('updates in place through the repository rather than duplicating a row', function (): void {
     $repository = settingsRepositoryFor();
 
-    $repository->set('crm', 'dup', 'first');
-    $repository->set('crm', 'dup', 'second');
+    $repository->set('crm', 'dup', JsonDocuments::capture('first'));
+    $repository->set('crm', 'dup', JsonDocuments::capture('second'));
 
-    expect($repository->get('crm', 'dup'))->toBe('second')
+    expect(JsonDocuments::decode($repository->get('crm', 'dup')))->toBe('second')
         ->and(settingsPg()->table('sys_settings')->where('namespace', 'crm')->where('key', 'dup')->count())->toBe(1);
 });
 
@@ -166,10 +167,10 @@ it('rejects a duplicate account-level row at the DB constraint (UNIQUE NULLS NOT
 
 it('does not fire SettingChanged when set() re-writes the same value', function (): void {
     $repository = settingsRepositoryFor();
-    $repository->set('crm', 'theme', 'stable');
+    $repository->set('crm', 'theme', JsonDocuments::capture('stable'));
 
     Event::fake([SettingChanged::class]);
-    $repository->set('crm', 'theme', 'stable');
+    $repository->set('crm', 'theme', JsonDocuments::capture('stable'));
 
     Event::assertNotDispatched(SettingChanged::class);
 });
@@ -178,8 +179,8 @@ it('fires SettingChanged once per actual value change', function (): void {
     $repository = settingsRepositoryFor();
 
     Event::fake([SettingChanged::class]);
-    $repository->set('crm', 'theme', 'first');
-    $repository->set('crm', 'theme', 'second');
+    $repository->set('crm', 'theme', JsonDocuments::capture('first'));
+    $repository->set('crm', 'theme', JsonDocuments::capture('second'));
 
     Event::assertDispatchedTimes(SettingChanged::class, 2);
 });
@@ -187,35 +188,35 @@ it('fires SettingChanged once per actual value change', function (): void {
 it('all() merges the cascade with the narrower scope winning per key', function (): void {
     $repository = settingsRepositoryFor();
 
-    $repository->set('crm', 'theme', 'account-theme');
-    $repository->set('crm', 'locale', 'en');
-    $repository->set('crm', 'theme', 'user-theme', SettingsScope::user(SETTINGS_USER_1));
+    $repository->set('crm', 'theme', JsonDocuments::capture('account-theme'));
+    $repository->set('crm', 'locale', JsonDocuments::capture('en'));
+    $repository->set('crm', 'theme', JsonDocuments::capture('user-theme'), SettingsScope::user(SETTINGS_USER_1));
 
-    expect($repository->all('crm', SettingsScope::user(SETTINGS_USER_1)))
+    expect(JsonDocuments::decodeTree($repository->all('crm', SettingsScope::user(SETTINGS_USER_1))))
         ->toBe(['theme' => 'user-theme', 'locale' => 'en'])
-        ->and($repository->all('crm'))->toBe(['theme' => 'account-theme', 'locale' => 'en']);
+        ->and(JsonDocuments::decodeTree($repository->all('crm')))->toBe(['theme' => 'account-theme', 'locale' => 'en']);
 });
 
 it('forget() removes exactly its own scope level, leaving other levels intact', function (): void {
     $repository = settingsRepositoryFor();
 
-    $repository->set('crm', 'theme', 'account-theme');
-    $repository->set('crm', 'theme', 'user-theme', SettingsScope::user(SETTINGS_USER_1));
+    $repository->set('crm', 'theme', JsonDocuments::capture('account-theme'));
+    $repository->set('crm', 'theme', JsonDocuments::capture('user-theme'), SettingsScope::user(SETTINGS_USER_1));
 
     $repository->forget('crm', 'theme', SettingsScope::user(SETTINGS_USER_1));
 
-    expect($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1)))->toBe('account-theme')
-        ->and($repository->get('crm', 'theme'))->toBe('account-theme');
+    expect(JsonDocuments::decode($repository->get('crm', 'theme', SettingsScope::user(SETTINGS_USER_1))))->toBe('account-theme')
+        ->and(JsonDocuments::decode($repository->get('crm', 'theme')))->toBe('account-theme');
 });
 
 it('rejects a department scope on every method (sys_settings has no department level, D38)', function (): void {
     $repository = settingsRepositoryFor();
     $department = SettingsScope::department('00000000-0000-0000-0000-000000000301');
 
-    expect(fn () => $repository->get('crm', 'theme', $department))->toThrow(UnsupportedScopeException::class)
-        ->and(fn () => $repository->set('crm', 'theme', 'x', $department))->toThrow(UnsupportedScopeException::class)
+    expect(fn () => JsonDocuments::decode($repository->get('crm', 'theme', $department)))->toThrow(UnsupportedScopeException::class)
+        ->and(fn () => $repository->set('crm', 'theme', JsonDocuments::capture('x'), $department))->toThrow(UnsupportedScopeException::class)
         ->and(fn () => $repository->forget('crm', 'theme', $department))->toThrow(UnsupportedScopeException::class)
-        ->and(fn () => $repository->all('crm', $department))->toThrow(UnsupportedScopeException::class);
+        ->and(fn () => JsonDocuments::decodeTree($repository->all('crm', $department)))->toThrow(UnsupportedScopeException::class);
 });
 
 it('rejects a value over the 64KB quota', function (): void {
@@ -223,7 +224,7 @@ it('rejects a value over the 64KB quota', function (): void {
 
     $tooLarge = str_repeat('x', 70_000);
 
-    expect(fn () => $repository->set('crm', 'huge', $tooLarge))
+    expect(fn () => $repository->set('crm', 'huge', JsonDocuments::capture($tooLarge)))
         ->toThrow(SettingValueTooLargeException::class);
 });
 
@@ -270,7 +271,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
         // reaches SettingsRepository::get().
         $repository = new DatabaseSettingsRepository(defaults: $defaults, connection: SETTINGS_TEST_CONNECTION);
 
-        expect($repository->get('sst', 'theme'))->toBe('manifest-default')
+        expect(JsonDocuments::decode($repository->get('sst', 'theme')))->toBe('manifest-default')
             ->and(settingsPg()->table('sys_settings')->where('namespace', 'sst')->where('key', 'theme')->exists())->toBeFalse();
     } finally {
         unlink($path);

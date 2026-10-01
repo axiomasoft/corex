@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Enums\DisableReason;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Support\Facades\DB;

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Data;
 
+use CoreX\Attributes\Api;
 use LogicException;
 
-/** @internal Controlled reference-clock sample, never a deployed time source. */
+#[Api(since: '1.0')]
 final readonly class ClockReading
 {
     public function __construct(

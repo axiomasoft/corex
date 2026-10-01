@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Address;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
@@ -39,9 +40,9 @@ final class MapAddressSuggestProvider implements AddressSuggestProvider
         if (! array_key_exists($key, $this->responses)) {
             return new SuggestionResult(
                 status: 'notFound',
-                suggestions: [],
+                suggestions: JsonDocuments::capture([]),
                 source: $this->source,
-                provenance: ['consentReference' => $query->consentReference],
+                provenance: JsonDocuments::capture(['consentReference' => $query->consentReference]),
             );
         }
 
@@ -51,17 +52,17 @@ final class MapAddressSuggestProvider implements AddressSuggestProvider
         if (strlen($payload) > $limits->maxResponseBytes) {
             return new SuggestionResult(
                 status: 'rateLimited',
-                suggestions: [],
+                suggestions: JsonDocuments::capture([]),
                 source: $this->source,
-                provenance: ['reason' => 'response_bounds'],
+                provenance: JsonDocuments::capture(['reason' => 'response_bounds']),
             );
         }
 
         return new SuggestionResult(
             status: 'available',
-            suggestions: $suggestions,
+            suggestions: JsonDocuments::capture($suggestions),
             source: $this->source,
-            provenance: ['consentReference' => $query->consentReference],
+            provenance: JsonDocuments::capture(['consentReference' => $query->consentReference]),
         );
     }
 }

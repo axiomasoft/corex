@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * The current account/workspace pair a request or job runs under. Resolved
  * by axiomasoft/corex-tenancy; boxed installs get a constant singleton via
@@ -11,6 +13,7 @@ namespace CoreX\Context\Data;
  *
  * Contract: B-10 §3.1, B-11 §3.1 (owner: B-11).
  */
+#[Api(since: '1.0')]
 final readonly class TenantContext
 {
     public function __construct(

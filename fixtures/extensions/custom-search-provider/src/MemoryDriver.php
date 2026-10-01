@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Data\Candidate;

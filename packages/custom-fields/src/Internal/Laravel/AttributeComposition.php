@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Laravel;
 
-use CoreX\Config\ViolationList;
+use CoreX\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type. */
 final readonly class AttributeComposition
@@ -28,7 +28,7 @@ final readonly class AttributeComposition
     /** @param  array<string, mixed>  $config */
     public static function fromArray(array $config): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
         $sources = self::sources($violations, $config['sources'] ?? ['static']);
         $storageDriver = self::storageDriver($violations, $config['storage_driver'] ?? 'jsonb');
         $definitions = self::definitions($violations, $config['definitions'] ?? []);
@@ -67,7 +67,7 @@ final readonly class AttributeComposition
     /**
      * @return list<string>
      */
-    private static function sources(ViolationList $violations, mixed $value): array
+    private static function sources(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value) || $value === []) {
             $violations->add('sources', 'must be a non-empty list');
@@ -100,7 +100,7 @@ final readonly class AttributeComposition
         return $sources === [] ? ['static'] : $sources;
     }
 
-    private static function storageDriver(ViolationList $violations, mixed $value): string
+    private static function storageDriver(ConfigurationValidator $violations, mixed $value): string
     {
         if (is_string($value) && in_array($value, ['jsonb', 'eav'], true)) {
             return $value;
@@ -114,7 +114,7 @@ final readonly class AttributeComposition
     /**
      * @return array<string, 'jsonb'|'eav'>
      */
-    private static function storageByEntity(ViolationList $violations, mixed $value): array
+    private static function storageByEntity(ConfigurationValidator $violations, mixed $value): array
     {
         if ($value === []) {
             return [];
@@ -144,7 +144,7 @@ final readonly class AttributeComposition
     /**
      * @return array<string, list<array<string, mixed>>>
      */
-    private static function definitions(ViolationList $violations, mixed $value): array
+    private static function definitions(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
             $violations->add('definitions', 'must be a map of entity definitions');
@@ -186,7 +186,7 @@ final readonly class AttributeComposition
     /**
      * @return array<string, bool>
      */
-    private static function drivers(ViolationList $violations, mixed $value): array
+    private static function drivers(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
             $violations->add('drivers', 'must be a map');

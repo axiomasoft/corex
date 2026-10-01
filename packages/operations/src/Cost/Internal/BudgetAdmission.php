@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Cost\Internal;
 
 use Closure;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Operations\Cost\Contracts\BudgetExecution;
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
 use CoreX\Operations\Cost\Contracts\OperationBudget;
 use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
@@ -12,6 +14,8 @@ use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Cost\Exceptions\BudgetRateLimited;
+use CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
@@ -20,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** @internal Admission and settlement inside the shared operation invocation seam. */
-final readonly class BudgetAdmission
+final readonly class BudgetAdmission implements BudgetExecution
 {
     /** @var Closure(OperationInvocation):CostInput */
     private Closure $costInput;
@@ -100,9 +104,9 @@ final readonly class BudgetAdmission
         ActualCost $actual,
     ): OperationResult {
         return new OperationResult(
-            data: $result->data,
+            data: JsonDocuments::capture(JsonDocuments::array($result->data)),
             replayed: $result->replayed,
-            metadata: [...$result->metadata, 'cost' => $this->metadata($reservation, $estimate, $actual)],
+            metadata: JsonDocuments::capture([...JsonDocuments::map($result->metadata), 'cost' => $this->metadata($reservation, $estimate, $actual)]),
         );
     }
 

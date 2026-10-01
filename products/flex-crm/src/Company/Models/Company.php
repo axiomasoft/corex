@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Company\Models;
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Contact\Models\ContactCompany;
 use Flex\Crm\Context\Models\Concerns\HasActivities;

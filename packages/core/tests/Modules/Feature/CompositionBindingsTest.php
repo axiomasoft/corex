@@ -11,7 +11,7 @@ use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Contracts\RecordsRegistrar;
 use CoreX\Modules\Contracts\RegistryIntrospection;
-use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
@@ -26,7 +26,7 @@ use CoreX\Modules\Laravel\ModulesBootRegistrar;
 use CoreX\Modules\Laravel\RegistryRegistrar;
 use CoreX\Modules\Laravel\SettingsRegistrar;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Illuminate\Foundation\Application;
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -12,7 +14,7 @@ use CoreX\Modules\Internal\Audit\AuditCapabilityWiring;
 use CoreX\Modules\Internal\Commands\CompileModulesCommand;
 use CoreX\Modules\Internal\Commands\ExplainModuleCommand;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Console\Application as Console;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -20,7 +22,7 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\Artisan;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ModulesBootRegistrar implements PackageRegistrar
 {
     #[Override]

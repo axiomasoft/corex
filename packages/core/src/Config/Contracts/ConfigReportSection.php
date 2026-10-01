@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Config\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /** A package's contribution to the effective configuration report. */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ConfigReportSection
 {
     public function order(): int;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Laravel\Listeners\RevertTenancyOnJobException;
@@ -19,7 +21,7 @@ use Stancl\Tenancy\Events\TenantCreated;
 use Stancl\Tenancy\Listeners\BootstrapTenancy;
 use Stancl\Tenancy\Listeners\RevertToCentralContext;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EventsRegistrar implements PackageRegistrar
 {
     #[Override]

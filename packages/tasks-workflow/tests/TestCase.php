@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Tests;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tasks\Access\Contracts\TaskAccess;

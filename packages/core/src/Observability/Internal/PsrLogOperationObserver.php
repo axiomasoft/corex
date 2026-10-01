@@ -6,6 +6,7 @@ namespace CoreX\Observability\Internal;
 
 use CoreX\Observability\Contracts\OperationObserver;
 use CoreX\Observability\Data\OperationCompleted;
+use CoreX\Observability\Data\OperationContext;
 use CoreX\Observability\Data\OperationFailed;
 use CoreX\Observability\Data\OperationStarted;
 use DateTimeInterface;

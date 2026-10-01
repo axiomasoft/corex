@@ -6,8 +6,8 @@ namespace CoreX\Search\Internal\Query;
 
 use Closure;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchHydrator;
 use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\CurrentSearchRecord;

@@ -6,9 +6,10 @@ namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -16,7 +17,7 @@ use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
@@ -177,7 +178,7 @@ final class BulkStoreTest extends TestCase
 
         $current = $this->store->find($this->scope(), 'bulk-takeover');
         self::assertNotNull($current);
-        self::assertSame(['offset' => 2], $current->checkpoint);
+        self::assertSame(['offset' => 2], JsonDocuments::map($current->checkpoint));
         self::assertTrue($this->store->save(
             $this->next($current, BulkOperationStatus::Completed, resultRef: ['id' => 'result-2']),
             'worker-2',
@@ -448,13 +449,13 @@ final class BulkStoreTest extends TestCase
             encodedScope: (new ArrayDataScopeCodec)->encode($scope),
             actorId: $scope->actorId,
             clientId: 'client-1',
-            extensionStamp: [
+            extensionStamp: JsonDocuments::capture([
                 'point' => 'api.operation',
                 'id' => 'notes.bulk-import',
                 'version' => '1',
                 'registryFingerprint' => hash('sha256', 'registry'),
-            ],
-            inputRef: $inputRef ?? ['kind' => 'parameters', 'parameters' => ['limit' => 10]],
+            ]),
+            inputRef: JsonDocuments::capture($inputRef ?? ['kind' => 'parameters', 'parameters' => ['limit' => 10]]),
         );
     }
 
@@ -472,17 +473,17 @@ final class BulkStoreTest extends TestCase
     ): BulkOperation {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: $operation->transferRef,
+            transferRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->transferRef)),
             status: $status,
             terminalStatus: $operation->terminalStatus,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: $checkpoint ?? $operation->checkpoint,
-            progress: $operation->progress,
-            resultRef: $resultRef,
-            error: $error,
+            checkpoint: JsonDocuments::capture($checkpoint ?? JsonDocuments::map($operation->checkpoint)),
+            progress: JsonDocuments::capture(JsonDocuments::map($operation->progress)),
+            resultRef: JsonDocuments::nullable($resultRef),
+            error: JsonDocuments::nullable($error),
             attempt: $operation->attempt,
             nextAttemptAt: $operation->nextAttemptAt,
             createdAt: $operation->createdAt,

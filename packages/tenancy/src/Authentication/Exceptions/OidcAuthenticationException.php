@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Authentication\Exceptions;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use Illuminate\Http\Response;
 use RuntimeException;
 
@@ -14,6 +16,7 @@ use RuntimeException;
  * identifiers, never token content, `client_secret`, or `code_verifier`
  * (Implementation Rule 8).
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class OidcAuthenticationException extends RuntimeException
 {
     private function __construct(string $message)

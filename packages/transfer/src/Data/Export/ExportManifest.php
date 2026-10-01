@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data\Export;
 
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ExportManifest
 {
-    /** @param array<string, null|bool|int|string|array<array-key, mixed>> $roster */
+    /** The closed JSON roster retains the original transport shape. */
     public function __construct(
         public string $id,
         public string $snapshotMode,
         public string $schemaHash,
         public string $restoreEpoch,
-        public array $roster,
+        public JsonDocument $roster,
         public string $partsHash,
     ) {
         if (! in_array($snapshotMode, ['coherent', 'liveBounded'], true)) {

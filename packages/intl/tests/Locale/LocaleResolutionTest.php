@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Brick\Money\Money;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Data\FormatPolicy;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
@@ -218,7 +219,7 @@ it('LOC-09 reads localized reference metadata from two providers deterministical
 
     expect($boxesCountry->status)->toBe('available')
         ->and($compactCountry->status)->toBe('available')
-        ->and($boxesCountry->records[0]['sourceId'])->toBe('US')
-        ->and($compactCountry->records[0]['sourceId'])->toBe('US')
-        ->and($boxesCountry->records[0]['names']['ru'])->toBe('Соединённые Штаты');
+        ->and(JsonDocuments::list($boxesCountry->records)[0]['sourceId'])->toBe('US')
+        ->and(JsonDocuments::list($compactCountry->records)[0]['sourceId'])->toBe('US')
+        ->and(JsonDocuments::list($boxesCountry->records)[0]['names']['ru'])->toBe('Соединённые Штаты');
 });

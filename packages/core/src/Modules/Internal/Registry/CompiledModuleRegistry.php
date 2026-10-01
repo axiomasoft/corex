@@ -6,13 +6,13 @@ namespace CoreX\Modules\Internal\Registry;
 
 use Closure;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistryCache;
 use CoreX\Modules\Contracts\ModuleStateReader;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Modules\Exceptions\ModuleNotFound;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Registry\CompiledModule;
 use RuntimeException;
 
 /**

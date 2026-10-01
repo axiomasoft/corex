@@ -373,13 +373,13 @@ parameters:
 			path: scripts/distribution/extension_fixture_probe.php
 
 		-
-			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Compiler\InstalledPackageVersion|string>, non-empty-array<mixed> given.'
+			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Data\InstalledPackageVersion|string>, non-empty-array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/distribution/extension_fixture_probe.php
 
 		-
-			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Definition\ModuleManifest>, array{mixed} given.'
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Data\ModuleManifest>, array{mixed} given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/distribution/extension_fixture_probe.php
@@ -457,13 +457,13 @@ parameters:
 			path: scripts/extension-contract-gate.php
 
 		-
-			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Compiler\InstalledPackageVersion|string>, mixed given.'
+			rawMessage: 'Parameter $installedPackages of static method CoreX\Modules\Testing\ExtensionContract::verify() expects array<int<0, max>|string, CoreX\Modules\Data\InstalledPackageVersion|string>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/extension-contract-gate.php
 
 		-
-			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Definition\ModuleManifest>, mixed given.'
+			rawMessage: 'Parameter $manifests of static method CoreX\Modules\Testing\ExtensionContract::verify() expects list<CoreX\Modules\Data\ModuleManifest>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/extension-contract-gate.php

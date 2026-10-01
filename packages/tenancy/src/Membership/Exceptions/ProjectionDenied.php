@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
-/** @internal The disposable reference consumer denies an unsupported or stale entrance. */
+#[Api(since: '1.0')]
 final class ProjectionDenied extends RuntimeException {}

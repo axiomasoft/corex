@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\InvalidManifestException;
 use CoreX\Modules\Internal\Definition\ModuleDependency;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tests\Stubs\StubModuleDefinition;

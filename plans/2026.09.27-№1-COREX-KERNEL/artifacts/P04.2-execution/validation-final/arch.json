@@ -1,0 +1,9 @@
+{
+  "name": "arch",
+  "command": "scripts/php84 composer test:arch",
+  "exit_code": 0,
+  "duration_ms": 11376,
+  "patch_sha256": "d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe",
+  "log": "validation-final/arch.log",
+  "log_sha256": "4c96a2d889a74c9258201572d7d94b54e8c0c7bcf9d99a76572f610735bb6019"
+}

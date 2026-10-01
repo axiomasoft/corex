@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class SourceManifest
 {
     public function __construct(public string $immutableRef, public string $sha256, public int $length, public string $format, public string $parserVersion, public string $encoding, public string $delimiter, public string $enclosure, public string $escape, public string $schemaHash)

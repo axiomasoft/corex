@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Data\FieldDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\EntityNotFound;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
-use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -115,7 +116,7 @@ it('round-trips a FieldDefinition through toArray/fromArray (P1.15)', function (
         type: 'money',
         required: true,
         searchable: true,
-        meta: ['currency' => 'RUB', 'nested' => ['a', 'b']],
+        meta: JsonDocuments::nullable(['currency' => 'RUB', 'nested' => ['a', 'b']]),
     );
 
     $rebuilt = FieldDefinition::fromArray($field->toArray());

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
-use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Contracts\ModuleDefinition;
+use CoreX\Modules\Data\ModuleManifest;
 use Override;
 
 final class TaskWorkflowIntegration extends ModuleDefinition

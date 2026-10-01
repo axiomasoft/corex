@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace CoreX\Search\Testing;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 use CoreX\Search\Contracts\SearchHydrator;
 use CoreX\Search\Data\CurrentSearchRecord;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Query\PolicySearchHydrator;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchFixtures
 {
     /** @param Closure(DataScope, RecordRef, SearchSnapshot):?CurrentSearchRecord $loadCurrent */

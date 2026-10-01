@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tests\Stubs;
 
 use CoreX\Audit\Contracts\Auditable;
-use CoreX\Database\HasConfiguredId;
+use CoreX\Database\Laravel\HasConfiguredId;
 use Illuminate\Database\Eloquent\Model;
 
 /**

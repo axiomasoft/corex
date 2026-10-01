@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Contracts;
 
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Features\Data\FeatureFlagDefinition;
+use CoreX\Settings\Data\SettingsScope;
 
 /**
  * Per-account feature-flag store with workspace/user/department overrides.
@@ -14,14 +17,14 @@ use CoreX\Settings\Contracts\SettingsScope;
  * the caller passed (user/department) beats workspace beats the flag's own
  * account-level default — one call resolves exactly the level named by
  * `$scope`, no implicit walk to a broader id the caller didn't supply.
- *
- * @internal spec: B-10 §3.1
  */
+#[Api(since: '1.0')]
 interface FeatureFlags
 {
     public function active(string $key, ?SettingsScope $scope = null): bool;
 
-    public function value(string $key, ?SettingsScope $scope = null): mixed;
+    /** Returns a closed JSON value, including JSON null for a missing flag. */
+    public function value(string $key, ?SettingsScope $scope = null): JsonDocument;
 
     /** Idempotent — a second `define()` for the same key never overwrites an admin-toggled `is_enabled`. */
     public function define(FeatureFlagDefinition $def): void;

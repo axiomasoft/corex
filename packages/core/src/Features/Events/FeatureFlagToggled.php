@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 use Override;
 
 /**
@@ -14,10 +16,9 @@ use Override;
  * `define()` only registers a manifest default — so no production code path
  * dispatches this yet; the admin toggle action that will (UI feature-flag
  * management is out of scope here) is deferred to future work.
- *
- * @internal spec: B-10, P1.9
  */
-final class FeatureFlagToggled extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class FeatureFlagToggled extends DomainEvent
 {
     public function __construct(
         public readonly string $key,

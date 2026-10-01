@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\ImpersonationGuard;
-use CoreX\Context\NullImpersonationService;
+use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\PendingPool;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
@@ -75,7 +75,7 @@ function p32Lifecycle(StanclTenantDatabaseLifecycle $database): AccountLifecycle
         pendingPool: app(PendingPool::class),
         fsm: new AccountLifecycleFsm,
         tenantDatabaseLifecycle: $database,
-        impersonationGuard: new ImpersonationGuard(new NullImpersonationService),
+        impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => new NullImpersonationService]),
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     );
 }

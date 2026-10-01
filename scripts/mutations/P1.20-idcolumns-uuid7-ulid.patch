@@ -1,10 +1,10 @@
-diff --git a/packages/core/src/Database/Schema/IdColumns.php b/packages/core/src/Database/Schema/IdColumns.php
+diff --git a/packages/core/src/Database/Laravel/IdColumns.php b/packages/core/src/Database/Laravel/IdColumns.php
 index 084d300..c018ced 100644
---- a/packages/core/src/Database/Schema/IdColumns.php
-+++ b/packages/core/src/Database/Schema/IdColumns.php
+--- a/packages/core/src/Database/Laravel/IdColumns.php
++++ b/packages/core/src/Database/Laravel/IdColumns.php
 @@ -26,8 +26,8 @@ final class IdColumns
      {
-         match (Config::idStrategy()) {
+         match (app(CoreOptions::class)->idStrategy) {
              IdStrategy::Int => $table->id($name),
 -            IdStrategy::Uuid, IdStrategy::Uuid7 => $table->uuid($name)->primary(),
 -            IdStrategy::Ulid => $table->ulid($name)->primary(),

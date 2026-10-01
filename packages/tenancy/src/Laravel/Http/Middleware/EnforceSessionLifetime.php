@@ -6,7 +6,8 @@ namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,11 +16,12 @@ use Illuminate\Support\Facades\Auth;
 /**
  * AC-15: a tenant-local session must not outlive
  * `oidc.max_session_lifetime_minutes` (720 = 12h) after the `_corex_auth_at`
- * marker {@see OidcLoginController} sets on login — independent of whatever
+ * marker {@see CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController} sets on login — independent of whatever
  * `session.lifetime` the consuming app configures. A request without the
  * marker (no OIDC login this session — e.g. a guest route) passes through
  * unaffected.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EnforceSessionLifetime
 {
     public function __construct(

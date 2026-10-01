@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
@@ -14,6 +15,7 @@ use CoreX\Messaging\Exceptions\InvalidMessage;
  * Существование этой записи — и есть повышение факта до публичного контракта
  * (MSG-002). Ни рефлексия, ни подписка, ни имя класса такого повышения не дают.
  */
+#[Api(since: '1.0')]
 final readonly class MessageContract
 {
     public function __construct(

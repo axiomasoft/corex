@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace ThirdParty\Workflow;
 
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\Entity;
 use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Extend\Workflow;
-use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Modules\Testing\ExtensionContract;
 use RuntimeException;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
@@ -14,6 +15,7 @@ use CoreX\TasksWorkflow\Exceptions\MaterializationConflict;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use stdClass;
 
 /** @internal Durable materialization receipts and occurrence rows. */
@@ -32,7 +34,7 @@ final class MaterializationStore
             throw MaterializationConflict::forOperationKey($existing->requestKey);
         }
 
-        $receipt = $this->receiptFromStored($existing->resultRef);
+        $receipt = $this->receiptFromStored(JsonDocuments::map($existing->resultRef));
 
         return new MaterializationReceipt(
             version: $receipt->version,
@@ -168,12 +170,23 @@ final class MaterializationStore
         $cursor = null;
 
         if (isset($stored['cursor']) && is_array($stored['cursor'])) {
+            $resume = $stored['cursor']['resumePosition'];
+
+            if (! is_array($resume)) {
+                throw new InvalidArgumentException('Stored cursor position must be a map.');
+            }
+            foreach ($resume as $key => $value) {
+                if (! in_array($key, ['scanned', 'emitted'], true) || ! is_int($value)) {
+                    throw new InvalidArgumentException('Stored cursor position must contain integer counters.');
+                }
+            }
+            /** @var array{scanned?: int, emitted?: int} $resume */
             $cursor = new ExpansionCursor(
                 setHash: (string) $stored['cursor']['setHash'],
                 windowHash: (string) $stored['cursor']['windowHash'],
                 tzdbVersion: (string) $stored['cursor']['tzdbVersion'],
                 libraryVersion: (string) $stored['cursor']['libraryVersion'],
-                resumePosition: $stored['cursor']['resumePosition'],
+                resumePosition: $resume,
             );
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use RuntimeException;
 use Throwable;
@@ -18,9 +19,8 @@ use Throwable;
  * module left silently half-migrated with schema_version advanced past the last
  * table that actually applied. A retry after the fix starts from the real
  * on-disk schema.
- *
- * @internal spec: D40, P1.29 M-1
  */
+#[Api(since: '1.0')]
 final class ModuleUpgradeFailedException extends RuntimeException
 {
     public function __construct(string $module, Throwable $previous)

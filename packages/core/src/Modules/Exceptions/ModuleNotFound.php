@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class ModuleNotFound extends RuntimeException
 {
     public function __construct(string $composerName)

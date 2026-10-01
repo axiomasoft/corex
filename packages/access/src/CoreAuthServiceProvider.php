@@ -15,14 +15,17 @@ use CoreX\Access\Access\Internal\WorkspacePermissionLayer;
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
-use CoreX\Access\Contracts\ScopeResolver;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
-use CoreX\Access\Identity\Internal\PrincipalUserProvider;
+use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
 use CoreX\Access\Internal\Support\AccessConfigSection;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder;
+use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
 use CoreX\Access\Tenancy\Internal\TenantContextGuard;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
@@ -33,11 +36,14 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreAuthServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
+        MatrixPortBindings::register($this->app);
+
         $this->app->tag([AccessConfigSection::class], ConfigReportSection::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-access.php', 'corex-access');

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Membership\Data\ActorRef;
+use CoreX\Tenancy\Membership\Data\MembershipQuery;
+use CoreX\Tenancy\Membership\Data\RevokeMembershipRequest;
 use CoreX\Tenancy\Membership\Enums\ActorType;
 use CoreX\Tenancy\Membership\Enums\MembershipReason;
 use CoreX\Tenancy\Membership\Events\MembershipRevoked;
@@ -11,8 +13,6 @@ use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
 use CoreX\Tenancy\Membership\Exceptions\RevokeUncertain;
 use CoreX\Tenancy\Membership\Internal\Transport\AccessTokenValidator;
-use CoreX\Tenancy\Membership\Internal\Transport\MembershipQuery;
-use CoreX\Tenancy\Membership\Internal\Transport\RevokeMembershipRequest;
 use CoreX\Tenancy\Membership\Internal\Transport\StrictTransport;
 use CoreX\Tenancy\Tests\Support\Membership\FakeCentral;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;

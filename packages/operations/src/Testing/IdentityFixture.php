@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Authorization\Contracts\Principal;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use Illuminate\Http\Request;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IdentityFixture implements Principal, PrincipalResolver
 {
     public bool $authenticated = true;

@@ -7,6 +7,7 @@ namespace CoreX\CustomFields\Internal\Support;
 use InvalidArgumentException;
 use JsonException;
 
+/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
 final class Validation
 {
     public static function entity(string $entity): void
@@ -30,6 +31,38 @@ final class Validation
         }
     }
 
+    /** @param array<array-key, mixed> $value */
+    public static function jsonMap(array $value, string $name): void
+    {
+        self::assertMap($value, $name);
+    }
+
+    /** @param array<array-key, mixed> $values */
+    public static function jsonMapList(array $values, string $name): void
+    {
+        self::assertMapList($values, $name);
+    }
+
+    /** @param array<array-key, mixed> $value
+     * @return JsonMap
+     */
+    public static function validatedMap(array $value, string $name): array
+    {
+        self::assertMap($value, $name);
+
+        return $value;
+    }
+
+    /** @param array<array-key, mixed> $values
+     * @return list<JsonMap>
+     */
+    public static function validatedMapList(array $values, string $name): array
+    {
+        self::assertMapList($values, $name);
+
+        return $values;
+    }
+
     /** @param array<array-key, mixed> $values */
     public static function fieldList(array $values, int $limit = 30): void
     {
@@ -51,9 +84,16 @@ final class Validation
         }
     }
 
-    /** @param array<array-key, mixed> $value */
-    public static function jsonMap(array $value, string $name): void
+    /** @param array<array-key, mixed> $value
+     * @phpstan-assert JsonMap $value
+     */
+    private static function assertMap(array $value, string $name): void
     {
+        foreach (array_keys($value) as $key) {
+            if (! is_string($key)) {
+                throw new InvalidArgumentException("{$name} must have string keys.");
+            }
+        }
         $keys = 0;
         self::jsonValue(value: $value, name: $name, depth: 0, keys: $keys);
 
@@ -68,8 +108,10 @@ final class Validation
         }
     }
 
-    /** @param array<array-key, mixed> $values */
-    public static function jsonMapList(array $values, string $name): void
+    /** @param array<array-key, mixed> $values
+     * @phpstan-assert list<JsonMap> $values
+     */
+    private static function assertMapList(array $values, string $name): void
     {
         if (! array_is_list($values)) {
             throw new InvalidArgumentException("{$name} must be a list.");
@@ -80,7 +122,7 @@ final class Validation
                 throw new InvalidArgumentException("{$name} must contain JSON maps.");
             }
 
-            self::jsonMap(value: $value, name: $name);
+            self::assertMap(value: $value, name: $name);
         }
     }
 

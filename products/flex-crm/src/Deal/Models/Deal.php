@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Deal\Models;
 
 use Brick\Money\Money;
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\Models\Concerns\HasActivities;

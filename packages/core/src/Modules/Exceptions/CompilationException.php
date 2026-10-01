@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
  * Compilation validation failure: always a deploy failure, never a warning.
- *
- * @internal spec: B-10 §7.4 п.4
  */
+#[Api(since: '1.0')]
 final class CompilationException extends RuntimeException
 {
     public static function duplicateTablePrefix(string $prefix, string $firstModule, string $secondModule): self
@@ -80,8 +80,6 @@ final class CompilationException extends RuntimeException
      * The two carrying different text is what lets a test pin the validation
      * layer specifically (a mutant that removes the validation check falls
      * through to this distinct throw and the validation-message assert reddens).
-     *
-     * @internal spec: P3.7
      */
     public static function tablePrefixInvariantBypassed(string $composerName): self
     {

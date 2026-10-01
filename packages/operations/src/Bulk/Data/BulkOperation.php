@@ -4,32 +4,28 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Data;
 
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class BulkOperation
 {
-    /**
-     * @param  array<string, mixed>|null  $transferRef
-     * @param  array<string, mixed>  $checkpoint
-     * @param  array<string, mixed>  $progress
-     * @param  array<string, mixed>|null  $resultRef
-     * @param  array<string, mixed>|null  $error
-     */
     public function __construct(
         public BulkOperationDefinition $definition,
-        public ?array $transferRef,
+        public ?JsonDocument $transferRef,
         public BulkOperationStatus $status,
         public ?BulkOperationStatus $terminalStatus,
         public int $revision,
         public ?string $leaseOwner,
         public ?DateTimeImmutable $leaseUntil,
         public ?DateTimeImmutable $cancelRequestedAt,
-        public array $checkpoint,
-        public array $progress,
-        public ?array $resultRef,
-        public ?array $error,
+        public JsonDocument $checkpoint,
+        public JsonDocument $progress,
+        public ?JsonDocument $resultRef,
+        public ?JsonDocument $error,
         public int $attempt,
         public DateTimeImmutable $nextAttemptAt,
         public DateTimeImmutable $createdAt,

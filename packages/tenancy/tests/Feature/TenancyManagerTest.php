@@ -7,7 +7,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use Illuminate\Support\Facades\DB;

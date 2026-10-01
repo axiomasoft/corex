@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Audit\Internal;
 
 use CoreX\Audit\Contracts\Auditable;
-use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
-use CoreX\Audit\CurrentActor;
-use CoreX\Config\Config;
+use CoreX\Audit\Data\AuditEntry;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -73,7 +73,7 @@ final class AuditObserver
         // HasAuditLog::boot: a boot-time skip never re-enables when the
         // config flips, and the capability path (::observe) never saw the flag
         // at all — a disabled audit still wrote through byCapability(Auditable).
-        if (! Config::auditEnabled()) {
+        if (! app(CoreOptions::class)->auditEnabled) {
             return;
         }
 
@@ -131,8 +131,8 @@ final class AuditObserver
             actorId: CurrentActor::id(),
             entityType: $model->getMorphClass(),
             entityId: (string) $model->getKey(),
-            changes: $changes === [] ? null : $changes,
-            context: CurrentActor::context(),
+            changes: JsonDocuments::nullable($changes === [] ? null : json_decode(json_encode($changes, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR)),
+            context: JsonDocuments::capture(CurrentActor::context()),
         ));
     }
 

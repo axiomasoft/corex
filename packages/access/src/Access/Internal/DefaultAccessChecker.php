@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
+use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Support\AuthOptions;
-use CoreX\Access\Matrix\Internal\ScopeMapVersion;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Matrix\Contracts\ScopeMapVersions as ScopeMapVersion;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\EntityRegistry;
 use Illuminate\Database\Query\Builder;

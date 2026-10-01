@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Internal\Settings\CompiledSettingDefaultsProvider;
-use CoreX\Modules\RegistersNothingOnBoot;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SettingsRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;

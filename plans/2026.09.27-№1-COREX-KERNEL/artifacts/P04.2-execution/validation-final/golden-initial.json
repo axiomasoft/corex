@@ -1,0 +1,9 @@
+{
+  "name": "golden",
+  "command": "scripts/php84 composer golden",
+  "exit_code": 1,
+  "duration_ms": 7159,
+  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "log": "validation-final/golden.log",
+  "log_sha256": "616cf04cbe6da5ac7c4f5cd277b2182312fdbee192747ddf3d888ec77f45d9a2"
+}

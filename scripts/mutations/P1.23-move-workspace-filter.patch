@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Departments/DatabaseDepartmentRepository.php b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 index b6b538a..bc057a5 100644
---- a/packages/core/src/Departments/DatabaseDepartmentRepository.php
-+++ b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+--- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
++++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 @@ -135,8 +135,8 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                      path = (?::ltree || subpath(path, nlevel(?::ltree) - 1)),
                      parent_id = case when id = ? then ? else parent_id end,

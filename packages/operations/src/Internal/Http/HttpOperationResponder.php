@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal\Http;
 
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use DateTimeImmutable;
 use DateTimeZone;

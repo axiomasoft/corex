@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Data;
 
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Attributes\Api;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 
 /** Canonical JSON scalar or structured value for bounded schema validation. */
+#[Api(since: '1.0')]
 final readonly class JsonValue
 {
     public function __construct(
@@ -20,8 +22,4 @@ final readonly class JsonValue
         JsonCanonical::assertWellFormed($canonicalJson);
     }
 
-    public static function fromDecoded(mixed $value): self
-    {
-        return new self(JsonCanonical::encode($value));
-    }
 }

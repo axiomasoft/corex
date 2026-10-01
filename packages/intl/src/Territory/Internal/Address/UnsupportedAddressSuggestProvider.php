@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Address;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
@@ -27,9 +28,9 @@ final class UnsupportedAddressSuggestProvider implements AddressSuggestProvider
 
         return new SuggestionResult(
             status: 'unsupported',
-            suggestions: [],
+            suggestions: JsonDocuments::capture([]),
             source: null,
-            provenance: ['driver' => 'absent'],
+            provenance: JsonDocuments::capture(['driver' => 'absent']),
         );
     }
 }

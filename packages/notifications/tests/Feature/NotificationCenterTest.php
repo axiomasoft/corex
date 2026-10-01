@@ -5,6 +5,8 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
@@ -19,14 +21,14 @@ use CoreX\Notifications\Inbox\Data\NotificationAction;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
+use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
+use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use CoreX\Notifications\Inbox\Internal\DenyNotificationPolicy;
-use CoreX\Notifications\Inbox\Internal\NotificationAccessDenied;
-use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Preferences\Data\PreferenceInput;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Settings\Contracts\SettingsRepository;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use Illuminate\Support\Facades\DB;
 
@@ -45,12 +47,12 @@ final class InMemorySettingsRepository implements SettingsRepository
     /** @var array<string, mixed> */
     private array $values = [];
 
-    public function get(string $namespace, string $key, ?SettingsScope $scope = null, mixed $default = null): mixed
+    public function get(string $namespace, string $key, ?SettingsScope $scope = null, ?JsonDocument $default = null): JsonDocument
     {
-        return $this->values["{$namespace}:{$key}"] ?? $default;
+        return JsonDocuments::capture($this->values["{$namespace}:{$key}"] ?? $default);
     }
 
-    public function set(string $namespace, string $key, mixed $value, ?SettingsScope $scope = null): void
+    public function set(string $namespace, string $key, JsonDocument $value, ?SettingsScope $scope = null): void
     {
         $this->values["{$namespace}:{$key}"] = $value;
     }
@@ -90,7 +92,7 @@ function notificationInput(string $requestKey, string $message = 'hello'): Notif
         eventType: 'document.ready',
         recipient: new RecipientReference(kind: 'user', id: '11111111-1111-7111-8111-111111111112'),
         templateKey: 'document-ready',
-        payload: ['message' => $message],
+        payload: JsonDocuments::capture(['message' => $message]),
         related: new EntityReference(handle: 'document', id: 'document-1'),
     );
 }

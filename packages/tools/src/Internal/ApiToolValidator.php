@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use CoreX\Modules\Data\Api;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
-use CoreX\Operations\Definition\ApiOperationValidator;
+use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
 use JsonException;
 
 /** @internal Validates compiled tool declarations without depending on tool runtime. */
@@ -54,8 +54,8 @@ final class ApiToolValidator
             throw new CompilationException('Mutation tools require domain-key or provider-key idempotency: '.$api->toolCode);
         }
 
-        ApiOperationValidator::assertJsonValue($api->requestSchema);
-        ApiOperationValidator::assertJsonValue($api->responseSchema);
+        OperationDefinitionValidator::assertJsonValue($api->requestSchema);
+        OperationDefinitionValidator::assertJsonValue($api->responseSchema);
 
         try {
             json_encode([$api->requestSchema, $api->responseSchema, $api->availability], JSON_THROW_ON_ERROR);

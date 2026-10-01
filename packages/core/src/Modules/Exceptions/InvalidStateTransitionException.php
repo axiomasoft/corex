@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use LogicException;
 
 /**
@@ -11,9 +12,8 @@ use LogicException;
  * `purged` is terminal — re-installing a purged module goes through
  * `corex:modules:repair` (which returns it to `available`), never a direct
  * `enable` on the dead schema; `upgrade` requires `enabled`.
- *
- * @internal spec: B-10 §5.1 invariants, A11/A12
  */
+#[Api(since: '1.0')]
 final class InvalidStateTransitionException extends LogicException
 {
     public static function purgedIsTerminal(string $module): self

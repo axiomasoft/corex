@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Data;
 
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 final readonly class ModuleExplanation
 {
     /**
-     * @param  array<string, null|bool|int|string|array<int|string, mixed>>  $declaredConstraints
+     * @param  array{}|array{requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, compatibilityPassport: string, installedPackagePresent: bool}  $declaredConstraints
      * @param  list<string>  $reasons
      */
     public function __construct(

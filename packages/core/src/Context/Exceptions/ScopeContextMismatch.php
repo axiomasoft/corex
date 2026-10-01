@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class ScopeContextMismatch extends RuntimeException
 {
     public static function account(string $expected, string $actual): self

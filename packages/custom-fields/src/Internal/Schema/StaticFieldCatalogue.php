@@ -6,7 +6,8 @@ namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
-use CoreX\Data\DataScope;
+use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\Data\Data\DataScope;
 use RuntimeException;
 
 final readonly class StaticFieldCatalogue implements FieldCatalogue
@@ -47,6 +48,8 @@ final readonly class StaticFieldCatalogue implements FieldCatalogue
 
         $payload = json_encode($fields, JSON_THROW_ON_ERROR);
         $hash = hash('sha256', $entity."\n".$payload);
+
+        $fields = Validation::validatedMapList($fields, 'active fields');
 
         return new FieldSnapshot(
             entity: $entity,

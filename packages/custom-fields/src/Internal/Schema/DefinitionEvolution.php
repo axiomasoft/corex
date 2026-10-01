@@ -6,6 +6,7 @@ namespace CoreX\CustomFields\Internal\Schema;
 
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeLifecycle;
+use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Values\AttributeValueTransformerRegistry;
 use DateInterval;
 use DateTimeImmutable;
@@ -223,6 +224,8 @@ final readonly class DefinitionEvolution
         array $writeKeys,
         array $meta,
     ): AttributeDefinition {
+        $meta = Validation::validatedMap($meta, 'attribute metadata');
+
         return new AttributeDefinition(
             id: $current->id,
             entity: $current->entity,

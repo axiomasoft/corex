@@ -6,11 +6,12 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
-use CoreX\Tasks\Project\Models\Project;
+use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
@@ -20,14 +21,15 @@ use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\EntityReference;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
 use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Data\TaskView;
 use CoreX\Tasks\Task\Data\UpdateTaskData;
 use CoreX\Tasks\Task\Enums\TaskPriority;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Events\TaskCompleted;
 use CoreX\Tasks\Task\Events\TaskMovedToStage;
 use CoreX\Tasks\Task\Events\TaskUpdated;
-use CoreX\Tasks\Task\Models\Stage;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Stage;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\TasksModule;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +53,7 @@ beforeEach(function (): void {
     $this->project = Project::query()->create([
         'workspace_id' => $this->workspaceId,
         'name' => 'Launch',
-        'created_by' => $this->actor->toArray(),
+        'created_by' => JsonDocuments::decodeTree($this->actor->toArray()),
     ]);
     $this->todo = Stage::query()->create([
         'project_id' => $this->project->getKey(),
@@ -330,11 +332,11 @@ it('authorizes mutations against the task inside its locking transaction', funct
         assigneeId: $this->userId,
     ));
     $mutationAccess = Mockery::mock(TaskMutationAccess::class);
-    $assertLockedTask = function (mixed $data, TenantContext $context, Task $task) use ($reference): bool {
+    $assertLockedTask = function (mixed $data, TenantContext $context, TaskView $task) use ($reference): bool {
         return $data->taskId === $reference->id
             && $context->account->status === 'active'
-            && $task->getKey() === $reference->id
-            && $task->getConnection()->transactionLevel() > 0;
+            && $task->id === $reference->id
+            && DB::connection()->transactionLevel() > 0;
     };
 
     $mutationAccess->shouldReceive('authorizeUpdate')
@@ -455,7 +457,11 @@ it('ships a deny-by-default host authorization seam', function (): void {
             actor: $this->actor,
         ),
         context: app(TenantContextResolver::class)->current(),
-        task: new Task,
+        task: new TaskView(
+            id: (string) Str::uuid7(), workspaceId: null, projectId: null, stageId: null,
+            title: 'Denied', status: TaskStatus::Open, authorId: null, assigneeId: null,
+            requiresAcceptance: false,
+        ),
     ))->toThrow(AuthorizationException::class);
 });
 

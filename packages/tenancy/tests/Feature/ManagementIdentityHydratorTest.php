@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Tenancy\Membership\Internal\Identity\ManagementIdentityHydrator;
+use CoreX\Tenancy\Identity\Internal\Membership\ManagementIdentityHydrator;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {

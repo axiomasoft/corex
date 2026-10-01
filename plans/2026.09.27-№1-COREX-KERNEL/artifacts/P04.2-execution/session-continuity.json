@@ -1,0 +1,36 @@
+{
+  "estimate": {
+    "route_attested": false,
+    "capabilities_attested": false,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "bb0eba9837058889247db1774d1334a8fce724f6de6650aaa48ffd591340c8f7",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 1,
+    "lifecycle": "owner-requested-new-session",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "artifacts/P04.2-execution/implementation-handoff.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": null,
+  "owner_context": "cold-start-root: owner-requested-new-session",
+  "route_attestation": "not performed; owner explicitly waived executor route verification",
+  "next": {
+    "kind": "manual",
+    "command_id": null,
+    "plan_id": null,
+    "arguments": [
+      "frontier/high",
+      "P04.2"
+    ],
+    "context_kind": "cold-start-root",
+    "item_ids": [
+      "P04.2"
+    ],
+    "cold_start_scope": []
+  }
+}

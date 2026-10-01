@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Method CoreX\Intl\Currency\Data\RateBatch::__construct() has parameter $sourceManifest with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Currency/Data/RateBatch.php
-
-		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 11
@@ -91,12 +85,6 @@ parameters:
 			path: src/IntlServiceProvider.php
 
 		-
-			rawMessage: 'Method CoreX\Intl\Locale\Data\LocalePolicy::__construct() has parameter $explicitFallbackTags with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Locale/Data/LocalePolicy.php
-
-		-
 			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
 			identifier: booleanNot.exprNotBoolean
 			count: 2
@@ -107,42 +95,6 @@ parameters:
 			identifier: notIdentical.alwaysTrue
 			count: 1
 			path: src/Locale/Internal/Bcp47Validator.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Locale\Internal\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{mixed, non-empty-list, true}.'
-			identifier: return.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Locale\Internal\DefaultLocaleResolver::negotiate() should return array{string, list<string>, bool} but returns array{string, non-empty-list, true}.'
-			identifier: return.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
-
-		-
-			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array given.'
-			identifier: argument.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
-
-		-
-			rawMessage: 'Parameter $fallbackChain of class CoreX\Intl\Locale\Data\LocaleResolution constructor expects list<string>, list given.'
-			identifier: argument.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
-
-		-
-			rawMessage: 'Parameter $tag of method CoreX\Intl\Locale\Internal\Bcp47Validator::canonicalize() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
-
-		-
-			rawMessage: 'Parameter $tag of method CoreX\Intl\Locale\Internal\Bcp47Validator::isSupported() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Locale/Internal/DefaultLocaleResolver.php
 
 		-
 			rawMessage: 'Strict comparison using === between ''app'' and ''app'' will always evaluate to true.'
@@ -172,73 +124,13 @@ parameters:
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 1
-			path: src/Money/MoneyCast.php
+			path: src/Money/Laravel/MoneyCast.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Money/MoneyCast.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\DatasetManifest::__construct() has parameter $counts with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/DatasetManifest.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\DatasetManifest::__construct() has parameter $types with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/DatasetManifest.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\ReferencePage::__construct() has parameter $provenance with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/ReferencePage.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\ReferencePage::__construct() has parameter $records with no value type specified in iterable type list<mixed>.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/ReferencePage.php
-
-		-
-			rawMessage: PHPDoc tag @param for parameter $records contains unresolvable type.
-			identifier: parameter.unresolvableType
-			count: 1
-			path: src/Territory/Data/ReferencePage.php
-
-		-
-			rawMessage: PHPDoc type for property CoreX\Intl\Territory\Data\ReferencePage::$records contains unresolvable type.
-			identifier: property.unresolvableType
-			count: 1
-			path: src/Territory/Data/ReferencePage.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\SuggestionResult::__construct() has parameter $provenance with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/SuggestionResult.php
-
-		-
-			rawMessage: 'Method CoreX\Intl\Territory\Data\SuggestionResult::__construct() has parameter $suggestions with no value type specified in iterable type list<mixed>.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Territory/Data/SuggestionResult.php
-
-		-
-			rawMessage: PHPDoc tag @param for parameter $suggestions contains unresolvable type.
-			identifier: parameter.unresolvableType
-			count: 1
-			path: src/Territory/Data/SuggestionResult.php
-
-		-
-			rawMessage: PHPDoc type for property CoreX\Intl\Territory\Data\SuggestionResult::$suggestions contains unresolvable type.
-			identifier: property.unresolvableType
-			count: 1
-			path: src/Territory/Data/SuggestionResult.php
+			path: src/Money/Laravel/MoneyCast.php
 
 		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
@@ -374,12 +266,6 @@ parameters:
 
 		-
 			rawMessage: 'Parameter $coveredCountries of class CoreX\Intl\Territory\Data\DatasetManifest constructor expects list<string>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
-
-		-
-			rawMessage: 'Parameter $records of class CoreX\Intl\Territory\Data\ReferencePage constructor expects list<mixed>, array<int, array<string, mixed>> given.'
 			identifier: argument.type
 			count: 1
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php

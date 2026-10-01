@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Support;
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Registry\CompiledModule;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledModule;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 
 /** Selected P7 laboratory cohort contributions; disjoint from archive cohort. */
 final class LabToolModule implements ModuleRegistry

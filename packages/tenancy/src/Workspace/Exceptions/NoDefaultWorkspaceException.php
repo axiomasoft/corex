@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspace\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
@@ -13,7 +14,6 @@ use RuntimeException;
  * a distinct subclass lets callers (`Http\Middleware\ResolveWorkspace`)
  * translate this specific access-denial into 403 instead of the 500 a bare
  * `RuntimeException` would render.
- *
- * @internal spec: B-11 §5.4 п.4, AC-18
  */
+#[Api(since: '1.0')]
 final class NoDefaultWorkspaceException extends RuntimeException {}

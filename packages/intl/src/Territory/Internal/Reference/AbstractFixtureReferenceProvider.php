@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Reference;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Exceptions\SnapshotExpiredException;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
 use CoreX\Intl\Territory\Data\DatasetManifest;
@@ -85,10 +86,10 @@ abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 
         return new ReferencePage(
             status: $page === [] ? 'notFound' : 'available',
-            records: array_map(fn (array $record): array => $this->present(record: $record), $page),
+            records: JsonDocuments::capture(array_map(fn (array $record): array => $this->present(record: $record), $page)),
             next: $next,
             snapshotId: $snapshotId,
-            provenance: ['provider' => $this->provider, 'snapshotId' => $snapshotId],
+            provenance: JsonDocuments::capture(['provider' => $this->provider, 'snapshotId' => $snapshotId]),
         );
     }
 

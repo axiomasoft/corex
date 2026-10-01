@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Support;
 
-use CoreX\Config\SecretRef;
-use CoreX\Config\ViolationList;
-use CoreX\Tenancy\Provisioning\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Config\Data\SecretRef;
+use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 
-/** @internal Package composition type. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class TenancyOptions
 {
     /**
@@ -71,7 +73,7 @@ final readonly class TenancyOptions
      */
     public static function fromArray(array $tenancy, array $corexTenancy): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
 
         $centralConnection = self::nonEmpty($violations, 'central_connection', $tenancy['central_connection'] ?? 'pgsql');
         $tenantModel = self::classString($violations, 'tenant_model', $tenancy['tenant_model'] ?? null);
@@ -307,7 +309,7 @@ final readonly class TenancyOptions
     }
 
     /** @param array<string, mixed> $tenancy */
-    private static function statusGate(ViolationList $violations, array $tenancy): StatusGatePolicy
+    private static function statusGate(ConfigurationValidator $violations, array $tenancy): StatusGatePolicy
     {
         $statusGate = is_array($tenancy['status_gate'] ?? null) ? $tenancy['status_gate'] : [];
         $paymentRoute = self::nullableNonEmptyString($statusGate['payment_route'] ?? null);
@@ -330,7 +332,7 @@ final readonly class TenancyOptions
         );
     }
 
-    private static function optionalSecret(ViolationList $violations, string $path, mixed $value): ?SecretRef
+    private static function optionalSecret(ConfigurationValidator $violations, string $path, mixed $value): ?SecretRef
     {
         if ($value === null || $value === '') {
             return null;
@@ -347,7 +349,7 @@ final readonly class TenancyOptions
 
     /** @return class-string */
     private static function classString(
-        ViolationList $violations,
+        ConfigurationValidator $violations,
         string $path,
         mixed $value,
         ?string $contract = null,
@@ -374,7 +376,7 @@ final readonly class TenancyOptions
      * @return list<class-string>
      */
     private static function classList(
-        ViolationList $violations,
+        ConfigurationValidator $violations,
         string $path,
         mixed $value,
         bool $required,
@@ -460,7 +462,7 @@ final readonly class TenancyOptions
         return $resolved;
     }
 
-    private static function bool(ViolationList $violations, string $path, mixed $value): bool
+    private static function bool(ConfigurationValidator $violations, string $path, mixed $value): bool
     {
         if (is_bool($value)) {
             return $value;
@@ -471,7 +473,7 @@ final readonly class TenancyOptions
         return false;
     }
 
-    private static function nonEmpty(ViolationList $violations, string $path, mixed $value): string
+    private static function nonEmpty(ConfigurationValidator $violations, string $path, mixed $value): string
     {
         if (is_string($value) && $value !== '') {
             return $value;
@@ -487,7 +489,7 @@ final readonly class TenancyOptions
         return is_string($value) && $value !== '' ? $value : null;
     }
 
-    private static function nonNegativeInt(ViolationList $violations, string $path, mixed $value): int
+    private static function nonNegativeInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
         if (is_int($value) && $value >= 0) {
             return $value;
@@ -498,7 +500,7 @@ final readonly class TenancyOptions
         return 0;
     }
 
-    private static function positiveInt(ViolationList $violations, string $path, mixed $value): int
+    private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
         if (is_int($value) && $value > 0) {
             return $value;

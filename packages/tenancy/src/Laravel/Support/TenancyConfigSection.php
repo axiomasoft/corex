@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Support;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Messaging\Enums\PubSubDriver;
 
-/** @internal Configuration report composition. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyConfigSection implements ConfigReportSection
 {
     public function order(): int

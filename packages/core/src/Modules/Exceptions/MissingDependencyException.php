@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class MissingDependencyException extends RuntimeException
 {
     public function __construct(string $module, string $missingDependency)

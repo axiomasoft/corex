@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Дедупликация идемпотентного потребителя (MSG-006).
  *
@@ -30,6 +33,7 @@ namespace CoreX\Messaging\Contracts;
  *
  * Не подтверждать доставку брокеру до коммита локальной транзакции.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface Inbox
 {
     /** @return bool true — заявка получена, эффект применять; false — дубликат */

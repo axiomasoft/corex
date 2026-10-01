@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Lead\Models;
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 use Flex\Crm\Context\Models\Concerns\HasActivities;
 use Flex\Crm\Context\Models\Concerns\HasCrmContext;
 use Flex\Crm\Lead\Enums\LeadStatus;

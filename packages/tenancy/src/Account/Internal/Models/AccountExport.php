@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Account\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Account\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

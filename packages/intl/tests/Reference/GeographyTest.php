@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Exceptions\SnapshotExpiredException;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
@@ -74,8 +75,8 @@ it('GEO-01 queries equivalent coverage from two fixture providers', function ():
         limit: 10,
     ));
 
-    expect($boxes->records[0]['sourceId'])->toBe('US-CA')
-        ->and($compact->records[0]['sourceId'])->toBe('US-CA');
+    expect(JsonDocuments::list($boxes->records)[0]['sourceId'])->toBe('US-CA')
+        ->and(JsonDocuments::list($compact->records)[0]['sourceId'])->toBe('US-CA');
 });
 
 it('GEO-02 exposes manifest provenance and hashes', function (): void {
@@ -132,10 +133,10 @@ it('GEO-05 pins keyset cursor to snapshot and query hash', function (): void {
     $first = $provider->query($scope, $query);
     $second = $provider->query($scope, $query, $first->next);
 
-    expect($first->records)->toHaveCount(1)
+    expect(JsonDocuments::list($first->records))->toHaveCount(1)
         ->and($first->next)->not->toBeNull()
-        ->and($second->records)->toHaveCount(1)
-        ->and($second->records[0]['sourceId'])->not->toBe($first->records[0]['sourceId']);
+        ->and(JsonDocuments::list($second->records))->toHaveCount(1)
+        ->and(JsonDocuments::list($second->records)[0]['sourceId'])->not->toBe(JsonDocuments::list($first->records)[0]['sourceId']);
 });
 
 it('GEO-06 normalizes bounded UTF-8 queries without merging ambiguous names', function (): void {
@@ -146,7 +147,7 @@ it('GEO-06 normalizes bounded UTF-8 queries without merging ambiguous names', fu
         kind: 'country', countryKey: null, parentKey: null, placeKey: null, query: 'united states', locale: 'en', snapshotId: 'boxes-fixture-v1', mode: 'prefix', limit: 100,
     ));
 
-    expect($page->records)->toHaveCount(1)
+    expect(JsonDocuments::list($page->records))->toHaveCount(1)
         ->and(fn () => app(FixtureReferenceNormalizer::class)->normalizeQuery(str_repeat('a', 201)))
         ->toThrow(SchemaMismatchException::class);
 });
@@ -159,7 +160,7 @@ it('GEO-07 returns multiple timezone candidates for countries without guessing a
         kind: 'country', countryKey: new ReferenceIdentity(namespace: 'iso3166-1', sourceId: 'US'), parentKey: null, placeKey: null, query: null, locale: 'en', snapshotId: 'boxes-fixture-v1', mode: 'exact', limit: 10,
     ));
 
-    expect(count($country->records[0]['timezones']))->toBeGreaterThan(1);
+    expect(count(JsonDocuments::list($country->records)[0]['timezones']))->toBeGreaterThan(1);
 });
 
 it('GEO-09 keeps read-only lookup scoped without public write API on provider', function (): void {

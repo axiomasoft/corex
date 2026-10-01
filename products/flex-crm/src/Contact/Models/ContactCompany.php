@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Contact\Models;
 
-use CoreX\Database\HasConfiguredId;
+use CoreX\Database\Laravel\HasConfiguredId;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
 use Illuminate\Auth\Access\AuthorizationException;

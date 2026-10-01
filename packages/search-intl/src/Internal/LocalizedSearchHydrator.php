@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\SearchIntl\Internal;
 
 use Closure;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Translation\Data\LocalizedText;
 use CoreX\Search\Contracts\SearchHydrator;

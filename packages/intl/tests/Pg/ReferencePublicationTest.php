@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
 use CoreX\Intl\Territory\Data\DatasetCandidate;

@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Exceptions;
 
+use CoreX\Attributes\Api;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use RuntimeException;
 
 /** Explicit public error. Never pass database or infrastructure exception messages here. */
+#[Api(since: '1.0')]
 final class ApiError extends RuntimeException implements DescribesError
 {
-    /**
-     * @param  array<string, mixed>  $details
-     */
     public function __construct(
         public readonly string $errorCode,
         public readonly int $status,
         string $message,
-        public readonly array $details = [],
+        public readonly JsonDocument $details = new JsonDocument('[]'),
         public readonly ?ErrorCategory $category = null,
         public readonly bool $retryable = false,
         public readonly ?string $path = null,
@@ -62,7 +63,7 @@ final class ApiError extends RuntimeException implements DescribesError
     {
         $details = [];
 
-        foreach ($this->details as $key => $value) {
+        foreach (JsonDocuments::map($this->details) as $key => $value) {
             if ($value === null || is_scalar($value)) {
                 $details[$key] = $value;
 

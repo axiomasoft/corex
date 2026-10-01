@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 enum IndexPolicy: string
 {
     case None = 'none';

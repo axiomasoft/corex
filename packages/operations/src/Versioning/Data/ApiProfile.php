@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
-use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Attributes\Api;
+use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 
 /** Immutable code projection. It has no register, replace, or freeze API. */
+#[Api(since: '1.0')]
 final readonly class ApiProfile
 {
     /**
@@ -34,7 +36,7 @@ final readonly class ApiProfile
         return $this->contractFingerprint;
     }
 
-    /** @return array<string, mixed> */
+    /** @return array{capabilities: list<array{id: string, status: string, limits: array<string, int|string>, operations: list<string>}>, deprecations: list<array{id: string, deprecatedAt: string, sunsetAt: ?string, successor: ?string, migrationUri: string}>, operations: list<array{contractHash: string, id: string, version: string}>, registryFingerprint: string, version: array{major: string, status: string, supportedThrough: ?string}} */
     public function projection(): array
     {
         return [

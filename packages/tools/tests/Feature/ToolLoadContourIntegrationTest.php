@@ -10,32 +10,33 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Cost\Data\CostInput;
-use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\InvocationFixtures;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
-use CoreX\Operations\Testing\InvocationFixtures;
 use CoreX\Operations\Testing\LoadContourModule;
 use CoreX\Operations\Testing\ModuleFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use Illuminate\Http\Request;
 use Orchestra\Testbench\TestCase;
@@ -114,7 +115,7 @@ final class ToolLoadContourIntegrationTest extends TestCase
         $declaration = collect($this->modules->registry->api)->first(
             static fn (Api $api): bool => $api->toolCode === 'notes.create',
         );
-        $descriptor = ToolDescriptor::fromDeclaration($declaration);
+        $descriptor = ToolDescriptorFactory::fromDeclaration($declaration);
         $tool = $this->app->make(ToolInvoker::class)->invoke(
             ResolvedContexts::make($this->tenants->current(), $this->identity, new InvocationMetadata('request-123', 'v1', 'notes.create', 'POST')),
             new ToolCall('notes.create', 'v1', $descriptor->contractHash, new JsonObject(JsonCanonical::encode(['title' => 'Hello'])), 'request-123'),

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
-use CoreX\Data\DataScope;
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Registry\FieldDefinition;
+use CoreX\Data\Data\DataScope;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;

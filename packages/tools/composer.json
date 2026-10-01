@@ -18,7 +18,7 @@
     },
     "suggest": {
         "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
-        "opis/json-schema": "2.4.1 \u2014 bounded offline tool-schema/1 validation adapter",
+        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
@@ -79,7 +79,8 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Tools\\Contracts",
-                "CoreX\\Tools\\Data"
+                "CoreX\\Tools\\Data",
+                "CoreX\\Tools\\ToolServiceProvider"
             ]
         },
         "branch-alias": {

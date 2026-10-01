@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

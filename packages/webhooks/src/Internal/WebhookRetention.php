@@ -6,7 +6,7 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;

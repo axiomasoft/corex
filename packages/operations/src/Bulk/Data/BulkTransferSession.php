@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ExportRunner;
 use CoreX\Transfer\Contracts\TransferResultReader;
@@ -14,6 +15,7 @@ use CoreX\Transfer\Data\StepToken;
 use CoreX\Transfer\Data\TransferRef;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class BulkTransferSession
 {
     public function __construct(

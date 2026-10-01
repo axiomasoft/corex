@@ -6,7 +6,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Identity\Internal\Models\User;

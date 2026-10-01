@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;

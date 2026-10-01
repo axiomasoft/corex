@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Tests\Stubs;
 
-use CoreX\Database\BaseModel;
+use CoreX\Database\Laravel\BaseModel;
 
 /**
  * Stub used as an authorization context entity.

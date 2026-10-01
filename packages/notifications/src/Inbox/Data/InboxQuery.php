@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Inbox\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class InboxQuery
 {
     public function __construct(public ?string $before, public int $limit = 100)

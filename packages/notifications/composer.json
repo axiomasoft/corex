@@ -42,7 +42,12 @@
                 "CoreX\\Notifications\\Inbox\\Contracts",
                 "CoreX\\Notifications\\Inbox\\Data",
                 "CoreX\\Notifications\\Preferences\\Contracts",
-                "CoreX\\Notifications\\Preferences\\Data"
+                "CoreX\\Notifications\\Preferences\\Data",
+                "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied",
+                "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
+                "CoreX\\Notifications\\NotificationsModule",
+                "CoreX\\Notifications\\NotificationsServiceProvider",
+                "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings"
             ]
         },
         "laravel": {

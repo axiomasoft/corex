@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Contracts;
 
+use CoreX\Attributes\Api;
 use CoreX\Departments\Data\Department;
 use CoreX\Departments\Events\DepartmentMoved;
 use CoreX\Departments\Exceptions\DepartmentCycleException;
@@ -15,9 +16,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * Soft-deleted departments are excluded from every read here —
  * find()/subtree()/primaryOf() never surface a removed row, so a deleted
  * department drops out of the scope feeding entity-scoped RBAC.
- *
- * @internal spec: B-10 §3.1/§5.7
  */
+#[Api(since: '1.0')]
 interface DepartmentRepository
 {
     public function find(string $id): ?Department;

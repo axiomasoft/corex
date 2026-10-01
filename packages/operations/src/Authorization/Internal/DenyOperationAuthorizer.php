@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Authorization\Internal;
 
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Override;
 

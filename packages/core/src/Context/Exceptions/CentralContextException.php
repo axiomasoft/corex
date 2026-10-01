@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Exceptions;
 
+use CoreX\Attributes\Api;
 use CoreX\Context\Contracts\TenantContextResolver;
 use RuntimeException;
 
@@ -15,6 +16,7 @@ use RuntimeException;
  * request. The boxed `SingleAccountResolver` never throws this (constant
  * context, always "initialized").
  */
+#[Api(since: '1.0')]
 final class CentralContextException extends RuntimeException
 {
     public function __construct()

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Compiler;
 
-use CoreX\Modules\Compiler\NormalizedExtension;
 use CoreX\Modules\Contracts\Extender;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Data\NormalizedExtension;
 use CoreX\Modules\Exceptions\CompilationException;
 
 /**

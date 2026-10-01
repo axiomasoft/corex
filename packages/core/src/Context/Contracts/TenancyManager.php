@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Context\Contracts;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
@@ -14,9 +16,8 @@ use CoreX\Context\Data\WorkspaceRef;
  * Boxed installs bind a null-manager (constant context, no stancl); cloud
  * installs bind реализацию из пакета axiomasoft/corex-tenancy — the choice is a container
  * binding, never an `if(cloud)` branch.
- *
- * @internal spec: B-11 §3.1, D10
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TenancyManager
 {
     /**

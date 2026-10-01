@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Data\DeliveryHealth;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -20,7 +20,7 @@ final readonly class SqlDeliveryHealth
 
     public function read(): DeliveryHealth
     {
-        $table = Config::outboxMessagesTable();
+        $table = app(CoreOptions::class)->outboxMessagesTable;
         $now = $this->clock->now();
         $counts = [];
 

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Internal;
 
-use CoreX\Audit\Contracts\AuditEntry;
+use CoreX\Audit\Data\AuditEntry;
+use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -50,8 +51,8 @@ final class RecordAuditEntry implements ShouldQueueAfterCommit
             'entity_type' => $this->entry->entityType,
             'entity_id' => $this->entry->entityId,
             'action' => $this->entry->action,
-            'changes' => $this->entry->changes,
-            'context' => $this->entry->context,
+            'changes' => JsonDocuments::optionalMap($this->entry->changes),
+            'context' => JsonDocuments::map($this->entry->context),
         ]);
     }
 }

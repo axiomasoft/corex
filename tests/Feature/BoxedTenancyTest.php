@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\NullTenancyManager;
+use CoreX\Context\Internal\NullTenancyManager;
 
 /**
  * P2.5 — boxed TenancyManager binding (D10, B-11 §6.1 L892–907): no

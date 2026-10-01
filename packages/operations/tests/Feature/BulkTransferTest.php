@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -19,7 +20,7 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
@@ -100,14 +101,14 @@ final class BulkTransferTest extends TestCase
 
         self::assertNotNull($resumed);
         self::assertSame(1, $factory->sinkWrites);
-        self::assertSame('1', $resumed->checkpoint['sequence']);
+        self::assertSame('1', JsonDocuments::map($resumed->checkpoint)['sequence']);
 
         $this->clock->advance(new DateInterval('PT31S'));
         $again = $worker->workOnce($this->scope);
 
         self::assertNotNull($again);
         self::assertSame(1, $factory->sinkWrites);
-        self::assertSame('1', $again->checkpoint['sequence']);
+        self::assertSame('1', JsonDocuments::map($again->checkpoint)['sequence']);
     }
 
     public function test_repeat_create_returns_the_current_token_and_export_rotates_an_unsealed_attempt(): void
@@ -122,17 +123,17 @@ final class BulkTransferTest extends TestCase
 
         $unsealed = new BulkOperation(
             definition: $submitted->definition,
-            transferRef: null,
+            transferRef: JsonDocuments::nullable(null),
             status: BulkOperationStatus::Running,
             terminalStatus: null,
             revision: 1,
             leaseOwner: 'worker-1',
             leaseUntil: $this->clock->now()->add(new DateInterval('PT30S')),
             cancelRequestedAt: null,
-            checkpoint: ['attempt_id' => 'old-attempt', 'sealed' => false, 'sequence' => '0'],
-            progress: ['phase' => 'running'],
-            resultRef: null,
-            error: null,
+            checkpoint: JsonDocuments::capture(['attempt_id' => 'old-attempt', 'sealed' => false, 'sequence' => '0']),
+            progress: JsonDocuments::capture(['phase' => 'running']),
+            resultRef: JsonDocuments::nullable(null),
+            error: JsonDocuments::nullable(null),
             attempt: 1,
             nextAttemptAt: $this->clock->now(),
             createdAt: $this->clock->now(),
@@ -161,7 +162,7 @@ final class BulkTransferTest extends TestCase
 
         self::assertNotNull($failed);
         self::assertSame(BulkOperationStatus::Failed, $failed->status);
-        self::assertSame('contract_drift', $failed->error['code'] ?? null);
+        self::assertSame('contract_drift', JsonDocuments::optionalMap($failed->error)['code'] ?? null);
         self::assertSame(0, $factory->steps);
         self::assertSame('started', $observed[0][0]);
         self::assertSame('failed', $observed[1][0]);
@@ -203,15 +204,15 @@ final class BulkTransferTest extends TestCase
             encodedScope: (new ArrayDataScopeCodec)->encode($this->scope),
             actorId: 'actor-1',
             clientId: 'client-1',
-            extensionStamp: [
+            extensionStamp: JsonDocuments::capture([
                 'point' => 'api.operation',
                 'id' => 'notes.bulk-import',
                 'version' => '1',
                 'rights' => 'read',
                 'restore_epoch' => hash('sha256', 'bulk-restore-epoch'),
                 'registryFingerprint' => hash('sha256', 'registry'),
-            ],
-            inputRef: ['kind' => $kind, 'format' => 'ndjson', 'sha256' => hash('sha256', $kind), 'length' => 1],
+            ]),
+            inputRef: JsonDocuments::capture(['kind' => $kind, 'format' => 'ndjson', 'sha256' => hash('sha256', $kind), 'length' => 1]),
         );
     }
 

@@ -1,0 +1,23 @@
+{
+  "schema": "p04-owner-validation-transfer/v1",
+  "decision": "D67",
+  "owner_instruction": "сука, больши ни одной проверки, дописывай код по задаче, а после дай промт для новой сессии для ревью и проверки",
+  "implementation_status": "implemented-awaiting-independent-review-and-final-validation",
+  "item_status": "in-progress",
+  "final_patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
+  "previous_validation_patch_sha256": "2f12c8f2adf123d76c1bdf8255a18c76954aabf13140aeb8d0e0cf73cd5adc14",
+  "previous_validation_is_final": false,
+  "checks_started_after_owner_stop": 0,
+  "review_in_this_session": false,
+  "commit": null,
+  "reason_no_commit": "Owner prohibited all further checks, including commit hooks.",
+  "checkpoint": "artifacts/P04.2-execution/implementation-handoff.md",
+  "known_remaining": [
+    "Run current scoped analyse and lint after final changes.",
+    "Replay sealed candidate and establish final source equality.",
+    "Run TaskCompletion filter, root/package/PG suites needed for the current candidate; package vendors were copied into scratch but no new package run was started.",
+    "Verify the manually authored eight new registrar Golden records and semantic delta without bulk GOLDEN_UPDATE.",
+    "Run finite remaining gates required by P04.2; retain prior GREEN evidence when scope and relevant inputs are identical.",
+    "Perform independent review in the new session and close P04.2 only on actual results."
+  ]
+}

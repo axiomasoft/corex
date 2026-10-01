@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Support;
 
-use CoreX\Config\ViolationList;
+use CoreX\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type for flex-crm config (D38 / P16.8). */
 final readonly class CrmOptions
@@ -16,14 +16,14 @@ final readonly class CrmOptions
     /** @param  array<string, mixed>  $config */
     public static function fromArray(array $config): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
         $language = self::nonEmpty($violations, 'search_language', $config['search_language'] ?? 'russian');
         $violations->failIfAny();
 
         return new self(searchLanguage: $language);
     }
 
-    private static function nonEmpty(ViolationList $violations, string $path, mixed $value): string
+    private static function nonEmpty(ConfigurationValidator $violations, string $path, mixed $value): string
     {
         if (is_string($value) && $value !== '') {
             return $value;

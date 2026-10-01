@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Integration;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use DateTimeImmutable;
 use InvalidArgumentException;
 

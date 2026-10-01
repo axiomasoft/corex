@@ -1,0 +1,12 @@
+[
+  {
+    "file": "packages/tenancy/tests/Pg/ClaimLifecycleConcurrencyTest.php",
+    "imports": [
+      "use Illuminate\\Support\\Facades\\DB;",
+      "use CoreX\\Tenancy\\Provisioning\\Internal\\ClaimAccountSignup;",
+      "use CoreX\\Tenancy\\Contracts\\TemplateIntegrityVerifier;",
+      "use CoreX\\Tenancy\\Provisioning\\Data\\ClaimRequest;",
+      "use CoreX\\Tenancy\\Provisioning\\Data\\QualifiedTemplate;"
+    ]
+  }
+]

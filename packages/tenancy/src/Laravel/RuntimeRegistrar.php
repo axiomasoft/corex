@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
@@ -14,7 +16,7 @@ use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
@@ -26,7 +28,7 @@ use Override;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 use Stancl\Tenancy\Tenancy as Stancl;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RuntimeRegistrar implements PackageRegistrar
 {
     #[Override]

@@ -159,7 +159,7 @@
         {
             "from": "axiomasoft/corex-operations",
             "to": "axiomasoft/corex",
-            "import_file": "packages/operations/src/Definition/Operation.php",
+            "import_file": "packages/operations/src/Definition/Data/Operation.php",
             "adr": "P3.3",
             "expires_when": "import removed or target symbol promoted to public-api",
             "reason": "Frozen R4 baseline at P3.3 (API-003 debt)."

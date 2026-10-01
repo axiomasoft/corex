@@ -76,28 +76,28 @@ test('search contracts are split across dedicated files (A61)', function (): voi
 test('search provider eloquent import probe fails A61 with file path', function (): void {
     $probePath = SourceScanner::packagePath('search', 'src/Internal/A61ProbeSearchProvider.php');
     $probeContents = <<<'PHP'
-<?php
-
-declare(strict_types=1);
-
-namespace CoreX\Search\Internal;
-
-use CoreX\Search\Contracts\SearchProvider;
-use Illuminate\Database\Eloquent\Model;
-
-final class A61ProbeSearchProvider implements SearchProvider
-{
-    public function capabilities(): \CoreX\Search\Data\SearchCapabilities
+    <?php
+    
+    declare(strict_types=1);
+    
+    namespace CoreX\Search\Internal;
+    
+    use CoreX\Search\Contracts\SearchProvider;
+    use Illuminate\Database\Eloquent\Model;
+    
+    final class A61ProbeSearchProvider implements SearchProvider
     {
-        throw new \LogicException('probe');
+        public function capabilities(): \CoreX\Search\Data\SearchCapabilities
+        {
+            throw new \LogicException('probe');
+        }
+    
+        public function query(\CoreX\Data\Data\DataScope $scope, \CoreX\Search\Data\SearchQuery $query): \CoreX\Search\Data\CandidatePage
+        {
+            throw new \LogicException('probe');
+        }
     }
-
-    public function query(\CoreX\Data\DataScope $scope, \CoreX\Search\Data\SearchQuery $query): \CoreX\Search\Data\CandidatePage
-    {
-        throw new \LogicException('probe');
-    }
-}
-PHP;
+    PHP;
 
     file_put_contents($probePath, $probeContents);
 
@@ -211,9 +211,6 @@ test('table ownership gate reports T4 for core cross-package foreign key probe',
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {

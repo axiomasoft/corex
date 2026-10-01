@@ -38,7 +38,10 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Media\\Contracts",
-                "CoreX\\Media\\Data"
+                "CoreX\\Media\\Data",
+                "CoreX\\Media\\Laravel\\UploadedFileSource",
+                "CoreX\\Media\\MediaModule",
+                "CoreX\\Media\\MediaServiceProvider"
             ]
         },
         "laravel": {

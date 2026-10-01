@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\MessageEnvelope;
 
 /**
@@ -19,6 +21,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
  * а не форматирование (как `ArrayDataScopeCodec`, P4.8). Канал публикации берётся из
  * объявления контракта в реестре, а не из полей конверта.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface MessagePublisher
 {
     public function publish(MessageEnvelope $message): void;

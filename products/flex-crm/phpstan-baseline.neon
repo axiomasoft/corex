@@ -1,102 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000100_create_crm_pipelines_table.php
-
-		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000110_create_crm_stages_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000110_create_crm_stages_table.php
-
-		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 2
-			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
-
-		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 3
-			path: database/migrations/2026_06_14_000120_create_crm_deals_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000130_create_crm_companies_table.php
-
-		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000130_create_crm_companies_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000140_create_crm_contacts_table.php
-
-		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 3
-			path: database/migrations/2026_06_14_000140_create_crm_contacts_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000150_create_crm_leads_table.php
-
-		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 4
-			path: database/migrations/2026_06_14_000150_create_crm_leads_table.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: database/migrations/2026_06_14_000160_create_crm_activities_table.php
-
-		-
-			rawMessage: 'Call to static method reference() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 2
-			path: database/migrations/2026_06_14_000160_create_crm_activities_table.php
-
-		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 7
-			path: database/migrations/2026_09_14_000002_company_contact_parity.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 4
-			path: database/migrations/2026_09_14_000002_company_contact_parity.php
-
-		-
 			rawMessage: Cannot access property $server_version_num on mixed.
 			identifier: property.nonObject
 			count: 1
@@ -107,18 +11,6 @@ parameters:
 			identifier: cast.int
 			count: 1
 			path: database/migrations/2026_09_14_000002_company_contact_parity.php
-
-		-
-			rawMessage: 'Call to static method foreign() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 19
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 7
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
 
 		-
 			rawMessage: Cannot access offset 'name' on mixed.
@@ -415,30 +307,6 @@ parameters:
 			path: src/Contact/Models/ContactCompany.php
 
 		-
-			rawMessage: Usage of internal trait CoreX\Database\HasConfiguredId in class Flex\Crm\Contact\Models\ContactCompany.
-			identifier: traitUse.internalTrait
-			count: 1
-			path: src/Contact/Models/ContactCompany.php
-
-		-
-			rawMessage: Access to property $database of internal class CoreX\Context\Data\DatabaseConnectionConfig from outside its root namespace CoreX.
-			identifier: property.internalClass
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: 'Call to method isActive() of internal interface CoreX\Modules\Contracts\ModuleRegistry from outside its root namespace CoreX.'
-			identifier: method.internalInterface
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: 'Call to method resolve() of internal interface CoreX\Context\Contracts\AccountConnectionResolver from outside its root namespace CoreX.'
-			identifier: method.internalInterface
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
 			rawMessage: Cannot access property $name on mixed.
 			identifier: property.nonObject
 			count: 1
@@ -447,30 +315,6 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: 'Parameter $connections of method Flex\Crm\Context\ContextGuard::__construct() has typehint with internal interface CoreX\Context\Contracts\AccountConnectionResolver.'
-			identifier: parameter.internalInterface
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: 'Parameter $modules of method Flex\Crm\Context\ContextGuard::__construct() has typehint with internal interface CoreX\Modules\Contracts\ModuleRegistry.'
-			identifier: parameter.internalInterface
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: Property $connections references internal interface CoreX\Context\Contracts\AccountConnectionResolver in its type.
-			identifier: property.internalInterface
-			count: 1
-			path: src/Context/ContextGuard.php
-
-		-
-			rawMessage: Property $modules references internal interface CoreX\Modules\Contracts\ModuleRegistry in its type.
-			identifier: property.internalInterface
 			count: 1
 			path: src/Context/ContextGuard.php
 
@@ -511,114 +355,6 @@ parameters:
 			path: src/Context/Internal/RecordRules.php
 
 		-
-			rawMessage: Usage of internal trait CoreX\Database\HasConfiguredId in class Flex\Crm\Context\Models\Source.
-			identifier: traitUse.internalTrait
-			count: 1
-			path: src/Context/Models/Source.php
-
-		-
-			rawMessage: 'Call to method auditable() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 2
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method extends() of internal class CoreX\Modules\Definition\ModuleManifest from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method handle() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method label() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method table() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method tablePrefix() of internal class CoreX\Modules\Definition\ModuleManifest from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method title() of internal class CoreX\Modules\Definition\ModuleManifest from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to method titleAttribute() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to static method make() of internal class CoreX\Modules\Definition\ModuleManifest from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to static method make() of internal class CoreX\Modules\Extend\Entity from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Call to static method operation() of internal class CoreX\Modules\Extend\Api from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 7
-			path: src/CrmModule.php
-
-		-
-			rawMessage: Class Flex\Crm\CrmModule extends internal class CoreX\Modules\Definition\ModuleDefinition.
-			identifier: class.extendsInternalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: 'Return type of method Flex\Crm\CrmModule::manifest() has typehint with internal class CoreX\Modules\Definition\ModuleManifest.'
-			identifier: return.internalClass
-			count: 1
-			path: src/CrmModule.php
-
-		-
-			rawMessage: Access to constant Auditable of internal enum CoreX\Modules\Enums\Capability from outside its root namespace CoreX.
-			identifier: classConstant.internalEnum
-			count: 2
-			path: src/CrmServiceProvider.php
-
-		-
-			rawMessage: Access to constant on internal class CoreX\Modules\Registry\ArrayEntityRegistry.
-			identifier: classConstant.internalClass
-			count: 1
-			path: src/CrmServiceProvider.php
-
-		-
-			rawMessage: 'Call to method __construct() of internal class CoreX\Modules\Registry\EntityDefinition from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmServiceProvider.php
-
-		-
-			rawMessage: 'Call to method register() of internal class CoreX\Modules\Registry\ArrayEntityRegistry from outside its root namespace CoreX.'
-			identifier: method.internalClass
-			count: 7
-			path: src/CrmServiceProvider.php
-
-		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -628,12 +364,6 @@ parameters:
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
 			count: 1
-			path: src/CrmServiceProvider.php
-
-		-
-			rawMessage: Instantiation of internal class CoreX\Modules\Registry\EntityDefinition.
-			identifier: new.internalClass
-			count: 7
 			path: src/CrmServiceProvider.php
 
 		-

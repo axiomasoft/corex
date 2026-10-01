@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Contracts;
 
-use CoreX\Data\DataScope;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Data\WebhookDelivery;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface WebhookDeliveryStore
 {
     public function find(DataScope $scope, string $id): ?WebhookDelivery;

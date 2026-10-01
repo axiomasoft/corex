@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace CoreX;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\Internal\PruneAuditLog;
-use CoreX\Config\Config;
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Config\CoreOptions;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Internal\Commands\ValidateConfigCommand;
+use CoreX\Config\Internal\Config;
 use CoreX\Config\Internal\KernelConfigSection;
+use CoreX\Config\Laravel\CoreOptionsParser;
+use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\GuardedTenantContextRestorer;
-use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Messaging\Contracts\Inbox;
@@ -44,12 +48,16 @@ use CoreX\Messaging\Internal\SqlOutboxRelay;
 use CoreX\Modules\Contracts\ModuleRegistrar;
 use CoreX\Modules\Internal\ServiceProviderModuleRegistrar;
 use CoreX\Observability\Contracts\OperationObserver;
+use CoreX\Observability\Contracts\TracePropagation;
 use CoreX\Observability\Internal\NullOperationObserver;
+use CoreX\Observability\Internal\OpenTelemetryBridge;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Internal\LocalTenantStorage;
-use CoreX\Time\LaravelClock;
+use CoreX\Time\Laravel\LaravelClock;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Filesystem\FilesystemManager;
@@ -58,6 +66,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 use Psr\Clock\ClockInterface;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreServiceProvider extends ServiceProvider
 {
     /**
@@ -66,21 +75,27 @@ final class CoreServiceProvider extends ServiceProvider
      * them in place — schema changes ship as NEW additive migration files under
      * the same publish tag and bump this constant. Lets a host verify which
      * generation its published set is on before re-running vendor:publish.
-     *
-     * @internal spec: D43
      */
     public const int SCHEMA_VERSION = 1;
 
     #[Override]
     public function register(): void
     {
+        $this->app->bind(TracePropagation::class, static fn (Application $app): TracePropagation => $app->make(OpenTelemetryBridge::class));
+
+        $this->app->singleton(CoreOptionsParser::class);
+        $this->app->bind(ImpersonationGuard::class, Context\Internal\ImpersonationGuard::class);
         $this->app->tag([KernelConfigSection::class], ConfigReportSection::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
         $raw = $this->app['config']->get('corex', []);
-        $options = CoreOptions::fromArray(is_array($raw) ? $raw : []);
-        $this->app->instance(CoreOptions::class, $options);
+        $options = CoreOptionsParser::fromArray(is_array($raw) ? $raw : []);
+        $this->app->bind(CoreOptions::class, static function (Application $app): CoreOptions {
+            $raw = $app->make(Repository::class)->get('corex', []);
+
+            return CoreOptionsParser::fromArray(is_array($raw) ? $raw : []);
+        });
         Config::bind($options);
 
         $this->app->singleton(SettingDefaultsProvider::class, $options->settingDefaultsProvider);
@@ -119,9 +134,9 @@ final class CoreServiceProvider extends ServiceProvider
             static fn ($app): SqlOutboxRelay => new SqlOutboxRelay(
                 connection: $app->make(Connection::class),
                 clock: $app->make(ClockInterface::class),
-                leaseSeconds: Config::messagingLeaseSeconds(),
-                maxAttempts: Config::messagingMaxAttempts(),
-                backoffCapSeconds: Config::messagingBackoffCapSeconds(),
+                leaseSeconds: app(CoreOptions::class)->messagingLeaseSeconds,
+                maxAttempts: app(CoreOptions::class)->messagingMaxAttempts,
+                backoffCapSeconds: app(CoreOptions::class)->messagingBackoffCapSeconds,
             ),
         );
         $this->app->scoped(
@@ -150,8 +165,8 @@ final class CoreServiceProvider extends ServiceProvider
             return new LocalTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),
                 filesystems: new FilesystemManager($app),
-                durableRoot: Config::storageDurableRoot(),
-                ephemeralRoot: Config::storageEphemeralRoot(),
+                durableRoot: app(CoreOptions::class)->storageDurableRoot,
+                ephemeralRoot: app(CoreOptions::class)->storageEphemeralRoot,
             );
         });
     }

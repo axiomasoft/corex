@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoteHandler implements OperationHandler
 {
     public static int $calls = 0;

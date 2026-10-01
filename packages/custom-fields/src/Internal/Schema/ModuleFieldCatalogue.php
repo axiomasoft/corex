@@ -11,10 +11,11 @@ use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
-use CoreX\Data\DataScope;
+use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\Data\Data\DataScope;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Extend\EntityField;
+use CoreX\Modules\Data\EntityField;
 use RuntimeException;
 
 final readonly class ModuleFieldCatalogue implements FieldCatalogue
@@ -61,10 +62,10 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
             entity: $entity,
             schemaVersion: 'attributes/2',
             schemaHash: AttributeDefinition::schemaHash($entity, $definitions),
-            activeFields: array_map(
+            activeFields: Validation::validatedMapList(array_map(
                 static fn (AttributeDefinition $definition): array => $definition->snapshotRow(),
                 $definitions,
-            ),
+            ), 'active fields'),
             driverCapabilities: $this->drivers,
         );
     }
@@ -82,6 +83,8 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
         }
 
         unset($meta['attribute_id']);
+
+        $meta = Validation::validatedMap($meta, 'attribute metadata');
 
         return new AttributeDefinition(
             id: $id,

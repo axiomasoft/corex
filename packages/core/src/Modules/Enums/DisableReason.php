@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Enums;
 
+use CoreX\Attributes\Api;
+
 /**
  * Why a module was disabled (`mod_modules.disable_reason`).
- *
- * @internal spec: B-10 §5.1/§5.4
  */
+#[Api(since: '1.0')]
 enum DisableReason: string
 {
     case Manual = 'manual';

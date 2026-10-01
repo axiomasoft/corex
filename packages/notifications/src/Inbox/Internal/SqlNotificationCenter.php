@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Inbox\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
@@ -15,6 +16,8 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationRef;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
+use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
+use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
@@ -37,7 +40,7 @@ final class SqlNotificationCenter implements NotificationCenter
             throw new NotificationAccessDenied('Notification delivery is denied.');
         }
 
-        $payload = $this->canonicalMap($input->payload);
+        $payload = $this->canonicalMap(JsonDocuments::map($input->payload));
         $related = $input->related === null ? null : ['handle' => $input->related->handle, 'id' => $input->related->id];
         $digest = hash('sha256', $input->requestKey."\0".$input->eventType."\0".$input->templateKey."\0".$this->json($payload)."\0".$this->json($related));
 

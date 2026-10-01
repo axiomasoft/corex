@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\CallableDataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Search\Data\Candidate;
 use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\CurrentSearchRecord;

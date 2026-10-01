@@ -5,9 +5,9 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Data\ArrayDataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Exceptions\InvalidScopePayload;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 
 function codecSampleScope(?string $workspaceId = null, bool $boxed = true): DataScope
 {

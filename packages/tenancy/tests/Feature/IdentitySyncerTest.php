@@ -5,7 +5,7 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
 use Illuminate\Support\Facades\Artisan;

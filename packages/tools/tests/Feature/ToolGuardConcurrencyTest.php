@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\ApiServiceProvider;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\MutatingHandler;
-use CoreX\Operations\Testing\ResolvedContexts;
-use CoreX\Operations\Validation\Data\JsonObject;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
-use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
@@ -95,12 +95,12 @@ final class ToolGuardConcurrencyTest extends TestCase
             ]),
         ], installedPackages: []);
 
-        $descriptor = ToolDescriptor::fromDeclaration($registry->api[0]);
+        $descriptor = ToolDescriptorFactory::fromDeclaration($registry->api[0]);
         $call = new ToolCall(
             code: 'notes.create',
             toolVersion: 'v1',
             expectedContractHash: $descriptor->contractHash,
-            arguments: JsonObject::fromArray(['name' => 'alpha', 'operation_key' => 'concurrent-op']),
+            arguments: JsonObjectFactory::fromArray(['name' => 'alpha', 'operation_key' => 'concurrent-op']),
             requestId: 'req-concurrent',
             operationKey: 'concurrent-op',
         );

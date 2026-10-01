@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Internal\Support;
 
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Config\Contracts\ConfigReportSection;
 
 /** @internal Configuration report composition. */

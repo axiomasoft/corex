@@ -1,0 +1,107 @@
+{
+  "schema": "p04.2-move-map/1",
+  "moves": [
+    {
+      "path": "packages/access/src/Internal/Support/AuthOptions.php",
+      "target_path": "packages/access/src/Laravel/AuthOptions.php",
+      "old": "CoreX\\Access\\Internal\\Support\\AuthOptions",
+      "new": "CoreX\\Access\\Laravel\\AuthOptions",
+      "reason": "Shared configuration adapter actually injected into eight module consumers; parsing remains Laravel control, not Api payload.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/access/src/Access/Internal/PrincipalIdentity.php",
+      "target_path": "packages/access/src/Access/Laravel/PrincipalIdentity.php",
+      "old": "CoreX\\Access\\Access\\Internal\\PrincipalIdentity",
+      "new": "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+      "reason": "Authenticatable/AzGuard adapter used by login provider and permission resolver; mutable framework identity is not an Api DTO.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/access/src/Identity/Internal/PrincipalUserProvider.php",
+      "target_path": "packages/access/src/Identity/Laravel/PrincipalUserProvider.php",
+      "old": "CoreX\\Access\\Identity\\Internal\\PrincipalUserProvider",
+      "new": "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
+      "reason": "Registered corex-principal Laravel auth driver; framework UserProvider integration, not a domain record.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/access/src/Roles/Internal/SystemRoleImmutable.php",
+      "target_path": "packages/access/src/Roles/Laravel/SystemRoleImmutable.php",
+      "old": "CoreX\\Access\\Roles\\Internal\\SystemRoleImmutable",
+      "new": "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable",
+      "reason": "Exact model extension for Role and RoleMatrixRow saving/deleting hooks and affectsSystemRole().",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Internal/Http/AcceptNegotiation.php",
+      "target_path": "packages/operations/src/Errors/Laravel/AcceptNegotiation.php",
+      "old": "CoreX\\Operations\\Internal\\Http\\AcceptNegotiation",
+      "new": "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation",
+      "reason": "Accept-header integration helper actually called by the error response serializer; internal HTTP controller also consumes it.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Definition/Internal/OperationFingerprint.php",
+      "target_path": "packages/operations/src/Definition/Laravel/OperationFingerprint.php",
+      "old": "CoreX\\Operations\\Definition\\Internal\\OperationFingerprint",
+      "new": "CoreX\\Operations\\Definition\\Laravel\\OperationFingerprint",
+      "reason": "Operation request/tenant connection integration actually called by idempotency; no data substitution contract.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Authorization/Internal/DeclaredFieldAuthorizer.php",
+      "target_path": "packages/operations/src/Authorization/Laravel/DeclaredFieldAuthorizer.php",
+      "old": "CoreX\\Operations\\Authorization\\Internal\\DeclaredFieldAuthorizer",
+      "new": "CoreX\\Operations\\Authorization\\Laravel\\DeclaredFieldAuthorizer",
+      "reason": "Host field-policy adapter and request/result projection control used by invocation; existing field authorizer port stays the host substitution contract.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Testing/InvocationFixtures.php",
+      "target_path": "packages/operations/src/Laravel/InvocationFixtures.php",
+      "old": "CoreX\\Operations\\Testing\\InvocationFixtures",
+      "new": "CoreX\\Operations\\Laravel\\InvocationFixtures",
+      "reason": "Existing test composition root instantiates production invocation and budget adapters; narrow Laravel composition entry, no Testing blanket exemption.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/operations/src/Testing/ResolvedContexts.php",
+      "target_path": "packages/operations/src/Invocation/Laravel/ResolvedContexts.php",
+      "old": "CoreX\\Operations\\Testing\\ResolvedContexts",
+      "new": "CoreX\\Operations\\Invocation\\Laravel\\ResolvedContexts",
+      "reason": "Existing request-context composition helper returns the RequestContext interface; its concrete implementation stays Internal.",
+      "layer": "Spi",
+      "kind": "call"
+    },
+    {
+      "path": "packages/panels/src/Internal/SavedViewsRegistrar.php",
+      "target_path": "packages/panels/src/SavedViews/Laravel/SavedViewsRegistrar.php",
+      "old": "CoreX\\Panels\\Internal\\SavedViewsRegistrar",
+      "new": "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar",
+      "reason": "Existing provider binding composition for saved views; adapters stay Internal and return contracts.",
+      "layer": "Spi",
+      "kind": "call"
+    }
+  ],
+  "classes": {
+    "CoreX\\Access\\Internal\\Support\\AuthOptions": "CoreX\\Access\\Laravel\\AuthOptions",
+    "CoreX\\Access\\Access\\Internal\\PrincipalIdentity": "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+    "CoreX\\Access\\Identity\\Internal\\PrincipalUserProvider": "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
+    "CoreX\\Access\\Roles\\Internal\\SystemRoleImmutable": "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable",
+    "CoreX\\Operations\\Internal\\Http\\AcceptNegotiation": "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation",
+    "CoreX\\Operations\\Definition\\Internal\\OperationFingerprint": "CoreX\\Operations\\Definition\\Laravel\\OperationFingerprint",
+    "CoreX\\Operations\\Authorization\\Internal\\DeclaredFieldAuthorizer": "CoreX\\Operations\\Authorization\\Laravel\\DeclaredFieldAuthorizer",
+    "CoreX\\Operations\\Testing\\InvocationFixtures": "CoreX\\Operations\\Laravel\\InvocationFixtures",
+    "CoreX\\Operations\\Testing\\ResolvedContexts": "CoreX\\Operations\\Invocation\\Laravel\\ResolvedContexts",
+    "CoreX\\Panels\\Internal\\SavedViewsRegistrar": "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar"
+  }
+}

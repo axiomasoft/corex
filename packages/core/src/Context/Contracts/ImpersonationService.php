@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\ImpersonationState;
-use CoreX\Context\NullImpersonationService;
 
 /**
  * Support impersonation (B-11 §5.9, AC-31). Boxed installs bind
- * {@see NullImpersonationService} (no grants exist there —
+ * {@see CoreX\Context\Internal\NullImpersonationService} (no grants exist there —
  * B-11 §6.1); cloud installs rebind to `DatabaseImpersonationService`
  * (axiomasoft/corex-tenancy, D10). Lives in axiomasoft/corex (D139). Its only consumer
  * is in Audit and must not import axiomasoft/corex-tenancy.
@@ -18,9 +19,8 @@ use CoreX\Context\NullImpersonationService;
  * AUTHENTICATED staff identity (a leaked `grantId` alone cannot be tied to
  * its presenter), and `state()` is additive — `active()` keeps its exact
  * original return type for spec backward-compatibility.
- *
- * @internal spec: B-11 §3.3/§5.9, D139/D140
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ImpersonationService
 {
     /**

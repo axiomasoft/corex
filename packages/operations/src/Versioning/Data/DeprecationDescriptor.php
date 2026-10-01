@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class DeprecationDescriptor
 {
     public function __construct(

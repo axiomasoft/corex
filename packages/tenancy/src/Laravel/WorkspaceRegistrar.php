@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\RegistersNothingOnBoot;
+use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
-/** @internal Package composition type. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkspaceRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;

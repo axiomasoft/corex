@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Account\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Account\Models\Account;
-use CoreX\Tenancy\Provisioning\Internal\Models\MigrationBatch;
+use CoreX\Tenancy\Provisioning\Laravel\MigrationBatchRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -42,9 +41,7 @@ final class AccountSchemaState extends Model
      */
     protected function casts(): array
     {
-        return [
-            'last_migrated_at' => 'immutable_datetime',
-        ];
+        return ['last_migrated_at' => 'immutable_datetime'];
     }
 
     /**
@@ -56,10 +53,10 @@ final class AccountSchemaState extends Model
     }
 
     /**
-     * @return BelongsTo<MigrationBatch, $this>
+     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
      */
     public function batch(): BelongsTo
     {
-        return $this->belongsTo(MigrationBatch::class, 'batch_id');
+        return MigrationBatchRelations::belongsTo($this, 'batch_id', null, 'batch');
     }
 }

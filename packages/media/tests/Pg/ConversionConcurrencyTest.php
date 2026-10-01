@@ -10,6 +10,7 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Media\Tests\PgTestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ it('uses a PostgreSQL file-row lock across independent connections', function ()
 
     $file = app(MediaLibrary::class)->store(
         pgConversionContext(),
-        new UploadInput('pg-lock-request', UploadedFile::fake()->createWithContent('source.txt', 'postgres lock'), 'attachment'),
+        new UploadInput('pg-lock-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'postgres lock')), 'attachment'),
     );
     $connection = config('database.connections.pgsql');
     $dsn = "pgsql:host={$connection['host']};port={$connection['port']};dbname={$connection['database']}";

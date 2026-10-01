@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class MappingResult
 {
     public function __construct(public string $status, public ?CanonicalRecord $record, public ?string $errorCode)

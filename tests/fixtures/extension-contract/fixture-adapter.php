@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\BaseModel;
-use CoreX\Modules\Compiler\InstalledPackageVersion;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Entity;
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Extend\Menu;
-use CoreX\Modules\Registry\FieldDefinition;
 
 /**
  * Scalar fixtures are shared by the root ratchet and external extension tests.

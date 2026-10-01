@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Access\Matrix\Internal;
 
 use Closure;
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Matrix\Contracts\ScopeMapVersions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
@@ -20,7 +21,7 @@ use Illuminate\Contracts\Cache\Repository;
  * inventory-2026-07-26.md §5): `axiomasoft/corex-access` runs in boxed installs too,
  * where no such bootstrapper is wired.
  */
-final readonly class ScopeMapVersion
+final readonly class ScopeMapVersion implements ScopeMapVersions
 {
     public function __construct(
         private TenantContextResolver $tenantContext,

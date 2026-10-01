@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Intl\Currency\Internal;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
-use CoreX\Data\WriteToken;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Data\RateBatch;
 use CoreX\Intl\Currency\Data\RateImportReceipt;
@@ -125,7 +126,7 @@ final class SqlRateImporter implements RateImporter
                 'operation_key' => $token->operationKey,
                 'payload_hash' => $token->payloadHash,
                 'format_hash' => $batch->formatHash,
-                'source_manifest' => json_encode($batch->sourceManifest, JSON_THROW_ON_ERROR),
+                'source_manifest' => json_encode(JsonDocuments::map($batch->sourceManifest), JSON_THROW_ON_ERROR),
                 'generation' => $generation,
                 'state' => $conflicts > 0 ? 'conflict' : 'published',
                 'created_at' => (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'),

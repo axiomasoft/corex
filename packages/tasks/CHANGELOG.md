@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — P04.2
+
+- Команды и события используют скалярные views; синхронный TaskCompletionCapture участвует в транзакции сохранения.
+
+
 ## Unreleased
 
 ### Changed

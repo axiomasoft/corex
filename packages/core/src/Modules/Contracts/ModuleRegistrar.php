@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Lightweight module loader: a module's top-level service provider registers
  * its child providers here. Top-level providers are still discovered via
@@ -20,6 +23,7 @@ namespace CoreX\Modules\Contracts;
  * a provider still registered keeps serving that module's routes/listeners
  * for requests already in flight — by design, not a bug to work around here.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ModuleRegistrar
 {
     /** @param class-string ...$providers */

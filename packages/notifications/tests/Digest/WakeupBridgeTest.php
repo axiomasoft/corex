@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestWindow;
@@ -18,7 +20,7 @@ use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Settings\Contracts\SettingsRepository;
-use CoreX\Settings\Contracts\SettingsScope;
+use CoreX\Settings\Data\SettingsScope;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Data\WakeupRequest;
@@ -39,12 +41,12 @@ final class AllowDigestPolicy implements NotificationPolicy
 
 final class DigestBridgeSettingsRepository implements SettingsRepository
 {
-    public function get(string $namespace, string $key, ?SettingsScope $scope = null, mixed $default = null): mixed
+    public function get(string $namespace, string $key, ?SettingsScope $scope = null, ?JsonDocument $default = null): JsonDocument
     {
-        return $default;
+        return JsonDocuments::capture($default);
     }
 
-    public function set(string $namespace, string $key, mixed $value, ?SettingsScope $scope = null): void {}
+    public function set(string $namespace, string $key, JsonDocument $value, ?SettingsScope $scope = null): void {}
 
     public function forget(string $namespace, string $key, ?SettingsScope $scope = null): void {}
 
@@ -58,7 +60,7 @@ it('maps a typed digest wakeup request without a workflow dependency', function 
     $seen = null;
     $context = new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'digest-test', 'active', [], []));
     $window = new WakeupWindow(new DateTimeImmutable('2026-09-16T09:00:00Z'), new DateTimeImmutable('2026-09-16T10:00:00Z'), 'hourly');
-    $request = new WakeupRequest($context, 'notification.digest.v1', 'digest:2026-09-16T09', new DateTimeImmutable('2026-09-16T10:00:00Z'), $window, []);
+    $request = new WakeupRequest($context, 'notification.digest.v1', 'digest:2026-09-16T09', new DateTimeImmutable('2026-09-16T10:00:00Z'), $window, JsonDocuments::capture([]));
     $adapter = new DigestWakeupAdapter(function (DigestTick $tick) use (&$seen): void {
         $seen = $tick;
     });
@@ -165,7 +167,7 @@ function freezeDigest(string $requestKey): object
         eventType: 'document.ready',
         recipient: new RecipientReference(kind: 'user', id: '11111111-1111-7111-8111-111111111112'),
         templateKey: 'document-ready',
-        payload: ['message' => $requestKey],
+        payload: JsonDocuments::capture(['message' => $requestKey]),
         related: new EntityReference(handle: 'document', id: 'document-1'),
     ));
     $end = new DateTimeImmutable('-1 minute');

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Planning\Data\PlanningToken;
 use CoreX\Tasks\Planning\Internal\PlanningHasher;
 use CoreX\Tasks\Task\Data\ActorData;
-use CoreX\Tasks\Task\Models\Task;
+use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Time\Data\TimeLogDraft;
 use CoreX\Tasks\Time\Enums\TimeLogSource;
 use CoreX\Tasks\Time\Internal\Models\TimeLog;
@@ -42,7 +43,7 @@ beforeEach(function (): void {
     $this->task = Task::query()->create([
         'workspace_id' => $this->workspaceId,
         'title' => 'Concurrent',
-        'created_by' => $this->actor->toArray(),
+        'created_by' => JsonDocuments::decodeTree($this->actor->toArray()),
         'spent_minutes' => 0,
     ]);
 });

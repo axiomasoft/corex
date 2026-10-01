@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Contracts\DomainChallengeStore;
 use CoreX\Tenancy\DomainTrust\Data\DomainChallengeBinding;
 use CoreX\Tenancy\DomainTrust\Data\DomainTrustTransition;
+use CoreX\Tenancy\DomainTrust\Data\NormalizedHost;
 use CoreX\Tenancy\DomainTrust\Data\ObservedDomainProof;
 use CoreX\Tenancy\DomainTrust\Enums\DomainTrustChangeReason;
 use CoreX\Tenancy\DomainTrust\Events\DomainTrustChanged;

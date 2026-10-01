@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestRef;
 use CoreX\Notifications\Digest\Data\DigestWindow;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
-use CoreX\Notifications\Inbox\Internal\NotificationAccessDenied;
+use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;
@@ -74,7 +75,7 @@ final class SqlDigestBuilder implements DigestBuilder
                     requestKey: "notification.digest:{$runId}",
                     fireAt: $window->end,
                     window: new WakeupWindow($window->start, $window->end, $window->period),
-                    payload: ['run_id' => $runId],
+                    payload: JsonDocuments::capture(['run_id' => $runId]),
                 ));
             }
 

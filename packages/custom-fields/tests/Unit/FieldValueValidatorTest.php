@@ -9,8 +9,8 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\Values\FieldValueValidator;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\DataScope;
 
 it('accepts all supported typed values from the active registry snapshot', function (): void {
     $hash = str_repeat('a', 64);

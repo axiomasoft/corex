@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Contracts\RecordsRegistrar;
-use CoreX\Modules\Discovery\ModuleDiscovery;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
 use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
 use CoreX\Modules\Internal\Support\ModulesOptions;
-use CoreX\Modules\RegistersNothingOnBoot;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class LifecycleRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;

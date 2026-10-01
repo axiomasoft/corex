@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Bulk\Internal;
 
 use CoreX\Data\Contracts\DataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperation;
@@ -56,7 +57,7 @@ final readonly class TransferBulkExecutor
                 ? BulkOperationStatus::Cancelled
                 : BulkOperationStatus::Cancelling;
 
-            return $this->with($operation, $status, $operation->checkpoint, [
+            return $this->with($operation, $status, JsonDocuments::map($operation->checkpoint), [
                 'phase' => $status->value,
             ], error: ['code' => 'cancelled']);
         }
@@ -87,14 +88,14 @@ final readonly class TransferBulkExecutor
 
     private function transfers(BulkOperationDefinition $definition): bool
     {
-        $kind = $definition->inputRef['kind'] ?? null;
+        $kind = JsonDocuments::map($definition->inputRef)['kind'] ?? null;
 
         return in_array($kind, ['transfer', 'import', 'export'], true);
     }
 
     private function assertStamp(BulkOperation $operation, string $restoreEpoch, string $schemaHash, string $mappingHash): void
     {
-        $stamp = $operation->definition->extensionStamp;
+        $stamp = JsonDocuments::map($operation->definition->extensionStamp);
         $expectedRestore = $stamp['restore_epoch'] ?? null;
         $expectedVersion = $stamp['version'] ?? null;
         $expectedRights = $stamp['rights'] ?? null;
@@ -119,8 +120,8 @@ final readonly class TransferBulkExecutor
             throw new InvalidArgumentException('Export bulk session is incomplete.');
         }
 
-        $previous = $operation->checkpoint['attempt_id'] ?? null;
-        $sealed = $operation->checkpoint['sealed'] ?? null;
+        $previous = JsonDocuments::map($operation->checkpoint)['attempt_id'] ?? null;
+        $sealed = JsonDocuments::map($operation->checkpoint)['sealed'] ?? null;
 
         if (is_string($previous) && $sealed !== true && $previous === $manifest->id) {
             throw new TransferStampDrift;
@@ -132,7 +133,7 @@ final readonly class TransferBulkExecutor
         return $this->with($operation, BulkOperationStatus::Completed, [
             'attempt_id' => $sealedManifest->id,
             'sealed' => true,
-            'sequence' => $operation->checkpoint['sequence'] ?? '0',
+            'sequence' => JsonDocuments::map($operation->checkpoint)['sequence'] ?? '0',
         ], [
             'phase' => 'completed',
             'attempt_id' => $sealedManifest->id,
@@ -200,17 +201,17 @@ final readonly class TransferBulkExecutor
     ): BulkOperation {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: $transferRef ?? $operation->transferRef,
+            transferRef: JsonDocuments::nullable($transferRef ?? JsonDocuments::optionalMap($operation->transferRef)),
             status: $status,
             terminalStatus: $operation->terminalStatus,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: $checkpoint,
-            progress: $progress,
-            resultRef: $resultRef ?? $operation->resultRef,
-            error: $error,
+            checkpoint: JsonDocuments::capture($checkpoint),
+            progress: JsonDocuments::capture($progress),
+            resultRef: JsonDocuments::nullable($resultRef ?? JsonDocuments::optionalMap($operation->resultRef)),
+            error: JsonDocuments::nullable($error),
             attempt: $operation->attempt,
             nextAttemptAt: $nextAttemptAt ?? $operation->nextAttemptAt,
             createdAt: $operation->createdAt,

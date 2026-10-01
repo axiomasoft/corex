@@ -18,6 +18,7 @@ use CoreX\Media\Internal\MediaAccessDenied;
 use CoreX\Media\Internal\MediaFileInUse;
 use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
+use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +42,7 @@ function mediaContext(): MediaContext
 
 function upload(string $key, string $contents): UploadInput
 {
-    return new UploadInput($key, UploadedFile::fake()->createWithContent('photo.txt', $contents), 'attachment');
+    return new UploadInput($key, UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('photo.txt', $contents)), 'attachment');
 }
 
 function allowMedia(): void

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * Временная таблица живёт в сессии, а не в транзакции — после коммита пул
  * отдаёт бекенд другому клиенту, и таблица «исчезает» либо течёт.
- *
- * @internal spec: B-10 §7.3 п.2
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoTempTableRule extends AbstractDatabaseCallRule
 {
     protected function isViolation(string $sql): bool

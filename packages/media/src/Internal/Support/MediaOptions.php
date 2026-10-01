@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Internal\Support;
 
-use CoreX\Config\ViolationList;
+use CoreX\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type. */
 final readonly class MediaOptions
@@ -26,7 +26,7 @@ final readonly class MediaOptions
     /** @param  array<string, mixed>  $config */
     public static function fromArray(array $config): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
 
         $maxUploadBytes = self::positiveInt($violations, 'max_upload_bytes', $config['max_upload_bytes'] ?? 10 * 1024 * 1024);
         $maxImagePixels = self::positiveInt($violations, 'max_image_pixels', $config['max_image_pixels'] ?? 20_000_000);
@@ -55,7 +55,7 @@ final readonly class MediaOptions
         );
     }
 
-    private static function nonEmpty(ViolationList $violations, string $path, mixed $value): string
+    private static function nonEmpty(ConfigurationValidator $violations, string $path, mixed $value): string
     {
         if (is_string($value) && $value !== '') {
             return $value;
@@ -66,7 +66,7 @@ final readonly class MediaOptions
         return 'invalid';
     }
 
-    private static function positiveInt(ViolationList $violations, string $path, mixed $value): int
+    private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
         if (is_int($value) && $value > 0) {
             return $value;
@@ -80,7 +80,7 @@ final readonly class MediaOptions
     /**
      * @return list<string>
      */
-    private static function nonEmptyStringList(ViolationList $violations, string $path, mixed $value): array
+    private static function nonEmptyStringList(ConfigurationValidator $violations, string $path, mixed $value): array
     {
         if (! is_array($value)) {
             $violations->add($path, 'must be a non-empty list of strings');

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\DomainTrust\Data;
 
-use CoreX\Tenancy\DomainTrust\Internal\NormalizedHost;
+use CoreX\Attributes\Api;
 
+#[Api(since: '1.0')]
 final readonly class DomainChallengeBinding
 {
     public function __construct(

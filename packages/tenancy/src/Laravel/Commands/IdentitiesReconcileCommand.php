@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * identity's `updated_at` — the retry path for {@see IdentitySyncer}'s
  * per-account failure isolation (AC-16 з).
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IdentitiesReconcileCommand extends Command
 {
     protected $signature = 'corex:tenancy:reconcile-identities';

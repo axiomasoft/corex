@@ -141,7 +141,14 @@ final readonly class WakeupHandlerRegistry
         }
 
         try {
-            $stamp = ExtensionStamp::fromArray($metadata['extension']);
+            $rawStamp = $metadata['extension'];
+            foreach (['point', 'id', 'version', 'registryFingerprint'] as $field) {
+                if (! is_string($rawStamp[$field] ?? null)) {
+                    throw new InvalidArgumentException('Invalid extension stamp.');
+                }
+            }
+            /** @var array{point: string, id: string, version: string, registryFingerprint: string} $rawStamp */
+            $stamp = ExtensionStamp::fromArray($rawStamp);
         } catch (InvalidArgumentException) {
             return ['status' => 'handler-stamp-missing'];
         }

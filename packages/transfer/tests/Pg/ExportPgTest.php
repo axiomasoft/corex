@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\CallableDataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
@@ -31,7 +32,7 @@ it('seals verified immutable parts and emits them only under current authority',
     $manifestId = '22222222-2222-4222-8222-222222222222';
     exportInsertJob($jobId, $hash);
     $runner = exportRunner(record: exportRecord($hash));
-    $draft = new ExportManifest($manifestId, 'coherent', $hash, $hash, ['contact' => ['count' => 1]], str_repeat('0', 64));
+    $draft = new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture(['contact' => ['count' => 1]]), str_repeat('0', 64));
 
     $sealed = $runner->seal(scope: exportScope($hash), jobId: $jobId, draft: $draft, after: new ExportCursor('0', '0', $hash));
     $bytes = $runner->emit(scope: exportScope($hash), manifest: $sealed, cursor: new ExportCursor('0', '0', $sealed->partsHash));
@@ -48,7 +49,7 @@ it('refuses output after a current policy revocation or an incompatible restore 
     $manifestId = '44444444-4444-4444-8444-444444444444';
     exportInsertJob($jobId, $hash);
     $runner = exportRunner(record: exportRecord($hash));
-    $sealed = $runner->seal(scope: exportScope($hash), jobId: $jobId, draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)), after: new ExportCursor('0', '0', $hash));
+    $sealed = $runner->seal(scope: exportScope($hash), jobId: $jobId, draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)), after: new ExportCursor('0', '0', $hash));
 
     expect(fn (): string => exportRunner(record: exportRecord($hash), allowed: false)->emit(scope: exportScope($hash), manifest: $sealed, cursor: new ExportCursor('0', '0', $sealed->partsHash)))
         ->toThrow(ExportUnavailable::class)
@@ -68,7 +69,7 @@ it('aborts an unsealed capture instead of resuming its mutable snapshot', functi
 
     expect(fn (): ExportManifest => exportRunner(record: exportRecord($hash))->seal(
         scope: exportScope($hash), jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class)
         ->and(DB::table('corex_export_manifests')->value('state'))->toBe('aborted');
@@ -94,7 +95,7 @@ it('captures source pages inside a repeatable-read transaction', function (): vo
 
     exportRunner(record: exportRecord($hash), source: $source)->seal(
         scope: exportScope($hash), jobId: $jobId,
-        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, [], str_repeat('0', 64)),
+        draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     );
 

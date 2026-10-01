@@ -6,8 +6,8 @@ namespace CoreX\Operations\Tests\Unit;
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Errors\Enums\UnavailabilityReason;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Laravel\Support\ApiOptions;

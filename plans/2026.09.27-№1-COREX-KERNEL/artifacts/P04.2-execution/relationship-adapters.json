@@ -1,0 +1,114 @@
+[
+    {
+        "consumer": "packages/tasks/src/Sprint/Internal/Models/Sprint.php",
+        "method": "project",
+        "factory": "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Sprint/Internal/Models/Sprint.php",
+        "method": "tasks",
+        "factory": "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Project/Internal/Models/Project.php",
+        "method": "stages",
+        "factory": "CoreX\\Tasks\\Task\\Laravel\\StageRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Project/Internal/Models/Project.php",
+        "method": "sprints",
+        "factory": "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Project/Internal/Models/Project.php",
+        "method": "tasks",
+        "factory": "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Time/Internal/Models/TimeLog.php",
+        "method": "task",
+        "factory": "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Time/Internal/Models/Timer.php",
+        "method": "task",
+        "factory": "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Task/Internal/Models/Task.php",
+        "method": "project",
+        "factory": "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Task/Internal/Models/Task.php",
+        "method": "sprint",
+        "factory": "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Task/Internal/Models/Task.php",
+        "method": "timeLogs",
+        "factory": "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tasks/src/Task/Internal/Models/Stage.php",
+        "method": "project",
+        "factory": "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tenancy/src/Account/Internal/Models/Account.php",
+        "method": "domains",
+        "factory": "CoreX\\Tenancy\\DomainTrust\\Laravel\\DomainRelations",
+        "kind": "hasMany",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tenancy/src/Account/Internal/Models/AccountSchemaState.php",
+        "method": "batch",
+        "factory": "CoreX\\Tenancy\\Provisioning\\Laravel\\MigrationBatchRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
+        "method": "invitedBy",
+        "factory": "CoreX\\Tenancy\\Identity\\Laravel\\UserRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
+        "method": "user",
+        "factory": "CoreX\\Tenancy\\Identity\\Laravel\\UserRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    },
+    {
+        "consumer": "packages/tenancy/src/DomainTrust/Internal/Models/Domain.php",
+        "method": "account",
+        "factory": "CoreX\\Tenancy\\Account\\Laravel\\AccountRelations",
+        "kind": "belongsTo",
+        "reason": "Exact Eloquent relationship composition; related concrete stays in its owner. Explicit belongsTo keys/relation preserve original inference."
+    }
+]

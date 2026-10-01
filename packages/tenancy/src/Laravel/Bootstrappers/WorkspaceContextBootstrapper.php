@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Bootstrappers;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
@@ -34,6 +36,7 @@ use Stancl\Tenancy\Contracts\Tenant;
  * `TenancyServiceProvider::register()` (this class is not part of stancl's
  * own default bootstrapper list, so stancl's own provider never calls it).
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkspaceContextBootstrapper implements TenancyBootstrapper
 {
     public function __construct(

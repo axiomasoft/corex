@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Access\Database\Seeders;
 
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\Role;
 use Illuminate\Database\Seeder;
 
 /**

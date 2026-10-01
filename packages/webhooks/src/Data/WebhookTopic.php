@@ -4,24 +4,68 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Attributes\Api;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 
 /** Immutable projection of one declared message contract onto a webhook topic. */
+#[Api(since: '1.0')]
 final readonly class WebhookTopic
 {
     public const array CLASSES = ['none', 'pseudonymous', 'personal', 'restricted', 'secret'];
 
-    /** @param  array<mixed>  $schema */
-    public function __construct(
-        public string $name,
-        public int $version,
-        public string $major,
-        public array $schema,
-        public string $schemaHash,
-        public string $piiClass,
-        public string $projectorService,
-    ) {
+    /** @param  array<string, string>  $schema */
+    public function __construct(public string $name, public int $version, public string $major, public array $schema, public string $schemaHash, public string $piiClass, public string $projectorService)
+    {
+        self::validateInput($name, $version, $major, $schema, $schemaHash, $piiClass, $projectorService);
+    }
+
+    public function id(): string
+    {
+        return "{$this->name}.v{$this->version}";
+    }
+
+    public function sensitive(): bool
+    {
+        return $this->piiClass === 'personal' || $this->piiClass === 'restricted';
+    }
+
+    public function secret(): bool
+    {
+        return $this->piiClass === 'secret';
+    }
+
+    public function rank(): int
+    {
+        return match ($this->piiClass) {
+            'none' => 0,
+            'pseudonymous' => 1,
+            'personal' => 2,
+            'restricted' => 3,
+            'secret' => 4,
+            default => throw new InvalidArgumentException('Webhook topic PII class is not declared.'),
+        };
+    }
+
+    /** Runtime validation also rejects values from untyped integration callers.
+     * @param  array<array-key, mixed>  $schema
+     */
+    private static function validateInput(
+        /** Runtime input. */
+        string $name,
+        /** Runtime input. */
+        int $version,
+        /** Runtime input. */
+        string $major,
+        /** Runtime input. */
+        array $schema,
+        /** Runtime input. */
+        string $schemaHash,
+        /** Runtime input. */
+        string $piiClass,
+        /** Runtime input. */
+        string $projectorService,
+    ): void {
         if (preg_match('/\A[a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*){1,3}\z/D', $name) !== 1 || str_contains($name, '\\')) {
             throw new InvalidArgumentException('Webhook topic name must be a declared contract name.');
         }
@@ -55,32 +99,5 @@ final readonly class WebhookTopic
         if (preg_match('/\A[a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*)*\z/D', $projectorService) !== 1) {
             throw new InvalidArgumentException('Webhook projector must be an installed service id.');
         }
-    }
-
-    public function id(): string
-    {
-        return "{$this->name}.v{$this->version}";
-    }
-
-    public function sensitive(): bool
-    {
-        return $this->piiClass === 'personal' || $this->piiClass === 'restricted';
-    }
-
-    public function secret(): bool
-    {
-        return $this->piiClass === 'secret';
-    }
-
-    public function rank(): int
-    {
-        return match ($this->piiClass) {
-            'none' => 0,
-            'pseudonymous' => 1,
-            'personal' => 2,
-            'restricted' => 3,
-            'secret' => 4,
-            default => throw new InvalidArgumentException('Webhook topic PII class is not declared.'),
-        };
     }
 }

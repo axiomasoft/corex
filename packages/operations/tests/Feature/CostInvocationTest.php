@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Config\SecretRef;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -23,12 +24,12 @@ use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Data\EstimatedCost;
+use CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable;
 use CoreX\Operations\Cost\Internal\BudgetAdmission;
-use CoreX\Operations\Cost\Internal\BudgetStoreUnavailable;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
@@ -38,17 +39,17 @@ use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Tests\TestCase;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -132,8 +133,8 @@ final class CostInvocationTest extends TestCase
         self::assertFalse($fresh->replayed);
         self::assertTrue($replay->replayed);
         self::assertSame([5, 1], array_map(static fn (EstimatedCost $cost): int => $cost->units, $budget->costs));
-        self::assertSame(1, $replay->metadata['cost']['requested']);
-        self::assertSame(1, $replay->metadata['cost']['actual']);
+        self::assertSame(1, JsonDocuments::map($replay->metadata)['cost']['requested']);
+        self::assertSame(1, JsonDocuments::map($replay->metadata)['cost']['actual']);
         self::assertSame(1, $connection->table('sys_api_idempotency')->count());
     }
 
@@ -252,8 +253,8 @@ final class CostInvocationTest extends TestCase
             path: '/notes',
             ability: 'notes.write',
             handler: $handler,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Command,
@@ -271,7 +272,7 @@ final class CostInvocationTest extends TestCase
         return new OperationInvocation(
             operation: $operation,
             context: $this->context(),
-            input: ['name' => 'alpha'],
+            input: JsonDocuments::capture(['name' => 'alpha']),
             parameters: [],
             idempotencyKey: $key,
         );

@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
+use CoreX\CustomFields\Internal\Support\Validation;
 use InvalidArgumentException;
 
+/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+#[Api(since: '1.0')]
 final readonly class AttributeDefinition
 {
     /**
-     * @param  array<string, mixed>  $constraints
+     * @param  JsonMap  $constraints
      * @param  list<string>  $readKeys
      * @param  list<string>  $writeKeys
-     * @param  array<string, mixed>  $meta
+     * @param  JsonMap  $meta
      */
     public function __construct(
         public AttributeId $id,
@@ -85,17 +89,22 @@ final readonly class AttributeDefinition
         return $definitions;
     }
 
-    /** @return array<string, mixed> */
+    /** @return array{constraints: JsonMap, entity: string, id: string, index: string, key: string, lifecycle: string, meta: JsonMap, read_keys: list<string>, required: bool, revision: int, searchable: bool, type: string, write_keys: list<string>} */
     public function canonical(): array
     {
+        $constraints = self::sortMap($this->constraints);
+        $meta = self::sortMap($this->meta);
+        $constraints = Validation::validatedMap($constraints, 'constraints');
+        $meta = Validation::validatedMap($meta, 'meta');
+
         return [
-            'constraints' => self::sortMap($this->constraints),
+            'constraints' => $constraints,
             'entity' => $this->entity,
             'id' => $this->id->value,
             'index' => $this->index->value,
             'key' => $this->key,
             'lifecycle' => $this->lifecycle->value,
-            'meta' => self::sortMap($this->meta),
+            'meta' => $meta,
             'read_keys' => $this->readKeys,
             'required' => $this->required,
             'revision' => $this->revision,
@@ -105,7 +114,7 @@ final readonly class AttributeDefinition
         ];
     }
 
-    /** @return array<string, mixed> */
+    /** @return array{code: string, constraints: JsonMap, id: string, index: string, key: string, lifecycle: string, meta: JsonMap, read_keys: list<string>, required: bool, revision: int, searchable: bool, type: string, write_keys: list<string>} */
     public function snapshotRow(): array
     {
         return [

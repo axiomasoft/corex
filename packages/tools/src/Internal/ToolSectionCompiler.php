@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
-use CoreX\Modules\Compiler\NormalizedExtension;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Data\NormalizedExtension;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
 
 /** @internal Tool declaration compilation. */
 final class ToolSectionCompiler implements ManifestSectionCompiler

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\DomainTrust\Data;
 
-use CoreX\Tenancy\DomainTrust\Internal\NormalizedHost;
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 
+#[Api(since: '1.0')]
 final readonly class DomainChallengeDraft
 {
     public function __construct(

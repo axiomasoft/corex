@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Unit;
 
-use CoreX\Config\SecretRef;
-use CoreX\Time\FrozenClock;
+use CoreX\Config\Data\SecretRef;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Internal\HmacWebhookSigner;
 use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Tests\Fixtures\WebhookReceiverVerifier;

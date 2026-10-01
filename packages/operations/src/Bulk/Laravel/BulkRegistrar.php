@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeCodec;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperation;
@@ -24,13 +26,13 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 
-/** @internal Explicit, lazy composition root for durable bulk execution. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class BulkRegistrar
 {
     public static function register(Application $app): void
     {
         $config = $app['config']->get('corex-operations.bulk');
-        $options = BulkOptions::fromArray(is_array($config) ? $config : []);
+        $options = BulkOptionsParser::fromArray(is_array($config) ? $config : []);
         $app->instance(BulkOptions::class, $options);
         $app->singleton(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),

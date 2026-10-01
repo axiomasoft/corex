@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Unit;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\RegistryIntrospection;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Testing\CatalogueModuleFixture;

@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
+use CoreX\Attributes\Api;
+
 /**
  * Full Laravel connection config for an account's tenant database, resolved
  * from root_clusters+db_name.
- *
- * @internal spec: B-11 §3.1 (owner: B-11)
  */
+#[Api(since: '1.0')]
 final readonly class DatabaseConnectionConfig
 {
     /**
-     * @param  array<string, mixed>  $options
+     * @param  array<string, scalar|null>  $options
      */
     public function __construct(
         public string $driver,

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use JsonException;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class Validation
 {
     public static function opaque(string $value, string $name): void

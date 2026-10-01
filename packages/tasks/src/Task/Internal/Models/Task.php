@@ -1,0 +1,106 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tasks\Task\Internal\Models;
+
+use CoreX\Database\Laravel\BaseModel;
+use CoreX\Tasks\Project\Laravel\ProjectRelations;
+use CoreX\Tasks\Sprint\Laravel\SprintRelations;
+use CoreX\Tasks\Task\Enums\TaskPriority;
+use CoreX\Tasks\Task\Enums\TaskStatus;
+use CoreX\Tasks\Time\Laravel\TimeLogRelations;
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * @property string $id
+ * @property string|null $workspace_id
+ * @property string|null $project_id
+ * @property string|null $sprint_id
+ * @property string|null $stage_id
+ * @property string|null $parent_id
+ * @property bool $requires_acceptance
+ * @property string $title
+ * @property string|null $description
+ * @property TaskStatus $status
+ * @property TaskPriority $priority
+ * @property string|null $author_id
+ * @property string|null $assignee_id
+ * @property DateTimeInterface|null $starts_at
+ * @property DateTimeInterface|null $due_at
+ * @property DateTimeInterface|null $completed_at
+ * @property int|null $estimate_minutes
+ * @property int $spent_minutes
+ * @property string $position
+ * @property DateTimeInterface|null $created_at
+ * @property DateTimeInterface|null $updated_at
+ * @property-read Model|null $project
+ * @property-read Stage|null $stage
+ */
+final class Task extends BaseModel
+{
+    protected $table = 'tsk_tasks';
+
+    /** @var list<string> */
+    protected $fillable = ['workspace_id', 'project_id', 'sprint_id', 'stage_id', 'parent_id', 'title', 'description', 'status', 'priority', 'author_id', 'assignee_id', 'created_by', 'starts_at', 'due_at', 'completed_at', 'requires_acceptance', 'recurrence_rule_id', 'recurrence_occurs_at', 'estimate_minutes', 'spent_minutes', 'position'];
+
+    /** @var array<string, mixed> */
+    protected $attributes = ['status' => 'open', 'priority' => 'normal', 'requires_acceptance' => false, 'spent_minutes' => 0, 'position' => 0];
+
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    public function project(): BelongsTo
+    {
+        return ProjectRelations::belongsTo($this, 'project_id', null, 'project');
+    }
+
+    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    public function sprint(): BelongsTo
+    {
+        return SprintRelations::belongsTo($this, 'sprint_id', null, 'sprint');
+    }
+
+    /** @return BelongsTo<Stage, $this> */
+    public function stage(): BelongsTo
+    {
+        return $this->belongsTo(Stage::class);
+    }
+
+    /** @return BelongsTo<Task, $this> */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /** @return HasMany<Task, $this> */
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /** @return HasMany<TaskTarget, $this> */
+    public function targets(): HasMany
+    {
+        return $this->hasMany(TaskTarget::class);
+    }
+
+    /** @return HasMany<TaskWatcher, $this> */
+    public function watchers(): HasMany
+    {
+        return $this->hasMany(TaskWatcher::class);
+    }
+
+    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    public function timeLogs(): HasMany
+    {
+        return TimeLogRelations::hasMany($this);
+    }
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return ['status' => TaskStatus::class, 'priority' => TaskPriority::class, 'created_by' => 'array', 'starts_at' => 'datetime', 'due_at' => 'datetime', 'completed_at' => 'datetime', 'requires_acceptance' => 'boolean', 'recurrence_occurs_at' => 'datetime', 'estimate_minutes' => 'integer', 'spent_minutes' => 'integer', 'position' => 'decimal:10'];
+    }
+}

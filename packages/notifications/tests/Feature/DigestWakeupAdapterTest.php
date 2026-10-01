@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use CoreX\CoreServiceProvider;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Settings\Contracts\SettingsRepository;
-use CoreX\Settings\Contracts\SettingsScope;
-use CoreX\Time\FrozenClock;
+use CoreX\Settings\Data\SettingsScope;
+use CoreX\Time\Testing\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Testing\WakeupFixtures;
@@ -17,12 +19,12 @@ uses(TestCase::class);
 
 final class DigestClockSettingsRepository implements SettingsRepository
 {
-    public function get(string $namespace, string $key, ?SettingsScope $scope = null, mixed $default = null): mixed
+    public function get(string $namespace, string $key, ?SettingsScope $scope = null, ?JsonDocument $default = null): JsonDocument
     {
-        return $default;
+        return JsonDocuments::capture($default);
     }
 
-    public function set(string $namespace, string $key, mixed $value, ?SettingsScope $scope = null): void {}
+    public function set(string $namespace, string $key, JsonDocument $value, ?SettingsScope $scope = null): void {}
 
     public function forget(string $namespace, string $key, ?SettingsScope $scope = null): void {}
 

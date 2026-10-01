@@ -6,7 +6,7 @@ use CoreX\CustomFields\Internal\Integration\AttributeMessageContractRegistry;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContracts;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Integration\AttributeValuesChanged;
-use CoreX\Data\ArrayDataScopeCodec;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 

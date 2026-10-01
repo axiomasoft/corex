@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\LeasedMessage;
 use Throwable;
 
@@ -14,6 +16,7 @@ use Throwable;
  * выполняется ПОСЛЕ её коммита; markPublished() и releaseWithBackoff() выполняются
  * отдельными запросами с fence-предикатом по владельцу аренды.
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface OutboxRelay
 {
     /** @return list<LeasedMessage> */

@@ -4,15 +4,33 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+#[Api(since: '1.0')]
 final readonly class TransferReceipt
 {
     /**
-     * @param  array<string, null|bool|int|string|array<array-key, mixed>>  $stats
-     * @param  array<array-key, mixed>  $gaps
+     * @param  JsonMap  $stats
+     * @param  list<string>  $gaps
      */
     public function __construct(public string $state, public SourceCursor $cursor, public string $checkpointSequence, public array $stats, public array $gaps, public ?string $errorCode)
+    {
+        self::validateInput($state, $cursor, $checkpointSequence, $stats, $gaps, $errorCode);
+    }
+
+    /** Runtime validation also rejects values from untyped integration callers.
+     * @param  array<array-key, mixed>  $stats
+     * @param  array<array-key, mixed>  $gaps
+     */
+    private static function validateInput(/** Runtime input. */
+        string $state, /** Runtime input. */
+        SourceCursor $cursor, /** Runtime input. */
+        string $checkpointSequence, /** Runtime input. */
+        array $stats, /** Runtime input. */
+        array $gaps, /** Runtime input. */
+        ?string $errorCode): void
     {
         if (! in_array($state, ['pending', 'running', 'unknown', 'completed', 'cancelled', 'failed'], strict: true) || ! array_is_list($gaps)) {
             throw new InvalidArgumentException('Invalid transfer receipt.');

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Delivery\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\DeliveryClaim;
 use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
-use CoreX\Notifications\Inbox\Internal\NotificationOperationConflict;
+use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use Illuminate\Database\ConnectionInterface;
 use JsonException;
 
@@ -71,7 +72,7 @@ final class DeliveryStore
                 deliveryKey: $delivery->delivery_key,
                 epoch: $epoch,
                 attempts: $attempts,
-                message: $this->message($delivery->message),
+                message: JsonDocuments::capture($this->message($delivery->message)),
                 messageHash: $delivery->message_hash,
                 templateVersion: $delivery->template_version,
                 policyVersion: $delivery->policy_version,

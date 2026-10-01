@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,6 +18,7 @@ use Stancl\Tenancy\Tenancy;
  * {@see Request::getHost()} — the edge (Caddy) is not a source of truth,
  * client-supplied `X-Account-*`/`X-Forwarded-Host` are never consulted.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ResolveTenantFromHost extends IdentificationMiddleware
 {
     public function __construct(

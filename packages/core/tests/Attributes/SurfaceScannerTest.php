@@ -64,6 +64,50 @@ final class SurfaceScannerTest extends TestCase
         self::assertSame("'active'", $symbols['Demo\\Status']['enum_cases']['Active']);
     }
 
+    public function test_attributes_scanner_resolves_native_throws_without_treating_exception_state_as_payload(): void
+    {
+        $this->source(<<<'SOURCE'
+        namespace Demo;
+        use CoreX\Attributes\Api;
+        #[Api] final class Rejected extends \RuntimeException {}
+        #[Api] interface Query {
+            /** @throws \RuntimeException */ public function get(): string;
+        }
+        SOURCE);
+        self::assertSame([], $this->scan()->diagnostics);
+        $this->source('namespace Demo; #[\CoreX\Attributes\Api] interface Query { /** @throws UnknownError */ public function get(): string; }');
+        self::assertContains('API-UNRESOLVED-TYPE', array_column($this->scan()->diagnostics, 'code'));
+    }
+
+    public function test_attributes_scanner_checks_nested_imported_aliases_and_promoted_property_docs(): void
+    {
+        $this->source(<<<'SOURCE'
+        namespace Demo;
+        use CoreX\Attributes\Api;
+        /**
+         * @phpstan-type Leaf null|int|string
+         * @phpstan-type Values array<string, Leaf|list<Leaf>>
+         */
+        #[Api] final readonly class Types {}
+        /** @phpstan-import-type Values from Types */
+        #[Api] final readonly class View {
+            public function __construct(/** @var Values */ public array $values) {}
+        }
+        SOURCE);
+        self::assertSame([], $this->scan()->diagnostics);
+        $this->source(<<<'SOURCE'
+        namespace Demo;
+        use CoreX\Attributes\Api;
+        /** @phpstan-type Values array<string, \Illuminate\Database\Eloquent\Model> */
+        #[Api] final readonly class Types {}
+        /** @phpstan-import-type Values from Types */
+        #[Api] final readonly class View {
+            public function __construct(/** @var Values */ public array $values) {}
+        }
+        SOURCE);
+        self::assertContains('API-PAYLOAD', array_column($this->scan()->diagnostics, 'code'));
+    }
+
     /** @return iterable<string, array{string, string}> */
     public static function negatives(): iterable
     {
@@ -82,6 +126,8 @@ final class SurfaceScannerTest extends TestCase
         yield 'nested bare list' => [$api.'#[Api] interface View { /** @return array{rows: list} */ public function rows(): array; }', 'API-UNTYPED-PAYLOAD'];
         yield 'nested bare array' => [$api.'#[Api] interface View { /** @return list<array> */ public function rows(): array; }', 'API-UNTYPED-PAYLOAD'];
         yield 'mixed' => [$api.'#[Api] final readonly class View { public mixed $value; }', 'API-UNTYPED-PAYLOAD'];
+        yield 'exception model field' => [$api.'#[Api] final class Failure extends \RuntimeException { public function __construct(public \Illuminate\Database\Eloquent\Model $row) {} }', 'API-PAYLOAD'];
+        yield 'nested SPI mixed field' => [$api.'#[Spi(SpiKind::Call)] final readonly class Data { /** @var array<string, mixed> */ public array $values; } #[Api] final readonly class View { public Data $data; }', 'API-UNTYPED-PAYLOAD'];
         yield 'model' => [$api.'#[Api] final readonly class View { public \Illuminate\Database\Eloquent\Model $row; }', 'API-PAYLOAD'];
         yield 'derived model' => [$api.'class Local extends \Illuminate\Database\Eloquent\Model {} #[Api] final readonly class View { public Local $row; }', 'API-PAYLOAD'];
         yield 'nested foreign internal' => [$api.'#[Api] interface View { /** @return list<array{child: \Foreign\Internal\Row}> */ public function rows(): array; }', 'API-INTERNAL-TYPE'];

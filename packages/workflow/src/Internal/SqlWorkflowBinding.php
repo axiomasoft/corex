@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Workflow\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Workflow\Contracts\EngineAdapter;
@@ -43,7 +44,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
             'event_id' => $request->eventId,
             'event_name' => $request->eventName,
             'entity_handle' => $request->entityHandle,
-            'scalar_snapshot' => $this->canonicalMap($request->scalarSnapshot),
+            'scalar_snapshot' => $this->canonicalMap(JsonDocuments::map($request->scalarSnapshot)),
         ];
 
         return $this->captureIntent(

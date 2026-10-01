@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — P04.2
+
+- Публичные JSON-поля операций и результатов закрыты JsonDocument; интеграционные парсеры отделены от неизменяемых DTO.
+
+
 ## Unreleased — package identifier alignment
 
 ### Changed

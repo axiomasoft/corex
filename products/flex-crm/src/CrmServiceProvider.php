@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Flex\Crm\Activity\Models\Activity;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Contact\Models\Contact;

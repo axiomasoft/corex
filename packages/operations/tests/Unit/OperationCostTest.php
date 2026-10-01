@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Extend\Api;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Modules\Data\Api;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
-use CoreX\Operations\Definition\Operation;
+use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Tests\Support\CostOperationHandler;
 use CoreX\Operations\Tests\TestCase;
@@ -20,7 +22,7 @@ $schema = ['type' => 'object', 'additionalProperties' => false];
 $project = static function (Api $api): Operation {
     $api->declaringModule = 'example/notes';
 
-    return Operation::fromDeclaration($api, 'fingerprint');
+    return OperationFactory::fromDeclaration($api, 'fingerprint');
 };
 
 $input = static function (
@@ -144,8 +146,8 @@ it('keeps old positional constructors working and hashes cost additively', funct
         '/notes',
         'notes.read',
         CostOperationHandler::class,
-        $schema,
-        $schema,
+        JsonDocuments::capture($schema),
+        JsonDocuments::capture($schema),
         [],
         200,
     );

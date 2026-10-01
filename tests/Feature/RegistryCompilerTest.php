@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-use CoreX\Features\Contracts\FeatureFlagDefinition;
-use CoreX\Modules\Compiler\CompiledEntityField;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Features\Data\FeatureFlagDefinition;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledEntityField;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\EntityField;
+use CoreX\Modules\Data\FieldDefinition;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Permissions;
 use CoreX\Modules\Internal\Compiler\InstalledPackages;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\Internal\Definition\ModuleDependency;
 use CoreX\Modules\Internal\Extend\Filament;
 use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Internal\Extend\Routes;
 use CoreX\Modules\Internal\Extend\Workflow;
 use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
-use CoreX\Modules\Registry\FieldDefinition;
 use CoreX\Tests\Stubs\StubEntityAlphaThing;
 use CoreX\Tests\Stubs\StubEntityBetaThing;
 use CoreX\Tests\Stubs\StubRogueExtender;
@@ -219,7 +220,7 @@ $registryCompilerFullManifest = function (): ModuleManifest {
                 ->label('Thing', 'Things')
                 ->auditable()
                 ->searchable()
-                ->fields([new FieldDefinition('name', 'string', required: true, searchable: true, meta: ['max' => 255])]),
+                ->fields([new FieldDefinition('name', 'string', required: true, searchable: true, meta: JsonDocuments::nullable(['max' => 255]))]),
             EntityField::scalar('sfl.thing', 'extra', 'string', ['default' => 'x'])->required(),
             Permissions::group('thing', ['view', 'create', 'delete'], 'app')->scopeable(),
             Api::entity('sfl.thing')->readonly()->fields(['name'])->include('extra')->attribute('foo', Widget::class),

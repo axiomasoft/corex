@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Observability\Internal;
 
 use Closure;
+use CoreX\Observability\Contracts\TracePropagation;
+use CoreX\Observability\Data\OperationContext;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanKind;
@@ -18,7 +20,7 @@ use Throwable;
  *
  * Account, workspace, actor and operation ids are not metric labels.
  */
-final class OpenTelemetryBridge
+final class OpenTelemetryBridge implements TracePropagation
 {
     public const SEMCONV_SCHEMA_URL = 'https://opentelemetry.io/schemas/1.32.0';
 

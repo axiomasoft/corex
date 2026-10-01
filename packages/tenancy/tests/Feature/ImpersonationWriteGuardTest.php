@@ -2,11 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Data\AuditEntry;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Context\ImpersonationGuard;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites;
@@ -156,20 +162,25 @@ it('щ: L2 blocks Model::save()/delete() under impersonation; passes outside it'
 });
 
 it('ъ: L2 exempts AuditLog — the compliance record can write while queue=sync during impersonation', function (): void {
-    $fake = new WriteGuardFakeImpersonationService(wgActiveState());
+    $fake = new WriteGuardFakeImpersonationService(new ImpersonationState('grant-wg', (string) Str::uuid(), 'target-wg', new DateTimeImmutable('+1 hour')));
     app()->instance(ImpersonationService::class, $fake);
 
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
     Event::listen('eloquent.saving: *', [$guard, 'handle']);
 
-    (ImpersonationGuard::writeExemptModels()[0])::on('pgsql')->create([
-        'occurred_at' => now(),
-        'actor_type' => 'support',
-        'action' => 'created',
-        'context' => [],
-    ]);
-
-    expect((ImpersonationGuard::writeExemptModels()[0])::on('pgsql')->count())->toBe(1);
+    app()->instance(TenantContextResolver::class, new class implements TenantContextResolver
+    {
+        public function current(): TenantContext
+        {
+            return new TenantContext(new AccountRef(
+                id: 'audit-write-fixture', slug: 'fixture', status: 'trial', features: [], limits: [],
+            ));
+        }
+    });
+    app(AuditLogger::class)->record(new AuditEntry(
+        action: 'created', actorType: ActorType::Support,
+    ));
+    expect(DB::connection('pgsql')->table('sys_audit_log')->count())->toBe(1);
 });
 
 it('ъ: L2 exempts ImpersonationGrant — the grant row itself is not blocked', function (): void {
@@ -243,7 +254,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
 
 it('ь: L3 ImpersonationGuard::assertAllowed() throws under impersonation and stays silent outside it', function (): void {
     $fake = new WriteGuardFakeImpersonationService(wgActiveState());
-    $guard = new ImpersonationGuard($fake);
+    $guard = app()->makeWith(ImpersonationGuard::class, ['impersonation' => $fake]);
 
     expect($guard->denies(ImpersonationRestrictedAction::DeleteAccount))->toBeTrue();
     expect(fn () => $guard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount))

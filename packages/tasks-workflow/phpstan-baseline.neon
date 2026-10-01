@@ -1,27 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method primary() of internal class CoreX\Database\Schema\IdColumns from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 2
-			path: database/migrations/2026_09_15_000072_create_task_series_mapping.php
-
-		-
-			rawMessage: Binary operation "." between 'completion-capture…' and mixed results in an error.
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Internal/CaptureTaskCompletion.php
-
-		-
-			rawMessage: Binary operation "." between 'task:' and mixed results in an error.
-			identifier: binaryOp.invalid
-			count: 2
-			path: src/Internal/CaptureTaskCompletion.php
-
-		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 4
+			count: 2
 			path: src/Internal/CaptureTaskCompletion.php
 
 		-
@@ -56,12 +38,6 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #2 $array of function array_map expects array, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/MaterializationStore.php
-
-		-
-			rawMessage: 'Parameter $resumePosition of class CoreX\Recurrence\Data\ExpansionCursor constructor expects array<string, array<int|string, mixed>|bool|int|string|null>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/MaterializationStore.php
@@ -130,12 +106,6 @@ parameters:
 			rawMessage: 'Parameter #2 $array of function array_map expects array, mixed given.'
 			identifier: argument.type
 			count: 3
-			path: src/Internal/SeriesDefinitionCodec.php
-
-		-
-			rawMessage: 'Parameter $context of class CoreX\Tasks\Task\Data\ActorData constructor expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
 			path: src/Internal/SeriesDefinitionCodec.php
 
 		-

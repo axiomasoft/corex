@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Laravel;
 
-use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/** @internal Literal webhook routes forwarded into the shared P13 dispatcher/invoker stack. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class WebhookRouteRegistrar
 {
     public static function register(Application $app): void

@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Departments/DatabaseDepartmentRepository.php b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 index 3536fea..af33575 100644
---- a/packages/core/src/Departments/DatabaseDepartmentRepository.php
-+++ b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+--- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
++++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 @@ -153,12 +153,10 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                  [$newParentPath, $oldPath, $departmentId, $newParentId, $oldPath, $lockWorkspaceId],
              );

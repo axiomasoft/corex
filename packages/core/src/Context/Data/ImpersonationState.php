@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
+use CoreX\Attributes\Api;
 use DateTimeImmutable;
 
 /**
  * Snapshot of an active impersonation session — resolved from the claimed
  * `root_impersonation_grants` row (D143), never re-derived from the id_token.
- *
- * @internal spec: B-11 §5.9, D140
  */
+#[Api(since: '1.0')]
 final readonly class ImpersonationState
 {
     public function __construct(

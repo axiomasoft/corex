@@ -1,7 +1,7 @@
-diff --git a/packages/core/src/Departments/DatabaseDepartmentRepository.php b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 index 3536fea..899cae7 100644
---- a/packages/core/src/Departments/DatabaseDepartmentRepository.php
-+++ b/packages/core/src/Departments/DatabaseDepartmentRepository.php
+--- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
++++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 @@ -74,37 +74,14 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
      public function move(string $departmentId, ?string $newParentId): void
      {
@@ -11,7 +11,7 @@ index 3536fea..899cae7 100644
 -            //     query still returns it for a row mid-deletion, so we always
 -            //     serialize on the right workspace. Absent row → explicit throw,
 -            //     never a silent no-op (A5 If-then).
--            $lockWorkspaceId = $this->db()->table(Config::departmentsTable())
+-            $lockWorkspaceId = $this->db()->table(app(CoreOptions::class)->departmentsTable)
 -                ->where('id', $departmentId)
 -                ->value('workspace_id');
 -

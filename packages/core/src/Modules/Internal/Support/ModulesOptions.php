@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Support;
 
-use CoreX\Config\ViolationList;
+use CoreX\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type. */
 final readonly class ModulesOptions
@@ -19,7 +19,7 @@ final readonly class ModulesOptions
     /** @param  array<string, mixed>  $config */
     public static function fromArray(array $config): self
     {
-        $violations = new ViolationList;
+        $violations = new ConfigurationValidator;
 
         $connection = self::nullableNonEmptyString($config['connection'] ?? null);
 
@@ -38,7 +38,7 @@ final readonly class ModulesOptions
         );
     }
 
-    private static function nonEmpty(ViolationList $violations, string $path, mixed $value): string
+    private static function nonEmpty(ConfigurationValidator $violations, string $path, mixed $value): string
     {
         if (is_string($value) && $value !== '') {
             return $value;
@@ -54,7 +54,7 @@ final readonly class ModulesOptions
         return is_string($value) && $value !== '' ? $value : null;
     }
 
-    private static function positiveInt(ViolationList $violations, string $path, mixed $value): int
+    private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
         if (is_int($value) && $value > 0) {
             return $value;

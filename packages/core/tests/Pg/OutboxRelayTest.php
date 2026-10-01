@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Config;
+use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
-use CoreX\Time\FrozenClock;
+use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
 

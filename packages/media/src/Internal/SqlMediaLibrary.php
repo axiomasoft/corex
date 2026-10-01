@@ -38,19 +38,19 @@ final class SqlMediaLibrary implements MediaLibrary
             throw new MediaAccessDenied('Media upload is denied.');
         }
 
-        $path = $input->file->getRealPath();
-        $originalName = $input->file->getClientOriginalName();
+        $bytes = $input->file->bytes;
+        $originalName = $input->file->originalName;
 
-        if (! $input->file->isValid()
-            || $path === false
+        if (! $input->file->valid
+            || $bytes === null
             || $originalName === ''
             || str_contains($originalName, "\0")
             || str_contains($originalName, '/')
             || str_contains($originalName, '\\')
-            || ($checksum = hash_file('sha256', $path)) === false
         ) {
             throw new MediaOperationConflict('Media upload is invalid.');
         }
+        $checksum = hash('sha256', $bytes);
 
         if (! in_array($input->purpose, $this->options->purposes, true)) {
             throw new MediaOperationConflict('Media upload purpose is not registered.');
@@ -73,18 +73,18 @@ final class SqlMediaLibrary implements MediaLibrary
 
         $id = (string) Str::uuid();
         $key = "media/originals/{$id}";
-        $size = $input->file->getSize();
+        $size = $input->file->size;
 
         if ($size < 1 || $size > $this->options->maxUploadBytes) {
             throw new MediaOperationConflict('Media upload size is invalid.');
         }
-        $mime = $input->file->getMimeType() ?? 'application/octet-stream';
+        $mime = $input->file->mimeType ?? 'application/octet-stream';
 
         if (! in_array($mime, $this->options->allowedMimeTypes, true)) {
             throw new MediaOperationConflict('Media upload MIME type is invalid.');
         }
 
-        $image = @getimagesize($path);
+        $image = @getimagesizefromstring($bytes);
 
         if ($image !== false) {
             $maxImagePixels = $this->options->maxImagePixels;
@@ -123,7 +123,12 @@ final class SqlMediaLibrary implements MediaLibrary
             return $this->reference($existing);
         }
 
-        $stream = fopen($path, 'rb');
+        $stream = fopen('php://temp', 'w+b');
+
+        if ($stream !== false) {
+            fwrite($stream, $bytes);
+            rewind($stream);
+        }
 
         try {
             if ($stream === false || ! $this->storage->disk()->writeStream($key, $stream, ['visibility' => 'private'])) {

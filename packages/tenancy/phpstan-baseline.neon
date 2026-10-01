@@ -85,12 +85,6 @@ parameters:
 			path: src/Identity/Internal/DatabaseIdentitySyncer.php
 
 		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 3
-			path: src/Identity/Internal/DatabaseIdentitySyncer.php
-
-		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Identity\Internal\Models\User>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
@@ -373,13 +367,13 @@ parameters:
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNotNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\Account>::whereNotNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\Account>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
@@ -409,7 +403,7 @@ parameters:
 			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
-			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Account\Models\Account|null.'
+			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Account\Internal\Models\Account|null.'
 			identifier: varTag.type
 			count: 1
 			path: src/Laravel/Resolvers/HostTenantResolver.php
@@ -490,25 +484,25 @@ parameters:
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 4
-			path: src/Membership/Internal/Identity/ManagementIdentityHydrator.php
+			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Identity\Internal\Models\User>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Membership/Internal/Identity/ManagementIdentityHydrator.php
+			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
 		-
 			rawMessage: 'Only booleans are allowed in an if condition, bool|null given.'
 			identifier: if.condNotBoolean
 			count: 1
-			path: src/Membership/Internal/Identity/ManagementIdentityHydrator.php
+			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
 		-
 			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Membership/Internal/Identity/ManagementIdentityHydrator.php
+			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
 		-
 			rawMessage: Cannot access property $logical_digest on mixed.
@@ -535,24 +529,6 @@ parameters:
 			path: src/Membership/Internal/Persistence/PairStore.php
 
 		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 3
-			path: src/Membership/Internal/Projection/ApplyMembershipProjection.php
-
-		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, Closure(CoreX\Tenancy\Membership\Data\AccountListEntry): array{account_id: string, name: string, slug: string, primary_host: string, status: string} given.'
-			identifier: argument.type
-			count: 1
-			path: src/Membership/Internal/Switcher/RedisAccountMenuCache.php
-
-		-
-			rawMessage: 'Parameter $accounts of class CoreX\Tenancy\Membership\Data\AvailableAccounts constructor expects list<mixed>, array<CoreX\Tenancy\Membership\Data\AccountListEntry> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Membership/Internal/Switcher/RedisAccountMenuCache.php
-
-		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
@@ -562,7 +538,7 @@ parameters:
 			rawMessage: 'Only booleans are allowed in ||, int|false given on the right side.'
 			identifier: booleanOr.rightNotBoolean
 			count: 1
-			path: src/Membership/Internal/Transport/MembershipQuery.php
+			path: src/Membership/Data/MembershipQuery.php
 
 		-
 			rawMessage: 'Method CoreX\Tenancy\Membership\Internal\Transport\StrictJson::object() should return array<string, mixed> but returns array.'
@@ -597,12 +573,6 @@ parameters:
 		-
 			rawMessage: Cannot access property $revokeUri on CoreX\Tenancy\Membership\Internal\Transport\ChannelBinding|null.
 			identifier: property.nonObject
-			count: 1
-			path: src/Membership/Internal/Transport/StrictTransport.php
-
-		-
-			rawMessage: 'Parameter $accounts of class CoreX\Tenancy\Membership\Data\AvailableAccounts constructor expects list<mixed>, array<CoreX\Tenancy\Membership\Data\AccountListEntry> given.'
-			identifier: argument.type
 			count: 1
 			path: src/Membership/Internal/Transport/StrictTransport.php
 
@@ -886,37 +856,25 @@ parameters:
 			rawMessage: Access to an undefined property object::$app_db_user.
 			identifier: property.notFound
 			count: 3
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
 
 		-
 			rawMessage: Access to an undefined property object::$db_name.
 			identifier: property.notFound
 			count: 2
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
 
 		-
-			rawMessage: Casting to int something that's already int.
-			identifier: cast.useless
-			count: 2
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
-
-		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 2
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
-
-		-
-			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Provisioning\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
+			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
 
 		-
 			rawMessage: 'Part $cluster->app_db_user (mixed) of encapsed string cannot be cast to string.'
 			identifier: encapsedStringPart.nonString
 			count: 2
-			path: src/Provisioning/Database/TemplateClonePostgreSQLManager.php
+			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
 
 		-
 			rawMessage: Access to an undefined property object::$cluster_id.
@@ -1024,115 +982,115 @@ parameters:
 			rawMessage: Casting to int something that's already int.
 			identifier: cast.useless
 			count: 1
-			path: src/Provisioning/Jobs/CreateDatabaseFromTemplate.php
+			path: src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php
 
 		-
 			rawMessage: Casting to string something that's already string.
 			identifier: cast.useless
 			count: 1
-			path: src/Provisioning/Jobs/CreateDatabaseFromTemplate.php
+			path: src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 4
-			path: src/Provisioning/Internal/Migrations/MigrationWaveOrchestrator.php
+			path: src/Account/Laravel/MigrationWaveOrchestrator.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Models\Account>::whereNull().'
+			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\Account>::whereNull().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Provisioning/Internal/Migrations/MigrationWaveOrchestrator.php
+			path: src/Account/Laravel/MigrationWaveOrchestrator.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\AccountSchemaState>::orderBy().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Provisioning/Internal/Migrations/MigrationWaveOrchestrator.php
+			path: src/Account/Laravel/MigrationWaveOrchestrator.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\AccountSchemaState>::select().'
 			identifier: staticMethod.dynamicCall
 			count: 1
-			path: src/Provisioning/Internal/Migrations/MigrationWaveOrchestrator.php
+			path: src/Account/Laravel/MigrationWaveOrchestrator.php
 
 		-
 			rawMessage: Access to an undefined property object::$embedding_dim.
 			identifier: property.notFound
 			count: 2
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Access to an undefined property object::$embedding_model.
 			identifier: property.notFound
 			count: 2
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Access to an undefined property object::$id.
 			identifier: property.notFound
 			count: 4
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Access to an undefined property object::$template_version.
 			identifier: property.notFound
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Access to an undefined property object::$version.
 			identifier: property.notFound
 			count: 3
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Anonymous function should return string|null but returns mixed.
 			identifier: return.type
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Binary operation "." between 'DROP DATABASE IF…' and mixed results in an error.
 			identifier: binaryOp.invalid
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: 'Cannot call method orWhere() on mixed.'
 			identifier: method.nonObject
 			count: 2
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: 'Cannot call method where() on mixed.'
 			identifier: method.nonObject
 			count: 6
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 4
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: 'Parameter $clusterId of class CoreX\Context\Data\ProvisionParams constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: 'Parameter $embeddingModel of class CoreX\Context\Data\ProvisionParams constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: src/Provisioning/Internal/PendingPool.php
+			path: src/Account/Internal/PendingPool.php
 
 		-
 			rawMessage: Cannot cast mixed to int.
@@ -1157,12 +1115,6 @@ parameters:
 			identifier: constructor.missingParentCall
 			count: 1
 			path: src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php
-
-		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 1
-			path: src/Runtime/Internal/StanclTenancyManager.php
 
 		-
 			rawMessage: 'Method CoreX\Tenancy\Runtime\Internal\StanclTenancyManager::runFor() should return T but returns (T of mixed)|null.'

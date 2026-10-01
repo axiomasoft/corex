@@ -124,7 +124,7 @@ Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror conf
 - `Extend\PermissionsMerger` — листенер `ModuleEnabled`/`ModuleDisabled` (`CoreAuthServiceProvider::boot()`),
   на каждое enable/disable перекомпилирует всю матрицу (`RoleMatrixCompiler::recompileAll()`);
   строк матрицы сам не создаёт (D113 — это дело модулей). `merge()` также валидирует декларации
-  `CoreX\Modules\Extend\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
+  `CoreX\Modules\Data\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
   игнорируется fail-closed и попадает в возвращаемый список предупреждений (никогда не в лог).
 - `Access\PermissionSurface` — read-only читатель декларированной поверхности прав
   `(entity_key, action, допустимые scope)` активных модулей для UI-матрицы, поверх

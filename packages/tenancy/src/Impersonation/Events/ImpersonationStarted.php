@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Impersonation\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
-use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use Override;
 
 /**
- * Fired after {@see DatabaseImpersonationService::start()}
+ * Fired after {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService::start()}
  * has claimed the grant, mirrored `root_account_events`, and opened the
  * tenant session (B-11 §3.4).
  */
-final class ImpersonationStarted extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ImpersonationStarted extends DomainEvent
 {
     public function __construct(
         public readonly string $grantId,

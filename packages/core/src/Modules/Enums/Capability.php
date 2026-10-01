@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Enums;
 
+use CoreX\Attributes\Api;
+
 /**
  * Contract of satellite hookup: a satellite queries
  * EntityRegistry::byCapability() at boot and wires itself, without knowing
  * the owning module.
- *
- * @internal spec: B-10 §4.4
  */
+#[Api(since: '1.0')]
 enum Capability: string
 {
     case Searchable = 'searchable';

@@ -26,7 +26,8 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\Transfer\\Contracts",
-                "CoreX\\Transfer\\Data"
+                "CoreX\\Transfer\\Data",
+                "CoreX\\Transfer\\TransferServiceProvider"
             ]
         },
         "laravel": {

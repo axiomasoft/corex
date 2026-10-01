@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Data\Data\RecordRef;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class TargetResult
 {
     public function __construct(public string $status, public ?RecordRef $target, public ?string $recordVersion, public ?string $providerTask, public ?string $errorCode)

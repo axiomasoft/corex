@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Operations\Validation\Data\JsonObject;
 
 /** Typed headless tool invocation request; correlation and proof are untrusted evidence. */
+#[Api(since: '1.0')]
 final readonly class ToolCall
 {
     public function __construct(

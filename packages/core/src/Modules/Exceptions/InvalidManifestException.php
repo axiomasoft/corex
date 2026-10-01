@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
-use CoreX\Modules\Definition\ModuleDefinition;
+use CoreX\Attributes\Api;
+use CoreX\Modules\Contracts\ModuleDefinition;
 use RuntimeException;
 
+#[Api(since: '1.0')]
 final class InvalidManifestException extends RuntimeException
 {
     public static function invalidComposerName(string $composerName): self

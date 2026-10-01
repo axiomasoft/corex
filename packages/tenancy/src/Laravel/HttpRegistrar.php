@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\PackageRegistrar;
@@ -28,7 +30,7 @@ use Illuminate\Routing\Router;
 use Override;
 use Stancl\Tenancy\Middleware\ScopeSessions;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class HttpRegistrar implements PackageRegistrar
 {
     #[Override]

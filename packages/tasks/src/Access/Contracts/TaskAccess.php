@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Access\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\EntityReference;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
 use CoreX\Tasks\Task\Data\TaskDraft;
 
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TaskAccess
 {
     public function authorizeCreate(TaskDraft $draft, TenantContext $context): void;

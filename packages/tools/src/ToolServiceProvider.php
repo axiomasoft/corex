@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
@@ -20,6 +22,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 
 /** Explicit tool surface; no routes, migrations or auto-discovery. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ToolServiceProvider extends ServiceProvider
 {
     #[Override]

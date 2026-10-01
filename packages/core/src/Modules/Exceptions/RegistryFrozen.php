@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
  * Late or duplicate entity registration after the compiled projection froze.
- *
- * @internal
  */
+#[Api(since: '1.0')]
 final class RegistryFrozen extends RuntimeException
 {
     public static function late(string $point, string $id): self

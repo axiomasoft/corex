@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Internal\Support\AuthOptions;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
-use CoreX\Context\SingleAccountResolver;
+use CoreX\Context\Internal\SingleAccountResolver;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;

@@ -10,7 +10,7 @@ use CoreX\CustomFields\Data\FilterNode;
 use CoreX\CustomFields\Data\FilterPlan;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
 
 final class SchemaAttributeFilter implements AttributeFilter
@@ -19,11 +19,21 @@ final class SchemaAttributeFilter implements AttributeFilter
 
     public function compile(DataScope $scope, FieldSnapshot $schema, FilterNode $filter): FilterPlan
     {
-        if (! $this->authorizer->authorize(scope: $scope, entity: $schema->entity, subjectId: '', fields: array_column($schema->activeFields, 'code'), action: 'filter')->allowed) {
+        $codes = [];
+        foreach ($schema->activeFields as $field) {
+            $code = $field['code'] ?? null;
+
+            if (! is_string($code)) {
+                throw new InvalidArgumentException('Active field code must be a string.');
+            }
+            $codes[] = $code;
+        }
+
+        if (! $this->authorizer->authorize(scope: $scope, entity: $schema->entity, subjectId: '', fields: $codes, action: 'filter')->allowed) {
             throw new ScopeDenied('The current scope denies this attribute filter.');
         }
 
-        $fields = array_fill_keys(array_column($schema->activeFields, 'code'), true);
+        $fields = array_fill_keys($codes, true);
         $this->validate($filter->tree, $fields, 0);
 
         return new FilterPlan(schemaHash: $schema->schemaHash, tree: $filter->tree);

@@ -26,17 +26,18 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
+    'packages/core/src/Config/Laravel/CoreOptionsParser.php',
     'packages/core/src/Config/Internal/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
-    'packages/core/src/Config/Config.php',
-    'packages/core/src/Config/CoreOptions.php',
+    'packages/core/src/Config/Internal/Config.php',
+    'packages/core/src/Config/Data/CoreOptions.php',
     'packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php',
     'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
     'packages/core/src/Modules/Contracts/PackageRegistrar.php',
-    'packages/core/src/Modules/RegistersNothingOnBoot.php',
+    'packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php',
 ];
 
-const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/BaseModel.php';
+const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php';
 
 /**
  * Closed public edges (D116). Not an ALLOWED widening: any other symbol stays R-Z1.
@@ -44,8 +45,8 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/BaseModel.php';
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
-    'packages/core/src/Context/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
-    'packages/core/src/Data/DataScope.php' => [
+    'packages/core/src/Context/Internal/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
+    'packages/core/src/Data/Data/DataScope.php' => [
         'CoreX\\Context\\Data\\TenantContext',
     ],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
@@ -53,23 +54,23 @@ const CORE_ZONE_EXACT_IMPORTS = [
         'CoreX\\Context\\Contracts\\TenantContextResolver',
     ],
     'packages/core/src/Features/Events/FeatureFlagToggled.php' => [
-        'CoreX\\Settings\\Contracts\\SettingsScope',
+        'CoreX\Settings\Data\SettingsScope',
 
         'CoreX\\Messaging\\Events\\DomainEvent',
     ],
-    'packages/core/src/Features/DatabaseFeatureFlags.php' => [
-        'CoreX\\Settings\\Contracts\\SettingsScope',
+    'packages/core/src/Features/Internal/DatabaseFeatureFlags.php' => [
+        'CoreX\Settings\Data\SettingsScope',
         'CoreX\\Settings\\Enums\\SettingScope',
     ],
-    'packages/core/src/Context/GuardedTenantContextRestorer.php' => [
+    'packages/core/src/Context/Internal/GuardedTenantContextRestorer.php' => [
         'CoreX\\Context\\Data\\TenantContext',
     ],
-    'packages/core/src/Context/NullTenancyManager.php' => [
+    'packages/core/src/Context/Internal/NullTenancyManager.php' => [
         'CoreX\\Context\\Data\\AccountRef',
         'CoreX\\Context\\Data\\TenantContext',
         'CoreX\\Context\\Data\\WorkspaceRef',
     ],
-    'packages/core/src/Context/SingleAccountResolver.php' => [
+    'packages/core/src/Context/Internal/SingleAccountResolver.php' => [
         'CoreX\\Context\\Data\\AccountRef',
         'CoreX\\Context\\Data\\TenantContext',
     ],
@@ -77,20 +78,20 @@ const CORE_ZONE_EXACT_IMPORTS = [
         'CoreX\\Messaging\\Events\\DomainEvent',
     ],
     'packages/core/src/Features/Contracts/FeatureFlags.php' => [
-        'CoreX\\Settings\\Contracts\\SettingsScope',
+        'CoreX\Settings\Data\SettingsScope',
     ],
     'packages/core/src/Settings/Events/SettingChanged.php' => [
         'CoreX\\Messaging\\Events\\DomainEvent',
     ],
     'packages/core/src/Messaging/Contracts/TraceContextBridge.php' => [
-        'CoreX\\Observability\\Internal\\OperationContext',
+        'CoreX\Observability\Data\OperationContext',
     ],
     'packages/core/src/Messaging/Internal/NullTraceContextBridge.php' => [
-        'CoreX\\Observability\\Internal\\OperationContext',
+        'CoreX\Observability\Data\OperationContext',
     ],
     'packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php' => [
-        'CoreX\\Observability\\Internal\\OpenTelemetryBridge',
-        'CoreX\\Observability\\Internal\\OperationContext',
+        'CoreX\\Observability\\Contracts\\TracePropagation',
+        'CoreX\Observability\Data\OperationContext',
     ],
     'packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php' => [
         'CoreX\\Audit\\Internal\\AuditObserver',
@@ -103,9 +104,9 @@ const CORE_ZONE_EXACT_IMPORTS = [
  * @var list<string>
  */
 const CORE_ZONE_FOUNDATION_SUPPORT = [
-    'Config/ViolationList.php',
+    'Config/Laravel/ConfigurationValidator.php',
     'Config/Exceptions/InvalidConfiguration.php',
-    'Config/SecretRef.php',
+    'Config/Data/SecretRef.php',
 ];
 
 /**
@@ -133,6 +134,9 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
+    'Observability/Contracts/TracePropagation.php' => 'Foundation',
+    'Messaging/Internal/DurablePayloadTypeChecker.php' => 'Foundation',
+    'Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php' => 'Foundation',
     'Attributes/Api.php' => 'Foundation',
     'Attributes/Internal/SourceType.php' => 'Foundation',
     'Attributes/Internal/SurfaceDiagnostic.php' => 'Foundation',
@@ -141,22 +145,22 @@ const CORE_ZONE_DUMP = [
     'Attributes/Spi.php' => 'Foundation',
     'Attributes/SpiKind.php' => 'Foundation',
     'Audit/Internal/AuditObserver.php' => 'Audit',
-    'Audit/Contracts/AuditEntry.php' => 'Audit',
+    'Audit/Data/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',
     'Audit/Contracts/AuditRetention.php' => 'Audit',
     'Audit/Contracts/Auditable.php' => 'Audit',
-    'Audit/CurrentActor.php' => 'Audit',
+    'Audit/Internal/CurrentActor.php' => 'Audit',
     'Audit/Enums/ActorType.php' => 'Foundation',
-    'Audit/HasAuditLog.php' => 'Audit',
+    'Audit/Laravel/HasAuditLog.php' => 'Audit',
     'Audit/Internal/AuditLog.php' => 'Audit',
-    'Audit/NullAuditRetention.php' => 'Audit',
+    'Audit/Internal/NullAuditRetention.php' => 'Audit',
     'Audit/Internal/PruneAuditLog.php' => 'Audit',
-    'Audit/QueuedAuditLogger.php' => 'Audit',
+    'Audit/Internal/QueuedAuditLogger.php' => 'Audit',
     'Audit/Internal/RecordAuditEntry.php' => 'Audit',
     'Config/Contracts/ConfigReportSection.php' => 'Foundation',
     'Config/Exceptions/InvalidConfiguration.php' => 'Foundation',
-    'Config/SecretRef.php' => 'Foundation',
-    'Config/ViolationList.php' => 'Foundation',
+    'Config/Data/SecretRef.php' => 'Foundation',
+    'Config/Laravel/ConfigurationValidator.php' => 'Foundation',
     'Context/Contracts/AccountConnectionResolver.php' => 'TenancyContracts',
     'Context/Contracts/IdentityPasswordRehasher.php' => 'TenancyContracts',
     'Context/Contracts/ImpersonationService.php' => 'TenancyContracts',
@@ -173,42 +177,42 @@ const CORE_ZONE_DUMP = [
     'Context/Exceptions/CentralContextException.php' => 'TenancyContracts',
     'Context/Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
     'Context/Exceptions/ScopeContextMismatch.php' => 'TenancyContracts',
-    'Context/GuardedTenantContextRestorer.php' => 'TenancyContracts',
-    'Context/ImpersonationGuard.php' => 'TenancyContracts',
+    'Context/Internal/GuardedTenantContextRestorer.php' => 'TenancyContracts',
+    'Context/Internal/ImpersonationGuard.php' => 'TenancyContracts',
     'Context/Data/ImpersonationState.php' => 'TenancyContracts',
-    'Context/NullImpersonationService.php' => 'TenancyContracts',
-    'Context/NullTenancyManager.php' => 'TenancyContracts',
+    'Context/Internal/NullImpersonationService.php' => 'TenancyContracts',
+    'Context/Internal/NullTenancyManager.php' => 'TenancyContracts',
     'Context/Data/ProvisionParams.php' => 'TenancyContracts',
-    'Context/SingleAccountResolver.php' => 'TenancyContracts',
-    'Data/AllowAllDataScopeAuthorizer.php' => 'Foundation',
-    'Data/ArrayDataScopeCodec.php' => 'Foundation',
-    'Data/CallableDataScopeAuthorizer.php' => 'Foundation',
+    'Context/Internal/SingleAccountResolver.php' => 'TenancyContracts',
+    'Data/Internal/AllowAllDataScopeAuthorizer.php' => 'Foundation',
+    'Data/Internal/ArrayDataScopeCodec.php' => 'Foundation',
+    'Data/Internal/CallableDataScopeAuthorizer.php' => 'Foundation',
     'Data/Contracts/DataScopeAuthorizer.php' => 'Foundation',
     'Data/Contracts/DataScopeCodec.php' => 'Foundation',
-    'Data/DataScope.php' => 'Foundation',
+    'Data/Data/DataScope.php' => 'Foundation',
     'Data/Data/DataScopeAccessDecision.php' => 'Foundation',
-    'Data/DenyDataScopeAuthorizer.php' => 'Foundation',
+    'Data/Internal/DenyDataScopeAuthorizer.php' => 'Foundation',
     'Data/Exceptions/InvalidScopePayload.php' => 'Foundation',
     'Data/Data/RecordRef.php' => 'Foundation',
-    'Data/WriteToken.php' => 'Foundation',
-    'Database/BaseModel.php' => 'Foundation',
+    'Data/Data/WriteToken.php' => 'Foundation',
+    'Database/Laravel/BaseModel.php' => 'Foundation',
     'Database/Enums/IdStrategy.php' => 'Foundation',
-    'Database/HasConfiguredId.php' => 'Foundation',
-    'Database/Schema/IdColumns.php' => 'Foundation',
+    'Database/Laravel/HasConfiguredId.php' => 'Foundation',
+    'Database/Laravel/IdColumns.php' => 'Foundation',
     'Departments/Contracts/DepartmentRepository.php' => 'Departments',
-    'Departments/DatabaseDepartmentRepository.php' => 'Departments',
+    'Departments/Internal/DatabaseDepartmentRepository.php' => 'Departments',
     'Departments/Data/Department.php' => 'Departments',
     'Departments/Events/DepartmentMoved.php' => 'Departments',
     'Departments/Exceptions/CrossWorkspaceMoveException.php' => 'Departments',
     'Departments/Exceptions/DepartmentCycleException.php' => 'Departments',
-    'Departments/Models/Department.php' => 'Departments',
+    'Departments/Internal/Models/Department.php' => 'Departments',
     'Errors/Contracts/DescribesError.php' => 'Foundation',
     'Errors/Data/ErrorDescriptor.php' => 'Foundation',
     'Errors/Enums/ErrorCategory.php' => 'Foundation',
     'Errors/Enums/UnavailabilityReason.php' => 'Foundation',
-    'Features/Contracts/FeatureFlagDefinition.php' => 'Features',
+    'Features/Data/FeatureFlagDefinition.php' => 'Features',
     'Features/Contracts/FeatureFlags.php' => 'Features',
-    'Features/DatabaseFeatureFlags.php' => 'Features',
+    'Features/Internal/DatabaseFeatureFlags.php' => 'Features',
     'Features/Events/FeatureFlagToggled.php' => 'Features',
     'Features/Internal/Models/FeatureFlag.php' => 'Features',
     'Features/Internal/Models/FeatureOverride.php' => 'Features',
@@ -262,32 +266,32 @@ const CORE_ZONE_DUMP = [
     'Observability/Internal/NullOperationObserver.php' => 'Foundation',
     'Observability/Internal/OpenTelemetryBridge.php' => 'Foundation',
     'Observability/Data/OperationCompleted.php' => 'Foundation',
-    'Observability/Internal/OperationContext.php' => 'Foundation',
+    'Observability/Data/OperationContext.php' => 'Foundation',
     'Observability/Data/OperationFailed.php' => 'Foundation',
     'Observability/Enums/OperationOutcome.php' => 'Foundation',
     'Observability/Data/OperationStarted.php' => 'Foundation',
     'Observability/Internal/PsrLogOperationObserver.php' => 'Foundation',
     'Settings/Contracts/SettingDefaultsProvider.php' => 'Settings',
     'Settings/Contracts/SettingsRepository.php' => 'Settings',
-    'Settings/Contracts/SettingsScope.php' => 'Settings',
-    'Settings/DatabaseSettingsRepository.php' => 'Settings',
+    'Settings/Data/SettingsScope.php' => 'Settings',
+    'Settings/Internal/DatabaseSettingsRepository.php' => 'Settings',
     'Settings/Enums/SettingScope.php' => 'Settings',
     'Settings/Events/SettingChanged.php' => 'Settings',
     'Settings/Exceptions/SettingValueTooLargeException.php' => 'Settings',
     'Settings/Exceptions/UnsupportedScopeException.php' => 'Settings',
     'Settings/Internal/Models/Setting.php' => 'Settings',
-    'Settings/NullSettingDefaultsProvider.php' => 'Settings',
+    'Settings/Internal/NullSettingDefaultsProvider.php' => 'Settings',
     'Storage/Contracts/TenantStorage.php' => 'Storage',
     'Storage/Data/ExportArchiveRef.php' => 'Storage',
     'Storage/Internal/LocalTenantStorage.php' => 'Storage',
-    'Storage/ScopedFilesystem.php' => 'Storage',
+    'Storage/Internal/ScopedFilesystem.php' => 'Storage',
     'Storage/Data/StorageCapabilities.php' => 'Storage',
     'Storage/Exceptions/StorageCapabilityUnavailable.php' => 'Storage',
     'Storage/Exceptions/StorageOperationFailed.php' => 'Storage',
-    'Time/FrozenClock.php' => 'Foundation',
-    'Time/LaravelClock.php' => 'Foundation',
-    'Time/SystemClock.php' => 'Foundation',
-    'packages/intl/src/Money/MoneyCast.php' => 'Money',
+    'Time/Testing/FrozenClock.php' => 'Foundation',
+    'Time/Laravel/LaravelClock.php' => 'Foundation',
+    'Time/Laravel/SystemClock.php' => 'Foundation',
+    'packages/intl/src/Money/Laravel/MoneyCast.php' => 'Money',
     'packages/panels/src/SavedViews/Contracts/SavedViewRepository.php' => 'SavedViews',
     'packages/panels/src/SavedViews/Contracts/ViewAccessPolicy.php' => 'SavedViews',
     'packages/panels/src/SavedViews/Contracts/ViewSchemaProvider.php' => 'SavedViews',
@@ -310,16 +314,16 @@ test('every core src file is classified into a zone or composition/testing', fun
     expect(rz0Offenders())->toBe([])
         ->and(zoneOf('packages/core/src/Messaging/Internal/PubSubManager.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
-        ->and(zoneOf('packages/core/src/Config/ViolationList.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Config/Laravel/ConfigurationValidator.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Config/Exceptions/InvalidConfiguration.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Config/SecretRef.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Config/Data/SecretRef.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Contracts/DescribesError.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Data/ErrorDescriptor.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Enums/ErrorCategory.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Enums/UnavailabilityReason.php'))->toBe('Foundation')
-        ->and(coreZoneKind('packages/core/src/Config/CoreOptions.php'))->toBe('composition')
+        ->and(coreZoneKind('packages/core/src/Config/Data/CoreOptions.php'))->toBe('composition')
         ->and(coreZoneKind('packages/core/src/Modules/Contracts/PackageRegistrar.php'))->toBe('composition')
-        ->and(coreZoneKind('packages/core/src/Modules/RegistersNothingOnBoot.php'))->toBe('composition');
+        ->and(coreZoneKind('packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php'))->toBe('composition');
 });
 
 test('zone files import only allowed CoreX zones (R-Z1)', function (): void {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
 /**
@@ -11,6 +12,7 @@ use InvalidArgumentException;
  *
  * Dependency-neutral: no Laravel types. Tenant activation is not part of the stamp.
  */
+#[Api(since: '1.0')]
 final readonly class ExtensionStamp
 {
     public function __construct(
@@ -36,7 +38,7 @@ final readonly class ExtensionStamp
         ];
     }
 
-    /** @param array<string, mixed> $value */
+    /** @param array{point: string, id: string, version: string, registryFingerprint: string} $value */
     public static function fromArray(array $value): self
     {
         return new self(

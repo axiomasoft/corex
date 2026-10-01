@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
@@ -11,7 +12,7 @@ use CoreX\Operations\Errors\Internal\ErrorWire;
 use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
 use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;
 use RuntimeException;
@@ -28,7 +29,7 @@ final class ErrorRepresentationTest extends TestCase
                 errorCode: 'synthetic_'.$category->value,
                 status: 409,
                 message: 'Safe '.$category->value.' message.',
-                details: ['reason' => $category->value],
+                details: JsonDocuments::capture(['reason' => $category->value]),
                 category: $category,
                 retryable: $category === ErrorCategory::Conflict,
                 path: '/attributes/color',

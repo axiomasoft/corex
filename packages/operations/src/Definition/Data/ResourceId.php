@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Database\Enums\IdStrategy;
 use InvalidArgumentException;
 use Stringable;
 
+#[Api(since: '1.0')]
 final readonly class ResourceId implements Stringable
 {
     private function __construct(

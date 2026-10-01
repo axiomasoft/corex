@@ -4,6 +4,7 @@
 declare(strict_types=1);
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use Symfony\Component\Process\Process;
 
 $root = dirname(__DIR__);
 $package = $root.'/packages/custom-fields';
@@ -147,15 +148,10 @@ function phpFiles(string $directory): array
 /** @return array{int, string} */
 function runGate(string $root, string $script): array
 {
-    $process = proc_open([PHP_BINARY, $root.'/scripts/'.$script], [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root);
+    require_once $root.'/vendor/autoload.php';
+    // Drain both streams concurrently, including when a gate prints many diagnostics.
+    $process = new Process([PHP_BINARY, $root.'/scripts/'.$script], $root);
+    $process->run();
 
-    if (! is_resource($process)) {
-        return [2, 'could not start process'];
-    }
-
-    $output = stream_get_contents($pipes[1]).stream_get_contents($pipes[2]);
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-
-    return [proc_close($process), trim($output)];
+    return [$process->getExitCode() ?? 2, trim($process->getOutput().$process->getErrorOutput())];
 }

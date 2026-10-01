@@ -7,9 +7,9 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use Illuminate\Contracts\Container\Container;
 
 final class WorkUnitMutableContextResolver implements TenantContextResolver

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
+use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ApiVersion
 {
     public function __construct(

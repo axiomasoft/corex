@@ -77,7 +77,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     $relative = static fn (string $path): string => substr($path, strlen($root) + 1);
 
     foreach (SourceScanner::filesMatching($src, '/\bclass\s+\w*(?:OperationRegistry|ApiRegistry)\b/') as $path) {
-        if ($path !== $src.'/Definition/OperationRegistry.php') {
+        if ($path !== $src.'/Definition/Internal/OperationRegistry.php') {
             $violations[] = 'second-operation-registry: '.$relative($path);
         }
     }
@@ -104,7 +104,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
         }
     }
 
-    $dispatcher = (string) file_get_contents($src.'/Invocation/OperationDispatcher.php');
+    $dispatcher = (string) file_get_contents($src.'/Invocation/Internal/OperationDispatcher.php');
     $tools = (string) file_get_contents(SourceScanner::packagePath('tools', 'src/Internal/GuardedToolInvoker.php'));
     $profile = (string) file_get_contents($src.'/Versioning/Data/ApiProfile.php');
     $factory = (string) file_get_contents($src.'/Versioning/Internal/ApiProfileFactory.php');

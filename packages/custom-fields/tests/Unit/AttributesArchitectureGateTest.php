@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use Symfony\Component\Process\Process;
 
 /** @return array{int, string} */
 function runAttributesArchitectureGate(?string $fixture = null): array
@@ -12,17 +13,10 @@ function runAttributesArchitectureGate(?string $fixture = null): array
         $command = [...$command, '--fixture', $root.'/tests/fixtures/attributes-architecture/'.$fixture];
     }
 
-    $process = proc_open($command, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root);
+    $process = new Process($command, $root);
+    $process->run();
 
-    if (! is_resource($process)) {
-        throw new RuntimeException('Unable to start attributes architecture gate.');
-    }
-
-    $output = stream_get_contents($pipes[1]).stream_get_contents($pipes[2]);
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-
-    return [proc_close($process), $output];
+    return [$process->getExitCode() ?? 2, $process->getOutput().$process->getErrorOutput()];
 }
 
 it('passes the package architecture ratchet on the current source tree', function (): void {

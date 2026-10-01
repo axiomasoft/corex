@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Exceptions;
 
+use CoreX\Attributes\Api;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
-use CoreX\Context\ImpersonationGuard;
 use RuntimeException;
 
 /**
@@ -15,9 +15,8 @@ use RuntimeException;
  * for the layer that raised it — a bare "write blocked" message would leave
  * the premortem A8/A9 diagnosis (route marker vs `allowing()` scope) to
  * guesswork.
- *
- * @internal spec: B-11 §5.9, D141/D142
  */
+#[Api(since: '1.0')]
 final class ImpersonationRestrictedException extends RuntimeException
 {
     private function __construct(string $message)
@@ -34,7 +33,7 @@ final class ImpersonationRestrictedException extends RuntimeException
         );
     }
 
-    /** L3 — {@see ImpersonationGuard::assertAllowed()}. */
+    /** L3 — {@see CoreX\Context\Internal\ImpersonationGuard::assertAllowed()}. */
     public static function forAction(ImpersonationRestrictedAction $action): self
     {
         return new self(

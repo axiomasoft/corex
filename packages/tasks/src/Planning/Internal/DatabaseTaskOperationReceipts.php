@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
 use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
@@ -33,7 +34,7 @@ final class DatabaseTaskOperationReceipts implements TaskOperationReceipts
         return new TaskOperationReceipt(
             requestKey: (string) $row->request_key,
             payloadHash: (string) $row->payload_hash,
-            resultRef: $result,
+            resultRef: JsonDocuments::capture($result),
         );
     }
 

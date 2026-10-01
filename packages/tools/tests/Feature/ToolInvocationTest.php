@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Modules\Compiler\CompiledRegistry;
-use CoreX\Modules\Compiler\RegistryCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\CompiledRegistry;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\BrokenHandler;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
 use CoreX\Operations\Testing\ContextFixture;
@@ -21,9 +22,9 @@ use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\MutatingHandler;
 use CoreX\Operations\Testing\OutputMismatchHandler;
 use CoreX\Operations\Testing\ProviderKeyHandler;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
@@ -31,6 +32,7 @@ use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\CountingHandler;
 use CoreX\Tools\Tests\Support\HeadlessWrappedHandler;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
@@ -169,7 +171,7 @@ final class ToolInvocationTest extends TestCase
     {
         foreach ($this->modules->registry->api as $api) {
             if ($api->toolCode === $code) {
-                return ToolDescriptor::fromDeclaration($api);
+                return ToolDescriptorFactory::fromDeclaration($api);
             }
         }
 
@@ -184,7 +186,7 @@ final class ToolInvocationTest extends TestCase
             code: $code,
             toolVersion: $descriptor->toolVersion,
             expectedContractHash: $descriptor->contractHash,
-            arguments: JsonObject::fromArray($arguments),
+            arguments: JsonObjectFactory::fromArray($arguments),
             requestId: 'req-'.md5($code.serialize($arguments)),
             operationKey: $operationKey,
             clientProof: $clientProof,
@@ -377,8 +379,8 @@ final class ToolInvocationTest extends TestCase
         $call = new ToolCall(
             code: 'notes.broken',
             toolVersion: 'v1',
-            expectedContractHash: ToolDescriptor::fromDeclaration($this->modules->registry->api[0])->contractHash,
-            arguments: JsonObject::fromArray(['name' => 'x']),
+            expectedContractHash: ToolDescriptorFactory::fromDeclaration($this->modules->registry->api[0])->contractHash,
+            arguments: JsonObjectFactory::fromArray(['name' => 'x']),
             requestId: 'req-broken',
         );
 
@@ -412,7 +414,7 @@ final class ToolInvocationTest extends TestCase
             code: 'notes.read',
             toolVersion: 'v1',
             expectedContractHash: str_repeat('a', 64),
-            arguments: JsonObject::fromArray(['name' => 'alpha']),
+            arguments: JsonObjectFactory::fromArray(['name' => 'alpha']),
             requestId: 'req-stale',
         );
 

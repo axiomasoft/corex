@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Access\Extend\Internal;
 
 use CoreX\Access\Contracts\RoleMatrixCompiler;
-use CoreX\Access\Matrix\Data\ActiveEntityFilter;
-use CoreX\Access\Matrix\Internal\MatrixValidator;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
@@ -15,7 +13,7 @@ use CoreX\Modules\Events\ModuleEnabled;
 /**
  * Ties `aut_role_matrix` compilation to module lifecycle (AC-27, D112/D113):
  * on ANY enable/disable, {@see RoleMatrixCompiler::recompileAll()} re-runs,
- * so the active-module filter in {@see ActiveEntityFilter}
+ * so the active-module filter in {@see CoreX\Access\Matrix\Contracts\EntityActivity}
  * (consumed by the compiler and the AzGuard catalog) is re-evaluated against
  * the module's new state. This class creates NO `aut_role_matrix` rows
  * itself (D113 — the merger only merges the SURFACE, modules write the
@@ -27,7 +25,7 @@ use CoreX\Modules\Events\ModuleEnabled;
  * the registry cannot be attributed to any module (the compiled slot
  * carries no module attribution of its own, findings/P2.9-seam-inventory
  * §6) and is skipped fail-closed — surfaced as a warning in the return
- * value, never a log (same contract as {@see MatrixValidator}).
+ * value, never a log (same contract as {@see CoreX\Access\Matrix\Internal\MatrixValidator}).
  *
  * @internal spec: B-11 §4 п.2/п.4, P2.21 D112/D113, AC-27
  */

@@ -4,17 +4,30 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Data\Export;
 
+use CoreX\Attributes\Api;
 use CoreX\Transfer\Data\CanonicalRecord;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class ExportPage
 {
-    /** @param list<mixed> $rows */
-    public function __construct(
-        public array $rows,
-        public ?ExportCursor $next,
-        public bool $complete,
-    ) {
+    /** @param list<CanonicalRecord> $rows */
+    public function __construct(public array $rows, public ?ExportCursor $next, public bool $complete)
+    {
+        self::validateInput($rows, $next, $complete);
+    }
+
+    /** Runtime validation also rejects values from untyped integration callers.
+     * @param  array<array-key, mixed>  $rows
+     */
+    private static function validateInput(
+        /** Runtime input. */
+        array $rows,
+        /** Runtime input. */
+        ?ExportCursor $next,
+        /** Runtime input. */
+        bool $complete,
+    ): void {
         foreach ($rows as $row) {
             if (! $row instanceof CanonicalRecord) {
                 throw new InvalidArgumentException('Export pages contain only canonical records.');

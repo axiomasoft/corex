@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Enums;
 
-/** @internal Use operation declarations, not this projection enum, as the public contract. */
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
 enum IdempotencyRequirement: string
 {
     case Forbidden = 'forbidden';

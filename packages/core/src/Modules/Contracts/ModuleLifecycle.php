@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Data\ModuleStatus;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Exceptions\HasEnabledDependentsException;
@@ -17,9 +19,8 @@ use CoreX\Modules\Exceptions\ModuleEnableFailedException;
  * never goes straight to `archived`/`purged` — disable is a mandatory
  * two-step safety gate. `purged` is terminal: re-installing a purged module
  * goes through {@see repair()}, not enable().
- *
- * @internal spec: B-10 §3.3/§5.1, §7.4 п.3
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ModuleLifecycle
 {
     /**

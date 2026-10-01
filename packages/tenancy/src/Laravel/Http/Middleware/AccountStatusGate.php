@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,6 +19,7 @@ use Illuminate\Http\Response;
  * should never reach this middleware — cache/domain already reject them)
  * falls through to 403.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AccountStatusGate
 {
     private readonly StatusGatePolicy $statusGate;

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Tenancy\Provisioning\Internal\Migrations\MigrationWaveOrchestrator;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use Illuminate\Console\Command;
 
 /**
@@ -14,6 +16,7 @@ use Illuminate\Console\Command;
  * on a single account's failure (AC-11); real parallel worker dispatch is
  * Scope Excluded.
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenantsMigrateCommand extends Command
 {
     protected $signature = 'corex:tenancy:migrate {--batch=} {--p=8} {--skip-failing}';

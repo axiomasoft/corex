@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Contracts;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use DateTimeImmutable;
 
 /**
@@ -14,9 +16,8 @@ use DateTimeImmutable;
  *
  * Per-tariff retention numbers (billing) are out of scope here — a host
  * binds its own implementation.
- *
- * @internal spec: B-10 §7.4 п.8
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface AuditRetention
 {
     public function olderThan(): ?DateTimeImmutable;

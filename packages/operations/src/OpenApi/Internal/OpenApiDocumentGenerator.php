@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
 
 /** Build-time installed-code projection; not a public endpoint or a grant of access. */
-final class OpenApiDocumentGenerator
+final class OpenApiDocumentGenerator implements OpenApiDocuments
 {
     public function __construct(
         private readonly OperationRegistry $operations,
@@ -104,15 +106,15 @@ final class OpenApiDocumentGenerator
             }
 
             if ($operation->method === 'GET') {
-                foreach (($operation->requestSchema['properties'] ?? []) as $name => $schema) {
+                foreach ((JsonDocuments::map($operation->requestSchema)['properties'] ?? []) as $name => $schema) {
                     $entry['parameters'][] = [
                         'name' => $name, 'in' => 'query',
-                        'required' => in_array($name, $operation->requestSchema['required'] ?? [], true),
+                        'required' => in_array($name, JsonDocuments::map($operation->requestSchema)['required'] ?? [], true),
                         'schema' => $schema,
                     ];
                 }
             } else {
-                $entry['requestBody'] = ['required' => true, 'content' => ['application/json' => ['schema' => $operation->requestSchema]]];
+                $entry['requestBody'] = ['required' => true, 'content' => ['application/json' => ['schema' => JsonDocuments::map($operation->requestSchema)]]];
             }
 
             $paths[$operation->path][strtolower($operation->method)] = $entry;

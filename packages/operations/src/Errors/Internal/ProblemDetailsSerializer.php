@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\InvocationMetadata;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Http\JsonResponse;
 

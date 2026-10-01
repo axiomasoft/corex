@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;

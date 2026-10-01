@@ -64,3 +64,18 @@ constitute a publication promise.
 ## Installation
 
 Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through `axiomasoft/corex`. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
+
+## Завершение и чтение задачи
+
+Команды и события возвращают скалярные `TaskView`, `StageView`, `ProjectView` и
+`SprintView`; конкретные Eloquent-модели остаются внутри владельца. Для внешнего
+чтения доступны `TaskRead`, `ProjectRead` и `SprintRead`.
+
+Интеграция завершения реализует `TaskCompletionCapture` и получает
+`TaskCompletionCandidate` через тег `corex.tasks.completion-captures`. Вызов
+синхронный, до сохранения, внутри транзакции команды: ошибка capture откатывает
+изменение статуса. Tasks Workflow проверяет реальный переход в Done, сохраняет
+receipt без повторов и пропускает отключённую либо отсутствующую интеграцию.
+
+`TaskOperationReceipt::resultRef` содержит `JsonDocument`; JSON-представление
+результата восстанавливает `JsonDocuments::map()`.

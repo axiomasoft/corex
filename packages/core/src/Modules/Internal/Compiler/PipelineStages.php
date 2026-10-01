@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal\Compiler;
 
-use CoreX\Modules\Extend\Api;
-use CoreX\Modules\Extend\Entity;
-use CoreX\Modules\Extend\EntityField;
-use CoreX\Modules\Extend\Permissions;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\Entity;
+use CoreX\Modules\Data\EntityField;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Internal\Extend\Filament;
 use CoreX\Modules\Internal\Extend\Menu;
 use CoreX\Modules\Internal\Extend\Routes;

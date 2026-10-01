@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Address;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
@@ -87,26 +88,26 @@ final class FixtureAddressSuggestProvider implements AddressSuggestProvider
         if (strlen($payload) > $limits->maxResponseBytes) {
             return new SuggestionResult(
                 status: 'unavailable',
-                suggestions: [],
+                suggestions: JsonDocuments::capture([]),
                 source: 'fixture-address/1',
-                provenance: ['reason' => 'response_bounds'],
+                provenance: JsonDocuments::capture(['reason' => 'response_bounds']),
             );
         }
 
         if ($matches === []) {
             return new SuggestionResult(
                 status: 'notFound',
-                suggestions: [],
+                suggestions: JsonDocuments::capture([]),
                 source: 'fixture-address/1',
-                provenance: ['consentReference' => $query->consentReference],
+                provenance: JsonDocuments::capture(['consentReference' => $query->consentReference]),
             );
         }
 
         return new SuggestionResult(
             status: 'available',
-            suggestions: $matches,
+            suggestions: JsonDocuments::capture($matches),
             source: 'fixture-address/1',
-            provenance: ['consentReference' => $query->consentReference],
+            provenance: JsonDocuments::capture(['consentReference' => $query->consentReference]),
         );
     }
 }

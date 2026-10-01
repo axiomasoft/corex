@@ -5,18 +5,18 @@ declare(strict_types=1);
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
-use CoreX\Access\Internal\Models\Role;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Matrix\AzGuardRoleModel;
+use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
+use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\EntityDefinition;
+use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
-use CoreX\Modules\Extend\Permissions;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
-use CoreX\Modules\Registry\EntityDefinition;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 
 uses()->group('pg');
 

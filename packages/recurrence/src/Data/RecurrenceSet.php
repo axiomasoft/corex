@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Recurrence\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\Recurrence\Internal\CanonicalHasher;
 use CoreX\Recurrence\Internal\RuntimeProfile;
 use InvalidArgumentException;
 
+#[Api(since: '1.0')]
 final readonly class RecurrenceSet
 {
     /**

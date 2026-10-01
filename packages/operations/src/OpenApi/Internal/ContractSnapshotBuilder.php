@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal;
 
-use CoreX\Operations\Definition\Operation;
-use CoreX\Operations\Definition\OperationRegistry;
+use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Operations\Definition\Contracts\OperationRegistry;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;
 
@@ -132,12 +133,12 @@ final class ContractSnapshotBuilder
             'method' => $operation->method,
             'mode' => $operation->mode->value,
             'module' => $operation->module,
-            'pagination' => $operation->pagination,
+            'pagination' => JsonDocuments::optionalMap($operation->pagination),
             'path' => $operation->path,
             'read_fields' => $operation->readFields,
-            'request_schema' => $operation->requestSchema,
+            'request_schema' => JsonDocuments::map($operation->requestSchema),
             'required_scopes' => $operation->requiredScopes,
-            'response_schema' => $operation->responseSchema,
+            'response_schema' => JsonDocuments::map($operation->responseSchema),
             'success_status' => $operation->successStatus,
             'version' => $operation->version,
             'write_fields' => $operation->writeFields,

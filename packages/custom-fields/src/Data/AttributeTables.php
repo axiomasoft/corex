@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
+use CoreX\Attributes\Api;
 use CoreX\CustomFields\Exceptions\InvalidAttributeTables;
 
+#[Api(since: '1.0')]
 final readonly class AttributeTables
 {
     private const IDENTIFIER = '/^[a-z][a-z0-9_]*$/';

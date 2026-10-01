@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Data\ToolCall;
@@ -66,7 +67,7 @@ final class McpToolsProjection
             code: $descriptor->code,
             toolVersion: $descriptor->toolVersion,
             expectedContractHash: $descriptor->contractHash,
-            arguments: JsonObject::fromArray($arguments),
+            arguments: JsonObjectFactory::fromArray($arguments),
             requestId: $requestId,
             operationKey: $operationKey,
         );
@@ -90,7 +91,7 @@ final class McpToolsProjection
                 'readOnlyHint' => $tool->sideEffect === 'read',
                 'destructiveHint' => $tool->sideEffect === 'irreversible',
                 'idempotentHint' => in_array($tool->idempotency, ['read-only', 'domain-key', 'provider-key'], true),
-                'openWorldHint' => (bool) ($tool->availability['openWorld'] ?? false),
+                'openWorldHint' => (bool) (JsonDocuments::map($tool->availability)['openWorld'] ?? false),
             ],
             'canonicalCode' => $tool->code,
             'toolVersion' => $tool->toolVersion,

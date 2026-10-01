@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Laravel;
 
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\FieldCastRegistry;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
@@ -14,22 +15,22 @@ use CoreX\Modules\Contracts\ModuleRegistryCache;
 use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Contracts\RegistryIntrospection;
-use CoreX\Modules\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Compiler\FieldCastMap;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
 use CoreX\Modules\Internal\ReadRegistryIntrospection;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Internal\Support\ModulesOptions;
-use CoreX\Modules\RegistersNothingOnBoot;
-use CoreX\Modules\Registry\ArrayEntityRegistry;
+use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Override;
 
-/** @internal Composition registrar. Not package public API. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RegistryRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;
@@ -115,8 +116,6 @@ final class RegistryRegistrar implements PackageRegistrar
      *
      * Lives next to CompiledModuleRegistry, the only caller. moduleWiring
      * stays on LifecycleRegistrar.
-     *
-     * @internal spec: D39
      */
     private function registryVersion(Application $app): int
     {

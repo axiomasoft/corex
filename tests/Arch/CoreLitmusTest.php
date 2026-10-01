@@ -18,7 +18,11 @@ use CoreX\Tests\Support\SourceScanner;
  * @var list<string>
  */
 const LITMUS_FOUNDATION = [
-    'packages/core/src/Database/HasConfiguredId.php',
+    'packages/core/src/Data/Laravel/SystemDataScopeAuthorization.php',
+    'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php',
+    'packages/core/src/Data/Data/JsonDocument.php',
+    'packages/core/src/Data/Laravel/JsonDocuments.php',
+    'packages/core/src/Database/Laravel/HasConfiguredId.php',
     'packages/core/src/Data/Contracts/DataScopeAuthorizer.php',
     'packages/core/src/Data/Contracts/DataScopeCodec.php',
     'packages/core/src/Messaging/Contracts/DurablePayload.php',
@@ -29,19 +33,19 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Messaging/Contracts/Cancellable.php',
     'packages/core/src/Messaging/Events/DomainEvent.php',
     'packages/core/src/Data/Exceptions/InvalidScopePayload.php',
-    'packages/core/src/Database/BaseModel.php',
+    'packages/core/src/Database/Laravel/BaseModel.php',
     'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php',
-    'packages/core/src/Data/AllowAllDataScopeAuthorizer.php',
-    'packages/core/src/Data/ArrayDataScopeCodec.php',
-    'packages/core/src/Data/CallableDataScopeAuthorizer.php',
-    'packages/core/src/Data/DataScope.php',
-    'packages/core/src/Data/DenyDataScopeAuthorizer.php',
+    'packages/core/src/Data/Internal/AllowAllDataScopeAuthorizer.php',
+    'packages/core/src/Data/Internal/ArrayDataScopeCodec.php',
+    'packages/core/src/Data/Internal/CallableDataScopeAuthorizer.php',
+    'packages/core/src/Data/Data/DataScope.php',
+    'packages/core/src/Data/Internal/DenyDataScopeAuthorizer.php',
     'packages/core/src/Data/Data/RecordRef.php',
-    'packages/core/src/Data/WriteToken.php',
-    'packages/core/src/Database/Schema/IdColumns.php',
-    'packages/core/src/Time/FrozenClock.php',
-    'packages/core/src/Time/LaravelClock.php',
-    'packages/core/src/Time/SystemClock.php',
+    'packages/core/src/Data/Data/WriteToken.php',
+    'packages/core/src/Database/Laravel/IdColumns.php',
+    'packages/core/src/Time/Testing/FrozenClock.php',
+    'packages/core/src/Time/Laravel/LaravelClock.php',
+    'packages/core/src/Time/Laravel/SystemClock.php',
 ];
 
 /**
@@ -50,9 +54,9 @@ const LITMUS_FOUNDATION = [
  * @var list<string>
  */
 const LITMUS_ELOQUENT = [
-    'packages/core/src/Database/BaseModel.php',
-    'packages/core/src/Database/HasConfiguredId.php',
-    'packages/core/src/Database/Schema/IdColumns.php',
+    'packages/core/src/Database/Laravel/BaseModel.php',
+    'packages/core/src/Database/Laravel/HasConfiguredId.php',
+    'packages/core/src/Database/Laravel/IdColumns.php',
 ];
 
 /** @var list<string> */
@@ -79,9 +83,9 @@ test('foundation membership is an explicit constant of the live zone map', funct
 
 test('LITMUS_ELOQUENT is exactly the three identity paths', function (): void {
     expect(LITMUS_ELOQUENT)->toHaveCount(3)
-        ->and(LITMUS_ELOQUENT[0])->toEndWith('Database/BaseModel.php')
-        ->and(LITMUS_ELOQUENT[1])->toEndWith('Database/HasConfiguredId.php')
-        ->and(LITMUS_ELOQUENT[2])->toEndWith('Database/Schema/IdColumns.php');
+        ->and(LITMUS_ELOQUENT[0])->toEndWith('Database/Laravel/BaseModel.php')
+        ->and(LITMUS_ELOQUENT[1])->toEndWith('Database/Laravel/HasConfiguredId.php')
+        ->and(LITMUS_ELOQUENT[2])->toEndWith('Database/Laravel/IdColumns.php');
 });
 
 test('foundation litmus hard conditions are green on the clean tree', function (): void {
@@ -99,9 +103,18 @@ test('condition 1 below the grep bar warns and does not fail the gate', function
 
 test('condition 5 above 200 lines outside Contracts Enums and Data is unresolved', function (): void {
     $rule = 'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php';
+    $absolute = litmusAbsolute($rule);
+    $original = (string) file_get_contents($absolute);
 
-    expect(litmusSizeStatus($rule))->toBe('unresolved')
-        ->and(litmusSizeStatus('packages/core/src/Database/BaseModel.php'))->toBe('pass')
+    try {
+        file_put_contents($absolute, $original.str_repeat("\n", 201));
+        expect(litmusSizeStatus($rule))->toBe('unresolved');
+    } finally {
+        file_put_contents($absolute, $original);
+    }
+
+    expect(litmusSizeStatus($rule))->toBe('pass')
+        ->and(litmusSizeStatus('packages/core/src/Database/Laravel/BaseModel.php'))->toBe('pass')
         ->and(litmusRl3Offenders())->toBe([])
         ->and(litmusNameOffenders())->toBe([]);
 });
@@ -323,9 +336,10 @@ function litmusAbsolute(string $relative): string
  */
 function litmusLiveFoundationFiles(): array
 {
-    $prefixes = ['Messaging/PHPStan/', 'Data/', 'Database/Schema/', 'Time/'];
+    $prefixes = ['Messaging/PHPStan/', 'Data/', 'Time/'];
     $named = [
-        'Database/HasConfiguredId.php',
+        'Database/Laravel/HasConfiguredId.php',
+        'Database/Laravel/IdColumns.php',
         'Data/Contracts/DataScopeAuthorizer.php',
         'Data/Contracts/DataScopeCodec.php',
         'Messaging/Contracts/DurablePayload.php',
@@ -336,7 +350,7 @@ function litmusLiveFoundationFiles(): array
         'Messaging/Contracts/Cancellable.php',
         'Messaging/Events/DomainEvent.php',
         'Data/Exceptions/InvalidScopePayload.php',
-        'Database/BaseModel.php',
+        'Database/Laravel/BaseModel.php',
     ];
     $root = SourceScanner::packagePath('core', 'src');
     $prefix = SourceScanner::repoRoot().'/packages/core/src/';

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
@@ -11,10 +13,9 @@ use Override;
  * Retrofitted onto `DomainEvent` — was an interim plain-event class
  * dispatched on a successful `ModuleLifecycle::enable()`. Name matches the
  * domain-events table (`mod.module.enabled`).
- *
- * @internal spec: P1.25, A68, OQ-4 workaround, B-10 §3.1
  */
-final class ModuleEnabled extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class ModuleEnabled extends DomainEvent
 {
     /** @param  list<string>  $migrationsRun */
     public function __construct(

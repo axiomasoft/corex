@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Modules\Contracts;
 
 use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 
 /**
  * Cache seam for {@see ModuleRegistry}'s per-account enabled-set.
@@ -19,9 +21,8 @@ use Closure;
  * so a stale entry is never read and nothing has to be cleared — which is
  * exactly why the fix survives a multi-node file cache and a long-running
  * `queue:work`, where a caller-local `forget()` would not.
- *
- * @internal spec: B-10 §6.1
  */
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ModuleRegistryCache
 {
     /**

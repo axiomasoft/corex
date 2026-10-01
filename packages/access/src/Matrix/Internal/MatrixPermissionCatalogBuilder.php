@@ -9,9 +9,9 @@ use AzGuard\Registry\Contracts\PermissionDefinition;
 use AzGuard\Registry\Definitions\SimplePermissionDefinition;
 use AzGuard\Registry\Resolver\EffectivePermissionResolver;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Internal\Support\AuthOptions;
-use CoreX\Access\Matrix\Data\ActiveEntityFilter;
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Roles\Data\RoleMatrixEntry;
+use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use Override;
 
 /**
@@ -50,11 +50,10 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
             return [];
         }
 
-        return RoleMatrixRow::query()
-            ->where('scope', '!=', Scope::None->value)
-            ->get(['entity_key', 'action'])
-            ->filter(fn (RoleMatrixRow $row): bool => $this->activeEntities()->isActive($row->entity_key))
-            ->map(static fn (RoleMatrixRow $row): string => "{$panelId}.{$row->entity_key}.{$row->action}")
+        return collect(RoleMatrixData::matrix())
+            ->filter(static fn (RoleMatrixEntry $row): bool => $row->scope !== Scope::None)
+            ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities()->isActive($row->entityKey))
+            ->map(static fn (RoleMatrixEntry $row): string => "{$panelId}.{$row->entityKey}.{$row->action}")
             ->unique()
             ->map(static fn (string $key): PermissionDefinition => new SimplePermissionDefinition($key, $panelId))
             ->values()

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Internal\Jobs;
 
-use CoreX\Tenancy\Membership\Internal\Projection\ApplyMembershipProjection;
+use CoreX\Tenancy\Identity\Contracts\MembershipProjection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,7 +27,7 @@ final class RefreshAccountMembership implements ShouldQueue
         public readonly string $requestId,
     ) {}
 
-    public function handle(ApplyMembershipProjection $projection): void
+    public function handle(MembershipProjection $projection): void
     {
         $projection->refresh(identityId: $this->identityId, accountId: $this->accountId, product: $this->product, requestId: $this->requestId);
     }

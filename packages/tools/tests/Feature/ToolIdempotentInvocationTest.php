@@ -9,37 +9,40 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\Compiler\RegistryCompiler;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Definition\ModuleManifest;
-use CoreX\Modules\Extend\Api;
+use CoreX\Modules\Data\Api;
+use CoreX\Modules\Data\ModuleManifest;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
-use CoreX\Operations\Invocation\InvocationMetadata;
-use CoreX\Operations\Invocation\OperationDispatcher;
+use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
-use CoreX\Operations\Testing\ResolvedContexts;
 use CoreX\Operations\Validation\Data\JsonObject;
+use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
@@ -171,8 +174,8 @@ final class ToolIdempotentInvocationTest extends TestCase
             new ToolCall(
                 code: 'notes.create',
                 toolVersion: 'v1',
-                expectedContractHash: ToolDescriptor::fromDeclaration($toolDeclaration)->contractHash,
-                arguments: JsonObject::fromArray(['name' => 'alpha']),
+                expectedContractHash: ToolDescriptorFactory::fromDeclaration($toolDeclaration)->contractHash,
+                arguments: JsonObjectFactory::fromArray(['name' => 'alpha']),
                 requestId: 'tool-request',
                 operationKey: 'shared-key',
             ),
@@ -201,7 +204,7 @@ final class ToolIdempotentInvocationTest extends TestCase
                 authenticatedPrincipal: $this->principal,
                 requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
             ),
-            input: $input,
+            input: JsonDocuments::capture($input),
             parameters: ['parent' => 'root'],
             idempotencyKey: $key,
         );
@@ -220,8 +223,8 @@ final class ToolIdempotentInvocationTest extends TestCase
             path: '/notes',
             ability: 'notes.write',
             handler: NoteHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Command,
@@ -261,10 +264,10 @@ final class ToolIdempotentInvocationReplayAuthorizerFixture implements ReplayAut
         }
 
         if ($this->removeSecret && $outcome->kind === 'success') {
-            $data = $outcome->data ?? [];
+            $data = JsonDocuments::optionalArray($outcome->data) ?? [];
             unset($data['secret']);
 
-            return StoredOperationOutcome::success($data);
+            return StoredOperationOutcome::success(JsonDocuments::capture($data));
         }
 
         return $outcome;

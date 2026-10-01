@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs\Lifecycle;
 
-use CoreX\Modules\Definition\ModuleDefinition;
-use CoreX\Modules\Definition\ModuleManifest;
+use CoreX\Modules\Contracts\ModuleDefinition;
+use CoreX\Modules\Data\ModuleManifest;
 
 /**
  * No-dependency module used across ModuleLifecycleTest: two migrations

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Exceptions;
 
+use CoreX\Attributes\Api;
 use RuntimeException;
 
 /**
@@ -15,9 +16,8 @@ use RuntimeException;
  * is a fail-closed exception instead: declaration drift is a bug in the
  * entity's own registration, fixed by declaring the capability, never
  * papered over by a wider grant.
- *
- * @internal spec: B-11 §4 п.3, P2.9 D114
  */
+#[Api(since: '1.0')]
 final class ScopeCapabilityMismatch extends RuntimeException
 {
     public static function forScope(string $entityKey, string $scope, string $missingCapability, string $column): self

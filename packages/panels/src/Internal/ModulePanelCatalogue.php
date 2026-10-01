@@ -6,8 +6,8 @@ namespace CoreX\Panels\Internal;
 
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Registry\EntityDefinition;
 use CoreX\Panels\Contracts\PanelCatalogue;
 use CoreX\Panels\Contracts\PanelProvider;
 use CoreX\Panels\Data\EntityReference;

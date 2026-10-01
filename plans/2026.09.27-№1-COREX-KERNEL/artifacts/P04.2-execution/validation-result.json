@@ -1,0 +1,142 @@
+{
+  "schema": "p04-replay-validation/v1",
+  "patch_sha256": "2f12c8f2adf123d76c1bdf8255a18c76954aabf13140aeb8d0e0cf73cd5adc14",
+  "checks": [
+    {
+      "name": "strict",
+      "command": "scripts/php84 php scripts/php-api.php --strict",
+      "exit_code": 0,
+      "duration_ms": 5657,
+      "log": "validation/strict.log",
+      "log_sha256": "2bd621f010d44d42e39a13bf7bec9037f0485558b05bdf61b45be53accdd4ce4"
+    },
+    {
+      "name": "module",
+      "command": "scripts/php84 composer module-layout-gate",
+      "exit_code": 0,
+      "duration_ms": 757,
+      "log": "validation/module.log",
+      "log_sha256": "aadde1b66c22d3a4c6b5c07f672b811678aad71f3a63a977c50743061e170268"
+    },
+    {
+      "name": "graph",
+      "command": "scripts/php84 php scripts/package-graph-gate.php",
+      "exit_code": 0,
+      "duration_ms": 387,
+      "log": "validation/graph.log",
+      "log_sha256": "572cd24e26b0ec044bdc176553af7e6fd385d4104f04001d3dbfe5a4af4443a8"
+    },
+    {
+      "name": "lint",
+      "command": "scripts/php84 composer lint:check",
+      "exit_code": 0,
+      "duration_ms": 162439,
+      "log": "validation/lint.log",
+      "log_sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+    },
+    {
+      "name": "analyse",
+      "command": "scripts/php84 composer analyse",
+      "exit_code": 1,
+      "duration_ms": 143508,
+      "log": "validation/analyse.log",
+      "log_sha256": "712760299f6bc401b05e85e373393c994a99de0304085b107ee2c5c3ad3652dc"
+    },
+    {
+      "name": "ceilings",
+      "command": "scripts/php84 php scripts/quality-ceiling-guard.php",
+      "exit_code": 0,
+      "duration_ms": 32,
+      "log": "validation/ceilings.log",
+      "log_sha256": "0f803042208f4fe0ba2d743c2374d163f1800ec943fd15275cbce36a6dfa31a2"
+    },
+    {
+      "name": "task-completion",
+      "command": "scripts/php84 composer test -- --filter=TaskCompletion",
+      "exit_code": 1,
+      "duration_ms": 928,
+      "log": "validation/task-completion.log",
+      "log_sha256": "1280d036e0d9fe196686fa85e71fd4a2b3355e644ed48fbb2bd086af1a13fb08"
+    },
+    {
+      "name": "test",
+      "command": "scripts/php84 composer test",
+      "exit_code": 1,
+      "duration_ms": 35451,
+      "log": "validation/test.log",
+      "log_sha256": "a0fe355f777746a11d064c05e60d039c82070bc048e93b21f5a506e6ce61ca7a"
+    },
+    {
+      "name": "pg",
+      "command": "PGSQL_PORT=5432 scripts/php84 composer test:pg",
+      "exit_code": 0,
+      "duration_ms": 53275,
+      "log": "validation/pg.log",
+      "log_sha256": "d9ee7d8370810c9306c48a55d0a4aa7971f96d9553b76cda86032624f4a1bdc7"
+    },
+    {
+      "name": "packages",
+      "command": "scripts/php84 composer test:packages",
+      "exit_code": 1,
+      "duration_ms": 679,
+      "log": "validation/packages.log",
+      "log_sha256": "dffdbc80c2b496cbf5345d9aeb7e908d2438f35b9fb84ffe2566e5bd1034e19c"
+    },
+    {
+      "name": "arch",
+      "command": "scripts/php84 composer test:arch",
+      "exit_code": 1,
+      "duration_ms": 10853,
+      "log": "validation/arch.log",
+      "log_sha256": "4833b9cde1967bfb21e88124492a36306d197107b8f1af5ee45143db750681b1"
+    },
+    {
+      "name": "golden",
+      "command": "scripts/php84 composer golden",
+      "exit_code": 0,
+      "duration_ms": 6991,
+      "log": "validation/golden.log",
+      "log_sha256": "c3e94af63c59550e83a8612b2ab5161632957a1b90f074b96cff645eb7400af5"
+    },
+    {
+      "name": "rename",
+      "command": "scripts/php84 php scripts/rename-completeness-gate.php",
+      "exit_code": 0,
+      "duration_ms": 448,
+      "log": "validation/rename.log",
+      "log_sha256": "4c1361e2167f2da3b37d7fa6350fe129f69bbff4252f049090fa93063bd3948f"
+    },
+    {
+      "name": "ownership",
+      "command": "scripts/php84 php scripts/ownership-gate.php --strict",
+      "exit_code": 0,
+      "duration_ms": 124,
+      "log": "validation/ownership.log",
+      "log_sha256": "211d798473ca489faa425c4118f8d3cbfcf58a54a0b11b29b02f757112a3be7b"
+    },
+    {
+      "name": "docs",
+      "command": "scripts/php84 php scripts/package-docs-gate.php",
+      "exit_code": 0,
+      "duration_ms": 174,
+      "log": "validation/docs.log",
+      "log_sha256": "5aeb6cf46f665c6be35b63deac881dd466826ca0f927559c270b3287a3b6385e"
+    },
+    {
+      "name": "anti-weakening",
+      "command": "scripts/php84 bash scripts/anti-weakening-gate.sh",
+      "exit_code": 1,
+      "duration_ms": 3545,
+      "log": "validation/anti-weakening.log",
+      "log_sha256": "5f0127cd21cb4be89a91f879fb824fd014f9b4da7d4a5fc90577813bb6c59251"
+    },
+    {
+      "name": "mutations",
+      "command": "scripts/php84 bash scripts/mutation-check.sh --all",
+      "exit_code": 0,
+      "duration_ms": 12946,
+      "log": "validation/mutations.log",
+      "log_sha256": "6402141b2bd2210bb1d0b622257b533bd73169aa7e17c9e907e9a779adf17049"
+    }
+  ]
+}

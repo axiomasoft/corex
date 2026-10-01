@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal\Commands;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Internal\BulkWorker;
 use Illuminate\Console\Command;
 

@@ -10,7 +10,6 @@ use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
 use CoreX\Storage\Exceptions\StorageCapabilityUnavailable;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
-use CoreX\Storage\ScopedFilesystem;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;

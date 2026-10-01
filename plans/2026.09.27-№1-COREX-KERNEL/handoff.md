@@ -1,37 +1,26 @@
-# HANDOFF — 2026-09-29 — after P04.1
+# HANDOFF — 2026-10-01 — after P04.2
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2
+**Next:** exec-items: task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.3
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
 | Model | frontier |
 | Thinking | high |
-| Capabilities | repository write · shell · PHP8.4 · isolated test DB · independent item review |
-| Context | continue-root |
-| Суть | P04.1 закрыт; следующий P04.2 классифицирует API/SPI и вводит immutable DTO по D63. |
+| Context | cold-start-root: owner-requested-new-session |
+| Capabilities | repository write · PHP8.4 · isolated test DB |
+| Суть | Следующий готовый item по Routing; рекомендация не авторизует его запуск. |
 
-```session-continuity-decision/v1
-{"evidence": ["batch:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P04.1-execution/completion.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```text
+task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.3
 ```
 
-**Done:** P04.1: Api/Spi/SpiKind, AST source scanner, CLI report/strict/write/check,
-fixtures, exact layout exception, report CI, documentation and initial source report.
-Required suites and 34 mutation controls pass. Independent Cursor/Grok 4.7 High review GREEN.
-Golden includes exactly seven new tooling types; existing effective records and other layers unchanged.
+**Done:** P04.2: независимое ревью GREEN; три исправленных замечания; финальные обязательные проверки и sealed replay GREEN. Доказательства: artifacts/P04.2-execution/completion.md, review-verdict.md, validation-final-result.json, replay-equality-final.json.
 
-**Remaining:** P04.2 → P04.3 → P04.4. P04.2 is a recommendation, outside the completed
-owner-authorized solo P04.1 scope. No automatic successor execution.
+**Remaining:** В рамках P04.2 — отсутствует. P04.3 не начат. Push/release не выполнялись.
 
-**Sources of truth:** phases/P04/P04.1.md; phases/P04/P04.2.md;
-decisions/D63-p04-public-surface-contract.md; decisions/D64-p04-errors-and-golden-delta.md;
-decisions/D66-p04-owner-design-acceptance.md; artifacts/P04.1-execution/scanner-contract.md;
-artifacts/P04.1-execution/completion.md; artifacts/P04.1-execution/proof-index.json;
-artifacts/P04.1-execution/review-verdict.md; journal.jsonl.
+**Sources of truth:** immutable phases/P04/P04.2.md; D63/D64/D67; artifacts/P04.2-execution/completion.md; journal.jsonl.
 
-**Open risks:** Current source tree intentionally retains classification debt. Report exit 0
-does not imply strict admission. P04.2 owns classification/DTO changes; P04.4 owns strict CI cutover.
+**Open risks:** Общий plan-lint обнаруживает read-budget превышение следующего P04.3 bundle: 288416 оценочных токенов; classification-result.tsv — 247314. Это граница будущего запуска, не незавершённая проверка реализации P04.2; P04.3 не запускать до отдельного решения по компактной передаче. Локальная валидация не является hosted CI или fresh-install evidence. Прежние RED/предыдущие replay receipts сохранены отдельно. Route probing остаётся отменённым владельцем; attested route не заявлен.
 
-**Workarounds/Deferred/Open questions:** See execution observations for recovered runner issues
-and bounded integration repairs. Run Testbench suites serially; package PG lane uses isolated
-corex_test on port 5434. Push, hosted CI, release and later items were not executed.
+**Workarounds/Deferred/Open questions:** Предпочтение владельца: при реализации больших задач завершать код с лёгкими проверками; финальное ревью — в свежей сессии; не добавлять циклы SKM или повторные полные прогоны без изменённых входов/подтверждённого дефекта. Пакетная валидация переиспользует GREEN prefix и продолжает с исправленного operations.

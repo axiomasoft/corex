@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Contracts\CentralApiClient;
+use CoreX\Tenancy\Identity\Internal\Membership\ApplyMembershipProjection;
 use CoreX\Tenancy\Laravel\Http\Middleware\RequireActiveMembership;
-use CoreX\Tenancy\Membership\Internal\Projection\ApplyMembershipProjection;
 use CoreX\Tenancy\Membership\Internal\Projection\ReferenceMembershipProjection;
 use Illuminate\Routing\Router;
 

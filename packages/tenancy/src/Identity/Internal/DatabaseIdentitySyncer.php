@@ -7,8 +7,7 @@ namespace CoreX\Tenancy\Identity\Internal;
 use Carbon\CarbonImmutable;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Context\Data\AccountRef;
-use CoreX\Tenancy\Account\Models\Account;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
 use CoreX\Tenancy\Identity\Internal\Jobs\SyncIdentityToAccount;
@@ -58,7 +57,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             ->where('id', $identityId)
             ->first();
 
-        $account = Account::on($this->centralConnection)->find($accountId);
+        $account = app(AccountRead::class)->find($accountId, $this->centralConnection);
 
         if ($identity === null || $account === null) {
             $this->markFailed($identityId, $accountId);
@@ -72,13 +71,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             ->where('account_id', $accountId)
             ->first();
 
-        $accountRef = new AccountRef(
-            id: (string) $account->id,
-            slug: (string) ($account->slug ?? ''),
-            status: (string) $account->status,
-            features: [],
-            limits: [],
-        );
+        $accountRef = $account;
 
         try {
             $this->tenancy->runFor($accountRef, null, function () use ($identity, $identityId, $accountId): void {

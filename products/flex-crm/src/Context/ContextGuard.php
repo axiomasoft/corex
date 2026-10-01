@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Context;
 
-use CoreX\Config\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Database\Enums\IdStrategy;
@@ -108,12 +108,12 @@ final readonly class ContextGuard
         $workspace = $ctx->tenant->workspace ?? throw new AuthorizationException('CRM workspace write requires a workspace.');
         $id = $workspace->id;
 
-        return Config::idStrategy() === IdStrategy::Int ? (int) $id : $id;
+        return app(CoreOptions::class)->idStrategy === IdStrategy::Int ? (int) $id : $id;
     }
 
     public function id(string|int $id): void
     {
-        $valid = match (Config::idStrategy()) {
+        $valid = match (app(CoreOptions::class)->idStrategy) {
             IdStrategy::Int => is_int($id) && $id > 0,
             IdStrategy::Ulid => is_string($id) && Str::isUlid($id),
             default => is_string($id) && Str::isUuid($id),

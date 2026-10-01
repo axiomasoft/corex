@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\PHPStan\Rules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+
 /**
  * `SET` держит состояние в сессии, которую transaction pooling отдаёт
  * другому клиенту после коммита. Легален только `SET LOCAL` в транзакции.
- *
- * @internal spec: B-10 §7.3 п.1
  */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NoSetWithoutLocalRule extends AbstractDatabaseCallRule
 {
     protected function isViolation(string $sql): bool

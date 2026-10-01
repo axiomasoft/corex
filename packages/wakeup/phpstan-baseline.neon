@@ -133,12 +133,6 @@ parameters:
 			path: src/Internal/WakeupHandlerRegistry.php
 
 		-
-			rawMessage: 'Parameter #1 $value of static method CoreX\Modules\Data\ExtensionStamp::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/WakeupHandlerRegistry.php
-
-		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 3

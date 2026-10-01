@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Audit\Contracts\AuditEntry;
 use CoreX\Audit\Contracts\AuditLogger;
+use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Operation;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Pagination\OrderingRegistry;
-use CoreX\Operations\Pagination\SignedCursorCodec;
+use CoreX\Operations\Pagination\Contracts\CursorCodec;
+use CoreX\Operations\Pagination\Contracts\OrderingRegistry;
+use CoreX\Operations\Pagination\Laravel\OrderingFactory;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
@@ -37,7 +39,7 @@ final readonly class WebhookReplay
         private TenantContextRestorer $contexts,
         private WebhookTopicCatalogue $topics,
         private ClockInterface $clock,
-        private SignedCursorCodec $cursors,
+        private CursorCodec $cursors,
         private AuditLogger $audit,
     ) {}
 
@@ -256,7 +258,7 @@ final readonly class WebhookReplay
             actorId: $scope->actorId,
             entityType: 'webhook_delivery',
             entityId: (string) $row->id,
-            context: $context,
+            context: JsonDocuments::capture($context),
             occurredAt: $now,
             workspaceId: $scope->workspaceId,
         ));
@@ -328,7 +330,7 @@ final readonly class WebhookReplay
 
     private static function rangeOrdering(): OrderingRegistry
     {
-        return OrderingRegistry::fromOperations([new Operation(
+        return OrderingFactory::fromOperations([new Operation(
             module: 'axiomasoft/corex-operations',
             id: 'webhook-deliveries.range-replay',
             version: 'v1',
@@ -336,20 +338,20 @@ final readonly class WebhookReplay
             path: '/webhook-deliveries/replay',
             ability: 'webhooks.replay',
             handler: WebhookReplayCursorOperationHandler::class,
-            requestSchema: [],
-            responseSchema: [],
+            requestSchema: JsonDocuments::capture([]),
+            responseSchema: JsonDocuments::capture([]),
             inputRules: [],
             successStatus: 200,
             mode: OperationMode::Command,
             requiredScopes: ['webhooks.replay'],
             idempotency: IdempotencyRequirement::Required,
-            pagination: [
+            pagination: JsonDocuments::nullable([
                 'ordering' => self::RangeOrdering,
                 'direction' => 'asc',
                 'fields' => ['upper_bound', 'created_at', 'id'],
                 'types' => ['string', 'string', 'string'],
                 'unique' => 'id',
-            ],
+            ]),
             effectMode: 'tenant_transactional',
         )]);
     }

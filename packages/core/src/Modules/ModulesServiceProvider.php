@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Modules;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Internal\Support\ModulesConfigSection;
@@ -15,6 +17,7 @@ use CoreX\Modules\Laravel\SettingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ModulesServiceProvider extends ServiceProvider
 {
     /**
@@ -22,8 +25,6 @@ final class ModulesServiceProvider extends ServiceProvider
      * publishes a COPY, so upgrades ship as NEW additive migration files under
      * the same publish tag and bump this constant (mirrors
      * {@see CoreServiceProvider::SCHEMA_VERSION}).
-     *
-     * @internal spec: D43
      */
     public const int SCHEMA_VERSION = 1;
 

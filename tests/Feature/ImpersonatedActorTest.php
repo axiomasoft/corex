@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Audit\CurrentActor;
+use CoreX\Audit\Contracts\CurrentActor;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
-use CoreX\Context\NullImpersonationService;
+use CoreX\Context\Internal\NullImpersonationService;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

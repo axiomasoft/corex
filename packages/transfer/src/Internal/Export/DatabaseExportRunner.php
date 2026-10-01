@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Transfer\Internal\Export;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\ExportRunner;
@@ -69,7 +70,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
                 'capture_attempt' => hash('sha256', $draft->id.'|'.$draft->schemaHash.'|'.$draft->restoreEpoch),
                 'schema_hash' => $draft->schemaHash,
                 'restore_epoch' => $draft->restoreEpoch,
-                'roster' => json_encode($draft->roster, JSON_THROW_ON_ERROR),
+                'roster' => json_encode(JsonDocuments::map($draft->roster), JSON_THROW_ON_ERROR),
                 'parts_hash' => null,
                 'snapshot_mode' => $draft->snapshotMode,
                 'state' => 'capturing',
@@ -131,7 +132,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
                 snapshotMode: 'coherent',
                 schemaHash: $draft->schemaHash,
                 restoreEpoch: $draft->restoreEpoch,
-                roster: $draft->roster,
+                roster: JsonDocuments::capture($draft->roster),
                 partsHash: $partsHash,
             );
         }, attempts: 3);
@@ -276,7 +277,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
             snapshotMode: $stored->snapshot_mode,
             schemaHash: $stored->schema_hash,
             restoreEpoch: $stored->restore_epoch,
-            roster: json_decode($stored->roster, true, flags: JSON_THROW_ON_ERROR),
+            roster: JsonDocuments::capture(json_decode($stored->roster, true, flags: JSON_THROW_ON_ERROR)),
             partsHash: $stored->parts_hash,
         );
     }

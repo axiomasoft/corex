@@ -111,15 +111,15 @@ beforeEach(function (): void {
     $source = <<<'PHP'
 <?php
 declare(strict_types=1);
-require AUTOLOAD;
-use Illuminate\Database\Capsule\Manager;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Facade;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
+require AUTOLOAD;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Facade;
 $p = json_decode(fgets(STDIN), true, flags: JSON_THROW_ON_ERROR);
 if (! str_ends_with($p['config']['database'], '_test')) { throw new RuntimeException('Unsafe worker database.'); }
 $capsule = new Manager;

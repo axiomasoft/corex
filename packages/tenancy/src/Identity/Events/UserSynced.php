@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Events;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
@@ -13,7 +15,8 @@ use Override;
  * ambient {@see TenantContextResolver} resolves the
  * account this projection was synced into.
  */
-final class UserSynced extends DomainEvent
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final readonly class UserSynced extends DomainEvent
 {
     public function __construct(
         public readonly string $identityId,

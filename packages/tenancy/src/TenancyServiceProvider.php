@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy;
 
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
@@ -16,6 +18,7 @@ use CoreX\Tenancy\Laravel\IdentityRegistrar;
 use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
 use CoreX\Tenancy\Laravel\Support\TenancyConfigSection;
+use CoreX\Tenancy\Laravel\TenancyPortBindings;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
@@ -23,11 +26,14 @@ use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
+        TenancyPortBindings::register($this->app);
+
         $this->app->tag([TenancyConfigSection::class], ConfigReportSection::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');

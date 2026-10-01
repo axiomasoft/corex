@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\SearchCapabilities;

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Data\DataScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use DateTimeImmutable;
@@ -30,7 +31,7 @@ final readonly class BulkResultReader
             return ['status' => 410, 'body' => ['code' => 'bulk_result_expired'], 'code' => 'bulk_result_expired'];
         }
 
-        if ($operation->status !== BulkOperationStatus::Completed || $operation->resultRef === null) {
+        if ($operation->status !== BulkOperationStatus::Completed || JsonDocuments::optionalMap($operation->resultRef) === null) {
             return ['status' => 409, 'body' => ['code' => 'bulk_not_ready'], 'code' => 'bulk_not_ready'];
         }
 
