@@ -681,7 +681,7 @@ jobs:
 
       - name: Install remaining standalone package harnesses
         run: |
-          for package in media tasks tasks-workflow panels operations tenancy webhooks tools; do
+          for package in media tasks tasks-workflow panels operations tenancy webhooks tools recurrence; do
             composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
             composer audit --locked --working-dir="packages/$package"
           done
@@ -691,8 +691,8 @@ jobs:
       - name: Per-package test aggregator
         run: composer test:packages
 
-      - name: Core and modules suites
-        run: vendor/bin/pest packages/core/tests packages/core/tests/Modules
+      - name: Core and modules SQLite suites
+        run: vendor/bin/pest --exclude-group=pg packages/core/tests packages/core/tests/Modules
 
   tasks-tests:
     permissions:
