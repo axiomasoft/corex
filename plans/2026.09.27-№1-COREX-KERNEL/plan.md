@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
+| Authoring Model | codex/GPT-6 (owner-directed P10 finish, D77/D78, 2026-10-01; exact runtime selector/effort unavailable); claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -60,7 +60,7 @@ operations, независимые модули, детерминированн�
   Остаточная ссылка на старое имя — дефект (гейт rename-completeness).
 - **Катящийся дизайн с немедленным исполнением** (D21). Фаза проектируется `task:plan-design <ID> <Pn>` по фактическому коду
   после закрытия предыдущей, проходит phase design check (plan-lint + self-check §Self-check досье → `finish` →
-  `task:plan-audit <ID> design` другой моделью, D24; текущий P04 принят владельцем без повторного audit по D66) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
+  `task:plan-audit <ID> design` другой моделью, D24; текущий P04 принят владельцем без повторного audit по D66; текущий finish P10 ведёт прямо к исполнению по указанию владельца D77) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
   skeleton в `backlog/Pnn.md` (не phase carriers) до своей очереди; design audit охватывает только детализированные фазы,
   дизайн вперёд не делается (владелец, B5; D24).
 - Порядок фаз: механические структурные изменения (P02, P03) — до проектирования API/подсистем (P04+), чтобы не делать
@@ -123,6 +123,8 @@ operations, независимые модули, детерминированн�
   `review: <provider>/<model> <GREEN|findings:N>` в Completion Notes; ≤2 fix/recheck-раунда, затем эскалация. Review
   `light` — self-check + affected tests той же сессией.
 - Каждая фаза при дизайне переносит эти правила в Validation своих items (строка «Independent review: …» для `full`).
+
+**Design Audit Waiver:** D77
 
 ## 3. Routing
 
@@ -187,6 +189,8 @@ operations, независимые модули, детерминированн�
 | 2026-09-29 | P03 audit A1–A5 remediation: D58; manifest/lock sync, Golden-before-verify, R5 namespace resolution и прямой Laravel bridge, точный kernel provider. Проверки — artifacts/P03-design-remediation/. Продукт и статусы исполнения не изменены; новый finish, независимый audit ожидается. | designer/codex/gpt-6-astra/high |
 | 2026-09-29 | P03 full Rector replay: implicit imports, baseline paths, architecture fixtures, AST-verified hashes, portable harness setup; D59; design-only scope | auditor/designer codex/gpt-6-astra/xhigh |
 | 2026-09-29 | P03.1 execution: D60 clarifies the active-source retirement scan while preserving immutable audits; current baseline and module gate copied unchanged, STR doctrine/CI updated. The unchanged P03.2 helper lint findings remain with their owner. | executor/designer/codex/gpt-6-sol/high |
+
+| 2026-10-01 | `task:plan-design finish`: второй содержательный дизайн P10 по D77; D78 уточняет рецепт установки, манифесты и протокол worker; строки 14–20 сохранены. Новый fingerprint; следующий шаг P10.1; runtime не запускался. | designer/codex/GPT-6 (runtime selector/effort unavailable) |
 
 ## 5. Decision Log
 

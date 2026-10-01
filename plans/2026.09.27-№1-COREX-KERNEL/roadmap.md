@@ -1,6 +1,6 @@
 # Roadmap — 2026.09.27-№1-COREX-KERNEL
 
-**Обновлён:** 2026-10-01 · **Соответствует plan.md:** P00–P04 закрыты локально GREEN; hosted CI красный с 2026-07-15 (`findings/01-hosted-ci-debt.md`); вставлена фаза P10 «зелёный hosted CI» перед исполнением P05 (D73); P05 детализирована (D69–D72); P10 детализирована (D74, D75); finish P00–P05 + P10 выполнен 2026-10-01 (строки sheet 14–20); design audit этого finish — ATTENTION, правка D76; следующий шаг — повторный finish и design audit независимой моделью; P06–P09 — skeleton в `backlog/` (D21/D24)
+**Обновлён:** 2026-10-01 · **Соответствует plan.md:** P00–P04 закрыты локально GREEN; hosted CI красный с 2026-07-15 (`findings/01-hosted-ci-debt.md`); вставлена фаза P10 «зелёный hosted CI» перед исполнением P05 (D73); P05 детализирована (D69–D72); P10 детализирована (D74, D75); finish P00–P05 + P10 выполнен 2026-10-01 (строки sheet 14–20); design audit этого finish — ATTENTION, правка D76; повторный содержательный finish Codex завершён (D77/D78); следующий шаг — P10.1 по указанию владельца, без ещё одного обязательного design audit; P06–P09 — skeleton в `backlog/` (D21/D24)
 
 ## Жизненный цикл плана (D21, D24)
 
@@ -41,14 +41,14 @@ execution-sheet → закрытие фазы → дизайн следующе�
 
 Эта таблица — **единственное конкретное per-admission execution-расписание**.
 P00–P03 закрыты GREEN. Строки 1–9 сохраняют историю принятых запусков;
-D47 откладывает push/hosted CI. P04 строки 10–13 подтверждены finish
+D47 исторически откладывал push/hosted CI; с P10 действует D73. P04 строки 10–13 подтверждены finish
 2026-09-29 (D65): четыре последовательных solo, без изменения маршрутов/review.
 Для текущего fingerprint P04 повторный design audit снят владельцем (D66):
 GREEN finish и явное owner acceptance открывают строку 10. Строки 11–13 требуют
 GREEN результатов своих предшественников. Строки 14–20 записаны finish 2026-10-01:
 четыре solo P10 (D75), затем B05-A, P05.3, P05.4 (D71); порядок строгий, P05 стартует только
 после GREEN P10 с зелёным hosted CI (D73). Строки 14–20 открывает design-gate GREEN для
-fingerprint этого finish. P06–P09 backlog не входят в finish (D24).
+fingerprint этого finish; текущий допуск — owner-directed waiver D77. P06–P09 backlog не входят в finish (D24).
 P04.1 → P04.2 → P04.3 → P04.4: first report tooling, then classified/DTO surface,
 then typed registry, then fixed strict cutover. Public semantics требуют frontier/high
 для первых трёх, последняя строка implementation/high. Все reviews full и другой моделью.
@@ -71,7 +71,7 @@ then typed registry, then fixed strict cutover. Public semantics требуют 
 | 14 · solo P10.1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1` | `implementation/high` | `light` | `codex/gpt-6-sol/high` | self-check + affected tests, та же сессия; внешняя проверка — hosted CI | `codex/gpt-6-sol/high`, ≤2 rounds | design-gate GREEN; P04 closed; push в `origin` и чтение hosted CI доступны | CI-рецепт без изменения манифестов, `bc-check`, `contract-guard`, `ci-local.sh`; делает отказы остальных джобов читаемыми |
 | 15 · solo P10.2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P10.1 GREEN; hosted CI прочитан | Манифесты из собственных объявлений, мост `Tooling/` и R6, объявленные зависимости; полноту манифеста CI не видит |
 | 16 · solo P10.3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | P10.2 GREEN; hosted CI прочитан | Протокол готовности worker схем; fail-closed и завершение процессов на всех ветках |
-| 17 · solo P10.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4` | `implementation/high` | `light` | `codex/gpt-6-sol/high` | self-check + affected tests, та же сессия; внешняя проверка — hosted CI; правка `packages/*/src` — `cursor/grok-4.7/high`, fresh (D76) | `codex/gpt-6-sol/high`, ≤2 rounds | P10.3 GREEN; hosted CI прочитан | PG-группа, `test:hermetic`, покрытие, лейны Laravel 12 и PHP 8.5; закрывает P10 только при всех джобах `success` (D73) |
+| 17 · solo P10.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4` | `implementation/high` | `light` | `codex/gpt-6-sol/high` | self-check + affected tests, та же сессия; внешняя проверка — hosted CI; правка `packages/*/src` — `cursor/grok-4.7/high`, fresh (D76) | `codex/gpt-6-sol/high`, ≤2 rounds | P10.3 GREEN; hosted CI прочитан | PG-группа, `test:hermetic`, покрытие, лейны Laravel 12 и PHP 8.5; закрывает P10 при workflow `success`; event-skipped допустим по D76 |
 | 18 · B05-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2` | `implementation/high` | `light` | `codex/gpt-6-sol/high` | self-check + affected tests, та же сессия | `codex/gpt-6-sol/high`, ≤2 rounds | P10 closed GREEN, hosted CI зелёный на базе (D73) | P05.1 → P05.2; Options и удаление static `Config`, затем registrars по тем же providers |
 | 19 · solo P05.3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3` | `implementation/high` | `full` | `codex/gpt-6-sol/high` | `cursor/grok-4.7/high`, fresh | `codex/gpt-6-sol/high`, ≤2 rounds | B05-A GREEN | Порты вместо фасадов и static state в 16 пакетах; время жизни биндингов и соединение tenant тесты ловят слабо |
 | 20 · solo P05.4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P05.4` | `implementation/high` | `light` | `codex/gpt-6-sol/high` | self-check + affected tests, та же сессия | `codex/gpt-6-sol/high`, ≤2 rounds | P05.3 GREEN | Резидентный режим, смена tenant, `config:cache`, reference и доктрина; закрывает P05 при зелёном hosted CI (D73) |
@@ -123,8 +123,8 @@ to independent reviews or future frontier execution. Phase audit is never automa
 | Дизайн P10 (выполнен) | `task:plan-design 2026.09.27-№1-COREX-KERNEL P10` | D73–D75; `findings/01-hosted-ci-debt.md` |
 | Finish (выполнен 2026-10-01) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | phase finalize + plan-lint GREEN; строки sheet 14–17 (P10), 18–20 (B05-A, P05.3, P05.4) |
 | Design audit (выполнен 2026-10-01: ATTENTION) | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | `findings/P05-P10-design-audit.md`; правка — D76 |
-| Повторный finish | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | правка D76 в дереве; новый fingerprint |
-| Design audit либо owner acceptance | `task:plan-audit 2026.09.27-№1-COREX-KERNEL design` | fingerprint повторного finish; независимая модель; прецедент снятия — D66 |
+| Повторный finish (выполнен, D77/D78) | `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` | правка D76 в дереве; новый fingerprint |
+| Допуск по указанию владельца (D77) | finish → строка 14, P10.1 | fingerprint-bound waiver; дополнительный design audit перед P10 не требуется |
 | Исполнение | точные команды строк execution-sheet: сначала P10, затем P05 | design-gate GREEN; каждый предшественник GREEN; hosted CI зелёный на базе |
 | Закрытие | финальный GREEN P05.4 в owning continuation | Validation items + phase close gate |
 | Дизайн P06 | `task:plan-design 2026.09.27-№1-COREX-KERNEL P06` | P05 closed; фактический код |
