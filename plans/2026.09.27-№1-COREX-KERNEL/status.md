@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 080219701801f7a8e7efd9d797c1688bc3db9be8bf3f5a37368b9312fe2ea7d5
+inputs_sha256: 0046e573def434e6faa85c77bc1fed1ebf07167c41b862f32a991b4d7b5e3c00
 generated_by: task plan-views status
 -->
 
@@ -29,7 +29,7 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
-| P10 | Зелёный hosted CI на базе P04 | 1/4 | 🟡 In progress |
+| P10 | Зелёный hosted CI на базе P04 | 2/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -87,7 +87,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P10.1 | Герметичный CI-рецепт и диагностируемые гейты | 🟢 Done | 2026-10-01 |
-| P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | ⬜ Not started | — |
+| P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | 🟢 Done | 2026-10-01 |
 | P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | ⬜ Not started | — |
 | P10.4 | Лейны тестов, покрытие и зелёный hosted CI | ⬜ Not started | — |
 
@@ -268,6 +268,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · local-repair · Bounded PHPStan recipe repair complete; no dependency/runtime/baseline changes. Exact tests-lint green in clean candidate and hosted; negative control red then restored green. artifacts/P10.1-execution/recipe-repair-decision.json |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P10.1 GREEN: hosted 36877605003 @ 0d1baedf, all item targets green; 14 inherited failures belong P10.2–P10.4. BC no rg exit 0. review: self-check GREEN; SKM skipped by owner. artifacts/P10.1-execution/completion.md |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · local-repair · Owner D81/D82 resolved review/scope: phase-only review; continue CI repair. DATA-003 267 writes pass; tenancy 497 passed/1800 assertions. Same attempt, acceptance pending. Details: artifacts/P10.2-execution/progress.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · closed-green · P10.2 GREEN: candidate dd94f729, CI 36907048899 required jobs and 22 baseline greens success; overall coverage pending. D81 phase-only review; D82 CI repairs. Evidence: artifacts/P10.2-execution/completion.md. |
 
 ## Owner Gates
 

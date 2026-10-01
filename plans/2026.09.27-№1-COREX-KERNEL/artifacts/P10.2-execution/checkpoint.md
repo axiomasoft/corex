@@ -1,7 +1,29 @@
-# P10.2 active checkpoint
+# PLAN3.P10.2 — Completion Notes
 
-Candidate 243efc7536775c275166b9701e70ecbc44256ab1 is published; CI 36900690930 confirms Auth/CRM/deps/rename/Static/BC success. Local access PG 112 tests and CRM coverage 95.7% passed on owned disposable test databases, removed afterwards. Clean Laravel 12/13 copies check all 20 manifests without diagnostics. Implementation evidence remains in this directory.
+2026-10-01 · executor/codex/gpt-6.1-sol/high · status: GREEN for P10.2.
 
-Owner decisions D81 and D82 resolve the previous questions: only one independent review of the entire P10 phase after implementation; continue CI repairs in P10.2 without usage-limit stopping. No item-level independent review verdict is claimed. Current scope adds DATA-003 and necessary PG test isolation repairs. The 49 DATA violations reproduce exactly on base 428f47db.
+write-site: pre_mutation: allow · pre_final: allow (effective owner overrides D81/D82).
 
-In progress: resolve option-table expressions without permissive fallback, align ownership catalog with owning migrations, keep foreign/unknown/dynamic-write negative controls; diagnose PostgreSQL connection lifetime in tenancy tests. Hosted tenancy/Laravel 13 hit max connections; GitHub single-job rerun was refused HTTP403 while the workflow remained running. Do not replay the entire workflow for that error. No item/phase closure or successor execution.
+Product candidate: `dd94f729078e966b6b8bfa6ac851e7c528e3e0d7`, published to origin/main. Base: `428f47dbbab1ea1663a673f0fa1d6c2709f8e148`. [Hosted CI 36907048899](https://github.com/axiomasoft/corex/actions/runs/36907048899): required Layer and dependency jobs success; all 22 jobs green after P10.1 remain success; PackageGraphTest and AttributesArchitectureGateTest explicitly PASS in all four root lanes. Final workflow: 24 success / 12 failure / 1 skipped; overall conclusion failure. Coverage was already red after P10.1 and remains assigned to P10.4. All P10.2 declared acceptance jobs are green.
+
+## Result
+
+- Manifests keep their own package declarations, expand same-owner inheritance/traits, omit foreign members and separately record direct extends/implements/uses under unchanged php-api/1. All 20 manifests and reference regenerate deterministically. Clean committed copies on Laravel 12/13: 1307 owners, 20 manifests, zero diagnostics.
+- Six development classes moved into Tooling/PHPStan with all consumers, maps and gates updated. R6 forbids runtime references to Tooling/PHPStan/Testing; shared registry implementation is Internal, Testing SPI delegates. Runtime consumer fixes restore access fixture sharing and CRM compiled entities.
+- All original 800 marked symbols and 3301 own declarations/signatures are conserved. Fifteen existing promoted-property omissions repaired. D82 separately authorizes one additive callable InboxRetention SPI; old signatures stay equal. Golden's named delta preserves existing records and routes/events/wire.
+- Actual dependencies declared without new analyser exceptions; all standalone dependency audits pass. Access PG suite: 112/293. CRM combined suite: 81/409, coverage 95.7% against unchanged 95% floor.
+- Owner-authorized CI repair D82 resolves 49 DATA-003 findings reproduced at base: exact Options FQCN/default resolution, correct migration owners in catalog and core-owned inbox deletion via a public callable SPI. No new writer exception, skipped package or ignored path. All 267 writes pass; six positive/negative gate regression tests preserve foreign/unknown/dynamic failures. Webhook retention: six SQLite/PG tests, 41 assertions; owner cleanup preserves unrelated IDs and consumers.
+- Tenancy test teardown releases every managed PDO after restoring public schema. Standalone disposable PG16 suite: 497 passed, six existing skips, 1800 assertions with max_connections=100. Both hosted PG18 tenancy lanes pass. The disposable cluster and its anonymous volume were stopped and removed.
+- Final architecture 101/378; Golden 4/1335; scanner 41/189; R0–R6 zero; complete Composer analyse, Pint, all 20 BC checks, contract guard, package docs and anti-weakening pass. Earlier RED and quota witnesses are retained; final positive proofs have distinct files.
+
+## Review and boundary
+
+review: executor self-check complete; independent review deferred to the completed P10 phase (D81). The single Cursor/Grok attempt failed on quota and supplied no verdict. E31's effective predicate is the explicit owner override, recorded in review-policy-override.json; no independent item GREEN is claimed. One independent whole-phase review remains required before P10 closure.
+
+D82 authorizes necessary CI repairs in this attempt. No worker protocol repair or successor item is executed. Known remaining failures: root PG methods in SQLite lanes and coverage/package cohort installation — P10.4; tools schema worker readiness — P10.3. Sources: ci-final-assessment.json, ci-final-jobs.json, ci-root-manifest-witnesses.json, own-members-diff.json, source-binding.json, validation-witnesses.json, self-check.md.
+
+## Continuation
+
+Next: run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3
+
+The authorized P10.2 solo scope is complete. P10.3 is a recommendation for this chat and requires its owner invocation. Runtime Task immutable ba841d9 remains the compatible admitted owner; no new prepare/start is run for this attempt. Unrelated CLAUDE.md and CLAUDE.md.bak stay untouched.

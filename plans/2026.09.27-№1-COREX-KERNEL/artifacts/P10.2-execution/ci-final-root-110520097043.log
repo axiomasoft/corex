@@ -1,0 +1,1994 @@
+﻿2026-10-01T18:28:13.6242125Z Current runner version: '2.337.0'
+2026-10-01T18:28:13.6264150Z ##[group]Runner Image Provisioner
+2026-10-01T18:28:13.6265093Z Hosted Compute Agent
+2026-10-01T18:28:13.6265574Z Version: 20260901.588
+2026-10-01T18:28:13.6266120Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-01T18:28:13.6266787Z Build Date: 2026-09-01T19:56:44Z
+2026-10-01T18:28:13.6267324Z Worker ID: {1c93d601-fbbb-49fe-ac00-76f4743b32db}
+2026-10-01T18:28:13.6267950Z Azure Region: westus3
+2026-10-01T18:28:13.6268422Z ##[endgroup]
+2026-10-01T18:28:13.6269654Z ##[group]Operating System
+2026-10-01T18:28:13.6270208Z Ubuntu
+2026-10-01T18:28:13.6270637Z 24.04.5
+2026-10-01T18:28:13.6271096Z LTS
+2026-10-01T18:28:13.6271521Z ##[endgroup]
+2026-10-01T18:28:13.6271960Z ##[group]Runner Image
+2026-10-01T18:28:13.6272568Z Image: ubuntu-24.04
+2026-10-01T18:28:13.6273035Z Version: 20260927.320.1
+2026-10-01T18:28:13.6274390Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-01T18:28:13.6275808Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-01T18:28:13.6276627Z ##[endgroup]
+2026-10-01T18:28:13.6277476Z ##[group]GITHUB_TOKEN Permissions
+2026-10-01T18:28:13.6279246Z Contents: read
+2026-10-01T18:28:13.6279785Z Metadata: read
+2026-10-01T18:28:13.6280353Z ##[endgroup]
+2026-10-01T18:28:13.6282024Z Secret source: Actions
+2026-10-01T18:28:13.6282864Z Cache mode: write
+2026-10-01T18:28:13.6283425Z Prepare workflow directory
+2026-10-01T18:28:13.6728154Z Prepare all required actions
+2026-10-01T18:28:13.6767023Z Getting action download info
+2026-10-01T18:28:14.0164811Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-01T18:28:14.1442244Z Download action repository 'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240' (SHA:f3e473d116dcccaddc5834248c87452386958240)
+2026-10-01T18:28:14.6523538Z Complete job name: PHP 8.4 · Laravel 13.*
+2026-10-01T18:28:14.7068177Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-01T18:28:14.7068973Z with:
+2026-10-01T18:28:14.7069326Z   persist-credentials: false
+2026-10-01T18:28:14.7069747Z   repository: axiomasoft/corex
+2026-10-01T18:28:14.7072839Z   token: ***
+2026-10-01T18:28:14.7073188Z   ssh-strict: true
+2026-10-01T18:28:14.7073538Z   ssh-user: git
+2026-10-01T18:28:14.7073888Z   clean: true
+2026-10-01T18:28:14.7074242Z   sparse-checkout-cone-mode: true
+2026-10-01T18:28:14.7074768Z   fetch-depth: 1
+2026-10-01T18:28:14.7075118Z   fetch-tags: false
+2026-10-01T18:28:14.7075467Z   show-progress: true
+2026-10-01T18:28:14.7075819Z   lfs: false
+2026-10-01T18:28:14.7076143Z   submodules: false
+2026-10-01T18:28:14.7076494Z   set-safe-directory: true
+2026-10-01T18:28:14.7076893Z   allow-unsafe-pr-checkout: false
+2026-10-01T18:28:14.7077558Z env:
+2026-10-01T18:28:14.7077884Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:14.7078242Z ##[endgroup]
+2026-10-01T18:28:14.8017471Z Syncing repository: axiomasoft/corex
+2026-10-01T18:28:14.8019505Z ##[group]Getting Git version info
+2026-10-01T18:28:14.8020489Z Working directory is '/home/runner/work/corex/corex'
+2026-10-01T18:28:14.8021819Z [command]/usr/bin/git version
+2026-10-01T18:28:14.8396307Z git version 2.55.0
+2026-10-01T18:28:14.8437467Z ##[endgroup]
+2026-10-01T18:28:14.8444892Z Temporarily overriding HOME='/home/runner/work/_temp/750491e3-9016-44b7-86d1-24c94fc97024' before making global git config changes
+2026-10-01T18:28:14.8446648Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-01T18:28:14.8447849Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex/corex
+2026-10-01T18:28:14.8536741Z Deleting the contents of '/home/runner/work/corex/corex'
+2026-10-01T18:28:14.8538164Z ##[group]Determining repository object format
+2026-10-01T18:28:14.8545596Z ##[endgroup]
+2026-10-01T18:28:14.8547248Z ##[group]Initializing the repository
+2026-10-01T18:28:14.8548230Z [command]/usr/bin/git init /home/runner/work/corex/corex
+2026-10-01T18:28:14.8602701Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-01T18:28:14.8604147Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-01T18:28:14.8607122Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-01T18:28:14.8608006Z hint: call:
+2026-10-01T18:28:14.8608486Z hint:
+2026-10-01T18:28:14.8609143Z hint: 	git config --global init.defaultBranch <name>
+2026-10-01T18:28:14.8609862Z hint:
+2026-10-01T18:28:14.8610531Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-01T18:28:14.8611533Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-01T18:28:14.8612420Z hint:
+2026-10-01T18:28:14.8612964Z hint: 	git branch -m <name>
+2026-10-01T18:28:14.8613532Z hint:
+2026-10-01T18:28:14.8614276Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-01T18:28:14.8615685Z Initialized empty Git repository in /home/runner/work/corex/corex/.git/
+2026-10-01T18:28:14.8617564Z [command]/usr/bin/git remote add origin https://github.com/axiomasoft/corex
+2026-10-01T18:28:14.8801508Z ##[endgroup]
+2026-10-01T18:28:14.8802853Z ##[group]Disabling automatic garbage collection
+2026-10-01T18:28:14.8804437Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-01T18:28:14.8810427Z ##[endgroup]
+2026-10-01T18:28:14.8812237Z ##[group]Setting up auth
+2026-10-01T18:28:14.8813072Z Removing SSH command configuration
+2026-10-01T18:28:14.8814441Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-01T18:28:14.8818602Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-01T18:28:14.9080068Z Removing HTTP extra header
+2026-10-01T18:28:14.9083418Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-01T18:28:14.9113621Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-01T18:28:14.9324914Z Removing includeIf entries pointing to credentials config files
+2026-10-01T18:28:14.9326397Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-01T18:28:14.9356482Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-01T18:28:14.9571328Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-01T18:28:14.9596559Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex/corex/.git.path /home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:14.9627594Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex/corex/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:14.9661827Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:14.9694382Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:14.9723472Z ##[endgroup]
+2026-10-01T18:28:14.9725252Z ##[group]Fetching the repository
+2026-10-01T18:28:14.9729662Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +dd94f729078e966b6b8bfa6ac851e7c528e3e0d7:refs/remotes/origin/main
+2026-10-01T18:28:20.9415223Z From https://github.com/axiomasoft/corex
+2026-10-01T18:28:20.9417185Z  * [new ref]         dd94f729078e966b6b8bfa6ac851e7c528e3e0d7 -> origin/main
+2026-10-01T18:28:20.9421859Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-01T18:28:20.9451497Z   origin/main
+2026-10-01T18:28:20.9458588Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-01T18:28:20.9485111Z dd94f729078e966b6b8bfa6ac851e7c528e3e0d7
+2026-10-01T18:28:20.9497543Z ##[endgroup]
+2026-10-01T18:28:20.9499722Z ##[group]Determining the checkout info
+2026-10-01T18:28:20.9502005Z ##[endgroup]
+2026-10-01T18:28:20.9503208Z [command]/usr/bin/git sparse-checkout disable
+2026-10-01T18:28:20.9545608Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-01T18:28:20.9579358Z ##[group]Checking out the ref
+2026-10-01T18:28:20.9590146Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-01T18:28:21.7609353Z Switched to a new branch 'main'
+2026-10-01T18:28:21.9176956Z branch 'main' set up to track 'origin/main'.
+2026-10-01T18:28:21.9222385Z ##[endgroup]
+2026-10-01T18:28:21.9297636Z [command]/usr/bin/git log -1 --format=%H
+2026-10-01T18:28:21.9327381Z dd94f729078e966b6b8bfa6ac851e7c528e3e0d7
+2026-10-01T18:28:21.9334819Z ##[group]Removing auth
+2026-10-01T18:28:21.9335649Z Removing SSH command configuration
+2026-10-01T18:28:21.9339036Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-01T18:28:21.9385897Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-01T18:28:21.9617601Z Removing HTTP extra header
+2026-10-01T18:28:21.9618380Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-01T18:28:21.9652222Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-01T18:28:21.9877900Z Removing includeIf entries pointing to credentials config files
+2026-10-01T18:28:21.9878850Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-01T18:28:21.9911441Z includeif.gitdir:/home/runner/work/corex/corex/.git.path
+2026-10-01T18:28:21.9912515Z includeif.gitdir:/home/runner/work/corex/corex/.git/worktrees/*.path
+2026-10-01T18:28:21.9913657Z includeif.gitdir:/github/workspace/.git.path
+2026-10-01T18:28:21.9914896Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-01T18:28:21.9919930Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex/corex/.git.path
+2026-10-01T18:28:21.9946395Z /home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:21.9954332Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex/corex/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-04eebdf4\-5a58\-493d\-9528\-a6cbe1dd4762\.config
+2026-10-01T18:28:22.0212894Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex/corex/.git/worktrees/*.path
+2026-10-01T18:28:22.0259476Z /home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:22.0268407Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex/corex/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-04eebdf4\-5a58\-493d\-9528\-a6cbe1dd4762\.config
+2026-10-01T18:28:22.1263980Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-01T18:28:22.1316868Z /github/runner_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:22.1345843Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-04eebdf4\-5a58\-493d\-9528\-a6cbe1dd4762\.config
+2026-10-01T18:28:22.1516874Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-01T18:28:22.1518015Z /github/runner_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config
+2026-10-01T18:28:22.1520143Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-04eebdf4\-5a58\-493d\-9528\-a6cbe1dd4762\.config
+2026-10-01T18:28:22.1616664Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-01T18:28:22.1986553Z Removing credentials config '/home/runner/work/_temp/git-credentials-04eebdf4-5a58-493d-9528-a6cbe1dd4762.config'
+2026-10-01T18:28:22.1987676Z ##[endgroup]
+2026-10-01T18:28:22.2165645Z ##[group]Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+2026-10-01T18:28:22.2165994Z with:
+2026-10-01T18:28:22.2166170Z   php-version: 8.4
+2026-10-01T18:28:22.2166436Z   extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+2026-10-01T18:28:22.2166762Z   coverage: none
+2026-10-01T18:28:22.2166950Z   ini-file: production
+2026-10-01T18:28:22.2168872Z   github-token: ***
+2026-10-01T18:28:22.2169047Z env:
+2026-10-01T18:28:22.2169214Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:22.2169407Z ##[endgroup]
+2026-10-01T18:28:22.2519101Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
+2026-10-01T18:28:22.2917955Z
+2026-10-01T18:28:22.2919165Z ==> Setup PHP
+2026-10-01T18:28:28.1178866Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T18:28:28.1179826Z
+2026-10-01T18:28:28.1180407Z ==> Setup Extensions
+2026-10-01T18:28:28.1640464Z ✓ mbstring Enabled
+2026-10-01T18:28:28.1663635Z ✓ pdo Enabled
+2026-10-01T18:28:28.1692766Z ✓ sqlite3 Enabled
+2026-10-01T18:28:28.1709280Z ✓ pdo_sqlite Enabled
+2026-10-01T18:28:28.1739945Z ✓ bcmath Enabled
+2026-10-01T18:28:28.1770375Z ✓ curl Enabled
+2026-10-01T18:28:28.1800795Z ✓ intl Enabled
+2026-10-01T18:28:28.1825665Z ✓ zip Enabled
+2026-10-01T18:28:28.1857000Z ✓ gd Enabled
+2026-10-01T18:28:28.1858374Z
+2026-10-01T18:28:28.1858942Z ==> Setup Tools
+2026-10-01T18:28:28.6854356Z ✓ composer Added composer 2.10.3
+2026-10-01T18:28:28.6858194Z
+2026-10-01T18:28:28.6870932Z ==> Setup Coverage
+2026-10-01T18:28:28.9026555Z ✓ none Disabled Xdebug and PCOV
+2026-10-01T18:28:28.9027153Z
+2026-10-01T18:28:28.9027580Z ==> Sponsor setup-php
+2026-10-01T18:28:28.9028462Z ✓ setup-php https://setup-php.com/sponsor
+2026-10-01T18:28:28.9209589Z ##[group]Run echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
+2026-10-01T18:28:28.9210257Z echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
+2026-10-01T18:28:29.3616368Z shell: /usr/bin/bash -e {0}
+2026-10-01T18:28:29.3616631Z env:
+2026-10-01T18:28:29.3616830Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:29.3617033Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-01T18:28:29.3617242Z   COMPOSER_NO_INTERACTION: 1
+2026-10-01T18:28:29.3617435Z   COMPOSER_NO_AUDIT: 1
+2026-10-01T18:28:29.3617625Z ##[endgroup]
+2026-10-01T18:28:29.3870436Z Temporary constraint illuminate/contracts:13.* applies during dependency installation
+2026-10-01T18:28:29.3920688Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
+2026-10-01T18:28:29.3921094Z python3 scripts/distribution/stage-stancl-providers.py
+2026-10-01T18:28:29.3977977Z shell: /usr/bin/bash -e {0}
+2026-10-01T18:28:29.3978423Z env:
+2026-10-01T18:28:29.3978594Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:29.3978788Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-01T18:28:29.3978994Z   COMPOSER_NO_INTERACTION: 1
+2026-10-01T18:28:29.3979190Z   COMPOSER_NO_AUDIT: 1
+2026-10-01T18:28:29.3979365Z ##[endgroup]
+2026-10-01T18:28:29.8302485Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
+2026-10-01T18:28:29.8354536Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+2026-10-01T18:28:29.8355604Z composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+2026-10-01T18:28:29.8410782Z shell: /usr/bin/bash -e {0}
+2026-10-01T18:28:29.8410996Z env:
+2026-10-01T18:28:29.8411180Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:29.8411376Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-01T18:28:29.8411583Z   COMPOSER_NO_INTERACTION: 1
+2026-10-01T18:28:29.8411772Z   COMPOSER_NO_AUDIT: 1
+2026-10-01T18:28:29.8411947Z ##[endgroup]
+2026-10-01T18:28:29.9699038Z Loading composer repositories with package information
+2026-10-01T18:28:32.7995089Z Updating dependencies
+2026-10-01T18:28:32.8735102Z Lock file operations: 0 installs, 35 updates, 0 removals
+2026-10-01T18:28:32.8735791Z   - Upgrading axiomasoft/corex-access (dev-main 82db6a4 => dev-main 56161ef)
+2026-10-01T18:28:32.8755399Z   - Upgrading axiomasoft/corex-tenancy (dev-main 6ea86f0 => dev-main e7e3316)
+2026-10-01T18:28:32.8756377Z   - Upgrading doctrine/lexer (3.0.2 => 3.0.3)
+2026-10-01T18:28:32.8757038Z   - Upgrading fidry/cpu-core-counter (1.4.0 => 1.4.1)
+2026-10-01T18:28:32.8758260Z   - Upgrading firebase/php-jwt (v7.2.0 => v7.2.1)
+2026-10-01T18:28:32.8758846Z   - Upgrading justinrainbow/json-schema (6.13.0 => 6.13.1)
+2026-10-01T18:28:32.8759501Z   - Upgrading laravel/framework (v13.33.0 => v13.34.0)
+2026-10-01T18:28:32.8760071Z   - Upgrading monolog/monolog (3.12.0 => 3.12.1)
+2026-10-01T18:28:32.8760622Z   - Upgrading orchestra/sidekick (v1.2.22 => v1.2.23)
+2026-10-01T18:28:32.8761160Z   - Upgrading pestphp/pest (v5.2.1 => v5.3.0)
+2026-10-01T18:28:32.8761721Z   - Upgrading phpdocumentor/type-resolver (2.0.0 => 2.1.0)
+2026-10-01T18:28:32.8762331Z   - Upgrading phpunit/php-code-coverage (14.3.5 => 14.4.0)
+2026-10-01T18:28:32.8762890Z   - Upgrading phpunit/phpunit (13.3.4 => 13.3.6)
+2026-10-01T18:28:32.8763486Z   - Upgrading roave/backward-compatibility-check (8.22.0 => 8.23.0)
+2026-10-01T18:28:32.8764127Z   - Upgrading sebastian/environment (9.3.2 => 9.3.3)
+2026-10-01T18:28:32.8764815Z   - Upgrading seld/phar-utils (1.2.2 => 1.2.3)
+2026-10-01T18:28:32.8765340Z   - Upgrading symfony/console (v7.4.19 => v7.4.20)
+2026-10-01T18:28:32.8765890Z   - Upgrading symfony/error-handler (v8.1.5 => v8.1.8)
+2026-10-01T18:28:32.8766441Z   - Upgrading symfony/finder (v8.1.7 => v8.1.8)
+2026-10-01T18:28:32.8766999Z   - Upgrading symfony/http-foundation (v8.1.7 => v8.1.8)
+2026-10-01T18:28:32.8767563Z   - Upgrading symfony/http-kernel (v8.1.7 => v8.1.8)
+2026-10-01T18:28:32.8768172Z   - Upgrading symfony/polyfill-intl-grapheme (v1.41.0 => v1.43.0)
+2026-10-01T18:28:32.8768852Z   - Upgrading symfony/polyfill-intl-idn (v1.42.0 => v1.43.0)
+2026-10-01T18:28:32.8769488Z   - Upgrading symfony/polyfill-intl-normalizer (v1.42.0 => v1.43.0)
+2026-10-01T18:28:32.8770128Z   - Upgrading symfony/polyfill-mbstring (v1.38.2 => v1.43.0)
+2026-10-01T18:28:32.8770720Z   - Upgrading symfony/polyfill-php80 (v1.37.0 => v1.43.0)
+2026-10-01T18:28:32.8771289Z   - Upgrading symfony/polyfill-php82 (v1.38.1 => v1.43.0)
+2026-10-01T18:28:32.8771843Z   - Upgrading symfony/polyfill-php83 (v1.41.0 => v1.43.0)
+2026-10-01T18:28:32.8772407Z   - Upgrading symfony/polyfill-php84 (v1.38.1 => v1.43.0)
+2026-10-01T18:28:32.8772978Z   - Upgrading symfony/polyfill-php85 (v1.41.0 => v1.43.0)
+2026-10-01T18:28:32.8773940Z   - Upgrading symfony/polyfill-php86 (v1.41.0 => v1.43.0)
+2026-10-01T18:28:32.8774498Z   - Upgrading symfony/polyfill-uuid (v1.37.0 => v1.43.0)
+2026-10-01T18:28:32.8775173Z   - Upgrading symfony/routing (v8.1.6 => v8.1.8)
+2026-10-01T18:28:32.8775690Z   - Upgrading symfony/uid (v8.1.5 => v8.1.8)
+2026-10-01T18:28:32.8776188Z   - Upgrading symfony/yaml (v8.1.6 => v8.1.8)
+2026-10-01T18:28:32.9255701Z Writing lock file
+2026-10-01T18:28:32.9256471Z Installing dependencies from lock file (including require-dev)
+2026-10-01T18:28:32.9328643Z Package operations: 233 installs, 0 updates, 0 removals
+2026-10-01T18:28:32.9337263Z   - Downloading php-http/discovery (1.20.0)
+2026-10-01T18:28:32.9340919Z   - Downloading pestphp/pest-plugin (v5.0.0)
+2026-10-01T18:28:32.9343774Z   - Downloading phpstan/phpstan (2.2.16)
+2026-10-01T18:28:32.9346581Z   - Downloading composer/semver (3.5.0)
+2026-10-01T18:28:32.9349348Z   - Downloading tbachert/spi (v1.0.5)
+2026-10-01T18:28:32.9351713Z   - Downloading phpstan/extension-installer (1.4.3)
+2026-10-01T18:28:32.9354344Z   - Downloading voku/portable-ascii (2.1.1)
+2026-10-01T18:28:32.9365693Z   - Downloading symfony/polyfill-php80 (v1.43.0)
+2026-10-01T18:28:32.9385421Z   - Downloading symfony/polyfill-mbstring (v1.43.0)
+2026-10-01T18:28:32.9386127Z   - Downloading symfony/polyfill-ctype (v1.37.0)
+2026-10-01T18:28:32.9386754Z   - Downloading phpoption/phpoption (1.10.0)
+2026-10-01T18:28:32.9387330Z   - Downloading graham-campbell/result-type (v1.2.0)
+2026-10-01T18:28:32.9387964Z   - Downloading vlucas/phpdotenv (v5.7.0)
+2026-10-01T18:28:32.9388532Z   - Downloading symfony/css-selector (v8.1.6)
+2026-10-01T18:28:32.9389115Z   - Downloading tijsverkoyen/css-to-inline-styles (v2.4.0)
+2026-10-01T18:28:32.9389693Z   - Downloading symfony/var-dumper (v8.1.7)
+2026-10-01T18:28:32.9390222Z   - Downloading symfony/polyfill-uuid (v1.43.0)
+2026-10-01T18:28:32.9390749Z   - Downloading symfony/uid (v8.1.8)
+2026-10-01T18:28:32.9391274Z   - Downloading symfony/deprecation-contracts (v3.7.1)
+2026-10-01T18:28:32.9391849Z   - Downloading symfony/routing (v8.1.8)
+2026-10-01T18:28:32.9392368Z   - Downloading symfony/process (v8.1.7)
+2026-10-01T18:28:32.9392893Z   - Downloading symfony/polyfill-php86 (v1.43.0)
+2026-10-01T18:28:32.9393432Z   - Downloading symfony/polyfill-php85 (v1.43.0)
+2026-10-01T18:28:32.9393958Z   - Downloading symfony/polyfill-php84 (v1.43.0)
+2026-10-01T18:28:32.9394534Z   - Downloading symfony/polyfill-intl-normalizer (v1.43.0)
+2026-10-01T18:28:32.9395312Z   - Downloading symfony/polyfill-intl-idn (v1.43.0)
+2026-10-01T18:28:32.9395908Z   - Downloading symfony/mime (v8.1.7)
+2026-10-01T18:28:32.9396579Z   - Downloading psr/container (2.0.2)
+2026-10-01T18:28:32.9397103Z   - Downloading symfony/service-contracts (v3.7.3)
+2026-10-01T18:28:32.9397655Z   - Downloading psr/event-dispatcher (1.0.0)
+2026-10-01T18:28:32.9398229Z   - Downloading symfony/event-dispatcher-contracts (v3.7.1)
+2026-10-01T18:28:32.9398820Z   - Downloading symfony/event-dispatcher (v8.1.5)
+2026-10-01T18:28:32.9399382Z   - Downloading psr/log (3.0.2)
+2026-10-01T18:28:32.9399859Z   - Downloading doctrine/lexer (3.0.3)
+2026-10-01T18:28:32.9400361Z   - Downloading egulias/email-validator (4.0.4)
+2026-10-01T18:28:32.9400878Z   - Downloading symfony/mailer (v8.1.7)
+2026-10-01T18:28:32.9401378Z   - Downloading symfony/http-foundation (v8.1.8)
+2026-10-01T18:28:32.9401917Z   - Downloading symfony/error-handler (v8.1.8)
+2026-10-01T18:28:32.9402440Z   - Downloading symfony/http-kernel (v8.1.8)
+2026-10-01T18:28:32.9402940Z   - Downloading symfony/finder (v8.1.8)
+2026-10-01T18:28:32.9403533Z   - Downloading symfony/polyfill-intl-grapheme (v1.43.0)
+2026-10-01T18:28:32.9404117Z   - Downloading symfony/string (v8.1.7)
+2026-10-01T18:28:32.9404732Z   - Downloading symfony/console (v7.4.20)
+2026-10-01T18:28:32.9405278Z   - Downloading ramsey/collection (2.1.1)
+2026-10-01T18:28:32.9405782Z   - Downloading brick/math (0.14.8)
+2026-10-01T18:28:32.9425194Z   - Downloading ramsey/uuid (4.9.4)
+2026-10-01T18:28:32.9446017Z   - Downloading psr/simple-cache (3.0.0)
+2026-10-01T18:28:32.9446866Z   - Downloading psr/http-message (2.0)
+2026-10-01T18:28:32.9447427Z   - Downloading nunomaduro/termwind (v2.4.0)
+2026-10-01T18:28:32.9448005Z   - Downloading symfony/translation-contracts (v3.7.1)
+2026-10-01T18:28:32.9448678Z   - Downloading symfony/translation (v8.1.5)
+2026-10-01T18:28:32.9449186Z   - Downloading psr/clock (1.0.0)
+2026-10-01T18:28:32.9449672Z   - Downloading symfony/clock (v8.1.0)
+2026-10-01T18:28:32.9450233Z   - Downloading carbonphp/carbon-doctrine-types (3.2.1)
+2026-10-01T18:28:32.9450787Z   - Downloading nesbot/carbon (3.14.1)
+2026-10-01T18:28:32.9451508Z   - Downloading monolog/monolog (3.12.1)
+2026-10-01T18:28:32.9452032Z   - Downloading psr/http-factory (1.1.0)
+2026-10-01T18:28:32.9452538Z   - Downloading league/uri-interfaces (7.8.1)
+2026-10-01T18:28:32.9453079Z   - Downloading league/uri (7.8.1)
+2026-10-01T18:28:32.9455096Z   - Downloading league/mime-type-detection (1.17.0)
+2026-10-01T18:28:32.9466214Z   - Downloading league/flysystem-local (3.35.3)
+2026-10-01T18:28:32.9466804Z   - Downloading league/flysystem (3.36.0)
+2026-10-01T18:28:32.9467389Z   - Downloading nette/utils (v4.1.5)
+2026-10-01T18:28:32.9467882Z   - Downloading nette/schema (v1.3.6)
+2026-10-01T18:28:32.9468424Z   - Downloading dflydev/dot-access-data (v3.0.3)
+2026-10-01T18:28:32.9468939Z   - Downloading league/config (v1.2.0)
+2026-10-01T18:28:32.9469416Z   - Downloading league/commonmark (2.10.3)
+2026-10-01T18:28:32.9469938Z   - Downloading laravel/serializable-closure (v2.1.0)
+2026-10-01T18:28:32.9470482Z   - Downloading laravel/prompts (v0.3.24)
+2026-10-01T18:28:32.9471007Z   - Downloading guzzlehttp/uri-template (v2.0.1)
+2026-10-01T18:28:32.9471545Z   - Downloading symfony/polyfill-php82 (v1.43.0)
+2026-10-01T18:28:32.9472046Z   - Downloading guzzlehttp/psr7 (3.1.0)
+2026-10-01T18:28:32.9472533Z   - Downloading guzzlehttp/promises (3.0.2)
+2026-10-01T18:28:32.9473026Z   - Downloading psr/http-client (1.0.3)
+2026-10-01T18:28:32.9473508Z   - Downloading guzzlehttp/guzzle (8.2.0)
+2026-10-01T18:28:32.9473998Z   - Downloading fruitcake/php-cors (v1.4.0)
+2026-10-01T18:28:32.9474531Z   - Downloading dragonmantank/cron-expression (v3.6.0)
+2026-10-01T18:28:32.9475300Z   - Downloading doctrine/inflector (2.1.0)
+2026-10-01T18:28:32.9475794Z   - Downloading laravel/framework (v13.34.0)
+2026-10-01T18:28:32.9476293Z   - Syncing axioma-studio/azguard-core (0.3.0) into cache
+2026-10-01T18:28:36.5470995Z   - Downloading brick/money (0.10.3)
+2026-10-01T18:28:36.5471970Z   - Downloading symfony/polyfill-php81 (v1.38.1)
+2026-10-01T18:28:36.5485251Z   - Downloading meilisearch/meilisearch-php (v1.16.1)
+2026-10-01T18:28:36.5486061Z   - Downloading rlanvin/php-rrule (v3.0.0)
+2026-10-01T18:28:36.5486663Z   - Downloading firebase/php-jwt (v7.2.1)
+2026-10-01T18:28:36.5487225Z   - Downloading stancl/virtualcolumn (v1.5.0)
+2026-10-01T18:28:36.5487785Z   - Downloading spatie/invade (2.1.1)
+2026-10-01T18:28:36.5488291Z   - Downloading nikic/php-parser (v5.9.0)
+2026-10-01T18:28:36.5488794Z   - Downloading psy/psysh (v0.12.24)
+2026-10-01T18:28:36.5489335Z   - Downloading laravel/tinker (v3.0.2)
+2026-10-01T18:28:36.5489930Z   - Downloading axiomasoft/stancl-jobpipeline (2.0.0-alpha1)
+2026-10-01T18:28:36.5495151Z   - Downloading axiomasoft/stancl-tenancy (4.0.0-alpha1)
+2026-10-01T18:28:36.5542674Z   - Downloading beberlei/assert (v3.3.4)
+2026-10-01T18:28:36.5545419Z   - Downloading composer/ca-bundle (1.5.14)
+2026-10-01T18:28:36.5547941Z   - Downloading composer/pcre (3.4.0)
+2026-10-01T18:28:36.5549383Z   - Downloading composer/class-map-generator (1.8.0)
+2026-10-01T18:28:36.5550649Z   - Downloading composer/metadata-minifier (1.0.1)
+2026-10-01T18:28:36.5551934Z   - Downloading composer/spdx-licenses (1.6.0)
+2026-10-01T18:28:36.5553165Z   - Downloading composer/xdebug-handler (3.0.5)
+2026-10-01T18:28:36.5555002Z   - Downloading fidry/cpu-core-counter (1.4.1)
+2026-10-01T18:28:36.5559065Z   - Downloading filp/whoops (2.18.5)
+2026-10-01T18:28:36.5559725Z   - Downloading giggsey/libphonenumber-for-php-lite (9.0.40)
+2026-10-01T18:28:36.5560738Z   - Downloading hamcrest/hamcrest-php (v3.0.0)
+2026-10-01T18:28:36.5565274Z   - Downloading jean85/pretty-package-versions (2.1.1)
+2026-10-01T18:28:36.5566028Z   - Downloading marc-mabe/php-enum (v4.7.2)
+2026-10-01T18:28:36.5566643Z   - Downloading justinrainbow/json-schema (6.13.1)
+2026-10-01T18:28:36.5567256Z   - Downloading iamcal/sql-parser (v0.7)
+2026-10-01T18:28:36.5568787Z   - Downloading larastan/larastan (v3.12.2)
+2026-10-01T18:28:36.5570178Z   - Downloading laravel/agent-detector (v2.0.2)
+2026-10-01T18:28:36.5571447Z   - Downloading laravel/pao (v1.1.5)
+2026-10-01T18:28:36.5572978Z   - Downloading laravel/pint (v1.32.1)
+2026-10-01T18:28:36.5574529Z   - Downloading myclabs/deep-copy (1.14.0)
+2026-10-01T18:28:36.5576430Z   - Downloading open-telemetry/sem-conv (1.44.0)
+2026-10-01T18:28:36.5577714Z   - Downloading open-telemetry/context (1.5.0)
+2026-10-01T18:28:36.5578921Z   - Downloading open-telemetry/api (1.10.0)
+2026-10-01T18:28:36.5580547Z   - Downloading nyholm/psr7-server (1.1.0)
+2026-10-01T18:28:36.5581793Z   - Downloading open-telemetry/sdk (1.15.0)
+2026-10-01T18:28:36.5583424Z   - Downloading opis/string (2.1.0)
+2026-10-01T18:28:36.5584866Z   - Downloading opis/uri (1.1.0)
+2026-10-01T18:28:36.5586344Z   - Downloading opis/json-schema (2.6.0)
+2026-10-01T18:28:36.5587659Z   - Downloading symfony/polyfill-php83 (v1.43.0)
+2026-10-01T18:28:36.5589247Z   - Downloading orchestra/sidekick (v1.2.23)
+2026-10-01T18:28:36.5590472Z   - Downloading orchestra/canvas-core (v11.0.0)
+2026-10-01T18:28:36.5591737Z   - Downloading symfony/yaml (v8.1.8)
+2026-10-01T18:28:36.5593495Z   - Downloading staabm/side-effects-detector (1.0.5)
+2026-10-01T18:28:36.5595896Z   - Downloading sebastian/version (7.0.0)
+2026-10-01T18:28:36.5597333Z   - Downloading sebastian/type (7.0.2)
+2026-10-01T18:28:36.5598650Z   - Downloading sebastian/recursion-context (8.0.1)
+2026-10-01T18:28:36.5599896Z   - Downloading sebastian/object-enumerator (8.1.0)
+2026-10-01T18:28:36.5601260Z   - Downloading sebastian/object-reflector (6.1.0)
+2026-10-01T18:28:36.5602496Z   - Downloading sebastian/global-state (9.0.1)
+2026-10-01T18:28:36.5603698Z   - Downloading sebastian/git-state (1.0.0)
+2026-10-01T18:28:36.5605586Z   - Downloading sebastian/file-filter (1.0.0)
+2026-10-01T18:28:36.5606966Z   - Downloading sebastian/exporter (8.2.1)
+2026-10-01T18:28:36.5608233Z   - Downloading sebastian/environment (9.3.3)
+2026-10-01T18:28:36.5609469Z   - Downloading sebastian/diff (9.0.1)
+2026-10-01T18:28:36.5610727Z   - Downloading sebastian/comparator (8.4.0)
+2026-10-01T18:28:36.5611941Z   - Downloading sebastian/cli-parser (5.0.1)
+2026-10-01T18:28:36.5613571Z   - Downloading phpunit/php-timer (9.0.0)
+2026-10-01T18:28:36.5615022Z   - Downloading phpunit/php-text-template (6.0.0)
+2026-10-01T18:28:36.5616304Z   - Downloading phpunit/php-invoker (7.0.0)
+2026-10-01T18:28:36.5617618Z   - Downloading phpunit/php-file-iterator (7.0.2)
+2026-10-01T18:28:36.5619283Z   - Downloading theseer/tokenizer (2.0.1)
+2026-10-01T18:28:36.5620516Z   - Downloading sebastian/lines-of-code (5.0.2)
+2026-10-01T18:28:36.5621719Z   - Downloading sebastian/complexity (6.0.0)
+2026-10-01T18:28:36.5622974Z   - Downloading phpunit/php-code-coverage (14.4.0)
+2026-10-01T18:28:36.5629466Z   - Downloading phar-io/version (3.2.1)
+2026-10-01T18:28:36.5633812Z   - Downloading phar-io/manifest (2.0.4)
+2026-10-01T18:28:36.5634321Z   - Downloading phpunit/phpunit (13.3.6)
+2026-10-01T18:28:36.5635075Z   - Downloading orchestra/testbench-core (v11.5.0)
+2026-10-01T18:28:36.5635723Z   - Downloading orchestra/canvas (v11.1.0)
+2026-10-01T18:28:36.5636263Z   - Downloading nunomaduro/collision (v8.9.5)
+2026-10-01T18:28:36.5636858Z   - Downloading laravel/pail (v1.2.7)
+2026-10-01T18:28:36.5637385Z   - Downloading fakerphp/faker (v1.24.1)
+2026-10-01T18:28:36.5637958Z   - Downloading orchestra/workbench (v11.3.0)
+2026-10-01T18:28:36.5638638Z   - Downloading mockery/mockery (1.6.15)
+2026-10-01T18:28:36.5639852Z   - Downloading orchestra/testbench (v11.3.0)
+2026-10-01T18:28:36.5641060Z   - Downloading pestphp/pest-plugin-profanity (v5.0.0)
+2026-10-01T18:28:36.5642189Z   - Downloading pestphp/pest-plugin-mutate (v5.0.2)
+2026-10-01T18:28:36.5643730Z   - Downloading webmozart/assert (2.4.1)
+2026-10-01T18:28:36.5645067Z   - Downloading phpstan/phpdoc-parser (2.3.6)
+2026-10-01T18:28:36.5646678Z   - Downloading phpdocumentor/reflection-common (2.2.1)
+2026-10-01T18:28:36.5647877Z   - Downloading doctrine/deprecations (1.1.6)
+2026-10-01T18:28:36.5649103Z   - Downloading phpdocumentor/type-resolver (2.1.0)
+2026-10-01T18:28:36.5650348Z   - Downloading phpdocumentor/reflection-docblock (6.0.3)
+2026-10-01T18:28:36.5652145Z   - Downloading ta-tikoma/phpunit-architecture-test (0.8.7)
+2026-10-01T18:28:36.5653145Z   - Downloading pestphp/pest-plugin-arch (v5.0.0)
+2026-10-01T18:28:36.5654857Z   - Downloading brianium/paratest (v7.25.0)
+2026-10-01T18:28:36.5656035Z   - Downloading pestphp/pest (v5.3.0)
+2026-10-01T18:28:36.5657588Z   - Downloading revolt/event-loop (v1.0.9)
+2026-10-01T18:28:36.5659169Z   - Downloading php-standard-library/foundation (6.3.0)
+2026-10-01T18:28:36.5660308Z   - Downloading php-standard-library/promise (6.3.0)
+2026-10-01T18:28:36.5661443Z   - Downloading php-standard-library/default (6.3.0)
+2026-10-01T18:28:36.5662624Z   - Downloading php-standard-library/locale (6.3.0)
+2026-10-01T18:28:36.5663867Z   - Downloading php-standard-library/interoperability (6.3.0)
+2026-10-01T18:28:36.5665194Z   - Downloading php-standard-library/comparison (6.3.0)
+2026-10-01T18:28:36.5666367Z   - Downloading php-standard-library/date-time (6.3.0)
+2026-10-01T18:28:36.5667538Z   - Downloading php-standard-library/async (6.3.0)
+2026-10-01T18:28:36.5668698Z   - Downloading php-standard-library/channel (6.3.0)
+2026-10-01T18:28:36.5669857Z   - Downloading php-standard-library/collection (6.3.0)
+2026-10-01T18:28:36.5671055Z   - Downloading php-standard-library/option (6.3.0)
+2026-10-01T18:28:36.5672267Z   - Downloading php-standard-library/either-or-both (6.3.0)
+2026-10-01T18:28:36.5673399Z   - Downloading php-standard-library/result (6.3.0)
+2026-10-01T18:28:36.5674698Z   - Downloading php-standard-library/io (6.3.0)
+2026-10-01T18:28:36.5675955Z   - Downloading php-standard-library/process (6.3.0)
+2026-10-01T18:28:36.5677132Z   - Downloading php-standard-library/iter (6.3.0)
+2026-10-01T18:28:36.5678324Z   - Downloading php-standard-library/range (6.3.0)
+2026-10-01T18:28:36.5679568Z   - Downloading phpstan/phpstan-strict-rules (2.0.12)
+2026-10-01T18:28:36.5681187Z   - Downloading react/promise (v3.3.0)
+2026-10-01T18:28:36.5682751Z   - Downloading rector/rector (2.6.7)
+2026-10-01T18:28:36.5684308Z   - Downloading jetbrains/phpstorm-stubs (v2026.2)
+2026-10-01T18:28:36.5686061Z   - Downloading roave/better-reflection (6.73.0)
+2026-10-01T18:28:36.5687252Z   - Downloading php-standard-library/vec (6.3.0)
+2026-10-01T18:28:36.5688436Z   - Downloading php-standard-library/type (6.3.0)
+2026-10-01T18:28:36.5689611Z   - Downloading php-standard-library/str (6.3.0)
+2026-10-01T18:28:36.5690774Z   - Downloading php-standard-library/shell (6.3.0)
+2026-10-01T18:28:36.5692019Z   - Downloading php-standard-library/regex (6.3.0)
+2026-10-01T18:28:36.5693300Z   - Downloading php-standard-library/json (6.3.0)
+2026-10-01T18:28:36.5694485Z   - Downloading php-standard-library/filesystem (6.3.0)
+2026-10-01T18:28:36.5695825Z   - Downloading php-standard-library/file (6.3.0)
+2026-10-01T18:28:36.5697011Z   - Downloading php-standard-library/env (6.3.0)
+2026-10-01T18:28:36.5698195Z   - Downloading php-standard-library/dict (6.3.0)
+2026-10-01T18:28:36.5699806Z   - Downloading ocramius/package-versions (2.12.0)
+2026-10-01T18:28:36.5701332Z   - Downloading nikolaposa/version (4.2.1)
+2026-10-01T18:28:36.5702580Z   - Downloading symfony/polyfill-php73 (v1.37.0)
+2026-10-01T18:28:36.5703803Z   - Downloading symfony/filesystem (v8.1.6)
+2026-10-01T18:28:36.5705526Z   - Downloading seld/signal-handler (2.0.2)
+2026-10-01T18:28:36.5706671Z   - Downloading seld/phar-utils (1.2.3)
+2026-10-01T18:28:36.5707792Z   - Downloading seld/jsonlint (1.12.1)
+2026-10-01T18:28:36.5709038Z   - Downloading composer/composer (2.10.3)
+2026-10-01T18:28:36.5710284Z   - Downloading roave/backward-compatibility-check (8.23.0)
+2026-10-01T18:28:36.5711898Z   - Downloading shipmonk/composer-dependency-analyser (1.8.4)
+2026-10-01T18:28:42.1603042Z   - Installing php-http/discovery (1.20.0): Extracting archive
+2026-10-01T18:28:42.1754469Z   - Installing pestphp/pest-plugin (v5.0.0): Extracting archive
+2026-10-01T18:28:42.1822976Z   - Installing phpstan/phpstan (2.2.16): Extracting archive
+2026-10-01T18:28:42.1835226Z   - Installing composer/semver (3.5.0): Extracting archive
+2026-10-01T18:28:42.5028173Z   - Installing tbachert/spi (v1.0.5): Extracting archive
+2026-10-01T18:28:42.5109129Z   - Installing phpstan/extension-installer (1.4.3): Extracting archive
+2026-10-01T18:28:42.5318574Z   - Installing voku/portable-ascii (2.1.1): Extracting archive
+2026-10-01T18:28:42.5329103Z   - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5352274Z   - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5370505Z   - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
+2026-10-01T18:28:42.5391853Z   - Installing phpoption/phpoption (1.10.0): Extracting archive
+2026-10-01T18:28:42.5392684Z   - Installing graham-campbell/result-type (v1.2.0): Extracting archive
+2026-10-01T18:28:42.5400048Z   - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
+2026-10-01T18:28:42.5449464Z   - Installing symfony/css-selector (v8.1.6): Extracting archive
+2026-10-01T18:28:42.5495531Z   - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
+2026-10-01T18:28:42.5497627Z   - Installing symfony/var-dumper (v8.1.7): Extracting archive
+2026-10-01T18:28:42.5565465Z   - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5595199Z   - Installing symfony/uid (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5625208Z   - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
+2026-10-01T18:28:42.5645287Z   - Installing symfony/routing (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5665045Z   - Installing symfony/process (v8.1.7): Extracting archive
+2026-10-01T18:28:42.5666559Z   - Installing symfony/polyfill-php86 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5701454Z   - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5709977Z   - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5725334Z   - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5726112Z   - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5728330Z   - Installing symfony/mime (v8.1.7): Extracting archive
+2026-10-01T18:28:42.5728790Z   - Installing psr/container (2.0.2): Extracting archive
+2026-10-01T18:28:42.5729179Z   - Installing symfony/service-contracts (v3.7.3): Extracting archive
+2026-10-01T18:28:42.5729517Z   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2026-10-01T18:28:42.5730033Z   - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
+2026-10-01T18:28:42.5730618Z   - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
+2026-10-01T18:28:42.5731075Z   - Installing psr/log (3.0.2): Extracting archive
+2026-10-01T18:28:42.5731499Z   - Installing doctrine/lexer (3.0.3): Extracting archive
+2026-10-01T18:28:42.5731979Z   - Installing egulias/email-validator (4.0.4): Extracting archive
+2026-10-01T18:28:42.5732475Z   - Installing symfony/mailer (v8.1.7): Extracting archive
+2026-10-01T18:28:42.5732988Z   - Installing symfony/http-foundation (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5733632Z   - Installing symfony/error-handler (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5735164Z   - Installing symfony/http-kernel (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5744447Z   - Installing symfony/finder (v8.1.8): Extracting archive
+2026-10-01T18:28:42.5745254Z   - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5746297Z   - Installing symfony/string (v8.1.7): Extracting archive
+2026-10-01T18:28:42.5746880Z   - Installing symfony/console (v7.4.20): Extracting archive
+2026-10-01T18:28:42.5747531Z   - Installing ramsey/collection (2.1.1): Extracting archive
+2026-10-01T18:28:42.5748118Z   - Installing brick/math (0.14.8): Extracting archive
+2026-10-01T18:28:42.5748732Z   - Installing ramsey/uuid (4.9.4): Extracting archive
+2026-10-01T18:28:42.5749301Z   - Installing psr/simple-cache (3.0.0): Extracting archive
+2026-10-01T18:28:42.5749887Z   - Installing psr/http-message (2.0): Extracting archive
+2026-10-01T18:28:42.5750683Z   - Installing nunomaduro/termwind (v2.4.0): Extracting archive
+2026-10-01T18:28:42.5751344Z   - Installing symfony/translation-contracts (v3.7.1): Extracting archive
+2026-10-01T18:28:42.5751984Z   - Installing symfony/translation (v8.1.5): Extracting archive
+2026-10-01T18:28:42.5752558Z   - Installing psr/clock (1.0.0): Extracting archive
+2026-10-01T18:28:42.5753101Z   - Installing symfony/clock (v8.1.0): Extracting archive
+2026-10-01T18:28:42.5753744Z   - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
+2026-10-01T18:28:42.5754380Z   - Installing nesbot/carbon (3.14.1): Extracting archive
+2026-10-01T18:28:42.5755117Z   - Installing monolog/monolog (3.12.1): Extracting archive
+2026-10-01T18:28:42.5755672Z   - Installing psr/http-factory (1.1.0): Extracting archive
+2026-10-01T18:28:42.5756273Z   - Installing league/uri-interfaces (7.8.1): Extracting archive
+2026-10-01T18:28:42.5756857Z   - Installing league/uri (7.8.1): Extracting archive
+2026-10-01T18:28:42.5757493Z   - Installing league/mime-type-detection (1.17.0): Extracting archive
+2026-10-01T18:28:42.5758179Z   - Installing league/flysystem-local (3.35.3): Extracting archive
+2026-10-01T18:28:42.5758808Z   - Installing league/flysystem (3.36.0): Extracting archive
+2026-10-01T18:28:42.5759399Z   - Installing nette/utils (v4.1.5): Extracting archive
+2026-10-01T18:28:42.5759959Z   - Installing nette/schema (v1.3.6): Extracting archive
+2026-10-01T18:28:42.5760579Z   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2026-10-01T18:28:42.5761206Z   - Installing league/config (v1.2.0): Extracting archive
+2026-10-01T18:28:42.5761787Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-01T18:28:42.5762465Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-01T18:28:42.5763151Z   - Installing laravel/prompts (v0.3.24): Extracting archive
+2026-10-01T18:28:42.5763780Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-01T18:28:42.5764443Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.5765376Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-01T18:28:42.5765988Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-01T18:28:42.5766602Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-01T18:28:42.5789832Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-01T18:28:42.5791848Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-01T18:28:42.5792796Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-01T18:28:42.5795618Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-01T18:28:42.5796334Z   - Installing laravel/framework (v13.34.0): Extracting archive
+2026-10-01T18:28:42.5797736Z   - Installing axiomasoft/corex (dev-main 964f918): Symlinking from packages/core
+2026-10-01T18:28:42.5798633Z   - Installing axioma-studio/azguard-core (0.3.0): Cloning 253cbf4cce from cache
+2026-10-01T18:28:42.9052253Z   - Installing axiomasoft/corex-access (dev-main 56161ef): Symlinking from packages/access
+2026-10-01T18:28:42.9068332Z   - Installing axiomasoft/corex-custom-fields (dev-main 8448c94): Symlinking from packages/custom-fields
+2026-10-01T18:28:42.9085543Z   - Installing axiomasoft/corex-media (dev-main b7a1de1): Symlinking from packages/media
+2026-10-01T18:28:42.9101716Z   - Installing axiomasoft/corex-wakeup (dev-main 593ac91): Symlinking from packages/wakeup
+2026-10-01T18:28:42.9118652Z   - Installing axiomasoft/corex-notifications (dev-main a313286): Symlinking from packages/notifications
+2026-10-01T18:28:42.9135669Z   - Installing axiomasoft/corex-panels (dev-main dfaaa54): Symlinking from packages/panels
+2026-10-01T18:28:42.9152779Z   - Installing axiomasoft/corex-search (dev-main c916618): Symlinking from packages/search
+2026-10-01T18:28:42.9175365Z   - Installing brick/money (0.10.3): Extracting archive
+2026-10-01T18:28:42.9176567Z   - Installing axiomasoft/corex-intl (dev-main 5ae7138): Symlinking from packages/intl
+2026-10-01T18:28:42.9192464Z   - Installing axiomasoft/corex-search-intl (dev-main fcb5fbe): Symlinking from packages/search-intl
+2026-10-01T18:28:42.9210117Z   - Installing symfony/polyfill-php81 (v1.38.1): Extracting archive
+2026-10-01T18:28:42.9212110Z   - Installing meilisearch/meilisearch-php (v1.16.1): Extracting archive
+2026-10-01T18:28:42.9215594Z   - Installing axiomasoft/corex-search-meilisearch (dev-main 54fff5e): Symlinking from packages/search-meilisearch
+2026-10-01T18:28:42.9234285Z   - Installing axiomasoft/corex-workflow (dev-main 526acd8): Symlinking from packages/workflow
+2026-10-01T18:28:42.9253302Z   - Installing axiomasoft/corex-tasks (dev-main 66b438f): Symlinking from packages/tasks
+2026-10-01T18:28:42.9271024Z   - Installing rlanvin/php-rrule (v3.0.0): Extracting archive
+2026-10-01T18:28:42.9274238Z   - Installing axiomasoft/corex-recurrence (dev-main 0ad1683): Symlinking from packages/recurrence
+2026-10-01T18:28:42.9294158Z   - Installing axiomasoft/corex-tasks-workflow (dev-main efaf783): Symlinking from packages/tasks-workflow
+2026-10-01T18:28:42.9321449Z   - Installing firebase/php-jwt (v7.2.1): Extracting archive
+2026-10-01T18:28:42.9323470Z   - Installing stancl/virtualcolumn (v1.5.0): Extracting archive
+2026-10-01T18:28:42.9325772Z   - Installing spatie/invade (2.1.1): Extracting archive
+2026-10-01T18:28:42.9345369Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-01T18:28:42.9349214Z   - Installing psy/psysh (v0.12.24): Extracting archive
+2026-10-01T18:28:42.9349773Z   - Installing laravel/tinker (v3.0.2): Extracting archive
+2026-10-01T18:28:42.9350360Z   - Installing axiomasoft/stancl-jobpipeline (2.0.0-alpha1): Extracting archive
+2026-10-01T18:28:42.9354037Z   - Installing axiomasoft/stancl-tenancy (4.0.0-alpha1): Extracting archive
+2026-10-01T18:28:42.9354506Z   - Installing axiomasoft/corex-tenancy (dev-main e7e3316): Symlinking from packages/tenancy
+2026-10-01T18:28:42.9358498Z   - Installing axiomasoft/corex-operations (dev-main 451a7f4): Symlinking from packages/operations
+2026-10-01T18:28:42.9378648Z   - Installing axiomasoft/corex-tools (dev-main 9b988d9): Symlinking from packages/tools
+2026-10-01T18:28:42.9399608Z   - Installing axiomasoft/corex-transfer (dev-main 3e21b19): Symlinking from packages/transfer
+2026-10-01T18:28:42.9421110Z   - Installing axiomasoft/corex-webhooks (dev-main fed33be): Symlinking from packages/webhooks
+2026-10-01T18:28:42.9441307Z   - Installing beberlei/assert (v3.3.4): Extracting archive
+2026-10-01T18:28:42.9445885Z   - Installing composer/ca-bundle (1.5.14): Extracting archive
+2026-10-01T18:28:42.9446640Z   - Installing composer/pcre (3.4.0): Extracting archive
+2026-10-01T18:28:42.9447846Z   - Installing composer/class-map-generator (1.8.0): Extracting archive
+2026-10-01T18:28:42.9455311Z   - Installing composer/metadata-minifier (1.0.1): Extracting archive
+2026-10-01T18:28:42.9455875Z   - Installing composer/spdx-licenses (1.6.0): Extracting archive
+2026-10-01T18:28:42.9462660Z   - Installing composer/xdebug-handler (3.0.5): Extracting archive
+2026-10-01T18:28:42.9463389Z   - Installing fidry/cpu-core-counter (1.4.1): Extracting archive
+2026-10-01T18:28:42.9464118Z   - Installing filp/whoops (2.18.5): Extracting archive
+2026-10-01T18:28:42.9465191Z   - Installing giggsey/libphonenumber-for-php-lite (9.0.40): Extracting archive
+2026-10-01T18:28:42.9465990Z   - Installing flex/crm (dev-main f4e7f80): Symlinking from products/flex-crm
+2026-10-01T18:28:42.9487769Z   - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
+2026-10-01T18:28:42.9489166Z   - Installing jean85/pretty-package-versions (2.1.1): Extracting archive
+2026-10-01T18:28:42.9491207Z   - Installing marc-mabe/php-enum (v4.7.2): Extracting archive
+2026-10-01T18:28:42.9493162Z   - Installing justinrainbow/json-schema (6.13.1): Extracting archive
+2026-10-01T18:28:42.9495209Z   - Installing iamcal/sql-parser (v0.7): Extracting archive
+2026-10-01T18:28:42.9497211Z   - Installing larastan/larastan (v3.12.2): Extracting archive
+2026-10-01T18:28:42.9499745Z   - Installing laravel/agent-detector (v2.0.2): Extracting archive
+2026-10-01T18:28:42.9501144Z   - Installing laravel/pao (v1.1.5): Extracting archive
+2026-10-01T18:28:42.9503139Z   - Installing laravel/pint (v1.32.1): Extracting archive
+2026-10-01T18:28:42.9505461Z   - Installing myclabs/deep-copy (1.14.0): Extracting archive
+2026-10-01T18:28:42.9507580Z   - Installing open-telemetry/sem-conv (1.44.0): Extracting archive
+2026-10-01T18:28:42.9509566Z   - Installing open-telemetry/context (1.5.0): Extracting archive
+2026-10-01T18:28:42.9511563Z   - Installing open-telemetry/api (1.10.0): Extracting archive
+2026-10-01T18:28:42.9513498Z   - Installing nyholm/psr7-server (1.1.0): Extracting archive
+2026-10-01T18:28:42.9515676Z   - Installing open-telemetry/sdk (1.15.0): Extracting archive
+2026-10-01T18:28:42.9517598Z   - Installing opis/string (2.1.0): Extracting archive
+2026-10-01T18:28:42.9519552Z   - Installing opis/uri (1.1.0): Extracting archive
+2026-10-01T18:28:42.9521511Z   - Installing opis/json-schema (2.6.0): Extracting archive
+2026-10-01T18:28:42.9523444Z   - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
+2026-10-01T18:28:42.9525512Z   - Installing orchestra/sidekick (v1.2.23): Extracting archive
+2026-10-01T18:28:42.9527510Z   - Installing orchestra/canvas-core (v11.0.0): Extracting archive
+2026-10-01T18:28:42.9529386Z   - Installing symfony/yaml (v8.1.8): Extracting archive
+2026-10-01T18:28:42.9531374Z   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2026-10-01T18:28:42.9533328Z   - Installing sebastian/version (7.0.0): Extracting archive
+2026-10-01T18:28:42.9535404Z   - Installing sebastian/type (7.0.2): Extracting archive
+2026-10-01T18:28:42.9537453Z   - Installing sebastian/recursion-context (8.0.1): Extracting archive
+2026-10-01T18:28:42.9539354Z   - Installing sebastian/object-enumerator (8.1.0): Extracting archive
+2026-10-01T18:28:42.9541256Z   - Installing sebastian/object-reflector (6.1.0): Extracting archive
+2026-10-01T18:28:42.9543226Z   - Installing sebastian/global-state (9.0.1): Extracting archive
+2026-10-01T18:28:42.9545347Z   - Installing sebastian/git-state (1.0.0): Extracting archive
+2026-10-01T18:28:42.9547277Z   - Installing sebastian/file-filter (1.0.0): Extracting archive
+2026-10-01T18:28:42.9549169Z   - Installing sebastian/exporter (8.2.1): Extracting archive
+2026-10-01T18:28:42.9551069Z   - Installing sebastian/environment (9.3.3): Extracting archive
+2026-10-01T18:28:42.9552962Z   - Installing sebastian/diff (9.0.1): Extracting archive
+2026-10-01T18:28:42.9555344Z   - Installing sebastian/comparator (8.4.0): Extracting archive
+2026-10-01T18:28:42.9557378Z   - Installing sebastian/cli-parser (5.0.1): Extracting archive
+2026-10-01T18:28:42.9559288Z   - Installing phpunit/php-timer (9.0.0): Extracting archive
+2026-10-01T18:28:42.9561299Z   - Installing phpunit/php-text-template (6.0.0): Extracting archive
+2026-10-01T18:28:42.9563315Z   - Installing phpunit/php-invoker (7.0.0): Extracting archive
+2026-10-01T18:28:42.9565722Z   - Installing phpunit/php-file-iterator (7.0.2): Extracting archive
+2026-10-01T18:28:42.9567729Z   - Installing theseer/tokenizer (2.0.1): Extracting archive
+2026-10-01T18:28:42.9569834Z   - Installing sebastian/lines-of-code (5.0.2): Extracting archive
+2026-10-01T18:28:42.9571843Z   - Installing sebastian/complexity (6.0.0): Extracting archive
+2026-10-01T18:28:42.9573865Z   - Installing phpunit/php-code-coverage (14.4.0): Extracting archive
+2026-10-01T18:28:42.9575935Z   - Installing phar-io/version (3.2.1): Extracting archive
+2026-10-01T18:28:42.9605241Z   - Installing phar-io/manifest (2.0.4): Extracting archive
+2026-10-01T18:28:42.9605763Z   - Installing phpunit/phpunit (13.3.6): Extracting archive
+2026-10-01T18:28:42.9606304Z   - Installing orchestra/testbench-core (v11.5.0): Extracting archive
+2026-10-01T18:28:42.9606807Z   - Installing orchestra/canvas (v11.1.0): Extracting archive
+2026-10-01T18:28:42.9607296Z   - Installing nunomaduro/collision (v8.9.5): Extracting archive
+2026-10-01T18:28:42.9607953Z   - Installing laravel/pail (v1.2.7): Extracting archive
+2026-10-01T18:28:42.9608370Z   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2026-10-01T18:28:42.9608853Z   - Installing orchestra/workbench (v11.3.0): Extracting archive
+2026-10-01T18:28:42.9609324Z   - Installing mockery/mockery (1.6.15): Extracting archive
+2026-10-01T18:28:42.9609796Z   - Installing orchestra/testbench (v11.3.0): Extracting archive
+2026-10-01T18:28:42.9610372Z   - Installing pestphp/pest-plugin-profanity (v5.0.0): Extracting archive
+2026-10-01T18:28:42.9611002Z   - Installing pestphp/pest-plugin-mutate (v5.0.2): Extracting archive
+2026-10-01T18:28:42.9611497Z   - Installing webmozart/assert (2.4.1): Extracting archive
+2026-10-01T18:28:42.9612029Z   - Installing phpstan/phpdoc-parser (2.3.6): Extracting archive
+2026-10-01T18:28:42.9612588Z   - Installing phpdocumentor/reflection-common (2.2.1): Extracting archive
+2026-10-01T18:28:42.9613116Z   - Installing doctrine/deprecations (1.1.6): Extracting archive
+2026-10-01T18:28:42.9613660Z   - Installing phpdocumentor/type-resolver (2.1.0): Extracting archive
+2026-10-01T18:28:42.9614219Z   - Installing phpdocumentor/reflection-docblock (6.0.3): Extracting archive
+2026-10-01T18:28:42.9614911Z   - Installing ta-tikoma/phpunit-architecture-test (0.8.7): Extracting archive
+2026-10-01T18:28:42.9615411Z   - Installing pestphp/pest-plugin-arch (v5.0.0): Extracting archive
+2026-10-01T18:28:42.9625324Z   - Installing brianium/paratest (v7.25.0): Extracting archive
+2026-10-01T18:28:42.9626049Z   - Installing pestphp/pest (v5.3.0): Extracting archive
+2026-10-01T18:28:42.9626698Z   - Installing revolt/event-loop (v1.0.9): Extracting archive
+2026-10-01T18:28:42.9627362Z   - Installing php-standard-library/foundation (6.3.0): Extracting archive
+2026-10-01T18:28:42.9628084Z   - Installing php-standard-library/promise (6.3.0): Extracting archive
+2026-10-01T18:28:42.9628761Z   - Installing php-standard-library/default (6.3.0): Extracting archive
+2026-10-01T18:28:42.9629430Z   - Installing php-standard-library/locale (6.3.0): Extracting archive
+2026-10-01T18:28:42.9630166Z   - Installing php-standard-library/interoperability (6.3.0): Extracting archive
+2026-10-01T18:28:42.9630887Z   - Installing php-standard-library/comparison (6.3.0): Extracting archive
+2026-10-01T18:28:42.9631602Z   - Installing php-standard-library/date-time (6.3.0): Extracting archive
+2026-10-01T18:28:42.9633492Z   - Installing php-standard-library/async (6.3.0): Extracting archive
+2026-10-01T18:28:42.9635480Z   - Installing php-standard-library/channel (6.3.0): Extracting archive
+2026-10-01T18:28:42.9645375Z   - Installing php-standard-library/collection (6.3.0): Extracting archive
+2026-10-01T18:28:42.9646109Z   - Installing php-standard-library/option (6.3.0): Extracting archive
+2026-10-01T18:28:42.9646814Z   - Installing php-standard-library/either-or-both (6.3.0): Extracting archive
+2026-10-01T18:28:42.9647536Z   - Installing php-standard-library/result (6.3.0): Extracting archive
+2026-10-01T18:28:42.9648195Z   - Installing php-standard-library/io (6.3.0): Extracting archive
+2026-10-01T18:28:42.9648849Z   - Installing php-standard-library/process (6.3.0): Extracting archive
+2026-10-01T18:28:42.9649547Z   - Installing php-standard-library/iter (6.3.0): Extracting archive
+2026-10-01T18:28:42.9650201Z   - Installing php-standard-library/range (6.3.0): Extracting archive
+2026-10-01T18:28:42.9650881Z   - Installing phpstan/phpstan-strict-rules (2.0.12): Extracting archive
+2026-10-01T18:28:42.9651757Z   - Installing react/promise (v3.3.0): Extracting archive
+2026-10-01T18:28:42.9652599Z   - Installing rector/rector (2.6.7): Extracting archive
+2026-10-01T18:28:42.9655006Z   - Installing jetbrains/phpstorm-stubs (v2026.2): Extracting archive
+2026-10-01T18:28:42.9656879Z   - Installing roave/better-reflection (6.73.0): Extracting archive
+2026-10-01T18:28:42.9658860Z   - Installing php-standard-library/vec (6.3.0): Extracting archive
+2026-10-01T18:28:42.9660784Z   - Installing php-standard-library/type (6.3.0): Extracting archive
+2026-10-01T18:28:42.9662783Z   - Installing php-standard-library/str (6.3.0): Extracting archive
+2026-10-01T18:28:42.9664263Z   - Installing php-standard-library/shell (6.3.0): Extracting archive
+2026-10-01T18:28:42.9666570Z   - Installing php-standard-library/regex (6.3.0): Extracting archive
+2026-10-01T18:28:42.9668434Z   - Installing php-standard-library/json (6.3.0): Extracting archive
+2026-10-01T18:28:42.9670328Z   - Installing php-standard-library/filesystem (6.3.0): Extracting archive
+2026-10-01T18:28:42.9702182Z   - Installing php-standard-library/file (6.3.0): Extracting archive
+2026-10-01T18:28:42.9735278Z   - Installing php-standard-library/env (6.3.0): Extracting archive
+2026-10-01T18:28:42.9769485Z   - Installing php-standard-library/dict (6.3.0): Extracting archive
+2026-10-01T18:28:42.9777319Z   - Installing ocramius/package-versions (2.12.0): Extracting archive
+2026-10-01T18:28:42.9790418Z   - Installing nikolaposa/version (4.2.1): Extracting archive
+2026-10-01T18:28:42.9809775Z   - Installing symfony/polyfill-php73 (v1.37.0): Extracting archive
+2026-10-01T18:28:42.9810479Z   - Installing symfony/filesystem (v8.1.6): Extracting archive
+2026-10-01T18:28:42.9811123Z   - Installing seld/signal-handler (2.0.2): Extracting archive
+2026-10-01T18:28:42.9811698Z   - Installing seld/phar-utils (1.2.3): Extracting archive
+2026-10-01T18:28:42.9812291Z   - Installing seld/jsonlint (1.12.1): Extracting archive
+2026-10-01T18:28:42.9812905Z   - Installing composer/composer (2.10.3): Extracting archive
+2026-10-01T18:28:42.9813625Z   - Installing roave/backward-compatibility-check (8.23.0): Extracting archive
+2026-10-01T18:28:42.9814359Z   - Installing shipmonk/composer-dependency-analyser (1.8.4): Extracting archive
+2026-10-01T18:28:46.5013989Z Generating autoload files
+2026-10-01T18:28:46.8691087Z 109 packages you are using are looking for funding.
+2026-10-01T18:28:46.8691775Z Use the `composer fund` command to find out more!
+2026-10-01T18:28:46.8946210Z phpstan/extension-installer: Extensions installed
+2026-10-01T18:28:46.8946693Z > axiomasoft/corex: ignored
+2026-10-01T18:28:46.8946991Z > axiomasoft/corex: ignored
+2026-10-01T18:28:46.8947283Z > axiomasoft/corex-tenancy: ignored
+2026-10-01T18:28:46.8947625Z > axiomasoft/corex-tenancy: ignored
+2026-10-01T18:28:46.8947948Z > composer/composer: ignored
+2026-10-01T18:28:46.8948241Z > composer/pcre: ignored
+2026-10-01T18:28:46.8948522Z > larastan/larastan: ignored
+2026-10-01T18:28:46.8948816Z > nesbot/carbon: ignored
+2026-10-01T18:28:46.8949085Z > pestphp/pest: ignored
+2026-10-01T18:28:46.8949392Z > phpstan/phpstan-strict-rules: ignored
+2026-10-01T18:28:47.0419068Z ##[group]Run composer audit --locked
+2026-10-01T18:28:47.0419350Z composer audit --locked
+2026-10-01T18:28:47.0475004Z shell: /usr/bin/bash -e {0}
+2026-10-01T18:28:47.0475214Z env:
+2026-10-01T18:28:47.0475379Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:47.0475577Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-01T18:28:47.0475781Z   COMPOSER_NO_INTERACTION: 1
+2026-10-01T18:28:47.0475967Z   COMPOSER_NO_AUDIT: 1
+2026-10-01T18:28:47.0476141Z ##[endgroup]
+2026-10-01T18:28:47.4708197Z No security vulnerability advisories found.
+2026-10-01T18:28:47.4847105Z ##[group]Run composer test
+2026-10-01T18:28:47.4847352Z composer test
+2026-10-01T18:28:47.4901550Z shell: /usr/bin/bash -e {0}
+2026-10-01T18:28:47.4901760Z env:
+2026-10-01T18:28:47.4901923Z   LARAVEL_VERSION: 13.*
+2026-10-01T18:28:47.4902116Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-01T18:28:47.4902502Z   COMPOSER_NO_INTERACTION: 1
+2026-10-01T18:28:47.4902697Z   COMPOSER_NO_AUDIT: 1
+2026-10-01T18:28:47.4902872Z ##[endgroup]
+2026-10-01T18:28:48.1746278Z
+2026-10-01T18:28:48.1747616Z    PASS  Tests\Unit\CapabilityScopeAxisTest
+2026-10-01T18:28:48.1752075Z   ✓ it declares exactly 9 Capability cases, the original 7 unshifted, p… 0.09s
+2026-10-01T18:28:48.1770842Z   ✓ it round-trips Ownable/WorkspaceScoped through CompiledRegistry::to… 0.02s
+2026-10-01T18:28:48.5732614Z
+2026-10-01T18:28:48.5734046Z    PASS  Tests\Unit\EntityRegistryTest
+2026-10-01T18:28:48.5737372Z   ✓ it registers an entity and reads it back via get/has/forModel        0.01s
+2026-10-01T18:28:48.5740670Z   ✓ it throws EntityNotFound for an unregistered handle                  0.01s
+2026-10-01T18:28:48.5743965Z   ✓ it reports has() as false and forModel() as null for unregistered e… 0.14s
+2026-10-01T18:28:48.5747327Z   ✓ it returns the whole registry for all(null) and only active-module…  0.01s
+2026-10-01T18:28:48.5750321Z   ✓ it filters entities by capability                                    0.16s
+2026-10-01T18:28:48.5753776Z   ✓ it builds a morph map from registered handles that Relation::enforc… 0.01s
+2026-10-01T18:28:48.5756820Z   ✓ it round-trips a FieldDefinition through toArray/fromArray (P1.15)   0.01s
+2026-10-01T18:28:48.5759901Z   ✓ it round-trips an EntityDefinition — enums collapse to ->value, fie… 0.05s
+2026-10-01T18:28:48.5865002Z
+2026-10-01T18:28:48.5865853Z    PASS  Tests\Unit\FluentCanonTest
+2026-10-01T18:28:48.5869297Z   ✓ every manifest-authoring DTO exposes a public static factory constr… 0.01s
+2026-10-01T18:28:48.6021273Z
+2026-10-01T18:28:48.6022343Z    PASS  Tests\Feature\BoxedTenancyTest
+2026-10-01T18:28:48.6025909Z   ✓ it boxed TenancyManager is the null-manager: constant context, init… 0.01s
+2026-10-01T18:28:48.6029099Z   ✓ it runFor() on the boxed manager just runs the closure (no context…  0.01s
+2026-10-01T18:28:48.6376797Z
+2026-10-01T18:28:48.6378174Z    PASS  CoreX\Tests\Feature\ConfigReportCompositionTest
+2026-10-01T18:28:48.6380491Z   ✓ package sections preserve the complete report                        0.03s
+2026-10-01T18:28:48.7280736Z
+2026-10-01T18:28:48.7282336Z    PASS  Tests\Feature\ConfigurableIdTest
+2026-10-01T18:28:48.7284270Z   ✓ it model key behaviour follows config(corex.ids.strategy) with data… 0.02s
+2026-10-01T18:28:48.7287821Z   ✓ it model key behaviour follows config(corex.ids.strategy) with data… 0.01s
+2026-10-01T18:28:48.7290971Z   ✓ it model key behaviour follows config(corex.ids.strategy) with data… 0.01s
+2026-10-01T18:28:48.7294424Z   ✓ it model key behaviour follows config(corex.ids.strategy) with data… 0.01s
+2026-10-01T18:28:48.7297456Z   ✓ it generates the id kind matching the strategy                       0.01s
+2026-10-01T18:28:48.7300582Z   ✓ it config/corex.php declares the uuid7 strategy                      0.01s
+2026-10-01T18:28:48.7304024Z   ✓ it Config::idStrategy() defaults to uuid7 when the key is entirely…  0.01s
+2026-10-01T18:28:48.7307296Z   ✓ it uuid7 ids are time-sortable (monotonic across successive generat… 0.01s
+2026-10-01T18:28:48.7310229Z   ✓ it IdColumns emits integer key columns under the int strategy        0.01s
+2026-10-01T18:28:48.7742941Z
+2026-10-01T18:28:48.7745037Z    PASS  Tests\Feature\ImpersonatedActorTest
+2026-10-01T18:28:48.7747013Z   ✓ it boxed default: ImpersonationService binds to NullImpersonationSe… 0.01s
+2026-10-01T18:28:48.7750469Z   ✓ it NullImpersonationService::start() throws — boxed installs have n… 0.01s
+2026-10-01T18:28:48.7753433Z   ✓ it CurrentActor reports Support + staff id + grant/target context w… 0.01s
+2026-10-01T18:28:48.7756909Z   ✓ it CurrentActor never reports actor_type=user under impersonation,…  0.01s
+2026-10-01T18:28:48.7760031Z   ✓ it CurrentActor falls back to the pre-impersonation behavior once s… 0.01s
+2026-10-01T18:28:48.7982571Z
+2026-10-01T18:28:48.7984083Z    PASS  Tests\Feature\ImpersonationAuditContractTest
+2026-10-01T18:28:48.7986898Z   ✓ P12 stamps a direct AuditLogger call with authoritative impersonati… 0.01s
+2026-10-01T18:28:48.7990046Z   ✓ P12 direct audit ratchet rejects bypassing the impersonation stamp   0.01s
+2026-10-01T18:28:48.8615841Z
+2026-10-01T18:28:48.8620671Z    PASS  Tests\Feature\ModuleDiscoveryTest
+2026-10-01T18:28:48.8642503Z   ✓ it builds a fluent manifest with readable fields                     0.01s
+2026-10-01T18:28:48.8665389Z   ✓ it rejects an invalid tablePrefix with a precise message             0.01s
+2026-10-01T18:28:48.8666671Z   ✓ it rejects an invalid composer name                                  0.01s
+2026-10-01T18:28:48.8685549Z   ✓ it rejects an empty title                                            0.01s
+2026-10-01T18:28:48.8690233Z   ✓ it discovers manifests from an injected fallback list                0.01s
+2026-10-01T18:28:48.8715634Z   ✓ it rejects a discovered class that does not extend ModuleDefinition  0.01s
+2026-10-01T18:28:48.8716968Z   ✓ it corex:modules:compile does not fail when discovery reports no Co… 0.01s
+2026-10-01T18:28:48.8735673Z   ✓ it corex:modules:compile reports discovered manifests from the boun… 0.01s
+2026-10-01T18:28:49.8641696Z
+2026-10-01T18:28:49.8642764Z    PASS  Tests\Feature\ModuleRegistryTest
+2026-10-01T18:28:49.8645647Z   ✓ it reads all() and get() from the compiled file                      0.01s
+2026-10-01T18:28:49.8648654Z   ✓ it throws ModuleNotFound for an unknown module                       0.01s
+2026-10-01T18:28:49.8651950Z   ✓ it active() intersects the compiled registry with the enabled set f… 0.01s
+2026-10-01T18:28:49.8655462Z   ✓ it isolates active() per tenant context — no state leaks across acc… 0.02s
+2026-10-01T18:28:49.8658685Z   ✓ it does not call the reader again on a warm cache                    0.01s
+2026-10-01T18:28:49.8662267Z   ✓ it AllowAllActivationGate::check() always allows                     0.01s
+2026-10-01T18:28:49.8665624Z   ✓ it writes the compiled registry atomically, leaving no stray tmp fi… 0.01s
+2026-10-01T18:28:49.8668798Z   ✓ it corex:modules:compile writes the compiled registry file for the…  0.01s
+2026-10-01T18:28:49.8671778Z   ✓ it corex:modules:compile persists the entity, permissions and menu…  0.23s
+2026-10-01T18:28:49.8675298Z   ✓ it projects the compiled entities into EntityRegistry at boot — run… 0.28s
+2026-10-01T18:28:49.8678652Z   ✓ it adds the compiled entity handle to the morph map at boot, spanni… 0.02s
+2026-10-01T18:28:49.8681646Z   ✓ it reads the persisted registry back through compiled()              0.01s
+2026-10-01T18:28:49.8685017Z   ✓ it writeAtomic throws and leaves the destination intact when the at… 0.01s
+2026-10-01T18:28:49.8688230Z   ✓ it throws in production-style strict mode when the compiled registr… 0.01s
+2026-10-01T18:28:49.8691533Z   ✓ it returns an empty registry outside production when the compiled f… 0.01s
+2026-10-01T18:28:49.8694544Z   ✓ it reads active()/isActive() on a non-taggable file store without B… 0.32s
+2026-10-01T18:28:49.8697880Z   ✓ it reports isActive()=false for a module enabled in the reader but…  0.01s
+2026-10-01T18:28:49.8701052Z   ✓ it pins compiled() for one job and reloads only after flush          0.01s
+2026-10-01T18:28:49.8704271Z   ✓ it rejects a corrupt compiled artifact and keeps activation off the… 0.01s
+2026-10-01T18:28:49.8707487Z   ✓ it builds the registry cache from configured Options — store, ttl a… 0.01s
+2026-10-01T18:28:49.8993369Z
+2026-10-01T18:28:49.8995990Z    PASS  Tests\Feature\MoneyCastTest
+2026-10-01T18:28:49.8997853Z   ✓ it casts money to minor units on write and back on read              0.02s
+2026-10-01T18:28:49.9000907Z   ✓ it stores null when no money is set                                  0.01s
+2026-10-01T18:28:50.5182082Z
+2026-10-01T18:28:50.5183307Z    PASS  CoreX\Tests\Feature\OperationContractTest
+2026-10-01T18:28:50.5186647Z   ✓ real routes and exposed tool share compiled contract and guards      0.59s
+2026-10-01T18:28:50.5190312Z   ✓ snapshot check rejects stale bytes without rewriting them            0.02s
+2026-10-01T18:28:50.5193002Z   ✓ p14 consumer compiles against frozen public surface                  0.01s
+2026-10-01T18:28:50.6899899Z
+2026-10-01T18:28:50.6901089Z    PASS  Tests\Feature\PubSubTest
+2026-10-01T18:28:50.6902741Z   ✓ it delivers a publish()ed payload to a subscribe()d handler on the…  0.01s
+2026-10-01T18:28:50.6905043Z   ✓ it (е) publish → subscribe delivers through app(PubSub::class) on t… 0.01s
+2026-10-01T18:28:50.6906919Z   ✓ it AC-25(b)/(в) PubSubManager delegates publish() to the null drive… 0.01s
+2026-10-01T18:28:50.6910294Z   ✓ it AC-25(b)/(в) PubSubManager delegates publish() to the redis driv… 0.01s
+2026-10-01T18:28:50.6913589Z   ✓ it AC-25(b)/(в) PubSubManager delegates publish() to the database d… 0.01s
+2026-10-01T18:28:50.6917068Z   ✓ it (a) P1.24/A29: subscribe() refuses a faked Octane runtime withou… 0.01s
+2026-10-01T18:28:50.6920348Z   ✓ it P1.24: subscribe() refuses a non-console, non-Octane runtime (HT… 0.12s
+2026-10-01T18:28:50.6923546Z   ✓ it P1.24: SubscribeGuard allows an Octane runtime that explicitly o… 0.01s
+2026-10-01T18:28:50.8527333Z
+2026-10-01T18:28:50.8528862Z    PASS  Tests\Feature\RegistryCompilerTest
+2026-10-01T18:28:50.8530696Z   ✓ it compiles two stub modules with EntityDefinitions in pipeline ord… 0.01s
+2026-10-01T18:28:50.8533976Z   ✓ it rejects a duplicate tablePrefix across manifests                  0.01s
+2026-10-01T18:28:50.8537434Z   ✓ it rejects a manifest with no tablePrefix() call — D37, no auto-der… 0.01s
+2026-10-01T18:28:50.8540635Z   ✓ it rejects a manifest with no title() call                           0.01s
+2026-10-01T18:28:50.8543934Z   ✓ it rejects a duplicate entity handle declared by two modules, namin… 0.01s
+2026-10-01T18:28:50.8547256Z   ✓ it rejects requires that do not mirror an installed module           0.01s
+2026-10-01T18:28:50.8550440Z   ✓ it resolves requires against installed.json contents, not a hardcod… 0.01s
+2026-10-01T18:28:50.8553502Z   ✓ it rejects requires against a package absent from installed.json (A… 0.01s
+2026-10-01T18:28:50.8556822Z   ✓ it collects a cross-module EntityField as sleeping, without failing… 0.01s
+2026-10-01T18:28:50.8559906Z   ✓ it does not mark a same-module EntityField as sleeping               0.01s
+2026-10-01T18:28:50.8563178Z   ✓ it rejects an EntityField targeting a handle unknown to any compile… 0.01s
+2026-10-01T18:28:50.8566565Z   ✓ it rejects a third-party extender outside the closed set with an RF… 0.03s
+2026-10-01T18:28:50.8569656Z   ✓ it round-trips the whole CompiledRegistry (all 10 slices) through t… 0.01s
+2026-10-01T18:28:50.8572771Z   ✓ it collects settings/featureFlags off plain manifest properties, no… 0.01s
+2026-10-01T18:28:50.8576386Z   ✓ it runs the closed-set pipeline stages in the declared PipelineStag… 0.01s
+2026-10-01T18:28:50.8579117Z   ✓ it round-trips a CompiledEntityField, rehydrating the wrapped exten… 0.02s
+2026-10-01T18:28:50.8897250Z
+2026-10-01T18:28:50.8898782Z    PASS  Tests\Feature\TenantContextTest
+2026-10-01T18:28:50.8901056Z   ✓ it resolves a boxed TenantContext via SingleAccountResolver          0.01s
+2026-10-01T18:28:50.8904533Z   ✓ it forWorkspace returns a new context carrying the workspace, boxed… 0.01s
+2026-10-01T18:28:50.8908339Z   ✓ it SingleAccountResolver::current() is deterministic                 0.01s
+2026-10-01T18:28:50.8911297Z   ✓ it AccountRef and WorkspaceRef are immutable value objects matching… 0.01s
+2026-10-01T18:28:50.9105657Z
+2026-10-01T18:28:50.9107028Z    PASS  Tests\Feature\UlidGenerationTest
+2026-10-01T18:28:50.9109196Z   ✓ it uses ULID string keys                                             0.01s
+2026-10-01T18:28:50.9112344Z   ✓ it soft deletes                                                      0.01s
+2026-10-01T18:28:52.7395255Z
+2026-10-01T18:28:52.7396232Z    PASS  CoreX\Tools\Tests\Feature\InstalledToolContractTest
+2026-10-01T18:28:52.7397315Z   ✓ boxed archive boots with explicit policy and cross account guard in… 0.97s
+2026-10-01T18:28:52.7415803Z   ✓ direct and mcp projection share descriptor and result semantics ins… 0.71s
+2026-10-01T18:28:52.7416978Z   ✓ tool provider mounts no routes and rejects unknown or unguarded mut… 0.15s
+2026-10-01T18:28:52.7418043Z   ✓ lab cohort remains disjoint from archive after install inst 02 and…  0.01s
+2026-10-01T18:28:53.1895170Z
+2026-10-01T18:28:53.1906095Z    PASS  CoreX\Tools\Tests\Feature\ToolAuthorizationLayersTest
+2026-10-01T18:28:53.1907159Z   ✓ client actor record field and tenant layers deny independently       0.16s
+2026-10-01T18:28:53.1908266Z   ✓ http and tool apply the same recursive read policy without trusting… 0.29s
+2026-10-01T18:28:53.4305596Z
+2026-10-01T18:28:53.4346225Z    PASS  CoreX\Tools\Tests\Feature\ToolCatalogueTest
+2026-10-01T18:28:53.4350964Z   ✓ discovery filters activation policy and per tool deny metadata cat…  0.04s
+2026-10-01T18:28:53.4352135Z   ✓ default policy denies without breaking boot cat 02
+2026-10-01T18:28:53.4353233Z   ✓ discover allow does not grant invoke cat 03
+2026-10-01T18:28:53.4354187Z   ✓ policy reads trusted context not payload metadata cat 04
+2026-10-01T18:28:53.4355479Z   ✓ account changes re read activation and policy without stale state cat 05
+2026-10-01T18:28:53.4356542Z   ✓ epoch and activation changes are visible on next discover cat 06
+2026-10-01T18:28:53.4357737Z   ✓ catalogue is deterministic sorted and caps at one thousand cat 07    0.17s
+2026-10-01T18:28:53.4359470Z   ✓ contract hash tracks current compiled bytes cat 08                   0.01s
+2026-10-01T18:28:53.4360713Z   ✓ entity capabilities are not permission grants and metadata is not leaked cat 09
+2026-10-01T18:28:54.1688017Z
+2026-10-01T18:28:54.1689656Z    PASS  CoreX\Tools\Tests\Feature\ToolContributionsTest
+2026-10-01T18:28:54.1692428Z   ✓ external control plane tools never tenant exposed contrib 01         0.01s
+2026-10-01T18:28:54.1695945Z   ✓ selected p3 receipts map to actual mechanics contrib 02              0.01s
+2026-10-01T18:28:54.1699028Z   ✓ only approved p4 receipts add finite contributions contrib 03        0.01s
+2026-10-01T18:28:54.1702157Z   ✓ selected p5 wakeup binding without control plane edge contrib 04     0.01s
+2026-10-01T18:28:54.1705512Z   ✓ p6 search import limits bound without bypass contrib 05              0.01s
+2026-10-01T18:28:54.1710447Z   ✓ p7 utilities keep optional semantics contrib 06                      0.01s
+2026-10-01T18:28:54.1713582Z   ✓ archive and lab cohorts are independent contrib 07                   0.69s
+2026-10-01T18:28:54.1716929Z   ✓ included rows have exact tuple and hash receipt contrib 08           0.01s
+2026-10-01T18:28:54.4597759Z
+2026-10-01T18:28:54.4599189Z    PASS  CoreX\Tools\Tests\Feature\ToolCostInvocationTest
+2026-10-01T18:28:54.4602272Z   ✓ http and exposed tool share cost metadata without scope keys         0.29s
+2026-10-01T18:28:55.0173030Z
+2026-10-01T18:28:55.0174370Z    PASS  CoreX\Tools\Tests\Feature\ToolGuardConcurrencyTest
+2026-10-01T18:28:55.0179212Z   ✓ equal key requests replay under row lock without duplicate effects   0.56s
+2026-10-01T18:28:55.2994118Z
+2026-10-01T18:28:55.2995499Z    PASS  CoreX\Tools\Tests\Feature\ToolIdempotentInvocationTest
+2026-10-01T18:28:55.2998618Z   ✓ http key and exposed tool operation key share one effect             0.28s
+2026-10-01T18:29:00.6845891Z
+2026-10-01T18:29:00.6847072Z    PASS  CoreX\Tools\Tests\Feature\ToolInvocationTest
+2026-10-01T18:29:00.6850224Z   ✓ read transport and direct call share catalogue policy and handler i… 0.43s
+2026-10-01T18:29:00.6853401Z   ✓ invalid input rejected before handler invoke 02                      0.28s
+2026-10-01T18:29:00.6857121Z   ✓ mutation default guard denies and client hints cannot bypass invoke… 0.14s
+2026-10-01T18:29:00.6860348Z   ✓ consumer guard binds approval to principal scope hash and args invo… 0.69s
+2026-10-01T18:29:00.6863516Z   ✓ domain key idempotency replays equal requests and conflicts on mism… 0.69s
+2026-10-01T18:29:00.6873150Z   ✓ stale resource version denies before effect invoke 06                0.59s
+2026-10-01T18:29:00.6876593Z   ✓ provider key timeout keeps unknown outcome and stable operation key… 0.41s
+2026-10-01T18:29:00.6879836Z   ✓ output schema mismatch rolls back local transaction invoke 08        0.28s
+2026-10-01T18:29:00.6883244Z   ✓ replay requires current visibility invoke 09                         0.55s
+2026-10-01T18:29:00.6899881Z   ✓ draft and irreversible receive guarded treatment and read cannot mu… 0.58s
+2026-10-01T18:29:00.6903426Z   ✓ unexpected exceptions produce safe error without secrets invoke 11   0.15s
+2026-10-01T18:29:00.6906945Z   ✓ handler reuses verified context and http provider requires wrapper…  0.59s
+2026-10-01T18:29:00.6909961Z   ✓ stale contract hash rejected invoke revision                         0.01s
+2026-10-01T18:29:00.9815194Z
+2026-10-01T18:29:00.9816276Z    PASS  CoreX\Tools\Tests\Feature\ToolLoadContourIntegrationTest
+2026-10-01T18:29:00.9817595Z   ✓ http and tool share one handler and declared cost clamps             0.30s
+2026-10-01T18:29:01.2715984Z
+2026-10-01T18:29:01.2717546Z    PASS  CoreX\Tools\Tests\Feature\ToolOperationParityTest
+2026-10-01T18:29:01.2718824Z   ✓ http and exposed tool share one handler call                         0.29s
+2026-10-01T18:29:01.3033667Z
+2026-10-01T18:29:01.3035312Z    PASS  Packages\tools\tests\Unit\ToolDeclarationTest
+2026-10-01T18:29:01.3038612Z   ✓ it compiles explicit tool declarations into the existing API slice…  0.01s
+2026-10-01T18:29:01.3040563Z   ✓ it does not expose unannotated operations as tools (DESC-02)
+2026-10-01T18:29:01.3042837Z   ✓ it keeps stable tool tuple and contract hash across declaration order (DESC-03)
+2026-10-01T18:29:01.3045062Z   ✓ it rejects invalid canonical namespaces and wire collisions (DESC-04)
+2026-10-01T18:29:01.3047368Z   ✓ it rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-05)
+2026-10-01T18:29:01.3049507Z   ✓ it compiles exposeTool against a same-module operation without adding HTTP routes (DESC-01 expose)
+2026-10-01T18:29:01.3062721Z
+2026-10-01T18:29:01.3063585Z    PASS  CoreX\Tools\Tests\Unit\ToolNameTest
+2026-10-01T18:29:01.3065737Z   ✓ wire name projects canonical code and version
+2026-10-01T18:29:01.3067822Z   ✓ rejects invalid canonical codes
+2026-10-01T18:29:01.3070010Z   ✓ rejects reserved version suffix in verb
+2026-10-01T18:29:01.3072022Z   ✓ rejects invalid versions
+2026-10-01T18:29:01.3125603Z
+2026-10-01T18:29:01.3126644Z    PASS  Packages\tools\tests\Unit\ToolRegistryIntrospectionTest
+2026-10-01T18:29:01.3129255Z   ✓ it projects tool identity without leaking its handler into introspe… 0.01s
+2026-10-01T18:29:01.9915236Z
+2026-10-01T18:29:01.9916188Z    PASS  CoreX\Tools\Tests\Unit\ToolSchemaTest
+2026-10-01T18:29:01.9935646Z   ✓ admits draft2020 12 schema closure offline                           0.08s
+2026-10-01T18:29:01.9937447Z   ✓ rejects remote refs and dynamic keywords                             0.07s
+2026-10-01T18:29:01.9955420Z   ✓ preserves object vs array and safe integers
+2026-10-01T18:29:01.9956082Z   ✓ rejects duplicate object keys
+2026-10-01T18:29:01.9956952Z   ✓ rejects dynamic schema keywords                                      0.07s
+2026-10-01T18:29:01.9957594Z   ✓ additional properties same subschema semantics                       0.15s
+2026-10-01T18:29:01.9958231Z   ✓ resource budget exhaustion rejects before handler                    0.09s
+2026-10-01T18:29:01.9959002Z   ✓ validates instance with bounded errors                               0.21s
+2026-10-01T18:29:02.1065307Z
+2026-10-01T18:29:02.1066568Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest
+2026-10-01T18:29:02.1068862Z   ✓ retention windows reject unsafe configuration                        0.09s
+2026-10-01T18:29:02.1075850Z   ✓ expired webhook body cannot replay and tombstone preserves dedup     0.01s
+2026-10-01T18:29:02.1077375Z   ✓ shorter body window expires replay with the body                     0.01s
+2026-10-01T18:29:02.1079161Z   ✓ command prunes only the restored scope and rejects an unbounded bat… 0.01s
+2026-10-01T18:29:02.1081212Z   ✓ command without a trusted scope preserves tenant rows                0.01s
+2026-10-01T18:29:02.2756621Z
+2026-10-01T18:29:02.2757753Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookDeliveryTest
+2026-10-01T18:29:02.2760209Z   ✓ response matrix is fenced and retry is bounded                       0.15s
+2026-10-01T18:29:02.2763439Z   ✓ retry after jitter attempt and seventy two hour horizons are finite  0.01s
+2026-10-01T18:29:02.2766985Z   ✓ ack loss repeats same id and body with fresh signature and one rece… 0.01s
+2026-10-01T18:29:02.3505131Z
+2026-10-01T18:29:02.3505916Z    FAIL  CoreX\Webhooks\Tests\Feature\WebhookFanoutTest
+2026-10-01T18:29:02.3515447Z   ✓ projection failure rolls back inbox and delivery together            0.05s
+2026-10-01T18:29:02.3516445Z   ✓ duplicate event creates one delivery and forwards the existing publ… 0.01s
+2026-10-01T18:29:02.3517328Z   ✓ oversize payload is dead and a lossy publisher is rejected           0.01s
+2026-10-01T18:29:02.3525713Z   ⨯ postgresql inbox and delivery roll back together                     0.01s
+2026-10-01T18:29:02.3579653Z
+2026-10-01T18:29:02.3580521Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookLoadContourBootTest
+2026-10-01T18:29:02.3583816Z   ✓ boot disables remote delivery and reports missing signing            0.01s
+2026-10-01T18:29:02.3775961Z
+2026-10-01T18:29:02.3776925Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegrationTest
+2026-10-01T18:29:02.3780472Z   ✓ boxed and cloud scopes stay on the configured connection             0.02s
+2026-10-01T18:29:02.5379767Z
+2026-10-01T18:29:02.5380860Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookManagementTest
+2026-10-01T18:29:02.5384010Z   ✓ delivery history is bounded scoped and cursor bound to tenant clien… 0.14s
+2026-10-01T18:29:02.5387859Z   ✓ detail attempts and subscription projection are public safe          0.01s
+2026-10-01T18:29:02.5389494Z   ✓ literal routes forward every operation through the shared dispatcher
+2026-10-01T18:29:02.5391561Z   ✓ shared dispatcher preserves idempotency key for required replay
+2026-10-01T18:29:02.5393571Z   ✓ route contract requires actor scope and transactional idempotency
+2026-10-01T18:29:02.5478733Z
+2026-10-01T18:29:02.5480140Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookRedactionTest
+2026-10-01T18:29:02.5483120Z   ✓ public attempt history has an exact safe shape                       0.01s
+2026-10-01T18:29:02.5740992Z
+2026-10-01T18:29:02.5742136Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookReplayTest
+2026-10-01T18:29:02.5745643Z   ✓ replay keeps delivery identity bytes destination and monotonic atte… 0.01s
+2026-10-01T18:29:02.5748900Z   ✓ succeeded replay requires explicit confirmation and audit reason     0.01s
+2026-10-01T18:29:02.5752168Z   ✓ active lease changed or disabled destination removed topic expiry a… 0.01s
+2026-10-01T18:29:02.5755543Z   ✓ range is bounded to twenty four hours one hundred and a fixed upper… 0.01s
+2026-10-01T18:29:02.6226647Z
+2026-10-01T18:29:02.6227941Z    FAIL  CoreX\Webhooks\Tests\Feature\WebhookSubscriptionTest
+2026-10-01T18:29:02.6231211Z   ✓ unknown contract version schema and class names are rejected         0.01s
+2026-10-01T18:29:02.6236955Z   ✓ unknown version and schema are rejected
+2026-10-01T18:29:02.6255725Z   ✓ sensitive topics require an ability and secrets are always denied    0.01s
+2026-10-01T18:29:02.6275511Z   ✓ subscription is optimistic capped and tenant scoped                  0.02s
+2026-10-01T18:29:02.6295539Z   ⨯ postgresql subscription revision is optimistic                       0.01s
+2026-10-01T18:29:02.6296941Z   ✓ projector exports only the public allow list                         0.01s
+2026-10-01T18:29:02.9829064Z
+2026-10-01T18:29:02.9841505Z    PASS  CoreX\Webhooks\Tests\Feature\WebhookTransportTest
+2026-10-01T18:29:02.9843198Z   ✓ local receiver fixture observes exact wire bytes and pinned tls hos… 0.01s
+2026-10-01T18:29:02.9845178Z   ✓ loopback tls receiver preserves hostname and exact wire body         0.30s
+2026-10-01T18:29:02.9846343Z   ✓ redirect is returned once and never followed
+2026-10-01T18:29:02.9847197Z   ✓ response body and headers have hard caps
+2026-10-01T18:29:02.9848449Z   ✓ socket peer must equal the prevalidated pin
+2026-10-01T18:29:02.9849536Z   ✓ missing curl fails closed without attempting dns or network          0.04s
+2026-10-01T18:29:03.0060701Z
+2026-10-01T18:29:03.0061565Z    PASS  CoreX\Webhooks\Tests\Feature\WebhooksProviderTest
+2026-10-01T18:29:03.0064822Z   ✓ webhooks owns delivery and retention commands                        0.02s
+2026-10-01T18:29:03.0066863Z   ✓ discovered webhooks provider boots without opting into engine routes
+2026-10-01T18:29:03.1836616Z
+2026-10-01T18:29:03.1857541Z    PASS  CoreX\Webhooks\Tests\Unit\WebhookCompatibilityTest
+2026-10-01T18:29:03.1876090Z   ✓ planted webhook incompatibilities fail and additive topics pass      0.18s
+2026-10-01T18:29:03.1981795Z
+2026-10-01T18:29:03.1985505Z    PASS  CoreX\Webhooks\Tests\Unit\WebhookRotationTest
+2026-10-01T18:29:03.1996168Z   ✓ old and new signatures verify during overlap in deterministic order  0.01s
+2026-10-01T18:29:03.1997448Z   ✓ http success does not infer readiness and regular revoke requires confirmation
+2026-10-01T18:29:03.1998605Z   ✓ compromise can revoke without readiness confirmation
+2026-10-01T18:29:03.2308509Z
+2026-10-01T18:29:03.2310085Z    PASS  CoreX\Webhooks\Tests\Unit\WebhookSignatureTest
+2026-10-01T18:29:03.2313102Z   ✓ independent known hmac bytes and exact headers                       0.01s
+2026-10-01T18:29:03.2315460Z   ✓ secret format base64 and length are strict with data set "missing prefix"
+2026-10-01T18:29:03.2317766Z   ✓ secret format base64 and length are strict with data set "invalid base64"
+2026-10-01T18:29:03.2319831Z   ✓ secret format base64 and length are strict with data set "31 bytes"
+2026-10-01T18:29:03.2321898Z   ✓ secret format base64 and length are strict with data set "33 bytes"
+2026-10-01T18:29:03.2326177Z   ✓ secret format base64 and length are strict with data set "non-canon… 0.01s
+2026-10-01T18:29:03.2327954Z   ✓ receiver denies raw tamper stale and future timestamps
+2026-10-01T18:29:03.3569573Z
+2026-10-01T18:29:03.3571223Z    PASS  CoreX\Webhooks\Tests\Unit\WebhookUrlPolicyTest
+2026-10-01T18:29:03.3573833Z   ✓ public dns set is canonicalized and pinned deterministically         0.01s
+2026-10-01T18:29:03.3576152Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "unspecified"
+2026-10-01T18:29:03.3578346Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "private"
+2026-10-01T18:29:03.3580571Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "shared address space"
+2026-10-01T18:29:03.3582576Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "loopback"
+2026-10-01T18:29:03.3584814Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "link local"
+2026-10-01T18:29:03.3586883Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "metadata"
+2026-10-01T18:29:03.3588970Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "benchmark"
+2026-10-01T18:29:03.3591000Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "documentation"
+2026-10-01T18:29:03.3592970Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "multicast"
+2026-10-01T18:29:03.3595154Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "ipv6 loopback"
+2026-10-01T18:29:03.3669639Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "ipv4 mapped ipv6"
+2026-10-01T18:29:03.3671393Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "teredo"
+2026-10-01T18:29:03.3672679Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "six to four"
+2026-10-01T18:29:03.3674176Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "ipv6 documentation"
+2026-10-01T18:29:03.3675641Z   ✓ private reserved metadata mapped and mixed dns sets are denied with data set "mixed public and private"
+2026-10-01T18:29:03.3676850Z   ✓ ambiguous or credential bearing urls are denied with data set "http"
+2026-10-01T18:29:03.3677977Z   ✓ ambiguous or credential bearing urls are denied with data set "non standard port"
+2026-10-01T18:29:03.3679126Z   ✓ ambiguous or credential bearing urls are denied with data set "userinfo"
+2026-10-01T18:29:03.3680280Z   ✓ ambiguous or credential bearing urls are denied with data set "query credentials"
+2026-10-01T18:29:03.3681421Z   ✓ ambiguous or credential bearing urls are denied with data set "fragment"
+2026-10-01T18:29:03.3682512Z   ✓ ambiguous or credential bearing urls are denied with data set "ip literal"
+2026-10-01T18:29:03.3683611Z   ✓ ambiguous or credential bearing urls are denied with data set "ipv6 literal"
+2026-10-01T18:29:03.3685018Z   ✓ ambiguous or credential bearing urls are denied with data set "ambiguous integer host"
+2026-10-01T18:29:03.3686267Z   ✓ ambiguous or credential bearing urls are denied with data set "ambiguous dotted octal"
+2026-10-01T18:29:03.3687383Z   ✓ ambiguous or credential bearing urls are denied with data set "unicode idn"
+2026-10-01T18:29:03.3688405Z   ✓ ambiguous or credential bearing urls are denied with data set "trailing dot"
+2026-10-01T18:29:03.3689502Z   ✓ ambiguous or credential bearing urls are denied with data set "encoded newline"
+2026-10-01T18:29:03.3690706Z   ✓ ambiguous or credential bearing urls are denied with data set "backslash authority ambiguity"
+2026-10-01T18:29:03.3691731Z   ✓ empty dns is retryable unavailable
+2026-10-01T18:29:03.3692632Z   ✓ every attempt resolves again but an existing request keeps its pin
+2026-10-01T18:29:03.3693573Z   ✓ organization owned ranges are denied after public validation
+2026-10-01T18:29:03.3694473Z   ✓ request body and timeout caps are enforced
+2026-10-01T18:29:03.4123831Z
+2026-10-01T18:29:03.4125384Z    PASS  CoreX\Operations\Tests\Feature\ApiRetentionTest
+2026-10-01T18:29:03.4128026Z   ✓ retention windows reject unsafe configuration                        0.02s
+2026-10-01T18:29:03.4131372Z   ✓ clock clears owned bulk results then tombstones and keeps active ro… 0.01s
+2026-10-01T18:29:03.4134542Z   ✓ bulk prune is limited to one hundred rows                            0.02s
+2026-10-01T18:29:03.4137853Z   ✓ reservation expiry never refunds and held reservation keeps buckets  0.01s
+2026-10-01T18:29:03.4140938Z   ✓ command prunes only the restored scope and rejects an unbounded bat… 0.01s
+2026-10-01T18:29:03.4534033Z
+2026-10-01T18:29:03.4536305Z    PASS  CoreX\Operations\Tests\Feature\ApiRoutesTest
+2026-10-01T18:29:03.4538528Z   ✓ route list is exact and boot is idempotent                           0.01s
+2026-10-01T18:29:03.4541880Z   ✓ root discovery exposes code profile only                             0.01s
+2026-10-01T18:29:03.4545366Z   ✓ capabilities follow activation and ignore forged payload             0.01s
+2026-10-01T18:29:03.4548551Z   ✓ async sets location and deprecation headers are exact                0.01s
+2026-10-01T18:29:03.4551559Z   ✓ disabled routes register none                                        0.01s
+2026-10-01T18:29:03.4755468Z
+2026-10-01T18:29:03.4757141Z    PASS  CoreX\Operations\Tests\Feature\AuthorizationLayersTest
+2026-10-01T18:29:03.4760571Z   ✓ resource ids round trip all supported strategies and reject mismatc… 0.01s
+2026-10-01T18:29:03.4762508Z   ✓ default client scope policy allows only unscoped operations
+2026-10-01T18:29:03.4764901Z   ✓ replay rechecks scope actor and read fields without invoking handler
+2026-10-01T18:29:03.4768329Z   ✓ idempotent authorization denials leave no terminal store row         0.01s
+2026-10-01T18:29:03.4962694Z
+2026-10-01T18:29:03.4964253Z    PASS  CoreX\Operations\Tests\Feature\BulkApiTest
+2026-10-01T18:29:03.4967565Z   ✓ submit is accepted once and poll cancel cover the status matrix      0.01s
+2026-10-01T18:29:03.4971246Z   ✓ result matrix is not ready then sealed then expired and partial fai… 0.01s
+2026-10-01T18:29:03.5118263Z
+2026-10-01T18:29:03.5119812Z    PASS  CoreX\Operations\Tests\Feature\BulkResultAccessTest
+2026-10-01T18:29:03.5123522Z   ✓ foreign caller and revoked field access do not read the result       0.01s
+2026-10-01T18:29:03.5126538Z   ✓ failure cursor rejects limits above 100                              0.01s
+2026-10-01T18:29:03.5448417Z
+2026-10-01T18:29:03.5450026Z    PASS  CoreX\Operations\Tests\Feature\BulkStoreTest
+2026-10-01T18:29:03.5453335Z   ✓ same submission returns one operation and pending polling needs no…  0.01s
+2026-10-01T18:29:03.5456977Z   ✓ state transition matrix and cancel completion fence                  0.01s
+2026-10-01T18:29:03.5460407Z   ✓ expired lease takeover and stale revision are rejected               0.01s
+2026-10-01T18:29:03.5463532Z   ✓ wrong active connection and unsafe input references fail closed      0.01s
+2026-10-01T18:29:03.5762003Z
+2026-10-01T18:29:03.5763644Z    PASS  CoreX\Operations\Tests\Feature\BulkTransferTest
+2026-10-01T18:29:03.5767134Z   ✓ missing factory and package fail before submit                       0.01s
+2026-10-01T18:29:03.5770768Z   ✓ import resume does not repeat sink effects around checkpoint crashe… 0.01s
+2026-10-01T18:29:03.5774071Z   ✓ repeat create returns the current token and export rotates an unsea… 0.01s
+2026-10-01T18:29:03.5777858Z   ✓ stamp drift fails before the next batch and observers cannot change… 0.01s
+2026-10-01T18:29:03.6118534Z
+2026-10-01T18:29:03.6120022Z    PASS  CoreX\Operations\Tests\Feature\ContractSnapshotTest
+2026-10-01T18:29:03.6122964Z   ✓ generation is byte stable and check detects drift                    0.03s
+2026-10-01T18:29:03.6301222Z
+2026-10-01T18:29:03.6302396Z    PASS  CoreX\Operations\Tests\Feature\CostInvocationTest
+2026-10-01T18:29:03.6306263Z   ✓ budget denial rolls back unstarted idempotency and replay charges b… 0.01s
+2026-10-01T18:29:03.6308304Z   ✓ post admission unknown keeps estimate and store failure is not rate limited
+2026-10-01T18:29:03.6311652Z   ✓ http rate limit keeps retry after and store failure has no retry he… 0.01s
+2026-10-01T18:29:03.6615337Z
+2026-10-01T18:29:03.6616738Z    PASS  CoreX\Operations\Tests\Feature\ErrorRepresentationTest
+2026-10-01T18:29:03.6619879Z   ✓ every category keeps the same machine fields in both representation… 0.01s
+2026-10-01T18:29:03.6621883Z   ✓ human message change leaves the machine fixture unchanged
+2026-10-01T18:29:03.6625392Z   ✓ accept q values wildcards and unsupported types                      0.01s
+2026-10-01T18:29:03.6627300Z   ✓ retry after requires a named bounded policy
+2026-10-01T18:29:03.6629470Z   ✓ unknown exception stays a safe internal error
+2026-10-01T18:29:03.6997852Z
+2026-10-01T18:29:03.6999350Z    PASS  CoreX\Operations\Tests\Feature\IdempotencyStoreTest
+2026-10-01T18:29:03.7002309Z   ✓ fresh attempt completes and replays canonical outcome without stori… 0.01s
+2026-10-01T18:29:03.7005712Z   ✓ conflict contract mismatch takeover fence and retention matrix       0.01s
+2026-10-01T18:29:03.7008948Z   ✓ effect and terminal outcome roll back together before retry          0.01s
+2026-10-01T18:29:03.7010955Z   ✓ mutations require the active tenant connection and transaction
+2026-10-01T18:29:03.7014258Z   ✓ migration has exact columns unique key and scoped rollback           0.01s
+2026-10-01T18:29:03.7016343Z   ✓ provider binds store and publishes only an explicit tenant tag
+2026-10-01T18:29:03.7299550Z
+2026-10-01T18:29:03.7301031Z    PASS  CoreX\Operations\Tests\Feature\IdempotentInvocationTest
+2026-10-01T18:29:03.7304116Z   ✓ same key replays across transports and rechecks current authority    0.01s
+2026-10-01T18:29:03.7307628Z   ✓ required forbidden conflict in progress and contract mismatch skip…  0.01s
+2026-10-01T18:29:03.7310937Z   ✓ auth validation and mapped internal failures have distinct persiste… 0.01s
+2026-10-01T18:29:03.7314296Z   ✓ terminal store failure rolls back effect and retry commits once      0.01s
+2026-10-01T18:29:03.7317638Z   ✓ ambiguous commit requires reconciliation without second effect       0.01s
+2026-10-01T18:29:03.7511494Z
+2026-10-01T18:29:03.7512456Z    PASS  CoreX\Operations\Tests\Feature\LoadContourBootTest
+2026-10-01T18:29:03.7516315Z   ✓ public surface keeps transfer optional on laravel 12 or 13           0.01s
+2026-10-01T18:29:03.7517770Z   ✓ boot keeps cost and bulk transfer disabled
+2026-10-01T18:29:03.7521363Z   ✓ missing transfer package fails before submit and installed ports ar… 0.01s
+2026-10-01T18:29:03.7684340Z
+2026-10-01T18:29:03.7685472Z    PASS  CoreX\Operations\Tests\Feature\LoadSchemaTest
+2026-10-01T18:29:03.7687562Z   ✓ publication is inert and requires explicit schema identity
+2026-10-01T18:29:03.7691031Z   ✓ sqlite schemas constraints isolation and rollback                    0.01s
+2026-10-01T18:29:03.8114137Z
+2026-10-01T18:29:03.8115739Z    PASS  CoreX\Operations\Tests\Feature\OperationBudgetTest
+2026-10-01T18:29:03.8118870Z   ✓ reserve debits four hmac buckets without persisting scope identifie… 0.01s
+2026-10-01T18:29:03.8122045Z   ✓ default global enforcement observes lower scope debt                 0.01s
+2026-10-01T18:29:03.8125370Z   ✓ enforced deficit rolls back every bucket debit and reservation       0.01s
+2026-10-01T18:29:03.8128894Z   ✓ settlement refunds once and conflicting terminal outcome cannot ref… 0.01s
+2026-10-01T18:29:03.8132140Z   ✓ reject refunds once and actual overrun becomes debt                  0.01s
+2026-10-01T18:29:03.8135367Z   ✓ expired and missing reservations never refund                        0.01s
+2026-10-01T18:29:03.8138404Z   ✓ scope isolation refill and clock rollback are deterministic          0.01s
+2026-10-01T18:29:03.8457122Z
+2026-10-01T18:29:03.8457917Z    PASS  CoreX\Operations\Tests\Feature\OperationErrorBoundaryTest
+2026-10-01T18:29:03.8461423Z   ✓ old wire snapshot has no new error fields                            0.01s
+2026-10-01T18:29:03.8463279Z   ✓ four argument api error still describes itself
+2026-10-01T18:29:03.8465517Z   ✓ explicit api error keeps its status
+2026-10-01T18:29:03.8467719Z   ✓ described error maps every category to its default status
+2026-10-01T18:29:03.8469764Z   ✓ unknown exception reports once and leaks nothing
+2026-10-01T18:29:03.8471865Z   ✓ a broken descriptor producer maps to the safe internal error
+2026-10-01T18:29:03.8473904Z   ✓ framework fallbacks stay safe and gain a category
+2026-10-01T18:29:03.8476197Z   ✓ boundary preserves valid correlation internally without wire change
+2026-10-01T18:29:03.8572614Z
+2026-10-01T18:29:03.8573473Z    PASS  CoreX\Operations\Tests\Feature\OperationParityTest
+2026-10-01T18:29:03.8576920Z   ✓ denied activation and authorization skip the handler                 0.01s
+2026-10-01T18:29:03.8578841Z   ✓ throwing handler restores request context
+2026-10-01T18:29:04.0458970Z
+2026-10-01T18:29:04.0460771Z    PASS  CoreX\Operations\Tests\Feature\PlatformTest
+2026-10-01T18:29:04.0463261Z   ✓ default authentication and authorization deny                        0.01s
+2026-10-01T18:29:04.0466360Z   ✓ explicit mutation receives trusted context and envelope
+2026-10-01T18:29:04.0468506Z   ✓ unknown routes methods versions and metadata are not executable
+2026-10-01T18:29:04.0470803Z   ✓ missing boxed and disabled contexts fail closed
+2026-10-01T18:29:04.0473237Z   ✓ boxed profile requires explicit configuration
+2026-10-01T18:29:04.0475837Z   ✓ context and module state are read on every dispatch
+2026-10-01T18:29:04.0479674Z   ✓ malformed or forged input is rejected with data set #0               0.01s
+2026-10-01T18:29:04.0481945Z   ✓ malformed or forged input is rejected with data set #1
+2026-10-01T18:29:04.0484410Z   ✓ malformed or forged input is rejected with data set #2
+2026-10-01T18:29:04.0487121Z   ✓ malformed or forged input is rejected with data set #3
+2026-10-01T18:29:04.0489462Z   ✓ malformed or forged input is rejected with data set #4
+2026-10-01T18:29:04.0491816Z   ✓ malformed or forged input is rejected with data set #5
+2026-10-01T18:29:04.0494188Z   ✓ malformed or forged input is rejected with data set #6
+2026-10-01T18:29:04.0496671Z   ✓ malformed or forged input is rejected with data set #7
+2026-10-01T18:29:04.0499141Z   ✓ handler errors have stable status and no infrastructure details with data set #0
+2026-10-01T18:29:04.0501414Z   ✓ handler errors have stable status and no infrastructure details with data set #1
+2026-10-01T18:29:04.0503714Z   ✓ handler errors have stable status and no infrastructure details with data set #2
+2026-10-01T18:29:04.0506214Z   ✓ handler errors have stable status and no infrastructure details with data set #3
+2026-10-01T18:29:04.0508492Z   ✓ handler errors have stable status and no infrastructure details with data set #4
+2026-10-01T18:29:04.0510746Z   ✓ handler errors have stable status and no infrastructure details with data set #5
+2026-10-01T18:29:04.0513088Z   ✓ handler errors have stable status and no infrastructure details with data set #6
+2026-10-01T18:29:04.0515508Z   ✓ compilation preserves provenance roundtrip and old resource metadata
+2026-10-01T18:29:04.0517729Z   ✓ duplicate parameterized routes are compile errors
+2026-10-01T18:29:04.0520138Z   ✓ openapi is deterministic and derived from operations only
+2026-10-01T18:29:04.0523999Z   ✓ provider mounts package routes and application can mount an explici… 0.01s
+2026-10-01T18:29:04.0527674Z   ✓ error boundary normalizes upstream errors with named version and re… 0.01s
+2026-10-01T18:29:04.0531223Z   ✓ generated request id is shared by the boundary and dispatcher        0.01s
+2026-10-01T18:29:04.0534751Z   ✓ query in a mutation and non json body are rejected                   0.01s
+2026-10-01T18:29:04.0536888Z   ✓ disabled account is rejected
+2026-10-01T18:29:04.0539378Z   ✓ invalid declarations fail compilation with data set #0
+2026-10-01T18:29:04.0541717Z   ✓ invalid declarations fail compilation with data set #1
+2026-10-01T18:29:04.0544369Z   ✓ invalid declarations fail compilation with data set #2
+2026-10-01T18:29:04.0546649Z   ✓ invalid declarations fail compilation with data set #3
+2026-10-01T18:29:04.0549006Z   ✓ invalid declarations fail compilation with data set #4
+2026-10-01T18:29:04.0551420Z   ✓ invalid declarations fail compilation with data set #5
+2026-10-01T18:29:04.0553817Z   ✓ invalid declarations fail compilation with data set #6
+2026-10-01T18:29:04.0556460Z   ✓ invalid declarations fail compilation with data set #7
+2026-10-01T18:29:04.0558864Z   ✓ equal specificity overlapping routes are compile errors
+2026-10-01T18:29:04.0561336Z   ✓ equivalent cross method templates require identical parameter names
+2026-10-01T18:29:04.0565011Z   ✓ module adapters receive context only during the current operation    0.01s
+2026-10-01T18:29:04.0749108Z
+2026-10-01T18:29:04.0750662Z    PASS  CoreX\Operations\Tests\Feature\StoredOperationOutcomeTest
+2026-10-01T18:29:04.0753547Z   ✓ registered error roundtrip preserves identity and descriptor         0.02s
+2026-10-01T18:29:04.0756372Z   ✓ unknown code and corrupt occurrence become safe registered errors
+2026-10-01T18:29:04.0758828Z   ✓ queue serialization restores the registered enum identity
+2026-10-01T18:29:04.0761222Z   ✓ raw string cannot construct an api error
+2026-10-01T18:29:04.1311790Z
+2026-10-01T18:29:04.1313152Z    PASS  Packages\operations\tests\Unit\ApiOperationContractTest
+2026-10-01T18:29:04.1316719Z   ✓ it keeps legacy operation declarations on the compatibility matrix   0.01s
+2026-10-01T18:29:04.1319193Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "query post"
+2026-10-01T18:29:04.1321677Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "query required"
+2026-10-01T18:29:04.1324128Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "command forbidden"
+2026-10-01T18:29:04.1326658Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "command get"
+2026-10-01T18:29:04.1329103Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "async optional"
+2026-10-01T18:29:04.1331365Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "async status"
+2026-10-01T18:29:04.1333672Z   ✓ it rejects illegal mode, method and idempotency pairs with dataset "bulk get"
+2026-10-01T18:29:04.1336269Z   ✓ it rejects duplicate fields and scopes, bad capability and deprecation, and unsafe effects
+2026-10-01T18:29:04.1338566Z   ✓ it marks bulk modes unsupported and refuses enabled execution
+2026-10-01T18:29:04.1340914Z   ✓ it projects the same contract hash when declaration order is reversed
+2026-10-01T18:29:04.1343257Z   ✓ it reuses tagged compiler contributions across repeated compilations
+2026-10-01T18:29:04.1723665Z
+2026-10-01T18:29:04.1725228Z    PASS  Packages\operations\tests\Unit\ApiOperationCostTest
+2026-10-01T18:29:04.1727995Z   ✓ it keeps legacy declarations on default cost behavior and hash       0.01s
+2026-10-01T18:29:04.1731004Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "unknown key"
+2026-10-01T18:29:04.1733089Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "negative weight"
+2026-10-01T18:29:04.1735743Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "overflow bound"
+2026-10-01T18:29:04.1738085Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "zero base"
+2026-10-01T18:29:04.1740438Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "zero max"
+2026-10-01T18:29:04.1742770Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "non integer"
+2026-10-01T18:29:04.1745277Z   ✓ it rejects unknown keys, negative weights, overflow bounds and missing bulk recipes with dataset "missing bulk recipe"
+2026-10-01T18:29:04.1747463Z   ✓ it compiles reversed cost declarations to the same canonical recipe and hash
+2026-10-01T18:29:04.1749597Z   ✓ it accepts an explicit bulk recipe
+2026-10-01T18:29:04.1951279Z
+2026-10-01T18:29:04.1952881Z    PASS  CoreX\Operations\Tests\Unit\ApiProfileTest
+2026-10-01T18:29:04.1955607Z   ✓ reversed registry order keeps profile bytes and hash                 0.01s
+2026-10-01T18:29:04.1958105Z   ✓ activation changes effective capability without profile hash
+2026-10-01T18:29:04.1960630Z   ✓ hidden denial omits unknown capabilities and unsupported operations are explicit
+2026-10-01T18:29:04.1962845Z   ✓ invalid profile inputs fail
+2026-10-01T18:29:04.1965328Z   ✓ provider boots with typed options
+2026-10-01T18:29:04.2165073Z
+2026-10-01T18:29:04.2166516Z    PASS  CoreX\Operations\Tests\Unit\CursorCodecTest
+2026-10-01T18:29:04.2169598Z   ✓ golden wire round trips and page encodes after assembly              0.01s
+2026-10-01T18:29:04.2171980Z   ✓ tamper unknown and expired key and expired cursor are invalid
+2026-10-01T18:29:04.2174290Z   ✓ previous key verifies until it leaves the ring
+2026-10-01T18:29:04.2176987Z   ✓ scope direction order arity and type mismatches are invalid
+2026-10-01T18:29:04.2179330Z   ✓ reversed operation order keeps the registry bytes
+2026-10-01T18:29:04.2195425Z
+2026-10-01T18:29:04.2196366Z    PASS  CoreX\Operations\Tests\Unit\InvocationMetadataTest
+2026-10-01T18:29:04.2198161Z   ✓ four argument construction falls back to request id
+2026-10-01T18:29:04.2200692Z   ✓ valid correlation id is preserved
+2026-10-01T18:29:04.2203180Z   ✓ missing correlation id falls back to request id
+2026-10-01T18:29:04.2205804Z   ✓ invalid correlation and request ids are rejected identically
+2026-10-01T18:29:04.2208168Z   ✓ invalid correlation falls back to valid request id
+2026-10-01T18:29:04.2391334Z
+2026-10-01T18:29:04.2392775Z    PASS  Packages\operations\tests\Unit\OperationCostTest
+2026-10-01T18:29:04.2395919Z   ✓ it estimates table-driven weights, page, export, field, relation, f… 0.01s
+2026-10-01T18:29:04.2398821Z   ✓ it denies overflow and absent bounded export
+2026-10-01T18:29:04.2401022Z   ✓ it does not call database, cache or network while estimating
+2026-10-01T18:29:04.2403555Z   ✓ it keeps old positional constructors working and hashes cost additively
+2026-10-01T18:29:04.2447890Z
+2026-10-01T18:29:04.2448939Z    PASS  Packages\operations\tests\Unit\OperationRegistryDeterminismTest
+2026-10-01T18:29:04.2452226Z   ✓ it rejects duplicate normalized route identity and names both owner… 0.01s
+2026-10-01T18:29:04.2460187Z
+2026-10-01T18:29:04.2461074Z    PASS  Packages\operations\tests\Unit\OperationTest
+2026-10-01T18:29:04.2462970Z   ✓ it projects compiler metadata onto the runtime descriptor
+2026-10-01T18:29:04.2481093Z
+2026-10-01T18:29:04.2482057Z    PASS  CoreX\Operations\Tests\Unit\SchemaBudgetTest
+2026-10-01T18:29:04.2483640Z   ✓ admits small object schema
+2026-10-01T18:29:04.2486567Z   ✓ rejects remote ref in budget pass
+2026-10-01T18:29:04.2489043Z   ✓ assert payload rejects oversized raw json
+2026-10-01T18:29:04.2900520Z
+2026-10-01T18:29:04.2902165Z    PASS  Packages\panels\tests\SavedViews\SqlSavedViewRepositoryTest
+2026-10-01T18:29:04.2905415Z   ✓ it persists only a validated AST and compiles it without SQL or ide… 0.03s
+2026-10-01T18:29:04.2909321Z   ✓ it resolves the current default on one repository across central, t… 0.01s
+2026-10-01T18:29:04.2913020Z   ✓ it keeps an explicit views connection fixed while the default chang… 0.01s
+2026-10-01T18:29:04.3030681Z
+2026-10-01T18:29:04.3031967Z    PASS  Packages\panels\tests\SavedViews\ViewConfigValidatorTest
+2026-10-01T18:29:04.3035568Z   ✓ it rejects an unsafe saved-view filter before a consumer can map it… 0.01s
+2026-10-01T18:29:04.3048887Z
+2026-10-01T18:29:04.3049801Z    PASS  Packages\core\tests\Attributes\AttributesTest
+2026-10-01T18:29:04.3051625Z   ✓ it Attributes expose immutable metadata and backed kind roundtrips
+2026-10-01T18:29:04.3054025Z   ✓ it Attributes reject a method target at instantiation
+2026-10-01T18:29:05.4221060Z
+2026-10-01T18:29:05.4222493Z    PASS  CoreX\Tests\Attributes\SurfaceScannerTest
+2026-10-01T18:29:05.4226097Z   ✓ attributes scanner resolves aliases kinds and does not execute sour… 0.02s
+2026-10-01T18:29:05.4229522Z   ✓ attributes scanner resolves native throws without treating exceptio… 0.06s
+2026-10-01T18:29:05.4232922Z   ✓ attributes scanner checks nested imported aliases and promoted prop… 0.03s
+2026-10-01T18:29:05.4235186Z   ✓ attributes scanner diagnostics have location and nested path with data set "unclassified"
+2026-10-01T18:29:05.4237859Z   ✓ attributes scanner diagnostics have location and nested path with data set "conflicting"
+2026-10-01T18:29:05.4240515Z   ✓ attributes scanner diagnostics have location and nested path with data set "duplicate"
+2026-10-01T18:29:05.4242938Z   ✓ attributes scanner diagnostics have location and nested path with data set "kind"
+2026-10-01T18:29:05.4245495Z   ✓ attributes scanner diagnostics have location and nested path with data set "version"
+2026-10-01T18:29:05.4248383Z   ✓ attributes scanner diagnostics have location and nested path with data set "internal"
+2026-10-01T18:29:05.4250384Z   ✓ attributes scanner diagnostics have location and nested path with data set "mutable"
+2026-10-01T18:29:05.4252971Z   ✓ attributes scanner diagnostics have location and nested path with data set "untyped array"
+2026-10-01T18:29:05.4255857Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare list return"
+2026-10-01T18:29:05.4285798Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare non-empty list parameter"
+2026-10-01T18:29:05.4287306Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare non-empty array return"
+2026-10-01T18:29:05.4288654Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested bare list"
+2026-10-01T18:29:05.4289931Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested bare array"
+2026-10-01T18:29:05.4291220Z   ✓ attributes scanner diagnostics have location and nested path with data set "mixed"
+2026-10-01T18:29:05.4292431Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.02s
+2026-10-01T18:29:05.4293789Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested s p i mixed field"
+2026-10-01T18:29:05.4295242Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.02s
+2026-10-01T18:29:05.4296587Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.02s
+2026-10-01T18:29:05.4297921Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested foreign internal"
+2026-10-01T18:29:05.4299240Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.01s
+2026-10-01T18:29:05.4300499Z   ✓ attributes scanner diagnostics have location and nested path with data set "unknown alias"
+2026-10-01T18:29:05.4301760Z   ✓ attributes scanner diagnostics have location and nested path with data set "malformed doc"
+2026-10-01T18:29:05.4303076Z   ✓ attributes scanner diagnostics have location and nested path with data set "function loophole"
+2026-10-01T18:29:05.4304759Z   ✓ attributes scanner diagnostics have location and nested path with data set "member target"
+2026-10-01T18:29:05.4305970Z   ✓ attributes scanner checks all import spellings and product consumers
+2026-10-01T18:29:05.4307080Z   ✓ attributes scanner captures inherited signature and ignores bodies and prose
+2026-10-01T18:29:05.4308417Z   ✓ attributes scanner handles bound templates aliases virtual members and throws
+2026-10-01T18:29:05.4309650Z   ✓ attributes cli is deterministic and separates debt from parser erro… 0.72s
+2026-10-01T18:29:05.4310934Z   ✓ attributes scanner finds new types without classmap and rejects dup… 0.08s
+2026-10-01T18:29:05.4312117Z   ✓ attributes imported alias retains its defining namespace and nested leak
+2026-10-01T18:29:05.4313169Z   ✓ attributes property hooks and default changes are snapshot inputs
+2026-10-01T18:29:05.4314161Z   ✓ attributes protected inheritance and inherited internal leak
+2026-10-01T18:29:05.4315282Z   ✓ attributes nested mixed and nullable object cannot hide payloads
+2026-10-01T18:29:05.4316294Z   ✓ attributes typed collection docs remain valid
+2026-10-01T18:29:05.4317329Z   ✓ attributes configuration class strings and spi model documentation…  0.02s
+2026-10-01T18:29:05.4319429Z   ✓ attributes composition policy requires the exact existing edge       0.08s
+2026-10-01T18:29:05.4321917Z   ✓ attributes manifest keeps own and local members without expanding external types
+2026-10-01T18:29:05.4324275Z   ✓ attributes public promoted property survives a private constructor
+2026-10-01T18:29:05.4833238Z
+2026-10-01T18:29:05.4834435Z    PASS  Packages\core\tests\Unit\ClockTest
+2026-10-01T18:29:05.4837633Z   ✓ it returns UTC from system clock                                     0.05s
+2026-10-01T18:29:05.4839989Z   ✓ it advances frozen clock by the given interval
+2026-10-01T18:29:05.4842553Z   ✓ it reads time frozen via travelTo through the default clock binding
+2026-10-01T18:29:05.6992638Z
+2026-10-01T18:29:05.6994004Z    PASS  Packages\core\tests\Unit\CoreOptionsTest
+2026-10-01T18:29:05.6996046Z   ✓ it resolves settings cache ttl by key existence with dataset "missi… 0.01s
+2026-10-01T18:29:05.6997850Z   ✓ it resolves settings cache ttl by key existence with dataset "missing key"
+2026-10-01T18:29:05.6999192Z   ✓ it resolves settings cache ttl by key existence with dataset "expli… 0.19s
+2026-10-01T18:29:05.7001799Z   ✓ it resolves settings cache ttl by key existence with dataset "zero"  0.01s
+2026-10-01T18:29:05.7003784Z   ✓ it resolves settings cache ttl by key existence with dataset "positive"
+2026-10-01T18:29:05.7006204Z   ✓ it accumulates invalid cache ttl and cache store in one exception
+2026-10-01T18:29:05.7008194Z   ✓ it redacts a secret from string, dump, json, and serialization
+2026-10-01T18:29:05.7258358Z
+2026-10-01T18:29:05.7259949Z    PASS  Packages\core\tests\Unit\DataScopeCodecTest
+2026-10-01T18:29:05.7263304Z   ✓ it round-trips encoded payload with and without workspace            0.01s
+2026-10-01T18:29:05.7265169Z   ✓ it rejects unsupported payload version
+2026-10-01T18:29:05.7267395Z   ✓ it rejects missing connection key
+2026-10-01T18:29:05.7269508Z   ✓ it rejects absent workspace key
+2026-10-01T18:29:05.7271632Z   ✓ it accepts explicit null workspace key
+2026-10-01T18:29:05.7273644Z   ✓ it rejects malformed boxed value
+2026-10-01T18:29:05.8738652Z
+2026-10-01T18:29:05.8740522Z    PASS  Packages\core\tests\Unit\ErrorDescriptorTest
+2026-10-01T18:29:05.8743021Z   ✓ error category exposes the nine stable values                        0.01s
+2026-10-01T18:29:05.8745338Z   ✓ unavailability reason exposes the five stable values
+2026-10-01T18:29:05.8747557Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "root"
+2026-10-01T18:29:05.8749693Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "empty token"
+2026-10-01T18:29:05.8751713Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "nested"
+2026-10-01T18:29:05.8753879Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "escaped slash"
+2026-10-01T18:29:05.8756108Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "escaped tilde"
+2026-10-01T18:29:05.8758234Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "escaped nested"
+2026-10-01T18:29:05.8759994Z   ✓ descriptor accepts a null path
+2026-10-01T18:29:05.8763600Z   ✓ descriptor rejects an invalid code with dataset "empty"              0.02s
+2026-10-01T18:29:05.8765630Z   ✓ descriptor rejects an invalid code with dataset "upper"
+2026-10-01T18:29:05.8767810Z   ✓ descriptor rejects an invalid code with dataset "leading digit"
+2026-10-01T18:29:05.8769825Z   ✓ descriptor rejects an invalid code with dataset "double underscore"
+2026-10-01T18:29:05.8771871Z   ✓ descriptor rejects an invalid code with dataset "trailing underscore"
+2026-10-01T18:29:05.8773836Z   ✓ descriptor rejects an invalid code with dataset "hyphen"
+2026-10-01T18:29:05.8776157Z   ✓ descriptor rejects an invalid code with dataset "overlong"
+2026-10-01T18:29:05.8778137Z   ✓ descriptor accepts a code at the byte limit
+2026-10-01T18:29:05.8780420Z   ✓ descriptor rejects an invalid pointer escape or control character with dataset "missing slash"
+2026-10-01T18:29:05.8782464Z   ✓ descriptor rejects an invalid pointer escape or control character with dataset "bad escape"
+2026-10-01T18:29:05.8784539Z   ✓ descriptor rejects an invalid pointer escape or control character with dataset "dangling escape"
+2026-10-01T18:29:05.8786758Z   ✓ descriptor rejects an invalid pointer escape or control character with dataset "control"
+2026-10-01T18:29:05.8788573Z   ✓ descriptor rejects a control character in detail
+2026-10-01T18:29:05.8790656Z   ✓ descriptor rejects an oversize detail
+2026-10-01T18:29:05.8792764Z   ✓ descriptor rejects a non json detail with dataset "nested list"
+2026-10-01T18:29:05.8795268Z   ✓ descriptor rejects a non json detail with dataset "object"
+2026-10-01T18:29:05.8798385Z   ✓ descriptor rejects a non json detail with dataset "non finite"       0.02s
+2026-10-01T18:29:05.8801867Z   ✓ retryable records only that the same semantic input may succeed lat… 0.01s
+2026-10-01T18:29:05.8808160Z   ✓ describes error returns the same descriptor
+2026-10-01T18:29:06.0120525Z
+2026-10-01T18:29:06.0122123Z    PASS  Packages\core\tests\Unit\MessageContractRegistryTest
+2026-10-01T18:29:06.0125554Z   ✓ it finds declared contracts by name and version                      0.02s
+2026-10-01T18:29:06.0127541Z   ✓ it refuses undeclared contracts with MSG-002
+2026-10-01T18:29:06.0131187Z   ✓ it rejects duplicate identities when building the registry           0.10s
+2026-10-01T18:29:06.0133089Z   ✓ it keeps v1 and v2 of the same name separate
+2026-10-01T18:29:06.0135356Z   ✓ it lists all contracts sorted by id
+2026-10-01T18:29:06.0137617Z   ✓ it binds an empty registry by default in the container
+2026-10-01T18:29:06.1489958Z
+2026-10-01T18:29:06.1491559Z    PASS  Packages\core\tests\Unit\MessagingEnvelopeTest
+2026-10-01T18:29:06.1494547Z   ✓ it builds a full envelope and exposes contract identity              0.01s
+2026-10-01T18:29:06.1496669Z   ✓ it rejects empty message identity
+2026-10-01T18:29:06.1498813Z   ✓ it rejects an overlong message source
+2026-10-01T18:29:06.1501094Z   ✓ it rejects a control character in message subject
+2026-10-01T18:29:06.1504542Z   ✓ it rejects an unknown envelope version                               0.08s
+2026-10-01T18:29:06.1506708Z   ✓ it rejects an empty durable scope
+2026-10-01T18:29:06.1508869Z   ✓ it rejects payload nesting beyond eight levels
+2026-10-01T18:29:06.1510832Z   ✓ it rejects a top-level list payload
+2026-10-01T18:29:06.1512817Z   ✓ it rejects too many payload keys
+2026-10-01T18:29:06.1515032Z   ✓ it rejects unsupported payload values
+2026-10-01T18:29:06.1517191Z   ✓ it rejects payload exceeding 64KiB
+2026-10-01T18:29:06.1519268Z   ✓ it canonicalizes payload keys recursively
+2026-10-01T18:29:06.1521404Z   ✓ it rejects a PHP class name as contract name
+2026-10-01T18:29:06.1523362Z   ✓ it rejects domain events as published contracts
+2026-10-01T18:29:06.1525474Z   ✓ it orders pii class sensitivity for permits
+2026-10-01T18:29:06.1809695Z
+2026-10-01T18:29:06.1811285Z    PASS  Packages\core\tests\Unit\OpenTelemetryBridgeTest
+2026-10-01T18:29:06.1814215Z   ✓ it accepts the five metric keys and four retry buckets               0.01s
+2026-10-01T18:29:06.1817221Z   ✓ it rejects forbidden and unbounded metric labels before any exporter call
+2026-10-01T18:29:06.1819279Z   ✓ it runs consumer work once on the null bridge and on adapter fallback
+2026-10-01T18:29:06.1823126Z   ✓ it links the consumer span to the producer trace and exports five h… 0.01s
+2026-10-01T18:29:06.1824932Z   ✓ it boots null observer and trace bridge without an OpenTelemetry binding
+2026-10-01T18:29:06.2073877Z
+2026-10-01T18:29:06.2075781Z    PASS  Packages\core\tests\Unit\OperationObserverTest
+2026-10-01T18:29:06.2078511Z   ✓ it keeps one context through start and complete                      0.01s
+2026-10-01T18:29:06.2080464Z   ✓ it keeps one context through start and fail
+2026-10-01T18:29:06.2082688Z   ✓ it rejects invalid identifiers, negative attempt and unknown outcome
+2026-10-01T18:29:06.2084729Z   ✓ it logs exact static messages and keys
+2026-10-01T18:29:06.2086965Z   ✓ it omits canary secrets from failure logs
+2026-10-01T18:29:06.2089024Z   ✓ it does not throw from the null observer or a failing logger
+2026-10-01T18:29:06.2138937Z
+2026-10-01T18:29:06.2139897Z    PASS  Packages\core\tests\Unit\PackageRegistrarTest
+2026-10-01T18:29:06.2143074Z   ✓ it records register and boots as a no-op                             0.01s
+2026-10-01T18:29:06.4471723Z
+2026-10-01T18:29:06.4472969Z    PASS  Packages\core\tests\Unit\SupportDataTest
+2026-10-01T18:29:06.4474092Z   ✓ it carries only trusted data-boundary context
+2026-10-01T18:29:06.4475280Z   ✓ it derives durable scalars from tenant context
+2026-10-01T18:29:06.4476366Z   ✓ it builds the same scope via fromTenantContext as via scalar constructor
+2026-10-01T18:29:06.4477545Z   ✓ it rejects empty account identity in the scalar constructor
+2026-10-01T18:29:06.4478541Z   ✓ it rejects unsupported data scope version
+2026-10-01T18:29:06.4479497Z   ✓ it serializes and unserializes without exceptions
+2026-10-01T18:29:06.4481812Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset "empty connection identity"
+2026-10-01T18:29:06.4485847Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset… 0.16s
+2026-10-01T18:29:06.4488315Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset "non canonical restore epoch"
+2026-10-01T18:29:06.4490394Z   ✓ it keeps record references opaque and bounded
+2026-10-01T18:29:06.4492824Z   ✓ it rejects invalid record references with dataset "empty entity"
+2026-10-01T18:29:06.4495332Z   ✓ it rejects invalid record references with dataset "empty identifier"
+2026-10-01T18:29:06.4497881Z   ✓ it rejects invalid record references with dataset "oversized identifier"
+2026-10-01T18:29:06.4500184Z   ✓ it keeps write tokens opaque and binds them to a canonical payload digest
+2026-10-01T18:29:06.4502643Z   ✓ it rejects invalid write-token values with dataset "empty operation key"
+2026-10-01T18:29:06.4505186Z   ✓ it rejects invalid write-token values with dataset "non canonical payload digest"
+2026-10-01T18:29:06.4507542Z   ✓ it rejects invalid write-token values with dataset "empty expected record version"
+2026-10-01T18:29:06.4509883Z   ✓ it rejects invalid write-token values with dataset "oversized expected record version"
+2026-10-01T18:29:06.4928725Z
+2026-10-01T18:29:06.4930683Z    PASS  Packages\core\tests\Unit\TenantContextRestorerTest
+2026-10-01T18:29:06.4933213Z   ✓ it returns the active context when it matches the durable scope      0.03s
+2026-10-01T18:29:06.4935731Z   ✓ it rejects a mismatched account with a specific message
+2026-10-01T18:29:06.4938224Z   ✓ it rejects a mismatched workspace with a specific message
+2026-10-01T18:29:06.4940609Z   ✓ it rejects a mismatched boxed profile with a specific message
+2026-10-01T18:29:06.5410026Z
+2026-10-01T18:29:06.5411740Z    PASS  Packages\core\tests\Storage\LocalTenantStorageTest
+2026-10-01T18:29:06.5414907Z   ✓ it isolates durable and ephemeral storage by the current account an… 0.01s
+2026-10-01T18:29:06.5416922Z   ✓ it rejects path escape and reports unsupported export explicitly
+2026-10-01T18:29:06.5420619Z   ✓ it keeps all relative filesystem operations inside the account root  0.01s
+2026-10-01T18:29:06.5422345Z   ✓ it rejects symbolic links within an account root
+2026-10-01T18:29:06.5425471Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees them with ('%5cescape.txt')
+2026-10-01T18:29:06.5427541Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees them with ('%255cescape.txt')
+2026-10-01T18:29:06.5430052Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees them with ('document%00.txt')
+2026-10-01T18:29:06.5432447Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees them with ('document%2500.txt')
+2026-10-01T18:29:06.5434808Z   ✓ it rejects a replaced account root even when listing without a directory
+2026-10-01T18:29:06.5670146Z
+2026-10-01T18:29:06.5671191Z    PASS  Packages\core\tests\Feature\InboxClaimTest
+2026-10-01T18:29:06.5674510Z   ✓ it forgets only explicit message ids for the selected consumer       0.01s
+2026-10-01T18:29:06.5676433Z   ✓ it refuses claim outside a transaction with MSG-006
+2026-10-01T18:29:06.5679304Z   ✓ it returns true on first claim and false on duplicate consumer and message id
+2026-10-01T18:29:06.5681174Z   ✓ it treats consumers independently for the same message id
+2026-10-01T18:29:06.5683696Z   ✓ it stores processed_at from FrozenClock
+2026-10-01T18:29:06.5930536Z
+2026-10-01T18:29:06.5931684Z    PASS  Packages\core\tests\Feature\MessagePublisherTest
+2026-10-01T18:29:06.5935515Z   ✓ it admits a durable publisher binding and marks a leased row publis… 0.01s
+2026-10-01T18:29:06.5938748Z   ✓ it refuses relay when no durable publisher is bound                  0.01s
+2026-10-01T18:29:06.5942060Z   ✓ it refuses a null-transport publisher before markPublished           0.01s
+2026-10-01T18:29:06.5945114Z   ✓ it refuses a redis-publish publisher before markPublished            0.01s
+2026-10-01T18:29:06.6247778Z
+2026-10-01T18:29:06.6248873Z    PASS  Packages\core\tests\Feature\OutboxAppendTest
+2026-10-01T18:29:06.6252192Z   ✓ it refuses append outside a transaction with MSG-008                 0.01s
+2026-10-01T18:29:06.6254356Z   ✓ it refuses undeclared contracts inside a transaction with MSG-002
+2026-10-01T18:29:06.6256851Z   ✓ it refuses payload personal data above the contract maximum with MSG-007
+2026-10-01T18:29:06.6259397Z   ✓ it persists a pending row with encoded payload and clock-backed timestamps
+2026-10-01T18:29:06.6261920Z   ✓ it injects trace carrier into persisted metadata without changing identity
+2026-10-01T18:29:06.6264406Z   ✓ it uses one clock instant for available_at created_at and updated_at
+2026-10-01T18:29:06.6607344Z
+2026-10-01T18:29:06.6608778Z    PASS  Packages\core\tests\Feature\ProblemRegistryTest
+2026-10-01T18:29:06.6611977Z   ✓ ProblemRegistry boots with the isolated kernel and freezes its cata… 0.01s
+2026-10-01T18:29:06.6614168Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagnostics with dataset "duplicate code"
+2026-10-01T18:29:06.6616804Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagnostics with dataset "foreign prefix"
+2026-10-01T18:29:06.6619218Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagnostics with dataset "duplicate URI"
+2026-10-01T18:29:06.6621534Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagnostics with dataset "invalid status"
+2026-10-01T18:29:06.6623845Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagnostics with dataset "invalid URI"
+2026-10-01T18:29:06.6626385Z   ✓ ProblemRegistry rejects unknown persisted identities and descriptor category drift
+2026-10-01T18:29:06.6628654Z   ✓ ProblemRegistry constructor types reject dynamic raw strings
+2026-10-01T18:29:06.6967750Z
+2026-10-01T18:29:06.6968849Z    PASS  Packages\core\tests\Feature\PruneOutboxTest
+2026-10-01T18:29:06.6971947Z   ✓ it prunes published rows older than the published window and keeps…  0.01s
+2026-10-01T18:29:06.6975629Z   ✓ it prunes dead rows by the dead window not the published window      0.01s
+2026-10-01T18:29:06.6978850Z   ✓ it never prunes pending or publishing rows                           0.01s
+2026-10-01T18:29:06.6982016Z   ✓ it does not touch sys_inbox_messages                                 0.01s
+2026-10-01T18:29:06.6985175Z   ✓ it uses FrozenClock for retention thresholds                         0.01s
+2026-10-01T18:29:07.2242522Z
+2026-10-01T18:29:07.2246076Z    PASS  Packages\core\tests\Feature\PublishIsolationTest
+2026-10-01T18:29:07.2247854Z   ✓ it refuses a non-test PostgreSQL database before bootstrapping the…  0.18s
+2026-10-01T18:29:07.2249922Z   ✓ it cleans failed publish resources and leaves the next SQLite appli… 0.34s
+2026-10-01T18:29:07.2469926Z
+2026-10-01T18:29:07.2471316Z    PASS  Packages\core\tests\Feature\ValidateConfigCommandTest
+2026-10-01T18:29:07.2474388Z   ✓ it exits zero on the default test configuration                      0.01s
+2026-10-01T18:29:07.2476678Z   ✓ it prints two option violations in one pass and redacts a planted secret
+2026-10-01T18:29:07.2479114Z   ✓ it warns on the default intl cursor secret without printing it
+2026-10-01T18:29:07.2480980Z   ✓ it reports a selected redis adapter without failing when the driver class exists
+2026-10-01T18:29:07.2483096Z   ✓ it does not carry errors or secret warnings into a later run of the same command
+2026-10-01T18:29:07.2532090Z
+2026-10-01T18:29:07.2532936Z    PASS  Packages\core\tests\Feature\WorkUnitIsolationTest
+2026-10-01T18:29:07.2536362Z   ✓ it isolates consecutive work units when the first pass throws        0.01s
+2026-10-01T18:29:07.2589125Z
+2026-10-01T18:29:07.2590331Z    PASS  CoreX\Testing\Modules\ConfigReportSectionTest
+2026-10-01T18:29:07.2591924Z   ✓ section registers in report order and redacts its secrets
+2026-10-01T18:29:07.4687002Z
+2026-10-01T18:29:07.4688354Z    PASS  Packages\core\tests\Modules\Feature\CompositionBindingsTest
+2026-10-01T18:29:07.4691149Z   ✓ it keeps Registry register bindings on the measured key, concrete a… 0.01s
+2026-10-01T18:29:07.4695174Z   ✓ it keeps Lifecycle register bindings on the measured key, concrete…  0.01s
+2026-10-01T18:29:07.4698859Z   ✓ it keeps Settings register bindings on the measured key, concrete a… 0.01s
+2026-10-01T18:29:07.4702511Z   ✓ it resolves ModulesOptions from the composition instance             0.01s
+2026-10-01T18:29:07.4706289Z   ✓ it reads module options from the nested kernel configuration         0.01s
+2026-10-01T18:29:07.4709671Z   ✓ it registers composition modules through PackageRegistrar            0.17s
+2026-10-01T18:29:07.6008394Z
+2026-10-01T18:29:07.6010108Z    PASS  Packages\core\tests\Modules\Feature\RegistryIntrospectionTest
+2026-10-01T18:29:07.6012061Z   ✓ it projects the eight extenders and ownership from compiled bytes (… 0.01s
+2026-10-01T18:29:07.6015987Z   ✓ it returns the compiled authority fingerprint and ignores activatio… 0.01s
+2026-10-01T18:29:07.6019614Z   ✓ it explains unknown modules and tenant activation without guessing…  0.01s
+2026-10-01T18:29:07.6023113Z   ✓ it renders deterministic CLI output and requires account for tenant… 0.01s
+2026-10-01T18:29:07.6026776Z   ✓ it redacts internal class references and sensitive topology (INTRO-… 0.01s
+2026-10-01T18:29:07.6030251Z   ✓ it reports declared constraints with compatibility passport pending… 0.02s
+2026-10-01T18:29:07.6033551Z   ✓ it does not mutate module state while introspecting (INTRO-06)       0.01s
+2026-10-01T18:29:07.6037242Z   ✓ it separates missing input, unknown extenders and stale revisions (… 0.01s
+2026-10-01T18:29:07.6040544Z   ✓ it reports activation gate denial with tenant verdict (INTRO-02)     0.01s
+2026-10-01T18:29:07.6043983Z   ✓ it resolves RegistryIntrospection from the container                 0.03s
+2026-10-01T18:29:07.7533902Z
+2026-10-01T18:29:07.7535859Z    PASS  Packages\core\tests\Modules\Unit\ExtensionContractTest
+2026-10-01T18:29:07.7537807Z   ✓ it verifies deterministic compiled extension snapshots and explicit… 0.01s
+2026-10-01T18:29:07.7541407Z   ✓ it verifies deterministic compiled extension snapshots and explicit… 0.10s
+2026-10-01T18:29:07.7545162Z   ✓ it reports duplicate owners and replacement cycles from scalar fixt… 0.01s
+2026-10-01T18:29:07.7548860Z   ✓ it reports duplicate owners and replacement cycles from scalar fixt… 0.01s
+2026-10-01T18:29:07.7552443Z   ✓ it pins durable replay to exact point id and version while retainin… 0.01s
+2026-10-01T18:29:07.7556162Z   ✓ it reports invalid installed metadata without reading the host inst… 0.01s
+2026-10-01T18:29:07.7884156Z
+2026-10-01T18:29:07.7885815Z    PASS  Packages\core\tests\Modules\Unit\ExtensionMetadataTest
+2026-10-01T18:29:07.7888237Z   ✓ it reads installed version metadata and prefers the source referenc… 0.01s
+2026-10-01T18:29:07.7891457Z   ✓ it normalizes a missing installed file and a list-shaped manifest    0.01s
+2026-10-01T18:29:07.7894886Z   ✓ it accumulates repeatable replacement directives and rejects empty…  0.01s
+2026-10-01T18:29:07.7898228Z   ✓ it round-trips an extension stamp and rejects invalid scalars        0.01s
+2026-10-01T18:29:07.8245235Z
+2026-10-01T18:29:07.8246783Z    PASS  Packages\core\tests\Modules\Unit\ExtensionRemediationTest
+2026-10-01T18:29:07.8248923Z   ✓ it resolves module activity once per entity-list operation without…  0.01s
+2026-10-01T18:29:07.8252178Z   ✓ it rejects a dependency cycle with its chain before compilation      0.01s
+2026-10-01T18:29:07.8255569Z   ✓ it dispatches compiled manifest listeners once only while their own… 0.01s
+2026-10-01T18:29:07.8258913Z   ✓ it can compile a missing production registry while ordinary console… 0.01s
+2026-10-01T18:29:07.8442134Z
+2026-10-01T18:29:07.8444436Z    PASS  Packages\core\tests\Modules\Unit\FieldCastMapTest
+2026-10-01T18:29:07.8446655Z   ✓ it maps package casts with arguments and leaves unknown casts to th… 0.02s
+2026-10-01T18:29:07.8828675Z
+2026-10-01T18:29:07.8831134Z    PASS  Packages\core\tests\Modules\Unit\ModulesOptionsTest
+2026-10-01T18:29:07.8834125Z   ✓ it allows a null module connection                                   0.01s
+2026-10-01T18:29:07.8840028Z   ✓ it rejects a zero or negative cache ttl with (0)                     0.02s
+2026-10-01T18:29:07.8845761Z   ✓ it rejects a zero or negative cache ttl with (-1)                    0.01s
+2026-10-01T18:29:08.0695468Z
+2026-10-01T18:29:08.0697202Z    PASS  Packages\core\tests\Modules\Unit\RegistryCompilerDeterminismTest
+2026-10-01T18:29:08.0699199Z   ✓ it publishes one fingerprint for shuffled module, declaration and a… 0.01s
+2026-10-01T18:29:08.0702340Z   ✓ it keeps semantic menu order while hashing key-sorted payloads       0.01s
+2026-10-01T18:29:08.0706061Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.07s
+2026-10-01T18:29:08.0709182Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.01s
+2026-10-01T18:29:08.0712462Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.01s
+2026-10-01T18:29:08.0715832Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.01s
+2026-10-01T18:29:08.0719032Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.01s
+2026-10-01T18:29:08.0722280Z   ✓ it removes a replaced target from the effective slice and keeps it…  0.01s
+2026-10-01T18:29:08.0725660Z   ✓ it rejects a menu missing afterHandle target and a menu cycle with…  0.01s
+2026-10-01T18:29:08.0728890Z   ✓ it rejects a menu missing afterHandle target and a menu cycle with…  0.01s
+2026-10-01T18:29:08.0732133Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.01s
+2026-10-01T18:29:08.0735464Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.01s
+2026-10-01T18:29:08.0738801Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.01s
+2026-10-01T18:29:08.0741921Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.01s
+2026-10-01T18:29:08.0745247Z   ✓ it does not let a hydrated mutation change authority bytes or finge… 0.01s
+2026-10-01T18:29:08.1024159Z
+2026-10-01T18:29:08.1026062Z    PASS  Packages\core\tests\Modules\Unit\RegistryFreezeTest
+2026-10-01T18:29:08.1027870Z   ✓ it rejects duplicate registration before mutating the collector      0.02s
+2026-10-01T18:29:08.1031184Z   ✓ it rejects late registration and leaves collector and morph map unc… 0.01s
+2026-10-01T18:29:08.1742862Z
+2026-10-01T18:29:08.1744925Z    PASS  Packages\workflow\tests\Feature\WorkflowBindingTest
+2026-10-01T18:29:08.1746670Z   ✓ it captures an immutable intent and replays the same request key     0.01s
+2026-10-01T18:29:08.1749564Z   ✓ it rejects a changed immutable payload for the same request key      0.01s
+2026-10-01T18:29:08.1753121Z   ✓ it delegates signal and transition operations to the configured eng… 0.01s
+2026-10-01T18:29:08.1756429Z   ✓ it does not send expired signals to the engine adapter               0.01s
+2026-10-01T18:29:08.1759672Z   ✓ it rejects empty definition and version refs before insert with dat… 0.01s
+2026-10-01T18:29:08.1762826Z   ✓ it rejects empty definition and version refs before insert with dat… 0.01s
+2026-10-01T18:29:08.1766253Z   ✓ it stores the stamp inside the payload and excludes the fingerprint… 0.01s
+2026-10-01T18:29:08.1769565Z   ✓ it conflicts when the pinned version does not match the stored iden… 0.01s
+2026-10-01T18:29:08.1773235Z   ✓ it admits a legacy non-empty ref with the original hash and does no… 0.01s
+2026-10-01T18:29:08.1776066Z   ✓ it treats an unrelated registry fingerprint change as the same work  0.01s
+2026-10-01T18:29:08.1799422Z
+2026-10-01T18:29:08.1800343Z    PASS  Packages\workflow\tests\Unit\WorkflowStampTest
+2026-10-01T18:29:08.1802380Z   ✓ it derives the trigger identity and keeps the fingerprint out of the replay hash
+2026-10-01T18:29:08.1804514Z   ✓ it uses module-free provenance when no registry fingerprint is available
+2026-10-01T18:29:08.1806946Z   ✓ it rejects empty definition and version refs before a stamp is built with dataset "empty definition"
+2026-10-01T18:29:08.1809122Z   ✓ it rejects empty definition and version refs before a stamp is built with dataset "blank version"
+2026-10-01T18:29:08.1811150Z   ✓ it keeps the legacy comparison for non-empty refs that have no identity schema
+2026-10-01T18:29:08.1831381Z
+2026-10-01T18:29:08.1832338Z    PASS  Packages\customfields\tests\Unit\AttributeDefinitionTest
+2026-10-01T18:29:08.1834248Z   ✓ it rejects a new id that is not UUIDv7
+2026-10-01T18:29:08.1836908Z   ✓ it rejects duplicate keys and invalid lifecycle transitions
+2026-10-01T18:29:08.1839140Z   ✓ it keeps a stable hash and the pinned id across a key rename
+2026-10-01T18:29:08.1841229Z   ✓ it builds the same legacy id for the same entity and key
+2026-10-01T18:29:08.1861383Z
+2026-10-01T18:29:08.1862386Z    PASS  Packages\customfields\tests\Unit\AttributeMessageTranslatorTest
+2026-10-01T18:29:08.1864357Z   ✓ it translates a mutation into the declared metadata-only contract
+2026-10-01T18:29:08.1866688Z   ✓ it declares one additive v1 integration contract
+2026-10-01T18:29:08.1868748Z   ✓ it rejects a registry collision
+2026-10-01T18:29:08.1870969Z   ✓ it has no search dependency in the integration boundary
+2026-10-01T18:29:08.1895061Z
+2026-10-01T18:29:08.1896014Z    PASS  Packages\customfields\tests\Unit\AttributeStoreResolverTest
+2026-10-01T18:29:08.1898089Z   ✓ it rejects an entity map that is not jsonb or eav
+2026-10-01T18:29:08.1900594Z   ✓ it rejects a field-level engine declaration before the catalogue is bound
+2026-10-01T18:29:08.1902661Z   ✓ it keeps one engine per entity and restores mixed loadMany order
+2026-10-01T18:29:08.2033280Z
+2026-10-01T18:29:08.2034467Z    PASS  CoreX\CustomFields\Tests\Unit\AttributeTablesTest
+2026-10-01T18:29:08.2036950Z   ✓ it accepts the shipped default table names
+2026-10-01T18:29:08.2038528Z   ✓ it rejects an invalid table identifier at construction time
+2026-10-01T18:29:08.2040546Z   ✓ it rejects duplicate configured table names
+2026-10-01T18:29:08.2042666Z   ✓ it rejects invalid table names loaded from provider configuration
+2026-10-01T18:29:08.2080621Z
+2026-10-01T18:29:08.2081590Z    PASS  Packages\customfields\tests\Unit\AttributeWriteGuardTest
+2026-10-01T18:29:08.2083606Z   ✓ it runs the four authority layers in their fixed order with an opaque resource
+2026-10-01T18:29:08.2086348Z   ✓ it keeps field absence and hidden-field denial externally indistinguishable
+2026-10-01T18:29:08.2088305Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "subject ownership"
+2026-10-01T18:29:08.2090455Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "field visibility"
+2026-10-01T18:29:08.2092603Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "field write"
+2026-10-01T18:29:08.2094964Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "operation mutation"
+2026-10-01T18:29:08.2096873Z   ✓ it requires a current schema hash for stale or evolving definitions
+2026-10-01T18:29:08.2099121Z   ✓ it separates type validation from required enum length range format and reference constraints
+2026-10-01T18:29:12.2472219Z
+2026-10-01T18:29:12.2477613Z    PASS  Packages\customfields\tests\Unit\AttributesArchitectureGateTest
+2026-10-01T18:29:12.2479544Z   ✓ it passes the package architecture ratchet on the current source tr… 3.86s
+2026-10-01T18:29:12.2481483Z   ✓ it rejects each planted architecture violation for its own reason w… 0.04s
+2026-10-01T18:29:12.2485153Z   ✓ it rejects each planted architecture violation for its own reason w… 0.04s
+2026-10-01T18:29:12.2488633Z   ✓ it rejects each planted architecture violation for its own reason w… 0.04s
+2026-10-01T18:29:12.2491875Z   ✓ it rejects each planted architecture violation for its own reason w… 0.06s
+2026-10-01T18:29:12.2588495Z
+2026-10-01T18:29:12.2589670Z    PASS  CoreX\CustomFields\Tests\Unit\AttributesServiceProviderTest
+2026-10-01T18:29:12.2593005Z   ✓ it resolves a static catalogue without modules                       0.01s
+2026-10-01T18:29:12.2595043Z   ✓ it rejects an invalid source order
+2026-10-01T18:29:12.2639865Z
+2026-10-01T18:29:12.2640864Z    PASS  Packages\customfields\tests\Unit\CompositeFieldCatalogueTest
+2026-10-01T18:29:12.2642858Z   ✓ it rejects the same key owned by different identities
+2026-10-01T18:29:12.2645365Z   ✓ it rejects a renamed identity without a migrating alias
+2026-10-01T18:29:12.2647585Z   ✓ it rejects different types at the same identity and revision
+2026-10-01T18:29:12.2649676Z   ✓ it rejects different flags at the same identity and revision
+2026-10-01T18:29:12.2651676Z   ✓ it merges byte-identical definitions once
+2026-10-01T18:29:12.2653827Z   ✓ it allows only an exact retirement shadow override
+2026-10-01T18:29:12.2656190Z   ✓ it uses a migrating alias to accept a newer renamed revision
+2026-10-01T18:29:12.2658232Z   ✓ it fails closed and evicts a malformed cached snapshot
+2026-10-01T18:29:12.2660423Z   ✓ it does not reuse a snapshot after the source fingerprint changes
+2026-10-01T18:29:12.2662421Z   ✓ it falls back to the authoritative source when cache access fails
+2026-10-01T18:29:12.2754827Z
+2026-10-01T18:29:12.2755941Z    PASS  Packages\customfields\tests\Unit\DefinitionEvolutionTest
+2026-10-01T18:29:12.2758621Z   ✓ it enforces the closed attribute lifecycle graph with dataset "draft to active"
+2026-10-01T18:29:12.2760360Z   ✓ it enforces the closed attribute lifecycle graph with dataset "active to migrating"
+2026-10-01T18:29:12.2762460Z   ✓ it enforces the closed attribute lifecycle graph with dataset "deprecated to active"
+2026-10-01T18:29:12.2764827Z   ✓ it enforces the closed attribute lifecycle graph with dataset "migrating to deprecated"
+2026-10-01T18:29:12.2767080Z   ✓ it enforces the closed attribute lifecycle graph with dataset "active cannot retire directly"
+2026-10-01T18:29:12.2769027Z   ✓ it enforces the closed attribute lifecycle graph with dataset "migrating cannot retire"
+2026-10-01T18:29:12.2770952Z   ✓ it enforces the closed attribute lifecycle graph with dataset "retired is terminal"
+2026-10-01T18:29:12.2772885Z   ✓ it builds expand switch and contract revisions with the required paths
+2026-10-01T18:29:12.2775091Z   ✓ it blocks type changes without a transformer and switch or contract without proof
+2026-10-01T18:29:12.2776827Z   ✓ it makes both rollback points executable
+2026-10-01T18:29:12.2779023Z   ✓ it restores a deprecated source lifecycle when aborting before switch
+2026-10-01T18:29:12.2780909Z   ✓ it checks transformer determinism and supports reversible values
+2026-10-01T18:29:12.2800932Z
+2026-10-01T18:29:12.2801846Z    PASS  Packages\customfields\tests\Unit\ErrorContractTest
+2026-10-01T18:29:12.2804010Z   ✓ it describes an unavailable attributes engine without parsing the message
+2026-10-01T18:29:12.2806468Z   ✓ it describes access denial independently of the human message with dataset "scope"
+2026-10-01T18:29:12.2808556Z   ✓ it describes access denial independently of the human message with dataset "connection"
+2026-10-01T18:29:12.2810541Z   ✓ it describes access denial independently of the human message with dataset "unrelated"
+2026-10-01T18:29:12.2812380Z   ✓ it owns schema conflict constructors without message branching
+2026-10-01T18:29:12.2822341Z
+2026-10-01T18:29:12.2823268Z    PASS  Packages\customfields\tests\Unit\FieldValueValidatorTest
+2026-10-01T18:29:12.2825415Z   ✓ it accepts all supported typed values from the active registry snapshot
+2026-10-01T18:29:12.2827536Z   ✓ it rejects an unknown field and floating point money values
+2026-10-01T18:29:12.2836430Z
+2026-10-01T18:29:12.2837362Z    PASS  Packages\customfields\tests\Unit\ModuleFieldCatalogueTest
+2026-10-01T18:29:12.2839354Z   ✓ it projects active compiled entity fields without creating another registry
+2026-10-01T18:29:12.2847506Z
+2026-10-01T18:29:12.2848422Z    PASS  Packages\customfields\tests\Unit\StaticFieldCatalogueTest
+2026-10-01T18:29:12.2850407Z   ✓ it returns an empty snapshot for an entity without static definitions
+2026-10-01T18:29:12.2852497Z   ✓ it projects configured static definitions
+2026-10-01T18:29:12.2861116Z
+2026-10-01T18:29:12.2862088Z    PASS  Packages\customfields\tests\Unit\SupportBoundaryTest
+2026-10-01T18:29:12.2863901Z   ✓ it rejects malformed immutable boundary values
+2026-10-01T18:29:12.2881436Z
+2026-10-01T18:29:12.2882334Z    PASS  Packages\customfields\tests\Unit\SupportTest
+2026-10-01T18:29:12.2884754Z   ✓ it keeps field selections bounded and unique
+2026-10-01T18:29:12.2886756Z   ✓ it keeps record selections bounded and ordered
+2026-10-01T18:29:12.2888963Z   ✓ it accepts only canonical schema-bound attribute data
+2026-10-01T18:29:12.2891191Z   ✓ it rejects unapproved or oversized schema-change inputs
+2026-10-01T18:29:12.2893214Z   ✓ it fails closed while no qualified engine is bound
+2026-10-01T18:29:12.2895413Z   ✓ it compiles only structural allowlisted filters
+2026-10-01T18:29:12.2904736Z
+2026-10-01T18:29:12.2905722Z    PASS  Packages\customfields\tests\Unit\UnavailableAttributesTest
+2026-10-01T18:29:12.2907782Z   ✓ it fails closed consistently when an application has not enabled attributes
+2026-10-01T18:29:12.2918854Z
+2026-10-01T18:29:12.2919734Z    PASS  Packages\transfer\tests\Feature\ExportPortTest
+2026-10-01T18:29:12.2921804Z   ✓ it publishes the existing seal and emit signatures on ExportRunner
+2026-10-01T18:29:12.2929593Z
+2026-10-01T18:29:12.2930429Z    PASS  Packages\transfer\tests\Feature\ExportTest
+2026-10-01T18:29:12.2932438Z   ✓ it makes coherent manifests and their cursor binding explicit
+2026-10-01T18:29:12.2948792Z
+2026-10-01T18:29:12.2949624Z    PASS  Packages\transfer\tests\Unit\CodecTest
+2026-10-01T18:29:12.2951842Z   ✓ it parses a multiline CSV logical record and escaped quote as one bounded row
+2026-10-01T18:29:12.2953957Z   ✓ it refuses a CSV record before it can grow beyond its limit
+2026-10-01T18:29:12.2966650Z   ✓ it decodes only NDJSON objects and enforces the per-record byte limit
+2026-10-01T18:29:12.2967916Z   ✓ it keeps raw NDJSON separate from the labelled display-safe CSV projection
+2026-10-01T18:29:12.2978672Z
+2026-10-01T18:29:12.2979550Z    PASS  Packages\transfer\tests\Unit\SupportBoundaryTest
+2026-10-01T18:29:12.2981879Z   ✓ it accepts only a bounded immutable source manifest and canonical cursor
+2026-10-01T18:29:12.2984159Z   ✓ it rejects invalid mapping and target payload shapes before a target is called
+2026-10-01T18:29:12.3040586Z
+2026-10-01T18:29:12.3041551Z    PASS  CoreX\Search\Tests\Unit\ConfigReportSectionTest
+2026-10-01T18:29:12.3045092Z   ✓ section registers in report order and redacts its secrets            0.01s
+2026-10-01T18:29:12.3055618Z
+2026-10-01T18:29:12.3056547Z    PASS  Packages\search\tests\Unit\PolicySearchHydratorTest
+2026-10-01T18:29:12.3058924Z   ✓ it drops deleted, stale and policy-denied candidates before returning schema-approved fields
+2026-10-01T18:29:12.3072919Z
+2026-10-01T18:29:12.3073795Z    PASS  Packages\search\tests\Unit\SearchQueryTest
+2026-10-01T18:29:12.3076070Z   ✓ it bounds untrusted query shape before a provider is selected
+2026-10-01T18:29:12.3078193Z   ✓ it rejects a query beyond the public scan budget
+2026-10-01T18:29:12.3237647Z
+2026-10-01T18:29:12.3238728Z    PASS  SearchServiceProviderTest
+2026-10-01T18:29:12.3240674Z   ✓ it boots without database schemas sdk credentials or network activity
+2026-10-01T18:29:12.3242724Z   ✓ null driver returns unsupported search provider
+2026-10-01T18:29:12.3245506Z   ✓ postgres driver with weak cursor secret throws
+2026-10-01T18:29:12.3247155Z   ✓ meilisearch driver without adapter throws
+2026-10-01T18:29:12.3249296Z   ✓ it selects the postgresql provider only for an explicit ready profile
+2026-10-01T18:29:12.3262609Z
+2026-10-01T18:29:12.3263489Z    PASS  Packages\search\tests\Unit\SupportValueObjectsTest
+2026-10-01T18:29:12.3265857Z   ✓ it keeps neutral search value objects typed and unsupported providers empty
+2026-10-01T18:29:12.3267956Z   ✓ it rejects unsafe search snapshot and current record values
+2026-10-01T18:29:12.3297588Z
+2026-10-01T18:29:12.3298475Z    PASS  Packages\intl\tests\Address\AddressSuggestTest
+2026-10-01T18:29:12.3300595Z   ✓ it OPT-01 keeps offline base valid when address provider is absent
+2026-10-01T18:29:12.3302888Z   ✓ it OPT-04 rejects invalid query bounds and enforces response limits
+2026-10-01T18:29:12.3305169Z   ✓ it OPT-05 swaps two installed address drivers through the same port
+2026-10-01T18:29:12.3307312Z   ✓ it OPT-04 exposes distinct unavailable and rateLimited statuses
+2026-10-01T18:29:12.3309584Z   ✓ it OPT-07 address port surface stays read-only suggest without mutation hooks
+2026-10-01T18:29:12.3365068Z
+2026-10-01T18:29:12.3365964Z    PASS  CoreX\Intl\Tests\ConfigReportSectionTest
+2026-10-01T18:29:12.3369226Z   ✓ section registers in report order and redacts its secrets            0.01s
+2026-10-01T18:29:12.5612657Z
+2026-10-01T18:29:12.5614064Z    PASS  Packages\intl\tests\Locale\LocaleResolutionTest
+2026-10-01T18:29:12.5616547Z   ✓ it LOC-01 validates supported allowlist and rejects invalid tags     0.01s
+2026-10-01T18:29:12.5619779Z   ✓ it LOC-02 resolves user settings app and fallback chain explicitly   0.01s
+2026-10-01T18:29:12.5622972Z   ✓ it LOC-03 restores request locale scope without global leakage       0.01s
+2026-10-01T18:29:12.5626343Z   ✓ it LOC-04 builds deterministic policy hash without remote calls      0.01s
+2026-10-01T18:29:12.5629538Z   ✓ it LOC-05 reads translations with explicit fallback order            0.01s
+2026-10-01T18:29:12.5632899Z   ✓ it LOC-06 rejects undeclared localized field without schema hash     0.15s
+2026-10-01T18:29:12.5636347Z   ✓ it LOC-07 uses existing translator adapter without new storage       0.01s
+2026-10-01T18:29:12.5639736Z   ✓ it LOC-08 boots with plain formatting fallback when ICU path unavai… 0.01s
+2026-10-01T18:29:12.5642742Z   ✓ it LOC-09 reads localized reference metadata from two providers det… 0.01s
+2026-10-01T18:29:12.6540983Z
+2026-10-01T18:29:12.6545860Z    PASS  Packages\intl\tests\Money\MoneyRatesTest
+2026-10-01T18:29:12.6547119Z   ✓ it FX-01 returns pinned currency exponents and rejects unknown code… 0.01s
+2026-10-01T18:29:12.6548837Z   ✓ it FX-02 stores positive canonical decimal rates with base to quote… 0.01s
+2026-10-01T18:29:12.6552142Z   ✓ it FX-03 imports immutable snapshots idempotently and detects confl… 0.01s
+2026-10-01T18:29:12.6555137Z   ✓ it FX-05 distinguishes missing and stale lookup results              0.01s
+2026-10-01T18:29:12.6558309Z   ✓ it FX-06 converts with explicit rounding and deterministic receipts  0.01s
+2026-10-01T18:29:12.6561663Z   ✓ it FX-07 preserves same-currency identity without provider lookup    0.01s
+2026-10-01T18:29:12.6564992Z   ✓ it FX-08 converts negative zero and large signed amounts exactly     0.01s
+2026-10-01T18:29:12.6568175Z   ✓ it FX-09 formats with plain exact ISO fallback                       0.01s
+2026-10-01T18:29:12.6571230Z   ✓ it FX-10 keeps old snapshots addressable after corrected import rev… 0.01s
+2026-10-01T18:29:12.8495181Z
+2026-10-01T18:29:12.8497025Z    PASS  Packages\intl\tests\Reference\GeographyTest
+2026-10-01T18:29:12.8498822Z   ✓ it GEO-01 queries equivalent coverage from two fixture providers     0.11s
+2026-10-01T18:29:12.8505971Z   ✓ it GEO-02 exposes manifest provenance and hashes                     0.01s
+2026-10-01T18:29:12.8507444Z   ✓ it GEO-03 rejects malformed fixture publication and keeps active sn… 0.01s
+2026-10-01T18:29:12.8509286Z   ✓ it GEO-05 pins keyset cursor to snapshot and query hash              0.01s
+2026-10-01T18:29:12.8511483Z   ✓ it GEO-06 normalizes bounded UTF-8 queries without merging ambiguou… 0.01s
+2026-10-01T18:29:12.8514982Z   ✓ it GEO-07 returns multiple timezone candidates for countries withou… 0.01s
+2026-10-01T18:29:12.8518254Z   ✓ it GEO-09 keeps read-only lookup scoped without public write API on… 0.01s
+2026-10-01T18:29:12.8521404Z   ✓ it GEO-10 supports exact and prefix modes on sqlite fixtures         0.01s
+2026-10-01T18:29:12.8524537Z   ✓ it GEO-04 publishes fixture dataset through SQL importer             0.01s
+2026-10-01T18:29:12.8527849Z   ✓ it GEO-05 rejects expired snapshot pins                              0.01s
+2026-10-01T18:29:13.0019869Z
+2026-10-01T18:29:13.0021422Z    PASS  Tests\Arch\AchievedInvariantTest
+2026-10-01T18:29:13.0025293Z   ✓ attributes package does not depend on search or meilisearch (A57)    0.01s
+2026-10-01T18:29:13.0027573Z   ✓ attributes search import probe fails A57 with file path
+2026-10-01T18:29:13.0029936Z   ✓ search provider implementations do not import eloquent (A61)
+2026-10-01T18:29:13.0032134Z   ✓ search contracts are split across dedicated files (A61)
+2026-10-01T18:29:13.0034319Z   ✓ search provider eloquent import probe fails A61 with file path
+2026-10-01T18:29:13.0036886Z   ✓ trusted context resolver does not read tenant id from the request payload (A99)
+2026-10-01T18:29:13.0038924Z   ✓ trusted context resolver tenant_id probe fails A99 with file path
+2026-10-01T18:29:13.0042475Z   ✓ table ownership gate reports no violations on clean tree             0.05s
+2026-10-01T18:29:13.0046452Z   ✓ table ownership gate reports T1 for uncatalogued create              0.05s
+2026-10-01T18:29:13.0050822Z   ✓ table ownership gate reports T4 for core cross-package foreign key…  0.05s
+2026-10-01T18:29:13.9999068Z
+2026-10-01T18:29:14.0000736Z    PASS  Tests\Arch\ApiContractCompatibilityTest
+2026-10-01T18:29:14.0004761Z   ✓ api contract gate accepts the committed snapshot and additive fixtu… 0.13s
+2026-10-01T18:29:14.0009112Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T18:29:14.0017584Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0019145Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0020709Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0036061Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0038007Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T18:29:14.0039349Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0040668Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0041939Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0043251Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0055928Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0057739Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0059367Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0060730Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0062061Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0066335Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0068009Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0069588Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0070737Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.04s
+2026-10-01T18:29:14.0071897Z   ✓ api contract check refuses to update the baseline                    0.04s
+2026-10-01T18:29:14.1001874Z
+2026-10-01T18:29:14.1003450Z    PASS  Tests\Arch\ApiContractTest
+2026-10-01T18:29:14.1007561Z   ✓ operation contract has one compiled authority and one guarded execu… 0.02s
+2026-10-01T18:29:14.1011216Z   ✓ operation contract ratchet detects a second registry and a direct H… 0.02s
+2026-10-01T18:29:14.1015262Z   ✓ operation contract ratchet detects a second invoker and tenant hash… 0.02s
+2026-10-01T18:29:14.1019052Z   ✓ operation contract ratchet detects a direct handler path without fi… 0.02s
+2026-10-01T18:29:14.1022596Z   ✓ operation contract ratchet detects GraphQL source, dependency, capa… 0.03s
+2026-10-01T18:29:14.5274324Z
+2026-10-01T18:29:14.5276070Z    PASS  Tests\Arch\ConfigCompositionTest
+2026-10-01T18:29:14.5279440Z   ✓ config composition gate exits 0 on a clean tree                      0.14s
+2026-10-01T18:29:14.5283248Z   ✓ config composition gate exits 1 and names the planted file           0.14s
+2026-10-01T18:29:14.5287282Z   ✓ config composition gate catches qualified and dynamic calls without… 0.14s
+2026-10-01T18:29:14.5611314Z
+2026-10-01T18:29:14.5612794Z    PASS  Tests\Arch\CoreLitmusTest
+2026-10-01T18:29:14.5614482Z   ✓ foundation membership is an explicit constant of the live zone map
+2026-10-01T18:29:14.5617323Z   ✓ LITMUS_ELOQUENT is exactly the three identity paths
+2026-10-01T18:29:14.5619879Z   ✓ foundation litmus hard conditions are green on the clean tree
+2026-10-01T18:29:14.5623887Z   ✓ condition 1 below the grep bar warns and does not fail the gate      0.03s
+2026-10-01T18:29:14.5626603Z   ✓ condition 5 above 200 lines outside Contracts Enums and Data is unresolved
+2026-10-01T18:29:14.5629025Z   ✓ R-L3 planting in Foundation RecordRef names the file and Eloquent
+2026-10-01T18:29:14.6240692Z
+2026-10-01T18:29:14.6242044Z    PASS  Tests\Arch\CoreZoneTest
+2026-10-01T18:29:14.6244096Z   ✓ every core src file is classified into a zone or composition/testing
+2026-10-01T18:29:14.6255757Z   ✓ zone files import only allowed CoreX zones (R-Z1)                    0.01s
+2026-10-01T18:29:14.6257046Z   ✓ foreign files do not import zone Internal (R-Z2)
+2026-10-01T18:29:14.6258267Z   ✓ R-Z1 planting in Foundation RecordRef names the file and symbol      0.03s
+2026-10-01T18:29:14.6260092Z   ✓ R-Z1 planting in TenancyContracts AccountRef names the file and sym… 0.01s
+2026-10-01T18:29:14.6262626Z   ✓ R-Z2 planting in ActorType names the file and symbol                 0.01s
+2026-10-01T18:29:14.6263968Z   ✓ R-Z0 planting of an unclassified error file names the path
+2026-10-01T18:29:14.6265233Z   ✓ R-Z0 planting of an unclassified Support file names the file
+2026-10-01T18:29:15.6596480Z
+2026-10-01T18:29:15.6597728Z    PASS  Tests\Arch\ErrorContractTest
+2026-10-01T18:29:15.6601268Z   ✓ ErrorContract package catalogue matches the complete stable fixture  1.03s
+2026-10-01T18:29:15.6603843Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "alias"
+2026-10-01T18:29:15.6606499Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "group import"
+2026-10-01T18:29:15.6608825Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "FQCN"
+2026-10-01T18:29:15.6611163Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "descriptor"
+2026-10-01T18:29:15.7302532Z
+2026-10-01T18:29:15.7303948Z    PASS  Tests\Arch\LayerTest
+2026-10-01T18:29:15.7307318Z   ✓ foundation packages do not import flex/* namespaces                  0.02s
+2026-10-01T18:29:15.7309393Z   ✓ foundation packages declare no upward composer dependencies
+2026-10-01T18:29:15.7312223Z   ✓ axiomasoft/corex declares no monorepo package dependencies
+2026-10-01T18:29:15.7315708Z   ✓ axiomasoft/corex source imports no sibling package namespace         0.01s
+2026-10-01T18:29:15.7317642Z   ✓ tenant content does not bypass its owning storage adapter
+2026-10-01T18:29:15.7321365Z   ✓ foundation packages carry no flex product literals                   0.04s
+2026-10-01T18:29:19.5430957Z
+2026-10-01T18:29:19.5432194Z    PASS  Tests\Arch\NamingAndConfigGateTest
+2026-10-01T18:29:19.5436778Z   ✓ naming gate reports no violations on clean tree                      1.76s
+2026-10-01T18:29:19.5440966Z   ✓ naming gate reports N1 for ProbeHelper in core Contracts             1.77s
+2026-10-01T18:29:19.5444960Z   ✓ config composition gate is blocking on a clean tree                  0.14s
+2026-10-01T18:29:19.5448698Z   ✓ config composition gate names the probe file and exits 1             0.14s
+2026-10-01T18:29:19.5493367Z
+2026-10-01T18:29:19.5494295Z    PASS  Tests\Arch\ObservabilityContractTest
+2026-10-01T18:29:19.5496443Z   ✓ P12 observability gate keeps labels bounded and failure payloads redacted
+2026-10-01T18:29:19.5498961Z   ✓ P12 observability gate rejects an identifier metric label
+2026-10-01T18:29:19.5501466Z   ✓ P12 observability gate rejects an arbitrary OpenTelemetry attribute map
+2026-10-01T18:29:19.5503783Z   ✓ P12 observability gate rejects raw Throwable logging
+2026-10-01T18:29:25.7160730Z
+2026-10-01T18:29:25.7162278Z    PASS  Tests\Arch\PackageDocsTest
+2026-10-01T18:29:25.7166516Z   ✓ package docs gate reports every cohort package and assigns producer… 2.02s
+2026-10-01T18:29:25.7170223Z   ✓ package docs gate fails a planted missing heading                    2.10s
+2026-10-01T18:29:25.7173924Z   ✓ package docs gate fails a planted Internal example                   2.05s
+2026-10-01T18:30:01.8484877Z
+2026-10-01T18:30:01.8486449Z    PASS  Tests\Arch\PackageGraphTest
+2026-10-01T18:30:01.8489198Z   ✓ package graph gate reports no violations                             1.88s
+2026-10-01T18:30:01.8493262Z   ✓ package graph gate reports R1 when guard content is removed from gu… 3.77s
+2026-10-01T18:30:01.8497536Z   ✓ package graph gate reports R3 when host defines classes under reser… 1.90s
+2026-10-01T18:30:01.8501093Z   ✓ package graph gate reports R1 for group-use import (tokenizer graph… 3.80s
+2026-10-01T18:30:01.8504988Z   ✓ package graph gate reports R1 for FQCN reference without use (token… 3.78s
+2026-10-01T18:30:01.8508475Z   ✓ package graph gate reports R4 for unknown symbol outside source mem… 3.76s
+2026-10-01T18:30:01.8511894Z   ✓ package graph gate reports R2 for foreign Internal without R4 wordi… 3.76s
+2026-10-01T18:30:01.8515375Z   ✓ package graph gate reports R4b for accidental public top-level type  3.74s
+2026-10-01T18:30:01.8518869Z   ✓ package graph gate reports R5 for foundation importing product name… 3.73s
+2026-10-01T18:30:01.8522359Z   ✓ package graph gate reports R1 for wakeup import outside Integration… 3.81s
+2026-10-01T18:30:01.8526088Z   ✓ extension contract gate classifies registry-like surfaces and rejec… 0.30s
+2026-10-01T18:30:01.8529570Z   ✓ package graph rejects an invented generated symbol without authoriz… 1.89s
+2026-10-01T18:30:04.6741893Z
+2026-10-01T18:30:04.6742921Z    PASS  Tests\Arch\PhpApiBcTest
+2026-10-01T18:30:04.6747669Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.57s
+2026-10-01T18:30:04.6751512Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.53s
+2026-10-01T18:30:04.6755716Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.33s
+2026-10-01T18:30:04.6759612Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.32s
+2026-10-01T18:30:04.6763294Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.65s
+2026-10-01T18:30:04.6767284Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.41s
+2026-10-01T18:30:05.1644226Z
+2026-10-01T18:30:05.1645621Z    PASS  Tests\Arch\ProviderSizeTest
+2026-10-01T18:30:05.1676372Z   ✓ provider size gate exits 0 on a clean tree                           0.16s
+2026-10-01T18:30:05.1706074Z   ✓ provider size gate exits 1 and names the planted provider            0.16s
+2026-10-01T18:30:05.1707413Z   ✓ provider size gate does not count bindings outside a service provid… 0.16s
+2026-10-01T18:30:05.2247295Z
+2026-10-01T18:30:05.2248702Z    PASS  Tests\Arch\SingletonInjectionTest
+2026-10-01T18:30:05.2251967Z   ✓ singleton injection gate passes on clean tree with allowlist         0.03s
+2026-10-01T18:30:05.2255983Z   ✓ singleton injection gate names probe provider for application in co… 0.03s
+2026-10-01T18:30:05.2844836Z
+2026-10-01T18:30:05.2846097Z    PASS  Tests\Arch\TestingAutoloadTest
+2026-10-01T18:30:05.2849567Z   ✓ CoreX\Testing is dev-autoload only and production src has no harnes… 0.02s
+2026-10-01T18:30:05.2853423Z   ✓ package tests do not import another package Testing namespace        0.02s
+2026-10-01T18:30:05.2857029Z   ✓ R-T1 planting in ActorType names the file                            0.02s
+2026-10-01T18:30:06.4502578Z
+2026-10-01T18:30:06.4504199Z    PASS  CoreX\Tests\PHPStan\DurablePayloadRuleTest
+2026-10-01T18:30:06.4507448Z   ✓ declared properties on marked types                                  1.05s
+2026-10-01T18:30:06.4509719Z   ✓ unmarked type is silent
+2026-10-01T18:30:06.4512161Z   ✓ promoted property on marked type
+2026-10-01T18:30:07.2213277Z
+2026-10-01T18:30:07.2214471Z    PASS  CoreX\Tests\PHPStan\ModuleBoundaryRulesTest
+2026-10-01T18:30:07.2217742Z   ✓ foreign prefix sql                                                   0.74s
+2026-10-01T18:30:07.2218990Z   ✓ foreign prefix sql no false positive
+2026-10-01T18:30:07.2223030Z   ✓ fs outside module                                                    0.02s
+2026-10-01T18:30:07.2225999Z   ✓ direct system table write                                            0.01s
+2026-10-01T18:30:07.2487655Z
+2026-10-01T18:30:07.2488560Z    PASS  CoreX\Tests\PHPStan\TransactionPoolingRulesTest
+2026-10-01T18:30:07.2490218Z   ✓ set without local
+2026-10-01T18:30:07.2493186Z   ✓ session advisory lock
+2026-10-01T18:30:07.2496277Z   ✓ listen notify
+2026-10-01T18:30:07.2497991Z   ✓ temp table
+2026-10-01T18:30:07.2500972Z   ✓ sql prepare
+2026-10-01T18:30:07.2503850Z   ✓ eval                                                                 0.01s
+2026-10-01T18:30:07.2510058Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T18:30:07.2514385Z    FAILED  CoreX\Webhooks\Tests\Feature\WebhookFanoutTest >…   QueryException
+2026-10-01T18:30:07.2529299Z   SQLSTATE[08006] [7] connection to server at "127.0.0.1", port 5434 failed: Connection refused
+2026-10-01T18:30:07.2531095Z 	Is the server running on that host and accepting TCP/IP connections? (Connection: api_pg_root, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: DROP SCHEMA IF EXISTS api_p1412_tenant_test CASCADE)
+2026-10-01T18:30:07.2540145Z
+2026-10-01T18:30:07.2540989Z   at vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:67
+2026-10-01T18:30:07.2544796Z      63▕     protected function createPdoConnection($dsn, $username, #[\SensitiveParameter] $password, $options)
+2026-10-01T18:30:07.2545938Z      64▕     {
+2026-10-01T18:30:07.2546925Z      65▕         return version_compare(PHP_VERSION, '8.4.0', '<')
+2026-10-01T18:30:07.2549381Z      66▕             ? new PDO($dsn, $username, $password, $options)
+2026-10-01T18:30:07.2550969Z   ➜  67▕             : PDO::connect($dsn, $username, $password, $options); /** @phpstan-ignore staticMethod.notFound (PHP 8.4) */
+2026-10-01T18:30:07.2551680Z      68▕     }
+2026-10-01T18:30:07.2551961Z      69▕
+2026-10-01T18:30:07.2552218Z      70▕     /**
+2026-10-01T18:30:07.2552683Z      71▕      * Handle an exception that occurred during connect execution.
+2026-10-01T18:30:07.2553048Z
+2026-10-01T18:30:07.2553223Z       +12 vendor frames
+2026-10-01T18:30:07.2553906Z   13  packages/webhooks/tests/Feature/WebhookFanoutTest.php:145
+2026-10-01T18:30:07.2554397Z
+2026-10-01T18:30:07.2554912Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T18:30:07.2556383Z    FAILED  CoreX\Webhooks\Tests\Feature\WebhookSubscriptionT…  QueryException
+2026-10-01T18:30:07.2557690Z   SQLSTATE[08006] [7] connection to server at "127.0.0.1", port 5434 failed: Connection refused
+2026-10-01T18:30:07.2559595Z 	Is the server running on that host and accepting TCP/IP connections? (Connection: api_pg_root, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: DROP SCHEMA IF EXISTS api_p1411_tenant_test CASCADE)
+2026-10-01T18:30:07.2560779Z
+2026-10-01T18:30:07.2561761Z   at vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:67
+2026-10-01T18:30:07.2564425Z      63▕     protected function createPdoConnection($dsn, $username, #[\SensitiveParameter] $password, $options)
+2026-10-01T18:30:07.2565504Z      64▕     {
+2026-10-01T18:30:07.2566336Z      65▕         return version_compare(PHP_VERSION, '8.4.0', '<')
+2026-10-01T18:30:07.2567169Z      66▕             ? new PDO($dsn, $username, $password, $options)
+2026-10-01T18:30:07.2568529Z   ➜  67▕             : PDO::connect($dsn, $username, $password, $options); /** @phpstan-ignore staticMethod.notFound (PHP 8.4) */
+2026-10-01T18:30:07.2569469Z      68▕     }
+2026-10-01T18:30:07.2570173Z      69▕
+2026-10-01T18:30:07.2571853Z      70▕     /**
+2026-10-01T18:30:07.2572271Z      71▕      * Handle an exception that occurred during connect execution.
+2026-10-01T18:30:07.2572718Z
+2026-10-01T18:30:07.2572911Z       +12 vendor frames
+2026-10-01T18:30:07.2573628Z   13  packages/webhooks/tests/Feature/WebhookSubscriptionTest.php:171
+2026-10-01T18:30:07.2574129Z
+2026-10-01T18:30:07.2574739Z
+2026-10-01T18:30:07.2575534Z   Tests:    2 failed, 886 passed (3851 assertions)
+2026-10-01T18:30:07.2576706Z   Duration: 79.55s
+2026-10-01T18:30:07.2577169Z
+2026-10-01T18:30:07.2750954Z Script bash scripts/run-root-tests.sh @additional_args handling the test event returned with error code 2
+2026-10-01T18:30:07.2843213Z ##[error]Process completed with exit code 2.
+2026-10-01T18:30:07.2957347Z Post job cleanup.
+2026-10-01T18:30:07.3715209Z [command]/usr/bin/git version
+2026-10-01T18:30:07.3785659Z git version 2.55.0
+2026-10-01T18:30:07.3816947Z Temporarily overriding HOME='/home/runner/work/_temp/4beff59e-ad55-450d-8d04-ce731cf84db9' before making global git config changes
+2026-10-01T18:30:07.3818441Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-01T18:30:07.3821420Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex/corex
+2026-10-01T18:30:07.3906838Z Removing SSH command configuration
+2026-10-01T18:30:07.3907601Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-01T18:30:07.3909738Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-01T18:30:07.4225485Z Removing HTTP extra header
+2026-10-01T18:30:07.4271674Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-01T18:30:07.4927592Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-01T18:30:07.5107547Z Removing includeIf entries pointing to credentials config files
+2026-10-01T18:30:07.5325958Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-01T18:30:07.5396662Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-01T18:30:07.5455296Z Cleaning up orphan processes
