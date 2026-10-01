@@ -692,7 +692,7 @@ jobs:
         run: composer test:packages
 
       - name: Core and modules SQLite suites
-        run: vendor/bin/pest --exclude-group=pg packages/core/tests packages/core/tests/Modules
+        run: vendor/bin/pest --exclude-group=pg packages/core/tests
 
   tasks-tests:
     permissions:
